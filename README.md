@@ -8,7 +8,7 @@ Play in the browser, install it like an app on your phone, or grab it as a Windo
 
 - **Web**: open [`index.html`](index.html) directly, or visit the GitHub Pages build once it's enabled (see [Publishing this repo](#publishing-this-repo) below) at `https://karahaNx.github.io/Lumenfall/`.
 - **Mobile (PWA)**: visit the Pages link on your phone, then use your browser's "Add to Home Screen" (Android Chrome) or "Add to Home Screen" from the Share sheet (iOS Safari). It installs as a standalone icon and keeps working offline.
-- **Windows desktop (.exe)**: download the latest build from this repo's **Actions → Build Desktop App → Artifacts**, or from a tagged **Release** once one exists. See [Desktop build](#desktop-build) to build it yourself.
+- **Windows desktop (.exe)**: [**Download the installer**](https://github.com/karahaNx/Lumenfall/releases/latest/download/Lumenfall-Setup.exe) — always points at the latest tagged Release. A portable no-install build is on the [Releases page](https://github.com/karahaNx/Lumenfall/releases/latest) too. The web version also carries a small "Desktop app" button in the bottom-right corner linking here. See [Desktop build](#desktop-build) to build it yourself.
 - **Android (.apk)**: download the debug APK from **Actions → Build Android APK → Artifacts**. See [Android build](#android-build) for details and caveats.
 
 ## Project structure
