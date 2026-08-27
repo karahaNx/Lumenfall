@@ -1,13 +1,14 @@
 {
   "name": "lumenfall",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Lumenfall - an idle RPG where Wisps push deeper into an ever-collapsing Rift.",
   "main": "desktop/main.js",
+  "author": "karahaNx",
   "private": true,
   "license": "MIT",
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder --win"
+    "dist": "electron-builder --win --publish never"
   },
   "devDependencies": {
     "electron": "^31.3.1",
