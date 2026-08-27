@@ -36,7 +36,9 @@ npm start        # run it locally in a window
 npm run dist      # produce release/*.exe (NSIS installer + portable build)
 ```
 
-`npm run dist` is also run automatically by `.github/workflows/build-desktop.yml` on every push to `main`/`master` and on version tags (`v1.0.0`, etc.) — grab the result from the Actions run's artifacts, or from the GitHub Release if you pushed a tag.
+`npm run dist` is also run automatically by `.github/workflows/build-desktop.yml` on every push to `main`/`master` and on version tags (`v1.0.0`, etc.) — grab the result from the Actions run's artifacts, or from the GitHub Release if you pushed a tag. That CI path is the reliable one; see the note below if you build locally on Windows.
+
+> **Local Windows build fails with "Cannot create symbolic link"?** electron-builder downloads a small macOS code-signing helper even for Windows-only builds, and extracting it needs a privilege that regular (non-admin) Windows accounts don't have by default. Either run the build from an elevated terminal once, or turn on **Settings → Privacy & Security → For Developers → Developer Mode** (grants that privilege permanently). This doesn't affect GitHub Actions — `windows-latest` runners already have it.
 
 The Electron window loads `index.html` with `nodeIntegration` off and `contextIsolation`/`sandbox` on — the game gets no Node or filesystem access, it's just the same web page in a native frame.
 
