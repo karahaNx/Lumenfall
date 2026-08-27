@@ -683,7 +683,7 @@ var RARITY_MULT   = [1, 1.5, 2.25, 3.5, 5.5, 9];
 var RESEARCH = [
   {id:'focus',     name:'Battle Focus',       desc:'+8% Lumen from every kill, per level.',                  lumenBase:200, lumenGrowth:1.5,  shardBase:0,  shardGrowth:1},
   {id:'sense',     name:'Shard Sense',        desc:'+8% Shards from every kill, per level.',                 lumenBase:150, lumenGrowth:1.5,  shardBase:20, shardGrowth:1.5},
-  {id:'formation', name:'Formation Training', desc:'+5% power for every Active Wisp, per level.',      lumenBase:0,   lumenGrowth:1,    shardBase:40, shardGrowth:1.6},
+  {id:'formation', name:'Formation Training', desc:'+5% party power, per level.',      lumenBase:0,   lumenGrowth:1,    shardBase:40, shardGrowth:1.6},
   {id:'resolve',   name:"Guardian's Resolve", desc:'+10% Guardian tap damage, per level.',                   lumenBase:150, lumenGrowth:1.45, shardBase:0,  shardGrowth:1},
   {id:'charge',    name:'Swift Recovery',     desc:'+8% faster Wisp ability charge, per level.',              lumenBase:0,   lumenGrowth:1,    shardBase:30, shardGrowth:1.55}
 ];
@@ -694,7 +694,7 @@ var NODES = [
   {id:'echo',      name:'Echoing Rest',        desc:'+5% offline earning rate, per level (caps at 100%).', baseCost:2, growth:1.40},
   {id:'bonds',     name:'Cheaper Bonds',       desc:'−3% Wisp recruiting cost, per level (floor 40%).',  baseCost:2, growth:1.45},
   {id:'swift',     name:'Swift Ascension',     desc:'+4% Prisms earned per Ascend, per level.', baseCost:3, growth:1.50},
-  {id:'momentum',  name:'Eternal Momentum',    desc:'+6% power for every Active Wisp, per level.', baseCost:5, growth:1.55, requiresAchievement:'asc5'},
+  {id:'momentum',  name:'Eternal Momentum',    desc:'+6% party power, per level.', baseCost:5, growth:1.55, requiresAchievement:'asc5'},
   {id:'reserves',  name:'Deep Reserves',       desc:'+2 hours to your offline cap, per level.', baseCost:6, growth:1.60, requiresAchievement:'d100'}
 ];
 
@@ -791,7 +791,7 @@ function freshState(){
     longStudyLevels:longStudyLevels, activeStudies:[], studyQueue:studyQueue,
     achieved:achieved, owned:owned, riftTheme:'default',
     buffUntil:0, buffMult:1,
-    ascendCount:0, totalTaps:0, totalKills:0, totalOfflineSeconds:0,
+    ascendCount:0, totalTaps:0, totalKills:0, totalOfflineSeconds:0, luminousAccum:0,
     savedLabMultiplier:1,
     lastSeen:Date.now()
   };
@@ -973,7 +973,8 @@ function chipEffectivePower(id){
   return base * shareMult * (buffActive ? state.buffMult : 1);
 }
 function tapDamage(){
-  return (5 + effectivePartyPower()*0.02) * tapMult();
+  var buffActive = state.buffUntil && Date.now() < state.buffUntil;
+  return (5 + effectivePartyPower()*0.02) * tapMult() * (buffActive ? state.buffMult : 1);
 }
 function idleDps(){
   var buffActive = state.buffUntil && Date.now() < state.buffUntil;
@@ -997,7 +998,17 @@ function enemyNameFor(depth){
 function spawnEnemy(){
   state.enemyMaxHp = enemyHpFor(state.depth);
   state.enemyHp = state.enemyMaxHp;
-  state.enemyIsLuminous = !isBoss(state.depth) && Math.random() < eliteChance(state.depth);
+  if(isBoss(state.depth)){
+    state.enemyIsLuminous = false;
+  } else {
+    state.luminousAccum = (state.luminousAccum||0) + eliteChance(state.depth);
+    if(state.luminousAccum >= 1){
+      state.enemyIsLuminous = true;
+      state.luminousAccum -= 1;
+    } else {
+      state.enemyIsLuminous = false;
+    }
+  }
 }
 
 function gainLumen(n){ state.lumen += n; }
@@ -1333,7 +1344,7 @@ function buyShopItem(item){
 
 function applyAscendMutation(){
   var cleared = state.depth - 1;
-  var gain = Math.max(1, Math.floor(2*Math.sqrt(cleared)) * prismMult());
+  var gain = Math.max(1, Math.floor(2*Math.sqrt(cleared) * prismMult()));
   state.prisms += gain;
   state.ascendCount++;
   state.depth = 1;
@@ -1791,7 +1802,7 @@ function renderLongStudies(){
 function renderAscendSummary(){
   var cleared = state.depth - 1;
   var eligible = cleared >= 15;
-  var gain = eligible ? Math.max(1, Math.floor(2*Math.sqrt(cleared)) * prismMult()) : 0;
+  var gain = eligible ? Math.max(1, Math.floor(2*Math.sqrt(cleared) * prismMult())) : 0;
   els['prism-preview'].textContent = '+' + formatNum(gain) + ' Prisms';
   els['ascend-btn'].disabled = !eligible;
   els['ascend-note'].textContent = eligible
@@ -2011,6 +2022,7 @@ function tick(){
     state._autoTapAccum = (state._autoTapAccum||0) + TICK_MS;
     if(state._autoTapAccum>=1000){
       state._autoTapAccum -= 1000;
+      state.totalTaps++;
       var autoDmg = tapDamage();
       spawnFloatNum('+'+formatNum(autoDmg), els['enemy-stage']);
       dealDamage(autoDmg);
@@ -2156,11 +2168,13 @@ function setupStars(){
 var OFFLINE_MAX_KILLS = 5000;
 function simulateOfflineRun(effectiveSec){
   var remaining = effectiveSec;
-  var lumenGained = 0, shardGained = 0, sigilsGained = 0, ascends = 0, kills = 0;
+  var lumenGained = 0, shardGained = 0, sigilsGained = 0, motesGained = 0, ascends = 0, kills = 0;
+  var empowerAccum = 0;
   while(remaining > 0 && kills < OFFLINE_MAX_KILLS){
     var dps = idleDps();
     if(dps <= 0) break;
     var wasBossKill = isBoss(state.depth);
+    var wasLuminous = state.enemyIsLuminous;
     var enemyMax = state.enemyMaxHp>0 ? state.enemyMaxHp : enemyHpFor(state.depth);
     var curHp = state.enemyHp>0 ? state.enemyHp : enemyMax;
     var regenPerSec = wasBossKill ? enemyMax*BOSS_REGEN_PER_SEC : 0;
@@ -2180,6 +2194,11 @@ function simulateOfflineRun(effectiveSec){
     state.shards += shardGain;
     lumenGained += lumenGain;
     shardGained += shardGain;
+    if(wasLuminous){
+      var moteGain = Math.max(1, Math.round(motesDropFor(state.depth) * (1+supportMoteBonus())));
+      state.motes += moteGain;
+      motesGained += moteGain;
+    }
     if(wasBossKill){
       var sigilGain = sigilsFromBoss(state.depth);
       state.sigils += sigilGain;
@@ -2189,26 +2208,30 @@ function simulateOfflineRun(effectiveSec){
     state.depth++;
     state.maxDepthEver = Math.max(state.maxDepthEver, state.depth);
     spawnEnemy();
-    if(state.achieved.labmaster){ autoEmpowerTick(); }
+    if(state.achieved.labmaster){
+      empowerAccum += timeToKill;
+      while(empowerAccum >= 1){
+        empowerAccum -= 1;
+        autoEmpowerTick();
+      }
+    }
     if(state.owned.autoascend && (state.depth-1)>=15){
       applyAscendMutation();
       ascends++;
     }
   }
-  if(remaining > 0){
-    var dps2 = idleDps();
-    var passiveLumen = dps2 * remaining * offlineRate();
-    if(passiveLumen > 0){
-      gainLumen(passiveLumen);
-      lumenGained += passiveLumen;
-      var lumenPerKill2 = enemyRewardFor(state.depth);
-      var shardPerKill2 = shardRewardFor(state.depth);
-      var passiveShard = lumenPerKill2>0 ? passiveLumen*(shardPerKill2/lumenPerKill2) : 0;
-      state.shards += passiveShard;
-      shardGained += passiveShard;
+  if(remaining > 0 && kills >= OFFLINE_MAX_KILLS){
+    var elapsedInLoop = effectiveSec - remaining;
+    if(elapsedInLoop > 0){
+      var extraLumen = (lumenGained/elapsedInLoop) * remaining;
+      var extraShard = (shardGained/elapsedInLoop) * remaining;
+      gainLumen(extraLumen);
+      state.shards += extraShard;
+      lumenGained += extraLumen;
+      shardGained += extraShard;
     }
   }
-  return {lumenGained:lumenGained, shardGained:shardGained, sigilsGained:sigilsGained, kills:kills, ascends:ascends};
+  return {lumenGained:lumenGained, shardGained:shardGained, sigilsGained:sigilsGained, motesGained:motesGained, kills:kills, ascends:ascends};
 }
 
 function applyOfflineProgress(){
@@ -2220,9 +2243,10 @@ function applyOfflineProgress(){
   state.totalOfflineSeconds += effectiveSec;
   var completedStudies = advanceActiveStudies(elapsedSec);
   autoFillStudySlots();
-  autoLabQueueTick();
+  var labGuard = 0;
+  while(autoLabQueueTick() && labGuard < 200){ labGuard++; }
   checkAchievements();
-  return {elapsedSec: elapsedSec, effectiveSec: effectiveSec, earned: sim.lumenGained, shardEarned: sim.shardGained, sigilsEarned: sim.sigilsGained, ascends: sim.ascends, completedStudies: completedStudies};
+  return {elapsedSec: elapsedSec, effectiveSec: effectiveSec, earned: sim.lumenGained, shardEarned: sim.shardGained, sigilsEarned: sim.sigilsGained, motesEarned: sim.motesGained, ascends: sim.ascends, completedStudies: completedStudies};
 }
 
 function fmtDuration(sec){
@@ -2293,7 +2317,7 @@ function init(){
     introOverlay.style.display = 'none';
     var offline = applyOfflineProgress();
     if(offline && (offline.earned > 1 || offline.completedStudies.length || offline.ascends>0)){
-      var msg = 'You were away for ' + fmtDuration(offline.elapsedSec) + '. Your Wisps kept the Rift lit and gathered ' + formatNum(offline.earned) + ' Lumen' + (offline.shardEarned>1 ? ' and ' + formatNum(offline.shardEarned) + ' Shards' : '') + (offline.sigilsEarned>0 ? ' and ' + formatNum(offline.sigilsEarned) + ' Sigils' : '') + ' while you were gone.';
+      var msg = 'You were away for ' + fmtDuration(offline.elapsedSec) + '. Your Wisps kept the Rift lit and gathered ' + formatNum(offline.earned) + ' Lumen' + (offline.shardEarned>1 ? ' and ' + formatNum(offline.shardEarned) + ' Shards' : '') + (offline.sigilsEarned>0 ? ' and ' + formatNum(offline.sigilsEarned) + ' Sigils' : '') + (offline.motesEarned>0 ? ' and ' + formatNum(offline.motesEarned) + ' Motes' : '') + ' while you were gone.';
       if(offline.ascends>0){ msg += ' They ascended ' + offline.ascends + ' time' + (offline.ascends===1?'':'s') + ' on their own!'; }
       if(offline.completedStudies.length===1){ msg += ' Your Long Study "' + offline.completedStudies[0] + '" finished while you were away!'; }
       else if(offline.completedStudies.length>1){ msg += ' Your Long Studies "' + offline.completedStudies.join('", "') + '" finished while you were away!'; }
