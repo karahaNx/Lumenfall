@@ -2150,7 +2150,10 @@ function renderOfflinePreview(){
   if(sim.shardGained >= 1) parts.push('<strong>'+formatNum(sim.shardGained)+' Shards</strong>');
   if(sim.motesGained >= 1) parts.push(formatNum(sim.motesGained)+' Motes');
   if(sim.sigilsGained >= 1) parts.push(formatNum(sim.sigilsGained)+' Sigils');
-  el.innerHTML = 'Log off now and earn up to ' + parts.join(', ') + ' over your next ' + sim.capHours + 'h away.';
+  var tail = sim.retreated
+    ? ' over your next ' + sim.capHours + 'h away, falling back to farm Rift ' + sim.endDepth + ' once the Boss proves too strong.'
+    : ' over your next ' + sim.capHours + 'h away.';
+  el.innerHTML = 'Log off now and earn up to ' + parts.join(', ') + tail;
 }
 
 function renderSideStats(){
@@ -2384,36 +2387,13 @@ function setupStars(){
 // Init
 // ---------------------------------------------------------------
 var OFFLINE_MAX_KILLS = 5000;
-var OFFLINE_FARM_RETREAT = 2;
-
-// Used only when offline progress is stuck at a Boss wall (idle DPS can't
-// out-heal the regen). Rather than a real fight, this farms a single enemy
-// at an already-cleared depth without touching the real state.depth/enemyHp
-// -- so the player returns still parked at the Boss, having quietly earned
-// from easier ground nearby instead of gaining nothing for the whole window.
-function farmOneOfflineKill(depth){
-  var dps = idleDps();
-  if(dps<=0) return null;
-  var enemyMax = enemyHpFor(depth);
-  var timeToKill = enemyMax / dps;
-  var lumenGain = enemyRewardFor(depth) * offlineRate();
-  var shardGain = shardRewardFor(depth) * offlineRate();
-  gainLumen(lumenGain);
-  state.shards += shardGain;
-  var moteGain = 0;
-  state.luminousAccum = (state.luminousAccum||0) + eliteChance(depth);
-  if(state.luminousAccum >= 1){
-    state.luminousAccum -= 1;
-    moteGain = Math.max(1, Math.round(motesDropFor(depth) * (1+supportMoteBonus())));
-    state.motes += moteGain;
-  }
-  return {timeSpent:timeToKill, lumenGain:lumenGain, shardGain:shardGain, moteGain:moteGain};
-}
+var OFFLINE_FARM_RETREAT = 1;
 
 function simulateOfflineRun(effectiveSec){
   var remaining = effectiveSec;
   var lumenGained = 0, shardGained = 0, sigilsGained = 0, motesGained = 0, ascends = 0, kills = 0;
   var empowerAccum = 0;
+  var retreated = false;
   while(remaining > 0 && kills < OFFLINE_MAX_KILLS){
     var dps = idleDps();
     if(dps <= 0) break;
@@ -2424,19 +2404,13 @@ function simulateOfflineRun(effectiveSec){
     var regenPerSec = wasBossKill ? enemyMax*BOSS_REGEN_PER_SEC : 0;
     var netDps = dps - regenPerSec;
     if(netDps <= 0){
+      // Stuck at a Boss wall -- actually retreat a Rift and keep farming
+      // for real (not a side calculation) until the player comes back,
+      // instead of stalling the whole offline window at zero progress.
       if(!wasBossKill || state.depth<=1) break;
-      var farmed = farmOneOfflineKill(Math.max(1, state.depth-OFFLINE_FARM_RETREAT));
-      if(!farmed || farmed.timeSpent > remaining) break;
-      remaining -= farmed.timeSpent;
-      kills++;
-      lumenGained += farmed.lumenGain;
-      shardGained += farmed.shardGain;
-      state.totalKills++;
-      if(farmed.moteGain){ motesGained += farmed.moteGain; }
-      if(state.achieved.labmaster){
-        empowerAccum += farmed.timeSpent;
-        while(empowerAccum >= 1){ empowerAccum -= 1; autoEmpowerTick(); }
-      }
+      state.depth = Math.max(1, state.depth - OFFLINE_FARM_RETREAT);
+      retreated = true;
+      spawnEnemy();
       continue;
     }
     var timeToKill = curHp / netDps;
@@ -2490,7 +2464,11 @@ function simulateOfflineRun(effectiveSec){
       shardGained += extraShard;
     }
   }
-  return {lumenGained:lumenGained, shardGained:shardGained, sigilsGained:sigilsGained, motesGained:motesGained, kills:kills, ascends:ascends};
+  if(retreated && isBoss(state.depth) && state.depth>1){
+    state.depth = Math.max(1, state.depth - OFFLINE_FARM_RETREAT);
+    spawnEnemy();
+  }
+  return {lumenGained:lumenGained, shardGained:shardGained, sigilsGained:sigilsGained, motesGained:motesGained, kills:kills, ascends:ascends, retreated:retreated, endDepth:state.depth};
 }
 
 function applyOfflineProgress(){
@@ -2505,7 +2483,7 @@ function applyOfflineProgress(){
   var labGuard = 0;
   while(autoLabQueueTick() && labGuard < 200){ labGuard++; }
   checkAchievements();
-  return {elapsedSec: elapsedSec, effectiveSec: effectiveSec, earned: sim.lumenGained, shardEarned: sim.shardGained, sigilsEarned: sim.sigilsGained, motesEarned: sim.motesGained, ascends: sim.ascends, completedStudies: completedStudies};
+  return {elapsedSec: elapsedSec, effectiveSec: effectiveSec, earned: sim.lumenGained, shardEarned: sim.shardGained, sigilsEarned: sim.sigilsGained, motesEarned: sim.motesGained, ascends: sim.ascends, completedStudies: completedStudies, retreated: sim.retreated, endDepth: sim.endDepth};
 }
 
 function fmtDuration(sec){
@@ -2590,6 +2568,7 @@ function init(){
     if(offline && (offline.earned > 1 || offline.completedStudies.length || offline.ascends>0)){
       var msg = 'You were away for ' + fmtDuration(offline.elapsedSec) + '. Your Wisps kept the Rift lit and gathered ' + formatNum(offline.earned) + ' Lumen' + (offline.shardEarned>1 ? ' and ' + formatNum(offline.shardEarned) + ' Shards' : '') + (offline.sigilsEarned>0 ? ' and ' + formatNum(offline.sigilsEarned) + ' Sigils' : '') + (offline.motesEarned>0 ? ' and ' + formatNum(offline.motesEarned) + ' Motes' : '') + ' while you were gone.';
       if(offline.ascends>0){ msg += ' They ascended ' + offline.ascends + ' time' + (offline.ascends===1?'':'s') + ' on their own!'; }
+      if(offline.retreated){ msg += ' A Boss out-healed them, so they fell back to Rift ' + offline.endDepth + ' to keep farming until you returned.'; }
       if(offline.completedStudies.length===1){ msg += ' Your Long Study "' + offline.completedStudies[0] + '" finished while you were away!'; }
       else if(offline.completedStudies.length>1){ msg += ' Your Long Studies "' + offline.completedStudies.join('", "') + '" finished while you were away!'; }
       document.getElementById('welcome-text').textContent = msg;
