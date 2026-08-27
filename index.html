@@ -337,6 +337,24 @@
   }
   .big-btn:disabled{background:var(--bg-elev-2);color:var(--ink-dim);cursor:not-allowed;box-shadow:none;border:1px solid var(--line);}
 
+  /* ---------- Daily Quests ---------- */
+  .daily-card{margin-bottom:14px;}
+  .daily-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+  .daily-streak{font-size:.66rem;font-weight:700;color:var(--comet);background:var(--bg-elev);border:1px solid var(--line);border-radius:999px;padding:4px 10px;white-space:nowrap;}
+  .quest-row{padding:10px 0;border-bottom:1px solid var(--line);}
+  .quest-row:last-child{border-bottom:none;padding-bottom:0;}
+  .quest-row:first-child{padding-top:0;}
+  .quest-row-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;}
+  .quest-name{font-size:.8rem;font-weight:600;}
+  .quest-reward{font-size:.7rem;color:var(--comet);font-weight:700;flex:none;display:flex;align-items:center;gap:3px;}
+  .quest-bar-track{height:7px;border-radius:999px;background:var(--bg-elev);border:1px solid var(--line);overflow:hidden;}
+  .quest-bar-fill{height:100%;width:0%;background:linear-gradient(90deg, var(--comet), color-mix(in srgb, var(--comet) 70%, var(--prism)));transition:width .3s linear;}
+  .quest-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;}
+  .quest-progress-text{font-size:.68rem;color:var(--ink-dim);}
+  .quest-claim-btn{flex:none;border-radius:8px;border:1px solid var(--good);background:var(--good);color:#08210f;font-weight:700;font-size:.68rem;padding:6px 14px;cursor:pointer;}
+  .quest-claim-btn:disabled{opacity:.45;cursor:not-allowed;background:var(--bg-elev);color:var(--ink-dim);border-color:var(--line);}
+  .quest-claim-btn.done{background:var(--bg-elev);color:var(--good);border-color:var(--good);opacity:1;}
+
   /* ---------- Achievements ---------- */
   .ach-grid{display:grid;grid-template-columns:1fr;gap:8px;}
   .ach-card{display:flex;align-items:flex-start;gap:10px;}
@@ -520,6 +538,13 @@
 
   <main>
     <section class="tab-panel active" id="tab-battle">
+      <div class="card daily-card" id="daily-card">
+        <div class="daily-head">
+          <div class="section-label" style="margin:0;">Daily Quests</div>
+          <span class="daily-streak" id="daily-streak-badge">Day 1 streak</span>
+        </div>
+        <div id="daily-quest-list"></div>
+      </div>
       <div class="card stage">
         <div class="depth-label" id="depth-label">Rift 1</div>
         <div class="enemy-name" id="enemy-name">Hollow Wisp</div>
@@ -636,6 +661,14 @@
     <h2>Welcome back</h2>
     <p id="welcome-text"></p>
     <button class="primary-btn" id="welcome-claim">Continue</button>
+  </div>
+</div>
+
+<div class="overlay" id="daily-overlay" style="display:none;">
+  <div class="modal">
+    <h2 id="daily-title">Day 1 streak</h2>
+    <p id="daily-text"></p>
+    <button class="primary-btn" id="daily-claim">Continue</button>
   </div>
 </div>
 
@@ -762,7 +795,30 @@ var MANIFESTO = [
   {eyebrow:'"Present every few minutes"', title:'Actually idle', body:'Some idle games expect hours of daily babysitting or you hit a hard stop. Your Wisps keep fighting while you’re away, with generous, transparent offline earnings shown the moment you return.'},
   {eyebrow:'"24 heroes at once"', title:'A roster that unfolds', body:'Wisps unlock gradually as you go deeper, instead of dumping a full cast on a brand-new player.'},
   {eyebrow:'Gear rarity RNG', title:'No loot boxes, no gacha', body:'Every upgrade — leveling, Rarity, Lab research — is a visible, deterministic purchase, and even a Luminous enemy always drops the same fixed amount of Motes. What you see is what you get, never a random range.'},
-  {eyebrow:'What actually makes an idle RPG feel like one', title:'A real party, with real roles', body:'Up to five Wisps — each with a class, a resource bar, and an active ability — fight beside your Guardian. Their Rarity tier and Lab investment matter, not just one flat number going up.'}
+  {eyebrow:'What actually makes an idle RPG feel like one', title:'A real party, with real roles', body:'Up to five Wisps — each with a class, a resource bar, and an active ability — fight beside your Guardian. Their Rarity tier and Lab investment matter, not just one flat number going up.'},
+  {eyebrow:'Real taps only', title:'Autoclickers earn nothing extra', body:'Manual tapping is capped to what a genuinely fast human can do, and only real touch or click input counts toward damage — a script mashing the Rift in the background gets no more than your Wisps were already earning on their own.'}
+];
+
+var QUEST_POOL = [
+  {id:'q_tap_small',  metric:'taps',          name:'Strike the Rift',     desc:'Land taps on the Rift',   goal:200, reward:{comets:8}},
+  {id:'q_tap_big',    metric:'taps',          name:'Relentless Guardian', desc:'Land taps on the Rift',   goal:600, reward:{comets:15}},
+  {id:'q_kill_small', metric:'kills',         name:'Clear the Rift',      desc:'Defeat enemies',          goal:40,  reward:{comets:10}},
+  {id:'q_kill_big',   metric:'kills',         name:'Deep Delve',          desc:'Defeat enemies',          goal:120, reward:{comets:18}},
+  {id:'q_empower',    metric:'empowers',      name:'Grow Stronger',       desc:'Empower your Wisps',      goal:15,  reward:{comets:10}},
+  {id:'q_research',   metric:'research',      name:'Fund the Lab',        desc:'Buy Lab research levels', goal:5,   reward:{comets:10}},
+  {id:'q_boss',       metric:'bossKills',     name:'Boss Slayer',         desc:'Defeat a Rift boss',      goal:1,   reward:{comets:20}},
+  {id:'q_luminous',   metric:'luminousKills', name:'Chase the Light',     desc:'Defeat a Luminous enemy', goal:1,   reward:{comets:15}},
+  {id:'q_ascend',     metric:'ascends',       name:'Begin Again',         desc:'Ascend the Rift',         goal:1,   reward:{comets:25}}
+];
+
+var DAILY_LOGIN_REWARDS = [
+  {comets:5},
+  {comets:8},
+  {comets:12},
+  {comets:16},
+  {comets:20},
+  {comets:25},
+  {comets:40, prisms:3}
 ];
 
 var ENEMY_ADJ = ['Hollow','Dusk','Rift-Touched','Withering','Umbral','Ashen','Fractured','Silent','Creeping','Starved'];
@@ -793,11 +849,58 @@ function freshState(){
     buffUntil:0, buffMult:1,
     ascendCount:0, totalTaps:0, totalKills:0, totalOfflineSeconds:0, luminousAccum:0,
     savedLabMultiplier:1,
+    loginStreak:0, questDay:'', questIds:[], questClaimed:{}, dailyStats:{},
     lastSeen:Date.now()
   };
 }
 function totalStudyLevels(s){
   return LONG_STUDIES.reduce(function(sum,l){ return sum + (s.longStudyLevels[l.id]||0); }, 0);
+}
+function todayStr(){
+  var d = new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function daysBetweenStr(a,b){
+  return Math.round((new Date(b+'T00:00:00') - new Date(a+'T00:00:00'))/86400000);
+}
+function dateSeed(str){
+  var h = 0;
+  for(var i=0;i<str.length;i++){ h = (h*31 + str.charCodeAt(i))|0; }
+  return Math.abs(h);
+}
+function pickDailyQuests(dayStr){
+  var seed = dateSeed(dayStr);
+  var pool = QUEST_POOL.slice();
+  var picked = [];
+  for(var i=0;i<3 && pool.length;i++){
+    var idx = (seed + i*17) % pool.length;
+    picked.push(pool[idx].id);
+    pool.splice(idx,1);
+  }
+  return picked;
+}
+function loginRewardFor(streak){
+  return DAILY_LOGIN_REWARDS[(streak-1) % DAILY_LOGIN_REWARDS.length];
+}
+function trackDaily(metric, n){
+  if(!state.dailyStats) state.dailyStats = {};
+  state.dailyStats[metric] = (state.dailyStats[metric]||0) + (n||1);
+}
+var pendingDailyReward = null;
+function ensureDaily(){
+  var today = todayStr();
+  if(state.questDay === today) return false;
+  var hadPriorDay = !!state.questDay;
+  state.loginStreak = hadPriorDay ? (daysBetweenStr(state.questDay, today)===1 ? state.loginStreak+1 : 1) : 1;
+  state.questDay = today;
+  state.questIds = pickDailyQuests(today);
+  state.questClaimed = {};
+  state.dailyStats = {};
+  var reward = loginRewardFor(state.loginStreak);
+  state.comets += reward.comets||0;
+  if(reward.prisms) state.prisms += reward.prisms;
+  pendingDailyReward = {streak: state.loginStreak, reward: reward};
+  return true;
 }
 
 var state = null;
@@ -1032,20 +1135,24 @@ function defeatEnemy(){
     state.motes += moteGain;
     spawnFloatNum('+'+formatNum(moteGain)+' Motes', els['enemy-stage']);
     showToast('Luminous '+defeatedName+' defeated — +'+moteGain+' Motes');
+    trackDaily('luminousKills');
   }
   if(wasBoss){
     var sigilGain = sigilsFromBoss(state.depth);
     state.sigils += sigilGain;
     spawnFloatNum('+'+formatNum(sigilGain)+' Sigils', els['enemy-stage']);
     showToast('Boss defeated — +'+sigilGain+' Sigils');
+    trackDaily('bossKills');
   }
   state.totalKills++;
+  trackDaily('kills');
   state.depth++;
   state.maxDepthEver = Math.max(state.maxDepthEver, state.depth);
   spawnEnemy();
   checkAutoAscend();
   checkAchievements();
   renderDynamic();
+  renderDaily();
 }
 
 function checkAutoAscend(){
@@ -1076,11 +1183,13 @@ function checkAchievements(){
 function doTap(stageEl){
   var dmg = tapDamage();
   state.totalTaps++;
+  trackDaily('taps');
   spawnFloatNum('+'+formatNum(dmg), stageEl);
   stageEl.classList.add('hit');
   setTimeout(function(){ stageEl.classList.remove('hit'); }, 90);
   dealDamage(dmg);
   updateBattleFast();
+  renderDaily();
 }
 
 function buySpirit(sp){
@@ -1089,6 +1198,7 @@ function buySpirit(sp){
   var wasZero = state.spirits[sp.id]===0;
   state.lumen -= cost;
   state.spirits[sp.id]++;
+  trackDaily('empowers');
   if(wasZero && state.activeParty.length<5 && state.activeParty.indexOf(sp.id)===-1){
     state.activeParty.push(sp.id);
     renderPartyFormation();
@@ -1096,6 +1206,7 @@ function buySpirit(sp){
   checkAchievements();
   renderSpirits();
   updateBattleFast();
+  renderDaily();
 }
 
 function buyRarity(sp){
@@ -1228,8 +1339,10 @@ function buyResearch(node){
   state.lumen -= plan.cost.lumen;
   state.shards -= plan.cost.shard;
   state.research[node.id] += plan.buyCount;
+  trackDaily('research', plan.buyCount);
   renderResearch();
   updateBattleFast();
+  renderDaily();
 }
 
 function autoLabQueueTick(){
@@ -1249,6 +1362,7 @@ function autoLabQueueTick(){
     state.lumen -= cheapestCost.lumen;
     state.shards -= cheapestCost.shard;
     state.research[cheapest.id] += 1;
+    trackDaily('research');
     boughtAny = true;
   }
   return boughtAny;
@@ -1347,6 +1461,7 @@ function applyAscendMutation(){
   var gain = Math.max(1, Math.floor(2*Math.sqrt(cleared) * prismMult()));
   state.prisms += gain;
   state.ascendCount++;
+  trackDaily('ascends');
   state.depth = 1;
   state.lumen = 0;
   state.maxDepthEver = Math.max(state.maxDepthEver, cleared+1);
@@ -1421,7 +1536,8 @@ var els = {};
 function cacheEls(){
   ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','enemy-name','luminous-tag','boss-regen-tag','buff-indicator','enemy-stage','enemy-glyph',
    'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','party-col','research-list','study-list',
-   'prism-preview','ascend-btn','ascend-note','node-list','ach-list','shop-list','theme-list','manifesto','toast','currency-list'
+   'prism-preview','ascend-btn','ascend-note','node-list','ach-list','shop-list','theme-list','manifesto','toast','currency-list',
+   'daily-streak-badge','daily-quest-list'
   ].forEach(function(id){ els[id]=document.getElementById(id); });
 }
 
@@ -1960,6 +2076,65 @@ function renderAll(){
   renderCosmetics();
   renderCurrencies();
   renderManifesto();
+  renderDaily();
+}
+
+function renderDaily(){
+  if(!els['daily-quest-list']) return;
+  els['daily-streak-badge'].textContent = 'Day ' + (state.loginStreak||1) + ' streak';
+  var html = '';
+  (state.questIds||[]).forEach(function(id){
+    var q = QUEST_POOL.find(function(x){ return x.id===id; });
+    if(!q) return;
+    var progress = Math.min((state.dailyStats && state.dailyStats[q.metric])||0, q.goal);
+    var pct = Math.round(progress/q.goal*100);
+    var claimed = !!(state.questClaimed && state.questClaimed[id]);
+    var ready = progress>=q.goal && !claimed;
+    var rewardText = '+'+formatNum(q.reward.comets||0)+' '+costIcon('comet')+(q.reward.prisms ? ' +'+q.reward.prisms+' '+costIcon('prism') : '');
+    html += '<div class="quest-row">' +
+      '<div class="quest-row-head"><span class="quest-name">'+q.name+'</span><span class="quest-reward mono">'+rewardText+'</span></div>' +
+      '<div class="quest-bar-track"><div class="quest-bar-fill" style="width:'+pct+'%;"></div></div>' +
+      '<div class="quest-foot">' +
+        '<span class="quest-progress-text">'+q.desc+' ('+formatNum(progress)+' / '+formatNum(q.goal)+')</span>' +
+        '<button class="quest-claim-btn '+(claimed?'done':'')+'" data-quest-claim="'+id+'" '+(ready?'':'disabled')+'>'+(claimed?'Claimed':'Claim')+'</button>' +
+      '</div>' +
+    '</div>';
+  });
+  els['daily-quest-list'].innerHTML = html;
+  els['daily-quest-list'].querySelectorAll('[data-quest-claim]').forEach(function(btn){
+    btn.addEventListener('click', function(){ claimQuest(btn.getAttribute('data-quest-claim')); });
+  });
+}
+
+function claimQuest(id){
+  var q = QUEST_POOL.find(function(x){ return x.id===id; });
+  if(!q || (state.questIds||[]).indexOf(id)===-1) return;
+  if(state.questClaimed[id]) return;
+  var progress = (state.dailyStats && state.dailyStats[q.metric])||0;
+  if(progress < q.goal) return;
+  state.questClaimed[id] = true;
+  state.comets += q.reward.comets||0;
+  if(q.reward.prisms) state.prisms += q.reward.prisms;
+  showToast('Quest complete — '+'+'+formatNum(q.reward.comets||0)+' Comets'+(q.reward.prisms ? ' & +'+q.reward.prisms+' Prisms' : ''));
+  renderDaily();
+  renderHud();
+}
+
+function showDailyOverlay(info){
+  var overlay = document.getElementById('daily-overlay');
+  if(!overlay) return;
+  var reward = info.reward;
+  var rewardText = '+'+formatNum(reward.comets||0)+' Comets'+(reward.prisms ? ' and +'+reward.prisms+' Prisms' : '');
+  document.getElementById('daily-title').textContent = 'Day ' + info.streak + ' streak';
+  document.getElementById('daily-text').textContent = 'Welcome back — you earned ' + rewardText + ' for returning today. Keep the streak alive by coming back tomorrow, and check the Rift screen for today\'s fresh Daily Quests.';
+  overlay.style.display = 'flex';
+  var claimBtn = document.getElementById('daily-claim');
+  function handler(){
+    overlay.style.display = 'none';
+    claimBtn.removeEventListener('click', handler);
+    renderDaily();
+  }
+  claimBtn.addEventListener('click', handler);
 }
 
 // ---------------------------------------------------------------
@@ -1991,6 +2166,7 @@ function autoEmpowerTick(){
   if(cheapest && state.lumen>=cheapestCost){
     state.lumen -= cheapestCost;
     state.spirits[cheapest.id]++;
+    trackDaily('empowers');
     return true;
   }
   return false;
@@ -2018,11 +2194,14 @@ function tick(){
     state.heroResource[id] = cur;
   });
 
+  var dailyChanged = false;
   if(state.achieved.autotap){
     state._autoTapAccum = (state._autoTapAccum||0) + TICK_MS;
     if(state._autoTapAccum>=1000){
       state._autoTapAccum -= 1000;
       state.totalTaps++;
+      trackDaily('taps');
+      dailyChanged = true;
       var autoDmg = tapDamage();
       spawnFloatNum('+'+formatNum(autoDmg), els['enemy-stage']);
       dealDamage(autoDmg);
@@ -2032,10 +2211,11 @@ function tick(){
     state._autoEmpowerAccum = (state._autoEmpowerAccum||0) + TICK_MS;
     if(state._autoEmpowerAccum>=1000){
       state._autoEmpowerAccum -= 1000;
-      if(autoEmpowerTick()){ renderSpirits(); }
+      if(autoEmpowerTick()){ renderSpirits(); dailyChanged = true; }
     }
   }
-  if(autoLabQueueTick()){ renderResearch(); }
+  if(autoLabQueueTick()){ renderResearch(); dailyChanged = true; }
+  if(dailyChanged){ renderDaily(); }
 
   var completedStudies = advanceActiveStudies(TICK_MS/1000);
   var filledSlots = autoFillStudySlots();
@@ -2261,13 +2441,22 @@ function init(){
   cacheEls();
   state = loadState();
   if(state.owned.rememberbulk && state.savedLabMultiplier!==undefined){ labMultiplier = state.savedLabMultiplier; }
+  var dailyRolled = ensureDaily();
+  if(dailyRolled) saveState();
   spawnEnemy();
   setupTabs();
   setupStars();
 
   var stageEl = document.getElementById('enemy-stage');
+  var recentTapTimes = [];
+  var MAX_TAPS_PER_SEC = 20;
   stageEl.addEventListener('pointerdown', function(e){
     e.preventDefault();
+    if(!e.isTrusted) return;
+    var now = Date.now();
+    recentTapTimes.push(now);
+    while(recentTapTimes.length && now - recentTapTimes[0] > 1000) recentTapTimes.shift();
+    if(recentTapTimes.length > MAX_TAPS_PER_SEC) return;
     doTap(stageEl);
   });
 
@@ -2316,6 +2505,9 @@ function init(){
   } else {
     introOverlay.style.display = 'none';
     var offline = applyOfflineProgress();
+    function maybeShowDaily(){
+      if(dailyRolled && pendingDailyReward){ showDailyOverlay(pendingDailyReward); }
+    }
     if(offline && (offline.earned > 1 || offline.completedStudies.length || offline.ascends>0)){
       var msg = 'You were away for ' + fmtDuration(offline.elapsedSec) + '. Your Wisps kept the Rift lit and gathered ' + formatNum(offline.earned) + ' Lumen' + (offline.shardEarned>1 ? ' and ' + formatNum(offline.shardEarned) + ' Shards' : '') + (offline.sigilsEarned>0 ? ' and ' + formatNum(offline.sigilsEarned) + ' Sigils' : '') + (offline.motesEarned>0 ? ' and ' + formatNum(offline.motesEarned) + ' Motes' : '') + ' while you were gone.';
       if(offline.ascends>0){ msg += ' They ascended ' + offline.ascends + ' time' + (offline.ascends===1?'':'s') + ' on their own!'; }
@@ -2326,7 +2518,10 @@ function init(){
       document.getElementById('welcome-claim').addEventListener('click', function(){
         welcomeOverlay.style.display = 'none';
         renderAll();
+        maybeShowDaily();
       });
+    } else {
+      maybeShowDaily();
     }
     renderAll();
   }
