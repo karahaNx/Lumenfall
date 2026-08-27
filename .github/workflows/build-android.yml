@@ -1,0 +1,71 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'index.html'
+      - 'manifest.webmanifest'
+      - 'service-worker.js'
+      - 'icons/**'
+      - 'mobile/**'
+      - '.github/workflows/build-android.yml'
+  workflow_dispatch: {}
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Install mobile dependencies
+        working-directory: mobile
+        run: npm install
+
+      - name: Stage web assets
+        working-directory: mobile
+        run: |
+          mkdir -p www
+          cp ../index.html ../manifest.webmanifest ../service-worker.js www/
+          cp -r ../icons www/icons
+
+      - name: Stage app icon source
+        working-directory: mobile
+        run: |
+          mkdir -p assets
+          cp ../icons/icon-1024.png assets/icon.png
+          cp ../icons/icon-maskable-1024.png assets/icon-foreground.png
+
+      - name: Generate Android icons
+        working-directory: mobile
+        run: npx capacitor-assets generate --android --iconBackgroundColor '#0D0A16' --iconBackgroundColorDark '#0D0A16'
+
+      - name: Add Android platform
+        working-directory: mobile
+        run: npx cap add android
+
+      - name: Sync Capacitor
+        working-directory: mobile
+        run: npx cap sync android
+
+      - name: Build debug APK
+        working-directory: mobile/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lumenfall-android-debug
+          path: mobile/android/app/build/outputs/apk/debug/app-debug.apk

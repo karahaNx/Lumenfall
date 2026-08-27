@@ -1,0 +1,2198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Lumenfall</title>
+<meta name="description" content="Lumenfall — an idle RPG where Wisps push deeper into an ever-collapsing Rift. Recruit, empower, and ascend.">
+<meta name="theme-color" content="#1c1730">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon.ico">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#f2effa;
+    --bg-elev:#ffffff;
+    --bg-elev-2:#eae5f8;
+    --ink:#211f38;
+    --ink-dim:#5d5a7c;
+    --line:#ddd7f0;
+    --lumen:#c98a00;
+    --shard:#1f7fae;
+    --mote:#c14f76;
+    --prism:#8452d6;
+    --comet:#12a390;
+    --sigil:#b8461f;
+    --danger:#c93b4d;
+    --good:#2f9e52;
+    --shadow: 0 1px 2px rgba(33,31,56,.06), 0 8px 24px -12px rgba(33,31,56,.18);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0d0f1f;
+      --bg-elev:#161933;
+      --bg-elev-2:#1f2344;
+      --ink:#eae8f5;
+      --ink-dim:#a8a6c4;
+      --line:#2c2f52;
+      --lumen:#f0b429;
+      --shard:#4fb6e0;
+      --mote:#ff8fae;
+      --prism:#b088f9;
+      --comet:#5ee6d0;
+      --sigil:#ff8552;
+      --danger:#ef5b6b;
+      --good:#6fd67a;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px -12px rgba(0,0,0,.6);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0d0f1f;
+    --bg-elev:#161933;
+    --bg-elev-2:#1f2344;
+    --ink:#eae8f5;
+    --ink-dim:#a8a6c4;
+    --line:#2c2f52;
+    --lumen:#f0b429;
+    --shard:#4fb6e0;
+    --mote:#ff8fae;
+    --prism:#b088f9;
+    --comet:#5ee6d0;
+    --sigil:#ff8552;
+    --danger:#ef5b6b;
+    --good:#6fd67a;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px -12px rgba(0,0,0,.6);
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);}
+  body{
+    font-family:'Manrope',system-ui,-apple-system,sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+  h1,h2,h3{font-family:'Cinzel',Georgia,serif;text-wrap:balance;margin:0;}
+  .mono{font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;}
+  button{font-family:inherit;}
+  :focus-visible{outline:2px solid var(--prism);outline-offset:2px;border-radius:4px;}
+
+  canvas#stars{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+  .shell{
+    position:relative;z-index:1;
+    max-width:460px;margin:0 auto;
+    min-height:100vh;
+    display:flex;flex-direction:column;
+    background:color-mix(in srgb, var(--bg-elev) 88%, transparent);
+    backdrop-filter: blur(6px);
+    border-left:1px solid var(--line);
+    border-right:1px solid var(--line);
+  }
+
+  /* ---------- HUD ---------- */
+  .topbar{position:sticky;top:0;z-index:6;}
+  .hud{
+    display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+    padding:10px 12px;
+    background:color-mix(in srgb, var(--bg-elev) 92%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .chip{
+    display:flex;align-items:center;gap:5px;
+    padding:5px 9px;border-radius:999px;
+    background:var(--bg-elev-2);
+    border:1px solid var(--line);
+    flex:1 1 auto;min-width:0;
+  }
+  .chip .lbl{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;color:var(--ink-dim);}
+  .chip .val{font-size:.78rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .glyph-icon{flex:none;width:13px;height:13px;}
+  .hud .brand{
+    font-family:'Cinzel',serif;font-weight:700;font-size:1rem;letter-spacing:.02em;
+    color:var(--ink);flex:1 1 100%;margin-bottom:2px;
+  }
+
+  /* ---------- main ---------- */
+  main{flex:1;padding:14px 12px 24px;}
+  .tab-panel{display:none;animation: fade .25s ease;}
+  .tab-panel.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+
+  .card{
+    background:var(--bg-elev-2);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:14px;
+    box-shadow:var(--shadow);
+  }
+  .section-label{
+    font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;
+    color:var(--ink-dim);font-weight:700;margin:18px 2px 8px;
+  }
+  .section-label:first-child{margin-top:0;}
+  .section-sub{font-size:.78rem;color:var(--ink-dim);margin:-4px 2px 12px;}
+
+  /* ---------- reusable buy button ---------- */
+  .buy-btn{
+    flex:none;display:flex;flex-direction:column;align-items:center;gap:2px;
+    border:1px solid var(--line);background:var(--bg-elev);border-radius:10px;
+    padding:7px 10px;cursor:pointer;color:var(--ink);min-width:78px;
+  }
+  .buy-btn .cost{font-size:.74rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:2px;}
+  .buy-btn .label{font-size:.6rem;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.04em;}
+  .buy-btn:disabled{opacity:.4;cursor:not-allowed;}
+  .lock-note{font-size:.72rem;color:var(--ink-dim);font-style:italic;}
+  .cost-icon{width:9px;height:9px;flex:none;display:inline-block;}
+
+  /* ---------- Battle stage ---------- */
+  .stage{padding:16px 14px;display:flex;flex-direction:column;gap:10px;}
+  .depth-label{font-size:.78rem;color:var(--ink-dim);font-weight:700;letter-spacing:.04em;text-align:center;}
+  .depth-label .boss-tag{color:var(--danger);}
+  .enemy-name{font-family:'Cinzel',serif;font-size:1rem;font-weight:600;text-align:center;}
+
+  .battle-row{display:flex;gap:10px;align-items:flex-start;}
+  .party-col{width:60px;flex:none;display:flex;flex-direction:column;gap:6px;}
+  .hero-chip{
+    position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;
+    background:var(--bg-elev);border:1px solid var(--line);border-radius:9px;padding:5px 2px 6px;
+  }
+  .hero-chip .shape{width:20px;height:20px;}
+  .chip-bar-track{width:32px;height:3px;border-radius:999px;background:var(--line);overflow:hidden;}
+  .chip-bar-fill{height:100%;width:0%;transition:width .1s linear;}
+  .chip-label{font-size:.5rem;color:var(--ink-dim);font-weight:700;max-width:36px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .chip-power{font-family:'IBM Plex Mono',monospace;font-size:.5rem;color:var(--ink);font-weight:600;max-width:36px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .hero-chip.pulse{animation:pulseChip .3s ease;}
+  @keyframes pulseChip{0%{transform:scale(1);}50%{transform:scale(1.18);}100%{transform:scale(1);}}
+  .chip-flash{
+    position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+    font-size:.5rem;font-weight:700;white-space:nowrap;pointer-events:none;
+    animation: floatUp .8s ease-out forwards;
+  }
+  .empty-party-note{font-size:.66rem;color:var(--ink-dim);text-align:center;line-height:1.3;padding-top:4px;}
+
+  .enemy-stage-wrap{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:8px;}
+  .enemy-stage{
+    position:relative;width:128px;height:128px;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;user-select:none;touch-action:manipulation;
+  }
+  .enemy-stage::before{
+    content:'';position:absolute;inset:-16px;border-radius:50%;pointer-events:none;
+    background: radial-gradient(circle, color-mix(in srgb, var(--theme-accent, transparent) 45%, transparent) 0%, transparent 72%);
+  }
+  .enemy-stage.theme-radiant::before{
+    background: conic-gradient(from 0deg, var(--lumen), var(--shard), var(--mote), var(--prism), var(--comet), var(--sigil), var(--lumen));
+    opacity:.4;filter:blur(4px);
+  }
+  .enemy-glyph{
+    width:92px;height:92px;
+    background: linear-gradient(160deg, var(--danger), color-mix(in srgb, var(--danger) 60%, #3a1030));
+    border-radius: 63% 37% 54% 46% / 43% 47% 53% 57%;
+    box-shadow: 0 0 40px -6px color-mix(in srgb, var(--danger) 60%, transparent);
+    transition: transform .08s ease;
+  }
+  .enemy-glyph.boss{
+    border-radius:0;
+    clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+    width:104px;height:104px;
+  }
+  .enemy-glyph.luminous{
+    box-shadow: 0 0 46px 8px color-mix(in srgb, var(--mote) 65%, transparent);
+    filter: brightness(1.18) saturate(1.1);
+  }
+  .luminous-tag{font-size:.66rem;color:var(--mote);font-weight:700;text-align:center;margin-top:-4px;}
+  .enemy-stage.hit .enemy-glyph{transform:scale(.9) rotate(-2deg);}
+  .hp-wrap{width:100%;}
+  .hp-bar-track{height:9px;border-radius:999px;background:var(--bg-elev-2);border:1px solid var(--line);overflow:hidden;}
+  .hp-bar-fill{height:100%;background:linear-gradient(90deg, var(--danger), color-mix(in srgb, var(--danger) 70%, #ffb56b));width:100%;transition:width .12s linear;}
+  .hp-text{font-size:.68rem;color:var(--ink-dim);margin-top:4px;text-align:center;}
+  .boss-regen-tag{font-size:.66rem;color:var(--good);font-weight:700;text-align:center;margin-top:4px;}
+  .boss-regen-tag.insufficient{color:var(--danger);}
+  .buff-indicator{font-size:.72rem;color:var(--good);font-weight:700;text-align:center;}
+  .float-num{
+    position:absolute;left:50%;top:20%;transform:translateX(-50%);
+    font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.82rem;
+    color:var(--lumen);pointer-events:none;
+    animation: floatUp .7s ease-out forwards;
+  }
+  @keyframes floatUp{
+    0%{opacity:1;transform:translate(-50%,0);}
+    100%{opacity:0;transform:translate(-50%,-44px);}
+  }
+  .tap-hint{font-size:.7rem;color:var(--ink-dim);text-align:center;}
+  .stat-row{display:flex;gap:8px;width:100%;}
+  .stat-box{flex:1;background:var(--bg-elev-2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;text-align:left;}
+  .stat-box .k{font-size:.63rem;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.05em;}
+  .stat-box .v{font-size:.88rem;font-weight:600;margin-top:2px;}
+
+  /* ---------- shapes ---------- */
+  .shape{display:inline-block;flex:none;}
+  .shape-triangle{clip-path: polygon(50% 0%, 0% 100%, 100% 100%);}
+  .shape-hex{clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);}
+  .shape-diamond{clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);}
+  .shape-pentagon{clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);}
+  .shape-star{clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+  .shape-octagon{clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);}
+  .shape-droplet{border-radius:60% 60% 60% 0%;transform:rotate(45deg);}
+  .shape-ring{border-radius:50%;background:transparent !important;box-sizing:border-box;}
+
+  /* ---------- Hero roster ---------- */
+  .hero-grid{display:grid;grid-template-columns:1fr;gap:10px;}
+  .hero-card.locked{opacity:.55;}
+  .hero-top{display:flex;align-items:center;gap:10px;}
+  .hero-top .shape{width:34px;height:34px;}
+  .hero-card .shape-ring{border:6px solid currentColor;}
+  .hero-card.locked .shape{background:var(--ink-dim) !important;}
+  .hero-id{flex:1;min-width:0;}
+  .hero-id .name{font-weight:700;font-size:.9rem;}
+  .class-tag{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;margin-top:1px;}
+  .module-row{margin-top:8px;padding:8px 10px;border-radius:10px;background:var(--bg-elev);border:1px solid var(--line);}
+  .module-name{font-size:.76rem;font-weight:700;}
+  .module-effect{font-size:.68rem;color:var(--ink-dim);margin-top:2px;}
+  .module-row .mini-btn{width:100%;margin-top:8px;}
+  .ultimate-row{margin-top:8px;}
+  .ultimate-badge{
+    font-size:.7rem;font-weight:700;text-align:center;padding:8px;border-radius:10px;
+    background:color-mix(in srgb, var(--sigil) 16%, transparent);
+    color:var(--sigil);border:1px solid color-mix(in srgb, var(--sigil) 40%, transparent);
+  }
+  .ultimate-btn{width:100%;}
+  .node-queue-toggle{
+    margin-left:6px;padding:2px 8px;border-radius:999px;font-size:.6rem;font-weight:700;
+    border:1px solid var(--line);background:var(--bg-elev);color:var(--ink-dim);cursor:pointer;
+    vertical-align:middle;
+  }
+  .node-queue-toggle.active{background:var(--good);border-color:var(--good);color:#fff;}
+  .active-toggle{
+    flex:none;font-size:.62rem;font-weight:700;padding:5px 10px;border-radius:999px;
+    border:1px solid var(--line);background:var(--bg-elev);color:var(--ink-dim);cursor:pointer;
+  }
+  .active-toggle.is-active{background:var(--good);color:#08210f;border-color:var(--good);}
+  .hero-stats{font-size:.72rem;color:var(--ink-dim);margin:8px 0 6px;}
+  .hero-ability{font-size:.7rem;color:var(--ink-dim);margin-bottom:8px;line-height:1.4;}
+  .hero-ability strong{color:var(--ink);}
+  .hero-actions{display:flex;gap:8px;}
+  .mini-btn{
+    flex:1;border-radius:9px;border:1px solid var(--line);background:var(--bg-elev);color:var(--ink);
+    font-weight:700;font-size:.71rem;padding:8px 5px;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:1px;
+  }
+  .mini-btn:disabled{opacity:.4;cursor:not-allowed;}
+  .rarity-btn{color:var(--prism);}
+
+  /* ---------- Research / Ascend node cards ---------- */
+  .node-card{display:flex;gap:12px;align-items:center;margin-bottom:10px;}
+  .node-card .shape{width:30px;height:30px;}
+  .node-info .name{font-weight:700;font-size:.86rem;}
+  .node-info .desc{font-size:.72rem;color:var(--ink-dim);margin-top:1px;}
+  .node-info .lvl{font-size:.68rem;font-weight:700;margin-top:2px;}
+  .locked-node{opacity:.55;}
+
+  /* ---------- Lab: bulk buy + Long Studies ---------- */
+  .mult-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+  .mult-btn{
+    flex:1;min-width:38px;padding:6px 4px;border-radius:8px;
+    border:1px solid var(--line);background:var(--bg-elev);color:var(--ink-dim);
+    font-size:.68rem;font-weight:700;cursor:pointer;
+  }
+  .mult-btn.active{background:var(--shard);color:#fff;border-color:var(--shard);}
+  .study-card .name{font-weight:700;font-size:.88rem;}
+  .study-card .desc{font-size:.74rem;color:var(--ink-dim);margin-top:4px;line-height:1.4;}
+  .study-card .study-meta{font-size:.7rem;color:var(--ink-dim);margin-top:8px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;}
+  .study-bar-track{height:10px;border-radius:999px;background:var(--bg-elev);border:1px solid var(--line);overflow:hidden;margin-top:10px;}
+  .study-bar-fill{height:100%;width:0%;background:linear-gradient(90deg, var(--mote), color-mix(in srgb, var(--mote) 70%, var(--comet)));transition:width .3s linear;}
+  .study-time{font-size:.7rem;color:var(--ink-dim);margin-top:5px;}
+  .speed-row{display:flex;flex-wrap:wrap;gap:6px;}
+  .speed-btn{
+    flex:1;min-width:54px;padding:6px 4px;border-radius:8px;
+    border:1px solid var(--line);background:var(--bg-elev);color:var(--ink);
+    font-size:.68rem;font-weight:700;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:2px;
+  }
+  .speed-btn .speed-cost{font-size:.58rem;color:var(--ink-dim);font-weight:600;display:flex;align-items:center;gap:2px;}
+  .speed-btn.active{background:var(--mote);color:#fff;border-color:var(--mote);}
+  .speed-btn.active .speed-cost{color:#fff;}
+  .speed-btn:disabled{opacity:.4;cursor:not-allowed;}
+
+  /* ---------- Ascend ---------- */
+  .ascend-summary{display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center;padding:18px 14px;}
+  .ascend-breakdown{display:flex;gap:10px;width:100%;text-align:left;}
+  .ab-col{flex:1;background:var(--bg-elev);border:1px solid var(--line);border-radius:10px;padding:10px 12px;}
+  .ab-head{font-size:.64rem;text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:6px;}
+  .ab-reset .ab-head{color:var(--danger);}
+  .ab-keep .ab-head{color:var(--good);}
+  .ab-col ul{margin:0;padding-left:15px;font-size:.71rem;color:var(--ink-dim);line-height:1.6;}
+  .prism-preview{font-family:'IBM Plex Mono',monospace;font-size:1.6rem;font-weight:600;color:var(--prism);}
+  .big-btn{
+    width:100%;padding:12px;border-radius:12px;border:none;cursor:pointer;
+    font-weight:700;font-size:.92rem;letter-spacing:.01em;
+    background:linear-gradient(135deg, var(--prism), color-mix(in srgb, var(--prism) 70%, var(--lumen)));
+    color:#fff;box-shadow:var(--shadow);
+  }
+  .big-btn:disabled{background:var(--bg-elev-2);color:var(--ink-dim);cursor:not-allowed;box-shadow:none;border:1px solid var(--line);}
+
+  /* ---------- Achievements ---------- */
+  .ach-grid{display:grid;grid-template-columns:1fr;gap:8px;}
+  .ach-card{display:flex;align-items:flex-start;gap:10px;}
+  .ach-card .dot{flex:none;width:10px;height:10px;border-radius:50%;background:var(--line);margin-top:3px;}
+  .ach-card.done .dot{background:var(--good);}
+  .ach-card .info{flex:1;min-width:0;}
+  .ach-card .name{font-size:.84rem;font-weight:600;}
+  .ach-card.done .name{color:var(--ink-dim);text-decoration:line-through;}
+  .ach-card .ach-unlock{font-size:.65rem;color:var(--prism);font-weight:600;margin-top:2px;}
+  .ach-card.done .ach-unlock{color:var(--ink-dim);}
+  .ach-card .reward{font-size:.72rem;color:var(--comet);font-weight:700;flex:none;}
+  .shop-card{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+  .shop-card .info{flex:1;}
+  .shop-card .name{font-weight:700;font-size:.86rem;}
+  .shop-card .desc{font-size:.72rem;color:var(--ink-dim);margin-top:2px;}
+  .shop-card button{
+    flex:none;border-radius:10px;border:1px solid var(--line);background:var(--bg-elev);
+    padding:8px 12px;font-weight:700;font-size:.78rem;color:var(--comet);cursor:pointer;
+  }
+  .shop-card button:disabled{opacity:.4;cursor:not-allowed;}
+  .shop-card button.owned{color:var(--good);}
+  .theme-card{display:flex;align-items:center;gap:12px;margin-bottom:10px;cursor:pointer;border-color:transparent;}
+  .theme-card.active{border-color:var(--good);}
+  .theme-card.locked-node{cursor:default;}
+  .theme-swatch{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);}
+  .theme-info{flex:1;min-width:0;}
+  .theme-info .name{font-weight:700;font-size:.86rem;}
+  .theme-info .desc{font-size:.72rem;color:var(--ink-dim);margin-top:2px;}
+  .theme-active-tag{flex:none;font-size:.66rem;font-weight:700;color:var(--good);}
+
+  /* ---------- About ---------- */
+  .currency-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:4px;}
+  .currency-card{display:flex;gap:12px;align-items:flex-start;}
+  .currency-card .shape{margin-top:2px;}
+  .currency-card .cname{font-weight:700;font-size:.85rem;}
+  .currency-card .cdesc{font-size:.76rem;color:var(--ink-dim);margin-top:2px;line-height:1.42;}
+  .manifesto{display:flex;flex-direction:column;gap:10px;}
+  .man-card .eyebrow{font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;color:var(--prism);font-weight:700;margin-bottom:4px;}
+  .man-card .title{font-weight:700;font-size:.88rem;margin-bottom:3px;}
+  .man-card .body{font-size:.78rem;color:var(--ink-dim);line-height:1.45;}
+  .fine-print{font-size:.7rem;color:var(--ink-dim);line-height:1.5;margin-top:14px;padding:0 2px;}
+  .reset-btn{
+    margin-top:14px;width:100%;padding:11px;border-radius:12px;
+    border:1px solid var(--danger);background:transparent;color:var(--danger);
+    font-weight:700;font-size:.82rem;cursor:pointer;
+  }
+  .reset-confirm-row{margin-top:14px;}
+  .reset-warning{font-size:.76rem;color:var(--danger);line-height:1.45;margin-bottom:10px;}
+  .reset-confirm-actions{display:flex;gap:8px;}
+  .reset-confirm-actions .reset-btn{flex:1;margin-top:0;}
+
+  /* ---------- Tab bar ---------- */
+  nav.tabbar{
+    display:flex;
+    background:color-mix(in srgb, var(--bg-elev) 94%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.tabbar button{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+    padding:8px 2px 7px;background:none;border:none;cursor:pointer;color:var(--ink-dim);
+  }
+  nav.tabbar button .ic{width:14px;height:14px;border:2px solid currentColor;}
+  nav.tabbar button .lb{font-size:.56rem;font-weight:700;letter-spacing:.01em;}
+  nav.tabbar button.active{color:var(--lumen);}
+  nav.tabbar button.active .ic{background:var(--lumen);border-color:var(--lumen);}
+
+  /* ---------- Modal / intro ---------- */
+  .overlay{
+    position:fixed;inset:0;z-index:20;
+    background:color-mix(in srgb, var(--bg) 80%, transparent);
+    backdrop-filter:blur(6px);
+    display:flex;align-items:center;justify-content:center;padding:24px;
+  }
+  .modal{
+    max-width:380px;width:100%;background:var(--bg-elev);border:1px solid var(--line);
+    border-radius:18px;padding:24px 22px;text-align:center;box-shadow:var(--shadow);
+  }
+  .modal h2{font-size:1.3rem;margin-bottom:8px;}
+  .modal p{font-size:.85rem;color:var(--ink-dim);line-height:1.5;margin:0 0 16px;}
+  .modal .primary-btn{
+    width:100%;padding:11px;border-radius:12px;border:none;cursor:pointer;
+    background:var(--lumen);color:#241900;font-weight:800;font-size:.88rem;
+  }
+
+  /* ---------- Toast ---------- */
+  .toast{
+    position:fixed;left:50%;bottom:22px;transform:translate(-50%,8px);z-index:15;
+    background:var(--ink);color:var(--bg);font-size:.76rem;font-weight:600;
+    padding:8px 14px;border-radius:999px;opacity:0;pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease;max-width:80%;text-align:center;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important;transition-duration:.001ms !important;}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<div class="shell">
+  <div class="topbar">
+    <header class="hud">
+      <span class="brand">Lumenfall</span>
+      <div class="chip"><span class="shape shape-triangle glyph-icon" style="background:var(--lumen)"></span><span class="lbl">Lumen</span><span class="val mono" id="hud-lumen">0</span></div>
+      <div class="chip"><span class="shape shape-hex glyph-icon" style="background:var(--shard)"></span><span class="lbl">Shards</span><span class="val mono" id="hud-shard">0</span></div>
+      <div class="chip"><span class="shape shape-pentagon glyph-icon" style="background:var(--mote)"></span><span class="lbl">Motes</span><span class="val mono" id="hud-mote">0</span></div>
+      <div class="chip"><span class="shape shape-diamond glyph-icon" style="background:var(--prism)"></span><span class="lbl">Prisms</span><span class="val mono" id="hud-prism">0</span></div>
+      <div class="chip"><span class="shape shape-star glyph-icon" style="background:var(--comet)"></span><span class="lbl">Comets</span><span class="val mono" id="hud-comet">0</span></div>
+      <div class="chip"><span class="shape shape-octagon glyph-icon" style="background:var(--sigil)"></span><span class="lbl">Sigils</span><span class="val mono" id="hud-sigil">0</span></div>
+    </header>
+    <nav class="tabbar">
+      <button class="tab-btn active" data-tab="battle"><span class="ic" style="border-radius:50%;"></span><span class="lb">Rift</span></button>
+      <button class="tab-btn" data-tab="spirits"><span class="ic" style="clip-path:polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%);"></span><span class="lb">Wisps</span></button>
+      <button class="tab-btn" data-tab="research"><span class="ic" style="clip-path:polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);"></span><span class="lb">Lab</span></button>
+      <button class="tab-btn" data-tab="ascend"><span class="ic" style="clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);"></span><span class="lb">Ascend</span></button>
+      <button class="tab-btn" data-tab="deeds"><span class="ic" style="clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);"></span><span class="lb">Deeds</span></button>
+      <button class="tab-btn" data-tab="about"><span class="ic" style="border-radius:50%;border-style:solid;"></span><span class="lb">About</span></button>
+    </nav>
+  </div>
+
+  <main>
+    <section class="tab-panel active" id="tab-battle">
+      <div class="card stage">
+        <div class="depth-label" id="depth-label">Rift 1</div>
+        <div class="enemy-name" id="enemy-name">Hollow Wisp</div>
+        <div class="luminous-tag" id="luminous-tag" style="display:none;">Luminous — bonus Motes on defeat</div>
+        <div class="battle-row">
+          <div class="party-col" id="party-col"></div>
+          <div class="enemy-stage-wrap">
+            <div class="enemy-stage" id="enemy-stage">
+              <div class="enemy-glyph" id="enemy-glyph"></div>
+            </div>
+            <div class="hp-wrap">
+              <div class="hp-bar-track"><div class="hp-bar-fill" id="hp-fill"></div></div>
+              <div class="hp-text mono" id="hp-text">10 / 10</div>
+              <div class="boss-regen-tag" id="boss-regen-tag" style="display:none;">Boss — regenerates health. Grow stronger and come back.</div>
+            </div>
+          </div>
+        </div>
+        <div class="buff-indicator" id="buff-indicator" style="display:none;"></div>
+        <div class="tap-hint">Your Wisps already fight on their own, even when you're gone — tap the Rift to strike as your Guardian and speed things up.</div>
+        <div class="stat-row">
+          <div class="stat-box"><div class="k">Guardian tap</div><div class="v mono" id="stat-tap">1</div></div>
+          <div class="stat-box"><div class="k">Wisp power/s</div><div class="v mono" id="stat-idle">0</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-spirits">
+      <div class="section-label">Your Wisps</div>
+      <div class="section-sub">Up to 5 Wisps can be Active at once — only Active Wisps fight and charge abilities. Bench and swap freely.</div>
+      <div class="hero-grid" id="spirit-list"></div>
+    </section>
+
+    <section class="tab-panel" id="tab-research">
+      <div class="section-label">The Lab</div>
+      <div class="section-sub">Permanent upgrades funded by Lumen and Shards, earned from every kill — never lost on Ascend.</div>
+      <div id="research-list"></div>
+      <div class="section-label">Long Studies</div>
+      <div id="study-list"></div>
+    </section>
+
+    <section class="tab-panel" id="tab-ascend">
+      <div class="card ascend-summary">
+        <div class="section-label" style="margin:0;">Ascend the Rift</div>
+        <div style="font-size:.8rem;color:var(--ink-dim);width:100%;text-align:left;">Every Rift you clear before Ascending adds to the Prisms below — the deeper you push first, the more you earn. Ascending resets the current run so the next one starts from a stronger foundation, boosted by everything your Prisms have already bought.</div>
+        <div class="ascend-breakdown">
+          <div class="ab-col ab-reset"><div class="ab-head">Resets</div><ul><li>Rift depth</li><li>Wisp levels</li><li>Current Lumen</li></ul></div>
+          <div class="ab-col ab-keep"><div class="ab-head">Keeps</div><ul><li>Wisp Rarity, Modules &amp; Ultimates</li><li>Lab research</li><li>Long Study progress</li><li>Prisms &amp; this tree</li><li>Comets, Motes, Sigils &amp; Deeds</li></ul></div>
+        </div>
+        <div class="prism-preview mono" id="prism-preview">+0 Prisms</div>
+        <button class="big-btn" id="ascend-btn">Ascend</button>
+        <div class="lock-note" id="ascend-note"></div>
+      </div>
+      <div class="section-label">Ascension Tree</div>
+      <div id="node-list"></div>
+    </section>
+
+    <section class="tab-panel" id="tab-deeds">
+      <div class="section-label">Deeds</div>
+      <div class="ach-grid" id="ach-list"></div>
+      <div class="section-label">Comet Rest Stop</div>
+      <div id="shop-list"></div>
+      <div class="section-label">Cosmetics</div>
+      <div class="section-sub">Certain Deeds unlock a new aura for the Rift. Purely visual — never a power gain.</div>
+      <div id="theme-list"></div>
+    </section>
+
+    <section class="tab-panel" id="tab-about">
+      <div class="section-label">Currencies</div>
+      <div class="currency-grid" id="currency-list"></div>
+      <div class="section-label">Fair-Play Manifesto</div>
+      <div class="manifesto" id="manifesto"></div>
+      <div id="reset-row">
+        <button class="reset-btn" id="reset-btn">Reset Save</button>
+      </div>
+      <div class="reset-confirm-row" id="reset-confirm-row" style="display:none;">
+        <div class="reset-warning">This permanently deletes every Wisp, Rarity tier, Lab research, Long Study, Prism, Motes, Comet and Deed. This cannot be undone.</div>
+        <div class="reset-confirm-actions">
+          <button class="mini-btn" id="reset-cancel-btn">Cancel</button>
+          <button class="reset-btn" id="reset-confirm-btn">Yes, delete everything</button>
+        </div>
+      </div>
+      <div class="fine-print">Lumenfall is an original game, designed by reading public player feedback on idle RPGs and building the opposite of the parts people complain about most.</div>
+    </section>
+  </main>
+</div>
+
+<div class="overlay" id="intro-overlay">
+  <div class="modal">
+    <h2>Lumenfall</h2>
+    <p>Awaken a party of starlight Wisps — your first Wisp is already fighting for you. Strike into the Rift as their Guardian to speed things up, and unravel the eclipse swallowing the sky. Everything here is earned by playing — there is nothing to buy that makes you stronger.</p>
+    <button class="primary-btn" id="intro-begin">Begin</button>
+  </div>
+</div>
+
+<div class="overlay" id="welcome-overlay" style="display:none;">
+  <div class="modal">
+    <h2>Welcome back</h2>
+    <p id="welcome-text"></p>
+    <button class="primary-btn" id="welcome-claim">Continue</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+
+// ---------------------------------------------------------------
+// Data
+// ---------------------------------------------------------------
+var SPIRITS = [
+  {id:'ember',  name:'Ember Wisp',      shortName:'Ember',  shape:'shape-triangle', color:'#e08a2e', unlockDepth:1,  baseCost:10,      basePower:1,     heroClass:'Starcaller',  role:'DPS',     resource:'mana',    abilityType:'dps',     abilityName:'Nova Burst'},
+  {id:'tide',   name:'Tide Sprite',     shortName:'Tide',   shape:'shape-droplet',  color:'#3aa0c9', unlockDepth:3,  baseCost:60,      basePower:5,     heroClass:'Dawnpriest',  role:'Support', resource:'harmony', abilityType:'support', abilityName:'Blessing'},
+  {id:'stone',  name:'Stoneheart Golem',shortName:'Stone',  shape:'shape-hex',      color:'#7a8f6a', unlockDepth:6,  baseCost:360,     basePower:26,    heroClass:'Duskguard',   role:'Tank',    resource:'rage',    abilityType:'tank',    abilityName:'Bulwark Slam'},
+  {id:'gale',   name:'Gale Dancer',     shortName:'Gale',   shape:'shape-diamond',  color:'#79c7d1', unlockDepth:9,  baseCost:2100,    basePower:130,   heroClass:'Windrunner',  role:'Ranged',  resource:'focus',   abilityType:'ranged',  abilityName:'Piercing Volley'},
+  {id:'thorn',  name:'Thornback',       shortName:'Thorn',  shape:'shape-pentagon', color:'#4f8f5b', unlockDepth:12, baseCost:12000,   basePower:680,   heroClass:'Thornshaper', role:'Support', resource:'energy',  abilityType:'druid',   abilityName:'Bloom Surge'},
+  {id:'void',   name:'Voidling',        shortName:'Void',   shape:'shape-star',     color:'#8a5fd6', unlockDepth:18, baseCost:70000,   basePower:3400,  heroClass:'Starcaller',  role:'DPS',     resource:'mana',    abilityType:'dps',     abilityName:'Void Nova'},
+  {id:'aurora', name:'Aurora Seer',     shortName:'Aurora', shape:'shape-ring',     color:'#d16fa8', unlockDepth:24, baseCost:400000,  basePower:17000, heroClass:'Dawnpriest',  role:'Support', resource:'harmony', abilityType:'support', abilityName:'Radiant Blessing'},
+  {id:'titan',  name:'Starforged Titan',shortName:'Titan',  shape:'shape-octagon',  color:'#d1a72e', unlockDepth:32, baseCost:2200000, basePower:88000, heroClass:'Duskguard',   role:'Tank',    resource:'rage',    abilityType:'tank',    abilityName:'Titanic Slam'}
+];
+
+var ABILITY_DESC = {
+  tank: 'Heavy burst damage to the Rift.',
+  dps: 'Massive burst damage to the Rift.',
+  ranged: 'Burst damage, plus bonus Shards.',
+  druid: 'Burst damage, plus bonus Lumen.',
+  support: "Boosts the whole party's power for a few seconds."
+};
+
+var RESOURCE_COLORS = {mana:'#4f8fe0', rage:'#e0524f', harmony:'#e0b34f', focus:'#4fe0c9', energy:'#7fe04f'};
+var MODULE_MAX_LEVEL = 20;
+var MODULE_INFO = {
+  dps:     {name:'Overcharge Core',  effect:function(lvl){ return '+'+Math.round(lvl*5)+'% ability burst damage'; }},
+  tank:    {name:'Bulwark Plating',  effect:function(lvl){ return '+'+Math.round(lvl*5)+'% ability burst damage'; }},
+  ranged:  {name:'Piercing Lens',    effect:function(lvl){ return '+'+Math.round(lvl*5)+'% bonus Shards from its ability'; }},
+  druid:   {name:'Bloom Catalyst',   effect:function(lvl){ return '+'+Math.round(lvl*5)+'% bonus Lumen from its ability'; }},
+  support: {name:'Resonant Focus',   effect:function(lvl){ return '+'+Math.round(lvl*5)+'% Motes from Luminous kills while Active'; }}
+};
+var RARITY_NAMES  = ['Common','Uncommon','Rare','Epic','Legendary','Mythic'];
+var RARITY_COLORS = ['#9aa0b4','#4fae5e','#3d8fd6','#a860e0','#e0a730','#e0475f'];
+var RARITY_MULT   = [1, 1.5, 2.25, 3.5, 5.5, 9];
+
+var RESEARCH = [
+  {id:'focus',     name:'Battle Focus',       desc:'+8% Lumen from every kill, per level.',                  lumenBase:200, lumenGrowth:1.5,  shardBase:0,  shardGrowth:1},
+  {id:'sense',     name:'Shard Sense',        desc:'+8% Shards from every kill, per level.',                 lumenBase:150, lumenGrowth:1.5,  shardBase:20, shardGrowth:1.5},
+  {id:'formation', name:'Formation Training', desc:'+5% power for every Active Wisp, per level.',      lumenBase:0,   lumenGrowth:1,    shardBase:40, shardGrowth:1.6},
+  {id:'resolve',   name:"Guardian's Resolve", desc:'+10% Guardian tap damage, per level.',                   lumenBase:150, lumenGrowth:1.45, shardBase:0,  shardGrowth:1},
+  {id:'charge',    name:'Swift Recovery',     desc:'+8% faster Wisp ability charge, per level.',              lumenBase:0,   lumenGrowth:1,    shardBase:30, shardGrowth:1.55}
+];
+
+var NODES = [
+  {id:'starlight', name:'Starlight Affinity', desc:'+10% Lumen from every kill, per level.', baseCost:1, growth:1.35},
+  {id:'steady',    name:'Steady Hands',        desc:'+8% tap damage, per level.',              baseCost:1, growth:1.30},
+  {id:'echo',      name:'Echoing Rest',        desc:'+5% offline earning rate, per level (caps at 100%).', baseCost:2, growth:1.40},
+  {id:'bonds',     name:'Cheaper Bonds',       desc:'−3% Wisp recruiting cost, per level (floor 40%).',  baseCost:2, growth:1.45},
+  {id:'swift',     name:'Swift Ascension',     desc:'+4% Prisms earned per Ascend, per level.', baseCost:3, growth:1.50},
+  {id:'momentum',  name:'Eternal Momentum',    desc:'+6% power for every Active Wisp, per level.', baseCost:5, growth:1.55, requiresAchievement:'asc5'},
+  {id:'reserves',  name:'Deep Reserves',       desc:'+2 hours to your offline cap, per level.', baseCost:6, growth:1.60, requiresAchievement:'d100'}
+];
+
+var LONG_STUDIES = [
+  {id:'wispascend',   name:'Wisp Ascendancy',     desc:'+15% power for every Wisp, permanently.',                          unlockDepth:1,  baseDurationSec:180, durationGrowth:1.6, lumenBase:800,  lumenGrowth:1.8, shardBase:80,  shardGrowth:1.8},
+  {id:'guardmastery', name:"Guardian's Mastery",  desc:'+20% Guardian tap damage, permanently.',                           unlockDepth:1,  baseDurationSec:150, durationGrowth:1.6, lumenBase:600,  lumenGrowth:1.8, shardBase:40,  shardGrowth:1.8},
+  {id:'riftattune',   name:'Rift Attunement',     desc:'+10% offline earning rate, permanently (stacks past 100%).',      unlockDepth:1,  baseDurationSec:240, durationGrowth:1.6, lumenBase:500,  lumenGrowth:1.8, shardBase:100, shardGrowth:1.8},
+  {id:'shardstudy',   name:'Shard Attunement',    desc:'+8% Shards earned per kill, permanently.',                        unlockDepth:15, baseDurationSec:200, durationGrowth:1.6, lumenBase:400,  lumenGrowth:1.8, shardBase:150, shardGrowth:1.8},
+  {id:'lumenstudy',   name:'Lumen Wellspring',    desc:'+8% Lumen earned per kill, permanently.',                         unlockDepth:25, baseDurationSec:260, durationGrowth:1.6, lumenBase:1400, lumenGrowth:1.8, shardBase:120, shardGrowth:1.8},
+  {id:'formationstudy',name:'Formation Insight',  desc:'+5% party formation power, permanently.',                         unlockDepth:40, baseDurationSec:320, durationGrowth:1.6, lumenBase:2200, lumenGrowth:1.8, shardBase:220, shardGrowth:1.8},
+  {id:'motestudy',     name:'Luminous Sense',     desc:'+10% Motes gained from Luminous enemies, permanently.',           unlockDepth:60, baseDurationSec:380, durationGrowth:1.6, lumenBase:3200, lumenGrowth:1.8, shardBase:320, shardGrowth:1.8},
+  {id:'prismstudy',    name:'Ascendant Clarity',  desc:'+5% Prisms earned per Ascend, permanently.',                      unlockDepth:90, baseDurationSec:450, durationGrowth:1.6, lumenBase:4800, lumenGrowth:1.8, shardBase:480, shardGrowth:1.8}
+];
+
+var LAB_SPEED_TIERS = [1.5, 2, 3, 4, 5, 6, 7, 8];
+function speedTierCost(mult){
+  return Math.round(6 * Math.pow(mult, 2.1));
+}
+
+var ACHIEVEMENTS = [
+  {id:'d10',   name:'Reach Rift 10',        reward:5,  check:function(s){return s.maxDepthEver>=10;}},
+  {id:'d25',   name:'Reach Rift 25',        reward:10, check:function(s){return s.maxDepthEver>=25;}},
+  {id:'d50',   name:'Reach Rift 50',        reward:20, check:function(s){return s.maxDepthEver>=50;}},
+  {id:'d100',  name:'Reach Rift 100',       reward:50, unlocks:'Ascension Tree: Deep Reserves', check:function(s){return s.maxDepthEver>=100;}},
+  {id:'d250',  name:'Reach Rift 250',       reward:100, check:function(s){return s.maxDepthEver>=250;}},
+  {id:'tap100',  name:'Strike 100 times',    reward:3,  check:function(s){return s.totalTaps>=100;}},
+  {id:'tap1000', name:'Strike 1,000 times',  reward:8,  check:function(s){return s.totalTaps>=1000;}},
+  {id:'tap10000',name:'Strike 10,000 times', reward:20, check:function(s){return s.totalTaps>=10000;}},
+  {id:'fullparty', name:'Full Formation',    reward:12, check:function(s){return s.activeParty.length>=5;}},
+  {id:'asc1',  name:'Ascend once',          reward:10, check:function(s){return s.ascendCount>=1;}},
+  {id:'asc5',  name:'Ascend 5 times',       reward:25, unlocks:'Ascension Tree: Eternal Momentum', check:function(s){return s.ascendCount>=5;}},
+  {id:'asc10', name:'Ascend 10 times',      reward:50, check:function(s){return s.ascendCount>=10;}},
+  {id:'all',   name:'Recruit every Wisp',   reward:30, check:function(s){return SPIRITS.every(function(sp){return (s.spirits[sp.id]||0)>0;});}},
+  {id:'mythic',name:'Raise a Wisp to Mythic', reward:40, check:function(s){return SPIRITS.some(function(sp){return (s.heroRarity[sp.id]||0)>=5;});}},
+  {id:'idle8', name:'Rest 8 hours offline', reward:15, check:function(s){return s.totalOfflineSeconds>=8*3600;}},
+  {id:'autotap',   name:'Tireless Vigil',      reward:25, unlocks:'Auto-Tap — your Guardian strikes on its own, once a second', check:function(s){return s.ascendCount>=12;}},
+  {id:'labmaster', name:'The Lab Never Sleeps', reward:30, unlocks:'Auto-Empower — spare Lumen levels up your party for you, live or while you\'re offline', check:function(s){return RESEARCH.reduce(function(sum,r){return sum+(s.research[r.id]||0);},0)>=20;}},
+  {id:'study1',    name:'First Discovery',     reward:15, check:function(s){return totalStudyLevels(s)>=1;}},
+  {id:'study25',   name:'Devoted Scholar',     reward:50, check:function(s){return totalStudyLevels(s)>=25;}},
+  {id:'allstudies',name:'Every Path Studied',  reward:35, check:function(s){return LONG_STUDIES.every(function(l){return (s.longStudyLevels[l.id]||0)>=1;});}},
+  {id:'labqueue',  name:'Endless Curiosity',   reward:40, check:function(s){return RESEARCH.reduce(function(sum,r){return sum+(s.research[r.id]||0);},0)>=60;}},
+  {id:'firstultimate', name:'Awakened Power',  reward:45, check:function(s){return SPIRITS.some(function(sp){return !!(s.wispUltimate && s.wispUltimate[sp.id]);});}},
+  {id:'modulemax', name:'Perfect Synergy',     reward:45, unlocks:'Cosmetics: Radiant Rift aura', check:function(s){return SPIRITS.some(function(sp){return (s.wispModules[sp.id]||0)>=MODULE_MAX_LEVEL;});}}
+];
+
+var RIFT_THEMES = [
+  {id:'default', name:'Starlight',    desc:'The Rift as it always looked.', unlockAchievement:null,     accent:null},
+  {id:'ember',   name:'Ember Veil',   desc:'A warm ember aura around the Rift.', unlockAchievement:'d50',    accent:'#e08a2e'},
+  {id:'void',    name:'Void Bloom',   desc:'A deep violet aura around the Rift.', unlockAchievement:'asc5',   accent:'#8a5fd6'},
+  {id:'aurora',  name:'Aurora Pulse', desc:'A rose-teal aura around the Rift.', unlockAchievement:'mythic', accent:'#d16fa8'},
+  {id:'solar',   name:'Solar Crown',  desc:'A golden aura around the Rift.', unlockAchievement:'d250',   accent:'#d1a72e'},
+  {id:'radiant', name:'Radiant',      desc:'A prismatic aura cycling through every currency color.', unlockAchievement:'modulemax', accent:null}
+];
+
+var SHOP = [
+  {id:'autoascend', name:'Auto-Ascend Ritual', desc:'The moment you clear 15 Rifts, ascend automatically — live or while you\'re offline, no need to babysit the button.', cost:100},
+  {id:'offline24',  name:'Extended Rest',      desc:'Raise the offline earnings cap from 12 hours to 24 hours.', cost:140},
+  {id:'offline48',  name:'Deep Rest',          desc:'Raise the offline earnings cap by another 24 hours, stacking with Extended Rest.', cost:160},
+  {id:'rememberbulk',name:'Loadout Memory',    desc:'The Lab remembers your last bulk-buy multiplier between visits, instead of resetting to 1x.', cost:50}
+];
+
+var MANIFESTO = [
+  {eyebrow:'Our promise', title:'No pay-to-win, ever', body:'Lumenfall has nothing to buy with real money — every currency, from Lumen to Sigils, is earned by playing. Every upgrade you see is something you can reach yourself.'},
+  {eyebrow:'The "zone 80 wall"', title:'Progress never fully stalls', body:'Many idle RPGs stretch their upgrade paths thin enough that progress plateaus for days at a time. Every Ascend here guarantees Prisms the moment you qualify, and Rarity plus Lab research never get wiped — so a reset is always a net gain.'},
+  {eyebrow:'"Present every few minutes"', title:'Actually idle', body:'Some idle games expect hours of daily babysitting or you hit a hard stop. Your Wisps keep fighting while you’re away, with generous, transparent offline earnings shown the moment you return.'},
+  {eyebrow:'"24 heroes at once"', title:'A roster that unfolds', body:'Wisps unlock gradually as you go deeper, instead of dumping a full cast on a brand-new player.'},
+  {eyebrow:'Gear rarity RNG', title:'No loot boxes, no gacha', body:'Every upgrade — leveling, Rarity, Lab research — is a visible, deterministic purchase, and even a Luminous enemy always drops the same fixed amount of Motes. What you see is what you get, never a random range.'},
+  {eyebrow:'What actually makes an idle RPG feel like one', title:'A real party, with real roles', body:'Up to five Wisps — each with a class, a resource bar, and an active ability — fight beside your Guardian. Their Rarity tier and Lab investment matter, not just one flat number going up.'}
+];
+
+var ENEMY_ADJ = ['Hollow','Dusk','Rift-Touched','Withering','Umbral','Ashen','Fractured','Silent','Creeping','Starved'];
+var ENEMY_NOUN = ['Wisp','Serpent','Stalker','Husk','Warden','Shade','Leech','Prowler','Effigy','Wraith'];
+
+var SAVE_KEY = 'lumenfall_save_v2';
+var TICK_MS = 100;
+var BOSS_REGEN_PER_SEC = 0.006;
+
+// ---------------------------------------------------------------
+// State
+// ---------------------------------------------------------------
+function freshState(){
+  var spirits = {}, nodes = {}, research = {}, researchQueue = {}, heroRarity = {}, heroResource = {}, wispModules = {}, wispUltimate = {}, empowerQueue = {}, achieved = {}, owned = {}, longStudyLevels = {}, studyQueue = {};
+  SPIRITS.forEach(function(sp){ spirits[sp.id] = 0; heroRarity[sp.id] = 0; heroResource[sp.id] = 0; wispModules[sp.id] = 0; wispUltimate[sp.id] = false; empowerQueue[sp.id] = true; });
+  spirits['ember'] = 1;
+  NODES.forEach(function(n){ nodes[n.id] = 0; });
+  RESEARCH.forEach(function(r){ research[r.id] = 0; researchQueue[r.id] = false; });
+  LONG_STUDIES.forEach(function(l){ longStudyLevels[l.id] = 0; studyQueue[l.id] = false; });
+  return {
+    lumen:0, shards:0, prisms:0, comets:0, motes:0, sigils:0,
+    depth:1, maxDepthEver:1,
+    enemyHp:0, enemyMaxHp:0, enemyIsLuminous:false,
+    spirits:spirits, heroRarity:heroRarity, heroResource:heroResource, wispModules:wispModules, wispUltimate:wispUltimate, empowerQueue:empowerQueue, activeParty:['ember'],
+    nodes:nodes, research:research, researchQueue:researchQueue,
+    longStudyLevels:longStudyLevels, activeStudies:[], studyQueue:studyQueue,
+    achieved:achieved, owned:owned, riftTheme:'default',
+    buffUntil:0, buffMult:1,
+    ascendCount:0, totalTaps:0, totalKills:0, totalOfflineSeconds:0,
+    savedLabMultiplier:1,
+    lastSeen:Date.now()
+  };
+}
+function totalStudyLevels(s){
+  return LONG_STUDIES.reduce(function(sum,l){ return sum + (s.longStudyLevels[l.id]||0); }, 0);
+}
+
+var state = null;
+var isNewGame = false;
+
+function loadState(){
+  try{
+    var raw = localStorage.getItem(SAVE_KEY);
+    if(!raw){ isNewGame = true; return freshState(); }
+    var parsed = JSON.parse(raw);
+    var researchQueueWasMissing = parsed.researchQueue===undefined;
+    var studyQueueWasMissing = parsed.studyQueue===undefined;
+    var fresh = freshState();
+    for(var k in fresh){ if(parsed[k]===undefined) parsed[k]=fresh[k]; }
+    SPIRITS.forEach(function(sp){
+      if(parsed.spirits[sp.id]===undefined) parsed.spirits[sp.id]=0;
+      if(parsed.heroRarity[sp.id]===undefined) parsed.heroRarity[sp.id]=0;
+      if(parsed.heroResource[sp.id]===undefined) parsed.heroResource[sp.id]=0;
+      if(parsed.wispModules[sp.id]===undefined) parsed.wispModules[sp.id]=0;
+      if(parsed.wispUltimate[sp.id]===undefined) parsed.wispUltimate[sp.id]=false;
+      if(parsed.empowerQueue[sp.id]===undefined) parsed.empowerQueue[sp.id]=true;
+    });
+    NODES.forEach(function(n){ if(parsed.nodes[n.id]===undefined) parsed.nodes[n.id]=0; });
+    RESEARCH.forEach(function(r){
+      if(parsed.research[r.id]===undefined) parsed.research[r.id]=0;
+      if(researchQueueWasMissing){ parsed.researchQueue[r.id]=!!parsed.labQueueOn; }
+      else if(parsed.researchQueue[r.id]===undefined){ parsed.researchQueue[r.id]=false; }
+    });
+    delete parsed.labQueueOn;
+    LONG_STUDIES.forEach(function(l){
+      if(parsed.longStudyLevels[l.id]===undefined) parsed.longStudyLevels[l.id]=0;
+      if(studyQueueWasMissing){ parsed.studyQueue[l.id]=!!(parsed.owned && parsed.owned.autostudy); }
+      else if(parsed.studyQueue[l.id]===undefined){ parsed.studyQueue[l.id]=false; }
+    });
+    if(parsed.owned){ delete parsed.owned.autostudy; }
+    if(!Array.isArray(parsed.activeParty)) parsed.activeParty=[];
+    if(!Array.isArray(parsed.activeStudies)) parsed.activeStudies=[];
+    if(parsed.activeStudy){ parsed.activeStudies.push(parsed.activeStudy); delete parsed.activeStudy; }
+    return parsed;
+  }catch(e){ isNewGame = true; return freshState(); }
+}
+
+function saveState(){
+  try{
+    state.lastSeen = Date.now();
+    localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+  }catch(e){}
+}
+
+// ---------------------------------------------------------------
+// Math helpers
+// ---------------------------------------------------------------
+function formatNum(n){
+  n = Math.max(0, n);
+  if(n < 1000) return (Math.round(n*10)/10).toString();
+  var units = ['','K','M','B','T','Qa','Qi','Sx','Sp','Oc'];
+  var tier = Math.min(Math.floor(Math.log10(n)/3), units.length-1);
+  var scaled = n / Math.pow(10, tier*3);
+  return scaled.toFixed(2) + units[tier];
+}
+
+var COST_ICON_MAP = {
+  lumen: {shape:'shape-triangle', color:'var(--lumen)'},
+  shard: {shape:'shape-hex', color:'var(--shard)'},
+  mote:  {shape:'shape-pentagon', color:'var(--mote)'},
+  prism: {shape:'shape-diamond', color:'var(--prism)'},
+  comet: {shape:'shape-star', color:'var(--comet)'},
+  sigil: {shape:'shape-octagon', color:'var(--sigil)'}
+};
+function costIcon(kind){
+  var m = COST_ICON_MAP[kind];
+  return '<span class="shape '+m.shape+' cost-icon" style="background:'+m.color+'"></span>';
+}
+
+function isBoss(depth){ return depth>0 && depth%10===0; }
+
+function nodeLevel(id){ return state.nodes[id]||0; }
+function researchLevel(id){ return state.research[id]||0; }
+
+function lumenMult(){ return (1 + nodeLevel('starlight')*0.10) * (1 + researchLevel('focus')*0.08) * longStudyLumenMult(); }
+function shardMult(){ return (1 + researchLevel('sense')*0.08) * longStudyShardMult(); }
+function longStudyLevel(id){ return (state.longStudyLevels && state.longStudyLevels[id]) || 0; }
+function longStudyPowerMult(){ return 1 + longStudyLevel('wispascend')*0.15; }
+function longStudyTapMult(){ return 1 + longStudyLevel('guardmastery')*0.20; }
+function longStudyOfflineBonus(){ return longStudyLevel('riftattune')*0.10; }
+function longStudyShardMult(){ return 1 + longStudyLevel('shardstudy')*0.08; }
+function longStudyLumenMult(){ return 1 + longStudyLevel('lumenstudy')*0.08; }
+function longStudyFormationMult(){ return 1 + longStudyLevel('formationstudy')*0.05; }
+function longStudyMoteMult(){ return 1 + longStudyLevel('motestudy')*0.10; }
+function longStudyPrismMult(){ return 1 + longStudyLevel('prismstudy')*0.05; }
+function tapMult(){ return (1 + nodeLevel('steady')*0.08) * (1 + researchLevel('resolve')*0.10) * longStudyTapMult(); }
+function formationMult(){ return (1 + researchLevel('formation')*0.05) * longStudyFormationMult(); }
+function momentumMult(){ return 1 + nodeLevel('momentum')*0.06; }
+function fillRateMult(){ return 1 + researchLevel('charge')*0.08; }
+function offlineRate(){ return Math.min(1, 0.70 + nodeLevel('echo')*0.05) + longStudyOfflineBonus(); }
+function prismMult(){ return (1 + nodeLevel('swift')*0.04) * longStudyPrismMult(); }
+function costReduction(){ return Math.min(0.6, nodeLevel('bonds')*0.03); }
+function offlineCapHours(){ return 12 + (state.owned.offline24?12:0) + (state.owned.offline48?24:0) + nodeLevel('reserves')*2; }
+function eliteChance(depth){ return Math.min(0.30, 0.03 + Math.floor(depth/10)*0.02); }
+function motesDropFor(depth){ return Math.max(1, Math.round((1 + depth/8) * longStudyMoteMult())); }
+function sigilsFromBoss(depth){ return Math.max(1, Math.floor(depth/10)); }
+
+function moduleLevel(id){ return (state.wispModules && state.wispModules[id]) || 0; }
+function moduleMult(id){ return 1 + moduleLevel(id)*0.05; }
+function moduleCost(sp, level){
+  return {
+    lumen: Math.round(sp.baseCost*4 * Math.pow(1.35, level)),
+    shard: Math.round(sp.baseCost*0.4 * Math.pow(1.35, level))
+  };
+}
+function supportMoteBonus(){
+  var bonus = 0;
+  state.activeParty.forEach(function(id){
+    var sp = SPIRITS.find(function(s){ return s.id===id; });
+    if(!sp || sp.abilityType!=='support') return;
+    if((state.spirits[id]||0)<=0) return;
+    bonus += moduleLevel(id)*0.05;
+  });
+  return bonus;
+}
+function ultimateUnlocked(id){ return !!(state.wispUltimate && state.wispUltimate[id]); }
+function ultimateSigilCost(sp){ return Math.round(5 + sp.unlockDepth*2); }
+
+function synergyMult(){
+  var sum = 0;
+  SPIRITS.forEach(function(sp){ sum += (state.heroRarity[sp.id]||0)*0.02; });
+  return 1+sum;
+}
+
+function spiritPower(sp, level){
+  if(level<=0) return 0;
+  return sp.basePower * level * (1 + 0.01*(level-1));
+}
+function totalActivePartyPower(){
+  var sum = 0;
+  state.activeParty.forEach(function(id){
+    var sp = SPIRITS.find(function(s){ return s.id===id; });
+    if(!sp) return;
+    var level = state.spirits[id];
+    if(level<=0) return;
+    var tier = state.heroRarity[id]||0;
+    sum += spiritPower(sp, level) * RARITY_MULT[tier];
+  });
+  return sum;
+}
+function spiritCost(sp){
+  var level = state.spirits[sp.id];
+  var base = sp.baseCost * Math.pow(1.13, level);
+  return Math.round(base * (1-costReduction()));
+}
+function nodeCost(node){
+  var level = state.nodes[node.id];
+  return Math.ceil(node.baseCost * Math.pow(node.growth, level));
+}
+function rarityReq(tier){ return (tier+1)*8; }
+function rarityCost(sp, tier){
+  return {
+    shard: Math.round(15*Math.pow(3.2, tier)),
+    lumen: Math.round(sp.baseCost*8*Math.pow(2, tier))
+  };
+}
+
+function effectivePartyPower(){
+  return totalActivePartyPower() * formationMult() * synergyMult() * momentumMult() * longStudyPowerMult();
+}
+function chipEffectivePower(id){
+  var sp = SPIRITS.find(function(s){ return s.id===id; });
+  if(!sp) return 0;
+  var tier = state.heroRarity[id]||0;
+  var base = spiritPower(sp, state.spirits[id]) * RARITY_MULT[tier];
+  var shareMult = formationMult() * synergyMult() * momentumMult() * longStudyPowerMult();
+  var buffActive = state.buffUntil && Date.now() < state.buffUntil;
+  return base * shareMult * (buffActive ? state.buffMult : 1);
+}
+function tapDamage(){
+  return (5 + effectivePartyPower()*0.02) * tapMult();
+}
+function idleDps(){
+  var buffActive = state.buffUntil && Date.now() < state.buffUntil;
+  return effectivePartyPower() * (buffActive ? state.buffMult : 1);
+}
+function enemyHpFor(depth){
+  return Math.round(10 * Math.pow(1.145, depth) * (isBoss(depth)?6:1));
+}
+function enemyRewardFor(depth){
+  return Math.round(5 * Math.pow(1.11, depth) * (isBoss(depth)?8:1) * lumenMult());
+}
+function shardRewardFor(depth){
+  return Math.round(1 * Math.pow(1.09, depth) * (isBoss(depth)?5:1) * shardMult());
+}
+function enemyNameFor(depth){
+  var adj = ENEMY_ADJ[depth % ENEMY_ADJ.length];
+  var noun = ENEMY_NOUN[(depth*7) % ENEMY_NOUN.length];
+  return isBoss(depth) ? ('The '+adj+' '+noun) : (adj+' '+noun);
+}
+
+function spawnEnemy(){
+  state.enemyMaxHp = enemyHpFor(state.depth);
+  state.enemyHp = state.enemyMaxHp;
+  state.enemyIsLuminous = !isBoss(state.depth) && Math.random() < eliteChance(state.depth);
+}
+
+function gainLumen(n){ state.lumen += n; }
+
+function dealDamage(amount){
+  state.enemyHp -= amount;
+  if(state.enemyHp <= 0){ defeatEnemy(); }
+}
+
+function defeatEnemy(){
+  var reward = enemyRewardFor(state.depth);
+  var shardGain = shardRewardFor(state.depth);
+  var wasLuminous = state.enemyIsLuminous;
+  var wasBoss = isBoss(state.depth);
+  var defeatedName = enemyNameFor(state.depth);
+  gainLumen(reward);
+  state.shards += shardGain;
+  spawnFloatNum('+'+formatNum(reward), els['enemy-stage']);
+  if(wasLuminous){
+    var moteGain = Math.max(1, Math.round(motesDropFor(state.depth) * (1+supportMoteBonus())));
+    state.motes += moteGain;
+    spawnFloatNum('+'+formatNum(moteGain)+' Motes', els['enemy-stage']);
+    showToast('Luminous '+defeatedName+' defeated — +'+moteGain+' Motes');
+  }
+  if(wasBoss){
+    var sigilGain = sigilsFromBoss(state.depth);
+    state.sigils += sigilGain;
+    spawnFloatNum('+'+formatNum(sigilGain)+' Sigils', els['enemy-stage']);
+    showToast('Boss defeated — +'+sigilGain+' Sigils');
+  }
+  state.totalKills++;
+  state.depth++;
+  state.maxDepthEver = Math.max(state.maxDepthEver, state.depth);
+  spawnEnemy();
+  checkAutoAscend();
+  checkAchievements();
+  renderDynamic();
+}
+
+function checkAutoAscend(){
+  if(!state.owned.autoascend) return;
+  if(state.depth-1 >= 15){
+    doAscend(true);
+  }
+}
+
+// ---------------------------------------------------------------
+// Achievements
+// ---------------------------------------------------------------
+function checkAchievements(){
+  var changed = false;
+  ACHIEVEMENTS.forEach(function(a){
+    if(!state.achieved[a.id] && a.check(state)){
+      state.achieved[a.id] = true;
+      state.comets += a.reward;
+      changed = true;
+    }
+  });
+  if(changed){ renderAchievements(); renderNodes(); }
+}
+
+// ---------------------------------------------------------------
+// Actions
+// ---------------------------------------------------------------
+function doTap(stageEl){
+  var dmg = tapDamage();
+  state.totalTaps++;
+  spawnFloatNum('+'+formatNum(dmg), stageEl);
+  stageEl.classList.add('hit');
+  setTimeout(function(){ stageEl.classList.remove('hit'); }, 90);
+  dealDamage(dmg);
+  updateBattleFast();
+}
+
+function buySpirit(sp){
+  var cost = spiritCost(sp);
+  if(state.lumen < cost) return;
+  var wasZero = state.spirits[sp.id]===0;
+  state.lumen -= cost;
+  state.spirits[sp.id]++;
+  if(wasZero && state.activeParty.length<5 && state.activeParty.indexOf(sp.id)===-1){
+    state.activeParty.push(sp.id);
+    renderPartyFormation();
+  }
+  checkAchievements();
+  renderSpirits();
+  updateBattleFast();
+}
+
+function buyRarity(sp){
+  var tier = state.heroRarity[sp.id]||0;
+  if(tier>=5) return;
+  var level = state.spirits[sp.id];
+  if(level < rarityReq(tier)) return;
+  var cost = rarityCost(sp, tier);
+  if(state.shards<cost.shard || state.lumen<cost.lumen) return;
+  state.shards -= cost.shard;
+  state.lumen -= cost.lumen;
+  state.heroRarity[sp.id] = tier+1;
+  checkAchievements();
+  renderSpirits();
+  updateBattleFast();
+}
+
+function toggleActive(id){
+  var idx = state.activeParty.indexOf(id);
+  if(idx!==-1){
+    if(state.activeParty.length<=1){ showToast('You need at least one Active Wisp.'); return; }
+    state.activeParty.splice(idx,1);
+  } else {
+    if(state.spirits[id]<=0) return;
+    if(state.activeParty.length>=5){ showToast('Bench a Wisp first — max 5 Active.'); return; }
+    state.activeParty.push(id);
+  }
+  renderSpirits();
+  renderPartyFormation();
+  updateBattleFast();
+}
+
+function buyModule(sp){
+  var level = moduleLevel(sp.id);
+  if(level>=MODULE_MAX_LEVEL) return;
+  var cost = moduleCost(sp, level);
+  if(state.lumen<cost.lumen || state.shards<cost.shard) return;
+  state.lumen -= cost.lumen;
+  state.shards -= cost.shard;
+  state.wispModules[sp.id] = level+1;
+  renderSpirits();
+  updateBattleFast();
+}
+
+function buyUltimate(sp){
+  var tier = state.heroRarity[sp.id]||0;
+  if(tier<5 || ultimateUnlocked(sp.id)) return;
+  var cost = ultimateSigilCost(sp);
+  if(state.sigils<cost) return;
+  state.sigils -= cost;
+  state.wispUltimate[sp.id] = true;
+  checkAchievements();
+  renderSpirits();
+  updateBattleFast();
+}
+
+function themeUnlocked(theme){ return !theme.unlockAchievement || !!state.achieved[theme.unlockAchievement]; }
+function selectRiftTheme(themeId){
+  var theme = RIFT_THEMES.find(function(t){ return t.id===themeId; });
+  if(!theme || !themeUnlocked(theme)) return;
+  state.riftTheme = themeId;
+  applyRiftTheme();
+  renderCosmetics();
+}
+function applyRiftTheme(){
+  var stageEl = document.getElementById('enemy-stage');
+  if(!stageEl) return;
+  var theme = RIFT_THEMES.find(function(t){ return t.id===state.riftTheme; }) || RIFT_THEMES[0];
+  stageEl.classList.toggle('theme-radiant', theme.id==='radiant');
+  if(theme.accent){ stageEl.style.setProperty('--theme-accent', theme.accent); }
+  else { stageEl.style.removeProperty('--theme-accent'); }
+}
+
+function buyNode(node){
+  var cost = nodeCost(node);
+  if(state.prisms < cost) return;
+  state.prisms -= cost;
+  state.nodes[node.id]++;
+  renderNodes();
+  renderAscendSummary();
+  updateBattleFast();
+}
+
+var labMultiplier = 1;
+var MULT_OPTIONS = [1, 5, 10, 25, 50, 100, 'max'];
+
+function geometricSum(base, growth, startLevel, count){
+  if(base<=0 || count<=0) return 0;
+  if(growth===1) return base*count;
+  return base * Math.pow(growth, startLevel) * (Math.pow(growth, count)-1) / (growth-1);
+}
+function researchCostForLevels(node, level, count){
+  return {
+    lumen: Math.ceil(geometricSum(node.lumenBase, node.lumenGrowth, level, count)),
+    shard: Math.ceil(geometricSum(node.shardBase, node.shardGrowth, level, count))
+  };
+}
+function maxAffordableLevels(node, level, lumenBudget, shardBudget){
+  var hi = 1;
+  while(true){
+    var c = researchCostForLevels(node, level, hi);
+    if(c.lumen>lumenBudget || c.shard>shardBudget || hi>1000000) break;
+    hi *= 2;
+  }
+  var lo = Math.floor(hi/2);
+  hi = Math.max(hi, lo);
+  while(lo<hi){
+    var mid = Math.ceil((lo+hi+1)/2);
+    var cm = researchCostForLevels(node, level, mid);
+    if(cm.lumen<=lumenBudget && cm.shard<=shardBudget){ lo = mid; } else { hi = mid-1; }
+  }
+  return lo;
+}
+function getResearchBuyPlan(node){
+  var level = state.research[node.id];
+  if(labMultiplier==='max'){
+    var maxN = maxAffordableLevels(node, level, state.lumen, state.shards);
+    var count = maxN>0 ? maxN : 1;
+    var cost = researchCostForLevels(node, level, count);
+    return {count:count, cost:cost, affordable:maxN>0, buyCount:maxN};
+  }
+  var cost2 = researchCostForLevels(node, level, labMultiplier);
+  var afford2 = state.lumen>=cost2.lumen && state.shards>=cost2.shard;
+  return {count:labMultiplier, cost:cost2, affordable:afford2, buyCount: afford2?labMultiplier:0};
+}
+
+function buyResearch(node){
+  var plan = getResearchBuyPlan(node);
+  if(!plan.affordable || plan.buyCount<1) return;
+  state.lumen -= plan.cost.lumen;
+  state.shards -= plan.cost.shard;
+  state.research[node.id] += plan.buyCount;
+  renderResearch();
+  updateBattleFast();
+}
+
+function autoLabQueueTick(){
+  var boughtAny = false;
+  for(var guard=0; guard<20; guard++){
+    var cheapest = null, cheapestCost = null, cheapestTotal = Infinity;
+    RESEARCH.forEach(function(node){
+      if(!state.researchQueue[node.id]) return;
+      var level = state.research[node.id];
+      var cost = researchCostForLevels(node, level, 1);
+      var total = cost.lumen + cost.shard;
+      if(state.lumen>=cost.lumen && state.shards>=cost.shard && total<cheapestTotal){
+        cheapestTotal = total; cheapest = node; cheapestCost = cost;
+      }
+    });
+    if(!cheapest) break;
+    state.lumen -= cheapestCost.lumen;
+    state.shards -= cheapestCost.shard;
+    state.research[cheapest.id] += 1;
+    boughtAny = true;
+  }
+  return boughtAny;
+}
+
+function studyDuration(node, level){ return Math.round(node.baseDurationSec * Math.pow(node.durationGrowth, level)); }
+function studyCost(node, level){
+  return {
+    lumen: Math.round(node.lumenBase * Math.pow(node.lumenGrowth, level)),
+    shard: Math.round(node.shardBase * Math.pow(node.shardGrowth, level))
+  };
+}
+function unlockedLongStudies(){
+  return LONG_STUDIES.filter(function(l){ return state.maxDepthEver >= (l.unlockDepth||1); });
+}
+function studySlotCount(){
+  var n = unlockedLongStudies().length;
+  if(n<=2) return 1;
+  if(n<=5) return 2;
+  if(n===6) return 3;
+  if(n===7) return 4;
+  return 5;
+}
+function findActiveStudy(id){
+  return state.activeStudies.find(function(a){ return a.id===id; });
+}
+function startStudy(node){
+  if(state.activeStudies.length >= studySlotCount()) return;
+  if(findActiveStudy(node.id)) return;
+  var level = state.longStudyLevels[node.id]||0;
+  var cost = studyCost(node, level);
+  if(state.lumen<cost.lumen || state.shards<cost.shard) return;
+  state.lumen -= cost.lumen;
+  state.shards -= cost.shard;
+  var dur = studyDuration(node, level);
+  state.activeStudies.push({id:node.id, remainingSec:dur, totalDurationSec:dur, speedMult:1});
+  renderLongStudies();
+  updateBattleFast();
+}
+function applySpeedTier(studyId, mult){
+  var active = findActiveStudy(studyId);
+  if(!active) return;
+  if(mult<=active.speedMult) return;
+  var cost = speedTierCost(mult);
+  if(state.motes<cost) return;
+  state.motes -= cost;
+  active.speedMult = mult;
+  renderLongStudies();
+  renderHud();
+}
+function advanceActiveStudies(elapsedSec){
+  var completed = [];
+  for(var i=state.activeStudies.length-1; i>=0; i--){
+    var active = state.activeStudies[i];
+    active.remainingSec -= elapsedSec * active.speedMult;
+    if(active.remainingSec <= 0){
+      var node = LONG_STUDIES.find(function(n){ return n.id===active.id; });
+      state.longStudyLevels[active.id] = (state.longStudyLevels[active.id]||0) + 1;
+      state.activeStudies.splice(i, 1);
+      completed.push(node ? node.name : active.id);
+    }
+  }
+  return completed;
+}
+function autoFillStudySlots(){
+  var openSlots = studySlotCount() - state.activeStudies.length;
+  if(openSlots<=0) return false;
+  var candidates = unlockedLongStudies().filter(function(l){ return state.studyQueue[l.id] && !findActiveStudy(l.id); });
+  candidates.sort(function(a,b){
+    var ca = studyCost(a, state.longStudyLevels[a.id]||0);
+    var cb = studyCost(b, state.longStudyLevels[b.id]||0);
+    return (ca.lumen+ca.shard) - (cb.lumen+cb.shard);
+  });
+  var started = false;
+  for(var i=0; i<candidates.length && state.activeStudies.length<studySlotCount(); i++){
+    var lnode = candidates[i];
+    var cost = studyCost(lnode, state.longStudyLevels[lnode.id]||0);
+    if(state.lumen>=cost.lumen && state.shards>=cost.shard){
+      startStudy(lnode);
+      started = true;
+    }
+  }
+  return started;
+}
+
+function buyShopItem(item){
+  if(state.owned[item.id]) return;
+  if(state.comets < item.cost) return;
+  state.comets -= item.cost;
+  state.owned[item.id] = true;
+  renderShop();
+}
+
+function applyAscendMutation(){
+  var cleared = state.depth - 1;
+  var gain = Math.max(1, Math.floor(2*Math.sqrt(cleared)) * prismMult());
+  state.prisms += gain;
+  state.ascendCount++;
+  state.depth = 1;
+  state.lumen = 0;
+  state.maxDepthEver = Math.max(state.maxDepthEver, cleared+1);
+  SPIRITS.forEach(function(sp){ state.spirits[sp.id] = 0; });
+  state.spirits['ember'] = 1;
+  if(state.activeParty.indexOf('ember')===-1){
+    if(state.activeParty.length<5){ state.activeParty.unshift('ember'); }
+    else { state.activeParty[0] = 'ember'; }
+  }
+  spawnEnemy();
+}
+function doAscend(auto){
+  var cleared = state.depth - 1;
+  if(cleared < 15) return;
+  applyAscendMutation();
+  checkAchievements();
+  renderAll();
+  saveState();
+}
+
+function performReset(){
+  try{ localStorage.removeItem(SAVE_KEY); }catch(e){}
+  state = freshState();
+  labMultiplier = 1;
+  spawnEnemy();
+  applyRiftTheme();
+  renderAll();
+  saveState();
+  showToast('Save reset — starting fresh.');
+}
+
+function triggerAbility(sp, level){
+  var tier = state.heroRarity[sp.id]||0;
+  var power = spiritPower(sp, level) * RARITY_MULT[tier];
+  var mMult = moduleMult(sp.id);
+  var ult = ultimateUnlocked(sp.id) ? 2 : 1;
+  var burst = 0;
+  switch(sp.abilityType){
+    case 'tank':    burst = power*4*mMult*ult; break;
+    case 'dps':     burst = power*5*mMult*ult; break;
+    case 'ranged':  burst = power*3*ult; state.shards += Math.round(power*0.05*mMult*ult); break;
+    case 'druid':   burst = power*3*ult; gainLumen(Math.round(power*0.1*mMult*ult)); break;
+    case 'support':
+      var dur = ultimateUnlocked(sp.id) ? 8000 : 4000;
+      var strength = ultimateUnlocked(sp.id) ? 1.5 : 1.25;
+      state.buffUntil = Math.max(state.buffUntil||0, Date.now()+dur);
+      state.buffMult = Math.max(state.buffMult||1, strength);
+      break;
+  }
+  if(burst>0) dealDamage(burst);
+  flashChip(sp.id, sp.abilityName);
+}
+
+function flashChip(id, label){
+  var chip = els['party-col'].querySelector('[data-chip="'+id+'"]');
+  if(!chip) return;
+  chip.classList.add('pulse');
+  setTimeout(function(){ chip.classList.remove('pulse'); }, 300);
+  var sp = SPIRITS.find(function(s){ return s.id===id; });
+  var span = document.createElement('span');
+  span.className = 'chip-flash';
+  span.textContent = label;
+  if(sp) span.style.color = sp.color;
+  chip.appendChild(span);
+  setTimeout(function(){ span.remove(); }, 820);
+}
+
+// ---------------------------------------------------------------
+// Rendering
+// ---------------------------------------------------------------
+var els = {};
+function cacheEls(){
+  ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','enemy-name','luminous-tag','boss-regen-tag','buff-indicator','enemy-stage','enemy-glyph',
+   'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','party-col','research-list','study-list',
+   'prism-preview','ascend-btn','ascend-note','node-list','ach-list','shop-list','theme-list','manifesto','toast','currency-list'
+  ].forEach(function(id){ els[id]=document.getElementById(id); });
+}
+
+function renderHud(){
+  els['hud-lumen'].textContent = formatNum(state.lumen);
+  els['hud-shard'].textContent = formatNum(state.shards);
+  els['hud-mote'].textContent = formatNum(state.motes);
+  els['hud-prism'].textContent = formatNum(state.prisms);
+  els['hud-comet'].textContent = formatNum(state.comets);
+  els['hud-sigil'].textContent = formatNum(state.sigils);
+}
+
+function updateBattleFast(){
+  els['hp-fill'].style.width = Math.max(0, (state.enemyHp/state.enemyMaxHp*100)) + '%';
+  els['hp-text'].textContent = formatNum(Math.max(0,state.enemyHp)) + ' / ' + formatNum(state.enemyMaxHp);
+  els['depth-label'].innerHTML = 'Rift ' + state.depth + (isBoss(state.depth) ? ' &mdash; <span class="boss-tag">BOSS</span>' : '');
+  els['enemy-name'].textContent = (state.enemyIsLuminous ? 'Luminous ' : '') + enemyNameFor(state.depth);
+  els['enemy-glyph'].classList.toggle('boss', isBoss(state.depth));
+  els['enemy-glyph'].classList.toggle('luminous', !!state.enemyIsLuminous);
+  els['luminous-tag'].style.display = state.enemyIsLuminous ? 'block' : 'none';
+  var bossNow = isBoss(state.depth);
+  els['boss-regen-tag'].style.display = bossNow ? 'block' : 'none';
+  if(bossNow){
+    var regenPerSec = state.enemyMaxHp*BOSS_REGEN_PER_SEC;
+    var yourDps = idleDps();
+    var enough = yourDps > regenPerSec;
+    els['boss-regen-tag'].textContent = 'Regenerates ' + formatNum(regenPerSec) + '/s — your Wisps deal ' + formatNum(yourDps) + '/s' + (enough ? '' : ' (not enough yet)');
+    els['boss-regen-tag'].classList.toggle('insufficient', !enough);
+  }
+  els['stat-tap'].textContent = formatNum(tapDamage());
+  els['stat-idle'].textContent = formatNum(idleDps());
+  var buffActive = state.buffUntil && Date.now() < state.buffUntil;
+  els['buff-indicator'].style.display = buffActive ? 'block' : 'none';
+  if(buffActive){
+    var pct = Math.round((state.buffMult-1)*100);
+    var secLeft = Math.max(0, Math.ceil((state.buffUntil-Date.now())/1000));
+    els['buff-indicator'].textContent = 'Party boosted: +'+pct+'% power ('+secLeft+'s left)';
+  }
+  renderHud();
+}
+
+function spawnFloatNum(text, stageEl){
+  var span = document.createElement('span');
+  span.className = 'float-num';
+  span.textContent = text;
+  span.style.left = (40 + Math.random()*20) + '%';
+  stageEl.appendChild(span);
+  setTimeout(function(){ span.remove(); }, 720);
+}
+
+function showToast(msg){
+  var t = els['toast'];
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(function(){ t.classList.remove('show'); }, 2200);
+}
+
+function renderPartyFormation(){
+  var html = '';
+  var poweredCount = 0;
+  state.activeParty.forEach(function(id){
+    var sp = SPIRITS.find(function(s){ return s.id===id; });
+    if(!sp) return;
+    if((state.spirits[id]||0)<=0) return;
+    poweredCount++;
+    var power = chipEffectivePower(id);
+    html += '<div class="hero-chip" data-chip="'+id+'">'+
+      '<span class="shape '+sp.shape+'" style="width:20px;height:20px;background:'+sp.color+';color:'+sp.color+';"></span>'+
+      '<div class="chip-bar-track"><div class="chip-bar-fill" data-bar="'+id+'" style="background:'+RESOURCE_COLORS[sp.resource]+'"></div></div>'+
+      '<div class="chip-label">'+sp.shortName+'</div>'+
+      '<div class="chip-power" data-power="'+id+'">'+formatNum(power)+'</div>'+
+    '</div>';
+  });
+  if(poweredCount===0){
+    html = '<div class="empty-party-note">No Wisps active — visit the Wisps tab to field one.</div>' + html;
+  }
+  els['party-col'].innerHTML = html;
+}
+
+function updatePartyBars(){
+  state.activeParty.forEach(function(id){
+    var bar = els['party-col'].querySelector('[data-bar="'+id+'"]');
+    if(bar) bar.style.width = (state.heroResource[id]||0)+'%';
+    var powerEl = els['party-col'].querySelector('[data-power="'+id+'"]');
+    if(powerEl){ powerEl.textContent = formatNum(chipEffectivePower(id)); }
+  });
+}
+
+function renderSpirits(){
+  var html = '';
+  SPIRITS.forEach(function(sp){
+    var level = state.spirits[sp.id];
+    var unlocked = state.maxDepthEver >= sp.unlockDepth;
+    if(!unlocked){
+      html += '<div class="card hero-card locked">' +
+        '<div class="hero-top">'+
+          '<span class="shape '+sp.shape+'" style="width:34px;height:34px;background:var(--ink-dim);"></span>' +
+          '<div class="hero-id"><div class="name">???</div><div class="class-tag lock-note">Unlocks at Rift '+sp.unlockDepth+'</div></div>' +
+        '</div></div>';
+      return;
+    }
+    var recruited = level>0;
+    var tier = state.heroRarity[sp.id]||0;
+    var power = spiritPower(sp, level) * RARITY_MULT[tier];
+    var cost = spiritCost(sp);
+    var active = state.activeParty.indexOf(sp.id)!==-1;
+    var req = rarityReq(tier);
+    var rc = rarityCost(sp, tier);
+    var canRarity = recruited && tier<5 && level>=req && state.shards>=rc.shard && state.lumen>=rc.lumen;
+    var rarityLabel = tier>=5 ? 'Maxed' : (level<req ? ('Lv.'+req+' req') :
+      ('<span style="font-size:.62rem;">Ascend</span>' +
+       '<span style="font-size:.62rem;">'+costIcon('lumen')+formatNum(rc.lumen)+'</span>' +
+       '<span style="font-size:.62rem;">'+costIcon('shard')+formatNum(rc.shard)+'</span>'));
+    var modInfo = MODULE_INFO[sp.abilityType];
+    var modLvl = moduleLevel(sp.id);
+    var modMaxed = modLvl>=MODULE_MAX_LEVEL;
+    var modCost = moduleCost(sp, modLvl);
+    var canModule = !modMaxed && state.lumen>=modCost.lumen && state.shards>=modCost.shard;
+    var moduleHtml = !recruited ? '' :
+      '<div class="module-row">' +
+        '<div class="module-name">'+modInfo.name+' <span style="color:var(--shard);">Lv.'+modLvl+'/'+MODULE_MAX_LEVEL+'</span></div>' +
+        '<div class="module-effect">'+modInfo.effect(modLvl)+'</div>' +
+        (modMaxed ? '' :
+          '<button class="mini-btn" data-module="'+sp.id+'" '+(canModule?'':'disabled')+'>Upgrade Module' +
+            '<span style="font-size:.62rem;">'+costIcon('lumen')+formatNum(modCost.lumen)+'</span>' +
+            '<span style="font-size:.62rem;">'+costIcon('shard')+formatNum(modCost.shard)+'</span>' +
+          '</button>') +
+      '</div>';
+    var ultCost = ultimateSigilCost(sp);
+    var ultimateHtml = tier<5 ? '' :
+      '<div class="ultimate-row">' +
+        (ultimateUnlocked(sp.id) ?
+          '<div class="ultimate-badge">Ultimate Unlocked — '+sp.abilityName+' output doubled</div>' :
+          '<button class="mini-btn ultimate-btn" data-ultimate="'+sp.id+'" '+(state.sigils<ultCost?'disabled':'')+'>Unlock Ultimate<span style="font-size:.62rem;">'+costIcon('sigil')+ultCost+'</span></button>') +
+      '</div>';
+    var empowerOn = state.empowerQueue[sp.id]!==false;
+    var empowerHtml = (recruited && state.achieved.labmaster) ?
+      ' <button class="node-queue-toggle '+(empowerOn?'active':'')+'" data-empower-queue="'+sp.id+'">Auto-Empower '+(empowerOn?'ON':'OFF')+'</button>' : '';
+    html += '<div class="card hero-card">' +
+      '<div class="hero-top">'+
+        '<span class="shape '+sp.shape+'" style="width:34px;height:34px;background:'+sp.color+';color:'+sp.color+';"></span>' +
+        '<div class="hero-id">' +
+          '<div class="name">'+sp.name+'</div>' +
+          '<div class="class-tag" style="color:'+sp.color+'">'+sp.heroClass+' &middot; '+sp.role+'</div>' +
+        '</div>' +
+        (recruited ? '<button class="active-toggle '+(active?'is-active':'')+'" data-toggle="'+sp.id+'">'+(active?'Active':'Bench')+'</button>' : '') +
+      '</div>' +
+      '<div class="hero-stats">Lv.'+level+' &middot; '+formatNum(power)+' pwr &middot; <span style="color:'+RARITY_COLORS[tier]+';font-weight:700;">'+RARITY_NAMES[tier]+'</span>'+empowerHtml+'</div>' +
+      '<div class="hero-ability">Ability: <strong>'+sp.abilityName+'</strong> — '+ABILITY_DESC[sp.abilityType]+'</div>' +
+      moduleHtml +
+      '<div class="hero-actions">' +
+        '<button class="mini-btn" data-empower="'+sp.id+'" '+(state.lumen<cost?'disabled':'')+'>'+(recruited?'Empower':'Recruit')+'<span style="font-size:.62rem;">'+costIcon('lumen')+formatNum(cost)+'</span></button>' +
+        '<button class="mini-btn rarity-btn" data-rarity="'+sp.id+'" '+(canRarity?'':'disabled')+'>'+rarityLabel+'</button>' +
+      '</div>' +
+      ultimateHtml +
+    '</div>';
+  });
+  els['spirit-list'].innerHTML = html;
+  els['spirit-list'].querySelectorAll('[data-empower]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var sp = SPIRITS.find(function(s){ return s.id===btn.getAttribute('data-empower'); });
+      buySpirit(sp);
+    });
+  });
+  els['spirit-list'].querySelectorAll('[data-rarity]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var sp = SPIRITS.find(function(s){ return s.id===btn.getAttribute('data-rarity'); });
+      buyRarity(sp);
+    });
+  });
+  els['spirit-list'].querySelectorAll('[data-toggle]').forEach(function(btn){
+    btn.addEventListener('click', function(){ toggleActive(btn.getAttribute('data-toggle')); });
+  });
+  els['spirit-list'].querySelectorAll('[data-module]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var sp = SPIRITS.find(function(s){ return s.id===btn.getAttribute('data-module'); });
+      buyModule(sp);
+    });
+  });
+  els['spirit-list'].querySelectorAll('[data-ultimate]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var sp = SPIRITS.find(function(s){ return s.id===btn.getAttribute('data-ultimate'); });
+      buyUltimate(sp);
+    });
+  });
+  els['spirit-list'].querySelectorAll('[data-empower-queue]').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var id = btn.getAttribute('data-empower-queue');
+      state.empowerQueue[id] = state.empowerQueue[id]===false ? true : false;
+      renderSpirits();
+    });
+  });
+}
+
+function renderResearch(){
+  var multHtml = '<div class="section-sub" style="margin:0 2px 10px;">Each node has its own Lab Queue toggle — turn it on and that node auto-researches the next affordable level on its own.</div>' +
+    '<div class="mult-row" id="mult-row">' + MULT_OPTIONS.map(function(m){
+    var label = m==='max' ? 'Max' : m+'x';
+    var active = labMultiplier===m;
+    return '<button class="mult-btn '+(active?'active':'')+'" data-mult="'+m+'">'+label+'</button>';
+  }).join('') + '</div>';
+
+  var html = '';
+  RESEARCH.forEach(function(node){
+    var level = state.research[node.id];
+    var plan = getResearchBuyPlan(node);
+    var queueOn = !!state.researchQueue[node.id];
+    html += '<div class="card node-card">' +
+      '<span class="shape shape-hex" style="width:30px;height:30px;background:var(--shard);"></span>' +
+      '<div class="node-info" style="flex:1;">' +
+        '<div class="name">'+node.name+'</div>' +
+        '<div class="desc">'+node.desc+'</div>' +
+        '<div class="lvl" style="color:var(--shard);">Level '+level+
+          ' <button class="node-queue-toggle '+(queueOn?'active':'')+'" data-queue="'+node.id+'">Queue '+(queueOn?'ON':'OFF')+'</button>' +
+        '</div>' +
+      '</div>' +
+      '<button class="buy-btn" data-research="'+node.id+'" '+(plan.affordable?'':'disabled')+' style="min-width:94px;">' +
+        (node.lumenBase ? '<span class="cost mono">'+costIcon('lumen')+formatNum(plan.cost.lumen)+'</span>' : '') +
+        (node.shardBase ? '<span class="cost mono">'+costIcon('shard')+formatNum(plan.cost.shard)+'</span>' : '') +
+        '<span class="label">Research &times;'+plan.count+'</span>' +
+      '</button>' +
+    '</div>';
+  });
+  els['research-list'].innerHTML = multHtml + html;
+  els['research-list'].querySelectorAll('[data-mult]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var v = btn.getAttribute('data-mult');
+      labMultiplier = v==='max' ? 'max' : parseInt(v,10);
+      if(state.owned.rememberbulk){ state.savedLabMultiplier = labMultiplier; }
+      renderResearch();
+    });
+  });
+  els['research-list'].querySelectorAll('[data-research]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var node = RESEARCH.find(function(n){ return n.id===btn.getAttribute('data-research'); });
+      buyResearch(node);
+    });
+  });
+  els['research-list'].querySelectorAll('[data-queue]').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var id = btn.getAttribute('data-queue');
+      state.researchQueue[id] = !state.researchQueue[id];
+      renderResearch();
+    });
+  });
+}
+
+function renderLongStudies(){
+  var slots = studySlotCount();
+  var openSlots = slots - state.activeStudies.length;
+  var html = '<div class="section-sub" style="margin:0 2px 10px;">Run up to <strong>'+slots+'</strong> Long '+(slots===1?'Study':'Studies')+' at once — unlocking more Studies by pushing deeper raises this cap. Each completes over real time, even while you’re away, and Motes speed it up. Turn on a Study\'s Lab Queue to auto-begin it the instant a slot and the currency are both free.</div>';
+
+  if(state.activeStudies.length){
+    html += '<div class="section-sub" style="margin:0 2px 8px;text-transform:uppercase;letter-spacing:.04em;font-size:.7rem;">Active ('+state.activeStudies.length+'/'+slots+')</div>';
+    state.activeStudies.forEach(function(active){
+      var node = LONG_STUDIES.find(function(n){ return n.id===active.id; });
+      var pct = Math.max(0, Math.min(100, 100-(active.remainingSec/active.totalDurationSec*100)));
+      var queueOnActive = !!state.studyQueue[active.id];
+      html += '<div class="card study-card" style="margin-bottom:10px;">' +
+        '<div class="name">'+(node?node.name:'')+' <span style="color:var(--mote);">Lv.'+((state.longStudyLevels[active.id]||0)+1)+'</span>' +
+          ' <button class="node-queue-toggle '+(queueOnActive?'active':'')+'" data-study-queue="'+active.id+'">Queue '+(queueOnActive?'ON':'OFF')+'</button>' +
+        '</div>' +
+        (node ? '<div class="desc">'+node.desc+'</div>' : '') +
+        '<div class="study-bar-track"><div class="study-bar-fill" data-study-bar="'+active.id+'" style="width:'+pct+'%;"></div></div>' +
+        '<div class="study-time" data-study-text="'+active.id+'">'+fmtDuration(Math.max(0,active.remainingSec))+' remaining at '+active.speedMult+'x</div>' +
+        '<div class="section-sub" style="margin:10px 2px 6px;">Spend Motes to speed this Study up:</div>' +
+        '<div class="speed-row">' +
+          LAB_SPEED_TIERS.map(function(mult){
+            var mcost = speedTierCost(mult);
+            var isActive = active.speedMult>=mult;
+            var affordable = state.motes>=mcost;
+            return '<button class="speed-btn '+(isActive?'active':'')+'" data-speed="'+mult+'" data-speed-study="'+active.id+'" '+((isActive||!affordable)?'disabled':'')+'>'+mult+'x' +
+              (isActive ? '' : '<span class="speed-cost">'+costIcon('mote')+formatNum(mcost)+'</span>') +
+              '</button>';
+          }).join('') +
+        '</div>' +
+      '</div>';
+    });
+  }
+
+  html += '<div class="section-sub" style="margin:14px 2px 8px;text-transform:uppercase;letter-spacing:.04em;font-size:.7rem;">'+(openSlots>0 ? 'Available' : 'Available — no open slots')+'</div>';
+  LONG_STUDIES.forEach(function(lnode){
+    if(findActiveStudy(lnode.id)) return;
+    var unlocked = state.maxDepthEver >= (lnode.unlockDepth||1);
+    if(!unlocked){
+      html += '<div class="card study-card locked-node" style="margin-bottom:10px;">' +
+        '<div class="name">???</div>' +
+        '<div class="desc lock-note">Unlocks at Rift '+lnode.unlockDepth+'</div>' +
+      '</div>';
+      return;
+    }
+    var level = state.longStudyLevels[lnode.id]||0;
+    var cost = studyCost(lnode, level);
+    var dur = studyDuration(lnode, level);
+    var affordable = openSlots>0 && state.lumen>=cost.lumen && state.shards>=cost.shard;
+    var queueOn = !!state.studyQueue[lnode.id];
+    html += '<div class="card study-card" style="margin-bottom:10px;">' +
+      '<div class="name">'+lnode.name+' <span style="color:var(--mote);">Lv.'+level+'</span>' +
+        ' <button class="node-queue-toggle '+(queueOn?'active':'')+'" data-study-queue="'+lnode.id+'">Queue '+(queueOn?'ON':'OFF')+'</button>' +
+      '</div>' +
+      '<div class="desc">'+lnode.desc+'</div>' +
+      '<div class="study-meta">Takes '+fmtDuration(dur)+' &middot; '+costIcon('lumen')+formatNum(cost.lumen)+' '+costIcon('shard')+formatNum(cost.shard)+'</div>' +
+      '<button class="mini-btn" data-study="'+lnode.id+'" '+(affordable?'':'disabled')+' style="margin-top:10px;width:100%;">'+(openSlots>0?'Begin Study':'No open slots')+'</button>' +
+    '</div>';
+  });
+
+  els['study-list'].innerHTML = html;
+  els['study-list'].querySelectorAll('[data-study]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var lnode = LONG_STUDIES.find(function(n){ return n.id===btn.getAttribute('data-study'); });
+      startStudy(lnode);
+    });
+  });
+  els['study-list'].querySelectorAll('[data-speed-study]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      applySpeedTier(btn.getAttribute('data-speed-study'), parseFloat(btn.getAttribute('data-speed')));
+    });
+  });
+  els['study-list'].querySelectorAll('[data-study-queue]').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var id = btn.getAttribute('data-study-queue');
+      state.studyQueue[id] = !state.studyQueue[id];
+      renderLongStudies();
+    });
+  });
+}
+
+function renderAscendSummary(){
+  var cleared = state.depth - 1;
+  var eligible = cleared >= 15;
+  var gain = eligible ? Math.max(1, Math.floor(2*Math.sqrt(cleared)) * prismMult()) : 0;
+  els['prism-preview'].textContent = '+' + formatNum(gain) + ' Prisms';
+  els['ascend-btn'].disabled = !eligible;
+  els['ascend-note'].textContent = eligible
+    ? 'Ready — Ascending will reset your Rift depth and Wisp levels below.'
+    : 'Clear Rift 15 to unlock your first Ascend. (' + Math.max(0,15-cleared) + ' to go)';
+}
+
+function renderNodes(){
+  var html = '';
+  NODES.forEach(function(node){
+    if(node.requiresAchievement && !state.achieved[node.requiresAchievement]){
+      var reqAch = ACHIEVEMENTS.find(function(a){ return a.id===node.requiresAchievement; });
+      html += '<div class="card node-card locked-node">' +
+        '<span class="shape shape-diamond" style="width:30px;height:30px;background:var(--ink-dim);"></span>' +
+        '<div class="node-info" style="flex:1;">' +
+          '<div class="name">???</div>' +
+          '<div class="desc lock-note">Unlocks with the Deed &ldquo;'+(reqAch?reqAch.name:'')+'&rdquo;</div>' +
+        '</div>' +
+      '</div>';
+      return;
+    }
+    var level = state.nodes[node.id];
+    var cost = nodeCost(node);
+    html += '<div class="card node-card">' +
+      '<span class="shape shape-diamond" style="width:30px;height:30px;background:var(--prism);"></span>' +
+      '<div class="node-info" style="flex:1;">' +
+        '<div class="name">'+node.name+'</div>' +
+        '<div class="desc">'+node.desc+'</div>' +
+        '<div class="lvl" style="color:var(--prism);">Level '+level+'</div>' +
+      '</div>' +
+      '<button class="buy-btn" data-node="'+node.id+'" '+(state.prisms<cost?'disabled':'')+' style="min-width:78px;">' +
+        '<span class="cost mono">'+costIcon('prism')+formatNum(cost)+'</span><span class="label">Prisms</span>' +
+      '</button>' +
+    '</div>';
+  });
+  els['node-list'].innerHTML = html;
+  els['node-list'].querySelectorAll('[data-node]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var node = NODES.find(function(n){ return n.id===btn.getAttribute('data-node'); });
+      buyNode(node);
+    });
+  });
+}
+
+function renderAchievements(){
+  var html = '';
+  ACHIEVEMENTS.forEach(function(a){
+    var done = !!state.achieved[a.id];
+    html += '<div class="card ach-card '+(done?'done':'')+'">' +
+      '<span class="dot"></span>' +
+      '<div class="info">' +
+        '<div class="name">'+a.name+'</div>' +
+        (a.unlocks ? '<div class="ach-unlock">Unlocks: '+a.unlocks+'</div>' : '') +
+      '</div>' +
+      '<span class="reward mono">+'+a.reward+' '+costIcon('comet')+'</span>' +
+    '</div>';
+  });
+  els['ach-list'].innerHTML = html;
+
+  var shopHtml = '';
+  SHOP.forEach(function(item){
+    var owned = !!state.owned[item.id];
+    shopHtml += '<div class="card shop-card">' +
+      '<div class="info"><div class="name">'+item.name+'</div><div class="desc">'+item.desc+'</div></div>' +
+      '<button data-shop="'+item.id+'" class="'+(owned?'owned':'')+'" '+((owned||state.comets<item.cost)?'disabled':'')+'>' +
+        (owned ? 'Owned' : formatNum(item.cost)+' '+costIcon('comet')) +
+      '</button>' +
+    '</div>';
+  });
+  els['shop-list'].innerHTML = shopHtml;
+  els['shop-list'].querySelectorAll('button[data-shop]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var item = SHOP.find(function(i){ return i.id===btn.getAttribute('data-shop'); });
+      buyShopItem(item);
+    });
+  });
+}
+function renderShop(){ renderAchievements(); }
+
+function renderCosmetics(){
+  var html = '';
+  RIFT_THEMES.forEach(function(theme){
+    var unlocked = themeUnlocked(theme);
+    var active = state.riftTheme===theme.id;
+    if(!unlocked){
+      var reqAch = ACHIEVEMENTS.find(function(a){ return a.id===theme.unlockAchievement; });
+      html += '<div class="card theme-card locked-node">' +
+        '<div class="theme-swatch" style="background:var(--ink-dim);"></div>' +
+        '<div class="theme-info"><div class="name">???</div><div class="desc lock-note">Unlocks with the Deed &ldquo;'+(reqAch?reqAch.name:'')+'&rdquo;</div></div>' +
+      '</div>';
+      return;
+    }
+    var swatch = theme.accent ? theme.accent : 'conic-gradient(from 0deg, var(--lumen), var(--shard), var(--mote), var(--prism), var(--comet), var(--sigil), var(--lumen))';
+    html += '<div class="card theme-card '+(active?'active':'')+'" data-theme-select="'+theme.id+'">' +
+      '<div class="theme-swatch" style="background:'+swatch+';"></div>' +
+      '<div class="theme-info"><div class="name">'+theme.name+'</div><div class="desc">'+theme.desc+'</div></div>' +
+      (active ? '<span class="theme-active-tag">Equipped</span>' : '') +
+    '</div>';
+  });
+  els['theme-list'].innerHTML = html;
+  els['theme-list'].querySelectorAll('[data-theme-select]').forEach(function(card){
+    card.addEventListener('click', function(){ selectRiftTheme(card.getAttribute('data-theme-select')); });
+  });
+}
+
+var CURRENCIES = [
+  {name:'Lumen', shape:'shape-triangle', color:'var(--lumen)', desc:'Earned from every kill. Spend it to recruit and empower Wisps, and to fund most of the Lab.'},
+  {name:'Shards', shape:'shape-hex', color:'var(--shard)', desc:'Also earned from every kill, in smaller amounts. Spend it to raise a Wisp’s Rarity tier and to fund the rest of the Lab.'},
+  {name:'Motes', shape:'shape-pentagon', color:'var(--mote)', desc:'Dropped only by rare Luminous enemies in the Rift, always a fixed amount. Spend it to speed up your active Long Study in the Lab.'},
+  {name:'Prisms', shape:'shape-diamond', color:'var(--prism)', desc:'Earned only by Ascending — the deeper you clear first, the more you get. Spend it on the permanent Ascension Tree.'},
+  {name:'Comets', shape:'shape-star', color:'var(--comet)', desc:'Earned only from Deeds. Spend it at the Comet Rest Stop on convenience — never on power.'},
+  {name:'Sigils', shape:'shape-octagon', color:'var(--sigil)', desc:'Dropped only by Rift bosses, always a fixed amount. Spend it to unlock a Mythic Wisp’s Ultimate — doubling their ability’s output.'}
+];
+
+function renderCurrencies(){
+  var html = '';
+  CURRENCIES.forEach(function(c){
+    html += '<div class="card currency-card">' +
+      '<span class="shape '+c.shape+'" style="width:26px;height:26px;background:'+c.color+';"></span>' +
+      '<div><div class="cname">'+c.name+'</div><div class="cdesc">'+c.desc+'</div></div>' +
+    '</div>';
+  });
+  els['currency-list'].innerHTML = html;
+}
+
+function renderManifesto(){
+  var html = '';
+  MANIFESTO.forEach(function(m){
+    html += '<div class="card man-card">' +
+      '<div class="eyebrow">'+m.eyebrow+'</div>' +
+      '<div class="title">'+m.title+'</div>' +
+      '<div class="body">'+m.body+'</div>' +
+    '</div>';
+  });
+  els['manifesto'].innerHTML = html;
+}
+
+function renderDynamic(){
+  renderSpirits();
+  renderAscendSummary();
+  updateBattleFast();
+}
+
+function renderAll(){
+  renderHud();
+  updateBattleFast();
+  renderPartyFormation();
+  updatePartyBars();
+  renderSpirits();
+  renderResearch();
+  renderLongStudies();
+  renderAscendSummary();
+  renderNodes();
+  renderAchievements();
+  renderCosmetics();
+  renderCurrencies();
+  renderManifesto();
+}
+
+// ---------------------------------------------------------------
+// Tabs
+// ---------------------------------------------------------------
+function setupTabs(){
+  document.querySelectorAll('.tab-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+      document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('tab-'+btn.getAttribute('data-tab')).classList.add('active');
+    });
+  });
+}
+
+// ---------------------------------------------------------------
+// Game loop
+// ---------------------------------------------------------------
+function autoEmpowerTick(){
+  var cheapest = null, cheapestCost = Infinity;
+  state.activeParty.forEach(function(id){
+    if(state.empowerQueue[id]===false) return;
+    var sp = SPIRITS.find(function(s){ return s.id===id; });
+    if(!sp) return;
+    var cost = spiritCost(sp);
+    if(cost<cheapestCost){ cheapestCost=cost; cheapest=sp; }
+  });
+  if(cheapest && state.lumen>=cheapestCost){
+    state.lumen -= cheapestCost;
+    state.spirits[cheapest.id]++;
+    return true;
+  }
+  return false;
+}
+
+function tick(){
+  var dps = idleDps();
+  if(dps > 0){
+    dealDamage(dps * (TICK_MS/1000));
+  }
+  if(state.enemyHp>0 && isBoss(state.depth)){
+    state.enemyHp = Math.min(state.enemyMaxHp, state.enemyHp + state.enemyMaxHp*BOSS_REGEN_PER_SEC*(TICK_MS/1000));
+  }
+  var fillPerTick = (100/60) * fillRateMult();
+  state.activeParty.forEach(function(id){
+    var sp = SPIRITS.find(function(s){ return s.id===id; });
+    if(!sp) return;
+    var level = state.spirits[id];
+    if(level<=0) return;
+    var cur = (state.heroResource[id]||0) + fillPerTick;
+    if(cur>=100){
+      cur = 0;
+      triggerAbility(sp, level);
+    }
+    state.heroResource[id] = cur;
+  });
+
+  if(state.achieved.autotap){
+    state._autoTapAccum = (state._autoTapAccum||0) + TICK_MS;
+    if(state._autoTapAccum>=1000){
+      state._autoTapAccum -= 1000;
+      var autoDmg = tapDamage();
+      spawnFloatNum('+'+formatNum(autoDmg), els['enemy-stage']);
+      dealDamage(autoDmg);
+    }
+  }
+  if(state.achieved.labmaster){
+    state._autoEmpowerAccum = (state._autoEmpowerAccum||0) + TICK_MS;
+    if(state._autoEmpowerAccum>=1000){
+      state._autoEmpowerAccum -= 1000;
+      if(autoEmpowerTick()){ renderSpirits(); }
+    }
+  }
+  if(autoLabQueueTick()){ renderResearch(); }
+
+  var completedStudies = advanceActiveStudies(TICK_MS/1000);
+  var filledSlots = autoFillStudySlots();
+  if(completedStudies.length){
+    completedStudies.forEach(function(name){ showToast('Study complete: '+name+' advanced a level!'); });
+  }
+  if(completedStudies.length || filledSlots){
+    renderLongStudies();
+  } else {
+    updateStudyProgress();
+  }
+
+  updateBattleFast();
+  updatePartyBars();
+  checkAffordability();
+}
+
+function updateStudyProgress(){
+  state.activeStudies.forEach(function(active){
+    var fillEl = els['study-list'].querySelector('[data-study-bar="'+active.id+'"]');
+    var textEl = els['study-list'].querySelector('[data-study-text="'+active.id+'"]');
+    if(!fillEl || !textEl) return;
+    var pct = Math.max(0, Math.min(100, 100 - (active.remainingSec/active.totalDurationSec*100)));
+    fillEl.style.width = pct+'%';
+    textEl.textContent = fmtDuration(Math.max(0,active.remainingSec)) + ' remaining at ' + active.speedMult + 'x';
+  });
+}
+
+function checkAffordability(){
+  els['spirit-list'].querySelectorAll('[data-empower]').forEach(function(btn){
+    var sp = SPIRITS.find(function(s){ return s.id===btn.getAttribute('data-empower'); });
+    if(sp) btn.disabled = state.lumen < spiritCost(sp);
+  });
+  els['spirit-list'].querySelectorAll('[data-rarity]').forEach(function(btn){
+    var id = btn.getAttribute('data-rarity');
+    var sp = SPIRITS.find(function(s){ return s.id===id; });
+    if(!sp) return;
+    var tier = state.heroRarity[id]||0;
+    if(tier>=5){ btn.disabled = true; return; }
+    var level = state.spirits[id];
+    var req = rarityReq(tier);
+    var cost = rarityCost(sp, tier);
+    btn.disabled = !(level>=req && state.shards>=cost.shard && state.lumen>=cost.lumen);
+  });
+  els['spirit-list'].querySelectorAll('[data-module]').forEach(function(btn){
+    var sp = SPIRITS.find(function(s){ return s.id===btn.getAttribute('data-module'); });
+    if(!sp) return;
+    var level = moduleLevel(sp.id);
+    if(level>=MODULE_MAX_LEVEL) return;
+    var cost = moduleCost(sp, level);
+    btn.disabled = state.lumen<cost.lumen || state.shards<cost.shard;
+  });
+  els['spirit-list'].querySelectorAll('[data-ultimate]').forEach(function(btn){
+    var sp = SPIRITS.find(function(s){ return s.id===btn.getAttribute('data-ultimate'); });
+    if(!sp) return;
+    btn.disabled = state.sigils<ultimateSigilCost(sp);
+  });
+  els['research-list'].querySelectorAll('[data-research]').forEach(function(btn){
+    var node = RESEARCH.find(function(n){ return n.id===btn.getAttribute('data-research'); });
+    if(!node) return;
+    btn.disabled = !getResearchBuyPlan(node).affordable;
+  });
+  var openStudySlots = studySlotCount() - state.activeStudies.length;
+  els['study-list'].querySelectorAll('[data-study]').forEach(function(btn){
+    var lnode = LONG_STUDIES.find(function(n){ return n.id===btn.getAttribute('data-study'); });
+    if(!lnode) return;
+    var level = state.longStudyLevels[lnode.id]||0;
+    var cost = studyCost(lnode, level);
+    btn.disabled = openStudySlots<=0 || state.lumen<cost.lumen || state.shards<cost.shard;
+  });
+  els['study-list'].querySelectorAll('[data-speed-study]').forEach(function(btn){
+    var active = findActiveStudy(btn.getAttribute('data-speed-study'));
+    if(!active) return;
+    var mult = parseFloat(btn.getAttribute('data-speed'));
+    var isActive = active.speedMult>=mult;
+    btn.disabled = isActive || state.motes<speedTierCost(mult);
+  });
+}
+
+// ---------------------------------------------------------------
+// Starfield
+// ---------------------------------------------------------------
+function setupStars(){
+  var canvas = document.getElementById('stars');
+  var ctx = canvas.getContext('2d');
+  var stars = [];
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function resize(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    var count = Math.floor((canvas.width*canvas.height)/9000);
+    stars = [];
+    for(var i=0;i<count;i++){
+      stars.push({
+        x: Math.random()*canvas.width,
+        y: Math.random()*canvas.height,
+        r: Math.random()*1.4+0.3,
+        phase: Math.random()*Math.PI*2,
+        speed: 0.4+Math.random()*0.8
+      });
+    }
+  }
+  function isDark(){
+    var t = document.documentElement.getAttribute('data-theme');
+    if(t==='dark') return true;
+    if(t==='light') return false;
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  function draw(t){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    var dark = isDark();
+    var base = dark ? [230,228,245] : [90,80,140];
+    stars.forEach(function(s){
+      var tw = reduceMotion ? 0.7 : (0.5 + 0.5*Math.sin(t*0.001*s.speed + s.phase));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba('+base[0]+','+base[1]+','+base[2]+','+(dark ? 0.15+tw*0.5 : 0.10+tw*0.25)+')';
+      ctx.fill();
+    });
+    if(!reduceMotion) requestAnimationFrame(draw); else requestAnimationFrame(function(){});
+  }
+  window.addEventListener('resize', resize);
+  resize();
+  requestAnimationFrame(draw);
+}
+
+// ---------------------------------------------------------------
+// Init
+// ---------------------------------------------------------------
+var OFFLINE_MAX_KILLS = 5000;
+function simulateOfflineRun(effectiveSec){
+  var remaining = effectiveSec;
+  var lumenGained = 0, shardGained = 0, sigilsGained = 0, ascends = 0, kills = 0;
+  while(remaining > 0 && kills < OFFLINE_MAX_KILLS){
+    var dps = idleDps();
+    if(dps <= 0) break;
+    var wasBossKill = isBoss(state.depth);
+    var enemyMax = state.enemyMaxHp>0 ? state.enemyMaxHp : enemyHpFor(state.depth);
+    var curHp = state.enemyHp>0 ? state.enemyHp : enemyMax;
+    var regenPerSec = wasBossKill ? enemyMax*BOSS_REGEN_PER_SEC : 0;
+    var netDps = dps - regenPerSec;
+    if(netDps <= 0) break;
+    var timeToKill = curHp / netDps;
+    if(timeToKill > remaining){
+      state.enemyHp = Math.max(0, curHp - netDps*remaining);
+      remaining = 0;
+      break;
+    }
+    remaining -= timeToKill;
+    kills++;
+    var lumenGain = enemyRewardFor(state.depth) * offlineRate();
+    var shardGain = shardRewardFor(state.depth) * offlineRate();
+    gainLumen(lumenGain);
+    state.shards += shardGain;
+    lumenGained += lumenGain;
+    shardGained += shardGain;
+    if(wasBossKill){
+      var sigilGain = sigilsFromBoss(state.depth);
+      state.sigils += sigilGain;
+      sigilsGained += sigilGain;
+    }
+    state.totalKills++;
+    state.depth++;
+    state.maxDepthEver = Math.max(state.maxDepthEver, state.depth);
+    spawnEnemy();
+    if(state.achieved.labmaster){ autoEmpowerTick(); }
+    if(state.owned.autoascend && (state.depth-1)>=15){
+      applyAscendMutation();
+      ascends++;
+    }
+  }
+  if(remaining > 0){
+    var dps2 = idleDps();
+    var passiveLumen = dps2 * remaining * offlineRate();
+    if(passiveLumen > 0){
+      gainLumen(passiveLumen);
+      lumenGained += passiveLumen;
+      var lumenPerKill2 = enemyRewardFor(state.depth);
+      var shardPerKill2 = shardRewardFor(state.depth);
+      var passiveShard = lumenPerKill2>0 ? passiveLumen*(shardPerKill2/lumenPerKill2) : 0;
+      state.shards += passiveShard;
+      shardGained += passiveShard;
+    }
+  }
+  return {lumenGained:lumenGained, shardGained:shardGained, sigilsGained:sigilsGained, kills:kills, ascends:ascends};
+}
+
+function applyOfflineProgress(){
+  var elapsedSec = Math.max(0, (Date.now() - (state.lastSeen||Date.now())) / 1000);
+  if(elapsedSec < 5) return null;
+  var capSec = offlineCapHours()*3600;
+  var effectiveSec = Math.min(elapsedSec, capSec);
+  var sim = simulateOfflineRun(effectiveSec);
+  state.totalOfflineSeconds += effectiveSec;
+  var completedStudies = advanceActiveStudies(elapsedSec);
+  autoFillStudySlots();
+  autoLabQueueTick();
+  checkAchievements();
+  return {elapsedSec: elapsedSec, effectiveSec: effectiveSec, earned: sim.lumenGained, shardEarned: sim.shardGained, sigilsEarned: sim.sigilsGained, ascends: sim.ascends, completedStudies: completedStudies};
+}
+
+function fmtDuration(sec){
+  sec = Math.floor(sec);
+  var h = Math.floor(sec/3600), m = Math.floor((sec%3600)/60);
+  if(h>0) return h+'h '+m+'m';
+  if(m>0) return m+'m';
+  return Math.max(1,sec)+'s';
+}
+
+function init(){
+  cacheEls();
+  state = loadState();
+  if(state.owned.rememberbulk && state.savedLabMultiplier!==undefined){ labMultiplier = state.savedLabMultiplier; }
+  spawnEnemy();
+  setupTabs();
+  setupStars();
+
+  var stageEl = document.getElementById('enemy-stage');
+  stageEl.addEventListener('pointerdown', function(e){
+    e.preventDefault();
+    doTap(stageEl);
+  });
+
+  document.getElementById('ascend-btn').addEventListener('click', function(){ doAscend(false); });
+  document.getElementById('reset-btn').addEventListener('click', function(){
+    document.getElementById('reset-row').style.display = 'none';
+    document.getElementById('reset-confirm-row').style.display = 'block';
+  });
+  document.getElementById('reset-cancel-btn').addEventListener('click', function(){
+    document.getElementById('reset-confirm-row').style.display = 'none';
+    document.getElementById('reset-row').style.display = 'block';
+  });
+  document.getElementById('reset-confirm-btn').addEventListener('click', function(){
+    performReset();
+    document.getElementById('reset-confirm-row').style.display = 'none';
+    document.getElementById('reset-row').style.display = 'block';
+  });
+
+  applyRiftTheme();
+  renderAll();
+
+  var introOverlay = document.getElementById('intro-overlay');
+  var welcomeOverlay = document.getElementById('welcome-overlay');
+
+  if(isNewGame){
+    introOverlay.style.display = 'flex';
+    document.getElementById('intro-begin').addEventListener('click', function(){
+      introOverlay.style.display = 'none';
+      state.lastSeen = Date.now();
+      saveState();
+    });
+  } else {
+    introOverlay.style.display = 'none';
+    var offline = applyOfflineProgress();
+    if(offline && (offline.earned > 1 || offline.completedStudies.length || offline.ascends>0)){
+      var msg = 'You were away for ' + fmtDuration(offline.elapsedSec) + '. Your Wisps kept the Rift lit and gathered ' + formatNum(offline.earned) + ' Lumen' + (offline.shardEarned>1 ? ' and ' + formatNum(offline.shardEarned) + ' Shards' : '') + (offline.sigilsEarned>0 ? ' and ' + formatNum(offline.sigilsEarned) + ' Sigils' : '') + ' while you were gone.';
+      if(offline.ascends>0){ msg += ' They ascended ' + offline.ascends + ' time' + (offline.ascends===1?'':'s') + ' on their own!'; }
+      if(offline.completedStudies.length===1){ msg += ' Your Long Study "' + offline.completedStudies[0] + '" finished while you were away!'; }
+      else if(offline.completedStudies.length>1){ msg += ' Your Long Studies "' + offline.completedStudies.join('", "') + '" finished while you were away!'; }
+      document.getElementById('welcome-text').textContent = msg;
+      welcomeOverlay.style.display = 'flex';
+      document.getElementById('welcome-claim').addEventListener('click', function(){
+        welcomeOverlay.style.display = 'none';
+        renderAll();
+      });
+    }
+    renderAll();
+  }
+
+  setInterval(tick, TICK_MS);
+  setInterval(saveState, 5000);
+  document.addEventListener('visibilitychange', function(){ if(document.hidden) saveState(); });
+  window.addEventListener('beforeunload', saveState);
+}
+
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+})();
+</script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('service-worker.js').catch(function(){});
+  });
+}
+</script>
+</body>
+</html>

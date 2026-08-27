@@ -1,0 +1,75 @@
+# Lumenfall
+
+An idle RPG where a party of Wisps pushes deeper into an ever-collapsing Rift. Recruit them, empower them between fights, and time your Ascend to come back stronger. Every reward is deterministic — no loot rolls, no RNG, just numbers you can plan around.
+
+Play in the browser, install it like an app on your phone, or grab it as a Windows desktop build.
+
+## Play now
+
+- **Web**: open [`index.html`](index.html) directly, or visit the GitHub Pages build once it's enabled (see [Publishing this repo](#publishing-this-repo) below) at `https://karahaNx.github.io/Lumenfall/`.
+- **Mobile (PWA)**: visit the Pages link on your phone, then use your browser's "Add to Home Screen" (Android Chrome) or "Add to Home Screen" from the Share sheet (iOS Safari). It installs as a standalone icon and keeps working offline.
+- **Windows desktop (.exe)**: download the latest build from this repo's **Actions → Build Desktop App → Artifacts**, or from a tagged **Release** once one exists. See [Desktop build](#desktop-build) to build it yourself.
+- **Android (.apk)**: download the debug APK from **Actions → Build Android APK → Artifacts**. See [Android build](#android-build) for details and caveats.
+
+## Project structure
+
+```
+index.html              the whole game — self-contained HTML/CSS/JS, no build step
+manifest.webmanifest     PWA manifest (installable web app)
+service-worker.js        offline caching for the PWA
+icons/                   generated app icons (favicon, PWA, Electron .ico, Android source)
+desktop/main.js          Electron entry point, loads index.html in a native window
+package.json             Electron + electron-builder config (produces the Windows .exe)
+mobile/                  Capacitor project scaffold that wraps index.html for Android
+.github/workflows/       CI: deploys Pages, builds the .exe, builds the .apk
+```
+
+The game itself has no build step — `index.html` is the entire thing. Everything else in this repo exists purely to package that one file for other platforms.
+
+## Desktop build
+
+Requires [Node.js](https://nodejs.org) 18+.
+
+```bash
+npm install
+npm start        # run it locally in a window
+npm run dist      # produce release/*.exe (NSIS installer + portable build)
+```
+
+`npm run dist` is also run automatically by `.github/workflows/build-desktop.yml` on every push to `main`/`master` and on version tags (`v1.0.0`, etc.) — grab the result from the Actions run's artifacts, or from the GitHub Release if you pushed a tag.
+
+The Electron window loads `index.html` with `nodeIntegration` off and `contextIsolation`/`sandbox` on — the game gets no Node or filesystem access, it's just the same web page in a native frame.
+
+## Android build
+
+The `mobile/` folder is a [Capacitor](https://capacitorjs.com/) wrapper. The native `android/` project isn't committed — it's generated fresh each time from `mobile/capacitor.config.json`, which is the officially recommended way to use Capacitor.
+
+CI (`.github/workflows/build-android.yml`) copies the web files into `mobile/www/`, generates Android icons from `icons/icon-1024.png`, runs `npx cap add android`, and builds a **debug** APK with Gradle. Debug APKs are unsigned — install by sideloading (enable "Install unknown apps" for your browser/file manager), not through the Play Store. Getting a Play Store–ready signed release build going is a further step (keystore + signing config + a Play Console listing) that isn't set up here yet.
+
+To build locally you'll need Node.js, a JDK, and the Android SDK/Gradle:
+
+```bash
+cd mobile
+npm install
+mkdir -p www && cp ../index.html ../manifest.webmanifest ../service-worker.js www/ && cp -r ../icons www/icons
+npx cap add android
+npx cap sync android
+cd android && ./gradlew assembleDebug
+```
+
+## Publishing this repo
+
+This repo already has `origin` pointing at `https://github.com/karahaNx/Lumenfall.git`. Two one-time settings live on GitHub's side and can't be flipped from a local push:
+
+1. **Pages**: Settings → Pages → Source → **GitHub Actions**. Once set, every push to `main`/`master` redeploys the live site automatically.
+2. **Actions permissions**: Settings → Actions → General → Workflow permissions → **Read and write permissions** (needed for the desktop build workflow to attach `.exe` files to a Release when you push a version tag).
+
+## Design notes
+
+- **Deterministic rewards.** Every kill, boss fight, and study gives a fixed, calculable amount. What you plan around is your own math, not a drop chance.
+- **Wisps, not Towers.** Lumenfall is its own world — original currencies (Lumen, Shards, Motes, Prisms, Comets, Sigils), original cast, original Rift/Ascend structure. It's built in the spirit of idle-RPG games like *Firestone* and *The Tower*, without copying either.
+- **Offline progress actually simulates combat** — kill by kill, including boss regen walls, Auto-Empower, and Auto-Ascend — rather than a flat time-based multiplier.
+
+## License
+
+[MIT](LICENSE)
