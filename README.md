@@ -9,11 +9,11 @@ Play in the browser, install it like an app on your phone, or grab it as a Windo
 | | |
 |---|---|
 | 🌐 **Play in browser** | **[karahanx.github.io/Lumenfall](https://karahanx.github.io/Lumenfall/)** — nothing to install |
-| 🪟 **Windows desktop** | **[Download Lumenfall-Setup.exe](https://github.com/karahaNx/Lumenfall/releases/latest/download/Lumenfall-Setup.exe)** ([portable version](https://github.com/karahaNx/Lumenfall/releases/latest/download/Lumenfall-Portable.exe) also available) |
+| 🪟 **Windows desktop** | **[Download Lumenfall-Setup.exe](https://github.com/karahaNx/Lumenfall/releases/latest/download/Lumenfall-Setup.exe)** |
 | 🤖 **Android** | **[Download Lumenfall.apk](https://github.com/karahaNx/Lumenfall/releases/latest/download/Lumenfall.apk)** — unsigned, sideload it (see [Android build](#android-build)) |
 | 📱 **iPhone/iPad** | no native app yet — [installs as a PWA](#play-now) from the browser link above in the meantime |
 
-All three download links always point at the newest release — they don't need updating when a new version ships.
+Both download links always point at the newest release — they don't need updating when a new version ships.
 
 - **Mobile (PWA)**: visit the browser link on your phone, then use "Add to Home Screen" (Android Chrome, or the Share sheet on iOS Safari). It installs as a standalone icon and keeps working offline — this is the best option on iPhone/iPad today.
 - The web version also carries a small "Desktop app" button in its bottom-right corner linking to the Windows download.
@@ -40,7 +40,7 @@ Requires [Node.js](https://nodejs.org) 18+.
 ```bash
 npm install
 npm start        # run it locally in a window
-npm run dist      # produce release/*.exe (NSIS installer + portable build)
+npm run dist      # produce release/Lumenfall-Setup.exe
 ```
 
 `npm run dist` is also run automatically by `.github/workflows/build-desktop.yml` on every push to `main`/`master` and on version tags (`v1.0.0`, etc.) — grab the result from the Actions run's artifacts, or from the GitHub Release if you pushed a tag. That CI path is the reliable one; see the note below if you build locally on Windows.
@@ -53,15 +53,20 @@ The Electron window loads `index.html` with `nodeIntegration` off and `contextIs
 
 The `mobile/` folder is a [Capacitor](https://capacitorjs.com/) wrapper. The native `android/` project isn't committed — it's generated fresh each time from `mobile/capacitor.config.json`, which is the officially recommended way to use Capacitor.
 
-CI (`.github/workflows/build-android.yml`) copies the web files into `mobile/www/`, generates Android icons from `icons/icon-1024.png`, runs `npx cap add android`, and builds a **debug** APK with Gradle. Debug APKs are unsigned — install by sideloading (enable "Install unknown apps" for your browser/file manager), not through the Play Store. Getting a Play Store–ready signed release build going is a further step (keystore + signing config + a Play Console listing) that isn't set up here yet.
+CI (`.github/workflows/build-android.yml`) copies the web files into `mobile/www/`, adds the native `android/` project, then generates its launcher icon from `icons/icon-1024.png` / `icon-maskable-1024.png` / `icon-background-1024.png` — the same source art the Windows `.exe` icon comes from — before building a **debug** APK with Gradle. Debug APKs are unsigned — install by sideloading (enable "Install unknown apps" for your browser/file manager), not through the Play Store. Getting a Play Store–ready signed release build going is a further step (keystore + signing config + a Play Console listing) that isn't set up here yet.
 
-To build locally you'll need Node.js, a JDK, and the Android SDK/Gradle:
+To build locally you'll need Node.js, a JDK, and the Android SDK/Gradle. The icon generation step needs the native project to exist first, so `cap add android` has to run before it:
 
 ```bash
 cd mobile
 npm install
 mkdir -p www && cp ../index.html ../manifest.webmanifest ../service-worker.js www/ && cp -r ../icons www/icons
 npx cap add android
+mkdir -p assets
+cp ../icons/icon-1024.png assets/icon.png
+cp ../icons/icon-maskable-1024.png assets/icon-foreground.png
+cp ../icons/icon-background-1024.png assets/icon-background.png
+npx capacitor-assets generate --android
 npx cap sync android
 cd android && ./gradlew assembleDebug
 ```

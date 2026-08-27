@@ -26,6 +26,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
 
       - uses: actions/setup-java@v4
         with:
@@ -33,6 +35,8 @@ jobs:
           java-version: 17
 
       - uses: android-actions/setup-android@v3
+
+      - uses: gradle/actions/setup-gradle@v4
 
       - name: Install mobile dependencies
         working-directory: mobile
@@ -45,20 +49,21 @@ jobs:
           cp ../index.html ../manifest.webmanifest ../service-worker.js www/
           cp -r ../icons www/icons
 
+      - name: Add Android platform
+        working-directory: mobile
+        run: npx cap add android
+
       - name: Stage app icon source
         working-directory: mobile
         run: |
           mkdir -p assets
           cp ../icons/icon-1024.png assets/icon.png
           cp ../icons/icon-maskable-1024.png assets/icon-foreground.png
+          cp ../icons/icon-background-1024.png assets/icon-background.png
 
       - name: Generate Android icons
         working-directory: mobile
-        run: npx capacitor-assets generate --android --iconBackgroundColor '#0D0A16' --iconBackgroundColorDark '#0D0A16'
-
-      - name: Add Android platform
-        working-directory: mobile
-        run: npx cap add android
+        run: npx capacitor-assets generate --android
 
       - name: Sync Capacitor
         working-directory: mobile
