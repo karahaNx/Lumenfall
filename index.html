@@ -2403,11 +2403,14 @@ function simulateOfflineRun(effectiveSec){
     var curHp = state.enemyHp>0 ? state.enemyHp : enemyMax;
     var regenPerSec = wasBossKill ? enemyMax*BOSS_REGEN_PER_SEC : 0;
     var netDps = dps - regenPerSec;
-    if(netDps <= 0){
-      // Stuck at a Boss wall -- actually retreat a Rift and keep farming
-      // for real (not a side calculation) until the player comes back,
-      // instead of stalling the whole offline window at zero progress.
-      if(!wasBossKill || state.depth<=1) break;
+    if(wasBossKill && (netDps<=0 || (curHp/netDps) > remaining)){
+      // Either a true wall (idle DPS can't out-heal the regen) or just not
+      // enough of the offline window left to finish this Boss -- either way,
+      // don't waste the rest of the time on unrewarded chip damage. Actually
+      // retreat a Rift and keep farming there for real until the player
+      // comes back, rather than a side calculation or a partial, no-reward
+      // fight left sitting at the Boss.
+      if(state.depth<=1) break;
       state.depth = Math.max(1, state.depth - OFFLINE_FARM_RETREAT);
       retreated = true;
       spawnEnemy();
