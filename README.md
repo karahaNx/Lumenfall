@@ -6,10 +6,17 @@ Play in the browser, install it like an app on your phone, or grab it as a Windo
 
 ## Play now
 
-- **Web**: open [`index.html`](index.html) directly, or visit the GitHub Pages build once it's enabled (see [Publishing this repo](#publishing-this-repo) below) at `https://karahaNx.github.io/Lumenfall/`.
-- **Mobile (PWA)**: visit the Pages link on your phone, then use your browser's "Add to Home Screen" (Android Chrome) or "Add to Home Screen" from the Share sheet (iOS Safari). It installs as a standalone icon and keeps working offline.
-- **Windows desktop (.exe)**: [**Download the installer**](https://github.com/karahaNx/Lumenfall/releases/latest/download/Lumenfall-Setup.exe) — always points at the latest tagged Release. A portable no-install build is on the [Releases page](https://github.com/karahaNx/Lumenfall/releases/latest) too. The web version also carries a small "Desktop app" button in the bottom-right corner linking here. See [Desktop build](#desktop-build) to build it yourself.
-- **Android (.apk)**: download the debug APK from **Actions → Build Android APK → Artifacts**. See [Android build](#android-build) for details and caveats.
+| | |
+|---|---|
+| 🌐 **Play in browser** | **[karahanx.github.io/Lumenfall](https://karahanx.github.io/Lumenfall/)** — nothing to install |
+| 🪟 **Windows desktop** | **[Download Lumenfall-Setup.exe](https://github.com/karahaNx/Lumenfall/releases/latest/download/Lumenfall-Setup.exe)** ([portable version](https://github.com/karahaNx/Lumenfall/releases/latest/download/Lumenfall-Portable.exe) also available) |
+| 🤖 **Android** | **[Download Lumenfall.apk](https://github.com/karahaNx/Lumenfall/releases/latest/download/Lumenfall.apk)** — unsigned, sideload it (see [Android build](#android-build)) |
+| 📱 **iPhone/iPad** | no native app yet — [installs as a PWA](#play-now) from the browser link above in the meantime |
+
+All three download links always point at the newest release — they don't need updating when a new version ships.
+
+- **Mobile (PWA)**: visit the browser link on your phone, then use "Add to Home Screen" (Android Chrome, or the Share sheet on iOS Safari). It installs as a standalone icon and keeps working offline — this is the best option on iPhone/iPad today.
+- The web version also carries a small "Desktop app" button in its bottom-right corner linking to the Windows download.
 
 ## Project structure
 
@@ -61,10 +68,7 @@ cd android && ./gradlew assembleDebug
 
 ## Publishing this repo
 
-This repo already has `origin` pointing at `https://github.com/karahaNx/Lumenfall.git`. Two one-time settings live on GitHub's side and can't be flipped from a local push:
-
-1. **Pages**: Settings → Pages → Source → **GitHub Actions**. Once set, every push to `main`/`master` redeploys the live site automatically.
-2. **Actions permissions**: Settings → Actions → General → Workflow permissions → **Read and write permissions** (needed for the desktop build workflow to attach `.exe` files to a Release when you push a version tag).
+Pages is enabled (Settings → Pages → Source → GitHub Actions) and Actions has write access to attach release files — both already configured. Every push to `main` redeploys the site; pushing a tag like `v1.0.3` builds fresh installers/APK and attaches them to a new Release automatically.
 
 ## Design notes
 

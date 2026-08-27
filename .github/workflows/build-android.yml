@@ -10,7 +10,12 @@ on:
       - 'icons/**'
       - 'mobile/**'
       - '.github/workflows/build-android.yml'
+    tags:
+      - 'v*.*.*'
   workflow_dispatch: {}
+
+permissions:
+  contents: write
 
 jobs:
   build-android:
@@ -65,7 +70,16 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleDebug
 
+      - name: Rename APK
+        run: cp mobile/android/app/build/outputs/apk/debug/app-debug.apk Lumenfall.apk
+
       - uses: actions/upload-artifact@v4
         with:
           name: lumenfall-android-debug
-          path: mobile/android/app/build/outputs/apk/debug/app-debug.apk
+          path: Lumenfall.apk
+
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: Lumenfall.apk
