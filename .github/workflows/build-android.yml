@@ -8,6 +8,7 @@ on:
       - 'manifest.webmanifest'
       - 'service-worker.js'
       - 'icons/**'
+      - 'fonts/**'
       - 'mobile/**'
       - '.github/workflows/build-android.yml'
     tags:
@@ -48,6 +49,7 @@ jobs:
           mkdir -p www
           cp ../index.html ../manifest.webmanifest ../service-worker.js www/
           cp -r ../icons www/icons
+          cp -r ../fonts www/fonts
 
       - name: Add Android platform
         working-directory: mobile
@@ -60,6 +62,7 @@ jobs:
           cp ../icons/icon-1024.png assets/icon.png
           cp ../icons/icon-maskable-1024.png assets/icon-foreground.png
           cp ../icons/icon-background-1024.png assets/icon-background.png
+          cp ../icons/icon-1024.png assets/splash.png
 
       - name: Generate Android icons
         working-directory: mobile

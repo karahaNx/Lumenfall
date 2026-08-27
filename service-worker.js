@@ -1,10 +1,22 @@
-var CACHE_NAME = 'lumenfall-v1';
+var CACHE_NAME = 'lumenfall-v2';
 var CORE_ASSETS = [
   './',
   './index.html',
   './manifest.webmanifest',
   './icons/icon-192.png',
-  './icons/icon-512.png'
+  './icons/icon-512.png',
+  './fonts/fonts.css',
+  './fonts/cinzel-500.woff2',
+  './fonts/cinzel-600.woff2',
+  './fonts/cinzel-700.woff2',
+  './fonts/manrope-400.woff2',
+  './fonts/manrope-500.woff2',
+  './fonts/manrope-600.woff2',
+  './fonts/manrope-700.woff2',
+  './fonts/manrope-800.woff2',
+  './fonts/ibm-plex-mono-400.woff2',
+  './fonts/ibm-plex-mono-500.woff2',
+  './fonts/ibm-plex-mono-600.woff2'
 ];
 
 self.addEventListener('install', function(event){

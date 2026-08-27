@@ -12,8 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Lumenfall">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="fonts/fonts.css">
 <style>
   :root{
     --bg:#f2effa;
@@ -172,6 +171,7 @@
   .chip-label{font-size:.5rem;color:var(--ink-dim);font-weight:700;max-width:36px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .chip-power{font-family:'IBM Plex Mono',monospace;font-size:.5rem;color:var(--ink);font-weight:600;max-width:36px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .hero-chip.pulse{animation:pulseChip .3s ease;}
+  .hero-chip.unpowered{opacity:.5;}
   @keyframes pulseChip{0%{transform:scale(1);}50%{transform:scale(1.18);}100%{transform:scale(1);}}
   .chip-flash{
     position:absolute;top:-13px;left:50%;transform:translateX(-50%);
@@ -1427,21 +1427,19 @@ function showToast(msg){
 
 function renderPartyFormation(){
   var html = '';
-  var poweredCount = 0;
   state.activeParty.forEach(function(id){
     var sp = SPIRITS.find(function(s){ return s.id===id; });
     if(!sp) return;
-    if((state.spirits[id]||0)<=0) return;
-    poweredCount++;
+    var unpowered = (state.spirits[id]||0)<=0;
     var power = chipEffectivePower(id);
-    html += '<div class="hero-chip" data-chip="'+id+'">'+
+    html += '<div class="hero-chip'+(unpowered?' unpowered':'')+'" data-chip="'+id+'">'+
       '<span class="shape '+sp.shape+'" style="width:20px;height:20px;background:'+sp.color+';color:'+sp.color+';"></span>'+
       '<div class="chip-bar-track"><div class="chip-bar-fill" data-bar="'+id+'" style="background:'+RESOURCE_COLORS[sp.resource]+'"></div></div>'+
       '<div class="chip-label">'+sp.shortName+'</div>'+
       '<div class="chip-power" data-power="'+id+'">'+formatNum(power)+'</div>'+
     '</div>';
   });
-  if(poweredCount===0){
+  if(state.activeParty.length===0){
     html = '<div class="empty-party-note">No Wisps active — visit the Wisps tab to field one.</div>' + html;
   }
   els['party-col'].innerHTML = html;
@@ -2221,6 +2219,15 @@ if('serviceWorker' in navigator){
   window.addEventListener('load', function(){
     navigator.serviceWorker.register('service-worker.js').catch(function(){});
   });
+}
+</script>
+<script>
+if(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()){
+  var StatusBar = window.Capacitor.Plugins && window.Capacitor.Plugins.StatusBar;
+  if(StatusBar){
+    StatusBar.setBackgroundColor({color:'#0d0a16'}).catch(function(){});
+    StatusBar.setStyle({style:'DARK'}).catch(function(){});
+  }
 }
 </script>
 </body>

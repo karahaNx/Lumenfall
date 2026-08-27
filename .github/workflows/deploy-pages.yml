@@ -31,6 +31,7 @@ jobs:
           mkdir -p public
           cp index.html manifest.webmanifest service-worker.js public/
           cp -r icons public/icons
+          cp -r fonts public/fonts
 
       - uses: actions/configure-pages@v5
 
