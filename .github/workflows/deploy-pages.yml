@@ -1,14 +1,11 @@
+# NOTE: GitHub Pages requires a public repo on the Free plan. This repo is
+# currently private, so this workflow is manual-only (won't auto-run and
+# fail on every push). Once the repo goes public, add back an `on: push:`
+# trigger like the other workflows have, and re-enable Pages at
+# Settings -> Pages -> Source -> GitHub Actions.
 name: Deploy GitHub Pages
 
 on:
-  push:
-    branches: [main, master]
-    paths:
-      - 'index.html'
-      - 'manifest.webmanifest'
-      - 'service-worker.js'
-      - 'icons/**'
-      - '.github/workflows/deploy-pages.yml'
   workflow_dispatch: {}
 
 permissions:

@@ -4,18 +4,20 @@ An idle RPG where a party of Wisps pushes deeper into an ever-collapsing Rift. R
 
 Play in the browser, install it like an app on your phone, or grab it as a Windows desktop build.
 
+> **This repo is currently private.** The links below only work while you're signed in to GitHub as the repo owner — they won't load for anyone else, and the Pages site is off (GitHub's Free plan doesn't serve Pages from private repos at all). Make the repo public whenever you want either of those to actually work for other people; no other change is needed.
+
 ## Play now
 
 | | |
 |---|---|
-| 🌐 **Play in browser** | **[karahanx.github.io/Lumenfall](https://karahanx.github.io/Lumenfall/)** — nothing to install |
+| 🌐 **Play in browser** | [karahanx.github.io/Lumenfall](https://karahanx.github.io/Lumenfall/) — disabled until the repo is public, see above |
 | 🪟 **Windows desktop** | **[Download Lumenfall-Setup.exe](https://github.com/karahaNx/Lumenfall/releases/latest/download/Lumenfall-Setup.exe)** |
 | 🤖 **Android** | **[Download Lumenfall.apk](https://github.com/karahaNx/Lumenfall/releases/latest/download/Lumenfall.apk)** — unsigned, sideload it (see [Android build](#android-build)) |
-| 📱 **iPhone/iPad** | no native app yet — [installs as a PWA](#play-now) from the browser link above in the meantime |
+| 📱 **iPhone/iPad** | no native app yet — installs as a PWA from the browser link above, once that's public |
 
 Both download links always point at the newest release — they don't need updating when a new version ships.
 
-- **Mobile (PWA)**: visit the browser link on your phone, then use "Add to Home Screen" (Android Chrome, or the Share sheet on iOS Safari). It installs as a standalone icon and keeps working offline — this is the best option on iPhone/iPad today.
+- **Mobile (PWA)**: once the site is public, visit it on your phone and use "Add to Home Screen" (Android Chrome, or the Share sheet on iOS Safari). It installs as a standalone icon and keeps working offline — this is the intended option on iPhone/iPad.
 - The web version also carries a small "Desktop app" button in its bottom-right corner linking to the Windows download.
 
 ## Project structure
@@ -73,7 +75,13 @@ cd android && ./gradlew assembleDebug
 
 ## Publishing this repo
 
-Pages is enabled (Settings → Pages → Source → GitHub Actions) and Actions has write access to attach release files — both already configured. Every push to `main` redeploys the site; pushing a tag like `v1.0.3` builds fresh installers/APK and attaches them to a new Release automatically.
+Actions already has write access to attach release files — pushing a tag like `v1.0.5` builds fresh installers/APK and attaches them to a new Release automatically.
+
+Pages is a separate story: it's off because this repo is private, and GitHub's Free plan only serves Pages from public repos. To turn it on:
+
+1. Make the repo public (Settings → General → Danger Zone → Change visibility).
+2. Settings → Pages → Source → **GitHub Actions**.
+3. Add an `on: push:` trigger back to `.github/workflows/deploy-pages.yml` (it's currently `workflow_dispatch`-only so it doesn't fail on every push while Pages is off) — copy the trigger block from `build-desktop.yml` as a template.
 
 ## Design notes
 
