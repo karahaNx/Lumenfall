@@ -29,7 +29,7 @@ jobs:
       - name: Stage site content
         run: |
           mkdir -p public
-          cp index.html manifest.webmanifest service-worker.js public/
+          cp index.html manifest.webmanifest service-worker.js privacy.html public/
           cp -r icons public/icons
           cp -r fonts public/fonts
 

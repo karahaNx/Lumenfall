@@ -8,10 +8,6 @@
 <meta name="theme-color" content="#1c1730">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/favicon.ico">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Lumenfall">
 <link rel="stylesheet" href="fonts/fonts.css">
 <style>
   :root{
@@ -425,6 +421,37 @@
     width:100%;padding:11px;border-radius:12px;border:none;cursor:pointer;
     background:var(--lumen);color:#241900;font-weight:800;font-size:.88rem;
   }
+  .modal .ghost-btn{
+    width:100%;padding:9px;border-radius:12px;border:none;cursor:pointer;
+    background:transparent;color:var(--ink-dim);font-weight:600;font-size:.78rem;margin-top:8px;
+  }
+
+  /* ---------- Studio splash ---------- */
+  .studio-splash{
+    position:fixed;inset:0;z-index:30;background:#0a0814;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+  }
+  .studio-splash .wordmark{
+    font-family:'Cinzel',serif;font-weight:600;font-size:1.1rem;letter-spacing:.28em;
+    text-transform:uppercase;color:#eae8f5;opacity:0;text-align:center;
+    animation:studioFade 2.2s ease forwards;
+  }
+  .studio-splash .wordmark small{
+    display:block;font-family:'Manrope',sans-serif;font-weight:500;font-size:.6rem;
+    letter-spacing:.32em;color:#8a5fd6;margin-top:8px;text-transform:uppercase;
+  }
+  @keyframes studioFade{
+    0%{opacity:0;transform:scale(.96);}
+    22%{opacity:1;transform:scale(1);}
+    78%{opacity:1;transform:scale(1);}
+    100%{opacity:0;transform:scale(1.02);}
+  }
+
+  /* ---------- Tutorial ---------- */
+  .tut-dots{display:flex;gap:6px;justify-content:center;margin-bottom:14px;}
+  .tut-dot{width:6px;height:6px;border-radius:50%;background:var(--line);}
+  .tut-dot.on{background:var(--lumen);}
+  .tut-icon{width:44px;height:44px;margin:0 auto 14px;border-radius:12px;}
 
   /* ---------- Toast ---------- */
   .toast{
@@ -560,6 +587,9 @@
     </section>
 
     <section class="tab-panel" id="tab-about">
+      <div id="howtoplay-row">
+        <button class="reset-btn" id="howtoplay-btn" style="background:var(--bg-elev);color:var(--ink);border:1px solid var(--line);">How to Play</button>
+      </div>
       <div class="section-label">Currencies</div>
       <div class="currency-grid" id="currency-list"></div>
       <div class="section-label">Fair-Play Manifesto</div>
@@ -579,11 +609,25 @@
   </main>
 </div>
 
+<div class="studio-splash" id="studio-splash" style="display:none;">
+  <div class="wordmark">Xarib Productions<small>presents</small></div>
+</div>
+
 <div class="overlay" id="intro-overlay">
   <div class="modal">
     <h2>Lumenfall</h2>
     <p>Awaken a party of starlight Wisps — your first Wisp is already fighting for you. Strike into the Rift as their Guardian to speed things up, and unravel the eclipse swallowing the sky. Everything here is earned by playing — there is nothing to buy that makes you stronger.</p>
     <button class="primary-btn" id="intro-begin">Begin</button>
+  </div>
+</div>
+
+<div class="overlay" id="tutorial-overlay" style="display:none;">
+  <div class="modal">
+    <div class="tut-dots" id="tut-dots"></div>
+    <h2 id="tut-title"></h2>
+    <p id="tut-body"></p>
+    <button class="primary-btn" id="tut-next">Next</button>
+    <button class="ghost-btn" id="tut-skip">Skip tutorial</button>
   </div>
 </div>
 
@@ -1425,6 +1469,54 @@ function showToast(msg){
   showToast._t = setTimeout(function(){ t.classList.remove('show'); }, 2200);
 }
 
+var TUTORIAL_STEPS = [
+  {title:'Strike the Rift', body:'Tap or click the enemy to hit it directly. Your Wisps deal damage automatically too, every second, even if you never tap again.'},
+  {title:'Build your party', body:'Spend Lumen to Empower a Wisp and make it stronger. Up to 5 Wisps can be Active at once — bench and swap them anytime from the Wisps tab.'},
+  {title:'Ascend when stuck', body:'When a Rift’s boss is too tough, Ascend. You restart from Rift 1, but keep Prisms — a permanent power boost that makes the climb faster every time.'},
+  {title:'Research and Study', body:'The Lab and Long Studies turn Shards and Motes into permanent upgrades. Flip a Queue toggle and one buys itself the moment you can afford it.'},
+  {title:'Progress while away', body:'Close the game anytime — Lumenfall keeps fighting while you’re gone, and you’ll come back to rewards waiting for you.'}
+];
+
+function showTutorial(onComplete){
+  var overlay = document.getElementById('tutorial-overlay');
+  var dotsEl = document.getElementById('tut-dots');
+  var titleEl = document.getElementById('tut-title');
+  var bodyEl = document.getElementById('tut-body');
+  var nextBtn = document.getElementById('tut-next');
+  var skipBtn = document.getElementById('tut-skip');
+  var step = 0;
+
+  dotsEl.innerHTML = TUTORIAL_STEPS.map(function(){ return '<span class="tut-dot"></span>'; }).join('');
+  var dots = dotsEl.querySelectorAll('.tut-dot');
+
+  function renderStep(){
+    var s = TUTORIAL_STEPS[step];
+    titleEl.textContent = s.title;
+    bodyEl.textContent = s.body;
+    dots.forEach(function(d,i){ d.classList.toggle('on', i===step); });
+    nextBtn.textContent = (step===TUTORIAL_STEPS.length-1) ? 'Start Playing' : 'Next';
+  }
+
+  function finish(){
+    overlay.style.display = 'none';
+    nextBtn.removeEventListener('click', onNext);
+    skipBtn.removeEventListener('click', finish);
+    if(onComplete) onComplete();
+  }
+
+  function onNext(){
+    if(step===TUTORIAL_STEPS.length-1){ finish(); return; }
+    step++;
+    renderStep();
+  }
+
+  nextBtn.addEventListener('click', onNext);
+  skipBtn.addEventListener('click', finish);
+  step = 0;
+  renderStep();
+  overlay.style.display = 'flex';
+}
+
 function renderPartyFormation(){
   var html = '';
   state.activeParty.forEach(function(id){
@@ -2156,6 +2248,7 @@ function init(){
   });
 
   document.getElementById('ascend-btn').addEventListener('click', function(){ doAscend(false); });
+  document.getElementById('howtoplay-btn').addEventListener('click', function(){ showTutorial(); });
   document.getElementById('reset-btn').addEventListener('click', function(){
     document.getElementById('reset-row').style.display = 'none';
     document.getElementById('reset-confirm-row').style.display = 'block';
@@ -2177,11 +2270,24 @@ function init(){
   var welcomeOverlay = document.getElementById('welcome-overlay');
 
   if(isNewGame){
-    introOverlay.style.display = 'flex';
+    var studioSplash = document.getElementById('studio-splash');
+    var splashDone = false;
+    function proceedPastSplash(){
+      if(splashDone) return;
+      splashDone = true;
+      studioSplash.style.display = 'none';
+      introOverlay.style.display = 'flex';
+    }
+    studioSplash.style.display = 'flex';
+    studioSplash.addEventListener('click', proceedPastSplash);
+    setTimeout(proceedPastSplash, 2200);
+
     document.getElementById('intro-begin').addEventListener('click', function(){
       introOverlay.style.display = 'none';
-      state.lastSeen = Date.now();
-      saveState();
+      showTutorial(function(){
+        state.lastSeen = Date.now();
+        saveState();
+      });
     });
   } else {
     introOverlay.style.display = 'none';
