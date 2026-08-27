@@ -230,6 +230,8 @@
   .stat-box{flex:1;background:var(--bg-elev-2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;text-align:left;}
   .stat-box .k{font-size:.63rem;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.05em;}
   .stat-box .v{font-size:.88rem;font-weight:600;margin-top:2px;}
+  .offline-preview{font-size:.7rem;color:var(--ink-dim);text-align:center;margin-top:10px;line-height:1.5;}
+  .offline-preview strong{color:var(--good);font-weight:700;}
 
   /* ---------- shapes ---------- */
   .shape{display:inline-block;flex:none;}
@@ -568,6 +570,7 @@
           <div class="stat-box"><div class="k">Guardian tap</div><div class="v mono" id="stat-tap">1</div></div>
           <div class="stat-box"><div class="k">Wisp power/s</div><div class="v mono" id="stat-idle">0</div></div>
         </div>
+        <div class="offline-preview" id="offline-preview"></div>
       </div>
     </section>
 
@@ -1152,7 +1155,7 @@ function defeatEnemy(){
   checkAutoAscend();
   checkAchievements();
   renderDynamic();
-  renderDaily();
+  renderSideStats();
 }
 
 function checkAutoAscend(){
@@ -1206,7 +1209,7 @@ function buySpirit(sp){
   checkAchievements();
   renderSpirits();
   updateBattleFast();
-  renderDaily();
+  renderSideStats();
 }
 
 function buyRarity(sp){
@@ -1342,7 +1345,7 @@ function buyResearch(node){
   trackDaily('research', plan.buyCount);
   renderResearch();
   updateBattleFast();
-  renderDaily();
+  renderSideStats();
 }
 
 function autoLabQueueTick(){
@@ -1537,7 +1540,7 @@ function cacheEls(){
   ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','enemy-name','luminous-tag','boss-regen-tag','buff-indicator','enemy-stage','enemy-glyph',
    'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','party-col','research-list','study-list',
    'prism-preview','ascend-btn','ascend-note','node-list','ach-list','shop-list','theme-list','manifesto','toast','currency-list',
-   'daily-streak-badge','daily-quest-list'
+   'daily-streak-badge','daily-quest-list','offline-preview'
   ].forEach(function(id){ els[id]=document.getElementById(id); });
 }
 
@@ -2076,7 +2079,7 @@ function renderAll(){
   renderCosmetics();
   renderCurrencies();
   renderManifesto();
-  renderDaily();
+  renderSideStats();
 }
 
 function renderDaily(){
@@ -2118,6 +2121,41 @@ function claimQuest(id){
   showToast('Quest complete — '+'+'+formatNum(q.reward.comets||0)+' Comets'+(q.reward.prisms ? ' & +'+q.reward.prisms+' Prisms' : ''));
   renderDaily();
   renderHud();
+}
+
+function computeOfflinePreview(){
+  var capHours = offlineCapHours();
+  var realState = state;
+  var clone = JSON.parse(JSON.stringify(realState));
+  state = clone;
+  var sim;
+  try{
+    sim = simulateOfflineRun(capHours * 3600);
+  } finally {
+    state = realState;
+  }
+  sim.capHours = capHours;
+  return sim;
+}
+
+function renderOfflinePreview(){
+  var el = els['offline-preview'];
+  if(!el) return;
+  var sim = computeOfflinePreview();
+  if(sim.lumenGained < 1){
+    el.textContent = 'Empower your Wisps to start earning Lumen while you\'re away.';
+    return;
+  }
+  var parts = ['<strong>'+formatNum(sim.lumenGained)+' Lumen</strong>'];
+  if(sim.shardGained >= 1) parts.push('<strong>'+formatNum(sim.shardGained)+' Shards</strong>');
+  if(sim.motesGained >= 1) parts.push(formatNum(sim.motesGained)+' Motes');
+  if(sim.sigilsGained >= 1) parts.push(formatNum(sim.sigilsGained)+' Sigils');
+  el.innerHTML = 'Log off now and earn up to ' + parts.join(', ') + ' over your next ' + sim.capHours + 'h away.';
+}
+
+function renderSideStats(){
+  renderDaily();
+  renderOfflinePreview();
 }
 
 function showDailyOverlay(info){
@@ -2215,7 +2253,7 @@ function tick(){
     }
   }
   if(autoLabQueueTick()){ renderResearch(); dailyChanged = true; }
-  if(dailyChanged){ renderDaily(); }
+  if(dailyChanged){ renderSideStats(); }
 
   var completedStudies = advanceActiveStudies(TICK_MS/1000);
   var filledSlots = autoFillStudySlots();
