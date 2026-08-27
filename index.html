@@ -2384,6 +2384,32 @@ function setupStars(){
 // Init
 // ---------------------------------------------------------------
 var OFFLINE_MAX_KILLS = 5000;
+var OFFLINE_FARM_RETREAT = 2;
+
+// Used only when offline progress is stuck at a Boss wall (idle DPS can't
+// out-heal the regen). Rather than a real fight, this farms a single enemy
+// at an already-cleared depth without touching the real state.depth/enemyHp
+// -- so the player returns still parked at the Boss, having quietly earned
+// from easier ground nearby instead of gaining nothing for the whole window.
+function farmOneOfflineKill(depth){
+  var dps = idleDps();
+  if(dps<=0) return null;
+  var enemyMax = enemyHpFor(depth);
+  var timeToKill = enemyMax / dps;
+  var lumenGain = enemyRewardFor(depth) * offlineRate();
+  var shardGain = shardRewardFor(depth) * offlineRate();
+  gainLumen(lumenGain);
+  state.shards += shardGain;
+  var moteGain = 0;
+  state.luminousAccum = (state.luminousAccum||0) + eliteChance(depth);
+  if(state.luminousAccum >= 1){
+    state.luminousAccum -= 1;
+    moteGain = Math.max(1, Math.round(motesDropFor(depth) * (1+supportMoteBonus())));
+    state.motes += moteGain;
+  }
+  return {timeSpent:timeToKill, lumenGain:lumenGain, shardGain:shardGain, moteGain:moteGain};
+}
+
 function simulateOfflineRun(effectiveSec){
   var remaining = effectiveSec;
   var lumenGained = 0, shardGained = 0, sigilsGained = 0, motesGained = 0, ascends = 0, kills = 0;
@@ -2397,7 +2423,22 @@ function simulateOfflineRun(effectiveSec){
     var curHp = state.enemyHp>0 ? state.enemyHp : enemyMax;
     var regenPerSec = wasBossKill ? enemyMax*BOSS_REGEN_PER_SEC : 0;
     var netDps = dps - regenPerSec;
-    if(netDps <= 0) break;
+    if(netDps <= 0){
+      if(!wasBossKill || state.depth<=1) break;
+      var farmed = farmOneOfflineKill(Math.max(1, state.depth-OFFLINE_FARM_RETREAT));
+      if(!farmed || farmed.timeSpent > remaining) break;
+      remaining -= farmed.timeSpent;
+      kills++;
+      lumenGained += farmed.lumenGain;
+      shardGained += farmed.shardGain;
+      state.totalKills++;
+      if(farmed.moteGain){ motesGained += farmed.moteGain; }
+      if(state.achieved.labmaster){
+        empowerAccum += farmed.timeSpent;
+        while(empowerAccum >= 1){ empowerAccum -= 1; autoEmpowerTick(); }
+      }
+      continue;
+    }
     var timeToKill = curHp / netDps;
     if(timeToKill > remaining){
       state.enemyHp = Math.max(0, curHp - netDps*remaining);
