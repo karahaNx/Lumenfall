@@ -6,16 +6,13 @@ This repository is now **Android-only**. There is no Windows/Electron build, no 
 
 ## Download the current APK
 
-Every relevant push to `main` automatically runs **Build Android APK**.
+Every relevant push to `main` automatically runs **Build Android APK** and publishes the finished file to the fixed **Lumenfall Android — Latest** release.
 
-To get the newest build:
+**Direct APK:** [Download Lumenfall.apk](https://github.com/karahaNx/Lumenfall/releases/download/android-latest/Lumenfall.apk)
 
-1. Open this repository on GitHub.
-2. Open **Actions**.
-3. Select **Build Android APK**.
-4. Open the newest successful run.
-5. Under **Artifacts**, download **Lumenfall-Android-APK**.
-6. Extract the downloaded ZIP and install `Lumenfall.apk` on your Android device.
+Because the repository is private, GitHub will require you to be signed in to the account that has access to the repo.
+
+You can also open **Releases** in the repository and select **Lumenfall Android — Latest**. There is only one distributed app file: `Lumenfall.apk`.
 
 The generated APK is a debug-signed Android build intended for direct sideloading. Android may require you to allow **Install unknown apps** for the browser or file manager you use to open it.
 
@@ -44,7 +41,7 @@ The workflow:
 4. Generates the Android launcher icon and splash resources.
 5. Runs `cap sync android`.
 6. Builds `app-debug.apk` with Gradle.
-7. Publishes it as the GitHub Actions artifact **Lumenfall-Android-APK**.
+7. Publishes `Lumenfall.apk` to the fixed GitHub Release tag **android-latest**.
 
 The Android SDK supplied by GitHub's Ubuntu runner is used directly. The old `android-actions/setup-android` step was removed because it attempted to install the obsolete Android SDK package `tools`, which caused the recent workflow failures before the app build even started.
 
@@ -91,3 +88,8 @@ mobile/android/app/build/outputs/apk/debug/app-debug.apk
 ## License
 
 [MIT](LICENSE)
+
+
+## Legacy cleanup
+
+The Android workflow also removes obsolete GitHub Actions artifacts and old release assets ending in `.exe` or `.aab`. This keeps the repository's downloadable builds Android-APK-only and avoids the Actions artifact-storage quota that previously blocked uploads.
