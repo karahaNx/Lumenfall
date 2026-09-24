@@ -1,4 +1,4 @@
-var CACHE_NAME = 'lumenfall-v3';
+var CACHE_NAME = 'lumenfall-v4';
 var CORE_ASSETS = [
   './',
   './index.html',
