@@ -786,7 +786,7 @@ var RIFT_THEMES = [
 ];
 
 var SHOP = [
-  {id:'autoascend', name:'Auto-Ascend Ritual', desc:'The moment you clear 15 Rifts, ascend automatically — live or while you\'re offline, no need to babysit the button.', cost:100},
+  {id:'autoascend', name:'Auto-Ascend Ritual', desc:'Unlock automatic Ascension at your saved Rift target. Toggle it on or off anytime; push farther with it off, then manually Ascend to raise the target.', cost:100},
   {id:'offline24',  name:'Extended Rest',      desc:'Raise the offline earnings cap from 12 hours to 24 hours.', cost:140},
   {id:'offline48',  name:'Deep Rest',          desc:'Raise the offline earnings cap by another 24 hours, stacking with Extended Rest.', cost:160},
   {id:'rememberbulk',name:'Loadout Memory',    desc:'The Lab remembers your last bulk-buy multiplier between visits, instead of resetting to 1x.', cost:50}
@@ -852,6 +852,7 @@ function freshState(){
     buffUntil:0, buffMult:1,
     ascendCount:0, totalTaps:0, totalKills:0, totalOfflineSeconds:0, luminousAccum:0,
     savedLabMultiplier:1,
+    autoAscendEnabled:false, autoAscendTargetDepth:16,
     loginStreak:0, questDay:'', questIds:[], questClaimed:{}, dailyStats:{},
     lastSeen:Date.now()
   };
@@ -916,6 +917,8 @@ function loadState(){
     var parsed = JSON.parse(raw);
     var researchQueueWasMissing = parsed.researchQueue===undefined;
     var studyQueueWasMissing = parsed.studyQueue===undefined;
+    var autoAscendEnabledWasMissing = parsed.autoAscendEnabled===undefined;
+    var autoAscendTargetWasMissing = parsed.autoAscendTargetDepth===undefined;
     var fresh = freshState();
     for(var k in fresh){ if(parsed[k]===undefined) parsed[k]=fresh[k]; }
     SPIRITS.forEach(function(sp){
@@ -939,6 +942,10 @@ function loadState(){
       else if(parsed.studyQueue[l.id]===undefined){ parsed.studyQueue[l.id]=false; }
     });
     if(parsed.owned){ delete parsed.owned.autostudy; }
+    if(autoAscendEnabledWasMissing){ parsed.autoAscendEnabled = !!(parsed.owned && parsed.owned.autoascend); }
+    if(autoAscendTargetWasMissing){ parsed.autoAscendTargetDepth = Math.max(16, parsed.maxDepthEver||1); }
+    parsed.autoAscendTargetDepth = Math.max(16, Math.floor(parsed.autoAscendTargetDepth||16));
+    if(!(parsed.owned && parsed.owned.autoascend)){ parsed.autoAscendEnabled = false; }
     if(!Array.isArray(parsed.activeParty)) parsed.activeParty=[];
     if(!Array.isArray(parsed.activeStudies)) parsed.activeStudies=[];
     if(parsed.activeStudy){ parsed.activeStudies.push(parsed.activeStudy); delete parsed.activeStudy; }
@@ -1152,17 +1159,27 @@ function defeatEnemy(){
   state.depth++;
   state.maxDepthEver = Math.max(state.maxDepthEver, state.depth);
   spawnEnemy();
-  checkAutoAscend();
+  if(checkAutoAscend()) return;
   checkAchievements();
   renderDynamic();
   renderSideStats();
 }
 
-function checkAutoAscend(){
+var MIN_AUTO_ASCEND_RIFT = 16;
+function autoAscendTarget(){
+  return Math.max(MIN_AUTO_ASCEND_RIFT, Math.floor(state.autoAscendTargetDepth||MIN_AUTO_ASCEND_RIFT));
+}
+function autoAscendReady(){
+  return !!(state.owned.autoascend && state.autoAscendEnabled && state.depth >= autoAscendTarget());
+}
+function updateAutoAscendTargetFromProgress(){
   if(!state.owned.autoascend) return;
-  if(state.depth-1 >= 15){
-    doAscend(true);
-  }
+  state.autoAscendTargetDepth = Math.max(autoAscendTarget(), state.maxDepthEver||1, state.depth||1);
+}
+function checkAutoAscend(){
+  if(!autoAscendReady()) return false;
+  doAscend(true);
+  return true;
 }
 
 // ---------------------------------------------------------------
@@ -1456,7 +1473,20 @@ function buyShopItem(item){
   if(state.comets < item.cost) return;
   state.comets -= item.cost;
   state.owned[item.id] = true;
+  if(item.id==='autoascend'){
+    state.autoAscendTargetDepth = Math.max(MIN_AUTO_ASCEND_RIFT, state.maxDepthEver||1, state.depth||1);
+    state.autoAscendEnabled = true;
+  }
   renderShop();
+  saveState();
+}
+
+function toggleAutoAscend(){
+  if(!state.owned.autoascend) return;
+  state.autoAscendEnabled = !state.autoAscendEnabled;
+  renderShop();
+  saveState();
+  if(state.autoAscendEnabled) checkAutoAscend();
 }
 
 function applyAscendMutation(){
@@ -1479,6 +1509,7 @@ function applyAscendMutation(){
 function doAscend(auto){
   var cleared = state.depth - 1;
   if(cleared < 15) return;
+  if(!auto) updateAutoAscendTargetFromProgress();
   applyAscendMutation();
   checkAchievements();
   renderAll();
@@ -1984,11 +2015,20 @@ function renderAchievements(){
   var shopHtml = '';
   SHOP.forEach(function(item){
     var owned = !!state.owned[item.id];
-    shopHtml += '<div class="card shop-card">' +
-      '<div class="info"><div class="name">'+item.name+'</div><div class="desc">'+item.desc+'</div></div>' +
-      '<button data-shop="'+item.id+'" class="'+(owned?'owned':'')+'" '+((owned||state.comets<item.cost)?'disabled':'')+'>' +
+    var extra = '';
+    var buttonHtml = '';
+    if(item.id==='autoascend' && owned){
+      var enabled = !!state.autoAscendEnabled;
+      extra = '<div class="desc" style="margin-top:6px;color:var(--prism);font-weight:700;">Target: Rift '+autoAscendTarget()+' — turn OFF to push farther; your next manual Ascend at a new high raises this target.</div>';
+      buttonHtml = '<button data-autoascend-toggle class="'+(enabled?'owned':'')+'">'+(enabled?'ON':'OFF')+'</button>';
+    } else {
+      buttonHtml = '<button data-shop="'+item.id+'" class="'+(owned?'owned':'')+'" '+((owned||state.comets<item.cost)?'disabled':'')+'>' +
         (owned ? 'Owned' : formatNum(item.cost)+' '+costIcon('comet')) +
-      '</button>' +
+      '</button>';
+    }
+    shopHtml += '<div class="card shop-card">' +
+      '<div class="info"><div class="name">'+item.name+'</div><div class="desc">'+item.desc+'</div>'+extra+'</div>' +
+      buttonHtml +
     '</div>';
   });
   els['shop-list'].innerHTML = shopHtml;
@@ -1998,6 +2038,8 @@ function renderAchievements(){
       buyShopItem(item);
     });
   });
+  var autoToggle = els['shop-list'].querySelector('[data-autoascend-toggle]');
+  if(autoToggle){ autoToggle.addEventListener('click', toggleAutoAscend); }
 }
 function renderShop(){ renderAchievements(); }
 
@@ -2214,6 +2256,7 @@ function autoEmpowerTick(){
 }
 
 function tick(){
+  if(checkAutoAscend()) return;
   var dps = idleDps();
   if(dps > 0){
     dealDamage(dps * (TICK_MS/1000));
@@ -2395,6 +2438,11 @@ function simulateOfflineRun(effectiveSec){
   var empowerAccum = 0;
   var retreated = false;
   while(remaining > 0 && kills < OFFLINE_MAX_KILLS){
+    if(autoAscendReady()){
+      applyAscendMutation();
+      ascends++;
+      continue;
+    }
     var dps = idleDps();
     if(dps <= 0) break;
     var wasBossKill = isBoss(state.depth);
@@ -2450,10 +2498,6 @@ function simulateOfflineRun(effectiveSec){
         empowerAccum -= 1;
         autoEmpowerTick();
       }
-    }
-    if(state.owned.autoascend && (state.depth-1)>=15){
-      applyAscendMutation();
-      ascends++;
     }
   }
   if(remaining > 0 && kills >= OFFLINE_MAX_KILLS){
