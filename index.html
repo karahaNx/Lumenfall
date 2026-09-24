@@ -603,13 +603,6 @@
 
   <main>
     <section class="tab-panel active" id="tab-battle">
-      <div class="card daily-card" id="daily-card">
-        <div class="daily-head">
-          <div class="section-label" style="margin:0;">Daily Quests</div>
-          <span class="daily-streak" id="daily-streak-badge">Day 1 streak</span>
-        </div>
-        <div id="daily-quest-list"></div>
-      </div>
       <div class="card stage">
         <div class="depth-label" id="depth-label">Rift 1</div>
         <div class="rift-mode-row">
@@ -675,6 +668,13 @@
     </section>
 
     <section class="tab-panel" id="tab-deeds">
+      <div class="card daily-card" id="daily-card">
+        <div class="daily-head">
+          <div class="section-label" style="margin:0;">Daily Quests</div>
+          <span class="daily-streak" id="daily-streak-badge">Day 1 streak</span>
+        </div>
+        <div id="daily-quest-list"></div>
+      </div>
       <div class="section-label">Deeds</div>
       <div class="ach-grid" id="ach-list"></div>
       <div class="section-label">Comet Rest Stop</div>
@@ -2743,7 +2743,7 @@ function showDailyOverlay(info){
   var reward = info.reward;
   var rewardText = '+'+formatNum(reward.comets||0)+' Comets'+(reward.prisms ? ' and +'+reward.prisms+' Prisms' : '');
   document.getElementById('daily-title').textContent = 'Day ' + info.streak + ' streak';
-  document.getElementById('daily-text').textContent = 'Welcome back — you earned ' + rewardText + ' for returning today. Keep the streak alive by coming back tomorrow, and check the Rift screen for today\'s fresh Daily Quests.';
+  document.getElementById('daily-text').textContent = 'Welcome back — you earned ' + rewardText + ' for returning today. Keep the streak alive by coming back tomorrow, and check Deeds for today\'s fresh Daily Quests.';
   overlay.style.display = 'flex';
   var claimBtn = document.getElementById('daily-claim');
   function handler(){
