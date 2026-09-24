@@ -1,5 +1,14 @@
 # Lumenfall
 
+## ⬇️ DOWNLOAD ANDROID APK
+
+### [**DOWNLOAD LUMENFALL.APK**](https://github.com/karahaNx/Lumenfall/releases/download/android-latest/Lumenfall.apk)
+
+**Latest Android build · direct APK download · no ZIP · no EXE**
+
+---
+
+
 Lumenfall is an Android idle RPG where a party of Wisps pushes deeper into an ever-collapsing Rift.
 
 This repository is now **Android-only**. There is no Windows/Electron build, no EXE, no GitHub Pages deployment, no PWA distribution, and no Play Store AAB pipeline.
@@ -7,8 +16,6 @@ This repository is now **Android-only**. There is no Windows/Electron build, no 
 ## Download the current APK
 
 Every relevant push to `main` automatically runs **Build Android APK** and publishes the finished file to the fixed **Lumenfall Android — Latest** release.
-
-**Direct APK:** [Download Lumenfall.apk](https://github.com/karahaNx/Lumenfall/releases/download/android-latest/Lumenfall.apk)
 
 Because the repository is private, GitHub will require you to be signed in to the account that has access to the repo.
 
