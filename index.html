@@ -1428,6 +1428,12 @@ function automatedGuardianDps(depth){
 function sustainedCombatDps(depth){
   return sustainedWispDps(depth) + automatedGuardianDps(depth);
 }
+function estimatedBossKillSeconds(depth){
+  if(!isBoss(depth)) return 0;
+  var maxHp = enemyHpFor(depth);
+  var netDps = sustainedCombatDps(depth) - maxHp*bossRegenRate(depth);
+  return netDps>0 ? maxHp/netDps : Infinity;
+}
 function abilityResourceRates(){
   var cycle = abilityCycleSeconds();
   var rates = {lumen:0, shards:0};
@@ -2518,7 +2524,7 @@ var ENCYCLOPEDIA_MECHANICS = [
   {name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the current run for Prisms. Rarity, Lab, Long Studies, Modules, Ultimates and other permanent systems stay.'},
   {name:'Luminous Enemies', meta:'Rare encounter', desc:'Rare non-boss enemies that drop Motes. Their appearance chance rises as you push deeper.'},
   {name:'Boss Traits', meta:'Boss mechanic', desc:'Bosses rotate every 10 Rifts: Regrowth has stronger healing, Fractured Core takes +75% Wisp ability damage, and Guardian\'s Mark makes Guardian taps deal x3. The cycle repeats every 30 Rifts.'},
-  {name:'Offline Progress', meta:'Idle system', desc:'Combat, Wisp abilities, Auto-Tap, Farm, Auto-Ascend, Long Studies and automation continue while you are away, up to your current offline cap.'}
+  {name:'Offline Progress', meta:'Idle system', desc:'Combat, Wisp abilities, Auto-Tap, Farm, Auto-Ascend, Long Studies and automation continue while you are away. If Auto-Empower makes you strong enough after a boss retreat, the game retries the saved Boss automatically.'}
 ];
 
 function renderEncyclopedia(){
@@ -2923,6 +2929,7 @@ function simulateOfflineRun(effectiveSec){
   var remaining = effectiveSec;
   var lumenGained = 0, shardGained = 0, sigilsGained = 0, motesGained = 0, ascends = 0, kills = 0;
   var empowerAccum = 0;
+  var autoTapCombatSec = 0;
   var retreated = false;
   while(remaining > 0 && kills < OFFLINE_MAX_KILLS){
     if(autoAscendReady()){
@@ -2953,6 +2960,7 @@ function simulateOfflineRun(effectiveSec){
     }
     var timeToKill = curHp / netDps;
     if(timeToKill > remaining){
+      autoTapCombatSec += remaining;
       var partialLumen = abilityRates.lumen * remaining * offlineRate();
       var partialShards = abilityRates.shards * remaining * offlineRate();
       gainLumen(partialLumen);
@@ -2964,6 +2972,7 @@ function simulateOfflineRun(effectiveSec){
       break;
     }
     remaining -= timeToKill;
+    autoTapCombatSec += timeToKill;
     kills++;
     var lumenGain = enemyRewardFor(state.depth) * offlineRate();
     var shardGain = shardRewardFor(state.depth) * offlineRate();
@@ -3002,6 +3011,19 @@ function simulateOfflineRun(effectiveSec){
         autoEmpowerTick();
       }
     }
+
+    if(retreated && state.riftMode==='farm' && state.farmReturnDepth && remaining>0){
+      var retryDepth = state.farmReturnDepth;
+      var retrySeconds = estimatedBossKillSeconds(retryDepth);
+      if(isFinite(retrySeconds) && retrySeconds<=remaining){
+        state.depth = retryDepth;
+        state.riftMode = 'push';
+        state.farmDepth = 0;
+        state.farmReturnDepth = 0;
+        retreated = false;
+        spawnEnemy();
+      }
+    }
   }
   if(remaining > 0 && kills >= OFFLINE_MAX_KILLS){
     var elapsedInLoop = effectiveSec - remaining;
@@ -3012,9 +3034,22 @@ function simulateOfflineRun(effectiveSec){
       state.shards += extraShard;
       lumenGained += extraLumen;
       shardGained += extraShard;
+      autoTapCombatSec += remaining;
     }
   }
-  return {lumenGained:lumenGained, shardGained:shardGained, sigilsGained:sigilsGained, motesGained:motesGained, kills:kills, ascends:ascends, retreated:retreated, endDepth:state.depth, pushDepth:progressionDepth()};
+
+  var offlineAutoTaps = 0;
+  if(state.achieved.autotap && autoTapCombatSec>0){
+    var tapSeconds = ((state._autoTapAccum||0)/1000) + autoTapCombatSec;
+    offlineAutoTaps = Math.floor(tapSeconds);
+    state._autoTapAccum = (tapSeconds-offlineAutoTaps)*1000;
+    if(offlineAutoTaps>0){
+      state.totalTaps += offlineAutoTaps;
+      trackDaily('taps', offlineAutoTaps);
+    }
+  }
+
+  return {lumenGained:lumenGained, shardGained:shardGained, sigilsGained:sigilsGained, motesGained:motesGained, kills:kills, ascends:ascends, retreated:retreated, endDepth:state.depth, pushDepth:progressionDepth(), autoTaps:offlineAutoTaps};
 }
 
 function applyOfflineProgress(){
