@@ -624,7 +624,7 @@
         <div class="tap-hint">Your Wisps already fight on their own, even when you're gone — tap the Rift to strike as your Guardian and speed things up.</div>
         <div class="stat-row">
           <div class="stat-box"><div class="k">Guardian tap</div><div class="v mono" id="stat-tap">1</div></div>
-          <div class="stat-box"><div class="k">Wisp power/s</div><div class="v mono" id="stat-idle">0</div></div>
+          <div class="stat-box"><div class="k">Wisp DPS est.</div><div class="v mono" id="stat-idle">0</div></div>
         </div>
         <div class="offline-preview" id="offline-preview"></div>
       </div>
@@ -924,7 +924,7 @@ var ENEMY_NOUN = ['Wisp','Serpent','Stalker','Husk','Warden','Shade','Leech','Pr
 
 var SAVE_KEY = 'lumenfall_save_v2';
 var TICK_MS = 100;
-var BOSS_REGEN_PER_SEC = 0.006;
+var ABILITY_BASE_CYCLE_SEC = 6;
 
 // ---------------------------------------------------------------
 // State
@@ -1091,6 +1091,29 @@ function costIcon(kind){
 
 function isBoss(depth){ return depth>0 && depth%10===0; }
 
+var BOSS_TRAITS = [
+  {id:'regrowth', name:'Regrowth', regen:0.009, abilityMult:1, tapMult:1, hint:'High regeneration — sustained Wisp damage matters.'},
+  {id:'fractured', name:'Fractured Core', regen:0.005, abilityMult:1.75, tapMult:1, hint:'Wisp abilities deal +75% damage.'},
+  {id:'guardian', name:"Guardian's Mark", regen:0.006, abilityMult:1, tapMult:3, hint:'Guardian taps deal x3 damage.'}
+];
+function bossTraitFor(depth){
+  if(!isBoss(depth)) return null;
+  var bossIndex = Math.max(0, Math.floor(depth/10)-1);
+  return BOSS_TRAITS[bossIndex % BOSS_TRAITS.length];
+}
+function bossRegenRate(depth){
+  var trait = bossTraitFor(depth);
+  return trait ? trait.regen : 0;
+}
+function bossAbilityDamageMult(depth){
+  var trait = bossTraitFor(depth);
+  return trait ? trait.abilityMult : 1;
+}
+function bossTapDamageMult(depth){
+  var trait = bossTraitFor(depth);
+  return trait ? trait.tapMult : 1;
+}
+
 function highestFarmableDepth(pushDepth){
   var d = Math.max(1, Math.floor(pushDepth||1)-1);
   while(d>1 && isBoss(d)) d--;
@@ -1141,6 +1164,7 @@ function tapMult(){ return (1 + nodeLevel('steady')*0.08) * (1 + researchLevel('
 function formationMult(){ return (1 + researchLevel('formation')*0.05) * longStudyFormationMult(); }
 function momentumMult(){ return 1 + nodeLevel('momentum')*0.06; }
 function fillRateMult(){ return 1 + researchLevel('charge')*0.08; }
+function abilityCycleSeconds(){ return ABILITY_BASE_CYCLE_SEC / fillRateMult(); }
 function offlineRate(){ return Math.min(1, 0.70 + nodeLevel('echo')*0.05) + longStudyOfflineBonus(); }
 function prismMult(){ return (1 + nodeLevel('swift')*0.04) * longStudyPrismMult(); }
 function costReduction(){ return Math.min(0.6, nodeLevel('bonds')*0.03); }
@@ -1262,12 +1286,77 @@ function chipEffectivePower(id){
 }
 function tapDamage(){
   var buffActive = state.buffUntil && Date.now() < state.buffUntil;
-  return (5 + effectivePartyPower()*0.02) * tapMult() * (buffActive ? state.buffMult : 1);
+  return (5 + effectivePartyPower()*0.02) * tapMult() * (buffActive ? state.buffMult : 1) * bossTapDamageMult(state.depth);
+}
+function passiveWispDpsAt(depth){
+  var contextual = formationContextDamageMult(depth) / formationGeneralDamageMult();
+  return effectivePartyPower() * contextual;
 }
 function idleDps(){
   var buffActive = state.buffUntil && Date.now() < state.buffUntil;
-  var contextual = formationContextDamageMult(state.depth) / formationGeneralDamageMult();
-  return effectivePartyPower() * contextual * (buffActive ? state.buffMult : 1);
+  return passiveWispDpsAt(state.depth) * (buffActive ? state.buffMult : 1);
+}
+function averageSupportBuffMult(){
+  var cycle = abilityCycleSeconds();
+  var best = 1;
+  state.activeParty.forEach(function(id){
+    var sp = SPIRITS.find(function(s){ return s.id===id; });
+    if(!sp || sp.abilityType!=='support' || (state.spirits[id]||0)<=0) return;
+    var isUlt = ultimateUnlocked(id);
+    var durationSec = isUlt ? 8 : 4;
+    var strength = isUlt ? 1.5 : 1.25;
+    var uptime = Math.min(1, durationSec / cycle);
+    var average = 1 + (strength-1)*uptime;
+    if(average>best) best=average;
+  });
+  return best;
+}
+function abilityBurstDamage(sp, depth){
+  var level = state.spirits[sp.id]||0;
+  if(level<=0) return 0;
+  var tier = state.heroRarity[sp.id]||0;
+  var power = spiritPower(sp, level) * RARITY_MULT[tier];
+  var mMult = moduleMult(sp.id);
+  var ult = ultimateUnlocked(sp.id) ? 2 : 1;
+  var burst = 0;
+  switch(sp.abilityType){
+    case 'tank': burst = power*4*mMult*ult; break;
+    case 'dps': burst = power*5*mMult*ult; break;
+    case 'ranged': burst = power*3*ult; break;
+    case 'druid': burst = power*3*ult; break;
+  }
+  return burst * formationContextDamageMult(depth) * bossAbilityDamageMult(depth);
+}
+function averageAbilityDps(depth){
+  var cycle = abilityCycleSeconds();
+  if(cycle<=0) return 0;
+  var total = 0;
+  state.activeParty.forEach(function(id){
+    var sp = SPIRITS.find(function(s){ return s.id===id; });
+    if(!sp || (state.spirits[id]||0)<=0) return;
+    total += abilityBurstDamage(sp, depth) / cycle;
+  });
+  return total;
+}
+function sustainedWispDps(depth){
+  return passiveWispDpsAt(depth) * averageSupportBuffMult() + averageAbilityDps(depth);
+}
+function abilityResourceRates(){
+  var cycle = abilityCycleSeconds();
+  var rates = {lumen:0, shards:0};
+  if(cycle<=0) return rates;
+  state.activeParty.forEach(function(id){
+    var sp = SPIRITS.find(function(s){ return s.id===id; });
+    var level = state.spirits[id]||0;
+    if(!sp || level<=0) return;
+    var tier = state.heroRarity[id]||0;
+    var power = spiritPower(sp, level) * RARITY_MULT[tier];
+    var mMult = moduleMult(id);
+    var ult = ultimateUnlocked(id) ? 2 : 1;
+    if(sp.abilityType==='ranged') rates.shards += (power*0.05*mMult*ult*formationRewardMult()) / cycle;
+    if(sp.abilityType==='druid') rates.lumen += (power*0.10*mMult*ult*formationRewardMult()) / cycle;
+  });
+  return rates;
 }
 function enemyHpFor(depth){
   return Math.round(10 * Math.pow(1.145, depth) * (isBoss(depth)?6:1));
@@ -1729,7 +1818,7 @@ function triggerAbility(sp, level){
       state.buffMult = Math.max(state.buffMult||1, strength);
       break;
   }
-  if(burst>0) dealDamage(burst * formationContextDamageMult(state.depth));
+  if(burst>0) dealDamage(burst * formationContextDamageMult(state.depth) * bossAbilityDamageMult(state.depth));
   flashChip(sp.id, sp.abilityName);
 }
 
@@ -1791,14 +1880,17 @@ function updateBattleFast(){
   var bossNow = isBoss(state.depth);
   els['boss-regen-tag'].style.display = bossNow ? 'block' : 'none';
   if(bossNow){
-    var regenPerSec = state.enemyMaxHp*BOSS_REGEN_PER_SEC;
-    var yourDps = idleDps();
-    var enough = yourDps > regenPerSec;
-    els['boss-regen-tag'].textContent = 'Regenerates ' + formatNum(regenPerSec) + '/s — your Wisps deal ' + formatNum(yourDps) + '/s' + (enough ? '' : ' (not enough yet)');
+    var trait = bossTraitFor(state.depth);
+    var regenPerSec = state.enemyMaxHp*bossRegenRate(state.depth);
+    var yourDps = sustainedWispDps(state.depth);
+    var netDps = yourDps - regenPerSec;
+    var enough = netDps > 0;
+    var eta = enough ? Math.ceil(Math.max(0,state.enemyHp)/netDps) : 0;
+    els['boss-regen-tag'].textContent = trait.name+' — '+trait.hint+' Sustained '+formatNum(yourDps)+'/s vs '+formatNum(regenPerSec)+'/s regen' + (enough ? ' · ~'+fmtDuration(eta) : ' · Farm recommended');
     els['boss-regen-tag'].classList.toggle('insufficient', !enough);
   }
   els['stat-tap'].textContent = formatNum(tapDamage());
-  els['stat-idle'].textContent = formatNum(idleDps());
+  els['stat-idle'].textContent = formatNum(sustainedWispDps(state.depth));
   var buffActive = state.buffUntil && Date.now() < state.buffUntil;
   els['buff-indicator'].style.display = buffActive ? 'block' : 'none';
   if(buffActive){
@@ -2330,7 +2422,7 @@ var ENCYCLOPEDIA_MECHANICS = [
   {name:'Farm', meta:'Rift mode', desc:'Repeat your highest cleared non-boss Rift for steady resources, then return to the exact Push point when ready.'},
   {name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the current run for Prisms. Rarity, Lab, Long Studies, Modules, Ultimates and other permanent systems stay.'},
   {name:'Luminous Enemies', meta:'Rare encounter', desc:'Rare non-boss enemies that drop Motes. Their appearance chance rises as you push deeper.'},
-  {name:'Boss Regeneration', meta:'Boss mechanic', desc:'Bosses regenerate health every second. If your Wisp damage cannot overcome the regeneration, Farm and grow stronger before pushing again.'},
+  {name:'Boss Traits', meta:'Boss mechanic', desc:'Bosses rotate every 10 Rifts: Regrowth has stronger healing, Fractured Core takes +75% Wisp ability damage, and Guardian\'s Mark makes Guardian taps deal x3. The cycle repeats every 30 Rifts.'},
   {name:'Offline Progress', meta:'Idle system', desc:'Combat, Farm, Auto-Ascend, Long Studies and automation continue while you are away, up to your current offline cap.'}
 ];
 
@@ -2560,9 +2652,9 @@ function tick(){
     dealDamage(dps * (TICK_MS/1000));
   }
   if(state.enemyHp>0 && isBoss(state.depth)){
-    state.enemyHp = Math.min(state.enemyMaxHp, state.enemyHp + state.enemyMaxHp*BOSS_REGEN_PER_SEC*(TICK_MS/1000));
+    state.enemyHp = Math.min(state.enemyMaxHp, state.enemyHp + state.enemyMaxHp*bossRegenRate(state.depth)*(TICK_MS/1000));
   }
-  var fillPerTick = (100/60) * fillRateMult();
+  var fillPerTick = (100/ABILITY_BASE_CYCLE_SEC) * fillRateMult() * (TICK_MS/1000);
   state.activeParty.forEach(function(id){
     var sp = SPIRITS.find(function(s){ return s.id===id; });
     if(!sp) return;
@@ -2740,13 +2832,14 @@ function simulateOfflineRun(effectiveSec){
       ascends++;
       continue;
     }
-    var dps = idleDps();
+    var dps = sustainedWispDps(state.depth);
     if(dps <= 0) break;
+    var abilityRates = abilityResourceRates();
     var wasBossKill = isBoss(state.depth);
     var wasLuminous = state.enemyIsLuminous;
     var enemyMax = state.enemyMaxHp>0 ? state.enemyMaxHp : enemyHpFor(state.depth);
     var curHp = state.enemyHp>0 ? state.enemyHp : enemyMax;
-    var regenPerSec = wasBossKill ? enemyMax*BOSS_REGEN_PER_SEC : 0;
+    var regenPerSec = wasBossKill ? enemyMax*bossRegenRate(state.depth) : 0;
     var netDps = dps - regenPerSec;
     if(wasBossKill && (netDps<=0 || (curHp/netDps) > remaining)){
       // Preserve the Boss as the player's Push point and switch the run into
@@ -2762,6 +2855,12 @@ function simulateOfflineRun(effectiveSec){
     }
     var timeToKill = curHp / netDps;
     if(timeToKill > remaining){
+      var partialLumen = abilityRates.lumen * remaining * offlineRate();
+      var partialShards = abilityRates.shards * remaining * offlineRate();
+      gainLumen(partialLumen);
+      state.shards += partialShards;
+      lumenGained += partialLumen;
+      shardGained += partialShards;
       state.enemyHp = Math.max(0, curHp - netDps*remaining);
       remaining = 0;
       break;
@@ -2770,10 +2869,12 @@ function simulateOfflineRun(effectiveSec){
     kills++;
     var lumenGain = enemyRewardFor(state.depth) * offlineRate();
     var shardGain = shardRewardFor(state.depth) * offlineRate();
-    gainLumen(lumenGain);
-    state.shards += shardGain;
-    lumenGained += lumenGain;
-    shardGained += shardGain;
+    var abilityLumenGain = abilityRates.lumen * timeToKill * offlineRate();
+    var abilityShardGain = abilityRates.shards * timeToKill * offlineRate();
+    gainLumen(lumenGain + abilityLumenGain);
+    state.shards += shardGain + abilityShardGain;
+    lumenGained += lumenGain + abilityLumenGain;
+    shardGained += shardGain + abilityShardGain;
     if(wasLuminous){
       var moteGain = Math.max(1, Math.round(motesDropFor(state.depth) * (1+supportMoteBonus())));
       state.motes += moteGain;
