@@ -2070,9 +2070,10 @@ function showTutorial(onComplete){
 function renderBondSummary(){
   if(!els['bond-summary']) return;
   var active = activeFormationBonds();
-  els['bond-summary'].textContent = active.length
+  var text = active.length
     ? 'Active Bonds: ' + active.map(function(b){ return b.name.replace(' Bond','')+' ('+b.effect+')'; }).join(' · ')
     : 'No Formation Bond active.';
+  if(els['bond-summary'].textContent!==text) els['bond-summary'].textContent = text;
 }
 function renderFormationBonds(){
   if(els['bond-card']){
@@ -2588,11 +2589,27 @@ function renderAll(){
   renderCosmetics();
   renderManifesto();
   renderEncyclopedia();
-  renderSideStats();
+  renderSideStats(true);
 }
 
-function renderDaily(){
+var DAILY_RENDER_INTERVAL_MS = 250;
+var lastDailyRenderAt = 0;
+var dailyRenderTimer = null;
+function renderDaily(force){
   if(!els['daily-quest-list']) return;
+  var now = Date.now();
+  var elapsed = now-lastDailyRenderAt;
+  if(!force && elapsed<DAILY_RENDER_INTERVAL_MS){
+    if(!dailyRenderTimer){
+      dailyRenderTimer = setTimeout(function(){
+        dailyRenderTimer = null;
+        renderDaily(true);
+      }, DAILY_RENDER_INTERVAL_MS-elapsed);
+    }
+    return;
+  }
+  if(dailyRenderTimer){ clearTimeout(dailyRenderTimer); dailyRenderTimer=null; }
+  lastDailyRenderAt = now;
   els['daily-streak-badge'].textContent = 'Day ' + (state.loginStreak||1) + ' streak';
   var html = '';
   (state.questIds||[]).forEach(function(id){
@@ -2628,7 +2645,7 @@ function claimQuest(id){
   state.comets += q.reward.comets||0;
   if(q.reward.prisms) state.prisms += q.reward.prisms;
   showToast('Quest complete — '+'+'+formatNum(q.reward.comets||0)+' Comets'+(q.reward.prisms ? ' & +'+q.reward.prisms+' Prisms' : ''));
-  renderDaily();
+  renderDaily(true);
   renderHud();
 }
 
@@ -2647,9 +2664,25 @@ function computeOfflinePreview(){
   return sim;
 }
 
-function renderOfflinePreview(){
+var OFFLINE_PREVIEW_REFRESH_MS = 10000;
+var lastOfflinePreviewAt = 0;
+var offlinePreviewTimer = null;
+function renderOfflinePreview(force){
   var el = els['offline-preview'];
   if(!el) return;
+  var now = Date.now();
+  var elapsed = now-lastOfflinePreviewAt;
+  if(!force && elapsed<OFFLINE_PREVIEW_REFRESH_MS){
+    if(!offlinePreviewTimer){
+      offlinePreviewTimer = setTimeout(function(){
+        offlinePreviewTimer = null;
+        renderOfflinePreview(true);
+      }, OFFLINE_PREVIEW_REFRESH_MS-elapsed);
+    }
+    return;
+  }
+  if(offlinePreviewTimer){ clearTimeout(offlinePreviewTimer); offlinePreviewTimer=null; }
+  lastOfflinePreviewAt = now;
   var sim = computeOfflinePreview();
   if(sim.lumenGained < 1){
     el.textContent = 'Empower your Wisps to start earning Lumen while you\'re away.';
@@ -2665,9 +2698,9 @@ function renderOfflinePreview(){
   el.innerHTML = 'Log off now and earn up to ' + parts.join(', ') + tail;
 }
 
-function renderSideStats(){
-  renderDaily();
-  renderOfflinePreview();
+function renderSideStats(force){
+  renderDaily(!!force);
+  renderOfflinePreview(!!force);
 }
 
 function showDailyOverlay(info){
@@ -2682,7 +2715,7 @@ function showDailyOverlay(info){
   function handler(){
     overlay.style.display = 'none';
     claimBtn.removeEventListener('click', handler);
-    renderDaily();
+    renderDaily(true);
   }
   claimBtn.addEventListener('click', handler);
 }
@@ -2822,7 +2855,12 @@ function updateStudyProgress(){
   });
 }
 
+var AFFORDABILITY_REFRESH_MS = 500;
+var lastAffordabilityAt = 0;
 function checkAffordability(){
+  var now = Date.now();
+  if(now-lastAffordabilityAt < AFFORDABILITY_REFRESH_MS) return;
+  lastAffordabilityAt = now;
   els['spirit-list'].querySelectorAll('[data-empower]').forEach(function(btn){
     var sp = SPIRITS.find(function(s){ return s.id===btn.getAttribute('data-empower'); });
     if(sp) btn.disabled = state.lumen < spiritCost(sp);
