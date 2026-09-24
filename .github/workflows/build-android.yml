@@ -2,68 +2,66 @@ name: Build Android APK
 
 on:
   push:
-    branches: [main, master]
+    branches: [main]
     paths:
       - 'index.html'
-      - 'manifest.webmanifest'
-      - 'service-worker.js'
       - 'icons/**'
       - 'fonts/**'
       - 'mobile/**'
       - '.github/workflows/build-android.yml'
-    tags:
-      - 'v*.*.*'
   workflow_dispatch: {}
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  build-android:
+  build-apk:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
           cache-dependency-path: mobile/package-lock.json
 
-      - uses: actions/setup-java@v4
+      - name: Set up Java
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 17
 
-      - uses: android-actions/setup-android@v3
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
 
-      - uses: gradle/actions/setup-gradle@v4
+      - name: Verify Android SDK
+        shell: bash
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          test -n "$ANDROID_HOME"
+          test -d "$ANDROID_HOME"
 
-      - name: Install mobile dependencies
+      - name: Install Capacitor dependencies
         working-directory: mobile
-        run: npm install
+        run: npm ci --no-audit --no-fund
 
-      - name: Stage web assets
+      - name: Stage Android web assets
         working-directory: mobile
         run: |
-          mkdir -p www
-          cp ../index.html ../manifest.webmanifest ../service-worker.js www/
-          cp -r ../icons www/icons
-          cp -r ../fonts www/fonts
+          rm -rf www
+          mkdir -p www/fonts
+          cp ../index.html www/index.html
+          cp -r ../fonts/. www/fonts/
 
-      - name: Add Android platform
+      - name: Generate Android project
         working-directory: mobile
         run: npx cap add android
 
-      - name: Patch release signing config
-        if: startsWith(github.ref, 'refs/tags/v')
-        working-directory: mobile
-        env:
-          LUMENFALL_VERSION_NAME: ${{ github.ref_name }}
-          LUMENFALL_VERSION_CODE: ${{ github.run_number }}
-        run: python3 patch-release-signing.py
-
-      - name: Stage app icon source
+      - name: Stage Android icon sources
         working-directory: mobile
         run: |
           mkdir -p assets
@@ -72,7 +70,7 @@ jobs:
           cp ../icons/icon-background-1024.png assets/icon-background.png
           cp ../icons/icon-1024.png assets/splash.png
 
-      - name: Generate Android icons
+      - name: Generate Android icons and splash
         working-directory: mobile
         run: npx capacitor-assets generate --android
 
@@ -80,48 +78,22 @@ jobs:
         working-directory: mobile
         run: npx cap sync android
 
-      - name: Build debug APK
+      - name: Build APK
         working-directory: mobile/android
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug --no-daemon
 
-      - name: Rename APK
-        run: cp mobile/android/app/build/outputs/apk/debug/app-debug.apk Lumenfall.apk
+      - name: Prepare APK
+        run: |
+          cp mobile/android/app/build/outputs/apk/debug/app-debug.apk Lumenfall.apk
+          test -s Lumenfall.apk
+          ls -lh Lumenfall.apk
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
-          name: lumenfall-android-debug
+          name: Lumenfall-Android-APK
           path: Lumenfall.apk
-
-      - name: Decode release keystore
-        if: startsWith(github.ref, 'refs/tags/v')
-        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > mobile/android/app/release.keystore
-
-      - name: Build signed AAB (Play Store)
-        if: startsWith(github.ref, 'refs/tags/v')
-        working-directory: mobile/android
-        env:
-          ANDROID_KEYSTORE_PATH: release.keystore
-          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-        run: ./gradlew bundleRelease
-
-      - name: Rename AAB
-        if: startsWith(github.ref, 'refs/tags/v')
-        run: cp mobile/android/app/build/outputs/bundle/release/app-release.aab Lumenfall.aab
-
-      - uses: actions/upload-artifact@v4
-        if: startsWith(github.ref, 'refs/tags/v')
-        with:
-          name: lumenfall-android-release-aab
-          path: Lumenfall.aab
-
-      - name: Attach to release
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            Lumenfall.apk
-            Lumenfall.aab
+          if-no-files-found: error
+          retention-days: 30

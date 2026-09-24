@@ -6,8 +6,6 @@
 <title>Lumenfall</title>
 <meta name="description" content="Lumenfall — an idle RPG where Wisps push deeper into an ever-collapsing Rift. Recruit, empower, and ascend.">
 <meta name="theme-color" content="#1c1730">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/favicon.ico">
 <link rel="stylesheet" href="fonts/fonts.css">
 <style>
   :root{
@@ -494,36 +492,11 @@
     *{animation-duration:.001ms !important;transition-duration:.001ms !important;}
   }
 
-  /* ---------- Desktop download pill ---------- */
-  .desktop-download{
-    position:fixed;right:14px;bottom:14px;z-index:7;
-    display:inline-flex;align-items:center;gap:7px;
-    padding:8px 14px 8px 12px;border-radius:999px;
-    background:var(--bg-elev);border:1px solid var(--line);box-shadow:var(--shadow);
-    color:var(--ink);font-size:.76rem;font-weight:700;text-decoration:none;
-    transition:transform .15s ease, border-color .15s ease;
-  }
-  .desktop-download:hover{transform:translateY(-2px);border-color:var(--good);}
-  .desktop-download .dl-arrow{
-    width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;
-    border-top:6px solid var(--good);
-  }
-  @media (max-width:520px){ .desktop-download{display:none;} }
 </style>
 </head>
 <body>
 
 <canvas id="stars"></canvas>
-
-<a id="desktop-download" class="desktop-download" href="https://github.com/karahaNx/Lumenfall/releases/latest/download/Lumenfall-Setup.exe" title="Download the Windows desktop app">
-  <span class="dl-arrow"></span>Desktop app
-</a>
-<script>
-  if(navigator.userAgent.indexOf('Electron') !== -1){
-    var dl = document.getElementById('desktop-download');
-    if(dl) dl.remove();
-  }
-</script>
 
 <div class="shell">
   <div class="topbar">
@@ -2723,13 +2696,6 @@ if(document.readyState==='loading'){
   init();
 }
 })();
-</script>
-<script>
-if('serviceWorker' in navigator){
-  window.addEventListener('load', function(){
-    navigator.serviceWorker.register('service-worker.js').catch(function(){});
-  });
-}
 </script>
 <script>
 if(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()){
