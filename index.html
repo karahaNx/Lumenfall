@@ -232,6 +232,14 @@
   .stat-box .v{font-size:.88rem;font-weight:600;margin-top:2px;}
   .offline-preview{font-size:.7rem;color:var(--ink-dim);text-align:center;margin-top:10px;line-height:1.5;}
   .offline-preview strong{color:var(--good);font-weight:700;}
+  .rift-mode-row{display:flex;gap:7px;width:100%;align-items:center;}
+  .rift-mode-btn{
+    flex:1;border:1px solid var(--line);background:var(--bg-elev);color:var(--ink-dim);
+    border-radius:9px;padding:7px 8px;font-size:.68rem;font-weight:800;cursor:pointer;
+  }
+  .rift-mode-btn.active{border-color:var(--lumen);color:var(--lumen);background:color-mix(in srgb,var(--lumen) 10%,var(--bg-elev));}
+  .rift-mode-btn:disabled{opacity:.4;cursor:not-allowed;}
+  .rift-mode-note{font-size:.66rem;color:var(--ink-dim);text-align:center;line-height:1.4;margin-top:-3px;}
 
   /* ---------- shapes ---------- */
   .shape{display:inline-block;flex:none;}
@@ -549,6 +557,11 @@
       </div>
       <div class="card stage">
         <div class="depth-label" id="depth-label">Rift 1</div>
+        <div class="rift-mode-row">
+          <button class="rift-mode-btn active" id="rift-push-btn">Push</button>
+          <button class="rift-mode-btn" id="rift-farm-btn">Farm</button>
+        </div>
+        <div class="rift-mode-note" id="rift-mode-note">Push deeper until you hit a wall.</div>
         <div class="enemy-name" id="enemy-name">Hollow Wisp</div>
         <div class="luminous-tag" id="luminous-tag" style="display:none;">Luminous — bonus Motes on defeat</div>
         <div class="battle-row">
@@ -844,6 +857,7 @@ function freshState(){
   return {
     lumen:0, shards:0, prisms:0, comets:0, motes:0, sigils:0,
     depth:1, maxDepthEver:1,
+    riftMode:'push', farmDepth:0, farmReturnDepth:0,
     enemyHp:0, enemyMaxHp:0, enemyIsLuminous:false,
     spirits:spirits, heroRarity:heroRarity, heroResource:heroResource, wispModules:wispModules, wispUltimate:wispUltimate, empowerQueue:empowerQueue, activeParty:['ember'],
     nodes:nodes, research:research, researchQueue:researchQueue,
@@ -946,6 +960,14 @@ function loadState(){
     if(autoAscendTargetWasMissing){ parsed.autoAscendTargetDepth = Math.max(16, parsed.maxDepthEver||1); }
     parsed.autoAscendTargetDepth = Math.max(16, Math.floor(parsed.autoAscendTargetDepth||16));
     if(!(parsed.owned && parsed.owned.autoascend)){ parsed.autoAscendEnabled = false; }
+    if(parsed.riftMode!=='farm') parsed.riftMode = 'push';
+    parsed.farmDepth = Math.max(0, Math.floor(parsed.farmDepth||0));
+    parsed.farmReturnDepth = Math.max(0, Math.floor(parsed.farmReturnDepth||0));
+    if(parsed.riftMode==='farm' && (!parsed.farmDepth || !parsed.farmReturnDepth)){
+      parsed.riftMode = 'push';
+      parsed.farmDepth = 0;
+      parsed.farmReturnDepth = 0;
+    }
     if(!Array.isArray(parsed.activeParty)) parsed.activeParty=[];
     if(!Array.isArray(parsed.activeStudies)) parsed.activeStudies=[];
     if(parsed.activeStudy){ parsed.activeStudies.push(parsed.activeStudy); delete parsed.activeStudy; }
@@ -986,6 +1008,38 @@ function costIcon(kind){
 }
 
 function isBoss(depth){ return depth>0 && depth%10===0; }
+
+function highestFarmableDepth(pushDepth){
+  var d = Math.max(1, Math.floor(pushDepth||1)-1);
+  while(d>1 && isBoss(d)) d--;
+  return d;
+}
+function progressionDepth(){
+  return state.riftMode==='farm' && state.farmReturnDepth ? state.farmReturnDepth : state.depth;
+}
+function canFarmCurrentProgress(){
+  return progressionDepth()>1;
+}
+function enterFarmMode(){
+  if(state.riftMode==='farm' || !canFarmCurrentProgress()) return;
+  state.farmReturnDepth = state.depth;
+  state.farmDepth = highestFarmableDepth(state.farmReturnDepth);
+  state.riftMode = 'farm';
+  state.depth = state.farmDepth;
+  spawnEnemy();
+  renderAll();
+  saveState();
+}
+function enterPushMode(){
+  if(state.riftMode!=='farm') return;
+  state.depth = Math.max(1, state.farmReturnDepth||state.depth);
+  state.riftMode = 'push';
+  state.farmDepth = 0;
+  state.farmReturnDepth = 0;
+  spawnEnemy();
+  renderAll();
+  saveState();
+}
 
 function nodeLevel(id){ return state.nodes[id]||0; }
 function researchLevel(id){ return state.research[id]||0; }
@@ -1156,10 +1210,15 @@ function defeatEnemy(){
   }
   state.totalKills++;
   trackDaily('kills');
-  state.depth++;
-  state.maxDepthEver = Math.max(state.maxDepthEver, state.depth);
-  spawnEnemy();
-  if(checkAutoAscend()) return;
+  if(state.riftMode==='farm'){
+    state.depth = state.farmDepth;
+    spawnEnemy();
+  } else {
+    state.depth++;
+    state.maxDepthEver = Math.max(state.maxDepthEver, state.depth);
+    spawnEnemy();
+    if(checkAutoAscend()) return;
+  }
   checkAchievements();
   renderDynamic();
   renderSideStats();
@@ -1170,11 +1229,11 @@ function autoAscendTarget(){
   return Math.max(MIN_AUTO_ASCEND_RIFT, Math.floor(state.autoAscendTargetDepth||MIN_AUTO_ASCEND_RIFT));
 }
 function autoAscendReady(){
-  return !!(state.owned.autoascend && state.autoAscendEnabled && state.depth >= autoAscendTarget());
+  return !!(state.riftMode!=='farm' && state.owned.autoascend && state.autoAscendEnabled && state.depth >= autoAscendTarget());
 }
 function updateAutoAscendTargetFromProgress(){
   if(!state.owned.autoascend) return;
-  state.autoAscendTargetDepth = Math.max(autoAscendTarget(), state.maxDepthEver||1, state.depth||1);
+  state.autoAscendTargetDepth = Math.max(autoAscendTarget(), state.maxDepthEver||1, progressionDepth()||1);
 }
 function checkAutoAscend(){
   if(!autoAscendReady()) return false;
@@ -1490,12 +1549,15 @@ function toggleAutoAscend(){
 }
 
 function applyAscendMutation(){
-  var cleared = state.depth - 1;
+  var cleared = progressionDepth() - 1;
   var gain = Math.max(1, Math.floor(2*Math.sqrt(cleared) * prismMult()));
   state.prisms += gain;
   state.ascendCount++;
   trackDaily('ascends');
   state.depth = 1;
+  state.riftMode = 'push';
+  state.farmDepth = 0;
+  state.farmReturnDepth = 0;
   state.lumen = 0;
   state.maxDepthEver = Math.max(state.maxDepthEver, cleared+1);
   SPIRITS.forEach(function(sp){ state.spirits[sp.id] = 0; });
@@ -1507,7 +1569,7 @@ function applyAscendMutation(){
   spawnEnemy();
 }
 function doAscend(auto){
-  var cleared = state.depth - 1;
+  var cleared = progressionDepth() - 1;
   if(cleared < 15) return;
   if(!auto) updateAutoAscendTargetFromProgress();
   applyAscendMutation();
@@ -1568,7 +1630,7 @@ function flashChip(id, label){
 // ---------------------------------------------------------------
 var els = {};
 function cacheEls(){
-  ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','enemy-name','luminous-tag','boss-regen-tag','buff-indicator','enemy-stage','enemy-glyph',
+  ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','rift-push-btn','rift-farm-btn','rift-mode-note','enemy-name','luminous-tag','boss-regen-tag','buff-indicator','enemy-stage','enemy-glyph',
    'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','party-col','research-list','study-list',
    'prism-preview','ascend-btn','ascend-note','node-list','ach-list','shop-list','theme-list','manifesto','toast','currency-list',
    'daily-streak-badge','daily-quest-list','offline-preview'
@@ -1584,7 +1646,18 @@ function renderHud(){
   els['hud-sigil'].textContent = formatNum(state.sigils);
 }
 
+function renderRiftMode(){
+  var farming = state.riftMode==='farm';
+  els['rift-push-btn'].classList.toggle('active', !farming);
+  els['rift-farm-btn'].classList.toggle('active', farming);
+  els['rift-farm-btn'].disabled = !farming && !canFarmCurrentProgress();
+  els['rift-farm-btn'].textContent = farming ? ('Farm Rift '+state.farmDepth) : (canFarmCurrentProgress() ? ('Farm Rift '+highestFarmableDepth(progressionDepth())) : 'Farm');
+  els['rift-mode-note'].textContent = farming
+    ? 'Farming Rift '+state.farmDepth+' for resources. Push resumes at Rift '+state.farmReturnDepth+'.'
+    : 'Push deeper until you hit a wall. Farm always uses your highest cleared non-boss Rift.';
+}
 function updateBattleFast(){
+  renderRiftMode();
   els['hp-fill'].style.width = Math.max(0, (state.enemyHp/state.enemyMaxHp*100)) + '%';
   els['hp-text'].textContent = formatNum(Math.max(0,state.enemyHp)) + ' / ' + formatNum(state.enemyMaxHp);
   els['depth-label'].innerHTML = 'Rift ' + state.depth + (isBoss(state.depth) ? ' &mdash; <span class="boss-tag">BOSS</span>' : '');
@@ -1635,7 +1708,7 @@ var TUTORIAL_STEPS = [
   {title:'Build your party', body:'Spend Lumen to Empower a Wisp and make it stronger. Up to 5 Wisps can be Active at once — bench and swap them anytime from the Wisps tab.'},
   {title:'Ascend when stuck', body:'When a Rift’s boss is too tough, Ascend. You restart from Rift 1, but keep Prisms — a permanent power boost that makes the climb faster every time.'},
   {title:'Research and Study', body:'The Lab and Long Studies turn Shards and Motes into permanent upgrades. Flip a Queue toggle and one buys itself the moment you can afford it.'},
-  {title:'Progress while away', body:'Close the game anytime — Lumenfall keeps fighting while you’re gone, and you’ll come back to rewards waiting for you.'}
+  {title:'Progress while away', body:'Close the game anytime — Lumenfall keeps fighting while you’re gone. Use Farm on the Rift screen to stay on your highest cleared non-boss Rift for steady resources, then switch back to Push when you’re stronger.'}
 ];
 
 function showTutorial(onComplete){
@@ -1950,7 +2023,7 @@ function renderLongStudies(){
 }
 
 function renderAscendSummary(){
-  var cleared = state.depth - 1;
+  var cleared = progressionDepth() - 1;
   var eligible = cleared >= 15;
   var gain = eligible ? Math.max(1, Math.floor(2*Math.sqrt(cleared) * prismMult())) : 0;
   els['prism-preview'].textContent = '+' + formatNum(gain) + ' Prisms';
@@ -2489,9 +2562,14 @@ function simulateOfflineRun(effectiveSec){
       sigilsGained += sigilGain;
     }
     state.totalKills++;
-    state.depth++;
-    state.maxDepthEver = Math.max(state.maxDepthEver, state.depth);
-    spawnEnemy();
+    if(state.riftMode==='farm'){
+      state.depth = state.farmDepth;
+      spawnEnemy();
+    } else {
+      state.depth++;
+      state.maxDepthEver = Math.max(state.maxDepthEver, state.depth);
+      spawnEnemy();
+    }
     if(state.achieved.labmaster){
       empowerAccum += timeToKill;
       while(empowerAccum >= 1){
@@ -2564,6 +2642,8 @@ function init(){
     doTap(stageEl);
   });
 
+  document.getElementById('rift-push-btn').addEventListener('click', enterPushMode);
+  document.getElementById('rift-farm-btn').addEventListener('click', enterFarmMode);
   document.getElementById('ascend-btn').addEventListener('click', function(){ doAscend(false); });
   document.getElementById('howtoplay-btn').addEventListener('click', function(){ showTutorial(); });
   document.getElementById('reset-btn').addEventListener('click', function(){
