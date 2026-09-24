@@ -110,10 +110,17 @@
   .chip .lbl{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;color:var(--ink-dim);}
   .chip .val{font-size:.78rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .glyph-icon{flex:none;width:13px;height:13px;}
+  .hud-title-row{display:flex;align-items:center;width:100%;gap:8px;margin-bottom:2px;}
   .hud .brand{
     font-family:'Cinzel',serif;font-weight:700;font-size:1rem;letter-spacing:.02em;
-    color:var(--ink);flex:1 1 100%;margin-bottom:2px;
+    color:var(--ink);flex:1;min-width:0;
   }
+  .settings-btn{
+    width:34px;height:34px;border-radius:10px;border:1px solid var(--line);
+    background:var(--bg-elev-2);color:var(--ink-dim);font-size:1.05rem;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;
+  }
+  .settings-btn:active{transform:scale(.96);}
 
   /* ---------- main ---------- */
   main{flex:1;padding:14px 12px 24px;}
@@ -466,6 +473,52 @@
     background:transparent;color:var(--ink-dim);font-weight:600;font-size:.78rem;margin-top:8px;
   }
 
+  /* ---------- Settings / Encyclopedia ---------- */
+  .settings-overlay{padding:12px;align-items:stretch;}
+  .settings-modal{
+    width:100%;max-width:520px;height:min(92vh,760px);margin:auto;
+    background:var(--bg-elev);border:1px solid var(--line);border-radius:18px;
+    box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden;
+  }
+  .settings-head{
+    display:flex;align-items:center;gap:8px;padding:12px 12px 10px;
+    border-bottom:1px solid var(--line);flex:none;
+  }
+  .settings-head h2{font-family:'Cinzel',serif;font-size:1rem;margin:0;flex:1;text-align:center;}
+  .settings-icon-btn{
+    width:34px;height:34px;border-radius:10px;border:1px solid var(--line);
+    background:var(--bg-elev-2);color:var(--ink);font-size:1rem;cursor:pointer;
+  }
+  .settings-scroll{overflow-y:auto;padding:12px;overscroll-behavior:contain;}
+  .settings-menu{display:flex;flex-direction:column;gap:8px;}
+  .settings-row{
+    width:100%;display:flex;align-items:center;gap:10px;text-align:left;
+    padding:12px;border:1px solid var(--line);border-radius:12px;
+    background:var(--bg-elev-2);color:var(--ink);cursor:pointer;
+  }
+  .settings-row .settings-row-main{flex:1;min-width:0;}
+  .settings-row .settings-row-title{font-size:.82rem;font-weight:800;}
+  .settings-row .settings-row-sub{font-size:.68rem;color:var(--ink-dim);margin-top:2px;line-height:1.35;}
+  .settings-row .settings-chevron{font-size:1rem;color:var(--ink-dim);}
+  .settings-section-title{
+    font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-dim);
+    font-weight:800;margin:16px 2px 8px;
+  }
+  .ency-grid{display:flex;flex-direction:column;gap:8px;}
+  .ency-card{
+    border:1px solid var(--line);border-radius:12px;background:var(--bg-elev-2);
+    padding:10px 11px;text-align:left;
+  }
+  .ency-top{display:flex;align-items:center;gap:9px;}
+  .ency-main{flex:1;min-width:0;}
+  .ency-name{font-size:.78rem;font-weight:800;}
+  .ency-meta{font-size:.62rem;color:var(--ink-dim);margin-top:1px;}
+  .ency-desc{font-size:.69rem;color:var(--ink-dim);line-height:1.42;margin-top:6px;}
+  .ency-status{font-size:.6rem;font-weight:800;padding:3px 7px;border-radius:999px;background:var(--bg-elev);color:var(--ink-dim);white-space:nowrap;}
+  .ency-status.on{color:var(--good);}
+  .settings-about{margin-top:10px;}
+  .settings-about .man-card{margin-bottom:8px;}
+
   /* ---------- Studio splash ---------- */
   .studio-splash{
     position:fixed;inset:0;z-index:30;background:#0a0814;
@@ -515,7 +568,10 @@
 <div class="shell">
   <div class="topbar">
     <header class="hud">
-      <span class="brand">Lumenfall</span>
+      <div class="hud-title-row">
+        <span class="brand">Lumenfall</span>
+        <button class="settings-btn" id="settings-btn" aria-label="Open settings" title="Settings">⚙</button>
+      </div>
       <div class="chip"><span class="shape shape-triangle glyph-icon" style="background:var(--lumen)"></span><span class="lbl">Lumen</span><span class="val mono" id="hud-lumen">0</span></div>
       <div class="chip"><span class="shape shape-hex glyph-icon" style="background:var(--shard)"></span><span class="lbl">Shards</span><span class="val mono" id="hud-shard">0</span></div>
       <div class="chip"><span class="shape shape-pentagon glyph-icon" style="background:var(--mote)"></span><span class="lbl">Motes</span><span class="val mono" id="hud-mote">0</span></div>
@@ -529,7 +585,6 @@
       <button class="tab-btn" data-tab="research"><span class="ic" style="clip-path:polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);"></span><span class="lb">Lab</span></button>
       <button class="tab-btn" data-tab="ascend"><span class="ic" style="clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);"></span><span class="lb">Ascend</span></button>
       <button class="tab-btn" data-tab="deeds"><span class="ic" style="clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);"></span><span class="lb">Deeds</span></button>
-      <button class="tab-btn" data-tab="about"><span class="ic" style="border-radius:50%;border-style:solid;"></span><span class="lb">About</span></button>
     </nav>
   </div>
 
@@ -616,27 +671,58 @@
       <div id="theme-list"></div>
     </section>
 
-    <section class="tab-panel" id="tab-about">
-      <div id="howtoplay-row">
-        <button class="reset-btn" id="howtoplay-btn" style="background:var(--bg-elev);color:var(--ink);border:1px solid var(--line);">How to Play</button>
-      </div>
-      <div class="section-label">Currencies</div>
-      <div class="currency-grid" id="currency-list"></div>
-      <div class="section-label">Fair-Play Manifesto</div>
-      <div class="manifesto" id="manifesto"></div>
-      <div id="reset-row">
-        <button class="reset-btn" id="reset-btn">Reset Save</button>
-      </div>
-      <div class="reset-confirm-row" id="reset-confirm-row" style="display:none;">
-        <div class="reset-warning">This permanently deletes every Wisp, Rarity tier, Lab research, Long Study, Prism, Motes, Comet and Deed. This cannot be undone.</div>
-        <div class="reset-confirm-actions">
-          <button class="mini-btn" id="reset-cancel-btn">Cancel</button>
-          <button class="reset-btn" id="reset-confirm-btn">Yes, delete everything</button>
-        </div>
-      </div>
-      <div class="fine-print">Lumenfall is an original game, designed by reading public player feedback on idle RPGs and building the opposite of the parts people complain about most.</div>
-    </section>
   </main>
+</div>
+
+
+<div class="overlay settings-overlay" id="settings-overlay" style="display:none;">
+  <div class="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <div class="settings-head">
+      <button class="settings-icon-btn" id="settings-back" aria-label="Back" style="visibility:hidden;">←</button>
+      <h2 id="settings-title">Settings</h2>
+      <button class="settings-icon-btn" id="settings-close" aria-label="Close">×</button>
+    </div>
+    <div class="settings-scroll">
+      <div id="settings-home">
+        <div class="settings-menu">
+          <button class="settings-row" id="encyclopedia-btn">
+            <div class="settings-row-main">
+              <div class="settings-row-title">Encyclopedia</div>
+              <div class="settings-row-sub">Wisps, Formation Bonds, currencies and core mechanics.</div>
+            </div>
+            <span class="settings-chevron">›</span>
+          </button>
+          <button class="settings-row" id="howtoplay-btn">
+            <div class="settings-row-main">
+              <div class="settings-row-title">How to Play</div>
+              <div class="settings-row-sub">Replay the short tutorial without resetting progress.</div>
+            </div>
+            <span class="settings-chevron">›</span>
+          </button>
+        </div>
+
+        <div class="settings-section-title">Fair Play</div>
+        <div class="manifesto settings-about" id="manifesto"></div>
+
+        <div class="settings-section-title">Save</div>
+        <div id="reset-row">
+          <button class="reset-btn" id="reset-btn">Reset Save</button>
+        </div>
+        <div class="reset-confirm-row" id="reset-confirm-row" style="display:none;">
+          <div class="reset-warning">This permanently deletes every Wisp, Rarity tier, Lab research, Long Study, Prism, Motes, Comet and Deed. This cannot be undone.</div>
+          <div class="reset-confirm-actions">
+            <button class="mini-btn" id="reset-cancel-btn">Cancel</button>
+            <button class="reset-btn" id="reset-confirm-btn">Yes, delete everything</button>
+          </div>
+        </div>
+        <div class="fine-print">Lumenfall is an original idle RPG by Xarib Productions. Settings and Encyclopedia do not pause combat — your Wisps keep fighting behind this window.</div>
+      </div>
+
+      <div id="settings-encyclopedia" style="display:none;">
+        <div id="encyclopedia-content"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="studio-splash" id="studio-splash" style="display:none;">
@@ -1114,6 +1200,19 @@ function formationContextDamageMult(depth){
 }
 function formationRewardMult(){
   return bondActive('dawnpriest') ? 1.25 : 1;
+}
+function currentFormationFocus(){
+  if(state.riftMode==='farm') return {label:'Farm', bonds:['dawnpriest','pathfinder']};
+  if(isBoss(state.depth)) return {label:'Boss', bonds:['starcaller','duskguard']};
+  return {label:'Push', bonds:['starcaller','pathfinder']};
+}
+function formationRecommendationText(){
+  var focus = currentFormationFocus();
+  var names = focus.bonds.map(function(id){
+    var b = FORMATION_BONDS.find(function(x){ return x.id===id; });
+    return b ? b.name.replace(' Bond','') : '';
+  }).filter(Boolean);
+  return focus.label + ': ' + names.join(' + ');
 }
 
 function spiritPower(sp, level){
@@ -1655,8 +1754,8 @@ var els = {};
 function cacheEls(){
   ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','rift-push-btn','rift-farm-btn','rift-mode-note','enemy-name','luminous-tag','boss-regen-tag','buff-indicator','enemy-stage','enemy-glyph',
    'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','party-col','bond-card','bond-summary','research-list','study-list',
-   'prism-preview','ascend-btn','ascend-note','node-list','ach-list','shop-list','theme-list','manifesto','toast','currency-list',
-   'daily-streak-badge','daily-quest-list','offline-preview'
+   'prism-preview','ascend-btn','ascend-note','node-list','ach-list','shop-list','theme-list','manifesto','toast',
+   'daily-streak-badge','daily-quest-list','offline-preview','settings-overlay','settings-home','settings-encyclopedia','settings-title','settings-back','encyclopedia-content'
   ].forEach(function(id){ els[id]=document.getElementById(id); });
 }
 
@@ -1784,17 +1883,19 @@ function renderBondSummary(){
 }
 function renderFormationBonds(){
   if(els['bond-card']){
+    var focus = currentFormationFocus();
     var rows = FORMATION_BONDS.map(function(bond){
       var active = bondActive(bond.id);
+      var recommended = focus.bonds.indexOf(bond.id)!==-1;
       return '<div class="bond-row '+(active?'active':'')+'">' +
         '<span class="bond-dot"></span>' +
-        '<div class="bond-main"><div class="bond-name">'+bond.name+' · '+bond.tag+'</div><div class="bond-req">'+bond.req+'</div></div>' +
+        '<div class="bond-main"><div class="bond-name">'+bond.name+' · '+bond.tag+(recommended?' · Best now':'')+'</div><div class="bond-req">'+bond.req+'</div></div>' +
         '<div class="bond-effect">'+bond.effect+'</div>' +
       '</div>';
     }).join('');
     els['bond-card'].innerHTML =
       '<div class="bond-title">Formation Bonds</div>' +
-      '<div class="bond-help">Both listed Wisps must be Active and powered above Lv.0. You only have 5 slots, so choose the bonds that match what you are doing.</div>' +
+      '<div class="bond-help"><strong>'+formationRecommendationText()+'</strong>. Both Wisps in a Bond must be Active and above Lv.0. You only have 5 slots, so builds naturally trade one bonus for another.</div>' +
       '<div class="bond-list">'+rows+'</div>';
   }
   renderBondSummary();
@@ -2209,7 +2310,7 @@ function renderCurrencies(){
       '<div><div class="cname">'+c.name+'</div><div class="cdesc">'+c.desc+'</div></div>' +
     '</div>';
   });
-  els['currency-list'].innerHTML = html;
+  if(els['currency-list']) els['currency-list'].innerHTML = html;
 }
 
 function renderManifesto(){
@@ -2221,7 +2322,57 @@ function renderManifesto(){
       '<div class="body">'+m.body+'</div>' +
     '</div>';
   });
-  els['manifesto'].innerHTML = html;
+  if(els['manifesto']) els['manifesto'].innerHTML = html;
+}
+
+var ENCYCLOPEDIA_MECHANICS = [
+  {name:'Push', meta:'Rift mode', desc:'Climb toward new Rifts and bosses. Your saved Push point is preserved if you switch to Farm.'},
+  {name:'Farm', meta:'Rift mode', desc:'Repeat your highest cleared non-boss Rift for steady resources, then return to the exact Push point when ready.'},
+  {name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the current run for Prisms. Rarity, Lab, Long Studies, Modules, Ultimates and other permanent systems stay.'},
+  {name:'Luminous Enemies', meta:'Rare encounter', desc:'Rare non-boss enemies that drop Motes. Their appearance chance rises as you push deeper.'},
+  {name:'Boss Regeneration', meta:'Boss mechanic', desc:'Bosses regenerate health every second. If your Wisp damage cannot overcome the regeneration, Farm and grow stronger before pushing again.'},
+  {name:'Offline Progress', meta:'Idle system', desc:'Combat, Farm, Auto-Ascend, Long Studies and automation continue while you are away, up to your current offline cap.'}
+];
+
+function renderEncyclopedia(){
+  var el = document.getElementById('encyclopedia-content');
+  if(!el) return;
+
+  var html = '<div class="settings-section-title" style="margin-top:0;">Wisps</div><div class="ency-grid">';
+  SPIRITS.forEach(function(sp){
+    var recruited = (state.spirits[sp.id]||0)>0;
+    var unlocked = state.maxDepthEver>=sp.unlockDepth;
+    html += '<div class="ency-card"><div class="ency-top">' +
+      '<span class="shape '+sp.shape+'" style="width:24px;height:24px;background:'+sp.color+';color:'+sp.color+';"></span>' +
+      '<div class="ency-main"><div class="ency-name">'+sp.name+'</div><div class="ency-meta">'+sp.heroClass+' · '+sp.role+' · Unlock Rift '+sp.unlockDepth+'</div></div>' +
+      '<span class="ency-status '+(recruited?'on':'')+'">'+(recruited?'Recruited':(unlocked?'Available':'Locked'))+'</span>' +
+      '</div><div class="ency-desc"><strong>'+sp.abilityName+':</strong> '+ABILITY_DESC[sp.abilityType]+'</div></div>';
+  });
+  html += '</div>';
+
+  html += '<div class="settings-section-title">Formation Bonds</div><div class="ency-grid">';
+  FORMATION_BONDS.forEach(function(bond){
+    var active = bondActive(bond.id);
+    html += '<div class="ency-card"><div class="ency-top"><div class="ency-main"><div class="ency-name">'+bond.name+'</div><div class="ency-meta">'+bond.req+' · '+bond.tag+'</div></div>' +
+      '<span class="ency-status '+(active?'on':'')+'">'+(active?'Active':'Inactive')+'</span></div>' +
+      '<div class="ency-desc">'+bond.effect+'. Both listed Wisps must be Active and above Lv.0.</div></div>';
+  });
+  html += '</div>';
+
+  html += '<div class="settings-section-title">Currencies</div><div class="ency-grid">';
+  CURRENCIES.forEach(function(c){
+    html += '<div class="ency-card"><div class="ency-top"><span class="shape '+c.shape+'" style="width:22px;height:22px;background:'+c.color+';"></span>' +
+      '<div class="ency-main"><div class="ency-name">'+c.name+'</div></div></div><div class="ency-desc">'+c.desc+'</div></div>';
+  });
+  html += '</div>';
+
+  html += '<div class="settings-section-title">Core Mechanics</div><div class="ency-grid">';
+  ENCYCLOPEDIA_MECHANICS.forEach(function(m){
+    html += '<div class="ency-card"><div class="ency-name">'+m.name+'</div><div class="ency-meta">'+m.meta+'</div><div class="ency-desc">'+m.desc+'</div></div>';
+  });
+  html += '</div>';
+
+  el.innerHTML = html;
 }
 
 function renderDynamic(){
@@ -2242,8 +2393,8 @@ function renderAll(){
   renderNodes();
   renderAchievements();
   renderCosmetics();
-  renderCurrencies();
   renderManifesto();
+  renderEncyclopedia();
   renderSideStats();
 }
 
@@ -2346,6 +2497,28 @@ function showDailyOverlay(info){
 // ---------------------------------------------------------------
 // Tabs
 // ---------------------------------------------------------------
+function showSettingsView(view){
+  var home = document.getElementById('settings-home');
+  var encyclopedia = document.getElementById('settings-encyclopedia');
+  var title = document.getElementById('settings-title');
+  var back = document.getElementById('settings-back');
+  var isEncyclopedia = view==='encyclopedia';
+  home.style.display = isEncyclopedia ? 'none' : 'block';
+  encyclopedia.style.display = isEncyclopedia ? 'block' : 'none';
+  title.textContent = isEncyclopedia ? 'Encyclopedia' : 'Settings';
+  back.style.visibility = isEncyclopedia ? 'visible' : 'hidden';
+  if(isEncyclopedia) renderEncyclopedia();
+}
+function openSettings(){
+  showSettingsView('home');
+  document.getElementById('settings-overlay').style.display = 'flex';
+}
+function closeSettings(){
+  document.getElementById('settings-overlay').style.display = 'none';
+  document.getElementById('reset-confirm-row').style.display = 'none';
+  document.getElementById('reset-row').style.display = 'block';
+}
+
 function setupTabs(){
   document.querySelectorAll('.tab-btn').forEach(function(btn){
     btn.addEventListener('click', function(){
@@ -2689,7 +2862,13 @@ function init(){
   document.getElementById('rift-push-btn').addEventListener('click', enterPushMode);
   document.getElementById('rift-farm-btn').addEventListener('click', enterFarmMode);
   document.getElementById('ascend-btn').addEventListener('click', function(){ doAscend(false); });
-  document.getElementById('howtoplay-btn').addEventListener('click', function(){ showTutorial(); });
+
+  document.getElementById('settings-btn').addEventListener('click', openSettings);
+  document.getElementById('settings-close').addEventListener('click', closeSettings);
+  document.getElementById('settings-back').addEventListener('click', function(){ showSettingsView('home'); });
+  document.getElementById('encyclopedia-btn').addEventListener('click', function(){ showSettingsView('encyclopedia'); });
+  document.getElementById('settings-overlay').addEventListener('click', function(e){ if(e.target===this) closeSettings(); });
+  document.getElementById('howtoplay-btn').addEventListener('click', function(){ closeSettings(); showTutorial(); });
   document.getElementById('reset-btn').addEventListener('click', function(){
     document.getElementById('reset-row').style.display = 'none';
     document.getElementById('reset-confirm-row').style.display = 'block';
@@ -2759,6 +2938,9 @@ function init(){
   setInterval(saveState, 5000);
   document.addEventListener('visibilitychange', function(){ if(document.hidden) saveState(); });
   window.addEventListener('beforeunload', saveState);
+  document.addEventListener('keydown', function(e){
+    if(e.key==='Escape' && document.getElementById('settings-overlay').style.display!=='none') closeSettings();
+  });
 }
 
 if(document.readyState==='loading'){
