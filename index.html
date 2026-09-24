@@ -1781,7 +1781,14 @@ function applyAscendMutation(){
   state.farmReturnDepth = 0;
   state.lumen = 0;
   state.maxDepthEver = Math.max(state.maxDepthEver, cleared+1);
-  SPIRITS.forEach(function(sp){ state.spirits[sp.id] = 0; });
+  state.buffUntil = 0;
+  state.buffMult = 1;
+  state._autoTapAccum = 0;
+  state._autoEmpowerAccum = 0;
+  SPIRITS.forEach(function(sp){
+    state.spirits[sp.id] = 0;
+    state.heroResource[sp.id] = 0;
+  });
   state.spirits['ember'] = 1;
   if(state.activeParty.indexOf('ember')===-1){
     if(state.activeParty.length<5){ state.activeParty.unshift('ember'); }
@@ -2890,13 +2897,16 @@ function simulateOfflineRun(effectiveSec){
       var moteGain = Math.max(1, Math.round(motesDropFor(state.depth) * (1+supportMoteBonus())));
       state.motes += moteGain;
       motesGained += moteGain;
+      trackDaily('luminousKills');
     }
     if(wasBossKill){
       var sigilGain = sigilsFromBoss(state.depth);
       state.sigils += sigilGain;
       sigilsGained += sigilGain;
+      trackDaily('bossKills');
     }
     state.totalKills++;
+    trackDaily('kills');
     if(state.riftMode==='farm'){
       state.depth = state.farmDepth;
       spawnEnemy();
