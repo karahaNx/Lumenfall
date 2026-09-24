@@ -284,6 +284,20 @@
   .active-toggle.is-active{background:var(--good);color:#08210f;border-color:var(--good);}
   .hero-stats{font-size:.72rem;color:var(--ink-dim);margin:8px 0 6px;}
   .hero-ability{font-size:.7rem;color:var(--ink-dim);margin-bottom:8px;line-height:1.4;}
+  .bond-card{margin-bottom:12px;padding:12px;}
+  .bond-title{font-size:.82rem;font-weight:800;margin-bottom:2px;}
+  .bond-help{font-size:.67rem;color:var(--ink-dim);line-height:1.4;margin-bottom:8px;}
+  .bond-list{display:flex;flex-direction:column;gap:6px;}
+  .bond-row{display:flex;align-items:center;gap:8px;padding:7px 8px;border:1px solid var(--line);border-radius:9px;background:var(--bg-elev);}
+  .bond-row.active{border-color:color-mix(in srgb,var(--good) 65%,var(--line));background:color-mix(in srgb,var(--good) 8%,var(--bg-elev));}
+  .bond-dot{width:8px;height:8px;border-radius:50%;background:var(--ink-dim);flex:none;}
+  .bond-row.active .bond-dot{background:var(--good);}
+  .bond-main{flex:1;min-width:0;}
+  .bond-name{font-size:.7rem;font-weight:800;}
+  .bond-req{font-size:.61rem;color:var(--ink-dim);margin-top:1px;}
+  .bond-effect{font-size:.63rem;font-weight:700;text-align:right;max-width:42%;color:var(--ink-dim);}
+  .bond-row.active .bond-effect{color:var(--good);}
+  .bond-summary{font-size:.66rem;color:var(--ink-dim);text-align:center;line-height:1.35;margin-top:8px;min-height:1em;}
   .hero-ability strong{color:var(--ink);}
   .hero-actions{display:flex;gap:8px;}
   .mini-btn{
@@ -551,6 +565,7 @@
           </div>
         </div>
         <div class="buff-indicator" id="buff-indicator" style="display:none;"></div>
+        <div class="bond-summary" id="bond-summary"></div>
         <div class="tap-hint">Your Wisps already fight on their own, even when you're gone — tap the Rift to strike as your Guardian and speed things up.</div>
         <div class="stat-row">
           <div class="stat-box"><div class="k">Guardian tap</div><div class="v mono" id="stat-tap">1</div></div>
@@ -562,7 +577,8 @@
 
     <section class="tab-panel" id="tab-spirits">
       <div class="section-label">Your Wisps</div>
-      <div class="section-sub">Up to 5 Wisps can be Active at once — only Active Wisps fight and charge abilities. Bench and swap freely.</div>
+      <div class="section-sub">Up to 5 Wisps can be Active at once. Pair specific powered Wisps to activate simple Formation Bonds for Push, Farm or Boss fights.</div>
+      <div class="card bond-card" id="bond-card"></div>
       <div class="hero-grid" id="spirit-list"></div>
     </section>
 
@@ -688,6 +704,13 @@ var ABILITY_DESC = {
   druid: 'Burst damage, plus bonus Lumen.',
   support: "Boosts the whole party's power for a few seconds."
 };
+
+var FORMATION_BONDS = [
+  {id:'starcaller', name:'Starcaller Bond', ids:['ember','void'], req:'Ember + Void', effect:'+18% Wisp damage', tag:'Push'},
+  {id:'dawnpriest', name:'Dawnpriest Bond', ids:['tide','aurora'], req:'Tide + Aurora', effect:'+25% Lumen, Shards & Motes', tag:'Farm'},
+  {id:'duskguard', name:'Duskguard Bond', ids:['stone','titan'], req:'Stone + Titan', effect:'+35% Wisp damage vs Bosses', tag:'Boss'},
+  {id:'pathfinder', name:'Pathfinder Bond', ids:['gale','thorn'], req:'Gale + Thorn', effect:'+20% Wisp damage vs non-Bosses', tag:'Push / Farm'}
+];
 
 var RESOURCE_COLORS = {mana:'#4f8fe0', rage:'#e0524f', harmony:'#e0b34f', focus:'#4fe0c9', energy:'#7fe04f'};
 var MODULE_MAX_LEVEL = 20;
@@ -1037,7 +1060,7 @@ function prismMult(){ return (1 + nodeLevel('swift')*0.04) * longStudyPrismMult(
 function costReduction(){ return Math.min(0.6, nodeLevel('bonds')*0.03); }
 function offlineCapHours(){ return 12 + (state.owned.offline24?12:0) + (state.owned.offline48?24:0) + nodeLevel('reserves')*2; }
 function eliteChance(depth){ return Math.min(0.30, 0.03 + Math.floor(depth/10)*0.02); }
-function motesDropFor(depth){ return Math.max(1, Math.round((1 + depth/8) * longStudyMoteMult())); }
+function motesDropFor(depth){ return Math.max(1, Math.round((1 + depth/8) * longStudyMoteMult() * formationRewardMult())); }
 function sigilsFromBoss(depth){ return Math.max(1, Math.floor(depth/10)); }
 
 function moduleLevel(id){ return (state.wispModules && state.wispModules[id]) || 0; }
@@ -1062,9 +1085,35 @@ function ultimateUnlocked(id){ return !!(state.wispUltimate && state.wispUltimat
 function ultimateSigilCost(sp){ return Math.round(5 + sp.unlockDepth*2); }
 
 function synergyMult(){
+  // Preserve the original permanent Rarity collection bonus.
   var sum = 0;
   SPIRITS.forEach(function(sp){ sum += (state.heroRarity[sp.id]||0)*0.02; });
   return 1+sum;
+}
+
+function poweredActiveIds(){
+  return state.activeParty.filter(function(id){ return (state.spirits[id]||0)>0; });
+}
+function bondActive(bondId){
+  var bond = FORMATION_BONDS.find(function(b){ return b.id===bondId; });
+  if(!bond) return false;
+  var active = poweredActiveIds();
+  return bond.ids.every(function(id){ return active.indexOf(id)!==-1; });
+}
+function activeFormationBonds(){
+  return FORMATION_BONDS.filter(function(b){ return bondActive(b.id); });
+}
+function formationGeneralDamageMult(){
+  return bondActive('starcaller') ? 1.18 : 1;
+}
+function formationContextDamageMult(depth){
+  var mult = formationGeneralDamageMult();
+  if(isBoss(depth) && bondActive('duskguard')) mult *= 1.35;
+  if(!isBoss(depth) && bondActive('pathfinder')) mult *= 1.20;
+  return mult;
+}
+function formationRewardMult(){
+  return bondActive('dawnpriest') ? 1.25 : 1;
 }
 
 function spiritPower(sp, level){
@@ -1101,14 +1150,14 @@ function rarityCost(sp, tier){
 }
 
 function effectivePartyPower(){
-  return totalActivePartyPower() * formationMult() * synergyMult() * momentumMult() * longStudyPowerMult();
+  return totalActivePartyPower() * formationMult() * synergyMult() * momentumMult() * longStudyPowerMult() * formationGeneralDamageMult();
 }
 function chipEffectivePower(id){
   var sp = SPIRITS.find(function(s){ return s.id===id; });
   if(!sp) return 0;
   var tier = state.heroRarity[id]||0;
   var base = spiritPower(sp, state.spirits[id]) * RARITY_MULT[tier];
-  var shareMult = formationMult() * synergyMult() * momentumMult() * longStudyPowerMult();
+  var shareMult = formationMult() * synergyMult() * momentumMult() * longStudyPowerMult() * formationGeneralDamageMult();
   var buffActive = state.buffUntil && Date.now() < state.buffUntil;
   return base * shareMult * (buffActive ? state.buffMult : 1);
 }
@@ -1118,16 +1167,17 @@ function tapDamage(){
 }
 function idleDps(){
   var buffActive = state.buffUntil && Date.now() < state.buffUntil;
-  return effectivePartyPower() * (buffActive ? state.buffMult : 1);
+  var contextual = formationContextDamageMult(state.depth) / formationGeneralDamageMult();
+  return effectivePartyPower() * contextual * (buffActive ? state.buffMult : 1);
 }
 function enemyHpFor(depth){
   return Math.round(10 * Math.pow(1.145, depth) * (isBoss(depth)?6:1));
 }
 function enemyRewardFor(depth){
-  return Math.round(5 * Math.pow(1.11, depth) * (isBoss(depth)?8:1) * lumenMult());
+  return Math.round(5 * Math.pow(1.11, depth) * (isBoss(depth)?8:1) * lumenMult() * formationRewardMult());
 }
 function shardRewardFor(depth){
-  return Math.round(1 * Math.pow(1.09, depth) * (isBoss(depth)?5:1) * shardMult());
+  return Math.round(1 * Math.pow(1.09, depth) * (isBoss(depth)?5:1) * shardMult() * formationRewardMult());
 }
 function enemyNameFor(depth){
   var adj = ENEMY_ADJ[depth % ENEMY_ADJ.length];
@@ -1580,7 +1630,7 @@ function triggerAbility(sp, level){
       state.buffMult = Math.max(state.buffMult||1, strength);
       break;
   }
-  if(burst>0) dealDamage(burst);
+  if(burst>0) dealDamage(burst * formationContextDamageMult(state.depth));
   flashChip(sp.id, sp.abilityName);
 }
 
@@ -1604,7 +1654,7 @@ function flashChip(id, label){
 var els = {};
 function cacheEls(){
   ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','rift-push-btn','rift-farm-btn','rift-mode-note','enemy-name','luminous-tag','boss-regen-tag','buff-indicator','enemy-stage','enemy-glyph',
-   'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','party-col','research-list','study-list',
+   'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','party-col','bond-card','bond-summary','research-list','study-list',
    'prism-preview','ascend-btn','ascend-note','node-list','ach-list','shop-list','theme-list','manifesto','toast','currency-list',
    'daily-streak-badge','daily-quest-list','offline-preview'
   ].forEach(function(id){ els[id]=document.getElementById(id); });
@@ -1631,6 +1681,7 @@ function renderRiftMode(){
 }
 function updateBattleFast(){
   renderRiftMode();
+  renderFormationBonds();
   els['hp-fill'].style.width = Math.max(0, (state.enemyHp/state.enemyMaxHp*100)) + '%';
   els['hp-text'].textContent = formatNum(Math.max(0,state.enemyHp)) + ' / ' + formatNum(state.enemyMaxHp);
   els['depth-label'].innerHTML = 'Rift ' + state.depth + (isBoss(state.depth) ? ' &mdash; <span class="boss-tag">BOSS</span>' : '');
@@ -1678,7 +1729,7 @@ function showToast(msg){
 
 var TUTORIAL_STEPS = [
   {title:'Strike the Rift', body:'Tap or click the enemy to hit it directly. Your Wisps deal damage automatically too, every second, even if you never tap again.'},
-  {title:'Build your party', body:'Spend Lumen to Empower a Wisp and make it stronger. Up to 5 Wisps can be Active at once — bench and swap them anytime from the Wisps tab.'},
+  {title:'Build your party', body:'Spend Lumen to Empower Wisps. Up to 5 can be Active. Specific pairs activate Formation Bonds, so your best Push, Farm and Boss formations can be different.'},
   {title:'Ascend when stuck', body:'When a Rift’s boss is too tough, Ascend. You restart from Rift 1, but keep Prisms — a permanent power boost that makes the climb faster every time.'},
   {title:'Research and Study', body:'The Lab and Long Studies turn Shards and Motes into permanent upgrades. Flip a Queue toggle and one buys itself the moment you can afford it.'},
   {title:'Progress while away', body:'Close the game anytime — Lumenfall keeps fighting while you’re gone. Use Farm on the Rift screen to stay on your highest cleared non-boss Rift for steady resources, then switch back to Push when you’re stronger.'}
@@ -1724,6 +1775,29 @@ function showTutorial(onComplete){
   overlay.style.display = 'flex';
 }
 
+function renderFormationBonds(){
+  if(els['bond-card']){
+    var rows = FORMATION_BONDS.map(function(bond){
+      var active = bondActive(bond.id);
+      return '<div class="bond-row '+(active?'active':'')+'">' +
+        '<span class="bond-dot"></span>' +
+        '<div class="bond-main"><div class="bond-name">'+bond.name+' · '+bond.tag+'</div><div class="bond-req">'+bond.req+'</div></div>' +
+        '<div class="bond-effect">'+bond.effect+'</div>' +
+      '</div>';
+    }).join('');
+    els['bond-card'].innerHTML =
+      '<div class="bond-title">Formation Bonds</div>' +
+      '<div class="bond-help">Both listed Wisps must be Active and powered above Lv.0. You only have 5 slots, so choose the bonds that match what you are doing.</div>' +
+      '<div class="bond-list">'+rows+'</div>';
+  }
+  if(els['bond-summary']){
+    var active = activeFormationBonds();
+    els['bond-summary'].textContent = active.length
+      ? 'Active Bonds: ' + active.map(function(b){ return b.name.replace(' Bond','')+' ('+b.effect+')'; }).join(' · ')
+      : 'No Formation Bond active.';
+  }
+}
+
 function renderPartyFormation(){
   var html = '';
   state.activeParty.forEach(function(id){
@@ -1754,6 +1828,7 @@ function updatePartyBars(){
 }
 
 function renderSpirits(){
+  renderFormationBonds();
   var html = '';
   SPIRITS.forEach(function(sp){
     var level = state.spirits[sp.id];
@@ -2239,7 +2314,7 @@ function renderOfflinePreview(){
   if(sim.motesGained >= 1) parts.push(formatNum(sim.motesGained)+' Motes');
   if(sim.sigilsGained >= 1) parts.push(formatNum(sim.sigilsGained)+' Sigils');
   var tail = sim.retreated
-    ? ' over your next ' + sim.capHours + 'h away, falling back to farm Rift ' + sim.endDepth + ' once the Boss proves too strong.'
+    ? ' over your next ' + sim.capHours + 'h away, farming Rift ' + sim.endDepth + ' once the Boss proves too strong while keeping Rift ' + sim.pushDepth + ' as your Push point.'
     : ' over your next ' + sim.capHours + 'h away.';
   el.innerHTML = 'Log off now and earn up to ' + parts.join(', ') + tail;
 }
@@ -2476,7 +2551,6 @@ function setupStars(){
 // Init
 // ---------------------------------------------------------------
 var OFFLINE_MAX_KILLS = 5000;
-var OFFLINE_FARM_RETREAT = 1;
 
 function simulateOfflineRun(effectiveSec){
   var remaining = effectiveSec;
@@ -2498,14 +2572,13 @@ function simulateOfflineRun(effectiveSec){
     var regenPerSec = wasBossKill ? enemyMax*BOSS_REGEN_PER_SEC : 0;
     var netDps = dps - regenPerSec;
     if(wasBossKill && (netDps<=0 || (curHp/netDps) > remaining)){
-      // Either a true wall (idle DPS can't out-heal the regen) or just not
-      // enough of the offline window left to finish this Boss -- either way,
-      // don't waste the rest of the time on unrewarded chip damage. Actually
-      // retreat a Rift and keep farming there for real until the player
-      // comes back, rather than a side calculation or a partial, no-reward
-      // fight left sitting at the Boss.
+      // Preserve the Boss as the player's Push point and switch the run into
+      // the same explicit Farm mode used while online.
       if(state.depth<=1) break;
-      state.depth = Math.max(1, state.depth - OFFLINE_FARM_RETREAT);
+      state.farmReturnDepth = state.depth;
+      state.farmDepth = highestFarmableDepth(state.farmReturnDepth);
+      state.riftMode = 'farm';
+      state.depth = state.farmDepth;
       retreated = true;
       spawnEnemy();
       continue;
@@ -2562,11 +2635,7 @@ function simulateOfflineRun(effectiveSec){
       shardGained += extraShard;
     }
   }
-  if(retreated && isBoss(state.depth) && state.depth>1){
-    state.depth = Math.max(1, state.depth - OFFLINE_FARM_RETREAT);
-    spawnEnemy();
-  }
-  return {lumenGained:lumenGained, shardGained:shardGained, sigilsGained:sigilsGained, motesGained:motesGained, kills:kills, ascends:ascends, retreated:retreated, endDepth:state.depth};
+  return {lumenGained:lumenGained, shardGained:shardGained, sigilsGained:sigilsGained, motesGained:motesGained, kills:kills, ascends:ascends, retreated:retreated, endDepth:state.depth, pushDepth:progressionDepth()};
 }
 
 function applyOfflineProgress(){
@@ -2581,7 +2650,7 @@ function applyOfflineProgress(){
   var labGuard = 0;
   while(autoLabQueueTick() && labGuard < 200){ labGuard++; }
   checkAchievements();
-  return {elapsedSec: elapsedSec, effectiveSec: effectiveSec, earned: sim.lumenGained, shardEarned: sim.shardGained, sigilsEarned: sim.sigilsGained, motesEarned: sim.motesGained, ascends: sim.ascends, completedStudies: completedStudies, retreated: sim.retreated, endDepth: sim.endDepth};
+  return {elapsedSec: elapsedSec, effectiveSec: effectiveSec, earned: sim.lumenGained, shardEarned: sim.shardGained, sigilsEarned: sim.sigilsGained, motesEarned: sim.motesGained, ascends: sim.ascends, completedStudies: completedStudies, retreated: sim.retreated, endDepth: sim.endDepth, pushDepth: sim.pushDepth};
 }
 
 function fmtDuration(sec){
@@ -2668,7 +2737,7 @@ function init(){
     if(offline && (offline.earned > 1 || offline.completedStudies.length || offline.ascends>0)){
       var msg = 'You were away for ' + fmtDuration(offline.elapsedSec) + '. Your Wisps kept the Rift lit and gathered ' + formatNum(offline.earned) + ' Lumen' + (offline.shardEarned>1 ? ' and ' + formatNum(offline.shardEarned) + ' Shards' : '') + (offline.sigilsEarned>0 ? ' and ' + formatNum(offline.sigilsEarned) + ' Sigils' : '') + (offline.motesEarned>0 ? ' and ' + formatNum(offline.motesEarned) + ' Motes' : '') + ' while you were gone.';
       if(offline.ascends>0){ msg += ' They ascended ' + offline.ascends + ' time' + (offline.ascends===1?'':'s') + ' on their own!'; }
-      if(offline.retreated){ msg += ' A Boss out-healed them, so they fell back to Rift ' + offline.endDepth + ' to keep farming until you returned.'; }
+      if(offline.retreated){ msg += ' A Boss stopped the push, so they switched to Farm at Rift ' + offline.endDepth + '. Your Push point at Rift ' + offline.pushDepth + ' is still saved.'; }
       if(offline.completedStudies.length===1){ msg += ' Your Long Study "' + offline.completedStudies[0] + '" finished while you were away!'; }
       else if(offline.completedStudies.length>1){ msg += ' Your Long Studies "' + offline.completedStudies.join('", "') + '" finished while you were away!'; }
       document.getElementById('welcome-text').textContent = msg;
