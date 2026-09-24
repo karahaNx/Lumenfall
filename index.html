@@ -518,6 +518,18 @@
   .ency-status.on{color:var(--good);}
   .settings-about{margin-top:10px;}
   .settings-about .man-card{margin-bottom:8px;}
+  .save-backup-textarea{
+    width:100%;min-height:150px;resize:vertical;border:1px solid var(--line);
+    border-radius:12px;background:var(--bg-elev-2);color:var(--ink);
+    padding:10px;font-family:monospace;font-size:.65rem;line-height:1.4;
+  }
+  .save-backup-actions{display:flex;gap:8px;margin-top:10px;}
+  .save-backup-actions button{
+    flex:1;padding:10px 8px;border-radius:10px;border:1px solid var(--line);
+    background:var(--bg-elev-2);color:var(--ink);font-size:.72rem;font-weight:800;cursor:pointer;
+  }
+  .save-backup-actions .restore{border-color:var(--prism);color:var(--prism);}
+  .save-backup-note{font-size:.7rem;color:var(--ink-dim);line-height:1.45;margin-bottom:10px;}
 
   /* ---------- Studio splash ---------- */
   .studio-splash{
@@ -699,6 +711,13 @@
             </div>
             <span class="settings-chevron">›</span>
           </button>
+          <button class="settings-row" id="save-backup-btn">
+            <div class="settings-row-main">
+              <div class="settings-row-title">Save Backup</div>
+              <div class="settings-row-sub">Copy or restore your progress before reinstalling or changing device.</div>
+            </div>
+            <span class="settings-chevron">›</span>
+          </button>
         </div>
 
         <div class="settings-section-title">Fair Play</div>
@@ -720,6 +739,15 @@
 
       <div id="settings-encyclopedia" style="display:none;">
         <div id="encyclopedia-content"></div>
+      </div>
+
+      <div id="settings-backup" style="display:none;">
+        <div class="save-backup-note">Keep this code somewhere safe. Restoring replaces the current save. The restore starts from now, so an old backup cannot create extra offline time.</div>
+        <textarea class="save-backup-textarea" id="save-backup-code" spellcheck="false"></textarea>
+        <div class="save-backup-actions">
+          <button id="copy-save-backup">Copy Current Save</button>
+          <button class="restore" id="restore-save-backup">Restore Pasted Save</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1062,6 +1090,62 @@ function saveState(){
     state.lastSeen = Date.now();
     localStorage.setItem(SAVE_KEY, JSON.stringify(state));
   }catch(e){}
+}
+
+var SAVE_BACKUP_PREFIX = 'LUMENFALL1:';
+function encodeSaveBackup(obj){
+  var json = JSON.stringify(obj);
+  var bytes = new TextEncoder().encode(json);
+  var binary = '';
+  for(var i=0;i<bytes.length;i++) binary += String.fromCharCode(bytes[i]);
+  return SAVE_BACKUP_PREFIX + btoa(binary);
+}
+function decodeSaveBackup(code){
+  var clean = String(code||'').trim();
+  if(clean.indexOf(SAVE_BACKUP_PREFIX)!==0) throw new Error('Not a Lumenfall backup code');
+  var binary = atob(clean.slice(SAVE_BACKUP_PREFIX.length));
+  var bytes = new Uint8Array(binary.length);
+  for(var i=0;i<binary.length;i++) bytes[i] = binary.charCodeAt(i);
+  var parsed = JSON.parse(new TextDecoder().decode(bytes));
+  if(!parsed || typeof parsed!=='object' || !parsed.spirits || parsed.depth===undefined){
+    throw new Error('Backup data is incomplete');
+  }
+  return parsed;
+}
+function currentSaveBackup(){
+  saveState();
+  return encodeSaveBackup(state);
+}
+function copyTextFallback(textarea){
+  textarea.focus();
+  textarea.select();
+  try{ return document.execCommand('copy'); }catch(e){ return false; }
+}
+function copyCurrentSaveBackup(){
+  var textarea = document.getElementById('save-backup-code');
+  var code = currentSaveBackup();
+  textarea.value = code;
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(code).then(function(){
+      showToast('Save backup copied.');
+    }).catch(function(){
+      showToast(copyTextFallback(textarea) ? 'Save backup copied.' : 'Backup ready — copy the selected text.');
+    });
+  } else {
+    showToast(copyTextFallback(textarea) ? 'Save backup copied.' : 'Backup ready — copy the selected text.');
+  }
+}
+function restoreSaveBackup(){
+  var textarea = document.getElementById('save-backup-code');
+  try{
+    var restored = decodeSaveBackup(textarea.value);
+    restored.lastSeen = Date.now();
+    localStorage.setItem(SAVE_KEY, JSON.stringify(restored));
+    showToast('Save restored. Reloading…');
+    setTimeout(function(){ location.reload(); }, 500);
+  }catch(e){
+    showToast('That backup code is not valid.');
+  }
 }
 
 // ---------------------------------------------------------------
@@ -2610,14 +2694,17 @@ function showDailyOverlay(info){
 function showSettingsView(view){
   var home = document.getElementById('settings-home');
   var encyclopedia = document.getElementById('settings-encyclopedia');
+  var backup = document.getElementById('settings-backup');
   var title = document.getElementById('settings-title');
   var back = document.getElementById('settings-back');
-  var isEncyclopedia = view==='encyclopedia';
-  home.style.display = isEncyclopedia ? 'none' : 'block';
-  encyclopedia.style.display = isEncyclopedia ? 'block' : 'none';
-  title.textContent = isEncyclopedia ? 'Encyclopedia' : 'Settings';
-  back.style.visibility = isEncyclopedia ? 'visible' : 'hidden';
-  if(isEncyclopedia) renderEncyclopedia();
+  var isHome = view==='home';
+  home.style.display = isHome ? 'block' : 'none';
+  encyclopedia.style.display = view==='encyclopedia' ? 'block' : 'none';
+  backup.style.display = view==='backup' ? 'block' : 'none';
+  title.textContent = view==='encyclopedia' ? 'Encyclopedia' : (view==='backup' ? 'Save Backup' : 'Settings');
+  back.style.visibility = isHome ? 'hidden' : 'visible';
+  if(view==='encyclopedia') renderEncyclopedia();
+  if(view==='backup') document.getElementById('save-backup-code').value = currentSaveBackup();
 }
 function openSettings(){
   showSettingsView('home');
@@ -2991,6 +3078,9 @@ function init(){
   document.getElementById('settings-close').addEventListener('click', closeSettings);
   document.getElementById('settings-back').addEventListener('click', function(){ showSettingsView('home'); });
   document.getElementById('encyclopedia-btn').addEventListener('click', function(){ showSettingsView('encyclopedia'); });
+  document.getElementById('save-backup-btn').addEventListener('click', function(){ showSettingsView('backup'); });
+  document.getElementById('copy-save-backup').addEventListener('click', copyCurrentSaveBackup);
+  document.getElementById('restore-save-backup').addEventListener('click', restoreSaveBackup);
   document.getElementById('settings-overlay').addEventListener('click', function(e){ if(e.target===this) closeSettings(); });
   document.getElementById('howtoplay-btn').addEventListener('click', function(){ closeSettings(); showTutorial(); });
   document.getElementById('reset-btn').addEventListener('click', function(){
