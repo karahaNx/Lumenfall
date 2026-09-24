@@ -158,6 +158,7 @@
   .stage{padding:16px 14px;display:flex;flex-direction:column;gap:10px;}
   .depth-label{font-size:.78rem;color:var(--ink-dim);font-weight:700;letter-spacing:.04em;text-align:center;}
   .depth-label .boss-tag{color:var(--danger);}
+  .depth-label .region-label{display:block;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;margin-top:2px;}
   .enemy-name{font-family:'Cinzel',serif;font-size:1rem;font-weight:600;text-align:center;}
 
   .battle-row{display:flex;gap:10px;align-items:flex-start;}
@@ -189,7 +190,7 @@
   }
   .enemy-stage::before{
     content:'';position:absolute;inset:-16px;border-radius:50%;pointer-events:none;
-    background: radial-gradient(circle, color-mix(in srgb, var(--theme-accent, transparent) 45%, transparent) 0%, transparent 72%);
+    background: radial-gradient(circle, color-mix(in srgb, var(--theme-accent, var(--zone-accent, transparent)) 45%, transparent) 0%, transparent 72%);
   }
   .enemy-stage.theme-radiant::before{
     background: conic-gradient(from 0deg, var(--lumen), var(--shard), var(--mote), var(--prism), var(--comet), var(--sigil), var(--lumen));
@@ -950,6 +951,16 @@ var DAILY_LOGIN_REWARDS = [
 var ENEMY_ADJ = ['Hollow','Dusk','Rift-Touched','Withering','Umbral','Ashen','Fractured','Silent','Creeping','Starved'];
 var ENEMY_NOUN = ['Wisp','Serpent','Stalker','Husk','Warden','Shade','Leech','Prowler','Effigy','Wraith'];
 
+var RIFT_ZONE_SPAN = 25;
+var RIFT_ZONES = [
+  {name:'Starlit Verge', accent:'#d6b657'},
+  {name:'Ashen Canopy', accent:'#c96f55'},
+  {name:'Glass Wastes', accent:'#72b9cf'},
+  {name:'Drowned Observatory', accent:'#557fd1'},
+  {name:'Void Basilica', accent:'#8d65d4'},
+  {name:'Crown of Night', accent:'#c0639c'}
+];
+
 var SAVE_KEY = 'lumenfall_save_v2';
 var TICK_MS = 100;
 var ABILITY_BASE_CYCLE_SEC = 6;
@@ -1189,6 +1200,26 @@ function bossAbilityDamageMult(depth){
 function bossTapDamageMult(depth){
   var trait = bossTraitFor(depth);
   return trait ? trait.tapMult : 1;
+}
+
+function riftZoneFor(depth){
+  var zoneIndex = Math.max(0, Math.floor((Math.max(1,depth)-1)/RIFT_ZONE_SPAN));
+  var base = RIFT_ZONES[zoneIndex % RIFT_ZONES.length];
+  var echo = Math.floor(zoneIndex / RIFT_ZONES.length) + 1;
+  return {
+    name: base.name + (echo>1 ? ' · Echo '+echo : ''),
+    accent: base.accent,
+    index: zoneIndex
+  };
+}
+function applyRiftZoneVisual(depth){
+  var stageEl = document.getElementById('enemy-stage');
+  if(!stageEl) return;
+  var zone = riftZoneFor(depth);
+  if(stageEl.getAttribute('data-zone-index')!==String(zone.index)){
+    stageEl.setAttribute('data-zone-index', String(zone.index));
+    stageEl.style.setProperty('--zone-accent', zone.accent);
+  }
 }
 
 function highestFarmableDepth(pushDepth){
@@ -1972,7 +2003,9 @@ function updateBattleFast(){
   renderBondSummary();
   els['hp-fill'].style.width = Math.max(0, (state.enemyHp/state.enemyMaxHp*100)) + '%';
   els['hp-text'].textContent = formatNum(Math.max(0,state.enemyHp)) + ' / ' + formatNum(state.enemyMaxHp);
-  els['depth-label'].innerHTML = 'Rift ' + state.depth + (isBoss(state.depth) ? ' &mdash; <span class="boss-tag">BOSS</span>' : '');
+  var zone = riftZoneFor(state.depth);
+  applyRiftZoneVisual(state.depth);
+  els['depth-label'].innerHTML = 'Rift ' + state.depth + (isBoss(state.depth) ? ' &mdash; <span class="boss-tag">BOSS</span>' : '') + '<span class="region-label" style="color:'+zone.accent+'">'+zone.name+'</span>';
   els['enemy-name'].textContent = (state.enemyIsLuminous ? 'Luminous ' : '') + enemyNameFor(state.depth);
   els['enemy-glyph'].classList.toggle('boss', isBoss(state.depth));
   els['enemy-glyph'].classList.toggle('luminous', !!state.enemyIsLuminous);
@@ -2521,6 +2554,7 @@ function renderManifesto(){
 
 var ENCYCLOPEDIA_MECHANICS = [
   {name:'Push', meta:'Rift mode', desc:'Climb toward new Rifts and bosses. Your saved Push point is preserved if you switch to Farm.'},
+  {name:'Rift Regions', meta:'World progression', desc:'The Rift changes region every 25 levels, moving through the Starlit Verge, Ashen Canopy, Glass Wastes, Drowned Observatory, Void Basilica and Crown of Night before deeper echoes begin.'},
   {name:'Farm', meta:'Rift mode', desc:'Repeat your highest cleared non-boss Rift for steady resources, then return to the exact Push point when ready.'},
   {name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the current run for Prisms. Rarity, Lab, Long Studies, Modules, Ultimates and other permanent systems stay.'},
   {name:'Luminous Enemies', meta:'Rare encounter', desc:'Rare non-boss enemies that drop Motes. Their appearance chance rises as you push deeper.'},
