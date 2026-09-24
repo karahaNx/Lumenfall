@@ -50,6 +50,50 @@ jobs:
           test -n "$ANDROID_HOME"
           test -d "$ANDROID_HOME"
 
+      - name: Restore stable Android signing key
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          SIGNING_TAG="lumenfall-signing-v1"
+          KEYSTORE_DIR="$RUNNER_TEMP/lumenfall-signing"
+          KEYSTORE_FILE="$KEYSTORE_DIR/Lumenfall-debug.keystore"
+
+          mkdir -p "$KEYSTORE_DIR" "$HOME/.android"
+
+          if gh release view "$SIGNING_TAG" >/dev/null 2>&1; then
+            gh release download "$SIGNING_TAG" \
+              --pattern "Lumenfall-debug.keystore" \
+              --dir "$KEYSTORE_DIR" \
+              --clobber
+          else
+            keytool -genkeypair \
+              -keystore "$KEYSTORE_FILE" \
+              -storepass android \
+              -alias androiddebugkey \
+              -keypass android \
+              -keyalg RSA \
+              -keysize 2048 \
+              -validity 10000 \
+              -dname "CN=Lumenfall,O=Xarib Productions,C=DK"
+
+            gh release create "$SIGNING_TAG" "$KEYSTORE_FILE" \
+              --draft \
+              --title "Lumenfall signing key — PRIVATE" \
+              --notes "Private Android signing key used only by GitHub Actions. Do not publish or delete this draft release."
+          fi
+
+          test -s "$KEYSTORE_FILE"
+          cp "$KEYSTORE_FILE" "$HOME/.android/debug.keystore"
+          chmod 600 "$HOME/.android/debug.keystore"
+
+          echo "Android signing certificate:"
+          keytool -list -v \
+            -keystore "$HOME/.android/debug.keystore" \
+            -storepass android \
+            -alias androiddebugkey | grep "SHA256:" | head -1
+
       - name: Install Capacitor dependencies
         working-directory: mobile
         run: npm ci --no-audit --no-fund
@@ -65,6 +109,33 @@ jobs:
       - name: Generate Android project
         working-directory: mobile
         run: npx cap add android
+
+      - name: Set Android app version
+        env:
+          BUILD_NUMBER: ${{ github.run_number }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+
+          path = Path("mobile/android/app/build.gradle")
+          text = path.read_text()
+
+          version_code = int(os.environ["BUILD_NUMBER"])
+          version_name = f"0.1.{version_code}"
+
+          old_code = "versionCode 1"
+          old_name = 'versionName "1.0"'
+          if old_code not in text or old_name not in text:
+              raise SystemExit("Could not find Capacitor default Android version fields")
+
+          text = text.replace(old_code, f"versionCode {version_code}", 1)
+          text = text.replace(old_name, f'versionName "{version_name}"', 1)
+          path.write_text(text)
+
+          print(f"Android versionCode={version_code}, versionName={version_name}")
+          PY
 
       - name: Stage Android icon sources
         working-directory: mobile
