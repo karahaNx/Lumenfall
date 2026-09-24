@@ -1621,8 +1621,8 @@ function triggerAbility(sp, level){
   switch(sp.abilityType){
     case 'tank':    burst = power*4*mMult*ult; break;
     case 'dps':     burst = power*5*mMult*ult; break;
-    case 'ranged':  burst = power*3*ult; state.shards += Math.round(power*0.05*mMult*ult); break;
-    case 'druid':   burst = power*3*ult; gainLumen(Math.round(power*0.1*mMult*ult)); break;
+    case 'ranged':  burst = power*3*ult; state.shards += Math.round(power*0.05*mMult*ult*formationRewardMult()); break;
+    case 'druid':   burst = power*3*ult; gainLumen(Math.round(power*0.1*mMult*ult*formationRewardMult())); break;
     case 'support':
       var dur = ultimateUnlocked(sp.id) ? 8000 : 4000;
       var strength = ultimateUnlocked(sp.id) ? 1.5 : 1.25;
