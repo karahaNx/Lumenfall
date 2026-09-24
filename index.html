@@ -1681,7 +1681,7 @@ function renderRiftMode(){
 }
 function updateBattleFast(){
   renderRiftMode();
-  renderFormationBonds();
+  renderBondSummary();
   els['hp-fill'].style.width = Math.max(0, (state.enemyHp/state.enemyMaxHp*100)) + '%';
   els['hp-text'].textContent = formatNum(Math.max(0,state.enemyHp)) + ' / ' + formatNum(state.enemyMaxHp);
   els['depth-label'].innerHTML = 'Rift ' + state.depth + (isBoss(state.depth) ? ' &mdash; <span class="boss-tag">BOSS</span>' : '');
@@ -1775,6 +1775,13 @@ function showTutorial(onComplete){
   overlay.style.display = 'flex';
 }
 
+function renderBondSummary(){
+  if(!els['bond-summary']) return;
+  var active = activeFormationBonds();
+  els['bond-summary'].textContent = active.length
+    ? 'Active Bonds: ' + active.map(function(b){ return b.name.replace(' Bond','')+' ('+b.effect+')'; }).join(' · ')
+    : 'No Formation Bond active.';
+}
 function renderFormationBonds(){
   if(els['bond-card']){
     var rows = FORMATION_BONDS.map(function(bond){
@@ -1790,12 +1797,7 @@ function renderFormationBonds(){
       '<div class="bond-help">Both listed Wisps must be Active and powered above Lv.0. You only have 5 slots, so choose the bonds that match what you are doing.</div>' +
       '<div class="bond-list">'+rows+'</div>';
   }
-  if(els['bond-summary']){
-    var active = activeFormationBonds();
-    els['bond-summary'].textContent = active.length
-      ? 'Active Bonds: ' + active.map(function(b){ return b.name.replace(' Bond','')+' ('+b.effect+')'; }).join(' · ')
-      : 'No Formation Bond active.';
-  }
+  renderBondSummary();
 }
 
 function renderPartyFormation(){
