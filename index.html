@@ -1093,27 +1093,13 @@ function saveState(){
 }
 
 var SAVE_BACKUP_PREFIX = 'LUMENFALL1:';
-function utf8ToBase64(text){
-  var binary = encodeURIComponent(text).replace(/%([0-9A-F]{2})/g, function(_, hex){
-    return String.fromCharCode(parseInt(hex,16));
-  });
-  return btoa(binary);
-}
-function base64ToUtf8(base64){
-  var binary = atob(base64);
-  var encoded = '';
-  for(var i=0;i<binary.length;i++){
-    encoded += '%' + ('00'+binary.charCodeAt(i).toString(16)).slice(-2);
-  }
-  return decodeURIComponent(encoded);
-}
 function encodeSaveBackup(obj){
-  return SAVE_BACKUP_PREFIX + utf8ToBase64(JSON.stringify(obj));
+  return SAVE_BACKUP_PREFIX + encodeURIComponent(JSON.stringify(obj));
 }
 function decodeSaveBackup(code){
   var clean = String(code||'').trim();
   if(clean.indexOf(SAVE_BACKUP_PREFIX)!==0) throw new Error('Not a Lumenfall backup code');
-  var parsed = JSON.parse(base64ToUtf8(clean.slice(SAVE_BACKUP_PREFIX.length)));
+  var parsed = JSON.parse(decodeURIComponent(clean.slice(SAVE_BACKUP_PREFIX.length)));
   if(!parsed || typeof parsed!=='object' || !parsed.spirits || parsed.depth===undefined){
     throw new Error('Backup data is incomplete');
   }
