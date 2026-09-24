@@ -21,7 +21,15 @@ Because the repository is private, GitHub will require you to be signed in to th
 
 You can also open **Releases** in the repository and select **Lumenfall Android — Latest**. There is only one distributed app file: `Lumenfall.apk`.
 
-The generated APK is a debug-signed Android build intended for direct sideloading. Android may require you to allow **Install unknown apps** for the browser or file manager you use to open it.
+The generated APK is intended for direct sideloading. Android may require you to allow **Install unknown apps** for the browser or file manager you use to open it.
+
+### Updating the app
+
+Current builds use one persistent private Android signing key and an increasing Android `versionCode`, so future `Lumenfall.apk` files can be installed as updates over the existing app.
+
+If you installed one of the older APKs from before stable signing was introduced and Android reports a signature/package conflict, uninstall that old build once and install the current APK. Builds from the current signing generation are designed to update in place after that.
+
+Inside Lumenfall, **Settings → Save Backup** can copy/restore your save code for future reinstalls or device changes.
 
 ## Project structure
 
@@ -42,13 +50,17 @@ mobile/package-lock.json           locked Android/Capacitor dependency versions
 
 The workflow:
 
-1. Installs the locked Capacitor dependencies with `npm ci`.
-2. Copies `index.html` and the local fonts into `mobile/www`.
-3. Generates a fresh Capacitor Android project.
-4. Generates the Android launcher icon and splash resources.
-5. Runs `cap sync android`.
-6. Builds `app-debug.apk` with Gradle.
-7. Publishes `Lumenfall.apk` to the fixed GitHub Release tag **android-latest**.
+1. Restores the persistent private Lumenfall Android signing key.
+2. Installs the locked Capacitor dependencies with `npm ci`.
+3. Copies `index.html` and the local fonts into `mobile/www`.
+4. Generates a fresh Capacitor Android project.
+5. Assigns an increasing Android `versionCode` from the GitHub Actions run number.
+6. Generates the Android launcher icon and splash resources.
+7. Runs `cap sync android`.
+8. Builds the APK with Gradle using the stable signing identity.
+9. Publishes `Lumenfall.apk` to the fixed GitHub Release tag **android-latest**.
+
+The signing keystore is stored as an asset in the private draft release `lumenfall-signing-v1`. Do not publish or delete that draft release; losing the key would break update compatibility with already-installed builds.
 
 The Android SDK supplied by GitHub's Ubuntu runner is used directly. The old `android-actions/setup-android` step was removed because it attempted to install the obsolete Android SDK package `tools`, which caused the recent workflow failures before the app build even started.
 
@@ -89,8 +101,12 @@ mobile/android/app/build/outputs/apk/debug/app-debug.apk
 ## Design notes
 
 - Deterministic progression rather than loot-box/gacha RNG.
-- Offline combat simulation including boss walls and automation.
+- Offline combat simulation including Wisp abilities, Auto-Tap, smart boss retreat/retry and automation.
+- Formation Bonds for distinct Push, Farm and Boss builds.
+- Rotating Boss Traits: Regrowth, Fractured Core and Guardian's Mark.
+- Rift Regions that change every 25 levels.
 - Persistent Wisp progression, research, Long Studies, Ascension, Deeds, Push/Farm and Auto-Ascend systems.
+- In-app Encyclopedia plus save backup/restore under Settings.
 
 ## License
 
