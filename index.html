@@ -1284,9 +1284,12 @@ function chipEffectivePower(id){
   var buffActive = state.buffUntil && Date.now() < state.buffUntil;
   return base * shareMult * (buffActive ? state.buffMult : 1);
 }
+function guardianTapDamageAt(depth, partyBuffMult){
+  return (5 + effectivePartyPower()*0.02) * tapMult() * (partyBuffMult||1) * bossTapDamageMult(depth);
+}
 function tapDamage(){
   var buffActive = state.buffUntil && Date.now() < state.buffUntil;
-  return (5 + effectivePartyPower()*0.02) * tapMult() * (buffActive ? state.buffMult : 1) * bossTapDamageMult(state.depth);
+  return guardianTapDamageAt(state.depth, buffActive ? state.buffMult : 1);
 }
 function passiveWispDpsAt(depth){
   var contextual = formationContextDamageMult(depth) / formationGeneralDamageMult();
@@ -1340,6 +1343,13 @@ function averageAbilityDps(depth){
 }
 function sustainedWispDps(depth){
   return passiveWispDpsAt(depth) * averageSupportBuffMult() + averageAbilityDps(depth);
+}
+function automatedGuardianDps(depth){
+  if(!state.achieved.autotap) return 0;
+  return guardianTapDamageAt(depth, averageSupportBuffMult());
+}
+function sustainedCombatDps(depth){
+  return sustainedWispDps(depth) + automatedGuardianDps(depth);
 }
 function abilityResourceRates(){
   var cycle = abilityCycleSeconds();
@@ -1882,11 +1892,12 @@ function updateBattleFast(){
   if(bossNow){
     var trait = bossTraitFor(state.depth);
     var regenPerSec = state.enemyMaxHp*bossRegenRate(state.depth);
-    var yourDps = sustainedWispDps(state.depth);
+    var yourDps = sustainedCombatDps(state.depth);
     var netDps = yourDps - regenPerSec;
     var enough = netDps > 0;
     var eta = enough ? Math.ceil(Math.max(0,state.enemyHp)/netDps) : 0;
-    els['boss-regen-tag'].textContent = trait.name+' — '+trait.hint+' Sustained '+formatNum(yourDps)+'/s vs '+formatNum(regenPerSec)+'/s regen' + (enough ? ' · ~'+fmtDuration(eta) : ' · Farm recommended');
+    var wallHint = trait.id==='guardian' ? ' · Tap to push or Farm' : ' · Farm recommended';
+    els['boss-regen-tag'].textContent = trait.name+' — '+trait.hint+' Auto sustained '+formatNum(yourDps)+'/s vs '+formatNum(regenPerSec)+'/s regen' + (enough ? ' · ~'+fmtDuration(eta) : wallHint);
     els['boss-regen-tag'].classList.toggle('insufficient', !enough);
   }
   els['stat-tap'].textContent = formatNum(tapDamage());
@@ -2423,7 +2434,7 @@ var ENCYCLOPEDIA_MECHANICS = [
   {name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the current run for Prisms. Rarity, Lab, Long Studies, Modules, Ultimates and other permanent systems stay.'},
   {name:'Luminous Enemies', meta:'Rare encounter', desc:'Rare non-boss enemies that drop Motes. Their appearance chance rises as you push deeper.'},
   {name:'Boss Traits', meta:'Boss mechanic', desc:'Bosses rotate every 10 Rifts: Regrowth has stronger healing, Fractured Core takes +75% Wisp ability damage, and Guardian\'s Mark makes Guardian taps deal x3. The cycle repeats every 30 Rifts.'},
-  {name:'Offline Progress', meta:'Idle system', desc:'Combat, Farm, Auto-Ascend, Long Studies and automation continue while you are away, up to your current offline cap.'}
+  {name:'Offline Progress', meta:'Idle system', desc:'Combat, Wisp abilities, Auto-Tap, Farm, Auto-Ascend, Long Studies and automation continue while you are away, up to your current offline cap.'}
 ];
 
 function renderEncyclopedia(){
@@ -2832,7 +2843,7 @@ function simulateOfflineRun(effectiveSec){
       ascends++;
       continue;
     }
-    var dps = sustainedWispDps(state.depth);
+    var dps = sustainedCombatDps(state.depth);
     if(dps <= 0) break;
     var abilityRates = abilityResourceRates();
     var wasBossKill = isBoss(state.depth);
