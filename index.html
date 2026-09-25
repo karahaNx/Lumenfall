@@ -1313,6 +1313,35 @@
     nav.tabbar button{min-height:48px;}
   }
 
+
+  /* Retention: compact visible next goal */
+  .rift-objective{
+    --objective-progress:0%;
+    position:relative;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;
+    min-height:42px;padding:7px 9px 9px;border-radius:11px;overflow:hidden;
+    border:1px solid color-mix(in srgb,var(--zone-accent,var(--prism)) 20%,var(--line));
+    background:linear-gradient(135deg,color-mix(in srgb,var(--zone-accent,var(--prism)) 7%,var(--bg-elev)),color-mix(in srgb,var(--bg-elev-2) 82%,transparent));
+    box-shadow:var(--inner-highlight);
+  }
+  .rift-objective::after{
+    content:'';position:absolute;left:0;bottom:0;height:2px;width:var(--objective-progress);
+    background:linear-gradient(90deg,var(--zone-accent,var(--lumen)),color-mix(in srgb,var(--zone-accent,var(--prism)) 65%,#fff));
+    box-shadow:0 0 9px color-mix(in srgb,var(--zone-accent,var(--prism)) 40%,transparent);
+    transition:width .35s ease;
+  }
+  .objective-kind{
+    padding:3px 6px;border-radius:999px;font-size:.49rem;line-height:1;font-weight:900;letter-spacing:.09em;
+    color:var(--zone-accent,var(--lumen));border:1px solid color-mix(in srgb,var(--zone-accent,var(--lumen)) 30%,var(--line));
+    background:color-mix(in srgb,var(--zone-accent,var(--lumen)) 7%,var(--bg-elev));
+  }
+  .objective-copy{min-width:0;display:flex;flex-direction:column;gap:1px;text-align:left;}
+  .objective-copy strong{font-size:.68rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .objective-copy small{font-size:.56rem;color:var(--ink-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .objective-arrow{font-size:1rem;color:var(--ink-dim);opacity:.6;}
+  .objective-boss .objective-kind{color:var(--danger);border-color:color-mix(in srgb,var(--danger) 35%,var(--line));}
+  .objective-ascend-ready .objective-kind{color:var(--prism);border-color:color-mix(in srgb,var(--prism) 42%,var(--line));}
+  .objective-farm .objective-kind{color:var(--shard);border-color:color-mix(in srgb,var(--shard) 35%,var(--line));}
+
 </style>
 </head>
 <body>
@@ -1351,6 +1380,7 @@
           <button class="rift-mode-btn" id="rift-farm-btn">Farm</button>
         </div>
         <div class="rift-mode-note" id="rift-mode-note">Push deeper until you hit a wall.</div>
+        <div class="rift-objective" id="rift-objective"></div>
         <div class="enemy-name" id="enemy-name">Hollow Wisp</div>
         <div class="luminous-tag" id="luminous-tag" style="display:none;">Luminous — bonus Motes on defeat</div>
         <div class="battle-row">
@@ -1521,9 +1551,9 @@
 
 <div class="overlay" id="intro-overlay" style="display:none;">
   <div class="modal">
-    <h2>Lumenfall</h2>
-    <p>Awaken a party of starlight Wisps — your first Wisp is already fighting for you. Strike into the Rift as their Guardian to speed things up, and unravel the eclipse swallowing the sky. Everything here is earned by playing — there is nothing to buy that makes you stronger.</p>
-    <button class="primary-btn" id="intro-begin">Begin</button>
+    <h2>Enter the Rift</h2>
+    <p>Your Ember Wisp is already fighting. Tap the Rift to strike as its Guardian, spend Lumen to Empower your Wisps, and push toward your first Boss at Rift 10.</p>
+    <button class="primary-btn" id="intro-begin">Enter the Rift</button>
   </div>
 </div>
 
@@ -2733,7 +2763,7 @@ function flashChip(id, label){
 // ---------------------------------------------------------------
 var els = {};
 function cacheEls(){
-  ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','rift-push-btn','rift-farm-btn','rift-mode-note','enemy-name','luminous-tag','boss-regen-tag','buff-indicator','enemy-stage','enemy-glyph',
+  ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','rift-push-btn','rift-farm-btn','rift-mode-note','rift-objective','enemy-name','luminous-tag','boss-regen-tag','buff-indicator','enemy-stage','enemy-glyph',
    'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','party-col','bond-card','bond-summary','research-list','study-list',
    'prism-preview','ascend-btn','ascend-note','node-list','ach-list','shop-list','theme-list','manifesto','toast',
    'daily-streak-badge','daily-quest-list','offline-preview','settings-overlay','settings-home','settings-encyclopedia','settings-title','settings-back','encyclopedia-content'
@@ -2759,8 +2789,75 @@ function renderRiftMode(){
     ? 'Farming Rift '+state.farmDepth+' for resources. Push resumes at Rift '+state.farmReturnDepth+'.'
     : 'Push deeper until you hit a wall. Farm always uses your highest cleared non-boss Rift.';
 }
+function nextRiftObjective(){
+  var p = progressionDepth();
+
+  if(state.riftMode==='farm'){
+    return {
+      kind:'FARM',
+      title:'Build power for Rift '+state.farmReturnDepth,
+      detail:'Farming Rift '+state.farmDepth,
+      progress:Math.min(100,Math.round(sustainedCombatDps(state.farmReturnDepth)/Math.max(1,enemyHpFor(state.farmReturnDepth)*bossRegenRate(state.farmReturnDepth))*100))
+    };
+  }
+
+  if(isBoss(state.depth)){
+    var trait = bossTraitFor(state.depth);
+    return {
+      kind:'BOSS',
+      title:'Defeat Rift '+state.depth,
+      detail:trait ? trait.name : 'Boss encounter',
+      progress:100
+    };
+  }
+
+  if(state.ascendCount===0 && p>=16){
+    return {
+      kind:'ASCEND READY',
+      title:'Permanent power is waiting',
+      detail:'+'+prismGain()+' Prisms now',
+      progress:100
+    };
+  }
+
+  var candidates = [];
+  SPIRITS.forEach(function(sp){
+    if(sp.unlockDepth>p) candidates.push({depth:sp.unlockDepth,kind:'WISP',title:'Awaken '+sp.shortName,detail:sp.heroClass+' · Rift '+sp.unlockDepth});
+  });
+
+  var nextBoss = Math.ceil((p+1)/10)*10;
+  candidates.push({depth:nextBoss,kind:'BOSS',title:'Reach Rift '+nextBoss,detail:(bossTraitFor(nextBoss)||{}).name||'Boss'});
+
+  var nextRegionDepth = (Math.floor((p-1)/RIFT_ZONE_SPAN)+1)*RIFT_ZONE_SPAN+1;
+  var nextZone = riftZoneFor(nextRegionDepth);
+  candidates.push({depth:nextRegionDepth,kind:'REGION',title:'Enter '+nextZone.name,detail:'Rift '+nextRegionDepth});
+
+  candidates.sort(function(a,b){
+    if(a.depth!==b.depth) return a.depth-b.depth;
+    var order={WISP:0,BOSS:1,REGION:2};
+    return (order[a.kind]||9)-(order[b.kind]||9);
+  });
+
+  var goal = candidates[0];
+  var previousBoss = Math.floor((p-1)/10)*10;
+  goal.progress = Math.max(0,Math.min(100,Math.round((p-previousBoss)/10*100)));
+  return goal;
+}
+function renderRiftObjective(){
+  var el = els['rift-objective'];
+  if(!el) return;
+  var goal = nextRiftObjective();
+  el.style.setProperty('--objective-progress',(goal.progress||0)+'%');
+  el.innerHTML =
+    '<span class="objective-kind">'+goal.kind+'</span>'+
+    '<span class="objective-copy"><strong>'+goal.title+'</strong><small>'+goal.detail+'</small></span>'+
+    '<span class="objective-arrow">›</span>';
+  el.className = 'rift-objective objective-'+goal.kind.toLowerCase().replace(/[^a-z]+/g,'-');
+}
+
 function updateBattleFast(){
   renderRiftMode();
+  renderRiftObjective();
   renderBondSummary();
   els['hp-fill'].style.width = Math.max(0, (state.enemyHp/state.enemyMaxHp*100)) + '%';
   els['hp-text'].textContent = formatNum(Math.max(0,state.enemyHp)) + ' / ' + formatNum(state.enemyMaxHp);
@@ -2795,6 +2892,8 @@ function updateBattleFast(){
     els['enemy-stage'].classList.add(enough ? 'boss-ready' : 'boss-wall');
     if(battleStage) battleStage.classList.add(enough ? 'boss-ready' : 'boss-wall');
   }
+  var tapHint = document.querySelector('#tab-battle .tap-hint');
+  if(tapHint) tapHint.style.display = (state.totalTaps<10 && state.maxDepthEver<3) ? 'block' : 'none';
   els['stat-tap'].textContent = formatNum(tapDamage());
   els['stat-idle'].textContent = formatNum(sustainedWispDps(state.depth));
   var buffActive = state.buffUntil && Date.now() < state.buffUntil;
@@ -2825,11 +2924,9 @@ function showToast(msg){
 }
 
 var TUTORIAL_STEPS = [
-  {title:'Strike the Rift', body:'Tap or click the enemy to hit it directly. Your Wisps deal damage automatically too, every second, even if you never tap again.'},
-  {title:'Build your party', body:'Spend Lumen to Empower Wisps. Up to 5 can be Active. Specific pairs activate Formation Bonds, so your best Push, Farm and Boss formations can be different.'},
-  {title:'Ascend when stuck', body:'When a Rift’s boss is too tough, Ascend. You restart from Rift 1, but keep Prisms — a permanent power boost that makes the climb faster every time.'},
-  {title:'Research and Study', body:'The Lab and Long Studies turn Shards and Motes into permanent upgrades. Flip a Queue toggle and one buys itself the moment you can afford it.'},
-  {title:'Progress while away', body:'Close the game anytime — Lumenfall keeps fighting while you’re gone. Use Farm on the Rift screen to stay on your highest cleared non-boss Rift for steady resources, then switch back to Push when you’re stronger.'}
+  {title:'Fight & grow', body:'Wisps fight automatically. Tap the Rift as your Guardian for extra damage, then spend Lumen to Empower the Wisps you want in your Active party.'},
+  {title:'Build for the wall', body:'Formation Bonds reward different Wisp pairs for Push, Farm and Boss fights. If a Boss stops you, Farm your best cleared Rift and return stronger.'},
+  {title:'Ascend forever', body:'After enough progress you can Ascend for Prisms. Wisp Rarity, Modules, Ultimates, Lab research, Long Studies and other permanent systems stay with you — even while offline.'}
 ];
 
 function showTutorial(onComplete){
@@ -4093,12 +4190,11 @@ function init(){
 
     document.getElementById('intro-begin').addEventListener('click', function(){
       introOverlay.style.display = 'none';
-      showTutorial(function(){
-        isNewGame = false;
-        state.lastSeen = Date.now();
-        saveState();
-      });
-    });
+      isNewGame = false;
+      state.lastSeen = Date.now();
+      saveState();
+      showRiftMilestone('FIRST GOAL','Reach Rift 3','Awaken Tide Sprite','#3aa0c9');
+    },{once:true});
   } else {
     introOverlay.style.display = 'none';
 
