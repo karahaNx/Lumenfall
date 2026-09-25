@@ -1526,6 +1526,12 @@
   nav.tabbar button[data-tab="ascend"].has-attention::before{background:var(--prism);box-shadow:0 0 9px var(--prism);}
   @keyframes navAttention{0%,100%{transform:scale(.8);opacity:.65;}50%{transform:scale(1.15);opacity:1;}}
 
+
+  .rift-objective.actionable{cursor:pointer;transition:transform .15s ease,border-color .15s ease,filter .15s ease;}
+  .rift-objective.actionable:active{transform:scale(.985);filter:brightness(1.08);}
+  .rift-objective.actionable .objective-arrow{color:var(--zone-accent,var(--prism));opacity:.9;}
+  .objective-wisp-ready .objective-kind{color:var(--good);border-color:color-mix(in srgb,var(--good) 38%,var(--line));}
+
 </style>
 </head>
 <body>
@@ -3114,6 +3120,19 @@ function nextRiftObjective(){
     };
   }
 
+  var recruitReady = SPIRITS.find(function(sp){
+    return state.maxDepthEver>=sp.unlockDepth && (state.spirits[sp.id]||0)<=0;
+  });
+  if(recruitReady){
+    return {
+      kind:'WISP READY',
+      title:'Recruit '+recruitReady.shortName,
+      detail:recruitReady.heroClass+' · '+recruitReady.role,
+      progress:100,
+      tab:'spirits'
+    };
+  }
+
   if(isBoss(state.depth)){
     var trait = bossTraitFor(state.depth);
     return {
@@ -3129,7 +3148,8 @@ function nextRiftObjective(){
       kind:'ASCEND READY',
       title:'Permanent power is waiting',
       detail:'+'+ascendPrismGain(p)+' Prisms now',
-      progress:100
+      progress:100,
+      tab:'ascend'
     };
   }
 
@@ -3161,11 +3181,13 @@ function renderRiftObjective(){
   if(!el) return;
   var goal = nextRiftObjective();
   el.style.setProperty('--objective-progress',(goal.progress||0)+'%');
+  var actionable = !!goal.tab;
   el.innerHTML =
     '<span class="objective-kind">'+goal.kind+'</span>'+
     '<span class="objective-copy"><strong>'+goal.title+'</strong><small>'+goal.detail+'</small></span>'+
-    '<span class="objective-arrow">›</span>';
-  el.className = 'rift-objective objective-'+goal.kind.toLowerCase().replace(/[^a-z]+/g,'-');
+    '<span class="objective-arrow">'+(actionable?'›':'')+'</span>';
+  el.className = 'rift-objective objective-'+goal.kind.toLowerCase().replace(/[^a-z]+/g,'-')+(actionable?' actionable':'');
+  el.setAttribute('data-target-tab',goal.tab||'');
 }
 
 function updateBattleFast(){
@@ -4002,15 +4024,23 @@ function closeSettings(){
   document.getElementById('reset-row').style.display = 'block';
 }
 
+function activateTab(tabName){
+  var btn = document.querySelector('.tab-btn[data-tab="'+tabName+'"]');
+  var panel = document.getElementById('tab-'+tabName);
+  if(!btn || !panel) return;
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+  btn.classList.add('active');
+  panel.classList.add('active');
+  if(tabName==='spirits'){ renderFormationBonds(); renderRosterJourney(); }
+  if(tabName==='ascend') renderAscendSummary();
+  var main = document.querySelector('main');
+  if(main) main.scrollTop = 0;
+}
 function setupTabs(){
   document.querySelectorAll('.tab-btn').forEach(function(btn){
     btn.addEventListener('click', function(){
-      document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
-      document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
-      btn.classList.add('active');
-      var tabName = btn.getAttribute('data-tab');
-      document.getElementById('tab-'+tabName).classList.add('active');
-      if(tabName==='spirits') renderFormationBonds();
+      activateTab(btn.getAttribute('data-tab'));
     });
   });
 }
@@ -4497,6 +4527,10 @@ function init(){
 
   document.getElementById('rift-push-btn').addEventListener('click', enterPushMode);
   document.getElementById('rift-farm-btn').addEventListener('click', enterFarmMode);
+  document.getElementById('rift-objective').addEventListener('click', function(){
+    var target = this.getAttribute('data-target-tab');
+    if(target) activateTab(target);
+  });
   document.getElementById('ascend-btn').addEventListener('click', function(){ doAscend(false); });
 
   document.getElementById('settings-btn').addEventListener('click', openSettings);
