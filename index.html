@@ -4595,6 +4595,10 @@ function init(){
       isNewGame = false;
       state.lastSeen = Date.now();
       saveState();
+      if(pendingDailyReward && pendingDailyReward.reward){
+        var welcomeComets = pendingDailyReward.reward.comets||0;
+        if(welcomeComets>0) showToast('Welcome gift — +'+welcomeComets+' Comets');
+      }
       showRiftMilestone('FIRST GOAL','Reach Rift 3','Awaken Tide Sprite','#3aa0c9');
     });
   } else {
