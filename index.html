@@ -1462,6 +1462,69 @@
   #tab-battle .stage[data-zone-theme="4"] .enemy-glyph:not(.boss){clip-path:polygon(50% 0,83% 17%,100% 50%,82% 85%,50% 100%,18% 85%,0 50%,17% 17%);}
   #tab-battle .stage[data-zone-theme="5"] .enemy-glyph:not(.boss){clip-path:polygon(50% 0,64% 27%,94% 18%,79% 48%,100% 68%,67% 73%,50% 100%,34% 73%,0 68%,21% 48%,6% 18%,36% 27%);}
 
+
+  /* Wisp desire / collection journey */
+  .roster-journey{
+    --roster-progress:0%;
+    position:relative;overflow:hidden;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:9px;
+    min-height:49px;margin-bottom:10px;padding:8px 10px 10px;border-radius:13px;
+    border:1px solid color-mix(in srgb,var(--prism) 22%,var(--line));
+    background:
+      radial-gradient(circle at 92% 0%,color-mix(in srgb,var(--prism) 11%,transparent),transparent 38%),
+      linear-gradient(145deg,color-mix(in srgb,var(--bg-elev-2) 91%,transparent),color-mix(in srgb,var(--bg-elev) 94%,transparent));
+    box-shadow:var(--inner-highlight);
+  }
+  .roster-journey::after{
+    content:'';position:absolute;left:0;bottom:0;width:var(--roster-progress);height:2px;
+    background:linear-gradient(90deg,var(--prism),var(--mote));
+    box-shadow:0 0 10px color-mix(in srgb,var(--prism) 45%,transparent);transition:width .3s ease;
+  }
+  .roster-count{
+    display:grid;place-items:center;width:34px;height:34px;border-radius:10px;
+    font-size:.64rem;font-weight:850;color:var(--prism);
+    background:color-mix(in srgb,var(--prism) 8%,var(--bg-elev));
+    border:1px solid color-mix(in srgb,var(--prism) 25%,var(--line));
+  }
+  .roster-copy{display:flex;flex-direction:column;gap:2px;min-width:0;}
+  .roster-copy strong{font-size:.69rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .roster-copy small{font-size:.57rem;color:var(--ink-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .roster-label{font-size:.47rem;font-weight:900;letter-spacing:.12em;color:var(--ink-dim);writing-mode:vertical-rl;transform:rotate(180deg);}
+
+  .hero-card.wisp-reward-recruit{animation:wispRecruit .68s ease-out;}
+  .hero-card.wisp-reward-rarity{animation:wispRarity .68s ease-out;}
+  .hero-card.wisp-reward-ultimate{animation:wispUltimate .72s ease-out;}
+  @keyframes wispRecruit{0%,100%{transform:none;}38%{transform:translateY(-2px) scale(1.012);box-shadow:0 0 30px -8px var(--wisp-color),var(--inner-highlight);}}
+  @keyframes wispRarity{0%,100%{filter:none;}35%{filter:brightness(1.18) saturate(1.22);box-shadow:0 0 34px -9px var(--rarity-color),var(--inner-highlight);}}
+  @keyframes wispUltimate{0%,100%{filter:none;transform:none;}35%{filter:brightness(1.25);transform:scale(1.012);box-shadow:0 0 38px -7px var(--sigil),var(--inner-highlight);}}
+
+  /* Ascend is a major progression beat */
+  .ascend-flash{
+    position:fixed;z-index:900;left:50%;top:46%;transform:translate(-50%,-50%);
+    width:min(84vw,340px);padding:17px 18px;text-align:center;border-radius:17px;pointer-events:none;
+    background:
+      radial-gradient(circle at 50% 0%,color-mix(in srgb,var(--prism) 24%,transparent),transparent 48%),
+      color-mix(in srgb,var(--bg-elev) 94%,transparent);
+    border:1px solid color-mix(in srgb,var(--prism) 48%,var(--line));
+    box-shadow:0 24px 70px -28px rgba(0,0,0,.78),0 0 45px -14px var(--prism),var(--inner-highlight);
+    backdrop-filter:blur(15px) saturate(1.2);
+    animation:ascendFlashIn .48s cubic-bezier(.17,.86,.28,1) both;
+  }
+  .ascend-flash span{display:block;font-size:.52rem;font-weight:900;letter-spacing:.2em;color:var(--prism);margin-bottom:5px;}
+  .ascend-flash strong{display:block;font-family:'Cinzel',serif;font-size:1.3rem;letter-spacing:.07em;text-shadow:0 0 18px color-mix(in srgb,var(--prism) 48%,transparent);}
+  .ascend-flash small{display:block;margin-top:6px;font-size:.61rem;color:var(--ink-dim);}
+  .ascend-flash.leaving{animation:ascendFlashOut .4s ease forwards;}
+  @keyframes ascendFlashIn{from{opacity:0;transform:translate(-50%,-42%) scale(.86);filter:blur(5px);}to{opacity:1;transform:translate(-50%,-50%) scale(1);filter:none;}}
+  @keyframes ascendFlashOut{to{opacity:0;transform:translate(-50%,-57%) scale(1.035);}}
+
+  /* Only meaningful notification dots */
+  nav.tabbar button.has-attention::before{
+    content:'';position:absolute;top:6px;right:calc(50% - 18px);width:6px;height:6px;border-radius:50%;
+    background:var(--mote);box-shadow:0 0 9px var(--mote);
+    animation:navAttention 1.8s ease-in-out infinite;
+  }
+  nav.tabbar button[data-tab="ascend"].has-attention::before{background:var(--prism);box-shadow:0 0 9px var(--prism);}
+  @keyframes navAttention{0%,100%{transform:scale(.8);opacity:.65;}50%{transform:scale(1.15);opacity:1;}}
+
 </style>
 </head>
 <body>
@@ -1530,6 +1593,7 @@
     <section class="tab-panel" id="tab-spirits">
       <div class="section-label">Your Wisps</div>
       <div class="section-sub">Up to 5 Wisps can be Active at once. Pair specific powered Wisps to activate simple Formation Bonds for Push, Farm or Boss fights.</div>
+      <div class="roster-journey" id="roster-journey"></div>
       <div class="card bond-card" id="bond-card"></div>
       <div class="hero-grid" id="spirit-list"></div>
     </section>
@@ -2622,6 +2686,10 @@ function buySpirit(sp){
   }
   checkAchievements();
   renderSpirits();
+  if(wasZero){
+    showToast(sp.name+' joined your roster.');
+    pulseWispCard(sp.id,'recruit');
+  }
   updateBattleFast();
   renderSideStats();
 }
@@ -2638,6 +2706,8 @@ function buyRarity(sp){
   state.heroRarity[sp.id] = tier+1;
   checkAchievements();
   renderSpirits();
+  showToast(sp.name+' reached '+RARITY_NAMES[tier+1]+'.');
+  pulseWispCard(sp.id,'rarity');
   updateBattleFast();
 }
 
@@ -2665,6 +2735,10 @@ function buyModule(sp){
   state.shards -= cost.shard;
   state.wispModules[sp.id] = level+1;
   renderSpirits();
+  if(level+1>=MODULE_MAX_LEVEL){
+    showToast(sp.name+' Module perfected.');
+    pulseWispCard(sp.id,'rarity');
+  }
   updateBattleFast();
 }
 
@@ -2677,6 +2751,8 @@ function buyUltimate(sp){
   state.wispUltimate[sp.id] = true;
   checkAchievements();
   renderSpirits();
+  showToast(sp.name+' Ultimate awakened — '+sp.abilityName+' doubled.');
+  pulseWispCard(sp.id,'ultimate');
   updateBattleFast();
 }
 
@@ -2916,15 +2992,31 @@ function applyAscendMutation(){
     else { state.activeParty[0] = 'ember'; }
   }
   spawnEnemy();
+  return gain;
+}
+function showAscendFlash(gain,auto){
+  var old = document.querySelector('.ascend-flash');
+  if(old) old.remove();
+  var flash = document.createElement('div');
+  flash.className = 'ascend-flash';
+  flash.innerHTML =
+    '<span>'+(auto?'AUTO ASCEND':'ASCENDED')+'</span>'+
+    '<strong>+'+formatNum(gain)+' PRISMS</strong>'+
+    '<small>The Rift begins again. You do not.</small>';
+  document.body.appendChild(flash);
+  if(navigator.vibrate && !auto) navigator.vibrate([18,35,24]);
+  setTimeout(function(){ flash.classList.add('leaving'); },1250);
+  setTimeout(function(){ if(flash.parentNode) flash.remove(); },1700);
 }
 function doAscend(auto){
   var cleared = progressionDepth() - 1;
   if(cleared < 15) return;
   if(!auto) updateAutoAscendTargetFromProgress();
-  applyAscendMutation();
+  var gain = applyAscendMutation();
   checkAchievements();
   renderAll();
   saveState();
+  showAscendFlash(gain,auto);
 }
 
 function performReset(){
@@ -2983,7 +3075,7 @@ var els = {};
 function cacheEls(){
   ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','rift-push-btn','rift-farm-btn','rift-mode-note','rift-objective','enemy-name','luminous-tag','boss-regen-tag','buff-indicator','enemy-stage','enemy-glyph',
    'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','party-col','bond-card','bond-summary','research-list','study-list',
-   'prism-preview','ascend-btn','ascend-note','node-list','ach-list','shop-list','theme-list','manifesto','toast',
+   'prism-preview','ascend-btn','ascend-note','node-list','ach-list','roster-journey','shop-list','theme-list','manifesto','toast',
    'daily-streak-badge','daily-quest-list','offline-preview','settings-overlay','settings-home','settings-encyclopedia','settings-title','settings-back','encyclopedia-content'
   ].forEach(function(id){ els[id]=document.getElementById(id); });
 }
@@ -3246,14 +3338,41 @@ function updatePartyBars(){
   });
 }
 
+function renderRosterJourney(){
+  var el = els['roster-journey'];
+  if(!el) return;
+  var recruited = SPIRITS.filter(function(sp){ return (state.spirits[sp.id]||0)>0; }).length;
+  var ready = SPIRITS.find(function(sp){ return state.maxDepthEver>=sp.unlockDepth && (state.spirits[sp.id]||0)<=0; });
+  var next = SPIRITS.find(function(sp){ return state.maxDepthEver<sp.unlockDepth; });
+  var pct = Math.round(recruited/SPIRITS.length*100);
+  var target = ready
+    ? '<strong>'+ready.name+' is ready to recruit</strong><small>'+ready.heroClass+' · '+ready.role+'</small>'
+    : (next
+      ? '<strong>Next Wisp: '+next.name+'</strong><small>Reach Rift '+next.unlockDepth+' · '+next.heroClass+'</small>'
+      : '<strong>Every Wisp awakened</strong><small>Build your strongest 5-Wisp formation</small>');
+  el.style.setProperty('--roster-progress',pct+'%');
+  el.innerHTML =
+    '<span class="roster-count mono">'+recruited+'/'+SPIRITS.length+'</span>'+
+    '<span class="roster-copy">'+target+'</span>'+
+    '<span class="roster-label">ROSTER</span>';
+}
+function pulseWispCard(id,tone){
+  var card = els['spirit-list'] && els['spirit-list'].querySelector('[data-wisp-card="'+id+'"]');
+  if(!card) return;
+  var cls = 'wisp-reward-'+(tone||'power');
+  card.classList.add(cls);
+  setTimeout(function(){ card.classList.remove(cls); },720);
+}
+
 function renderSpirits(){
   renderFormationBonds();
+  renderRosterJourney();
   var html = '';
   SPIRITS.forEach(function(sp){
     var level = state.spirits[sp.id];
     var unlocked = state.maxDepthEver >= sp.unlockDepth;
     if(!unlocked){
-      html += '<div class="card hero-card locked">' +
+      html += '<div class="card hero-card locked" data-wisp-card="'+sp.id+'">' +
         '<div class="hero-top">'+
           '<span class="shape '+sp.shape+'" style="width:34px;height:34px;background:var(--ink-dim);"></span>' +
           '<div class="hero-id"><div class="name">???</div><div class="class-tag lock-note">Unlocks at Rift '+sp.unlockDepth+'</div></div>' +
@@ -3297,7 +3416,7 @@ function renderSpirits(){
     var empowerOn = state.empowerQueue[sp.id]!==false;
     var empowerHtml = (recruited && state.achieved.labmaster) ?
       ' <button class="node-queue-toggle '+(empowerOn?'active':'')+'" data-empower-queue="'+sp.id+'">Auto-Empower '+(empowerOn?'ON':'OFF')+'</button>' : '';
-    html += '<div class="card hero-card rarity-'+tier+(active?' active-wisp':'')+(ultimateUnlocked(sp.id)?' has-ultimate':'')+'" style="--wisp-color:'+sp.color+';--rarity-color:'+RARITY_COLORS[tier]+';">' +
+    html += '<div class="card hero-card rarity-'+tier+(active?' active-wisp':'')+(ultimateUnlocked(sp.id)?' has-ultimate':'')+'" data-wisp-card="'+sp.id+'" style="--wisp-color:'+sp.color+';--rarity-color:'+RARITY_COLORS[tier]+';">' +
       '<div class="hero-top">'+
         '<span class="shape '+sp.shape+'" style="width:34px;height:34px;background:'+sp.color+';color:'+sp.color+';"></span>' +
         '<div class="hero-id">' +
@@ -3500,6 +3619,8 @@ function renderAscendSummary(){
   var gain = eligible ? ascendPrismGain(progressionDepth()) : 0;
   els['prism-preview'].textContent = '+' + formatNum(gain) + ' Prisms';
   els['ascend-btn'].disabled = !eligible;
+  var ascendTab = document.querySelector('.tab-btn[data-tab="ascend"]');
+  if(ascendTab) ascendTab.classList.toggle('has-attention',eligible);
   els['ascend-note'].textContent = eligible
     ? 'Ready — Ascending will reset your Rift depth and Wisp levels below.'
     : 'Clear Rift 15 to unlock your first Ascend. (' + Math.max(0,15-cleared) + ' to go)';
@@ -3740,6 +3861,7 @@ function renderDaily(force){
   lastDailyRenderAt = now;
   els['daily-streak-badge'].textContent = 'Day ' + (state.loginStreak||1) + ' streak';
   var html = '';
+  var hasReadyQuest = false;
   (state.questIds||[]).forEach(function(id){
     var q = QUEST_POOL.find(function(x){ return x.id===id; });
     if(!q) return;
@@ -3747,6 +3869,7 @@ function renderDaily(force){
     var pct = Math.round(progress/q.goal*100);
     var claimed = !!(state.questClaimed && state.questClaimed[id]);
     var ready = progress>=q.goal && !claimed;
+    if(ready) hasReadyQuest = true;
     var rewardText = '+'+formatNum(q.reward.comets||0)+' '+costIcon('comet')+(q.reward.prisms ? ' +'+q.reward.prisms+' '+costIcon('prism') : '');
     html += '<div class="quest-row">' +
       '<div class="quest-row-head"><span class="quest-name">'+q.name+'</span><span class="quest-reward mono">'+rewardText+'</span></div>' +
@@ -3758,6 +3881,8 @@ function renderDaily(force){
     '</div>';
   });
   els['daily-quest-list'].innerHTML = html;
+  var deedsTab = document.querySelector('.tab-btn[data-tab="deeds"]');
+  if(deedsTab) deedsTab.classList.toggle('has-attention',hasReadyQuest);
   els['daily-quest-list'].querySelectorAll('[data-quest-claim]').forEach(function(btn){
     btn.addEventListener('click', function(){ claimQuest(btn.getAttribute('data-quest-claim')); });
   });
