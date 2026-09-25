@@ -98,6 +98,67 @@ jobs:
         working-directory: mobile
         run: npm ci --no-audit --no-fund
 
+      - name: Validate game source
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re, sys, tempfile, subprocess
+
+          src = Path("index.html").read_text(encoding="utf-8")
+
+          required_ids = [
+              "settings-btn", "settings-overlay", "enemy-stage", "enemy-glyph",
+              "spirit-list", "party-col", "research-list", "study-list",
+              "node-list", "ach-list", "daily-card", "rift-push-btn",
+              "rift-farm-btn", "ascend-btn"
+          ]
+
+          for element_id in required_ids:
+              count = len(re.findall(r'id="' + re.escape(element_id) + r'"', src))
+              if count != 1:
+                  raise SystemExit(f"QA failed: id={element_id!r} occurs {count} times")
+
+          forbidden = [
+              'data-tab="about"',
+              'Lumenfall-Setup.exe',
+              'serviceWorker.register',
+              'manifest.webmanifest',
+              'BOSS_REGEN_PER_SEC'
+          ]
+          for token in forbidden:
+              if token in src:
+                  raise SystemExit(f"QA failed: forbidden legacy token remains: {token}")
+
+          scripts = re.findall(r'<script(?:\s[^>]*)?>(.*?)</script>', src, flags=re.S)
+          if not scripts:
+              raise SystemExit("QA failed: no inline JavaScript found")
+
+          with tempfile.TemporaryDirectory() as td:
+              for i, code in enumerate(scripts, start=1):
+                  p = Path(td) / f"script-{i}.js"
+                  p.write_text(code, encoding="utf-8")
+                  result = subprocess.run(["node", "--check", str(p)], capture_output=True, text=True)
+                  if result.returncode != 0:
+                      print(result.stdout)
+                      print(result.stderr, file=sys.stderr)
+                      raise SystemExit(f"QA failed: inline script {i} has a syntax error")
+
+          required_features = [
+              "function sustainedCombatDps(depth)",
+              "function renderEncyclopedia()",
+              "function restoreSaveBackup()",
+              "var BOSS_TRAITS = [",
+              "var RIFT_ZONES = [",
+              "Lumenfall visual system"
+          ]
+          for token in required_features:
+              if token not in src:
+                  raise SystemExit(f"QA failed: required feature missing: {token}")
+
+          print(f"QA passed: {len(scripts)} scripts syntax-checked, {len(required_ids)} unique IDs verified.")
+          PY
+
       - name: Stage Android web assets
         working-directory: mobile
         run: |
