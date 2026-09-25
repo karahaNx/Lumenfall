@@ -3187,8 +3187,10 @@ function nextRiftObjective(){
 
   candidates.sort(function(a,b){
     if(a.depth!==b.depth) return a.depth-b.depth;
-    var order={WISP:0,BOSS:1,REGION:2};
-    return (order[a.kind]||9)-(order[b.kind]||9);
+    var order={ASCEND:0,WISP:1,BOSS:2,REGION:3};
+    var aOrder = order[a.kind]!==undefined ? order[a.kind] : 9;
+    var bOrder = order[b.kind]!==undefined ? order[b.kind] : 9;
+    return aOrder-bOrder;
   });
 
   var goal = candidates[0];
