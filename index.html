@@ -1532,6 +1532,23 @@
   .rift-objective.actionable .objective-arrow{color:var(--zone-accent,var(--prism));opacity:.9;}
   .objective-wisp-ready .objective-kind{color:var(--good);border-color:color-mix(in srgb,var(--good) 38%,var(--line));}
 
+
+  /* Slow ambient motion: high visual value, low update pressure */
+  #tab-battle .stage::before{
+    animation:zoneDrift 13s ease-in-out infinite alternate;
+  }
+  #tab-battle .stage::after{
+    animation:zoneSparkle 7s ease-in-out infinite alternate;
+  }
+  @keyframes zoneDrift{
+    0%{transform:translate3d(-1.2%,-.8%,0) rotate(-6deg) scale(1);}
+    100%{transform:translate3d(1.4%,1%,0) rotate(-3deg) scale(1.035);}
+  }
+  @keyframes zoneSparkle{
+    0%{opacity:.42;filter:brightness(.9);}
+    100%{opacity:.72;filter:brightness(1.12);}
+  }
+
 </style>
 </head>
 <body>
@@ -4224,7 +4241,14 @@ function setupStars(){
     if(t==='light') return false;
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   }
+  var lastStarDraw = 0;
+  var STAR_FRAME_MS = 50;
   function draw(t){
+    if(!reduceMotion && t-lastStarDraw<STAR_FRAME_MS){
+      requestAnimationFrame(draw);
+      return;
+    }
+    lastStarDraw = t;
     ctx.clearRect(0,0,canvas.width,canvas.height);
     var dark = isDark();
     var base = dark ? [230,228,245] : [90,80,140];
@@ -4235,7 +4259,7 @@ function setupStars(){
       ctx.fillStyle = 'rgba('+base[0]+','+base[1]+','+base[2]+','+(dark ? 0.15+tw*0.5 : 0.10+tw*0.25)+')';
       ctx.fill();
     });
-    if(!reduceMotion) requestAnimationFrame(draw); else requestAnimationFrame(function(){});
+    if(!reduceMotion) requestAnimationFrame(draw);
   }
   window.addEventListener('resize', resize);
   resize();
