@@ -2275,6 +2275,7 @@ var state = null;
 var isNewGame = false;
 var resetInProgress = false;
 var resetBootPending = false;
+var reloadInProgress = false;
 
 function loadState(){
   try{
@@ -2383,7 +2384,7 @@ function loadState(){
 }
 
 function saveState(){
-  if(resetInProgress) return;
+  if(resetInProgress || reloadInProgress) return;
   try{
     state.lastSeen = Date.now();
     localStorage.setItem(SAVE_KEY, JSON.stringify(state));
@@ -2436,9 +2437,17 @@ function restoreSaveBackup(){
     var restored = decodeSaveBackup(textarea.value);
     restored.lastSeen = Date.now();
     localStorage.setItem(SAVE_KEY, JSON.stringify(restored));
+
+    // From this point onward the backup on disk is authoritative.
+    // Block autosave/beforeunload from writing the pre-restore in-memory state over it.
+    reloadInProgress = true;
+    document.body.classList.add('app-paused');
+    var settingsOverlay = document.getElementById('settings-overlay');
+    if(settingsOverlay) settingsOverlay.style.display = 'none';
     showToast('Save restored. Reloading…');
-    setTimeout(function(){ location.reload(); }, 500);
+    setTimeout(function(){ location.reload(); }, 120);
   }catch(e){
+    reloadInProgress = false;
     showToast('That backup code is not valid.');
   }
 }
@@ -4383,7 +4392,7 @@ function autoEmpowerTick(){
 }
 
 function tick(){
-  if(document.hidden) return;
+  if(document.hidden || resetInProgress || reloadInProgress) return;
   if(checkAutoAscend()) return;
   var dps = idleDps();
   if(dps > 0){
@@ -4943,7 +4952,7 @@ function init(){
     });
   });
   window.addEventListener('beforeunload', function(){
-    if(!resetInProgress) saveState();
+    if(!resetInProgress && !reloadInProgress) saveState();
   });
   document.addEventListener('visibilitychange', function(){ document.body.classList.toggle('app-paused', document.hidden); });
   document.addEventListener('keydown', function(e){
