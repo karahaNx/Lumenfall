@@ -3931,6 +3931,39 @@ function playStartupIntro(done){
   startupIntroTimers.push(setTimeout(finish,3250));
 }
 
+function hasMeaningfulOfflineProgress(offline){
+  return !!(offline && (offline.earned>1 || offline.completedStudies.length || offline.ascends>0 || offline.shardEarned>1 || offline.sigilsEarned>0 || offline.motesEarned>0));
+}
+function offlineReturnMessage(offline){
+  var msg = 'You were away for ' + fmtDuration(offline.elapsedSec) + '. Your Wisps kept the Rift lit and gathered ' + formatNum(offline.earned) + ' Lumen' +
+    (offline.shardEarned>1 ? ' and ' + formatNum(offline.shardEarned) + ' Shards' : '') +
+    (offline.sigilsEarned>0 ? ' and ' + formatNum(offline.sigilsEarned) + ' Sigils' : '') +
+    (offline.motesEarned>0 ? ' and ' + formatNum(offline.motesEarned) + ' Motes' : '') + ' while you were gone.';
+  if(offline.ascends>0){ msg += ' They ascended ' + offline.ascends + ' time' + (offline.ascends===1?'':'s') + ' on their own!'; }
+  if(offline.retreated){ msg += ' A Boss stopped the push, so they switched to Farm at Rift ' + offline.endDepth + '. Your Push point at Rift ' + offline.pushDepth + ' is still saved.'; }
+  if(offline.completedStudies.length===1){ msg += ' Your Long Study "' + offline.completedStudies[0] + '" finished while you were away!'; }
+  else if(offline.completedStudies.length>1){ msg += ' Your Long Studies "' + offline.completedStudies.join('", "') + '" finished while you were away!'; }
+  return msg;
+}
+function showReturnFlow(offline,dailyWasRolled){
+  function maybeShowDaily(){
+    if(dailyWasRolled && pendingDailyReward){ showDailyOverlay(pendingDailyReward); }
+  }
+
+  if(hasMeaningfulOfflineProgress(offline)){
+    var welcomeOverlay = document.getElementById('welcome-overlay');
+    document.getElementById('welcome-text').textContent = offlineReturnMessage(offline);
+    welcomeOverlay.style.display = 'flex';
+    document.getElementById('welcome-claim').onclick = function(){
+      welcomeOverlay.style.display = 'none';
+      renderAll();
+      maybeShowDaily();
+    };
+  } else {
+    maybeShowDaily();
+  }
+}
+
 function init(){
   cacheEls();
   state = loadState();
@@ -3995,6 +4028,7 @@ function init(){
     document.getElementById('intro-begin').addEventListener('click', function(){
       introOverlay.style.display = 'none';
       showTutorial(function(){
+        isNewGame = false;
         state.lastSeen = Date.now();
         saveState();
       });
@@ -4006,35 +4040,43 @@ function init(){
     var offline = applyOfflineProgress();
     saveState();
 
-    function maybeShowDaily(){
-      if(dailyRolled && pendingDailyReward){ showDailyOverlay(pendingDailyReward); }
-    }
-    function showPostIntroFlow(){
-      if(offline && (offline.earned > 1 || offline.completedStudies.length || offline.ascends>0)){
-        var msg = 'You were away for ' + fmtDuration(offline.elapsedSec) + '. Your Wisps kept the Rift lit and gathered ' + formatNum(offline.earned) + ' Lumen' + (offline.shardEarned>1 ? ' and ' + formatNum(offline.shardEarned) + ' Shards' : '') + (offline.sigilsEarned>0 ? ' and ' + formatNum(offline.sigilsEarned) + ' Sigils' : '') + (offline.motesEarned>0 ? ' and ' + formatNum(offline.motesEarned) + ' Motes' : '') + ' while you were gone.';
-        if(offline.ascends>0){ msg += ' They ascended ' + offline.ascends + ' time' + (offline.ascends===1?'':'s') + ' on their own!'; }
-        if(offline.retreated){ msg += ' A Boss stopped the push, so they switched to Farm at Rift ' + offline.endDepth + '. Your Push point at Rift ' + offline.pushDepth + ' is still saved.'; }
-        if(offline.completedStudies.length===1){ msg += ' Your Long Study "' + offline.completedStudies[0] + '" finished while you were away!'; }
-        else if(offline.completedStudies.length>1){ msg += ' Your Long Studies "' + offline.completedStudies.join('", "') + '" finished while you were away!'; }
-        document.getElementById('welcome-text').textContent = msg;
-        welcomeOverlay.style.display = 'flex';
-        document.getElementById('welcome-claim').addEventListener('click', function(){
-          welcomeOverlay.style.display = 'none';
-          renderAll();
-          maybeShowDaily();
-        },{once:true});
-      } else {
-        maybeShowDaily();
-      }
-    }
-
     renderAll();
-    playStartupIntro(showPostIntroFlow);
+    playStartupIntro(function(){
+      showReturnFlow(offline,dailyRolled);
+    });
   }
 
   setInterval(tick, TICK_MS);
   setInterval(saveState, 5000);
-  document.addEventListener('visibilitychange', function(){ if(document.hidden) saveState(); });
+
+  var appHiddenAt = 0;
+  var resumeFlowBusy = false;
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden){
+      appHiddenAt = Date.now();
+      saveState();
+      return;
+    }
+
+    if(isNewGame || resumeFlowBusy || !appHiddenAt) return;
+    var awayMs = Date.now()-appHiddenAt;
+    appHiddenAt = 0;
+    if(awayMs < 5000) return;
+
+    resumeFlowBusy = true;
+    var rolledOnResume = ensureDaily();
+    var resumeOffline = applyOfflineProgress();
+    saveState();
+    renderAll();
+
+    var settingsOverlay = document.getElementById('settings-overlay');
+    if(settingsOverlay && settingsOverlay.style.display!=='none') closeSettings();
+
+    playStartupIntro(function(){
+      showReturnFlow(resumeOffline,rolledOnResume);
+      resumeFlowBusy = false;
+    });
+  });
   window.addEventListener('beforeunload', saveState);
   document.addEventListener('keydown', function(e){
     if(startupIntroPlaying && (e.key==='Escape' || e.key==='Enter' || e.key===' ')){
