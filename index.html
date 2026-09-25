@@ -3044,14 +3044,13 @@ function doAscend(auto){
 }
 
 function performReset(){
-  try{ localStorage.removeItem(SAVE_KEY); }catch(e){}
-  state = freshState();
-  labMultiplier = 1;
-  spawnEnemy();
-  applyRiftTheme();
-  renderAll();
-  saveState();
-  showToast('Save reset — starting fresh.');
+  try{
+    localStorage.removeItem(SAVE_KEY);
+    localStorage.removeItem(STARTUP_INTRO_KEY);
+  }catch(e){}
+  pendingDailyReward = null;
+  showToast('Save reset — restarting fresh.');
+  setTimeout(function(){ location.reload(); },350);
 }
 
 function triggerAbility(sp, level){
@@ -4633,7 +4632,7 @@ function init(){
     if(isNewGame || resumeFlowBusy || !appHiddenAt) return;
     var awayMs = Date.now()-appHiddenAt;
     appHiddenAt = 0;
-    if(awayMs < 5000) return;
+    if(awayMs < 1000) return;
 
     resumeFlowBusy = true;
     var rolledOnResume = ensureDaily();
