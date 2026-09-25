@@ -11,7 +11,7 @@
 
 Lumenfall is an Android idle RPG where a party of Wisps pushes deeper into an ever-collapsing Rift.
 
-This repository is now **Android-only**. There is no Windows/Electron build, no EXE, no GitHub Pages deployment, no PWA distribution, and no Play Store AAB pipeline.
+This repository is now **Android-only**.
 
 ## Download the current APK
 
