@@ -187,10 +187,13 @@ jobs:
               "function dailyQuestEligible(q,s)",
               "var resetInProgress = false;",
               "var resetBootPending = false;",
+              "var reloadInProgress = false;",
               "RESET_PENDING_KEY = 'lumenfall_reset_pending_v1'",
               "localStorage.setItem(RESET_PENDING_KEY,'1');",
-              "if(!resetInProgress) saveState();",
+              "if(resetInProgress || reloadInProgress) return;",
+              "if(!resetInProgress && !reloadInProgress) saveState();",
               "function restoreEnemyOrSpawn()",
+              "reloadInProgress = true;",
               "restoreEnemyOrSpawn();",
               "spawnEnemy(false);",
               "if(battleActive && main.scrollTop!==0) main.scrollTop = 0;",
@@ -199,6 +202,12 @@ jobs:
           for token in required_features:
               if token not in src:
                   raise SystemExit(f"QA failed: required feature missing: {token}")
+
+          restore_match = re.search(r'function restoreSaveBackup\(\)\{(.*?)\n\}', src, flags=re.S)
+          if not restore_match or "reloadInProgress = true;" not in restore_match.group(1):
+              raise SystemExit("QA failed: save restore is not protected from reload/autosave overwrite")
+          if "function tick(){\n  if(document.hidden || resetInProgress || reloadInProgress) return;" not in src:
+              raise SystemExit("QA failed: game loop is not suspended during reset/restore reload")
 
           if "renderRiftMode();\n  renderRiftObjective();" not in src:
               raise SystemExit("QA failed: expected Rift fast-render path changed")
