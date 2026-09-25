@@ -4091,6 +4091,7 @@ function autoEmpowerTick(){
 }
 
 function tick(){
+  if(document.hidden) return;
   if(checkAutoAscend()) return;
   var dps = idleDps();
   if(dps > 0){
@@ -4616,7 +4617,9 @@ function init(){
   }
 
   setInterval(tick, TICK_MS);
-  setInterval(saveState, 5000);
+  setInterval(function(){
+    if(!document.hidden) saveState();
+  }, 5000);
 
   var appHiddenAt = 0;
   var resumeFlowBusy = false;
@@ -4668,7 +4671,7 @@ if(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isN
   var StatusBar = window.Capacitor.Plugins && window.Capacitor.Plugins.StatusBar;
   if(StatusBar){
     StatusBar.setBackgroundColor({color:'#0d0a16'}).catch(function(){});
-    StatusBar.setStyle({style:'DARK'}).catch(function(){});
+    StatusBar.setStyle({style:'LIGHT'}).catch(function(){});
   }
 }
 </script>
