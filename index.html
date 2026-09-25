@@ -3428,7 +3428,7 @@ function renderSpirits(){
     var rc = rarityCost(sp, tier);
     var canRarity = recruited && tier<5 && level>=req && state.shards>=rc.shard && state.lumen>=rc.lumen;
     var rarityLabel = tier>=5 ? 'Maxed' : (level<req ? ('Lv.'+req+' req') :
-      ('<span style="font-size:.62rem;">Ascend</span>' +
+      ('<span style="font-size:.62rem;">Rarity Up</span>' +
        '<span style="font-size:.62rem;">'+costIcon('lumen')+formatNum(rc.lumen)+'</span>' +
        '<span style="font-size:.62rem;">'+costIcon('shard')+formatNum(rc.shard)+'</span>'));
     var modInfo = MODULE_INFO[sp.abilityType];
@@ -3463,7 +3463,7 @@ function renderSpirits(){
           '<div class="name">'+sp.name+'</div>' +
           '<div class="class-tag" style="color:'+sp.color+'">'+sp.heroClass+' &middot; '+sp.role+'</div>' +
         '</div>' +
-        (recruited ? '<button class="active-toggle '+(active?'is-active':'')+'" data-toggle="'+sp.id+'">'+(active?'Active':'Bench')+'</button>' : '') +
+        (recruited ? '<button class="active-toggle '+(active?'is-active':'')+'" data-toggle="'+sp.id+'" aria-pressed="'+(active?'true':'false')+'">'+(active?'Bench':'Field')+'</button>' : '') +
       '</div>' +
       '<div class="hero-stats">' +
         '<span class="hero-stat-pill">Lv. '+level+'</span>' +
