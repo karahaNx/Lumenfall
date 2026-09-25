@@ -1244,6 +1244,75 @@
     .stage{gap:7px!important;}
   }
 
+
+  /* Fixed mobile navigation + bounded app viewport */
+  html,body{
+    width:100%;
+    height:100%;
+    overscroll-behavior:none;
+  }
+  body{
+    min-height:100dvh;
+    overflow:hidden;
+  }
+  .shell{
+    width:100%;
+    height:100dvh;
+    min-height:100dvh;
+    overflow:hidden;
+  }
+  .topbar{
+    position:relative;
+    top:auto;
+    z-index:12;
+    flex:none;
+  }
+  main{
+    min-height:0;
+    overflow-y:auto;
+    overflow-x:hidden;
+    overscroll-behavior-y:contain;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding-bottom:calc(72px + env(safe-area-inset-bottom));
+  }
+  main::-webkit-scrollbar{display:none;}
+
+  nav.tabbar{
+    position:fixed;
+    z-index:14;
+    left:50%;
+    bottom:0;
+    transform:translateX(-50%);
+    width:min(500px,100%);
+    padding-bottom:env(safe-area-inset-bottom);
+    border-top:1px solid var(--soft-line,var(--line));
+    border-bottom:none;
+    box-shadow:0 -12px 34px -28px rgba(0,0,0,.72);
+  }
+  nav.tabbar::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    z-index:-1;
+    background:color-mix(in srgb,var(--bg-elev) 94%,transparent);
+    backdrop-filter:blur(18px) saturate(1.18);
+  }
+  nav.tabbar button{
+    min-height:54px;
+    padding:8px 2px 8px;
+  }
+
+  /* Rift should feel like a single screen when its content fits */
+  #tab-battle{
+    min-height:min-content;
+  }
+
+  @media (max-height:650px){
+    main{padding-bottom:calc(64px + env(safe-area-inset-bottom));}
+    nav.tabbar button{min-height:48px;}
+  }
+
 </style>
 </head>
 <body>
