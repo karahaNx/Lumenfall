@@ -3893,6 +3893,7 @@ function playStartupIntro(done){
     finished = true;
     startupIntroPlaying = false;
     startupIntroFinish = null;
+    intro.onpointerdown = null;
     clearStartupIntroTimers();
     markStartupIntroShown();
     intro.classList.add('is-leaving');
@@ -3907,11 +3908,7 @@ function playStartupIntro(done){
   intro.setAttribute('aria-hidden','false');
   startupIntroFinish = finish;
 
-  var skip = function(){
-    intro.removeEventListener('pointerdown',skip);
-    finish();
-  };
-  intro.addEventListener('pointerdown',skip,{once:true});
+  intro.onpointerdown = finish;
 
   var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(reduced){
