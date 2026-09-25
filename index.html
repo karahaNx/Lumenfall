@@ -2277,6 +2277,7 @@ function ensureDaily(){
 
 var state = null;
 var isNewGame = false;
+var resetInProgress = false;
 
 function loadState(){
   try{
@@ -2330,6 +2331,7 @@ function loadState(){
 }
 
 function saveState(){
+  if(resetInProgress) return;
   try{
     state.lastSeen = Date.now();
     localStorage.setItem(SAVE_KEY, JSON.stringify(state));
@@ -3278,13 +3280,24 @@ function doAscend(auto){
 }
 
 function performReset(){
+  if(resetInProgress) return;
+  resetInProgress = true;
+
   try{
     localStorage.removeItem(SAVE_KEY);
     localStorage.removeItem(STARTUP_INTRO_KEY);
   }catch(e){}
+
   pendingDailyReward = null;
-  showToast('Save reset — restarting fresh.');
-  setTimeout(function(){ location.reload(); },350);
+
+  // Stop the old session from progressing visually while the reload begins.
+  document.body.classList.add('app-paused');
+  var settingsOverlay = document.getElementById('settings-overlay');
+  if(settingsOverlay) settingsOverlay.style.display = 'none';
+
+  setTimeout(function(){
+    location.reload();
+  },80);
 }
 
 function triggerAbility(sp, level){
@@ -4901,7 +4914,9 @@ function init(){
       resumeFlowBusy = false;
     });
   });
-  window.addEventListener('beforeunload', saveState);
+  window.addEventListener('beforeunload', function(){
+    if(!resetInProgress) saveState();
+  });
   document.addEventListener('visibilitychange', function(){ document.body.classList.toggle('app-paused', document.hidden); });
   document.addEventListener('keydown', function(e){
     if(startupIntroPlaying && (e.key==='Escape' || e.key==='Enter' || e.key===' ')){
