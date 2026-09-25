@@ -532,26 +532,119 @@
   .save-backup-actions .restore{border-color:var(--prism);color:var(--prism);}
   .save-backup-note{font-size:.7rem;color:var(--ink-dim);line-height:1.45;margin-bottom:10px;}
 
-  /* ---------- Studio splash ---------- */
-  .studio-splash{
-    position:fixed;inset:0;z-index:30;background:#0a0814;
-    display:flex;align-items:center;justify-content:center;cursor:pointer;
+  /* ---------- xaribapps startup intro ---------- */
+  .startup-intro{
+    position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;
+    overflow:hidden;isolation:isolate;cursor:pointer;background:#05050b;color:#f7f5ff;
+    opacity:1;visibility:visible;transition:opacity .42s ease,visibility .42s ease;
+    -webkit-tap-highlight-color:transparent;
   }
-  .studio-splash .wordmark{
-    font-family:'Cinzel',serif;font-weight:600;font-size:1.1rem;letter-spacing:.28em;
-    text-transform:uppercase;color:#eae8f5;opacity:0;text-align:center;
-    animation:studioFade 2.2s ease forwards;
+  .startup-intro.is-visible{display:flex;}
+  .startup-intro.is-leaving{opacity:0;visibility:hidden;pointer-events:none;}
+  .startup-intro-bg{
+    position:absolute;inset:-8%;z-index:-5;
+    background:
+      radial-gradient(circle at 50% 46%,rgba(126,83,238,.18) 0%,rgba(70,66,170,.08) 22%,transparent 49%),
+      radial-gradient(circle at 20% 18%,rgba(77,154,255,.07),transparent 28%),
+      radial-gradient(circle at 84% 76%,rgba(191,88,226,.065),transparent 31%),
+      linear-gradient(180deg,#04050a 0%,#080812 55%,#05050b 100%);
+    animation:startBgBreath 4.8s ease-in-out infinite;
   }
-  .studio-splash .wordmark small{
-    display:block;font-family:'Manrope',sans-serif;font-weight:500;font-size:.6rem;
-    letter-spacing:.32em;color:#8a5fd6;margin-top:8px;text-transform:uppercase;
+  .startup-intro-stars{
+    position:absolute;inset:0;z-index:-4;opacity:.52;pointer-events:none;
+    background-image:
+      radial-gradient(circle at 14% 22%,rgba(255,255,255,.7) 0 1px,transparent 1.4px),
+      radial-gradient(circle at 79% 17%,rgba(255,255,255,.45) 0 1px,transparent 1.5px),
+      radial-gradient(circle at 30% 71%,rgba(206,197,255,.58) 0 1px,transparent 1.5px),
+      radial-gradient(circle at 88% 68%,rgba(255,255,255,.55) 0 1px,transparent 1.5px),
+      radial-gradient(circle at 57% 87%,rgba(175,207,255,.45) 0 1px,transparent 1.4px);
+    animation:startStars 5s ease-in-out infinite alternate;
   }
-  @keyframes studioFade{
-    0%{opacity:0;transform:scale(.96);}
-    22%{opacity:1;transform:scale(1);}
-    78%{opacity:1;transform:scale(1);}
-    100%{opacity:0;transform:scale(1.02);}
+  .startup-rift{
+    position:absolute;left:50%;top:50%;z-index:-2;width:2px;height:2px;transform:translate(-50%,-50%);
+    border-radius:999px;background:#fff;opacity:0;
+    box-shadow:0 0 20px #fff,0 0 45px rgba(140,98,255,.8),0 0 90px rgba(77,119,255,.42);
   }
+  .startup-rift::before,.startup-rift::after{
+    content:'';position:absolute;left:50%;top:50%;width:1px;height:145px;transform-origin:center;
+    background:linear-gradient(180deg,transparent,rgba(206,190,255,.18) 14%,rgba(255,255,255,.94) 50%,rgba(158,123,255,.2) 84%,transparent);
+    filter:drop-shadow(0 0 8px rgba(170,133,255,.75));
+  }
+  .startup-rift::before{transform:translate(-50%,-50%) rotate(4deg);}
+  .startup-rift::after{transform:translate(-50%,-50%) rotate(-5deg);}
+  .startup-intro.phase-rift .startup-rift{animation:riftIgnite .56s cubic-bezier(.2,.8,.2,1) forwards;}
+  .startup-content{position:relative;width:min(88vw,430px);height:230px;text-align:center;display:flex;align-items:center;justify-content:center;}
+  .startup-brand,.startup-game{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    opacity:0;transform:translateY(9px) scale(.985);pointer-events:none;
+  }
+  .startup-intro.phase-brand .startup-brand{animation:brandReveal 1.38s ease forwards;}
+  .startup-intro.phase-game .startup-game{animation:gameReveal 1.45s cubic-bezier(.2,.78,.2,1) forwards;}
+  .xaribapps-mark{
+    position:relative;width:82px;height:82px;margin-bottom:18px;
+    display:grid;place-items:center;
+  }
+  .xaribapps-ring{
+    position:absolute;inset:0;border:1px solid rgba(185,163,255,.38);border-radius:50%;
+    box-shadow:0 0 28px rgba(118,83,226,.18),inset 0 0 20px rgba(126,89,228,.08);
+    animation:brandRingSpin 10s linear infinite;
+  }
+  .xaribapps-ring::before,.xaribapps-ring::after{
+    content:'';position:absolute;border-radius:50%;inset:8px;border:1px solid rgba(119,159,255,.17);
+  }
+  .xaribapps-ring::after{inset:-5px;border-color:rgba(172,124,255,.11);border-style:dashed;}
+  .xaribapps-x{
+    position:relative;width:34px;height:34px;filter:drop-shadow(0 0 13px rgba(171,143,255,.55));
+  }
+  .xaribapps-x::before,.xaribapps-x::after{
+    content:'';position:absolute;left:15px;top:-2px;width:4px;height:38px;border-radius:4px;
+    background:linear-gradient(180deg,#fff,#bba8ff 55%,#6f85ef);
+  }
+  .xaribapps-x::before{transform:rotate(45deg);}
+  .xaribapps-x::after{transform:rotate(-45deg);}
+  .startup-brand-name{
+    font-family:'Manrope',sans-serif;font-size:1rem;font-weight:800;letter-spacing:.17em;
+    text-transform:lowercase;color:#f2efff;text-shadow:0 0 20px rgba(155,124,255,.2);
+  }
+  .startup-presents{
+    margin-top:7px;font-size:.56rem;font-weight:700;letter-spacing:.34em;text-transform:uppercase;
+    color:rgba(190,181,221,.62);
+  }
+  .startup-title-wrap{position:relative;padding:18px 8px;}
+  .startup-title-glow{
+    position:absolute;left:50%;top:50%;width:260px;height:130px;transform:translate(-50%,-50%);
+    background:radial-gradient(ellipse,rgba(132,90,240,.22),rgba(70,99,200,.08) 42%,transparent 70%);
+    filter:blur(9px);animation:titleGlow 2.1s ease-in-out infinite;
+  }
+  .startup-title{
+    position:relative;font-family:'Cinzel',serif;font-weight:700;font-size:clamp(2rem,8.2vw,3rem);
+    line-height:1;letter-spacing:.16em;padding-left:.16em;color:#faf8ff;
+    text-shadow:0 0 18px rgba(178,145,255,.27),0 0 42px rgba(88,118,255,.14);
+  }
+  .startup-title::after{
+    content:'';position:absolute;left:8%;right:8%;bottom:-11px;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(176,143,255,.75),rgba(225,235,255,.9),rgba(119,143,255,.7),transparent);
+    box-shadow:0 0 9px rgba(157,123,255,.52);
+    transform:scaleX(0);animation:titleLine 1s .32s ease forwards;
+  }
+  .startup-tagline{
+    position:relative;margin-top:28px;font-size:.57rem;font-weight:750;letter-spacing:.31em;
+    text-transform:uppercase;color:rgba(199,196,221,.66);
+  }
+  .startup-skip{
+    position:absolute;left:0;right:0;bottom:calc(17px + env(safe-area-inset-bottom));
+    text-align:center;font-size:.55rem;font-weight:700;letter-spacing:.17em;text-transform:uppercase;
+    color:rgba(202,198,220,.36);opacity:0;animation:skipIn .5s .75s ease forwards;
+  }
+  @keyframes startBgBreath{0%,100%{transform:scale(1);filter:brightness(.96);}50%{transform:scale(1.025);filter:brightness(1.08);}}
+  @keyframes startStars{from{opacity:.35;transform:translateY(0);}to{opacity:.62;transform:translateY(-4px);}}
+  @keyframes brandRingSpin{to{transform:rotate(360deg);}}
+  @keyframes brandReveal{0%{opacity:0;transform:translateY(10px) scale(.97);}20%,73%{opacity:1;transform:none;}100%{opacity:0;transform:translateY(-5px) scale(1.015);}}
+  @keyframes riftIgnite{0%{opacity:0;height:2px;transform:translate(-50%,-50%) scaleX(.5);}35%{opacity:1;height:5px;}100%{opacity:0;height:185px;transform:translate(-50%,-50%) scaleX(2.2);}}
+  @keyframes gameReveal{0%{opacity:0;transform:scale(.93);filter:blur(4px);}20%,78%{opacity:1;transform:none;filter:none;}100%{opacity:1;transform:none;filter:none;}}
+  @keyframes titleGlow{0%,100%{opacity:.72;transform:translate(-50%,-50%) scale(.93);}50%{opacity:1;transform:translate(-50%,-50%) scale(1.07);}}
+  @keyframes titleLine{to{transform:scaleX(1);}}
+  @keyframes skipIn{to{opacity:1;}}
 
   /* ---------- Tutorial ---------- */
   .tut-dots{display:flex;gap:6px;justify-content:center;margin-bottom:14px;}
@@ -1314,7 +1407,7 @@
             <button class="reset-btn" id="reset-confirm-btn">Yes, delete everything</button>
           </div>
         </div>
-        <div class="fine-print">Lumenfall is an original idle RPG by Xarib Productions. Settings and Encyclopedia do not pause combat — your Wisps keep fighting behind this window.</div>
+        <div class="fine-print">Lumenfall is an original idle RPG by xaribapps. Settings and Encyclopedia do not pause combat — your Wisps keep fighting behind this window.</div>
       </div>
 
       <div id="settings-encyclopedia" style="display:none;">
@@ -1333,8 +1426,28 @@
   </div>
 </div>
 
-<div class="studio-splash" id="studio-splash" style="display:none;">
-  <div class="wordmark">Xarib Productions<small>presents</small></div>
+<div class="startup-intro" id="startup-intro" aria-hidden="true">
+  <div class="startup-intro-bg"></div>
+  <div class="startup-intro-stars"></div>
+  <div class="startup-rift"></div>
+  <div class="startup-content">
+    <div class="startup-brand">
+      <div class="xaribapps-mark" aria-hidden="true">
+        <div class="xaribapps-ring"></div>
+        <div class="xaribapps-x"></div>
+      </div>
+      <div class="startup-brand-name">xaribapps</div>
+      <div class="startup-presents">presents</div>
+    </div>
+    <div class="startup-game">
+      <div class="startup-title-wrap">
+        <div class="startup-title-glow"></div>
+        <div class="startup-title">LUMENFALL</div>
+        <div class="startup-tagline">Enter the Rift</div>
+      </div>
+    </div>
+  </div>
+  <div class="startup-skip">Tap to skip</div>
 </div>
 
 <div class="overlay" id="intro-overlay">
@@ -3742,12 +3855,84 @@ function fmtDuration(sec){
   return Math.max(1,sec)+'s';
 }
 
+var STARTUP_INTRO_KEY = 'lumenfall_startup_intro_last';
+var STARTUP_INTRO_COOLDOWN_MS = 3 * 60 * 60 * 1000;
+var startupIntroTimers = [];
+var startupIntroPlaying = false;
+
+function clearStartupIntroTimers(){
+  startupIntroTimers.forEach(function(timer){ clearTimeout(timer); });
+  startupIntroTimers = [];
+}
+function shouldShowStartupIntro(){
+  if(isNewGame) return true;
+  try{
+    var last = parseInt(localStorage.getItem(STARTUP_INTRO_KEY)||'0',10);
+    return !last || (Date.now()-last)>=STARTUP_INTRO_COOLDOWN_MS;
+  }catch(e){
+    return true;
+  }
+}
+function markStartupIntroShown(){
+  try{ localStorage.setItem(STARTUP_INTRO_KEY,String(Date.now())); }catch(e){}
+}
+function playStartupIntro(done){
+  var intro = document.getElementById('startup-intro');
+  if(!intro || !shouldShowStartupIntro()){
+    if(done) done();
+    return;
+  }
+
+  clearStartupIntroTimers();
+  startupIntroPlaying = true;
+  var finished = false;
+
+  function finish(){
+    if(finished) return;
+    finished = true;
+    startupIntroPlaying = false;
+    clearStartupIntroTimers();
+    markStartupIntroShown();
+    intro.classList.add('is-leaving');
+    intro.setAttribute('aria-hidden','true');
+    setTimeout(function(){
+      intro.className = 'startup-intro';
+      if(done) done();
+    },430);
+  }
+
+  intro.className = 'startup-intro is-visible phase-brand';
+  intro.setAttribute('aria-hidden','false');
+
+  var skip = function(){
+    intro.removeEventListener('pointerdown',skip);
+    finish();
+  };
+  intro.addEventListener('pointerdown',skip,{once:true});
+
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduced){
+    startupIntroTimers.push(setTimeout(function(){
+      intro.className = 'startup-intro is-visible phase-game';
+    },220));
+    startupIntroTimers.push(setTimeout(finish,1050));
+    return;
+  }
+
+  startupIntroTimers.push(setTimeout(function(){
+    intro.className = 'startup-intro is-visible phase-rift';
+  },1320));
+  startupIntroTimers.push(setTimeout(function(){
+    intro.className = 'startup-intro is-visible phase-game';
+  },1640));
+  startupIntroTimers.push(setTimeout(finish,3250));
+}
+
 function init(){
   cacheEls();
   state = loadState();
   if(state.owned.rememberbulk && state.savedLabMultiplier!==undefined){ labMultiplier = state.savedLabMultiplier; }
   var dailyRolled = ensureDaily();
-  if(dailyRolled) saveState();
   spawnEnemy();
   setupTabs();
   setupStars();
@@ -3799,17 +3984,10 @@ function init(){
   var welcomeOverlay = document.getElementById('welcome-overlay');
 
   if(isNewGame){
-    var studioSplash = document.getElementById('studio-splash');
-    var splashDone = false;
-    function proceedPastSplash(){
-      if(splashDone) return;
-      splashDone = true;
-      studioSplash.style.display = 'none';
+    introOverlay.style.display = 'none';
+    playStartupIntro(function(){
       introOverlay.style.display = 'flex';
-    }
-    studioSplash.style.display = 'flex';
-    studioSplash.addEventListener('click', proceedPastSplash);
-    setTimeout(proceedPastSplash, 2200);
+    });
 
     document.getElementById('intro-begin').addEventListener('click', function(){
       introOverlay.style.display = 'none';
@@ -3820,27 +3998,35 @@ function init(){
     });
   } else {
     introOverlay.style.display = 'none';
+
+    // Apply offline progress before any startup save can advance lastSeen.
     var offline = applyOfflineProgress();
+    if(dailyRolled) saveState();
+
     function maybeShowDaily(){
       if(dailyRolled && pendingDailyReward){ showDailyOverlay(pendingDailyReward); }
     }
-    if(offline && (offline.earned > 1 || offline.completedStudies.length || offline.ascends>0)){
-      var msg = 'You were away for ' + fmtDuration(offline.elapsedSec) + '. Your Wisps kept the Rift lit and gathered ' + formatNum(offline.earned) + ' Lumen' + (offline.shardEarned>1 ? ' and ' + formatNum(offline.shardEarned) + ' Shards' : '') + (offline.sigilsEarned>0 ? ' and ' + formatNum(offline.sigilsEarned) + ' Sigils' : '') + (offline.motesEarned>0 ? ' and ' + formatNum(offline.motesEarned) + ' Motes' : '') + ' while you were gone.';
-      if(offline.ascends>0){ msg += ' They ascended ' + offline.ascends + ' time' + (offline.ascends===1?'':'s') + ' on their own!'; }
-      if(offline.retreated){ msg += ' A Boss stopped the push, so they switched to Farm at Rift ' + offline.endDepth + '. Your Push point at Rift ' + offline.pushDepth + ' is still saved.'; }
-      if(offline.completedStudies.length===1){ msg += ' Your Long Study "' + offline.completedStudies[0] + '" finished while you were away!'; }
-      else if(offline.completedStudies.length>1){ msg += ' Your Long Studies "' + offline.completedStudies.join('", "') + '" finished while you were away!'; }
-      document.getElementById('welcome-text').textContent = msg;
-      welcomeOverlay.style.display = 'flex';
-      document.getElementById('welcome-claim').addEventListener('click', function(){
-        welcomeOverlay.style.display = 'none';
-        renderAll();
+    function showPostIntroFlow(){
+      if(offline && (offline.earned > 1 || offline.completedStudies.length || offline.ascends>0)){
+        var msg = 'You were away for ' + fmtDuration(offline.elapsedSec) + '. Your Wisps kept the Rift lit and gathered ' + formatNum(offline.earned) + ' Lumen' + (offline.shardEarned>1 ? ' and ' + formatNum(offline.shardEarned) + ' Shards' : '') + (offline.sigilsEarned>0 ? ' and ' + formatNum(offline.sigilsEarned) + ' Sigils' : '') + (offline.motesEarned>0 ? ' and ' + formatNum(offline.motesEarned) + ' Motes' : '') + ' while you were gone.';
+        if(offline.ascends>0){ msg += ' They ascended ' + offline.ascends + ' time' + (offline.ascends===1?'':'s') + ' on their own!'; }
+        if(offline.retreated){ msg += ' A Boss stopped the push, so they switched to Farm at Rift ' + offline.endDepth + '. Your Push point at Rift ' + offline.pushDepth + ' is still saved.'; }
+        if(offline.completedStudies.length===1){ msg += ' Your Long Study "' + offline.completedStudies[0] + '" finished while you were away!'; }
+        else if(offline.completedStudies.length>1){ msg += ' Your Long Studies "' + offline.completedStudies.join('", "') + '" finished while you were away!'; }
+        document.getElementById('welcome-text').textContent = msg;
+        welcomeOverlay.style.display = 'flex';
+        document.getElementById('welcome-claim').addEventListener('click', function(){
+          welcomeOverlay.style.display = 'none';
+          renderAll();
+          maybeShowDaily();
+        },{once:true});
+      } else {
         maybeShowDaily();
-      });
-    } else {
-      maybeShowDaily();
+      }
     }
+
     renderAll();
+    playStartupIntro(showPostIntroFlow);
   }
 
   setInterval(tick, TICK_MS);
@@ -3848,6 +4034,11 @@ function init(){
   document.addEventListener('visibilitychange', function(){ if(document.hidden) saveState(); });
   window.addEventListener('beforeunload', saveState);
   document.addEventListener('keydown', function(e){
+    if(startupIntroPlaying && (e.key==='Escape' || e.key==='Enter' || e.key===' ')){
+      var intro = document.getElementById('startup-intro');
+      if(intro) intro.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}));
+      return;
+    }
     if(e.key==='Escape' && document.getElementById('settings-overlay').style.display!=='none') closeSettings();
   });
 }
