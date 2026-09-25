@@ -1983,9 +1983,17 @@ function dateSeed(str){
   for(var i=0;i<str.length;i++){ h = (h*31 + str.charCodeAt(i))|0; }
   return Math.abs(h);
 }
-function pickDailyQuests(dayStr){
+function dailyQuestEligible(q,s){
+  var depth = (s && s.maxDepthEver)||1;
+  if(q.metric==='research') return depth>=5;
+  if(q.metric==='bossKills') return depth>=8;
+  if(q.metric==='luminousKills') return depth>=10;
+  if(q.metric==='ascends') return depth>=16 || ((s && s.ascendCount)||0)>0;
+  return true;
+}
+function pickDailyQuests(dayStr,s){
   var seed = dateSeed(dayStr);
-  var pool = QUEST_POOL.slice();
+  var pool = QUEST_POOL.filter(function(q){ return dailyQuestEligible(q,s); });
   var picked = [];
   for(var i=0;i<3 && pool.length;i++){
     var idx = (seed + i*17) % pool.length;
@@ -2008,7 +2016,7 @@ function ensureDaily(){
   var hadPriorDay = !!state.questDay;
   state.loginStreak = hadPriorDay ? (daysBetweenStr(state.questDay, today)===1 ? state.loginStreak+1 : 1) : 1;
   state.questDay = today;
-  state.questIds = pickDailyQuests(today);
+  state.questIds = pickDailyQuests(today,state);
   state.questClaimed = {};
   state.dailyStats = {};
   var reward = loginRewardFor(state.loginStreak);
