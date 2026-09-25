@@ -2886,9 +2886,13 @@ function toggleAutoAscend(){
   if(state.autoAscendEnabled) checkAutoAscend();
 }
 
+function ascendPrismGain(depth){
+  var cleared = Math.max(0,(depth===undefined ? progressionDepth() : depth)-1);
+  return cleared>=15 ? Math.max(1, Math.floor(2*Math.sqrt(cleared) * prismMult())) : 0;
+}
 function applyAscendMutation(){
   var cleared = progressionDepth() - 1;
-  var gain = Math.max(1, Math.floor(2*Math.sqrt(cleared) * prismMult()));
+  var gain = ascendPrismGain(progressionDepth());
   state.prisms += gain;
   state.ascendCount++;
   trackDaily('ascends');
@@ -3011,7 +3015,9 @@ function nextRiftObjective(){
       kind:'FARM',
       title:'Build power for Rift '+state.farmReturnDepth,
       detail:'Farming Rift '+state.farmDepth,
-      progress:Math.min(100,Math.round(sustainedCombatDps(state.farmReturnDepth)/Math.max(1,enemyHpFor(state.farmReturnDepth)*bossRegenRate(state.farmReturnDepth))*100))
+      progress:isBoss(state.farmReturnDepth)
+        ? Math.min(100,Math.round(sustainedCombatDps(state.farmReturnDepth)/Math.max(1,enemyHpFor(state.farmReturnDepth)*bossRegenRate(state.farmReturnDepth))*100))
+        : 0
     };
   }
 
@@ -3029,7 +3035,7 @@ function nextRiftObjective(){
     return {
       kind:'ASCEND READY',
       title:'Permanent power is waiting',
-      detail:'+'+prismGain()+' Prisms now',
+      detail:'+'+ascendPrismGain(p)+' Prisms now',
       progress:100
     };
   }
@@ -3491,7 +3497,7 @@ function renderLongStudies(){
 function renderAscendSummary(){
   var cleared = progressionDepth() - 1;
   var eligible = cleared >= 15;
-  var gain = eligible ? Math.max(1, Math.floor(2*Math.sqrt(cleared) * prismMult())) : 0;
+  var gain = eligible ? ascendPrismGain(progressionDepth()) : 0;
   els['prism-preview'].textContent = '+' + formatNum(gain) + ' Prisms';
   els['ascend-btn'].disabled = !eligible;
   els['ascend-note'].textContent = eligible
