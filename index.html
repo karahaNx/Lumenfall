@@ -1450,7 +1450,7 @@
   <div class="startup-skip">Tap to skip</div>
 </div>
 
-<div class="overlay" id="intro-overlay">
+<div class="overlay" id="intro-overlay" style="display:none;">
   <div class="modal">
     <h2>Lumenfall</h2>
     <p>Awaken a party of starlight Wisps — your first Wisp is already fighting for you. Strike into the Rift as their Guardian to speed things up, and unravel the eclipse swallowing the sky. Everything here is earned by playing — there is nothing to buy that makes you stronger.</p>
@@ -3859,6 +3859,7 @@ var STARTUP_INTRO_KEY = 'lumenfall_startup_intro_last';
 var STARTUP_INTRO_COOLDOWN_MS = 3 * 60 * 60 * 1000;
 var startupIntroTimers = [];
 var startupIntroPlaying = false;
+var startupIntroFinish = null;
 
 function clearStartupIntroTimers(){
   startupIntroTimers.forEach(function(timer){ clearTimeout(timer); });
@@ -3891,6 +3892,7 @@ function playStartupIntro(done){
     if(finished) return;
     finished = true;
     startupIntroPlaying = false;
+    startupIntroFinish = null;
     clearStartupIntroTimers();
     markStartupIntroShown();
     intro.classList.add('is-leaving');
@@ -3903,6 +3905,7 @@ function playStartupIntro(done){
 
   intro.className = 'startup-intro is-visible phase-brand';
   intro.setAttribute('aria-hidden','false');
+  startupIntroFinish = finish;
 
   var skip = function(){
     intro.removeEventListener('pointerdown',skip);
@@ -4001,7 +4004,7 @@ function init(){
 
     // Apply offline progress before any startup save can advance lastSeen.
     var offline = applyOfflineProgress();
-    if(dailyRolled) saveState();
+    saveState();
 
     function maybeShowDaily(){
       if(dailyRolled && pendingDailyReward){ showDailyOverlay(pendingDailyReward); }
@@ -4035,8 +4038,7 @@ function init(){
   window.addEventListener('beforeunload', saveState);
   document.addEventListener('keydown', function(e){
     if(startupIntroPlaying && (e.key==='Escape' || e.key==='Enter' || e.key===' ')){
-      var intro = document.getElementById('startup-intro');
-      if(intro) intro.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}));
+      if(startupIntroFinish) startupIntroFinish();
       return;
     }
     if(e.key==='Escape' && document.getElementById('settings-overlay').style.display!=='none') closeSettings();
