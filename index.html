@@ -2187,6 +2187,7 @@ var RIFT_ZONES = [
 ];
 
 var SAVE_KEY = 'lumenfall_save_v2';
+var RESET_PENDING_KEY = 'lumenfall_reset_pending_v1';
 var TICK_MS = 100;
 var ABILITY_BASE_CYCLE_SEC = 6;
 
@@ -2204,7 +2205,7 @@ function freshState(){
     lumen:0, shards:0, prisms:0, comets:0, motes:0, sigils:0,
     depth:1, maxDepthEver:1,
     riftMode:'push', farmDepth:0, farmReturnDepth:0,
-    enemyHp:0, enemyMaxHp:0, enemyIsLuminous:false,
+    enemyDepth:0, enemyHp:0, enemyMaxHp:0, enemyIsLuminous:false,
     spirits:spirits, heroRarity:heroRarity, heroResource:heroResource, wispModules:wispModules, wispUltimate:wispUltimate, empowerQueue:empowerQueue, activeParty:['ember'],
     nodes:nodes, research:research, researchQueue:researchQueue,
     longStudyLevels:longStudyLevels, activeStudies:[], studyQueue:studyQueue,
@@ -2278,9 +2279,16 @@ function ensureDaily(){
 var state = null;
 var isNewGame = false;
 var resetInProgress = false;
+var resetBootPending = false;
 
 function loadState(){
   try{
+    if(localStorage.getItem(RESET_PENDING_KEY)==='1'){
+      localStorage.removeItem(SAVE_KEY);
+      resetBootPending = true;
+      isNewGame = true;
+      return freshState();
+    }
     var raw = localStorage.getItem(SAVE_KEY);
     if(!raw){ isNewGame = true; return freshState(); }
     var parsed = JSON.parse(raw);
@@ -2290,6 +2298,9 @@ function loadState(){
     var autoAscendTargetWasMissing = parsed.autoAscendTargetDepth===undefined;
     var fresh = freshState();
     for(var k in fresh){ if(parsed[k]===undefined) parsed[k]=fresh[k]; }
+    ['spirits','heroRarity','heroResource','wispModules','wispUltimate','empowerQueue','nodes','research','researchQueue','longStudyLevels','studyQueue','achieved','owned','questClaimed','dailyStats'].forEach(function(key){
+      if(!parsed[key] || typeof parsed[key]!=='object' || Array.isArray(parsed[key])) parsed[key] = fresh[key];
+    });
     SPIRITS.forEach(function(sp){
       if(parsed.spirits[sp.id]===undefined) parsed.spirits[sp.id]=0;
       if(parsed.heroRarity[sp.id]===undefined) parsed.heroRarity[sp.id]=0;
@@ -2315,17 +2326,63 @@ function loadState(){
     if(autoAscendTargetWasMissing){ parsed.autoAscendTargetDepth = Math.max(16, parsed.maxDepthEver||1); }
     parsed.autoAscendTargetDepth = Math.max(16, Math.floor(parsed.autoAscendTargetDepth||16));
     if(!(parsed.owned && parsed.owned.autoascend)){ parsed.autoAscendEnabled = false; }
+    function finiteNonNegative(value,fallback){
+      var n = Number(value);
+      return Number.isFinite(n) && n>=0 ? n : fallback;
+    }
+    parsed.lumen = finiteNonNegative(parsed.lumen,0);
+    parsed.shards = finiteNonNegative(parsed.shards,0);
+    parsed.prisms = finiteNonNegative(parsed.prisms,0);
+    parsed.comets = finiteNonNegative(parsed.comets,0);
+    parsed.motes = finiteNonNegative(parsed.motes,0);
+    parsed.sigils = finiteNonNegative(parsed.sigils,0);
+    parsed.depth = Math.max(1,Math.floor(finiteNonNegative(parsed.depth,1)));
+    parsed.maxDepthEver = Math.max(1,Math.floor(finiteNonNegative(parsed.maxDepthEver,parsed.depth)));
+
     if(parsed.riftMode!=='farm') parsed.riftMode = 'push';
-    parsed.farmDepth = Math.max(0, Math.floor(parsed.farmDepth||0));
-    parsed.farmReturnDepth = Math.max(0, Math.floor(parsed.farmReturnDepth||0));
-    if(parsed.riftMode==='farm' && (!parsed.farmDepth || !parsed.farmReturnDepth)){
+    parsed.farmDepth = Math.max(0, Math.floor(finiteNonNegative(parsed.farmDepth,0)));
+    parsed.farmReturnDepth = Math.max(0, Math.floor(finiteNonNegative(parsed.farmReturnDepth,0)));
+    if(parsed.riftMode==='farm' && parsed.farmReturnDepth>1){
+      parsed.farmDepth = highestFarmableDepth(parsed.farmReturnDepth);
+      parsed.depth = parsed.farmDepth;
+      parsed.maxDepthEver = Math.max(parsed.maxDepthEver,parsed.farmReturnDepth);
+    } else {
       parsed.riftMode = 'push';
       parsed.farmDepth = 0;
       parsed.farmReturnDepth = 0;
+      parsed.maxDepthEver = Math.max(parsed.maxDepthEver,parsed.depth);
     }
+
     if(!Array.isArray(parsed.activeParty)) parsed.activeParty=[];
+    var seenParty = {};
+    parsed.activeParty = parsed.activeParty.filter(function(id){
+      if(seenParty[id] || !SPIRITS.some(function(sp){ return sp.id===id; }) || (parsed.spirits[id]||0)<=0) return false;
+      seenParty[id] = true;
+      return true;
+    }).slice(0,5);
+    if(!parsed.activeParty.length){
+      parsed.spirits.ember = Math.max(1,parsed.spirits.ember||0);
+      parsed.activeParty = ['ember'];
+    }
+
     if(!Array.isArray(parsed.activeStudies)) parsed.activeStudies=[];
     if(parsed.activeStudy){ parsed.activeStudies.push(parsed.activeStudy); delete parsed.activeStudy; }
+    var seenStudies = {};
+    parsed.activeStudies = parsed.activeStudies.filter(function(active){
+      if(!active || seenStudies[active.id] || !LONG_STUDIES.some(function(node){ return node.id===active.id; })) return false;
+      var remaining = Number(active.remainingSec), total = Number(active.totalDurationSec), speed = Number(active.speedMult);
+      if(!Number.isFinite(remaining) || !Number.isFinite(total) || total<=0 || !Number.isFinite(speed) || speed<=0) return false;
+      active.remainingSec = Math.max(0,remaining);
+      active.totalDurationSec = total;
+      active.speedMult = speed;
+      seenStudies[active.id] = true;
+      return true;
+    });
+
+    parsed.enemyDepth = Math.max(0,Math.floor(finiteNonNegative(parsed.enemyDepth,0)));
+    parsed.enemyHp = finiteNonNegative(parsed.enemyHp,0);
+    parsed.enemyMaxHp = finiteNonNegative(parsed.enemyMaxHp,0);
+    parsed.luminousAccum = Math.max(0,Math.min(0.999999,finiteNonNegative(parsed.luminousAccum,0)));
     return parsed;
   }catch(e){ isNewGame = true; return freshState(); }
 }
@@ -2335,6 +2392,10 @@ function saveState(){
   try{
     state.lastSeen = Date.now();
     localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+    if(resetBootPending){
+      localStorage.removeItem(RESET_PENDING_KEY);
+      resetBootPending = false;
+    }
   }catch(e){}
 }
 
@@ -2482,7 +2543,7 @@ function enterFarmMode(){
   state.farmDepth = highestFarmableDepth(state.farmReturnDepth);
   state.riftMode = 'farm';
   state.depth = state.farmDepth;
-  spawnEnemy();
+  spawnEnemy(false);
   renderAll();
   saveState();
 }
@@ -2492,7 +2553,7 @@ function enterPushMode(){
   state.riftMode = 'push';
   state.farmDepth = 0;
   state.farmReturnDepth = 0;
-  spawnEnemy();
+  spawnEnemy(false);
   renderAll();
   saveState();
 }
@@ -2740,10 +2801,14 @@ function enemyNameFor(depth){
   return isBoss(depth) ? ('The '+adj+' '+noun) : (adj+' '+noun);
 }
 
-function spawnEnemy(){
+function spawnEnemy(rollLuminous){
+  state.enemyDepth = state.depth;
   state.enemyMaxHp = enemyHpFor(state.depth);
   state.enemyHp = state.enemyMaxHp;
   if(isBoss(state.depth)){
+    state.enemyIsLuminous = false;
+  } else if(rollLuminous===false){
+    // UI mode changes must not advance the rare-enemy pity counter.
     state.enemyIsLuminous = false;
   } else {
     state.luminousAccum = (state.luminousAccum||0) + eliteChance(state.depth);
@@ -2754,6 +2819,21 @@ function spawnEnemy(){
       state.enemyIsLuminous = false;
     }
   }
+}
+
+function restoreEnemyOrSpawn(){
+  var expectedMax = enemyHpFor(state.depth);
+  var savedMax = Number(state.enemyMaxHp);
+  var savedHp = Number(state.enemyHp);
+  var sameDepth = state.enemyDepth===state.depth;
+  if(sameDepth && Number.isFinite(savedMax) && savedMax>0 && Number.isFinite(savedHp) && savedHp>0){
+    var hpRatio = Math.max(0,Math.min(1,savedHp/savedMax));
+    state.enemyMaxHp = expectedMax;
+    state.enemyHp = Math.max(0.0001,expectedMax*hpRatio);
+    if(isBoss(state.depth)) state.enemyIsLuminous = false;
+    return;
+  }
+  spawnEnemy(true);
 }
 
 function gainLumen(n){ state.lumen += n; }
@@ -3284,6 +3364,7 @@ function performReset(){
   resetInProgress = true;
 
   try{
+    localStorage.setItem(RESET_PENDING_KEY,'1');
     localStorage.removeItem(SAVE_KEY);
     localStorage.removeItem(STARTUP_INTRO_KEY);
   }catch(e){}
@@ -3346,7 +3427,7 @@ function cacheEls(){
   ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','rift-push-btn','rift-farm-btn','rift-mode-note','rift-objective','enemy-name','luminous-tag','boss-regen-tag','buff-indicator','enemy-stage','enemy-glyph',
    'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','party-col','bond-card','bond-summary','research-list','study-list',
    'prism-preview','ascend-btn','ascend-note','node-list','ach-list','roster-journey','shop-list','theme-list','manifesto','toast',
-   'daily-streak-badge','daily-quest-list','offline-preview','settings-overlay','settings-home','settings-encyclopedia','settings-title','settings-back','encyclopedia-content'
+   'daily-streak-badge','daily-quest-list','settings-overlay','settings-home','settings-encyclopedia','settings-title','settings-back','encyclopedia-content'
   ].forEach(function(id){ els[id]=document.getElementById(id); });
 }
 
@@ -3368,7 +3449,6 @@ function renderRiftMode(){
   els['rift-mode-note'].textContent = farming
     ? 'Farming Rift '+state.farmDepth+' for resources. Push resumes at Rift '+state.farmReturnDepth+'.'
     : 'Push deeper until you hit a wall. Farm always uses your highest cleared non-boss Rift.';
-  syncMainScrollMode();
 }
 function nextRiftObjective(){
   var p = progressionDepth();
@@ -4205,58 +4285,8 @@ function claimQuest(id){
   renderHud();
 }
 
-function computeOfflinePreview(){
-  var capHours = offlineCapHours();
-  var realState = state;
-  var clone = JSON.parse(JSON.stringify(realState));
-  state = clone;
-  var sim;
-  try{
-    sim = simulateOfflineRun(capHours * 3600);
-  } finally {
-    state = realState;
-  }
-  sim.capHours = capHours;
-  return sim;
-}
-
-var OFFLINE_PREVIEW_REFRESH_MS = 10000;
-var lastOfflinePreviewAt = 0;
-var offlinePreviewTimer = null;
-function renderOfflinePreview(force){
-  var el = els['offline-preview'];
-  if(!el) return;
-  var now = Date.now();
-  var elapsed = now-lastOfflinePreviewAt;
-  if(!force && elapsed<OFFLINE_PREVIEW_REFRESH_MS){
-    if(!offlinePreviewTimer){
-      offlinePreviewTimer = setTimeout(function(){
-        offlinePreviewTimer = null;
-        renderOfflinePreview(true);
-      }, OFFLINE_PREVIEW_REFRESH_MS-elapsed);
-    }
-    return;
-  }
-  if(offlinePreviewTimer){ clearTimeout(offlinePreviewTimer); offlinePreviewTimer=null; }
-  lastOfflinePreviewAt = now;
-  var sim = computeOfflinePreview();
-  if(sim.lumenGained < 1){
-    el.textContent = 'Empower your Wisps to start earning Lumen while you\'re away.';
-    return;
-  }
-  var parts = ['<strong>'+formatNum(sim.lumenGained)+' Lumen</strong>'];
-  if(sim.shardGained >= 1) parts.push('<strong>'+formatNum(sim.shardGained)+' Shards</strong>');
-  if(sim.motesGained >= 1) parts.push(formatNum(sim.motesGained)+' Motes');
-  if(sim.sigilsGained >= 1) parts.push(formatNum(sim.sigilsGained)+' Sigils');
-  var tail = sim.retreated
-    ? ' over your next ' + sim.capHours + 'h away, farming Rift ' + sim.endDepth + ' once the Boss proves too strong while keeping Rift ' + sim.pushDepth + ' as your Push point.'
-    : ' over your next ' + sim.capHours + 'h away.';
-  el.innerHTML = 'Log off now and earn up to ' + parts.join(', ') + tail;
-}
-
 function renderSideStats(force){
   renderDaily(!!force);
-  renderOfflinePreview(!!force);
 }
 
 function showDailyOverlay(info){
@@ -4309,8 +4339,10 @@ function syncMainScrollMode(tabName){
   if(!main) return;
   var battlePanel = document.getElementById('tab-battle');
   var battleActive = typeof tabName==='string' ? tabName==='battle' : !!(battlePanel && battlePanel.classList.contains('active'));
-  main.classList.toggle('rift-scroll-locked', battleActive);
-  if(battleActive) main.scrollTop = 0;
+  if(main.classList.contains('rift-scroll-locked')!==battleActive){
+    main.classList.toggle('rift-scroll-locked', battleActive);
+  }
+  if(battleActive && main.scrollTop!==0) main.scrollTop = 0;
 }
 function activateTab(tabName){
   var btn = document.querySelector('.tab-btn[data-tab="'+tabName+'"]');
@@ -4574,7 +4606,7 @@ function simulateOfflineRun(effectiveSec){
       state.riftMode = 'farm';
       state.depth = state.farmDepth;
       retreated = true;
-      spawnEnemy();
+      spawnEnemy(false);
       continue;
     }
     var timeToKill = curHp / netDps;
@@ -4640,7 +4672,7 @@ function simulateOfflineRun(effectiveSec){
         state.farmDepth = 0;
         state.farmReturnDepth = 0;
         retreated = false;
-        spawnEnemy();
+        spawnEnemy(false);
       }
     }
   }
@@ -4805,8 +4837,9 @@ function init(){
   state = loadState();
   if(state.owned.rememberbulk && state.savedLabMultiplier!==undefined){ labMultiplier = state.savedLabMultiplier; }
   var dailyRolled = ensureDaily();
-  spawnEnemy();
+  restoreEnemyOrSpawn();
   setupTabs();
+  syncMainScrollMode();
   setupStars();
 
   var stageEl = document.getElementById('enemy-stage');
