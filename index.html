@@ -1274,7 +1274,8 @@
     overscroll-behavior-y:contain;
     -webkit-overflow-scrolling:touch;
     scrollbar-width:none;
-    padding-bottom:calc(72px + env(safe-area-inset-bottom));
+    padding-bottom:16px;
+    margin-bottom:calc(54px + env(safe-area-inset-bottom));
   }
   main::-webkit-scrollbar{display:none;}
 
@@ -1309,7 +1310,7 @@
   }
 
   @media (max-height:650px){
-    main{padding-bottom:calc(64px + env(safe-area-inset-bottom));}
+    main{padding-bottom:10px;margin-bottom:calc(48px + env(safe-area-inset-bottom));}
     nav.tabbar button{min-height:48px;}
   }
 
