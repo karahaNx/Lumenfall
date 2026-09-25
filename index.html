@@ -1278,6 +1278,12 @@
     margin-bottom:calc(54px + env(safe-area-inset-bottom));
   }
   main::-webkit-scrollbar{display:none;}
+  /* Push is a single-screen combat view: never allow vertical drift/scroll. */
+  main.push-scroll-locked{
+    overflow-y:hidden;
+    overscroll-behavior-y:none;
+    -webkit-overflow-scrolling:auto;
+  }
 
   nav.tabbar{
     position:fixed;
@@ -3121,6 +3127,7 @@ function renderRiftMode(){
   els['rift-mode-note'].textContent = farming
     ? 'Farming Rift '+state.farmDepth+' for resources. Push resumes at Rift '+state.farmReturnDepth+'.'
     : 'Push deeper until you hit a wall. Farm always uses your highest cleared non-boss Rift.';
+  syncMainScrollMode();
 }
 function nextRiftObjective(){
   var p = progressionDepth();
@@ -4047,6 +4054,15 @@ function closeSettings(){
   document.getElementById('reset-row').style.display = 'block';
 }
 
+function syncMainScrollMode(tabName){
+  var main = document.querySelector('main');
+  if(!main) return;
+  var battlePanel = document.getElementById('tab-battle');
+  var battleActive = typeof tabName==='string' ? tabName==='battle' : !!(battlePanel && battlePanel.classList.contains('active'));
+  var lockPush = battleActive && state.riftMode==='push';
+  main.classList.toggle('push-scroll-locked', lockPush);
+  if(lockPush) main.scrollTop = 0;
+}
 function activateTab(tabName){
   var btn = document.querySelector('.tab-btn[data-tab="'+tabName+'"]');
   var panel = document.getElementById('tab-'+tabName);
@@ -4059,6 +4075,7 @@ function activateTab(tabName){
   if(tabName==='ascend') renderAscendSummary();
   var main = document.querySelector('main');
   if(main) main.scrollTop = 0;
+  syncMainScrollMode(tabName);
 }
 function setupTabs(){
   document.querySelectorAll('.tab-btn').forEach(function(btn){
