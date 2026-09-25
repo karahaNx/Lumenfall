@@ -1734,14 +1734,6 @@
   <div class="startup-skip">Tap to skip</div>
 </div>
 
-<div class="overlay" id="intro-overlay" style="display:none;">
-  <div class="modal">
-    <h2>Enter the Rift</h2>
-    <p>Your Ember Wisp is already fighting. Tap the Rift to strike as its Guardian, spend Lumen to Empower your Wisps, and push toward your first Boss at Rift 10.</p>
-    <button class="primary-btn" id="intro-begin">Enter the Rift</button>
-  </div>
-</div>
-
 <div class="overlay" id="tutorial-overlay" style="display:none;">
   <div class="modal">
     <div class="tut-dots" id="tut-dots"></div>
@@ -4533,24 +4525,16 @@ function init(){
   applyRiftTheme();
   renderAll();
 
-  var introOverlay = document.getElementById('intro-overlay');
   var welcomeOverlay = document.getElementById('welcome-overlay');
 
   if(isNewGame){
-    introOverlay.style.display = 'none';
     playStartupIntro(function(){
-      introOverlay.style.display = 'flex';
-    });
-
-    document.getElementById('intro-begin').addEventListener('click', function(){
-      introOverlay.style.display = 'none';
       isNewGame = false;
       state.lastSeen = Date.now();
       saveState();
       showRiftMilestone('FIRST GOAL','Reach Rift 3','Awaken Tide Sprite','#3aa0c9');
-    },{once:true});
+    });
   } else {
-    introOverlay.style.display = 'none';
 
     // Apply offline progress before any startup save can advance lastSeen.
     var offline = applyOfflineProgress();
