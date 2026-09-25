@@ -1057,6 +1057,66 @@
     *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;}
   }
 
+
+  /* Wisp information hierarchy */
+  .hero-chip{border-left:2px solid color-mix(in srgb,var(--wisp-color,var(--line)) 46%,var(--line));}
+  .hero-stats{
+    display:flex;align-items:center;gap:5px;flex-wrap:wrap;
+    background:transparent;border:none;padding:0;margin:8px 0 7px;
+  }
+  .hero-stat-pill,.rarity-badge{
+    display:inline-flex;align-items:center;min-height:24px;padding:3px 7px;border-radius:999px;
+    font-size:.61rem;font-weight:850;line-height:1;
+    background:color-mix(in srgb,var(--bg-elev) 75%,transparent);
+    border:1px solid var(--soft-line);
+  }
+  .rarity-badge{
+    color:var(--badge-color);border-color:color-mix(in srgb,var(--badge-color) 35%,var(--line));
+    background:color-mix(in srgb,var(--badge-color) 7%,var(--bg-elev));
+    box-shadow:0 0 14px -11px var(--badge-color);
+  }
+  .hero-stats .node-queue-toggle{margin-left:auto;}
+  .hero-ability{
+    display:grid;grid-template-columns:auto 1fr;column-gap:7px;row-gap:2px;align-items:center;
+  }
+  .ability-label{
+    grid-row:1 / span 2;align-self:stretch;display:flex;align-items:center;
+    font-size:.55rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--wisp-color,var(--prism));
+    border-right:1px solid color-mix(in srgb,var(--wisp-color,var(--prism)) 22%,var(--line));
+    padding-right:7px;
+  }
+  .hero-ability strong{font-size:.72rem;}
+  .ability-desc{font-size:.65rem;color:var(--ink-dim);line-height:1.35;}
+  .hero-actions .mini-btn:first-child:not(:disabled){
+    border-color:color-mix(in srgb,var(--lumen) 28%,var(--line));
+  }
+  .rarity-btn:not(:disabled){
+    border-color:color-mix(in srgb,var(--prism) 30%,var(--line));
+    background:color-mix(in srgb,var(--prism) 4%,var(--bg-elev));
+  }
+
+  /* clearer locked state */
+  .hero-card.locked{
+    min-height:68px;filter:saturate(.35);
+    background:linear-gradient(135deg,color-mix(in srgb,var(--bg-elev-2) 85%,transparent),color-mix(in srgb,var(--bg) 88%,transparent));
+  }
+  .hero-card.locked::before{
+    background:repeating-linear-gradient(180deg,var(--line) 0 4px,transparent 4px 8px);
+  }
+
+  /* polished actionable states */
+  button:not(:disabled){-webkit-tap-highlight-color:transparent;}
+  .buy-btn:not(:disabled),.mini-btn:not(:disabled),.shop-card button:not(:disabled),.quest-claim-btn:not(:disabled){
+    cursor:pointer;
+  }
+  .buy-btn:not(:disabled){
+    border-color:color-mix(in srgb,var(--lumen) 18%,var(--line));
+  }
+  .quest-claim-btn:not(:disabled){
+    box-shadow:0 7px 18px -14px var(--good),var(--inner-highlight);
+  }
+
 </style>
 </head>
 <body>
@@ -2513,8 +2573,8 @@ function updateBattleFast(){
     var netDps = yourDps - regenPerSec;
     var enough = netDps > 0;
     var eta = enough ? Math.ceil(Math.max(0,state.enemyHp)/netDps) : 0;
-    var wallHint = trait.id==='guardian' ? ' · Tap to push or Farm' : ' · Farm recommended';
-    els['boss-regen-tag'].textContent = trait.name+' — '+trait.hint+' Auto sustained '+formatNum(yourDps)+'/s vs '+formatNum(regenPerSec)+'/s regen' + (enough ? ' · ~'+fmtDuration(eta) : wallHint);
+    var wallHint = trait.id==='guardian' ? 'Tap or Farm' : 'Farm recommended';
+    els['boss-regen-tag'].textContent = trait.name+' · '+formatNum(yourDps)+'/s power vs '+formatNum(regenPerSec)+'/s regen · ' + (enough ? '~'+fmtDuration(eta) : wallHint);
     els['boss-regen-tag'].classList.toggle('insufficient', !enough);
     els['enemy-stage'].classList.add(enough ? 'boss-ready' : 'boss-wall');
     if(battleStage) battleStage.classList.add(enough ? 'boss-ready' : 'boss-wall');
@@ -2631,7 +2691,7 @@ function renderPartyFormation(){
     if(!sp) return;
     var unpowered = (state.spirits[id]||0)<=0;
     var power = chipEffectivePower(id);
-    html += '<div class="hero-chip'+(unpowered?' unpowered':'')+'" data-chip="'+id+'">'+
+    html += '<div class="hero-chip'+(unpowered?' unpowered':'')+'" data-chip="'+id+'" style="--wisp-color:'+sp.color+';">'+
       '<span class="shape '+sp.shape+'" style="width:20px;height:20px;background:'+sp.color+';color:'+sp.color+';"></span>'+
       '<div class="chip-bar-track"><div class="chip-bar-fill" data-bar="'+id+'" style="background:'+RESOURCE_COLORS[sp.resource]+'"></div></div>'+
       '<div class="chip-label">'+sp.shortName+'</div>'+
@@ -2713,8 +2773,13 @@ function renderSpirits(){
         '</div>' +
         (recruited ? '<button class="active-toggle '+(active?'is-active':'')+'" data-toggle="'+sp.id+'">'+(active?'Active':'Bench')+'</button>' : '') +
       '</div>' +
-      '<div class="hero-stats">Lv.'+level+' &middot; '+formatNum(power)+' pwr &middot; <span style="color:'+RARITY_COLORS[tier]+';font-weight:700;">'+RARITY_NAMES[tier]+'</span>'+empowerHtml+'</div>' +
-      '<div class="hero-ability">Ability: <strong>'+sp.abilityName+'</strong> — '+ABILITY_DESC[sp.abilityType]+'</div>' +
+      '<div class="hero-stats">' +
+        '<span class="hero-stat-pill">Lv. '+level+'</span>' +
+        '<span class="hero-stat-pill mono">'+formatNum(power)+' PWR</span>' +
+        '<span class="rarity-badge" style="--badge-color:'+RARITY_COLORS[tier]+';">'+RARITY_NAMES[tier]+'</span>' +
+        empowerHtml +
+      '</div>' +
+      '<div class="hero-ability"><span class="ability-label">Ability</span><strong>'+sp.abilityName+'</strong><span class="ability-desc">'+ABILITY_DESC[sp.abilityType]+'</span></div>' +
       moduleHtml +
       '<div class="hero-actions">' +
         '<button class="mini-btn" data-empower="'+sp.id+'" '+(state.lumen<cost?'disabled':'')+'>'+(recruited?'Empower':'Recruit')+'<span style="font-size:.62rem;">'+costIcon('lumen')+formatNum(cost)+'</span></button>' +
