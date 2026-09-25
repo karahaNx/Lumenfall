@@ -4,10 +4,9 @@
 
 ### [**DOWNLOAD LUMENFALL.APK**](https://github.com/karahaNx/Lumenfall/releases/download/android-latest/Lumenfall.apk)
 
-**Latest Android build · direct APK download · no ZIP · no EXE**
+**Latest Android build · direct APK download
 
 ---
-
 
 Lumenfall is an Android idle RPG where a party of Wisps pushes deeper into an ever-collapsing Rift.
 
