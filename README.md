@@ -1,7 +1,5 @@
 # Lumenfall
 
-## ⬇️ DOWNLOAD ANDROID APK
-
 ### [**DOWNLOAD LUMENFALL.APK**](https://github.com/karahaNx/Lumenfall/releases/download/android-latest/Lumenfall.apk)
 
 **Latest Android build · direct APK download
