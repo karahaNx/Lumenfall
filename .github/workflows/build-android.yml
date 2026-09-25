@@ -131,6 +131,14 @@ jobs:
           if missing_refs:
               raise SystemExit(f"QA failed: getElementById references missing from HTML: {missing_refs}")
 
+          cache_match = re.search(r'function cacheEls\(\)\{(.*?)\n\}', src, flags=re.S)
+          if not cache_match:
+              raise SystemExit("QA failed: cacheEls() not found")
+          cached_ids = set(re.findall(r"'([^']+)'", cache_match.group(1)))
+          stale_cached_ids = sorted(cached_ids - id_set)
+          if stale_cached_ids:
+              raise SystemExit(f"QA failed: cacheEls references missing from HTML: {stale_cached_ids}")
+
           forbidden = [
               'data-tab="about"',
               'Lumenfall-Setup.exe',
@@ -140,7 +148,10 @@ jobs:
               'studio-splash',
               'Xarib Productions',
               'intro-overlay',
-              'prismGain()'
+              'prismGain()',
+              'offline-preview',
+              'function renderOfflinePreview(',
+              'function computeOfflinePreview('
           ]
           for token in forbidden:
               if token in src:
@@ -175,15 +186,27 @@ jobs:
               "function ascendPrismGain(",
               "function dailyQuestEligible(q,s)",
               "var resetInProgress = false;",
-              "resetInProgress = true;",
+              "var resetBootPending = false;",
+              "RESET_PENDING_KEY = 'lumenfall_reset_pending_v1'",
+              "localStorage.setItem(RESET_PENDING_KEY,'1');",
               "if(!resetInProgress) saveState();",
+              "function restoreEnemyOrSpawn()",
+              "restoreEnemyOrSpawn();",
+              "spawnEnemy(false);",
+              "if(battleActive && main.scrollTop!==0) main.scrollTop = 0;",
               "Lumenfall visual system"
           ]
           for token in required_features:
               if token not in src:
                   raise SystemExit(f"QA failed: required feature missing: {token}")
 
-          print(f"QA passed: {len(scripts)} scripts syntax-checked, {len(required_ids)} unique IDs verified.")
+          if "renderRiftMode();\n  renderRiftObjective();" not in src:
+              raise SystemExit("QA failed: expected Rift fast-render path changed")
+          rift_mode_match = re.search(r'function renderRiftMode\(\)\{(.*?)\n\}', src, flags=re.S)
+          if rift_mode_match and "syncMainScrollMode" in rift_mode_match.group(1):
+              raise SystemExit("QA failed: scroll sync regressed into the 100ms Rift render loop")
+
+          print(f"QA passed: {len(scripts)} scripts syntax-checked, {len(required_ids)} unique IDs verified, cache/state lifecycle guards present.")
           PY
 
       - name: Stage Android web assets
