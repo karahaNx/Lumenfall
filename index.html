@@ -1560,17 +1560,214 @@
     100%{opacity:.72;filter:brightness(1.12);}
   }
 
+
+  /* Rift art direction: moonlit ruins, faceted creatures, illuminated sigils. */
+  .art-definitions{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none;}
+  .hud .brand{display:flex;align-items:center;gap:9px;letter-spacing:.12em;font-size:1rem;}
+  .brand-sigil{width:25px;height:29px;color:var(--lumen);flex:none;}
+  .hud .chip{border-radius:9px;}
+  nav.tabbar .nav-art{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+  nav.tabbar button.active{color:var(--lumen);background:linear-gradient(0deg,color-mix(in srgb,var(--lumen) 9%,transparent),transparent);}
+  nav.tabbar button.active .nav-art{filter:drop-shadow(0 0 6px color-mix(in srgb,var(--lumen) 45%,transparent));}
+  main.rift-scroll-locked{padding:9px 10px 10px;display:flex;flex-direction:column;}
+  #tab-battle.active{height:100%;min-height:0;flex:1;}
+  #tab-battle .stage{
+    --ink:#f0effb;--ink-dim:#b5b4cb;--bg-elev:#13192d;--bg-elev-2:#1c2339;--line:#30364d;
+    --danger:#ff7b92;--lumen:#e7c67e;--prism:#bd9bef;--shard:#82d2ec;--mote:#ffb4d5;--good:#9ed9b1;
+    --land-light:#9ca7ee;--land-far:#19233b;--land-stone:#101b30;--land-edge:#384867;
+    color:var(--ink);
+    height:100%;min-height:0;padding:12px 12px 10px;gap:8px;
+    background:radial-gradient(ellipse at 50% 38%,#222946 0, #11182d 47%,#0b1121 100%)!important;
+    border-color:#36405b;border-radius:20px;box-shadow:inset 0 1px 0 #62708a44,0 10px 30px #0003;
+  }
+  #tab-battle .stage::before{display:none;}
+  #tab-battle .stage::after{background:linear-gradient(90deg,transparent,var(--zone-accent),transparent);inset:0 18% auto;height:1px;opacity:.6;animation:none;}
+  #tab-battle .stage[data-zone-theme="1"]{--land-light:#f3a874;--land-far:#392331;--land-stone:#241c2b;--land-edge:#705044;}
+  #tab-battle .stage[data-zone-theme="2"]{--land-light:#8ff0ed;--land-far:#143849;--land-stone:#102735;--land-edge:#42747c;}
+  #tab-battle .stage[data-zone-theme="3"]{--land-light:#74b5ff;--land-far:#152c50;--land-stone:#0e213a;--land-edge:#365c85;}
+  #tab-battle .stage[data-zone-theme="4"]{--land-light:#c194ff;--land-far:#2a2047;--land-stone:#1d1834;--land-edge:#584879;}
+  #tab-battle .stage[data-zone-theme="5"]{--land-light:#f29bd2;--land-far:#361e3c;--land-stone:#211729;--land-edge:#754463;}
+  .stage .depth-label{font-family:'Cinzel',serif;font-size:1.08rem;letter-spacing:.08em;flex:none;}
+  .stage .depth-label .region-label{font-family:'Manrope',sans-serif;font-size:.55rem;letter-spacing:.18em;margin-top:3px;}
+  .stage .rift-mode-row{flex:none;background:#090f20a6;border-color:#3b44594d;border-radius:11px;}
+  .stage .rift-mode-btn{min-height:34px;font-size:.7rem;letter-spacing:.1em;}
+  .stage .rift-mode-btn.active{color:#ffe1a0;background:linear-gradient(110deg,#6d50372e,#c4a0652e);box-shadow:inset 0 0 0 1px #eac07955,inset 0 1px 0 #f9dea62b;}
+  .stage .rift-mode-btn:disabled{opacity:.55;}
+  .stage .rift-mode-note{display:none;}
+  .stage .rift-objective{flex:none;z-index:2;background:#141d30;border-color:#3d4963;min-height:39px;padding:6px 9px 8px;}
+  .stage .enemy-name{position:relative;z-index:2;font-size:.9rem;letter-spacing:.035em;flex:none;margin:2px 0 -6px;}
+  .stage .luminous-tag{font-size:.55rem;padding:2px 7px;margin-top:4px;flex:none;color:#ffbcd4;}
+  .stage .battle-row{position:relative;isolation:isolate;flex:1;min-height:0;display:flex;flex-direction:column-reverse;align-items:stretch;gap:7px;margin:0 -4px;}
+  .rift-landscape{position:absolute;inset:-38px -8px -8px;z-index:-1;overflow:hidden;border-radius:12px;pointer-events:none;}
+  .rift-landscape>svg{position:absolute;width:100%;height:100%;opacity:.95;}
+  .zone-prop{display:none;}
+  [data-zone-theme="0"] .zone-stars,[data-zone-theme="1"] .zone-roots,[data-zone-theme="2"] .zone-crystals,
+  [data-zone-theme="3"] .zone-orbits,[data-zone-theme="4"] .zone-spires,[data-zone-theme="5"] .zone-crown{display:inline;}
+  .rift-landscape::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#11182d 0,transparent 20%,transparent 68%,#0b1121 100%);}
+  .stage .enemy-stage-wrap{width:100%;flex:1;min-height:0;gap:2px;}
+  .stage .enemy-stage{width:100%;height:auto;flex:1;min-height:0;}
+  .stage .enemy-stage::before{inset:8% 18%;filter:none;opacity:.4;}
+  .stage .enemy-stage::after{width:clamp(100px,23vh,200px);height:clamp(100px,23vh,200px);border:1px solid #99b6ef22;box-shadow:0 0 40px #8eaeff0a,inset 0 0 30px #b0a8ff0a;animation:none;}
+  #tab-battle .stage .enemy-glyph{
+    --creature-color:#504c80;--creature-rim:#b4a5dc;--creature-eye:#d5edff;
+    width:clamp(90px,22vh,190px);height:auto;aspect-ratio:1;max-height:95%;
+    background:none;box-shadow:none;border-radius:0;clip-path:none;flex:none;
+    filter:drop-shadow(0 12px 7px #0008) drop-shadow(0 0 12px #a6adfa33);animation:creatureFloat 4s ease-in-out infinite;
+  }
+  .creature-art{display:block;width:100%;height:100%;overflow:visible;}
+  #tab-battle .enemy-glyph::before,#tab-battle .enemy-glyph::after{display:none;}
+  .boss-regalia{display:none;position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
+  #tab-battle .stage .enemy-glyph.boss{width:clamp(100px,24vh,208px);}
+  .enemy-glyph.boss .boss-regalia{display:block;}
+  #tab-battle .stage .trait-regrowth .enemy-glyph{--creature-color:#285c50;--creature-rim:#99d9a3;--creature-eye:#d8ffc1;}
+  #tab-battle .stage .trait-fractured .enemy-glyph{--creature-color:#674297;--creature-rim:#cb9eff;--creature-eye:#f0d4ff;}
+  #tab-battle .stage .trait-guardian .enemy-glyph{--creature-color:#806032;--creature-rim:#e7b964;--creature-eye:#fff0b8;}
+  #tab-battle .stage .enemy-glyph.luminous{--creature-rim:#ffa6d3;--creature-eye:#fff6da;filter:drop-shadow(0 0 16px #ff9fdc88);}
+  #tab-battle .stage .enemy-stage.hit .creature-art{animation:creatureStrike .2s ease-out;}
+  .stage .hp-wrap{width:min(90%,300px);flex:none;position:relative;z-index:2;}
+  .stage .hp-bar-track{height:7px;border-color:#71536155;background:#090e1b;box-shadow:0 0 0 3px #080e1b77;}
+  .stage .hp-bar-fill{background:linear-gradient(90deg,#a7557c,#ee8d98,#ffd0ad);box-shadow:0 0 9px #ed8aa766;}
+  .stage .hp-text{color:#c3c9df;font-size:.59rem;text-shadow:0 1px 3px #000;margin-top:4px;}
+  .stage .boss-regen-tag{font-size:.58rem;line-height:1.25;margin:4px 0 0;padding:5px 6px;background:#131c2fee;color:#abe0ae;}
+  .stage .boss-regen-tag.insufficient{color:#ff9fae;border-color:#ed8aa744;}
+  .stage .party-col{flex:none;display:flex;flex-direction:row;justify-content:center;width:100%;gap:6px;padding:0 5px;}
+  .stage .hero-chip{width:56px;min-width:0;gap:2px;padding:4px 3px;border-left:1px solid color-mix(in srgb,var(--wisp-color) 35%,#29334e);border-color:color-mix(in srgb,var(--wisp-color) 30%,#29334e);background:linear-gradient(155deg,#263049e0,#101a2eed);border-radius:11px;}
+  .wisp-portrait{width:46px;height:46px;flex:none;color:var(--wisp-color);filter:drop-shadow(0 0 6px color-mix(in srgb,currentColor 22%,transparent));}
+  .stage .wisp-portrait{width:27px;height:27px;}
+  .stage .chip-label{font-size:.47rem;color:#c7cbe0;}
+  .stage .chip-power{font-size:.48rem;color:#f0effb;}
+  .stage .chip-bar-track{height:2px;width:32px;}
+  .stage .bond-summary:empty{display:none;}
+  .stage .bond-summary{font-size:.56rem;flex:none;line-height:1.2;margin:0;min-height:0;color:#a8b6ce;}
+  .stage .buff-indicator{flex:none;font-size:.6rem;color:#a5e9bc;}
+  .stage .tap-hint{font-size:.58rem;line-height:1.35;margin:0;flex:none;}
+  .stage .stat-row{flex:none;gap:7px;}
+  .stage .stat-box{padding:7px 9px;background:linear-gradient(140deg,#26304b77,#131b2c);border-color:#35425a88;border-radius:11px;}
+  .stage .stat-box .k{font-size:.52rem;letter-spacing:.09em;}
+  .stage .stat-box .v{font-size:.85rem;color:#e4d4ac;}
+  .rift-dust{position:absolute;inset:0;}
+  .rift-dust i{position:absolute;left:20%;top:70%;width:3px;height:3px;border-radius:50%;background:var(--land-light);box-shadow:0 0 6px var(--land-light);animation:dustRise 7s linear infinite;opacity:0;}
+  .rift-dust i:nth-child(2){left:76%;top:80%;animation-delay:-2s;}
+  .rift-dust i:nth-child(3){left:37%;top:64%;animation-delay:-4s;}
+  .rift-dust i:nth-child(4){left:60%;top:70%;animation-delay:-5s;}
+  .rift-dust i:nth-child(5){left:86%;top:55%;animation-delay:-1s;}
+  .rift-dust i:nth-child(6){left:12%;top:40%;animation-delay:-3s;}
+  .hero-top .wisp-portrait{border:1px solid color-mix(in srgb,var(--wisp-color) 25%,var(--line));border-radius:13px;padding:3px;background:radial-gradient(circle,color-mix(in srgb,var(--wisp-color) 13%,transparent),transparent);}
+  .hero-card.active-wisp{box-shadow:inset 0 1px 0 color-mix(in srgb,var(--wisp-color) 22%,transparent),var(--deep-shadow);}
+  .hero-card.locked .wisp-portrait{color:var(--ink-dim);opacity:.5;filter:none;}
+  @keyframes creatureFloat{0%,100%{transform:translateY(2px) rotate(-1deg);}50%{transform:translateY(-6px) rotate(1deg);}}
+  @keyframes creatureStrike{0%{transform:scale(.88) rotate(-4deg);filter:brightness(1.7);}100%{transform:scale(1);filter:brightness(1);}}
+  @keyframes dustRise{0%{transform:translate3d(0,15px,0);opacity:0;}30%,65%{opacity:.6;}100%{transform:translate3d(12px,-70px,0);opacity:0;}}
+  @media(max-height:730px){
+    #tab-battle .stage{padding:9px 10px 8px;gap:6px;}
+    .stage .depth-label{font-size:.95rem;}
+    .stage .rift-mode-btn{min-height:30px;padding:6px;}
+    .stage .rift-objective{min-height:34px;padding:4px 7px 6px;}
+    .stage .enemy-name{font-size:.8rem;margin:0 0 -5px;}
+    .stage .wisp-portrait{width:22px;height:22px;}
+    .stage .hero-chip{padding:3px 2px;gap:1px;}
+    .stage .stat-box{padding:5px 8px;}
+    .stage .tap-hint{font-size:.53rem;}
+  }
+  @media(max-height:580px){
+    #tab-battle .stage{gap:4px;padding:6px 9px;}
+    .stage .depth-label{font-size:.85rem;}.stage .depth-label .region-label{font-size:.48rem;margin:0;}
+    .stage .rift-mode-btn{min-height:27px;padding:4px;}.stage .tap-hint{display:none!important;}
+    .stage .rift-objective{min-height:29px;}.stage .objective-copy small{display:none;}
+    .stage .hero-chip{flex-direction:row;width:auto;flex:1;justify-content:center;flex-wrap:wrap;}
+    .stage .hero-chip .chip-label,.stage .hero-chip .chip-bar-track{display:none;}
+    .stage .wisp-portrait{width:19px;height:19px;}.stage .boss-regen-tag{font-size:.51rem;padding:3px;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    #tab-battle .stage .enemy-glyph,.rift-dust i{animation:none;}.rift-dust i{opacity:.35;}
+  }
+  body.app-paused *,body.app-paused *::before,body.app-paused *::after{animation-play-state:paused!important;}
+
 </style>
 </head>
 <body>
 
 <canvas id="stars"></canvas>
+<svg class="art-definitions" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs>
+
+ <linearGradient id="creature-facet" x1="0" x2="1" y1="0" y2=".6"><stop stop-color="#e5f6ff" stop-opacity=".25"/><stop offset=".49" stop-color="#e5f6ff" stop-opacity=".03"/><stop offset=".5" stop-color="#020412" stop-opacity=".5"/><stop offset="1" stop-color="#020412" stop-opacity="0"/></linearGradient>
+<symbol id="creature-wisp" viewBox="0 0 160 160">
+ <path d="M80 17 C49 30 31 63 42 93 L27 128 61 119 79 143 99 119 129 126 116 91 C129 64 110 37 80 17Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
+ <path d="M80 17 C49 30 31 63 42 93 L27 128 61 119 79 143 99 119 129 126 116 91 C129 64 110 37 80 17Z" fill="url(#creature-facet)"/>
+ <path d="M80 31 63 57 80 112 99 57Z" fill="#070b1a" opacity=".6"/>
+ <path d="M80 32 80 50 M64 94 80 115 96 94" fill="none" stroke="var(--creature-rim,#ba87e4)" opacity=".6"/>
+ <path d="M54 73 72 81 57 86 M106 73 88 81 103 86" fill="#e9fcff" stroke="var(--creature-eye,#acf0ff)" stroke-width="1.5" stroke-linejoin="round"/>
+ <path d="M80 89 87 102 80 116 73 102Z" fill="var(--creature-eye,#acf0ff)" opacity=".8"/>
+ </symbol><symbol id="creature-serpent" viewBox="0 0 160 160">
+ <path d="M111 28 139 44 121 70 98 62 C65 73 61 102 91 106 124 111 121 139 82 141 43 142 26 117 37 91 45 70 77 57 91 50Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
+ <path d="M111 28 139 44 121 70 98 62 C65 73 61 102 91 106 124 111 121 139 82 141 43 142 26 117 37 91 45 70 77 57 91 50Z" fill="url(#creature-facet)"/>
+ <path d="M80 31 63 57 80 112 99 57Z" fill="#070b1a" opacity=".6"/>
+ <path d="M80 32 80 50 M64 94 80 115 96 94" fill="none" stroke="var(--creature-rim,#ba87e4)" opacity=".6"/>
+ <path d="M112 46 124 48 114 53" fill="#e9fcff" stroke="var(--creature-eye,#acf0ff)" stroke-width="1.5" stroke-linejoin="round"/>
+ <path d="M80 89 87 102 80 116 73 102Z" fill="var(--creature-eye,#acf0ff)" opacity=".8"/>
+ </symbol><symbol id="creature-stalker" viewBox="0 0 160 160">
+ <path d="M34 25 66 51 93 49 128 22 119 70 138 94 111 94 120 135 88 119 72 137 53 117 30 129 41 89 23 85 42 65Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
+ <path d="M34 25 66 51 93 49 128 22 119 70 138 94 111 94 120 135 88 119 72 137 53 117 30 129 41 89 23 85 42 65Z" fill="url(#creature-facet)"/>
+ <path d="M80 31 63 57 80 112 99 57Z" fill="#070b1a" opacity=".6"/>
+ <path d="M80 32 80 50 M64 94 80 115 96 94" fill="none" stroke="var(--creature-rim,#ba87e4)" opacity=".6"/>
+ <path d="M54 70 72 77 57 81 M108 70 88 77 104 81" fill="#e9fcff" stroke="var(--creature-eye,#acf0ff)" stroke-width="1.5" stroke-linejoin="round"/>
+ <path d="M80 89 87 102 80 116 73 102Z" fill="var(--creature-eye,#acf0ff)" opacity=".8"/>
+ </symbol><symbol id="creature-husk" viewBox="0 0 160 160">
+ <path d="M54 28 104 25 120 51 112 88 131 128 101 118 84 141 60 124 27 134 47 88 40 53Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
+ <path d="M54 28 104 25 120 51 112 88 131 128 101 118 84 141 60 124 27 134 47 88 40 53Z" fill="url(#creature-facet)"/>
+ <path d="M80 31 63 57 80 112 99 57Z" fill="#070b1a" opacity=".6"/>
+ <path d="M80 32 80 50 M64 94 80 115 96 94" fill="none" stroke="var(--creature-rim,#ba87e4)" opacity=".6"/>
+ <path d="M56 63 73 68 57 74 M103 61 86 68 102 72" fill="#e9fcff" stroke="var(--creature-eye,#acf0ff)" stroke-width="1.5" stroke-linejoin="round"/>
+ <path d="M80 89 87 102 80 116 73 102Z" fill="var(--creature-eye,#acf0ff)" opacity=".8"/>
+ </symbol><symbol id="creature-warden" viewBox="0 0 160 160">
+ <path d="M80 16 107 39 136 45 125 88 106 118 80 145 53 118 34 89 24 45 55 38Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
+ <path d="M80 16 107 39 136 45 125 88 106 118 80 145 53 118 34 89 24 45 55 38Z" fill="url(#creature-facet)"/>
+ <path d="M80 31 63 57 80 112 99 57Z" fill="#070b1a" opacity=".6"/>
+ <path d="M80 32 80 50 M64 94 80 115 96 94" fill="none" stroke="var(--creature-rim,#ba87e4)" opacity=".6"/>
+ <path d="M51 63 73 70 54 79 M109 63 87 70 106 79" fill="#e9fcff" stroke="var(--creature-eye,#acf0ff)" stroke-width="1.5" stroke-linejoin="round"/>
+ <path d="M80 89 87 102 80 116 73 102Z" fill="var(--creature-eye,#acf0ff)" opacity=".8"/>
+ </symbol><symbol id="creature-shade" viewBox="0 0 160 160">
+ <path d="M78 14 C38 31 25 70 39 96 L18 132 57 116 74 144 96 119 139 132 119 96 C134 60 110 25 78 14Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
+ <path d="M78 14 C38 31 25 70 39 96 L18 132 57 116 74 144 96 119 139 132 119 96 C134 60 110 25 78 14Z" fill="url(#creature-facet)"/>
+ <path d="M80 31 63 57 80 112 99 57Z" fill="#070b1a" opacity=".6"/>
+ <path d="M80 32 80 50 M64 94 80 115 96 94" fill="none" stroke="var(--creature-rim,#ba87e4)" opacity=".6"/>
+ <path d="M54 67 73 73 57 80 M105 67 86 73 103 80" fill="#e9fcff" stroke="var(--creature-eye,#acf0ff)" stroke-width="1.5" stroke-linejoin="round"/>
+ <path d="M80 89 87 102 80 116 73 102Z" fill="var(--creature-eye,#acf0ff)" opacity=".8"/>
+ </symbol><symbol id="creature-leech" viewBox="0 0 160 160">
+ <path d="M72 25 C117 12 143 51 125 83 L137 102 114 101 112 125 94 116 78 142 60 120 37 126 40 106 18 94 38 83 C24 58 44 32 72 25Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
+ <path d="M72 25 C117 12 143 51 125 83 L137 102 114 101 112 125 94 116 78 142 60 120 37 126 40 106 18 94 38 83 C24 58 44 32 72 25Z" fill="url(#creature-facet)"/>
+ <path d="M80 31 63 57 80 112 99 57Z" fill="#070b1a" opacity=".6"/>
+ <path d="M80 32 80 50 M64 94 80 115 96 94" fill="none" stroke="var(--creature-rim,#ba87e4)" opacity=".6"/>
+ <path d="M57 66 73 76 58 83 M104 66 87 76 103 83" fill="#e9fcff" stroke="var(--creature-eye,#acf0ff)" stroke-width="1.5" stroke-linejoin="round"/>
+ <path d="M80 89 87 102 80 116 73 102Z" fill="var(--creature-eye,#acf0ff)" opacity=".8"/>
+ </symbol><symbol id="creature-prowler" viewBox="0 0 160 160">
+ <path d="M37 24 71 50 90 48 124 24 114 74 137 111 109 104 115 133 87 115 78 137 60 117 34 130 44 101 23 107 45 72Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
+ <path d="M37 24 71 50 90 48 124 24 114 74 137 111 109 104 115 133 87 115 78 137 60 117 34 130 44 101 23 107 45 72Z" fill="url(#creature-facet)"/>
+ <path d="M80 31 63 57 80 112 99 57Z" fill="#070b1a" opacity=".6"/>
+ <path d="M80 32 80 50 M64 94 80 115 96 94" fill="none" stroke="var(--creature-rim,#ba87e4)" opacity=".6"/>
+ <path d="M51 68 71 76 55 82 M109 68 89 76 105 82" fill="#e9fcff" stroke="var(--creature-eye,#acf0ff)" stroke-width="1.5" stroke-linejoin="round"/>
+ <path d="M80 89 87 102 80 116 73 102Z" fill="var(--creature-eye,#acf0ff)" opacity=".8"/>
+ </symbol><symbol id="creature-effigy" viewBox="0 0 160 160">
+ <path d="M80 13 97 45 122 30 111 60 141 73 107 85 117 132 87 111 80 145 71 111 42 132 54 85 19 73 49 60 38 30 63 45Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
+ <path d="M80 13 97 45 122 30 111 60 141 73 107 85 117 132 87 111 80 145 71 111 42 132 54 85 19 73 49 60 38 30 63 45Z" fill="url(#creature-facet)"/>
+ <path d="M80 31 63 57 80 112 99 57Z" fill="#070b1a" opacity=".6"/>
+ <path d="M80 32 80 50 M64 94 80 115 96 94" fill="none" stroke="var(--creature-rim,#ba87e4)" opacity=".6"/>
+ <path d="M58 64 73 72 60 79 M102 64 87 72 100 79" fill="#e9fcff" stroke="var(--creature-eye,#acf0ff)" stroke-width="1.5" stroke-linejoin="round"/>
+ <path d="M80 89 87 102 80 116 73 102Z" fill="var(--creature-eye,#acf0ff)" opacity=".8"/>
+ </symbol><symbol id="creature-wraith" viewBox="0 0 160 160">
+ <path d="M80 15 105 33 116 67 111 89 139 132 98 119 80 145 64 120 23 134 45 90 40 66 53 33Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
+ <path d="M80 15 105 33 116 67 111 89 139 132 98 119 80 145 64 120 23 134 45 90 40 66 53 33Z" fill="url(#creature-facet)"/>
+ <path d="M80 31 63 57 80 112 99 57Z" fill="#070b1a" opacity=".6"/>
+ <path d="M80 32 80 50 M64 94 80 115 96 94" fill="none" stroke="var(--creature-rim,#ba87e4)" opacity=".6"/>
+ <path d="M53 66 73 73 57 81 M106 66 87 73 102 81" fill="#e9fcff" stroke="var(--creature-eye,#acf0ff)" stroke-width="1.5" stroke-linejoin="round"/>
+ <path d="M80 89 87 102 80 116 73 102Z" fill="var(--creature-eye,#acf0ff)" opacity=".8"/>
+ </symbol><symbol id="wisp-ember" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="currentColor" opacity=".07"/><path d="M32 5 C31 22 10 25 15 43 C19 61 48 61 51 42 C54 32 44 22 43 17 L35 32 C29 26 37 15 32 5Z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M32 34 C19 48 33 57 40 47Z" fill="none" stroke="#fff3d8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="3" fill="#fff9e9"/></symbol><symbol id="wisp-tide" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="currentColor" opacity=".07"/><path d="M32 6 C25 21 10 34 15 47 C20 63 46 60 50 45 C54 32 39 20 32 6Z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M23 34 Q32 25 42 35 M22 42 Q32 34 44 43" fill="none" stroke="#fff3d8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="3" fill="#fff9e9"/></symbol><symbol id="wisp-stone" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="currentColor" opacity=".07"/><path d="M20 13 43 13 53 29 48 51 33 59 15 49 10 28Z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M19 29 27 31 M37 31 45 29 M24 43 40 43" fill="none" stroke="#fff3d8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="3" fill="#fff9e9"/></symbol><symbol id="wisp-gale" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="currentColor" opacity=".07"/><path d="M8 34 35 8 31 25 56 20 35 43 34 57 26 43 12 48Z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M18 34 43 27 29 40" fill="none" stroke="#fff3d8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="3" fill="#fff9e9"/></symbol><symbol id="wisp-thorn" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="currentColor" opacity=".07"/><path d="M32 7 38 23 54 15 46 33 57 43 39 44 32 59 25 44 8 43 18 33 10 15 26 23Z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M32 21 32 47 M22 29 32 37 42 29" fill="none" stroke="#fff3d8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="3" fill="#fff9e9"/></symbol><symbol id="wisp-void" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="currentColor" opacity=".07"/><path d="M32 6 40 23 58 32 40 40 32 58 24 40 6 32 24 24Z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M32 22 41 32 32 42 23 32Z" fill="none" stroke="#fff3d8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="3" fill="#fff9e9"/></symbol><symbol id="wisp-aurora" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="currentColor" opacity=".07"/><path d="M32 8 39 24 55 31 39 38 32 55 25 38 9 31 25 24Z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M13 17 Q32 3 51 17 M11 48 Q32 62 53 48" fill="none" stroke="#fff3d8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="3" fill="#fff9e9"/></symbol><symbol id="wisp-titan" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="currentColor" opacity=".07"/><path d="M17 11 27 19 32 6 38 19 48 11 50 29 47 48 32 59 17 48 13 29Z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M21 29 27 32 M37 32 43 29 M24 42 32 49 40 42" fill="none" stroke="#fff3d8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="3" fill="#fff9e9"/></symbol></defs></svg>
 
 <div class="shell">
   <div class="topbar">
     <header class="hud">
       <div class="hud-title-row">
-        <span class="brand">Lumenfall</span>
+        <span class="brand"><svg class="brand-sigil" viewBox="0 0 32 36" aria-hidden="true"><path d="M16 2 29 11 25 27 16 34 7 27 3 11Z" fill="none" stroke="currentColor"/><path d="M16 7 22 18 16 29 10 18Z" fill="currentColor" fill-opacity=".25" stroke="currentColor"/><path d="M16 12V24M11 18H21" stroke="#ffe9bd"/></svg>Lumenfall</span>
         <button class="settings-btn" id="settings-btn" aria-label="Open settings" title="Settings">⚙</button>
       </div>
       <div class="chip"><span class="shape shape-triangle glyph-icon" style="background:var(--lumen)"></span><span class="lbl">Lumen</span><span class="val mono" id="hud-lumen">0</span></div>
@@ -1581,11 +1778,11 @@
       <div class="chip"><span class="shape shape-octagon glyph-icon" style="background:var(--sigil)"></span><span class="lbl">Sigils</span><span class="val mono" id="hud-sigil">0</span></div>
     </header>
     <nav class="tabbar">
-      <button class="tab-btn active" data-tab="battle"><span class="ic" style="border-radius:50%;"></span><span class="lb">Rift</span></button>
-      <button class="tab-btn" data-tab="spirits"><span class="ic" style="clip-path:polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%);"></span><span class="lb">Wisps</span></button>
-      <button class="tab-btn" data-tab="research"><span class="ic" style="clip-path:polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);"></span><span class="lb">Lab</span></button>
-      <button class="tab-btn" data-tab="ascend"><span class="ic" style="clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);"></span><span class="lb">Ascend</span></button>
-      <button class="tab-btn" data-tab="deeds"><span class="ic" style="clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);"></span><span class="lb">Deeds</span></button>
+      <button class="tab-btn active" data-tab="battle"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 20V11a6 8 0 0 1 12 0v9M3 21h18M9 20v-8a3 4 0 0 1 6 0v8M12 3V1"/></svg><span class="lb">Rift</span></button>
+      <button class="tab-btn" data-tab="spirits"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c0 6-8 9-7 14a7 7 0 0 0 14 0c1-4-3-7-4-9l-3 6M9 16l3 4 3-4"/></svg><span class="lb">Wisps</span></button>
+      <button class="tab-btn" data-tab="research"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 2h6M10 2v7L4 19a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3L14 9V2M7 16h10M11 13h.01M14 19h.01"/></svg><span class="lb">Lab</span></button>
+      <button class="tab-btn" data-tab="ascend"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 10-8 10-8-10Z M12 2v20M4 12h16M12 7l4 5-4 5-4-5Z"/></svg><span class="lb">Ascend</span></button>
+      <button class="tab-btn" data-tab="deeds"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8v8a4 4 0 0 1-8 0ZM8 5H3v3a5 5 0 0 0 5 5M16 5h5v3a5 5 0 0 1-5 5M12 15v5M7 22h10M9 20h6"/></svg><span class="lb">Deeds</span></button>
     </nav>
   </div>
 
@@ -1601,11 +1798,38 @@
         <div class="rift-objective" id="rift-objective"></div>
         <div class="enemy-name" id="enemy-name">Hollow Wisp</div>
         <div class="luminous-tag" id="luminous-tag" style="display:none;">Luminous — bonus Motes on defeat</div>
-        <div class="battle-row">
+        <div class="battle-row"><div class="rift-landscape" aria-hidden="true">
+ <svg viewBox="0 0 400 440" preserveAspectRatio="xMidYMid slice">
+ <defs><linearGradient id="rift-mist" x2="0" y2="1"><stop stop-color="var(--land-light)" stop-opacity=".04"/><stop offset=".6" stop-color="var(--land-light)" stop-opacity=".18"/><stop offset="1" stop-color="#080d19" stop-opacity="0"/></linearGradient></defs>
+ <circle cx="200" cy="132" r="96" fill="var(--land-light)" opacity=".025"/>
+ <circle cx="200" cy="132" r="78" fill="none" stroke="var(--land-light)" opacity=".12"/>
+ <path d="M0 221 42 163 76 208 121 127 173 204 219 156 269 198 326 118 400 214V440H0Z" fill="var(--land-far)"/>
+ <g fill="var(--land-stone)" stroke="var(--land-edge)" stroke-width="1">
+ <path d="M41 349 49 133 62 120 78 129 85 343Z M46 144H80 M47 161H80 M52 178H76"/>
+ <path d="M316 348 321 142 334 132 352 146 361 354Z M320 163H353 M321 180H354 M328 194H349"/>
+ <path d="M84 331 90 97 116 70 136 70 128 98 111 115 107 331Z M267 335 271 116 252 95 255 70 281 80 302 106 309 337Z"/>
+ <path d="M101 112 Q199 -8 288 113 L277 117 Q198 20 113 121Z"/>
+ </g>
+ <path d="M113 115 Q199 20 276 115L298 350H90Z" fill="url(#rift-mist)"/>
+ <path d="M111 115 Q199 18 278 115" fill="none" stroke="var(--land-light)" stroke-width="2" opacity=".6"/>
+ <g fill="var(--land-light)" opacity=".7"><path d="M63 172 67 180 63 188 59 180Z M337 185 341 193 337 201 333 193Z M194 55 199 47 204 55 199 63Z"/></g>
+ <g class="zone-prop zone-stars" fill="var(--land-light)" opacity=".6"><path d="M24 93 27 103 37 106 27 109 24 119 21 109 11 106 21 103Z M366 71 368 78 375 80 368 82 366 89 364 82 357 80 364 78Z"/><circle cx="148" cy="34" r="1.3"/><circle cx="238" cy="22" r="1"/></g>
+ <g class="zone-prop zone-roots" fill="none" stroke="var(--land-edge)" stroke-width="3" opacity=".65"><path d="M20 359 37 281 25 223 29 182 M36 279 61 255 64 211 M26 224 9 206 M379 359 367 293 377 244 369 202 M368 293 343 265 336 230"/></g>
+ <g class="zone-prop zone-crystals" fill="var(--land-far)" stroke="var(--land-light)" stroke-opacity=".6"><path d="M16 342 9 280 29 244 40 300 31 347Z M37 350 40 305 58 279 60 333 48 354Z M337 345 343 288 361 257 372 318 356 353Z M370 357 372 324 390 300 391 347Z"/><path d="M29 244 27 335 M361 257 355 342"/></g>
+ <g class="zone-prop zone-orbits" fill="none" stroke="var(--land-light)" opacity=".25"><ellipse cx="200" cy="140" rx="104" ry="36" transform="rotate(-32 200 140)"/><ellipse cx="200" cy="140" rx="104" ry="36" transform="rotate(32 200 140)"/><circle cx="200" cy="140" r="104" stroke-dasharray="2 9"/></g>
+ <g class="zone-prop zone-spires" fill="var(--land-stone)" stroke="var(--land-edge)"><path d="M8 344 13 179 26 146 40 180 43 342Z M356 347 360 184 375 149 389 184 398 350Z"/><path d="M21 325V202L27 190 33 203V325 M370 326V208L377 196 384 208V329" fill="#070e20"/></g>
+ <g class="zone-prop zone-crown" fill="var(--land-far)" stroke="var(--land-light)" stroke-opacity=".5"><path d="M133 52 120 22 160 40 200 5 240 40 280 22 267 52 232 66 168 66Z"/><path d="M200 16 207 30 200 44 193 30Z" fill="var(--land-light)"/></g>
+ <path d="M0 359 72 327 115 350 185 333 235 347 318 321 400 357V440H0Z" fill="#080f1e"/>
+ <path d="M0 385 86 353 143 367 199 349 276 371 322 347 400 382" fill="none" stroke="var(--land-edge)" opacity=".5"/>
+ <ellipse cx="200" cy="348" rx="100" ry="23" fill="#080c19" stroke="var(--land-edge)"/>
+ <ellipse cx="200" cy="345" rx="84" ry="17" fill="none" stroke="var(--land-light)" opacity=".35"/>
+ <path d="M115 344 143 344 M258 344 286 344 M199 327V334 M199 357V364" stroke="var(--land-light)" opacity=".7"/>
+ </svg><div class="rift-dust"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+</div>
           <div class="party-col" id="party-col"></div>
           <div class="enemy-stage-wrap">
             <div class="enemy-stage" id="enemy-stage">
-              <div class="enemy-glyph" id="enemy-glyph"></div>
+              <div class="enemy-glyph" id="enemy-glyph"><svg class="creature-art" viewBox="0 0 160 160" aria-hidden="true"><use href="#creature-prowler"/></svg><svg class="boss-regalia" viewBox="0 0 160 160" aria-hidden="true"><path d="M44 37 34 8 60 25 80 2 100 25 126 8 116 37 98 30 80 40 62 30Z" fill="var(--creature-color)" stroke="var(--creature-eye)"/><path d="M20 66 4 50 9 103 36 116 27 88 M140 66 156 50 151 103 124 116 133 88" fill="var(--creature-color)" stroke="var(--creature-rim)"/><path d="M80 10 85 19 80 27 75 19Z" fill="#fff0cb"/></svg></div>
             </div>
             <div class="hp-wrap">
               <div class="hp-bar-track"><div class="hp-bar-fill" id="hp-fill"></div></div>
@@ -3232,6 +3456,12 @@ function updateBattleFast(){
   applyRiftZoneVisual(state.depth);
   els['depth-label'].innerHTML = 'Rift ' + state.depth + (isBoss(state.depth) ? ' &mdash; <span class="boss-tag">BOSS</span>' : '') + '<span class="region-label" style="color:'+zone.accent+'">'+zone.name+'</span>';
   els['enemy-name'].textContent = (state.enemyIsLuminous ? 'Luminous ' : '') + enemyNameFor(state.depth);
+  var creatureKind = ENEMY_NOUN[(state.depth*7) % ENEMY_NOUN.length].toLowerCase();
+  var creatureEl = els['enemy-glyph'];
+  if(creatureEl.getAttribute('data-creature')!==creatureKind){
+    creatureEl.setAttribute('data-creature',creatureKind);
+    creatureEl.querySelector('.creature-art use').setAttribute('href','#creature-'+creatureKind);
+  }
   els['enemy-glyph'].classList.toggle('boss', isBoss(state.depth));
   els['enemy-glyph'].classList.toggle('luminous', !!state.enemyIsLuminous);
   els['luminous-tag'].style.display = state.enemyIsLuminous ? 'block' : 'none';
@@ -3364,6 +3594,9 @@ function renderFormationBonds(){
   renderBondSummary();
 }
 
+function wispPortrait(sp){
+  return '<svg class="wisp-portrait" viewBox="0 0 64 64" style="--wisp-color:'+sp.color+'" aria-hidden="true"><use href="#wisp-'+sp.id+'"/></svg>';
+}
 function renderPartyFormation(){
   var html = '';
   state.activeParty.forEach(function(id){
@@ -3372,7 +3605,7 @@ function renderPartyFormation(){
     var unpowered = (state.spirits[id]||0)<=0;
     var power = chipEffectivePower(id);
     html += '<div class="hero-chip'+(unpowered?' unpowered':'')+'" data-chip="'+id+'" style="--wisp-color:'+sp.color+';">'+
-      '<span class="shape '+sp.shape+'" style="width:20px;height:20px;background:'+sp.color+';color:'+sp.color+';"></span>'+
+      wispPortrait(sp)+
       '<div class="chip-bar-track"><div class="chip-bar-fill" data-bar="'+id+'" style="background:'+RESOURCE_COLORS[sp.resource]+'"></div></div>'+
       '<div class="chip-label">'+sp.shortName+'</div>'+
       '<div class="chip-power" data-power="'+id+'">'+formatNum(power)+'</div>'+
@@ -3431,7 +3664,7 @@ function renderSpirits(){
     if(!unlocked){
       html += '<div class="card hero-card locked" data-wisp-card="'+sp.id+'">' +
         '<div class="hero-top">'+
-          '<span class="shape '+sp.shape+'" style="width:34px;height:34px;background:var(--ink-dim);"></span>' +
+          wispPortrait(sp) +
           '<div class="hero-id"><div class="name">???</div><div class="class-tag lock-note">Unlocks at Rift '+sp.unlockDepth+'</div></div>' +
         '</div></div>';
       return;
@@ -3475,7 +3708,7 @@ function renderSpirits(){
       ' <button class="node-queue-toggle '+(empowerOn?'active':'')+'" data-empower-queue="'+sp.id+'">Auto-Empower '+(empowerOn?'ON':'OFF')+'</button>' : '';
     html += '<div class="card hero-card rarity-'+tier+(active?' active-wisp':'')+(ultimateUnlocked(sp.id)?' has-ultimate':'')+'" data-wisp-card="'+sp.id+'" style="--wisp-color:'+sp.color+';--rarity-color:'+RARITY_COLORS[tier]+';">' +
       '<div class="hero-top">'+
-        '<span class="shape '+sp.shape+'" style="width:34px;height:34px;background:'+sp.color+';color:'+sp.color+';"></span>' +
+        wispPortrait(sp) +
         '<div class="hero-id">' +
           '<div class="name">'+sp.name+'</div>' +
           '<div class="class-tag" style="color:'+sp.color+'">'+sp.heroClass+' &middot; '+sp.role+'</div>' +
@@ -4669,6 +4902,7 @@ function init(){
     });
   });
   window.addEventListener('beforeunload', saveState);
+  document.addEventListener('visibilitychange', function(){ document.body.classList.toggle('app-paused', document.hidden); });
   document.addEventListener('keydown', function(e){
     if(startupIntroPlaying && (e.key==='Escape' || e.key==='Enter' || e.key===' ')){
       if(startupIntroFinish) startupIntroFinish();
