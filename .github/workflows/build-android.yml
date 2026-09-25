@@ -226,6 +226,65 @@ jobs:
           cp ../index.html www/index.html
           cp -r ../fonts/. www/fonts/
 
+      - name: Browser runtime smoke test
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          CHROME="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME" ]; then
+            echo "No supported Chromium browser found on the runner."
+            exit 1
+          fi
+
+          python3 -m http.server 4173 --directory mobile/www >/tmp/lumenfall-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" >/dev/null 2>&1 || true' EXIT
+
+          ready=0
+          for _ in $(seq 1 20); do
+            if curl --fail --silent http://127.0.0.1:4173/index.html >/dev/null; then
+              ready=1
+              break
+            fi
+            sleep 0.25
+          done
+          if [ "$ready" -ne 1 ]; then
+            cat /tmp/lumenfall-http.log
+            exit 1
+          fi
+
+          "$CHROME" \
+            --headless=new \
+            --no-sandbox \
+            --disable-gpu \
+            --disable-dev-shm-usage \
+            --window-size=390,844 \
+            --virtual-time-budget=1800 \
+            --dump-dom \
+            http://127.0.0.1:4173/index.html \
+            >/tmp/lumenfall-dom.html 2>/tmp/lumenfall-chrome.log
+
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          dom = Path("/tmp/lumenfall-dom.html").read_text(encoding="utf-8")
+
+          checks = {
+              "Rift zone runtime render": 'data-zone-index="0"' in dom,
+              "Rift scroll lock": bool(re.search(r'<main[^>]*class="[^"]*rift-scroll-locked', dom)),
+              "Enemy runtime render": bool(re.search(r'id="enemy-name"[^>]*>\s*[^<\s][^<]*<', dom)),
+              "HUD runtime render": bool(re.search(r'id="hud-lumen"[^>]*>\s*0(?:\.0)?\s*<', dom)),
+          }
+          failed = [name for name, ok in checks.items() if not ok]
+          if failed:
+              print(Path("/tmp/lumenfall-dom.html").read_text(encoding="utf-8")[:12000])
+              raise SystemExit("Browser smoke test failed: " + ", ".join(failed))
+
+          print("Browser smoke test passed: game initialized and rendered at a 390x844 mobile viewport.")
+          PY
+
       - name: Generate Android project
         working-directory: mobile
         run: npx cap add android
