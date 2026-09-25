@@ -1279,10 +1279,15 @@
   }
   main::-webkit-scrollbar{display:none;}
   /* Push is a single-screen combat view: never allow vertical drift/scroll. */
-  main.push-scroll-locked{
+  main.rift-scroll-locked{
     overflow-y:hidden;
     overscroll-behavior-y:none;
     -webkit-overflow-scrolling:auto;
+  }
+  /* The Rift is a fixed combat viewport. Block vertical touch panning at the source. */
+  #tab-battle{
+    touch-action:pan-x;
+    overscroll-behavior:none;
   }
 
   nav.tabbar{
@@ -4059,9 +4064,8 @@ function syncMainScrollMode(tabName){
   if(!main) return;
   var battlePanel = document.getElementById('tab-battle');
   var battleActive = typeof tabName==='string' ? tabName==='battle' : !!(battlePanel && battlePanel.classList.contains('active'));
-  var lockPush = battleActive && state.riftMode==='push';
-  main.classList.toggle('push-scroll-locked', lockPush);
-  if(lockPush) main.scrollTop = 0;
+  main.classList.toggle('rift-scroll-locked', battleActive);
+  if(battleActive) main.scrollTop = 0;
 }
 function activateTab(tabName){
   var btn = document.querySelector('.tab-btn[data-tab="'+tabName+'"]');
