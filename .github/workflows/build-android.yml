@@ -108,10 +108,10 @@ jobs:
           src = Path("index.html").read_text(encoding="utf-8")
 
           required_ids = [
-              "settings-btn", "settings-overlay", "enemy-stage", "enemy-glyph",
-              "spirit-list", "party-col", "research-list", "study-list",
-              "node-list", "ach-list", "daily-card", "rift-push-btn",
-              "rift-farm-btn", "ascend-btn"
+              "settings-btn", "settings-overlay", "startup-intro",
+              "enemy-stage", "enemy-glyph", "spirit-list", "party-col",
+              "research-list", "study-list", "node-list", "ach-list",
+              "daily-card", "rift-push-btn", "rift-farm-btn", "ascend-btn"
           ]
 
           for element_id in required_ids:
@@ -124,7 +124,9 @@ jobs:
               'Lumenfall-Setup.exe',
               'serviceWorker.register',
               'manifest.webmanifest',
-              'BOSS_REGEN_PER_SEC'
+              'BOSS_REGEN_PER_SEC',
+              'studio-splash',
+              'Xarib Productions'
           ]
           for token in forbidden:
               if token in src:
@@ -150,6 +152,8 @@ jobs:
               "function restoreSaveBackup()",
               "var BOSS_TRAITS = [",
               "var RIFT_ZONES = [",
+              "function playStartupIntro(done)",
+              "STARTUP_INTRO_COOLDOWN_MS = 3 * 60 * 60 * 1000",
               "Lumenfall visual system"
           ]
           for token in required_features:
