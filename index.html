@@ -3138,7 +3138,7 @@ function nextRiftObjective(){
   }
 
   var recruitReady = SPIRITS.find(function(sp){
-    return state.maxDepthEver>=sp.unlockDepth && (state.spirits[sp.id]||0)<=0;
+    return state.maxDepthEver>=sp.unlockDepth && (state.spirits[sp.id]||0)<=0 && state.lumen>=spiritCost(sp);
   });
   if(recruitReady){
     return {
@@ -3386,7 +3386,9 @@ function renderRosterJourney(){
   var next = SPIRITS.find(function(sp){ return state.maxDepthEver<sp.unlockDepth; });
   var pct = Math.round(recruited/SPIRITS.length*100);
   var target = ready
-    ? '<strong>'+ready.name+' is ready to recruit</strong><small>'+ready.heroClass+' · '+ready.role+'</small>'
+    ? (state.lumen>=spiritCost(ready)
+      ? '<strong>'+ready.name+' is ready to recruit</strong><small>'+ready.heroClass+' · '+ready.role+'</small>'
+      : '<strong>'+ready.name+' has awakened</strong><small>'+formatNum(spiritCost(ready))+' Lumen to recruit · '+ready.heroClass+'</small>')
     : (next
       ? '<strong>Next Wisp: '+next.name+'</strong><small>Reach Rift '+next.unlockDepth+' · '+next.heroClass+'</small>'
       : '<strong>Every Wisp awakened</strong><small>Build your strongest 5-Wisp formation</small>');
