@@ -36,7 +36,8 @@ Inside Lumenfall, **Settings → Save Backup** can copy/restore your save code f
 ```
 index.html                         game UI and game logic loaded inside the Android WebView
 fonts/                             self-hosted game fonts
-icons/                             Android launcher/splash source images
+branding/                          production Lumenfall mark and branding notes
+docs/                              project state and chat ownership rules
 mobile/capacitor.config.json       Capacitor Android configuration
 mobile/package.json                Android/Capacitor dependencies
 mobile/package-lock.json           locked Android/Capacitor dependency versions
@@ -52,10 +53,10 @@ The workflow:
 
 1. Restores the persistent private Lumenfall Android signing key.
 2. Installs the locked Capacitor dependencies with `npm ci`.
-3. Copies `index.html` and the local fonts into `mobile/www`.
+3. Copies `index.html`, fonts and production branding into `mobile/www`.
 4. Generates a fresh Capacitor Android project.
 5. Assigns an increasing Android `versionCode` from the GitHub Actions run number.
-6. Generates the Android launcher icon and splash resources.
+6. Rasterizes the production SVG mark into launcher, adaptive-icon and native splash sources, then generates Android resources.
 7. Runs `cap sync android`.
 8. Builds the APK with Gradle using the stable signing identity.
 9. Publishes `Lumenfall.apk` to the fixed GitHub Release tag **android-latest**.
@@ -73,17 +74,16 @@ cd mobile
 npm ci
 
 rm -rf www
-mkdir -p www/fonts
+mkdir -p www/fonts www/branding
 cp ../index.html www/index.html
 cp -r ../fonts/. www/fonts/
+cp -r ../branding/. www/branding/
 
 npx cap add android
 
-mkdir -p assets
-cp ../icons/icon-1024.png assets/icon.png
-cp ../icons/icon-maskable-1024.png assets/icon-foreground.png
-cp ../icons/icon-background-1024.png assets/icon-background.png
-cp ../icons/icon-1024.png assets/splash.png
+# GitHub Actions rasterizes branding/lumenfall-mark.svg with Sharp
+# into assets/icon.png, icon-foreground.png, icon-background.png and splash.png.
+# Use the workflow as the canonical build recipe.
 
 npx capacitor-assets generate --android
 npx cap sync android

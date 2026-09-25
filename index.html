@@ -212,7 +212,6 @@
     box-shadow: 0 0 46px 8px color-mix(in srgb, var(--mote) 65%, transparent);
     filter: brightness(1.18) saturate(1.1);
   }
-  .luminous-tag{font-size:.66rem;color:var(--mote);font-weight:700;text-align:center;margin-top:-4px;}
   .enemy-stage.hit .enemy-glyph{transform:scale(.9) rotate(-2deg);}
   .hp-wrap{width:100%;}
   .hp-bar-track{height:9px;border-radius:999px;background:var(--bg-elev-2);border:1px solid var(--line);overflow:hidden;}
@@ -609,6 +608,7 @@
     color:rgba(190,181,221,.62);
   }
   .startup-title-wrap{position:relative;padding:18px 8px;}
+  .startup-game-mark{width:92px;height:92px;object-fit:contain;margin:0 auto -2px;filter:drop-shadow(0 0 24px rgba(229,180,89,.24)) drop-shadow(0 0 34px rgba(126,98,255,.18));}
   .startup-title-glow{
     position:absolute;left:50%;top:50%;width:260px;height:130px;transform:translate(-50%,-50%);
     background:radial-gradient(ellipse,rgba(132,90,240,.22),rgba(70,99,200,.08) 42%,transparent 70%);
@@ -894,14 +894,6 @@
     filter:brightness(1.2) saturate(1.18);
     box-shadow:0 0 54px 10px color-mix(in srgb,var(--mote) 52%,transparent),inset 0 0 22px rgba(255,255,255,.16);
   }
-  .luminous-tag{
-    display:inline-flex!important;align-self:center;
-    padding:4px 9px;border-radius:999px;
-    background:color-mix(in srgb,var(--mote) 10%,var(--bg-elev));
-    border:1px solid color-mix(in srgb,var(--mote) 28%,var(--line));
-    box-shadow:0 0 18px -12px var(--mote);
-  }
-  .luminous-tag[style*="display:none"]{display:none!important;}
   .enemy-stage.hit{transform:scale(.98);}
   .enemy-stage.hit .enemy-glyph{transform:scale(.86) rotate(-3deg);filter:brightness(1.22);}
   .hp-bar-track{height:10px;background:color-mix(in srgb,var(--bg) 62%,var(--bg-elev));border-color:var(--soft-line);}
@@ -1559,7 +1551,7 @@
   /* Rift art direction: moonlit ruins, faceted creatures, illuminated sigils. */
   .art-definitions{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none;}
   .hud .brand{display:flex;align-items:center;gap:9px;letter-spacing:.12em;font-size:1rem;}
-  .brand-sigil{width:25px;height:29px;color:var(--lumen);flex:none;}
+  .brand-sigil{width:30px;height:30px;object-fit:contain;flex:none;filter:drop-shadow(0 0 8px rgba(230,183,89,.32));}
   .hud .chip{border-radius:9px;}
   nav.tabbar .nav-art{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
   nav.tabbar button.active{color:var(--lumen);background:linear-gradient(0deg,color-mix(in srgb,var(--lumen) 9%,transparent),transparent);}
@@ -1762,7 +1754,7 @@
   <div class="topbar">
     <header class="hud">
       <div class="hud-title-row">
-        <span class="brand"><svg class="brand-sigil" viewBox="0 0 32 36" aria-hidden="true"><path d="M16 2 29 11 25 27 16 34 7 27 3 11Z" fill="none" stroke="currentColor"/><path d="M16 7 22 18 16 29 10 18Z" fill="currentColor" fill-opacity=".25" stroke="currentColor"/><path d="M16 12V24M11 18H21" stroke="#ffe9bd"/></svg>Lumenfall</span>
+        <span class="brand"><img class="brand-sigil" src="branding/lumenfall-mark.svg" alt="" aria-hidden="true">Lumenfall</span>
         <button class="settings-btn" id="settings-btn" aria-label="Open settings" title="Settings">⚙</button>
       </div>
       <div class="chip"><span class="shape shape-triangle glyph-icon" style="background:var(--lumen)"></span><span class="lbl">Lumen</span><span class="val mono" id="hud-lumen">0</span></div>
@@ -1792,7 +1784,6 @@
         <div class="rift-mode-note" id="rift-mode-note">Push deeper until you hit a wall.</div>
         <div class="rift-objective" id="rift-objective"></div>
         <div class="enemy-name" id="enemy-name">Hollow Wisp</div>
-        <div class="luminous-tag" id="luminous-tag" style="display:none;">Luminous — bonus Motes on defeat</div>
         <div class="battle-row"><div class="rift-landscape" aria-hidden="true">
  <svg viewBox="0 0 400 440" preserveAspectRatio="xMidYMid slice">
  <defs><linearGradient id="rift-mist" x2="0" y2="1"><stop stop-color="var(--land-light)" stop-opacity=".04"/><stop offset=".6" stop-color="var(--land-light)" stop-opacity=".18"/><stop offset="1" stop-color="#080d19" stop-opacity="0"/></linearGradient></defs>
@@ -1976,6 +1967,7 @@
       <div class="startup-presents">presents</div>
     </div>
     <div class="startup-game">
+      <img class="startup-game-mark" src="branding/lumenfall-mark.svg" alt="" aria-hidden="true">
       <div class="startup-title-wrap">
         <div class="startup-title-glow"></div>
         <div class="startup-title">LUMENFALL</div>
@@ -3428,7 +3420,7 @@ function flashChip(id, label){
 // ---------------------------------------------------------------
 var els = {};
 function cacheEls(){
-  ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','rift-push-btn','rift-farm-btn','rift-mode-note','rift-objective','enemy-name','luminous-tag','boss-regen-tag','buff-indicator','enemy-stage','enemy-glyph',
+  ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','rift-push-btn','rift-farm-btn','rift-mode-note','rift-objective','enemy-name','boss-regen-tag','buff-indicator','enemy-stage','enemy-glyph',
    'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','party-col','bond-card','bond-summary','research-list','study-list',
    'prism-preview','ascend-btn','ascend-note','node-list','ach-list','roster-journey','shop-list','theme-list','manifesto','toast',
    'daily-streak-badge','daily-quest-list','settings-overlay','settings-home','settings-encyclopedia','settings-title','settings-back','encyclopedia-content'
@@ -3561,7 +3553,6 @@ function updateBattleFast(){
   }
   els['enemy-glyph'].classList.toggle('boss', isBoss(state.depth));
   els['enemy-glyph'].classList.toggle('luminous', !!state.enemyIsLuminous);
-  els['luminous-tag'].style.display = state.enemyIsLuminous ? 'block' : 'none';
   var bossNow = isBoss(state.depth);
   var battleStage = document.querySelector('#tab-battle .stage');
   var trait = bossNow ? bossTraitFor(state.depth) : null;

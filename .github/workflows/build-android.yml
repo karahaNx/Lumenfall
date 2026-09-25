@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - 'index.html'
-      - 'icons/**'
+      - 'branding/**'
       - 'fonts/**'
       - 'mobile/**'
       - '.github/workflows/build-android.yml'
@@ -151,7 +151,9 @@ jobs:
               'prismGain()',
               'offline-preview',
               'function renderOfflinePreview(',
-              'function computeOfflinePreview('
+              'function computeOfflinePreview(',
+              'id="luminous-tag"',
+              'Luminous — bonus Motes on defeat'
           ]
           for token in forbidden:
               if token in src:
@@ -197,7 +199,8 @@ jobs:
               "restoreEnemyOrSpawn();",
               "spawnEnemy(false);",
               "if(battleActive && main.scrollTop!==0) main.scrollTop = 0;",
-              "Lumenfall visual system"
+              "Lumenfall visual system",
+              "branding/lumenfall-mark.svg"
           ]
           for token in required_features:
               if token not in src:
@@ -222,9 +225,10 @@ jobs:
         working-directory: mobile
         run: |
           rm -rf www
-          mkdir -p www/fonts
+          mkdir -p www/fonts www/branding
           cp ../index.html www/index.html
           cp -r ../fonts/. www/fonts/
+          cp -r ../branding/. www/branding/
 
       - name: Browser runtime smoke test
         shell: bash
@@ -243,7 +247,7 @@ jobs:
 
           ready=0
           for _ in $(seq 1 20); do
-            if curl --fail --silent http://127.0.0.1:4173/index.html >/dev/null; then
+            if curl --fail --silent http://127.0.0.1:4173/index.html >/dev/null && curl --fail --silent http://127.0.0.1:4173/branding/lumenfall-mark.svg >/dev/null; then
               ready=1
               break
             fi
@@ -316,14 +320,43 @@ jobs:
           print(f"Android versionCode={version_code}, versionName={version_name}")
           PY
 
-      - name: Stage Android icon sources
+      - name: Stage Android icon and splash sources
         working-directory: mobile
+        shell: bash
         run: |
+          set -euo pipefail
           mkdir -p assets
-          cp ../icons/icon-1024.png assets/icon.png
-          cp ../icons/icon-maskable-1024.png assets/icon-foreground.png
-          cp ../icons/icon-background-1024.png assets/icon-background.png
-          cp ../icons/icon-1024.png assets/splash.png
+          node <<'NODE'
+          const sharp = require('sharp');
+          const markPath = '../branding/lumenfall-mark.svg';
+          const bg = { r: 8, g: 16, b: 39, alpha: 1 };
+
+          async function transparentCanvas(size, markSize) {
+            const mark = await sharp(markPath).resize(markSize, markSize, { fit: 'contain' }).png().toBuffer();
+            return sharp({ create: { width: size, height: size, channels: 4, background: { r:0,g:0,b:0,alpha:0 } } })
+              .composite([{ input: mark, gravity: 'center' }]).png().toBuffer();
+          }
+
+          async function main() {
+            const iconMark = await transparentCanvas(1024, 820);
+            await sharp({ create: { width: 1024, height: 1024, channels: 4, background: bg } })
+              .composite([{ input: iconMark }]).png().toFile('assets/icon.png');
+
+            // Adaptive foreground stays inside Android's safe zone.
+            const foreground = await transparentCanvas(1024, 610);
+            await sharp(foreground).png().toFile('assets/icon-foreground.png');
+
+            await sharp({ create: { width: 1024, height: 1024, channels: 4, background: bg } })
+              .png().toFile('assets/icon-background.png');
+
+            // Native splash: minimal, centered and safe across portrait crops.
+            const splashMark = await transparentCanvas(2732, 920);
+            await sharp({ create: { width: 2732, height: 2732, channels: 4, background: bg } })
+              .composite([{ input: splashMark }]).png().toFile('assets/splash.png');
+          }
+
+          main().catch(err => { console.error(err); process.exit(1); });
+          NODE
 
       - name: Generate Android icons and splash
         working-directory: mobile
