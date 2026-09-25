@@ -3171,6 +3171,9 @@ function nextRiftObjective(){
   }
 
   var candidates = [];
+  if(state.ascendCount===0 && p<16){
+    candidates.push({depth:16,kind:'ASCEND',title:'Unlock Ascend',detail:'Clear Rift 15'});
+  }
   SPIRITS.forEach(function(sp){
     if(sp.unlockDepth>p) candidates.push({depth:sp.unlockDepth,kind:'WISP',title:'Awaken '+sp.shortName,detail:sp.heroClass+' · Rift '+sp.unlockDepth});
   });
