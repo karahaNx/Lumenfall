@@ -109,15 +109,27 @@ jobs:
 
           required_ids = [
               "settings-btn", "settings-overlay", "startup-intro",
-              "enemy-stage", "enemy-glyph", "spirit-list", "party-col",
+              "enemy-stage", "enemy-glyph", "rift-objective",
+              "spirit-list", "party-col", "roster-journey",
               "research-list", "study-list", "node-list", "ach-list",
               "daily-card", "rift-push-btn", "rift-farm-btn", "ascend-btn"
           ]
 
+          all_ids = re.findall(r'\sid="([^"]+)"', src)
+          duplicates = sorted({x for x in all_ids if all_ids.count(x) > 1})
+          if duplicates:
+              raise SystemExit(f"QA failed: duplicate HTML ids: {duplicates}")
+
+          id_set = set(all_ids)
           for element_id in required_ids:
-              count = len(re.findall(r'id="' + re.escape(element_id) + r'"', src))
+              count = all_ids.count(element_id)
               if count != 1:
                   raise SystemExit(f"QA failed: id={element_id!r} occurs {count} times")
+
+          literal_id_refs = set(re.findall(r'document\.getElementById\([\'"]([^\'"]+)[\'"]\)', src))
+          missing_refs = sorted(literal_id_refs - id_set)
+          if missing_refs:
+              raise SystemExit(f"QA failed: getElementById references missing from HTML: {missing_refs}")
 
           forbidden = [
               'data-tab="about"',
@@ -126,7 +138,9 @@ jobs:
               'manifest.webmanifest',
               'BOSS_REGEN_PER_SEC',
               'studio-splash',
-              'Xarib Productions'
+              'Xarib Productions',
+              'intro-overlay',
+              'prismGain()'
           ]
           for token in forbidden:
               if token in src:
@@ -154,6 +168,12 @@ jobs:
               "var RIFT_ZONES = [",
               "function playStartupIntro(done)",
               "STARTUP_INTRO_COOLDOWN_MS = 3 * 60 * 60 * 1000",
+              "function nextRiftObjective()",
+              "function showRiftMilestone(",
+              "function renderRosterJourney()",
+              "function showAscendFlash(",
+              "function ascendPrismGain(",
+              "function dailyQuestEligible(q,s)",
               "Lumenfall visual system"
           ]
           for token in required_features:
