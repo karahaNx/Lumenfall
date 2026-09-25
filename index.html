@@ -1117,6 +1117,40 @@
     box-shadow:0 7px 18px -14px var(--good),var(--inner-highlight);
   }
 
+
+  /* Final mobile ergonomics / resilience */
+  body,.shell{min-height:100dvh;}
+  button{touch-action:manipulation;}
+  .settings-btn,.settings-icon-btn{min-width:40px;min-height:40px;}
+  nav.tabbar button{min-height:52px;}
+  .active-toggle,.node-queue-toggle,.quest-claim-btn{min-height:32px;}
+  .buy-btn,.mini-btn,.speed-btn,.shop-card button,.save-backup-actions button,.big-btn,.primary-btn{min-height:44px;}
+  .settings-row{min-height:56px;}
+  .settings-overlay{
+    padding:
+      max(10px,env(safe-area-inset-top))
+      max(10px,env(safe-area-inset-right))
+      max(10px,env(safe-area-inset-bottom))
+      max(10px,env(safe-area-inset-left));
+  }
+  .settings-modal{height:min(92dvh,760px);}
+  .settings-scroll{-webkit-overflow-scrolling:touch;}
+  .section-sub,.module-effect,.hero-ability,.settings-row-sub,.ency-desc,.shop-card .desc,.theme-info .desc,.boss-regen-tag{
+    overflow-wrap:anywhere;
+  }
+  .hp-text,.chip-power,.quest-reward,.reward,.prism-preview{font-variant-numeric:tabular-nums;}
+  .tab-panel{contain:layout style;}
+  .enemy-stage,.hero-chip,.hero-card{will-change:auto;}
+  @media (max-height:650px){
+    .hud{padding-top:calc(7px + env(safe-area-inset-top));padding-bottom:6px;}
+    nav.tabbar button{min-height:45px;padding-top:6px;padding-bottom:5px;}
+    main{padding-top:10px;}
+    .enemy-stage{width:136px;height:136px;}
+    .enemy-glyph{width:88px;height:88px;}
+    .enemy-glyph.boss{width:100px;height:100px;}
+    .stage{gap:7px!important;}
+  }
+
 </style>
 </head>
 <body>
