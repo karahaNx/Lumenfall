@@ -38,7 +38,7 @@ def parse_badging(output: str) -> dict:
         raise VerificationError("aapt output did not contain a package line")
 
     def field(name: str) -> str:
-        match = re.search(rf"\\b{name}='([^']*)'", package_line)
+        match = re.search(rf"\b{name}='([^']*)'", package_line)
         if not match:
             raise VerificationError(f"aapt package line did not contain {name}")
         return match.group(1)
@@ -52,7 +52,7 @@ def parse_badging(output: str) -> dict:
 
 def parse_apksigner_certificates(output: str) -> list[str]:
     matches = re.findall(
-        r"certificate SHA-256 digest:\\s*([0-9A-Fa-f:]+)",
+        r"certificate SHA-256 digest:\s*([0-9A-Fa-f:]+)",
         output,
         flags=re.IGNORECASE,
     )
@@ -87,7 +87,7 @@ def run_tool(command, label):
         if len(detail) > 1200:
             detail = detail[-1200:]
         raise VerificationError(f"{label} failed with exit code {completed.returncode}" + (f": {detail}" if detail else ""))
-    return (completed.stdout or "") + ("\\n" + completed.stderr if completed.stderr else "")
+    return (completed.stdout or "") + ("\n" + completed.stderr if completed.stderr else "")
 
 
 def verify_apk(apk, aapt, apksigner, expected_package, expected_version_code, expected_version_name, expected_cert_sha256):
@@ -108,8 +108,8 @@ def expect_failure(label, func):
 
 def self_test():
     expected_cert = "A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21"
-    good_badging = "package: name='com.lumenfall.app' versionCode='123' versionName='0.1.123' compileSdkVersion='35'\\n"
-    good_signer = "Signer #1 certificate SHA-256 digest: a91cbf3427d2ceb1cdbe07e5225f17d471b1829e52f7ab66497e754975ad3e21\\n"
+    good_badging = "package: name='com.lumenfall.app' versionCode='123' versionName='0.1.123' compileSdkVersion='35'\n"
+    good_signer = "Signer #1 certificate SHA-256 digest: a91cbf3427d2ceb1cdbe07e5225f17d471b1829e52f7ab66497e754975ad3e21\n"
     metadata = parse_badging(good_badging)
     certificates = parse_apksigner_certificates(good_signer)
     assert_identity(metadata, certificates, "com.lumenfall.app", "123", "0.1.123", expected_cert)
