@@ -4904,10 +4904,14 @@ function simulationNextFarmGridSeconds(clockStartMs,elapsedInRunSec){
   // event. Derive its phase from the run-local elapsed clock instead of the
   // huge absolute epoch value: adding fractional milliseconds near Date.now()
   // loses enough IEEE-754 precision to manufacture residual damage at high DPS.
-  var startPhaseMs = ((clockStartMs%1000)+1000)%1000;
-  var phaseMs = (startPhaseMs + elapsedInRunSec*1000) % 1000;
-  if(phaseMs<1e-7 || 1000-phaseMs<1e-7) return 1;
-  return (1000-phaseMs)/1000;
+  var startPhaseSec = (((clockStartMs%1000)+1000)%1000)/1000;
+  var positionSec = startPhaseSec + elapsedInRunSec;
+  var fraction = positionSec - Math.floor(positionSec);
+  // A pseudo-boundary closer than the simulator's own time epsilon is already
+  // the current boundary. Skip it and use the next full grid interval rather
+  // than creating a zero-time event with no gameplay action.
+  if(fraction<SIM_EPS || 1-fraction<SIM_EPS) return 1;
+  return 1-fraction;
 }
 function simulationApplyAutoAscend(summary){
   if(!autoAscendReady()) return false;
