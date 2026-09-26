@@ -4714,8 +4714,19 @@ function autoEmpowerTick(){
  * Passive Wisp damage is continuous and may carry elapsed time through more
  * than one enemy. Discrete Wisp bursts and Guardian/Auto-Taps remain
  * single-target events, so their overkill does not spill into the next enemy.
- * At equal timestamps the order is: passive damage/regeneration, Wisp
- * abilities, Auto-Tap, Auto-Empower, queued Research, Study completion/start.
+ * At equal timestamps the order is deterministic:
+ *   1. elapsed passive damage/regeneration and enemy death/reward;
+ *   2. current Auto-Ascend rule when a kill/arrival makes it ready;
+ *   3. support-buff expiry;
+ *   4. Wisp abilities (Active-party order);
+ *   5. Auto-Tap;
+ *   6. Auto-Empower;
+ *   7. queued Research purchases;
+ *   8. Long Study completion, then queued Study starts;
+ *   9. Boss retry, then Boss retreat if the current Boss is still unwinnable.
+ *
+ * Window/chunk boundaries are not a separate gameplay priority. The same
+ * timestamp resolver runs at time zero, internal events and the requested end.
  *
  * This preserves existing formulas while making elapsed-time semantics
  * independent from the 100 ms UI tick and from offline loop chunk size.
@@ -4744,6 +4755,21 @@ function simulationSummary(elapsedSec){
     achievements:[], retreated:false, retreats:0, retries:0,
     fastForwardedKills:0, iterations:0, ascendGains:[]
   };
+}
+function simulationTimelinePush(summary,elapsedSec,type,detail){
+  if(!summary.timeline) return;
+  if(summary.timeline.length>=2000) throw new Error('Authoritative simulation timeline guard exceeded');
+  summary.timeline.push({
+    elapsedSec:elapsedSec,
+    type:type,
+    detail:detail||null
+  });
+}
+function simulationExpireBuff(nowMs){
+  if(!state.buffUntil || nowMs < state.buffUntil) return false;
+  state.buffUntil = 0;
+  state.buffMult = 1;
+  return true;
 }
 function simulationRecordAchievements(summary){
   var changed = applyAchievementChecks();
@@ -5124,7 +5150,8 @@ function simulationProcessAbilities(nowMs,policy,summary){
 function simulationProcessAutoTap(nowMs,policy,summary){
   var processed = 0;
   while(state.achieved.autotap && (state._autoTapAccum||0)>=1000-1e-7){
-    state._autoTapAccum = Math.max(0,(state._autoTapAccum||0)-1000);
+    var tapResidual = (state._autoTapAccum||0)-1000;
+    state._autoTapAccum = Math.abs(tapResidual)<1e-7 ? 0 : Math.max(0,tapResidual);
     state.totalTaps++;
     summary.autoTaps++;
     trackDaily('taps');
@@ -5139,7 +5166,8 @@ function simulationProcessAutoTap(nowMs,policy,summary){
 function simulationProcessAutoEmpower(summary){
   var processed = 0;
   while(state.achieved.labmaster && (state._autoEmpowerAccum||0)>=1000-1e-7){
-    state._autoEmpowerAccum = Math.max(0,(state._autoEmpowerAccum||0)-1000);
+    var empowerResidual = (state._autoEmpowerAccum||0)-1000;
+    state._autoEmpowerAccum = Math.abs(empowerResidual)<1e-7 ? 0 : Math.max(0,empowerResidual);
     if(autoEmpowerTick()) summary.empowers++;
     processed++;
     if(processed>10) throw new Error('Authoritative simulation Auto-Empower guard exceeded');
@@ -5172,6 +5200,97 @@ function simulationMaybeRetryBoss(policy,summary){
   spawnEnemy(false);
   summary.retries++;
   return true;
+}
+function simulationResolveTimestamp(nowMs,elapsedSec,policy,summary){
+  var actions = 0;
+  var ascendsBefore;
+
+  if(simulationExpireBuff(nowMs)){
+    simulationTimelinePush(summary,elapsedSec,'buffExpire');
+    actions++;
+  }
+
+  ascendsBefore = summary.ascends;
+  var abilities = simulationProcessAbilities(nowMs,policy,summary);
+  if(abilities){
+    simulationTimelinePush(summary,elapsedSec,'ability',{count:abilities});
+    actions += abilities;
+  }
+  if(summary.ascends>ascendsBefore){
+    simulationTimelinePush(summary,elapsedSec,'autoAscend',{count:summary.ascends-ascendsBefore});
+  }
+
+  ascendsBefore = summary.ascends;
+  var taps = simulationProcessAutoTap(nowMs,policy,summary);
+  if(taps){
+    simulationTimelinePush(summary,elapsedSec,'autoTap',{count:taps});
+    actions += taps;
+  }
+  if(summary.ascends>ascendsBefore){
+    simulationTimelinePush(summary,elapsedSec,'autoAscend',{count:summary.ascends-ascendsBefore});
+  }
+
+  var spiritBefore = {};
+  state.activeParty.forEach(function(id){ spiritBefore[id]=state.spirits[id]||0; });
+  var empowers = simulationProcessAutoEmpower(summary);
+  if(empowers){
+    var empowered = [];
+    state.activeParty.forEach(function(id){
+      var delta = (state.spirits[id]||0)-(spiritBefore[id]||0);
+      if(delta>0) empowered.push({id:id,levels:delta});
+    });
+    simulationTimelinePush(summary,elapsedSec,'autoEmpower',{count:empowers,wisps:empowered});
+    actions += empowers;
+  }
+
+  var researchBefore = {};
+  RESEARCH.forEach(function(node){ researchBefore[node.id]=state.research[node.id]||0; });
+  var researchBought = simulationDrainResearchQueue(summary);
+  if(researchBought){
+    var researchChanges = [];
+    RESEARCH.forEach(function(node){
+      var delta = (state.research[node.id]||0)-(researchBefore[node.id]||0);
+      if(delta>0) researchChanges.push({id:node.id,levels:delta});
+    });
+    simulationTimelinePush(summary,elapsedSec,'research',{count:researchBought,nodes:researchChanges});
+    actions += researchBought;
+  }
+
+  var completedBefore = summary.completedStudies.length;
+  var completedStudies = simulationCompleteDueStudies(summary);
+  if(completedStudies){
+    simulationTimelinePush(summary,elapsedSec,'studyComplete',{
+      count:completedStudies,
+      names:summary.completedStudies.slice(completedBefore)
+    });
+    actions += completedStudies;
+  }
+
+  var activeBefore = {};
+  state.activeStudies.forEach(function(active){ activeBefore[active.id]=true; });
+  var studiesStarted = simulationStartQueuedStudies(summary);
+  if(studiesStarted){
+    var startedIds = state.activeStudies
+      .filter(function(active){ return !activeBefore[active.id]; })
+      .map(function(active){ return active.id; });
+    simulationTimelinePush(summary,elapsedSec,'studyStart',{count:studiesStarted,ids:startedIds});
+    actions += studiesStarted;
+  }
+
+  actions += simulationRecordAchievements(summary);
+
+  if(simulationMaybeRetryBoss(policy,summary)){
+    simulationTimelinePush(summary,elapsedSec,'bossRetry',{depth:state.depth});
+    actions++;
+  } else if(simulationMaybeRetreatFromBoss(policy,summary)){
+    simulationTimelinePush(summary,elapsedSec,'bossRetreat',{
+      farmDepth:state.farmDepth,
+      returnDepth:state.farmReturnDepth
+    });
+    actions++;
+  }
+
+  return actions;
 }
 function advanceAuthoritativeTime(elapsedSec,options){
   options = options || {};
@@ -5259,6 +5378,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
   var traceEverySec = Math.max(0,Number(options.traceEverySec)||0);
   var nextTraceElapsedSec = traceEverySec>0 ? traceEverySec : Infinity;
   if(traceEverySec>0) summary.trace = [];
+  if(options.captureTimeline) summary.timeline = [];
   var traceEventsFromSec = Number.isFinite(options.traceEventsFromSec) ? options.traceEventsFromSec : Infinity;
   var traceEventsToSec = Number.isFinite(options.traceEventsToSec) ? options.traceEventsToSec : -Infinity;
   var traceOffsetSec = Number(options.traceOffsetSec)||0;
@@ -5298,9 +5418,20 @@ function advanceAuthoritativeTime(elapsedSec,options){
     });
   }
 
-  simulationDrainResearchQueue(summary);
-  simulationStartQueuedStudies(summary);
-  simulationRecordAchievements(summary);
+  // Resolve time-zero state with exactly the same ordering as every later
+  // timestamp. This is critical for compositional offline simulation: a caller
+  // boundary cannot give Research/Studies priority over due automation.
+  var initialNowMs = simulationNowMs();
+  var initialAscends = summary.ascends;
+  if(state.enemyHp<=SIM_EPS){
+    var initialKills = summary.kills;
+    simulationDefeatEnemy(policy,summary);
+    simulationTimelinePush(summary,0,'enemyDeath',{count:summary.kills-initialKills});
+  }
+  if(simulationApplyAutoAscend(summary) && summary.ascends>initialAscends){
+    simulationTimelinePush(summary,0,'autoAscend',{count:summary.ascends-initialAscends});
+  }
+  simulationResolveTimestamp(initialNowMs,0,policy,summary);
 
   while(remaining>0){
     summary.iterations++;
@@ -5311,12 +5442,22 @@ function advanceAuthoritativeTime(elapsedSec,options){
     var nowMs = simulationNowMs();
 
     if(state.enemyHp<=SIM_EPS){
+      var topKillsBefore = summary.kills;
+      var topAscendsBefore = summary.ascends;
       simulationDefeatEnemy(policy,summary);
+      simulationTimelinePush(summary,currentElapsedSec(),'enemyDeath',{count:summary.kills-topKillsBefore});
+      if(summary.ascends>topAscendsBefore){
+        simulationTimelinePush(summary,currentElapsedSec(),'autoAscend',{count:summary.ascends-topAscendsBefore});
+      }
+      simulationResolveTimestamp(nowMs,currentElapsedSec(),policy,summary);
       continue;
     }
-    if(simulationApplyAutoAscend(summary)) continue;
-    if(simulationMaybeRetryBoss(policy,summary)) continue;
-    if(simulationMaybeRetreatFromBoss(policy,summary)) continue;
+    var explicitAscendsBefore = summary.ascends;
+    if(simulationApplyAutoAscend(summary)){
+      simulationTimelinePush(summary,currentElapsedSec(),'autoAscend',{count:summary.ascends-explicitAscendsBefore});
+      simulationResolveTimestamp(nowMs,currentElapsedSec(),policy,summary);
+      continue;
+    }
 
     var dps = simulationPassiveDps(nowMs);
     var rewardScale = simulationRewardScale(policy);
@@ -5404,13 +5545,15 @@ function advanceAuthoritativeTime(elapsedSec,options){
 
     nowMs = simulationNowMs();
     var actions = summary.kills-killsBefore;
-    actions += simulationProcessAbilities(nowMs,policy,summary);
-    actions += simulationProcessAutoTap(nowMs,policy,summary);
-    actions += simulationProcessAutoEmpower(summary);
-    actions += simulationDrainResearchQueue(summary);
-    actions += simulationCompleteDueStudies(summary);
-    actions += simulationStartQueuedStudies(summary);
-    actions += simulationRecordAchievements(summary);
+    if(summary.kills>killsBefore){
+      simulationTimelinePush(summary,elapsedInRun,'enemyDeath',{count:summary.kills-killsBefore});
+    }
+    var segmentAscendsBefore = summary.ascends;
+    actions += simulationResolveTimestamp(nowMs,elapsedInRun,policy,summary);
+    if(summary.ascends>segmentAscendsBefore){
+      // Auto-Ascend may also be triggered by a discrete ability/tap kill inside
+      // the resolver. Those cases are logged by the resolver itself.
+    }
 
     if(traceEverySec>0 && elapsedInRun===nextTraceElapsedSec){
       captureSimulationTrace();
