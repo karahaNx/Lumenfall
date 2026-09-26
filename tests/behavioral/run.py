@@ -512,13 +512,19 @@ def build_runner():
         function eventStateDifference(a,b){
           if(!a || !b) return {missing:{direct:!!a,chunked:!!b}};
           var diff = {};
-          if(a.logicalElapsedSec!==b.logicalElapsedSec) diff.logicalElapsedSec={direct:a.logicalElapsedSec,chunked:b.logicalElapsedSec};
           if(JSON.stringify(a.kinds)!==JSON.stringify(b.kinds)) diff.kinds={direct:a.kinds,chunked:b.kinds};
           [
             'stepSec','enemyHp','enemyMaxHp','totalKills','luminousAccum','enemyIsLuminous',
-            'autoTapAccum','autoEmpowerAccum','lumen','shards','passiveDps'
+            'autoTapAccum','autoEmpowerAccum','lumen','shards','buffUntil','buffMult','passiveDps'
           ].forEach(function(key){
             if(a[key]!==b[key]) diff[key]={direct:a[key],chunked:b[key]};
+          });
+          Object.keys(a.candidates||{}).forEach(function(key){
+            var av=(a.candidates||{})[key], bv=(b.candidates||{})[key];
+            if(av!==bv){
+              if(!diff.candidates) diff.candidates={};
+              diff.candidates[key]={direct:av,chunked:bv};
+            }
           });
           Object.keys(a.heroResource||{}).forEach(function(id){
             var av=(a.heroResource||{})[id]||0, bv=(b.heroResource||{})[id]||0;
@@ -530,14 +536,30 @@ def build_runner():
           if(JSON.stringify(a.spirits)!==JSON.stringify(b.spirits)){
             diff.spirits={direct:a.spirits,chunked:b.spirits};
           }
+          if(JSON.stringify(a.activeStudies)!==JSON.stringify(b.activeStudies)){
+            diff.activeStudies={direct:a.activeStudies,chunked:b.activeStudies};
+          }
           return diff;
         }
 
         var eventCount = Math.max(directEvents.length,chunkEvents.length);
         var previousMatchingEvent = null;
+        var firstLogicalTimeDivergence = null;
         for(var eventIndex=0;eventIndex<eventCount;eventIndex++){
           var directEvent = directEvents[eventIndex];
           var chunkEvent = chunkEvents[eventIndex];
+          if(
+            !firstLogicalTimeDivergence &&
+            directEvent && chunkEvent &&
+            directEvent.logicalElapsedSec!==chunkEvent.logicalElapsedSec
+          ){
+            firstLogicalTimeDivergence={
+              index:eventIndex,
+              direct:directEvent.logicalElapsedSec,
+              chunked:chunkEvent.logicalElapsedSec,
+              delta:directEvent.logicalElapsedSec-chunkEvent.logicalElapsedSec
+            };
+          }
           var eventDiff = eventStateDifference(directEvent,chunkEvent);
           if(Object.keys(eventDiff).length){
             firstEventDivergence={
@@ -545,11 +567,15 @@ def build_runner():
               previous:previousMatchingEvent,
               direct:directEvent||null,
               chunked:chunkEvent||null,
-              diff:eventDiff
+              diff:eventDiff,
+              firstLogicalTimeDivergence:firstLogicalTimeDivergence
             };
             break;
           }
           previousMatchingEvent={direct:directEvent,chunked:chunkEvent};
+        }
+        if(!firstEventDivergence && firstLogicalTimeDivergence){
+          firstEventDivergence={stateMatched:true,firstLogicalTimeDivergence:firstLogicalTimeDivergence};
         }
       }
 
