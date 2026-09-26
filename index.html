@@ -5192,6 +5192,10 @@ function advanceAuthoritativeTime(elapsedSec,options){
   var traceEverySec = Math.max(0,Number(options.traceEverySec)||0);
   var nextTraceElapsedSec = traceEverySec>0 ? traceEverySec : Infinity;
   if(traceEverySec>0) summary.trace = [];
+  var traceEventsFromSec = Number.isFinite(options.traceEventsFromSec) ? options.traceEventsFromSec : Infinity;
+  var traceEventsToSec = Number.isFinite(options.traceEventsToSec) ? options.traceEventsToSec : -Infinity;
+  var traceOffsetSec = Number(options.traceOffsetSec)||0;
+  if(traceEventsFromSec<=traceEventsToSec) summary.eventTrace = [];
 
   function captureSimulationTrace(){
     var traceNowMs = clockStartMs + elapsedInRun*1000;
@@ -5250,19 +5254,26 @@ function advanceAuthoritativeTime(elapsedSec,options){
     var dps = simulationPassiveDps(nowMs);
     var rewardScale = simulationRewardScale(policy);
     var next = remaining;
+    var abilityStep = simulationNextAbilitySeconds();
+    var autoTapStep = simulationNextAutoTapSeconds();
+    var autoEmpowerStep = simulationNextAutoEmpowerSeconds();
+    var studyStep = simulationNextStudySeconds();
+    var buffStep = simulationNextBuffSeconds(nowMs);
 
-    next = Math.min(next,simulationNextAbilitySeconds());
-    next = Math.min(next,simulationNextAutoTapSeconds());
-    next = Math.min(next,simulationNextAutoEmpowerSeconds());
-    next = Math.min(next,simulationNextStudySeconds());
-    next = Math.min(next,simulationNextBuffSeconds(nowMs));
+    next = Math.min(next,abilityStep);
+    next = Math.min(next,autoTapStep);
+    next = Math.min(next,autoEmpowerStep);
+    next = Math.min(next,studyStep);
+    next = Math.min(next,buffStep);
 
     var farmGridStep = Infinity;
+    var economyStep = Infinity;
     if(state.riftMode==='farm'){
       while(nextFarmGridElapsedSec<=elapsedInRun) nextFarmGridElapsedSec += 1;
       farmGridStep = nextFarmGridElapsedSec-elapsedInRun;
+      economyStep = simulationFarmEconomyBoundarySeconds(dps,rewardScale);
       next = Math.min(next,farmGridStep);
-      next = Math.min(next,simulationFarmEconomyBoundarySeconds(dps,rewardScale));
+      next = Math.min(next,economyStep);
     } else {
       next = Math.min(next,simulationPassiveKillSeconds(dps));
     }
@@ -5270,6 +5281,23 @@ function advanceAuthoritativeTime(elapsedSec,options){
     if(!Number.isFinite(next)) next = remaining;
     next = Math.max(0,Math.min(remaining,next));
     var hitsFarmGrid = state.riftMode==='farm' && next===farmGridStep;
+    var diagnosticEventKinds = [];
+    if(next===abilityStep) diagnosticEventKinds.push('ability');
+    if(next===autoTapStep) diagnosticEventKinds.push('autoTap');
+    if(next===autoEmpowerStep) diagnosticEventKinds.push('autoEmpower');
+    if(next===studyStep) diagnosticEventKinds.push('study');
+    if(next===buffStep) diagnosticEventKinds.push('buff');
+    if(next===farmGridStep) diagnosticEventKinds.push('farmGrid');
+    if(next===economyStep) diagnosticEventKinds.push('economy');
+    if(next===remaining) diagnosticEventKinds.push('windowEnd');
+    var diagnosticCandidates = {
+      ability:abilityStep,
+      autoTap:autoTapStep,
+      autoEmpower:autoEmpowerStep,
+      study:studyStep,
+      farmGrid:farmGridStep,
+      economy:economyStep
+    };
 
     var killsBefore = summary.kills;
     var elapsedBefore = elapsedInRun;
@@ -5306,6 +5334,28 @@ function advanceAuthoritativeTime(elapsedSec,options){
     if(traceEverySec>0 && elapsedInRun===nextTraceElapsedSec){
       captureSimulationTrace();
       nextTraceElapsedSec += traceEverySec;
+    }
+
+    var diagnosticLogicalElapsed = traceOffsetSec + elapsedInRun;
+    if(summary.eventTrace && diagnosticLogicalElapsed>=traceEventsFromSec && diagnosticLogicalElapsed<=traceEventsToSec){
+      summary.eventTrace.push({
+        logicalElapsedSec:diagnosticLogicalElapsed,
+        stepSec:next,
+        kinds:diagnosticEventKinds,
+        candidates:diagnosticCandidates,
+        enemyHp:state.enemyHp,
+        enemyMaxHp:state.enemyMaxHp,
+        totalKills:state.totalKills,
+        luminousAccum:state.luminousAccum,
+        enemyIsLuminous:!!state.enemyIsLuminous,
+        autoTapAccum:state._autoTapAccum||0,
+        autoEmpowerAccum:state._autoEmpowerAccum||0,
+        heroResource:JSON.parse(JSON.stringify(state.heroResource||{})),
+        lumen:state.lumen,
+        shards:state.shards,
+        spirits:JSON.parse(JSON.stringify(state.spirits||{})),
+        passiveDps:simulationPassiveDps(nowMs)
+      });
     }
 
     if(elapsedInRun===elapsedBefore && actions===0){
