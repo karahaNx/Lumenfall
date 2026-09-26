@@ -4902,8 +4902,12 @@ function simulationFarmEconomyBoundarySeconds(dps,rewardScale){
 function simulationNextFarmGridSeconds(nowMs){
   // Stable absolute one-second boundaries keep analytical Farm fast-forward
   // compositional across save/resume and QA chunk sizes without iterating kills.
+  // Epoch-scale millisecond values have ~0.000244 ms Number resolution, so a
+  // nominal whole-second boundary must be snapped above that representation
+  // noise. This grid is batching-only; it is not a gameplay event or tolerance.
   var phase = ((nowMs%1000)+1000)%1000;
-  if(phase<1e-6 || 1000-phase<1e-6) return 1;
+  var gridSnapMs = 0.001;
+  if(phase<gridSnapMs || 1000-phase<gridSnapMs) return 1;
   return (1000-phase)/1000;
 }
 function simulationApplyAutoAscend(summary){
