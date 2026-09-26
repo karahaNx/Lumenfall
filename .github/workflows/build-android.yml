@@ -50,49 +50,63 @@ jobs:
           test -n "$ANDROID_HOME"
           test -d "$ANDROID_HOME"
 
-      - name: Restore stable Android signing key
+      - name: Restore and verify stable Android signing key
         env:
           GH_TOKEN: ${{ github.token }}
+          EXPECTED_SIGNING_SHA256: "A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21"
         shell: bash
         run: |
           set -euo pipefail
           SIGNING_TAG="lumenfall-signing-v1"
           KEYSTORE_DIR="$RUNNER_TEMP/lumenfall-signing"
           KEYSTORE_FILE="$KEYSTORE_DIR/Lumenfall-debug.keystore"
+          KEYTOOL_OUTPUT="$KEYSTORE_DIR/keytool-output.txt"
 
           mkdir -p "$KEYSTORE_DIR" "$HOME/.android"
 
-          if gh release view "$SIGNING_TAG" >/dev/null 2>&1; then
-            gh release download "$SIGNING_TAG" \
-              --pattern "Lumenfall-debug.keystore" \
-              --dir "$KEYSTORE_DIR" \
-              --clobber
-          else
-            keytool -genkeypair \
-              -keystore "$KEYSTORE_FILE" \
-              -storepass android \
-              -alias androiddebugkey \
-              -keypass android \
-              -keyalg RSA \
-              -keysize 2048 \
-              -validity 10000 \
-              -dname "CN=Lumenfall,O=Xarib Productions,C=DK"
-
-            gh release create "$SIGNING_TAG" "$KEYSTORE_FILE" \
-              --draft \
-              --title "Lumenfall signing key — PRIVATE" \
-              --notes "Private Android signing key used only by GitHub Actions. Do not publish or delete this draft release."
+          if ! gh release view "$SIGNING_TAG" >/dev/null 2>&1; then
+            echo "::error::Established Android signing release '$SIGNING_TAG' is missing or inaccessible. Refusing to generate replacement signing material."
+            exit 1
           fi
 
-          test -s "$KEYSTORE_FILE"
+          if ! gh release download "$SIGNING_TAG" \
+            --pattern "Lumenfall-debug.keystore" \
+            --dir "$KEYSTORE_DIR" \
+            --clobber; then
+            echo "::error::Established Android signing keystore could not be downloaded. Refusing to build or publish."
+            exit 1
+          fi
+
+          if [ ! -s "$KEYSTORE_FILE" ]; then
+            echo "::error::Established Android signing keystore is missing or empty. Refusing to build or publish."
+            exit 1
+          fi
+
+          if ! keytool -list -v \
+            -keystore "$KEYSTORE_FILE" \
+            -storepass android \
+            -alias androiddebugkey >"$KEYTOOL_OUTPUT" 2>/dev/null; then
+            echo "::error::Established Android signing keystore is unreadable, corrupt, or invalid for the expected signing alias. Refusing to build or publish."
+            exit 1
+          fi
+
+          ACTUAL_SIGNING_SHA256="$(awk -F'SHA256: ' '/SHA256:/{print $2; exit}' "$KEYTOOL_OUTPUT" | tr -d '\r')"
+          rm -f "$KEYTOOL_OUTPUT"
+
+          if [ -z "$ACTUAL_SIGNING_SHA256" ]; then
+            echo "::error::Could not determine the Android signing certificate fingerprint. Refusing to build or publish."
+            exit 1
+          fi
+
+          if [ "$ACTUAL_SIGNING_SHA256" != "$EXPECTED_SIGNING_SHA256" ]; then
+            echo "::error::Android signing certificate mismatch. Expected $EXPECTED_SIGNING_SHA256 but restored $ACTUAL_SIGNING_SHA256. Refusing to build or publish."
+            exit 1
+          fi
+
           cp "$KEYSTORE_FILE" "$HOME/.android/debug.keystore"
           chmod 600 "$HOME/.android/debug.keystore"
 
-          echo "Android signing certificate:"
-          keytool -list -v \
-            -keystore "$HOME/.android/debug.keystore" \
-            -storepass android \
-            -alias androiddebugkey | grep "SHA256:" | head -1
+          echo "Verified established Android signing certificate SHA256: $ACTUAL_SIGNING_SHA256"
 
       - name: Install Capacitor dependencies
         working-directory: mobile
