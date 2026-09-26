@@ -3280,7 +3280,7 @@ function checkAutoAscend(){
 // ---------------------------------------------------------------
 // Achievements
 // ---------------------------------------------------------------
-function checkAchievements(){
+function applyAchievementChecks(){
   var changed = [];
   ACHIEVEMENTS.forEach(function(a){
     if(!state.achieved[a.id] && a.check(state)){
@@ -3289,12 +3289,17 @@ function checkAchievements(){
       changed.push(a);
     }
   });
+  return changed;
+}
+function checkAchievements(){
+  var changed = applyAchievementChecks();
   if(changed.length){
     renderAchievements();
     renderNodes();
     var newest = changed[changed.length-1];
     showToast('Deed complete — '+newest.name+' · +'+newest.reward+' Comets');
   }
+  return changed;
 }
 
 // ---------------------------------------------------------------
@@ -4694,65 +4699,591 @@ function autoEmpowerTick(){
   return false;
 }
 
-function tick(){
-  if(document.hidden || resetInProgress || reloadInProgress) return;
-  if(checkAutoAscend()) return;
-  var dps = idleDps();
-  if(dps > 0){
-    dealDamage(dps * (TICK_MS/1000));
-  }
-  if(state.enemyHp>0 && isBoss(state.depth)){
-    state.enemyHp = Math.min(state.enemyMaxHp, state.enemyHp + state.enemyMaxHp*bossRegenRate(state.depth)*(TICK_MS/1000));
-  }
-  var fillPerTick = (100/ABILITY_BASE_CYCLE_SEC) * fillRateMult() * (TICK_MS/1000);
+/*
+ * P0-05 authoritative elapsed-time simulation contract
+ * ----------------------------------------------------
+ * Rendering cadence is not gameplay cadence. Combat, abilities, automated
+ * taps, automated purchases, Studies, boss regeneration and Rift transitions
+ * advance against elapsed game time through this engine.
+ *
+ * Deliberate policy differences are explicit:
+ *   - live rewards use a 1.0 earning scale;
+ *   - offline Lumen/Shards use the existing offlineRate() progression rule;
+ *   - only offline simulation may retreat from a genuinely unwinnable Boss.
+ *
+ * Passive Wisp damage is continuous and may carry elapsed time through more
+ * than one enemy. Discrete Wisp bursts and Guardian/Auto-Taps remain
+ * single-target events, so their overkill does not spill into the next enemy.
+ * At equal timestamps the order is: passive damage/regeneration, Wisp
+ * abilities, Auto-Tap, Auto-Empower, queued Research, Study completion/start.
+ *
+ * This preserves existing formulas while making elapsed-time semantics
+ * independent from the 100 ms UI tick and from offline loop chunk size.
+ */
+var SIM_EPS = 1e-9;
+var SIM_EVENT_LIMIT = 250000;
+
+function simulationPolicy(kind,options){
+  options = options || {};
+  return {
+    kind:kind,
+    offline:kind==='offline',
+    visual:!!options.visual,
+    allowBossRetreat:kind==='offline'
+  };
+}
+function simulationRewardScale(policy){
+  return policy.offline ? offlineRate() : 1;
+}
+function simulationSummary(elapsedSec){
+  return {
+    elapsedSec:elapsedSec,
+    lumenGained:0, shardGained:0, sigilsGained:0, motesGained:0,
+    kills:0, bossKills:0, luminousKills:0, ascends:0, autoTaps:0,
+    empowers:0, researchBought:0, studiesStarted:0, completedStudies:[],
+    achievements:[], retreated:false, retreats:0, retries:0,
+    fastForwardedKills:0, iterations:0, ascendGains:[]
+  };
+}
+function simulationRecordAchievements(summary){
+  var changed = applyAchievementChecks();
+  changed.forEach(function(a){
+    if(summary.achievements.indexOf(a.id)===-1) summary.achievements.push(a.id);
+  });
+  return changed.length;
+}
+function simulationBuffMult(nowMs){
+  return state.buffUntil && nowMs < state.buffUntil ? state.buffMult : 1;
+}
+function simulationPassiveDps(nowMs){
+  return passiveWispDpsAt(state.depth) * simulationBuffMult(nowMs);
+}
+function simulationNextBuffSeconds(nowMs){
+  if(state.buffUntil && nowMs < state.buffUntil) return Math.max(0,(state.buffUntil-nowMs)/1000);
+  return Infinity;
+}
+function simulationNextAbilitySeconds(){
+  var fillPerSec = (100/ABILITY_BASE_CYCLE_SEC) * fillRateMult();
+  if(fillPerSec<=0) return Infinity;
+  var next = Infinity;
   state.activeParty.forEach(function(id){
-    var sp = SPIRITS.find(function(s){ return s.id===id; });
-    if(!sp) return;
-    var level = state.spirits[id];
-    if(level<=0) return;
-    var cur = (state.heroResource[id]||0) + fillPerTick;
-    if(cur>=100){
-      cur = 0;
-      triggerAbility(sp, level);
-    }
-    state.heroResource[id] = cur;
+    if((state.spirits[id]||0)<=0) return;
+    var cur = Math.max(0,Math.min(100,state.heroResource[id]||0));
+    next = Math.min(next,Math.max(0,(100-cur)/fillPerSec));
+  });
+  return next;
+}
+function simulationAdvanceAbilityResources(elapsedSec){
+  if(elapsedSec<=0) return;
+  var fill = (100/ABILITY_BASE_CYCLE_SEC) * fillRateMult() * elapsedSec;
+  state.activeParty.forEach(function(id){
+    if((state.spirits[id]||0)<=0) return;
+    state.heroResource[id] = Math.min(100,(state.heroResource[id]||0)+fill);
+  });
+}
+function simulationNextAutoTapSeconds(){
+  if(!state.achieved.autotap) return Infinity;
+  return Math.max(0,(1000-(state._autoTapAccum||0))/1000);
+}
+function simulationNextAutoEmpowerSeconds(){
+  if(!state.achieved.labmaster) return Infinity;
+  return Math.max(0,(1000-(state._autoEmpowerAccum||0))/1000);
+}
+function simulationAdvanceAutomationTimers(elapsedSec){
+  if(state.achieved.autotap) state._autoTapAccum = (state._autoTapAccum||0) + elapsedSec*1000;
+  if(state.achieved.labmaster) state._autoEmpowerAccum = (state._autoEmpowerAccum||0) + elapsedSec*1000;
+}
+function simulationNextStudySeconds(){
+  var next = Infinity;
+  state.activeStudies.forEach(function(active){
+    if(active.speedMult>0) next = Math.min(next,Math.max(0,active.remainingSec/active.speedMult));
+  });
+  return next;
+}
+function simulationAdvanceStudyProgress(elapsedSec){
+  if(elapsedSec<=0) return;
+  state.activeStudies.forEach(function(active){
+    active.remainingSec -= elapsedSec * active.speedMult;
+  });
+}
+function simulationCompleteDueStudies(summary){
+  var completed = 0;
+  for(var i=state.activeStudies.length-1;i>=0;i--){
+    var active = state.activeStudies[i];
+    if(active.remainingSec>SIM_EPS) continue;
+    var node = LONG_STUDIES.find(function(n){ return n.id===active.id; });
+    state.longStudyLevels[active.id] = (state.longStudyLevels[active.id]||0)+1;
+    state.activeStudies.splice(i,1);
+    summary.completedStudies.push(node ? node.name : active.id);
+    completed++;
+  }
+  if(completed) simulationRecordAchievements(summary);
+  return completed;
+}
+function simulationStartQueuedStudies(summary){
+  var started = 0;
+  var candidates = unlockedLongStudies().filter(function(node){
+    return state.studyQueue[node.id] && !findActiveStudy(node.id);
+  });
+  candidates.sort(function(a,b){
+    var ca = studyCost(a,state.longStudyLevels[a.id]||0);
+    var cb = studyCost(b,state.longStudyLevels[b.id]||0);
+    return (ca.lumen+ca.shard)-(cb.lumen+cb.shard);
+  });
+  for(var i=0;i<candidates.length && state.activeStudies.length<studySlotCount();i++){
+    var node = candidates[i];
+    var level = state.longStudyLevels[node.id]||0;
+    var cost = studyCost(node,level);
+    if(state.lumen<cost.lumen || state.shards<cost.shard) continue;
+    state.lumen -= cost.lumen;
+    state.shards -= cost.shard;
+    var duration = studyDuration(node,level);
+    state.activeStudies.push({id:node.id,remainingSec:duration,totalDurationSec:duration,speedMult:1});
+    started++;
+    summary.studiesStarted++;
+  }
+  return started;
+}
+function simulationResearchLevelTotal(){
+  return RESEARCH.reduce(function(sum,node){ return sum+(state.research[node.id]||0); },0);
+}
+function simulationDrainResearchQueue(summary){
+  var before = simulationResearchLevelTotal();
+  var guard = 0;
+  while(autoLabQueueTick()){
+    guard++;
+    if(guard>=1000) throw new Error('Authoritative simulation Research guard exceeded');
+  }
+  var bought = simulationResearchLevelTotal()-before;
+  if(bought>0){
+    summary.researchBought += bought;
+    simulationRecordAchievements(summary);
+  }
+  return bought;
+}
+function simulationCurrencyKillsNeeded(cost,lumenPerKill,shardPerKill){
+  var lumenDeficit = Math.max(0,cost.lumen-state.lumen);
+  var shardDeficit = Math.max(0,cost.shard-state.shards);
+  var lumenKills = lumenDeficit<=SIM_EPS ? 0 : (lumenPerKill>0 ? Math.ceil((lumenDeficit-SIM_EPS)/lumenPerKill) : Infinity);
+  var shardKills = shardDeficit<=SIM_EPS ? 0 : (shardPerKill>0 ? Math.ceil((shardDeficit-SIM_EPS)/shardPerKill) : Infinity);
+  return Math.max(lumenKills,shardKills);
+}
+function simulationKillsUntilEconomyMutation(rewardScale){
+  var depth = state.farmDepth||state.depth;
+  var lumenPerKill = enemyRewardFor(depth)*rewardScale;
+  var shardPerKill = shardRewardFor(depth)*rewardScale;
+  var best = Infinity;
+
+  RESEARCH.forEach(function(node){
+    if(!state.researchQueue[node.id]) return;
+    var cost = researchCostForLevels(node,state.research[node.id],1);
+    best = Math.min(best,simulationCurrencyKillsNeeded(cost,lumenPerKill,shardPerKill));
   });
 
-  var dailyChanged = false;
-  if(state.achieved.autotap){
-    state._autoTapAccum = (state._autoTapAccum||0) + TICK_MS;
-    if(state._autoTapAccum>=1000){
-      state._autoTapAccum -= 1000;
-      state.totalTaps++;
-      trackDaily('taps');
-      dailyChanged = true;
-      var autoDmg = tapDamage();
-      spawnFloatNum('+'+formatNum(autoDmg), els['enemy-stage']);
-      dealDamage(autoDmg);
-    }
+  if(state.activeStudies.length<studySlotCount()){
+    unlockedLongStudies().forEach(function(node){
+      if(!state.studyQueue[node.id] || findActiveStudy(node.id)) return;
+      var cost = studyCost(node,state.longStudyLevels[node.id]||0);
+      best = Math.min(best,simulationCurrencyKillsNeeded(cost,lumenPerKill,shardPerKill));
+    });
   }
-  if(state.achieved.labmaster){
-    state._autoEmpowerAccum = (state._autoEmpowerAccum||0) + TICK_MS;
-    if(state._autoEmpowerAccum>=1000){
-      state._autoEmpowerAccum -= 1000;
-      if(autoEmpowerTick()){ renderSpirits(); dailyChanged = true; }
-    }
-  }
-  if(autoLabQueueTick()){ renderResearch(); dailyChanged = true; }
-  if(dailyChanged){ renderSideStats(); }
+  return best;
+}
+function simulationFarmEconomyBoundarySeconds(dps,rewardScale){
+  if(dps<=0 || state.enemyMaxHp<=0) return Infinity;
+  var killsNeeded = simulationKillsUntilEconomyMutation(rewardScale);
+  if(!isFinite(killsNeeded)) return Infinity;
+  if(killsNeeded<=0) return 0;
+  return (state.enemyHp + Math.max(0,killsNeeded-1)*state.enemyMaxHp)/dps;
+}
+function simulationApplyAutoAscend(summary){
+  if(!autoAscendReady()) return false;
+  var gain = applyAscendMutation();
+  summary.ascends++;
+  summary.ascendGains.push(gain);
+  // saveState() canonicalizes runtime state after a normal Auto-Ascend. Do the
+  // same in-memory here so live and offline do not diverge before persistence.
+  state = acceptPersistedState(state,'simulation-ascend');
+  simulationRecordAchievements(summary);
+  return true;
+}
+function simulationDefeatEnemy(policy,summary){
+  var depth = state.depth;
+  var wasBoss = isBoss(depth);
+  var wasLuminous = !!state.enemyIsLuminous;
+  var rewardScale = simulationRewardScale(policy);
+  var lumenGain = enemyRewardFor(depth)*rewardScale;
+  var shardGain = shardRewardFor(depth)*rewardScale;
 
-  var completedStudies = advanceActiveStudies(TICK_MS/1000);
-  var filledSlots = autoFillStudySlots();
-  if(completedStudies.length){
-    saveState();
-    completedStudies.forEach(function(name){ showToast('Study complete: '+name+' advanced a level!'); });
+  gainLumen(lumenGain);
+  state.shards += shardGain;
+  summary.lumenGained += lumenGain;
+  summary.shardGained += shardGain;
+
+  if(wasLuminous){
+    var moteGain = Math.max(1,Math.round(motesDropFor(depth)*(1+supportMoteBonus())));
+    state.motes += moteGain;
+    summary.motesGained += moteGain;
+    summary.luminousKills++;
+    trackDaily('luminousKills');
   }
-  if(completedStudies.length || filledSlots){
-    renderLongStudies();
+  if(wasBoss){
+    var sigilGain = sigilsFromBoss(depth);
+    state.sigils += sigilGain;
+    summary.sigilsGained += sigilGain;
+    summary.bossKills++;
+    trackDaily('bossKills');
+  }
+
+  state.totalKills++;
+  summary.kills++;
+  trackDaily('kills');
+
+  if(state.riftMode==='farm'){
+    state.depth = state.farmDepth;
+    spawnEnemy();
   } else {
-    updateStudyProgress();
+    state.depth++;
+    state.maxDepthEver = Math.max(state.maxDepthEver,state.depth);
+    spawnEnemy();
   }
 
+  simulationRecordAchievements(summary);
+  simulationApplyAutoAscend(summary);
+}
+function simulationBatchFarmKills(count,policy,summary){
+  count = Math.max(0,Math.floor(count));
+  if(!count) return;
+  var depth = state.farmDepth||state.depth;
+  var rewardScale = simulationRewardScale(policy);
+  var lumenGain = enemyRewardFor(depth)*rewardScale*count;
+  var shardGain = shardRewardFor(depth)*rewardScale*count;
+  var startAccum = Math.max(0,Math.min(0.999999999999,state.luminousAccum||0));
+  var chance = eliteChance(depth);
+  var luminousKills = state.enemyIsLuminous ? 1 : 0;
+
+  if(count>1){
+    luminousKills += Math.floor(startAccum+(count-1)*chance+1e-12);
+  }
+
+  var afterSpawns = startAccum+count*chance;
+  var completedCrossings = Math.floor(afterSpawns+1e-12);
+  var finalAccum = afterSpawns-completedCrossings;
+  if(finalAccum<0 && finalAccum>-SIM_EPS) finalAccum=0;
+  if(finalAccum>=1 && finalAccum<1+SIM_EPS) finalAccum=0;
+  var beforeFinalSpawn = startAccum+Math.max(0,count-1)*chance;
+  var finalLuminous = Math.floor(afterSpawns+1e-12)>Math.floor(beforeFinalSpawn+1e-12);
+
+  gainLumen(lumenGain);
+  state.shards += shardGain;
+  summary.lumenGained += lumenGain;
+  summary.shardGained += shardGain;
+
+  if(luminousKills>0){
+    var motePer = Math.max(1,Math.round(motesDropFor(depth)*(1+supportMoteBonus())));
+    var moteGain = motePer*luminousKills;
+    state.motes += moteGain;
+    summary.motesGained += moteGain;
+    summary.luminousKills += luminousKills;
+    trackDaily('luminousKills',luminousKills);
+  }
+
+  state.totalKills += count;
+  summary.kills += count;
+  if(count>1) summary.fastForwardedKills += count-1;
+  trackDaily('kills',count);
+
+  state.depth = state.farmDepth;
+  state.enemyDepth = state.depth;
+  state.enemyMaxHp = enemyHpFor(state.depth);
+  state.enemyHp = state.enemyMaxHp;
+  state.luminousAccum = Math.max(0,Math.min(0.999999999999,finalAccum));
+  state.enemyIsLuminous = finalLuminous;
+  simulationRecordAchievements(summary);
+}
+function simulationApplyFarmPassive(elapsedSec,dps,policy,summary){
+  if(elapsedSec<=0 || dps<=0) return;
+  var damage = dps*elapsedSec;
+  if(damage+SIM_EPS < state.enemyHp){
+    state.enemyHp -= damage;
+    return;
+  }
+
+  var maxHp = state.enemyMaxHp>0 ? state.enemyMaxHp : enemyHpFor(state.depth);
+  var remainingDamage = Math.max(0,damage-state.enemyHp);
+  var additionalKills = Math.floor(remainingDamage/maxHp+1e-12);
+  var leftover = remainingDamage-additionalKills*maxHp;
+  if(leftover<0 && leftover>-SIM_EPS) leftover=0;
+  if(leftover>=maxHp-SIM_EPS){
+    additionalKills++;
+    leftover=0;
+  }
+
+  simulationBatchFarmKills(1+additionalKills,policy,summary);
+  if(leftover>SIM_EPS) state.enemyHp = Math.max(SIM_EPS,state.enemyMaxHp-leftover);
+}
+function simulationPassiveKillSeconds(dps){
+  if(state.riftMode==='farm') return Infinity;
+  if(isBoss(state.depth)){
+    var net = dps-state.enemyMaxHp*bossRegenRate(state.depth);
+    return net>0 ? Math.max(0,state.enemyHp/net) : Infinity;
+  }
+  return dps>0 ? Math.max(0,state.enemyHp/dps) : Infinity;
+}
+function simulationApplyPushPassive(elapsedSec,dps,policy,summary){
+  if(elapsedSec<=0) return;
+  if(isBoss(state.depth)){
+    var net = dps-state.enemyMaxHp*bossRegenRate(state.depth);
+    state.enemyHp = Math.min(state.enemyMaxHp,state.enemyHp-net*elapsedSec);
+  } else if(dps>0){
+    state.enemyHp -= dps*elapsedSec;
+  }
+  if(state.enemyHp<=SIM_EPS) simulationDefeatEnemy(policy,summary);
+}
+function simulationDealDiscreteDamage(amount,policy,summary){
+  if(amount<=0) return false;
+  state.enemyHp -= amount;
+  if(state.enemyHp<=SIM_EPS){
+    simulationDefeatEnemy(policy,summary);
+    return true;
+  }
+  return false;
+}
+function simulationTriggerAbility(sp,level,nowMs,policy,summary){
+  var tier = state.heroRarity[sp.id]||0;
+  var power = spiritPower(sp,level)*RARITY_MULT[tier];
+  var mMult = moduleMult(sp.id);
+  var ult = ultimateUnlocked(sp.id) ? 2 : 1;
+  var burst = 0;
+  var rewardScale = simulationRewardScale(policy);
+
+  switch(sp.abilityType){
+    case 'tank':
+      burst = power*4*mMult*ult;
+      break;
+    case 'dps':
+      burst = power*5*mMult*ult;
+      break;
+    case 'ranged': {
+      burst = power*3*ult;
+      var shardGain = Math.round(power*0.05*mMult*ult*formationRewardMult())*rewardScale;
+      state.shards += shardGain;
+      summary.shardGained += shardGain;
+      break;
+    }
+    case 'druid': {
+      burst = power*3*ult;
+      var lumenGain = Math.round(power*0.10*mMult*ult*formationRewardMult())*rewardScale;
+      gainLumen(lumenGain);
+      summary.lumenGained += lumenGain;
+      break;
+    }
+    case 'support': {
+      var durationMs = ultimateUnlocked(sp.id) ? 8000 : 4000;
+      var strength = ultimateUnlocked(sp.id) ? 1.5 : 1.25;
+      state.buffUntil = Math.max(state.buffUntil||0,nowMs+durationMs);
+      state.buffMult = Math.max(state.buffMult||1,strength);
+      break;
+    }
+  }
+
+  if(policy.visual){
+    emitCombatVfx(sp.abilityType==='support' ? 'support' : 'ability',sp.color);
+    flashBattleStage(sp.abilityType==='support' ? 'support' : 'ability');
+    flashChip(sp.id,sp.abilityName);
+  }
+  if(burst>0){
+    simulationDealDiscreteDamage(
+      burst*formationContextDamageMult(state.depth)*bossAbilityDamageMult(state.depth),
+      policy,
+      summary
+    );
+  }
+}
+function simulationProcessAbilities(nowMs,policy,summary){
+  var fired = 0;
+  var ids = state.activeParty.slice();
+  for(var i=0;i<ids.length;i++){
+    var id = ids[i];
+    if((state.spirits[id]||0)<=0 || (state.heroResource[id]||0)<100-1e-7) continue;
+    var sp = SPIRITS.find(function(s){ return s.id===id; });
+    if(!sp) continue;
+    state.heroResource[id] = 0;
+    simulationTriggerAbility(sp,state.spirits[id],nowMs,policy,summary);
+    fired++;
+  }
+  return fired;
+}
+function simulationProcessAutoTap(nowMs,policy,summary){
+  var processed = 0;
+  while(state.achieved.autotap && (state._autoTapAccum||0)>=1000-1e-7){
+    state._autoTapAccum = Math.max(0,(state._autoTapAccum||0)-1000);
+    state.totalTaps++;
+    summary.autoTaps++;
+    trackDaily('taps');
+    var damage = guardianTapDamageAt(state.depth,simulationBuffMult(nowMs));
+    if(policy.visual) spawnFloatNum('+'+formatNum(damage),els['enemy-stage']);
+    simulationDealDiscreteDamage(damage,policy,summary);
+    processed++;
+    if(processed>10) throw new Error('Authoritative simulation Auto-Tap guard exceeded');
+  }
+  return processed;
+}
+function simulationProcessAutoEmpower(summary){
+  var processed = 0;
+  while(state.achieved.labmaster && (state._autoEmpowerAccum||0)>=1000-1e-7){
+    state._autoEmpowerAccum = Math.max(0,(state._autoEmpowerAccum||0)-1000);
+    if(autoEmpowerTick()) summary.empowers++;
+    processed++;
+    if(processed>10) throw new Error('Authoritative simulation Auto-Empower guard exceeded');
+  }
+  return processed;
+}
+function simulationMaybeRetreatFromBoss(policy,summary){
+  if(!policy.allowBossRetreat || state.riftMode==='farm' || !isBoss(state.depth)) return false;
+  // A short offline window must not change mode merely because the Boss takes
+  // longer than the remaining absence. Retreat only from a sustained-DPS wall.
+  if(isFinite(estimatedBossKillSeconds(state.depth))) return false;
+  if(state.depth<=1) return false;
+  state.farmReturnDepth = state.depth;
+  state.farmDepth = highestFarmableDepth(state.farmReturnDepth);
+  state.riftMode = 'farm';
+  state.depth = state.farmDepth;
+  spawnEnemy(false);
+  summary.retreated = true;
+  summary.retreats++;
+  return true;
+}
+function simulationMaybeRetryBoss(policy,summary){
+  if(!policy.allowBossRetreat || state.riftMode!=='farm' || !state.farmReturnDepth || !isBoss(state.farmReturnDepth)) return false;
+  var retryDepth = state.farmReturnDepth;
+  if(!isFinite(estimatedBossKillSeconds(retryDepth))) return false;
+  state.depth = retryDepth;
+  state.riftMode = 'push';
+  state.farmDepth = 0;
+  state.farmReturnDepth = 0;
+  spawnEnemy(false);
+  summary.retries++;
+  return true;
+}
+function advanceAuthoritativeTime(elapsedSec,options){
+  options = options || {};
+  elapsedSec = Math.max(0,Number(elapsedSec)||0);
+  var policy = simulationPolicy(options.kind||'live',options);
+  var summary = simulationSummary(elapsedSec);
+  var remaining = elapsedSec;
+  var nowMs = Number.isFinite(options.clockStartMs) ? options.clockStartMs : Date.now();
+
+  simulationDrainResearchQueue(summary);
+  simulationStartQueuedStudies(summary);
+  simulationRecordAchievements(summary);
+
+  while(remaining>SIM_EPS){
+    summary.iterations++;
+    if(summary.iterations>SIM_EVENT_LIMIT){
+      throw new Error('Authoritative simulation event limit exceeded after '+summary.iterations+' iterations');
+    }
+
+    if(state.enemyHp<=SIM_EPS){
+      simulationDefeatEnemy(policy,summary);
+      continue;
+    }
+    if(simulationApplyAutoAscend(summary)) continue;
+    if(simulationMaybeRetryBoss(policy,summary)) continue;
+    if(simulationMaybeRetreatFromBoss(policy,summary)) continue;
+
+    var dps = simulationPassiveDps(nowMs);
+    var rewardScale = simulationRewardScale(policy);
+    var next = remaining;
+
+    next = Math.min(next,simulationNextAbilitySeconds());
+    next = Math.min(next,simulationNextAutoTapSeconds());
+    next = Math.min(next,simulationNextAutoEmpowerSeconds());
+    next = Math.min(next,simulationNextStudySeconds());
+    next = Math.min(next,simulationNextBuffSeconds(nowMs));
+
+    if(state.riftMode==='farm'){
+      next = Math.min(next,simulationFarmEconomyBoundarySeconds(dps,rewardScale));
+    } else {
+      next = Math.min(next,simulationPassiveKillSeconds(dps));
+    }
+
+    if(!Number.isFinite(next)) next = remaining;
+    next = Math.max(0,Math.min(remaining,next));
+
+    var killsBefore = summary.kills;
+    if(next>SIM_EPS){
+      if(state.riftMode==='farm') simulationApplyFarmPassive(next,dps,policy,summary);
+      else simulationApplyPushPassive(next,dps,policy,summary);
+      simulationAdvanceAbilityResources(next);
+      simulationAdvanceAutomationTimers(next);
+      simulationAdvanceStudyProgress(next);
+      nowMs += next*1000;
+      remaining = Math.max(0,remaining-next);
+    }
+
+    var actions = summary.kills-killsBefore;
+    actions += simulationProcessAbilities(nowMs,policy,summary);
+    actions += simulationProcessAutoTap(nowMs,policy,summary);
+    actions += simulationProcessAutoEmpower(summary);
+    actions += simulationDrainResearchQueue(summary);
+    actions += simulationCompleteDueStudies(summary);
+    actions += simulationStartQueuedStudies(summary);
+    actions += simulationRecordAchievements(summary);
+
+    if(next<=SIM_EPS && actions===0){
+      throw new Error('Authoritative simulation stalled at a zero-time event');
+    }
+  }
+
+  summary.endDepth = state.depth;
+  summary.pushDepth = progressionDepth();
+  summary.clockEndMs = nowMs;
+  return summary;
+}
+function advanceStudyOnlyTime(elapsedSec,clockStartMs,summary){
+  var remaining = Math.max(0,Number(elapsedSec)||0);
+  var nowMs = Number.isFinite(clockStartMs) ? clockStartMs : Date.now();
+  simulationStartQueuedStudies(summary);
+  while(remaining>SIM_EPS){
+    var next = Math.min(remaining,simulationNextStudySeconds());
+    if(!Number.isFinite(next)) break;
+    if(next>SIM_EPS){
+      simulationAdvanceStudyProgress(next);
+      remaining -= next;
+      nowMs += next*1000;
+    }
+    var actions = simulationCompleteDueStudies(summary)+simulationStartQueuedStudies(summary);
+    if(next<=SIM_EPS && actions===0) break;
+  }
+  return nowMs;
+}
+
+function tick(){
+  if(document.hidden || resetInProgress || reloadInProgress) return;
+  var sim = advanceAuthoritativeTime(TICK_MS/1000,{kind:'live',visual:true,clockStartMs:Date.now()-TICK_MS});
+
+  if(sim.ascends>0){
+    saveState();
+    showAscendFlash(sim.ascendGains[sim.ascendGains.length-1]||0,true);
+  }
+  if(sim.completedStudies.length){
+    saveState();
+    sim.completedStudies.forEach(function(name){ showToast('Study complete: '+name+' advanced a level!'); });
+  }
+  if(sim.achievements.length){
+    renderAchievements();
+    renderNodes();
+  }
+  if(sim.empowers>0) renderSpirits();
+  if(sim.researchBought>0) renderResearch();
+  if(sim.completedStudies.length || sim.studiesStarted>0) renderLongStudies();
+  else updateStudyProgress();
+
+  if(sim.kills>0 || sim.ascends>0){
+    renderDynamic();
+    renderSideStats();
+  }
   updateBattleFast();
   updatePartyBars();
   checkAffordability();
@@ -4882,148 +5413,50 @@ function setupStars(){
 // ---------------------------------------------------------------
 // Init
 // ---------------------------------------------------------------
-var OFFLINE_MAX_KILLS = 5000;
-
-function simulateOfflineRun(effectiveSec){
-  var remaining = effectiveSec;
-  var lumenGained = 0, shardGained = 0, sigilsGained = 0, motesGained = 0, ascends = 0, kills = 0;
-  var empowerAccum = 0;
-  var autoTapCombatSec = 0;
-  var retreated = false;
-  while(remaining > 0 && kills < OFFLINE_MAX_KILLS){
-    if(autoAscendReady()){
-      applyAscendMutation();
-      ascends++;
-      continue;
-    }
-    var dps = sustainedCombatDps(state.depth);
-    if(dps <= 0) break;
-    var abilityRates = abilityResourceRates();
-    var wasBossKill = isBoss(state.depth);
-    var wasLuminous = state.enemyIsLuminous;
-    var enemyMax = state.enemyMaxHp>0 ? state.enemyMaxHp : enemyHpFor(state.depth);
-    var curHp = state.enemyHp>0 ? state.enemyHp : enemyMax;
-    var regenPerSec = wasBossKill ? enemyMax*bossRegenRate(state.depth) : 0;
-    var netDps = dps - regenPerSec;
-    if(wasBossKill && (netDps<=0 || (curHp/netDps) > remaining)){
-      // Preserve the Boss as the player's Push point and switch the run into
-      // the same explicit Farm mode used while online.
-      if(state.depth<=1) break;
-      state.farmReturnDepth = state.depth;
-      state.farmDepth = highestFarmableDepth(state.farmReturnDepth);
-      state.riftMode = 'farm';
-      state.depth = state.farmDepth;
-      retreated = true;
-      spawnEnemy(false);
-      continue;
-    }
-    var timeToKill = curHp / netDps;
-    if(timeToKill > remaining){
-      autoTapCombatSec += remaining;
-      var partialLumen = abilityRates.lumen * remaining * offlineRate();
-      var partialShards = abilityRates.shards * remaining * offlineRate();
-      gainLumen(partialLumen);
-      state.shards += partialShards;
-      lumenGained += partialLumen;
-      shardGained += partialShards;
-      state.enemyHp = Math.max(0, curHp - netDps*remaining);
-      remaining = 0;
-      break;
-    }
-    remaining -= timeToKill;
-    autoTapCombatSec += timeToKill;
-    kills++;
-    var lumenGain = enemyRewardFor(state.depth) * offlineRate();
-    var shardGain = shardRewardFor(state.depth) * offlineRate();
-    var abilityLumenGain = abilityRates.lumen * timeToKill * offlineRate();
-    var abilityShardGain = abilityRates.shards * timeToKill * offlineRate();
-    gainLumen(lumenGain + abilityLumenGain);
-    state.shards += shardGain + abilityShardGain;
-    lumenGained += lumenGain + abilityLumenGain;
-    shardGained += shardGain + abilityShardGain;
-    if(wasLuminous){
-      var moteGain = Math.max(1, Math.round(motesDropFor(state.depth) * (1+supportMoteBonus())));
-      state.motes += moteGain;
-      motesGained += moteGain;
-      trackDaily('luminousKills');
-    }
-    if(wasBossKill){
-      var sigilGain = sigilsFromBoss(state.depth);
-      state.sigils += sigilGain;
-      sigilsGained += sigilGain;
-      trackDaily('bossKills');
-    }
-    state.totalKills++;
-    trackDaily('kills');
-    if(state.riftMode==='farm'){
-      state.depth = state.farmDepth;
-      spawnEnemy();
-    } else {
-      state.depth++;
-      state.maxDepthEver = Math.max(state.maxDepthEver, state.depth);
-      spawnEnemy();
-    }
-    if(state.achieved.labmaster){
-      empowerAccum += timeToKill;
-      while(empowerAccum >= 1){
-        empowerAccum -= 1;
-        autoEmpowerTick();
-      }
-    }
-
-    if(retreated && state.riftMode==='farm' && state.farmReturnDepth && remaining>0){
-      var retryDepth = state.farmReturnDepth;
-      var retrySeconds = estimatedBossKillSeconds(retryDepth);
-      if(isFinite(retrySeconds) && retrySeconds<=remaining){
-        state.depth = retryDepth;
-        state.riftMode = 'push';
-        state.farmDepth = 0;
-        state.farmReturnDepth = 0;
-        retreated = false;
-        spawnEnemy(false);
-      }
-    }
-  }
-  if(remaining > 0 && kills >= OFFLINE_MAX_KILLS){
-    var elapsedInLoop = effectiveSec - remaining;
-    if(elapsedInLoop > 0){
-      var extraLumen = (lumenGained/elapsedInLoop) * remaining;
-      var extraShard = (shardGained/elapsedInLoop) * remaining;
-      gainLumen(extraLumen);
-      state.shards += extraShard;
-      lumenGained += extraLumen;
-      shardGained += extraShard;
-      autoTapCombatSec += remaining;
-    }
-  }
-
-  var offlineAutoTaps = 0;
-  if(state.achieved.autotap && autoTapCombatSec>0){
-    var tapSeconds = ((state._autoTapAccum||0)/1000) + autoTapCombatSec;
-    offlineAutoTaps = Math.floor(tapSeconds);
-    state._autoTapAccum = (tapSeconds-offlineAutoTaps)*1000;
-    if(offlineAutoTaps>0){
-      state.totalTaps += offlineAutoTaps;
-      trackDaily('taps', offlineAutoTaps);
-    }
-  }
-
-  return {lumenGained:lumenGained, shardGained:shardGained, sigilsGained:sigilsGained, motesGained:motesGained, kills:kills, ascends:ascends, retreated:retreated, endDepth:state.depth, pushDepth:progressionDepth(), autoTaps:offlineAutoTaps};
+function simulateOfflineRun(effectiveSec,options){
+  options = options || {};
+  return advanceAuthoritativeTime(effectiveSec,{
+    kind:'offline',
+    visual:false,
+    clockStartMs:Number.isFinite(options.clockStartMs) ? options.clockStartMs : Date.now()-effectiveSec*1000
+  });
 }
 
 function applyOfflineProgress(){
-  var elapsedSec = Math.max(0, (Date.now() - (state.lastSeen||Date.now())) / 1000);
+  var now = Date.now();
+  var lastSeen = state.lastSeen||now;
+  var elapsedSec = Math.max(0,(now-lastSeen)/1000);
   if(elapsedSec < 5) return null;
+
   var capSec = offlineCapHours()*3600;
-  var effectiveSec = Math.min(elapsedSec, capSec);
-  var sim = simulateOfflineRun(effectiveSec);
+  var effectiveSec = Math.min(elapsedSec,capSec);
+  var sim = simulateOfflineRun(effectiveSec,{clockStartMs:lastSeen});
+
+  // Long Studies are real-time progression and intentionally continue past the
+  // combat earning cap. Combat, Auto-Tap, Auto-Empower and Research do not.
+  if(elapsedSec>effectiveSec){
+    advanceStudyOnlyTime(elapsedSec-effectiveSec,lastSeen+effectiveSec*1000,sim);
+  }
+
   state.totalOfflineSeconds += effectiveSec;
-  var completedStudies = advanceActiveStudies(elapsedSec);
-  autoFillStudySlots();
-  var labGuard = 0;
-  while(autoLabQueueTick() && labGuard < 200){ labGuard++; }
   checkAchievements();
-  return {elapsedSec: elapsedSec, effectiveSec: effectiveSec, earned: sim.lumenGained, shardEarned: sim.shardGained, sigilsEarned: sim.sigilsGained, motesEarned: sim.motesGained, ascends: sim.ascends, completedStudies: completedStudies, retreated: sim.retreated, endDepth: sim.endDepth, pushDepth: sim.pushDepth};
+
+  return {
+    elapsedSec:elapsedSec,
+    effectiveSec:effectiveSec,
+    earned:sim.lumenGained,
+    shardEarned:sim.shardGained,
+    sigilsEarned:sim.sigilsGained,
+    motesEarned:sim.motesGained,
+    ascends:sim.ascends,
+    completedStudies:sim.completedStudies,
+    retreated:sim.retreated,
+    endDepth:state.depth,
+    pushDepth:progressionDepth(),
+    kills:sim.kills,
+    iterations:sim.iterations,
+    fastForwardedKills:sim.fastForwardedKills
+  };
 }
 
 function fmtDuration(sec){
