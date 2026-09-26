@@ -2353,6 +2353,7 @@ function loadState(){
       parsed.activeParty = ['ember'];
     }
 
+    if(!Array.isArray(parsed.questIds)) parsed.questIds=[];
     if(!Array.isArray(parsed.activeStudies)) parsed.activeStudies=[];
     if(parsed.activeStudy){ parsed.activeStudies.push(parsed.activeStudy); delete parsed.activeStudy; }
     var seenStudies = {};
