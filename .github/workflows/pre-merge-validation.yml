@@ -29,6 +29,28 @@ jobs:
       - name: APK identity verifier self-test
         run: python3 scripts/verify_apk_identity.py --self-test
 
+      - name: Inspect currently distributed APK signer
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/current-lumenfall-release"
+          gh release download android-latest \
+            --pattern "Lumenfall.apk" \
+            --dir "$RUNNER_TEMP/current-lumenfall-release" \
+            --clobber
+
+          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -mindepth 2 -maxdepth 2 -type f -name apksigner -perm -u+x -print | sort -Vr | head -1)"
+          if [ -z "$APKSIGNER" ]; then
+            echo "::error::apksigner not found on runner"
+            exit 1
+          fi
+
+          echo "Current android-latest signing certificate:"
+          "$APKSIGNER" verify --print-certs "$RUNNER_TEMP/current-lumenfall-release/Lumenfall.apk" |
+            grep -i "certificate SHA-256 digest" | head -1
+
       - name: Validate game source
         shell: bash
         run: |
