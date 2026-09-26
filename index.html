@@ -4899,13 +4899,6 @@ function simulationFarmEconomyBoundarySeconds(dps,rewardScale){
   if(killsNeeded<=0) return 0;
   return (state.enemyHp + Math.max(0,killsNeeded-1)*state.enemyMaxHp)/dps;
 }
-function simulationNextFarmGridSeconds(nowMs){
-  // Stable absolute one-second boundaries keep analytical Farm fast-forward
-  // compositional across save/resume and QA chunk sizes without iterating kills.
-  var phase = ((nowMs%1000)+1000)%1000;
-  if(phase<1e-6 || 1000-phase<1e-6) return 1;
-  return (1000-phase)/1000;
-}
 function simulationApplyAutoAscend(summary){
   if(!autoAscendReady()) return false;
   var gain = applyAscendMutation();
@@ -5186,7 +5179,13 @@ function advanceAuthoritativeTime(elapsedSec,options){
   var policy = simulationPolicy(options.kind||'live',options);
   var summary = simulationSummary(elapsedSec);
   var remaining = elapsedSec;
-  var nowMs = Number.isFinite(options.clockStartMs) ? options.clockStartMs : Date.now();
+  var clockStartMs = Number.isFinite(options.clockStartMs) ? options.clockStartMs : Date.now();
+  var nowMs = clockStartMs;
+  // Farm fast-forward uses one-second numerical anchors. Keep the next anchor
+  // as an exact absolute millisecond value instead of repeatedly taking modulo
+  // of a large, incrementally-rounded epoch timestamp. A caller can therefore
+  // stop/restart at an anchor without changing the next Farm damage segment.
+  var nextFarmGridMs = Math.floor(clockStartMs/1000)*1000 + 1000;
 
   simulationDrainResearchQueue(summary);
   simulationStartQueuedStudies(summary);
@@ -5216,8 +5215,11 @@ function advanceAuthoritativeTime(elapsedSec,options){
     next = Math.min(next,simulationNextStudySeconds());
     next = Math.min(next,simulationNextBuffSeconds(nowMs));
 
+    var farmGridStep = Infinity;
     if(state.riftMode==='farm'){
-      next = Math.min(next,simulationNextFarmGridSeconds(nowMs));
+      while(nextFarmGridMs<=nowMs) nextFarmGridMs += 1000;
+      farmGridStep = (nextFarmGridMs-nowMs)/1000;
+      next = Math.min(next,farmGridStep);
       next = Math.min(next,simulationFarmEconomyBoundarySeconds(dps,rewardScale));
     } else {
       next = Math.min(next,simulationPassiveKillSeconds(dps));
@@ -5225,6 +5227,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
 
     if(!Number.isFinite(next)) next = remaining;
     next = Math.max(0,Math.min(remaining,next));
+    var hitsFarmGrid = state.riftMode==='farm' && next===farmGridStep;
 
     var killsBefore = summary.kills;
     var remainingBefore = remaining;
@@ -5239,7 +5242,12 @@ function advanceAuthoritativeTime(elapsedSec,options){
       simulationAdvanceAbilityResources(next);
       simulationAdvanceAutomationTimers(next);
       simulationAdvanceStudyProgress(next);
-      nowMs += next*1000;
+      if(hitsFarmGrid){
+        nowMs = nextFarmGridMs;
+        nextFarmGridMs += 1000;
+      } else {
+        nowMs += next*1000;
+      }
       remaining = Math.max(0,remaining-next);
     }
 
@@ -5259,7 +5267,10 @@ function advanceAuthoritativeTime(elapsedSec,options){
 
   summary.endDepth = state.depth;
   summary.pushDepth = progressionDepth();
-  summary.clockEndMs = nowMs;
+  // Expose the requested endpoint rather than accumulated event-addition
+  // error. Internal Farm anchors above ensure the state itself reaches the
+  // same numerical boundaries before this canonical clock is returned.
+  summary.clockEndMs = clockStartMs + elapsedSec*1000;
   return summary;
 }
 function advanceStudyOnlyTime(elapsedSec,clockStartMs,summary){
