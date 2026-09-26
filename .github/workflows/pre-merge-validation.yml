@@ -158,6 +158,22 @@ jobs:
           cp -r fonts/. mobile/www/fonts/
           cp -r branding/. mobile/www/branding/
 
+      - name: Stateful behavioral regression suite
+        shell: bash
+        run: python3 tests/behavioral/run.py --web-root mobile/www
+
+      - name: Behavioral harness negative self-test
+        shell: bash
+        run: |
+          set -euo pipefail
+          for scenario in self-test-bad-assertion self-test-uncaught-error self-test-unhandled-rejection; do
+            if python3 tests/behavioral/run.py --web-root mobile/www --scenario "$scenario"; then
+              echo "::error::Behavioral harness negative scenario '$scenario' unexpectedly passed."
+              exit 1
+            fi
+            echo "Behavioral harness correctly caught expected failure: $scenario"
+          done
+
       - name: Install runtime error guard in staged copy
         shell: bash
         run: |
