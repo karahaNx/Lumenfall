@@ -5336,6 +5336,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
     if(!Number.isFinite(next)) next = remaining;
     next = Math.max(0,Math.min(remaining,next));
     var hitsFarmGrid = state.riftMode==='farm' && next===farmGridStep;
+    var hitsWindowEnd = next===remaining;
     var diagnosticEventKinds = [];
     if(next===abilityStep) diagnosticEventKinds.push('ability');
     if(next===autoTapStep) diagnosticEventKinds.push('autoTap');
@@ -5376,8 +5377,16 @@ function advanceAuthoritativeTime(elapsedSec,options){
       // resets farmGridRemainingSec exactly to 1, and logical elapsed is then
       // reconstructed from that canonical scheduler state.
       syncElapsedClockFromFarmGrid();
+      if(hitsWindowEnd){
+        // The caller's requested endpoint is itself an authoritative event
+        // boundary. After gameplay state consumes the exact residual step,
+        // canonicalize the logical clock to that target instead of leaving a
+        // representational tail that cannot advance on the next iteration.
+        elapsedWholeSec = targetWholeSec;
+        elapsedFractionSec = targetFractionSec;
+      }
       elapsedInRun = currentElapsedSec();
-      remaining = simulationRemainingSec();
+      remaining = hitsWindowEnd ? 0 : simulationRemainingSec();
     }
 
     nowMs = simulationNowMs();
