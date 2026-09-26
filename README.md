@@ -58,7 +58,13 @@ The workflow:
 8. Builds the APK with Gradle using the stable signing identity.
 9. Publishes `Lumenfall.apk` to the fixed GitHub Release tag **android-latest**.
 
-The signing keystore is stored as an asset in the private draft release `lumenfall-signing-v1`. Do not publish or delete that draft release; losing the key would break update compatibility with already-installed builds.
+The established signing keystore is stored as the asset `Lumenfall-debug.keystore` in the private draft release `lumenfall-signing-v1`. The expected SHA-256 certificate fingerprint is `A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21`.
+
+The publishing workflow treats that exact certificate as immutable. If the draft release or asset is missing/inaccessible, the keystore cannot be opened, or its certificate fingerprint differs, the build fails before APK publication. Normal CI must never generate a replacement signing identity.
+
+Recovery requires restoring the **exact existing keystore** from an independently protected backup outside the normal GitHub build/release control path, then verifying that it produces the fingerprint above before rerunning publication. Never create a new key as a substitute: a new certificate would break Android update compatibility with currently installed builds. Do not commit the keystore, private key material, credentials or backup material to this repository.
+
+The repository cannot prove that the required independent external backup exists. Maintaining and periodically verifying that protected backup remains an operator responsibility.
 
 The Android SDK supplied by GitHub's Ubuntu runner is used directly. The old `android-actions/setup-android` step was removed because it attempted to install the obsolete Android SDK package `tools`, which caused the recent workflow failures before the app build even started.
 
