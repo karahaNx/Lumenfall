@@ -5189,14 +5189,15 @@ function advanceAuthoritativeTime(elapsedSec,options){
     return elapsedWholeSec+elapsedFractionSec;
   }
   function simulationRemainingSec(){
-    var whole = targetWholeSec-elapsedWholeSec;
-    var fraction = targetFractionSec-elapsedFractionSec;
-    if(fraction<0){
-      whole -= 1;
-      fraction += 1;
+    // Window-end time is represented in the same one-second grid coordinate as
+    // Farm scheduling. When a window end and Farm grid are the same logical
+    // instant, both candidates therefore use the exact same residual value.
+    var crossingDelta = targetFarmGridCrossings-farmGridCrossings;
+    if(crossingDelta<0) return 0;
+    if(crossingDelta===0){
+      return Math.max(0,farmGridRemainingSec-targetFarmGridRemainingSec);
     }
-    if(whole<0) return 0;
-    return whole+fraction;
+    return farmGridRemainingSec + Math.max(0,crossingDelta-1) + (1-targetFarmGridRemainingSec);
   }
   function simulationNowMs(){
     // Compose absolute event time from the same canonical one-second scheduler
@@ -5217,6 +5218,10 @@ function advanceAuthoritativeTime(elapsedSec,options){
   var firstFarmGridSec = startPhaseSec===0 ? 1 : 1-startPhaseSec;
   var farmGridRemainingSec = firstFarmGridSec;
   var farmGridCrossings = 0;
+  var targetGridPositionSec = startPhaseSec+elapsedSec;
+  var targetFarmGridCrossings = Math.floor(targetGridPositionSec);
+  var targetGridPhaseSec = targetGridPositionSec-targetFarmGridCrossings;
+  var targetFarmGridRemainingSec = targetGridPhaseSec===0 ? 1 : 1-targetGridPhaseSec;
 
   function advanceFarmGridClock(stepSec){
     if(stepSec<=0) return 0;
@@ -5390,10 +5395,8 @@ function advanceAuthoritativeTime(elapsedSec,options){
         elapsedWholeSec = targetWholeSec;
         elapsedFractionSec = targetFractionSec;
 
-        var endGridPositionSec = startPhaseSec+elapsedSec;
-        farmGridCrossings = Math.floor(endGridPositionSec);
-        var endGridPhaseSec = endGridPositionSec-farmGridCrossings;
-        farmGridRemainingSec = endGridPhaseSec===0 ? 1 : 1-endGridPhaseSec;
+        farmGridCrossings = targetFarmGridCrossings;
+        farmGridRemainingSec = targetFarmGridRemainingSec;
       }
       elapsedInRun = currentElapsedSec();
       remaining = hitsWindowEnd ? 0 : simulationRemainingSec();
