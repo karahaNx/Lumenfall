@@ -514,7 +514,7 @@ def build_runner():
           var diff = {};
           if(JSON.stringify(a.kinds)!==JSON.stringify(b.kinds)) diff.kinds={direct:a.kinds,chunked:b.kinds};
           [
-            'stepSec','enemyHp','enemyMaxHp','totalKills','luminousAccum','enemyIsLuminous',
+            'clockMs','stepSec','enemyHp','enemyMaxHp','totalKills','luminousAccum','enemyIsLuminous',
             'autoTapAccum','autoEmpowerAccum','lumen','shards','buffUntil','buffMult','passiveDps'
           ].forEach(function(key){
             if(a[key]!==b[key]) diff[key]={direct:a[key],chunked:b[key]};
