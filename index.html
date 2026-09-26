@@ -5197,7 +5197,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
   simulationStartQueuedStudies(summary);
   simulationRecordAchievements(summary);
 
-  while(remaining>SIM_EPS){
+  while(remaining>0){
     summary.iterations++;
     if(summary.iterations>SIM_EVENT_LIMIT){
       throw new Error('Authoritative simulation event limit exceeded after '+summary.iterations+' iterations');
@@ -5232,9 +5232,11 @@ function advanceAuthoritativeTime(elapsedSec,options){
     next = Math.max(0,Math.min(remaining,next));
 
     var killsBefore = summary.kills;
-    // Sub-nanosecond kill boundaries are possible in mature Farm states. They
-    // are still real gameplay events; skipping them would create a zero-time
-    // stall and reintroduce a hidden high-DPS cap.
+    var elapsedBefore = elapsedInRun;
+    // Sub-nanosecond elapsed time can still carry material damage at mature
+    // power. Never discard it merely because it is below a generic time
+    // epsilon; only treat the simulator as stalled if floating-point addition
+    // literally cannot advance the elapsed clock and no state event fires.
     if(next>0){
       if(state.riftMode==='farm') simulationApplyFarmPassive(next,dps,policy,summary);
       else simulationApplyPushPassive(next,dps,policy,summary);
@@ -5255,8 +5257,8 @@ function advanceAuthoritativeTime(elapsedSec,options){
     actions += simulationStartQueuedStudies(summary);
     actions += simulationRecordAchievements(summary);
 
-    if(next<=SIM_EPS && actions===0){
-      throw new Error('Authoritative simulation stalled at a zero-time event');
+    if(elapsedInRun===elapsedBefore && actions===0){
+      throw new Error('Authoritative simulation stalled without elapsed-time or state progress');
     }
   }
 
