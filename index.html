@@ -4899,12 +4899,15 @@ function simulationFarmEconomyBoundarySeconds(dps,rewardScale){
   if(killsNeeded<=0) return 0;
   return (state.enemyHp + Math.max(0,killsNeeded-1)*state.enemyMaxHp)/dps;
 }
-function simulationNextFarmGridSeconds(nowMs){
-  // Stable absolute one-second boundaries keep analytical Farm fast-forward
-  // compositional across save/resume and QA chunk sizes without iterating kills.
-  var phase = ((nowMs%1000)+1000)%1000;
-  if(phase<1e-6 || 1000-phase<1e-6) return 1;
-  return (1000-phase)/1000;
+function simulationNextFarmGridSeconds(clockStartMs,elapsedInRunSec){
+  // The Farm grid is only an analytical batching boundary, never a gameplay
+  // event. Derive its phase from the run-local elapsed clock instead of the
+  // huge absolute epoch value: adding fractional milliseconds near Date.now()
+  // loses enough IEEE-754 precision to manufacture residual damage at high DPS.
+  var startPhaseMs = ((clockStartMs%1000)+1000)%1000;
+  var phaseMs = (startPhaseMs + elapsedInRunSec*1000) % 1000;
+  if(phaseMs<1e-7 || 1000-phaseMs<1e-7) return 1;
+  return (1000-phaseMs)/1000;
 }
 function simulationApplyAutoAscend(summary){
   if(!autoAscendReady()) return false;
@@ -5181,8 +5184,10 @@ function advanceAuthoritativeTime(elapsedSec,options){
   elapsedSec = Math.max(0,Number(elapsedSec)||0);
   var policy = simulationPolicy(options.kind||'live',options);
   var summary = simulationSummary(elapsedSec);
+  var clockStartMs = Number.isFinite(options.clockStartMs) ? options.clockStartMs : Date.now();
+  var elapsedInRun = 0;
   var remaining = elapsedSec;
-  var nowMs = Number.isFinite(options.clockStartMs) ? options.clockStartMs : Date.now();
+  var nowMs = clockStartMs;
 
   simulationDrainResearchQueue(summary);
   simulationStartQueuedStudies(summary);
@@ -5213,7 +5218,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
     next = Math.min(next,simulationNextBuffSeconds(nowMs));
 
     if(state.riftMode==='farm'){
-      next = Math.min(next,simulationNextFarmGridSeconds(nowMs));
+      next = Math.min(next,simulationNextFarmGridSeconds(clockStartMs,elapsedInRun));
       next = Math.min(next,simulationFarmEconomyBoundarySeconds(dps,rewardScale));
     } else {
       next = Math.min(next,simulationPassiveKillSeconds(dps));
@@ -5232,8 +5237,9 @@ function advanceAuthoritativeTime(elapsedSec,options){
       simulationAdvanceAbilityResources(next);
       simulationAdvanceAutomationTimers(next);
       simulationAdvanceStudyProgress(next);
-      nowMs += next*1000;
-      remaining = Math.max(0,remaining-next);
+      elapsedInRun += next;
+      remaining = Math.max(0,elapsedSec-elapsedInRun);
+      nowMs = clockStartMs + elapsedInRun*1000;
     }
 
     var actions = summary.kills-killsBefore;
@@ -5252,7 +5258,9 @@ function advanceAuthoritativeTime(elapsedSec,options){
 
   summary.endDepth = state.depth;
   summary.pushDepth = progressionDepth();
-  summary.clockEndMs = nowMs;
+  // Return the canonical requested endpoint, not a sum of fractional event
+  // timestamps. This makes repeated chunks compose to the same time boundary.
+  summary.clockEndMs = clockStartMs + elapsedSec*1000;
   return summary;
 }
 function advanceStudyOnlyTime(elapsedSec,clockStartMs,summary){
