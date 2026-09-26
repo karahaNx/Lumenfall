@@ -383,9 +383,19 @@ jobs:
 
       - name: Build APK
         working-directory: mobile/android
+        shell: bash
         run: |
+          set -euo pipefail
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon
+
+          KEYSTORE_FILE="$RUNNER_TEMP/lumenfall-signing/Lumenfall-debug.keystore"
+          test -s "$KEYSTORE_FILE"
+
+          ./gradlew assembleDebug --no-daemon \
+            -Pandroid.injected.signing.store.file="$KEYSTORE_FILE" \
+            -Pandroid.injected.signing.store.password=android \
+            -Pandroid.injected.signing.key.alias=androiddebugkey \
+            -Pandroid.injected.signing.key.password=android
 
       - name: Prepare APK
         run: |
