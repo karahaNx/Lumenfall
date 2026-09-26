@@ -1335,9 +1335,16 @@ def run_scenario(chrome, base_url, scenario, fixture):
 
     runtime_marker = re.search(r'\bdata-qa-runtime-error="([^"]+)"', dom)
     passed = completed.returncode == 0 and status == "pass" and runtime_marker is None
+    result_text = re.search(r'<pre[^>]*\bid="qa-result"[^>]*>(.*?)</pre>', dom, flags=re.S)
 
     if passed:
         print(f"PASS {scenario}")
+        if result_text and (scenario == "parity-long-high-power" or scenario.startswith("chronology-")):
+            try:
+                payload = json.loads(html_lib.unescape(re.sub(r'<[^>]+>', '', result_text.group(1))).strip())
+                print("  detail: " + json.dumps(payload.get("detail"), sort_keys=True))
+            except Exception:
+                pass
         return True
 
     print(f"FAIL {scenario}")
@@ -1345,7 +1352,6 @@ def run_scenario(chrome, base_url, scenario, fixture):
     print(f"  qa status: {status!r}")
     if runtime_marker:
         print(f"  runtime error marker: {runtime_marker.group(1)}")
-    result_text = re.search(r'<pre[^>]*\bid="qa-result"[^>]*>(.*?)</pre>', dom, flags=re.S)
     if result_text:
         print("  result:")
         print(html_lib.unescape(re.sub(r'<[^>]+>', '', result_text.group(1))).strip())
