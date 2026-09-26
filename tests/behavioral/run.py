@@ -290,7 +290,10 @@ def build_runner():
       'farmReturnDepth','enemyDepth','enemyIsLuminous','ascendCount','totalTaps',
       'prisms','comets','autoAscendEnabled','autoAscendTargetDepth'
     ].forEach(function(key){
-      assert(actual[key]===expected[key],label+' '+key+' must match exactly');
+      assert(
+        actual[key]===expected[key],
+        label+' '+key+' must match exactly (expected '+JSON.stringify(expected[key])+', got '+JSON.stringify(actual[key])+')'
+      );
     });
 
     ['activeParty','spirits','research','longStudyLevels','achieved','dailyStats'].forEach(function(key){
