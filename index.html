@@ -5188,7 +5188,24 @@ function advanceAuthoritativeTime(elapsedSec,options){
   // repeatedly accumulated.
   var startPhaseSec = (((clockStartMs%1000)+1000)%1000)/1000;
   var firstFarmGridSec = startPhaseSec===0 ? 1 : 1-startPhaseSec;
-  var nextFarmGridElapsedSec = firstFarmGridSec;
+  var farmGridRemainingSec = firstFarmGridSec;
+  var farmGridCrossings = 0;
+
+  function advanceFarmGridClock(stepSec){
+    if(stepSec<=0) return 0;
+    if(stepSec<farmGridRemainingSec){
+      farmGridRemainingSec -= stepSec;
+      return 0;
+    }
+    var afterFirst = stepSec-farmGridRemainingSec;
+    var wholeAfter = Math.floor(afterFirst);
+    var fractionalAfter = afterFirst-wholeAfter;
+    var crossed = 1+wholeAfter;
+    farmGridCrossings += crossed;
+    farmGridRemainingSec = fractionalAfter===0 ? 1 : 1-fractionalAfter;
+    return crossed;
+  }
+
   var traceEverySec = Math.max(0,Number(options.traceEverySec)||0);
   var nextTraceElapsedSec = traceEverySec>0 ? traceEverySec : Infinity;
   if(traceEverySec>0) summary.trace = [];
@@ -5202,7 +5219,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
     var traceDps = simulationPassiveDps(traceNowMs);
     var traceRewardScale = simulationRewardScale(policy);
     var traceFarmGrid = state.riftMode==='farm'
-      ? Math.max(0,nextFarmGridElapsedSec-elapsedInRun)
+      ? farmGridRemainingSec
       : Infinity;
     summary.trace.push({
       elapsedSec:elapsedInRun,
@@ -5269,8 +5286,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
     var farmGridStep = Infinity;
     var economyStep = Infinity;
     if(state.riftMode==='farm'){
-      while(nextFarmGridElapsedSec<=elapsedInRun) nextFarmGridElapsedSec += 1;
-      farmGridStep = nextFarmGridElapsedSec-elapsedInRun;
+      farmGridStep = farmGridRemainingSec;
       economyStep = simulationFarmEconomyBoundarySeconds(dps,rewardScale);
       next = Math.min(next,farmGridStep);
       next = Math.min(next,economyStep);
@@ -5312,9 +5328,15 @@ function advanceAuthoritativeTime(elapsedSec,options){
       simulationAdvanceAbilityResources(next);
       simulationAdvanceAutomationTimers(next);
       simulationAdvanceStudyProgress(next);
+      var crossedFarmGrids = advanceFarmGridClock(next);
       if(hitsFarmGrid){
-        elapsedInRun = nextFarmGridElapsedSec;
-        nextFarmGridElapsedSec += 1;
+        if(crossedFarmGrids!==1){
+          throw new Error('Authoritative Farm grid clock crossed an unexpected boundary count');
+        }
+        // Snap only the logical clock to the exact analytical grid. Gameplay
+        // state above advanced by the countdown-derived step, so direct and
+        // chunked execution consume the same residual elapsed time.
+        elapsedInRun = firstFarmGridSec + (farmGridCrossings-1);
       } else {
         elapsedInRun += next;
       }
