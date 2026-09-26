@@ -38,12 +38,19 @@ SCENARIOS = {
     "future-backup-rejection": "mid-game",
     "recovery-offline-once": "offline-recovery",
     "save-failure-warning": "mid-game",
+    "parity-short": "parity-early-simple",
+    "parity-medium-farm": "parity-medium-farm",
+    "parity-long-high-power": "parity-long-high-power",
+    "parity-boss-short": "parity-boss-short",
+    "parity-boss-retry": "parity-boss-retry",
+    "parity-auto-ascend": "parity-auto-ascend",
 }
 
 NEGATIVE_SCENARIOS = {
     "self-test-bad-assertion": "fresh",
     "self-test-uncaught-error": "fresh",
     "self-test-unhandled-rejection": "fresh",
+    "self-test-parity-regression": "parity-early-simple",
 }
 
 
@@ -170,6 +177,131 @@ window.__lumenfallQaBridge = {
     restoreSaveBackup();
   },
   enemyHpFor: function(depth){ return enemyHpFor(depth); },
+  setState: function(next){
+    state = acceptPersistedState(JSON.parse(JSON.stringify(next)),'qa-simulation');
+    restoreEnemyOrSpawn();
+    return JSON.parse(JSON.stringify(state));
+  },
+  simulate: function(seconds,kind,chunkSec,startMs){
+    var begin = performance.now();
+    var remaining = Math.max(0,Number(seconds)||0);
+    var chunk = Math.max(0,Number(chunkSec)||remaining||0);
+    var clock = Number.isFinite(startMs) ? startMs : 2000000000000;
+    var aggregate = {
+      lumenGained:0,shardGained:0,sigilsGained:0,motesGained:0,
+      kills:0,bossKills:0,luminousKills:0,ascends:0,autoTaps:0,
+      empowers:0,researchBought:0,studiesStarted:0,retreats:0,retries:0,
+      fastForwardedKills:0,iterations:0,retreated:false,
+      completedStudies:[],achievements:[],ascendGains:[]
+    };
+    function merge(part){
+      [
+        'lumenGained','shardGained','sigilsGained','motesGained',
+        'kills','bossKills','luminousKills','ascends','autoTaps','empowers',
+        'researchBought','studiesStarted','retreats','retries',
+        'fastForwardedKills','iterations'
+      ].forEach(function(key){ aggregate[key] += part[key]||0; });
+      aggregate.retreated = aggregate.retreated || !!part.retreated;
+      (part.completedStudies||[]).forEach(function(name){ aggregate.completedStudies.push(name); });
+      (part.achievements||[]).forEach(function(id){ if(aggregate.achievements.indexOf(id)===-1) aggregate.achievements.push(id); });
+      (part.ascendGains||[]).forEach(function(gain){ aggregate.ascendGains.push(gain); });
+      aggregate.endDepth = part.endDepth;
+      aggregate.pushDepth = part.pushDepth;
+      aggregate.clockEndMs = part.clockEndMs;
+    }
+    var guard = 0;
+    while(remaining>1e-9){
+      if(++guard>100000) throw new Error('QA simulation chunk guard exceeded');
+      var dt = chunk>0 ? Math.min(chunk,remaining) : remaining;
+      var part = advanceAuthoritativeTime(dt,{kind:kind||'live',visual:false,clockStartMs:clock});
+      merge(part);
+      clock = part.clockEndMs;
+      remaining = Math.max(0,remaining-dt);
+    }
+    return {
+      state:JSON.parse(JSON.stringify(state)),
+      summary:aggregate,
+      wallMs:performance.now()-begin
+    };
+  },
+  simulateOfflineDirect: function(seconds,startMs){
+    var begin = performance.now();
+    var result = simulateOfflineRun(seconds,{clockStartMs:Number.isFinite(startMs)?startMs:2000000000000});
+    return {
+      state:JSON.parse(JSON.stringify(state)),
+      summary:result,
+      wallMs:performance.now()-begin
+    };
+  },
+  simulateDirectTrace: function(seconds,kind,everySec,startMs){
+    var result = advanceAuthoritativeTime(seconds,{
+      kind:kind||'offline',
+      visual:false,
+      clockStartMs:Number.isFinite(startMs)?startMs:2000000000000,
+      traceEverySec:everySec
+    });
+    return {
+      state:JSON.parse(JSON.stringify(state)),
+      summary:result,
+      trace:JSON.parse(JSON.stringify(result.trace||[]))
+    };
+  },
+  simulateEventTrace: function(seconds,kind,startMs,fromSec,toSec,offsetSec){
+    var result = advanceAuthoritativeTime(seconds,{
+      kind:kind||'offline',
+      visual:false,
+      clockStartMs:Number.isFinite(startMs)?startMs:2000000000000,
+      traceEventsFromSec:fromSec,
+      traceEventsToSec:toSec,
+      traceOffsetSec:offsetSec||0
+    });
+    return {
+      state:JSON.parse(JSON.stringify(state)),
+      summary:result,
+      eventTrace:JSON.parse(JSON.stringify(result.eventTrace||[]))
+    };
+  },
+  currentSimulationTrace: function(elapsedSec,startMs){
+    var clockStartMs = Number.isFinite(startMs)?startMs:2000000000000;
+    var nowMs = clockStartMs + elapsedSec*1000;
+    var dps = simulationPassiveDps(nowMs);
+    var rewardScale = simulationRewardScale(simulationPolicy('offline',{}));
+    return {
+      elapsedSec:elapsedSec,
+      enemyHp:state.enemyHp,
+      enemyMaxHp:state.enemyMaxHp,
+      totalKills:state.totalKills,
+      luminousAccum:state.luminousAccum,
+      enemyIsLuminous:!!state.enemyIsLuminous,
+      autoTapAccum:state._autoTapAccum||0,
+      autoEmpowerAccum:state._autoEmpowerAccum||0,
+      heroResource:JSON.parse(JSON.stringify(state.heroResource||{})),
+      lumen:state.lumen,
+      shards:state.shards,
+      spirits:JSON.parse(JSON.stringify(state.spirits||{})),
+      passiveDps:dps,
+      nextEvents:{
+        ability:simulationNextAbilitySeconds(),
+        autoTap:simulationNextAutoTapSeconds(),
+        autoEmpower:simulationNextAutoEmpowerSeconds(),
+        study:simulationNextStudySeconds(),
+        farmGrid:state.riftMode==='farm' ? 1 : Infinity,
+        economy:state.riftMode==='farm' ? simulationFarmEconomyBoundarySeconds(dps,rewardScale) : Infinity
+      }
+    };
+  },
+  simulationDiagnosticsFor: function(snapshot){
+    var previous = state;
+    state = JSON.parse(JSON.stringify(snapshot));
+    var out = {
+      passiveDps:passiveWispDpsAt(state.depth),
+      sustainedDps:sustainedCombatDps(state.depth),
+      abilityCycleSec:abilityCycleSeconds(),
+      offlineRate:offlineRate()
+    };
+    state = previous;
+    return out;
+  },
   freeze: function(){ reloadInProgress = true; document.body.classList.add('app-paused'); }
 };
 '''
@@ -203,6 +335,280 @@ def build_runner():
   function phase(){ return parseInt(localStorage.getItem(ctx.phaseKey)||'0',10); }
   function nextPhase(n){ localStorage.setItem(ctx.phaseKey,String(n)); }
   function backupCode(obj){ return 'LUMENFALL1:'+encodeURIComponent(JSON.stringify(obj)); }
+
+  // P0-05 parity contract:
+  // discrete progression must be exact; continuous state uses <= 1e-6 absolute
+  // or 1e-12 relative error, whichever is larger. This is intentionally far
+  // below any player-visible economic unit and is not a balance fudge factor.
+  var PARITY_ABS_TOL = 1e-6;
+  var PARITY_REL_TOL = 1e-12;
+  var PARITY_CLOCK_MS = 2000000000000;
+  function parityApprox(actual,expected,label){
+    var tolerance = Math.max(PARITY_ABS_TOL,Math.max(Math.abs(actual),Math.abs(expected))*PARITY_REL_TOL);
+    if(!Number.isFinite(actual) || !Number.isFinite(expected) || Math.abs(actual-expected)>tolerance){
+      throw new Error(label+' parity mismatch (expected '+expected+', got '+actual+', tolerance '+tolerance+')');
+    }
+  }
+  function assertJsonEqual(actual,expected,label){
+    var a = JSON.stringify(actual);
+    var b = JSON.stringify(expected);
+    if(a!==b) throw new Error(label+' parity mismatch (expected '+b+', got '+a+')');
+  }
+  function assertProtectedParity(actual,expected,label){
+    [
+      'totalKills','motes','sigils','depth','maxDepthEver','riftMode','farmDepth',
+      'farmReturnDepth','enemyDepth','enemyIsLuminous','ascendCount','totalTaps',
+      'prisms','comets','autoAscendEnabled','autoAscendTargetDepth'
+    ].forEach(function(key){
+      assert(
+        actual[key]===expected[key],
+        label+' '+key+' must match exactly (expected '+JSON.stringify(expected[key])+', got '+JSON.stringify(actual[key])+')'
+      );
+    });
+
+    ['activeParty','spirits','research','longStudyLevels','achieved','dailyStats'].forEach(function(key){
+      assertJsonEqual(actual[key],expected[key],label+' '+key);
+    });
+
+    ['lumen','shards','enemyHp','enemyMaxHp','luminousAccum','buffUntil','buffMult','_autoTapAccum','_autoEmpowerAccum'].forEach(function(key){
+      parityApprox(Number(actual[key]||0),Number(expected[key]||0),label+' '+key);
+    });
+
+    Object.keys(expected.heroResource||{}).forEach(function(id){
+      parityApprox(Number((actual.heroResource||{})[id]||0),Number(expected.heroResource[id]||0),label+' heroResource.'+id);
+    });
+
+    assert(actual.activeStudies.length===expected.activeStudies.length,label+' activeStudies length must match exactly');
+    for(var i=0;i<expected.activeStudies.length;i++){
+      var aStudy = actual.activeStudies[i], eStudy = expected.activeStudies[i];
+      assert(aStudy.id===eStudy.id,label+' activeStudies['+i+'].id must match exactly');
+      assert(aStudy.speedMult===eStudy.speedMult,label+' activeStudies['+i+'].speedMult must match exactly');
+      parityApprox(aStudy.remainingSec,eStudy.remainingSec,label+' activeStudies['+i+'].remainingSec');
+      parityApprox(aStudy.totalDurationSec,eStudy.totalDurationSec,label+' activeStudies['+i+'].totalDurationSec');
+    }
+  }
+  function assertSummaryParity(actual,expected,label){
+    [
+      'kills','bossKills','luminousKills','sigilsGained','motesGained','ascends',
+      'autoTaps','empowers','researchBought','studiesStarted','retreats','retries'
+    ].forEach(function(key){
+      assert((actual[key]||0)===(expected[key]||0),label+' summary '+key+' must match exactly');
+    });
+    parityApprox(actual.lumenGained||0,expected.lumenGained||0,label+' summary lumenGained');
+    parityApprox(actual.shardGained||0,expected.shardGained||0,label+' summary shardGained');
+    assertJsonEqual(actual.completedStudies||[],expected.completedStudies||[],label+' summary completedStudies');
+    assertJsonEqual(actual.ascendGains||[],expected.ascendGains||[],label+' summary ascendGains');
+  }
+  function runParityPair(seconds,kind,referenceChunk){
+    var bridge = window.__lumenfallQaBridge;
+    var baseline = state();
+    var reference = bridge.simulate(seconds,kind,referenceChunk,PARITY_CLOCK_MS);
+    bridge.setState(baseline);
+    var direct = kind==='offline'
+      ? bridge.simulateOfflineDirect(seconds,PARITY_CLOCK_MS)
+      : bridge.simulate(seconds,kind,seconds,PARITY_CLOCK_MS);
+    try{
+      assertProtectedParity(direct.state,reference.state,kind+' '+seconds+'s');
+      assertSummaryParity(direct.summary,reference.summary,kind+' '+seconds+'s');
+    }catch(error){
+      var refDiag = bridge.simulationDiagnosticsFor(reference.state);
+      var directDiag = bridge.simulationDiagnosticsFor(direct.state);
+      var boundaryDiagnostics = [];
+      var firstCheckpointDivergence = null;
+      if(kind==='offline' && seconds===14400){
+        bridge.setState(baseline);
+        var uninterrupted = bridge.simulateDirectTrace(14400,'offline',60,PARITY_CLOCK_MS);
+        bridge.setState(baseline);
+        var chunkClock = PARITY_CLOCK_MS;
+        var chunkElapsed = 0;
+        var chunkStates = [];
+        for(var chunkIndex=0;chunkIndex<240;chunkIndex++){
+          var chunkPart = bridge.simulate(60,'offline',60,chunkClock);
+          chunkElapsed += 60;
+          chunkClock = chunkPart.summary.clockEndMs;
+          chunkStates.push(bridge.currentSimulationTrace(chunkElapsed,PARITY_CLOCK_MS));
+        }
+        function firstTraceDifference(a,b){
+          var scalarKeys = [
+            'enemyHp','enemyMaxHp','totalKills','luminousAccum','enemyIsLuminous',
+            'autoTapAccum','autoEmpowerAccum','lumen','shards','passiveDps'
+          ];
+          var diff = {};
+          scalarKeys.forEach(function(key){
+            if(a[key]!==b[key]) diff[key]={direct:a[key],chunked:b[key]};
+          });
+          var ids = Object.keys(a.heroResource||{});
+          ids.forEach(function(id){
+            var av=(a.heroResource||{})[id]||0, bv=(b.heroResource||{})[id]||0;
+            if(av!==bv){
+              if(!diff.heroResource) diff.heroResource={};
+              diff.heroResource[id]={direct:av,chunked:bv};
+            }
+          });
+          if(JSON.stringify(a.spirits)!==JSON.stringify(b.spirits)){
+            diff.spirits={direct:a.spirits,chunked:b.spirits};
+          }
+          return diff;
+        }
+        for(var traceIndex=0;traceIndex<Math.min(uninterrupted.trace.length,chunkStates.length);traceIndex++){
+          var traceDiff = firstTraceDifference(uninterrupted.trace[traceIndex],chunkStates[traceIndex]);
+          if(Object.keys(traceDiff).length){
+            firstCheckpointDivergence={
+              checkpointSec:(traceIndex+1)*60,
+              direct:uninterrupted.trace[traceIndex],
+              chunked:chunkStates[traceIndex],
+              diff:traceDiff
+            };
+            break;
+          }
+        }
+
+        [120,600,3600].forEach(function(probeSec){
+          bridge.setState(baseline);
+          var probeChunked = bridge.simulate(probeSec,'offline',60,PARITY_CLOCK_MS);
+          bridge.setState(baseline);
+          var probeDirect = bridge.simulateOfflineDirect(probeSec,PARITY_CLOCK_MS);
+          boundaryDiagnostics.push({
+            seconds:probeSec,
+            chunked:{
+              enemyHp:probeChunked.state.enemyHp,
+              autoTapAccum:probeChunked.state._autoTapAccum||0,
+              autoEmpowerAccum:probeChunked.state._autoEmpowerAccum||0,
+              emberResource:probeChunked.state.heroResource.ember,
+              clockEndMs:probeChunked.summary.clockEndMs
+            },
+            direct:{
+              enemyHp:probeDirect.state.enemyHp,
+              autoTapAccum:probeDirect.state._autoTapAccum||0,
+              autoEmpowerAccum:probeDirect.state._autoEmpowerAccum||0,
+              emberResource:probeDirect.state.heroResource.ember,
+              clockEndMs:probeDirect.summary.clockEndMs
+            }
+          });
+        });
+      }
+      var firstEventDivergence = null;
+      if(kind==='offline' && seconds===14400 && firstCheckpointDivergence){
+        var checkpointSec = firstCheckpointDivergence.checkpointSec;
+        var intervalStartSec = Math.max(0,checkpointSec-60);
+
+        bridge.setState(baseline);
+        // Run past the checkpoint so the direct trace does not gain an
+        // artificial window-end event at the boundary being investigated.
+        var directEvents = bridge.simulateEventTrace(
+          checkpointSec+60,'offline',PARITY_CLOCK_MS,intervalStartSec,checkpointSec,0
+        ).eventTrace.filter(function(event){ return event.logicalElapsedSec>intervalStartSec; });
+
+        bridge.setState(baseline);
+        var chunkTraceStartMs = PARITY_CLOCK_MS;
+        if(intervalStartSec>0){
+          var priorChunks = bridge.simulate(intervalStartSec,'offline',60,PARITY_CLOCK_MS);
+          chunkTraceStartMs = priorChunks.summary.clockEndMs;
+        }
+        var chunkEvents = bridge.simulateEventTrace(
+          60,'offline',chunkTraceStartMs,intervalStartSec,checkpointSec,intervalStartSec
+        ).eventTrace.filter(function(event){ return event.logicalElapsedSec>intervalStartSec; });
+
+        function eventStateDifference(a,b){
+          if(!a || !b) return {missing:{direct:!!a,chunked:!!b}};
+          var diff = {};
+          if(JSON.stringify(a.kinds)!==JSON.stringify(b.kinds)) diff.kinds={direct:a.kinds,chunked:b.kinds};
+          [
+            'clockMs','stepSec','enemyHp','enemyMaxHp','totalKills','luminousAccum','enemyIsLuminous',
+            'autoTapAccum','autoEmpowerAccum','lumen','shards','buffUntil','buffMult','passiveDps'
+          ].forEach(function(key){
+            if(a[key]!==b[key]) diff[key]={direct:a[key],chunked:b[key]};
+          });
+          Object.keys(a.candidates||{}).forEach(function(key){
+            var av=(a.candidates||{})[key], bv=(b.candidates||{})[key];
+            if(av!==bv){
+              if(!diff.candidates) diff.candidates={};
+              diff.candidates[key]={direct:av,chunked:bv};
+            }
+          });
+          Object.keys(a.heroResource||{}).forEach(function(id){
+            var av=(a.heroResource||{})[id]||0, bv=(b.heroResource||{})[id]||0;
+            if(av!==bv){
+              if(!diff.heroResource) diff.heroResource={};
+              diff.heroResource[id]={direct:av,chunked:bv};
+            }
+          });
+          if(JSON.stringify(a.spirits)!==JSON.stringify(b.spirits)){
+            diff.spirits={direct:a.spirits,chunked:b.spirits};
+          }
+          if(JSON.stringify(a.activeStudies)!==JSON.stringify(b.activeStudies)){
+            diff.activeStudies={direct:a.activeStudies,chunked:b.activeStudies};
+          }
+          return diff;
+        }
+
+        var eventCount = Math.max(directEvents.length,chunkEvents.length);
+        var previousMatchingEvent = null;
+        var firstLogicalTimeDivergence = null;
+        for(var eventIndex=0;eventIndex<eventCount;eventIndex++){
+          var directEvent = directEvents[eventIndex];
+          var chunkEvent = chunkEvents[eventIndex];
+          if(
+            !firstLogicalTimeDivergence &&
+            directEvent && chunkEvent &&
+            directEvent.logicalElapsedSec!==chunkEvent.logicalElapsedSec
+          ){
+            firstLogicalTimeDivergence={
+              index:eventIndex,
+              direct:directEvent.logicalElapsedSec,
+              chunked:chunkEvent.logicalElapsedSec,
+              delta:directEvent.logicalElapsedSec-chunkEvent.logicalElapsedSec
+            };
+          }
+          var eventDiff = eventStateDifference(directEvent,chunkEvent);
+          if(Object.keys(eventDiff).length){
+            firstEventDivergence={
+              index:eventIndex,
+              previous:previousMatchingEvent,
+              direct:directEvent||null,
+              chunked:chunkEvent||null,
+              diff:eventDiff,
+              firstLogicalTimeDivergence:firstLogicalTimeDivergence
+            };
+            break;
+          }
+          previousMatchingEvent={direct:directEvent,chunked:chunkEvent};
+        }
+        if(!firstEventDivergence && firstLogicalTimeDivergence){
+          firstEventDivergence={stateMatched:true,firstLogicalTimeDivergence:firstLogicalTimeDivergence};
+        }
+      }
+
+      error.message += ' | diagnostics=' + JSON.stringify({
+        reference:{
+          enemyHp:reference.state.enemyHp,
+          clockEndMs:reference.summary.clockEndMs,
+          autoTapAccum:reference.state._autoTapAccum||0,
+          autoEmpowerAccum:reference.state._autoEmpowerAccum||0,
+          heroResource:reference.state.heroResource,
+          passiveDps:refDiag.passiveDps,
+          sustainedDps:refDiag.sustainedDps,
+          abilityCycleSec:refDiag.abilityCycleSec
+        },
+        direct:{
+          enemyHp:direct.state.enemyHp,
+          clockEndMs:direct.summary.clockEndMs,
+          autoTapAccum:direct.state._autoTapAccum||0,
+          autoEmpowerAccum:direct.state._autoEmpowerAccum||0,
+          heroResource:direct.state.heroResource,
+          passiveDps:directDiag.passiveDps,
+          sustainedDps:directDiag.sustainedDps,
+          abilityCycleSec:directDiag.abilityCycleSec
+        },
+        boundaryProbes:boundaryDiagnostics,
+        firstCheckpointDivergence:firstCheckpointDivergence,
+        firstEventDivergence:firstEventDivergence
+      });
+      throw error;
+    }
+    return {baseline:baseline,reference:reference,direct:direct};
+  }
+
   function assertFresh(s){
     assert(s.depth===1,'fresh depth must be 1');
     assert(s.maxDepthEver===1,'fresh maxDepthEver must be 1');
@@ -473,6 +879,127 @@ def build_runner():
           return;
         }
 
+        case 'parity-short': {
+          var shortBaseline = state();
+          var livePair = runParityPair(60,'live',0.1);
+
+          bridge.setState(shortBaseline);
+          var offlinePair = runParityPair(60,'offline',0.1);
+
+          assert(livePair.direct.summary.kills===offlinePair.direct.summary.kills,'fixed-power short live/offline combat must produce identical kills');
+          assert(livePair.direct.state.depth===offlinePair.direct.state.depth,'fixed-power short live/offline combat must reach identical Rift depth');
+          assert(livePair.direct.state.motes===offlinePair.direct.state.motes,'Luminous/Mote cadence must be identical when combat path is identical');
+          assert(livePair.direct.state.sigils===offlinePair.direct.state.sigils,'Boss/Sigil cadence must be identical when combat path is identical');
+
+          var liveLumenGain = livePair.direct.state.lumen-shortBaseline.lumen;
+          var offlineLumenGain = offlinePair.direct.state.lumen-shortBaseline.lumen;
+          parityApprox(offlineLumenGain,liveLumenGain*0.70,'explicit base offline Lumen policy');
+          var liveShardGain = livePair.direct.state.shards-shortBaseline.shards;
+          var offlineShardGain = offlinePair.direct.state.shards-shortBaseline.shards;
+          parityApprox(offlineShardGain,liveShardGain*0.70,'explicit base offline Shard policy');
+
+          finish('pass',{
+            durationSec:60,
+            liveKills:livePair.direct.summary.kills,
+            offlineKills:offlinePair.direct.summary.kills,
+            liveWallMs:livePair.direct.wallMs,
+            offlineWallMs:offlinePair.direct.wallMs,
+            tolerance:{absolute:PARITY_ABS_TOL,relative:PARITY_REL_TOL}
+          });
+          return;
+        }
+
+        case 'parity-medium-farm': {
+          var mediumPair = runParityPair(3600,'offline',1);
+          assert(mediumPair.direct.state.riftMode==='farm','medium Farm parity must remain in Farm mode');
+          assert(mediumPair.direct.state.farmReturnDepth===90,'medium Farm parity must preserve Push return depth');
+          assert(mediumPair.direct.summary.luminousKills>0 && mediumPair.direct.summary.motesGained>0,'medium Farm parity must exercise deterministic Luminous/Motes');
+          assert(mediumPair.direct.summary.autoTaps>0,'medium Farm parity must exercise Auto-Tap');
+          assert(mediumPair.direct.summary.empowers>0,'medium Farm parity must exercise Auto-Empower');
+          assert(mediumPair.direct.summary.researchBought>0,'medium Farm parity must exercise queued Research');
+          assert(mediumPair.direct.summary.completedStudies.length>0,'medium Farm parity must exercise Long Study completion');
+          finish('pass',{
+            durationSec:3600,
+            kills:mediumPair.direct.summary.kills,
+            luminousKills:mediumPair.direct.summary.luminousKills,
+            motes:mediumPair.direct.summary.motesGained,
+            researchBought:mediumPair.direct.summary.researchBought,
+            studies:mediumPair.direct.summary.completedStudies.length,
+            wallMs:mediumPair.direct.wallMs
+          });
+          return;
+        }
+
+        case 'parity-long-high-power': {
+          var longBaseline = state();
+          var longPair = runParityPair(14400,'offline',60);
+          assert(longPair.direct.summary.kills>5000,'long parity must exceed the removed 5,000-kill cutoff');
+          assert(longPair.direct.summary.fastForwardedKills>0,'long parity must use bounded Farm fast-forwarding');
+          assert(longPair.direct.summary.luminousKills>0 && longPair.direct.summary.motesGained>0,'long parity must preserve Luminous/Motes through fast-forward');
+          assert(longPair.direct.summary.autoTaps>0 && longPair.direct.summary.empowers>0,'long parity must exercise automated combat/progression');
+          assert(longPair.direct.wallMs<5000,'representative 4-hour high-power simulation must stay computationally bounded');
+
+          bridge.setState(longBaseline);
+          var repeat = bridge.simulateOfflineDirect(14400,PARITY_CLOCK_MS);
+          assertProtectedParity(repeat.state,longPair.direct.state,'long deterministic repeat');
+          assertSummaryParity(repeat.summary,longPair.direct.summary,'long deterministic repeat');
+
+          finish('pass',{
+            durationSec:14400,
+            kills:longPair.direct.summary.kills,
+            fastForwardedKills:longPair.direct.summary.fastForwardedKills,
+            luminousKills:longPair.direct.summary.luminousKills,
+            motes:longPair.direct.summary.motesGained,
+            wallMs:longPair.direct.wallMs,
+            repeatWallMs:repeat.wallMs
+          });
+          return;
+        }
+
+        case 'parity-boss-short': {
+          var shortBoss = runParityPair(30,'offline',0.1);
+          assert(shortBoss.direct.summary.retreats===0,'beatable Boss must not retreat merely because the offline window is short');
+          assert(shortBoss.direct.state.riftMode==='push' && shortBoss.direct.state.depth===20,'short Boss window must remain at the Push Boss');
+          assert(shortBoss.direct.state.enemyHp>0 && shortBoss.direct.state.enemyHp<shortBoss.direct.state.enemyMaxHp,'short Boss window must preserve partial Boss damage');
+          finish('pass',{
+            durationSec:30,
+            enemyHp:shortBoss.direct.state.enemyHp,
+            enemyMaxHp:shortBoss.direct.state.enemyMaxHp,
+            retreats:shortBoss.direct.summary.retreats
+          });
+          return;
+        }
+
+        case 'parity-boss-retry': {
+          var retryPair = runParityPair(120,'offline',0.1);
+          assert(retryPair.direct.summary.retreats>=1,'unwinnable Boss must retreat to Farm');
+          assert(retryPair.direct.summary.retries>=1,'Auto-Empower must permit a later Boss retry once sustained damage is positive');
+          assert(retryPair.direct.summary.bossKills>=1,'retried Boss must be defeatable inside the representative window');
+          assert(retryPair.direct.summary.sigilsGained>=2,'Boss retry path must preserve Sigil rewards');
+          finish('pass',{
+            durationSec:120,
+            retreats:retryPair.direct.summary.retreats,
+            retries:retryPair.direct.summary.retries,
+            bossKills:retryPair.direct.summary.bossKills,
+            sigils:retryPair.direct.summary.sigilsGained,
+            endDepth:retryPair.direct.state.depth
+          });
+          return;
+        }
+
+        case 'parity-auto-ascend': {
+          var ascendPair = runParityPair(60,'offline',0.1);
+          assert(ascendPair.direct.summary.ascends>=1,'Auto-Ascend must fire under the current arrival-depth rule');
+          assert(ascendPair.direct.state.ascendCount>ascendPair.baseline.ascendCount,'Auto-Ascend must advance persistent Ascension count');
+          finish('pass',{
+            durationSec:60,
+            ascends:ascendPair.direct.summary.ascends,
+            ascendCount:ascendPair.direct.state.ascendCount,
+            endDepth:ascendPair.direct.state.depth
+          });
+          return;
+        }
+
         case 'self-test-bad-assertion':
           assert(s.depth===999999,'intentional harness self-test assertion');
           finish('pass');
@@ -487,6 +1014,17 @@ def build_runner():
           Promise.reject(new Error('intentional unhandled rejection QA self-test'));
           setTimeout(function(){ finish('pass',{unexpected:'unhandled rejection was not detected'}); },40);
           return;
+
+        case 'self-test-parity-regression': {
+          var parityBaseline = state();
+          var expectedParity = bridge.simulate(60,'live',0.1,PARITY_CLOCK_MS);
+          bridge.setState(parityBaseline);
+          var intentionallyWrong = bridge.simulate(60,'live',60,PARITY_CLOCK_MS);
+          intentionallyWrong.state.totalKills += 1;
+          assertProtectedParity(intentionallyWrong.state,expectedParity.state,'intentional parity regression');
+          finish('pass',{unexpected:'parity comparator did not reject a one-kill regression'});
+          return;
+        }
 
         default:
           throw new Error('unknown scenario '+ctx.scenario);
