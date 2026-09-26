@@ -5381,7 +5381,17 @@ function advanceAuthoritativeTime(elapsedSec,options){
     }
 
     if(elapsedInRun===elapsedBefore && actions===0){
-      throw new Error('Authoritative simulation stalled without elapsed-time or state progress');
+      throw new Error('Authoritative simulation stalled without elapsed-time or state progress | '+JSON.stringify({
+        elapsedInRun:elapsedInRun,
+        elapsedSec:elapsedSec,
+        remaining:remaining,
+        stepSec:next,
+        farmGridRemainingSec:farmGridRemainingSec,
+        farmGridCrossings:farmGridCrossings,
+        riftMode:state.riftMode,
+        candidates:diagnosticCandidates,
+        kinds:diagnosticEventKinds
+      }));
     }
   }
 
