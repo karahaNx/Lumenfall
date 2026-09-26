@@ -356,6 +356,32 @@ def build_runner():
     }catch(error){
       var refDiag = bridge.simulationDiagnosticsFor(reference.state);
       var directDiag = bridge.simulationDiagnosticsFor(direct.state);
+      var boundaryDiagnostics = [];
+      if(kind==='offline' && seconds===14400){
+        [120,600,3600].forEach(function(probeSec){
+          bridge.setState(baseline);
+          var probeChunked = bridge.simulate(probeSec,'offline',60,PARITY_CLOCK_MS);
+          bridge.setState(baseline);
+          var probeDirect = bridge.simulateOfflineDirect(probeSec,PARITY_CLOCK_MS);
+          boundaryDiagnostics.push({
+            seconds:probeSec,
+            chunked:{
+              enemyHp:probeChunked.state.enemyHp,
+              autoTapAccum:probeChunked.state._autoTapAccum||0,
+              autoEmpowerAccum:probeChunked.state._autoEmpowerAccum||0,
+              emberResource:probeChunked.state.heroResource.ember,
+              clockEndMs:probeChunked.summary.clockEndMs
+            },
+            direct:{
+              enemyHp:probeDirect.state.enemyHp,
+              autoTapAccum:probeDirect.state._autoTapAccum||0,
+              autoEmpowerAccum:probeDirect.state._autoEmpowerAccum||0,
+              emberResource:probeDirect.state.heroResource.ember,
+              clockEndMs:probeDirect.summary.clockEndMs
+            }
+          });
+        });
+      }
       error.message += ' | diagnostics=' + JSON.stringify({
         reference:{
           enemyHp:reference.state.enemyHp,
@@ -376,7 +402,8 @@ def build_runner():
           passiveDps:directDiag.passiveDps,
           sustainedDps:directDiag.sustainedDps,
           abilityCycleSec:directDiag.abilityCycleSec
-        }
+        },
+        boundaryProbes:boundaryDiagnostics
       });
       throw error;
     }
