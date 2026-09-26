@@ -8,6 +8,7 @@ on:
       - 'branding/**'
       - 'fonts/**'
       - 'mobile/**'
+      - 'scripts/verify_apk_identity.py'
       - '.github/workflows/build-android.yml'
   workflow_dispatch: {}
 
@@ -391,6 +392,38 @@ jobs:
           cp mobile/android/app/build/outputs/apk/debug/app-debug.apk Lumenfall.apk
           test -s Lumenfall.apk
           ls -lh Lumenfall.apk
+
+      - name: Verify final APK identity
+        env:
+          EXPECTED_PACKAGE_ID: "com.lumenfall.app"
+          EXPECTED_VERSION_CODE: "${{ github.run_number }}"
+          EXPECTED_VERSION_NAME: "0.1.${{ github.run_number }}"
+          EXPECTED_SIGNING_SHA256: "A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21"
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          BUILD_TOOLS_DIR=""
+          while IFS= read -r candidate; do
+            if [ -x "$candidate/aapt" ] && [ -x "$candidate/apksigner" ]; then
+              BUILD_TOOLS_DIR="$candidate"
+              break
+            fi
+          done < <(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d -print | sort -Vr)
+
+          if [ -z "$BUILD_TOOLS_DIR" ]; then
+            echo "::error::Could not find Android build-tools containing both aapt and apksigner."
+            exit 1
+          fi
+
+          python3 scripts/verify_apk_identity.py \
+            --apk Lumenfall.apk \
+            --aapt "$BUILD_TOOLS_DIR/aapt" \
+            --apksigner "$BUILD_TOOLS_DIR/apksigner" \
+            --expected-package "$EXPECTED_PACKAGE_ID" \
+            --expected-version-code "$EXPECTED_VERSION_CODE" \
+            --expected-version-name "$EXPECTED_VERSION_NAME" \
+            --expected-cert-sha256 "$EXPECTED_SIGNING_SHA256"
 
       - name: Remove legacy Actions artifacts
         continue-on-error: true
