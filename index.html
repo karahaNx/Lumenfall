@@ -4899,6 +4899,13 @@ function simulationFarmEconomyBoundarySeconds(dps,rewardScale){
   if(killsNeeded<=0) return 0;
   return (state.enemyHp + Math.max(0,killsNeeded-1)*state.enemyMaxHp)/dps;
 }
+function simulationNextFarmGridSeconds(nowMs){
+  // Stable absolute one-second boundaries keep analytical Farm fast-forward
+  // compositional across save/resume and QA chunk sizes without iterating kills.
+  var phase = ((nowMs%1000)+1000)%1000;
+  if(phase<1e-6 || 1000-phase<1e-6) return 1;
+  return (1000-phase)/1000;
+}
 function simulationApplyAutoAscend(summary){
   if(!autoAscendReady()) return false;
   var gain = applyAscendMutation();
@@ -5206,6 +5213,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
     next = Math.min(next,simulationNextBuffSeconds(nowMs));
 
     if(state.riftMode==='farm'){
+      next = Math.min(next,simulationNextFarmGridSeconds(nowMs));
       next = Math.min(next,simulationFarmEconomyBoundarySeconds(dps,rewardScale));
     } else {
       next = Math.min(next,simulationPassiveKillSeconds(dps));
