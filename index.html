@@ -5215,7 +5215,10 @@ function advanceAuthoritativeTime(elapsedSec,options){
     next = Math.max(0,Math.min(remaining,next));
 
     var killsBefore = summary.kills;
-    if(next>SIM_EPS){
+    // Sub-nanosecond kill boundaries are possible in mature Farm states. They
+    // are still real gameplay events; skipping them would create a zero-time
+    // stall and reintroduce a hidden high-DPS cap.
+    if(next>0){
       if(state.riftMode==='farm') simulationApplyFarmPassive(next,dps,policy,summary);
       else simulationApplyPushPassive(next,dps,policy,summary);
       simulationAdvanceAbilityResources(next);
