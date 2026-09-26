@@ -5232,16 +5232,18 @@ function simulationResolveTimestamp(nowMs,elapsedSec,policy,summary){
 
   var spiritBefore = {};
   state.activeParty.forEach(function(id){ spiritBefore[id]=state.spirits[id]||0; });
-  var empowers = simulationProcessAutoEmpower(summary);
-  if(empowers){
+  var empowersBefore = summary.empowers;
+  var empowerChecks = simulationProcessAutoEmpower(summary);
+  var empowerPurchases = summary.empowers-empowersBefore;
+  if(empowerPurchases){
     var empowered = [];
     state.activeParty.forEach(function(id){
       var delta = (state.spirits[id]||0)-(spiritBefore[id]||0);
       if(delta>0) empowered.push({id:id,levels:delta});
     });
-    simulationTimelinePush(summary,elapsedSec,'autoEmpower',{count:empowers,wisps:empowered});
-    actions += empowers;
+    simulationTimelinePush(summary,elapsedSec,'autoEmpower',{count:empowerPurchases,wisps:empowered});
   }
+  actions += empowerChecks;
 
   var researchBefore = {};
   RESEARCH.forEach(function(node){ researchBefore[node.id]=state.research[node.id]||0; });
