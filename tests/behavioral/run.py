@@ -643,9 +643,10 @@ def build_runner():
   }
   function assertChronologicalSplit(baseline,totalSec,eventSec,direct,label){
     assert(eventSec>0 && eventSec<totalSec,label+' split event must be strictly inside the simulated window');
-    bridge.setState(baseline);
-    var first = bridge.simulate(eventSec,'offline',eventSec,PARITY_CLOCK_MS);
-    var second = bridge.simulate(
+    var chronologyBridge = window.__lumenfallQaBridge;
+    chronologyBridge.setState(baseline);
+    var first = chronologyBridge.simulate(eventSec,'offline',eventSec,PARITY_CLOCK_MS);
+    var second = chronologyBridge.simulate(
       totalSec-eventSec,
       'offline',
       totalSec-eventSec,
