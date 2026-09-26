@@ -5187,18 +5187,6 @@ function advanceAuthoritativeTime(elapsedSec,options){
   function currentElapsedSec(){
     return elapsedWholeSec+elapsedFractionSec;
   }
-  function advanceElapsedClock(stepSec){
-    var whole = Math.floor(stepSec);
-    var fraction = stepSec-whole;
-    elapsedWholeSec += whole;
-    var nextFraction = elapsedFractionSec+fraction;
-    if(nextFraction>=1){
-      var carry = Math.floor(nextFraction);
-      elapsedWholeSec += carry;
-      nextFraction -= carry;
-    }
-    elapsedFractionSec = nextFraction;
-  }
   function simulationRemainingSec(){
     var whole = targetWholeSec-elapsedWholeSec;
     var fraction = targetFractionSec-elapsedFractionSec;
@@ -5238,13 +5226,22 @@ function advanceAuthoritativeTime(elapsedSec,options){
     farmGridRemainingSec = fractionalAfter===0 ? 1 : 1-fractionalAfter;
     return crossed;
   }
-  function snapElapsedClockToFarmGrid(){
-    if(firstFarmGridSec===1){
-      elapsedWholeSec = farmGridCrossings;
-      elapsedFractionSec = 0;
-    }else{
-      elapsedWholeSec = Math.max(0,farmGridCrossings-1);
-      elapsedFractionSec = firstFarmGridSec;
+  function syncElapsedClockFromFarmGrid(){
+    // The grid countdown is the canonical sub-second clock. Derive logical
+    // elapsed from it after every segment instead of independently summing the
+    // same floating-point steps in a second clock.
+    if(farmGridCrossings===0){
+      elapsedWholeSec = 0;
+      elapsedFractionSec = firstFarmGridSec-farmGridRemainingSec;
+      return;
+    }
+
+    elapsedWholeSec = farmGridCrossings-1;
+    elapsedFractionSec = firstFarmGridSec+(1-farmGridRemainingSec);
+    if(elapsedFractionSec>=1){
+      var carry = Math.floor(elapsedFractionSec);
+      elapsedWholeSec += carry;
+      elapsedFractionSec -= carry;
     }
   }
 
@@ -5372,15 +5369,13 @@ function advanceAuthoritativeTime(elapsedSec,options){
       simulationAdvanceAutomationTimers(next);
       simulationAdvanceStudyProgress(next);
       var crossedFarmGrids = advanceFarmGridClock(next);
-      advanceElapsedClock(next);
-      if(hitsFarmGrid){
-        if(crossedFarmGrids!==1){
-          throw new Error('Authoritative Farm grid clock crossed an unexpected boundary count');
-        }
-        // State above consumed the countdown-derived residual. Canonicalize
-        // only the split logical clock at the exact analytical grid boundary.
-        snapElapsedClockToFarmGrid();
+      if(hitsFarmGrid && crossedFarmGrids!==1){
+        throw new Error('Authoritative Farm grid clock crossed an unexpected boundary count');
       }
+      // One scheduler, one notion of elapsed time. A processed grid event
+      // resets farmGridRemainingSec exactly to 1, and logical elapsed is then
+      // reconstructed from that canonical scheduler state.
+      syncElapsedClockFromFarmGrid();
       elapsedInRun = currentElapsedSec();
       remaining = simulationRemainingSec();
     }
@@ -5407,6 +5402,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
         stepSec:next,
         kinds:diagnosticEventKinds,
         candidates:diagnosticCandidates,
+        farmGridRemainingSec:farmGridRemainingSec,
         enemyHp:state.enemyHp,
         enemyMaxHp:state.enemyMaxHp,
         totalKills:state.totalKills,
