@@ -44,6 +44,12 @@ SCENARIOS = {
     "parity-boss-short": "parity-boss-short",
     "parity-boss-retry": "parity-boss-retry",
     "parity-auto-ascend": "parity-auto-ascend",
+    "chronology-research-mid-window": "chronology-research-mid-window",
+    "chronology-study-mid-window": "chronology-study-mid-window",
+    "chronology-auto-empower-mid-window": "chronology-auto-empower-mid-window",
+    "chronology-auto-ascend-mid-window": "chronology-auto-ascend-mid-window",
+    "chronology-boss-retry": "chronology-boss-retry",
+    "chronology-simultaneous-order": "chronology-simultaneous-order",
 }
 
 NEGATIVE_SCENARIOS = {
@@ -51,6 +57,7 @@ NEGATIVE_SCENARIOS = {
     "self-test-uncaught-error": "fresh",
     "self-test-unhandled-rejection": "fresh",
     "self-test-parity-regression": "parity-early-simple",
+    "self-test-chronology-regression": "chronology-simultaneous-order",
 }
 
 
@@ -230,6 +237,21 @@ window.__lumenfallQaBridge = {
     return {
       state:JSON.parse(JSON.stringify(state)),
       summary:result,
+      wallMs:performance.now()-begin
+    };
+  },
+  simulateTimeline: function(seconds,kind,startMs){
+    var begin = performance.now();
+    var result = advanceAuthoritativeTime(seconds,{
+      kind:kind||'offline',
+      visual:false,
+      clockStartMs:Number.isFinite(startMs)?startMs:2000000000000,
+      captureTimeline:true
+    });
+    return {
+      state:JSON.parse(JSON.stringify(state)),
+      summary:result,
+      timeline:JSON.parse(JSON.stringify(result.timeline||[])),
       wallMs:performance.now()-begin
     };
   },
@@ -607,6 +629,33 @@ def build_runner():
       throw error;
     }
     return {baseline:baseline,reference:reference,direct:direct};
+  }
+
+  function cloneJson(value){ return JSON.parse(JSON.stringify(value)); }
+  function firstTimelineEvent(result,type){
+    return (result.timeline||[]).find(function(event){ return event.type===type; }) || null;
+  }
+  function timelineEventsNear(result,elapsedSec,epsilon){
+    epsilon = epsilon===undefined ? 1e-6 : epsilon;
+    return (result.timeline||[]).filter(function(event){
+      return Math.abs(event.elapsedSec-elapsedSec)<=epsilon;
+    });
+  }
+  function assertChronologicalSplit(baseline,totalSec,eventSec,direct,label){
+    assert(eventSec>0 && eventSec<totalSec,label+' split event must be strictly inside the simulated window');
+    bridge.setState(baseline);
+    var first = bridge.simulate(eventSec,'offline',eventSec,PARITY_CLOCK_MS);
+    var second = bridge.simulate(
+      totalSec-eventSec,
+      'offline',
+      totalSec-eventSec,
+      PARITY_CLOCK_MS+eventSec*1000
+    );
+    assertProtectedParity(second.state,direct.state,label+' split/reference');
+    return {first:first,second:second};
+  }
+  function timelineTypes(result){
+    return (result.timeline||[]).map(function(event){ return event.type; });
   }
 
   function assertFresh(s){
@@ -1000,6 +1049,184 @@ def build_runner():
           return;
         }
 
+        case 'chronology-research-mid-window': {
+          var researchBaseline = state();
+          var researchDirect = bridge.simulateTimeline(60,'offline',PARITY_CLOCK_MS);
+          var researchEvent = firstTimelineEvent(researchDirect,'research');
+          assert(researchEvent,'queued Research must be purchased during the offline window');
+          assert(researchEvent.elapsedSec>0 && researchEvent.elapsedSec<60,'Research purchase must occur mid-window');
+          assert(researchDirect.state.research.formation===1,'Formation Research must advance exactly one level in this fixture');
+          var researchSplit = assertChronologicalSplit(
+            researchBaseline,60,researchEvent.elapsedSec,researchDirect,
+            'mid-window Research'
+          );
+          assert(researchSplit.first.state.research.formation===1,'Research must already be applied at its affordability timestamp');
+
+          var researchControl = cloneJson(researchBaseline);
+          researchControl.researchQueue.formation = false;
+          bridge.setState(researchControl);
+          var researchWithoutQueue = bridge.simulateTimeline(60,'offline',PARITY_CLOCK_MS);
+          assert(
+            researchDirect.state.totalKills>researchWithoutQueue.state.totalKills,
+            'mid-window Formation Research must affect combat during the remaining offline time'
+          );
+          finish('pass',{
+            eventSec:researchEvent.elapsedSec,
+            formationLevel:researchDirect.state.research.formation,
+            killsWithResearch:researchDirect.state.totalKills-researchBaseline.totalKills,
+            killsWithoutResearch:researchWithoutQueue.state.totalKills-researchControl.totalKills
+          });
+          return;
+        }
+
+        case 'chronology-study-mid-window': {
+          var studyBaseline = state();
+          var studyDirect = bridge.simulateTimeline(60,'offline',PARITY_CLOCK_MS);
+          var completion = firstTimelineEvent(studyDirect,'studyComplete');
+          var studyStart = firstTimelineEvent(studyDirect,'studyStart');
+          assert(completion && studyStart,'Study completion must free a slot and start the queued Study');
+          parityApprox(completion.elapsedSec,10,'Wisp Ascendancy completion timestamp');
+          parityApprox(studyStart.elapsedSec,completion.elapsedSec,'queued Study start timestamp');
+          var sameStudyTime = timelineEventsNear(studyDirect,completion.elapsedSec);
+          var studyTypes = sameStudyTime.map(function(event){ return event.type; });
+          assert(
+            studyTypes.indexOf('studyComplete')!==-1 &&
+            studyTypes.indexOf('studyStart')>studyTypes.indexOf('studyComplete'),
+            'Study completion must be ordered before queued Study start at the same timestamp'
+          );
+          assert(studyDirect.state.longStudyLevels.wispascend===1,'Wisp Ascendancy must complete mid-window');
+          assert(
+            studyDirect.state.activeStudies.some(function(active){ return active.id==='guardmastery'; }),
+            'Guardian Mastery must start when the Study slot opens'
+          );
+          assertChronologicalSplit(studyBaseline,60,completion.elapsedSec,studyDirect,'mid-window Long Study');
+
+          var studyControl = cloneJson(studyBaseline);
+          studyControl.activeStudies[0].remainingSec = 1000;
+          studyControl.activeStudies[0].totalDurationSec = 1000;
+          bridge.setState(studyControl);
+          var studyWithoutCompletion = bridge.simulateTimeline(60,'offline',PARITY_CLOCK_MS);
+          assert(
+            studyDirect.state.totalKills>studyWithoutCompletion.state.totalKills,
+            'completed Wisp Ascendancy must increase combat for the remainder of the same window'
+          );
+          finish('pass',{
+            completionSec:completion.elapsedSec,
+            startedStudy:studyStart.detail && studyStart.detail.ids,
+            killsWithCompletion:studyDirect.state.totalKills-studyBaseline.totalKills,
+            killsWithoutCompletion:studyWithoutCompletion.state.totalKills-studyControl.totalKills
+          });
+          return;
+        }
+
+        case 'chronology-auto-empower-mid-window': {
+          var empowerBaseline = state();
+          var empowerDirect = bridge.simulateTimeline(120,'offline',PARITY_CLOCK_MS);
+          var empowerEvent = firstTimelineEvent(empowerDirect,'autoEmpower');
+          assert(empowerEvent,'Auto-Empower must purchase after Farm income makes a level affordable');
+          assert(empowerEvent.elapsedSec>0 && empowerEvent.elapsedSec<120,'Auto-Empower purchase must occur mid-window');
+          assert(empowerDirect.state.spirits.ember>1,'Auto-Empower must increase Ember level');
+          var empowerSplit = assertChronologicalSplit(
+            empowerBaseline,120,empowerEvent.elapsedSec,empowerDirect,
+            'mid-window Auto-Empower'
+          );
+          assert(empowerSplit.first.state.spirits.ember>1,'Empower must be applied at its scheduled trigger timestamp');
+
+          var empowerControl = cloneJson(empowerBaseline);
+          empowerControl.achieved.labmaster = false;
+          bridge.setState(empowerControl);
+          var empowerDisabled = bridge.simulateTimeline(120,'offline',PARITY_CLOCK_MS);
+          assert(
+            empowerDirect.state.totalKills>empowerDisabled.state.totalKills,
+            'chronological Auto-Empower must improve later combat in the same window'
+          );
+          finish('pass',{
+            firstEmpowerSec:empowerEvent.elapsedSec,
+            finalEmberLevel:empowerDirect.state.spirits.ember,
+            killsWithEmpower:empowerDirect.state.totalKills-empowerBaseline.totalKills,
+            killsWithoutEmpower:empowerDisabled.state.totalKills-empowerControl.totalKills
+          });
+          return;
+        }
+
+        case 'chronology-auto-ascend-mid-window': {
+          var ascendBaseline = state();
+          var ascendDirect = bridge.simulateTimeline(30,'offline',PARITY_CLOCK_MS);
+          var ascendEvent = firstTimelineEvent(ascendDirect,'autoAscend');
+          assert(ascendEvent,'Auto-Ascend must occur when the current target rule becomes satisfied');
+          assert(ascendEvent.elapsedSec>0 && ascendEvent.elapsedSec<30,'Auto-Ascend must occur mid-window');
+          assert(ascendDirect.state.ascendCount===ascendBaseline.ascendCount+1,'fixture must perform exactly one Auto-Ascend');
+          var ascendSplit = assertChronologicalSplit(
+            ascendBaseline,30,ascendEvent.elapsedSec,ascendDirect,
+            'mid-window Auto-Ascend'
+          );
+          assert(
+            ascendDirect.state.totalKills>ascendSplit.first.state.totalKills,
+            'offline simulation must continue from the post-Ascend state for the remaining time'
+          );
+          finish('pass',{
+            ascendSec:ascendEvent.elapsedSec,
+            ascendCount:ascendDirect.state.ascendCount,
+            killsAtAscend:ascendSplit.first.state.totalKills,
+            finalKills:ascendDirect.state.totalKills
+          });
+          return;
+        }
+
+        case 'chronology-boss-retry': {
+          var bossBaseline = state();
+          var bossDirect = bridge.simulateTimeline(120,'offline',PARITY_CLOCK_MS);
+          var retreatEvent = firstTimelineEvent(bossDirect,'bossRetreat');
+          var bossEmpowerEvent = firstTimelineEvent(bossDirect,'autoEmpower');
+          var retryEvent = firstTimelineEvent(bossDirect,'bossRetry');
+          assert(retreatEvent && bossEmpowerEvent && retryEvent,'Boss chronology must include retreat, progression gain and retry');
+          assert(retreatEvent.elapsedSec===0,'unwinnable starting Boss must retreat at simulated time zero');
+          assert(
+            bossEmpowerEvent.elapsedSec>retreatEvent.elapsedSec &&
+            retryEvent.elapsedSec>=bossEmpowerEvent.elapsedSec,
+            'Boss retry must happen only after chronological power progression'
+          );
+          assert(bossDirect.summary.bossKills>=1,'retried Boss must be defeated inside the fixture window');
+          assert(bossDirect.summary.sigilsGained>=2,'retried Boss must preserve Sigil rewards');
+          assertChronologicalSplit(bossBaseline,120,retryEvent.elapsedSec,bossDirect,'Boss retreat/progression/retry');
+          finish('pass',{
+            retreatSec:retreatEvent.elapsedSec,
+            firstEmpowerSec:bossEmpowerEvent.elapsedSec,
+            retrySec:retryEvent.elapsedSec,
+            bossKills:bossDirect.summary.bossKills,
+            sigils:bossDirect.summary.sigilsGained
+          });
+          return;
+        }
+
+        case 'chronology-simultaneous-order': {
+          var simultaneousDirect = bridge.simulateTimeline(7,'offline',PARITY_CLOCK_MS);
+          var researchAtBoundary = firstTimelineEvent(simultaneousDirect,'research');
+          var completionAtBoundary = firstTimelineEvent(simultaneousDirect,'studyComplete');
+          assert(researchAtBoundary && completionAtBoundary,'fixture must exercise Research and Study completion near the same timestamp');
+          assert(
+            Math.abs(researchAtBoundary.elapsedSec-completionAtBoundary.elapsedSec)<=1e-6,
+            'Research and Study completion must resolve at the same effective timestamp'
+          );
+          var boundaryEvents = timelineEventsNear(simultaneousDirect,researchAtBoundary.elapsedSec,1e-6);
+          var boundaryTypes = boundaryEvents.map(function(event){ return event.type; });
+          ['ability','autoTap','autoEmpower','research','studyComplete'].forEach(function(type){
+            assert(boundaryTypes.indexOf(type)!==-1,'simultaneous fixture must include '+type+' at the shared boundary');
+          });
+          assert(
+            boundaryTypes.indexOf('ability') < boundaryTypes.indexOf('autoTap') &&
+            boundaryTypes.indexOf('autoTap') < boundaryTypes.indexOf('autoEmpower') &&
+            boundaryTypes.indexOf('autoEmpower') < boundaryTypes.indexOf('research') &&
+            boundaryTypes.indexOf('research') < boundaryTypes.indexOf('studyComplete'),
+            'same-timestamp order must be ability -> Auto-Tap -> Auto-Empower -> Research -> Study completion'
+          );
+          finish('pass',{
+            boundarySec:researchAtBoundary.elapsedSec,
+            order:boundaryTypes
+          });
+          return;
+        }
+
         case 'self-test-bad-assertion':
           assert(s.depth===999999,'intentional harness self-test assertion');
           finish('pass');
@@ -1023,6 +1250,21 @@ def build_runner():
           intentionallyWrong.state.totalKills += 1;
           assertProtectedParity(intentionallyWrong.state,expectedParity.state,'intentional parity regression');
           finish('pass',{unexpected:'parity comparator did not reject a one-kill regression'});
+          return;
+        }
+
+        case 'self-test-chronology-regression': {
+          var chronologyProbe = bridge.simulateTimeline(7,'offline',PARITY_CLOCK_MS);
+          var chronologyResearch = firstTimelineEvent(chronologyProbe,'research');
+          var chronologyStudy = firstTimelineEvent(chronologyProbe,'studyComplete');
+          assert(chronologyResearch && chronologyStudy,'intentional chronology self-test fixture must produce both events');
+          assert(
+            chronologyStudy.elapsedSec < chronologyResearch.elapsedSec ||
+            (Math.abs(chronologyStudy.elapsedSec-chronologyResearch.elapsedSec)<=1e-6 &&
+             timelineTypes(chronologyProbe).indexOf('studyComplete') < timelineTypes(chronologyProbe).indexOf('research')),
+            'intentional chronology regression: Study incorrectly expected before Research'
+          );
+          finish('pass',{unexpected:'chronology ordering regression was not detected'});
           return;
         }
 
