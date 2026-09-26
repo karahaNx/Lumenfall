@@ -5179,6 +5179,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
   var policy = simulationPolicy(options.kind||'live',options);
   var summary = simulationSummary(elapsedSec);
   var clockStartMs = Number.isFinite(options.clockStartMs) ? options.clockStartMs : Date.now();
+  var clockStartWholeSec = Math.floor(clockStartMs/1000);
   var elapsedWholeSec = 0;
   var elapsedFractionSec = 0;
   var targetWholeSec = Math.floor(elapsedSec);
@@ -5198,7 +5199,12 @@ function advanceAuthoritativeTime(elapsedSec,options){
     return whole+fraction;
   }
   function simulationNowMs(){
-    return clockStartMs + elapsedWholeSec*1000 + elapsedFractionSec*1000;
+    // Compose absolute event time from the same canonical one-second scheduler
+    // on every call. This avoids call-boundary-dependent grouping such as
+    // (base + 203.157s) versus ((base + 180s) + 23.157s).
+    var absoluteWholeSec = clockStartWholeSec + farmGridCrossings;
+    var absolutePhaseSec = farmGridRemainingSec===1 ? 0 : 1-farmGridRemainingSec;
+    return absoluteWholeSec*1000 + absolutePhaseSec*1000;
   }
 
   var elapsedInRun = 0;
@@ -5379,11 +5385,15 @@ function advanceAuthoritativeTime(elapsedSec,options){
       syncElapsedClockFromFarmGrid();
       if(hitsWindowEnd){
         // The caller's requested endpoint is itself an authoritative event
-        // boundary. After gameplay state consumes the exact residual step,
-        // canonicalize the logical clock to that target instead of leaving a
-        // representational tail that cannot advance on the next iteration.
+        // boundary. Canonicalize both logical elapsed and the analytical grid
+        // phase so the next call starts from exactly the same scheduler state.
         elapsedWholeSec = targetWholeSec;
         elapsedFractionSec = targetFractionSec;
+
+        var endGridPositionSec = startPhaseSec+elapsedSec;
+        farmGridCrossings = Math.floor(endGridPositionSec);
+        var endGridPhaseSec = endGridPositionSec-farmGridCrossings;
+        farmGridRemainingSec = endGridPhaseSec===0 ? 1 : 1-endGridPhaseSec;
       }
       elapsedInRun = currentElapsedSec();
       remaining = hitsWindowEnd ? 0 : simulationRemainingSec();
@@ -5408,6 +5418,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
     if(summary.eventTrace && diagnosticLogicalElapsed>=traceEventsFromSec && diagnosticLogicalElapsed<=traceEventsToSec){
       summary.eventTrace.push({
         logicalElapsedSec:diagnosticLogicalElapsed,
+        clockMs:nowMs,
         stepSec:next,
         kinds:diagnosticEventKinds,
         candidates:diagnosticCandidates,
