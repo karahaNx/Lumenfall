@@ -4864,8 +4864,11 @@ function simulationDrainResearchQueue(summary){
 function simulationCurrencyKillsNeeded(cost,lumenPerKill,shardPerKill){
   var lumenDeficit = Math.max(0,cost.lumen-state.lumen);
   var shardDeficit = Math.max(0,cost.shard-state.shards);
-  var lumenKills = lumenDeficit<=SIM_EPS ? 0 : (lumenPerKill>0 ? Math.ceil((lumenDeficit-SIM_EPS)/lumenPerKill) : Infinity);
-  var shardKills = shardDeficit<=SIM_EPS ? 0 : (shardPerKill>0 ? Math.ceil((shardDeficit-SIM_EPS)/shardPerKill) : Infinity);
+  // Affordability itself is strict (budget >= cost), so any positive deficit
+  // needs at least one real reward event. Never round a tiny deficit down to a
+  // zero-time economy boundary.
+  var lumenKills = lumenDeficit<=0 ? 0 : (lumenPerKill>0 ? Math.max(1,Math.ceil(lumenDeficit/lumenPerKill-1e-12)) : Infinity);
+  var shardKills = shardDeficit<=0 ? 0 : (shardPerKill>0 ? Math.max(1,Math.ceil(shardDeficit/shardPerKill-1e-12)) : Infinity);
   return Math.max(lumenKills,shardKills);
 }
 function simulationKillsUntilEconomyMutation(rewardScale){
