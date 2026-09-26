@@ -233,6 +233,48 @@ window.__lumenfallQaBridge = {
       wallMs:performance.now()-begin
     };
   },
+  simulateDirectTrace: function(seconds,kind,everySec,startMs){
+    var result = advanceAuthoritativeTime(seconds,{
+      kind:kind||'offline',
+      visual:false,
+      clockStartMs:Number.isFinite(startMs)?startMs:2000000000000,
+      traceEverySec:everySec
+    });
+    return {
+      state:JSON.parse(JSON.stringify(state)),
+      summary:result,
+      trace:JSON.parse(JSON.stringify(result.trace||[]))
+    };
+  },
+  currentSimulationTrace: function(elapsedSec,startMs){
+    var clockStartMs = Number.isFinite(startMs)?startMs:2000000000000;
+    var nowMs = clockStartMs + elapsedSec*1000;
+    var dps = simulationPassiveDps(nowMs);
+    var rewardScale = simulationRewardScale(simulationPolicy('offline',{}));
+    return {
+      elapsedSec:elapsedSec,
+      enemyHp:state.enemyHp,
+      enemyMaxHp:state.enemyMaxHp,
+      totalKills:state.totalKills,
+      luminousAccum:state.luminousAccum,
+      enemyIsLuminous:!!state.enemyIsLuminous,
+      autoTapAccum:state._autoTapAccum||0,
+      autoEmpowerAccum:state._autoEmpowerAccum||0,
+      heroResource:JSON.parse(JSON.stringify(state.heroResource||{})),
+      lumen:state.lumen,
+      shards:state.shards,
+      spirits:JSON.parse(JSON.stringify(state.spirits||{})),
+      passiveDps:dps,
+      nextEvents:{
+        ability:simulationNextAbilitySeconds(),
+        autoTap:simulationNextAutoTapSeconds(),
+        autoEmpower:simulationNextAutoEmpowerSeconds(),
+        study:simulationNextStudySeconds(),
+        farmGrid:state.riftMode==='farm' ? 1 : Infinity,
+        economy:state.riftMode==='farm' ? simulationFarmEconomyBoundarySeconds(dps,rewardScale) : Infinity
+      }
+    };
+  },
   simulationDiagnosticsFor: function(snapshot){
     var previous = state;
     state = JSON.parse(JSON.stringify(snapshot));
@@ -357,7 +399,55 @@ def build_runner():
       var refDiag = bridge.simulationDiagnosticsFor(reference.state);
       var directDiag = bridge.simulationDiagnosticsFor(direct.state);
       var boundaryDiagnostics = [];
+      var firstCheckpointDivergence = null;
       if(kind==='offline' && seconds===14400){
+        bridge.setState(baseline);
+        var uninterrupted = bridge.simulateDirectTrace(14400,'offline',60,PARITY_CLOCK_MS);
+        bridge.setState(baseline);
+        var chunkClock = PARITY_CLOCK_MS;
+        var chunkElapsed = 0;
+        var chunkStates = [];
+        for(var chunkIndex=0;chunkIndex<240;chunkIndex++){
+          var chunkPart = bridge.simulate(60,'offline',60,chunkClock);
+          chunkElapsed += 60;
+          chunkClock = chunkPart.summary.clockEndMs;
+          chunkStates.push(bridge.currentSimulationTrace(chunkElapsed,PARITY_CLOCK_MS));
+        }
+        function firstTraceDifference(a,b){
+          var scalarKeys = [
+            'enemyHp','enemyMaxHp','totalKills','luminousAccum','enemyIsLuminous',
+            'autoTapAccum','autoEmpowerAccum','lumen','shards','passiveDps'
+          ];
+          var diff = {};
+          scalarKeys.forEach(function(key){
+            if(a[key]!==b[key]) diff[key]={direct:a[key],chunked:b[key]};
+          });
+          var ids = Object.keys(a.heroResource||{});
+          ids.forEach(function(id){
+            var av=(a.heroResource||{})[id]||0, bv=(b.heroResource||{})[id]||0;
+            if(av!==bv){
+              if(!diff.heroResource) diff.heroResource={};
+              diff.heroResource[id]={direct:av,chunked:bv};
+            }
+          });
+          if(JSON.stringify(a.spirits)!==JSON.stringify(b.spirits)){
+            diff.spirits={direct:a.spirits,chunked:b.spirits};
+          }
+          return diff;
+        }
+        for(var traceIndex=0;traceIndex<Math.min(uninterrupted.trace.length,chunkStates.length);traceIndex++){
+          var traceDiff = firstTraceDifference(uninterrupted.trace[traceIndex],chunkStates[traceIndex]);
+          if(Object.keys(traceDiff).length){
+            firstCheckpointDivergence={
+              checkpointSec:(traceIndex+1)*60,
+              direct:uninterrupted.trace[traceIndex],
+              chunked:chunkStates[traceIndex],
+              diff:traceDiff
+            };
+            break;
+          }
+        }
+
         [120,600,3600].forEach(function(probeSec){
           bridge.setState(baseline);
           var probeChunked = bridge.simulate(probeSec,'offline',60,PARITY_CLOCK_MS);
@@ -403,7 +493,8 @@ def build_runner():
           sustainedDps:directDiag.sustainedDps,
           abilityCycleSec:directDiag.abilityCycleSec
         },
-        boundaryProbes:boundaryDiagnostics
+        boundaryProbes:boundaryDiagnostics,
+        firstCheckpointDivergence:firstCheckpointDivergence
       });
       throw error;
     }
