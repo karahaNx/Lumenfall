@@ -5423,6 +5423,9 @@ function advanceAuthoritativeTime(elapsedSec,options){
         lumen:state.lumen,
         shards:state.shards,
         spirits:JSON.parse(JSON.stringify(state.spirits||{})),
+        buffUntil:state.buffUntil||0,
+        buffMult:state.buffMult||1,
+        activeStudies:JSON.parse(JSON.stringify(state.activeStudies||[])),
         passiveDps:simulationPassiveDps(nowMs)
       });
     }
