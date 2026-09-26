@@ -5427,6 +5427,10 @@ function advanceAuthoritativeTime(elapsedSec,options){
     var initialKills = summary.kills;
     simulationDefeatEnemy(policy,summary);
     simulationTimelinePush(summary,0,'enemyDeath',{count:summary.kills-initialKills});
+    if(summary.ascends>initialAscends){
+      simulationTimelinePush(summary,0,'autoAscend',{count:summary.ascends-initialAscends});
+      initialAscends = summary.ascends;
+    }
   }
   if(simulationApplyAutoAscend(summary) && summary.ascends>initialAscends){
     simulationTimelinePush(summary,0,'autoAscend',{count:summary.ascends-initialAscends});
@@ -5508,6 +5512,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
     };
 
     var killsBefore = summary.kills;
+    var ascendsBeforeAdvance = summary.ascends;
     var elapsedWholeBefore = elapsedWholeSec;
     var elapsedFractionBefore = elapsedFractionSec;
     // Sub-nanosecond elapsed time can still carry material damage at mature
@@ -5548,12 +5553,10 @@ function advanceAuthoritativeTime(elapsedSec,options){
     if(summary.kills>killsBefore){
       simulationTimelinePush(summary,elapsedInRun,'enemyDeath',{count:summary.kills-killsBefore});
     }
-    var segmentAscendsBefore = summary.ascends;
-    actions += simulationResolveTimestamp(nowMs,elapsedInRun,policy,summary);
-    if(summary.ascends>segmentAscendsBefore){
-      // Auto-Ascend may also be triggered by a discrete ability/tap kill inside
-      // the resolver. Those cases are logged by the resolver itself.
+    if(summary.ascends>ascendsBeforeAdvance){
+      simulationTimelinePush(summary,elapsedInRun,'autoAscend',{count:summary.ascends-ascendsBeforeAdvance});
     }
+    actions += simulationResolveTimestamp(nowMs,elapsedInRun,policy,summary);
 
     if(traceEverySec>0 && elapsedInRun===nextTraceElapsedSec){
       captureSimulationTrace();
