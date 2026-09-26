@@ -5011,67 +5011,30 @@ function simulationBatchFarmKills(count,policy,summary){
   state.enemyIsLuminous = finalLuminous;
   simulationRecordAchievements(summary);
 }
-var SIM_DECIMAL_POW10 = [BigInt(1)];
-function simulationPow10BigInt(exponent){
-  exponent = Math.max(0,Math.floor(exponent||0));
-  while(SIM_DECIMAL_POW10.length<=exponent){
-    SIM_DECIMAL_POW10.push(SIM_DECIMAL_POW10[SIM_DECIMAL_POW10.length-1]*BigInt(10));
-  }
-  return SIM_DECIMAL_POW10[exponent];
-}
-function simulationDecimalParts(value){
-  value = Math.max(0,Number(value)||0);
-  if(value===0) return {numerator:BigInt(0),scale:0};
-  var text = value.toExponential(17);
-  var pieces = text.split('e');
-  var mantissa = pieces[0];
-  var exponent = parseInt(pieces[1],10);
-  var digits = mantissa.replace('.','').replace(/^0+/,'') || '0';
-  var scale = 17-exponent;
-  var numerator = BigInt(digits);
-  if(scale<0){
-    numerator *= simulationPow10BigInt(-scale);
-    scale = 0;
-  }
-  return {numerator:numerator,scale:scale};
-}
-function simulationFarmPassiveOutcome(elapsedSec,dps,maxHp,currentHp){
-  // Farm fast-forward can represent tens of millions of kills per second.
-  // Multiplying DPS by elapsed time as one Number and then subtracting
-  // kills*maxHp loses the low-order remainder at mature power. Convert the
-  // already-defined Number inputs to deterministic decimal rationals and do
-  // only the quotient/remainder step in integer arithmetic. This changes no
-  // formula; it preserves the represented damage budget across chunk sizes.
-  var progress = Math.max(0,maxHp-currentHp);
-  var progressParts = simulationDecimalParts(progress);
-  var dpsParts = simulationDecimalParts(dps);
-  var timeParts = simulationDecimalParts(elapsedSec);
-  var damageNumerator = dpsParts.numerator*timeParts.numerator;
-  var damageScale = dpsParts.scale+timeParts.scale;
-  var commonScale = Math.max(progressParts.scale,damageScale);
-  var totalNumerator =
-    progressParts.numerator*simulationPow10BigInt(commonScale-progressParts.scale) +
-    damageNumerator*simulationPow10BigInt(commonScale-damageScale);
-  var denominator = simulationPow10BigInt(commonScale);
-  var hpUnits = BigInt(Math.round(maxHp));
-  var killDenominator = hpUnits*denominator;
-  var killsBig = totalNumerator/killDenominator;
-  if(killsBig>BigInt(Number.MAX_SAFE_INTEGER)){
-    throw new Error('Authoritative Farm batch exceeded exact kill-count range');
-  }
-  var remainderNumerator = totalNumerator%killDenominator;
-  var remainderDamage = Number(remainderNumerator)/Number(denominator);
-  return {
-    kills:Number(killsBig),
-    enemyHp:remainderNumerator===BigInt(0) ? maxHp : Math.max(0,maxHp-remainderDamage)
-  };
-}
 function simulationApplyFarmPassive(elapsedSec,dps,policy,summary){
   if(elapsedSec<=0 || dps<=0) return;
+  var damage = dps*elapsedSec;
+  if(damage+SIM_EPS < state.enemyHp){
+    state.enemyHp -= damage;
+    return;
+  }
+
   var maxHp = state.enemyMaxHp>0 ? state.enemyMaxHp : enemyHpFor(state.depth);
-  var outcome = simulationFarmPassiveOutcome(elapsedSec,dps,maxHp,state.enemyHp);
-  if(outcome.kills>0) simulationBatchFarmKills(outcome.kills,policy,summary);
-  state.enemyHp = outcome.enemyHp;
+  var remainingDamage = Math.max(0,damage-state.enemyHp);
+  var additionalKills = Math.floor(remainingDamage/maxHp+1e-12);
+  // Avoid catastrophic cancellation from subtracting a huge kills*maxHp
+  // product from a similarly huge damage value. Modulo preserves the
+  // represented damage remainder directly and is compositional across the
+  // fixed Farm batching boundaries.
+  var leftover = remainingDamage%maxHp;
+  if(leftover<SIM_EPS) leftover=0;
+  if(leftover>=maxHp-SIM_EPS){
+    additionalKills++;
+    leftover=0;
+  }
+
+  simulationBatchFarmKills(1+additionalKills,policy,summary);
+  if(leftover>0) state.enemyHp = Math.max(SIM_EPS,state.enemyMaxHp-leftover);
 }
 function simulationPassiveKillSeconds(dps){
   if(state.riftMode==='farm') return Infinity;
