@@ -246,6 +246,21 @@ window.__lumenfallQaBridge = {
       trace:JSON.parse(JSON.stringify(result.trace||[]))
     };
   },
+  simulateEventTrace: function(seconds,kind,startMs,fromSec,toSec,offsetSec){
+    var result = advanceAuthoritativeTime(seconds,{
+      kind:kind||'offline',
+      visual:false,
+      clockStartMs:Number.isFinite(startMs)?startMs:2000000000000,
+      traceEventsFromSec:fromSec,
+      traceEventsToSec:toSec,
+      traceOffsetSec:offsetSec||0
+    });
+    return {
+      state:JSON.parse(JSON.stringify(state)),
+      summary:result,
+      eventTrace:JSON.parse(JSON.stringify(result.eventTrace||[]))
+    };
+  },
   currentSimulationTrace: function(elapsedSec,startMs){
     var clockStartMs = Number.isFinite(startMs)?startMs:2000000000000;
     var nowMs = clockStartMs + elapsedSec*1000;
@@ -472,6 +487,59 @@ def build_runner():
           });
         });
       }
+      var firstEventDivergence = null;
+      if(kind==='offline' && seconds===14400 && firstCheckpointDivergence && firstCheckpointDivergence.checkpointSec===120){
+        bridge.setState(baseline);
+        var directEvents = bridge.simulateEventTrace(180,'offline',PARITY_CLOCK_MS,60,120,0).eventTrace;
+        bridge.setState(baseline);
+        var firstChunk = bridge.simulate(60,'offline',60,PARITY_CLOCK_MS);
+        var secondChunkStart = firstChunk.summary.clockEndMs;
+        var chunkEvents = bridge.simulateEventTrace(60,'offline',secondChunkStart,60,120,60).eventTrace;
+
+        function eventStateDifference(a,b){
+          if(!a || !b) return {missing:{direct:!!a,chunked:!!b}};
+          var diff = {};
+          if(a.logicalElapsedSec!==b.logicalElapsedSec) diff.logicalElapsedSec={direct:a.logicalElapsedSec,chunked:b.logicalElapsedSec};
+          if(JSON.stringify(a.kinds)!==JSON.stringify(b.kinds)) diff.kinds={direct:a.kinds,chunked:b.kinds};
+          [
+            'stepSec','enemyHp','enemyMaxHp','totalKills','luminousAccum','enemyIsLuminous',
+            'autoTapAccum','autoEmpowerAccum','lumen','shards','passiveDps'
+          ].forEach(function(key){
+            if(a[key]!==b[key]) diff[key]={direct:a[key],chunked:b[key]};
+          });
+          Object.keys(a.heroResource||{}).forEach(function(id){
+            var av=(a.heroResource||{})[id]||0, bv=(b.heroResource||{})[id]||0;
+            if(av!==bv){
+              if(!diff.heroResource) diff.heroResource={};
+              diff.heroResource[id]={direct:av,chunked:bv};
+            }
+          });
+          if(JSON.stringify(a.spirits)!==JSON.stringify(b.spirits)){
+            diff.spirits={direct:a.spirits,chunked:b.spirits};
+          }
+          return diff;
+        }
+
+        var eventCount = Math.max(directEvents.length,chunkEvents.length);
+        var previousMatchingEvent = null;
+        for(var eventIndex=0;eventIndex<eventCount;eventIndex++){
+          var directEvent = directEvents[eventIndex];
+          var chunkEvent = chunkEvents[eventIndex];
+          var eventDiff = eventStateDifference(directEvent,chunkEvent);
+          if(Object.keys(eventDiff).length){
+            firstEventDivergence={
+              index:eventIndex,
+              previous:previousMatchingEvent,
+              direct:directEvent||null,
+              chunked:chunkEvent||null,
+              diff:eventDiff
+            };
+            break;
+          }
+          previousMatchingEvent={direct:directEvent,chunked:chunkEvent};
+        }
+      }
+
       error.message += ' | diagnostics=' + JSON.stringify({
         reference:{
           enemyHp:reference.state.enemyHp,
@@ -494,7 +562,8 @@ def build_runner():
           abilityCycleSec:directDiag.abilityCycleSec
         },
         boundaryProbes:boundaryDiagnostics,
-        firstCheckpointDivergence:firstCheckpointDivergence
+        firstCheckpointDivergence:firstCheckpointDivergence,
+        firstEventDivergence:firstEventDivergence
       });
       throw error;
     }
