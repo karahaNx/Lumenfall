@@ -488,15 +488,26 @@ def build_runner():
         });
       }
       var firstEventDivergence = null;
-      if(kind==='offline' && seconds===14400 && firstCheckpointDivergence && firstCheckpointDivergence.checkpointSec===120){
+      if(kind==='offline' && seconds===14400 && firstCheckpointDivergence){
+        var checkpointSec = firstCheckpointDivergence.checkpointSec;
+        var intervalStartSec = Math.max(0,checkpointSec-60);
+
         bridge.setState(baseline);
-        var directEvents = bridge.simulateEventTrace(180,'offline',PARITY_CLOCK_MS,60,120,0).eventTrace
-          .filter(function(event){ return event.logicalElapsedSec>60; });
+        // Run past the checkpoint so the direct trace does not gain an
+        // artificial window-end event at the boundary being investigated.
+        var directEvents = bridge.simulateEventTrace(
+          checkpointSec+60,'offline',PARITY_CLOCK_MS,intervalStartSec,checkpointSec,0
+        ).eventTrace.filter(function(event){ return event.logicalElapsedSec>intervalStartSec; });
+
         bridge.setState(baseline);
-        var firstChunk = bridge.simulate(60,'offline',60,PARITY_CLOCK_MS);
-        var secondChunkStart = firstChunk.summary.clockEndMs;
-        var chunkEvents = bridge.simulateEventTrace(60,'offline',secondChunkStart,60,120,60).eventTrace
-          .filter(function(event){ return event.logicalElapsedSec>60; });
+        var chunkTraceStartMs = PARITY_CLOCK_MS;
+        if(intervalStartSec>0){
+          var priorChunks = bridge.simulate(intervalStartSec,'offline',60,PARITY_CLOCK_MS);
+          chunkTraceStartMs = priorChunks.summary.clockEndMs;
+        }
+        var chunkEvents = bridge.simulateEventTrace(
+          60,'offline',chunkTraceStartMs,intervalStartSec,checkpointSec,intervalStartSec
+        ).eventTrace.filter(function(event){ return event.logicalElapsedSec>intervalStartSec; });
 
         function eventStateDifference(a,b){
           if(!a || !b) return {missing:{direct:!!a,chunked:!!b}};
