@@ -5189,6 +5189,43 @@ function advanceAuthoritativeTime(elapsedSec,options){
   var startPhaseSec = (((clockStartMs%1000)+1000)%1000)/1000;
   var firstFarmGridSec = startPhaseSec===0 ? 1 : 1-startPhaseSec;
   var nextFarmGridElapsedSec = firstFarmGridSec;
+  var traceEverySec = Math.max(0,Number(options.traceEverySec)||0);
+  var nextTraceElapsedSec = traceEverySec>0 ? traceEverySec : Infinity;
+  if(traceEverySec>0) summary.trace = [];
+
+  function captureSimulationTrace(){
+    var traceNowMs = clockStartMs + elapsedInRun*1000;
+    var traceDps = simulationPassiveDps(traceNowMs);
+    var traceRewardScale = simulationRewardScale(policy);
+    var traceFarmGrid = state.riftMode==='farm'
+      ? Math.max(0,nextFarmGridElapsedSec-elapsedInRun)
+      : Infinity;
+    summary.trace.push({
+      elapsedSec:elapsedInRun,
+      enemyHp:state.enemyHp,
+      enemyMaxHp:state.enemyMaxHp,
+      totalKills:state.totalKills,
+      luminousAccum:state.luminousAccum,
+      enemyIsLuminous:!!state.enemyIsLuminous,
+      autoTapAccum:state._autoTapAccum||0,
+      autoEmpowerAccum:state._autoEmpowerAccum||0,
+      heroResource:JSON.parse(JSON.stringify(state.heroResource||{})),
+      lumen:state.lumen,
+      shards:state.shards,
+      spirits:JSON.parse(JSON.stringify(state.spirits||{})),
+      passiveDps:traceDps,
+      nextEvents:{
+        ability:simulationNextAbilitySeconds(),
+        autoTap:simulationNextAutoTapSeconds(),
+        autoEmpower:simulationNextAutoEmpowerSeconds(),
+        study:simulationNextStudySeconds(),
+        farmGrid:traceFarmGrid,
+        economy:state.riftMode==='farm'
+          ? simulationFarmEconomyBoundarySeconds(traceDps,traceRewardScale)
+          : Infinity
+      }
+    });
+  }
 
   simulationDrainResearchQueue(summary);
   simulationStartQueuedStudies(summary);
@@ -5265,6 +5302,11 @@ function advanceAuthoritativeTime(elapsedSec,options){
     actions += simulationCompleteDueStudies(summary);
     actions += simulationStartQueuedStudies(summary);
     actions += simulationRecordAchievements(summary);
+
+    if(traceEverySec>0 && elapsedInRun===nextTraceElapsedSec){
+      captureSimulationTrace();
+      nextTraceElapsedSec += traceEverySec;
+    }
 
     if(elapsedInRun===elapsedBefore && actions===0){
       throw new Error('Authoritative simulation stalled without elapsed-time or state progress');
