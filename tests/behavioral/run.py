@@ -207,6 +207,7 @@ window.__lumenfallQaBridge = {
       (part.ascendGains||[]).forEach(function(gain){ aggregate.ascendGains.push(gain); });
       aggregate.endDepth = part.endDepth;
       aggregate.pushDepth = part.pushDepth;
+      aggregate.clockEndMs = part.clockEndMs;
     }
     var guard = 0;
     while(remaining>1e-9){
@@ -231,6 +232,18 @@ window.__lumenfallQaBridge = {
       summary:result,
       wallMs:performance.now()-begin
     };
+  },
+  simulationDiagnosticsFor: function(snapshot){
+    var previous = state;
+    state = JSON.parse(JSON.stringify(snapshot));
+    var out = {
+      passiveDps:passiveWispDpsAt(state.depth),
+      sustainedDps:sustainedCombatDps(state.depth),
+      abilityCycleSec:abilityCycleSeconds(),
+      offlineRate:offlineRate()
+    };
+    state = previous;
+    return out;
   },
   freeze: function(){ reloadInProgress = true; document.body.classList.add('app-paused'); }
 };
@@ -337,8 +350,36 @@ def build_runner():
     var direct = kind==='offline'
       ? bridge.simulateOfflineDirect(seconds,PARITY_CLOCK_MS)
       : bridge.simulate(seconds,kind,seconds,PARITY_CLOCK_MS);
-    assertProtectedParity(direct.state,reference.state,kind+' '+seconds+'s');
-    assertSummaryParity(direct.summary,reference.summary,kind+' '+seconds+'s');
+    try{
+      assertProtectedParity(direct.state,reference.state,kind+' '+seconds+'s');
+      assertSummaryParity(direct.summary,reference.summary,kind+' '+seconds+'s');
+    }catch(error){
+      var refDiag = bridge.simulationDiagnosticsFor(reference.state);
+      var directDiag = bridge.simulationDiagnosticsFor(direct.state);
+      error.message += ' | diagnostics=' + JSON.stringify({
+        reference:{
+          enemyHp:reference.state.enemyHp,
+          clockEndMs:reference.summary.clockEndMs,
+          autoTapAccum:reference.state._autoTapAccum||0,
+          autoEmpowerAccum:reference.state._autoEmpowerAccum||0,
+          heroResource:reference.state.heroResource,
+          passiveDps:refDiag.passiveDps,
+          sustainedDps:refDiag.sustainedDps,
+          abilityCycleSec:refDiag.abilityCycleSec
+        },
+        direct:{
+          enemyHp:direct.state.enemyHp,
+          clockEndMs:direct.summary.clockEndMs,
+          autoTapAccum:direct.state._autoTapAccum||0,
+          autoEmpowerAccum:direct.state._autoEmpowerAccum||0,
+          heroResource:direct.state.heroResource,
+          passiveDps:directDiag.passiveDps,
+          sustainedDps:directDiag.sustainedDps,
+          abilityCycleSec:directDiag.abilityCycleSec
+        }
+      });
+      throw error;
+    }
     return {baseline:baseline,reference:reference,direct:direct};
   }
 
