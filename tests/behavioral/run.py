@@ -32,6 +32,12 @@ SCENARIOS = {
     "reset-roundtrip": "mid-game",
     "restore-roundtrip": "mid-game",
     "malformed-backup-rejection": "mid-game",
+    "recovery-from-corrupt-primary": "corrupted-with-recovery",
+    "unsupported-future-load": "future-schema",
+    "legacy-backup-restore": "mid-game",
+    "future-backup-rejection": "mid-game",
+    "recovery-offline-once": "offline-recovery",
+    "save-failure-warning": "mid-game",
 }
 
 NEGATIVE_SCENARIOS = {
@@ -97,6 +103,7 @@ def build_prelude(fixtures):
 
   function materialize(value){{
     if(value==='__NOW__') return Date.now();
+    if(value==='__NOW_MINUS_60S__') return Date.now()-60000;
     if(value==='__TODAY__'){{
       var d = new Date();
       return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
@@ -126,6 +133,11 @@ def build_prelude(fixtures):
       localStorage.setItem('lumenfall_save_v2', JSON.stringify(fixture.save));
       localStorage.setItem('lumenfall_startup_intro_last', String(Date.now()));
     }}
+    if(Object.prototype.hasOwnProperty.call(fixture,'recoveryRaw')){{
+      localStorage.setItem('lumenfall_save_recovery_v1', fixture.recoveryRaw);
+    }} else if(fixture.recoverySave){{
+      localStorage.setItem('lumenfall_save_recovery_v1', JSON.stringify(fixture.recoverySave));
+    }}
   }}
 
   window.__lumenfallQaContext = {{
@@ -146,7 +158,9 @@ window.__lumenfallQaBridge = {
   getState: function(){ return JSON.parse(JSON.stringify(state)); },
   getFlags: function(){ return {resetInProgress:resetInProgress, resetBootPending:resetBootPending, reloadInProgress:reloadInProgress}; },
   rawSave: function(){ return localStorage.getItem(SAVE_KEY); },
-  save: function(){ saveState(); },
+  rawRecovery: function(){ return localStorage.getItem(RECOVERY_SAVE_KEY); },
+  persistenceStatus: function(){ return persistenceStatus(); },
+  save: function(){ return saveState(); },
   enterFarm: function(){ enterFarmMode(); },
   enterPush: function(){ enterPushMode(); },
   reset: function(){ performReset(); },
@@ -196,6 +210,7 @@ def build_runner():
     assert(s.activeParty.length===1 && s.activeParty[0]==='ember','fresh party must contain only Ember');
     assert(s.spirits.ember===1,'fresh Ember level must be 1');
     assert(s.enemyDepth===1,'fresh enemy must belong to Rift 1');
+    assert(s.schemaVersion===1,'fresh state must use current save schema');
   }
   function run(){
     var bridge = window.__lumenfallQaBridge;
@@ -213,8 +228,12 @@ def build_runner():
           assert(s.depth===17 && s.maxDepthEver===17,'mid-game depth must load intact');
           assert(s.lumen===12500 && s.shards===420,'mid-game currencies must load intact');
           assert(s.activeParty.join(',')==='ember,tide,stone','mid-game active party must load intact');
+          assert(s.schemaVersion===1,'current-version fixture must remain schema 1');
           assert(typeof s.research.focus==='number','missing research entries must be normalized');
           assert(s.enemyDepth===17 && s.enemyHp>0,'mid-game enemy must be restored/spawned at the saved depth');
+          bridge.save();
+          assert(JSON.parse(bridge.rawSave()).schemaVersion===1,'current save must serialize schema version');
+          assert(JSON.parse(bridge.rawRecovery()).schemaVersion===1,'successful save must refresh bounded recovery');
           finish('pass',{depth:s.depth,party:s.activeParty});
           return;
 
@@ -236,13 +255,20 @@ def build_runner():
           assert(Object.keys(s.studyQueue).every(function(id){ return s.studyQueue[id]===true; }),'legacy autostudy flag must migrate to studyQueue');
           assert(s.autoAscendEnabled===true && s.autoAscendTargetDepth>=22,'legacy auto-ascend ownership must migrate to enabled target');
           assert(!Object.prototype.hasOwnProperty.call(s.owned,'autostudy'),'legacy owned.autostudy must be removed');
-          finish('pass',{activeStudies:s.activeStudies.length,autoAscendTargetDepth:s.autoAscendTargetDepth});
+          assert(s.schemaVersion===1,'legacy save must migrate to current schema');
+          assert(JSON.parse(bridge.rawSave()).schemaVersion===1,'migrated legacy save must round-trip as current schema');
+          finish('pass',{activeStudies:s.activeStudies.length,autoAscendTargetDepth:s.autoAscendTargetDepth,schemaVersion:s.schemaVersion});
           return;
 
-        case 'corrupted-load':
+        case 'corrupted-load': {
           assertFresh(s);
-          finish('pass',{fallback:'fresh'});
+          var corruptRaw = bridge.rawSave();
+          assert(bridge.persistenceStatus().blocked===true,'corrupt primary without recovery must block destructive autosave');
+          bridge.save();
+          assert(bridge.rawSave()===corruptRaw,'blocked corrupt primary must be preserved instead of overwritten');
+          finish('pass',{fallback:'fresh',blocked:true});
           return;
+        }
 
         case 'malformed-daily-load':
           assert(Array.isArray(s.questIds),'malformed questIds must normalize to an array');
@@ -250,6 +276,16 @@ def build_runner():
           assert(s.shards===0,'non-numeric Shards must normalize to zero');
           assert(s.activeParty.join(',')==='ember,tide','invalid/duplicate party entries must be removed');
           assert(s.activeStudies.length===1 && s.activeStudies[0].id==='wispascend','invalid active studies must be removed while valid study survives');
+          assert(s.heroRarity.ember===5 && s.heroRarity.tide===0,'rarity values must clamp to known bounds');
+          assert(s.heroResource.ember===100 && s.heroResource.tide===0,'Wisp resource values must clamp to 0..100');
+          assert(s.wispModules.ember===20 && s.wispModules.tide===0,'module levels must clamp to module bounds');
+          assert(s.wispUltimate.ember===false && s.wispUltimate.tide===false,'invalid/impossible Ultimate flags must normalize');
+          assert(s.nodes.starlight===0 && s.nodes.steady===0,'malformed node levels must normalize');
+          assert(s.research.focus===0 && s.research.sense===0,'malformed research levels must normalize');
+          assert(s.questIds.join(',')==='q_tap_small','quest IDs must be known and unique');
+          assert(s.dailyStats.taps===0 && s.dailyStats.kills===0 && s.dailyStats.unknown===undefined,'daily stats must normalize to known metrics');
+          assert(s.savedLabMultiplier===1,'invalid remembered Lab multiplier must normalize');
+          assert(s.autoAscendEnabled===false,'non-boolean Auto-Ascend flag must not be trusted');
           finish('pass',{questIds:s.questIds,party:s.activeParty});
           return;
 
@@ -321,10 +357,12 @@ def build_runner():
         case 'reset-roundtrip':
           if(phase()===0){
             assert(s.depth===17 && s.lumen===12500,'reset test must start from non-fresh state');
+            assert(bridge.rawRecovery()!==null,'normal save must have a bounded recovery copy before reset');
             nextPhase(1); bridge.reset(); return;
           }
           if(phase()===1){
             assertFresh(s);
+            assert(bridge.rawRecovery()===null,'reset boot must clear old recovery before fresh save');
             assert(localStorage.getItem('lumenfall_reset_pending_v1')==='1','reset pending marker must survive into fresh boot until fresh state is saved');
             bridge.save();
             assert(localStorage.getItem('lumenfall_reset_pending_v1')===null,'fresh save must clear reset pending marker');
@@ -332,6 +370,7 @@ def build_runner():
           }
           assertFresh(s);
           assert(localStorage.getItem('lumenfall_reset_pending_v1')===null,'reset marker must stay cleared after subsequent reload');
+          assert(JSON.parse(bridge.rawRecovery()).depth===1,'intentional reset must replace recovery with fresh progression, never resurrect old state');
           finish('pass',{depth:s.depth,reset:'durable'});
           return;
 
@@ -344,7 +383,9 @@ def build_runner():
           assert(s.depth===33 && s.maxDepthEver===44,'restored progression must be authoritative after reload');
           assert(s.lumen===777777 && s.prisms===31,'restored currencies must replace original state');
           assert(s.activeParty.join(',')==='ember,void','restored party must replace original party');
-          finish('pass',{depth:s.depth,lumen:s.lumen});
+          assert(s.schemaVersion===1,'current backup restore must remain on current schema');
+          assert(JSON.parse(bridge.rawRecovery()).depth===33,'successful Restore must establish restored state in recovery slot');
+          finish('pass',{depth:s.depth,lumen:s.lumen,schemaVersion:s.schemaVersion});
           return;
 
         case 'malformed-backup-rejection': {
@@ -355,6 +396,80 @@ def build_runner():
           assert(bridge.getFlags().reloadInProgress===false,'malformed backup must not enter reload mode');
           assert(state().depth===17,'malformed backup must leave in-memory state unchanged');
           finish('pass',{rejected:true});
+          return;
+        }
+
+        case 'recovery-from-corrupt-primary': {
+          assert(s.depth===17 && s.lumen===12500,'valid recovery must replace malformed primary in memory');
+          assert(bridge.persistenceStatus().recovered===true,'recovery path must be observable');
+          var repairedPrimary = JSON.parse(bridge.rawSave());
+          var goodRecovery = JSON.parse(bridge.rawRecovery());
+          assert(repairedPrimary.schemaVersion===1 && repairedPrimary.depth===17,'malformed primary must be repaired from validated recovery');
+          assert(goodRecovery.schemaVersion===1 && goodRecovery.depth===17,'good recovery must never be overwritten by malformed primary');
+          finish('pass',{recovered:true,depth:s.depth});
+          return;
+        }
+
+        case 'unsupported-future-load': {
+          assertFresh(s);
+          var futureRaw = bridge.rawSave();
+          assert(JSON.parse(futureRaw).schemaVersion===99,'future schema fixture must remain intact');
+          assert(bridge.persistenceStatus().blocked===true,'future schema must block destructive persistence');
+          bridge.save();
+          assert(bridge.rawSave()===futureRaw,'future schema primary must not be rewritten as current');
+          finish('pass',{blocked:true,futureSchema:99});
+          return;
+        }
+
+        case 'legacy-backup-restore':
+          if(phase()===0){
+            var legacyTarget = ctx.fixtures['legacy'].save;
+            nextPhase(1); bridge.restoreBackup(backupCode(legacyTarget)); return;
+          }
+          assert(s.schemaVersion===1,'legacy backup must migrate to current schema before acceptance');
+          assert(s.depth===22 && s.activeStudies.length===1,'legacy backup progression and migrated study must restore');
+          assert(JSON.parse(bridge.rawRecovery()).schemaVersion===1,'legacy restore must establish current-schema recovery');
+          finish('pass',{schemaVersion:s.schemaVersion,depth:s.depth});
+          return;
+
+        case 'future-backup-rejection': {
+          var beforeFuture = bridge.rawSave();
+          bridge.restoreBackup(backupCode(ctx.fixtures['future-schema'].save));
+          assert(bridge.rawSave()===beforeFuture,'unsupported future backup must not replace authoritative save');
+          assert(bridge.getFlags().reloadInProgress===false,'future backup rejection must not enter reload mode');
+          finish('pass',{rejectedFuture:true});
+          return;
+        }
+
+        case 'recovery-offline-once': {
+          var snapKey = ctx.phaseKey + '_offline_seconds';
+          if(phase()===0){
+            assert(bridge.persistenceStatus().recovered===true,'offline recovery scenario must use recovery');
+            assert(s.totalOfflineSeconds>=55,'recovered save must receive its pending offline interval once');
+            localStorage.setItem(snapKey,String(s.totalOfflineSeconds));
+            nextPhase(1); location.reload(); return;
+          }
+          var firstOffline = Number(localStorage.getItem(snapKey));
+          assert(Math.abs(s.totalOfflineSeconds-firstOffline)<1,'reloading repaired recovery must not duplicate offline progression');
+          finish('pass',{offlineSeconds:s.totalOfflineSeconds});
+          return;
+        }
+
+        case 'save-failure-warning': {
+          var originalSetItem = Storage.prototype.setItem;
+          Storage.prototype.setItem = function(key,value){
+            if(key==='lumenfall_save_v2' || key==='lumenfall_save_recovery_v1') throw new Error('intentional storage write failure');
+            return originalSetItem.call(this,key,value);
+          };
+          bridge.save();
+          bridge.save();
+          Storage.prototype.setItem = originalSetItem;
+          var persistence = bridge.persistenceStatus();
+          assert(persistence.failureCount>=2,'repeated save failures must be tracked');
+          assert(persistence.warningShown===true,'repeated save failures must surface one controlled warning');
+          var toast = document.getElementById('toast');
+          assert(toast && toast.textContent.indexOf('Saving is failing')!==-1,'save failure warning must be visible to the player');
+          finish('pass',{failureCount:persistence.failureCount,warningShown:persistence.warningShown});
           return;
         }
 

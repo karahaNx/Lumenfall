@@ -2174,6 +2174,8 @@ var RIFT_ZONES = [
 ];
 
 var SAVE_KEY = 'lumenfall_save_v2';
+var RECOVERY_SAVE_KEY = 'lumenfall_save_recovery_v1';
+var SAVE_SCHEMA_VERSION = 1;
 var RESET_PENDING_KEY = 'lumenfall_reset_pending_v1';
 var TICK_MS = 100;
 var ABILITY_BASE_CYCLE_SEC = 6;
@@ -2189,6 +2191,7 @@ function freshState(){
   RESEARCH.forEach(function(r){ research[r.id] = 0; researchQueue[r.id] = false; });
   LONG_STUDIES.forEach(function(l){ longStudyLevels[l.id] = 0; studyQueue[l.id] = false; });
   return {
+    schemaVersion:SAVE_SCHEMA_VERSION,
     lumen:0, shards:0, prisms:0, comets:0, motes:0, sigils:0,
     depth:1, maxDepthEver:1,
     riftMode:'push', farmDepth:0, farmReturnDepth:0,
@@ -2269,123 +2272,399 @@ var resetInProgress = false;
 var resetBootPending = false;
 var reloadInProgress = false;
 
-function loadState(){
+function persistenceError(code,message){
+  var error = new Error(message);
+  error.code = code;
+  return error;
+}
+function isPlainObject(value){
+  return !!value && typeof value==='object' && !Array.isArray(value);
+}
+function clonePersistedValue(value){
+  return JSON.parse(JSON.stringify(value));
+}
+function finiteNonNegative(value,fallback){
+  var n = Number(value);
+  return Number.isFinite(n) && n>=0 ? n : fallback;
+}
+function nonNegativeInt(value,fallback){
+  return Math.max(0,Math.floor(finiteNonNegative(value,fallback)));
+}
+function boundedInt(value,fallback,min,max){
+  var n = Math.floor(Number(value));
+  if(!Number.isFinite(n)) return fallback;
+  return Math.max(min,Math.min(max,n));
+}
+function strictBool(value,fallback){
+  return typeof value==='boolean' ? value : fallback;
+}
+function assertPersistedRootShape(value){
+  if(!isPlainObject(value) || value.depth===undefined || !isPlainObject(value.spirits)){
+    throw persistenceError('invalid-root','Save data is missing required progression fields');
+  }
+}
+function identifySaveSchemaVersion(value){
+  assertPersistedRootShape(value);
+  if(value.schemaVersion===undefined) return 0;
+  if(!Number.isInteger(value.schemaVersion) || value.schemaVersion<0){
+    throw persistenceError('invalid-schema','Save schema version is invalid');
+  }
+  if(value.schemaVersion>SAVE_SCHEMA_VERSION){
+    throw persistenceError('unsupported-future-schema','Save was created by a newer Lumenfall schema');
+  }
+  return value.schemaVersion;
+}
+function migrateSaveV0ToV1(input){
+  var migrated = clonePersistedValue(input);
+  var researchQueueWasMissing = migrated.researchQueue===undefined;
+  var studyQueueWasMissing = migrated.studyQueue===undefined;
+  var autoAscendEnabledWasMissing = migrated.autoAscendEnabled===undefined;
+  var autoAscendTargetWasMissing = migrated.autoAscendTargetDepth===undefined;
+  var legacyOwned = isPlainObject(migrated.owned) ? migrated.owned : {};
+
+  if(researchQueueWasMissing){
+    migrated.researchQueue = {};
+    RESEARCH.forEach(function(r){ migrated.researchQueue[r.id] = !!migrated.labQueueOn; });
+  }
+  delete migrated.labQueueOn;
+
+  if(studyQueueWasMissing){
+    migrated.studyQueue = {};
+    LONG_STUDIES.forEach(function(l){ migrated.studyQueue[l.id] = !!legacyOwned.autostudy; });
+  }
+
+  if(!Array.isArray(migrated.activeStudies)) migrated.activeStudies = [];
+  if(isPlainObject(migrated.activeStudy)) migrated.activeStudies.push(migrated.activeStudy);
+  delete migrated.activeStudy;
+
+  if(autoAscendEnabledWasMissing) migrated.autoAscendEnabled = !!legacyOwned.autoascend;
+  if(autoAscendTargetWasMissing) migrated.autoAscendTargetDepth = Math.max(16,Number(migrated.maxDepthEver)||1);
+
+  if(isPlainObject(migrated.owned)) delete migrated.owned.autostudy;
+  migrated.schemaVersion = 1;
+  return migrated;
+}
+var SAVE_MIGRATIONS = {
+  0: migrateSaveV0ToV1
+};
+function migratePersistedState(input){
+  var migrated = clonePersistedValue(input);
+  var version = identifySaveSchemaVersion(migrated);
+  while(version<SAVE_SCHEMA_VERSION){
+    var migrate = SAVE_MIGRATIONS[version];
+    if(typeof migrate!=='function'){
+      throw persistenceError('unsupported-old-schema','No migration exists for save schema '+version);
+    }
+    migrated = migrate(migrated);
+    var nextVersion = identifySaveSchemaVersion(migrated);
+    if(nextVersion!==version+1){
+      throw persistenceError('invalid-migration','Save migration did not advance exactly one schema version');
+    }
+    version = nextVersion;
+  }
+  return migrated;
+}
+function normalizeCurrentSave(input){
+  var fresh = freshState();
+  var out = freshState();
+  var source = isPlainObject(input) ? input : {};
+
+  out.schemaVersion = SAVE_SCHEMA_VERSION;
+
+  ['lumen','shards','prisms','comets','motes','sigils'].forEach(function(key){
+    out[key] = finiteNonNegative(source[key],fresh[key]);
+  });
+
+  out.depth = Math.max(1,nonNegativeInt(source.depth,1));
+  out.maxDepthEver = Math.max(1,nonNegativeInt(source.maxDepthEver,out.depth));
+
+  out.riftMode = source.riftMode==='farm' ? 'farm' : 'push';
+  out.farmDepth = nonNegativeInt(source.farmDepth,0);
+  out.farmReturnDepth = nonNegativeInt(source.farmReturnDepth,0);
+  if(out.riftMode==='farm' && out.farmReturnDepth>1){
+    out.farmDepth = highestFarmableDepth(out.farmReturnDepth);
+    out.depth = out.farmDepth;
+    out.maxDepthEver = Math.max(out.maxDepthEver,out.farmReturnDepth);
+  } else {
+    out.riftMode = 'push';
+    out.farmDepth = 0;
+    out.farmReturnDepth = 0;
+    out.maxDepthEver = Math.max(out.maxDepthEver,out.depth);
+  }
+
+  var spirits = isPlainObject(source.spirits) ? source.spirits : {};
+  var heroRarity = isPlainObject(source.heroRarity) ? source.heroRarity : {};
+  var heroResource = isPlainObject(source.heroResource) ? source.heroResource : {};
+  var wispModules = isPlainObject(source.wispModules) ? source.wispModules : {};
+  var wispUltimate = isPlainObject(source.wispUltimate) ? source.wispUltimate : {};
+  var empowerQueue = isPlainObject(source.empowerQueue) ? source.empowerQueue : {};
+  SPIRITS.forEach(function(sp){
+    out.spirits[sp.id] = nonNegativeInt(spirits[sp.id],fresh.spirits[sp.id]);
+    out.heroRarity[sp.id] = boundedInt(heroRarity[sp.id],fresh.heroRarity[sp.id],0,RARITY_NAMES.length-1);
+    out.heroResource[sp.id] = Math.max(0,Math.min(100,finiteNonNegative(heroResource[sp.id],fresh.heroResource[sp.id])));
+    out.wispModules[sp.id] = boundedInt(wispModules[sp.id],fresh.wispModules[sp.id],0,MODULE_MAX_LEVEL);
+    out.wispUltimate[sp.id] = strictBool(wispUltimate[sp.id],fresh.wispUltimate[sp.id]);
+    if(out.heroRarity[sp.id]<RARITY_NAMES.length-1) out.wispUltimate[sp.id] = false;
+    out.empowerQueue[sp.id] = strictBool(empowerQueue[sp.id],fresh.empowerQueue[sp.id]);
+  });
+
+  var party = Array.isArray(source.activeParty) ? source.activeParty : [];
+  var seenParty = {};
+  out.activeParty = party.filter(function(id){
+    if(typeof id!=='string' || seenParty[id]) return false;
+    if(!SPIRITS.some(function(sp){ return sp.id===id; })) return false;
+    if((out.spirits[id]||0)<=0) return false;
+    seenParty[id] = true;
+    return true;
+  }).slice(0,5);
+  if(!out.activeParty.length){
+    out.spirits.ember = Math.max(1,out.spirits.ember||0);
+    out.activeParty = ['ember'];
+  }
+
+  var nodes = isPlainObject(source.nodes) ? source.nodes : {};
+  NODES.forEach(function(node){ out.nodes[node.id] = nonNegativeInt(nodes[node.id],fresh.nodes[node.id]); });
+
+  var research = isPlainObject(source.research) ? source.research : {};
+  var researchQueue = isPlainObject(source.researchQueue) ? source.researchQueue : {};
+  RESEARCH.forEach(function(node){
+    out.research[node.id] = nonNegativeInt(research[node.id],fresh.research[node.id]);
+    out.researchQueue[node.id] = strictBool(researchQueue[node.id],fresh.researchQueue[node.id]);
+  });
+
+  var studyLevels = isPlainObject(source.longStudyLevels) ? source.longStudyLevels : {};
+  var studyQueue = isPlainObject(source.studyQueue) ? source.studyQueue : {};
+  LONG_STUDIES.forEach(function(node){
+    out.longStudyLevels[node.id] = nonNegativeInt(studyLevels[node.id],fresh.longStudyLevels[node.id]);
+    out.studyQueue[node.id] = strictBool(studyQueue[node.id],fresh.studyQueue[node.id]);
+  });
+
+  var activeStudies = Array.isArray(source.activeStudies) ? source.activeStudies : [];
+  var seenStudies = {};
+  out.activeStudies = activeStudies.filter(function(active){
+    if(!isPlainObject(active) || typeof active.id!=='string' || seenStudies[active.id]) return false;
+    if(!LONG_STUDIES.some(function(node){ return node.id===active.id; })) return false;
+    var remaining = Number(active.remainingSec);
+    var total = Number(active.totalDurationSec);
+    var speed = Number(active.speedMult);
+    var validSpeed = speed===1 || LAB_SPEED_TIERS.indexOf(speed)!==-1;
+    if(!Number.isFinite(remaining) || !Number.isFinite(total) || total<=0 || !validSpeed) return false;
+    active.remainingSec = Math.max(0,Math.min(total,remaining));
+    active.totalDurationSec = total;
+    active.speedMult = speed;
+    seenStudies[active.id] = true;
+    return true;
+  }).slice(0,5).map(function(active){
+    return {id:active.id,remainingSec:active.remainingSec,totalDurationSec:active.totalDurationSec,speedMult:active.speedMult};
+  });
+
+  var achieved = isPlainObject(source.achieved) ? source.achieved : {};
+  ACHIEVEMENTS.forEach(function(a){ if(achieved[a.id]===true) out.achieved[a.id] = true; });
+
+  var owned = isPlainObject(source.owned) ? source.owned : {};
+  SHOP.forEach(function(item){ if(owned[item.id]===true) out.owned[item.id] = true; });
+
+  var themeId = typeof source.riftTheme==='string' ? source.riftTheme : fresh.riftTheme;
+  out.riftTheme = RIFT_THEMES.some(function(theme){ return theme.id===themeId; }) ? themeId : fresh.riftTheme;
+
+  out.buffUntil = finiteNonNegative(source.buffUntil,fresh.buffUntil);
+  out.buffMult = Math.max(1,finiteNonNegative(source.buffMult,fresh.buffMult));
+  out.ascendCount = nonNegativeInt(source.ascendCount,fresh.ascendCount);
+  out.totalTaps = nonNegativeInt(source.totalTaps,fresh.totalTaps);
+  out.totalKills = nonNegativeInt(source.totalKills,fresh.totalKills);
+  out.totalOfflineSeconds = finiteNonNegative(source.totalOfflineSeconds,fresh.totalOfflineSeconds);
+  out.luminousAccum = Math.max(0,Math.min(0.999999,finiteNonNegative(source.luminousAccum,fresh.luminousAccum)));
+  out._autoTapAccum = Math.max(0,Math.min(999.999,finiteNonNegative(source._autoTapAccum,0)));
+  out._autoEmpowerAccum = Math.max(0,Math.min(999.999,finiteNonNegative(source._autoEmpowerAccum,0)));
+
+  var allowedMultipliers = [1,5,10,25,50,100,'max'];
+  out.savedLabMultiplier = allowedMultipliers.indexOf(source.savedLabMultiplier)!==-1 ? source.savedLabMultiplier : fresh.savedLabMultiplier;
+
+  out.autoAscendEnabled = strictBool(source.autoAscendEnabled,fresh.autoAscendEnabled);
+  out.autoAscendTargetDepth = Math.max(16,nonNegativeInt(source.autoAscendTargetDepth,fresh.autoAscendTargetDepth));
+  if(!out.owned.autoascend) out.autoAscendEnabled = false;
+
+  out.enemyDepth = nonNegativeInt(source.enemyDepth,fresh.enemyDepth);
+  out.enemyMaxHp = finiteNonNegative(source.enemyMaxHp,fresh.enemyMaxHp);
+  out.enemyHp = finiteNonNegative(source.enemyHp,fresh.enemyHp);
+  if(out.enemyMaxHp>0) out.enemyHp = Math.min(out.enemyHp,out.enemyMaxHp);
+  else out.enemyHp = 0;
+  out.enemyIsLuminous = strictBool(source.enemyIsLuminous,fresh.enemyIsLuminous);
+  if(isBoss(out.enemyDepth)) out.enemyIsLuminous = false;
+
+  out.loginStreak = nonNegativeInt(source.loginStreak,fresh.loginStreak);
+  out.questDay = typeof source.questDay==='string' && (source.questDay==='' || /^\d{4}-\d{2}-\d{2}$/.test(source.questDay)) ? source.questDay : '';
+  var knownQuestIds = {};
+  QUEST_POOL.forEach(function(q){ knownQuestIds[q.id] = true; });
+  var seenQuestIds = {};
+  out.questIds = (Array.isArray(source.questIds) ? source.questIds : []).filter(function(id){
+    if(typeof id!=='string' || !knownQuestIds[id] || seenQuestIds[id]) return false;
+    seenQuestIds[id] = true;
+    return true;
+  }).slice(0,3);
+
+  var questClaimed = isPlainObject(source.questClaimed) ? source.questClaimed : {};
+  QUEST_POOL.forEach(function(q){ if(questClaimed[q.id]===true) out.questClaimed[q.id] = true; });
+
+  var dailyStats = isPlainObject(source.dailyStats) ? source.dailyStats : {};
+  var metrics = {};
+  QUEST_POOL.forEach(function(q){ metrics[q.metric] = true; });
+  Object.keys(metrics).forEach(function(metric){ out.dailyStats[metric] = finiteNonNegative(dailyStats[metric],0); });
+
+  out.lastSeen = finiteNonNegative(source.lastSeen,Date.now());
+  if(out.lastSeen<=0) out.lastSeen = Date.now();
+  return out;
+}
+function acceptPersistedState(input,sourceName){
+  assertPersistedRootShape(input);
+  var migrated = migratePersistedState(input);
+  if(identifySaveSchemaVersion(migrated)!==SAVE_SCHEMA_VERSION){
+    throw persistenceError('unsupported-schema','Save schema is not supported');
+  }
+  var normalized = normalizeCurrentSave(migrated);
+  normalized.schemaVersion = SAVE_SCHEMA_VERSION;
+  return normalized;
+}
+function parsePersistedState(raw,sourceName){
+  if(typeof raw!=='string' || !raw.length) throw persistenceError('missing-save','Save data is missing');
+  var parsed;
+  try{ parsed = JSON.parse(raw); }
+  catch(e){ throw persistenceError('invalid-json','Save data is not valid JSON'); }
+  return acceptPersistedState(parsed,sourceName||'save');
+}
+
+var persistenceFailureCount = 0;
+var persistenceWarningShown = false;
+var persistenceLastError = '';
+var persistenceBlocked = false;
+var persistenceBlockedReason = '';
+var recoveredFromRecovery = false;
+
+function recordPersistenceFailure(error){
+  persistenceFailureCount++;
+  persistenceLastError = error && error.message ? error.message : String(error||'Unknown persistence error');
+  if(persistenceFailureCount>=2 && !persistenceWarningShown){
+    persistenceWarningShown = true;
+    if(els && els['toast']) showToast('Saving is failing — recent progress may not persist.');
+  }
+}
+function recordPersistenceSuccess(){
+  persistenceFailureCount = 0;
+  persistenceLastError = '';
+  persistenceWarningShown = false;
+}
+function setPersistenceBlocked(reason){
+  persistenceBlocked = true;
+  persistenceBlockedReason = reason || 'Stored save data could not be accepted safely.';
+}
+function persistenceStatus(){
+  return {
+    failureCount:persistenceFailureCount,
+    warningShown:persistenceWarningShown,
+    lastError:persistenceLastError,
+    blocked:persistenceBlocked,
+    blockedReason:persistenceBlockedReason,
+    recovered:recoveredFromRecovery
+  };
+}
+function announcePersistenceStatus(){
+  if(persistenceBlocked){
+    if(!persistenceWarningShown){
+      persistenceWarningShown = true;
+      showToast('Save data needs recovery — Reset or restore a valid backup before progress can be saved.');
+    }
+    return;
+  }
+  if(recoveredFromRecovery) showToast('Recovered your last known-good save.');
+}
+function readPersistedSlot(key){
+  var raw;
+  try{ raw = localStorage.getItem(key); }
+  catch(e){ return {raw:null,state:null,error:persistenceError('storage-read-failed','Stored save data could not be read')}; }
+  if(!raw) return {raw:null,state:null,error:null};
+  try{ return {raw:raw,state:parsePersistedState(raw,key),error:null}; }
+  catch(e){ return {raw:raw,state:null,error:e}; }
+}
+function repairPrimaryFromRecovery(recovered){
   try{
-    if(localStorage.getItem(RESET_PENDING_KEY)==='1'){
+    localStorage.setItem(SAVE_KEY,JSON.stringify(recovered));
+    return true;
+  }catch(e){
+    recordPersistenceFailure(e);
+    return false;
+  }
+}
+function loadState(){
+  var resetMarker = null;
+  try{ resetMarker = localStorage.getItem(RESET_PENDING_KEY); }
+  catch(e){
+    setPersistenceBlocked('Browser storage is unavailable.');
+    isNewGame = true;
+    return freshState();
+  }
+
+  if(resetMarker==='1'){
+    try{
       localStorage.removeItem(SAVE_KEY);
-      resetBootPending = true;
-      isNewGame = true;
-      return freshState();
-    }
-    var raw = localStorage.getItem(SAVE_KEY);
-    if(!raw){ isNewGame = true; return freshState(); }
-    var parsed = JSON.parse(raw);
-    var researchQueueWasMissing = parsed.researchQueue===undefined;
-    var studyQueueWasMissing = parsed.studyQueue===undefined;
-    var autoAscendEnabledWasMissing = parsed.autoAscendEnabled===undefined;
-    var autoAscendTargetWasMissing = parsed.autoAscendTargetDepth===undefined;
-    var fresh = freshState();
-    for(var k in fresh){ if(parsed[k]===undefined) parsed[k]=fresh[k]; }
-    ['spirits','heroRarity','heroResource','wispModules','wispUltimate','empowerQueue','nodes','research','researchQueue','longStudyLevels','studyQueue','achieved','owned','questClaimed','dailyStats'].forEach(function(key){
-      if(!parsed[key] || typeof parsed[key]!=='object' || Array.isArray(parsed[key])) parsed[key] = fresh[key];
-    });
-    SPIRITS.forEach(function(sp){
-      if(parsed.spirits[sp.id]===undefined) parsed.spirits[sp.id]=0;
-      if(parsed.heroRarity[sp.id]===undefined) parsed.heroRarity[sp.id]=0;
-      if(parsed.heroResource[sp.id]===undefined) parsed.heroResource[sp.id]=0;
-      if(parsed.wispModules[sp.id]===undefined) parsed.wispModules[sp.id]=0;
-      if(parsed.wispUltimate[sp.id]===undefined) parsed.wispUltimate[sp.id]=false;
-      if(parsed.empowerQueue[sp.id]===undefined) parsed.empowerQueue[sp.id]=true;
-    });
-    NODES.forEach(function(n){ if(parsed.nodes[n.id]===undefined) parsed.nodes[n.id]=0; });
-    RESEARCH.forEach(function(r){
-      if(parsed.research[r.id]===undefined) parsed.research[r.id]=0;
-      if(researchQueueWasMissing){ parsed.researchQueue[r.id]=!!parsed.labQueueOn; }
-      else if(parsed.researchQueue[r.id]===undefined){ parsed.researchQueue[r.id]=false; }
-    });
-    delete parsed.labQueueOn;
-    LONG_STUDIES.forEach(function(l){
-      if(parsed.longStudyLevels[l.id]===undefined) parsed.longStudyLevels[l.id]=0;
-      if(studyQueueWasMissing){ parsed.studyQueue[l.id]=!!(parsed.owned && parsed.owned.autostudy); }
-      else if(parsed.studyQueue[l.id]===undefined){ parsed.studyQueue[l.id]=false; }
-    });
-    if(parsed.owned){ delete parsed.owned.autostudy; }
-    if(autoAscendEnabledWasMissing){ parsed.autoAscendEnabled = !!(parsed.owned && parsed.owned.autoascend); }
-    if(autoAscendTargetWasMissing){ parsed.autoAscendTargetDepth = Math.max(16, parsed.maxDepthEver||1); }
-    parsed.autoAscendTargetDepth = Math.max(16, Math.floor(parsed.autoAscendTargetDepth||16));
-    if(!(parsed.owned && parsed.owned.autoascend)){ parsed.autoAscendEnabled = false; }
-    function finiteNonNegative(value,fallback){
-      var n = Number(value);
-      return Number.isFinite(n) && n>=0 ? n : fallback;
-    }
-    parsed.lumen = finiteNonNegative(parsed.lumen,0);
-    parsed.shards = finiteNonNegative(parsed.shards,0);
-    parsed.prisms = finiteNonNegative(parsed.prisms,0);
-    parsed.comets = finiteNonNegative(parsed.comets,0);
-    parsed.motes = finiteNonNegative(parsed.motes,0);
-    parsed.sigils = finiteNonNegative(parsed.sigils,0);
-    parsed.depth = Math.max(1,Math.floor(finiteNonNegative(parsed.depth,1)));
-    parsed.maxDepthEver = Math.max(1,Math.floor(finiteNonNegative(parsed.maxDepthEver,parsed.depth)));
+      localStorage.removeItem(RECOVERY_SAVE_KEY);
+    }catch(e){ recordPersistenceFailure(e); }
+    resetBootPending = true;
+    isNewGame = true;
+    return freshState();
+  }
 
-    if(parsed.riftMode!=='farm') parsed.riftMode = 'push';
-    parsed.farmDepth = Math.max(0, Math.floor(finiteNonNegative(parsed.farmDepth,0)));
-    parsed.farmReturnDepth = Math.max(0, Math.floor(finiteNonNegative(parsed.farmReturnDepth,0)));
-    if(parsed.riftMode==='farm' && parsed.farmReturnDepth>1){
-      parsed.farmDepth = highestFarmableDepth(parsed.farmReturnDepth);
-      parsed.depth = parsed.farmDepth;
-      parsed.maxDepthEver = Math.max(parsed.maxDepthEver,parsed.farmReturnDepth);
-    } else {
-      parsed.riftMode = 'push';
-      parsed.farmDepth = 0;
-      parsed.farmReturnDepth = 0;
-      parsed.maxDepthEver = Math.max(parsed.maxDepthEver,parsed.depth);
+  var primary = readPersistedSlot(SAVE_KEY);
+  if(primary.state) return primary.state;
+
+  var recovery = readPersistedSlot(RECOVERY_SAVE_KEY);
+  if(recovery.state){
+    recoveredFromRecovery = true;
+    if(primary.error && primary.error.code==='unsupported-future-schema'){
+      setPersistenceBlocked('Primary save uses a newer unsupported schema. It has been preserved.');
+      return recovery.state;
     }
+    repairPrimaryFromRecovery(recovery.state);
+    return recovery.state;
+  }
 
-    if(!Array.isArray(parsed.activeParty)) parsed.activeParty=[];
-    var seenParty = {};
-    parsed.activeParty = parsed.activeParty.filter(function(id){
-      if(seenParty[id] || !SPIRITS.some(function(sp){ return sp.id===id; }) || (parsed.spirits[id]||0)<=0) return false;
-      seenParty[id] = true;
-      return true;
-    }).slice(0,5);
-    if(!parsed.activeParty.length){
-      parsed.spirits.ember = Math.max(1,parsed.spirits.ember||0);
-      parsed.activeParty = ['ember'];
-    }
+  if(!primary.raw && !recovery.raw){
+    isNewGame = true;
+    return freshState();
+  }
 
-    if(!Array.isArray(parsed.questIds)) parsed.questIds=[];
-    if(!Array.isArray(parsed.activeStudies)) parsed.activeStudies=[];
-    if(parsed.activeStudy){ parsed.activeStudies.push(parsed.activeStudy); delete parsed.activeStudy; }
-    var seenStudies = {};
-    parsed.activeStudies = parsed.activeStudies.filter(function(active){
-      if(!active || seenStudies[active.id] || !LONG_STUDIES.some(function(node){ return node.id===active.id; })) return false;
-      var remaining = Number(active.remainingSec), total = Number(active.totalDurationSec), speed = Number(active.speedMult);
-      if(!Number.isFinite(remaining) || !Number.isFinite(total) || total<=0 || !Number.isFinite(speed) || speed<=0) return false;
-      active.remainingSec = Math.max(0,remaining);
-      active.totalDurationSec = total;
-      active.speedMult = speed;
-      seenStudies[active.id] = true;
-      return true;
-    });
-
-    parsed.enemyDepth = Math.max(0,Math.floor(finiteNonNegative(parsed.enemyDepth,0)));
-    parsed.enemyHp = finiteNonNegative(parsed.enemyHp,0);
-    parsed.enemyMaxHp = finiteNonNegative(parsed.enemyMaxHp,0);
-    parsed.luminousAccum = Math.max(0,Math.min(0.999999,finiteNonNegative(parsed.luminousAccum,0)));
-    return parsed;
-  }catch(e){ isNewGame = true; return freshState(); }
+  if(primary.error && primary.error.code==='unsupported-future-schema'){
+    setPersistenceBlocked('Primary save uses a newer unsupported schema. It has been preserved.');
+  } else {
+    setPersistenceBlocked('Stored save data is invalid and no valid recovery copy is available.');
+  }
+  isNewGame = true;
+  return freshState();
 }
 
 function saveState(){
   if(resetInProgress || reloadInProgress) return;
+  if(persistenceBlocked) return false;
   try{
-    state.lastSeen = Date.now();
-    localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+    var candidate = clonePersistedValue(state);
+    candidate.schemaVersion = SAVE_SCHEMA_VERSION;
+    candidate.lastSeen = Date.now();
+    var canonical = acceptPersistedState(candidate,'runtime');
+    var serialized = JSON.stringify(canonical);
+
+    localStorage.setItem(SAVE_KEY,serialized);
+    localStorage.setItem(RECOVERY_SAVE_KEY,serialized);
+
+    state = canonical;
     if(resetBootPending){
       localStorage.removeItem(RESET_PENDING_KEY);
       resetBootPending = false;
     }
-  }catch(e){}
+    recordPersistenceSuccess();
+    return true;
+  }catch(e){
+    recordPersistenceFailure(e);
+    return false;
+  }
 }
 
 var SAVE_BACKUP_PREFIX = 'LUMENFALL1:';
@@ -2394,16 +2673,15 @@ function encodeSaveBackup(obj){
 }
 function decodeSaveBackup(code){
   var clean = String(code||'').trim();
-  if(clean.indexOf(SAVE_BACKUP_PREFIX)!==0) throw new Error('Not a Lumenfall backup code');
-  var parsed = JSON.parse(decodeURIComponent(clean.slice(SAVE_BACKUP_PREFIX.length)));
-  if(!parsed || typeof parsed!=='object' || !parsed.spirits || parsed.depth===undefined){
-    throw new Error('Backup data is incomplete');
-  }
-  return parsed;
+  if(clean.indexOf(SAVE_BACKUP_PREFIX)!==0) throw persistenceError('invalid-backup-prefix','Not a Lumenfall backup code');
+  var parsed;
+  try{ parsed = JSON.parse(decodeURIComponent(clean.slice(SAVE_BACKUP_PREFIX.length))); }
+  catch(e){ throw persistenceError('invalid-backup-json','Backup code does not contain valid JSON'); }
+  return acceptPersistedState(parsed,'backup');
 }
 function currentSaveBackup(){
   saveState();
-  return encodeSaveBackup(state);
+  return encodeSaveBackup(acceptPersistedState(state,'backup-export'));
 }
 function copyTextFallback(textarea){
   textarea.focus();
@@ -2426,12 +2704,34 @@ function copyCurrentSaveBackup(){
 }
 function restoreSaveBackup(){
   var textarea = document.getElementById('save-backup-code');
+  var oldRecovery = null;
+  var recoveryWritten = false;
   try{
     var restored = decodeSaveBackup(textarea.value);
     restored.lastSeen = Date.now();
-    localStorage.setItem(SAVE_KEY, JSON.stringify(restored));
+    restored.schemaVersion = SAVE_SCHEMA_VERSION;
+    restored = acceptPersistedState(restored,'backup');
+    var serialized = JSON.stringify(restored);
 
-    // From this point onward the backup on disk is authoritative.
+    oldRecovery = localStorage.getItem(RECOVERY_SAVE_KEY);
+    localStorage.setItem(RECOVERY_SAVE_KEY,serialized);
+    recoveryWritten = true;
+    try{
+      localStorage.setItem(SAVE_KEY,serialized);
+    }catch(primaryError){
+      try{
+        if(oldRecovery===null) localStorage.removeItem(RECOVERY_SAVE_KEY);
+        else localStorage.setItem(RECOVERY_SAVE_KEY,oldRecovery);
+      }catch(rollbackError){}
+      throw primaryError;
+    }
+
+    persistenceBlocked = false;
+    persistenceBlockedReason = '';
+    recoveredFromRecovery = false;
+    recordPersistenceSuccess();
+
+    // From this point onward the validated restored backup on disk is authoritative.
     // Block autosave/beforeunload from writing the pre-restore in-memory state over it.
     reloadInProgress = true;
     document.body.classList.add('app-paused');
@@ -2440,8 +2740,11 @@ function restoreSaveBackup(){
     showToast('Save restored. Reloading…');
     setTimeout(function(){ location.reload(); }, 120);
   }catch(e){
+    if(recoveryWritten && reloadInProgress===false && oldRecovery!==null){
+      // Best-effort rollback is already attempted above when the primary write fails.
+    }
     reloadInProgress = false;
-    showToast('That backup code is not valid.');
+    showToast('That backup code is not valid or supported.');
   }
 }
 
@@ -3042,6 +3345,7 @@ function buyRarity(sp){
   state.lumen -= cost.lumen;
   state.heroRarity[sp.id] = tier+1;
   checkAchievements();
+  saveState();
   renderSpirits();
   showToast(sp.name+' reached '+RARITY_NAMES[tier+1]+'.');
   pulseWispCard(sp.id,'rarity');
@@ -3071,6 +3375,7 @@ function buyModule(sp){
   state.lumen -= cost.lumen;
   state.shards -= cost.shard;
   state.wispModules[sp.id] = level+1;
+  saveState();
   renderSpirits();
   if(level+1>=MODULE_MAX_LEVEL){
     showToast(sp.name+' Module perfected.');
@@ -3087,6 +3392,7 @@ function buyUltimate(sp){
   state.sigils -= cost;
   state.wispUltimate[sp.id] = true;
   checkAchievements();
+  saveState();
   renderSpirits();
   showToast(sp.name+' Ultimate awakened — '+sp.abilityName+' doubled.');
   pulseWispCard(sp.id,'ultimate');
@@ -3115,6 +3421,7 @@ function buyNode(node){
   if(state.prisms < cost) return;
   state.prisms -= cost;
   state.nodes[node.id]++;
+  saveState();
   renderNodes();
   renderAscendSummary();
   updateBattleFast();
@@ -3170,6 +3477,7 @@ function buyResearch(node){
   state.shards -= plan.cost.shard;
   state.research[node.id] += plan.buyCount;
   trackDaily('research', plan.buyCount);
+  saveState();
   renderResearch();
   updateBattleFast();
   renderSideStats();
@@ -3229,6 +3537,7 @@ function startStudy(node){
   state.shards -= cost.shard;
   var dur = studyDuration(node, level);
   state.activeStudies.push({id:node.id, remainingSec:dur, totalDurationSec:dur, speedMult:1});
+  saveState();
   renderLongStudies();
   updateBattleFast();
 }
@@ -3240,6 +3549,7 @@ function applySpeedTier(studyId, mult){
   if(state.motes<cost) return;
   state.motes -= cost;
   active.speedMult = mult;
+  saveState();
   renderLongStudies();
   renderHud();
 }
@@ -3363,6 +3673,7 @@ function performReset(){
   try{
     localStorage.setItem(RESET_PENDING_KEY,'1');
     localStorage.removeItem(SAVE_KEY);
+    localStorage.removeItem(RECOVERY_SAVE_KEY);
     localStorage.removeItem(STARTUP_INTRO_KEY);
   }catch(e){}
 
@@ -4433,6 +4744,7 @@ function tick(){
   var completedStudies = advanceActiveStudies(TICK_MS/1000);
   var filledSlots = autoFillStudySlots();
   if(completedStudies.length){
+    saveState();
     completedStudies.forEach(function(name){ showToast('Study complete: '+name+' advanced a level!'); });
   }
   if(completedStudies.length || filledSlots){
@@ -4884,6 +5196,7 @@ function init(){
 
   applyRiftTheme();
   renderAll();
+  announcePersistenceStatus();
 
   var welcomeOverlay = document.getElementById('welcome-overlay');
 
