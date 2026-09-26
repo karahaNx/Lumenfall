@@ -5178,14 +5178,17 @@ function advanceAuthoritativeTime(elapsedSec,options){
   elapsedSec = Math.max(0,Number(elapsedSec)||0);
   var policy = simulationPolicy(options.kind||'live',options);
   var summary = simulationSummary(elapsedSec);
-  var remaining = elapsedSec;
   var clockStartMs = Number.isFinite(options.clockStartMs) ? options.clockStartMs : Date.now();
-  var nowMs = clockStartMs;
-  // Farm fast-forward uses one-second numerical anchors. Keep the next anchor
-  // as an exact absolute millisecond value instead of repeatedly taking modulo
-  // of a large, incrementally-rounded epoch timestamp. A caller can therefore
-  // stop/restart at an anchor without changing the next Farm damage segment.
-  var nextFarmGridMs = Math.floor(clockStartMs/1000)*1000 + 1000;
+  var elapsedInRun = 0;
+  var remaining = elapsedSec;
+
+  // Authoritative simulation time lives entirely in this small relative
+  // seconds domain. Absolute epoch milliseconds are derived only when gameplay
+  // semantics require them (for example support-buff expiry) and are never
+  // repeatedly accumulated.
+  var startPhaseSec = (((clockStartMs%1000)+1000)%1000)/1000;
+  var firstFarmGridSec = startPhaseSec===0 ? 1 : 1-startPhaseSec;
+  var nextFarmGridElapsedSec = firstFarmGridSec;
 
   simulationDrainResearchQueue(summary);
   simulationStartQueuedStudies(summary);
@@ -5196,6 +5199,8 @@ function advanceAuthoritativeTime(elapsedSec,options){
     if(summary.iterations>SIM_EVENT_LIMIT){
       throw new Error('Authoritative simulation event limit exceeded after '+summary.iterations+' iterations');
     }
+
+    var nowMs = clockStartMs + elapsedInRun*1000;
 
     if(state.enemyHp<=SIM_EPS){
       simulationDefeatEnemy(policy,summary);
@@ -5217,8 +5222,8 @@ function advanceAuthoritativeTime(elapsedSec,options){
 
     var farmGridStep = Infinity;
     if(state.riftMode==='farm'){
-      while(nextFarmGridMs<=nowMs) nextFarmGridMs += 1000;
-      farmGridStep = (nextFarmGridMs-nowMs)/1000;
+      while(nextFarmGridElapsedSec<=elapsedInRun) nextFarmGridElapsedSec += 1;
+      farmGridStep = nextFarmGridElapsedSec-elapsedInRun;
       next = Math.min(next,farmGridStep);
       next = Math.min(next,simulationFarmEconomyBoundarySeconds(dps,rewardScale));
     } else {
@@ -5230,7 +5235,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
     var hitsFarmGrid = state.riftMode==='farm' && next===farmGridStep;
 
     var killsBefore = summary.kills;
-    var remainingBefore = remaining;
+    var elapsedBefore = elapsedInRun;
     // Sub-nanosecond elapsed time can still carry material damage at mature
     // power. Never discard it merely because it is below a generic time
     // epsilon; only treat the simulator as stalled if floating-point
@@ -5243,14 +5248,15 @@ function advanceAuthoritativeTime(elapsedSec,options){
       simulationAdvanceAutomationTimers(next);
       simulationAdvanceStudyProgress(next);
       if(hitsFarmGrid){
-        nowMs = nextFarmGridMs;
-        nextFarmGridMs += 1000;
+        elapsedInRun = nextFarmGridElapsedSec;
+        nextFarmGridElapsedSec += 1;
       } else {
-        nowMs += next*1000;
+        elapsedInRun += next;
       }
-      remaining = Math.max(0,remaining-next);
+      remaining = Math.max(0,elapsedSec-elapsedInRun);
     }
 
+    nowMs = clockStartMs + elapsedInRun*1000;
     var actions = summary.kills-killsBefore;
     actions += simulationProcessAbilities(nowMs,policy,summary);
     actions += simulationProcessAutoTap(nowMs,policy,summary);
@@ -5260,16 +5266,13 @@ function advanceAuthoritativeTime(elapsedSec,options){
     actions += simulationStartQueuedStudies(summary);
     actions += simulationRecordAchievements(summary);
 
-    if(remaining===remainingBefore && actions===0){
+    if(elapsedInRun===elapsedBefore && actions===0){
       throw new Error('Authoritative simulation stalled without elapsed-time or state progress');
     }
   }
 
   summary.endDepth = state.depth;
   summary.pushDepth = progressionDepth();
-  // Expose the requested endpoint rather than accumulated event-addition
-  // error. Internal Farm anchors above ensure the state itself reaches the
-  // same numerical boundaries before this canonical clock is returned.
   summary.clockEndMs = clockStartMs + elapsedSec*1000;
   return summary;
 }
