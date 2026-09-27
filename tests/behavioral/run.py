@@ -236,6 +236,65 @@ def build_prelude(fixtures):
 
 def build_bridge():
     return r'''
+var qaLifecycleEvents = [];
+function qaLifecycleRecord(type,detail){
+  qaLifecycleEvents.push({
+    type:type,
+    nowMs:Date.now(),
+    detail:detail===undefined ? null : JSON.parse(JSON.stringify(detail))
+  });
+}
+var qaOriginalSaveState = saveState;
+saveState = function(){
+  var beforeLastSeen = state ? state.lastSeen : null;
+  var result = qaOriginalSaveState.apply(this,arguments);
+  qaLifecycleRecord('save',{
+    beforeLastSeen:beforeLastSeen,
+    afterLastSeen:state ? state.lastSeen : null,
+    hidden:document.hidden
+  });
+  return result;
+};
+var qaOriginalEnsureDaily = ensureDaily;
+ensureDaily = function(){
+  var beforeDay = state ? state.questDay : null;
+  var beforeStreak = state ? state.loginStreak : null;
+  var result = qaOriginalEnsureDaily.apply(this,arguments);
+  qaLifecycleRecord('daily',{
+    rolled:!!result,
+    beforeDay:beforeDay,
+    afterDay:state ? state.questDay : null,
+    beforeStreak:beforeStreak,
+    afterStreak:state ? state.loginStreak : null
+  });
+  return result;
+};
+var qaOriginalApplyOfflineProgress = applyOfflineProgress;
+applyOfflineProgress = function(){
+  var before = state ? {
+    lastSeen:state.lastSeen,
+    totalOfflineSeconds:state.totalOfflineSeconds,
+    totalKills:state.totalKills,
+    lumen:state.lumen,
+    shards:state.shards,
+    ascendCount:state.ascendCount
+  } : null;
+  var result = qaOriginalApplyOfflineProgress.apply(this,arguments);
+  qaLifecycleRecord('offline',{
+    before:before,
+    result:result,
+    after:state ? {
+      lastSeen:state.lastSeen,
+      totalOfflineSeconds:state.totalOfflineSeconds,
+      totalKills:state.totalKills,
+      lumen:state.lumen,
+      shards:state.shards,
+      ascendCount:state.ascendCount
+    } : null
+  });
+  return result;
+};
+
 window.__lumenfallQaBridge = {
   getState: function(){ return JSON.parse(JSON.stringify(state)); },
   getFlags: function(){ return {resetInProgress:resetInProgress, resetBootPending:resetBootPending, reloadInProgress:reloadInProgress}; },
@@ -243,6 +302,48 @@ window.__lumenfallQaBridge = {
   rawRecovery: function(){ return localStorage.getItem(RECOVERY_SAVE_KEY); },
   persistenceStatus: function(){ return persistenceStatus(); },
   save: function(){ return saveState(); },
+  clockNow: function(){ return window.__lumenfallQaContext.clockNow(); },
+  advanceTime: function(ms){ return window.__lumenfallQaContext.advanceTime(ms); },
+  setLocalClock: function(year,month,day,hour,minute,second){
+    return window.__lumenfallQaContext.setLocalClock(year,month,day,hour,minute,second);
+  },
+  currentDay: function(){ return window.__lumenfallQaContext.currentDay(); },
+  dispatchVisibility: function(hidden){
+    window.__lumenfallQaContext.setHidden(hidden);
+    document.dispatchEvent(new Event('visibilitychange'));
+    return {
+      hidden:document.hidden,
+      state:JSON.parse(JSON.stringify(state)),
+      trace:JSON.parse(JSON.stringify(qaLifecycleEvents))
+    };
+  },
+  lifecycleTrace: function(){ return JSON.parse(JSON.stringify(qaLifecycleEvents)); },
+  clearLifecycleTrace: function(){ qaLifecycleEvents.length = 0; },
+  applyOfflineNow: function(){ return applyOfflineProgress(); },
+  setLastSeen: function(value){ state.lastSeen=Number(value); return state.lastSeen; },
+  suppressUnloadSave: function(){ reloadInProgress=true; },
+  previewOffline: function(snapshot,seconds,startMs){
+    var previousState = state;
+    var previousDailyReward = pendingDailyReward;
+    try{
+      state = acceptPersistedState(JSON.parse(JSON.stringify(snapshot)),'qa-lifecycle-preview');
+      restoreEnemyOrSpawn();
+      var result = advanceAuthoritativeTime(seconds,{
+        kind:'offline',
+        visual:false,
+        clockStartMs:startMs,
+        captureTimeline:true
+      });
+      return {
+        state:JSON.parse(JSON.stringify(state)),
+        summary:JSON.parse(JSON.stringify(result)),
+        timeline:JSON.parse(JSON.stringify(result.timeline||[]))
+      };
+    } finally {
+      state = previousState;
+      pendingDailyReward = previousDailyReward;
+    }
+  },
   enterFarm: function(){ enterFarmMode(); },
   enterPush: function(){ enterPushMode(); },
   reset: function(){ performReset(); },
