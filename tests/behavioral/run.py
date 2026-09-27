@@ -911,6 +911,84 @@ def build_runner():
   function timelineTypes(result){
     return (result.timeline||[]).map(function(event){ return event.type; });
   }
+  function consumedOfflineEvents(trace){
+    return (trace||[]).filter(function(event){
+      return event.type==='offline' && event.detail && event.detail.result && event.detail.result.effectiveSec>0;
+    });
+  }
+  function assertOfflineExactlyOnce(trace,expectedSec,label){
+    var consumed = consumedOfflineEvents(trace);
+    assert(consumed.length===1,label+' must consume exactly one offline window, got '+consumed.length);
+    parityApprox(consumed[0].detail.result.effectiveSec,expectedSec,label+' effective offline seconds');
+    parityApprox(consumed[0].detail.result.elapsedSec,expectedSec,label+' elapsed offline seconds');
+    return consumed[0];
+  }
+  function assertLifecycleState(actual,expected,label){
+    assertProtectedParity(actual,expected,label);
+    ['researchQueue','studyQueue','owned','questIds','questClaimed'].forEach(function(key){
+      assertJsonEqual(actual[key],expected[key],label+' '+key);
+    });
+    parityApprox(actual.totalOfflineSeconds,expected.totalOfflineSeconds,label+' totalOfflineSeconds');
+    parityApprox(actual.lastSeen,expected.lastSeen,label+' lastSeen');
+    assert(actual.schemaVersion===1,label+' must preserve save schema v1');
+  }
+  function expectedLifecycleState(baseline,seconds,startMs){
+    var preview = window.__lumenfallQaBridge.previewOffline(baseline,seconds,startMs);
+    preview.state.totalOfflineSeconds = baseline.totalOfflineSeconds + seconds;
+    preview.state.lastSeen = startMs + seconds*1000;
+    return preview;
+  }
+  function assertResumeOrdering(trace,startMs,endMs,label){
+    var hideSave = trace.findIndex(function(event){
+      return event.type==='save' && event.nowMs===startMs && event.detail && event.detail.hidden===true;
+    });
+    var daily = trace.findIndex(function(event){ return event.type==='daily' && event.nowMs===endMs; });
+    var offline = trace.findIndex(function(event){
+      return event.type==='offline' && event.nowMs===endMs && event.detail && event.detail.result;
+    });
+    var resumeSave = trace.findIndex(function(event){
+      return event.type==='save' && event.nowMs===endMs && event.detail && event.detail.hidden===false;
+    });
+    assert(hideSave!==-1,label+' must save on background');
+    assert(daily>hideSave,label+' daily check must occur after background save');
+    assert(offline>daily,label+' offline simulation must occur after daily check');
+    assert(resumeSave>offline,label+' resume save must occur after offline simulation');
+  }
+  function runResumeWindow(seconds,label){
+    var lifecycleBridge = window.__lumenfallQaBridge;
+    var startMs = lifecycleBridge.clockNow();
+    var baseline = state();
+    assert(
+      Math.abs(baseline.lastSeen-startMs)<=1,
+      label+' must start with lastSeen owned by the current foreground timestamp'
+    );
+    var expected = expectedLifecycleState(baseline,seconds,startMs);
+    lifecycleBridge.clearLifecycleTrace();
+    lifecycleBridge.dispatchVisibility(true);
+    lifecycleBridge.advanceTime(seconds*1000);
+    var endMs = lifecycleBridge.clockNow();
+    lifecycleBridge.dispatchVisibility(false);
+    var actual = state();
+    assertLifecycleState(actual,expected.state,label);
+    var trace = lifecycleBridge.lifecycleTrace();
+    assertOfflineExactlyOnce(trace,seconds,label);
+    assertResumeOrdering(trace,startMs,endMs,label);
+
+    var beforeDuplicate = cloneJson(actual);
+    lifecycleBridge.dispatchVisibility(false);
+    var afterDuplicate = state();
+    assertLifecycleState(afterDuplicate,beforeDuplicate,label+' duplicate visible signal');
+    assertOfflineExactlyOnce(lifecycleBridge.lifecycleTrace(),seconds,label+' duplicate visible signal');
+
+    return {
+      startMs:startMs,
+      endMs:endMs,
+      baseline:baseline,
+      expected:expected,
+      actual:actual,
+      trace:lifecycleBridge.lifecycleTrace()
+    };
+  }
   var FORMULA_WISP_IDS = ['ember','tide','stone','gale','thorn','void','aurora','titan'];
   function cleanFormulaState(activeIds){
     var out = cloneJson(state());
