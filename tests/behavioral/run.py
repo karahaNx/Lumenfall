@@ -788,8 +788,9 @@ def build_runner():
     return out;
   }
   function formulaSnapshotFor(snapshot,id,depth,buffMult){
-    bridge.setState(snapshot);
-    return bridge.wispFormulaSnapshot(id,depth,buffMult);
+    var formulaBridge = window.__lumenfallQaBridge;
+    formulaBridge.setState(snapshot);
+    return formulaBridge.wispFormulaSnapshot(id,depth,buffMult);
   }
 
   function assertFresh(s){
