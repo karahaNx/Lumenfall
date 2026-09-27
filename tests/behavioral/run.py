@@ -20,6 +20,9 @@ SCENARIOS = {
     "layout-fresh": "fresh",
     "layout-dense": "layout-dense",
     "layout-boss": "layout-dense-boss",
+    "layout-accessibility-states": "accessibility-mixed-states",
+    "p1-05-accessibility-baseline": "accessibility-mixed-states",
+    "p1-05-reduced-motion": "accessibility-mixed-states",
     "fresh-load": "fresh",
     "midgame-load": "mid-game",
     "mature-load": "mature-high-power",
@@ -56,8 +59,14 @@ SCENARIOS = {
     "wisp-formula-contract": "fresh",
 }
 
+PREP_SCENARIOS = {
+    "p1-05-accessibility-contract": "accessibility-mixed-states",
+}
+
 NEGATIVE_SCENARIOS = {
     "self-test-layout-collapse": "layout-dense-boss",
+    "self-test-p1-05-selected": "accessibility-mixed-states",
+    "self-test-p1-05-focus-return": "accessibility-mixed-states",
     "self-test-bad-assertion": "fresh",
     "self-test-uncaught-error": "fresh",
     "self-test-unhandled-rejection": "fresh",
@@ -1577,6 +1586,34 @@ def build_runner():
           return;
         }
 
+        case 'p1-05-accessibility-baseline': {
+          var accessibilityAudit = window.P105AccessibilityQa.runAudit(bridge,ctx,assert);
+          finish('pass',accessibilityAudit);
+          return;
+        }
+
+        case 'p1-05-accessibility-contract': {
+          var accessibilityContract = window.P105AccessibilityQa.runAcceptance(bridge,ctx,assert);
+          finish('pass',accessibilityContract);
+          return;
+        }
+
+        case 'p1-05-reduced-motion': {
+          var reducedMotion = window.P105AccessibilityQa.runReducedMotion(bridge,ctx,assert);
+          finish('pass',reducedMotion);
+          return;
+        }
+
+        case 'self-test-p1-05-selected':
+          window.P105AccessibilityQa.negativeSelected(assert);
+          finish('pass',{unexpected:'selected semantics regression was not detected'});
+          return;
+
+        case 'self-test-p1-05-focus-return':
+          window.P105AccessibilityQa.negativeFocusReturn(assert);
+          finish('pass',{unexpected:'focus-return regression was not detected'});
+          return;
+
         case 'self-test-bad-assertion':
           assert(s.depth===999999,'intentional harness self-test assertion');
           finish('pass');
@@ -1658,7 +1695,13 @@ def instrument_html(source, fixtures):
 
     if source.count("</body>") != 1:
         raise SystemExit("Behavioral QA failed: expected exactly one </body> marker")
-    source = source.replace("</body>", "<script>" + (ROOT / "layout.js").read_text(encoding="utf-8") + "</script>" + build_runner() + "\n</body>", 1)
+    source = source.replace(
+        "</body>",
+        "<script>" + (ROOT / "layout.js").read_text(encoding="utf-8") + "</script>" +
+        "<script>" + (ROOT / "accessibility.js").read_text(encoding="utf-8") + "</script>" +
+        build_runner() + "\n</body>",
+        1,
+    )
     return source
 
 
@@ -1705,6 +1748,8 @@ def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
             "--dump-dom",
             url,
         ]
+        if scenario == "p1-05-reduced-motion":
+            command.insert(-1, "--force-prefers-reduced-motion")
         completed = subprocess.run(command, capture_output=True, text=True, timeout=25)
         dom = completed.stdout
         stderr = completed.stderr
@@ -1722,7 +1767,7 @@ def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
 
     if passed:
         print(f"PASS {scenario}" + (f" {viewport}" if viewport else ""))
-        if result_text and (viewport or scenario == "parity-long-high-power" or scenario.startswith("chronology-")):
+        if result_text and (viewport or scenario == "parity-long-high-power" or scenario.startswith("chronology-") or scenario.startswith("p1-05-")):
             try:
                 payload = json.loads(html_lib.unescape(re.sub(r'<[^>]+>', '', result_text.group(1))).strip())
                 print("  detail: " + json.dumps(payload.get("detail"), sort_keys=True))
@@ -1750,7 +1795,7 @@ def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
 def main():
     parser = argparse.ArgumentParser(description="Lumenfall stateful browser regression harness")
     parser.add_argument("--web-root", default="mobile/www", help="staged web root containing index.html")
-    parser.add_argument("--scenario", choices=sorted(set(SCENARIOS) | set(NEGATIVE_SCENARIOS)))
+    parser.add_argument("--scenario", choices=sorted(set(SCENARIOS) | set(PREP_SCENARIOS) | set(NEGATIVE_SCENARIOS)))
     args = parser.parse_args()
 
     web_root = Path(args.web_root).resolve()
@@ -1761,7 +1806,8 @@ def main():
     fixtures = load_fixtures()
     chrome = find_chrome()
 
-    selected = {args.scenario: (SCENARIOS | NEGATIVE_SCENARIOS)[args.scenario]} if args.scenario else SCENARIOS
+    all_scenarios = SCENARIOS | PREP_SCENARIOS | NEGATIVE_SCENARIOS
+    selected = {args.scenario: all_scenarios[args.scenario]} if args.scenario else SCENARIOS
 
     with tempfile.TemporaryDirectory(prefix="lumenfall-behavioral-") as td:
         stage = Path(td) / "www"
