@@ -1607,6 +1607,300 @@ def build_runner():
           return;
         }
 
+        case 'lifecycle-background-resume': {
+          var resume = runResumeWindow(30,'background/resume');
+          assert(resume.actual.totalKills>resume.baseline.totalKills,'background/resume must advance combat');
+          assert(resume.actual.lumen>resume.baseline.lumen,'background/resume must advance offline economy');
+          assert(resume.actual.lastSeen===resume.endMs,'resume save must own the consumed window endpoint');
+          finish('pass',{
+            elapsedSec:30,
+            kills:resume.actual.totalKills-resume.baseline.totalKills,
+            lumen:resume.actual.lumen-resume.baseline.lumen,
+            offlineApplications:consumedOfflineEvents(resume.trace).length,
+            lastSeen:resume.actual.lastSeen
+          });
+          return;
+        }
+
+        case 'lifecycle-repeated-resume': {
+          var windows = [15,25,40];
+          var initialOffline = s.totalOfflineSeconds;
+          var previousLastSeen = s.lastSeen;
+          var cycleDetails = [];
+          windows.forEach(function(seconds,index){
+            var cycle = runResumeWindow(seconds,'resume cycle '+(index+1));
+            assert(cycle.actual.lastSeen>previousLastSeen,'resume cycle timestamps must be monotonic');
+            previousLastSeen = cycle.actual.lastSeen;
+            cycleDetails.push({
+              seconds:seconds,
+              kills:cycle.actual.totalKills-cycle.baseline.totalKills,
+              lastSeen:cycle.actual.lastSeen
+            });
+          });
+          s=state();
+          parityApprox(
+            s.totalOfflineSeconds,
+            initialOffline+windows.reduce(function(sum,value){ return sum+value; },0),
+            'repeated resume total offline seconds'
+          );
+          finish('pass',{cycles:cycleDetails,totalOfflineSeconds:s.totalOfflineSeconds});
+          return;
+        }
+
+        case 'lifecycle-cold-restart': {
+          var coldKey = 'lumenfall_qa_expected_'+ctx.scenario;
+          if(phase()===0){
+            var coldStart = bridge.clockNow();
+            var coldExpected = expectedLifecycleState(s,45,coldStart);
+            localStorage.setItem(coldKey,JSON.stringify(coldExpected));
+            bridge.save();
+            bridge.advanceTime(45000);
+            nextPhase(1);
+            bridge.suppressUnloadSave();
+            location.reload();
+            return;
+          }
+          var expectedCold = JSON.parse(localStorage.getItem(coldKey));
+          assert(expectedCold && expectedCold.state,'cold restart expected snapshot must persist across reload');
+          assertLifecycleState(state(),expectedCold.state,'cold restart');
+          var coldTrace = bridge.lifecycleTrace();
+          assertOfflineExactlyOnce(coldTrace,45,'cold restart');
+          var coldDailyIndex = coldTrace.findIndex(function(event){ return event.type==='daily'; });
+          var coldOfflineIndex = coldTrace.findIndex(function(event){ return event.type==='offline' && event.detail && event.detail.result; });
+          var coldSaveIndex = coldTrace.findIndex(function(event){ return event.type==='save' && event.nowMs===bridge.clockNow(); });
+          assert(coldDailyIndex!==-1 && coldOfflineIndex>coldDailyIndex && coldSaveIndex>coldOfflineIndex,'cold-start order must be daily -> offline -> save');
+          var beforeColdVisible = cloneJson(state());
+          bridge.dispatchVisibility(false);
+          assertLifecycleState(state(),beforeColdVisible,'cold restart stray visible signal');
+          assertOfflineExactlyOnce(bridge.lifecycleTrace(),45,'cold restart stray visible signal');
+          assert(JSON.parse(bridge.rawSave()).schemaVersion===1,'cold restart must preserve canonical primary schema');
+          assert(JSON.parse(bridge.rawRecovery()).schemaVersion===1,'cold restart must preserve bounded recovery schema');
+          finish('pass',{
+            elapsedSec:45,
+            offlineApplications:consumedOfflineEvents(bridge.lifecycleTrace()).length,
+            totalOfflineSeconds:state().totalOfflineSeconds,
+            lastSeen:state().lastSeen
+          });
+          return;
+        }
+
+        case 'lifecycle-partial-enemy': {
+          var partial = runResumeWindow(10,'partial enemy resume');
+          assert(partial.baseline.enemyDepth===3 && partial.baseline.enemyHp<partial.baseline.enemyMaxHp,'partial fixture must begin with damaged enemy');
+          assert(partial.expected.summary.kills===1,'partial fixture must kill exactly the damaged enemy once');
+          assert(partial.actual.totalKills===partial.baseline.totalKills+1,'damaged enemy reward/death must occur exactly once');
+          assert(partial.actual.enemyDepth===partial.expected.state.enemyDepth,'next enemy depth must match authoritative simulation');
+          assert(partial.actual.enemyHp>0 && partial.actual.enemyHp<partial.actual.enemyMaxHp,'offline remainder must continue into the deterministic next enemy');
+          parityApprox(
+            partial.actual.lumen-partial.baseline.lumen,
+            partial.expected.state.lumen-partial.baseline.lumen,
+            'partial enemy reward'
+          );
+          finish('pass',{
+            startHp:partial.baseline.enemyHp,
+            endDepth:partial.actual.enemyDepth,
+            endHp:partial.actual.enemyHp,
+            kills:partial.actual.totalKills-partial.baseline.totalKills
+          });
+          return;
+        }
+
+        case 'lifecycle-boss-retry': {
+          var bossLife = runResumeWindow(120,'boss retreat/Farm/retry lifecycle');
+          var retreat = firstTimelineEvent(bossLife.expected,'bossRetreat');
+          var retry = firstTimelineEvent(bossLife.expected,'bossRetry');
+          assert(retreat && retry,'lifecycle Boss reference must retreat and retry');
+          assert(bossLife.expected.summary.retreats===1,'Boss lifecycle fixture must retreat exactly once');
+          assert(bossLife.expected.summary.retries>=1,'Boss lifecycle fixture must retry after Farm progression');
+          assert(bossLife.expected.summary.bossKills>=1,'Boss lifecycle fixture must defeat the retried Boss');
+          assert(
+            bossLife.actual.sigils-bossLife.baseline.sigils===bossLife.expected.summary.sigilsGained,
+            'Boss Sigils must be awarded exactly once'
+          );
+          assert(
+            bossLife.actual.totalKills-bossLife.baseline.totalKills===bossLife.expected.summary.kills,
+            'Farm and Boss kills must match the authoritative offline window exactly'
+          );
+          finish('pass',{
+            retreatSec:retreat.elapsedSec,
+            retrySec:retry.elapsedSec,
+            bossKills:bossLife.expected.summary.bossKills,
+            farmAndBossKills:bossLife.expected.summary.kills,
+            sigils:bossLife.expected.summary.sigilsGained
+          });
+          return;
+        }
+
+        case 'lifecycle-auto-ascend': {
+          var ascendLife = runResumeWindow(30,'Auto-Ascend offline lifecycle');
+          var ascendEvent = firstTimelineEvent(ascendLife.expected,'autoAscend');
+          assert(ascendEvent && ascendEvent.elapsedSec>0 && ascendEvent.elapsedSec<30,'Auto-Ascend must occur chronologically inside the offline window');
+          assert(ascendLife.expected.summary.ascends===1,'Auto-Ascend fixture must ascend exactly once');
+          assert(ascendLife.actual.ascendCount===ascendLife.baseline.ascendCount+1,'resume must apply exactly one Ascend');
+          assert(ascendLife.actual.prisms===ascendLife.expected.state.prisms,'Ascend reward must not duplicate');
+          assert(
+            ascendLife.actual.totalKills>ascendLife.baseline.totalKills,
+            'remaining offline time must continue from the post-Ascend state'
+          );
+          finish('pass',{
+            ascendSec:ascendEvent.elapsedSec,
+            ascendCount:ascendLife.actual.ascendCount,
+            prisms:ascendLife.actual.prisms,
+            finalDepth:ascendLife.actual.depth
+          });
+          return;
+        }
+
+        case 'lifecycle-long-study': {
+          var studyKey = 'lumenfall_qa_expected_'+ctx.scenario;
+          if(phase()===0){
+            var studyStartMs = bridge.clockNow();
+            var studyExpected = expectedLifecycleState(s,60,studyStartMs);
+            localStorage.setItem(studyKey,JSON.stringify(studyExpected));
+            bridge.save();
+            bridge.advanceTime(60000);
+            nextPhase(1);
+            bridge.suppressUnloadSave();
+            location.reload();
+            return;
+          }
+          var expectedStudy = JSON.parse(localStorage.getItem(studyKey));
+          assertLifecycleState(state(),expectedStudy.state,'Long Study cold restart');
+          assertOfflineExactlyOnce(bridge.lifecycleTrace(),60,'Long Study cold restart');
+          var completion = firstTimelineEvent(expectedStudy,'studyComplete');
+          var queuedStart = firstTimelineEvent(expectedStudy,'studyStart');
+          assert(completion && queuedStart,'Long Study lifecycle must complete and start the queued Study');
+          parityApprox(completion.elapsedSec,10,'Long Study lifecycle completion time');
+          parityApprox(queuedStart.elapsedSec,completion.elapsedSec,'queued Study start time');
+          assert(state().longStudyLevels.wispascend===1,'completed Long Study effect must apply once');
+          assert(
+            state().activeStudies.some(function(active){ return active.id==='guardmastery'; }),
+            'next queued Study must survive/restart through the cold lifecycle'
+          );
+          var studyBeforeVisible = cloneJson(state());
+          bridge.dispatchVisibility(false);
+          assertLifecycleState(state(),studyBeforeVisible,'Long Study duplicate visible signal');
+          finish('pass',{
+            completionSec:completion.elapsedSec,
+            started:queuedStart.detail && queuedStart.detail.ids,
+            level:state().longStudyLevels.wispascend
+          });
+          return;
+        }
+
+        case 'lifecycle-lab-queue': {
+          var labKey = 'lumenfall_qa_expected_'+ctx.scenario;
+          if(phase()===0){
+            var labStartMs = bridge.clockNow();
+            var labExpected = expectedLifecycleState(s,60,labStartMs);
+            localStorage.setItem(labKey,JSON.stringify(labExpected));
+            bridge.save();
+            bridge.advanceTime(60000);
+            nextPhase(1);
+            bridge.suppressUnloadSave();
+            location.reload();
+            return;
+          }
+          var expectedLab = JSON.parse(localStorage.getItem(labKey));
+          assertLifecycleState(state(),expectedLab.state,'Lab queue cold restart');
+          assertOfflineExactlyOnce(bridge.lifecycleTrace(),60,'Lab queue cold restart');
+          var researchEvent = firstTimelineEvent(expectedLab,'research');
+          assert(researchEvent && researchEvent.elapsedSec>0 && researchEvent.elapsedSec<60,'queued Research must purchase chronologically during cold offline time');
+          assert(state().research.formation===1,'queued Formation Research must purchase exactly once');
+          assert(state().researchQueue.formation===true,'Research queue enablement must survive save/reload');
+          parityApprox(state().lumen,expectedLab.state.lumen,'Research lifecycle Lumen spending');
+          parityApprox(state().shards,expectedLab.state.shards,'Research lifecycle Shard spending');
+          var labBeforeVisible = cloneJson(state());
+          bridge.dispatchVisibility(false);
+          assertLifecycleState(state(),labBeforeVisible,'Lab queue duplicate visible signal');
+          finish('pass',{
+            purchaseSec:researchEvent.elapsedSec,
+            formationLevel:state().research.formation,
+            lumen:state().lumen,
+            shards:state().shards
+          });
+          return;
+        }
+
+        case 'lifecycle-daily-rollover': {
+          var dailyStateKey = 'lumenfall_qa_daily_'+ctx.scenario;
+          if(phase()===0){
+            var day0 = bridge.currentDay();
+            var startComets = s.comets;
+            assert(s.questDay===day0 && s.loginStreak===3,'daily fixture must begin on its seeded day/streak');
+            bridge.clearLifecycleTrace();
+            bridge.dispatchVisibility(true);
+            bridge.advanceTime(20000);
+            bridge.dispatchVisibility(false);
+            var afterFirstDay = state();
+            var day1 = bridge.currentDay();
+            assert(day1!==day0,'deterministic clock must cross a local day boundary');
+            assert(afterFirstDay.questDay===day1,'daily rollover must claim the new day exactly once');
+            assert(afterFirstDay.loginStreak===4,'daily streak must advance exactly once');
+            assert(afterFirstDay.comets===startComets+16,'Day 4 login reward must apply exactly once');
+            assert(Object.keys(afterFirstDay.questClaimed).length===0,'daily claimed quests must reset on rollover');
+            assert(afterFirstDay.questIds.length===3,'daily rollover must select three eligible quests');
+            var firstDailyRolls = bridge.lifecycleTrace().filter(function(event){
+              return event.type==='daily' && event.detail && event.detail.rolled;
+            });
+            assert(firstDailyRolls.length===1,'first daily boundary must roll exactly once');
+            assertOfflineExactlyOnce(bridge.lifecycleTrace(),20,'first daily rollover offline window');
+
+            var firstSnapshot = cloneJson(afterFirstDay);
+            bridge.dispatchVisibility(false);
+            assertLifecycleState(state(),firstSnapshot,'same-day duplicate visible after daily rollover');
+            assert(state().comets===startComets+16 && state().loginStreak===4,'duplicate visible must not duplicate daily reward');
+
+            localStorage.setItem(dailyStateKey,JSON.stringify({
+              day:day1,
+              comets:state().comets,
+              streak:state().loginStreak
+            }));
+            bridge.save();
+            nextPhase(1);
+            location.reload();
+            return;
+          }
+
+          var persistedDaily = JSON.parse(localStorage.getItem(dailyStateKey));
+          assert(state().questDay===persistedDaily.day,'same-day reload must keep the rolled quest day');
+          assert(state().comets===persistedDaily.comets,'same-day reload must not repeat login reward');
+          assert(state().loginStreak===persistedDaily.streak,'same-day reload must not advance streak again');
+          var initDailyRolls = bridge.lifecycleTrace().filter(function(event){
+            return event.type==='daily' && event.detail && event.detail.rolled;
+          });
+          assert(initDailyRolls.length===0,'same-day cold reload must not roll daily state again');
+          assert(consumedOfflineEvents(bridge.lifecycleTrace()).length===0,'same-time cold reload must not consume another offline window');
+
+          bridge.setLocalClock(2035,0,16,23,59,50);
+          bridge.save();
+          bridge.clearLifecycleTrace();
+          var beforeSecondBoundary = state();
+          bridge.dispatchVisibility(true);
+          bridge.advanceTime(20000);
+          bridge.dispatchVisibility(false);
+          var afterSecondBoundary = state();
+          assert(afterSecondBoundary.questDay===bridge.currentDay(),'second deterministic boundary must update quest day');
+          assert(afterSecondBoundary.loginStreak===beforeSecondBoundary.loginStreak+1,'next real day must advance streak once');
+          assert(afterSecondBoundary.comets===beforeSecondBoundary.comets+20,'Day 5 login reward must apply once');
+          var secondDailyRolls = bridge.lifecycleTrace().filter(function(event){
+            return event.type==='daily' && event.detail && event.detail.rolled;
+          });
+          assert(secondDailyRolls.length===1,'second daily boundary must roll exactly once');
+          assertOfflineExactlyOnce(bridge.lifecycleTrace(),20,'second daily rollover offline window');
+          var secondSnapshot = cloneJson(afterSecondBoundary);
+          bridge.dispatchVisibility(false);
+          assertLifecycleState(state(),secondSnapshot,'second daily duplicate visible');
+          assert(state().comets===secondSnapshot.comets,'second daily duplicate visible must not repeat reward');
+          finish('pass',{
+            firstDay:persistedDaily.day,
+            secondDay:afterSecondBoundary.questDay,
+            streak:afterSecondBoundary.loginStreak,
+            comets:afterSecondBoundary.comets
+          });
+          return;
+        }
+
         case 'wisp-formula-contract': {
           var formulaBase = cleanFormulaState(['ember']);
           var emberBase = formulaSnapshotFor(formulaBase,'ember',10,1);
@@ -1846,6 +2140,19 @@ def build_runner():
             'intentional chronology regression: Study incorrectly expected before Research'
           );
           finish('pass',{unexpected:'chronology ordering regression was not detected'});
+          return;
+        }
+
+        case 'self-test-lifecycle-duplicate': {
+          var duplicateProbe = runResumeWindow(20,'lifecycle duplicate negative control');
+          bridge.setLastSeen(duplicateProbe.startMs);
+          bridge.applyOfflineNow();
+          assertOfflineExactlyOnce(
+            bridge.lifecycleTrace(),
+            20,
+            'intentional duplicate lifecycle regression'
+          );
+          finish('pass',{unexpected:'duplicate offline application was not detected'});
           return;
         }
 
