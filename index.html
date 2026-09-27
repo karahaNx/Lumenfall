@@ -91,6 +91,8 @@
     border-right:1px solid var(--line);
   }
 
+  :root{--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);--nav-height:54px;}
+
   /* ---------- HUD ---------- */
   .topbar{position:sticky;top:0;z-index:6;}
   .hud{
@@ -152,7 +154,6 @@
   .buy-btn .label{font-size:.6rem;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.04em;}
   .buy-btn:disabled{opacity:.4;cursor:not-allowed;}
   .lock-note{font-size:.72rem;color:var(--ink-dim);font-style:italic;}
-  .cost-icon{width:9px;height:9px;flex:none;display:inline-block;}
 
   /* ---------- Battle stage ---------- */
   .stage{padding:16px 14px;display:flex;flex-direction:column;gap:10px;}
@@ -315,7 +316,7 @@
 
   /* ---------- Research / Ascend node cards ---------- */
   .node-card{display:flex;gap:12px;align-items:center;margin-bottom:10px;}
-  .node-card .shape{width:30px;height:30px;}
+  .node-card > .shape{width:30px;height:30px;}
   .node-info .name{font-weight:700;font-size:.86rem;}
   .node-info .desc{font-size:.72rem;color:var(--ink-dim);margin-top:1px;}
   .node-info .lvl{font-size:.68rem;font-weight:700;margin-top:2px;}
@@ -630,7 +631,7 @@
     text-transform:uppercase;color:rgba(199,196,221,.66);
   }
   .startup-skip{
-    position:absolute;left:0;right:0;bottom:calc(17px + env(safe-area-inset-bottom));
+    position:absolute;left:0;right:0;bottom:calc(17px + var(--safe-bottom));
     text-align:center;font-size:.55rem;font-weight:700;letter-spacing:.17em;text-transform:uppercase;
     color:rgba(202,198,220,.36);opacity:0;animation:skipIn .5s .75s ease forwards;
   }
@@ -652,10 +653,11 @@
 
   /* ---------- Toast ---------- */
   .toast{
-    position:fixed;left:50%;bottom:22px;transform:translate(-50%,8px);z-index:15;
+    position:fixed;left:50%;bottom:calc(var(--nav-height) + var(--safe-bottom) + 8px);transform:translate(-50%,8px);z-index:15;
     background:var(--ink);color:var(--bg);font-size:.76rem;font-weight:600;
     padding:8px 14px;border-radius:999px;opacity:0;pointer-events:none;
-    transition:opacity .2s ease, transform .2s ease;max-width:80%;text-align:center;
+    transition:opacity .2s ease, transform .2s ease;width:max-content;max-width:min(460px,calc(100% - 32px));text-align:center;
+    line-height:16px;border-radius:12px;
   }
   .toast.show{opacity:1;transform:translate(-50%,0);}
 
@@ -700,7 +702,7 @@
     box-shadow:0 0 70px -50px color-mix(in srgb,var(--prism) 55%,transparent);
   }
   .hud{
-    padding:calc(10px + env(safe-area-inset-top)) 12px 9px;
+    padding:calc(10px + var(--safe-top)) 12px 9px;
     background:color-mix(in srgb,var(--bg-elev) 88%,transparent);
     border-color:var(--soft-line);
     backdrop-filter:blur(18px) saturate(1.18);
@@ -741,7 +743,7 @@
   nav.tabbar button.active .ic{box-shadow:0 0 16px color-mix(in srgb,var(--lumen) 48%,transparent);}
 
   main{
-    padding:16px 12px calc(28px + env(safe-area-inset-bottom));
+    padding:16px 12px calc(28px + var(--safe-bottom));
   }
   .tab-panel.active{animation:panelIn .22s ease-out;}
   @keyframes panelIn{from{opacity:0;transform:translateY(7px) scale(.995);}to{opacity:1;transform:none;}}
@@ -1103,10 +1105,10 @@
     box-shadow:0 30px 80px -30px rgba(0,0,0,.55),var(--inner-highlight);
   }
   .settings-head{
-    padding-top:calc(12px + env(safe-area-inset-top));
+    padding-top:calc(12px + var(--safe-top));
     background:color-mix(in srgb,var(--bg-elev) 75%,transparent);backdrop-filter:blur(12px);
   }
-  .settings-scroll{padding-bottom:calc(16px + env(safe-area-inset-bottom));}
+  .settings-scroll{padding-bottom:calc(16px + var(--safe-bottom));}
   .settings-row,.ency-card{
     border-color:var(--soft-line);
     background:linear-gradient(150deg,color-mix(in srgb,var(--bg-elev-2) 88%,transparent),color-mix(in srgb,var(--bg-elev) 92%,transparent));
@@ -1208,9 +1210,9 @@
   .settings-row{min-height:56px;}
   .settings-overlay{
     padding:
-      max(10px,env(safe-area-inset-top))
+      max(10px,var(--safe-top))
       max(10px,env(safe-area-inset-right))
-      max(10px,env(safe-area-inset-bottom))
+      max(10px,var(--safe-bottom))
       max(10px,env(safe-area-inset-left));
   }
   .settings-modal{height:min(92dvh,760px);}
@@ -1222,7 +1224,7 @@
   .tab-panel{contain:layout style;}
   .enemy-stage,.hero-chip,.hero-card{will-change:auto;}
   @media (max-height:650px){
-    .hud{padding-top:calc(7px + env(safe-area-inset-top));padding-bottom:6px;}
+    .hud{padding-top:calc(7px + var(--safe-top));padding-bottom:6px;}
     nav.tabbar button{min-height:45px;padding-top:6px;padding-bottom:5px;}
     main{padding-top:10px;}
     .enemy-stage{width:136px;height:136px;}
@@ -1262,7 +1264,7 @@
     -webkit-overflow-scrolling:touch;
     scrollbar-width:none;
     padding-bottom:16px;
-    margin-bottom:calc(54px + env(safe-area-inset-bottom));
+    margin-bottom:calc(var(--nav-height) + var(--safe-bottom));
   }
   main::-webkit-scrollbar{display:none;}
   /* Push is a single-screen combat view: never allow vertical drift/scroll. */
@@ -1284,7 +1286,7 @@
     bottom:0;
     transform:translateX(-50%);
     width:min(500px,100%);
-    padding-bottom:env(safe-area-inset-bottom);
+    padding-bottom:var(--safe-bottom);
     border-top:1px solid var(--soft-line,var(--line));
     border-bottom:none;
     box-shadow:0 -12px 34px -28px rgba(0,0,0,.72);
@@ -1308,7 +1310,8 @@
   }
 
   @media (max-height:650px){
-    main{padding-bottom:10px;margin-bottom:calc(48px + env(safe-area-inset-bottom));}
+    :root{--nav-height:48px;}
+    main{padding-bottom:10px;}
     nav.tabbar button{min-height:48px;}
   }
 
@@ -1645,25 +1648,64 @@
   @keyframes creatureFloat{0%,100%{transform:translateY(2px) rotate(-1deg);}50%{transform:translateY(-6px) rotate(1deg);}}
   @keyframes creatureStrike{0%{transform:scale(.88) rotate(-4deg);filter:brightness(1.7);}100%{transform:scale(1);filter:brightness(1);}}
   @keyframes dustRise{0%{transform:translate3d(0,15px,0);opacity:0;}30%,65%{opacity:.6;}100%{transform:translate3d(12px,-70px,0);opacity:0;}}
-  @media(max-height:730px){
-    #tab-battle .stage{padding:9px 10px 8px;gap:6px;}
-    .stage .depth-label{font-size:.95rem;}
-    .stage .rift-mode-btn{min-height:30px;padding:6px;}
-    .stage .rift-objective{min-height:34px;padding:4px 7px 6px;}
-    .stage .enemy-name{font-size:.8rem;margin:0 0 -5px;}
-    .stage .wisp-portrait{width:22px;height:22px;}
-    .stage .hero-chip{padding:3px 2px;gap:1px;}
-    .stage .stat-box{padding:5px 8px;}
-    .stage .tap-hint{font-size:.53rem;}
-  }
-  @media(max-height:580px){
-    #tab-battle .stage{gap:4px;padding:6px 9px;}
-    .stage .depth-label{font-size:.85rem;}.stage .depth-label .region-label{font-size:.48rem;margin:0;}
-    .stage .rift-mode-btn{min-height:27px;padding:4px;}.stage .tap-hint{display:none!important;}
-    .stage .rift-objective{min-height:29px;}.stage .objective-copy small{display:none;}
-    .stage .hero-chip{flex-direction:row;width:auto;flex:1;justify-content:center;flex-wrap:wrap;}
-    .stage .hero-chip .chip-label,.stage .hero-chip .chip-bar-track{display:none;}
-    .stage .wisp-portrait{width:19px;height:19px;}.stage .boss-regen-tag{font-size:.51rem;padding:3px;}
+  .cost-icon,.shape.cost-icon{width:.85em;height:.85em;min-width:.85em;max-width:.85em;flex:none;display:inline-block;vertical-align:-.05em;}
+
+  /* P1-04: fixed HUD tracks and bounded Rift chrome protect the interaction region.
+     Secondary content lives in the independently scrollable details dialog. */
+  .hud{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:calc(4px + var(--safe-top)) 10px 4px;}
+  .hud-title-row{grid-column:1/-1;height:44px;margin:0;}
+  .settings-btn{width:44px;height:44px;}
+  .hud .chip{display:grid;grid-template-columns:12px minmax(0,1fr);grid-template-rows:12px 14px;column-gap:4px;row-gap:0;height:34px;padding:3px 7px;}
+  .hud .chip .glyph-icon{width:11px;height:11px;}
+  .hud .chip .lbl{font-size:10px;line-height:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .hud .chip .val{grid-column:1/-1;font-size:12px;line-height:14px;min-width:0;}
+  nav.tabbar button{height:var(--nav-height);min-height:var(--nav-height);padding:4px 2px;}
+  nav.tabbar .lb{font-size:10px;}
+  main.rift-scroll-locked{padding:6px 10px;}
+  #tab-battle .stage{padding:8px 10px;gap:4px!important;}
+  .rift-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;flex:none;height:44px;}
+  .stage .depth-label{min-width:0;font-size:16px;letter-spacing:.02em;text-align:left;}
+  .stage .depth-label .region-label{font-size:10px;line-height:14px;letter-spacing:.04em;white-space:nowrap;}
+  .rift-details-btn{flex:none;min-width:90px;min-height:44px;border:1px solid #4f5975;border-radius:10px;background:#1c2339;color:#f0effb;font:600 12px 'Manrope',sans-serif;}
+  .rift-details-btn span{display:block;font-size:10px;font-weight:400;color:#b5c6dc;}
+  .stage .rift-mode-row{height:44px;min-height:44px;padding:0;}
+  .stage .rift-mode-btn{min-height:44px;font-size:12px;padding:6px;letter-spacing:.03em;white-space:nowrap;}
+  .stage .rift-objective{height:48px;min-height:48px;padding:5px 8px;grid-template-columns:minmax(0,1fr) auto;gap:4px;}
+  .stage .objective-kind{display:none;} /* Mode/title already convey the kind; retain full explanation in Details. */
+  .stage .objective-copy strong{font-size:13px;line-height:18px;}
+  .stage .objective-copy small{font-size:11px;line-height:16px;}
+  .stage .enemy-name{font-size:14px;line-height:20px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .stage .battle-row{min-height:156px;gap:0;margin:0;}
+  .stage .enemy-stage-wrap{min-height:156px;gap:4px;}
+  .stage .enemy-stage{min-height:120px;overflow:hidden;}
+  .guardian-label{position:absolute;bottom:4px;z-index:3;font-size:11px;line-height:16px;color:#eee1c3;pointer-events:none;text-shadow:0 1px 4px #000;}
+  .stage .hp-wrap{width:100%;max-width:340px;height:32px;}
+  .stage .hp-text{font-size:12px;line-height:18px;margin-top:4px;white-space:nowrap;}
+  .stage .stat-row{height:64px;min-height:64px;align-items:center;}
+  .stage .stat-box{padding:4px 8px;min-width:0;}
+  .stage .stat-box .k{font-size:10px;line-height:14px;letter-spacing:.03em;}
+  .stage .stat-box .v{font-size:14px;line-height:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  #rift-details{width:min(460px,calc(100% - 24px));max-height:calc(100dvh - var(--safe-top) - var(--safe-bottom) - 24px);padding:0;border:1px solid var(--line);border-radius:18px;background:var(--bg-elev);color:var(--ink);overflow:hidden;}
+  #rift-details::backdrop{background:#060b18c9;}
+  #rift-details[open]{display:flex;flex-direction:column;}
+  .rift-details-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 14px;border-bottom:1px solid var(--line);flex:none;}
+  .rift-details-head h2{font:600 18px 'Cinzel',serif;margin:0;}
+  #rift-details-close{min-height:44px;min-width:64px;border:1px solid var(--line);border-radius:10px;background:var(--bg-elev-2);color:var(--ink);font:600 13px 'Manrope',sans-serif;}
+  .rift-details-scroll{padding:12px 14px;overflow-y:auto;overscroll-behavior:contain;min-height:0;touch-action:pan-y;}
+  .rift-details-scroll h3{font-size:14px;margin:16px 0 8px;}
+  #rift-details .rift-mode-note,#rift-details .bond-summary,#rift-details .tap-hint,#rift-details .buff-indicator,#rift-details .boss-regen-tag,#rift-objective-detail{font-size:13px;line-height:1.5;white-space:normal;margin:8px 0;}
+  #rift-details .party-col{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;width:100%;}
+  #rift-details .hero-chip{width:auto;min-width:0;padding:6px 2px;}
+  #rift-details .wisp-portrait{width:32px;height:32px;}
+  #rift-details .chip-label,#rift-details .chip-power{font-size:11px;line-height:16px;max-width:100%;overflow:hidden;text-overflow:ellipsis;}
+  #rift-details .chip-bar-track{width:100%;max-width:40px;}
+  #rift-hp-detail{font-size:13px;line-height:1.5;overflow-wrap:anywhere;}
+  #rift-resources{margin:0;font-size:13px;}
+  #rift-resources>div{padding:6px 0;border-top:1px solid var(--line);}
+  #rift-resources dt{font-weight:700;}#rift-resources dd{margin:2px 0 0;overflow-wrap:anywhere;font-family:'Space Mono',monospace;}
+  @media(max-height:650px){
+    .hud .chip{height:30px;padding-top:1px;padding-bottom:1px;}
+    #tab-battle .stage{padding-top:4px;padding-bottom:4px;}
   }
   @media(prefers-reduced-motion:reduce){
     #tab-battle .stage .enemy-glyph,.rift-dust i{animation:none;}.rift-dust i{opacity:.35;}
@@ -1776,12 +1818,12 @@
   <main>
     <section class="tab-panel active" id="tab-battle">
       <div class="card stage">
-        <div class="depth-label" id="depth-label">Rift 1</div>
+        <div class="rift-heading"><div class="depth-label" id="depth-label">Rift 1</div><button class="rift-details-btn" id="rift-details-btn" aria-haspopup="dialog">Details<span id="rift-status">Combat &amp; party</span></button></div>
         <div class="rift-mode-row">
           <button class="rift-mode-btn active" id="rift-push-btn">Push</button>
           <button class="rift-mode-btn" id="rift-farm-btn">Farm</button>
         </div>
-        <div class="rift-mode-note" id="rift-mode-note">Push deeper until you hit a wall.</div>
+
         <div class="rift-objective" id="rift-objective"></div>
         <div class="enemy-name" id="enemy-name">Hollow Wisp</div>
         <div class="battle-row"><div class="rift-landscape" aria-hidden="true">
@@ -1812,21 +1854,18 @@
  <path d="M115 344 143 344 M258 344 286 344 M199 327V334 M199 357V364" stroke="var(--land-light)" opacity=".7"/>
  </svg><div class="rift-dust"><i></i><i></i><i></i><i></i><i></i><i></i></div>
 </div>
-          <div class="party-col" id="party-col"></div>
+
           <div class="enemy-stage-wrap">
-            <div class="enemy-stage" id="enemy-stage">
+            <div class="enemy-stage" id="enemy-stage" aria-label="Guardian Tap"><span class="guardian-label">Guardian Tap</span>
               <div class="enemy-glyph" id="enemy-glyph"><svg class="creature-art" viewBox="0 0 160 160" aria-hidden="true"><use href="#creature-prowler"/></svg><svg class="boss-regalia" viewBox="0 0 160 160" aria-hidden="true"><path d="M44 37 34 8 60 25 80 2 100 25 126 8 116 37 98 30 80 40 62 30Z" fill="var(--creature-color)" stroke="var(--creature-eye)"/><path d="M20 66 4 50 9 103 36 116 27 88 M140 66 156 50 151 103 124 116 133 88" fill="var(--creature-color)" stroke="var(--creature-rim)"/><path d="M80 10 85 19 80 27 75 19Z" fill="#fff0cb"/></svg></div>
             </div>
             <div class="hp-wrap">
               <div class="hp-bar-track"><div class="hp-bar-fill" id="hp-fill"></div></div>
               <div class="hp-text mono" id="hp-text">10 / 10</div>
-              <div class="boss-regen-tag" id="boss-regen-tag" style="display:none;">Boss — regenerates health. Grow stronger and come back.</div>
+
             </div>
           </div>
         </div>
-        <div class="buff-indicator" id="buff-indicator" style="display:none;"></div>
-        <div class="bond-summary" id="bond-summary"></div>
-        <div class="tap-hint">Your Wisps already fight on their own, even when you're gone — tap the Rift to strike as your Guardian and speed things up.</div>
         <div class="stat-row">
           <div class="stat-box"><div class="k">Guardian tap</div><div class="v mono" id="stat-tap">1</div></div>
           <div class="stat-box"><div class="k">Wisp DPS est.</div><div class="v mono" id="stat-idle">0</div></div>
@@ -1886,6 +1925,23 @@
   </main>
 </div>
 
+
+<dialog id="rift-details" aria-labelledby="rift-details-title">
+  <div class="rift-details-head"><h2 id="rift-details-title">Rift details</h2><button id="rift-details-close" aria-label="Close Rift details">Close</button></div>
+  <div class="rift-details-scroll">
+    <div class="rift-mode-note" id="rift-mode-note">Push deeper until you hit a wall.</div>
+    <p id="rift-objective-detail"></p>
+    <p id="rift-hp-detail"></p>
+    <div class="boss-regen-tag" id="boss-regen-tag" style="display:none;">Boss — regenerates health. Grow stronger and come back.</div>
+    <h3>Active party</h3>
+    <div class="party-col" id="party-col"></div>
+    <div class="buff-indicator" id="buff-indicator" style="display:none;"></div>
+        <div class="bond-summary" id="bond-summary"></div>
+        <div class="tap-hint">Your Wisps already fight on their own, even when you're gone — tap the Rift to strike as your Guardian and speed things up.</div>
+
+    <h3>Resources</h3><dl id="rift-resources"></dl>
+  </div>
+</dialog>
 
 <div class="overlay settings-overlay" id="settings-overlay" style="display:none;">
   <div class="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
@@ -3800,13 +3856,19 @@ function cacheEls(){
   ].forEach(function(id){ els[id]=document.getElementById(id); });
 }
 
+// Presentation only: the shared formatter can outgrow compact rows above its suffix range.
+// Keep authoritative numeric values intact; exact amounts remain inspectable in Details.
+function formatRiftNumber(value){
+  var text = formatNum(value);
+  return value>=1e30 || text.length>10 ? Number(value).toExponential(2) : text;
+}
 function renderHud(){
-  els['hud-lumen'].textContent = formatNum(state.lumen);
-  els['hud-shard'].textContent = formatNum(state.shards);
-  els['hud-mote'].textContent = formatNum(state.motes);
-  els['hud-prism'].textContent = formatNum(state.prisms);
-  els['hud-comet'].textContent = formatNum(state.comets);
-  els['hud-sigil'].textContent = formatNum(state.sigils);
+  els['hud-lumen'].textContent = formatRiftNumber(state.lumen);
+  els['hud-shard'].textContent = formatRiftNumber(state.shards);
+  els['hud-mote'].textContent = formatRiftNumber(state.motes);
+  els['hud-prism'].textContent = formatRiftNumber(state.prisms);
+  els['hud-comet'].textContent = formatRiftNumber(state.comets);
+  els['hud-sigil'].textContent = formatRiftNumber(state.sigils);
 }
 
 function renderRiftMode(){
@@ -3913,7 +3975,7 @@ function updateBattleFast(){
   renderRiftObjective();
   renderBondSummary();
   els['hp-fill'].style.width = Math.max(0, (state.enemyHp/state.enemyMaxHp*100)) + '%';
-  els['hp-text'].textContent = formatNum(Math.max(0,state.enemyHp)) + ' / ' + formatNum(state.enemyMaxHp);
+  els['hp-text'].textContent = formatRiftNumber(Math.max(0,state.enemyHp)) + ' / ' + formatRiftNumber(state.enemyMaxHp);
   var zone = riftZoneFor(state.depth);
   applyRiftZoneVisual(state.depth);
   els['depth-label'].innerHTML = 'Rift ' + state.depth + (isBoss(state.depth) ? ' &mdash; <span class="boss-tag">BOSS</span>' : '') + '<span class="region-label" style="color:'+zone.accent+'">'+zone.name+'</span>';
@@ -3950,10 +4012,9 @@ function updateBattleFast(){
     els['enemy-stage'].classList.add(enough ? 'boss-ready' : 'boss-wall');
     if(battleStage) battleStage.classList.add(enough ? 'boss-ready' : 'boss-wall');
   }
-  var tapHint = document.querySelector('#tab-battle .tap-hint');
-  if(tapHint) tapHint.style.display = (state.totalTaps<10 && state.maxDepthEver<3) ? 'block' : 'none';
-  els['stat-tap'].textContent = formatNum(tapDamage());
-  els['stat-idle'].textContent = formatNum(sustainedWispDps(state.depth));
+
+  els['stat-tap'].textContent = formatRiftNumber(tapDamage());
+  els['stat-idle'].textContent = formatRiftNumber(sustainedWispDps(state.depth));
   var buffActive = state.buffUntil && Date.now() < state.buffUntil;
   els['buff-indicator'].style.display = buffActive ? 'block' : 'none';
   if(buffActive){
@@ -3961,7 +4022,21 @@ function updateBattleFast(){
     var secLeft = Math.max(0, Math.ceil((state.buffUntil-Date.now())/1000));
     els['buff-indicator'].textContent = 'Passive + Tap boosted: +'+pct+'% ('+secLeft+'s left)';
   }
+  document.getElementById('rift-status').textContent = buffActive ? 'Boost active' : 'Combat & party';
   renderHud();
+  if(document.getElementById('rift-details').open) renderRiftDetails();
+}
+
+function renderRiftDetails(){
+  var goal = nextRiftObjective();
+  document.getElementById('rift-objective-detail').textContent = goal.title+' — '+goal.detail;
+  document.getElementById('rift-hp-detail').textContent = 'HP: '+Math.max(0,state.enemyHp).toLocaleString()+' / '+state.enemyMaxHp.toLocaleString();
+  document.getElementById('rift-resources').innerHTML = [
+    ['Lumen',state.lumen],['Shards',state.shards],['Motes',state.motes],
+    ['Prisms',state.prisms],['Comets',state.comets],['Sigils',state.sigils]
+  ].map(function(resource){
+    return '<div><dt>'+resource[0]+'</dt><dd>'+resource[1].toLocaleString()+'</dd></div>';
+  }).join('');
 }
 
 function spawnFloatNum(text, stageEl, tone){
@@ -6023,6 +6098,13 @@ function init(){
   });
   document.getElementById('ascend-btn').addEventListener('click', function(){ doAscend(false); });
 
+  document.getElementById('rift-details-btn').addEventListener('click', function(){
+    renderRiftDetails();
+    document.getElementById('rift-details').showModal();
+  });
+  document.getElementById('rift-details-close').addEventListener('click', function(){ document.getElementById('rift-details').close(); });
+  document.getElementById('rift-details').addEventListener('click', function(e){ if(e.target===this) this.close(); });
+
   document.getElementById('settings-btn').addEventListener('click', openSettings);
   document.getElementById('settings-close').addEventListener('click', closeSettings);
   document.getElementById('settings-back').addEventListener('click', function(){ showSettingsView('home'); });
@@ -6139,3 +6221,4 @@ if(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isN
 </script>
 </body>
 </html>
+
