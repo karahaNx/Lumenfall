@@ -1699,6 +1699,7 @@
   #rift-details .wisp-portrait{width:32px;height:32px;}
   #rift-details .chip-label,#rift-details .chip-power{font-size:11px;line-height:16px;max-width:100%;overflow:hidden;text-overflow:ellipsis;}
   #rift-details .chip-bar-track{width:100%;max-width:40px;}
+  #rift-hp-detail{font-size:13px;line-height:1.5;overflow-wrap:anywhere;}
   #rift-resources{margin:0;font-size:13px;}
   #rift-resources>div{padding:6px 0;border-top:1px solid var(--line);}
   #rift-resources dt{font-weight:700;}#rift-resources dd{margin:2px 0 0;overflow-wrap:anywhere;font-family:'Space Mono',monospace;}
@@ -1930,6 +1931,7 @@
   <div class="rift-details-scroll">
     <div class="rift-mode-note" id="rift-mode-note">Push deeper until you hit a wall.</div>
     <p id="rift-objective-detail"></p>
+    <p id="rift-hp-detail"></p>
     <div class="boss-regen-tag" id="boss-regen-tag" style="display:none;">Boss — regenerates health. Grow stronger and come back.</div>
     <h3>Active party</h3>
     <div class="party-col" id="party-col"></div>
@@ -3854,13 +3856,19 @@ function cacheEls(){
   ].forEach(function(id){ els[id]=document.getElementById(id); });
 }
 
+// Presentation only: the shared formatter can outgrow compact rows above its suffix range.
+// Keep authoritative numeric values intact; exact amounts remain inspectable in Details.
+function formatRiftNumber(value){
+  var text = formatNum(value);
+  return value>=1e30 || text.length>10 ? Number(value).toExponential(2) : text;
+}
 function renderHud(){
-  els['hud-lumen'].textContent = formatNum(state.lumen);
-  els['hud-shard'].textContent = formatNum(state.shards);
-  els['hud-mote'].textContent = formatNum(state.motes);
-  els['hud-prism'].textContent = formatNum(state.prisms);
-  els['hud-comet'].textContent = formatNum(state.comets);
-  els['hud-sigil'].textContent = formatNum(state.sigils);
+  els['hud-lumen'].textContent = formatRiftNumber(state.lumen);
+  els['hud-shard'].textContent = formatRiftNumber(state.shards);
+  els['hud-mote'].textContent = formatRiftNumber(state.motes);
+  els['hud-prism'].textContent = formatRiftNumber(state.prisms);
+  els['hud-comet'].textContent = formatRiftNumber(state.comets);
+  els['hud-sigil'].textContent = formatRiftNumber(state.sigils);
 }
 
 function renderRiftMode(){
@@ -3967,7 +3975,7 @@ function updateBattleFast(){
   renderRiftObjective();
   renderBondSummary();
   els['hp-fill'].style.width = Math.max(0, (state.enemyHp/state.enemyMaxHp*100)) + '%';
-  els['hp-text'].textContent = formatNum(Math.max(0,state.enemyHp)) + ' / ' + formatNum(state.enemyMaxHp);
+  els['hp-text'].textContent = formatRiftNumber(Math.max(0,state.enemyHp)) + ' / ' + formatRiftNumber(state.enemyMaxHp);
   var zone = riftZoneFor(state.depth);
   applyRiftZoneVisual(state.depth);
   els['depth-label'].innerHTML = 'Rift ' + state.depth + (isBoss(state.depth) ? ' &mdash; <span class="boss-tag">BOSS</span>' : '') + '<span class="region-label" style="color:'+zone.accent+'">'+zone.name+'</span>';
@@ -4005,8 +4013,8 @@ function updateBattleFast(){
     if(battleStage) battleStage.classList.add(enough ? 'boss-ready' : 'boss-wall');
   }
 
-  els['stat-tap'].textContent = formatNum(tapDamage());
-  els['stat-idle'].textContent = formatNum(sustainedWispDps(state.depth));
+  els['stat-tap'].textContent = formatRiftNumber(tapDamage());
+  els['stat-idle'].textContent = formatRiftNumber(sustainedWispDps(state.depth));
   var buffActive = state.buffUntil && Date.now() < state.buffUntil;
   els['buff-indicator'].style.display = buffActive ? 'block' : 'none';
   if(buffActive){
@@ -4022,6 +4030,7 @@ function updateBattleFast(){
 function renderRiftDetails(){
   var goal = nextRiftObjective();
   document.getElementById('rift-objective-detail').textContent = goal.title+' — '+goal.detail;
+  document.getElementById('rift-hp-detail').textContent = 'HP: '+Math.max(0,state.enemyHp).toLocaleString()+' / '+state.enemyMaxHp.toLocaleString();
   document.getElementById('rift-resources').innerHTML = [
     ['Lumen',state.lumen],['Shards',state.shards],['Motes',state.motes],
     ['Prisms',state.prisms],['Comets',state.comets],['Sigils',state.sigils]

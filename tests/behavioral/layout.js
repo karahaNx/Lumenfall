@@ -30,6 +30,7 @@ window.runRiftLayoutQa = async function(bridge, ctx, assert){
     assert(Math.abs(rect('.hud').height-hudHeight)<1,'stable HUD height');
     var chips=Array.from(document.querySelectorAll('.hud .chip'));
     assert(new Set(chips.map(function(el){return Math.round(el.getBoundingClientRect().top);})).size===2,'exactly two currency rows');
+    assert(q('#hp-text').scrollWidth<=q('#hp-text').clientWidth,'HP text fits without clipping');
     var enemy=visible('#enemy-stage');
     assert(document.elementFromPoint(enemy.x+enemy.width/2,enemy.y+enemy.height/2).closest('#enemy-stage'),'Guardian Tap is not covered');
     minimum=Math.min(minimum,enemy.height);
@@ -70,6 +71,7 @@ window.runRiftLayoutQa = async function(bridge, ctx, assert){
   q('#rift-details-btn').focus();q('#rift-details-btn').click();
   assert(q('#rift-details').open,'details opens');
   visible('#rift-details-close');
+  assert(q('#rift-hp-detail').textContent.indexOf('HP: ')===0,'exact HP remains inspectable');
   assert(q('#rift-mode-note').textContent.length>0 && q('#rift-objective-detail').textContent.length>0,'mode/objective detail retained');
   assert(document.querySelectorAll('#rift-resources dd').length===6,'all exact resource amounts inspectable');
   assert(document.querySelectorAll('#party-col .hero-chip').length===initial.activeParty.length,'full party inspectable');
