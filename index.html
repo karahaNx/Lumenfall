@@ -230,6 +230,9 @@
     color:var(--sigil);border:1px solid color-mix(in srgb, var(--sigil) 40%, transparent);
   }
   .ultimate-btn{width:100%;}
+  .sigil-resonance-btn{width:100%;margin-top:6px;color:var(--sigil);}
+  .quest-actions{display:flex;align-items:center;gap:6px;flex:none;}
+  .quest-refresh-btn{border-color:var(--comet);background:var(--bg-elev);color:var(--comet);}
   .node-queue-toggle{
     margin-left:6px;padding:2px 8px;border-radius:999px;font-size:.6rem;font-weight:700;
     border:1px solid var(--line);background:var(--bg-elev);color:var(--ink-dim);cursor:pointer;
@@ -2203,6 +2206,9 @@ var TICK_MS = 100;
 var ABILITY_BASE_CYCLE_SEC = 6;
 var ASCEND_REPEAT_REWARD_RATE = 0.20;
 var OFFLINE_BOSS_RETREAT_GRACE_SEC = 5 * 60;
+var SIGIL_RESONANCE_COST = 25;
+var SIGIL_RESONANCE_RUN_LIMIT = 3;
+var COMET_QUEST_REFRESH_BASE_COST = 25;
 
 // ---------------------------------------------------------------
 // State
@@ -2225,10 +2231,10 @@ function freshState(){
     longStudyLevels:longStudyLevels, activeStudies:[], studyQueue:studyQueue,
     achieved:achieved, owned:owned, riftTheme:'default',
     buffUntil:0, buffMult:1,
-    ascendCount:0, ascendRewardedDepth:0, totalTaps:0, totalKills:0, totalOfflineSeconds:0, luminousAccum:0,
+    ascendCount:0, ascendRewardedDepth:0, sigilResonanceUses:0, totalTaps:0, totalKills:0, totalOfflineSeconds:0, luminousAccum:0,
     savedLabMultiplier:1,
     autoAscendEnabled:false, autoAscendTargetDepth:16,
-    loginStreak:0, questDay:'', questIds:[], questClaimed:{}, dailyStats:{},
+    loginStreak:0, questDay:'', questIds:[], questClaimed:{}, dailyQuestRefreshes:0, dailyStats:{},
     lastSeen:Date.now()
   };
 }
@@ -2269,6 +2275,48 @@ function pickDailyQuests(dayStr,s){
 function loginRewardFor(streak){
   return DAILY_LOGIN_REWARDS[(streak-1) % DAILY_LOGIN_REWARDS.length];
 }
+function restStopComplete(){
+  return SHOP.every(function(item){ return !!state.owned[item.id]; });
+}
+function maxDailyQuestCometReward(){
+  return QUEST_POOL.reduce(function(max,q){ return Math.max(max,(q.reward && q.reward.comets)||0); },0);
+}
+function dailyQuestRefreshCost(){
+  // A refresh may inherit already-earned daily progress. Keeping its cost at
+  // least the richest quest reward prevents Comet-positive reroll arbitrage.
+  return Math.max(COMET_QUEST_REFRESH_BASE_COST,maxDailyQuestCometReward());
+}
+function dailyQuestRefreshCandidates(replacedId){
+  var current = state.questIds||[];
+  return QUEST_POOL.filter(function(q){
+    return q.id!==replacedId &&
+      current.indexOf(q.id)===-1 &&
+      !(state.questClaimed && state.questClaimed[q.id]) &&
+      dailyQuestEligible(q,state);
+  });
+}
+function refreshDailyQuest(id){
+  if(!restStopComplete() || !id || state.questClaimed[id]) return false;
+  var index=(state.questIds||[]).indexOf(id);
+  if(index<0) return false;
+  var cost=dailyQuestRefreshCost();
+  if(state.comets<cost) return false;
+  var candidates=dailyQuestRefreshCandidates(id);
+  if(!candidates.length) return false;
+
+  // No RNG or hidden server state: current date + persisted refresh count +
+  // selected slot choose the same replacement from the same save.
+  var seed=dateSeed(state.questDay||todayStr()) + (state.dailyQuestRefreshes||0)*31 + index*17;
+  var replacement=candidates[Math.abs(seed)%candidates.length];
+  state.comets-=cost;
+  state.dailyQuestRefreshes=(state.dailyQuestRefreshes||0)+1;
+  state.questIds[index]=replacement.id;
+  saveState();
+  renderDaily(true);
+  renderHud();
+  showToast('Daily Quest refreshed — '+replacement.name+'.');
+  return true;
+}
 function trackDaily(metric, n){
   if(!state.dailyStats) state.dailyStats = {};
   state.dailyStats[metric] = (state.dailyStats[metric]||0) + (n||1);
@@ -2282,6 +2330,7 @@ function ensureDaily(){
   state.questDay = today;
   state.questIds = pickDailyQuests(today,state);
   state.questClaimed = {};
+  state.dailyQuestRefreshes = 0;
   state.dailyStats = {};
   var reward = loginRewardFor(state.loginStreak);
   state.comets += reward.comets||0;
@@ -2494,6 +2543,7 @@ function normalizeCurrentSave(input){
   out.buffUntil = finiteNonNegative(source.buffUntil,fresh.buffUntil);
   out.buffMult = Math.max(1,finiteNonNegative(source.buffMult,fresh.buffMult));
   out.ascendCount = nonNegativeInt(source.ascendCount,fresh.ascendCount);
+  out.sigilResonanceUses = boundedInt(source.sigilResonanceUses,fresh.sigilResonanceUses,0,SIGIL_RESONANCE_RUN_LIMIT);
   // Schema v1 remains compatible: older saves simply have no reward benchmark
   // and receive one final full first reward before future repeats diminish.
   out.ascendRewardedDepth = Math.min(
@@ -2535,6 +2585,7 @@ function normalizeCurrentSave(input){
 
   var questClaimed = isPlainObject(source.questClaimed) ? source.questClaimed : {};
   QUEST_POOL.forEach(function(q){ if(questClaimed[q.id]===true) out.questClaimed[q.id] = true; });
+  out.dailyQuestRefreshes = nonNegativeInt(source.dailyQuestRefreshes,fresh.dailyQuestRefreshes);
 
   var dailyStats = isPlainObject(source.dailyStats) ? source.dailyStats : {};
   var metrics = {};
@@ -2939,6 +2990,31 @@ function supportMoteBonus(){
 }
 function ultimateUnlocked(id){ return !!(state.wispUltimate && state.wispUltimate[id]); }
 function ultimateSigilCost(sp){ return Math.round(5 + sp.unlockDepth*2); }
+function totalUltimateSigilCost(){
+  return SPIRITS.reduce(function(sum,sp){ return sum+ultimateSigilCost(sp); },0);
+}
+function allUltimatesOwned(){
+  return SPIRITS.every(function(sp){ return ultimateUnlocked(sp.id); });
+}
+function canSigilResonate(sp){
+  if(!sp || !allUltimatesOwned() || !ultimateUnlocked(sp.id)) return false;
+  if((state.spirits[sp.id]||0)<=0 || state.activeParty.indexOf(sp.id)===-1) return false;
+  if((state.heroResource[sp.id]||0)>=100) return false;
+  if((state.sigilResonanceUses||0)>=SIGIL_RESONANCE_RUN_LIMIT) return false;
+  return state.sigils>=SIGIL_RESONANCE_COST;
+}
+function useSigilResonance(sp){
+  if(!canSigilResonate(sp)) return false;
+  state.sigils-=SIGIL_RESONANCE_COST;
+  state.sigilResonanceUses=(state.sigilResonanceUses||0)+1;
+  state.heroResource[sp.id]=100;
+  saveState();
+  renderSpirits();
+  updatePartyBars();
+  renderHud();
+  showToast(sp.name+' resonates — '+sp.abilityName+' is ready.');
+  return true;
+}
 
 function synergyMult(){
   // Preserve the original permanent Rarity collection bonus.
@@ -3782,6 +3858,7 @@ function applyAscendMutation(){
   state.maxDepthEver = Math.max(state.maxDepthEver, cleared+1);
   state.buffUntil = 0;
   state.buffMult = 1;
+  state.sigilResonanceUses = 0;
   state._autoTapAccum = 0;
   state._autoEmpowerAccum = 0;
   SPIRITS.forEach(function(sp){
@@ -3890,7 +3967,7 @@ function presentControlStates(root){
   root.querySelectorAll('button').forEach(function(btn){
     btn.querySelectorAll('.control-state').forEach(function(label){label.remove();});
     var reason='', kind=btn.disabled?'unavailable':'available', subject='';
-    var spId=btn.getAttribute('data-empower') || btn.getAttribute('data-rarity') || btn.getAttribute('data-module') || btn.getAttribute('data-ultimate') || btn.getAttribute('data-empower-queue') || btn.getAttribute('data-toggle');
+    var spId=btn.getAttribute('data-empower') || btn.getAttribute('data-rarity') || btn.getAttribute('data-module') || btn.getAttribute('data-ultimate') || btn.getAttribute('data-sigil-resonate') || btn.getAttribute('data-empower-queue') || btn.getAttribute('data-toggle');
     var sp=spId && SPIRITS.find(function(item){return item.id===spId;});
     if(sp) subject=sp.name;
     var queueAttr=toggles.find(function(attr){return btn.hasAttribute('data-'+attr);});
@@ -3913,7 +3990,7 @@ function presentControlStates(root){
       else if(btn.disabled){kind='unaffordable';reason='Need Motes';}
     }
     if(btn.hasAttribute('data-theme-select')) kind=btn.getAttribute('aria-pressed')==='true'?'selected':'available';
-    if(btn.disabled && btn.matches('[data-empower],[data-rarity],[data-module],[data-ultimate],[data-research],[data-node],[data-study],[data-shop]')){
+    if(btn.disabled && btn.matches('[data-empower],[data-rarity],[data-module],[data-ultimate],[data-sigil-resonate],[data-quest-refresh],[data-research],[data-node],[data-study],[data-shop]')){
       var cost={};kind='unaffordable';
       if(btn.hasAttribute('data-empower')) cost.lumen=spiritCost(sp);
       if(btn.hasAttribute('data-rarity')){
@@ -3924,6 +4001,17 @@ function presentControlStates(root){
       }
       if(btn.hasAttribute('data-module')) cost=moduleCost(sp,moduleLevel(sp.id));
       if(btn.hasAttribute('data-ultimate')) cost.sigil=ultimateSigilCost(sp);
+      if(btn.hasAttribute('data-sigil-resonate')){
+        cost.sigil=SIGIL_RESONANCE_COST;
+        if((state.sigilResonanceUses||0)>=SIGIL_RESONANCE_RUN_LIMIT){kind='unavailable';reason='Run limit reached';}
+        else if((state.spirits[sp.id]||0)<=0 || state.activeParty.indexOf(sp.id)===-1){kind='unavailable';reason='Field this Wisp first';}
+        else if((state.heroResource[sp.id]||0)>=100){kind='unavailable';reason='Ability already ready';}
+      }
+      if(btn.hasAttribute('data-quest-refresh')){
+        subject='Daily Quest Refresh';
+        cost.comet=dailyQuestRefreshCost();
+        if(!dailyQuestRefreshCandidates(btn.getAttribute('data-quest-refresh')).length){kind='unavailable';reason='No alternate quest';}
+      }
       if(btn.hasAttribute('data-research')){var node=RESEARCH.find(function(n){return n.id===btn.getAttribute('data-research');});subject=node.name;cost=getResearchBuyPlan(node).cost;}
       if(btn.hasAttribute('data-node')){var node=NODES.find(function(n){return n.id===btn.getAttribute('data-node');});subject=node.name;cost.prism=nodeCost(node);}
       if(btn.hasAttribute('data-study')){
@@ -4423,10 +4511,16 @@ function renderSpirits(){
           '</button>') +
       '</div>';
     var ultCost = ultimateSigilCost(sp);
+    var resonanceOwned = allUltimatesOwned();
+    var resonanceUses = state.sigilResonanceUses||0;
+    var resonanceDisabled = !canSigilResonate(sp);
+    var resonanceHtml = resonanceOwned && ultimateUnlocked(sp.id) ?
+      '<button class="mini-btn sigil-resonance-btn" data-sigil-resonate="'+sp.id+'" '+(resonanceDisabled?'disabled':'')+'>Resonate '+resonanceUses+'/'+SIGIL_RESONANCE_RUN_LIMIT+
+        '<span style="font-size:.6875rem;">'+costIcon('sigil')+SIGIL_RESONANCE_COST+'</span></button>' : '';
     var ultimateHtml = tier<5 ? '' :
       '<div class="ultimate-row">' +
         (ultimateUnlocked(sp.id) ?
-          '<div class="ultimate-badge">Ultimate Unlocked — '+ultimateEffectText(sp)+'</div>' :
+          '<div class="ultimate-badge">Ultimate Unlocked — '+ultimateEffectText(sp)+'</div>'+resonanceHtml :
           '<button class="mini-btn ultimate-btn" data-ultimate="'+sp.id+'" '+(state.sigils<ultCost?'disabled':'')+'>Unlock Ultimate<span style="font-size:.6875rem;">'+costIcon('sigil')+ultCost+'</span></button>') +
       '</div>';
     var empowerOn = state.empowerQueue[sp.id]!==false;
@@ -4482,6 +4576,12 @@ function renderSpirits(){
     btn.addEventListener('click', function(){
       var sp = SPIRITS.find(function(s){ return s.id===btn.getAttribute('data-ultimate'); });
       buyUltimate(sp);
+    });
+  });
+  els['spirit-list'].querySelectorAll('[data-sigil-resonate]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var sp = SPIRITS.find(function(s){ return s.id===btn.getAttribute('data-sigil-resonate'); });
+      useSigilResonance(sp);
     });
   });
   els['spirit-list'].querySelectorAll('[data-empower-queue]').forEach(function(btn){
@@ -4723,6 +4823,12 @@ function renderAchievements(){
       buttonHtml +
     '</div>';
   });
+  if(restStopComplete()){
+    shopHtml += '<div class="card shop-card">' +
+      '<div class="info"><div class="name">Daily Quest Refresh</div>' +
+      '<div class="desc">Rest Stop complete. Spend '+dailyQuestRefreshCost()+' Comets beside any unclaimed Daily Quest to replace it with another eligible quest. Refreshing never grants extra power or extra quest slots.</div></div>' +
+    '</div>';
+  }
   replaceControlMarkup(els['shop-list'],shopHtml);
   els['shop-list'].querySelectorAll('button[data-shop]').forEach(function(btn){
     btn.addEventListener('click', function(){
@@ -4766,8 +4872,8 @@ var CURRENCIES = [
   {name:'Shards', shape:'shape-hex', color:'var(--shard)', desc:'Also earned from every kill, in smaller amounts. Spend it to raise a Wisp’s Rarity tier and to fund the rest of the Lab.'},
   {name:'Motes', shape:'shape-pentagon', color:'var(--mote)', desc:'Dropped only by rare Luminous enemies in the Rift, always a fixed amount. Spend it to speed up your active Long Study in the Lab.'},
   {name:'Prisms', shape:'shape-diamond', color:'var(--prism)', desc:'Earned only by Ascending — the deeper you clear first, the more you get. Spend it on the permanent Ascension Tree.'},
-  {name:'Comets', shape:'shape-star', color:'var(--comet)', desc:'Earned only from Deeds. Spend it at the Comet Rest Stop on convenience — never on power.'},
-  {name:'Sigils', shape:'shape-octagon', color:'var(--sigil)', desc:'Dropped only by Rift bosses, always a fixed amount. Spend them on Mythic Wisp Ultimates: damage/resource abilities double their output; Support buffs become stronger and longer.'}
+  {name:'Comets', shape:'shape-star', color:'var(--comet)', desc:'Earned from Deeds, Daily Quests and login streaks. Spend them on Rest Stop convenience; after all four purchases, they can refresh unclaimed Daily Quests without granting power.'},
+  {name:'Sigils', shape:'shape-octagon', color:'var(--sigil)', desc:'Dropped by Rift bosses. First unlock Mythic Wisp Ultimates; after every Ultimate is owned, spend 25 to ready one Active Wisp ability, up to 3 times per Ascension run.'}
 ];
 
 function renderCurrencies(){
@@ -4803,6 +4909,7 @@ var ENCYCLOPEDIA_MECHANICS = [
   {name:'Guardian Tap', meta:'Guardian damage', desc:'Tap starts at 5 damage plus 2% of your general Active-Wisp passive power, then Tap upgrades apply. Support buffs and Guardian’s Mark also multiply it. Auto-Tap uses the same hit once per second.'},
   {name:'Rarity', meta:'Wisp progression', desc:'Rarity multiplies that Wisp’s Power, so it affects passive damage plus damaging/resource abilities. Every Rarity tier owned across the roster also adds +2% general passive-party power. Rarity does not strengthen Support buffs.'},
   {name:'Modules & Ultimates', meta:'Wisp progression', desc:'Modules are role-specific: DPS/Tank Modules boost ability damage, Ranged/Druid Modules boost ability resources, and Support Modules boost Motes while Active. Ultimates double damage/resource ability output; Support Ultimates change the buff from +25% for 4s to +50% for 8s.'},
+  {name:'Endgame Currency Utility', meta:'Economy rule', desc:'After all eight Ultimates are owned, Sigils can ready one Active Wisp ability for 25 Sigils, at most 3 times per Ascension run. After all four Rest Stop purchases are owned, Comets can replace an unclaimed Daily Quest for at least the richest quest reward, so refreshing cannot generate extra Comets.'},
   {name:'Wisp Roles', meta:'Build label', desc:'Roles describe current ability style, not a separate defense system. Tank Wisps currently use heavy burst abilities; Support Wisps either buff passive/Tap damage or provide resource-focused utility.'},
   {name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the run for Prisms. Your first reward sets a cleared-Rift benchmark; repeats at or below it earn a 20% reserve reward, while pushing beyond it adds a new-depth bonus. Permanent systems stay.'},
   {name:'Luminous Enemies', meta:'Rare encounter', desc:'Rare non-boss enemies that drop Motes. Their appearance chance rises as you push deeper.'},
@@ -4905,12 +5012,18 @@ function renderDaily(force){
     var ready = progress>=q.goal && !claimed;
     if(ready) hasReadyQuest = true;
     var rewardText = '+'+formatNum(q.reward.comets||0)+' '+costIcon('comet')+(q.reward.prisms ? ' +'+q.reward.prisms+' '+costIcon('prism') : '');
+    var refreshCost = dailyQuestRefreshCost();
+    var refreshCandidates = !claimed && restStopComplete() ? dailyQuestRefreshCandidates(id) : [];
+    var refreshHtml = !claimed && restStopComplete() ?
+      '<button class="quest-claim-btn quest-refresh-btn" data-quest-refresh="'+id+'" '+((state.comets>=refreshCost && refreshCandidates.length)?'':'disabled')+'>Refresh '+costIcon('comet')+refreshCost+'</button>' : '';
     html += '<div class="quest-row">' +
       '<div class="quest-row-head"><span class="quest-name">'+q.name+'</span><span class="quest-reward mono">'+rewardText+'</span></div>' +
       '<div class="quest-bar-track"><div class="quest-bar-fill" style="width:'+pct+'%;"></div></div>' +
       '<div class="quest-foot">' +
         '<span class="quest-progress-text">'+q.desc+' ('+formatNum(progress)+' / '+formatNum(q.goal)+')</span>' +
-        '<button class="quest-claim-btn '+(claimed?'done':'')+'" data-quest-claim="'+id+'" '+(ready?'':'disabled')+'>'+(claimed?'Claimed':'Claim')+'</button>' +
+        '<span class="quest-actions">'+refreshHtml+
+          '<button class="quest-claim-btn '+(claimed?'done':'')+'" data-quest-claim="'+id+'" '+(ready?'':'disabled')+'>'+(claimed?'Claimed':'Claim')+'</button>' +
+        '</span>' +
       '</div>' +
     '</div>';
   });
@@ -4919,6 +5032,9 @@ function renderDaily(force){
   if(deedsTab) deedsTab.classList.toggle('has-attention',hasReadyQuest);
   els['daily-quest-list'].querySelectorAll('[data-quest-claim]').forEach(function(btn){
     btn.addEventListener('click', function(){ claimQuest(btn.getAttribute('data-quest-claim')); });
+  });
+  els['daily-quest-list'].querySelectorAll('[data-quest-refresh]').forEach(function(btn){
+    btn.addEventListener('click', function(){ refreshDailyQuest(btn.getAttribute('data-quest-refresh')); });
   });
 }
 
