@@ -66,6 +66,7 @@ SCENARIOS = {
     "lifecycle-boss-retry": "chronology-boss-retry",
     "lifecycle-auto-ascend": "chronology-auto-ascend-mid-window",
     "p2-ascend-integrity": "fresh",
+    "p2-wisp-progression-pacing": "fresh",
     "lifecycle-long-study": "chronology-study-mid-window",
     "lifecycle-lab-queue": "chronology-research-mid-window",
     "lifecycle-daily-rollover": "lifecycle-daily",
@@ -86,6 +87,7 @@ NEGATIVE_SCENARIOS = {
     "self-test-chronology-regression": "chronology-simultaneous-order",
     "self-test-lifecycle-duplicate": "lifecycle-basic",
     "self-test-wisp-formula-regression": "fresh",
+    "self-test-wisp-pacing-regression": "fresh",
 }
 
 
@@ -391,6 +393,58 @@ window.__lumenfallQaBridge = {
     };
   },
   bossRetreatGraceSec: function(){ return OFFLINE_BOSS_RETREAT_GRACE_SEC; },
+  wispPacingContract: function(id){
+    var sp = SPIRITS.find(function(item){ return item.id===id; });
+    if(!sp) throw new Error('Unknown Wisp '+id);
+    var rarity = [];
+    var module = [];
+    var rarityTotal = {lumen:0,shard:0};
+    var moduleTotal = {lumen:0,shard:0};
+    for(var tier=0;tier<5;tier++){
+      var rc = rarityCost(sp,tier);
+      rarity.push({tier:tier,req:rarityReq(tier),lumen:rc.lumen,shard:rc.shard});
+      rarityTotal.lumen += rc.lumen;
+      rarityTotal.shard += rc.shard;
+    }
+    for(var level=0;level<MODULE_MAX_LEVEL;level++){
+      var mc = moduleCost(sp,level);
+      module.push({level:level,lumen:mc.lumen,shard:mc.shard,pacing:modulePacingMult(level)});
+      moduleTotal.lumen += mc.lumen;
+      moduleTotal.shard += mc.shard;
+    }
+    return {
+      id:id,
+      rarity:rarity,
+      rarityTotal:rarityTotal,
+      module:module,
+      moduleTotal:moduleTotal,
+      moduleMax:MODULE_MAX_LEVEL,
+      ultimateSigils:ultimateSigilCost(sp)
+    };
+  },
+  allWispPacingTotals: function(){
+    var out={rarity:{lumen:0,shard:0},module:{lumen:0,shard:0}};
+    SPIRITS.forEach(function(sp){
+      var contract=this.wispPacingContract(sp.id);
+      out.rarity.lumen+=contract.rarityTotal.lumen;
+      out.rarity.shard+=contract.rarityTotal.shard;
+      out.module.lumen+=contract.moduleTotal.lumen;
+      out.module.shard+=contract.moduleTotal.shard;
+    },this);
+    return out;
+  },
+  buyRarityFor: function(id){
+    var sp=SPIRITS.find(function(item){return item.id===id;});
+    if(!sp) throw new Error('Unknown Wisp '+id);
+    buyRarity(sp);
+    return JSON.parse(JSON.stringify(state));
+  },
+  buyModuleFor: function(id){
+    var sp=SPIRITS.find(function(item){return item.id===id;});
+    if(!sp) throw new Error('Unknown Wisp '+id);
+    buyModule(sp);
+    return JSON.parse(JSON.stringify(state));
+  },
   setState: function(next){
     state = acceptPersistedState(JSON.parse(JSON.stringify(next)),'qa-simulation');
     restoreEnemyOrSpawn();
@@ -1143,6 +1197,8 @@ def build_runner():
           assert(s.depth===95 && s.maxDepthEver===120,'mature progression depth must load intact');
           assert(s.activeParty.length===5,'mature party must keep five active Wisps');
           assert(s.spirits.titan===42 && s.heroRarity.ember===5,'mature Wisp progression must load intact');
+          assert(s.heroRarity.void===5 && s.heroRarity.titan===3,'existing high Rarity progression must not be reduced by future pacing');
+          assert(s.wispModules.ember===20 && s.wispModules.void===20 && s.wispModules.titan===9,'existing Module progression must not be reduced by future costs');
           assert(s.research.focus===24 && s.longStudyLevels.wispascend===9,'mature Lab progression must load intact');
           assert(s.owned.autoascend===true && s.autoAscendEnabled===true,'mature automation flags must load intact');
           assert(s.ascendRewardedDepth===0,'existing schema-v1 saves without a benchmark must safely default to 0');
@@ -2306,6 +2362,73 @@ def build_runner():
           return;
         }
 
+        case 'p2-wisp-progression-pacing': {
+          var emberCurve = bridge.wispPacingContract('ember');
+          var voidCurve = bridge.wispPacingContract('void');
+          var titanCurve = bridge.wispPacingContract('titan');
+          var rosterTotals = bridge.allWispPacingTotals();
+
+          assert(emberCurve.rarity[0].req===8,'first Rarity must remain available at Wisp Lv.8');
+          assert(emberCurve.rarity[0].shard===15 && emberCurve.rarity[0].lumen===80,'Ember first Rarity must retain the previous 15 Shard / 80 Lumen entry price');
+          assert(emberCurve.rarity[4].req===65,'Mythic must require deliberate Wisp investment through Lv.65');
+          assert(emberCurve.rarity[4].shard===500000,'Mythic Shard investment contract must remain 500,000');
+          assert(emberCurve.rarity[4].lumen===24000,'Ember Mythic Lumen price must use the 2400× base-cost tier');
+          assert(emberCurve.rarity[4].shard>emberCurve.rarity[2].shard*500,'late Rarity must be materially more serious than early/mid Rarity');
+
+          for(var earlyModule=0;earlyModule<5;earlyModule++){
+            var oldExpectedLumen=Math.round(10*4*Math.pow(1.35,earlyModule));
+            var oldExpectedShard=Math.round(10*0.4*Math.pow(1.35,earlyModule));
+            assert(emberCurve.module[earlyModule].lumen===oldExpectedLumen,'Module '+(earlyModule+1)+' early Lumen cost must remain unchanged');
+            assert(emberCurve.module[earlyModule].shard===oldExpectedShard,'Module '+(earlyModule+1)+' early Shard cost must remain unchanged');
+          }
+          assert(emberCurve.moduleMax===20,'Module cap must remain 20');
+          assert(emberCurve.module[5].pacing>1,'late Module pacing must begin after the first five upgrades');
+          assert(emberCurve.module[19].pacing>10,'Module 20 must carry a materially stronger late-investment multiplier');
+          assert(emberCurve.module[19].lumen>emberCurve.module[9].lumen*100,'Module endgame investment must widen materially versus the mid curve');
+
+          assert(rosterTotals.rarity.shard===emberCurve.rarityTotal.shard*8,'full-roster Rarity Shard commitment must equal eight complete Wisp paths');
+          assert(rosterTotals.module.shard>voidCurve.moduleTotal.shard*30,'full-roster Module commitment must be substantially longer than one representative Active Wisp');
+          assert(titanCurve.moduleTotal.shard>voidCurve.moduleTotal.shard*30,'late-roster Titan Module path must remain a deliberate specialization choice');
+
+          var maxable = cloneJson(state());
+          maxable.lumen = 1e15;
+          maxable.shards = 1e15;
+          maxable.spirits.ember = 65;
+          maxable.activeParty = ['ember'];
+          maxable.heroRarity.ember = 0;
+          maxable.wispModules.ember = 0;
+          bridge.setState(maxable);
+          for(var rarityBuy=0;rarityBuy<5;rarityBuy++) bridge.buyRarityFor('ember');
+          for(var moduleBuy=0;moduleBuy<20;moduleBuy++) bridge.buyModuleFor('ember');
+          var maxed = state();
+          assert(maxed.heroRarity.ember===5,'one deliberately funded Wisp must still be able to reach Mythic');
+          assert(maxed.wispModules.ember===20,'one deliberately funded Wisp must still be able to reach Module 20');
+
+          var grandfathered = cloneJson(state());
+          grandfathered.spirits.ember = 1;
+          grandfathered.heroRarity.ember = 5;
+          grandfathered.wispModules.ember = 20;
+          grandfathered.spirits.titan = 1;
+          grandfathered.heroRarity.titan = 5;
+          grandfathered.wispModules.titan = 20;
+          var acceptedGrandfathered = bridge.setState(grandfathered);
+          assert(acceptedGrandfathered.heroRarity.ember===5 && acceptedGrandfathered.wispModules.ember===20,'existing maxed Ember progression must never be downgraded by new requirements');
+          assert(acceptedGrandfathered.heroRarity.titan===5 && acceptedGrandfathered.wispModules.titan===20,'existing maxed Titan progression must never be downgraded by new requirements');
+
+          assert(emberCurve.ultimateSigils===7 && titanCurve.ultimateSigils===69,'Ultimate/Sigil costs must remain unchanged by P2-01B');
+
+          finish('pass',{
+            rarityRequirements:emberCurve.rarity.map(function(x){return x.req;}),
+            rarityShardCosts:emberCurve.rarity.map(function(x){return x.shard;}),
+            emberRarityTotal:emberCurve.rarityTotal,
+            emberModuleTotal:emberCurve.moduleTotal,
+            voidModuleTotal:voidCurve.moduleTotal,
+            titanModuleTotal:titanCurve.moduleTotal,
+            rosterTotals:rosterTotals
+          });
+          return;
+        }
+
         case 'self-test-bad-assertion':
           assert(s.depth===999999,'intentional harness self-test assertion');
           finish('pass');
@@ -2371,6 +2494,16 @@ def build_runner():
             'intentional Wisp formula regression: passive-only Formation Training incorrectly expected to scale ability damage'
           );
           finish('pass',{unexpected:'Wisp formula regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-pacing-regression': {
+          var compressed = bridge.wispPacingContract('ember');
+          assert(
+            compressed.rarity[4].shard<100000,
+            'intentional Wisp pacing regression: Mythic cost compression was not detected'
+          );
+          finish('pass',{unexpected:'Wisp pacing regression was not detected'});
           return;
         }
 
