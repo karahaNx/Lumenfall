@@ -62,8 +62,10 @@ SCENARIOS = {
     "lifecycle-repeated-resume": "lifecycle-basic",
     "lifecycle-cold-restart": "lifecycle-basic",
     "lifecycle-partial-enemy": "lifecycle-partial-enemy",
+    "lifecycle-boss-background-short": "chronology-boss-retry",
     "lifecycle-boss-retry": "chronology-boss-retry",
     "lifecycle-auto-ascend": "chronology-auto-ascend-mid-window",
+    "p2-ascend-integrity": "fresh",
     "lifecycle-long-study": "chronology-study-mid-window",
     "lifecycle-lab-queue": "chronology-research-mid-window",
     "lifecycle-daily-rollover": "lifecycle-daily",
@@ -351,6 +353,7 @@ window.__lumenfallQaBridge = {
         kind:'offline',
         visual:false,
         clockStartMs:startMs,
+        offlineWindowStartMs:startMs,
         captureTimeline:true
       });
       return {
@@ -372,6 +375,22 @@ window.__lumenfallQaBridge = {
     restoreSaveBackup();
   },
   enemyHpFor: function(depth){ return enemyHpFor(depth); },
+  ascendBreakdown: function(depth){ return JSON.parse(JSON.stringify(ascendPrismBreakdown(depth))); },
+  ascendManual: function(){
+    var before = {prisms:state.prisms,ascendCount:state.ascendCount,benchmark:state.ascendRewardedDepth||0};
+    doAscend(false);
+    return {
+      before:before,
+      after:{
+        prisms:state.prisms,
+        ascendCount:state.ascendCount,
+        benchmark:state.ascendRewardedDepth||0,
+        depth:state.depth
+      },
+      gain:state.prisms-before.prisms
+    };
+  },
+  bossRetreatGraceSec: function(){ return OFFLINE_BOSS_RETREAT_GRACE_SEC; },
   setState: function(next){
     state = acceptPersistedState(JSON.parse(JSON.stringify(next)),'qa-simulation');
     restoreEnemyOrSpawn();
@@ -382,6 +401,7 @@ window.__lumenfallQaBridge = {
     var remaining = Math.max(0,Number(seconds)||0);
     var chunk = Math.max(0,Number(chunkSec)||remaining||0);
     var clock = Number.isFinite(startMs) ? startMs : 2000000000000;
+    var offlineWindowStartMs = clock;
     var aggregate = {
       lumenGained:0,shardGained:0,sigilsGained:0,motesGained:0,
       kills:0,bossKills:0,luminousKills:0,ascends:0,autoTaps:0,
@@ -408,7 +428,12 @@ window.__lumenfallQaBridge = {
     while(remaining>1e-9){
       if(++guard>100000) throw new Error('QA simulation chunk guard exceeded');
       var dt = chunk>0 ? Math.min(chunk,remaining) : remaining;
-      var part = advanceAuthoritativeTime(dt,{kind:kind||'live',visual:false,clockStartMs:clock});
+      var part = advanceAuthoritativeTime(dt,{
+        kind:kind||'live',
+        visual:false,
+        clockStartMs:clock,
+        offlineWindowStartMs:(kind||'live')==='offline' ? offlineWindowStartMs : undefined
+      });
       merge(part);
       clock = part.clockEndMs;
       remaining = Math.max(0,remaining-dt);
@@ -421,7 +446,8 @@ window.__lumenfallQaBridge = {
   },
   simulateOfflineDirect: function(seconds,startMs){
     var begin = performance.now();
-    var result = simulateOfflineRun(seconds,{clockStartMs:Number.isFinite(startMs)?startMs:2000000000000});
+    var offlineStartMs = Number.isFinite(startMs)?startMs:2000000000000;
+    var result = simulateOfflineRun(seconds,{clockStartMs:offlineStartMs,offlineWindowStartMs:offlineStartMs});
     return {
       state:JSON.parse(JSON.stringify(state)),
       summary:result,
@@ -430,10 +456,12 @@ window.__lumenfallQaBridge = {
   },
   simulateTimeline: function(seconds,kind,startMs){
     var begin = performance.now();
+    var timelineStartMs = Number.isFinite(startMs)?startMs:2000000000000;
     var result = advanceAuthoritativeTime(seconds,{
       kind:kind||'offline',
       visual:false,
-      clockStartMs:Number.isFinite(startMs)?startMs:2000000000000,
+      clockStartMs:timelineStartMs,
+      offlineWindowStartMs:(kind||'offline')==='offline' ? timelineStartMs : undefined,
       captureTimeline:true
     });
     return {
@@ -444,10 +472,12 @@ window.__lumenfallQaBridge = {
     };
   },
   simulateDirectTrace: function(seconds,kind,everySec,startMs){
+    var traceStartMs = Number.isFinite(startMs)?startMs:2000000000000;
     var result = advanceAuthoritativeTime(seconds,{
       kind:kind||'offline',
       visual:false,
-      clockStartMs:Number.isFinite(startMs)?startMs:2000000000000,
+      clockStartMs:traceStartMs,
+      offlineWindowStartMs:(kind||'offline')==='offline' ? traceStartMs : undefined,
       traceEverySec:everySec
     });
     return {
@@ -457,13 +487,16 @@ window.__lumenfallQaBridge = {
     };
   },
   simulateEventTrace: function(seconds,kind,startMs,fromSec,toSec,offsetSec){
+    var eventStartMs = Number.isFinite(startMs)?startMs:2000000000000;
+    var eventOffsetSec = offsetSec||0;
     var result = advanceAuthoritativeTime(seconds,{
       kind:kind||'offline',
       visual:false,
-      clockStartMs:Number.isFinite(startMs)?startMs:2000000000000,
+      clockStartMs:eventStartMs,
+      offlineWindowStartMs:(kind||'offline')==='offline' ? eventStartMs-eventOffsetSec*1000 : undefined,
       traceEventsFromSec:fromSec,
       traceEventsToSec:toSec,
-      traceOffsetSec:offsetSec||0
+      traceOffsetSec:eventOffsetSec
     });
     return {
       state:JSON.parse(JSON.stringify(state)),
@@ -652,7 +685,7 @@ def build_runner():
   function assertProtectedParity(actual,expected,label){
     [
       'totalKills','motes','sigils','depth','maxDepthEver','riftMode','farmDepth',
-      'farmReturnDepth','enemyDepth','enemyIsLuminous','ascendCount','totalTaps',
+      'farmReturnDepth','enemyDepth','enemyIsLuminous','ascendCount','ascendRewardedDepth','totalTaps',
       'prisms','comets','autoAscendEnabled','autoAscendTargetDepth'
     ].forEach(function(key){
       assert(
@@ -1112,7 +1145,8 @@ def build_runner():
           assert(s.spirits.titan===42 && s.heroRarity.ember===5,'mature Wisp progression must load intact');
           assert(s.research.focus===24 && s.longStudyLevels.wispascend===9,'mature Lab progression must load intact');
           assert(s.owned.autoascend===true && s.autoAscendEnabled===true,'mature automation flags must load intact');
-          finish('pass',{depth:s.depth,maxDepthEver:s.maxDepthEver});
+          assert(s.ascendRewardedDepth===0,'existing schema-v1 saves without a benchmark must safely default to 0');
+          finish('pass',{depth:s.depth,maxDepthEver:s.maxDepthEver,ascendRewardedDepth:s.ascendRewardedDepth});
           return;
 
         case 'legacy-load':
@@ -1434,13 +1468,13 @@ def build_runner():
         }
 
         case 'parity-boss-retry': {
-          var retryPair = runParityPair(120,'offline',0.1);
+          var retryPair = runParityPair(360,'offline',0.1);
           assert(retryPair.direct.summary.retreats>=1,'unwinnable Boss must retreat to Farm');
           assert(retryPair.direct.summary.retries>=1,'Auto-Empower must permit a later Boss retry once sustained damage is positive');
           assert(retryPair.direct.summary.bossKills>=1,'retried Boss must be defeatable inside the representative window');
           assert(retryPair.direct.summary.sigilsGained>=2,'Boss retry path must preserve Sigil rewards');
           finish('pass',{
-            durationSec:120,
+            durationSec:360,
             retreats:retryPair.direct.summary.retreats,
             retries:retryPair.direct.summary.retries,
             bossKills:retryPair.direct.summary.bossKills,
@@ -1589,12 +1623,12 @@ def build_runner():
 
         case 'chronology-boss-retry': {
           var bossBaseline = state();
-          var bossDirect = bridge.simulateTimeline(120,'offline',PARITY_CLOCK_MS);
+          var bossDirect = bridge.simulateTimeline(360,'offline',PARITY_CLOCK_MS);
           var retreatEvent = firstTimelineEvent(bossDirect,'bossRetreat');
           var bossEmpowerEvent = firstTimelineEvent(bossDirect,'autoEmpower');
           var retryEvent = firstTimelineEvent(bossDirect,'bossRetry');
           assert(retreatEvent && bossEmpowerEvent && retryEvent,'Boss chronology must include retreat, progression gain and retry');
-          assert(retreatEvent.elapsedSec===0,'unwinnable starting Boss must retreat at simulated time zero');
+          parityApprox(retreatEvent.elapsedSec,bridge.bossRetreatGraceSec(),'unwinnable Boss retreat grace timestamp');
           assert(
             bossEmpowerEvent.elapsedSec>retreatEvent.elapsedSec &&
             retryEvent.elapsedSec>=bossEmpowerEvent.elapsedSec,
@@ -1602,7 +1636,7 @@ def build_runner():
           );
           assert(bossDirect.summary.bossKills>=1,'retried Boss must be defeated inside the fixture window');
           assert(bossDirect.summary.sigilsGained>=2,'retried Boss must preserve Sigil rewards');
-          assertChronologicalSplit(bossBaseline,120,retryEvent.elapsedSec,bossDirect,'Boss retreat/progression/retry');
+          assertChronologicalSplit(bossBaseline,360,retryEvent.elapsedSec,bossDirect,'Boss retreat/progression/retry');
           finish('pass',{
             retreatSec:retreatEvent.elapsedSec,
             firstEmpowerSec:bossEmpowerEvent.elapsedSec,
@@ -1739,11 +1773,29 @@ def build_runner():
           return;
         }
 
+        case 'lifecycle-boss-background-short': {
+          var shortBossLife = runResumeWindow(30,'short Boss background intent');
+          assert(shortBossLife.baseline.riftMode==='push' && shortBossLife.baseline.depth===20,'short Boss fixture must begin on Push Boss 20');
+          assert(shortBossLife.expected.summary.retreats===0,'short Boss background must not retreat');
+          assert(shortBossLife.actual.riftMode==='push','short screen-off must preserve Push mode');
+          assert(shortBossLife.actual.depth===20 && shortBossLife.actual.enemyDepth===20,'short screen-off must preserve Boss intent');
+          assert(shortBossLife.actual.farmReturnDepth===0,'short screen-off must not create a hidden Farm return point');
+          finish('pass',{
+            elapsedSec:30,
+            mode:shortBossLife.actual.riftMode,
+            depth:shortBossLife.actual.depth,
+            retreats:shortBossLife.expected.summary.retreats,
+            offlineApplications:consumedOfflineEvents(shortBossLife.trace).length
+          });
+          return;
+        }
+
         case 'lifecycle-boss-retry': {
-          var bossLife = runResumeWindow(120,'boss retreat/Farm/retry lifecycle');
+          var bossLife = runResumeWindow(360,'boss retreat/Farm/retry lifecycle');
           var retreat = firstTimelineEvent(bossLife.expected,'bossRetreat');
           var retry = firstTimelineEvent(bossLife.expected,'bossRetry');
           assert(retreat && retry,'lifecycle Boss reference must retreat and retry');
+          parityApprox(retreat.elapsedSec,bridge.bossRetreatGraceSec(),'Boss lifecycle retreat grace');
           assert(bossLife.expected.summary.retreats===1,'Boss lifecycle fixture must retreat exactly once');
           assert(bossLife.expected.summary.retries>=1,'Boss lifecycle fixture must retry after Farm progression');
           assert(bossLife.expected.summary.bossKills>=1,'Boss lifecycle fixture must defeat the retried Boss');
@@ -2168,6 +2220,91 @@ def build_runner():
           window.P105AccessibilityQa.negativeFocusReturn(assert);
           finish('pass',{unexpected:'focus-return regression was not detected'});
           return;
+
+        case 'p2-ascend-integrity': {
+          function ascendState(cleared,benchmark,autoEnabled){
+            var a = cloneJson(state());
+            a.depth = cleared+1;
+            a.maxDepthEver = Math.max(a.maxDepthEver,cleared+1);
+            a.riftMode = 'push';
+            a.farmDepth = 0;
+            a.farmReturnDepth = 0;
+            a.enemyDepth = cleared+1;
+            a.enemyHp = 1;
+            a.enemyMaxHp = 1;
+            a.prisms = 0;
+            a.ascendCount = 0;
+            a.ascendRewardedDepth = benchmark||0;
+            a.spirits.ember = 50;
+            a.activeParty = ['ember'];
+            a.owned.autoascend = !!autoEnabled;
+            a.autoAscendEnabled = !!autoEnabled;
+            a.autoAscendTargetDepth = cleared+1;
+            return a;
+          }
+
+          var firstState = ascendState(100,0,false);
+          bridge.setState(firstState);
+          var firstBreakdown = bridge.ascendBreakdown(101);
+          assert(firstBreakdown.full===20,'Rift 100 baseline full Prism curve must remain 20 before Prism multipliers');
+          assert(firstBreakdown.gain===firstBreakdown.full,'first meaningful Ascend must keep the full intended reward');
+          var firstManual = bridge.ascendManual();
+          assert(firstManual.gain===20,'first meaningful Ascend must award full 20 Prisms at cleared Rift 100');
+          assert(firstManual.after.benchmark===100,'first Ascend must establish cleared Rift 100 as the reward benchmark');
+
+          var repeatState = ascendState(100,100,false);
+          bridge.setState(repeatState);
+          var repeatBreakdown = bridge.ascendBreakdown(101);
+          assert(repeatBreakdown.gain===4,'same-depth Rift 100 repeat must pay the 20% reserve reward');
+          assert(repeatBreakdown.progressBonus===0,'same-depth repeat must have no new-depth bonus');
+          var repeatManual = bridge.ascendManual();
+          assert(repeatManual.gain===4,'manual same-depth repeat must award only reserve Prisms');
+          assert(repeatManual.after.benchmark===100,'same-depth repeat must not move the benchmark');
+
+          var fartherState = ascendState(200,100,false);
+          bridge.setState(fartherState);
+          var fartherBreakdown = bridge.ascendBreakdown(201);
+          assert(fartherBreakdown.gain>repeatBreakdown.gain,'meaningfully deeper push must improve Ascend value');
+          assert(fartherBreakdown.progressBonus>0,'new cleared depth must add a positive depth bonus');
+          assert(fartherBreakdown.gain<=fartherBreakdown.full,'benchmark rule must never exceed the original full curve');
+          var fartherManual = bridge.ascendManual();
+          assert(fartherManual.gain===fartherBreakdown.gain,'manual deeper Ascend must use the benchmark breakdown exactly');
+          assert(fartherManual.after.benchmark===200,'deeper manual Ascend must advance the reward benchmark');
+
+          var wallState = ascendState(100,100,false);
+          bridge.setState(wallState);
+          var wallBreakdown = bridge.ascendBreakdown(101);
+          assert(wallBreakdown.gain>=1,'a player hard-walled at the benchmark must retain a useful prestige path');
+
+          var parityBaseline = ascendState(150,100,true);
+          bridge.setState(parityBaseline);
+          var manualExpected = bridge.ascendBreakdown(151);
+          var manualAutoParity = bridge.ascendManual();
+          assert(manualAutoParity.gain===manualExpected.gain,'manual Ascend must use the canonical benchmark reward');
+
+          bridge.setState(parityBaseline);
+          var liveAuto = bridge.simulateTimeline(1,'live',PARITY_CLOCK_MS);
+          assert(liveAuto.summary.ascends===1,'live Auto-Ascend must fire once when already ready');
+          assert(liveAuto.summary.ascendGains[0]===manualExpected.gain,'live Auto-Ascend must use the manual reward rule');
+          assert(liveAuto.state.ascendRewardedDepth===150,'live Auto-Ascend must advance the same benchmark');
+
+          bridge.setState(parityBaseline);
+          var offlineAuto = bridge.simulateTimeline(1,'offline',PARITY_CLOCK_MS);
+          assert(offlineAuto.summary.ascends===1,'offline Auto-Ascend must fire once when already ready');
+          assert(offlineAuto.summary.ascendGains[0]===manualExpected.gain,'offline Auto-Ascend must use the same benchmark reward');
+          assert(offlineAuto.state.prisms===liveAuto.state.prisms,'live and offline Auto-Ascend Prism totals must match');
+          assert(offlineAuto.state.ascendRewardedDepth===liveAuto.state.ascendRewardedDepth,'live/offline Auto-Ascend benchmark must match');
+
+          finish('pass',{
+            firstReward:firstManual.gain,
+            repeatReward:repeatManual.gain,
+            deeperReward:fartherManual.gain,
+            wallReward:wallBreakdown.gain,
+            manualAutoReward:manualExpected.gain,
+            finalBenchmark:offlineAuto.state.ascendRewardedDepth
+          });
+          return;
+        }
 
         case 'self-test-bad-assertion':
           assert(s.depth===999999,'intentional harness self-test assertion');
