@@ -2058,6 +2058,11 @@ var FORMATION_BONDS = [
 
 var RESOURCE_COLORS = {mana:'#4f8fe0', rage:'#e0524f', harmony:'#e0b34f', focus:'#4fe0c9', energy:'#7fe04f'};
 var MODULE_MAX_LEVEL = 20;
+var MODULE_LATE_GROWTH = 1.18;
+var MODULE_LATE_GROWTH_START = 5;
+var RARITY_LEVEL_REQUIREMENTS = [8,18,30,45,65];
+var RARITY_SHARD_COSTS = [15,90,900,15000,500000];
+var RARITY_LUMEN_BASE_MULTS = [8,20,80,400,2400];
 var MODULE_INFO = {
   dps:     {name:'Overcharge Core',  effect:function(lvl){ return '+'+Math.round(lvl*5)+'% ability burst damage'; }},
   tank:    {name:'Bulwark Plating',  effect:function(lvl){ return '+'+Math.round(lvl*5)+'% ability burst damage'; }},
@@ -2912,10 +2917,14 @@ function sigilsFromBoss(depth){ return Math.max(1, Math.floor(depth/10)); }
 
 function moduleLevel(id){ return (state.wispModules && state.wispModules[id]) || 0; }
 function moduleMult(id){ return 1 + moduleLevel(id)*0.05; }
+function modulePacingMult(level){
+  return Math.pow(MODULE_LATE_GROWTH,Math.max(0,level-(MODULE_LATE_GROWTH_START-1)));
+}
 function moduleCost(sp, level){
+  var pacing = modulePacingMult(level);
   return {
-    lumen: Math.round(sp.baseCost*4 * Math.pow(1.35, level)),
-    shard: Math.round(sp.baseCost*0.4 * Math.pow(1.35, level))
+    lumen: Math.round(sp.baseCost*4 * Math.pow(1.35, level) * pacing),
+    shard: Math.round(sp.baseCost*0.4 * Math.pow(1.35, level) * pacing)
   };
 }
 function supportMoteBonus(){
@@ -3032,11 +3041,30 @@ function nodeCost(node){
   var level = state.nodes[node.id];
   return Math.ceil(node.baseCost * Math.pow(node.growth, level));
 }
-function rarityReq(tier){ return (tier+1)*8; }
+/*
+ * P2-01B permanent Wisp pacing contract
+ * --------------------------------------
+ * Rarity keeps the first upgrade at its existing accessibility point, then
+ * deliberately widens both the current-run level requirement and permanent
+ * resource commitment. The five upgrade tiers are explicit rather than hidden
+ * behind one exponential so players can see the real price in the existing UI.
+ *
+ * Module levels 1-5 keep the previous curve exactly. From level 6 onward an
+ * additional 1.18x late-growth factor applies per level, preserving useful
+ * early Modules while making the final third a serious permanent investment.
+ * The cap remains 20 and every level keeps the existing +5% role-specific gain.
+ *
+ * Existing saves are never repriced retroactively: stored Rarity/Module levels
+ * remain valid even if they exceed a new current-run level requirement.
+ */
+function rarityReq(tier){
+  return RARITY_LEVEL_REQUIREMENTS[Math.max(0,Math.min(RARITY_LEVEL_REQUIREMENTS.length-1,tier))];
+}
 function rarityCost(sp, tier){
+  tier = Math.max(0,Math.min(RARITY_SHARD_COSTS.length-1,tier));
   return {
-    shard: Math.round(15*Math.pow(3.2, tier)),
-    lumen: Math.round(sp.baseCost*8*Math.pow(2, tier))
+    shard: RARITY_SHARD_COSTS[tier],
+    lumen: Math.round(sp.baseCost*RARITY_LUMEN_BASE_MULTS[tier])
   };
 }
 
