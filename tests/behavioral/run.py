@@ -1197,6 +1197,8 @@ def build_runner():
           assert(s.depth===95 && s.maxDepthEver===120,'mature progression depth must load intact');
           assert(s.activeParty.length===5,'mature party must keep five active Wisps');
           assert(s.spirits.titan===42 && s.heroRarity.ember===5,'mature Wisp progression must load intact');
+          assert(s.heroRarity.void===5 && s.heroRarity.titan===3,'existing high Rarity progression must not be reduced by future pacing');
+          assert(s.wispModules.ember===20 && s.wispModules.void===20 && s.wispModules.titan===9,'existing Module progression must not be reduced by future costs');
           assert(s.research.focus===24 && s.longStudyLevels.wispascend===9,'mature Lab progression must load intact');
           assert(s.owned.autoascend===true && s.autoAscendEnabled===true,'mature automation flags must load intact');
           assert(s.ascendRewardedDepth===0,'existing schema-v1 saves without a benchmark must safely default to 0');
