@@ -8,61 +8,14 @@
 <meta name="theme-color" content="#1c1730">
 <link rel="stylesheet" href="fonts/fonts.css">
 <style>
+  /* Lumenfall deliberately uses one dark palette, independent of system appearance. */
   :root{
-    --bg:#f2effa;
-    --bg-elev:#ffffff;
-    --bg-elev-2:#eae5f8;
-    --ink:#211f38;
-    --ink-dim:#5d5a7c;
-    --line:#ddd7f0;
-    --lumen:#c98a00;
-    --shard:#1f7fae;
-    --mote:#c14f76;
-    --prism:#8452d6;
-    --comet:#12a390;
-    --sigil:#b8461f;
-    --danger:#c93b4d;
-    --good:#2f9e52;
-    --shadow: 0 1px 2px rgba(33,31,56,.06), 0 8px 24px -12px rgba(33,31,56,.18);
-    color-scheme: light;
-  }
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){
-      --bg:#0d0f1f;
-      --bg-elev:#161933;
-      --bg-elev-2:#1f2344;
-      --ink:#eae8f5;
-      --ink-dim:#a8a6c4;
-      --line:#2c2f52;
-      --lumen:#f0b429;
-      --shard:#4fb6e0;
-      --mote:#ff8fae;
-      --prism:#b088f9;
-      --comet:#5ee6d0;
-      --sigil:#ff8552;
-      --danger:#ef5b6b;
-      --good:#6fd67a;
-      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px -12px rgba(0,0,0,.6);
-      color-scheme: dark;
-    }
-  }
-  :root[data-theme="dark"]{
-    --bg:#0d0f1f;
-    --bg-elev:#161933;
-    --bg-elev-2:#1f2344;
-    --ink:#eae8f5;
-    --ink-dim:#a8a6c4;
-    --line:#2c2f52;
-    --lumen:#f0b429;
-    --shard:#4fb6e0;
-    --mote:#ff8fae;
-    --prism:#b088f9;
-    --comet:#5ee6d0;
-    --sigil:#ff8552;
-    --danger:#ef5b6b;
-    --good:#6fd67a;
-    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px -12px rgba(0,0,0,.6);
-    color-scheme: dark;
+    --bg:#0d0f1f;--bg-elev:#161933;--bg-elev-2:#1f2344;
+    --ink:#f0effb;--ink-dim:#b5b4cb;--line:#3b4060;
+    --lumen:#f0c567;--shard:#82d2ec;--mote:#ffb4d5;--prism:#bd9bef;
+    --comet:#5ee6d0;--sigil:#ffa17b;--danger:#ff7b92;--good:#9ed9b1;
+    --shadow:0 1px 2px #0006,0 12px 32px -12px #0009;
+    color-scheme:dark;
   }
 
   *{box-sizing:border-box;}
@@ -90,6 +43,8 @@
     border-left:1px solid var(--line);
     border-right:1px solid var(--line);
   }
+
+  :root{--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);--nav-height:54px;}
 
   /* ---------- HUD ---------- */
   .topbar{position:sticky;top:0;z-index:6;}
@@ -150,9 +105,8 @@
   }
   .buy-btn .cost{font-size:.74rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:2px;}
   .buy-btn .label{font-size:.6rem;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.04em;}
-  .buy-btn:disabled{opacity:.4;cursor:not-allowed;}
+  .buy-btn:disabled{opacity:1;cursor:not-allowed;}
   .lock-note{font-size:.72rem;color:var(--ink-dim);font-style:italic;}
-  .cost-icon{width:9px;height:9px;flex:none;display:inline-block;}
 
   /* ---------- Battle stage ---------- */
   .stage{padding:16px 14px;display:flex;flex-direction:column;gap:10px;}
@@ -241,7 +195,7 @@
     border-radius:9px;padding:7px 8px;font-size:.68rem;font-weight:800;cursor:pointer;
   }
   .rift-mode-btn.active{border-color:var(--lumen);color:var(--lumen);background:color-mix(in srgb,var(--lumen) 10%,var(--bg-elev));}
-  .rift-mode-btn:disabled{opacity:.4;cursor:not-allowed;}
+  .rift-mode-btn:disabled{opacity:1;cursor:not-allowed;}
   .rift-mode-note{font-size:.66rem;color:var(--ink-dim);text-align:center;line-height:1.4;margin-top:-3px;}
 
   /* ---------- shapes ---------- */
@@ -257,7 +211,7 @@
 
   /* ---------- Hero roster ---------- */
   .hero-grid{display:grid;grid-template-columns:1fr;gap:10px;}
-  .hero-card.locked{opacity:.55;}
+  .hero-card.locked{opacity:1;}
   .hero-top{display:flex;align-items:center;gap:10px;}
   .hero-top .shape{width:34px;height:34px;}
   .hero-card .shape-ring{border:6px solid currentColor;}
@@ -283,7 +237,7 @@
   }
   .node-queue-toggle.active{background:var(--good);border-color:var(--good);color:#fff;}
   .active-toggle{
-    flex:none;font-size:.62rem;font-weight:700;padding:5px 10px;border-radius:999px;
+    flex:none;font-size:.6875rem;font-weight:700;padding:5px 10px;border-radius:999px;
     border:1px solid var(--line);background:var(--bg-elev);color:var(--ink-dim);cursor:pointer;
   }
   .active-toggle.is-active{background:var(--good);color:#08210f;border-color:var(--good);}
@@ -310,16 +264,16 @@
     font-weight:700;font-size:.71rem;padding:8px 5px;cursor:pointer;
     display:flex;flex-direction:column;align-items:center;gap:1px;
   }
-  .mini-btn:disabled{opacity:.4;cursor:not-allowed;}
+  .mini-btn:disabled{opacity:1;cursor:not-allowed;}
   .rarity-btn{color:var(--prism);}
 
   /* ---------- Research / Ascend node cards ---------- */
   .node-card{display:flex;gap:12px;align-items:center;margin-bottom:10px;}
-  .node-card .shape{width:30px;height:30px;}
+  .node-card > .shape{width:30px;height:30px;}
   .node-info .name{font-weight:700;font-size:.86rem;}
   .node-info .desc{font-size:.72rem;color:var(--ink-dim);margin-top:1px;}
   .node-info .lvl{font-size:.68rem;font-weight:700;margin-top:2px;}
-  .locked-node{opacity:.55;}
+  .locked-node{opacity:1;}
 
   /* ---------- Lab: bulk buy + Long Studies ---------- */
   .mult-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
@@ -345,7 +299,7 @@
   .speed-btn .speed-cost{font-size:.58rem;color:var(--ink-dim);font-weight:600;display:flex;align-items:center;gap:2px;}
   .speed-btn.active{background:var(--mote);color:#fff;border-color:var(--mote);}
   .speed-btn.active .speed-cost{color:#fff;}
-  .speed-btn:disabled{opacity:.4;cursor:not-allowed;}
+  .speed-btn:disabled{opacity:1;cursor:not-allowed;}
 
   /* ---------- Ascend ---------- */
   .ascend-summary{display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center;padding:18px 14px;}
@@ -379,7 +333,7 @@
   .quest-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;}
   .quest-progress-text{font-size:.68rem;color:var(--ink-dim);}
   .quest-claim-btn{flex:none;border-radius:8px;border:1px solid var(--good);background:var(--good);color:#08210f;font-weight:700;font-size:.68rem;padding:6px 14px;cursor:pointer;}
-  .quest-claim-btn:disabled{opacity:.45;cursor:not-allowed;background:var(--bg-elev);color:var(--ink-dim);border-color:var(--line);}
+  .quest-claim-btn:disabled{opacity:1;cursor:not-allowed;background:var(--bg-elev);color:var(--ink-dim);border-color:var(--line);}
   .quest-claim-btn.done{background:var(--bg-elev);color:var(--good);border-color:var(--good);opacity:1;}
 
   /* ---------- Achievements ---------- */
@@ -401,7 +355,7 @@
     flex:none;border-radius:10px;border:1px solid var(--line);background:var(--bg-elev);
     padding:8px 12px;font-weight:700;font-size:.78rem;color:var(--comet);cursor:pointer;
   }
-  .shop-card button:disabled{opacity:.4;cursor:not-allowed;}
+  .shop-card button:disabled{opacity:1;cursor:not-allowed;}
   .shop-card button.owned{color:var(--good);}
   .theme-card{display:flex;align-items:center;gap:12px;margin-bottom:10px;cursor:pointer;border-color:transparent;}
   .theme-card.active{border-color:var(--good);}
@@ -510,7 +464,7 @@
   .ency-top{display:flex;align-items:center;gap:9px;}
   .ency-main{flex:1;min-width:0;}
   .ency-name{font-size:.78rem;font-weight:800;}
-  .ency-meta{font-size:.62rem;color:var(--ink-dim);margin-top:1px;}
+  .ency-meta{font-size:.6875rem;color:var(--ink-dim);margin-top:1px;}
   .ency-desc{font-size:.69rem;color:var(--ink-dim);line-height:1.42;margin-top:6px;}
   .ency-status{font-size:.6rem;font-weight:800;padding:3px 7px;border-radius:999px;background:var(--bg-elev);color:var(--ink-dim);white-space:nowrap;}
   .ency-status.on{color:var(--good);}
@@ -630,7 +584,7 @@
     text-transform:uppercase;color:rgba(199,196,221,.66);
   }
   .startup-skip{
-    position:absolute;left:0;right:0;bottom:calc(17px + env(safe-area-inset-bottom));
+    position:absolute;left:0;right:0;bottom:calc(17px + var(--safe-bottom));
     text-align:center;font-size:.55rem;font-weight:700;letter-spacing:.17em;text-transform:uppercase;
     color:rgba(202,198,220,.36);opacity:0;animation:skipIn .5s .75s ease forwards;
   }
@@ -652,10 +606,11 @@
 
   /* ---------- Toast ---------- */
   .toast{
-    position:fixed;left:50%;bottom:22px;transform:translate(-50%,8px);z-index:15;
+    position:fixed;left:50%;bottom:calc(var(--nav-height) + var(--safe-bottom) + 8px);transform:translate(-50%,8px);z-index:15;
     background:var(--ink);color:var(--bg);font-size:.76rem;font-weight:600;
     padding:8px 14px;border-radius:999px;opacity:0;pointer-events:none;
-    transition:opacity .2s ease, transform .2s ease;max-width:80%;text-align:center;
+    transition:opacity .2s ease, transform .2s ease;width:max-content;max-width:min(460px,calc(100% - 32px));text-align:center;
+    line-height:16px;border-radius:12px;
   }
   .toast.show{opacity:1;transform:translate(-50%,0);}
 
@@ -671,20 +626,9 @@
     --panel-glass:color-mix(in srgb,var(--bg-elev) 88%,transparent);
     --panel-solid:color-mix(in srgb,var(--bg-elev-2) 92%,var(--bg-elev));
     --soft-line:color-mix(in srgb,var(--line) 72%,transparent);
-    --deep-shadow:0 18px 50px -28px rgba(23,18,55,.45),0 3px 10px -6px rgba(23,18,55,.16);
-    --inner-highlight:inset 0 1px 0 rgba(255,255,255,.35);
-  }
-  @media (prefers-color-scheme:dark){
-    :root:not([data-theme="light"]){
-      --deep-shadow:0 22px 60px -30px rgba(0,0,0,.82),0 4px 14px -8px rgba(0,0,0,.65);
-      --inner-highlight:inset 0 1px 0 rgba(255,255,255,.055);
-    }
-  }
-  :root[data-theme="dark"]{
     --deep-shadow:0 22px 60px -30px rgba(0,0,0,.82),0 4px 14px -8px rgba(0,0,0,.65);
     --inner-highlight:inset 0 1px 0 rgba(255,255,255,.055);
   }
-
   html{background:var(--bg);}
   body{
     background:
@@ -700,7 +644,7 @@
     box-shadow:0 0 70px -50px color-mix(in srgb,var(--prism) 55%,transparent);
   }
   .hud{
-    padding:calc(10px + env(safe-area-inset-top)) 12px 9px;
+    padding:calc(10px + var(--safe-top)) 12px 9px;
     background:color-mix(in srgb,var(--bg-elev) 88%,transparent);
     border-color:var(--soft-line);
     backdrop-filter:blur(18px) saturate(1.18);
@@ -741,7 +685,7 @@
   nav.tabbar button.active .ic{box-shadow:0 0 16px color-mix(in srgb,var(--lumen) 48%,transparent);}
 
   main{
-    padding:16px 12px calc(28px + env(safe-area-inset-bottom));
+    padding:16px 12px calc(28px + var(--safe-bottom));
   }
   .tab-panel.active{animation:panelIn .22s ease-out;}
   @keyframes panelIn{from{opacity:0;transform:translateY(7px) scale(.995);}to{opacity:1;transform:none;}}
@@ -805,7 +749,7 @@
     background:linear-gradient(135deg,color-mix(in srgb,var(--lumen) 17%,var(--bg-elev)),color-mix(in srgb,var(--prism) 9%,var(--bg-elev)));
     box-shadow:0 5px 16px -12px color-mix(in srgb,var(--lumen) 70%,transparent),var(--inner-highlight);
   }
-  .rift-mode-note{font-size:.62rem;opacity:.88;}
+  .rift-mode-note{font-size:.6875rem;opacity:.88;}
   .battle-row{gap:11px;align-items:center;margin:1px 0 3px;}
   .party-col{width:62px;gap:6px;}
   .hero-chip{
@@ -915,7 +859,7 @@
     border:1px solid color-mix(in srgb,var(--good) 30%,var(--line));
     background:color-mix(in srgb,var(--good) 8%,var(--bg-elev));
   }
-  .bond-summary{font-size:.62rem;opacity:.9;}
+  .bond-summary{font-size:.6875rem;opacity:.9;}
   .tap-hint{font-size:.65rem;line-height:1.42;opacity:.82;}
   .stat-box{
     background:linear-gradient(160deg,color-mix(in srgb,var(--bg-elev) 82%,transparent),color-mix(in srgb,var(--bg-elev-2) 74%,transparent));
@@ -1022,7 +966,7 @@
   }
   .mult-btn{min-height:34px;border:none;background:transparent;}
   .mult-btn.active{
-    background:linear-gradient(135deg,var(--shard),color-mix(in srgb,var(--shard) 72%,var(--prism)));
+    background:color-mix(in srgb,var(--shard) 15%,var(--bg-elev));color:var(--ink);
     box-shadow:0 5px 14px -10px var(--shard);
   }
   .study-card{
@@ -1055,7 +999,7 @@
     text-shadow:0 0 18px color-mix(in srgb,var(--prism) 34%,transparent);
   }
   .big-btn{
-    min-height:48px;border:1px solid color-mix(in srgb,var(--prism) 44%,transparent);
+    color:var(--bg);min-height:48px;border:1px solid color-mix(in srgb,var(--prism) 44%,transparent);
     box-shadow:0 10px 30px -20px var(--prism),var(--inner-highlight);
   }
   #tab-ascend .node-card{
@@ -1103,10 +1047,10 @@
     box-shadow:0 30px 80px -30px rgba(0,0,0,.55),var(--inner-highlight);
   }
   .settings-head{
-    padding-top:calc(12px + env(safe-area-inset-top));
+    padding-top:calc(12px + var(--safe-top));
     background:color-mix(in srgb,var(--bg-elev) 75%,transparent);backdrop-filter:blur(12px);
   }
-  .settings-scroll{padding-bottom:calc(16px + env(safe-area-inset-bottom));}
+  .settings-scroll{padding-bottom:calc(16px + var(--safe-bottom));}
   .settings-row,.ency-card{
     border-color:var(--soft-line);
     background:linear-gradient(150deg,color-mix(in srgb,var(--bg-elev-2) 88%,transparent),color-mix(in srgb,var(--bg-elev) 92%,transparent));
@@ -1208,9 +1152,9 @@
   .settings-row{min-height:56px;}
   .settings-overlay{
     padding:
-      max(10px,env(safe-area-inset-top))
+      max(10px,var(--safe-top))
       max(10px,env(safe-area-inset-right))
-      max(10px,env(safe-area-inset-bottom))
+      max(10px,var(--safe-bottom))
       max(10px,env(safe-area-inset-left));
   }
   .settings-modal{height:min(92dvh,760px);}
@@ -1222,7 +1166,7 @@
   .tab-panel{contain:layout style;}
   .enemy-stage,.hero-chip,.hero-card{will-change:auto;}
   @media (max-height:650px){
-    .hud{padding-top:calc(7px + env(safe-area-inset-top));padding-bottom:6px;}
+    .hud{padding-top:calc(7px + var(--safe-top));padding-bottom:6px;}
     nav.tabbar button{min-height:45px;padding-top:6px;padding-bottom:5px;}
     main{padding-top:10px;}
     .enemy-stage{width:136px;height:136px;}
@@ -1262,7 +1206,7 @@
     -webkit-overflow-scrolling:touch;
     scrollbar-width:none;
     padding-bottom:16px;
-    margin-bottom:calc(54px + env(safe-area-inset-bottom));
+    margin-bottom:calc(var(--nav-height) + var(--safe-bottom));
   }
   main::-webkit-scrollbar{display:none;}
   /* Push is a single-screen combat view: never allow vertical drift/scroll. */
@@ -1284,7 +1228,7 @@
     bottom:0;
     transform:translateX(-50%);
     width:min(500px,100%);
-    padding-bottom:env(safe-area-inset-bottom);
+    padding-bottom:var(--safe-bottom);
     border-top:1px solid var(--soft-line,var(--line));
     border-bottom:none;
     box-shadow:0 -12px 34px -28px rgba(0,0,0,.72);
@@ -1308,7 +1252,8 @@
   }
 
   @media (max-height:650px){
-    main{padding-bottom:10px;margin-bottom:calc(48px + env(safe-area-inset-bottom));}
+    :root{--nav-height:48px;}
+    main{padding-bottom:10px;}
     nav.tabbar button{min-height:48px;}
   }
 
@@ -1559,8 +1504,6 @@
   main.rift-scroll-locked{padding:9px 10px 10px;display:flex;flex-direction:column;}
   #tab-battle.active{height:100%;min-height:0;flex:1;}
   #tab-battle .stage{
-    --ink:#f0effb;--ink-dim:#b5b4cb;--bg-elev:#13192d;--bg-elev-2:#1c2339;--line:#30364d;
-    --danger:#ff7b92;--lumen:#e7c67e;--prism:#bd9bef;--shard:#82d2ec;--mote:#ffb4d5;--good:#9ed9b1;
     --land-light:#9ca7ee;--land-far:#19233b;--land-stone:#101b30;--land-edge:#384867;
     color:var(--ink);
     height:100%;min-height:0;padding:12px 12px 10px;gap:8px;
@@ -1579,7 +1522,7 @@
   .stage .rift-mode-row{flex:none;background:#090f20a6;border-color:#3b44594d;border-radius:11px;}
   .stage .rift-mode-btn{min-height:34px;font-size:.7rem;letter-spacing:.1em;}
   .stage .rift-mode-btn.active{color:#ffe1a0;background:linear-gradient(110deg,#6d50372e,#c4a0652e);box-shadow:inset 0 0 0 1px #eac07955,inset 0 1px 0 #f9dea62b;}
-  .stage .rift-mode-btn:disabled{opacity:.55;}
+  .stage .rift-mode-btn:disabled{color:var(--ink-dim);opacity:1;}
   .stage .rift-mode-note{display:none;}
   .stage .rift-objective{flex:none;z-index:2;background:#141d30;border-color:#3d4963;min-height:39px;padding:6px 9px 8px;}
   .stage .enemy-name{position:relative;z-index:2;font-size:.9rem;letter-spacing:.035em;flex:none;margin:2px 0 -6px;}
@@ -1645,29 +1588,89 @@
   @keyframes creatureFloat{0%,100%{transform:translateY(2px) rotate(-1deg);}50%{transform:translateY(-6px) rotate(1deg);}}
   @keyframes creatureStrike{0%{transform:scale(.88) rotate(-4deg);filter:brightness(1.7);}100%{transform:scale(1);filter:brightness(1);}}
   @keyframes dustRise{0%{transform:translate3d(0,15px,0);opacity:0;}30%,65%{opacity:.6;}100%{transform:translate3d(12px,-70px,0);opacity:0;}}
-  @media(max-height:730px){
-    #tab-battle .stage{padding:9px 10px 8px;gap:6px;}
-    .stage .depth-label{font-size:.95rem;}
-    .stage .rift-mode-btn{min-height:30px;padding:6px;}
-    .stage .rift-objective{min-height:34px;padding:4px 7px 6px;}
-    .stage .enemy-name{font-size:.8rem;margin:0 0 -5px;}
-    .stage .wisp-portrait{width:22px;height:22px;}
-    .stage .hero-chip{padding:3px 2px;gap:1px;}
-    .stage .stat-box{padding:5px 8px;}
-    .stage .tap-hint{font-size:.53rem;}
-  }
-  @media(max-height:580px){
-    #tab-battle .stage{gap:4px;padding:6px 9px;}
-    .stage .depth-label{font-size:.85rem;}.stage .depth-label .region-label{font-size:.48rem;margin:0;}
-    .stage .rift-mode-btn{min-height:27px;padding:4px;}.stage .tap-hint{display:none!important;}
-    .stage .rift-objective{min-height:29px;}.stage .objective-copy small{display:none;}
-    .stage .hero-chip{flex-direction:row;width:auto;flex:1;justify-content:center;flex-wrap:wrap;}
-    .stage .hero-chip .chip-label,.stage .hero-chip .chip-bar-track{display:none;}
-    .stage .wisp-portrait{width:19px;height:19px;}.stage .boss-regen-tag{font-size:.51rem;padding:3px;}
+  .cost-icon,.shape.cost-icon{width:.85em;height:.85em;min-width:.85em;max-width:.85em;flex:none;display:inline-block;vertical-align:-.05em;}
+
+  /* P1-04: fixed HUD tracks and bounded Rift chrome protect the interaction region.
+     Secondary content lives in the independently scrollable details dialog. */
+  .hud{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:calc(4px + var(--safe-top)) 10px 4px;}
+  .hud-title-row{grid-column:1/-1;height:44px;margin:0;}
+  .settings-btn{width:44px;height:44px;}
+  .hud .chip{display:grid;grid-template-columns:12px minmax(0,1fr);grid-template-rows:12px 14px;column-gap:4px;row-gap:0;height:34px;padding:3px 7px;}
+  .hud .chip .glyph-icon{width:11px;height:11px;}
+  .hud .chip .lbl{font-size:10px;line-height:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .hud .chip .val{grid-column:1/-1;font-size:12px;line-height:14px;min-width:0;}
+  nav.tabbar button{height:var(--nav-height);min-height:var(--nav-height);padding:4px 2px;}
+  nav.tabbar .lb{font-size:10px;}
+  main.rift-scroll-locked{padding:6px 10px;}
+  #tab-battle .stage{padding:8px 10px;gap:4px!important;}
+  .rift-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;flex:none;height:44px;}
+  .stage .depth-label{min-width:0;font-size:16px;letter-spacing:.02em;text-align:left;}
+  .stage .depth-label .region-label{font-size:10px;line-height:14px;letter-spacing:.04em;white-space:nowrap;}
+  .rift-details-btn{flex:none;min-width:90px;min-height:44px;border:1px solid #4f5975;border-radius:10px;background:#1c2339;color:#f0effb;font:600 12px 'Manrope',sans-serif;}
+  .rift-details-btn span{display:block;font-size:10px;font-weight:400;color:#b5c6dc;}
+  .stage .rift-mode-row{height:44px;min-height:44px;padding:0;}
+  .stage .rift-mode-btn{min-height:44px;font-size:12px;padding:6px;letter-spacing:.03em;white-space:nowrap;}
+  .stage .rift-objective{height:48px;min-height:48px;padding:5px 8px;grid-template-columns:minmax(0,1fr) auto;gap:4px;}
+  .stage .objective-kind{display:none;} /* Mode/title already convey the kind; retain full explanation in Details. */
+  .stage .objective-copy strong{font-size:13px;line-height:18px;}
+  .stage .objective-copy small{font-size:11px;line-height:16px;}
+  .stage .enemy-name{font-size:14px;line-height:20px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .stage .battle-row{min-height:156px;gap:0;margin:0;}
+  .stage .enemy-stage-wrap{min-height:156px;gap:4px;}
+  .stage .enemy-stage{min-height:120px;overflow:hidden;}
+  .guardian-label{position:absolute;bottom:4px;z-index:3;font-size:11px;line-height:16px;color:#eee1c3;pointer-events:none;text-shadow:0 1px 4px #000;}
+  .stage .hp-wrap{width:100%;max-width:340px;height:32px;}
+  .stage .hp-text{font-size:12px;line-height:18px;margin-top:4px;white-space:nowrap;}
+  .stage .stat-row{height:64px;min-height:64px;align-items:center;}
+  .stage .stat-box{padding:4px 8px;min-width:0;}
+  .stage .stat-box .k{font-size:10px;line-height:14px;letter-spacing:.03em;}
+  .stage .stat-box .v{font-size:14px;line-height:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  #rift-details{width:min(460px,calc(100% - 24px));max-height:calc(100dvh - var(--safe-top) - var(--safe-bottom) - 24px);padding:0;border:1px solid var(--line);border-radius:18px;background:var(--bg-elev);color:var(--ink);overflow:hidden;}
+  #rift-details::backdrop{background:#060b18c9;}
+  #rift-details[open]{display:flex;flex-direction:column;}
+  .rift-details-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 14px;border-bottom:1px solid var(--line);flex:none;}
+  .rift-details-head h2{font:600 18px 'Cinzel',serif;margin:0;}
+  #rift-details-close{min-height:44px;min-width:64px;border:1px solid var(--line);border-radius:10px;background:var(--bg-elev-2);color:var(--ink);font:600 13px 'Manrope',sans-serif;}
+  .rift-details-scroll{padding:12px 14px;overflow-y:auto;overscroll-behavior:contain;min-height:0;touch-action:pan-y;}
+  .rift-details-scroll h3{font-size:14px;margin:16px 0 8px;}
+  #rift-details .rift-mode-note,#rift-details .bond-summary,#rift-details .tap-hint,#rift-details .buff-indicator,#rift-details .boss-regen-tag,#rift-objective-detail{font-size:13px;line-height:1.5;white-space:normal;margin:8px 0;}
+  #rift-details .party-col{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;width:100%;}
+  #rift-details .hero-chip{width:auto;min-width:0;padding:6px 2px;}
+  #rift-details .wisp-portrait{width:32px;height:32px;}
+  #rift-details .chip-label,#rift-details .chip-power{font-size:11px;line-height:16px;max-width:100%;overflow:hidden;text-overflow:ellipsis;}
+  #rift-details .chip-bar-track{width:100%;max-width:40px;}
+  #rift-hp-detail{font-size:13px;line-height:1.5;overflow-wrap:anywhere;}
+  #rift-resources{margin:0;font-size:13px;}
+  #rift-resources>div{padding:6px 0;border-top:1px solid var(--line);}
+  #rift-resources dt{font-weight:700;}#rift-resources dd{margin:2px 0 0;overflow-wrap:anywhere;font-family:'Space Mono',monospace;}
+  @media(max-height:650px){
+    .hud .chip{height:30px;padding-top:1px;padding-bottom:1px;}
+    #tab-battle .stage{padding-top:4px;padding-bottom:4px;}
   }
   @media(prefers-reduced-motion:reduce){
     #tab-battle .stage .enemy-glyph,.rift-dust i{animation:none;}.rift-dust i{opacity:.35;}
   }
+  /* Shared state grammar: text + border/shape, never opacity or color alone. */
+  button[data-state="unaffordable"],button[data-state="locked"],button[data-state="unavailable"]{border-style:dashed;background:var(--bg-elev);box-shadow:none;}
+  button[data-state="maxed"],button[data-state="completed"]{border-style:solid;color:var(--good);background:var(--bg-elev);}
+  .control-state{display:block;font-size:11px;line-height:1.35;font-weight:600;letter-spacing:0;text-transform:none;color:var(--ink-dim);}
+  [data-state="locked"].card{border-style:dashed;}
+  .lock-note{color:var(--ink-dim);font-style:normal;}
+  button[aria-pressed="true"]{box-shadow:inset 0 0 0 1px var(--lumen);}
+  .speed-btn[aria-pressed="true"]{background:color-mix(in srgb,var(--mote) 15%,var(--bg-elev));color:var(--ink);border-color:var(--mote);}
+  .mult-btn[aria-pressed="true"]::before,.speed-btn[aria-pressed="true"]::before{content:'✓ ';}
+  .theme-card[data-theme-select]{width:100%;text-align:left;color:var(--ink);font:inherit;}
+  .ency-top .wisp-portrait{width:32px;height:32px;}
+  .mini-btn,.buy-btn,.speed-btn,.mult-btn,.node-queue-toggle,.active-toggle,.shop-card button,.quest-claim-btn,.modal .ghost-btn{min-height:44px;}
+  .settings-icon-btn{width:44px;height:44px;}
+  .buy-btn .label{font-size:11px;}
+  .node-queue-toggle{font-size:11px;}
+  button.enemy-stage{appearance:none;padding:0;border:0;background:transparent;color:inherit;font:inherit;cursor:pointer;}
+  .stage .enemy-stage:focus-visible{outline-offset:-3px;}
+  .rift-objective[role="button"]:focus-visible{outline-offset:-3px;}
+  .modal{max-height:calc(100dvh - var(--safe-top) - var(--safe-bottom) - 24px);overflow-y:auto;}
+  .modal p{font-size:14px;line-height:1.5;}
+  .startup-skip{border:0;background:none;width:100%;min-height:44px;color:var(--ink);font:600 12px 'Manrope',sans-serif;cursor:pointer;}
   body.app-paused *,body.app-paused *::before,body.app-paused *::after{animation-play-state:paused!important;}
 
 </style>
@@ -1776,12 +1779,12 @@
   <main>
     <section class="tab-panel active" id="tab-battle">
       <div class="card stage">
-        <div class="depth-label" id="depth-label">Rift 1</div>
+        <div class="rift-heading"><div class="depth-label" id="depth-label">Rift 1</div><button class="rift-details-btn" id="rift-details-btn" aria-haspopup="dialog">Details<span id="rift-status">Combat &amp; party</span></button></div>
         <div class="rift-mode-row">
           <button class="rift-mode-btn active" id="rift-push-btn">Push</button>
           <button class="rift-mode-btn" id="rift-farm-btn">Farm</button>
         </div>
-        <div class="rift-mode-note" id="rift-mode-note">Push deeper until you hit a wall.</div>
+
         <div class="rift-objective" id="rift-objective"></div>
         <div class="enemy-name" id="enemy-name">Hollow Wisp</div>
         <div class="battle-row"><div class="rift-landscape" aria-hidden="true">
@@ -1812,21 +1815,18 @@
  <path d="M115 344 143 344 M258 344 286 344 M199 327V334 M199 357V364" stroke="var(--land-light)" opacity=".7"/>
  </svg><div class="rift-dust"><i></i><i></i><i></i><i></i><i></i><i></i></div>
 </div>
-          <div class="party-col" id="party-col"></div>
+
           <div class="enemy-stage-wrap">
-            <div class="enemy-stage" id="enemy-stage">
+            <button type="button" class="enemy-stage" id="enemy-stage" aria-label="Guardian Tap — strike the enemy"><span class="guardian-label">Guardian Tap</span>
               <div class="enemy-glyph" id="enemy-glyph"><svg class="creature-art" viewBox="0 0 160 160" aria-hidden="true"><use href="#creature-prowler"/></svg><svg class="boss-regalia" viewBox="0 0 160 160" aria-hidden="true"><path d="M44 37 34 8 60 25 80 2 100 25 126 8 116 37 98 30 80 40 62 30Z" fill="var(--creature-color)" stroke="var(--creature-eye)"/><path d="M20 66 4 50 9 103 36 116 27 88 M140 66 156 50 151 103 124 116 133 88" fill="var(--creature-color)" stroke="var(--creature-rim)"/><path d="M80 10 85 19 80 27 75 19Z" fill="#fff0cb"/></svg></div>
-            </div>
+            </button>
             <div class="hp-wrap">
               <div class="hp-bar-track"><div class="hp-bar-fill" id="hp-fill"></div></div>
               <div class="hp-text mono" id="hp-text">10 / 10</div>
-              <div class="boss-regen-tag" id="boss-regen-tag" style="display:none;">Boss — regenerates health. Grow stronger and come back.</div>
+
             </div>
           </div>
         </div>
-        <div class="buff-indicator" id="buff-indicator" style="display:none;"></div>
-        <div class="bond-summary" id="bond-summary"></div>
-        <div class="tap-hint">Your Wisps already fight on their own, even when you're gone — tap the Rift to strike as your Guardian and speed things up.</div>
         <div class="stat-row">
           <div class="stat-box"><div class="k">Guardian tap</div><div class="v mono" id="stat-tap">1</div></div>
           <div class="stat-box"><div class="k">Wisp DPS est.</div><div class="v mono" id="stat-idle">0</div></div>
@@ -1887,8 +1887,25 @@
 </div>
 
 
+<dialog id="rift-details" aria-labelledby="rift-details-title">
+  <div class="rift-details-head"><h2 id="rift-details-title">Rift details</h2><button id="rift-details-close" aria-label="Close Rift details">Close</button></div>
+  <div class="rift-details-scroll">
+    <div class="rift-mode-note" id="rift-mode-note">Push deeper until you hit a wall.</div>
+    <p id="rift-objective-detail"></p>
+    <p id="rift-hp-detail"></p>
+    <div class="boss-regen-tag" id="boss-regen-tag" style="display:none;">Boss — regenerates health. Grow stronger and come back.</div>
+    <h3>Active party</h3>
+    <div class="party-col" id="party-col"></div>
+    <div class="buff-indicator" id="buff-indicator" style="display:none;"></div>
+        <div class="bond-summary" id="bond-summary"></div>
+        <div class="tap-hint">Your Wisps already fight on their own, even when you're gone — tap the Rift to strike as your Guardian and speed things up.</div>
+
+    <h3>Resources</h3><dl id="rift-resources"></dl>
+  </div>
+</dialog>
+
 <div class="overlay settings-overlay" id="settings-overlay" style="display:none;">
-  <div class="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+  <div class="settings-modal" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="settings-title">
     <div class="settings-head">
       <button class="settings-icon-btn" id="settings-back" aria-label="Back" style="visibility:hidden;">←</button>
       <h2 id="settings-title">Settings</h2>
@@ -1943,7 +1960,7 @@
 
       <div id="settings-backup" style="display:none;">
         <div class="save-backup-note">Keep this code somewhere safe. Restoring replaces the current save. The restore starts from now, so an old backup cannot create extra offline time.</div>
-        <textarea class="save-backup-textarea" id="save-backup-code" spellcheck="false"></textarea>
+        <textarea class="save-backup-textarea" id="save-backup-code" aria-label="Save backup code" spellcheck="false"></textarea>
         <div class="save-backup-actions">
           <button id="copy-save-backup">Copy Current Save</button>
           <button class="restore" id="restore-save-backup">Restore Pasted Save</button>
@@ -1953,7 +1970,7 @@
   </div>
 </div>
 
-<div class="startup-intro" id="startup-intro" aria-hidden="true">
+<div class="startup-intro" id="startup-intro" role="dialog" aria-modal="true" aria-labelledby="startup-title" aria-hidden="true">
   <div class="startup-intro-bg"></div>
   <div class="startup-intro-stars"></div>
   <div class="startup-rift"></div>
@@ -1970,18 +1987,18 @@
       <img class="startup-game-mark" src="branding/lumenfall-mark.svg" alt="" aria-hidden="true">
       <div class="startup-title-wrap">
         <div class="startup-title-glow"></div>
-        <div class="startup-title">LUMENFALL</div>
+        <div class="startup-title" id="startup-title">LUMENFALL</div>
         <div class="startup-tagline">Enter the Rift</div>
       </div>
     </div>
   </div>
-  <div class="startup-skip">Tap to skip</div>
+  <button type="button" class="startup-skip" id="startup-skip">Skip intro</button>
 </div>
 
 <div class="overlay" id="tutorial-overlay" style="display:none;">
-  <div class="modal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tut-title" tabindex="-1">
     <div class="tut-dots" id="tut-dots"></div>
-    <h2 id="tut-title"></h2>
+    <h2 id="tut-title">How to Play</h2>
     <p id="tut-body"></p>
     <button class="primary-btn" id="tut-next">Next</button>
     <button class="ghost-btn" id="tut-skip">Skip tutorial</button>
@@ -1989,22 +2006,22 @@
 </div>
 
 <div class="overlay" id="welcome-overlay" style="display:none;">
-  <div class="modal">
-    <h2>Welcome back</h2>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="welcome-title" tabindex="-1">
+    <h2 id="welcome-title">Welcome back</h2>
     <p id="welcome-text"></p>
     <button class="primary-btn" id="welcome-claim">Continue</button>
   </div>
 </div>
 
 <div class="overlay" id="daily-overlay" style="display:none;">
-  <div class="modal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="daily-title" tabindex="-1">
     <h2 id="daily-title">Day 1 streak</h2>
     <p id="daily-text"></p>
     <button class="primary-btn" id="daily-claim">Continue</button>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <script>
 (function(){
@@ -2761,16 +2778,16 @@ function formatNum(n){
 }
 
 var COST_ICON_MAP = {
-  lumen: {shape:'shape-triangle', color:'var(--lumen)'},
-  shard: {shape:'shape-hex', color:'var(--shard)'},
-  mote:  {shape:'shape-pentagon', color:'var(--mote)'},
-  prism: {shape:'shape-diamond', color:'var(--prism)'},
-  comet: {shape:'shape-star', color:'var(--comet)'},
-  sigil: {shape:'shape-octagon', color:'var(--sigil)'}
+  lumen: {name:'Lumen', shape:'shape-triangle', color:'var(--lumen)'},
+  shard: {name:'Shards', shape:'shape-hex', color:'var(--shard)'},
+  mote:  {name:'Motes', shape:'shape-pentagon', color:'var(--mote)'},
+  prism: {name:'Prisms', shape:'shape-diamond', color:'var(--prism)'},
+  comet: {name:'Comets', shape:'shape-star', color:'var(--comet)'},
+  sigil: {name:'Sigils', shape:'shape-octagon', color:'var(--sigil)'}
 };
 function costIcon(kind){
   var m = COST_ICON_MAP[kind];
-  return '<span class="shape '+m.shape+' cost-icon" style="background:'+m.color+'"></span>';
+  return '<span class="shape '+m.shape+' cost-icon" role="img" aria-label="'+m.name+'" style="background:'+m.color+'"></span>';
 }
 
 function isBoss(depth){ return depth>0 && depth%10===0; }
@@ -3792,6 +3809,158 @@ function flashChip(id, label){
 // Rendering
 // ---------------------------------------------------------------
 var els = {};
+function controlText(node){
+  if(node.nodeType===3) return node.textContent;
+  if(node.nodeType!==1) return '';
+  if(node.classList.contains('cost-icon')) return node.getAttribute('aria-label') || '';
+  return Array.from(node.childNodes).map(controlText).join(' ');
+}
+// Shared presentation states read existing eligibility; they never grant or deny purchases.
+function presentControlStates(root){
+  var toggles = ['empower-queue','queue','study-queue','autoascend-toggle'];
+  root.querySelectorAll('button').forEach(function(btn){
+    btn.querySelectorAll('.control-state').forEach(function(label){label.remove();});
+    var reason='', kind=btn.disabled?'unavailable':'available', subject='';
+    var spId=btn.getAttribute('data-empower') || btn.getAttribute('data-rarity') || btn.getAttribute('data-module') || btn.getAttribute('data-ultimate') || btn.getAttribute('data-empower-queue') || btn.getAttribute('data-toggle');
+    var sp=spId && SPIRITS.find(function(item){return item.id===spId;});
+    if(sp) subject=sp.name;
+    var queueAttr=toggles.find(function(attr){return btn.hasAttribute('data-'+attr);});
+    if(queueAttr){
+      var id=btn.getAttribute('data-'+queueAttr);
+      var on=queueAttr==='empower-queue' ? state.empowerQueue[id]!==false : queueAttr==='queue' ? !!state.researchQueue[id] : queueAttr==='study-queue' ? !!state.studyQueue[id] : !!state.autoAscendEnabled;
+      btn.setAttribute('aria-pressed',String(on));
+      if(queueAttr==='queue') subject=RESEARCH.find(function(n){return n.id===id;}).name;
+      if(queueAttr==='study-queue') subject=LONG_STUDIES.find(function(n){return n.id===id;}).name;
+      if(queueAttr==='autoascend-toggle') subject='Auto-Ascend';
+    }
+    if(btn.hasAttribute('data-mult')){btn.setAttribute('aria-pressed',String(btn.classList.contains('active')));subject='Lab multiplier';}
+    if(btn.hasAttribute('data-speed-study')){
+      var study=findActiveStudy(btn.getAttribute('data-speed-study'));
+      var mult=Number(btn.getAttribute('data-speed'));
+      subject='Study speed';
+      btn.setAttribute('aria-pressed',String(!!study && study.speedMult===mult));
+      if(!study){btn.disabled=true;kind='completed';reason='Completed';}
+      else if(study.speedMult>=mult) kind='completed';
+      else if(btn.disabled){kind='unaffordable';reason='Need Motes';}
+    }
+    if(btn.hasAttribute('data-theme-select')) kind=btn.getAttribute('aria-pressed')==='true'?'selected':'available';
+    if(btn.disabled && btn.matches('[data-empower],[data-rarity],[data-module],[data-ultimate],[data-research],[data-node],[data-study],[data-shop]')){
+      var cost={};kind='unaffordable';
+      if(btn.hasAttribute('data-empower')) cost.lumen=spiritCost(sp);
+      if(btn.hasAttribute('data-rarity')){
+        var tier=state.heroRarity[sp.id]||0, level=state.spirits[sp.id]||0;
+        if(tier>=5) kind='maxed';
+        else if(!level || level<rarityReq(tier)){kind='locked';reason=!level?'Recruit first':'';}
+        else cost=rarityCost(sp,tier);
+      }
+      if(btn.hasAttribute('data-module')) cost=moduleCost(sp,moduleLevel(sp.id));
+      if(btn.hasAttribute('data-ultimate')) cost.sigil=ultimateSigilCost(sp);
+      if(btn.hasAttribute('data-research')){var node=RESEARCH.find(function(n){return n.id===btn.getAttribute('data-research');});subject=node.name;cost=getResearchBuyPlan(node).cost;}
+      if(btn.hasAttribute('data-node')){var node=NODES.find(function(n){return n.id===btn.getAttribute('data-node');});subject=node.name;cost.prism=nodeCost(node);}
+      if(btn.hasAttribute('data-study')){
+        var node=LONG_STUDIES.find(function(n){return n.id===btn.getAttribute('data-study');});subject=node.name;
+        if(state.activeStudies.length>=studySlotCount()){kind='unavailable';reason='No open slots';}
+        else cost=studyCost(node,state.longStudyLevels[node.id]||0);
+      }
+      if(btn.hasAttribute('data-shop')){
+        var item=SHOP.find(function(n){return n.id===btn.getAttribute('data-shop');});subject=item.name;
+        if(state.owned[item.id]) kind='completed';else cost.comet=item.cost;
+      }
+      if(kind==='unaffordable'){
+        var resourceKeys={lumen:['lumen','Lumen'],shard:['shards','Shards'],mote:['motes','Motes'],prism:['prisms','Prisms'],comet:['comets','Comets'],sigil:['sigils','Sigils']};
+        var missing=Object.keys(resourceKeys).filter(function(key){return (cost[key]||0)>state[resourceKeys[key][0]];}).map(function(key){return resourceKeys[key][1];});
+        reason=missing.length?'Need '+missing.join(' + '):'Insufficient resources';
+      }
+    }
+    if(btn.hasAttribute('data-quest-claim')){
+      var id=btn.getAttribute('data-quest-claim');
+      kind=state.questClaimed[id]?'completed':btn.disabled?'unavailable':'available';
+      if(kind==='unavailable') reason='In progress';
+    }
+    btn.setAttribute('data-state',kind);
+    if(reason && btn.textContent.toLowerCase().indexOf(reason.toLowerCase())===-1){
+      var label=document.createElement('span');label.className='control-state';label.textContent=reason;btn.appendChild(label);
+    }
+    var name=(subject?subject+' — ':'')+controlText(btn).replace(/\s+/g,' ').trim();
+    if(btn.getAttribute('aria-label')!==name) btn.setAttribute('aria-label',name);
+  });
+}
+
+// Live UI updates must not strand keyboard focus on a detached button.
+function replaceControlMarkup(root,html){
+  var focused=document.activeElement;
+  var previous=root.contains(focused) ? focused : null;
+  var keys=previous ? Array.from(previous.attributes).filter(function(a){return a.name.startsWith('data-') && a.name!=='data-state';}) : [];
+  var index=previous ? Array.from(root.querySelectorAll('button')).indexOf(previous) : -1;
+  root.innerHTML=html;
+  presentControlStates(root);
+  if(previous){
+    var buttons=Array.from(root.querySelectorAll('button'));
+    var replacement=keys.length && buttons.find(function(btn){return keys.every(function(a){return btn.getAttribute(a.name)===a.value;});});
+    if(replacement && !replacement.disabled) replacement.focus({preventScroll:true});
+    else {
+      var next=buttons.slice(Math.max(0,index)).concat(buttons.slice(0,Math.max(0,index))).find(function(btn){return !btn.disabled;});
+      if(next) next.focus({preventScroll:true});
+      else { root.tabIndex=-1;root.focus({preventScroll:true}); }
+    }
+  }
+}
+
+// Custom overlays share one focus lifecycle. Native Rift Details retains showModal().
+var overlayFocus = null;
+function overlayVisible(el){ return el && el.style.display!=='none' && getComputedStyle(el).visibility!=='hidden' && el.getClientRects().length>0; }
+function overlayControls(modal){
+  return Array.from(modal.querySelectorAll('button:not(:disabled),input:not(:disabled),textarea:not(:disabled),select:not(:disabled),a[href],[tabindex="0"]')).filter(function(el){return el.getClientRects().length && getComputedStyle(el).visibility!=='hidden';});
+}
+function setOverlayInert(active){
+  document.querySelector('.shell').inert=!!active;
+  document.querySelectorAll('.overlay').forEach(function(el){el.inert=!!active && el!==active;});
+  document.getElementById('rift-details').inert=!!active;
+}
+function focusOverlay(){
+  if(!overlayFocus || !overlayVisible(overlayFocus.el)) return;
+  var controls=overlayControls(overlayFocus.modal);
+  (controls[0] || overlayFocus.modal).focus({preventScroll:true});
+}
+function openOverlay(el,dismiss,opener){
+  var details=document.getElementById('rift-details');
+  if(details.open) details.close();
+  var modal=el.matches('[role="dialog"]') ? el : el.querySelector('[role="dialog"]');
+  var trigger=opener || document.activeElement;
+  if(overlayFocus && overlayFocus.el!==el) closeOverlay(overlayFocus.el);
+  overlayFocus={el:el,modal:modal,dismiss:dismiss,trigger:trigger};
+  el.style.display='flex';
+  setOverlayInert(el);
+  focusOverlay();
+}
+function closeOverlay(el){
+  el.style.display='none';
+  if(overlayFocus && overlayFocus.el===el){
+    var trigger=overlayFocus.trigger;
+    overlayFocus=null;
+    setOverlayInert(null);
+    if(!trigger || !trigger.isConnected || trigger===document.body || !trigger.getClientRects().length) trigger=document.querySelector('nav.tabbar .active');
+    if(trigger) trigger.focus({preventScroll:true});
+  }
+}
+function setupOverlayFocus(){
+  document.addEventListener('focusin',function(e){
+    if(overlayFocus && overlayVisible(overlayFocus.el) && !overlayFocus.modal.contains(e.target)) focusOverlay();
+  });
+  document.addEventListener('keydown',function(e){
+    if(!overlayFocus || !overlayVisible(overlayFocus.el)) return;
+    if(e.key==='Escape'){
+      e.preventDefault();e.stopImmediatePropagation();overlayFocus.dismiss();return;
+    }
+    if(e.key==='Tab'){
+      var controls=overlayControls(overlayFocus.modal), first=controls[0], last=controls[controls.length-1];
+      if(!controls.length){e.preventDefault();focusOverlay();return;}
+      if(e.shiftKey && (document.activeElement===first || !controls.includes(document.activeElement))){e.preventDefault();last.focus();}
+      else if(!e.shiftKey && (document.activeElement===last || !controls.includes(document.activeElement))){e.preventDefault();first.focus();}
+    }
+  },true);
+}
+
 function cacheEls(){
   ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','rift-push-btn','rift-farm-btn','rift-mode-note','rift-objective','enemy-name','boss-regen-tag','buff-indicator','enemy-stage','enemy-glyph',
    'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','party-col','bond-card','bond-summary','research-list','study-list',
@@ -3800,21 +3969,33 @@ function cacheEls(){
   ].forEach(function(id){ els[id]=document.getElementById(id); });
 }
 
+// Presentation only: the shared formatter can outgrow compact rows above its suffix range.
+// Keep authoritative numeric values intact; exact amounts remain inspectable in Details.
+function formatRiftNumber(value){
+  var text = formatNum(value);
+  return value>=1e30 || text.length>10 ? Number(value).toExponential(2) : text;
+}
 function renderHud(){
-  els['hud-lumen'].textContent = formatNum(state.lumen);
-  els['hud-shard'].textContent = formatNum(state.shards);
-  els['hud-mote'].textContent = formatNum(state.motes);
-  els['hud-prism'].textContent = formatNum(state.prisms);
-  els['hud-comet'].textContent = formatNum(state.comets);
-  els['hud-sigil'].textContent = formatNum(state.sigils);
+  els['hud-lumen'].textContent = formatRiftNumber(state.lumen);
+  els['hud-shard'].textContent = formatRiftNumber(state.shards);
+  els['hud-mote'].textContent = formatRiftNumber(state.motes);
+  els['hud-prism'].textContent = formatRiftNumber(state.prisms);
+  els['hud-comet'].textContent = formatRiftNumber(state.comets);
+  els['hud-sigil'].textContent = formatRiftNumber(state.sigils);
 }
 
 function renderRiftMode(){
   var farming = state.riftMode==='farm';
   els['rift-push-btn'].classList.toggle('active', !farming);
+  els['rift-push-btn'].setAttribute('aria-pressed',String(!farming));
+  els['rift-farm-btn'].setAttribute('aria-pressed',String(farming));
   els['rift-farm-btn'].classList.toggle('active', farming);
   els['rift-farm-btn'].disabled = !farming && !canFarmCurrentProgress();
   els['rift-farm-btn'].textContent = farming ? ('Farm Rift '+state.farmDepth) : (canFarmCurrentProgress() ? ('Farm Rift '+highestFarmableDepth(progressionDepth())) : 'Farm');
+  els['rift-farm-btn'].setAttribute('data-state',els['rift-farm-btn'].disabled ? 'locked' : 'available');
+  els['rift-farm-btn'].setAttribute('aria-label',els['rift-farm-btn'].disabled ? 'Farm unavailable — clear Rift 1 to unlock' : els['rift-farm-btn'].textContent);
+  els['rift-farm-btn'].title = els['rift-farm-btn'].disabled ? 'Clear Rift 1 to unlock Farm' : '';
+  if(els['rift-farm-btn'].disabled) els['rift-farm-btn'].innerHTML='Farm<span class="control-state">Clear Rift 1</span>';
   els['rift-mode-note'].textContent = farming
     ? 'Farming Rift '+state.farmDepth+' for resources. Push resumes at Rift '+state.farmReturnDepth+'.'
     : 'Push deeper until you hit a wall. Farm always uses your highest cleared non-boss Rift.';
@@ -3906,6 +4087,8 @@ function renderRiftObjective(){
     '<span class="objective-arrow">'+(actionable?'›':'')+'</span>';
   el.className = 'rift-objective objective-'+goal.kind.toLowerCase().replace(/[^a-z]+/g,'-')+(actionable?' actionable':'');
   el.setAttribute('data-target-tab',goal.tab||'');
+  if(actionable){ el.setAttribute('role','button'); el.tabIndex=0; el.setAttribute('aria-label',goal.title+' — '+goal.detail); }
+  else { el.removeAttribute('role'); el.removeAttribute('tabindex'); el.removeAttribute('aria-label'); }
 }
 
 function updateBattleFast(){
@@ -3913,7 +4096,7 @@ function updateBattleFast(){
   renderRiftObjective();
   renderBondSummary();
   els['hp-fill'].style.width = Math.max(0, (state.enemyHp/state.enemyMaxHp*100)) + '%';
-  els['hp-text'].textContent = formatNum(Math.max(0,state.enemyHp)) + ' / ' + formatNum(state.enemyMaxHp);
+  els['hp-text'].textContent = formatRiftNumber(Math.max(0,state.enemyHp)) + ' / ' + formatRiftNumber(state.enemyMaxHp);
   var zone = riftZoneFor(state.depth);
   applyRiftZoneVisual(state.depth);
   els['depth-label'].innerHTML = 'Rift ' + state.depth + (isBoss(state.depth) ? ' &mdash; <span class="boss-tag">BOSS</span>' : '') + '<span class="region-label" style="color:'+zone.accent+'">'+zone.name+'</span>';
@@ -3950,10 +4133,9 @@ function updateBattleFast(){
     els['enemy-stage'].classList.add(enough ? 'boss-ready' : 'boss-wall');
     if(battleStage) battleStage.classList.add(enough ? 'boss-ready' : 'boss-wall');
   }
-  var tapHint = document.querySelector('#tab-battle .tap-hint');
-  if(tapHint) tapHint.style.display = (state.totalTaps<10 && state.maxDepthEver<3) ? 'block' : 'none';
-  els['stat-tap'].textContent = formatNum(tapDamage());
-  els['stat-idle'].textContent = formatNum(sustainedWispDps(state.depth));
+
+  els['stat-tap'].textContent = formatRiftNumber(tapDamage());
+  els['stat-idle'].textContent = formatRiftNumber(sustainedWispDps(state.depth));
   var buffActive = state.buffUntil && Date.now() < state.buffUntil;
   els['buff-indicator'].style.display = buffActive ? 'block' : 'none';
   if(buffActive){
@@ -3961,7 +4143,21 @@ function updateBattleFast(){
     var secLeft = Math.max(0, Math.ceil((state.buffUntil-Date.now())/1000));
     els['buff-indicator'].textContent = 'Passive + Tap boosted: +'+pct+'% ('+secLeft+'s left)';
   }
+  document.getElementById('rift-status').textContent = buffActive ? 'Boost active' : 'Combat & party';
   renderHud();
+  if(document.getElementById('rift-details').open) renderRiftDetails();
+}
+
+function renderRiftDetails(){
+  var goal = nextRiftObjective();
+  document.getElementById('rift-objective-detail').textContent = goal.title+' — '+goal.detail;
+  document.getElementById('rift-hp-detail').textContent = 'HP: '+Math.max(0,state.enemyHp).toLocaleString()+' / '+state.enemyMaxHp.toLocaleString();
+  document.getElementById('rift-resources').innerHTML = [
+    ['Lumen',state.lumen],['Shards',state.shards],['Motes',state.motes],
+    ['Prisms',state.prisms],['Comets',state.comets],['Sigils',state.sigils]
+  ].map(function(resource){
+    return '<div><dt>'+resource[0]+'</dt><dd>'+resource[1].toLocaleString()+'</dd></div>';
+  }).join('');
 }
 
 function spawnFloatNum(text, stageEl, tone){
@@ -4008,7 +4204,7 @@ function showTutorial(onComplete){
   }
 
   function finish(){
-    overlay.style.display = 'none';
+    closeOverlay(overlay);
     nextBtn.removeEventListener('click', onNext);
     skipBtn.removeEventListener('click', finish);
     if(onComplete) onComplete();
@@ -4024,7 +4220,7 @@ function showTutorial(onComplete){
   skipBtn.addEventListener('click', finish);
   step = 0;
   renderStep();
-  overlay.style.display = 'flex';
+  openOverlay(overlay,finish);
 }
 
 function renderBondSummary(){
@@ -4123,7 +4319,7 @@ function renderSpirits(){
     var level = state.spirits[sp.id];
     var unlocked = state.maxDepthEver >= sp.unlockDepth;
     if(!unlocked){
-      html += '<div class="card hero-card locked" data-wisp-card="'+sp.id+'">' +
+      html += '<div class="card hero-card locked" data-state="locked" aria-disabled="true" data-wisp-card="'+sp.id+'">' +
         '<div class="hero-top">'+
           wispPortrait(sp) +
           '<div class="hero-id"><div class="name">???</div><div class="class-tag lock-note">Unlocks at Rift '+sp.unlockDepth+'</div></div>' +
@@ -4139,9 +4335,9 @@ function renderSpirits(){
     var rc = rarityCost(sp, tier);
     var canRarity = recruited && tier<5 && level>=req && state.shards>=rc.shard && state.lumen>=rc.lumen;
     var rarityLabel = tier>=5 ? 'Maxed' : (level<req ? ('Lv.'+req+' req') :
-      ('<span style="font-size:.62rem;">Rarity Up</span>' +
-       '<span style="font-size:.62rem;">'+costIcon('lumen')+formatNum(rc.lumen)+'</span>' +
-       '<span style="font-size:.62rem;">'+costIcon('shard')+formatNum(rc.shard)+'</span>'));
+      ('<span style="font-size:.6875rem;">Rarity Up</span>' +
+       '<span style="font-size:.6875rem;">'+costIcon('lumen')+formatNum(rc.lumen)+'</span>' +
+       '<span style="font-size:.6875rem;">'+costIcon('shard')+formatNum(rc.shard)+'</span>'));
     var modInfo = MODULE_INFO[sp.abilityType];
     var modLvl = moduleLevel(sp.id);
     var modMaxed = modLvl>=MODULE_MAX_LEVEL;
@@ -4149,12 +4345,12 @@ function renderSpirits(){
     var canModule = !modMaxed && state.lumen>=modCost.lumen && state.shards>=modCost.shard;
     var moduleHtml = !recruited ? '' :
       '<div class="module-row">' +
-        '<div class="module-name">'+modInfo.name+' <span style="color:var(--shard);">Lv.'+modLvl+'/'+MODULE_MAX_LEVEL+'</span></div>' +
+        '<div class="module-name">'+modInfo.name+' <span style="color:var(--shard);">Lv.'+modLvl+'/'+MODULE_MAX_LEVEL+(modMaxed?' · Maxed':'')+'</span></div>' +
         '<div class="module-effect">'+modInfo.effect(modLvl)+'</div>' +
         (modMaxed ? '' :
           '<button class="mini-btn" data-module="'+sp.id+'" '+(canModule?'':'disabled')+'>Upgrade Module' +
-            '<span style="font-size:.62rem;">'+costIcon('lumen')+formatNum(modCost.lumen)+'</span>' +
-            '<span style="font-size:.62rem;">'+costIcon('shard')+formatNum(modCost.shard)+'</span>' +
+            '<span style="font-size:.6875rem;">'+costIcon('lumen')+formatNum(modCost.lumen)+'</span>' +
+            '<span style="font-size:.6875rem;">'+costIcon('shard')+formatNum(modCost.shard)+'</span>' +
           '</button>') +
       '</div>';
     var ultCost = ultimateSigilCost(sp);
@@ -4162,7 +4358,7 @@ function renderSpirits(){
       '<div class="ultimate-row">' +
         (ultimateUnlocked(sp.id) ?
           '<div class="ultimate-badge">Ultimate Unlocked — '+ultimateEffectText(sp)+'</div>' :
-          '<button class="mini-btn ultimate-btn" data-ultimate="'+sp.id+'" '+(state.sigils<ultCost?'disabled':'')+'>Unlock Ultimate<span style="font-size:.62rem;">'+costIcon('sigil')+ultCost+'</span></button>') +
+          '<button class="mini-btn ultimate-btn" data-ultimate="'+sp.id+'" '+(state.sigils<ultCost?'disabled':'')+'>Unlock Ultimate<span style="font-size:.6875rem;">'+costIcon('sigil')+ultCost+'</span></button>') +
       '</div>';
     var empowerOn = state.empowerQueue[sp.id]!==false;
     var empowerHtml = (recruited && state.achieved.labmaster) ?
@@ -4185,13 +4381,13 @@ function renderSpirits(){
       '<div class="hero-ability"><span class="ability-label">Ability</span><strong>'+sp.abilityName+'</strong><span class="ability-desc">'+ABILITY_DESC[sp.abilityType]+'</span></div>' +
       moduleHtml +
       '<div class="hero-actions">' +
-        '<button class="mini-btn" data-empower="'+sp.id+'" '+(state.lumen<cost?'disabled':'')+'>'+(recruited?'Empower':'Recruit')+'<span style="font-size:.62rem;">'+costIcon('lumen')+formatNum(cost)+'</span></button>' +
+        '<button class="mini-btn" data-empower="'+sp.id+'" '+(state.lumen<cost?'disabled':'')+'>'+(recruited?'Empower':'Recruit')+'<span style="font-size:.6875rem;">'+costIcon('lumen')+formatNum(cost)+'</span></button>' +
         '<button class="mini-btn rarity-btn" data-rarity="'+sp.id+'" '+(canRarity?'':'disabled')+'>'+rarityLabel+'</button>' +
       '</div>' +
       ultimateHtml +
     '</div>';
   });
-  els['spirit-list'].innerHTML = html;
+  replaceControlMarkup(els['spirit-list'],html);
   els['spirit-list'].querySelectorAll('[data-empower]').forEach(function(btn){
     btn.addEventListener('click', function(){
       var sp = SPIRITS.find(function(s){ return s.id===btn.getAttribute('data-empower'); });
@@ -4258,7 +4454,7 @@ function renderResearch(){
       '</button>' +
     '</div>';
   });
-  els['research-list'].innerHTML = multHtml + html;
+  replaceControlMarkup(els['research-list'],multHtml + html);
   els['research-list'].querySelectorAll('[data-mult]').forEach(function(btn){
     btn.addEventListener('click', function(){
       var v = btn.getAttribute('data-mult');
@@ -4305,10 +4501,11 @@ function renderLongStudies(){
         '<div class="speed-row">' +
           LAB_SPEED_TIERS.map(function(mult){
             var mcost = speedTierCost(mult);
-            var isActive = active.speedMult>=mult;
+            var isActive = active.speedMult===mult;
+            var acquired = active.speedMult>=mult;
             var affordable = state.motes>=mcost;
-            return '<button class="speed-btn '+(isActive?'active':'')+'" data-speed="'+mult+'" data-speed-study="'+active.id+'" '+((isActive||!affordable)?'disabled':'')+'>'+mult+'x' +
-              (isActive ? '' : '<span class="speed-cost">'+costIcon('mote')+formatNum(mcost)+'</span>') +
+            return '<button class="speed-btn '+(isActive?'active':'')+'" data-speed="'+mult+'" data-speed-study="'+active.id+'" '+((acquired||!affordable)?'disabled':'')+'>'+mult+'x' +
+              (acquired ? (isActive?' · Current':' · Unlocked') : '<span class="speed-cost">'+costIcon('mote')+formatNum(mcost)+'</span>') +
               '</button>';
           }).join('') +
         '</div>' +
@@ -4321,7 +4518,7 @@ function renderLongStudies(){
     if(findActiveStudy(lnode.id)) return;
     var unlocked = state.maxDepthEver >= (lnode.unlockDepth||1);
     if(!unlocked){
-      html += '<div class="card study-card locked-node" style="margin-bottom:10px;">' +
+      html += '<div class="card study-card locked-node" data-state="locked" aria-disabled="true" style="margin-bottom:10px;">' +
         '<div class="name">???</div>' +
         '<div class="desc lock-note">Unlocks at Rift '+lnode.unlockDepth+'</div>' +
       '</div>';
@@ -4342,7 +4539,7 @@ function renderLongStudies(){
     '</div>';
   });
 
-  els['study-list'].innerHTML = html;
+  replaceControlMarkup(els['study-list'],html);
   els['study-list'].querySelectorAll('[data-study]').forEach(function(btn){
     btn.addEventListener('click', function(){
       var lnode = LONG_STUDIES.find(function(n){ return n.id===btn.getAttribute('data-study'); });
@@ -4370,6 +4567,8 @@ function renderAscendSummary(){
   var gain = eligible ? ascendPrismGain(progressionDepth()) : 0;
   els['prism-preview'].textContent = '+' + formatNum(gain) + ' Prisms';
   els['ascend-btn'].disabled = !eligible;
+  els['ascend-btn'].setAttribute('data-state',eligible?'available':'locked');
+  els['ascend-btn'].setAttribute('aria-describedby','ascend-note');
   var ascendTab = document.querySelector('.tab-btn[data-tab="ascend"]');
   if(ascendTab) ascendTab.classList.toggle('has-attention',eligible);
   els['ascend-note'].textContent = eligible
@@ -4382,7 +4581,7 @@ function renderNodes(){
   NODES.forEach(function(node){
     if(node.requiresAchievement && !state.achieved[node.requiresAchievement]){
       var reqAch = ACHIEVEMENTS.find(function(a){ return a.id===node.requiresAchievement; });
-      html += '<div class="card node-card locked-node">' +
+      html += '<div class="card node-card locked-node" data-state="locked" aria-disabled="true">' +
         '<span class="shape shape-diamond" style="width:30px;height:30px;background:var(--ink-dim);"></span>' +
         '<div class="node-info" style="flex:1;">' +
           '<div class="name">???</div>' +
@@ -4405,7 +4604,7 @@ function renderNodes(){
       '</button>' +
     '</div>';
   });
-  els['node-list'].innerHTML = html;
+  replaceControlMarkup(els['node-list'],html);
   els['node-list'].querySelectorAll('[data-node]').forEach(function(btn){
     btn.addEventListener('click', function(){
       var node = NODES.find(function(n){ return n.id===btn.getAttribute('data-node'); });
@@ -4418,10 +4617,10 @@ function renderAchievements(){
   var html = '';
   ACHIEVEMENTS.forEach(function(a){
     var done = !!state.achieved[a.id];
-    html += '<div class="card ach-card '+(done?'done':'')+'">' +
+    html += '<div class="card ach-card '+(done?'done':'')+'" data-state="'+(done?'completed':'available')+'">' +
       '<span class="dot"></span>' +
       '<div class="info">' +
-        '<div class="name">'+a.name+'</div>' +
+        '<div class="name">'+a.name+(done?' · Completed':'')+'</div>' +
         (a.unlocks ? '<div class="ach-unlock">Unlocks: '+a.unlocks+'</div>' : '') +
       '</div>' +
       '<span class="reward mono">+'+a.reward+' '+costIcon('comet')+'</span>' +
@@ -4448,7 +4647,7 @@ function renderAchievements(){
       buttonHtml +
     '</div>';
   });
-  els['shop-list'].innerHTML = shopHtml;
+  replaceControlMarkup(els['shop-list'],shopHtml);
   els['shop-list'].querySelectorAll('button[data-shop]').forEach(function(btn){
     btn.addEventListener('click', function(){
       var item = SHOP.find(function(i){ return i.id===btn.getAttribute('data-shop'); });
@@ -4467,20 +4666,20 @@ function renderCosmetics(){
     var active = state.riftTheme===theme.id;
     if(!unlocked){
       var reqAch = ACHIEVEMENTS.find(function(a){ return a.id===theme.unlockAchievement; });
-      html += '<div class="card theme-card locked-node">' +
+      html += '<div class="card theme-card locked-node" data-state="locked" aria-disabled="true">' +
         '<div class="theme-swatch" style="background:var(--ink-dim);"></div>' +
         '<div class="theme-info"><div class="name">???</div><div class="desc lock-note">Unlocks with the Deed &ldquo;'+(reqAch?reqAch.name:'')+'&rdquo;</div></div>' +
       '</div>';
       return;
     }
     var swatch = theme.accent ? theme.accent : 'conic-gradient(from 0deg, var(--lumen), var(--shard), var(--mote), var(--prism), var(--comet), var(--sigil), var(--lumen))';
-    html += '<div class="card theme-card '+(active?'active':'')+'" data-theme-select="'+theme.id+'">' +
+    html += '<button type="button" class="card theme-card '+(active?'active':'')+'" aria-pressed="'+active+'" data-theme-select="'+theme.id+'">' +
       '<div class="theme-swatch" style="background:'+swatch+';"></div>' +
       '<div class="theme-info"><div class="name">'+theme.name+'</div><div class="desc">'+theme.desc+'</div></div>' +
-      (active ? '<span class="theme-active-tag">Equipped</span>' : '') +
-    '</div>';
+      '<span class="theme-active-tag">'+(active?'✓ Equipped':'Equip')+'</span>' +
+    '</button>';
   });
-  els['theme-list'].innerHTML = html;
+  replaceControlMarkup(els['theme-list'],html);
   els['theme-list'].querySelectorAll('[data-theme-select]').forEach(function(card){
     card.addEventListener('click', function(){ selectRiftTheme(card.getAttribute('data-theme-select')); });
   });
@@ -4544,7 +4743,7 @@ function renderEncyclopedia(){
     var recruited = (state.spirits[sp.id]||0)>0;
     var unlocked = state.maxDepthEver>=sp.unlockDepth;
     html += '<div class="ency-card"><div class="ency-top">' +
-      '<span class="shape '+sp.shape+'" style="width:24px;height:24px;background:'+sp.color+';color:'+sp.color+';"></span>' +
+      wispPortrait(sp) +
       '<div class="ency-main"><div class="ency-name">'+sp.name+'</div><div class="ency-meta">'+sp.heroClass+' · '+sp.role+' · Unlock Rift '+sp.unlockDepth+'</div></div>' +
       '<span class="ency-status '+(recruited?'on':'')+'">'+(recruited?'Recruited':(unlocked?'Available':'Locked'))+'</span>' +
       '</div><div class="ency-desc"><strong>'+sp.abilityName+':</strong> '+ABILITY_DESC[sp.abilityType]+'</div></div>';
@@ -4583,6 +4782,7 @@ function renderDynamic(){
 }
 
 function renderAll(){
+  if(overlayFocus && !overlayVisible(overlayFocus.el)) closeOverlay(overlayFocus.el);
   renderHud();
   updateBattleFast();
   renderPartyFormation();
@@ -4638,7 +4838,7 @@ function renderDaily(force){
       '</div>' +
     '</div>';
   });
-  els['daily-quest-list'].innerHTML = html;
+  replaceControlMarkup(els['daily-quest-list'],html);
   var deedsTab = document.querySelector('.tab-btn[data-tab="deeds"]');
   if(deedsTab) deedsTab.classList.toggle('has-attention',hasReadyQuest);
   els['daily-quest-list'].querySelectorAll('[data-quest-claim]').forEach(function(btn){
@@ -4671,14 +4871,14 @@ function showDailyOverlay(info){
   var rewardText = '+'+formatNum(reward.comets||0)+' Comets'+(reward.prisms ? ' and +'+reward.prisms+' Prisms' : '');
   document.getElementById('daily-title').textContent = 'Day ' + info.streak + ' streak';
   document.getElementById('daily-text').textContent = 'Welcome back — you earned ' + rewardText + ' for returning today. Keep the streak alive by coming back tomorrow, and check Deeds for today\'s fresh Daily Quests.';
-  overlay.style.display = 'flex';
   var claimBtn = document.getElementById('daily-claim');
   function handler(){
-    overlay.style.display = 'none';
+    closeOverlay(overlay);
     claimBtn.removeEventListener('click', handler);
     renderDaily(true);
   }
   claimBtn.addEventListener('click', handler);
+  openOverlay(overlay,handler);
 }
 
 // ---------------------------------------------------------------
@@ -4698,13 +4898,16 @@ function showSettingsView(view){
   back.style.visibility = isHome ? 'hidden' : 'visible';
   if(view==='encyclopedia') renderEncyclopedia();
   if(view==='backup') document.getElementById('save-backup-code').value = currentSaveBackup();
+  if(document.getElementById('settings-overlay').style.display!=='none'){
+    (isHome ? document.getElementById('encyclopedia-btn') : back).focus();
+  }
 }
 function openSettings(){
   showSettingsView('home');
-  document.getElementById('settings-overlay').style.display = 'flex';
+  openOverlay(document.getElementById('settings-overlay'),closeSettings,document.getElementById('settings-btn'));
 }
 function closeSettings(){
-  document.getElementById('settings-overlay').style.display = 'none';
+  closeOverlay(document.getElementById('settings-overlay'));
   document.getElementById('reset-confirm-row').style.display = 'none';
   document.getElementById('reset-row').style.display = 'block';
 }
@@ -4723,9 +4926,10 @@ function activateTab(tabName){
   var btn = document.querySelector('.tab-btn[data-tab="'+tabName+'"]');
   var panel = document.getElementById('tab-'+tabName);
   if(!btn || !panel) return;
-  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-current','false'); });
   document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
   btn.classList.add('active');
+  btn.setAttribute('aria-current','page');
   panel.classList.add('active');
   if(tabName==='spirits'){ renderFormationBonds(); renderRosterJourney(); }
   if(tabName==='ascend') renderAscendSummary();
@@ -4735,6 +4939,8 @@ function activateTab(tabName){
 }
 function setupTabs(){
   document.querySelectorAll('.tab-btn').forEach(function(btn){
+    btn.setAttribute('aria-current',btn.classList.contains('active') ? 'page' : 'false');
+    btn.setAttribute('aria-controls','tab-'+btn.getAttribute('data-tab'));
     btn.addEventListener('click', function(){
       activateTab(btn.getAttribute('data-tab'));
     });
@@ -5770,9 +5976,10 @@ function checkAffordability(){
     var active = findActiveStudy(btn.getAttribute('data-speed-study'));
     if(!active) return;
     var mult = parseFloat(btn.getAttribute('data-speed'));
-    var isActive = active.speedMult>=mult;
-    btn.disabled = isActive || state.motes<speedTierCost(mult);
+    var acquired = active.speedMult>=mult;
+    btn.disabled = acquired || state.motes<speedTierCost(mult);
   });
+  ['spirit-list','research-list','study-list','node-list','shop-list'].forEach(function(id){presentControlStates(els[id]);});
 }
 
 // ---------------------------------------------------------------
@@ -5925,12 +6132,14 @@ function playStartupIntro(done){
     startupIntroPlaying = false;
     startupIntroFinish = null;
     intro.onpointerdown = null;
+    document.getElementById('startup-skip').onclick = null;
     clearStartupIntroTimers();
     markStartupIntroShown();
     intro.classList.add('is-leaving');
     intro.setAttribute('aria-hidden','true');
     setTimeout(function(){
       intro.className = 'startup-intro';
+      closeOverlay(intro);
       if(done) done();
     },430);
   }
@@ -5940,6 +6149,8 @@ function playStartupIntro(done){
   startupIntroFinish = finish;
 
   intro.onpointerdown = finish;
+  document.getElementById('startup-skip').onclick = finish;
+  openOverlay(intro,finish);
 
   var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(reduced){
@@ -5981,12 +6192,12 @@ function showReturnFlow(offline,dailyWasRolled){
   if(hasMeaningfulOfflineProgress(offline)){
     var welcomeOverlay = document.getElementById('welcome-overlay');
     document.getElementById('welcome-text').textContent = offlineReturnMessage(offline);
-    welcomeOverlay.style.display = 'flex';
     document.getElementById('welcome-claim').onclick = function(){
-      welcomeOverlay.style.display = 'none';
+      closeOverlay(welcomeOverlay);
       renderAll();
       maybeShowDaily();
     };
+    openOverlay(welcomeOverlay,function(){ document.getElementById('welcome-claim').click(); });
   } else {
     maybeShowDaily();
   }
@@ -5999,29 +6210,44 @@ function init(){
   var dailyRolled = ensureDaily();
   restoreEnemyOrSpawn();
   setupTabs();
+  setupOverlayFocus();
   syncMainScrollMode();
   setupStars();
 
   var stageEl = document.getElementById('enemy-stage');
   var recentTapTimes = [];
   var MAX_TAPS_PER_SEC = 20;
-  stageEl.addEventListener('pointerdown', function(e){
-    e.preventDefault();
+  function guardianInput(e){
     if(!e.isTrusted) return;
     var now = Date.now();
     recentTapTimes.push(now);
     while(recentTapTimes.length && now - recentTapTimes[0] > 1000) recentTapTimes.shift();
     if(recentTapTimes.length > MAX_TAPS_PER_SEC) return;
     doTap(stageEl);
-  });
+  }
+  stageEl.addEventListener('pointerdown',function(e){ e.preventDefault(); guardianInput(e); });
+  stageEl.addEventListener('click',function(e){ if(e.detail===0) guardianInput(e); });
+  stageEl.addEventListener('keydown',function(e){ if(e.repeat && (e.key==='Enter' || e.key===' ')) e.preventDefault(); });
 
   document.getElementById('rift-push-btn').addEventListener('click', enterPushMode);
   document.getElementById('rift-farm-btn').addEventListener('click', enterFarmMode);
+  document.getElementById('rift-objective').addEventListener('keydown',function(e){
+    if(this.getAttribute('role')==='button' && (e.key==='Enter' || e.key===' ')){
+      e.preventDefault(); if(!e.repeat) this.click();
+    }
+  });
   document.getElementById('rift-objective').addEventListener('click', function(){
     var target = this.getAttribute('data-target-tab');
     if(target) activateTab(target);
   });
   document.getElementById('ascend-btn').addEventListener('click', function(){ doAscend(false); });
+
+  document.getElementById('rift-details-btn').addEventListener('click', function(){
+    renderRiftDetails();
+    document.getElementById('rift-details').showModal();
+  });
+  document.getElementById('rift-details-close').addEventListener('click', function(){ document.getElementById('rift-details').close(); });
+  document.getElementById('rift-details').addEventListener('click', function(e){ if(e.target===this) this.close(); });
 
   document.getElementById('settings-btn').addEventListener('click', openSettings);
   document.getElementById('settings-close').addEventListener('click', closeSettings);
@@ -6035,8 +6261,11 @@ function init(){
   document.getElementById('reset-btn').addEventListener('click', function(){
     document.getElementById('reset-row').style.display = 'none';
     document.getElementById('reset-confirm-row').style.display = 'block';
+    document.getElementById('reset-cancel-btn').focus();
   });
   document.getElementById('reset-cancel-btn').addEventListener('click', function(){
+    document.getElementById('reset-row').style.display = 'block';
+    document.getElementById('reset-btn').focus();
     document.getElementById('reset-confirm-row').style.display = 'none';
     document.getElementById('reset-row').style.display = 'block';
   });
@@ -6139,3 +6368,5 @@ if(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isN
 </script>
 </body>
 </html>
+
+
