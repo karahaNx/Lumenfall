@@ -169,7 +169,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for scenario in self-test-bad-assertion self-test-uncaught-error self-test-unhandled-rejection self-test-parity-regression self-test-chronology-regression self-test-wisp-formula-regression self-test-lifecycle-duplicate; do
+          for scenario in self-test-bad-assertion self-test-uncaught-error self-test-unhandled-rejection self-test-parity-regression self-test-chronology-regression self-test-wisp-formula-regression self-test-p1-05-selected self-test-p1-05-focus-return self-test-lifecycle-duplicate; do
             if python3 tests/behavioral/run.py --web-root mobile/www --scenario "$scenario"; then
               echo "::error::Behavioral harness negative scenario '$scenario' unexpectedly passed."
               exit 1
