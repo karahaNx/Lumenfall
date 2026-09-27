@@ -17,6 +17,9 @@ ROOT = Path(__file__).resolve().parent
 FIXTURES_PATH = ROOT / "fixtures.json"
 
 SCENARIOS = {
+    "layout-fresh": "fresh",
+    "layout-dense": "layout-dense",
+    "layout-boss": "layout-dense-boss",
     "fresh-load": "fresh",
     "midgame-load": "mid-game",
     "mature-load": "mature-high-power",
@@ -54,6 +57,7 @@ SCENARIOS = {
 }
 
 NEGATIVE_SCENARIOS = {
+    "self-test-layout-collapse": "layout-dense-boss",
     "self-test-bad-assertion": "fresh",
     "self-test-uncaught-error": "fresh",
     "self-test-unhandled-rejection": "fresh",
@@ -109,6 +113,7 @@ def build_prelude(fixtures):
     el.setAttribute('data-status','fail');
     el.setAttribute('data-scenario',scenario);
     el.textContent = JSON.stringify({{scenario:scenario,status:'fail',runtimeErrors:errors}}, null, 2);
+    if(parent!==window) parent.postMessage({{qaLayoutResult:el.textContent,status:'fail'}},location.origin);
   }}
   window.addEventListener('error', function(event){{
     markRuntimeFailure('uncaught-error', event.message || (event.error && event.error.message) || 'unknown error');
@@ -118,6 +123,7 @@ def build_prelude(fixtures):
   }});
 
   function materialize(value){{
+    if(value==='__NOW_PLUS_10M__') return Date.now()+600000;
     if(value==='__NOW__') return Date.now();
     if(value==='__NOW_MINUS_60S__') return Date.now()-60000;
     if(value==='__TODAY__'){{
@@ -171,6 +177,8 @@ def build_prelude(fixtures):
 def build_bridge():
     return r'''
 window.__lumenfallQaBridge = {
+  renderLayout: function(){ renderAll(); updateBattleFast(); },
+  toast: function(message){ showToast(message); },
   getState: function(){ return JSON.parse(JSON.stringify(state)); },
   getFlags: function(){ return {resetInProgress:resetInProgress, resetBootPending:resetBootPending, reloadInProgress:reloadInProgress}; },
   rawSave: function(){ return localStorage.getItem(SAVE_KEY); },
@@ -434,6 +442,7 @@ def build_runner():
     el.setAttribute('data-status',status);
     el.setAttribute('data-scenario',ctx.scenario);
     el.textContent = JSON.stringify({scenario:ctx.scenario,status:status,detail:detail||null,runtimeErrors:ctx.errors}, null, 2);
+    if(parent!==window) parent.postMessage({qaLayoutResult:el.textContent,status:status},location.origin);
   }
   function assert(condition, message){ if(!condition) throw new Error(message); }
   function approx(actual, expected, epsilon, message){
@@ -807,6 +816,11 @@ def build_runner():
     if(!bridge || !bridge.getState){ finish('fail','test bridge unavailable'); return; }
     try{
       var s = state();
+      if(ctx.scenario.startsWith('layout-') || ctx.scenario==='self-test-layout-collapse'){
+        bridge.freeze();
+        window.runRiftLayoutQa(bridge,ctx,assert).then(function(detail){ finish('pass',detail); },function(error){ finish('fail',error.message); });
+        return;
+      }
       switch(ctx.scenario){
         case 'fresh-load':
           assertFresh(s);
@@ -1644,7 +1658,7 @@ def instrument_html(source, fixtures):
 
     if source.count("</body>") != 1:
         raise SystemExit("Behavioral QA failed: expected exactly one </body> marker")
-    source = source.replace("</body>", build_runner() + "\n</body>", 1)
+    source = source.replace("</body>", "<script>" + (ROOT / "layout.js").read_text(encoding="utf-8") + "</script>" + build_runner() + "\n</body>", 1)
     return source
 
 
@@ -1653,9 +1667,29 @@ class QuietHandler(SimpleHTTPRequestHandler):
         pass
 
 
-def run_scenario(chrome, base_url, scenario, fixture):
+# Exact CSS viewports are hosted in an iframe: Chrome window chrome must not
+# silently turn a requested 360x800 viewport into 360x713 in CI.
+LAYOUT_VIEWPORTS = [(360,800,0,0),(360,780,0,0),(390,844,0,0),(412,915,0,0),(360,640,24,24)]
+LAYOUT_HOST = """<!doctype html><html><body><script>
+var p=new URLSearchParams(location.search), frame=document.createElement('iframe');
+frame.style.cssText='border:0;width:'+Number(p.get('width'))+'px;height:'+Number(p.get('height'))+'px';
+frame.src='index.html?'+p.toString();document.body.appendChild(frame);
+addEventListener('message',function(e){
+  if(e.origin!==location.origin || e.source!==frame.contentWindow || !e.data.qaLayoutResult)return;
+  var result=document.getElementById('qa-result') || document.createElement('pre');result.id='qa-result';result.dataset.status=e.data.status;
+  result.textContent=e.data.qaLayoutResult;document.body.appendChild(result);
+});
+</script></body></html>"""
+
+
+def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
     with tempfile.TemporaryDirectory(prefix=f"lumenfall-qa-{scenario}-") as profile:
-        url = base_url + "/index.html?" + urlencode({"qaScenario": scenario, "qaFixture": fixture})
+        params = {"qaScenario": scenario, "qaFixture": fixture}
+        page = "/index.html"
+        if viewport:
+            params.update(zip(("width","height","safeTop","safeBottom"), viewport))
+            page = "/layout.html"
+        url = base_url + page + "?" + urlencode(params)
         command = [
             chrome,
             "--headless=new",
@@ -1687,8 +1721,8 @@ def run_scenario(chrome, base_url, scenario, fixture):
     result_text = re.search(r'<pre[^>]*\bid="qa-result"[^>]*>(.*?)</pre>', dom, flags=re.S)
 
     if passed:
-        print(f"PASS {scenario}")
-        if result_text and (scenario == "parity-long-high-power" or scenario.startswith("chronology-")):
+        print(f"PASS {scenario}" + (f" {viewport}" if viewport else ""))
+        if result_text and (viewport or scenario == "parity-long-high-power" or scenario.startswith("chronology-")):
             try:
                 payload = json.loads(html_lib.unescape(re.sub(r'<[^>]+>', '', result_text.group(1))).strip())
                 print("  detail: " + json.dumps(payload.get("detail"), sort_keys=True))
@@ -1735,6 +1769,8 @@ def main():
         source = (stage / "index.html").read_text(encoding="utf-8")
         (stage / "index.html").write_text(instrument_html(source, fixtures), encoding="utf-8")
 
+        (stage / "layout.html").write_text(LAYOUT_HOST, encoding="utf-8")
+
         handler = partial(QuietHandler, directory=str(stage))
         server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
         thread = threading.Thread(target=server.serve_forever, daemon=True)
@@ -1744,8 +1780,10 @@ def main():
         failures = []
         try:
             for scenario, fixture in selected.items():
-                if not run_scenario(chrome, base_url, scenario, fixture):
-                    failures.append(scenario)
+                viewports = LAYOUT_VIEWPORTS if scenario.startswith('layout-') or scenario=='self-test-layout-collapse' else [None]
+                for viewport in viewports:
+                    if not run_scenario(chrome, base_url, scenario, fixture, viewport):
+                        failures.append(f"{scenario} {viewport}")
         finally:
             server.shutdown()
             server.server_close()
@@ -1759,3 +1797,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
