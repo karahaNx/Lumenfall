@@ -50,6 +50,7 @@ SCENARIOS = {
     "chronology-auto-ascend-mid-window": "chronology-auto-ascend-mid-window",
     "chronology-boss-retry": "chronology-boss-retry",
     "chronology-simultaneous-order": "chronology-simultaneous-order",
+    "wisp-formula-contract": "fresh",
 }
 
 NEGATIVE_SCENARIOS = {
@@ -58,6 +59,7 @@ NEGATIVE_SCENARIOS = {
     "self-test-unhandled-rejection": "fresh",
     "self-test-parity-regression": "parity-early-simple",
     "self-test-chronology-regression": "chronology-simultaneous-order",
+    "self-test-wisp-formula-regression": "fresh",
 }
 
 
@@ -323,6 +325,90 @@ window.__lumenfallQaBridge = {
     };
     state = previous;
     return out;
+  },
+  wispFormulaSnapshot: function(id,depth,partyBuffMult){
+    var sp = SPIRITS.find(function(item){ return item.id===id; });
+    if(!sp) throw new Error('Unknown Wisp '+id);
+    var level = state.spirits[id]||0;
+    var targetDepth = Number.isFinite(depth) ? depth : state.depth;
+    var reward = abilityRewardPerCast(sp,level);
+    var support = sp.abilityType==='support' ? supportAbilityProfile(sp) : null;
+    return {
+      wispPower:wispPower(sp,level),
+      totalActivePartyPower:totalActivePartyPower(),
+      passiveGlobalPowerMult:passiveGlobalPowerMult(),
+      effectivePartyPower:effectivePartyPower(),
+      passiveDps:passiveWispDpsAt(targetDepth),
+      abilityDamage:abilityBurstDamage(sp,targetDepth),
+      abilityReward:reward,
+      supportProfile:support,
+      guardianTap:guardianTapDamageAt(targetDepth,partyBuffMult===undefined?1:partyBuffMult),
+      formationDamageMult:formationContextDamageMult(targetDepth),
+      formationRewardMult:formationRewardMult(),
+      bossAbilityMult:bossAbilityDamageMult(targetDepth),
+      bossTapMult:bossTapDamageMult(targetDepth),
+      moduleMult:moduleMult(id),
+      ultimateMult:abilityUltimateMult(sp),
+      supportMoteBonus:supportMoteBonus(),
+      moteReward:Math.max(1,Math.round(motesDropFor(targetDepth)*(1+supportMoteBonus())))
+    };
+  },
+  triggerAbilityFor: function(id,kind,nowMs){
+    var sp = SPIRITS.find(function(item){ return item.id===id; });
+    if(!sp) throw new Error('Unknown Wisp '+id);
+    var before = {
+      lumen:state.lumen,
+      shards:state.shards,
+      enemyHp:state.enemyHp,
+      buffUntil:state.buffUntil||0,
+      buffMult:state.buffMult||1
+    };
+    var summary = simulationSummary(0);
+    simulationTriggerAbility(
+      sp,
+      state.spirits[id]||0,
+      Number.isFinite(nowMs)?nowMs:2000000000000,
+      simulationPolicy(kind||'live',{visual:false}),
+      summary
+    );
+    return {
+      before:before,
+      after:{
+        lumen:state.lumen,
+        shards:state.shards,
+        enemyHp:state.enemyHp,
+        buffUntil:state.buffUntil||0,
+        buffMult:state.buffMult||1
+      },
+      summary:summary
+    };
+  },
+  autoTapOnce: function(nowMs){
+    var beforeHp = state.enemyHp;
+    state._autoTapAccum = 1000;
+    var summary = simulationSummary(0);
+    var processed = simulationProcessAutoTap(
+      Number.isFinite(nowMs)?nowMs:2000000000000,
+      simulationPolicy('live',{visual:false}),
+      summary
+    );
+    return {
+      processed:processed,
+      damage:beforeHp-state.enemyHp,
+      state:JSON.parse(JSON.stringify(state)),
+      summary:summary
+    };
+  },
+  renderGameplayLanguage: function(){
+    renderSpirits();
+    renderEncyclopedia();
+    updateBattleFast();
+    return {
+      wisps:els['spirit-list'] ? els['spirit-list'].textContent : '',
+      encyclopedia:document.getElementById('encyclopedia-content') ? document.getElementById('encyclopedia-content').textContent : '',
+      boss:els['boss-regen-tag'] ? els['boss-regen-tag'].textContent : '',
+      buff:els['buff-indicator'] ? els['buff-indicator'].textContent : ''
+    };
   },
   freeze: function(){ reloadInProgress = true; document.body.classList.add('app-paused'); }
 };
@@ -657,6 +743,53 @@ def build_runner():
   }
   function timelineTypes(result){
     return (result.timeline||[]).map(function(event){ return event.type; });
+  }
+  var FORMULA_WISP_IDS = ['ember','tide','stone','gale','thorn','void','aurora','titan'];
+  function cleanFormulaState(activeIds){
+    var out = cloneJson(state());
+    out.lumen = 0;
+    out.shards = 0;
+    out.motes = 0;
+    out.sigils = 0;
+    out.depth = 100;
+    out.maxDepthEver = 120;
+    out.riftMode = 'push';
+    out.farmDepth = 0;
+    out.farmReturnDepth = 0;
+    out.enemyDepth = 100;
+    out.enemyHp = 1;
+    out.enemyMaxHp = 1;
+    out.enemyIsLuminous = false;
+    out.luminousAccum = 0;
+    out.activeParty = activeIds.slice();
+    FORMULA_WISP_IDS.forEach(function(id){
+      out.spirits[id] = activeIds.indexOf(id)!==-1 ? 10 : 0;
+      out.heroRarity[id] = 0;
+      out.heroResource[id] = 0;
+      out.wispModules[id] = 0;
+      out.wispUltimate[id] = false;
+      out.empowerQueue[id] = false;
+    });
+    Object.keys(out.nodes).forEach(function(id){ out.nodes[id]=0; });
+    Object.keys(out.research).forEach(function(id){ out.research[id]=0; });
+    Object.keys(out.researchQueue).forEach(function(id){ out.researchQueue[id]=false; });
+    Object.keys(out.longStudyLevels).forEach(function(id){ out.longStudyLevels[id]=0; });
+    Object.keys(out.studyQueue).forEach(function(id){ out.studyQueue[id]=false; });
+    out.activeStudies = [];
+    out.achieved = {};
+    out.owned = {};
+    out.ascendCount = 0;
+    out.totalTaps = 0;
+    out.totalKills = 0;
+    out.buffUntil = 0;
+    out.buffMult = 1;
+    out._autoTapAccum = 0;
+    out._autoEmpowerAccum = 0;
+    return out;
+  }
+  function formulaSnapshotFor(snapshot,id,depth,buffMult){
+    bridge.setState(snapshot);
+    return bridge.wispFormulaSnapshot(id,depth,buffMult);
   }
 
   function assertFresh(s){
@@ -1228,6 +1361,207 @@ def build_runner():
           return;
         }
 
+        case 'wisp-formula-contract': {
+          var formulaBase = cleanFormulaState(['ember']);
+          var emberBase = formulaSnapshotFor(formulaBase,'ember',10,1);
+          parityApprox(emberBase.wispPower,10.9,'Ember Wisp Power level curve');
+          parityApprox(emberBase.passiveDps,emberBase.wispPower,'base passive Wisp damage');
+          parityApprox(emberBase.abilityDamage,emberBase.wispPower*5,'base DPS ability damage');
+          parityApprox(emberBase.guardianTap,5+emberBase.effectivePartyPower*0.02,'Guardian Tap Wisp-power contribution');
+
+          var rarityState = cloneJson(formulaBase);
+          rarityState.heroRarity.ember = 1;
+          var emberRare = formulaSnapshotFor(rarityState,'ember',10,1);
+          parityApprox(emberRare.wispPower,emberBase.wispPower*1.5,'Rarity must multiply Wisp Power');
+          parityApprox(emberRare.abilityDamage,emberBase.abilityDamage*1.5,'Rarity must multiply damaging ability output');
+          parityApprox(emberRare.passiveDps,emberBase.passiveDps*1.5*1.02,'Rarity must affect passive damage plus +2% collection synergy');
+
+          var moduleState = cloneJson(formulaBase);
+          moduleState.wispModules.ember = 10;
+          var emberModule = formulaSnapshotFor(moduleState,'ember',10,1);
+          parityApprox(emberModule.passiveDps,emberBase.passiveDps,'DPS Module must not change passive damage');
+          parityApprox(emberModule.abilityDamage,emberBase.abilityDamage*1.5,'DPS Module must change ability damage only');
+
+          var ultimateState = cloneJson(formulaBase);
+          ultimateState.heroRarity.ember = 5;
+          ultimateState.spirits.ember = 40;
+          ultimateState.wispUltimate.ember = true;
+          var ultimateOffState = cloneJson(ultimateState);
+          ultimateOffState.wispUltimate.ember = false;
+          var emberUltOff = formulaSnapshotFor(ultimateOffState,'ember',10,1);
+          var emberUltOn = formulaSnapshotFor(ultimateState,'ember',10,1);
+          parityApprox(emberUltOn.passiveDps,emberUltOff.passiveDps,'Ultimate must not change passive damage');
+          parityApprox(emberUltOn.abilityDamage,emberUltOff.abilityDamage*2,'DPS Ultimate must double ability damage');
+
+          var formationTrainingState = cloneJson(formulaBase);
+          formationTrainingState.research.formation = 1;
+          var formationTraining = formulaSnapshotFor(formationTrainingState,'ember',10,1);
+          parityApprox(formationTraining.passiveDps,emberBase.passiveDps*1.05,'Formation Training passive-only scaling');
+          parityApprox(formationTraining.abilityDamage,emberBase.abilityDamage,'Formation Training must not scale ability damage');
+          assert(formationTraining.guardianTap>emberBase.guardianTap,'Formation Training must raise the Wisp-powered part of Guardian Tap');
+
+          var ascendancyState = cloneJson(formulaBase);
+          ascendancyState.longStudyLevels.wispascend = 1;
+          var ascendancy = formulaSnapshotFor(ascendancyState,'ember',10,1);
+          parityApprox(ascendancy.passiveDps,emberBase.passiveDps*1.15,'Wisp Ascendancy passive-only scaling');
+          parityApprox(ascendancy.abilityDamage,emberBase.abilityDamage,'Wisp Ascendancy must not scale ability damage');
+
+          var starcallerState = cleanFormulaState(['ember','void']);
+          var starcaller = formulaSnapshotFor(starcallerState,'ember',10,1);
+          parityApprox(starcaller.formationDamageMult,1.18,'Starcaller damage Bond');
+          parityApprox(
+            starcaller.passiveDps,
+            starcaller.totalActivePartyPower*1.18,
+            'Starcaller must scale passive Wisp damage'
+          );
+          var starcallerBroken = cleanFormulaState(['ember']);
+          var emberNoBond = formulaSnapshotFor(starcallerBroken,'ember',10,1);
+          parityApprox(starcaller.abilityDamage,emberNoBond.abilityDamage*1.18,'Starcaller must scale damaging abilities');
+
+          var duskguardState = cleanFormulaState(['stone','titan']);
+          var stoneBoss = formulaSnapshotFor(duskguardState,'stone',20,1);
+          parityApprox(stoneBoss.formationDamageMult,1.35,'Duskguard Boss damage Bond');
+
+          var pathfinderState = cleanFormulaState(['gale','thorn']);
+          var galeNormal = formulaSnapshotFor(pathfinderState,'gale',19,1);
+          parityApprox(galeNormal.formationDamageMult,1.20,'Pathfinder non-Boss damage Bond');
+
+          var supportBaseState = cleanFormulaState(['tide']);
+          supportBaseState.spirits.tide = 40;
+          supportBaseState.heroRarity.tide = 5;
+          supportBaseState.wispModules.tide = 20;
+          bridge.setState(supportBaseState);
+          var tideSupport = bridge.wispFormulaSnapshot('tide',100,1);
+          assert(tideSupport.supportProfile.strength===1.25 && tideSupport.supportProfile.durationMs===4000,'Support strength/duration must ignore Wisp Power, Rarity and Module');
+          var supportTrigger = bridge.triggerAbilityFor('tide','live',PARITY_CLOCK_MS);
+          assert(supportTrigger.after.buffMult===1.25,'Support ability must apply +25% passive/Tap buff');
+          assert(supportTrigger.after.buffUntil===PARITY_CLOCK_MS+4000,'Support ability must last 4 seconds without Ultimate');
+
+          var supportUltState = cloneJson(supportBaseState);
+          supportUltState.wispUltimate.tide = true;
+          bridge.setState(supportUltState);
+          var tideUltimate = bridge.wispFormulaSnapshot('tide',100,1);
+          assert(tideUltimate.supportProfile.strength===1.5 && tideUltimate.supportProfile.durationMs===8000,'Support Ultimate must become +50% for 8 seconds');
+          var supportUltTrigger = bridge.triggerAbilityFor('tide','live',PARITY_CLOCK_MS);
+          assert(supportUltTrigger.after.buffMult===1.5 && supportUltTrigger.after.buffUntil===PARITY_CLOCK_MS+8000,'Support Ultimate runtime effect');
+
+          var rewardState = cleanFormulaState(['gale','thorn','tide','aurora']);
+          rewardState.wispModules.gale = 10;
+          rewardState.wispModules.thorn = 10;
+          rewardState.heroRarity.gale = 1;
+          rewardState.heroRarity.thorn = 1;
+          rewardState.heroRarity.tide = 1;
+          rewardState.heroRarity.aurora = 1;
+          rewardState.spirits.gale = 10;
+          rewardState.spirits.thorn = 10;
+          rewardState.spirits.tide = 10;
+          rewardState.spirits.aurora = 10;
+          rewardState.wispUltimate.gale = false;
+          rewardState.wispUltimate.thorn = false;
+          var galeReward = formulaSnapshotFor(rewardState,'gale',100,1);
+          var thornReward = formulaSnapshotFor(rewardState,'thorn',100,1);
+          assert(galeReward.formationRewardMult===1.25,'Dawnpriest must apply +25% Formation reward multiplier');
+          parityApprox(
+            galeReward.abilityReward.shards,
+            Math.round(galeReward.wispPower*0.05*1.5*1.25),
+            'Gale Module/Dawnpriest Shard ability reward'
+          );
+          parityApprox(
+            thornReward.abilityReward.lumen,
+            Math.round(thornReward.wispPower*0.10*1.5*1.25),
+            'Thorn Module/Dawnpriest Lumen ability reward'
+          );
+
+          var rewardUltState = cloneJson(rewardState);
+          rewardUltState.heroRarity.gale = 5;
+          rewardUltState.heroRarity.thorn = 5;
+          rewardUltState.spirits.gale = 40;
+          rewardUltState.spirits.thorn = 40;
+          rewardUltState.wispUltimate.gale = true;
+          rewardUltState.wispUltimate.thorn = true;
+          var rewardUltGale = formulaSnapshotFor(rewardUltState,'gale',100,1);
+          var rewardUltThorn = formulaSnapshotFor(rewardUltState,'thorn',100,1);
+          parityApprox(
+            rewardUltGale.abilityReward.shards,
+            Math.round(rewardUltGale.wispPower*0.05*1.5*2*1.25),
+            'Gale Ultimate must double Shard ability output'
+          );
+          parityApprox(
+            rewardUltThorn.abilityReward.lumen,
+            Math.round(rewardUltThorn.wispPower*0.10*1.5*2*1.25),
+            'Thorn Ultimate must double Lumen ability output'
+          );
+
+          var moteNoModuleState = cleanFormulaState(['tide']);
+          moteNoModuleState.spirits.tide = 40;
+          moteNoModuleState.heroRarity.tide = 5;
+          var moteNoModule = formulaSnapshotFor(moteNoModuleState,'tide',50,1);
+          var moteModuleState = cloneJson(moteNoModuleState);
+          moteModuleState.wispModules.tide = 10;
+          var moteModule = formulaSnapshotFor(moteModuleState,'tide',50,1);
+          assert(moteNoModule.supportMoteBonus===0,'Support Module baseline Mote bonus');
+          parityApprox(moteModule.supportMoteBonus,0.5,'Support Module must add +5% Motes per level');
+          assert(moteModule.moteReward>moteNoModule.moteReward,'Support Module must increase Luminous Mote reward');
+
+          var tapState = cleanFormulaState(['ember']);
+          tapState.nodes.steady = 1;
+          tapState.research.resolve = 1;
+          tapState.longStudyLevels.guardmastery = 1;
+          var tapNormal = formulaSnapshotFor(tapState,'ember',10,1);
+          parityApprox(
+            tapNormal.guardianTap,
+            (5+tapNormal.effectivePartyPower*0.02)*1.08*1.10*1.20,
+            'Guardian Tap specific upgrade stack'
+          );
+          var tapSupport = formulaSnapshotFor(tapState,'ember',10,1.25);
+          parityApprox(tapSupport.guardianTap,tapNormal.guardianTap*1.25,'Support buff must scale Guardian Tap');
+
+          var tapGuardianBoss = formulaSnapshotFor(tapState,'ember',30,1);
+          parityApprox(tapGuardianBoss.bossTapMult,3,'Guardian Mark boss Tap multiplier');
+          parityApprox(tapGuardianBoss.guardianTap,tapNormal.guardianTap*3,'Guardian Mark must triple Guardian Tap');
+
+          var abilityRegrowth = formulaSnapshotFor(formulaBase,'ember',10,1);
+          var abilityFractured = formulaSnapshotFor(formulaBase,'ember',20,1);
+          parityApprox(abilityFractured.bossAbilityMult,1.75,'Fractured Core boss ability multiplier');
+          parityApprox(abilityFractured.abilityDamage,abilityRegrowth.abilityDamage*1.75,'Fractured Core must boost Wisp ability hits only');
+
+          var autoTapState = cleanFormulaState(['ember']);
+          autoTapState.depth = 30;
+          autoTapState.enemyDepth = 30;
+          autoTapState.maxDepthEver = 120;
+          autoTapState.achieved.autotap = true;
+          autoTapState.ascendCount = 12;
+          bridge.setState(autoTapState);
+          var expectedAutoTap = bridge.wispFormulaSnapshot('ember',30,1).guardianTap;
+          var autoTap = bridge.autoTapOnce(PARITY_CLOCK_MS);
+          parityApprox(autoTap.damage,expectedAutoTap,'Auto-Tap must use the same Guardian Tap formula');
+          assert(autoTap.processed===1 && autoTap.summary.autoTaps===1,'Auto-Tap must process exactly one automated hit');
+
+          var languageState = cleanFormulaState(['ember','tide','void']);
+          languageState.depth = 20;
+          languageState.enemyDepth = 20;
+          languageState.maxDepthEver = 120;
+          bridge.setState(languageState);
+          var language = bridge.renderGameplayLanguage();
+          assert(language.wisps.indexOf('Wisp Power')!==-1,'Wisp cards must label the canonical Wisp Power stat');
+          assert(language.wisps.indexOf('Boosts passive Wisp damage and Guardian Tap')!==-1,'Support card wording must name its actual targets');
+          assert(language.encyclopedia.indexOf('Ability Output')!==-1 && language.encyclopedia.indexOf('Guardian Tap')!==-1,'Encyclopedia must expose canonical output terms');
+          assert(language.boss.indexOf('combat DPS')!==-1,'Boss status must describe sustained combat DPS rather than generic power');
+
+          finish('pass',{
+            baseWispPower:emberBase.wispPower,
+            rarityAbility:emberRare.abilityDamage,
+            moduleAbility:emberModule.abilityDamage,
+            supportBase:tideSupport.supportProfile,
+            supportUltimate:tideUltimate.supportProfile,
+            galeShards:rewardUltGale.abilityReward.shards,
+            thornLumen:rewardUltThorn.abilityReward.lumen,
+            guardianTap:tapNormal.guardianTap,
+            guardianBossTap:tapGuardianBoss.guardianTap
+          });
+          return;
+        }
+
         case 'self-test-bad-assertion':
           assert(s.depth===999999,'intentional harness self-test assertion');
           finish('pass');
@@ -1266,6 +1600,20 @@ def build_runner():
             'intentional chronology regression: Study incorrectly expected before Research'
           );
           finish('pass',{unexpected:'chronology ordering regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-formula-regression': {
+          var formulaRegressionBase = cleanFormulaState(['ember']);
+          var beforeFormulaRegression = formulaSnapshotFor(formulaRegressionBase,'ember',10,1);
+          var wrongFormulaState = cloneJson(formulaRegressionBase);
+          wrongFormulaState.research.formation = 1;
+          var afterFormulaRegression = formulaSnapshotFor(wrongFormulaState,'ember',10,1);
+          assert(
+            afterFormulaRegression.abilityDamage>beforeFormulaRegression.abilityDamage,
+            'intentional Wisp formula regression: passive-only Formation Training incorrectly expected to scale ability damage'
+          );
+          finish('pass',{unexpected:'Wisp formula regression was not detected'});
           return;
         }
 
