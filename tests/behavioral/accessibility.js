@@ -222,7 +222,8 @@
       add(findings,'keyboard-theme-choice','Unlocked cosmetic theme choices must be semantic keyboard controls.');
     }
     qa('.bond-row,.ency-card,.hero-card:not([data-theme-select]),.shop-card,.node-card').forEach(function(el){
-      if((el.getAttribute('role')==='button' || Number(el.getAttribute('tabindex'))>=0) && !el.matches('button,[data-theme-select]')){
+      var hasTabIndex=el.hasAttribute('tabindex') && Number(el.getAttribute('tabindex'))>=0;
+      if((el.getAttribute('role')==='button' || hasTabIndex) && !el.matches('button,[data-theme-select]')){
         add(findings,'noninteractive-fake-control','Non-interactive visual cards must not masquerade as keyboard controls.');
       }
     });
