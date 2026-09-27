@@ -2025,18 +2025,18 @@ var SPIRITS = [
 ];
 
 var ABILITY_DESC = {
-  tank: 'Heavy burst damage to the Rift.',
-  dps: 'Massive burst damage to the Rift.',
-  ranged: 'Burst damage, plus bonus Shards.',
-  druid: 'Burst damage, plus bonus Lumen.',
-  support: "Boosts the whole party's power for a few seconds."
+  tank: 'Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it.',
+  dps: 'High ability damage. Its Module boosts the hit; its Ultimate doubles it.',
+  ranged: 'Ability damage + Shards. Module boosts the Shards; Ultimate doubles both.',
+  druid: 'Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both.',
+  support: 'Boosts passive Wisp damage and Guardian Tap by +25% for 4s. Ultimate: +50% for 8s.'
 };
 
 var FORMATION_BONDS = [
-  {id:'starcaller', name:'Starcaller Bond', ids:['ember','void'], req:'Ember + Void', effect:'+18% Wisp damage', tag:'Push'},
+  {id:'starcaller', name:'Starcaller Bond', ids:['ember','void'], req:'Ember + Void', effect:'+18% passive & ability damage', tag:'Push'},
   {id:'dawnpriest', name:'Dawnpriest Bond', ids:['tide','aurora'], req:'Tide + Aurora', effect:'+25% Lumen, Shards & Motes', tag:'Farm'},
-  {id:'duskguard', name:'Duskguard Bond', ids:['stone','titan'], req:'Stone + Titan', effect:'+35% Wisp damage vs Bosses', tag:'Boss'},
-  {id:'pathfinder', name:'Pathfinder Bond', ids:['gale','thorn'], req:'Gale + Thorn', effect:'+20% Wisp damage vs non-Bosses', tag:'Push / Farm'}
+  {id:'duskguard', name:'Duskguard Bond', ids:['stone','titan'], req:'Stone + Titan', effect:'+35% passive & ability damage vs Bosses', tag:'Boss'},
+  {id:'pathfinder', name:'Pathfinder Bond', ids:['gale','thorn'], req:'Gale + Thorn', effect:'+20% passive & ability damage vs non-Bosses', tag:'Push / Farm'}
 ];
 
 var RESOURCE_COLORS = {mana:'#4f8fe0', rage:'#e0524f', harmony:'#e0b34f', focus:'#4fe0c9', energy:'#7fe04f'};
@@ -2055,7 +2055,7 @@ var RARITY_MULT   = [1, 1.5, 2.25, 3.5, 5.5, 9];
 var RESEARCH = [
   {id:'focus',     name:'Battle Focus',       desc:'+8% Lumen from every kill, per level.',                  lumenBase:200, lumenGrowth:1.5,  shardBase:0,  shardGrowth:1},
   {id:'sense',     name:'Shard Sense',        desc:'+8% Shards from every kill, per level.',                 lumenBase:150, lumenGrowth:1.5,  shardBase:20, shardGrowth:1.5},
-  {id:'formation', name:'Formation Training', desc:'+5% party power, per level.',      lumenBase:0,   lumenGrowth:1,    shardBase:40, shardGrowth:1.6},
+  {id:'formation', name:'Formation Training', desc:'+5% passive Wisp damage per level; also raises the Wisp-powered part of Guardian Tap.', lumenBase:0, lumenGrowth:1, shardBase:40, shardGrowth:1.6},
   {id:'resolve',   name:"Guardian's Resolve", desc:'+10% Guardian tap damage, per level.',                   lumenBase:150, lumenGrowth:1.45, shardBase:0,  shardGrowth:1},
   {id:'charge',    name:'Swift Recovery',     desc:'+8% faster Wisp ability charge, per level.',              lumenBase:0,   lumenGrowth:1,    shardBase:30, shardGrowth:1.55}
 ];
@@ -2066,17 +2066,17 @@ var NODES = [
   {id:'echo',      name:'Echoing Rest',        desc:'+5% offline earning rate, per level (caps at 100%).', baseCost:2, growth:1.40},
   {id:'bonds',     name:'Cheaper Bonds',       desc:'−3% Wisp recruiting cost, per level (floor 40%).',  baseCost:2, growth:1.45},
   {id:'swift',     name:'Swift Ascension',     desc:'+4% Prisms earned per Ascend, per level.', baseCost:3, growth:1.50},
-  {id:'momentum',  name:'Eternal Momentum',    desc:'+6% party power, per level.', baseCost:5, growth:1.55, requiresAchievement:'asc5'},
+  {id:'momentum',  name:'Eternal Momentum',    desc:'+6% passive Wisp damage per level; also raises the Wisp-powered part of Guardian Tap.', baseCost:5, growth:1.55, requiresAchievement:'asc5'},
   {id:'reserves',  name:'Deep Reserves',       desc:'+2 hours to your offline cap, per level.', baseCost:6, growth:1.60, requiresAchievement:'d100'}
 ];
 
 var LONG_STUDIES = [
-  {id:'wispascend',   name:'Wisp Ascendancy',     desc:'+15% power for every Wisp, permanently.',                          unlockDepth:1,  baseDurationSec:180, durationGrowth:1.6, lumenBase:800,  lumenGrowth:1.8, shardBase:80,  shardGrowth:1.8},
+  {id:'wispascend',   name:'Wisp Ascendancy',     desc:'+15% passive Wisp damage permanently; also raises the Wisp-powered part of Guardian Tap.', unlockDepth:1, baseDurationSec:180, durationGrowth:1.6, lumenBase:800, lumenGrowth:1.8, shardBase:80, shardGrowth:1.8},
   {id:'guardmastery', name:"Guardian's Mastery",  desc:'+20% Guardian tap damage, permanently.',                           unlockDepth:1,  baseDurationSec:150, durationGrowth:1.6, lumenBase:600,  lumenGrowth:1.8, shardBase:40,  shardGrowth:1.8},
   {id:'riftattune',   name:'Rift Attunement',     desc:'+10% offline earning rate, permanently (stacks past 100%).',      unlockDepth:1,  baseDurationSec:240, durationGrowth:1.6, lumenBase:500,  lumenGrowth:1.8, shardBase:100, shardGrowth:1.8},
   {id:'shardstudy',   name:'Shard Attunement',    desc:'+8% Shards earned per kill, permanently.',                        unlockDepth:15, baseDurationSec:200, durationGrowth:1.6, lumenBase:400,  lumenGrowth:1.8, shardBase:150, shardGrowth:1.8},
   {id:'lumenstudy',   name:'Lumen Wellspring',    desc:'+8% Lumen earned per kill, permanently.',                         unlockDepth:25, baseDurationSec:260, durationGrowth:1.6, lumenBase:1400, lumenGrowth:1.8, shardBase:120, shardGrowth:1.8},
-  {id:'formationstudy',name:'Formation Insight',  desc:'+5% party formation power, permanently.',                         unlockDepth:40, baseDurationSec:320, durationGrowth:1.6, lumenBase:2200, lumenGrowth:1.8, shardBase:220, shardGrowth:1.8},
+  {id:'formationstudy',name:'Formation Insight',  desc:'+5% passive Wisp damage permanently; also raises the Wisp-powered part of Guardian Tap.', unlockDepth:40, baseDurationSec:320, durationGrowth:1.6, lumenBase:2200, lumenGrowth:1.8, shardBase:220, shardGrowth:1.8},
   {id:'motestudy',     name:'Luminous Sense',     desc:'+10% Motes gained from Luminous enemies, permanently.',           unlockDepth:60, baseDurationSec:380, durationGrowth:1.6, lumenBase:3200, lumenGrowth:1.8, shardBase:320, shardGrowth:1.8},
   {id:'prismstudy',    name:'Ascendant Clarity',  desc:'+5% Prisms earned per Ascend, permanently.',                      unlockDepth:90, baseDurationSec:450, durationGrowth:1.6, lumenBase:4800, lumenGrowth:1.8, shardBase:480, shardGrowth:1.8}
 ];
@@ -2951,19 +2951,50 @@ function formationRecommendationText(){
   return focus.label + ': ' + names.join(' + ');
 }
 
+/*
+ * P1-03 Wisp power / gameplay-language contract
+ * ------------------------------------------------
+ * Wisp Power = level-scaled spiritPower() × that Wisp's Rarity multiplier.
+ * It is the shared per-Wisp input for passive damage, damaging abilities and
+ * Gale/Thorn ability rewards. It does NOT set Support buff strength.
+ *
+ * Passive Wisp Damage = Active Wisp Power × passive-only permanent multipliers
+ * (Formation Training, Rarity collection synergy, Eternal Momentum,
+ * Wisp Ascendancy, Formation Insight) × applicable damage Bonds × Support buff.
+ * Modules and Ultimates do not modify passive damage.
+ *
+ * Ability Damage = Wisp Power × ability coefficient × the DPS/Tank Module
+ * where applicable × Ultimate × applicable Formation damage Bonds ×
+ * bossAbilityDamageMult(). Passive-only permanent multipliers and Support buffs
+ * do not modify ability hits.
+ *
+ * Ability Rewards = Wisp Power × reward coefficient × that Ranged/Druid Module
+ * × Ultimate × Dawnpriest reward multiplier. Kill-only Lumen/Shard multipliers
+ * do not modify ability-generated resources.
+ *
+ * Support Buff = fixed by the Support ability: +25% for 4s, or +50% for 8s
+ * with its Ultimate. Wisp Power, Rarity and Modules do not change this buff.
+ *
+ * Guardian Tap = (5 + 2% of general Active-party passive power) × Tap-specific
+ * upgrades × active Support buff × bossTapDamageMult(). Auto-Tap uses the exact
+ * same hit formula. Context-only Duskguard/Pathfinder damage Bonds do not
+ * directly multiply Guardian Tap.
+ */
 function spiritPower(sp, level){
   if(level<=0) return 0;
   return sp.basePower * level * (1 + 0.01*(level-1));
+}
+function wispPower(sp,level){
+  if(!sp || level<=0) return 0;
+  var tier = state.heroRarity[sp.id]||0;
+  return spiritPower(sp,level) * RARITY_MULT[tier];
 }
 function totalActivePartyPower(){
   var sum = 0;
   state.activeParty.forEach(function(id){
     var sp = SPIRITS.find(function(s){ return s.id===id; });
     if(!sp) return;
-    var level = state.spirits[id];
-    if(level<=0) return;
-    var tier = state.heroRarity[id]||0;
-    sum += spiritPower(sp, level) * RARITY_MULT[tier];
+    sum += wispPower(sp,state.spirits[id]||0);
   });
   return sum;
 }
@@ -2984,20 +3015,26 @@ function rarityCost(sp, tier){
   };
 }
 
+function passiveGlobalPowerMult(){
+  return formationMult() * synergyMult() * momentumMult() * longStudyPowerMult();
+}
 function effectivePartyPower(){
-  return totalActivePartyPower() * formationMult() * synergyMult() * momentumMult() * longStudyPowerMult() * formationGeneralDamageMult();
+  // General Active-party passive power includes Starcaller, but not the
+  // context-only Duskguard/Pathfinder damage Bonds.
+  return totalActivePartyPower() * passiveGlobalPowerMult() * formationGeneralDamageMult();
 }
 function chipEffectivePower(id){
   var sp = SPIRITS.find(function(s){ return s.id===id; });
   if(!sp) return 0;
-  var tier = state.heroRarity[id]||0;
-  var base = spiritPower(sp, state.spirits[id]) * RARITY_MULT[tier];
-  var shareMult = formationMult() * synergyMult() * momentumMult() * longStudyPowerMult() * formationGeneralDamageMult();
+  var shareMult = passiveGlobalPowerMult() * formationGeneralDamageMult();
   var buffActive = state.buffUntil && Date.now() < state.buffUntil;
-  return base * shareMult * (buffActive ? state.buffMult : 1);
+  return wispPower(sp,state.spirits[id]||0) * shareMult * (buffActive ? state.buffMult : 1);
+}
+function guardianTapBaseDamage(){
+  return 5 + effectivePartyPower()*0.02;
 }
 function guardianTapDamageAt(depth, partyBuffMult){
-  return (5 + effectivePartyPower()*0.02) * tapMult() * (partyBuffMult||1) * bossTapDamageMult(depth);
+  return guardianTapBaseDamage() * tapMult() * (partyBuffMult||1) * bossTapDamageMult(depth);
 }
 function tapDamage(){
   var buffActive = state.buffUntil && Date.now() < state.buffUntil;
@@ -3011,36 +3048,66 @@ function idleDps(){
   var buffActive = state.buffUntil && Date.now() < state.buffUntil;
   return passiveWispDpsAt(state.depth) * (buffActive ? state.buffMult : 1);
 }
+function supportAbilityProfile(sp){
+  var ultimate = !!(sp && ultimateUnlocked(sp.id));
+  return {
+    strength:ultimate ? 1.5 : 1.25,
+    durationMs:ultimate ? 8000 : 4000
+  };
+}
 function averageSupportBuffMult(){
   var cycle = abilityCycleSeconds();
   var best = 1;
   state.activeParty.forEach(function(id){
     var sp = SPIRITS.find(function(s){ return s.id===id; });
     if(!sp || sp.abilityType!=='support' || (state.spirits[id]||0)<=0) return;
-    var isUlt = ultimateUnlocked(id);
-    var durationSec = isUlt ? 8 : 4;
-    var strength = isUlt ? 1.5 : 1.25;
-    var uptime = Math.min(1, durationSec / cycle);
-    var average = 1 + (strength-1)*uptime;
+    var profile = supportAbilityProfile(sp);
+    var uptime = Math.min(1, (profile.durationMs/1000) / cycle);
+    var average = 1 + (profile.strength-1)*uptime;
     if(average>best) best=average;
   });
   return best;
 }
+function abilityDamageCoefficient(sp){
+  if(!sp) return 0;
+  if(sp.abilityType==='tank') return 4;
+  if(sp.abilityType==='dps') return 5;
+  if(sp.abilityType==='ranged' || sp.abilityType==='druid') return 3;
+  return 0;
+}
+function abilityDamageModuleMult(sp){
+  return sp && (sp.abilityType==='dps' || sp.abilityType==='tank') ? moduleMult(sp.id) : 1;
+}
+function abilityUltimateMult(sp){
+  return sp && ultimateUnlocked(sp.id) ? 2 : 1;
+}
+function abilityRawBurst(sp,level){
+  return wispPower(sp,level) * abilityDamageCoefficient(sp) * abilityDamageModuleMult(sp) * abilityUltimateMult(sp);
+}
 function abilityBurstDamage(sp, depth){
   var level = state.spirits[sp.id]||0;
   if(level<=0) return 0;
-  var tier = state.heroRarity[sp.id]||0;
-  var power = spiritPower(sp, level) * RARITY_MULT[tier];
-  var mMult = moduleMult(sp.id);
-  var ult = ultimateUnlocked(sp.id) ? 2 : 1;
-  var burst = 0;
-  switch(sp.abilityType){
-    case 'tank': burst = power*4*mMult*ult; break;
-    case 'dps': burst = power*5*mMult*ult; break;
-    case 'ranged': burst = power*3*ult; break;
-    case 'druid': burst = power*3*ult; break;
-  }
-  return burst * formationContextDamageMult(depth) * bossAbilityDamageMult(depth);
+  return abilityRawBurst(sp,level) * formationContextDamageMult(depth) * bossAbilityDamageMult(depth);
+}
+function abilityRewardRaw(sp,level){
+  if(!sp || level<=0) return {lumen:0,shards:0};
+  var power = wispPower(sp,level);
+  var mult = moduleMult(sp.id) * abilityUltimateMult(sp) * formationRewardMult();
+  return {
+    lumen:sp.abilityType==='druid' ? power*0.10*mult : 0,
+    shards:sp.abilityType==='ranged' ? power*0.05*mult : 0
+  };
+}
+function abilityRewardPerCast(sp,level){
+  var raw = abilityRewardRaw(sp,level);
+  return {lumen:Math.round(raw.lumen),shards:Math.round(raw.shards)};
+}
+function ultimateEffectText(sp){
+  if(!sp) return 'Ultimate unlocked';
+  if(sp.abilityType==='support') return 'Support buff becomes +50% for 8s';
+  if(sp.abilityType==='ranged') return 'Ability damage and Shards ×2';
+  if(sp.abilityType==='druid') return 'Ability damage and Lumen ×2';
+  return 'Ability damage ×2';
 }
 function averageAbilityDps(depth){
   var cycle = abilityCycleSeconds();
@@ -3077,12 +3144,9 @@ function abilityResourceRates(){
     var sp = SPIRITS.find(function(s){ return s.id===id; });
     var level = state.spirits[id]||0;
     if(!sp || level<=0) return;
-    var tier = state.heroRarity[id]||0;
-    var power = spiritPower(sp, level) * RARITY_MULT[tier];
-    var mMult = moduleMult(id);
-    var ult = ultimateUnlocked(id) ? 2 : 1;
-    if(sp.abilityType==='ranged') rates.shards += (power*0.05*mMult*ult*formationRewardMult()) / cycle;
-    if(sp.abilityType==='druid') rates.lumen += (power*0.10*mMult*ult*formationRewardMult()) / cycle;
+    var rewards = abilityRewardRaw(sp,level);
+    rates.lumen += rewards.lumen/cycle;
+    rates.shards += rewards.shards/cycle;
   });
   return rates;
 }
@@ -3695,22 +3759,14 @@ function performReset(){
 }
 
 function triggerAbility(sp, level){
-  var tier = state.heroRarity[sp.id]||0;
-  var power = spiritPower(sp, level) * RARITY_MULT[tier];
-  var mMult = moduleMult(sp.id);
-  var ult = ultimateUnlocked(sp.id) ? 2 : 1;
-  var burst = 0;
-  switch(sp.abilityType){
-    case 'tank':    burst = power*4*mMult*ult; break;
-    case 'dps':     burst = power*5*mMult*ult; break;
-    case 'ranged':  burst = power*3*ult; state.shards += Math.round(power*0.05*mMult*ult*formationRewardMult()); break;
-    case 'druid':   burst = power*3*ult; gainLumen(Math.round(power*0.1*mMult*ult*formationRewardMult())); break;
-    case 'support':
-      var dur = ultimateUnlocked(sp.id) ? 8000 : 4000;
-      var strength = ultimateUnlocked(sp.id) ? 1.5 : 1.25;
-      state.buffUntil = Math.max(state.buffUntil||0, Date.now()+dur);
-      state.buffMult = Math.max(state.buffMult||1, strength);
-      break;
+  var burst = abilityRawBurst(sp,level);
+  var rewards = abilityRewardPerCast(sp,level);
+  if(rewards.shards>0) state.shards += rewards.shards;
+  if(rewards.lumen>0) gainLumen(rewards.lumen);
+  if(sp.abilityType==='support'){
+    var support = supportAbilityProfile(sp);
+    state.buffUntil = Math.max(state.buffUntil||0,Date.now()+support.durationMs);
+    state.buffMult = Math.max(state.buffMult||1,support.strength);
   }
   emitCombatVfx(sp.abilityType==='support' ? 'support' : 'ability',sp.color);
   flashBattleStage(sp.abilityType==='support' ? 'support' : 'ability');
@@ -3889,7 +3945,7 @@ function updateBattleFast(){
     var enough = netDps > 0;
     var eta = enough ? Math.ceil(Math.max(0,state.enemyHp)/netDps) : 0;
     var wallHint = trait.id==='guardian' ? 'Tap or Farm' : 'Farm recommended';
-    els['boss-regen-tag'].textContent = trait.name+' · '+formatNum(yourDps)+'/s power vs '+formatNum(regenPerSec)+'/s regen · ' + (enough ? '~'+fmtDuration(eta) : wallHint);
+    els['boss-regen-tag'].textContent = trait.name+' · '+formatNum(yourDps)+'/s combat DPS vs '+formatNum(regenPerSec)+'/s regen · ' + (enough ? '~'+fmtDuration(eta) : wallHint);
     els['boss-regen-tag'].classList.toggle('insufficient', !enough);
     els['enemy-stage'].classList.add(enough ? 'boss-ready' : 'boss-wall');
     if(battleStage) battleStage.classList.add(enough ? 'boss-ready' : 'boss-wall');
@@ -3903,7 +3959,7 @@ function updateBattleFast(){
   if(buffActive){
     var pct = Math.round((state.buffMult-1)*100);
     var secLeft = Math.max(0, Math.ceil((state.buffUntil-Date.now())/1000));
-    els['buff-indicator'].textContent = 'Party boosted: +'+pct+'% power ('+secLeft+'s left)';
+    els['buff-indicator'].textContent = 'Passive + Tap boosted: +'+pct+'% ('+secLeft+'s left)';
   }
   renderHud();
 }
@@ -4076,7 +4132,7 @@ function renderSpirits(){
     }
     var recruited = level>0;
     var tier = state.heroRarity[sp.id]||0;
-    var power = spiritPower(sp, level) * RARITY_MULT[tier];
+    var power = wispPower(sp,level);
     var cost = spiritCost(sp);
     var active = state.activeParty.indexOf(sp.id)!==-1;
     var req = rarityReq(tier);
@@ -4105,7 +4161,7 @@ function renderSpirits(){
     var ultimateHtml = tier<5 ? '' :
       '<div class="ultimate-row">' +
         (ultimateUnlocked(sp.id) ?
-          '<div class="ultimate-badge">Ultimate Unlocked — '+sp.abilityName+' output doubled</div>' :
+          '<div class="ultimate-badge">Ultimate Unlocked — '+ultimateEffectText(sp)+'</div>' :
           '<button class="mini-btn ultimate-btn" data-ultimate="'+sp.id+'" '+(state.sigils<ultCost?'disabled':'')+'>Unlock Ultimate<span style="font-size:.62rem;">'+costIcon('sigil')+ultCost+'</span></button>') +
       '</div>';
     var empowerOn = state.empowerQueue[sp.id]!==false;
@@ -4122,7 +4178,7 @@ function renderSpirits(){
       '</div>' +
       '<div class="hero-stats">' +
         '<span class="hero-stat-pill">Lv. '+level+'</span>' +
-        '<span class="hero-stat-pill mono">'+formatNum(power)+' PWR</span>' +
+        '<span class="hero-stat-pill mono">'+formatNum(power)+' Wisp Power</span>' +
         '<span class="rarity-badge" style="--badge-color:'+RARITY_COLORS[tier]+';">'+RARITY_NAMES[tier]+'</span>' +
         empowerHtml +
       '</div>' +
@@ -4436,7 +4492,7 @@ var CURRENCIES = [
   {name:'Motes', shape:'shape-pentagon', color:'var(--mote)', desc:'Dropped only by rare Luminous enemies in the Rift, always a fixed amount. Spend it to speed up your active Long Study in the Lab.'},
   {name:'Prisms', shape:'shape-diamond', color:'var(--prism)', desc:'Earned only by Ascending — the deeper you clear first, the more you get. Spend it on the permanent Ascension Tree.'},
   {name:'Comets', shape:'shape-star', color:'var(--comet)', desc:'Earned only from Deeds. Spend it at the Comet Rest Stop on convenience — never on power.'},
-  {name:'Sigils', shape:'shape-octagon', color:'var(--sigil)', desc:'Dropped only by Rift bosses, always a fixed amount. Spend it to unlock a Mythic Wisp’s Ultimate — doubling their ability’s output.'}
+  {name:'Sigils', shape:'shape-octagon', color:'var(--sigil)', desc:'Dropped only by Rift bosses, always a fixed amount. Spend them on Mythic Wisp Ultimates: damage/resource abilities double their output; Support buffs become stronger and longer.'}
 ];
 
 function renderCurrencies(){
@@ -4466,9 +4522,16 @@ var ENCYCLOPEDIA_MECHANICS = [
   {name:'Push', meta:'Rift mode', desc:'Climb toward new Rifts and bosses. Your saved Push point is preserved if you switch to Farm.'},
   {name:'Rift Regions', meta:'World progression', desc:'The Rift changes region every 25 levels, moving through the Starlit Verge, Ashen Canopy, Glass Wastes, Drowned Observatory, Void Basilica and Crown of Night before deeper echoes begin.'},
   {name:'Farm', meta:'Rift mode', desc:'Repeat your highest cleared non-boss Rift for steady resources, then return to the exact Push point when ready.'},
+  {name:'Wisp Power', meta:'Combat stat', desc:'Level and Rarity set each Wisp’s Power. It feeds passive damage and that Wisp’s damaging or resource ability. Support buff strength is fixed by the ability and its Ultimate, not by Wisp Power.'},
+  {name:'Passive Wisp Damage', meta:'Combat rule', desc:'Active Wisp Power is multiplied by passive-only permanent upgrades, applicable damage Bonds and active Support buffs. Modules and Ultimates do not increase passive damage.'},
+  {name:'Ability Output', meta:'Combat / economy rule', desc:'Damaging abilities use Wisp Power, their relevant Module, Ultimate, damage Bonds and Boss ability modifiers. Gale/Thorn resource output uses Wisp Power, its Module, Ultimate and Dawnpriest; passive-only party upgrades and Support buffs do not increase ability output.'},
+  {name:'Guardian Tap', meta:'Guardian damage', desc:'Tap starts at 5 damage plus 2% of your general Active-Wisp passive power, then Tap upgrades apply. Support buffs and Guardian’s Mark also multiply it. Auto-Tap uses the same hit once per second.'},
+  {name:'Rarity', meta:'Wisp progression', desc:'Rarity multiplies that Wisp’s Power, so it affects passive damage plus damaging/resource abilities. Every Rarity tier owned across the roster also adds +2% general passive-party power. Rarity does not strengthen Support buffs.'},
+  {name:'Modules & Ultimates', meta:'Wisp progression', desc:'Modules are role-specific: DPS/Tank Modules boost ability damage, Ranged/Druid Modules boost ability resources, and Support Modules boost Motes while Active. Ultimates double damage/resource ability output; Support Ultimates change the buff from +25% for 4s to +50% for 8s.'},
+  {name:'Wisp Roles', meta:'Build label', desc:'Roles describe current ability style, not a separate defense system. Tank Wisps currently use heavy burst abilities; Support Wisps either buff passive/Tap damage or provide resource-focused utility.'},
   {name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the current run for Prisms. Rarity, Lab, Long Studies, Modules, Ultimates and other permanent systems stay.'},
   {name:'Luminous Enemies', meta:'Rare encounter', desc:'Rare non-boss enemies that drop Motes. Their appearance chance rises as you push deeper.'},
-  {name:'Boss Traits', meta:'Boss mechanic', desc:'Bosses rotate every 10 Rifts: Regrowth has stronger healing, Fractured Core takes +75% Wisp ability damage, and Guardian\'s Mark makes Guardian taps deal x3. The cycle repeats every 30 Rifts.'},
+  {name:'Boss Traits', meta:'Boss mechanic', desc:'Regrowth regenerates 0.9% max HP/s. Fractured Core regenerates 0.5%/s and takes +75% from Wisp ability hits only. Guardian’s Mark regenerates 0.6%/s and makes manual Guardian Tap and Auto-Tap deal x3; passive Wisp damage is unchanged by those trait bonuses.'},
   {name:'Offline Progress', meta:'Idle system', desc:'Combat, Wisp abilities, Auto-Tap, Farm, Auto-Ascend, Long Studies and automation continue while you are away. If Auto-Empower makes you strong enough after a boss retreat, the game retries the saved Boss automatically.'}
 ];
 
@@ -5083,41 +5146,24 @@ function simulationDealDiscreteDamage(amount,policy,summary){
   return false;
 }
 function simulationTriggerAbility(sp,level,nowMs,policy,summary){
-  var tier = state.heroRarity[sp.id]||0;
-  var power = spiritPower(sp,level)*RARITY_MULT[tier];
-  var mMult = moduleMult(sp.id);
-  var ult = ultimateUnlocked(sp.id) ? 2 : 1;
-  var burst = 0;
+  var burst = abilityRawBurst(sp,level);
+  var rewards = abilityRewardPerCast(sp,level);
   var rewardScale = simulationRewardScale(policy);
 
-  switch(sp.abilityType){
-    case 'tank':
-      burst = power*4*mMult*ult;
-      break;
-    case 'dps':
-      burst = power*5*mMult*ult;
-      break;
-    case 'ranged': {
-      burst = power*3*ult;
-      var shardGain = Math.round(power*0.05*mMult*ult*formationRewardMult())*rewardScale;
-      state.shards += shardGain;
-      summary.shardGained += shardGain;
-      break;
-    }
-    case 'druid': {
-      burst = power*3*ult;
-      var lumenGain = Math.round(power*0.10*mMult*ult*formationRewardMult())*rewardScale;
-      gainLumen(lumenGain);
-      summary.lumenGained += lumenGain;
-      break;
-    }
-    case 'support': {
-      var durationMs = ultimateUnlocked(sp.id) ? 8000 : 4000;
-      var strength = ultimateUnlocked(sp.id) ? 1.5 : 1.25;
-      state.buffUntil = Math.max(state.buffUntil||0,nowMs+durationMs);
-      state.buffMult = Math.max(state.buffMult||1,strength);
-      break;
-    }
+  if(rewards.shards>0){
+    var shardGain = rewards.shards*rewardScale;
+    state.shards += shardGain;
+    summary.shardGained += shardGain;
+  }
+  if(rewards.lumen>0){
+    var lumenGain = rewards.lumen*rewardScale;
+    gainLumen(lumenGain);
+    summary.lumenGained += lumenGain;
+  }
+  if(sp.abilityType==='support'){
+    var support = supportAbilityProfile(sp);
+    state.buffUntil = Math.max(state.buffUntil||0,nowMs+support.durationMs);
+    state.buffMult = Math.max(state.buffMult||1,support.strength);
   }
 
   if(policy.visual){
