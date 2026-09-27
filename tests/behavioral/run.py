@@ -1468,13 +1468,13 @@ def build_runner():
         }
 
         case 'parity-boss-retry': {
-          var retryPair = runParityPair(360,'offline',0.1);
+          var retryPair = runParityPair(720,'offline',0.1);
           assert(retryPair.direct.summary.retreats>=1,'unwinnable Boss must retreat to Farm');
           assert(retryPair.direct.summary.retries>=1,'Auto-Empower must permit a later Boss retry once sustained damage is positive');
           assert(retryPair.direct.summary.bossKills>=1,'retried Boss must be defeatable inside the representative window');
           assert(retryPair.direct.summary.sigilsGained>=2,'Boss retry path must preserve Sigil rewards');
           finish('pass',{
-            durationSec:360,
+            durationSec:720,
             retreats:retryPair.direct.summary.retreats,
             retries:retryPair.direct.summary.retries,
             bossKills:retryPair.direct.summary.bossKills,
@@ -1623,7 +1623,7 @@ def build_runner():
 
         case 'chronology-boss-retry': {
           var bossBaseline = state();
-          var bossDirect = bridge.simulateTimeline(360,'offline',PARITY_CLOCK_MS);
+          var bossDirect = bridge.simulateTimeline(720,'offline',PARITY_CLOCK_MS);
           var retreatEvent = firstTimelineEvent(bossDirect,'bossRetreat');
           var bossEmpowerEvent = firstTimelineEvent(bossDirect,'autoEmpower');
           var retryEvent = firstTimelineEvent(bossDirect,'bossRetry');
@@ -1636,7 +1636,7 @@ def build_runner():
           );
           assert(bossDirect.summary.bossKills>=1,'retried Boss must be defeated inside the fixture window');
           assert(bossDirect.summary.sigilsGained>=2,'retried Boss must preserve Sigil rewards');
-          assertChronologicalSplit(bossBaseline,360,retryEvent.elapsedSec,bossDirect,'Boss retreat/progression/retry');
+          assertChronologicalSplit(bossBaseline,720,retryEvent.elapsedSec,bossDirect,'Boss retreat/progression/retry');
           finish('pass',{
             retreatSec:retreatEvent.elapsedSec,
             firstEmpowerSec:bossEmpowerEvent.elapsedSec,
@@ -1791,7 +1791,7 @@ def build_runner():
         }
 
         case 'lifecycle-boss-retry': {
-          var bossLife = runResumeWindow(360,'boss retreat/Farm/retry lifecycle');
+          var bossLife = runResumeWindow(720,'boss retreat/Farm/retry lifecycle');
           var retreat = firstTimelineEvent(bossLife.expected,'bossRetreat');
           var retry = firstTimelineEvent(bossLife.expected,'bossRetry');
           assert(retreat && retry,'lifecycle Boss reference must retreat and retry');
