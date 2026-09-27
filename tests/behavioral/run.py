@@ -58,6 +58,15 @@ SCENARIOS = {
     "chronology-auto-ascend-mid-window": "chronology-auto-ascend-mid-window",
     "chronology-boss-retry": "chronology-boss-retry",
     "chronology-simultaneous-order": "chronology-simultaneous-order",
+    "lifecycle-background-resume": "lifecycle-basic",
+    "lifecycle-repeated-resume": "lifecycle-basic",
+    "lifecycle-cold-restart": "lifecycle-basic",
+    "lifecycle-partial-enemy": "lifecycle-partial-enemy",
+    "lifecycle-boss-retry": "chronology-boss-retry",
+    "lifecycle-auto-ascend": "chronology-auto-ascend-mid-window",
+    "lifecycle-long-study": "chronology-study-mid-window",
+    "lifecycle-lab-queue": "chronology-research-mid-window",
+    "lifecycle-daily-rollover": "lifecycle-daily",
     "wisp-formula-contract": "fresh",
 }
 
@@ -73,6 +82,7 @@ NEGATIVE_SCENARIOS = {
     "self-test-unhandled-rejection": "fresh",
     "self-test-parity-regression": "parity-early-simple",
     "self-test-chronology-regression": "chronology-simultaneous-order",
+    "self-test-lifecycle-duplicate": "lifecycle-basic",
     "self-test-wisp-formula-regression": "fresh",
 }
 
@@ -149,12 +159,60 @@ def build_prelude(fixtures):
     return value;
   }}
 
-  var resolvedFixtures = materialize(fixtures);
+  var RealDate = Date;
+  var clockKey = 'lumenfall_qa_clock_' + scenario;
   var phase = localStorage.getItem(phaseKey);
+  var initialClockMs = scenario==='lifecycle-daily-rollover'
+    ? new RealDate(2035,0,15,23,59,50,0).getTime()
+    : new RealDate(2035,0,15,12,0,0,0).getTime();
+
   if(phase===null){{
     localStorage.clear();
     phase = '0';
     localStorage.setItem(phaseKey, phase);
+    localStorage.setItem(clockKey, String(initialClockMs));
+  }}
+
+  var fakeNowMs = Number(localStorage.getItem(clockKey));
+  if(!Number.isFinite(fakeNowMs)) fakeNowMs = initialClockMs;
+
+  class QaDate extends RealDate {{
+    constructor(){{
+      if(arguments.length===0) super(fakeNowMs);
+      else super(...arguments);
+    }}
+    static now(){{ return fakeNowMs; }}
+  }}
+  QaDate.parse = RealDate.parse;
+  QaDate.UTC = RealDate.UTC;
+  window.Date = QaDate;
+
+  function setClock(ms){{
+    fakeNowMs = Number(ms);
+    if(!Number.isFinite(fakeNowMs)) throw new Error('QA clock requires a finite timestamp');
+    localStorage.setItem(clockKey,String(fakeNowMs));
+    return fakeNowMs;
+  }}
+  function advanceClock(ms){{ return setClock(fakeNowMs + Number(ms||0)); }}
+  function setLocalClock(year,month,day,hour,minute,second){{
+    return setClock(new RealDate(year,month,day,hour||0,minute||0,second||0,0).getTime());
+  }}
+  function currentDay(){{
+    var d = new Date();
+    return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  }}
+
+  var qaHidden = false;
+  try{{
+    Object.defineProperty(document,'hidden',{{configurable:true,get:function(){{ return qaHidden; }}}});
+    Object.defineProperty(document,'visibilityState',{{configurable:true,get:function(){{ return qaHidden ? 'hidden' : 'visible'; }}}});
+  }}catch(e){{
+    markRuntimeFailure('visibility-control-error', e && e.message ? e.message : String(e));
+  }}
+  function setHidden(value){{ qaHidden = !!value; return qaHidden; }}
+
+  var resolvedFixtures = materialize(fixtures);
+  if(phase==='0'){{
     var fixture = resolvedFixtures[fixtureName];
     if(!fixture){{
       markRuntimeFailure('fixture-error', 'Unknown fixture '+fixtureName);
@@ -176,8 +234,16 @@ def build_prelude(fixtures):
     scenario: scenario,
     fixtureName: fixtureName,
     phaseKey: phaseKey,
+    clockKey: clockKey,
     fixtures: resolvedFixtures,
     errors: errors,
+    clockNow: function(){{ return fakeNowMs; }},
+    advanceTime: advanceClock,
+    setClock: setClock,
+    setLocalClock: setLocalClock,
+    currentDay: currentDay,
+    setHidden: setHidden,
+    getHidden: function(){{ return qaHidden; }},
     markRuntimeFailure: markRuntimeFailure
   }};
 }})();
@@ -186,6 +252,65 @@ def build_prelude(fixtures):
 
 def build_bridge():
     return r'''
+var qaLifecycleEvents = [];
+function qaLifecycleRecord(type,detail){
+  qaLifecycleEvents.push({
+    type:type,
+    nowMs:Date.now(),
+    detail:detail===undefined ? null : JSON.parse(JSON.stringify(detail))
+  });
+}
+var qaOriginalSaveState = saveState;
+saveState = function(){
+  var beforeLastSeen = state ? state.lastSeen : null;
+  var result = qaOriginalSaveState.apply(this,arguments);
+  qaLifecycleRecord('save',{
+    beforeLastSeen:beforeLastSeen,
+    afterLastSeen:state ? state.lastSeen : null,
+    hidden:document.hidden
+  });
+  return result;
+};
+var qaOriginalEnsureDaily = ensureDaily;
+ensureDaily = function(){
+  var beforeDay = state ? state.questDay : null;
+  var beforeStreak = state ? state.loginStreak : null;
+  var result = qaOriginalEnsureDaily.apply(this,arguments);
+  qaLifecycleRecord('daily',{
+    rolled:!!result,
+    beforeDay:beforeDay,
+    afterDay:state ? state.questDay : null,
+    beforeStreak:beforeStreak,
+    afterStreak:state ? state.loginStreak : null
+  });
+  return result;
+};
+var qaOriginalApplyOfflineProgress = applyOfflineProgress;
+applyOfflineProgress = function(){
+  var before = state ? {
+    lastSeen:state.lastSeen,
+    totalOfflineSeconds:state.totalOfflineSeconds,
+    totalKills:state.totalKills,
+    lumen:state.lumen,
+    shards:state.shards,
+    ascendCount:state.ascendCount
+  } : null;
+  var result = qaOriginalApplyOfflineProgress.apply(this,arguments);
+  qaLifecycleRecord('offline',{
+    before:before,
+    result:result,
+    after:state ? {
+      lastSeen:state.lastSeen,
+      totalOfflineSeconds:state.totalOfflineSeconds,
+      totalKills:state.totalKills,
+      lumen:state.lumen,
+      shards:state.shards,
+      ascendCount:state.ascendCount
+    } : null
+  });
+  return result;
+};
+
 window.__lumenfallQaBridge = {
   refreshAffordability: function(){ lastAffordabilityAt=0; checkAffordability(); },
   renderLayout: function(){ renderAll(); updateBattleFast(); },
@@ -196,6 +321,48 @@ window.__lumenfallQaBridge = {
   rawRecovery: function(){ return localStorage.getItem(RECOVERY_SAVE_KEY); },
   persistenceStatus: function(){ return persistenceStatus(); },
   save: function(){ return saveState(); },
+  clockNow: function(){ return window.__lumenfallQaContext.clockNow(); },
+  advanceTime: function(ms){ return window.__lumenfallQaContext.advanceTime(ms); },
+  setLocalClock: function(year,month,day,hour,minute,second){
+    return window.__lumenfallQaContext.setLocalClock(year,month,day,hour,minute,second);
+  },
+  currentDay: function(){ return window.__lumenfallQaContext.currentDay(); },
+  dispatchVisibility: function(hidden){
+    window.__lumenfallQaContext.setHidden(hidden);
+    document.dispatchEvent(new Event('visibilitychange'));
+    return {
+      hidden:document.hidden,
+      state:JSON.parse(JSON.stringify(state)),
+      trace:JSON.parse(JSON.stringify(qaLifecycleEvents))
+    };
+  },
+  lifecycleTrace: function(){ return JSON.parse(JSON.stringify(qaLifecycleEvents)); },
+  clearLifecycleTrace: function(){ qaLifecycleEvents.length = 0; },
+  applyOfflineNow: function(){ return applyOfflineProgress(); },
+  setLastSeen: function(value){ state.lastSeen=Number(value); return state.lastSeen; },
+  suppressUnloadSave: function(){ reloadInProgress=true; },
+  previewOffline: function(snapshot,seconds,startMs){
+    var previousState = state;
+    var previousDailyReward = pendingDailyReward;
+    try{
+      state = acceptPersistedState(JSON.parse(JSON.stringify(snapshot)),'qa-lifecycle-preview');
+      restoreEnemyOrSpawn();
+      var result = advanceAuthoritativeTime(seconds,{
+        kind:'offline',
+        visual:false,
+        clockStartMs:startMs,
+        captureTimeline:true
+      });
+      return {
+        state:JSON.parse(JSON.stringify(state)),
+        summary:JSON.parse(JSON.stringify(result)),
+        timeline:JSON.parse(JSON.stringify(result.timeline||[]))
+      };
+    } finally {
+      state = previousState;
+      pendingDailyReward = previousDailyReward;
+    }
+  },
   enterFarm: function(){ enterFarmMode(); },
   enterPush: function(){ enterPushMode(); },
   reset: function(){ performReset(); },
@@ -763,6 +930,93 @@ def build_runner():
   }
   function timelineTypes(result){
     return (result.timeline||[]).map(function(event){ return event.type; });
+  }
+  function consumedOfflineEvents(trace){
+    return (trace||[]).filter(function(event){
+      return event.type==='offline' && event.detail && event.detail.result && event.detail.result.effectiveSec>0;
+    });
+  }
+  function assertOfflineExactlyOnce(trace,expectedSec,label){
+    var consumed = consumedOfflineEvents(trace);
+    assert(consumed.length===1,label+' must consume exactly one offline window, got '+consumed.length);
+    parityApprox(consumed[0].detail.result.effectiveSec,expectedSec,label+' effective offline seconds');
+    parityApprox(consumed[0].detail.result.elapsedSec,expectedSec,label+' elapsed offline seconds');
+    return consumed[0];
+  }
+  function assertLifecycleState(actual,expected,label){
+    var actualComparable = cloneJson(actual);
+    var expectedComparable = cloneJson(expected);
+    function sortedTrueMap(value){
+      var out = {};
+      Object.keys(value||{}).sort().forEach(function(key){ if(value[key]) out[key]=true; });
+      return out;
+    }
+    actualComparable.achieved = sortedTrueMap(actualComparable.achieved);
+    expectedComparable.achieved = sortedTrueMap(expectedComparable.achieved);
+    assertProtectedParity(actualComparable,expectedComparable,label);
+    ['researchQueue','studyQueue','owned','questIds','questClaimed'].forEach(function(key){
+      assertJsonEqual(actual[key],expected[key],label+' '+key);
+    });
+    parityApprox(actual.totalOfflineSeconds,expected.totalOfflineSeconds,label+' totalOfflineSeconds');
+    parityApprox(actual.lastSeen,expected.lastSeen,label+' lastSeen');
+    assert(actual.schemaVersion===1,label+' must preserve save schema v1');
+  }
+  function expectedLifecycleState(baseline,seconds,startMs){
+    var preview = window.__lumenfallQaBridge.previewOffline(baseline,seconds,startMs);
+    preview.state.totalOfflineSeconds = baseline.totalOfflineSeconds + seconds;
+    preview.state.lastSeen = startMs + seconds*1000;
+    return preview;
+  }
+  function assertResumeOrdering(trace,startMs,endMs,label){
+    var hideSave = trace.findIndex(function(event){
+      return event.type==='save' && event.nowMs===startMs && event.detail && event.detail.hidden===true;
+    });
+    var daily = trace.findIndex(function(event){ return event.type==='daily' && event.nowMs===endMs; });
+    var offline = trace.findIndex(function(event){
+      return event.type==='offline' && event.nowMs===endMs && event.detail && event.detail.result;
+    });
+    var resumeSave = trace.findIndex(function(event){
+      return event.type==='save' && event.nowMs===endMs && event.detail && event.detail.hidden===false;
+    });
+    assert(hideSave!==-1,label+' must save on background');
+    assert(daily>hideSave,label+' daily check must occur after background save');
+    assert(offline>daily,label+' offline simulation must occur after daily check');
+    assert(resumeSave>offline,label+' resume save must occur after offline simulation');
+  }
+  function runResumeWindow(seconds,label){
+    var lifecycleBridge = window.__lumenfallQaBridge;
+    var startMs = lifecycleBridge.clockNow();
+    var baseline = state();
+    assert(
+      Math.abs(baseline.lastSeen-startMs)<=1,
+      label+' must start with lastSeen owned by the current foreground timestamp'
+    );
+    var expected = expectedLifecycleState(baseline,seconds,startMs);
+    lifecycleBridge.clearLifecycleTrace();
+    lifecycleBridge.dispatchVisibility(true);
+    lifecycleBridge.advanceTime(seconds*1000);
+    var endMs = lifecycleBridge.clockNow();
+    lifecycleBridge.dispatchVisibility(false);
+    var actual = state();
+    assertLifecycleState(actual,expected.state,label);
+    var trace = lifecycleBridge.lifecycleTrace();
+    assertOfflineExactlyOnce(trace,seconds,label);
+    assertResumeOrdering(trace,startMs,endMs,label);
+
+    var beforeDuplicate = cloneJson(actual);
+    lifecycleBridge.dispatchVisibility(false);
+    var afterDuplicate = state();
+    assertLifecycleState(afterDuplicate,beforeDuplicate,label+' duplicate visible signal');
+    assertOfflineExactlyOnce(lifecycleBridge.lifecycleTrace(),seconds,label+' duplicate visible signal');
+
+    return {
+      startMs:startMs,
+      endMs:endMs,
+      baseline:baseline,
+      expected:expected,
+      actual:actual,
+      trace:lifecycleBridge.lifecycleTrace()
+    };
   }
   var FORMULA_WISP_IDS = ['ember','tide','stone','gale','thorn','void','aurora','titan'];
   function cleanFormulaState(activeIds){
@@ -1387,6 +1641,300 @@ def build_runner():
           return;
         }
 
+        case 'lifecycle-background-resume': {
+          var resume = runResumeWindow(30,'background/resume');
+          assert(resume.actual.totalKills>resume.baseline.totalKills,'background/resume must advance combat');
+          assert(resume.actual.lumen>resume.baseline.lumen,'background/resume must advance offline economy');
+          assert(resume.actual.lastSeen===resume.endMs,'resume save must own the consumed window endpoint');
+          finish('pass',{
+            elapsedSec:30,
+            kills:resume.actual.totalKills-resume.baseline.totalKills,
+            lumen:resume.actual.lumen-resume.baseline.lumen,
+            offlineApplications:consumedOfflineEvents(resume.trace).length,
+            lastSeen:resume.actual.lastSeen
+          });
+          return;
+        }
+
+        case 'lifecycle-repeated-resume': {
+          var windows = [15,25,40];
+          var initialOffline = s.totalOfflineSeconds;
+          var previousLastSeen = s.lastSeen;
+          var cycleDetails = [];
+          windows.forEach(function(seconds,index){
+            var cycle = runResumeWindow(seconds,'resume cycle '+(index+1));
+            assert(cycle.actual.lastSeen>previousLastSeen,'resume cycle timestamps must be monotonic');
+            previousLastSeen = cycle.actual.lastSeen;
+            cycleDetails.push({
+              seconds:seconds,
+              kills:cycle.actual.totalKills-cycle.baseline.totalKills,
+              lastSeen:cycle.actual.lastSeen
+            });
+          });
+          s=state();
+          parityApprox(
+            s.totalOfflineSeconds,
+            initialOffline+windows.reduce(function(sum,value){ return sum+value; },0),
+            'repeated resume total offline seconds'
+          );
+          finish('pass',{cycles:cycleDetails,totalOfflineSeconds:s.totalOfflineSeconds});
+          return;
+        }
+
+        case 'lifecycle-cold-restart': {
+          var coldKey = 'lumenfall_qa_expected_'+ctx.scenario;
+          if(phase()===0){
+            var coldStart = bridge.clockNow();
+            var coldExpected = expectedLifecycleState(s,45,coldStart);
+            localStorage.setItem(coldKey,JSON.stringify(coldExpected));
+            bridge.save();
+            bridge.advanceTime(45000);
+            nextPhase(1);
+            bridge.suppressUnloadSave();
+            location.reload();
+            return;
+          }
+          var expectedCold = JSON.parse(localStorage.getItem(coldKey));
+          assert(expectedCold && expectedCold.state,'cold restart expected snapshot must persist across reload');
+          assertLifecycleState(state(),expectedCold.state,'cold restart');
+          var coldTrace = bridge.lifecycleTrace();
+          assertOfflineExactlyOnce(coldTrace,45,'cold restart');
+          var coldDailyIndex = coldTrace.findIndex(function(event){ return event.type==='daily'; });
+          var coldOfflineIndex = coldTrace.findIndex(function(event){ return event.type==='offline' && event.detail && event.detail.result; });
+          var coldSaveIndex = coldTrace.findIndex(function(event){ return event.type==='save' && event.nowMs===bridge.clockNow(); });
+          assert(coldDailyIndex!==-1 && coldOfflineIndex>coldDailyIndex && coldSaveIndex>coldOfflineIndex,'cold-start order must be daily -> offline -> save');
+          var beforeColdVisible = cloneJson(state());
+          bridge.dispatchVisibility(false);
+          assertLifecycleState(state(),beforeColdVisible,'cold restart stray visible signal');
+          assertOfflineExactlyOnce(bridge.lifecycleTrace(),45,'cold restart stray visible signal');
+          assert(JSON.parse(bridge.rawSave()).schemaVersion===1,'cold restart must preserve canonical primary schema');
+          assert(JSON.parse(bridge.rawRecovery()).schemaVersion===1,'cold restart must preserve bounded recovery schema');
+          finish('pass',{
+            elapsedSec:45,
+            offlineApplications:consumedOfflineEvents(bridge.lifecycleTrace()).length,
+            totalOfflineSeconds:state().totalOfflineSeconds,
+            lastSeen:state().lastSeen
+          });
+          return;
+        }
+
+        case 'lifecycle-partial-enemy': {
+          var partial = runResumeWindow(6,'partial enemy resume');
+          assert(partial.baseline.enemyDepth===3 && partial.baseline.enemyHp<partial.baseline.enemyMaxHp,'partial fixture must begin with damaged enemy');
+          assert(partial.expected.summary.kills===1,'partial fixture must kill exactly the damaged enemy once');
+          assert(partial.actual.totalKills===partial.baseline.totalKills+1,'damaged enemy reward/death must occur exactly once');
+          assert(partial.actual.enemyDepth===partial.expected.state.enemyDepth,'next enemy depth must match authoritative simulation');
+          assert(partial.actual.enemyHp>0 && partial.actual.enemyHp<partial.actual.enemyMaxHp,'offline remainder must continue into the deterministic next enemy');
+          parityApprox(
+            partial.actual.lumen-partial.baseline.lumen,
+            partial.expected.state.lumen-partial.baseline.lumen,
+            'partial enemy reward'
+          );
+          finish('pass',{
+            startHp:partial.baseline.enemyHp,
+            endDepth:partial.actual.enemyDepth,
+            endHp:partial.actual.enemyHp,
+            kills:partial.actual.totalKills-partial.baseline.totalKills
+          });
+          return;
+        }
+
+        case 'lifecycle-boss-retry': {
+          var bossLife = runResumeWindow(120,'boss retreat/Farm/retry lifecycle');
+          var retreat = firstTimelineEvent(bossLife.expected,'bossRetreat');
+          var retry = firstTimelineEvent(bossLife.expected,'bossRetry');
+          assert(retreat && retry,'lifecycle Boss reference must retreat and retry');
+          assert(bossLife.expected.summary.retreats===1,'Boss lifecycle fixture must retreat exactly once');
+          assert(bossLife.expected.summary.retries>=1,'Boss lifecycle fixture must retry after Farm progression');
+          assert(bossLife.expected.summary.bossKills>=1,'Boss lifecycle fixture must defeat the retried Boss');
+          assert(
+            bossLife.actual.sigils-bossLife.baseline.sigils===bossLife.expected.summary.sigilsGained,
+            'Boss Sigils must be awarded exactly once'
+          );
+          assert(
+            bossLife.actual.totalKills-bossLife.baseline.totalKills===bossLife.expected.summary.kills,
+            'Farm and Boss kills must match the authoritative offline window exactly'
+          );
+          finish('pass',{
+            retreatSec:retreat.elapsedSec,
+            retrySec:retry.elapsedSec,
+            bossKills:bossLife.expected.summary.bossKills,
+            farmAndBossKills:bossLife.expected.summary.kills,
+            sigils:bossLife.expected.summary.sigilsGained
+          });
+          return;
+        }
+
+        case 'lifecycle-auto-ascend': {
+          var ascendLife = runResumeWindow(30,'Auto-Ascend offline lifecycle');
+          var ascendEvent = firstTimelineEvent(ascendLife.expected,'autoAscend');
+          assert(ascendEvent && ascendEvent.elapsedSec>0 && ascendEvent.elapsedSec<30,'Auto-Ascend must occur chronologically inside the offline window');
+          assert(ascendLife.expected.summary.ascends===1,'Auto-Ascend fixture must ascend exactly once');
+          assert(ascendLife.actual.ascendCount===ascendLife.baseline.ascendCount+1,'resume must apply exactly one Ascend');
+          assert(ascendLife.actual.prisms===ascendLife.expected.state.prisms,'Ascend reward must not duplicate');
+          assert(
+            ascendLife.actual.totalKills>ascendLife.baseline.totalKills,
+            'remaining offline time must continue from the post-Ascend state'
+          );
+          finish('pass',{
+            ascendSec:ascendEvent.elapsedSec,
+            ascendCount:ascendLife.actual.ascendCount,
+            prisms:ascendLife.actual.prisms,
+            finalDepth:ascendLife.actual.depth
+          });
+          return;
+        }
+
+        case 'lifecycle-long-study': {
+          var studyKey = 'lumenfall_qa_expected_'+ctx.scenario;
+          if(phase()===0){
+            var studyStartMs = bridge.clockNow();
+            var studyExpected = expectedLifecycleState(s,60,studyStartMs);
+            localStorage.setItem(studyKey,JSON.stringify(studyExpected));
+            bridge.save();
+            bridge.advanceTime(60000);
+            nextPhase(1);
+            bridge.suppressUnloadSave();
+            location.reload();
+            return;
+          }
+          var expectedStudy = JSON.parse(localStorage.getItem(studyKey));
+          assertLifecycleState(state(),expectedStudy.state,'Long Study cold restart');
+          assertOfflineExactlyOnce(bridge.lifecycleTrace(),60,'Long Study cold restart');
+          var completion = firstTimelineEvent(expectedStudy,'studyComplete');
+          var queuedStart = firstTimelineEvent(expectedStudy,'studyStart');
+          assert(completion && queuedStart,'Long Study lifecycle must complete and start the queued Study');
+          parityApprox(completion.elapsedSec,10,'Long Study lifecycle completion time');
+          parityApprox(queuedStart.elapsedSec,completion.elapsedSec,'queued Study start time');
+          assert(state().longStudyLevels.wispascend===1,'completed Long Study effect must apply once');
+          assert(
+            state().activeStudies.some(function(active){ return active.id==='guardmastery'; }),
+            'next queued Study must survive/restart through the cold lifecycle'
+          );
+          var studyBeforeVisible = cloneJson(state());
+          bridge.dispatchVisibility(false);
+          assertLifecycleState(state(),studyBeforeVisible,'Long Study duplicate visible signal');
+          finish('pass',{
+            completionSec:completion.elapsedSec,
+            started:queuedStart.detail && queuedStart.detail.ids,
+            level:state().longStudyLevels.wispascend
+          });
+          return;
+        }
+
+        case 'lifecycle-lab-queue': {
+          var labKey = 'lumenfall_qa_expected_'+ctx.scenario;
+          if(phase()===0){
+            var labStartMs = bridge.clockNow();
+            var labExpected = expectedLifecycleState(s,60,labStartMs);
+            localStorage.setItem(labKey,JSON.stringify(labExpected));
+            bridge.save();
+            bridge.advanceTime(60000);
+            nextPhase(1);
+            bridge.suppressUnloadSave();
+            location.reload();
+            return;
+          }
+          var expectedLab = JSON.parse(localStorage.getItem(labKey));
+          assertLifecycleState(state(),expectedLab.state,'Lab queue cold restart');
+          assertOfflineExactlyOnce(bridge.lifecycleTrace(),60,'Lab queue cold restart');
+          var researchEvent = firstTimelineEvent(expectedLab,'research');
+          assert(researchEvent && researchEvent.elapsedSec>0 && researchEvent.elapsedSec<60,'queued Research must purchase chronologically during cold offline time');
+          assert(state().research.formation===1,'queued Formation Research must purchase exactly once');
+          assert(state().researchQueue.formation===true,'Research queue enablement must survive save/reload');
+          parityApprox(state().lumen,expectedLab.state.lumen,'Research lifecycle Lumen spending');
+          parityApprox(state().shards,expectedLab.state.shards,'Research lifecycle Shard spending');
+          var labBeforeVisible = cloneJson(state());
+          bridge.dispatchVisibility(false);
+          assertLifecycleState(state(),labBeforeVisible,'Lab queue duplicate visible signal');
+          finish('pass',{
+            purchaseSec:researchEvent.elapsedSec,
+            formationLevel:state().research.formation,
+            lumen:state().lumen,
+            shards:state().shards
+          });
+          return;
+        }
+
+        case 'lifecycle-daily-rollover': {
+          var dailyStateKey = 'lumenfall_qa_daily_'+ctx.scenario;
+          if(phase()===0){
+            var day0 = bridge.currentDay();
+            var startComets = s.comets;
+            assert(s.questDay===day0 && s.loginStreak===3,'daily fixture must begin on its seeded day/streak');
+            bridge.clearLifecycleTrace();
+            bridge.dispatchVisibility(true);
+            bridge.advanceTime(20000);
+            bridge.dispatchVisibility(false);
+            var afterFirstDay = state();
+            var day1 = bridge.currentDay();
+            assert(day1!==day0,'deterministic clock must cross a local day boundary');
+            assert(afterFirstDay.questDay===day1,'daily rollover must claim the new day exactly once');
+            assert(afterFirstDay.loginStreak===4,'daily streak must advance exactly once');
+            assert(afterFirstDay.comets===startComets+16,'Day 4 login reward must apply exactly once');
+            assert(Object.keys(afterFirstDay.questClaimed).length===0,'daily claimed quests must reset on rollover');
+            assert(afterFirstDay.questIds.length===3,'daily rollover must select three eligible quests');
+            var firstDailyRolls = bridge.lifecycleTrace().filter(function(event){
+              return event.type==='daily' && event.detail && event.detail.rolled;
+            });
+            assert(firstDailyRolls.length===1,'first daily boundary must roll exactly once');
+            assertOfflineExactlyOnce(bridge.lifecycleTrace(),20,'first daily rollover offline window');
+
+            var firstSnapshot = cloneJson(afterFirstDay);
+            bridge.dispatchVisibility(false);
+            assertLifecycleState(state(),firstSnapshot,'same-day duplicate visible after daily rollover');
+            assert(state().comets===startComets+16 && state().loginStreak===4,'duplicate visible must not duplicate daily reward');
+
+            localStorage.setItem(dailyStateKey,JSON.stringify({
+              day:day1,
+              comets:state().comets,
+              streak:state().loginStreak
+            }));
+            bridge.save();
+            nextPhase(1);
+            location.reload();
+            return;
+          }
+
+          var persistedDaily = JSON.parse(localStorage.getItem(dailyStateKey));
+          assert(state().questDay===persistedDaily.day,'same-day reload must keep the rolled quest day');
+          assert(state().comets===persistedDaily.comets,'same-day reload must not repeat login reward');
+          assert(state().loginStreak===persistedDaily.streak,'same-day reload must not advance streak again');
+          var initDailyRolls = bridge.lifecycleTrace().filter(function(event){
+            return event.type==='daily' && event.detail && event.detail.rolled;
+          });
+          assert(initDailyRolls.length===0,'same-day cold reload must not roll daily state again');
+          assert(consumedOfflineEvents(bridge.lifecycleTrace()).length===0,'same-time cold reload must not consume another offline window');
+
+          bridge.setLocalClock(2035,0,16,23,59,50);
+          bridge.save();
+          bridge.clearLifecycleTrace();
+          var beforeSecondBoundary = state();
+          bridge.dispatchVisibility(true);
+          bridge.advanceTime(20000);
+          bridge.dispatchVisibility(false);
+          var afterSecondBoundary = state();
+          assert(afterSecondBoundary.questDay===bridge.currentDay(),'second deterministic boundary must update quest day');
+          assert(afterSecondBoundary.loginStreak===beforeSecondBoundary.loginStreak+1,'next real day must advance streak once');
+          assert(afterSecondBoundary.comets===beforeSecondBoundary.comets+20,'Day 5 login reward must apply once');
+          var secondDailyRolls = bridge.lifecycleTrace().filter(function(event){
+            return event.type==='daily' && event.detail && event.detail.rolled;
+          });
+          assert(secondDailyRolls.length===1,'second daily boundary must roll exactly once');
+          assertOfflineExactlyOnce(bridge.lifecycleTrace(),20,'second daily rollover offline window');
+          var secondSnapshot = cloneJson(afterSecondBoundary);
+          bridge.dispatchVisibility(false);
+          assertLifecycleState(state(),secondSnapshot,'second daily duplicate visible');
+          assert(state().comets===secondSnapshot.comets,'second daily duplicate visible must not repeat reward');
+          finish('pass',{
+            firstDay:persistedDaily.day,
+            secondDay:afterSecondBoundary.questDay,
+            streak:afterSecondBoundary.loginStreak,
+            comets:afterSecondBoundary.comets
+          });
+          return;
+        }
+
         case 'wisp-formula-contract': {
           var formulaBase = cleanFormulaState(['ember']);
           var emberBase = formulaSnapshotFor(formulaBase,'ember',10,1);
@@ -1659,6 +2207,19 @@ def build_runner():
             'intentional chronology regression: Study incorrectly expected before Research'
           );
           finish('pass',{unexpected:'chronology ordering regression was not detected'});
+          return;
+        }
+
+        case 'self-test-lifecycle-duplicate': {
+          var duplicateProbe = runResumeWindow(20,'lifecycle duplicate negative control');
+          bridge.setLastSeen(duplicateProbe.startMs);
+          bridge.applyOfflineNow();
+          assertOfflineExactlyOnce(
+            bridge.lifecycleTrace(),
+            20,
+            'intentional duplicate lifecycle regression'
+          );
+          finish('pass',{unexpected:'duplicate offline application was not detected'});
           return;
         }
 
