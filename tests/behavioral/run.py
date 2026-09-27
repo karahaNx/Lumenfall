@@ -17,6 +17,14 @@ ROOT = Path(__file__).resolve().parent
 FIXTURES_PATH = ROOT / "fixtures.json"
 
 SCENARIOS = {
+    "layout-fresh": "fresh",
+    "layout-dense": "layout-dense",
+    "layout-boss": "layout-dense-boss",
+    "layout-accessibility-states": "accessibility-mixed-states",
+    "p1-05-accessibility-baseline": "accessibility-mixed-states",
+    "p1-05-accessibility-contract": "accessibility-mixed-states",
+    "p1-05-control-regressions": "accessibility-mixed-states",
+    "p1-05-reduced-motion": "accessibility-mixed-states",
     "fresh-load": "fresh",
     "midgame-load": "mid-game",
     "mature-load": "mature-high-power",
@@ -62,14 +70,20 @@ SCENARIOS = {
     "wisp-formula-contract": "fresh",
 }
 
+# The strict P1-05 contract is now a mandatory default regression gate.
+PREP_SCENARIOS = {}
+
 NEGATIVE_SCENARIOS = {
+    "self-test-layout-collapse": "layout-dense-boss",
+    "self-test-p1-05-selected": "accessibility-mixed-states",
+    "self-test-p1-05-focus-return": "accessibility-mixed-states",
     "self-test-bad-assertion": "fresh",
     "self-test-uncaught-error": "fresh",
     "self-test-unhandled-rejection": "fresh",
     "self-test-parity-regression": "parity-early-simple",
     "self-test-chronology-regression": "chronology-simultaneous-order",
-    "self-test-wisp-formula-regression": "fresh",
     "self-test-lifecycle-duplicate": "lifecycle-basic",
+    "self-test-wisp-formula-regression": "fresh",
 }
 
 
@@ -119,6 +133,7 @@ def build_prelude(fixtures):
     el.setAttribute('data-status','fail');
     el.setAttribute('data-scenario',scenario);
     el.textContent = JSON.stringify({{scenario:scenario,status:'fail',runtimeErrors:errors}}, null, 2);
+    if(parent!==window) parent.postMessage({{qaLayoutResult:el.textContent,status:'fail'}},location.origin);
   }}
   window.addEventListener('error', function(event){{
     markRuntimeFailure('uncaught-error', event.message || (event.error && event.error.message) || 'unknown error');
@@ -128,6 +143,7 @@ def build_prelude(fixtures):
   }});
 
   function materialize(value){{
+    if(value==='__NOW_PLUS_10M__') return Date.now()+600000;
     if(value==='__NOW__') return Date.now();
     if(value==='__NOW_MINUS_60S__') return Date.now()-60000;
     if(value==='__TODAY__'){{
@@ -222,6 +238,90 @@ def build_prelude(fixtures):
     fixtures: resolvedFixtures,
     errors: errors,
     clockNow: function(){{ return fakeNowMs; }},
+    advanceTime: advanceClock,
+    setClock: setClock,
+    setLocalClock: setLocalClock,
+    currentDay: currentDay,
+    setHidden: setHidden,
+    getHidden: function(){{ return qaHidden; }},
+    markRuntimeFailure: markRuntimeFailure
+  }};
+}})();
+</script>'''
+
+
+def build_bridge():
+    return r'''
+var qaLifecycleEvents = [];
+function qaLifecycleRecord(type,detail){
+  qaLifecycleEvents.push({
+    type:type,
+    nowMs:Date.now(),
+    detail:detail===undefined ? null : JSON.parse(JSON.stringify(detail))
+  });
+}
+var qaOriginalSaveState = saveState;
+saveState = function(){
+  var beforeLastSeen = state ? state.lastSeen : null;
+  var result = qaOriginalSaveState.apply(this,arguments);
+  qaLifecycleRecord('save',{
+    beforeLastSeen:beforeLastSeen,
+    afterLastSeen:state ? state.lastSeen : null,
+    hidden:document.hidden
+  });
+  return result;
+};
+var qaOriginalEnsureDaily = ensureDaily;
+ensureDaily = function(){
+  var beforeDay = state ? state.questDay : null;
+  var beforeStreak = state ? state.loginStreak : null;
+  var result = qaOriginalEnsureDaily.apply(this,arguments);
+  qaLifecycleRecord('daily',{
+    rolled:!!result,
+    beforeDay:beforeDay,
+    afterDay:state ? state.questDay : null,
+    beforeStreak:beforeStreak,
+    afterStreak:state ? state.loginStreak : null
+  });
+  return result;
+};
+var qaOriginalApplyOfflineProgress = applyOfflineProgress;
+applyOfflineProgress = function(){
+  var before = state ? {
+    lastSeen:state.lastSeen,
+    totalOfflineSeconds:state.totalOfflineSeconds,
+    totalKills:state.totalKills,
+    lumen:state.lumen,
+    shards:state.shards,
+    ascendCount:state.ascendCount
+  } : null;
+  var result = qaOriginalApplyOfflineProgress.apply(this,arguments);
+  qaLifecycleRecord('offline',{
+    before:before,
+    result:result,
+    after:state ? {
+      lastSeen:state.lastSeen,
+      totalOfflineSeconds:state.totalOfflineSeconds,
+      totalKills:state.totalKills,
+      lumen:state.lumen,
+      shards:state.shards,
+      ascendCount:state.ascendCount
+    } : null
+  });
+  return result;
+};
+
+window.__lumenfallQaBridge = {
+  refreshAffordability: function(){ lastAffordabilityAt=0; checkAffordability(); },
+  renderLayout: function(){ renderAll(); updateBattleFast(); },
+  toast: function(message){ showToast(message); },
+  getState: function(){ return JSON.parse(JSON.stringify(state)); },
+  getFlags: function(){ return {resetInProgress:resetInProgress, resetBootPending:resetBootPending, reloadInProgress:reloadInProgress}; },
+  rawSave: function(){ return localStorage.getItem(SAVE_KEY); },
+  rawRecovery: function(){ return localStorage.getItem(RECOVERY_SAVE_KEY); },
+  persistenceStatus: function(){ return persistenceStatus(); },
+  save: function(){ return saveState(); },
+  clockNow: function(){{ return fakeNowMs; }},
     advanceTime: advanceClock,
     setClock: setClock,
     setLocalClock: setLocalClock,
@@ -601,6 +701,7 @@ def build_runner():
     el.setAttribute('data-status',status);
     el.setAttribute('data-scenario',ctx.scenario);
     el.textContent = JSON.stringify({scenario:ctx.scenario,status:status,detail:detail||null,runtimeErrors:ctx.errors}, null, 2);
+    if(parent!==window) parent.postMessage({qaLayoutResult:el.textContent,status:status},location.origin);
   }
   function assert(condition, message){ if(!condition) throw new Error(message); }
   function approx(actual, expected, epsilon, message){
@@ -1061,6 +1162,11 @@ def build_runner():
     if(!bridge || !bridge.getState){ finish('fail','test bridge unavailable'); return; }
     try{
       var s = state();
+      if(ctx.scenario.startsWith('layout-') || ctx.scenario==='self-test-layout-collapse'){
+        bridge.freeze();
+        window.runRiftLayoutQa(bridge,ctx,assert).then(function(detail){ finish('pass',detail); },function(error){ finish('fail',error.message); });
+        return;
+      }
       switch(ctx.scenario){
         case 'fresh-load':
           assertFresh(s);
@@ -2111,6 +2217,39 @@ def build_runner():
           return;
         }
 
+        case 'p1-05-accessibility-baseline': {
+          var accessibilityAudit = window.P105AccessibilityQa.runAudit(bridge,ctx,assert);
+          finish('pass',accessibilityAudit);
+          return;
+        }
+
+        case 'p1-05-accessibility-contract': {
+          var accessibilityContract = window.P105AccessibilityQa.runAcceptance(bridge,ctx,assert);
+          finish('pass',accessibilityContract);
+          return;
+        }
+
+        case 'p1-05-control-regressions': {
+          finish('pass',window.runP105ControlQa(bridge,ctx,assert));
+          return;
+        }
+
+        case 'p1-05-reduced-motion': {
+          var reducedMotion = window.P105AccessibilityQa.runReducedMotion(bridge,ctx,assert);
+          finish('pass',reducedMotion);
+          return;
+        }
+
+        case 'self-test-p1-05-selected':
+          window.P105AccessibilityQa.negativeSelected(assert);
+          finish('pass',{unexpected:'selected semantics regression was not detected'});
+          return;
+
+        case 'self-test-p1-05-focus-return':
+          window.P105AccessibilityQa.negativeFocusReturn(assert);
+          finish('pass',{unexpected:'focus-return regression was not detected'});
+          return;
+
         case 'self-test-bad-assertion':
           assert(s.depth===999999,'intentional harness self-test assertion');
           finish('pass');
@@ -2205,7 +2344,14 @@ def instrument_html(source, fixtures):
 
     if source.count("</body>") != 1:
         raise SystemExit("Behavioral QA failed: expected exactly one </body> marker")
-    source = source.replace("</body>", build_runner() + "\n</body>", 1)
+    source = source.replace(
+        "</body>",
+        "<script>" + (ROOT / "layout.js").read_text(encoding="utf-8") + "</script>" +
+        "<script>" + (ROOT / "accessibility.js").read_text(encoding="utf-8") + "</script>" +
+        "<script>" + (ROOT / "accessibility-controls.js").read_text(encoding="utf-8") + "</script>" +
+        build_runner() + "\n</body>",
+        1,
+    )
     return source
 
 
@@ -2214,9 +2360,29 @@ class QuietHandler(SimpleHTTPRequestHandler):
         pass
 
 
-def run_scenario(chrome, base_url, scenario, fixture):
+# Exact CSS viewports are hosted in an iframe: Chrome window chrome must not
+# silently turn a requested 360x800 viewport into 360x713 in CI.
+LAYOUT_VIEWPORTS = [(360,800,0,0),(360,780,0,0),(390,844,0,0),(412,915,0,0),(360,640,24,24)]
+LAYOUT_HOST = """<!doctype html><html><body><script>
+var p=new URLSearchParams(location.search), frame=document.createElement('iframe');
+frame.style.cssText='border:0;width:'+Number(p.get('width'))+'px;height:'+Number(p.get('height'))+'px';
+frame.src='index.html?'+p.toString();document.body.appendChild(frame);
+addEventListener('message',function(e){
+  if(e.origin!==location.origin || e.source!==frame.contentWindow || !e.data.qaLayoutResult)return;
+  var result=document.getElementById('qa-result') || document.createElement('pre');result.id='qa-result';result.dataset.status=e.data.status;
+  result.textContent=e.data.qaLayoutResult;document.body.appendChild(result);
+});
+</script></body></html>"""
+
+
+def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
     with tempfile.TemporaryDirectory(prefix=f"lumenfall-qa-{scenario}-") as profile:
-        url = base_url + "/index.html?" + urlencode({"qaScenario": scenario, "qaFixture": fixture})
+        params = {"qaScenario": scenario, "qaFixture": fixture}
+        page = "/index.html"
+        if viewport:
+            params.update(zip(("width","height","safeTop","safeBottom"), viewport))
+            page = "/layout.html"
+        url = base_url + page + "?" + urlencode(params)
         command = [
             chrome,
             "--headless=new",
@@ -2232,6 +2398,8 @@ def run_scenario(chrome, base_url, scenario, fixture):
             "--dump-dom",
             url,
         ]
+        if scenario == "p1-05-reduced-motion":
+            command.insert(-1, "--force-prefers-reduced-motion")
         completed = subprocess.run(command, capture_output=True, text=True, timeout=25)
         dom = completed.stdout
         stderr = completed.stderr
@@ -2248,8 +2416,8 @@ def run_scenario(chrome, base_url, scenario, fixture):
     result_text = re.search(r'<pre[^>]*\bid="qa-result"[^>]*>(.*?)</pre>', dom, flags=re.S)
 
     if passed:
-        print(f"PASS {scenario}")
-        if result_text and (scenario == "parity-long-high-power" or scenario.startswith("chronology-")):
+        print(f"PASS {scenario}" + (f" {viewport}" if viewport else ""))
+        if result_text and (viewport or scenario == "parity-long-high-power" or scenario.startswith("chronology-") or scenario.startswith("p1-05-")):
             try:
                 payload = json.loads(html_lib.unescape(re.sub(r'<[^>]+>', '', result_text.group(1))).strip())
                 print("  detail: " + json.dumps(payload.get("detail"), sort_keys=True))
@@ -2277,7 +2445,7 @@ def run_scenario(chrome, base_url, scenario, fixture):
 def main():
     parser = argparse.ArgumentParser(description="Lumenfall stateful browser regression harness")
     parser.add_argument("--web-root", default="mobile/www", help="staged web root containing index.html")
-    parser.add_argument("--scenario", choices=sorted(set(SCENARIOS) | set(NEGATIVE_SCENARIOS)))
+    parser.add_argument("--scenario", choices=sorted(set(SCENARIOS) | set(PREP_SCENARIOS) | set(NEGATIVE_SCENARIOS)))
     args = parser.parse_args()
 
     web_root = Path(args.web_root).resolve()
@@ -2288,13 +2456,16 @@ def main():
     fixtures = load_fixtures()
     chrome = find_chrome()
 
-    selected = {args.scenario: (SCENARIOS | NEGATIVE_SCENARIOS)[args.scenario]} if args.scenario else SCENARIOS
+    all_scenarios = SCENARIOS | PREP_SCENARIOS | NEGATIVE_SCENARIOS
+    selected = {args.scenario: all_scenarios[args.scenario]} if args.scenario else SCENARIOS
 
     with tempfile.TemporaryDirectory(prefix="lumenfall-behavioral-") as td:
         stage = Path(td) / "www"
         shutil.copytree(web_root, stage)
         source = (stage / "index.html").read_text(encoding="utf-8")
         (stage / "index.html").write_text(instrument_html(source, fixtures), encoding="utf-8")
+
+        (stage / "layout.html").write_text(LAYOUT_HOST, encoding="utf-8")
 
         handler = partial(QuietHandler, directory=str(stage))
         server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
@@ -2305,8 +2476,10 @@ def main():
         failures = []
         try:
             for scenario, fixture in selected.items():
-                if not run_scenario(chrome, base_url, scenario, fixture):
-                    failures.append(scenario)
+                viewports = LAYOUT_VIEWPORTS if scenario.startswith('layout-') or scenario=='self-test-layout-collapse' else [None]
+                for viewport in viewports:
+                    if not run_scenario(chrome, base_url, scenario, fixture, viewport):
+                        failures.append(f"{scenario} {viewport}")
         finally:
             server.shutdown()
             server.server_close()
@@ -2320,3 +2493,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
