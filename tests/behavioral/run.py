@@ -2511,7 +2511,11 @@ def build_runner():
           var liveAfterResonance=bridge.simulate(1,'live',0.1,PARITY_CLOCK_MS);
           bridge.setState(resonatedSnapshot);
           var offlineAfterResonance=bridge.simulate(1,'offline',0.1,PARITY_CLOCK_MS);
-          assert(liveAfterResonance.state.sigils===resonatedSnapshot.sigils && offlineAfterResonance.state.sigils===resonatedSnapshot.sigils,'authoritative live/offline simulation must never auto-spend Resonance Sigils');
+          assert(
+            liveAfterResonance.state.sigils===resonatedSnapshot.sigils+(liveAfterResonance.summary.sigilsGained||0) &&
+            offlineAfterResonance.state.sigils===resonatedSnapshot.sigils+(offlineAfterResonance.summary.sigilsGained||0),
+            'authoritative live/offline simulation may earn Boss Sigils but must never auto-spend Resonance Sigils'
+          );
           assert(liveAfterResonance.state.sigilResonanceUses===1 && offlineAfterResonance.state.sigilResonanceUses===1,'live/offline simulation must preserve the same run-bounded Resonance counter');
           assert(ids.every(function(id){return liveAfterResonance.state.wispUltimate[id] && offlineAfterResonance.state.wispUltimate[id];}),'live/offline continuation must preserve all Ultimates after a Resonance spend');
 
