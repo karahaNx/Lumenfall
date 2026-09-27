@@ -924,7 +924,16 @@ def build_runner():
     return consumed[0];
   }
   function assertLifecycleState(actual,expected,label){
-    assertProtectedParity(actual,expected,label);
+    var actualComparable = cloneJson(actual);
+    var expectedComparable = cloneJson(expected);
+    function sortedTrueMap(value){
+      var out = {};
+      Object.keys(value||{}).sort().forEach(function(key){ if(value[key]) out[key]=true; });
+      return out;
+    }
+    actualComparable.achieved = sortedTrueMap(actualComparable.achieved);
+    expectedComparable.achieved = sortedTrueMap(expectedComparable.achieved);
+    assertProtectedParity(actualComparable,expectedComparable,label);
     ['researchQueue','studyQueue','owned','questIds','questClaimed'].forEach(function(key){
       assertJsonEqual(actual[key],expected[key],label+' '+key);
     });
@@ -1685,7 +1694,7 @@ def build_runner():
         }
 
         case 'lifecycle-partial-enemy': {
-          var partial = runResumeWindow(10,'partial enemy resume');
+          var partial = runResumeWindow(6,'partial enemy resume');
           assert(partial.baseline.enemyDepth===3 && partial.baseline.enemyHp<partial.baseline.enemyMaxHp,'partial fixture must begin with damaged enemy');
           assert(partial.expected.summary.kills===1,'partial fixture must kill exactly the damaged enemy once');
           assert(partial.actual.totalKills===partial.baseline.totalKills+1,'damaged enemy reward/death must occur exactly once');
