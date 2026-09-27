@@ -22,6 +22,8 @@ SCENARIOS = {
     "layout-boss": "layout-dense-boss",
     "layout-accessibility-states": "accessibility-mixed-states",
     "p1-05-accessibility-baseline": "accessibility-mixed-states",
+    "p1-05-accessibility-contract": "accessibility-mixed-states",
+    "p1-05-control-regressions": "accessibility-mixed-states",
     "p1-05-reduced-motion": "accessibility-mixed-states",
     "fresh-load": "fresh",
     "midgame-load": "mid-game",
@@ -59,9 +61,8 @@ SCENARIOS = {
     "wisp-formula-contract": "fresh",
 }
 
-PREP_SCENARIOS = {
-    "p1-05-accessibility-contract": "accessibility-mixed-states",
-}
+# The strict P1-05 contract is now a mandatory default regression gate.
+PREP_SCENARIOS = {}
 
 NEGATIVE_SCENARIOS = {
     "self-test-layout-collapse": "layout-dense-boss",
@@ -186,6 +187,7 @@ def build_prelude(fixtures):
 def build_bridge():
     return r'''
 window.__lumenfallQaBridge = {
+  refreshAffordability: function(){ lastAffordabilityAt=0; checkAffordability(); },
   renderLayout: function(){ renderAll(); updateBattleFast(); },
   toast: function(message){ showToast(message); },
   getState: function(){ return JSON.parse(JSON.stringify(state)); },
@@ -1598,6 +1600,11 @@ def build_runner():
           return;
         }
 
+        case 'p1-05-control-regressions': {
+          finish('pass',window.runP105ControlQa(bridge,ctx,assert));
+          return;
+        }
+
         case 'p1-05-reduced-motion': {
           var reducedMotion = window.P105AccessibilityQa.runReducedMotion(bridge,ctx,assert);
           finish('pass',reducedMotion);
@@ -1699,6 +1706,7 @@ def instrument_html(source, fixtures):
         "</body>",
         "<script>" + (ROOT / "layout.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "accessibility.js").read_text(encoding="utf-8") + "</script>" +
+        "<script>" + (ROOT / "accessibility-controls.js").read_text(encoding="utf-8") + "</script>" +
         build_runner() + "\n</body>",
         1,
     )
@@ -1843,4 +1851,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
