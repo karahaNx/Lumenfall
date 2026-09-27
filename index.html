@@ -1853,7 +1853,7 @@
     <section class="tab-panel" id="tab-ascend">
       <div class="card ascend-summary">
         <div class="section-label" style="margin:0;">Ascend the Rift</div>
-        <div style="font-size:.8rem;color:var(--ink-dim);width:100%;text-align:left;">Every Rift you clear before Ascending adds to the Prisms below — the deeper you push first, the more you earn. Ascending resets the current run so the next one starts from a stronger foundation, boosted by everything your Prisms have already bought.</div>
+        <div style="font-size:.8rem;color:var(--ink-dim);width:100%;text-align:left;">Your first Ascend sets a Prism reward benchmark. Repeating at the same depth earns a 20% reserve reward; pushing beyond the benchmark adds the newly earned depth bonus. Ascending still resets the current run while permanent progression stays.</div>
         <div class="ascend-breakdown">
           <div class="ab-col ab-reset"><div class="ab-head">Resets</div><ul><li>Rift depth</li><li>Wisp levels</li><li>Current Lumen</li></ul></div>
           <div class="ab-col ab-keep"><div class="ab-head">Keeps</div><ul><li>Wisp Rarity, Modules &amp; Ultimates</li><li>Lab research</li><li>Long Study progress</li><li>Prisms &amp; this tree</li><li>Comets, Motes, Sigils &amp; Deeds</li></ul></div>
@@ -2196,6 +2196,8 @@ var SAVE_SCHEMA_VERSION = 1;
 var RESET_PENDING_KEY = 'lumenfall_reset_pending_v1';
 var TICK_MS = 100;
 var ABILITY_BASE_CYCLE_SEC = 6;
+var ASCEND_REPEAT_REWARD_RATE = 0.20;
+var OFFLINE_BOSS_RETREAT_GRACE_SEC = 5 * 60;
 
 // ---------------------------------------------------------------
 // State
@@ -2218,7 +2220,7 @@ function freshState(){
     longStudyLevels:longStudyLevels, activeStudies:[], studyQueue:studyQueue,
     achieved:achieved, owned:owned, riftTheme:'default',
     buffUntil:0, buffMult:1,
-    ascendCount:0, totalTaps:0, totalKills:0, totalOfflineSeconds:0, luminousAccum:0,
+    ascendCount:0, ascendRewardedDepth:0, totalTaps:0, totalKills:0, totalOfflineSeconds:0, luminousAccum:0,
     savedLabMultiplier:1,
     autoAscendEnabled:false, autoAscendTargetDepth:16,
     loginStreak:0, questDay:'', questIds:[], questClaimed:{}, dailyStats:{},
@@ -2487,6 +2489,12 @@ function normalizeCurrentSave(input){
   out.buffUntil = finiteNonNegative(source.buffUntil,fresh.buffUntil);
   out.buffMult = Math.max(1,finiteNonNegative(source.buffMult,fresh.buffMult));
   out.ascendCount = nonNegativeInt(source.ascendCount,fresh.ascendCount);
+  // Schema v1 remains compatible: older saves simply have no reward benchmark
+  // and receive one final full first reward before future repeats diminish.
+  out.ascendRewardedDepth = Math.min(
+    Math.max(0,out.maxDepthEver-1),
+    nonNegativeInt(source.ascendRewardedDepth,fresh.ascendRewardedDepth)
+  );
   out.totalTaps = nonNegativeInt(source.totalTaps,fresh.totalTaps);
   out.totalKills = nonNegativeInt(source.totalKills,fresh.totalKills);
   out.totalOfflineSeconds = finiteNonNegative(source.totalOfflineSeconds,fresh.totalOfflineSeconds);
@@ -3695,14 +3703,47 @@ function toggleAutoAscend(){
   if(state.autoAscendEnabled) checkAutoAscend();
 }
 
-function ascendPrismGain(depth){
+function ascendFullPrismGainForCleared(cleared){
+  cleared = Math.max(0,Math.floor(cleared||0));
+  return cleared>=15 ? Math.max(1,Math.floor(2*Math.sqrt(cleared)*prismMult())) : 0;
+}
+function ascendPrismBreakdown(depth){
   var cleared = Math.max(0,(depth===undefined ? progressionDepth() : depth)-1);
-  return cleared>=15 ? Math.max(1, Math.floor(2*Math.sqrt(cleared) * prismMult())) : 0;
+  var full = ascendFullPrismGainForCleared(cleared);
+  var benchmark = Math.max(0,Math.floor(state.ascendRewardedDepth||0));
+  if(full<=0){
+    return {gain:0,full:0,reserve:0,progressBonus:0,cleared:cleared,benchmark:benchmark};
+  }
+  if(benchmark<=0){
+    return {gain:full,full:full,reserve:0,progressBonus:full,cleared:cleared,benchmark:0};
+  }
+
+  // A wall must remain a viable prestige path, but repeating the same shallow
+  // reset cannot keep paying the full curve forever. Repeats retain 20% of the
+  // current full reward (minimum 1 Prism). Pushing beyond the best previously
+  // rewarded cleared Rift adds only the newly unlocked part of the same Prism
+  // curve. No new currency/layer is introduced.
+  var reserve = Math.max(1,Math.floor(full*ASCEND_REPEAT_REWARD_RATE));
+  var benchmarkFull = ascendFullPrismGainForCleared(benchmark);
+  var progressBonus = cleared>benchmark ? Math.max(0,full-benchmarkFull) : 0;
+  var gain = Math.max(1,Math.min(full,reserve+progressBonus));
+  return {
+    gain:gain,
+    full:full,
+    reserve:reserve,
+    progressBonus:progressBonus,
+    cleared:cleared,
+    benchmark:benchmark
+  };
+}
+function ascendPrismGain(depth){
+  return ascendPrismBreakdown(depth).gain;
 }
 function applyAscendMutation(){
   var cleared = progressionDepth() - 1;
   var gain = ascendPrismGain(progressionDepth());
   state.prisms += gain;
+  state.ascendRewardedDepth = Math.max(state.ascendRewardedDepth||0,cleared);
   state.ascendCount++;
   trackDaily('ascends');
   state.depth = 1;
@@ -4564,16 +4605,23 @@ function renderLongStudies(){
 function renderAscendSummary(){
   var cleared = progressionDepth() - 1;
   var eligible = cleared >= 15;
-  var gain = eligible ? ascendPrismGain(progressionDepth()) : 0;
+  var breakdown = ascendPrismBreakdown(progressionDepth());
+  var gain = eligible ? breakdown.gain : 0;
   els['prism-preview'].textContent = '+' + formatNum(gain) + ' Prisms';
   els['ascend-btn'].disabled = !eligible;
   els['ascend-btn'].setAttribute('data-state',eligible?'available':'locked');
   els['ascend-btn'].setAttribute('aria-describedby','ascend-note');
   var ascendTab = document.querySelector('.tab-btn[data-tab="ascend"]');
   if(ascendTab) ascendTab.classList.toggle('has-attention',eligible);
-  els['ascend-note'].textContent = eligible
-    ? 'Ready — Ascending will reset your Rift depth and Wisp levels below.'
-    : 'Clear Rift 15 to unlock your first Ascend. (' + Math.max(0,15-cleared) + ' to go)';
+  if(!eligible){
+    els['ascend-note'].textContent = 'Clear Rift 15 to unlock your first Ascend. (' + Math.max(0,15-cleared) + ' to go)';
+  } else if(breakdown.benchmark<=0){
+    els['ascend-note'].textContent = 'First reward benchmark — this Ascend receives the full depth reward.';
+  } else if(cleared>breakdown.benchmark){
+    els['ascend-note'].textContent = 'New progress: '+formatNum(breakdown.reserve)+' reserve + '+formatNum(breakdown.progressBonus)+' depth bonus. Benchmark becomes cleared Rift '+cleared+'.';
+  } else {
+    els['ascend-note'].textContent = 'Repeat reward: 20% reserve. Push beyond cleared Rift '+breakdown.benchmark+' to add a depth bonus.';
+  }
 }
 
 function renderNodes(){
@@ -4728,7 +4776,7 @@ var ENCYCLOPEDIA_MECHANICS = [
   {name:'Rarity', meta:'Wisp progression', desc:'Rarity multiplies that Wisp’s Power, so it affects passive damage plus damaging/resource abilities. Every Rarity tier owned across the roster also adds +2% general passive-party power. Rarity does not strengthen Support buffs.'},
   {name:'Modules & Ultimates', meta:'Wisp progression', desc:'Modules are role-specific: DPS/Tank Modules boost ability damage, Ranged/Druid Modules boost ability resources, and Support Modules boost Motes while Active. Ultimates double damage/resource ability output; Support Ultimates change the buff from +25% for 4s to +50% for 8s.'},
   {name:'Wisp Roles', meta:'Build label', desc:'Roles describe current ability style, not a separate defense system. Tank Wisps currently use heavy burst abilities; Support Wisps either buff passive/Tap damage or provide resource-focused utility.'},
-  {name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the current run for Prisms. Rarity, Lab, Long Studies, Modules, Ultimates and other permanent systems stay.'},
+  {name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the run for Prisms. Your first reward sets a cleared-Rift benchmark; repeats at or below it earn a 20% reserve reward, while pushing beyond it adds a new-depth bonus. Permanent systems stay.'},
   {name:'Luminous Enemies', meta:'Rare encounter', desc:'Rare non-boss enemies that drop Motes. Their appearance chance rises as you push deeper.'},
   {name:'Boss Traits', meta:'Boss mechanic', desc:'Regrowth regenerates 0.9% max HP/s. Fractured Core regenerates 0.5%/s and takes +75% from Wisp ability hits only. Guardian’s Mark regenerates 0.6%/s and makes manual Guardian Tap and Auto-Tap deal x3; passive Wisp damage is unchanged by those trait bonuses.'},
   {name:'Offline Progress', meta:'Idle system', desc:'Combat, Wisp abilities, Auto-Tap, Farm, Auto-Ascend, Long Studies and automation continue while you are away. If Auto-Empower makes you strong enough after a boss retreat, the game retries the saved Boss automatically.'}
@@ -5005,11 +5053,17 @@ var SIM_EVENT_LIMIT = 250000;
 
 function simulationPolicy(kind,options){
   options = options || {};
+  var clockStartMs = Number.isFinite(options.clockStartMs) ? options.clockStartMs : Date.now();
+  var offlineWindowStartMs = Number.isFinite(options.offlineWindowStartMs) ? options.offlineWindowStartMs : clockStartMs;
   return {
     kind:kind,
     offline:kind==='offline',
     visual:!!options.visual,
-    allowBossRetreat:kind==='offline'
+    allowBossRetreat:kind==='offline',
+    offlineWindowStartMs:offlineWindowStartMs,
+    bossRetreatNotBeforeMs:kind==='offline'
+      ? offlineWindowStartMs + OFFLINE_BOSS_RETREAT_GRACE_SEC*1000
+      : Infinity
   };
 }
 function simulationRewardScale(policy){
@@ -5426,10 +5480,17 @@ function simulationProcessAutoEmpower(summary){
   }
   return processed;
 }
-function simulationMaybeRetreatFromBoss(policy,summary){
+function simulationNextBossRetreatSeconds(nowMs,policy){
+  if(!policy.allowBossRetreat || state.riftMode==='farm' || !isBoss(state.depth)) return Infinity;
+  if(isFinite(estimatedBossKillSeconds(state.depth))) return Infinity;
+  return Math.max(0,(policy.bossRetreatNotBeforeMs-nowMs)/1000);
+}
+function simulationMaybeRetreatFromBoss(policy,summary,nowMs){
   if(!policy.allowBossRetreat || state.riftMode==='farm' || !isBoss(state.depth)) return false;
-  // A short offline window must not change mode merely because the Boss takes
-  // longer than the remaining absence. Retreat only from a sustained-DPS wall.
+  // Background intent contract: a brief screen lock keeps the selected Push
+  // Boss. Only an impossible sustained-DPS wall that survives a full 5-minute
+  // uninterrupted offline grace period may switch to Farm.
+  if(nowMs+SIM_EPS*1000 < policy.bossRetreatNotBeforeMs) return false;
   if(isFinite(estimatedBossKillSeconds(state.depth))) return false;
   if(state.depth<=1) return false;
   state.farmReturnDepth = state.depth;
@@ -5536,7 +5597,7 @@ function simulationResolveTimestamp(nowMs,elapsedSec,policy,summary){
   if(simulationMaybeRetryBoss(policy,summary)){
     simulationTimelinePush(summary,elapsedSec,'bossRetry',{depth:state.depth});
     actions++;
-  } else if(simulationMaybeRetreatFromBoss(policy,summary)){
+  } else if(simulationMaybeRetreatFromBoss(policy,summary,nowMs)){
     simulationTimelinePush(summary,elapsedSec,'bossRetreat',{
       farmDepth:state.farmDepth,
       returnDepth:state.farmReturnDepth
@@ -5725,12 +5786,14 @@ function advanceAuthoritativeTime(elapsedSec,options){
     var autoEmpowerStep = simulationNextAutoEmpowerSeconds();
     var studyStep = simulationNextStudySeconds();
     var buffStep = simulationNextBuffSeconds(nowMs);
+    var bossRetreatStep = simulationNextBossRetreatSeconds(nowMs,policy);
 
     next = Math.min(next,abilityStep);
     next = Math.min(next,autoTapStep);
     next = Math.min(next,autoEmpowerStep);
     next = Math.min(next,studyStep);
     next = Math.min(next,buffStep);
+    next = Math.min(next,bossRetreatStep);
 
     var farmGridStep = Infinity;
     var economyStep = Infinity;
@@ -5753,6 +5816,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
     if(next===autoEmpowerStep) diagnosticEventKinds.push('autoEmpower');
     if(next===studyStep) diagnosticEventKinds.push('study');
     if(next===buffStep) diagnosticEventKinds.push('buff');
+    if(next===bossRetreatStep) diagnosticEventKinds.push('bossRetreatGrace');
     if(next===farmGridStep) diagnosticEventKinds.push('farmGrid');
     if(next===economyStep) diagnosticEventKinds.push('economy');
     if(next===remaining) diagnosticEventKinds.push('windowEnd');
@@ -5761,6 +5825,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
       autoTap:autoTapStep,
       autoEmpower:autoEmpowerStep,
       study:studyStep,
+      bossRetreatGrace:bossRetreatStep,
       farmGrid:farmGridStep,
       economy:economyStep
     };
@@ -6041,10 +6106,13 @@ function setupStars(){
 // ---------------------------------------------------------------
 function simulateOfflineRun(effectiveSec,options){
   options = options || {};
+  var clockStartMs = Number.isFinite(options.clockStartMs) ? options.clockStartMs : Date.now()-effectiveSec*1000;
+  var offlineWindowStartMs = Number.isFinite(options.offlineWindowStartMs) ? options.offlineWindowStartMs : clockStartMs;
   return advanceAuthoritativeTime(effectiveSec,{
     kind:'offline',
     visual:false,
-    clockStartMs:Number.isFinite(options.clockStartMs) ? options.clockStartMs : Date.now()-effectiveSec*1000
+    clockStartMs:clockStartMs,
+    offlineWindowStartMs:offlineWindowStartMs
   });
 }
 
@@ -6179,7 +6247,7 @@ function offlineReturnMessage(offline){
     (offline.sigilsEarned>0 ? ' and ' + formatNum(offline.sigilsEarned) + ' Sigils' : '') +
     (offline.motesEarned>0 ? ' and ' + formatNum(offline.motesEarned) + ' Motes' : '') + ' while you were gone.';
   if(offline.ascends>0){ msg += ' They ascended ' + offline.ascends + ' time' + (offline.ascends===1?'':'s') + ' on their own!'; }
-  if(offline.retreated){ msg += ' A Boss stopped the push, so they switched to Farm at Rift ' + offline.endDepth + '. Your Push point at Rift ' + offline.pushDepth + ' is still saved.'; }
+  if(offline.retreated){ msg += ' After the Boss remained an impossible wall for 5 minutes offline, they switched to Farm at Rift ' + offline.endDepth + '. Your Push point at Rift ' + offline.pushDepth + ' is still saved.'; }
   if(offline.completedStudies.length===1){ msg += ' Your Long Study "' + offline.completedStudies[0] + '" finished while you were away!'; }
   else if(offline.completedStudies.length>1){ msg += ' Your Long Studies "' + offline.completedStudies.join('", "') + '" finished while you were away!'; }
   return msg;
