@@ -2094,19 +2094,19 @@
 // Data
 // ---------------------------------------------------------------
 var SPIRITS = [
-  {id:'ember',  name:'Ember Wisp',      shortName:'Ember',  shape:'shape-triangle', color:'#e08a2e', unlockDepth:1,  baseCost:10,      basePower:1,     heroClass:'Starcaller',  role:'DPS',     resource:'mana',    abilityType:'dps',     abilityName:'Nova Burst'},
-  {id:'tide',   name:'Tide Sprite',     shortName:'Tide',   shape:'shape-droplet',  color:'#3aa0c9', unlockDepth:3,  baseCost:60,      basePower:5,     heroClass:'Dawnpriest',  role:'Support', resource:'harmony', abilityType:'support', abilityName:'Blessing'},
-  {id:'stone',  name:'Stoneheart Golem',shortName:'Stone',  shape:'shape-hex',      color:'#7a8f6a', unlockDepth:6,  baseCost:360,     basePower:26,    heroClass:'Duskguard',   role:'Tank',    resource:'rage',    abilityType:'tank',    abilityName:'Bulwark Slam'},
-  {id:'gale',   name:'Gale Dancer',     shortName:'Gale',   shape:'shape-diamond',  color:'#79c7d1', unlockDepth:9,  baseCost:2100,    basePower:130,   heroClass:'Windrunner',  role:'Ranged',  resource:'focus',   abilityType:'ranged',  abilityName:'Piercing Volley'},
-  {id:'thorn',  name:'Thornback',       shortName:'Thorn',  shape:'shape-pentagon', color:'#4f8f5b', unlockDepth:12, baseCost:12000,   basePower:680,   heroClass:'Thornshaper', role:'Support', resource:'energy',  abilityType:'druid',   abilityName:'Bloom Surge'},
-  {id:'void',   name:'Voidling',        shortName:'Void',   shape:'shape-star',     color:'#8a5fd6', unlockDepth:18, baseCost:70000,   basePower:3400,  heroClass:'Starcaller',  role:'DPS',     resource:'mana',    abilityType:'dps',     abilityName:'Void Nova'},
-  {id:'aurora', name:'Aurora Seer',     shortName:'Aurora', shape:'shape-ring',     color:'#d16fa8', unlockDepth:24, baseCost:400000,  basePower:17000, heroClass:'Dawnpriest',  role:'Support', resource:'harmony', abilityType:'support', abilityName:'Radiant Blessing'},
-  {id:'titan',  name:'Starforged Titan',shortName:'Titan',  shape:'shape-octagon',  color:'#d1a72e', unlockDepth:32, baseCost:2200000, basePower:88000, heroClass:'Duskguard',   role:'Tank',    resource:'rage',    abilityType:'tank',    abilityName:'Titanic Slam'}
+  {id:'ember',  name:'Ember Wisp',      shortName:'Ember',  shape:'shape-triangle', color:'#e08a2e', unlockDepth:1,  baseCost:10,      basePower:1,     heroClass:'Starcaller',  role:'Burst',         resource:'mana',    abilityType:'dps',     abilityName:'Nova Burst'},
+  {id:'tide',   name:'Tide Sprite',     shortName:'Tide',   shape:'shape-droplet',  color:'#3aa0c9', unlockDepth:3,  baseCost:60,      basePower:5,     heroClass:'Dawnpriest',  role:'Amplifier',     resource:'harmony', abilityType:'support', abilityName:'Blessing'},
+  {id:'stone',  name:'Stoneheart Golem',shortName:'Stone',  shape:'shape-hex',      color:'#7a8f6a', unlockDepth:6,  baseCost:360,     basePower:26,    heroClass:'Duskguard',   role:'Breaker',       resource:'rage',    abilityType:'breaker', abilityName:'Bulwark Slam'},
+  {id:'gale',   name:'Gale Dancer',     shortName:'Gale',   shape:'shape-diamond',  color:'#79c7d1', unlockDepth:9,  baseCost:2100,    basePower:130,   heroClass:'Windrunner',  role:'Shard Utility', resource:'focus',   abilityType:'ranged',  abilityName:'Piercing Volley'},
+  {id:'thorn',  name:'Thornback',       shortName:'Thorn',  shape:'shape-pentagon', color:'#4f8f5b', unlockDepth:12, baseCost:12000,   basePower:680,   heroClass:'Thornshaper', role:'Lumen Utility', resource:'energy',  abilityType:'druid',   abilityName:'Bloom Surge'},
+  {id:'void',   name:'Voidling',        shortName:'Void',   shape:'shape-star',     color:'#8a5fd6', unlockDepth:18, baseCost:70000,   basePower:3400,  heroClass:'Starcaller',  role:'Burst',         resource:'mana',    abilityType:'dps',     abilityName:'Void Nova'},
+  {id:'aurora', name:'Aurora Seer',     shortName:'Aurora', shape:'shape-ring',     color:'#d16fa8', unlockDepth:24, baseCost:400000,  basePower:17000, heroClass:'Dawnpriest',  role:'Amplifier',     resource:'harmony', abilityType:'support', abilityName:'Radiant Blessing'},
+  {id:'titan',  name:'Starforged Titan',shortName:'Titan',  shape:'shape-octagon',  color:'#d1a72e', unlockDepth:32, baseCost:2200000, basePower:88000, heroClass:'Duskguard',   role:'Breaker',       resource:'rage',    abilityType:'breaker', abilityName:'Titanic Slam'}
 ];
 
 var ABILITY_DESC = {
-  tank: 'Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it.',
-  dps: 'High ability damage. Its Module boosts the hit; its Ultimate doubles it.',
+  breaker: 'Heavy ability damage. Stone + Titan together activate the Duskguard boss-damage Bond; its Module boosts the hit and its Ultimate doubles it.',
+  dps: 'Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it.',
   ranged: 'Ability damage + Shards. Module boosts the Shards; Ultimate doubles both.',
   druid: 'Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both.',
   support: 'Boosts passive Wisp damage and Guardian Tap by +25% for 4s. Ultimate: +50% for 8s.'
@@ -2130,7 +2130,7 @@ var RARITY_SHARD_COSTS = [15,90,900,15000,500000];
 var RARITY_LUMEN_BASE_MULTS = [8,20,80,400,2400];
 var MODULE_INFO = {
   dps:     {name:'Overcharge Core',  effect:function(lvl){ return '+'+Math.round(lvl*5)+'% ability burst damage'; }},
-  tank:    {name:'Bulwark Plating',  effect:function(lvl){ return '+'+Math.round(lvl*5)+'% ability burst damage'; }},
+  breaker: {name:'Impact Core',      effect:function(lvl){ return '+'+Math.round(lvl*5)+'% ability burst damage'; }},
   ranged:  {name:'Piercing Lens',    effect:function(lvl){ return '+'+Math.round(lvl*5)+'% bonus Shards from its ability'; }},
   druid:   {name:'Bloom Catalyst',   effect:function(lvl){ return '+'+Math.round(lvl*5)+'% bonus Lumen from its ability'; }},
   support: {name:'Resonant Focus',   effect:function(lvl){ return '+'+Math.round(lvl*5)+'% Motes from Luminous kills while Active'; }}
@@ -3313,13 +3313,13 @@ function averageSupportBuffMult(){
 }
 function abilityDamageCoefficient(sp){
   if(!sp) return 0;
-  if(sp.abilityType==='tank') return 4;
+  if(sp.abilityType==='breaker') return 4;
   if(sp.abilityType==='dps') return 5;
   if(sp.abilityType==='ranged' || sp.abilityType==='druid') return 3;
   return 0;
 }
 function abilityDamageModuleMult(sp){
-  return sp && (sp.abilityType==='dps' || sp.abilityType==='tank') ? moduleMult(sp.id) : 1;
+  return sp && (sp.abilityType==='dps' || sp.abilityType==='breaker') ? moduleMult(sp.id) : 1;
 }
 function abilityUltimateMult(sp){
   return sp && ultimateUnlocked(sp.id) ? 2 : 1;
@@ -5179,7 +5179,7 @@ var ENCYCLOPEDIA_MECHANICS = [
   {name:'Rarity', meta:'Wisp progression', desc:'Rarity multiplies that Wisp’s Power, so it affects passive damage plus damaging/resource abilities. Every Rarity tier owned across the roster also adds +2% general passive-party power. Rarity does not strengthen Support buffs.'},
   {name:'Modules & Ultimates', meta:'Wisp progression', desc:'Modules are role-specific: DPS/Tank Modules boost ability damage, Ranged/Druid Modules boost ability resources, and Support Modules boost Motes while Active. Ultimates double damage/resource ability output; Support Ultimates change the buff from +25% for 4s to +50% for 8s.'},
   {name:'Endgame Currency Utility', meta:'Economy rule', desc:'After all eight Ultimates are owned, Sigils can ready one Active Wisp ability for 25 Sigils, at most 3 times per Ascension run. After all four Rest Stop purchases are owned, Comets can replace an unclaimed Daily Quest for at least the richest quest reward, so refreshing cannot generate extra Comets.'},
-  {name:'Wisp Roles', meta:'Build label', desc:'Roles describe current ability style, not a separate defense system. Tank Wisps currently use heavy burst abilities; Support Wisps either buff passive/Tap damage or provide resource-focused utility.'},
+  {name:'Wisp Roles', meta:'Build label', desc:'Roles describe authoritative ability identity: Burst delivers the highest raw ability coefficient; Breaker delivers heavy ability hits and the Stone + Titan Duskguard pair specializes against bosses; Amplifier buffs passive Wisp damage and Guardian Tap; Shard Utility and Lumen Utility add their named resource to ability casts. Roles do not imply HP, aggro, mitigation or other defensive systems.'},
   {name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the run for Prisms. Your first reward sets a cleared-Rift benchmark; repeats at or below it earn a 20% reserve reward, while pushing beyond it adds a new-depth bonus. Permanent systems stay.'},
   {name:'Luminous Enemies', meta:'Rare encounter', desc:'Rare non-boss enemies that drop Motes. Their appearance chance rises as you push deeper.'},
   {name:'Boss Traits', meta:'Boss mechanic', desc:'Regrowth regenerates 0.9% max HP/s. Fractured Core regenerates 0.5%/s and takes +75% from Wisp ability hits only. Guardian’s Mark regenerates 0.6%/s and makes manual Guardian Tap and Auto-Tap deal x3; passive Wisp damage is unchanged by those trait bonuses.'},
