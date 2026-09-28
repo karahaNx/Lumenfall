@@ -68,6 +68,9 @@ SCENARIOS = {
     "p2-ascend-integrity": "fresh",
     "p2-wisp-progression-pacing": "fresh",
     "p2-endgame-currency-utility": "fresh",
+    "p2-03a-wisp-role-integrity": "accessibility-mixed-states",
+    "p2-03a-wisp-role-integrity-mature": "mature-high-power",
+    "p2-03a-wisp-role-integrity-endgame": "parity-long-high-power",
     "p2-02a-core-qol": "accessibility-mixed-states",
     "p2-02b-wisp-hierarchy": "accessibility-mixed-states",
     "p2-02b-lab-hierarchy": "accessibility-mixed-states",
@@ -93,6 +96,7 @@ NEGATIVE_SCENARIOS = {
     "self-test-wisp-formula-regression": "fresh",
     "self-test-wisp-pacing-regression": "fresh",
     "self-test-endgame-currency-regression": "fresh",
+    "self-test-wisp-role-regression": "fresh",
 }
 
 
@@ -398,6 +402,26 @@ window.__lumenfallQaBridge = {
     };
   },
   bossRetreatGraceSec: function(){ return OFFLINE_BOSS_RETREAT_GRACE_SEC; },
+  freshStateSnapshot: function(){ return JSON.parse(JSON.stringify(freshState())); },
+  wispRoleContract: function(){
+    return SPIRITS.map(function(sp){
+      var module=MODULE_INFO[sp.abilityType];
+      return {
+        id:sp.id,
+        name:sp.name,
+        heroClass:sp.heroClass,
+        role:sp.role,
+        abilityType:sp.abilityType,
+        abilityName:sp.abilityName,
+        coefficient:abilityDamageCoefficient(sp),
+        moduleName:module ? module.name : '',
+        moduleEffect20:module ? module.effect(20) : '',
+        description:ABILITY_DESC[sp.abilityType]||'',
+        rewardKind:sp.abilityType==='ranged'?'shards':(sp.abilityType==='druid'?'lumen':'none'),
+        supportProfile:sp.abilityType==='support'?supportAbilityProfile(sp):null
+      };
+    });
+  },
   endgameEconomyContract: function(){
     var restStopTotal=SHOP.reduce(function(sum,item){return sum+item.cost;},0);
     var deedTotal=ACHIEVEMENTS.reduce(function(sum,item){return sum+item.reward;},0);
@@ -2322,6 +2346,175 @@ def build_runner():
           finish('pass',{unexpected:'focus-return regression was not detected'});
           return;
 
+        case 'p2-03a-wisp-role-integrity': {
+          var catalog=bridge.wispRoleContract();
+          var expectedRoles={
+            ember:'Burst',tide:'Amplifier',stone:'Breaker',gale:'Shard Utility',
+            thorn:'Lumen Utility',void:'Burst',aurora:'Amplifier',titan:'Breaker'
+          };
+          var expectedTypes={
+            ember:'dps',tide:'support',stone:'breaker',gale:'ranged',
+            thorn:'druid',void:'dps',aurora:'support',titan:'breaker'
+          };
+          catalog.forEach(function(entry){
+            assert(entry.role===expectedRoles[entry.id],entry.id+' must advertise its authoritative role identity');
+            assert(entry.abilityType===expectedTypes[entry.id],entry.id+' ability type must match its role contract');
+            var semantic=(entry.role+' '+entry.moduleName+' '+entry.description).toLowerCase();
+            ['tank','aggro','threat','mitigation','armor','healing','protect allies','absorb damage'].forEach(function(term){
+              assert(semantic.indexOf(term)===-1,entry.id+' role language must not claim nonexistent defensive mechanic: '+term);
+            });
+          });
+          assert(catalog.length===8,'role contract must cover every Wisp');
+          assert(Math.max.apply(null,catalog.map(function(x){return x.coefficient;}))===5,'role correction must not introduce a raw ability coefficient above the established 5x cap');
+
+          var emberRole=catalog.find(function(x){return x.id==='ember';});
+          var stoneRole=catalog.find(function(x){return x.id==='stone';});
+          var galeRole=catalog.find(function(x){return x.id==='gale';});
+          var thornRole=catalog.find(function(x){return x.id==='thorn';});
+          var tideRole=catalog.find(function(x){return x.id==='tide';});
+          assert(emberRole.coefficient===5 && emberRole.moduleEffect20==='+100% ability burst damage','Burst must retain the established highest raw ability coefficient and Module identity');
+          assert(stoneRole.coefficient===4 && stoneRole.moduleEffect20==='+100% ability burst damage','Breaker must retain the former Tank 4x heavy-hit + Module mechanics exactly');
+          assert(galeRole.coefficient===3 && galeRole.rewardKind==='shards','Shard Utility must be a 3x hit plus Shard generation');
+          assert(thornRole.coefficient===3 && thornRole.rewardKind==='lumen','Lumen Utility must be a 3x hit plus Lumen generation');
+          assert(tideRole.coefficient===0 && tideRole.abilityType==='support','Amplifier must remain a real temporary combat buff instead of direct ability damage');
+          var amplifierBase=cleanFormulaState(['tide']);
+          amplifierBase.spirits.tide=10;
+          amplifierBase.wispUltimate.tide=false;
+          var tideBaseFormula=formulaSnapshotFor(amplifierBase,'tide',19,1);
+          assert(tideBaseFormula.supportProfile.strength===1.25 && tideBaseFormula.supportProfile.durationMs===4000,'Amplifier base buff must remain +25% for 4s');
+          var amplifierUltimate=cloneJson(amplifierBase);
+          amplifierUltimate.heroRarity.tide=5;
+          amplifierUltimate.wispUltimate.tide=true;
+          var tideUltFormula=formulaSnapshotFor(amplifierUltimate,'tide',19,1);
+          assert(tideUltFormula.supportProfile.strength===1.5 && tideUltFormula.supportProfile.durationMs===8000,'Amplifier Ultimate must remain +50% for 8s');
+
+          var breakerBase=cleanFormulaState(['stone']);
+          breakerBase.spirits.stone=10;
+          var stoneNormal=formulaSnapshotFor(breakerBase,'stone',19,1);
+          parityApprox(stoneNormal.abilityDamage,stoneNormal.wispPower*4,'Breaker base hit must remain the pre-P2-03A 4x Wisp-Power formula');
+          var breakerModule=cloneJson(breakerBase);
+          breakerModule.wispModules.stone=10;
+          var stoneModule=formulaSnapshotFor(breakerModule,'stone',19,1);
+          parityApprox(stoneModule.abilityDamage,stoneNormal.abilityDamage*1.5,'Breaker Module must preserve the established +5% per level hit scaling');
+
+          var breakerPair=cleanFormulaState(['stone','titan']);
+          var stoneBossPair=formulaSnapshotFor(breakerPair,'stone',20,1);
+          var breakerSolo=cleanFormulaState(['stone']);
+          var stoneBossSolo=formulaSnapshotFor(breakerSolo,'stone',20,1);
+          parityApprox(stoneBossPair.abilityDamage,stoneBossSolo.abilityDamage*1.35,'Stone + Titan must retain meaningful Duskguard boss utility');
+          parityApprox(stoneBossPair.formationDamageMult,1.35,'Duskguard boss Bond must remain exactly +35%');
+
+          var burstBase=cleanFormulaState(['ember']);
+          var emberBurst=formulaSnapshotFor(burstBase,'ember',19,1);
+          parityApprox(emberBurst.abilityDamage,emberBurst.wispPower*5,'Burst identity must remain the established 5x raw ability hit');
+          assert(emberRole.coefficient>stoneRole.coefficient,'Burst and Breaker must remain mechanically distinguishable without inventing defense');
+
+          var shardState=cleanFormulaState(['gale']);
+          var galeUtility=formulaSnapshotFor(shardState,'gale',19,1);
+          assert(galeUtility.abilityReward.shards>0 && galeUtility.abilityReward.lumen===0,'Gale role must map to actual Shard utility');
+          var lumenState=cleanFormulaState(['thorn']);
+          var thornUtility=formulaSnapshotFor(lumenState,'thorn',19,1);
+          assert(thornUtility.abilityReward.lumen>0 && thornUtility.abilityReward.shards===0,'Thorn role must map to actual Lumen utility');
+
+          var mixed=cleanFormulaState(['ember','stone']);
+          var emberMixed=formulaSnapshotFor(mixed,'ember',19,1);
+          var stoneMixed=formulaSnapshotFor(mixed,'stone',19,1);
+          parityApprox(emberMixed.totalActivePartyPower,emberMixed.wispPower+stoneMixed.wispPower,'active-party power must remain the sum of Active Wisp Power when no Bond/global multiplier applies');
+
+          var presetState=cloneJson(state());
+          ['ember','tide','stone','gale','thorn','void','aurora','titan'].forEach(function(id){presetState.spirits[id]=Math.max(10,presetState.spirits[id]||0);});
+          presetState.activeParty=['ember','void','gale','thorn','tide'];
+          presetState.formationPresets={
+            push:['ember','void','gale','thorn','tide'],
+            farm:['tide','aurora','gale','thorn','ember'],
+            boss:['ember','void','stone','titan','tide']
+          };
+          presetState.activeFormationPreset='push';
+          bridge.setState(presetState);
+          bridge.save();
+          var presetRoundTrip=bridge.setState(JSON.parse(bridge.rawSave()));
+          assert(JSON.stringify(presetRoundTrip.formationPresets)===JSON.stringify(presetState.formationPresets),'role correction must not alter saved Formation presets');
+          assert(presetRoundTrip.activeFormationPreset==='push','role correction must preserve active Formation preset identity');
+
+          var pushState=cleanFormulaState(presetState.formationPresets.push);
+          var pushSnapshot=formulaSnapshotFor(pushState,'ember',19,1);
+          parityApprox(pushSnapshot.formationDamageMult,1.18*1.20,'Push Formation must retain Starcaller + Pathfinder damage');
+          assert(bridge.activeBondIds().sort().join(',')==='pathfinder,starcaller','Push Formation Bonds must remain unchanged');
+
+          var farmState=cleanFormulaState(presetState.formationPresets.farm);
+          var farmSnapshot=formulaSnapshotFor(farmState,'gale',19,1);
+          parityApprox(farmSnapshot.formationDamageMult,1.20,'Farm Formation must retain Pathfinder non-Boss damage');
+          parityApprox(farmSnapshot.formationRewardMult,1.25,'Farm Formation must retain Dawnpriest reward bonus');
+          assert(bridge.activeBondIds().sort().join(',')==='dawnpriest,pathfinder','Farm Formation Bonds must remain unchanged');
+
+          var bossState=cleanFormulaState(presetState.formationPresets.boss);
+          var bossSnapshot=formulaSnapshotFor(bossState,'stone',20,1);
+          parityApprox(bossSnapshot.formationDamageMult,1.18*1.35,'Boss Formation must retain Starcaller + Duskguard damage');
+          assert(bridge.activeBondIds().sort().join(',')==='duskguard,starcaller','Boss Formation Bonds must remain unchanged');
+
+          var liveBreaker=cloneJson(breakerBase);
+          liveBreaker.depth=19;liveBreaker.enemyDepth=19;liveBreaker.enemyMaxHp=1e9;liveBreaker.enemyHp=1e9;
+          bridge.setState(liveBreaker);
+          var liveHit=bridge.triggerAbilityFor('stone','live',PARITY_CLOCK_MS);
+          bridge.setState(liveBreaker);
+          var offlineHit=bridge.triggerAbilityFor('stone','offline',PARITY_CLOCK_MS);
+          parityApprox(liveHit.before.enemyHp-liveHit.after.enemyHp,offlineHit.before.enemyHp-offlineHit.after.enemyHp,'Breaker ability damage must stay coherent through live/offline authoritative paths');
+
+          var early=bridge.freshStateSnapshot();
+          bridge.setState(early);
+          var earlyRun=bridge.simulate(60,'live',0.1,PARITY_CLOCK_MS);
+          assert(earlyRun.summary.kills>0 && earlyRun.state.depth>1,'early progression must remain viable after role correction');
+
+          bridge.setState(presetState);
+          bridge.renderLayout();
+          var language=bridge.renderGameplayLanguage();
+          assert(language.wisps.indexOf('Breaker')!==-1 && language.wisps.indexOf('Burst')!==-1 && language.wisps.indexOf('Amplifier')!==-1,'Wisp UI must expose corrected role labels');
+          var rendered=(language.wisps+' '+language.encyclopedia).toLowerCase();
+          [' tank ','aggro','threat','mitigation','protect allies','absorb damage'].forEach(function(term){
+            assert(rendered.indexOf(term)===-1,'player-facing role copy must not advertise nonexistent defense: '+term);
+          });
+
+          finish('pass',{
+            roles:catalog.map(function(x){return [x.id,x.role,x.coefficient];}),
+            pushMult:pushSnapshot.formationDamageMult,
+            farmMult:farmSnapshot.formationDamageMult,
+            farmRewardMult:farmSnapshot.formationRewardMult,
+            bossMult:bossSnapshot.formationDamageMult,
+            earlyKills:earlyRun.summary.kills,
+            presetsPreserved:true,
+            liveOfflineBreakerDamage:liveHit.before.enemyHp-liveHit.after.enemyHp
+          });
+          return;
+        }
+
+        case 'p2-03a-wisp-role-integrity-mature': {
+          var matureState=cloneJson(state());
+          assert(matureState.depth===95 && matureState.maxDepthEver===120,'mature role regression must use the canonical mature/high-power fixture');
+          assert(matureState.activeParty.length===5,'mature fixture must retain its five-Wisp Formation');
+          matureState.autoAscendEnabled=false;
+          bridge.setState(matureState);
+          var matureBefore=cloneJson(state());
+          var matureRun=bridge.simulate(60,'live',0.1,PARITY_CLOCK_MS);
+          assert(matureRun.summary.kills>0,'canonical mature progression must remain viable after role correction');
+          assert(state().activeParty.join(',')===matureBefore.activeParty.join(','),'mature simulation must preserve the selected Formation');
+          finish('pass',{depth:matureBefore.depth,kills:matureRun.summary.kills,party:matureBefore.activeParty});
+          return;
+        }
+
+        case 'p2-03a-wisp-role-integrity-endgame': {
+          var endgameState=cloneJson(state());
+          assert(endgameState.riftMode==='farm' && endgameState.maxDepthEver===120,'endgame role regression must use the canonical high-power Farm fixture');
+          endgameState.autoAscendEnabled=false;
+          bridge.setState(endgameState);
+          var endgameBefore=cloneJson(state());
+          var endgameRun=bridge.simulate(60,'live',0.1,PARITY_CLOCK_MS);
+          assert(endgameRun.summary.kills>0,'high-power Farm progression must remain viable after role correction');
+          assert(state().riftMode==='farm','Farm mode must remain stable during the role-integrity check');
+          assert(state().activeParty.join(',')===endgameBefore.activeParty.join(','),'endgame Farm simulation must preserve the selected Formation');
+          finish('pass',{depth:endgameBefore.depth,kills:endgameRun.summary.kills,party:endgameBefore.activeParty});
+          return;
+        }
+
         case 'p2-02b-lab-hierarchy': {
           var labState=cloneJson(state());
           labState.maxDepthEver=45;labState.autoAscendEnabled=false;
@@ -2904,6 +3097,16 @@ def build_runner():
             'intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected'
           );
           finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
           return;
         }
 
