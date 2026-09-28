@@ -143,7 +143,7 @@ jobs:
               if count != 1:
                   raise SystemExit(f"QA failed: id={element_id!r} occurs {count} times")
 
-          literal_id_refs = set(re.findall(r'document\.getElementById\([\'"]([^\'"]+)[\'"]\)', src))
+          literal_id_refs = set(re.findall(r'document\.getElementById\([\'\"]([^\'\"]+)[\'\"]\)', src))
           missing_refs = sorted(literal_id_refs - id_set)
           if missing_refs:
               raise SystemExit(f"QA failed: getElementById references missing from HTML: {missing_refs}")
@@ -359,14 +359,12 @@ jobs:
             await sharp({ create: { width: 1024, height: 1024, channels: 4, background: bg } })
               .composite([{ input: iconMark }]).png().toFile('assets/icon.png');
 
-            // Adaptive foreground stays inside Android's safe zone.
             const foreground = await transparentCanvas(1024, 610);
             await sharp(foreground).png().toFile('assets/icon-foreground.png');
 
             await sharp({ create: { width: 1024, height: 1024, channels: 4, background: bg } })
               .png().toFile('assets/icon-background.png');
 
-            // Native splash: minimal, centered and safe across portrait crops.
             const splashMark = await transparentCanvas(2732, 920);
             await sharp({ create: { width: 2732, height: 2732, channels: 4, background: bg } })
               .composite([{ input: splashMark }]).png().toFile('assets/splash.png');
@@ -455,6 +453,9 @@ jobs:
           arch: x86_64
           emulator-build: 14788078
           profile: pixel_6
+          cores: 2
+          ram-size: 1536M
+          heap-size: 256M
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim -camera-back none
           script: python3 scripts/android_lifecycle_smoke.py --apk Lumenfall.apk --fixtures tests/behavioral/fixtures.json --package com.lumenfall.app
