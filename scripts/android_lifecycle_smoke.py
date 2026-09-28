@@ -326,8 +326,15 @@ def reload_seeded_save(package, seeded):
 
         # The fixture is synthetic. Let it become an ordinary established game
         # state by passing the production 5s autosave interval before testing
-        # Android process death.
-        time.sleep(6)
+        # Android process death. Reattach afterward because WebView/CDP sockets
+        # may rotate or close while the page reloads.
+    finally:
+        session.close()
+
+    time.sleep(6)
+    session = attach_webview(package)
+    try:
+        usable_runtime(session)
         actual = read_save(session)
         assert_basic_continuity(actual, seeded)
         recovery_raw = session.cdp.evaluate(
