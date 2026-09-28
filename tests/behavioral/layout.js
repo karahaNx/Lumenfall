@@ -87,6 +87,8 @@ window.runRiftLayoutQa = async function(bridge, ctx, assert){
   // Actual generated purchase markup: shared inline icons stay proportional in both Lab and Ascend.
   ['spirits','ascend'].forEach(function(tab){
     q('[data-tab="'+tab+'"]').click();
+    // Inspect disclosed progression before measuring its actual purchase icons.
+    document.querySelectorAll('#tab-'+tab+' .wisp-progression').forEach(function(el){el.open=true;});
     var icons=Array.from(document.querySelectorAll('#tab-'+tab+' .cost-icon'));
     assert(icons.length>0,tab+' cost icons exist');
     icons.forEach(function(el){var r=el.getBoundingClientRect();assert(r.width>0 && r.width<=16 && r.height<=16,tab+' nested icon sizing');});

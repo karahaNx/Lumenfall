@@ -69,6 +69,7 @@ SCENARIOS = {
     "p2-wisp-progression-pacing": "fresh",
     "p2-endgame-currency-utility": "fresh",
     "p2-02a-core-qol": "accessibility-mixed-states",
+    "p2-02b-wisp-hierarchy": "accessibility-mixed-states",
     "lifecycle-long-study": "chronology-study-mid-window",
     "lifecycle-lab-queue": "chronology-research-mid-window",
     "lifecycle-daily-rollover": "lifecycle-daily",
@@ -2319,6 +2320,35 @@ def build_runner():
           window.P105AccessibilityQa.negativeFocusReturn(assert);
           finish('pass',{unexpected:'focus-return regression was not detected'});
           return;
+
+        case 'p2-02b-wisp-hierarchy': {
+          var beforeHierarchy=JSON.stringify(state());
+          document.querySelector('[data-tab="spirits"]').click();
+          var cards=Array.from(document.querySelectorAll('[data-wisp-card]'));
+          var activeIds=state().activeParty;
+          assert(cards.slice(0,activeIds.length).every(function(card){return activeIds.indexOf(card.dataset.wispCard)!==-1;}),'Active Wisps must precede reserve/recruitment cards');
+          assert(document.querySelectorAll('.formation-member').length===activeIds.length,'current Formation must identify every Active Wisp');
+          cards.forEach(function(card){
+            var empower=card.querySelector('[data-empower]'),secondary=card.querySelector('.hero-ability');
+            if(empower && secondary) assert(!!(empower.compareDocumentPosition(secondary)&Node.DOCUMENT_POSITION_FOLLOWING),'Empower must precede secondary progression in reading order');
+          });
+          var help=document.querySelector('.formation-help');
+          assert(help && !help.open && help.querySelector('#bond-card'),'Bonds remain available through native disclosure');
+          help.open=true;bridge.renderLayout();
+          assert(help.open,'refresh must retain Formation guidance disclosure state');
+          help.open=false;
+          var progression=document.querySelector('.wisp-progression');
+          assert(progression && !progression.open,'secondary Wisp progression starts collapsed');
+          var summary=progression.querySelector('summary');
+          var inspectId=summary.dataset.wispDetails;
+          summary.focus();summary.click();bridge.renderLayout();
+          progression=document.querySelector('[data-wisp-progression="'+inspectId+'"]');
+          assert(progression.open,'Wisp disclosure remains open through refresh');
+          assert(document.activeElement===progression.querySelector('summary'),'refresh preserves disclosure keyboard focus');
+          assert(progression.querySelector('[data-rarity]') && progression.querySelector('.hero-ability'),'secondary upgrade information remains reachable');
+          assert(JSON.stringify(state())===beforeHierarchy,'hierarchy/navigation/inspection must not mutate gameplay state');
+          finish('pass',{activeFirst:true,empowerFirst:true,stateUnchanged:true});return;
+        }
 
         case 'p2-02a-core-qol': {
           var wispIds=['ember','tide','stone','gale','thorn','void','aurora','titan'];

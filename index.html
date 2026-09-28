@@ -1660,6 +1660,24 @@
   .lab-tab{min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg-elev);color:var(--ink-dim);font:700 12px 'Manrope',sans-serif;}
   .lab-tab.active{border-color:var(--shard);color:var(--ink);background:color-mix(in srgb,var(--shard) 12%,var(--bg-elev));}
   .lab-panel[hidden]{display:none;}
+  /* P2-02B Part 1: task order matches DOM/keyboard order. */
+  .formation-lineup{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px;}
+  .formation-member{display:flex;align-items:center;gap:3px;font-size:11px;color:var(--ink);}
+  .formation-member .wisp-portrait{width:24px;height:24px;flex:none;}
+  #tab-spirits .formation-preset-card{margin-bottom:12px;}
+  #tab-spirits .hero-grid{display:flex;flex-direction:column;gap:10px;}
+  .roster-group-label{font-size:12px;font-weight:800;color:var(--ink-dim);margin:2px 0;}
+  #tab-spirits .hero-card{margin:0;padding:12px;}
+  #tab-spirits .hero-top{margin-bottom:6px;}
+  .wisp-empower-action{width:100%;min-height:44px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;}
+  .wisp-empower-action:not(:disabled){border-color:var(--lumen);color:var(--lumen);}
+  .wisp-empower-action .control-state{width:100%;text-align:left;}
+  .wisp-progression{border-top:1px solid var(--line);margin-top:4px;}
+  .wisp-progression>summary{min-height:44px;padding:12px 0;cursor:pointer;font-size:12px;color:var(--ink-dim);font-weight:700;}
+  .wisp-progression>summary:focus-visible{outline:2px solid var(--lumen);outline-offset:2px;}
+  .formation-help{margin-top:12px;}
+  .formation-help>summary{min-height:44px;cursor:pointer;padding:12px 2px;font-size:13px;font-weight:700;}
+  .formation-help>summary:focus-visible{outline:2px solid var(--lumen);outline-offset:2px;}
   #rift-details .chip-label,#rift-details .chip-power{font-size:11px;line-height:16px;max-width:100%;overflow:hidden;text-overflow:ellipsis;}
   #rift-details .chip-bar-track{width:100%;max-width:40px;}
   #rift-hp-detail{font-size:13px;line-height:1.5;overflow-wrap:anywhere;}
@@ -1858,12 +1876,13 @@
     </section>
 
     <section class="tab-panel" id="tab-spirits">
-      <div class="section-label">Your Wisps</div>
-      <div class="section-sub">Up to 5 Wisps can be Active at once. Pair specific powered Wisps to activate simple Formation Bonds for Push, Farm or Boss fights.</div>
-      <div class="roster-journey" id="roster-journey"></div>
       <div id="formation-presets"></div>
-      <div class="card bond-card" id="bond-card"></div>
+      <details class="formation-help"><summary>Formation Bonds &amp; guidance</summary>
+        <div class="section-sub">Up to 5 Wisps can be Active at once. Pair specific powered Wisps to activate simple Formation Bonds for Push, Farm or Boss fights.</div>
+        <div class="card bond-card" id="bond-card"></div>
+      </details>
       <div class="hero-grid" id="spirit-list"></div>
+      <div class="roster-journey" id="roster-journey"></div>
     </section>
 
     <section class="tab-panel" id="tab-research">
@@ -4556,8 +4575,12 @@ function renderFormationPresets(){
   if(!root) return;
   var activeName=FORMATION_PRESET_IDS.find(formationPresetIsActive);
   var html='<div class="card formation-preset-card">' +
-    '<div class="formation-preset-head"><div class="formation-preset-title">Formation Presets</div>' +
+    '<div class="formation-preset-head"><div class="formation-preset-title">Current Formation · '+state.activeParty.length+'/5</div>' +
     '<div class="formation-preset-state">'+(activeName ? FORMATION_PRESET_LABELS[activeName]+' active' : 'Custom formation')+'</div></div>' +
+    '<div class="formation-lineup">'+state.activeParty.map(function(id){
+      var sp=SPIRITS.find(function(item){return item.id===id;});
+      return sp ? '<span class="formation-member">'+wispPortrait(sp)+sp.shortName+'</span>' : '';
+    }).join('')+'</div>' +
     '<div class="formation-preset-grid">';
   FORMATION_PRESET_IDS.forEach(function(name){
     var members=formationPresetMembers(name);
@@ -4668,10 +4691,19 @@ function pulseWispCard(id,tone){
 }
 
 function renderSpirits(){
+  var openProgression=Array.from(els['spirit-list'].querySelectorAll('details[open]')).map(function(el){return el.dataset.wispProgression;});
+  var focusedProgression=document.activeElement && document.activeElement.dataset.wispDetails;
   renderFormationBonds();
   renderRosterJourney();
   var html = '';
-  SPIRITS.forEach(function(sp){
+  // Sort a presentation-only copy; simulation and saved party order are unchanged.
+  var roster=SPIRITS.slice().sort(function(a,b){
+    return Number(state.activeParty.indexOf(b.id)!==-1)-Number(state.activeParty.indexOf(a.id)!==-1);
+  });
+  var previousGroup='';
+  roster.forEach(function(sp){
+    var group=state.activeParty.indexOf(sp.id)!==-1 ? 'Active Wisps' : 'Reserve & recruitment';
+    if(group!==previousGroup){html+='<div class="roster-group-label">'+group+'</div>';previousGroup=group;}
     var level = state.spirits[sp.id];
     var unlocked = state.maxDepthEver >= sp.unlockDepth;
     if(!unlocked){
@@ -4740,16 +4772,21 @@ function renderSpirits(){
         '<span class="rarity-badge" style="--badge-color:'+RARITY_COLORS[tier]+';">'+RARITY_NAMES[tier]+'</span>' +
         empowerHtml +
       '</div>' +
+      '<button class="mini-btn wisp-empower-action" data-empower="'+sp.id+'" '+(state.lumen<cost?'disabled':'')+'><strong>'+(recruited?'Empower':'Recruit')+'</strong><span class="mono">'+costIcon('lumen')+formatNum(cost)+'</span></button>' +
+      '<details class="wisp-progression" data-wisp-progression="'+sp.id+'" '+(openProgression.indexOf(sp.id)!==-1?'open':'')+'><summary data-wisp-details="'+sp.id+'">'+sp.shortName+' · Ability, Rarity, Module &amp; Ultimate</summary>' +
       '<div class="hero-ability"><span class="ability-label">Ability</span><strong>'+sp.abilityName+'</strong><span class="ability-desc">'+ABILITY_DESC[sp.abilityType]+'</span></div>' +
       moduleHtml +
       '<div class="hero-actions">' +
-        '<button class="mini-btn" data-empower="'+sp.id+'" '+(state.lumen<cost?'disabled':'')+'>'+(recruited?'Empower':'Recruit')+'<span style="font-size:.6875rem;">'+costIcon('lumen')+formatNum(cost)+'</span></button>' +
         '<button class="mini-btn rarity-btn" data-rarity="'+sp.id+'" '+(canRarity?'':'disabled')+'>'+rarityLabel+'</button>' +
       '</div>' +
       ultimateHtml +
-    '</div>';
+    '</details></div>';
   });
   replaceControlMarkup(els['spirit-list'],html);
+  if(focusedProgression){
+    var restoredSummary=els['spirit-list'].querySelector('[data-wisp-details="'+focusedProgression+'"]');
+    if(restoredSummary) restoredSummary.focus({preventScroll:true});
+  }
   els['spirit-list'].querySelectorAll('[data-empower]').forEach(function(btn){
     btn.addEventListener('click', function(){
       var sp = SPIRITS.find(function(s){ return s.id===btn.getAttribute('data-empower'); });
@@ -5129,7 +5166,7 @@ function renderEncyclopedia(){
   SPIRITS.forEach(function(sp){
     var recruited = (state.spirits[sp.id]||0)>0;
     var unlocked = state.maxDepthEver>=sp.unlockDepth;
-    html += '<div class="ency-card"><div class="ency-top">' +
+    html += '<div class="ency-card" data-ency-wisp="'+sp.id+'"><div class="ency-top">' +
       wispPortrait(sp) +
       '<div class="ency-main"><div class="ency-name">'+sp.name+'</div><div class="ency-meta">'+sp.heroClass+' · '+sp.role+' · Unlock Rift '+sp.unlockDepth+'</div></div>' +
       '<span class="ency-status '+(recruited?'on':'')+'">'+(recruited?'Recruited':(unlocked?'Available':'Locked'))+'</span>' +
