@@ -69,6 +69,8 @@ SCENARIOS = {
     "p2-wisp-progression-pacing": "fresh",
     "p2-endgame-currency-utility": "fresh",
     "p2-03a-wisp-role-integrity": "accessibility-mixed-states",
+    "p2-03a-wisp-role-integrity-mature": "mature-high-power",
+    "p2-03a-wisp-role-integrity-endgame": "parity-long-high-power",
     "p2-02a-core-qol": "accessibility-mixed-states",
     "p2-02b-wisp-hierarchy": "accessibility-mixed-states",
     "p2-02b-lab-hierarchy": "accessibility-mixed-states",
@@ -2463,12 +2465,6 @@ def build_runner():
           var earlyRun=bridge.simulate(60,'live',0.1,PARITY_CLOCK_MS);
           assert(earlyRun.summary.kills>0 && earlyRun.state.depth>1,'early progression must remain viable after role correction');
 
-          var mature=cloneJson(presetState);
-          mature.autoAscendEnabled=false;
-          bridge.setState(mature);
-          var matureRun=bridge.simulate(10,'live',0.1,PARITY_CLOCK_MS);
-          assert(matureRun.summary.kills>0,'mature progression must remain viable after role correction');
-
           bridge.setState(presetState);
           bridge.renderLayout();
           var language=bridge.renderGameplayLanguage();
@@ -2485,10 +2481,37 @@ def build_runner():
             farmRewardMult:farmSnapshot.formationRewardMult,
             bossMult:bossSnapshot.formationDamageMult,
             earlyKills:earlyRun.summary.kills,
-            matureKills:matureRun.summary.kills,
             presetsPreserved:true,
             liveOfflineBreakerDamage:liveHit.before.enemyHp-liveHit.after.enemyHp
           });
+          return;
+        }
+
+        case 'p2-03a-wisp-role-integrity-mature': {
+          var matureState=cloneJson(state());
+          assert(matureState.depth===95 && matureState.maxDepthEver===120,'mature role regression must use the canonical mature/high-power fixture');
+          assert(matureState.activeParty.length===5,'mature fixture must retain its five-Wisp Formation');
+          matureState.autoAscendEnabled=false;
+          bridge.setState(matureState);
+          var matureBefore=cloneJson(state());
+          var matureRun=bridge.simulate(60,'live',0.1,PARITY_CLOCK_MS);
+          assert(matureRun.summary.kills>0,'canonical mature progression must remain viable after role correction');
+          assert(state().activeParty.join(',')===matureBefore.activeParty.join(','),'mature simulation must preserve the selected Formation');
+          finish('pass',{depth:matureBefore.depth,kills:matureRun.summary.kills,party:matureBefore.activeParty});
+          return;
+        }
+
+        case 'p2-03a-wisp-role-integrity-endgame': {
+          var endgameState=cloneJson(state());
+          assert(endgameState.riftMode==='farm' && endgameState.maxDepthEver===120,'endgame role regression must use the canonical high-power Farm fixture');
+          endgameState.autoAscendEnabled=false;
+          bridge.setState(endgameState);
+          var endgameBefore=cloneJson(state());
+          var endgameRun=bridge.simulate(60,'live',0.1,PARITY_CLOCK_MS);
+          assert(endgameRun.summary.kills>0,'high-power Farm progression must remain viable after role correction');
+          assert(state().riftMode==='farm','Farm mode must remain stable during the role-integrity check');
+          assert(state().activeParty.join(',')===endgameBefore.activeParty.join(','),'endgame Farm simulation must preserve the selected Formation');
+          finish('pass',{depth:endgameBefore.depth,kills:endgameRun.summary.kills,party:endgameBefore.activeParty});
           return;
         }
 
