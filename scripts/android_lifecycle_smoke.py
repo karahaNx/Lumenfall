@@ -135,15 +135,19 @@ def bounded_command_diagnostic(command, timeout=5):
 def collect_attach_diagnostics(package, last_detail):
     get_state = bounded_command_diagnostic(["adb", "get-state"])
     devices = bounded_command_diagnostic(["adb", "devices", "-l"])
+    shell_probe = bounded_command_diagnostic(["adb", "shell", "echo", "lumenfall-shell-ok"])
     pidof = bounded_command_diagnostic(["adb", "shell", "pidof", package])
     unix = bounded_command_diagnostic(["adb", "shell", "cat", "/proc/net/unix"])
     activity = bounded_command_diagnostic(
         ["adb", "shell", "dumpsys", "activity", "activities"]
     )
-    processes = bounded_command_diagnostic(
-        ["adb", "shell", "ps", "-A"]
-    )
+    processes = bounded_command_diagnostic(["adb", "shell", "ps", "-A"])
 
+    shell_responsive = (
+        shell_probe["returncode"] == 0
+        and shell_probe["stdout"] == "lumenfall-shell-ok"
+    )
+    pid_query_completed = pidof["returncode"] is not None
     pids = pidof["stdout"].split() if pidof["returncode"] == 0 else []
     sockets = []
     if unix["returncode"] == 0:
@@ -155,8 +159,12 @@ def collect_attach_diagnostics(package, last_detail):
 
     if get_state["returncode"] != 0 or get_state["stdout"] != "device":
         domain = "ADB/emulator unavailable"
+    elif not shell_responsive:
+        domain = "ADB transport reports device but guest shell is unresponsive"
+    elif not pid_query_completed:
+        domain = "guest shell responsive but package PID query failed/timed out"
     elif not pids:
-        domain = "package process absent"
+        domain = "guest shell responsive and package process absent"
     elif not sockets:
         domain = "package process alive but no WebView devtools socket"
     else:
@@ -183,9 +191,12 @@ def collect_attach_diagnostics(package, last_detail):
         "lastAttachDetail": last_detail,
         "adbGetState": get_state,
         "adbDevices": devices,
+        "guestShellProbe": shell_probe,
         "packagePid": pidof,
         "webviewSockets": sockets,
+        "activityDiagnostic": activity,
         "activityLines": focused,
+        "processDiagnostic": processes,
         "processLines": process_lines,
     }
 
