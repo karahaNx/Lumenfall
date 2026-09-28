@@ -38,9 +38,12 @@ window.runRiftLayoutQa = async function(bridge, ctx, assert){
     ['#hp-text','#enemy-name','#depth-label','#rift-objective','.objective-copy strong','.objective-copy small'].forEach(function(s){
       visible(s);assert(parseFloat(getComputedStyle(q(s)).fontSize)>=10,s+' legible size');
     });
-    ['#rift-push-btn','#rift-farm-btn','#rift-details-btn','#settings-btn'].forEach(function(s){
+    ['#rift-push-btn','#rift-farm-btn','#rift-study-status','#rift-details-btn','#settings-btn'].forEach(function(s){
       var r=visible(s);assert(r.height>=44 && r.width>=44,s+' 44px touch target');
     });
+    var studyStatus=rect('#rift-study-status'),details=rect('#rift-details-btn'),depth=rect('#depth-label');
+    assert(depth.right<=studyStatus.left+1 && studyStatus.right<=details.left+1,'Rift heading controls do not overlap');
+    assert(/Studies \d+\/\d+/.test(q('#rift-study-status').textContent),'Rift Study occupancy remains visible');
     document.querySelectorAll('nav.tabbar button').forEach(function(el){assert(el.getBoundingClientRect().height>=44,'navigation touch target');});
     var nav=visible('nav.tabbar');
     assert(rect('.stage').bottom<=nav.top+1,'stage clear of navigation');
@@ -82,11 +85,18 @@ window.runRiftLayoutQa = async function(bridge, ctx, assert){
   q('#rift-details-close').click();assert(!q('#rift-details').open,'details closes');
   assert(document.activeElement===q('#rift-details-btn'),'details returns focus');
   // Actual generated purchase markup: shared inline icons stay proportional in both Lab and Ascend.
-  ['spirits','research','ascend'].forEach(function(tab){
+  ['spirits','ascend'].forEach(function(tab){
     q('[data-tab="'+tab+'"]').click();
     var icons=Array.from(document.querySelectorAll('#tab-'+tab+' .cost-icon'));
     assert(icons.length>0,tab+' cost icons exist');
     icons.forEach(function(el){var r=el.getBoundingClientRect();assert(r.width>0 && r.width<=16 && r.height<=16,tab+' nested icon sizing');});
+  });
+  q('[data-tab="research"]').click();
+  ['permanent','studies'].forEach(function(view){
+    bridge.setLabView(view,false);
+    var icons=Array.from(document.querySelectorAll('#lab-panel-'+view+' .cost-icon'));
+    assert(icons.length>0,'research '+view+' cost icons exist');
+    icons.forEach(function(el){var r=el.getBoundingClientRect();assert(r.width>0 && r.width<=16 && r.height<=16,'research '+view+' nested icon sizing');});
   });
   q('[data-tab="battle"]').click();check('push');
   return {viewport:[innerWidth,innerHeight],safeInsets:[params.get('safeTop'),params.get('safeBottom')],minimumEnemyHeight:minimum,hudHeight:hudHeight,party:initial.activeParty.length};

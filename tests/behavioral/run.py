@@ -68,6 +68,7 @@ SCENARIOS = {
     "p2-ascend-integrity": "fresh",
     "p2-wisp-progression-pacing": "fresh",
     "p2-endgame-currency-utility": "fresh",
+    "p2-02a-core-qol": "accessibility-mixed-states",
     "lifecycle-long-study": "chronology-study-mid-window",
     "lifecycle-lab-queue": "chronology-research-mid-window",
     "lifecycle-daily-rollover": "lifecycle-daily",
@@ -482,6 +483,11 @@ window.__lumenfallQaBridge = {
     restoreEnemyOrSpawn();
     return JSON.parse(JSON.stringify(state));
   },
+  applyFormationPreset: function(name){ return applyFormationPreset(name); },
+  saveFormationPreset: function(name){ return saveFormationPreset(name); },
+  activeBondIds: function(){ return activeFormationBonds().map(function(bond){return bond.id;}); },
+  setLabView: function(view,focus){ setLabView(view,!!focus); return labView; },
+  autoEmpowerAll: function(enabled){ setAutoEmpowerAll(!!enabled); return JSON.parse(JSON.stringify(state.empowerQueue)); },
   simulate: function(seconds,kind,chunkSec,startMs){
     var begin = performance.now();
     var remaining = Math.max(0,Number(seconds)||0);
@@ -1194,6 +1200,7 @@ def build_runner():
     assert(s.spirits.ember===1,'fresh Ember level must be 1');
     assert(s.enemyDepth===1,'fresh enemy must belong to Rift 1');
     assert(s.schemaVersion===1,'fresh state must use current save schema');
+    assert(s.activeFormationPreset==='push' && s.formationPresets.push.join(',')==='ember','fresh formation preset defaults must preserve Ember without a schema bump');
   }
   function run(){
     var bridge = window.__lumenfallQaBridge;
@@ -1237,6 +1244,7 @@ def build_runner():
           assert(s.owned.autoascend && s.owned.offline24 && s.owned.offline48 && s.owned.rememberbulk,'all existing Rest Stop purchases must remain owned');
           assert(s.sigilResonanceUses===0 && s.dailyQuestRefreshes===0,'older schema-v1 saves must safely default new utility counters to zero');
           assert(s.ascendRewardedDepth===0,'existing schema-v1 saves without a benchmark must safely default to 0');
+          assert(s.activeFormationPreset==='push' && s.formationPresets.push.join(',')===s.activeParty.join(','),'older schema-v1 saves must seed presets from their current Formation');
           finish('pass',{depth:s.depth,maxDepthEver:s.maxDepthEver,comets:s.comets,sigils:s.sigils,ascendRewardedDepth:s.ascendRewardedDepth});
           return;
 
@@ -2312,6 +2320,172 @@ def build_runner():
           finish('pass',{unexpected:'focus-return regression was not detected'});
           return;
 
+        case 'p2-02a-core-qol': {
+          var wispIds=['ember','tide','stone','gale','thorn','void','aurora','titan'];
+          var qol=cloneJson(state());
+          qol.maxDepthEver=45;
+          qol.depth=45;
+          qol.enemyDepth=45;
+          qol.enemyHp=1;
+          qol.enemyMaxHp=1;
+          qol.lumen=1e12;
+          qol.shards=1e12;
+          qol.motes=1e9;
+          qol.achieved.labmaster=true;
+          wispIds.forEach(function(id){qol.spirits[id]=10;});
+          qol.activeParty=['ember','void','gale','thorn','tide'];
+          qol.formationPresets={
+            push:['ember','void','gale','thorn','tide'],
+            farm:['tide','aurora','gale','thorn','ember'],
+            boss:['ember','void','stone','titan','tide']
+          };
+          qol.activeFormationPreset='push';
+          qol.activeStudies=[
+            {id:'wispascend',remainingSec:90,totalDurationSec:180,speedMult:1},
+            {id:'shardstudy',remainingSec:80,totalDurationSec:200,speedMult:2}
+          ];
+          bridge.setState(qol);
+          bridge.renderLayout();
+
+          document.querySelector('[data-tab="spirits"]').click();
+          var farmPreset=document.querySelector('[data-formation-preset="farm"]');
+          farmPreset.focus();
+          farmPreset.click();
+          var afterFarm=state();
+          assert(afterFarm.activeParty.join(',')===qol.formationPresets.farm.join(','),'Farm preset must apply the exact saved Wisp Formation');
+          assert(bridge.activeBondIds().sort().join(',')==='dawnpriest,pathfinder','Farm preset must recalculate the intended Formation Bonds');
+          assert(document.querySelector('[data-formation-preset="farm"]').getAttribute('aria-pressed')==='true','active Formation preset must be visibly and semantically selected');
+          assert(document.activeElement===document.querySelector('[data-formation-preset="farm"]'),'Formation quick-switch must preserve keyboard focus after rendering');
+
+          var custom=cloneJson(state());
+          custom.activeParty=['ember','tide','stone'];
+          custom.activeFormationPreset='';
+          bridge.setState(custom);
+          bridge.renderLayout();
+          document.querySelector('[data-save-formation="boss"]').click();
+          assert(state().formationPresets.boss.join(',')==='ember,tide,stone','Save Boss must store the player-selected current Formation');
+          assert(state().activeFormationPreset==='boss','saving a preset must make that exact Formation active');
+          bridge.save();
+          var persisted=JSON.parse(bridge.rawSave());
+          var roundTrip=bridge.setState(persisted);
+          assert(roundTrip.formationPresets.boss.join(',')==='ember,tide,stone' && roundTrip.activeFormationPreset==='boss','Formation presets and active identity must survive canonical save/load');
+
+          var invalid=cloneJson(roundTrip);
+          invalid.activeParty=['ember','tide'];
+          invalid.activeFormationPreset='push';
+          invalid.spirits.aurora=0;
+          invalid.formationPresets.push=['deleted-wisp','ember','ember','aurora'];
+          var normalized=bridge.setState(invalid);
+          assert(normalized.formationPresets.push.join(',')==='ember,aurora','unknown and duplicate preset references must normalize safely while a known unavailable Wisp remains saved');
+          var beforeInvalidParty=normalized.activeParty.join(',');
+          assert(bridge.applyFormationPreset('push')===false,'a preset containing an unavailable Wisp must fail safely');
+          assert(state().activeParty.join(',')===beforeInvalidParty,'failed preset activation must not partially mutate the current Formation');
+
+          bridge.setState(qol);
+          bridge.renderLayout();
+          document.querySelector('[data-tab="battle"]').click();
+          var studyStatus=document.getElementById('rift-study-status');
+          assert(/Studies 2\/3/.test(studyStatus.textContent) && /1 slot free/.test(studyStatus.textContent),'Rift Study indicator must report occupied and available slots');
+          assert(studyStatus.classList.contains('has-open'),'Rift Study indicator must visibly flag an open slot');
+          studyStatus.focus();
+          studyStatus.click();
+          assert(document.getElementById('tab-research').classList.contains('active'),'Rift Study action must open the Lab');
+          assert(document.getElementById('lab-tab-studies').getAttribute('aria-selected')==='true' && !document.getElementById('lab-panel-studies').hidden,'Rift Study action must open Long Studies directly');
+          assert(document.activeElement===document.getElementById('lab-tab-studies'),'direct Rift to Long Studies navigation must move focus predictably');
+
+          var beforeTabs=state();
+          var gameplayBeforeTabs=JSON.stringify({research:beforeTabs.research,activeStudies:beforeTabs.activeStudies,studyQueue:beforeTabs.studyQueue,lumen:beforeTabs.lumen,shards:beforeTabs.shards});
+          document.getElementById('lab-tab-permanent').click();
+          document.getElementById('lab-tab-studies').click();
+          var afterTabs=state();
+          assert(JSON.stringify({research:afterTabs.research,activeStudies:afterTabs.activeStudies,studyQueue:afterTabs.studyQueue,lumen:afterTabs.lumen,shards:afterTabs.shards})===gameplayBeforeTabs,'Lab tab switching must not mutate gameplay state');
+          document.getElementById('lab-tab-permanent').focus();
+          document.getElementById('lab-tab-permanent').dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));
+          assert(document.activeElement===document.getElementById('lab-tab-studies') && document.getElementById('lab-tab-studies').getAttribute('aria-selected')==='true','Lab tabs must support arrow-key selection and focus');
+
+          bridge.setLabView('permanent',false);
+          var beforeResearch=state();
+          var beforeResearchLevel=beforeResearch.research.focus;
+          var studiesBeforeResearch=JSON.stringify(beforeResearch.activeStudies);
+          var researchButton=document.querySelector('[data-research="focus"]');
+          assert(researchButton && !researchButton.disabled,'funded Permanent Research action must remain available');
+          researchButton.click();
+          assert(state().research.focus>beforeResearchLevel,'Permanent Upgrades tab must preserve Research purchasing');
+          assert(JSON.stringify(state().activeStudies)===studiesBeforeResearch,'Permanent Research must not disturb Long Studies');
+
+          var studyState=cloneJson(state());
+          studyState.activeStudies=[];
+          studyState.studyQueue={};
+          studyState.lumen=1e12;
+          studyState.shards=1e12;
+          bridge.setState(studyState);
+          bridge.renderLayout();
+          bridge.setLabView('studies',false);
+          var researchBeforeStudy=JSON.stringify(state().research);
+          var beginStudy=document.querySelector('[data-study="guardmastery"]');
+          assert(beginStudy && !beginStudy.disabled,'funded Long Study action must remain available');
+          beginStudy.click();
+          assert(state().activeStudies.some(function(active){return active.id==='guardmastery';}),'Long Studies tab must preserve Study start behavior');
+          assert(JSON.stringify(state().research)===researchBeforeStudy,'starting a Long Study must not mutate Permanent Research');
+
+          var automation=cloneJson(qol);
+          wispIds.forEach(function(id){automation.empowerQueue[id]=id==='ember' || id==='gale';});
+          bridge.setState(automation);
+          bridge.renderLayout();
+          document.querySelector('[data-tab="spirits"]').click();
+          var globalAuto=document.querySelector('[data-empower-all]');
+          assert(globalAuto && globalAuto.getAttribute('aria-pressed')==='mixed' && /MIXED/.test(globalAuto.textContent),'mixed individual Auto-Empower state must be explicit');
+          globalAuto.focus();
+          globalAuto.click();
+          assert(wispIds.every(function(id){return state().empowerQueue[id]===true;}),'Auto-Empower All ON must enable every applicable recruited Wisp');
+          assert(document.querySelector('[data-empower-all]').getAttribute('aria-pressed')==='true','global ON state must match aria-pressed');
+          document.querySelector('[data-empower-all]').click();
+          assert(wispIds.every(function(id){return state().empowerQueue[id]===false;}),'Auto-Empower All OFF must disable every applicable recruited Wisp');
+          document.querySelector('[data-empower-queue="ember"]').click();
+          assert(state().empowerQueue.ember===true && state().empowerQueue.tide===false,'individual Auto-Empower toggle must still work after global actions');
+          assert(document.querySelector('[data-empower-all]').getAttribute('aria-pressed')==='mixed','individual change after global OFF must return the global state to mixed');
+
+          var deeds=cloneJson(qol);
+          deeds.totalTaps=4286;
+          deeds.achieved.tap10000=false;
+          deeds.maxDepthEver=55;
+          deeds.achieved.d50=true;
+          bridge.setState(deeds);
+          bridge.renderLayout();
+          document.querySelector('[data-tab="deeds"]').click();
+          var tapsProgress=document.querySelector('[data-deed-progress="tap10000"]');
+          assert(tapsProgress.dataset.current==='4286' && tapsProgress.dataset.target==='10000','incomplete Deed progress must use authoritative current and target counters');
+          assert(/\//.test(tapsProgress.textContent),'incomplete Deed progress must expose current / target text');
+          var completedProgress=document.querySelector('[data-deed-progress="d50"]');
+          assert(completedProgress.dataset.current==='50' && completedProgress.dataset.target==='50','completed Deed progress must remain at its reached target');
+          assert(/Completed/.test(completedProgress.closest('.ach-card').textContent),'completed Deed must remain explicitly completed');
+          assert(document.querySelectorAll('[data-deed-progress]').length===document.querySelectorAll('#ach-list .ach-card').length,'every current Deed must expose deterministic progress');
+
+          document.querySelector('[data-tab="battle"]').click();
+          document.getElementById('tab-battle').getAnimations().forEach(function(animation){animation.finish();});
+          assert(studyStatus.getBoundingClientRect().height>=44,'Rift Study action must retain a practical touch target');
+          document.querySelector('[data-tab="spirits"]').click();
+          document.getElementById('tab-spirits').getAnimations().forEach(function(animation){animation.finish();});
+          Array.from(document.querySelectorAll('[data-formation-preset],[data-save-formation],[data-empower-all]')).forEach(function(control){
+            assert(control.getBoundingClientRect().height>=44,'Formation and global automation controls must retain practical touch targets');
+          });
+          document.querySelector('[data-tab="research"]').click();
+          document.getElementById('tab-research').getAnimations().forEach(function(animation){animation.finish();});
+          Array.from(document.querySelectorAll('[role="tab"]')).forEach(function(tab){
+            assert(tab.getBoundingClientRect().height>=44,'Lab tabs must retain practical touch targets');
+          });
+
+          finish('pass',{
+            formation:afterFarm.activeParty,
+            bonds:bridge.activeBondIds(),
+            studyStatus:studyStatus.textContent.trim(),
+            labView:document.querySelector('[role="tab"][aria-selected="true"]').getAttribute('data-lab-view'),
+            autoEmpower:'mixed-after-individual',
+            deedProgress:tapsProgress.textContent.trim()
+          });
+          return;
+        }
+
         case 'p2-ascend-integrity': {
           function ascendState(cleared,benchmark,autoEnabled){
             var a = cloneJson(state());
@@ -2835,5 +3009,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
