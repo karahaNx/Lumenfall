@@ -116,6 +116,80 @@ def pick_webview_socket(package):
     return sockets[-1] if sockets else None
 
 
+def bounded_command_diagnostic(command, timeout=5):
+    try:
+        result = run(command, timeout=timeout, check=False)
+        return {
+            "returncode": result.returncode,
+            "stdout": (result.stdout or "").strip()[-1200:],
+            "stderr": (result.stderr or "").strip()[-1200:],
+        }
+    except Exception as exc:
+        return {
+            "returncode": None,
+            "stdout": "",
+            "stderr": f"{type(exc).__name__}: {exc}",
+        }
+
+
+def collect_attach_diagnostics(package, last_detail):
+    get_state = bounded_command_diagnostic(["adb", "get-state"])
+    devices = bounded_command_diagnostic(["adb", "devices", "-l"])
+    pidof = bounded_command_diagnostic(["adb", "shell", "pidof", package])
+    unix = bounded_command_diagnostic(["adb", "shell", "cat", "/proc/net/unix"])
+    activity = bounded_command_diagnostic(
+        ["adb", "shell", "dumpsys", "activity", "activities"]
+    )
+    processes = bounded_command_diagnostic(
+        ["adb", "shell", "ps", "-A"]
+    )
+
+    pids = pidof["stdout"].split() if pidof["returncode"] == 0 else []
+    sockets = []
+    if unix["returncode"] == 0:
+        for line in unix["stdout"].splitlines():
+            if "webview_devtools_remote" in line:
+                name = line.split()[-1].lstrip("@")
+                if name and name not in sockets:
+                    sockets.append(name)
+
+    if get_state["returncode"] != 0 or get_state["stdout"] != "device":
+        domain = "ADB/emulator unavailable"
+    elif not pids:
+        domain = "package process absent"
+    elif not sockets:
+        domain = "package process alive but no WebView devtools socket"
+    else:
+        domain = "WebView socket exists but forwarding/CDP target attachment failed"
+
+    focused = []
+    if activity["returncode"] == 0:
+        focused = [
+            line.strip()
+            for line in activity["stdout"].splitlines()
+            if package in line or "mResumedActivity" in line or "topResumedActivity" in line
+        ][-12:]
+
+    process_lines = []
+    if processes["returncode"] == 0:
+        process_lines = [
+            line.strip()
+            for line in processes["stdout"].splitlines()
+            if package in line
+        ][-12:]
+
+    return {
+        "failureDomain": domain,
+        "lastAttachDetail": last_detail,
+        "adbGetState": get_state,
+        "adbDevices": devices,
+        "packagePid": pidof,
+        "webviewSockets": sockets,
+        "activityLines": focused,
+        "processLines": process_lines,
+    }
+
+
 def free_forward_port():
     import socket
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
@@ -208,13 +282,22 @@ def attach_webview(package, timeout=35):
     deadline = time.monotonic() + timeout
     detail = "no attempt"
     while time.monotonic() < deadline:
-        socket_name = pick_webview_socket(package)
-        if not socket_name:
-            detail = "no WebView devtools socket"
+        try:
+            socket_name = pick_webview_socket(package)
+        except Exception as exc:
+            detail = f"socket discovery failed: {type(exc).__name__}: {exc}"
             time.sleep(0.5)
             continue
-        port = forward_webview(socket_name)
+
+        if not socket_name:
+            detail = "no WebView devtools socket discovered"
+            time.sleep(0.5)
+            continue
+
+        port = None
+        attached = False
         try:
+            port = forward_webview(socket_name)
             targets = fetch_json(f"http://127.0.0.1:{port}/json", timeout=2)
             pages = [
                 target
@@ -223,19 +306,29 @@ def attach_webview(package, timeout=35):
             ]
             if not pages:
                 detail = f"{socket_name} exposed no page target"
-                remove_forward(port)
                 time.sleep(0.5)
                 continue
             pages.sort(key=lambda target: 0 if "localhost" in target.get("url", "") else 1)
             target = pages[0]
             cdp = Cdp(local_ws_url(target["webSocketDebuggerUrl"], port))
             cdp.command("Runtime.enable")
+            attached = True
             return WebViewSession(cdp, port, socket_name)
         except Exception as exc:
-            detail = f"{type(exc).__name__}: {exc}"
-            remove_forward(port)
+            detail = (
+                f"socket={socket_name} attach failed: "
+                f"{type(exc).__name__}: {exc}"
+            )
             time.sleep(0.5)
-    fail(f"could not attach to packaged WebView within {timeout}s ({detail})")
+        finally:
+            if port is not None and not attached:
+                remove_forward(port)
+
+    diagnostics = collect_attach_diagnostics(package, detail)
+    fail(
+        f"could not attach to packaged WebView within {timeout}s; "
+        f"diagnostics={json.dumps(diagnostics, sort_keys=True)}"
+    )
 
 
 def usable_runtime(session, timeout=30):
