@@ -244,7 +244,7 @@ def usable_runtime(session, timeout=30):
       ready: document.readyState,
       enemy: !!document.getElementById('enemy-name') && !!document.getElementById('enemy-name').textContent.trim(),
       hud: !!document.getElementById('hud-lumen'),
-      zone: !!document.querySelector('[data-zone-index]'),
+      rift: !!document.getElementById('rift-push-btn') && !!document.getElementById('spirit-list'),
       body: !!document.body,
       native: !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()),
       url: location.href
@@ -257,7 +257,7 @@ def usable_runtime(session, timeout=30):
                 isinstance(last, dict)
                 and last.get("enemy")
                 and last.get("hud")
-                and last.get("zone")
+                and last.get("rift")
                 and last.get("body")
                 and last.get("native")
             ):
