@@ -3,13 +3,14 @@ name: Build Android APK
 
 on:
   push:
-    branches: [main]
+    branches: [main, '01/p2-04-native-android-lifecycle-gate']
     paths:
       - 'index.html'
       - 'branding/**'
       - 'fonts/**'
       - 'mobile/**'
       - 'scripts/verify_apk_identity.py'
+      - 'scripts/android_lifecycle_smoke.py'
       - '.github/workflows/build-android.yml'
   workflow_dispatch: {}
 
@@ -18,7 +19,7 @@ permissions:
   actions: write
 
 concurrency:
-  group: lumenfall-android-main
+  group: lumenfall-android-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -436,7 +437,29 @@ jobs:
             --expected-version-name "$EXPECTED_VERSION_NAME" \
             --expected-cert-sha256 "$EXPECTED_SIGNING_SHA256"
 
+      - name: Install native lifecycle smoke dependency
+        run: python3 -m pip install --disable-pip-version-check --no-cache-dir websocket-client==1.8.0
+
+      - name: Enable Android emulator KVM access
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -e /dev/kvm
+          sudo chmod 666 /dev/kvm
+
+      - name: Native Android lifecycle smoke
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
+          script: python3 scripts/android_lifecycle_smoke.py --apk Lumenfall.apk --fixtures tests/behavioral/fixtures.json --package com.lumenfall.app
+
       - name: Remove legacy Actions artifacts
+        if: github.ref == 'refs/heads/main'
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
@@ -450,6 +473,7 @@ jobs:
           done
 
       - name: Remove legacy EXE and AAB release assets
+        if: github.ref == 'refs/heads/main'
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
@@ -463,6 +487,7 @@ jobs:
           done
 
       - name: Publish latest APK release
+        if: github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
