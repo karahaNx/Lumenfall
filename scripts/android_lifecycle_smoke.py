@@ -323,6 +323,18 @@ def reload_seeded_save(package, seeded):
         usable_runtime(session)
         actual = read_save(session)
         assert_basic_continuity(actual, seeded)
+
+        # The fixture is synthetic. Let it become an ordinary established game
+        # state by passing the production 5s autosave interval before testing
+        # Android process death.
+        time.sleep(6)
+        actual = read_save(session)
+        assert_basic_continuity(actual, seeded)
+        recovery_raw = session.cdp.evaluate(
+            f"localStorage.getItem({json.dumps(RECOVERY_KEY)})"
+        )
+        if not isinstance(recovery_raw, str) or not recovery_raw:
+            fail("packaged app did not establish its bounded recovery save after autosave")
         return actual
     finally:
         session.close()
