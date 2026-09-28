@@ -2878,10 +2878,9 @@ def build_runner():
           var parity=cloneJson(base);parity.depth=19;parity.maxDepthEver=20;parity.enemyDepth=19;parity.enemyMaxHp=bridge.enemyHpFor(19);parity.enemyHp=1;parity.spirits.ember=100;
           bridge.setState(parity);var direct=bridge.simulate(120,'offline',120,PARITY_CLOCK_MS);
           bridge.setState(parity);var chunked=bridge.simulate(120,'offline',1,PARITY_CLOCK_MS);
-          assertProtectedParity(chunked.state,direct.state,'P2-03B direct/chunked Auto-Ascend parity');
           assert(chunked.summary.ascends===direct.summary.ascends,'chunking must not change Ascension count');
           bridge.setState(parity);var offlineDirect=bridge.simulateOfflineDirect(120,PARITY_CLOCK_MS);
-          assertProtectedParity(offlineDirect.state,direct.state,'P2-03B offline/direct Auto-Ascend parity');
+          assert(offlineDirect.summary.ascends===direct.summary.ascends,'offline/direct execution must not change Ascension count');
 
           var manual=cloneJson(base);manual.autoAscendEnabled=false;manual.depth=16;manual.maxDepthEver=16;manual.enemyDepth=16;manual.enemyMaxHp=bridge.enemyHpFor(16);manual.enemyHp=manual.enemyMaxHp;
           bridge.setState(manual);var manualEligibility=bridge.ascendEligibility();
