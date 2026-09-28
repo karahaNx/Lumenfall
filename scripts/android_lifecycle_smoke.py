@@ -242,8 +242,9 @@ def usable_runtime(session, timeout=30):
     deadline = time.monotonic() + timeout
     expression = """(() => ({
       ready: document.readyState,
-      enemy: !!document.getElementById('enemy-name'),
+      enemy: !!document.getElementById('enemy-name') && !!document.getElementById('enemy-name').textContent.trim(),
       hud: !!document.getElementById('hud-lumen'),
+      zone: !!document.querySelector('[data-zone-index]'),
       body: !!document.body,
       native: !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()),
       url: location.href
@@ -254,9 +255,9 @@ def usable_runtime(session, timeout=30):
             last = session.cdp.evaluate(expression)
             if (
                 isinstance(last, dict)
-                and last.get("ready") in ("interactive", "complete")
                 and last.get("enemy")
                 and last.get("hud")
+                and last.get("zone")
                 and last.get("body")
                 and last.get("native")
             ):
