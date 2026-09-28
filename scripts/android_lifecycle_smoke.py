@@ -301,10 +301,104 @@ def seed_save(session, save):
       localStorage.removeItem({json.dumps(RESET_KEY)});
       localStorage.setItem({json.dumps(SAVE_KEY)}, {json.dumps(payload)});
       localStorage.setItem({json.dumps(INTRO_KEY)}, String(Date.now()));
+      window.__lumenfallNativeSeedPending = true;
       return localStorage.getItem({json.dumps(SAVE_KEY)}) !== null;
     }})()"""
     if session.cdp.evaluate(expression) is not True:
         fail("failed to seed canonical save into packaged WebView localStorage")
+
+
+def persistence_snapshot(session):
+    expression = f"""(() => {{
+      const raw = localStorage.getItem({json.dumps(SAVE_KEY)});
+      const recovery = localStorage.getItem({json.dumps(RECOVERY_KEY)});
+      let parsed = null;
+      let parseError = null;
+      if(raw){{
+        try {{ parsed = JSON.parse(raw); }}
+        catch(error) {{ parseError = String(error); }}
+      }}
+      return {{
+        url: location.href,
+        origin: location.origin,
+        preReloadContext: window.__lumenfallNativeSeedPending === true,
+        hasPrimary: typeof raw === 'string' && raw.length > 0,
+        hasRecovery: typeof recovery === 'string' && recovery.length > 0,
+        parsed: parsed,
+        parseError: parseError
+      }};
+    }})()"""
+    value = session.cdp.evaluate(expression)
+    if not isinstance(value, dict):
+        fail("packaged WebView persistence probe did not return an object")
+    return value
+
+
+def wait_for_seeded_reload(package, seeded, timeout=20):
+    deadline = time.monotonic() + timeout
+    last = None
+    last_error = "no attempt"
+    while time.monotonic() < deadline:
+        session = None
+        snapshot = None
+        try:
+            session = attach_webview(package, timeout=5)
+            usable_runtime(session, timeout=5)
+            snapshot = persistence_snapshot(session)
+        except Exception as exc:
+            last_error = f"{type(exc).__name__}: {exc}"
+        finally:
+            if session:
+                session.close()
+
+        if snapshot:
+            last = snapshot
+            if snapshot.get("origin") != "https://localhost":
+                last_error = f"wrong packaged WebView origin: {snapshot.get('origin')!r}"
+            elif snapshot.get("preReloadContext"):
+                last_error = "still attached to the pre-reload JavaScript context"
+            elif not snapshot.get("hasPrimary"):
+                last_error = "canonical save key is absent after reload"
+            elif snapshot.get("parseError"):
+                fail(
+                    "canonical save became malformed after reload: "
+                    + str(snapshot.get("parseError"))
+                )
+            elif not isinstance(snapshot.get("parsed"), dict):
+                last_error = "canonical save did not parse to an object"
+            else:
+                actual = snapshot["parsed"]
+                try:
+                    assert_basic_continuity(actual, seeded)
+                except SmokeError as exc:
+                    fail(f"seeded persistence was overwritten after reload: {exc}")
+                if not snapshot.get("hasRecovery"):
+                    last_error = (
+                        "canonical primary exists, but production startup save "
+                        "has not established the recovery copy yet"
+                    )
+                else:
+                    return actual
+        time.sleep(0.4)
+
+    summary = None
+    if last:
+        parsed = last.get("parsed") if isinstance(last.get("parsed"), dict) else {}
+        summary = {
+            "url": last.get("url"),
+            "origin": last.get("origin"),
+            "preReloadContext": last.get("preReloadContext"),
+            "hasPrimary": last.get("hasPrimary"),
+            "hasRecovery": last.get("hasRecovery"),
+            "parseError": last.get("parseError"),
+            "schemaVersion": parsed.get("schemaVersion"),
+            "riftMode": parsed.get("riftMode"),
+            "depth": parsed.get("depth"),
+        }
+    fail(
+        f"timed out waiting for seeded packaged reload; "
+        f"last error={last_error}; snapshot={json.dumps(summary, sort_keys=True)}"
+    )
 
 
 def reload_seeded_save(package, seeded):
@@ -312,42 +406,21 @@ def reload_seeded_save(package, seeded):
     try:
         usable_runtime(session)
         seed_save(session, seeded)
-        # Let the packaged app consume the seeded canonical save and run its own
-        # startup save path before process death is exercised.
-        session.cdp.evaluate("setTimeout(function(){ location.reload(); }, 0); true")
+        # The seed changes storage, not the already-running in-memory game state.
+        # Issue a real CDP reload command so the packaged app must consume the
+        # canonical save through its production load/startup-save path.
+        session.cdp.command("Page.enable")
+        session.cdp.command("Page.reload", {"ignoreCache": True})
     finally:
+        # Navigation is a hard CDP invalidation boundary. Never use this
+        # WebSocket/target for post-reload assertions.
         session.close()
 
-    # Reload/navigation invalidates the DevTools target boundary. Do not keep or
-    # trust a one-shot CDP session here: rediscover the current WebView target
-    # until a fresh connection can read the canonical save.
-    actual = wait_for_state(
-        package,
-        lambda save: isinstance(save, dict),
-        "seeded canonical save after packaged reload",
-        timeout=20,
-    )
-    assert_basic_continuity(actual, seeded)
-
-    # The fixture is synthetic. Let it become an ordinary established game
-    # state by passing the production 5s autosave interval before testing
-    # Android process death. Read through the same fresh-session retry path so
-    # any target/socket rotation remains an explicit invalidation boundary.
-    time.sleep(6)
-    actual = wait_for_state(
-        package,
-        lambda save: isinstance(save, dict),
-        "seeded canonical save after autosave",
-        timeout=20,
-    )
-    assert_basic_continuity(actual, seeded)
-    wait_for_storage_string(
-        package,
-        RECOVERY_KEY,
-        "bounded recovery save after autosave",
-        timeout=20,
-    )
-    return actual
+    # A successful post-reload checkpoint requires:
+    # - a fresh JavaScript execution context,
+    # - the expected canonical primary save,
+    # - and the recovery copy written by the production startup save path.
+    return wait_for_seeded_reload(package, seeded, timeout=20)
 
 
 def read_save(session):
@@ -382,29 +455,6 @@ def wait_for_state(package, predicate, description, timeout=20):
         f"timed out waiting for {description}; "
         f"last save={json.dumps(last, sort_keys=True) if last else None}"
     )
-
-
-def wait_for_storage_string(package, key, description, timeout=20):
-    deadline = time.monotonic() + timeout
-    last_error = "no attempt"
-    while time.monotonic() < deadline:
-        session = None
-        try:
-            session = attach_webview(package, timeout=5)
-            usable_runtime(session, timeout=5)
-            value = session.cdp.evaluate(
-                f"localStorage.getItem({json.dumps(key)})"
-            )
-            if isinstance(value, str) and value:
-                return value
-            last_error = f"storage value for {key!r} was empty"
-        except Exception as exc:
-            last_error = f"{type(exc).__name__}: {exc}"
-        finally:
-            if session:
-                session.close()
-        time.sleep(0.4)
-    fail(f"timed out waiting for {description}; last error={last_error}")
 
 
 def assert_range(value, low, high, label):
