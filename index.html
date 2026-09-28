@@ -2241,7 +2241,7 @@ var RIFT_THEMES = [
 ];
 
 var SHOP = [
-  {id:'autoascend', name:'Auto-Ascend Ritual', desc:'Unlock automatic Ascension at your saved Rift target. Toggle it on or off anytime; push farther with it off, then manually Ascend to raise the target.', cost:100},
+  {id:'autoascend', name:'Auto-Ascend Ritual', desc:'Unlock automatic Ascension after your saved cleared-Rift target. Toggle it on or off anytime; push farther with it off, then manually Ascend to raise the target.', cost:100},
   {id:'offline24',  name:'Extended Rest',      desc:'Raise the offline earnings cap from 12 hours to 24 hours.', cost:140},
   {id:'offline48',  name:'Deep Rest',          desc:'Raise the offline earnings cap by another 24 hours, stacking with Extended Rest.', cost:160},
   {id:'rememberbulk',name:'Loadout Memory',    desc:'The Lab remembers your last bulk-buy multiplier between visits, instead of resetting to 1x.', cost:50}
@@ -3029,6 +3029,12 @@ function highestFarmableDepth(pushDepth){
 function progressionDepth(){
   return state.riftMode==='farm' && state.farmReturnDepth ? state.farmReturnDepth : state.depth;
 }
+function clearedProgressionRift(){
+  return Math.max(0,progressionDepth()-1);
+}
+function ascendEligible(){
+  return clearedProgressionRift()>=15;
+}
 function canFarmCurrentProgress(){
   return progressionDepth()>1;
 }
@@ -3568,15 +3574,19 @@ function defeatEnemy(){
 }
 
 var MIN_AUTO_ASCEND_RIFT = 16;
+// schema-v1 stores the legacy encounter threshold N, meaning clear N-1.
 function autoAscendTarget(){
   return Math.max(MIN_AUTO_ASCEND_RIFT, Math.floor(state.autoAscendTargetDepth||MIN_AUTO_ASCEND_RIFT));
 }
+function autoAscendClearedTarget(){
+  return Math.max(15,autoAscendTarget()-1);
+}
 function autoAscendReady(){
-  return !!(state.riftMode!=='farm' && state.owned.autoascend && state.autoAscendEnabled && state.depth >= autoAscendTarget());
+  return !!(state.riftMode!=='farm' && state.owned.autoascend && state.autoAscendEnabled && ascendEligible() && clearedProgressionRift()>=autoAscendClearedTarget());
 }
 function updateAutoAscendTargetFromProgress(){
   if(!state.owned.autoascend) return;
-  state.autoAscendTargetDepth = Math.max(autoAscendTarget(), state.maxDepthEver||1, progressionDepth()||1);
+  state.autoAscendTargetDepth = Math.max(autoAscendTarget(), clearedProgressionRift()+1);
 }
 function checkAutoAscend(){
   if(!autoAscendReady()) return false;
@@ -4082,8 +4092,8 @@ function showAscendFlash(gain,auto){
   setTimeout(function(){ if(flash.parentNode) flash.remove(); },1700);
 }
 function doAscend(auto){
-  var cleared = progressionDepth() - 1;
-  if(cleared < 15) return;
+  var cleared = clearedProgressionRift();
+  if(!ascendEligible()) return;
   if(!auto) updateAutoAscendTargetFromProgress();
   var gain = applyAscendMutation();
   checkAchievements();
@@ -4997,8 +5007,8 @@ function renderLongStudies(){
 }
 
 function renderAscendSummary(){
-  var cleared = progressionDepth() - 1;
-  var eligible = cleared >= 15;
+  var cleared = clearedProgressionRift();
+  var eligible = ascendEligible();
   var breakdown = ascendPrismBreakdown(progressionDepth());
   var gain = eligible ? breakdown.gain : 0;
   els['prism-preview'].textContent = '+' + formatNum(gain) + ' Prisms';
@@ -5080,7 +5090,7 @@ function renderAchievements(){
     var buttonHtml = '';
     if(item.id==='autoascend' && owned){
       var enabled = !!state.autoAscendEnabled;
-      extra = '<div class="desc" style="margin-top:6px;color:var(--prism);font-weight:700;">Target: Rift '+autoAscendTarget()+' — turn OFF to push farther; your next manual Ascend at a new high raises this target.</div>';
+      extra = '<div class="desc" style="margin-top:6px;color:var(--prism);font-weight:700;">Target: clear Rift '+autoAscendClearedTarget()+' — turn OFF to push farther; your next manual Ascend at a new high raises this target.</div>';
       buttonHtml = '<button data-autoascend-toggle class="'+(enabled?'owned':'')+'">'+(enabled?'ON':'OFF')+'</button>';
     } else {
       buttonHtml = '<button data-shop="'+item.id+'" class="'+(owned?'owned':'')+'" '+((owned||state.comets<item.cost)?'disabled':'')+'>' +
