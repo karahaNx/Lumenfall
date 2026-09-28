@@ -2852,7 +2852,7 @@ def build_runner():
           assert(zero.state.ascendCount===before.ascendCount,'transient arrival at target Boss must not Auto-Ascend');
           assert(zero.state.sigils===before.sigils,'unbeaten target Boss must not grant or consume Sigils');
 
-          var kill=cloneJson(base);kill.enemyHp=0;
+          var kill=cloneJson(base);kill.enemyHp=1;kill.spirits.ember=100;kill.heroResource.ember=100;
           bridge.setState(kill);
           var afterKill=bridge.simulateTimeline(0,'offline',PARITY_CLOCK_MS);
           assert(afterKill.state.ascendCount===kill.ascendCount+1,'clearing target Rift must produce exactly one Auto-Ascend');
