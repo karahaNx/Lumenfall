@@ -1,0 +1,36 @@
+name: P2-03B PR bootstrap runner
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  patch:
+    if: github.event.pull_request.head.ref == '02/p2-03b-auto-ascend-rift-integrity'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 02/p2-03b-auto-ascend-rift-integrity
+          fetch-depth: 0
+      - name: Execute scoped bootstrap
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          text=Path('.github/workflows/p2-03b-bootstrap.yml').read_text()
+          marker='        run: |\n'
+          block=text.split(marker,1)[1]
+          lines=[]
+          for line in block.splitlines():
+              if line.startswith('          '): lines.append(line[10:])
+              elif not line.strip(): lines.append('')
+              else: break
+          Path('/tmp/p2-03b-bootstrap.sh').write_text('\n'.join(lines)+'\n')
+          PY
+          bash /tmp/p2-03b-bootstrap.sh
+          git pull --ff-only origin 02/p2-03b-auto-ascend-rift-integrity
+          rm -f .github/workflows/p2-03b-pr-bootstrap.yml
+          git add .github/workflows/p2-03b-pr-bootstrap.yml
+          git commit -m "Remove temporary P2-03B bootstrap runner"
+          git push origin HEAD:02/p2-03b-auto-ascend-rift-integrity
