@@ -402,19 +402,19 @@ def force_stop_continuity(fixtures_path, package, activity):
 
     force_stop(package)
     launch(package, activity)
-    session = attach_webview(package)
-    try:
-        usable_runtime(session)
-        actual = read_save(session)
-        assert_basic_continuity(actual, seeded)
-        log(
-            "force-stop/relaunch continuity passed: "
-            f"schema={actual.get('schemaVersion')} mode={actual.get('riftMode')} "
-            f"depth={actual.get('depth')}"
-        )
-        return actual
-    finally:
-        session.close()
+    actual = wait_for_state(
+        package,
+        lambda save: isinstance(save, dict),
+        "canonical save after force-stop relaunch",
+        timeout=10,
+    )
+    assert_basic_continuity(actual, seeded)
+    log(
+        "force-stop/relaunch continuity passed: "
+        f"schema={actual.get('schemaVersion')} mode={actual.get('riftMode')} "
+        f"depth={actual.get('depth')}"
+    )
+    return actual
 
 
 def background_resume(package, activity):
@@ -455,12 +455,12 @@ def background_resume(package, activity):
 
     force_stop(package)
     launch(package, activity)
-    session = attach_webview(package)
-    try:
-        usable_runtime(session)
-        restarted = read_save(session)
-    finally:
-        session.close()
+    restarted = wait_for_state(
+        package,
+        lambda save: isinstance(save, dict),
+        "canonical save after immediate relaunch",
+        timeout=10,
+    )
 
     duplicate_delta = float(restarted.get("totalOfflineSeconds", 0)) - consumed
     if abs(duplicate_delta) > 0.01:
