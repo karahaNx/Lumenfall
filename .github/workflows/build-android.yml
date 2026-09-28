@@ -448,14 +448,13 @@ jobs:
       - name: Native Android lifecycle smoke
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 35
+          api-level: 34
           target: google_apis
           arch: x86_64
-          emulator-build: 14788078
           profile: pixel_6
           cores: 2
-          ram-size: 1536M
-          heap-size: 256M
+          ram-size: 4096M
+          heap-size: 512M
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim -camera-back none
           script: python3 scripts/android_lifecycle_smoke.py --apk Lumenfall.apk --fixtures tests/behavioral/fixtures.json --package com.lumenfall.app
