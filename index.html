@@ -350,6 +350,7 @@
   .ach-card .ach-unlock{font-size:.65rem;color:var(--prism);font-weight:600;margin-top:2px;}
   .ach-card.done .ach-unlock{color:var(--ink-dim);}
   .ach-card .reward{font-size:.72rem;color:var(--comet);font-weight:700;flex:none;}
+  .ach-progress{font-size:.7rem;color:var(--ink-dim);font-weight:700;margin-top:3px;}
   .shop-card{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
   .shop-card .info{flex:1;}
   .shop-card .name{font-weight:700;font-size:.86rem;}
@@ -1640,6 +1641,25 @@
   #rift-details .party-col{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;width:100%;}
   #rift-details .hero-chip{width:auto;min-width:0;padding:6px 2px;}
   #rift-details .wisp-portrait{width:32px;height:32px;}
+  .rift-heading-actions{display:flex;align-items:stretch;gap:4px;flex:none;}
+  .rift-study-btn{min-width:82px;min-height:44px;padding:4px 6px;border:1px solid #4f5975;border-radius:10px;background:#1c2339;color:#f0effb;font:700 11px 'Manrope',sans-serif;white-space:nowrap;}
+  .rift-study-btn span{display:block;font-size:10px;line-height:13px;font-weight:500;color:#b5c6dc;}
+  .rift-study-btn.has-open{border-color:var(--good);color:var(--good);}
+  .formation-preset-card{padding:10px;margin-bottom:10px;}
+  .formation-preset-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
+  .formation-preset-title{font-size:.82rem;font-weight:800;}
+  .formation-preset-state{font-size:11px;color:var(--ink-dim);font-weight:700;}
+  .formation-preset-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;}
+  .formation-preset-slot{display:grid;grid-template-rows:minmax(52px,auto) 44px;gap:4px;}
+  .formation-preset-btn,.formation-save-btn,.auto-empower-all{border:1px solid var(--line);border-radius:10px;background:var(--bg-elev);color:var(--ink);font:700 12px 'Manrope',sans-serif;min-width:0;}
+  .formation-preset-btn[aria-pressed="true"]{border-color:var(--lumen);background:color-mix(in srgb,var(--lumen) 12%,var(--bg-elev));}
+  .formation-preset-btn span{display:block;font-size:10px;line-height:13px;color:var(--ink-dim);font-weight:500;overflow:hidden;text-overflow:ellipsis;}
+  .formation-save-btn{font-size:11px;min-height:44px;}
+  .auto-empower-all{width:100%;min-height:44px;margin-top:8px;}
+  .lab-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 0 12px;}
+  .lab-tab{min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg-elev);color:var(--ink-dim);font:700 12px 'Manrope',sans-serif;}
+  .lab-tab.active{border-color:var(--shard);color:var(--ink);background:color-mix(in srgb,var(--shard) 12%,var(--bg-elev));}
+  .lab-panel[hidden]{display:none;}
   #rift-details .chip-label,#rift-details .chip-power{font-size:11px;line-height:16px;max-width:100%;overflow:hidden;text-overflow:ellipsis;}
   #rift-details .chip-bar-track{width:100%;max-width:40px;}
   #rift-hp-detail{font-size:13px;line-height:1.5;overflow-wrap:anywhere;}
@@ -1782,7 +1802,7 @@
   <main>
     <section class="tab-panel active" id="tab-battle">
       <div class="card stage">
-        <div class="rift-heading"><div class="depth-label" id="depth-label">Rift 1</div><button class="rift-details-btn" id="rift-details-btn" aria-haspopup="dialog">Details<span id="rift-status">Combat &amp; party</span></button></div>
+        <div class="rift-heading"><div class="depth-label" id="depth-label">Rift 1</div><div class="rift-heading-actions"><button class="rift-study-btn" id="rift-study-status">Studies 0/1<span>1 slot free</span></button><button class="rift-details-btn" id="rift-details-btn" aria-haspopup="dialog">Details<span id="rift-status">Combat &amp; party</span></button></div></div>
         <div class="rift-mode-row">
           <button class="rift-mode-btn active" id="rift-push-btn">Push</button>
           <button class="rift-mode-btn" id="rift-farm-btn">Farm</button>
@@ -1841,16 +1861,24 @@
       <div class="section-label">Your Wisps</div>
       <div class="section-sub">Up to 5 Wisps can be Active at once. Pair specific powered Wisps to activate simple Formation Bonds for Push, Farm or Boss fights.</div>
       <div class="roster-journey" id="roster-journey"></div>
+      <div id="formation-presets"></div>
       <div class="card bond-card" id="bond-card"></div>
       <div class="hero-grid" id="spirit-list"></div>
     </section>
 
     <section class="tab-panel" id="tab-research">
       <div class="section-label">The Lab</div>
-      <div class="section-sub">Permanent upgrades funded by Lumen and Shards, earned from every kill — never lost on Ascend.</div>
-      <div id="research-list"></div>
-      <div class="section-label">Long Studies</div>
-      <div id="study-list"></div>
+      <div class="lab-tabs" role="tablist" aria-label="Lab sections">
+        <button class="lab-tab active" id="lab-tab-permanent" role="tab" aria-selected="true" aria-controls="lab-panel-permanent" tabindex="0" data-lab-view="permanent">Permanent Upgrades</button>
+        <button class="lab-tab" id="lab-tab-studies" role="tab" aria-selected="false" aria-controls="lab-panel-studies" tabindex="-1" data-lab-view="studies">Long Studies</button>
+      </div>
+      <div class="lab-panel" id="lab-panel-permanent" role="tabpanel" aria-labelledby="lab-tab-permanent">
+        <div class="section-sub">Permanent upgrades funded by Lumen and Shards, earned from every kill — never lost on Ascend.</div>
+        <div id="research-list"></div>
+      </div>
+      <div class="lab-panel" id="lab-panel-studies" role="tabpanel" aria-labelledby="lab-tab-studies" hidden>
+        <div id="study-list"></div>
+      </div>
     </section>
 
     <section class="tab-panel" id="tab-ascend">
@@ -2058,6 +2086,8 @@ var FORMATION_BONDS = [
   {id:'duskguard', name:'Duskguard Bond', ids:['stone','titan'], req:'Stone + Titan', effect:'+35% passive & ability damage vs Bosses', tag:'Boss'},
   {id:'pathfinder', name:'Pathfinder Bond', ids:['gale','thorn'], req:'Gale + Thorn', effect:'+20% passive & ability damage vs non-Bosses', tag:'Push / Farm'}
 ];
+var FORMATION_PRESET_IDS = ['push','farm','boss'];
+var FORMATION_PRESET_LABELS = {push:'Push',farm:'Farm',boss:'Boss'};
 
 var RESOURCE_COLORS = {mana:'#4f8fe0', rage:'#e0524f', harmony:'#e0b34f', focus:'#4fe0c9', energy:'#7fe04f'};
 var MODULE_MAX_LEVEL = 20;
@@ -2136,6 +2166,38 @@ var ACHIEVEMENTS = [
   {id:'firstultimate', name:'Awakened Power',  reward:45, check:function(s){return SPIRITS.some(function(sp){return !!(s.wispUltimate && s.wispUltimate[sp.id]);});}},
   {id:'modulemax', name:'Perfect Synergy',     reward:45, unlocks:'Cosmetics: Radiant Rift aura', check:function(s){return SPIRITS.some(function(sp){return (s.wispModules[sp.id]||0)>=MODULE_MAX_LEVEL;});}}
 ];
+
+// Every current Deed has an authoritative counter. Completed one-time Deeds
+// display their reached target even if a later Ascend resets the underlying run.
+function deedProgress(a,s){
+  var researchLevels = function(){ return RESEARCH.reduce(function(sum,r){return sum+(s.research[r.id]||0);},0); };
+  var config = {
+    d10:[s.maxDepthEver,10],d25:[s.maxDepthEver,25],d50:[s.maxDepthEver,50],d100:[s.maxDepthEver,100],d250:[s.maxDepthEver,250],
+    tap100:[s.totalTaps,100],tap1000:[s.totalTaps,1000],tap10000:[s.totalTaps,10000],
+    fullparty:[s.activeParty.length,5],
+    asc1:[s.ascendCount,1],asc5:[s.ascendCount,5],asc10:[s.ascendCount,10],
+    all:[SPIRITS.filter(function(sp){return (s.spirits[sp.id]||0)>0;}).length,SPIRITS.length],
+    mythic:[Math.max.apply(null,SPIRITS.map(function(sp){return s.heroRarity[sp.id]||0;})),5],
+    idle8:[s.totalOfflineSeconds,8*3600],
+    autotap:[s.ascendCount,12],
+    labmaster:[researchLevels(),20],
+    study1:[totalStudyLevels(s),1],study25:[totalStudyLevels(s),25],
+    allstudies:[LONG_STUDIES.filter(function(l){return (s.longStudyLevels[l.id]||0)>=1;}).length,LONG_STUDIES.length],
+    labqueue:[researchLevels(),60],
+    firstultimate:[SPIRITS.some(function(sp){return !!(s.wispUltimate&&s.wispUltimate[sp.id]);})?1:0,1],
+    modulemax:[Math.max.apply(null,SPIRITS.map(function(sp){return (s.wispModules&&s.wispModules[sp.id])||0;})),MODULE_MAX_LEVEL]
+  };
+  var pair = config[a.id];
+  if(!pair) return null;
+  return {current:Math.max(0,Number(pair[0])||0),target:pair[1],duration:a.id==='idle8'};
+}
+function deedProgressText(a,done){
+  var progress = deedProgress(a,state);
+  if(!progress) return '';
+  var current = done ? progress.target : Math.min(progress.current,progress.target);
+  if(progress.duration) return fmtDuration(current)+' / '+fmtDuration(progress.target);
+  return formatNum(current)+' / '+formatNum(progress.target);
+}
 
 var RIFT_THEMES = [
   {id:'default', name:'Starlight',    desc:'The Rift as it always looked.', unlockAchievement:null,     accent:null},
@@ -2227,6 +2289,7 @@ function freshState(){
     riftMode:'push', farmDepth:0, farmReturnDepth:0,
     enemyDepth:0, enemyHp:0, enemyMaxHp:0, enemyIsLuminous:false,
     spirits:spirits, heroRarity:heroRarity, heroResource:heroResource, wispModules:wispModules, wispUltimate:wispUltimate, empowerQueue:empowerQueue, activeParty:['ember'],
+    formationPresets:{push:['ember'],farm:['ember'],boss:['ember']}, activeFormationPreset:'push',
     nodes:nodes, research:research, researchQueue:researchQueue,
     longStudyLevels:longStudyLevels, activeStudies:[], studyQueue:studyQueue,
     achieved:achieved, owned:owned, riftTheme:'default',
@@ -2494,6 +2557,25 @@ function normalizeCurrentSave(input){
     out.spirits.ember = Math.max(1,out.spirits.ember||0);
     out.activeParty = ['ember'];
   }
+
+  var sourcePresets = isPlainObject(source.formationPresets) ? source.formationPresets : null;
+  out.formationPresets = {};
+  FORMATION_PRESET_IDS.forEach(function(name){
+    var raw = sourcePresets && Array.isArray(sourcePresets[name]) ? sourcePresets[name] : out.activeParty;
+    var seen = {};
+    var normalized = raw.filter(function(id){
+      if(typeof id!=='string' || seen[id]) return false;
+      if(!SPIRITS.some(function(sp){return sp.id===id;})) return false;
+      seen[id]=true;
+      return true;
+    }).slice(0,5);
+    out.formationPresets[name] = normalized.length ? normalized : out.activeParty.slice();
+  });
+  var requestedPreset = FORMATION_PRESET_IDS.indexOf(source.activeFormationPreset)!==-1
+    ? source.activeFormationPreset
+    : (sourcePresets ? '' : 'push');
+  out.activeFormationPreset = requestedPreset &&
+    out.activeParty.join(',')===out.formationPresets[requestedPreset].join(',') ? requestedPreset : '';
 
   var nodes = isPlainObject(source.nodes) ? source.nodes : {};
   NODES.forEach(function(node){ out.nodes[node.id] = nonNegativeInt(nodes[node.id],fresh.nodes[node.id]); });
@@ -3520,6 +3602,7 @@ function buySpirit(sp){
   trackDaily('empowers');
   if(wasZero && state.activeParty.length<5 && state.activeParty.indexOf(sp.id)===-1){
     state.activeParty.push(sp.id);
+    state.activeFormationPreset = '';
     renderPartyFormation();
   }
   checkAchievements();
@@ -3560,9 +3643,74 @@ function toggleActive(id){
     if(state.activeParty.length>=5){ showToast('Bench a Wisp first — max 5 Active.'); return; }
     state.activeParty.push(id);
   }
+  state.activeFormationPreset = '';
+  saveState();
   renderSpirits();
   renderPartyFormation();
   updateBattleFast();
+}
+
+function formationPresetMembers(name){
+  var raw = state.formationPresets && Array.isArray(state.formationPresets[name]) ? state.formationPresets[name] : [];
+  return raw.filter(function(id,index){
+    return SPIRITS.some(function(sp){return sp.id===id;}) && raw.indexOf(id)===index;
+  }).slice(0,5);
+}
+function formationPresetUnavailable(name){
+  return formationPresetMembers(name).filter(function(id){return (state.spirits[id]||0)<=0;});
+}
+function formationPresetIsActive(name){
+  return state.activeFormationPreset===name && state.activeParty.join(',')===formationPresetMembers(name).join(',');
+}
+function applyFormationPreset(name){
+  if(FORMATION_PRESET_IDS.indexOf(name)===-1) return false;
+  var members = formationPresetMembers(name);
+  var unavailable = formationPresetUnavailable(name);
+  if(!members.length || unavailable.length){
+    if(unavailable.length){
+      var missing = unavailable.map(function(id){
+        var sp=SPIRITS.find(function(item){return item.id===id;});
+        return sp ? sp.shortName : id;
+      });
+      showToast('Recruit '+missing.join(', ')+' before using this formation.');
+    } else {
+      showToast('Save at least one Active Wisp to this formation.');
+    }
+    return false;
+  }
+  state.activeParty = members.slice();
+  state.activeFormationPreset = name;
+  saveState();
+  renderSpirits();
+  renderPartyFormation();
+  updateBattleFast();
+  showToast(FORMATION_PRESET_LABELS[name]+' formation active.');
+  return true;
+}
+function saveFormationPreset(name){
+  if(FORMATION_PRESET_IDS.indexOf(name)===-1 || !state.activeParty.length) return false;
+  if(!state.formationPresets) state.formationPresets={};
+  state.formationPresets[name] = state.activeParty.slice(0,5);
+  state.activeFormationPreset = name;
+  saveState();
+  renderSpirits();
+  showToast(FORMATION_PRESET_LABELS[name]+' formation saved.');
+  return true;
+}
+function applicableAutoEmpowerIds(){
+  return SPIRITS.filter(function(sp){return (state.spirits[sp.id]||0)>0;}).map(function(sp){return sp.id;});
+}
+function autoEmpowerAllState(){
+  var ids=applicableAutoEmpowerIds();
+  var enabled=ids.filter(function(id){return state.empowerQueue[id]!==false;}).length;
+  return {ids:ids,enabled:enabled,value:enabled===0?'off':(enabled===ids.length?'on':'mixed')};
+}
+function setAutoEmpowerAll(enabled){
+  var summary=autoEmpowerAllState();
+  summary.ids.forEach(function(id){state.empowerQueue[id]=!!enabled;});
+  saveState();
+  renderSpirits();
+  showToast('Auto-Empower All '+(enabled?'ON':'OFF')+'.');
 }
 
 function buyModule(sp){
@@ -3626,6 +3774,7 @@ function buyNode(node){
 }
 
 var labMultiplier = 1;
+var labView = 'permanent';
 var MULT_OPTIONS = [1, 5, 10, 25, 50, 100, 'max'];
 
 function geometricSum(base, growth, startLevel, count){
@@ -3721,6 +3870,19 @@ function studySlotCount(){
   if(n===6) return 3;
   if(n===7) return 4;
   return 5;
+}
+function renderRiftStudyStatus(){
+  var btn=els['rift-study-status'];
+  if(!btn) return;
+  var slots=studySlotCount();
+  var occupied=Math.min(slots,state.activeStudies.length);
+  var open=Math.max(0,slots-occupied);
+  var label='Studies '+occupied+'/'+slots;
+  var detail=open ? open+' slot'+(open===1?'':'s')+' free' : 'All slots active';
+  var markup=label+'<span>'+detail+'</span>';
+  if(btn.innerHTML!==markup) btn.innerHTML=markup;
+  btn.classList.toggle('has-open',open>0);
+  btn.setAttribute('aria-label',label+' — '+detail+'. Open Long Studies.');
 }
 function findActiveStudy(id){
   return state.activeStudies.find(function(a){ return a.id===id; });
@@ -4119,8 +4281,8 @@ function setupOverlayFocus(){
 }
 
 function cacheEls(){
-  ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','rift-push-btn','rift-farm-btn','rift-mode-note','rift-objective','enemy-name','boss-regen-tag','buff-indicator','enemy-stage','enemy-glyph',
-   'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','party-col','bond-card','bond-summary','research-list','study-list',
+  ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','rift-push-btn','rift-farm-btn','rift-mode-note','rift-objective','rift-study-status','enemy-name','boss-regen-tag','buff-indicator','enemy-stage','enemy-glyph',
+   'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','party-col','formation-presets','bond-card','bond-summary','research-list','study-list',
    'prism-preview','ascend-btn','ascend-note','node-list','ach-list','roster-journey','shop-list','theme-list','manifesto','toast',
    'daily-streak-badge','daily-quest-list','settings-overlay','settings-home','settings-encyclopedia','settings-title','settings-back','encyclopedia-content'
   ].forEach(function(id){ els[id]=document.getElementById(id); });
@@ -4252,6 +4414,7 @@ function updateBattleFast(){
   renderRiftMode();
   renderRiftObjective();
   renderBondSummary();
+  renderRiftStudyStatus();
   els['hp-fill'].style.width = Math.max(0, (state.enemyHp/state.enemyMaxHp*100)) + '%';
   els['hp-text'].textContent = formatRiftNumber(Math.max(0,state.enemyHp)) + ' / ' + formatRiftNumber(state.enemyMaxHp);
   var zone = riftZoneFor(state.depth);
@@ -4388,7 +4551,43 @@ function renderBondSummary(){
     : 'No Formation Bond active.';
   if(els['bond-summary'].textContent!==text) els['bond-summary'].textContent = text;
 }
+function renderFormationPresets(){
+  var root=els['formation-presets'];
+  if(!root) return;
+  var activeName=FORMATION_PRESET_IDS.find(formationPresetIsActive);
+  var html='<div class="card formation-preset-card">' +
+    '<div class="formation-preset-head"><div class="formation-preset-title">Formation Presets</div>' +
+    '<div class="formation-preset-state">'+(activeName ? FORMATION_PRESET_LABELS[activeName]+' active' : 'Custom formation')+'</div></div>' +
+    '<div class="formation-preset-grid">';
+  FORMATION_PRESET_IDS.forEach(function(name){
+    var members=formationPresetMembers(name);
+    var unavailable=formationPresetUnavailable(name);
+    var active=formationPresetIsActive(name);
+    var detail=unavailable.length ? 'Needs '+unavailable.length+' Wisp'+(unavailable.length===1?'':'s') : members.length+'/5 Wisps';
+    html += '<div class="formation-preset-slot">' +
+      '<button class="formation-preset-btn'+(active?' active':'')+'" data-formation-preset="'+name+'" aria-pressed="'+active+'" '+(unavailable.length||!members.length?'disabled':'')+'>'+FORMATION_PRESET_LABELS[name]+'<span>'+(active?'Active · ':'')+detail+'</span></button>' +
+      '<button class="formation-save-btn" data-save-formation="'+name+'" aria-label="Save current formation as '+FORMATION_PRESET_LABELS[name]+'">Save '+FORMATION_PRESET_LABELS[name]+'</button>' +
+    '</div>';
+  });
+  html += '</div>';
+  if(state.achieved.labmaster){
+    var global=autoEmpowerAllState();
+    var pressed=global.value==='mixed' ? 'mixed' : String(global.value==='on');
+    html += '<button class="auto-empower-all" data-empower-all aria-pressed="'+pressed+'">Auto-Empower All: '+global.value.toUpperCase()+'</button>';
+  }
+  html += '</div>';
+  replaceControlMarkup(root,html);
+  root.querySelectorAll('[data-formation-preset]').forEach(function(btn){
+    btn.addEventListener('click',function(){applyFormationPreset(btn.getAttribute('data-formation-preset'));});
+  });
+  root.querySelectorAll('[data-save-formation]').forEach(function(btn){
+    btn.addEventListener('click',function(){saveFormationPreset(btn.getAttribute('data-save-formation'));});
+  });
+  var all=root.querySelector('[data-empower-all]');
+  if(all) all.addEventListener('click',function(){setAutoEmpowerAll(autoEmpowerAllState().value!=='on');});
+}
 function renderFormationBonds(){
+  renderFormationPresets();
   if(els['bond-card']){
     var focus = currentFormationFocus();
     var rows = FORMATION_BONDS.map(function(bond){
@@ -4589,6 +4788,7 @@ function renderSpirits(){
       e.stopPropagation();
       var id = btn.getAttribute('data-empower-queue');
       state.empowerQueue[id] = state.empowerQueue[id]===false ? true : false;
+      saveState();
       renderSpirits();
     });
   });
@@ -4649,6 +4849,7 @@ function renderResearch(){
 }
 
 function renderLongStudies(){
+  renderRiftStudyStatus();
   var slots = studySlotCount();
   var openSlots = slots - state.activeStudies.length;
   var html = '<div class="section-sub" style="margin:0 2px 10px;">Run up to <strong>'+slots+'</strong> Long '+(slots===1?'Study':'Studies')+' at once — unlocking more Studies by pushing deeper raises this cap. Each completes over real time, even while you’re away, and Motes speed it up. Turn on a Study\'s Lab Queue to auto-begin it the instant a slot and the currency are both free.</div>';
@@ -4793,10 +4994,13 @@ function renderAchievements(){
   var html = '';
   ACHIEVEMENTS.forEach(function(a){
     var done = !!state.achieved[a.id];
+    var progress = deedProgress(a,state);
+    var progressCurrent = progress ? (done ? progress.target : Math.min(progress.current,progress.target)) : 0;
     html += '<div class="card ach-card '+(done?'done':'')+'" data-state="'+(done?'completed':'available')+'">' +
       '<span class="dot"></span>' +
       '<div class="info">' +
         '<div class="name">'+a.name+(done?' · Completed':'')+'</div>' +
+        '<div class="ach-progress mono" data-deed-progress="'+a.id+'" data-current="'+progressCurrent+'" data-target="'+(progress?progress.target:0)+'">'+deedProgressText(a,done)+'</div>' +
         (a.unlocks ? '<div class="ach-unlock">Unlocks: '+a.unlocks+'</div>' : '') +
       '</div>' +
       '<span class="reward mono">+'+a.reward+' '+costIcon('comet')+'</span>' +
@@ -5076,6 +5280,41 @@ function showDailyOverlay(info){
 // ---------------------------------------------------------------
 // Tabs
 // ---------------------------------------------------------------
+function setLabView(view,moveFocus){
+  labView = view==='studies' ? 'studies' : 'permanent';
+  document.querySelectorAll('[data-lab-view]').forEach(function(btn){
+    var active=btn.getAttribute('data-lab-view')===labView;
+    btn.classList.toggle('active',active);
+    btn.setAttribute('aria-selected',String(active));
+    btn.tabIndex=active?0:-1;
+    if(active && moveFocus) btn.focus({preventScroll:true});
+  });
+  document.getElementById('lab-panel-permanent').hidden=labView!=='permanent';
+  document.getElementById('lab-panel-studies').hidden=labView!=='studies';
+  var main=document.querySelector('main');
+  if(main && document.getElementById('tab-research').classList.contains('active')) main.scrollTop=0;
+}
+function setupLabTabs(){
+  var tabs=Array.from(document.querySelectorAll('[data-lab-view]'));
+  tabs.forEach(function(btn,index){
+    btn.addEventListener('click',function(){setLabView(btn.getAttribute('data-lab-view'),false);});
+    btn.addEventListener('keydown',function(e){
+      var next=index;
+      if(e.key==='ArrowRight' || e.key==='ArrowDown') next=(index+1)%tabs.length;
+      else if(e.key==='ArrowLeft' || e.key==='ArrowUp') next=(index+tabs.length-1)%tabs.length;
+      else if(e.key==='Home') next=0;
+      else if(e.key==='End') next=tabs.length-1;
+      else return;
+      e.preventDefault();
+      setLabView(tabs[next].getAttribute('data-lab-view'),true);
+    });
+  });
+  setLabView(labView,false);
+}
+function openLongStudiesFromRift(){
+  activateTab('research');
+  setLabView('studies',true);
+}
 function showSettingsView(view){
   var home = document.getElementById('settings-home');
   var encyclopedia = document.getElementById('settings-encyclopedia');
@@ -5124,7 +5363,9 @@ function activateTab(tabName){
   btn.setAttribute('aria-current','page');
   panel.classList.add('active');
   if(tabName==='spirits'){ renderFormationBonds(); renderRosterJourney(); }
+  if(tabName==='research') setLabView(labView,false);
   if(tabName==='ascend') renderAscendSummary();
+  if(tabName==='deeds') renderAchievements();
   var main = document.querySelector('main');
   if(main) main.scrollTop = 0;
   syncMainScrollMode(tabName);
@@ -6422,6 +6663,7 @@ function init(){
   var dailyRolled = ensureDaily();
   restoreEnemyOrSpawn();
   setupTabs();
+  setupLabTabs();
   setupOverlayFocus();
   syncMainScrollMode();
   setupStars();
@@ -6443,6 +6685,7 @@ function init(){
 
   document.getElementById('rift-push-btn').addEventListener('click', enterPushMode);
   document.getElementById('rift-farm-btn').addEventListener('click', enterFarmMode);
+  document.getElementById('rift-study-status').addEventListener('click',openLongStudiesFromRift);
   document.getElementById('rift-objective').addEventListener('keydown',function(e){
     if(this.getAttribute('role')==='button' && (e.key==='Enter' || e.key===' ')){
       e.preventDefault(); if(!e.repeat) this.click();
@@ -6580,5 +6823,3 @@ if(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isN
 </script>
 </body>
 </html>
-
-
