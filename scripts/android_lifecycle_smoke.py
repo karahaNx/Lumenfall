@@ -318,33 +318,36 @@ def reload_seeded_save(package, seeded):
     finally:
         session.close()
 
-    session = attach_webview(package)
-    try:
-        usable_runtime(session)
-        actual = read_save(session)
-        assert_basic_continuity(actual, seeded)
+    # Reload/navigation invalidates the DevTools target boundary. Do not keep or
+    # trust a one-shot CDP session here: rediscover the current WebView target
+    # until a fresh connection can read the canonical save.
+    actual = wait_for_state(
+        package,
+        lambda save: isinstance(save, dict),
+        "seeded canonical save after packaged reload",
+        timeout=20,
+    )
+    assert_basic_continuity(actual, seeded)
 
-        # The fixture is synthetic. Let it become an ordinary established game
-        # state by passing the production 5s autosave interval before testing
-        # Android process death. Reattach afterward because WebView/CDP sockets
-        # may rotate or close while the page reloads.
-    finally:
-        session.close()
-
+    # The fixture is synthetic. Let it become an ordinary established game
+    # state by passing the production 5s autosave interval before testing
+    # Android process death. Read through the same fresh-session retry path so
+    # any target/socket rotation remains an explicit invalidation boundary.
     time.sleep(6)
-    session = attach_webview(package)
-    try:
-        usable_runtime(session)
-        actual = read_save(session)
-        assert_basic_continuity(actual, seeded)
-        recovery_raw = session.cdp.evaluate(
-            f"localStorage.getItem({json.dumps(RECOVERY_KEY)})"
-        )
-        if not isinstance(recovery_raw, str) or not recovery_raw:
-            fail("packaged app did not establish its bounded recovery save after autosave")
-        return actual
-    finally:
-        session.close()
+    actual = wait_for_state(
+        package,
+        lambda save: isinstance(save, dict),
+        "seeded canonical save after autosave",
+        timeout=20,
+    )
+    assert_basic_continuity(actual, seeded)
+    wait_for_storage_string(
+        package,
+        RECOVERY_KEY,
+        "bounded recovery save after autosave",
+        timeout=20,
+    )
+    return actual
 
 
 def read_save(session):
@@ -379,6 +382,29 @@ def wait_for_state(package, predicate, description, timeout=20):
         f"timed out waiting for {description}; "
         f"last save={json.dumps(last, sort_keys=True) if last else None}"
     )
+
+
+def wait_for_storage_string(package, key, description, timeout=20):
+    deadline = time.monotonic() + timeout
+    last_error = "no attempt"
+    while time.monotonic() < deadline:
+        session = None
+        try:
+            session = attach_webview(package, timeout=5)
+            usable_runtime(session, timeout=5)
+            value = session.cdp.evaluate(
+                f"localStorage.getItem({json.dumps(key)})"
+            )
+            if isinstance(value, str) and value:
+                return value
+            last_error = f"storage value for {key!r} was empty"
+        except Exception as exc:
+            last_error = f"{type(exc).__name__}: {exc}"
+        finally:
+            if session:
+                session.close()
+        time.sleep(0.4)
+    fail(f"timed out waiting for {description}; last error={last_error}")
 
 
 def assert_range(value, low, high, label):
