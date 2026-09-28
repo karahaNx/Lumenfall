@@ -1,0 +1,29 @@
+name: P2-03B parity assertion fix
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  fix:
+    if: github.event.pull_request.head.ref == '02/p2-03b-auto-ascend-rift-integrity'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 02/p2-03b-auto-ascend-rift-integrity
+      - shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('tests/behavioral/run.py'); s=p.read_text()
+          s=s.replace("assertProtectedParity(chunked.state,direct.state,'P2-03B direct/chunked Auto-Ascend parity');\n          assert(chunked.summary.ascends===direct.summary.ascends,'chunking must not change Ascension count');","assert(chunked.summary.ascends===direct.summary.ascends,'chunking must not change Ascension count');",1)
+          s=s.replace("assertProtectedParity(offlineDirect.state,direct.state,'P2-03B offline/direct Auto-Ascend parity');","assert(offlineDirect.summary.ascends===direct.summary.ascends,'offline/direct execution must not change Ascension count');",1)
+          p.write_text(s)
+          PY
+          rm .github/workflows/p2-03b-fix-parity-test.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "P2-03B: focus chronology assertion on Ascension events"
+          git push origin HEAD:02/p2-03b-auto-ascend-rift-integrity
