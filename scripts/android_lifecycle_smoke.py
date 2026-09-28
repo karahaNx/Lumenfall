@@ -307,6 +307,27 @@ def seed_save(session, save):
         fail("failed to seed canonical save into packaged WebView localStorage")
 
 
+def reload_seeded_save(package, seeded):
+    session = attach_webview(package)
+    try:
+        usable_runtime(session)
+        seed_save(session, seeded)
+        # Let the packaged app consume the seeded canonical save and run its own
+        # startup save path before process death is exercised.
+        session.cdp.evaluate("setTimeout(function(){ location.reload(); }, 0); true")
+    finally:
+        session.close()
+
+    session = attach_webview(package)
+    try:
+        usable_runtime(session)
+        actual = read_save(session)
+        assert_basic_continuity(actual, seeded)
+        return actual
+    finally:
+        session.close()
+
+
 def read_save(session):
     expression = f"""(() => {{
       const raw = localStorage.getItem({json.dumps(SAVE_KEY)});
@@ -373,12 +394,11 @@ def cold_launch(apk, package, activity):
 
 def force_stop_continuity(fixtures_path, package, activity):
     seeded = load_fixture(fixtures_path, "lifecycle-basic")
-    session = attach_webview(package)
-    try:
-        usable_runtime(session)
-        seed_save(session, seeded)
-    finally:
-        session.close()
+    persisted = reload_seeded_save(package, seeded)
+    log(
+        "seeded lifecycle-basic through packaged reload: "
+        f"schema={persisted.get('schemaVersion')} mode={persisted.get('riftMode')}"
+    )
 
     force_stop(package)
     launch(package, activity)
@@ -453,12 +473,11 @@ def background_resume(package, activity):
 
 def boss_background(fixtures_path, package, activity):
     boss = load_fixture(fixtures_path, "chronology-boss-retry")
-    session = attach_webview(package)
-    try:
-        usable_runtime(session)
-        seed_save(session, boss)
-    finally:
-        session.close()
+    persisted = reload_seeded_save(package, boss)
+    log(
+        "seeded chronology-boss-retry through packaged reload: "
+        f"mode={persisted.get('riftMode')} depth={persisted.get('depth')}"
+    )
 
     force_stop(package)
     launch(package, activity)
