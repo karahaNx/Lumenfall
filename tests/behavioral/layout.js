@@ -87,6 +87,8 @@ window.runRiftLayoutQa = async function(bridge, ctx, assert){
   // Actual generated purchase markup: shared inline icons stay proportional in both Lab and Ascend.
   ['spirits','ascend'].forEach(function(tab){
     q('[data-tab="'+tab+'"]').click();
+    // Inspect disclosed progression before measuring its actual purchase icons.
+    document.querySelectorAll('#tab-'+tab+' .wisp-progression').forEach(function(el){el.open=true;});
     var icons=Array.from(document.querySelectorAll('#tab-'+tab+' .cost-icon'));
     assert(icons.length>0,tab+' cost icons exist');
     icons.forEach(function(el){var r=el.getBoundingClientRect();assert(r.width>0 && r.width<=16 && r.height<=16,tab+' nested icon sizing');});
@@ -94,6 +96,15 @@ window.runRiftLayoutQa = async function(bridge, ctx, assert){
   q('[data-tab="research"]').click();
   ['permanent','studies'].forEach(function(view){
     bridge.setLabView(view,false);
+    if(view==='studies'){
+      var slots=visible('.study-slot-summary');
+      assert(slots.top>=0 && slots.bottom<rect('nav.tabbar').top,'Study slot status is visible on Lab arrival');
+      var choose=q('[data-study-choose]');
+      if(choose) assert(choose.getBoundingClientRect().height>=44,'Study choice shortcut has a practical target');
+      assert(q('#study-list').scrollWidth<=q('#study-list').clientWidth+1,'Lab Study content does not overflow horizontally');
+      document.querySelectorAll('.study-inspection>summary').forEach(function(el){assert(el.getBoundingClientRect().height>=44,'Study inspection has a practical target');});
+    }
+    document.querySelectorAll('#lab-panel-'+view+' .study-inspection').forEach(function(el){el.open=true;});
     var icons=Array.from(document.querySelectorAll('#lab-panel-'+view+' .cost-icon'));
     assert(icons.length>0,'research '+view+' cost icons exist');
     icons.forEach(function(el){var r=el.getBoundingClientRect();assert(r.width>0 && r.width<=16 && r.height<=16,'research '+view+' nested icon sizing');});

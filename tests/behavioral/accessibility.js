@@ -247,12 +247,15 @@
     q('#settings-btn').click();
     q('#encyclopedia-btn').click();
     var rosterCards=qa('[data-wisp-card]');
-    var encyclWisps=qa('#encyclopedia-content .ency-card').slice(0,rosterCards.length);
-    var inconsistent=false;
-    rosterCards.forEach(function(card,index){
+    var encyclWisps=qa('#encyclopedia-content [data-ency-wisp]');
+    var inconsistent=encyclWisps.length!==rosterCards.length;
+    rosterCards.forEach(function(card){
       var id=card.getAttribute('data-wisp-card');
       var rosterUse=q('.wisp-portrait use',card);
-      var encyclopedia=encyclWisps[index];
+      // Active-first roster order is presentation; identity remains keyed by Wisp ID.
+      var matches=encyclWisps.filter(function(el){return el.getAttribute('data-ency-wisp')===id;});
+      if(matches.length!==1) inconsistent=true;
+      var encyclopedia=matches[0];
       var encUse=encyclopedia && q('.wisp-portrait use',encyclopedia);
       if(!rosterUse || rosterUse.getAttribute('href')!=='#wisp-'+id || !encUse || encUse.getAttribute('href')!=='#wisp-'+id){
         inconsistent=true;

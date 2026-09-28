@@ -1660,6 +1660,37 @@
   .lab-tab{min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg-elev);color:var(--ink-dim);font:700 12px 'Manrope',sans-serif;}
   .lab-tab.active{border-color:var(--shard);color:var(--ink);background:color-mix(in srgb,var(--shard) 12%,var(--bg-elev));}
   .lab-panel[hidden]{display:none;}
+  .study-slot-summary{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;}
+  .study-slot-summary strong{display:block;font-size:15px;}
+  .study-slot-summary span{display:block;font-size:12px;color:var(--ink-dim);margin-top:3px;}
+  .study-slot-summary.has-open span{color:var(--good);}
+  .study-choose-btn{min-height:44px;padding:8px 12px;border:1px solid var(--mote);border-radius:10px;background:var(--bg-elev);color:var(--ink);font:700 12px 'Manrope',sans-serif;}
+  #study-list .study-running{border-left:3px solid var(--mote);padding:10px 12px;margin-bottom:10px;}
+  #study-list .study-running .name{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;}
+  #study-list .study-time{font-size:13px;font-weight:700;color:var(--ink);margin:6px 0;}
+  .study-running-label{font-size:11px;color:var(--mote);font-weight:700;margin-bottom:4px;}
+  .study-inspection>summary{min-height:44px;padding:12px 0;font-size:12px;cursor:pointer;color:var(--ink-dim);}
+  .study-inspection .speed-row{margin-top:8px;}
+  .study-choices-title{font-size:13px;font-weight:800;margin:16px 0 8px;}
+  .study-choose-btn:focus-visible,.study-inspection>summary:focus-visible,.study-choices-title:focus-visible{outline:2px solid var(--lumen);outline-offset:2px;}
+  /* P2-02B Part 1: task order matches DOM/keyboard order. */
+  .formation-lineup{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px;}
+  .formation-member{display:flex;align-items:center;gap:3px;font-size:11px;color:var(--ink);}
+  .formation-member .wisp-portrait{width:24px;height:24px;flex:none;}
+  #tab-spirits .formation-preset-card{margin-bottom:12px;}
+  #tab-spirits .hero-grid{display:flex;flex-direction:column;gap:10px;}
+  .roster-group-label{font-size:12px;font-weight:800;color:var(--ink-dim);margin:2px 0;}
+  #tab-spirits .hero-card{margin:0;padding:12px;}
+  #tab-spirits .hero-top{margin-bottom:6px;}
+  .wisp-empower-action{width:100%;min-height:44px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;}
+  .wisp-empower-action:not(:disabled){border-color:var(--lumen);color:var(--lumen);}
+  .wisp-empower-action .control-state{width:100%;text-align:left;}
+  .wisp-progression{border-top:1px solid var(--line);margin-top:4px;}
+  .wisp-progression>summary{min-height:44px;padding:12px 0;cursor:pointer;font-size:12px;color:var(--ink-dim);font-weight:700;}
+  .wisp-progression>summary:focus-visible{outline:2px solid var(--lumen);outline-offset:2px;}
+  .formation-help{margin-top:12px;}
+  .formation-help>summary{min-height:44px;cursor:pointer;padding:12px 2px;font-size:13px;font-weight:700;}
+  .formation-help>summary:focus-visible{outline:2px solid var(--lumen);outline-offset:2px;}
   #rift-details .chip-label,#rift-details .chip-power{font-size:11px;line-height:16px;max-width:100%;overflow:hidden;text-overflow:ellipsis;}
   #rift-details .chip-bar-track{width:100%;max-width:40px;}
   #rift-hp-detail{font-size:13px;line-height:1.5;overflow-wrap:anywhere;}
@@ -1858,12 +1889,13 @@
     </section>
 
     <section class="tab-panel" id="tab-spirits">
-      <div class="section-label">Your Wisps</div>
-      <div class="section-sub">Up to 5 Wisps can be Active at once. Pair specific powered Wisps to activate simple Formation Bonds for Push, Farm or Boss fights.</div>
-      <div class="roster-journey" id="roster-journey"></div>
       <div id="formation-presets"></div>
-      <div class="card bond-card" id="bond-card"></div>
+      <details class="formation-help"><summary>Formation Bonds &amp; guidance</summary>
+        <div class="section-sub">Up to 5 Wisps can be Active at once. Pair specific powered Wisps to activate simple Formation Bonds for Push, Farm or Boss fights.</div>
+        <div class="card bond-card" id="bond-card"></div>
+      </details>
       <div class="hero-grid" id="spirit-list"></div>
+      <div class="roster-journey" id="roster-journey"></div>
     </section>
 
     <section class="tab-panel" id="tab-research">
@@ -4556,8 +4588,12 @@ function renderFormationPresets(){
   if(!root) return;
   var activeName=FORMATION_PRESET_IDS.find(formationPresetIsActive);
   var html='<div class="card formation-preset-card">' +
-    '<div class="formation-preset-head"><div class="formation-preset-title">Formation Presets</div>' +
+    '<div class="formation-preset-head"><div class="formation-preset-title">Current Formation · '+state.activeParty.length+'/5</div>' +
     '<div class="formation-preset-state">'+(activeName ? FORMATION_PRESET_LABELS[activeName]+' active' : 'Custom formation')+'</div></div>' +
+    '<div class="formation-lineup">'+state.activeParty.map(function(id){
+      var sp=SPIRITS.find(function(item){return item.id===id;});
+      return sp ? '<span class="formation-member">'+wispPortrait(sp)+sp.shortName+'</span>' : '';
+    }).join('')+'</div>' +
     '<div class="formation-preset-grid">';
   FORMATION_PRESET_IDS.forEach(function(name){
     var members=formationPresetMembers(name);
@@ -4668,10 +4704,19 @@ function pulseWispCard(id,tone){
 }
 
 function renderSpirits(){
+  var openProgression=Array.from(els['spirit-list'].querySelectorAll('details[open]')).map(function(el){return el.dataset.wispProgression;});
+  var focusedProgression=document.activeElement && document.activeElement.dataset.wispDetails;
   renderFormationBonds();
   renderRosterJourney();
   var html = '';
-  SPIRITS.forEach(function(sp){
+  // Sort a presentation-only copy; simulation and saved party order are unchanged.
+  var roster=SPIRITS.slice().sort(function(a,b){
+    return Number(state.activeParty.indexOf(b.id)!==-1)-Number(state.activeParty.indexOf(a.id)!==-1);
+  });
+  var previousGroup='';
+  roster.forEach(function(sp){
+    var group=state.activeParty.indexOf(sp.id)!==-1 ? 'Active Wisps' : 'Reserve & recruitment';
+    if(group!==previousGroup){html+='<div class="roster-group-label">'+group+'</div>';previousGroup=group;}
     var level = state.spirits[sp.id];
     var unlocked = state.maxDepthEver >= sp.unlockDepth;
     if(!unlocked){
@@ -4740,16 +4785,21 @@ function renderSpirits(){
         '<span class="rarity-badge" style="--badge-color:'+RARITY_COLORS[tier]+';">'+RARITY_NAMES[tier]+'</span>' +
         empowerHtml +
       '</div>' +
+      '<button class="mini-btn wisp-empower-action" data-empower="'+sp.id+'" '+(state.lumen<cost?'disabled':'')+'><strong>'+(recruited?'Empower':'Recruit')+'</strong><span class="mono">'+costIcon('lumen')+formatNum(cost)+'</span></button>' +
+      '<details class="wisp-progression" data-wisp-progression="'+sp.id+'" '+(openProgression.indexOf(sp.id)!==-1?'open':'')+'><summary data-wisp-details="'+sp.id+'">'+sp.shortName+' · Ability, Rarity, Module &amp; Ultimate</summary>' +
       '<div class="hero-ability"><span class="ability-label">Ability</span><strong>'+sp.abilityName+'</strong><span class="ability-desc">'+ABILITY_DESC[sp.abilityType]+'</span></div>' +
       moduleHtml +
       '<div class="hero-actions">' +
-        '<button class="mini-btn" data-empower="'+sp.id+'" '+(state.lumen<cost?'disabled':'')+'>'+(recruited?'Empower':'Recruit')+'<span style="font-size:.6875rem;">'+costIcon('lumen')+formatNum(cost)+'</span></button>' +
         '<button class="mini-btn rarity-btn" data-rarity="'+sp.id+'" '+(canRarity?'':'disabled')+'>'+rarityLabel+'</button>' +
       '</div>' +
       ultimateHtml +
-    '</div>';
+    '</details></div>';
   });
   replaceControlMarkup(els['spirit-list'],html);
+  if(focusedProgression){
+    var restoredSummary=els['spirit-list'].querySelector('[data-wisp-details="'+focusedProgression+'"]');
+    if(restoredSummary) restoredSummary.focus({preventScroll:true});
+  }
   els['spirit-list'].querySelectorAll('[data-empower]').forEach(function(btn){
     btn.addEventListener('click', function(){
       var sp = SPIRITS.find(function(s){ return s.id===btn.getAttribute('data-empower'); });
@@ -4849,25 +4899,30 @@ function renderResearch(){
 }
 
 function renderLongStudies(){
+  var openInspections=Array.from(els['study-list'].querySelectorAll('details[open]')).map(function(el){return el.dataset.studyInspection;});
+  var focusedInspection=document.activeElement && document.activeElement.dataset.studyDetails;
   renderRiftStudyStatus();
   var slots = studySlotCount();
   var openSlots = slots - state.activeStudies.length;
-  var html = '<div class="section-sub" style="margin:0 2px 10px;">Run up to <strong>'+slots+'</strong> Long '+(slots===1?'Study':'Studies')+' at once — unlocking more Studies by pushing deeper raises this cap. Each completes over real time, even while you’re away, and Motes speed it up. Turn on a Study\'s Lab Queue to auto-begin it the instant a slot and the currency are both free.</div>';
+  var html = '<div class="study-slot-summary'+(openSlots>0?' has-open':'')+'"><div><strong>Studies '+state.activeStudies.length+' / '+slots+'</strong><span>'+(openSlots>0?openSlots+' slot'+(openSlots===1?'':'s')+' available':'All slots occupied')+'</span></div>' +
+    (openSlots>0?'<button class="study-choose-btn" data-study-choose>Choose Study</button>':'')+'</div>';
 
   if(state.activeStudies.length){
-    html += '<div class="section-sub" style="margin:0 2px 8px;text-transform:uppercase;letter-spacing:.04em;font-size:.7rem;">Active ('+state.activeStudies.length+'/'+slots+')</div>';
-    state.activeStudies.forEach(function(active){
+    // Presentation-only ordering uses the simulation's remaining-work / speed relationship.
+    state.activeStudies.slice().sort(function(a,b){return a.remainingSec/a.speedMult-b.remainingSec/b.speedMult;}).forEach(function(active,index){
       var node = LONG_STUDIES.find(function(n){ return n.id===active.id; });
       var pct = Math.max(0, Math.min(100, 100-(active.remainingSec/active.totalDurationSec*100)));
       var queueOnActive = !!state.studyQueue[active.id];
-      html += '<div class="card study-card" style="margin-bottom:10px;">' +
-        '<div class="name">'+(node?node.name:'')+' <span style="color:var(--mote);">Lv.'+((state.longStudyLevels[active.id]||0)+1)+'</span>' +
+      html += '<div class="card study-card study-running" data-running-study="'+active.id+'">' +
+        '<div class="study-running-label">'+(index===0?'Next completion':'Running')+'</div>' +
+        '<div class="name"><span>'+(node?node.name:'')+' <span style="color:var(--mote);">Lv.'+((state.longStudyLevels[active.id]||0)+1)+'</span></span>' +
           ' <button class="node-queue-toggle '+(queueOnActive?'active':'')+'" data-study-queue="'+active.id+'">Queue '+(queueOnActive?'ON':'OFF')+'</button>' +
         '</div>' +
-        (node ? '<div class="desc">'+node.desc+'</div>' : '') +
+        '<div class="study-time" data-study-text="'+active.id+'">'+studyRemainingText(active)+'</div>' +
         '<div class="study-bar-track"><div class="study-bar-fill" data-study-bar="'+active.id+'" style="width:'+pct+'%;"></div></div>' +
-        '<div class="study-time" data-study-text="'+active.id+'">'+fmtDuration(Math.max(0,active.remainingSec))+' remaining at '+active.speedMult+'x</div>' +
-        '<div class="section-sub" style="margin:10px 2px 6px;">Spend Motes to speed this Study up:</div>' +
+        '<details class="study-inspection" data-study-inspection="'+active.id+'" '+(openInspections.indexOf(active.id)!==-1?'open':'')+'><summary data-study-details="'+active.id+'">'+(node?node.name:'Study')+' · Details &amp; speed</summary>' +
+        (node ? '<div class="desc">'+node.desc+'</div>' : '') +
+        '<div class="section-sub" style="margin:8px 0;">Spend Motes to speed this Study up:</div>' +
         '<div class="speed-row">' +
           LAB_SPEED_TIERS.map(function(mult){
             var mcost = speedTierCost(mult);
@@ -4878,12 +4933,12 @@ function renderLongStudies(){
               (acquired ? (isActive?' · Current':' · Unlocked') : '<span class="speed-cost">'+costIcon('mote')+formatNum(mcost)+'</span>') +
               '</button>';
           }).join('') +
-        '</div>' +
+        '</div></details>' +
       '</div>';
     });
   }
 
-  html += '<div class="section-sub" style="margin:14px 2px 8px;text-transform:uppercase;letter-spacing:.04em;font-size:.7rem;">'+(openSlots>0 ? 'Available' : 'Available — no open slots')+'</div>';
+  html += '<h3 class="study-choices-title" id="study-choices" tabindex="-1">'+(openSlots>0 ? 'Choose a Study to begin' : 'Study choices — no open slots')+'</h3>';
   LONG_STUDIES.forEach(function(lnode){
     if(findActiveStudy(lnode.id)) return;
     var unlocked = state.maxDepthEver >= (lnode.unlockDepth||1);
@@ -4909,7 +4964,17 @@ function renderLongStudies(){
     '</div>';
   });
 
+  html += '<div class="section-sub">Unlocking more Studies by pushing deeper raises the slot cap. Studies progress while you’re away. A Study’s Lab Queue begins its next level when a slot and currency are free.</div>';
   replaceControlMarkup(els['study-list'],html);
+  if(focusedInspection){
+    var restoredInspection=els['study-list'].querySelector('[data-study-details="'+focusedInspection+'"]');
+    if(restoredInspection) restoredInspection.focus({preventScroll:true});
+  }
+  var choose=els['study-list'].querySelector('[data-study-choose]');
+  if(choose) choose.addEventListener('click',function(){
+    var target=document.getElementById('study-choices');
+    target.focus({preventScroll:true});target.scrollIntoView({block:'start'});
+  });
   els['study-list'].querySelectorAll('[data-study]').forEach(function(btn){
     btn.addEventListener('click', function(){
       var lnode = LONG_STUDIES.find(function(n){ return n.id===btn.getAttribute('data-study'); });
@@ -5129,7 +5194,7 @@ function renderEncyclopedia(){
   SPIRITS.forEach(function(sp){
     var recruited = (state.spirits[sp.id]||0)>0;
     var unlocked = state.maxDepthEver>=sp.unlockDepth;
-    html += '<div class="ency-card"><div class="ency-top">' +
+    html += '<div class="ency-card" data-ency-wisp="'+sp.id+'"><div class="ency-top">' +
       wispPortrait(sp) +
       '<div class="ency-main"><div class="ency-name">'+sp.name+'</div><div class="ency-meta">'+sp.heroClass+' · '+sp.role+' · Unlock Rift '+sp.unlockDepth+'</div></div>' +
       '<span class="ency-status '+(recruited?'on':'')+'">'+(recruited?'Recruited':(unlocked?'Available':'Locked'))+'</span>' +
@@ -6364,6 +6429,9 @@ function tick(){
   checkAffordability();
 }
 
+function studyRemainingText(active){
+  return fmtDuration(Math.max(0,active.remainingSec/active.speedMult))+' remaining · '+active.speedMult+'x';
+}
 function updateStudyProgress(){
   state.activeStudies.forEach(function(active){
     var fillEl = els['study-list'].querySelector('[data-study-bar="'+active.id+'"]');
@@ -6371,7 +6439,7 @@ function updateStudyProgress(){
     if(!fillEl || !textEl) return;
     var pct = Math.max(0, Math.min(100, 100 - (active.remainingSec/active.totalDurationSec*100)));
     fillEl.style.width = pct+'%';
-    textEl.textContent = fmtDuration(Math.max(0,active.remainingSec)) + ' remaining at ' + active.speedMult + 'x';
+    textEl.textContent = studyRemainingText(active);
   });
 }
 
