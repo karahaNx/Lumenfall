@@ -66,6 +66,7 @@ SCENARIOS = {
     "lifecycle-boss-retry": "chronology-boss-retry",
     "lifecycle-auto-ascend": "chronology-auto-ascend-mid-window",
     "p2-ascend-integrity": "fresh",
+    "p2-03b-auto-ascend-integrity": "fresh",
     "p2-wisp-progression-pacing": "fresh",
     "p2-endgame-currency-utility": "fresh",
     "p2-03a-wisp-role-integrity": "accessibility-mixed-states",
@@ -387,6 +388,7 @@ window.__lumenfallQaBridge = {
   },
   enemyHpFor: function(depth){ return enemyHpFor(depth); },
   ascendBreakdown: function(depth){ return JSON.parse(JSON.stringify(ascendPrismBreakdown(depth))); },
+  ascendEligibility: function(){ return {eligible:ascendEligible(),cleared:clearedProgressionRift(),autoReady:autoAscendReady(),autoClearedTarget:autoAscendClearedTarget()}; },
   ascendManual: function(){
     var before = {prisms:state.prisms,ascendCount:state.ascendCount,benchmark:state.ascendRewardedDepth||0};
     doAscend(false);
@@ -2834,6 +2836,62 @@ def build_runner():
             manualAutoReward:manualExpected.gain,
             finalBenchmark:offlineAuto.state.ascendRewardedDepth
           });
+          return;
+        }
+
+        case 'p2-03b-auto-ascend-integrity': {
+          var base=bridge.freshStateSnapshot();
+          base.owned.autoascend=true;base.autoAscendEnabled=true;base.autoAscendTargetDepth=21;
+          base.depth=20;base.maxDepthEver=20;base.enemyDepth=20;base.enemyMaxHp=bridge.enemyHpFor(20);base.enemyHp=base.enemyMaxHp;
+          bridge.setState(base);
+          var boundary=bridge.ascendEligibility();
+          assert(boundary.cleared===19 && boundary.autoClearedTarget===20,'target 21 must authoritatively mean clear Rift 20');
+          assert(boundary.eligible===true && boundary.autoReady===false,'manual eligibility may exist before the saved Auto target, but Auto cannot fire before target clear');
+          var before=state();
+          var zero=bridge.simulate(0,'offline',0,PARITY_CLOCK_MS);
+          assert(zero.state.ascendCount===before.ascendCount,'transient arrival at target Boss must not Auto-Ascend');
+          assert(zero.state.sigils===before.sigils,'unbeaten target Boss must not grant or consume Sigils');
+
+          var kill=cloneJson(base);kill.enemyHp=1;kill.spirits.ember=100;kill.heroResource.ember=100;
+          bridge.setState(kill);
+          var afterKill=bridge.simulateTimeline(0,'offline',PARITY_CLOCK_MS);
+          assert(afterKill.state.ascendCount===kill.ascendCount+1,'clearing target Rift must produce exactly one Auto-Ascend');
+          assert(afterKill.state.depth===1,'Auto-Ascend must reset to Rift 1');
+          assert(afterKill.summary.ascends===1,'one qualifying clear must produce one Ascension event');
+          assert(afterKill.state.sigils===kill.sigils+2,'target Boss Sigils must be awarded before Ascension reset');
+          assert(bridge.ascendEligibility().autoReady===false,'post-Ascension reset cannot remain eligible from stale progress');
+
+          var stale=cloneJson(afterKill.state);stale.maxDepthEver=99;stale.depth=1;stale.enemyDepth=1;stale.enemyMaxHp=bridge.enemyHpFor(1);stale.enemyHp=stale.enemyMaxHp;
+          bridge.setState(stale);
+          assert(bridge.ascendEligibility().eligible===false && bridge.ascendEligibility().autoReady===false,'historical maxDepthEver must not prove current-run eligibility');
+          bridge.save();
+          var saved=JSON.parse(bridge.rawSave());bridge.setState(saved);
+          assert(bridge.ascendEligibility().autoReady===false,'save/load must not recreate consumed Auto eligibility');
+
+          var farm=cloneJson(base);farm.depth=19;farm.riftMode='farm';farm.farmDepth=19;farm.farmReturnDepth=21;farm.enemyDepth=19;farm.enemyMaxHp=bridge.enemyHpFor(19);farm.enemyHp=farm.enemyMaxHp;
+          bridge.setState(farm);
+          var farmEligibility=bridge.ascendEligibility();
+          assert(farmEligibility.cleared===20 && farmEligibility.eligible===true && farmEligibility.autoReady===false,'Farm may preserve cleared Push progress but cannot trigger Auto-Ascend');
+          bridge.enterPush();
+          assert(bridge.ascendEligibility().autoReady===true,'returning to Push may use the same legitimate cleared target without inventing progress');
+
+          var parity=cloneJson(base);parity.depth=19;parity.maxDepthEver=20;parity.enemyDepth=19;parity.enemyMaxHp=bridge.enemyHpFor(19);parity.enemyHp=1;parity.spirits.ember=100;
+          bridge.setState(parity);var direct=bridge.simulate(120,'offline',120,PARITY_CLOCK_MS);
+          bridge.setState(parity);var chunked=bridge.simulate(120,'offline',1,PARITY_CLOCK_MS);
+          assert(chunked.summary.ascends===direct.summary.ascends,'chunking must not change Ascension count');
+          bridge.setState(parity);var offlineDirect=bridge.simulateOfflineDirect(120,PARITY_CLOCK_MS);
+          assert(offlineDirect.summary.ascends===direct.summary.ascends,'offline/direct execution must not change Ascension count');
+
+          var manual=cloneJson(base);manual.autoAscendEnabled=false;manual.depth=16;manual.maxDepthEver=16;manual.enemyDepth=16;manual.enemyMaxHp=bridge.enemyHpFor(16);manual.enemyHp=manual.enemyMaxHp;
+          bridge.setState(manual);var manualEligibility=bridge.ascendEligibility();
+          assert(manualEligibility.eligible===true,'15 legitimately cleared Rifts must satisfy shared Ascension eligibility');
+          var rewardBefore=bridge.ascendBreakdown(16).gain;var manualResult=bridge.ascendManual();
+          assert(manualResult.gain===rewardBefore,'P2-03B must not change Ascension reward magnitude');
+          var ineligible=cloneJson(manual);ineligible.depth=15;ineligible.maxDepthEver=15;ineligible.enemyDepth=15;ineligible.enemyMaxHp=bridge.enemyHpFor(15);ineligible.enemyHp=ineligible.enemyMaxHp;ineligible.autoAscendEnabled=true;ineligible.autoAscendTargetDepth=16;
+          bridge.setState(ineligible);
+          assert(bridge.ascendEligibility().eligible===false && bridge.ascendEligibility().autoReady===false,'Auto cannot bypass shared manual eligibility below 15 cleared Rifts');
+
+          finish('pass',{targetClearedRift:20,bossRewardBeforeAscend:true,singleEvent:true,postResetSafe:true,saveLoadSafe:true,farmSafe:true,directChunkedAscends:direct.summary.ascends,manualReward:manualResult.gain});
           return;
         }
 
