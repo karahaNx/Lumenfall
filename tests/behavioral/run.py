@@ -70,6 +70,7 @@ SCENARIOS = {
     "p2-endgame-currency-utility": "fresh",
     "p2-02a-core-qol": "accessibility-mixed-states",
     "p2-02b-wisp-hierarchy": "accessibility-mixed-states",
+    "p2-02b-lab-hierarchy": "accessibility-mixed-states",
     "lifecycle-long-study": "chronology-study-mid-window",
     "lifecycle-lab-queue": "chronology-research-mid-window",
     "lifecycle-daily-rollover": "lifecycle-daily",
@@ -2320,6 +2321,48 @@ def build_runner():
           window.P105AccessibilityQa.negativeFocusReturn(assert);
           finish('pass',{unexpected:'focus-return regression was not detected'});
           return;
+
+        case 'p2-02b-lab-hierarchy': {
+          var labState=cloneJson(state());
+          labState.maxDepthEver=45;labState.autoAscendEnabled=false;
+          labState.lumen=1e30;labState.shards=1e30;
+          var labJobs=[
+            {id:'wispascend',remainingSec:600,totalDurationSec:2000,speedMult:1},
+            {id:'shardstudy',remainingSec:700,totalDurationSec:2000,speedMult:2},
+            {id:'guardmastery',remainingSec:800,totalDurationSec:2000,speedMult:1}
+          ];
+          [0,2,3].forEach(function(count){
+            labState.activeStudies=labJobs.slice(0,count);
+            bridge.setState(labState);bridge.renderLayout();
+            var beforeLab=JSON.stringify(state());
+            document.querySelector('[data-tab="battle"]').click();
+            document.getElementById('rift-study-status').click();
+            assert(document.activeElement===document.getElementById('lab-tab-studies'),'Rift arrival focuses Long Studies tab');
+            var status=document.querySelector('.study-slot-summary');
+            assert(status===document.getElementById('study-list').firstElementChild,'occupancy leads Study content');
+            assert(status.textContent.indexOf('Studies '+count+' / 3')!==-1,'slot occupancy uses authoritative count');
+            assert(status.textContent.indexOf(count===3?'All slots occupied':(3-count)+' slot'+(count===2?'':'s')+' available')!==-1,'free/full slot text is explicit');
+            var running=Array.from(document.querySelectorAll('[data-running-study]'));
+            assert(running.length===count,'every active Study remains visible');
+            if(count){
+              assert(running[0].dataset.runningStudy==='shardstudy','next completion accounts for speed, without mutating queue order');
+              assert(running[0].querySelector('[data-study-text]').textContent==='5m remaining · 2x','remaining display uses authoritative work divided by speed and existing duration precision');
+              var inspect=running[0].querySelector('details'),summary=inspect.querySelector('summary');
+              assert(!inspect.open,'secondary speed controls begin collapsed');
+              summary.focus();summary.click();bridge.renderLayout();
+              inspect=document.querySelector('[data-study-inspection="shardstudy"]');
+              assert(inspect.open && document.activeElement===inspect.querySelector('summary'),'inspection preserves open state and focus through rendering');
+              assert(inspect.querySelectorAll('[data-speed-study]').length>0 && inspect.querySelector('.desc'),'speed controls and effect information stay reachable');
+              inspect.open=false;
+            }
+            var choose=document.querySelector('[data-study-choose]');
+            assert(!!choose===(count<3),'choose action is offered when a slot is free');
+            if(choose){choose.click();assert(document.activeElement===document.getElementById('study-choices'),'choose action moves focus to existing choices');}
+            if(count===3) assert(Array.from(document.querySelectorAll('[data-study]')).every(function(btn){return btn.disabled;}),'full slots preserve disabled start controls');
+            assert(JSON.stringify(state())===beforeLab,'Lab inspection/navigation must not mutate gameplay');
+          });
+          finish('pass',{occupancy:[0,2,3],nextCompletion:'shardstudy',focus:true,stateUnchanged:true});return;
+        }
 
         case 'p2-02b-wisp-hierarchy': {
           var beforeHierarchy=JSON.stringify(state());

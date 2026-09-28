@@ -96,6 +96,7 @@ window.runRiftLayoutQa = async function(bridge, ctx, assert){
   q('[data-tab="research"]').click();
   ['permanent','studies'].forEach(function(view){
     bridge.setLabView(view,false);
+    document.querySelectorAll('#lab-panel-'+view+' .study-inspection').forEach(function(el){el.open=true;});
     var icons=Array.from(document.querySelectorAll('#lab-panel-'+view+' .cost-icon'));
     assert(icons.length>0,'research '+view+' cost icons exist');
     icons.forEach(function(el){var r=el.getBoundingClientRect();assert(r.width>0 && r.width<=16 && r.height<=16,'research '+view+' nested icon sizing');});
