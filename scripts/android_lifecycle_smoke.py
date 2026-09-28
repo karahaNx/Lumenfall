@@ -541,6 +541,7 @@ def read_save(session):
 def wait_for_state(package, predicate, description, timeout=20):
     deadline = time.monotonic() + timeout
     last = None
+    last_error = "no attempt"
     while time.monotonic() < deadline:
         session = None
         try:
@@ -549,15 +550,19 @@ def wait_for_state(package, predicate, description, timeout=20):
             last = read_save(session)
             if predicate(last):
                 return last
-        except Exception:
-            pass
+            last_error = "save was readable but did not satisfy the expected state predicate"
+        except Exception as exc:
+            last_error = f"{type(exc).__name__}: {exc}"
         finally:
             if session:
                 session.close()
         time.sleep(0.4)
+    diagnostics = collect_attach_diagnostics(package, last_error)
     fail(
         f"timed out waiting for {description}; "
-        f"last save={json.dumps(last, sort_keys=True) if last else None}"
+        f"last error={last_error}; "
+        f"last save={json.dumps(last, sort_keys=True) if last else None}; "
+        f"diagnostics={json.dumps(diagnostics, sort_keys=True)}"
     )
 
 
@@ -617,12 +622,12 @@ def force_stop_continuity(fixtures_path, package, activity):
 
 
 def background_resume(package, activity):
-    session = attach_webview(package)
-    try:
-        usable_runtime(session)
-        before = read_save(session)
-    finally:
-        session.close()
+    before = wait_for_state(
+        package,
+        lambda save: isinstance(save, dict),
+        "canonical save before native background",
+        timeout=10,
+    )
 
     before_offline = float(before.get("totalOfflineSeconds", 0))
     before_last_seen = float(before.get("lastSeen", 0))
