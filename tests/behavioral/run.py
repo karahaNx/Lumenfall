@@ -2374,7 +2374,17 @@ def build_runner():
           assert(stoneRole.coefficient===4 && stoneRole.moduleEffect20==='+100% ability burst damage','Breaker must retain the former Tank 4x heavy-hit + Module mechanics exactly');
           assert(galeRole.coefficient===3 && galeRole.rewardKind==='shards','Shard Utility must be a 3x hit plus Shard generation');
           assert(thornRole.coefficient===3 && thornRole.rewardKind==='lumen','Lumen Utility must be a 3x hit plus Lumen generation');
-          assert(tideRole.coefficient===0 && tideRole.supportProfile.strength===1.25 && tideRole.supportProfile.durationMs===4000,'Amplifier must remain a real temporary combat buff instead of direct ability damage');
+          assert(tideRole.coefficient===0 && tideRole.abilityType==='support','Amplifier must remain a real temporary combat buff instead of direct ability damage');
+          var amplifierBase=cleanFormulaState(['tide']);
+          amplifierBase.spirits.tide=10;
+          amplifierBase.wispUltimate.tide=false;
+          var tideBaseFormula=formulaSnapshotFor(amplifierBase,'tide',19,1);
+          assert(tideBaseFormula.supportProfile.strength===1.25 && tideBaseFormula.supportProfile.durationMs===4000,'Amplifier base buff must remain +25% for 4s');
+          var amplifierUltimate=cloneJson(amplifierBase);
+          amplifierUltimate.heroRarity.tide=5;
+          amplifierUltimate.wispUltimate.tide=true;
+          var tideUltFormula=formulaSnapshotFor(amplifierUltimate,'tide',19,1);
+          assert(tideUltFormula.supportProfile.strength===1.5 && tideUltFormula.supportProfile.durationMs===8000,'Amplifier Ultimate must remain +50% for 8s');
 
           var breakerBase=cleanFormulaState(['stone']);
           breakerBase.spirits.stone=10;
