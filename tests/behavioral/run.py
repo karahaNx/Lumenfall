@@ -67,6 +67,7 @@ SCENARIOS = {
     "lifecycle-auto-ascend": "chronology-auto-ascend-mid-window",
     "p2-ascend-integrity": "fresh",
     "p2-wisp-progression-pacing": "fresh",
+    "p2-endgame-currency-utility": "fresh",
     "lifecycle-long-study": "chronology-study-mid-window",
     "lifecycle-lab-queue": "chronology-research-mid-window",
     "lifecycle-daily-rollover": "lifecycle-daily",
@@ -88,6 +89,7 @@ NEGATIVE_SCENARIOS = {
     "self-test-lifecycle-duplicate": "lifecycle-basic",
     "self-test-wisp-formula-regression": "fresh",
     "self-test-wisp-pacing-regression": "fresh",
+    "self-test-endgame-currency-regression": "fresh",
 }
 
 
@@ -393,6 +395,36 @@ window.__lumenfallQaBridge = {
     };
   },
   bossRetreatGraceSec: function(){ return OFFLINE_BOSS_RETREAT_GRACE_SEC; },
+  endgameEconomyContract: function(){
+    var restStopTotal=SHOP.reduce(function(sum,item){return sum+item.cost;},0);
+    var deedTotal=ACHIEVEMENTS.reduce(function(sum,item){return sum+item.reward;},0);
+    var sigilsThrough220=0;
+    for(var depth=10;depth<=220;depth+=10) sigilsThrough220+=sigilsFromBoss(depth);
+    return {
+      ultimateSigilTotal:totalUltimateSigilCost(),
+      restStopCometTotal:restStopTotal,
+      deedCometTotal:deedTotal,
+      sigilsThroughRift220:sigilsThrough220,
+      sigilResonanceCost:SIGIL_RESONANCE_COST,
+      sigilResonanceRunLimit:SIGIL_RESONANCE_RUN_LIMIT,
+      questRefreshCost:dailyQuestRefreshCost(),
+      maxQuestCometReward:maxDailyQuestCometReward(),
+      allUltimatesOwned:allUltimatesOwned(),
+      restStopComplete:restStopComplete()
+    };
+  },
+  resonateFor: function(id){
+    var sp=SPIRITS.find(function(item){return item.id===id;});
+    if(!sp) throw new Error('Unknown Wisp '+id);
+    var before={sigils:state.sigils,uses:state.sigilResonanceUses||0,resource:state.heroResource[id]||0};
+    var ok=useSigilResonance(sp);
+    return {ok:ok,before:before,state:JSON.parse(JSON.stringify(state))};
+  },
+  refreshQuest: function(id){
+    var before={comets:state.comets,refreshes:state.dailyQuestRefreshes||0,questIds:(state.questIds||[]).slice()};
+    var ok=refreshDailyQuest(id);
+    return {ok:ok,before:before,state:JSON.parse(JSON.stringify(state))};
+  },
   wispPacingContract: function(id){
     var sp = SPIRITS.find(function(item){ return item.id===id; });
     if(!sp) throw new Error('Unknown Wisp '+id);
@@ -1201,8 +1233,11 @@ def build_runner():
           assert(s.wispModules.ember===20 && s.wispModules.void===20 && s.wispModules.titan===9,'existing Module progression must not be reduced by future costs');
           assert(s.research.focus===24 && s.longStudyLevels.wispascend===9,'mature Lab progression must load intact');
           assert(s.owned.autoascend===true && s.autoAscendEnabled===true,'mature automation flags must load intact');
+          assert(s.comets===850 && s.sigils===210,'existing mature Comet/Sigil balances must load intact');
+          assert(s.owned.autoascend && s.owned.offline24 && s.owned.offline48 && s.owned.rememberbulk,'all existing Rest Stop purchases must remain owned');
+          assert(s.sigilResonanceUses===0 && s.dailyQuestRefreshes===0,'older schema-v1 saves must safely default new utility counters to zero');
           assert(s.ascendRewardedDepth===0,'existing schema-v1 saves without a benchmark must safely default to 0');
-          finish('pass',{depth:s.depth,maxDepthEver:s.maxDepthEver,ascendRewardedDepth:s.ascendRewardedDepth});
+          finish('pass',{depth:s.depth,maxDepthEver:s.maxDepthEver,comets:s.comets,sigils:s.sigils,ascendRewardedDepth:s.ascendRewardedDepth});
           return;
 
         case 'legacy-load':
@@ -2429,6 +2464,114 @@ def build_runner():
           return;
         }
 
+        case 'p2-endgame-currency-utility': {
+          var economy=bridge.endgameEconomyContract();
+          assert(economy.ultimateSigilTotal===250,'all current Wisp Ultimates must retain the documented 250-Sigil total');
+          assert(economy.sigilsThroughRift220===253,'first-clear boss sequence through Rift 220 must yield 253 Sigils before repeated runs');
+          assert(economy.restStopCometTotal===450,'the four finite Rest Stop purchases must total 450 Comets');
+          assert(economy.deedCometTotal===683,'current one-time Deeds must total 683 Comets');
+          assert(economy.questRefreshCost>=economy.maxQuestCometReward,'Daily Quest Refresh must never be cheaper than the richest Comet quest reward');
+          assert(economy.sigilResonanceCost===25 && economy.sigilResonanceRunLimit===3,'Sigil Resonance must remain fixed at 25 Sigils and 3 uses per Ascension run');
+
+          var ids=['ember','tide','stone','gale','thorn','void','aurora','titan'];
+          function endgameState(){
+            var e=cloneJson(state());
+            e.depth=1;e.maxDepthEver=250;e.riftMode='push';e.farmDepth=0;e.farmReturnDepth=0;
+            e.enemyDepth=1;e.enemyHp=1;e.enemyMaxHp=1;e.enemyIsLuminous=false;
+            e.sigils=1000000;e.comets=1000000;e.sigilResonanceUses=0;e.dailyQuestRefreshes=0;
+            e.owned={autoascend:true,offline24:true,offline48:true,rememberbulk:true};
+            e.autoAscendEnabled=false;
+            e.activeParty=['ember','tide','stone','gale','thorn'];
+            ids.forEach(function(id){
+              e.spirits[id]=1;
+              e.heroRarity[id]=5;
+              e.heroResource[id]=0;
+              e.wispUltimate[id]=true;
+            });
+            e.questDay=bridge.currentDay();
+            e.questIds=['q_tap_small','q_kill_small','q_empower'];
+            e.questClaimed={};
+            e.dailyStats={taps:0,kills:0,empowers:0,research:0,bossKills:0,luminousKills:0,ascends:0};
+            return e;
+          }
+
+          var endgame=bridge.setState(endgameState());
+          var postCap=bridge.endgameEconomyContract();
+          assert(postCap.allUltimatesOwned===true,'Sigil utility must unlock after every existing Ultimate is owned');
+          assert(postCap.restStopComplete===true,'Comet refresh must unlock after all four Rest Stop purchases are owned');
+
+          var resonance1=bridge.resonateFor('ember');
+          assert(resonance1.ok===true,'Sigils must have a valid post-Ultimate Resonance spend');
+          assert(resonance1.state.sigils===endgame.sigils-economy.sigilResonanceCost,'Resonance must spend exactly its Sigil cost');
+          assert(resonance1.state.sigilResonanceUses===1 && resonance1.state.heroResource.ember===100,'Resonance must ready exactly the selected Active Wisp ability');
+          assert(ids.every(function(id){return resonance1.state.wispUltimate[id]===true;}),'spending post-cap Sigils must preserve every earned Ultimate');
+
+          var resonatedSnapshot=cloneJson(resonance1.state);
+          bridge.setState(resonatedSnapshot);
+          var liveAfterResonance=bridge.simulate(1,'live',0.1,PARITY_CLOCK_MS);
+          bridge.setState(resonatedSnapshot);
+          var offlineAfterResonance=bridge.simulate(1,'offline',0.1,PARITY_CLOCK_MS);
+          assert(
+            liveAfterResonance.state.sigils===resonatedSnapshot.sigils+(liveAfterResonance.summary.sigilsGained||0) &&
+            offlineAfterResonance.state.sigils===resonatedSnapshot.sigils+(offlineAfterResonance.summary.sigilsGained||0),
+            'authoritative live/offline simulation may earn Boss Sigils but must never auto-spend Resonance Sigils'
+          );
+          assert(liveAfterResonance.state.sigilResonanceUses===1 && offlineAfterResonance.state.sigilResonanceUses===1,'live/offline simulation must preserve the same run-bounded Resonance counter');
+          assert(ids.every(function(id){return liveAfterResonance.state.wispUltimate[id] && offlineAfterResonance.state.wispUltimate[id];}),'live/offline continuation must preserve all Ultimates after a Resonance spend');
+
+          var bounded=cloneJson(resonance1.state);
+          bounded.heroResource.tide=0;
+          bridge.setState(bounded);
+          assert(bridge.resonateFor('tide').ok===true,'second Resonance use must remain available');
+          bounded=cloneJson(state());bounded.heroResource.stone=0;bridge.setState(bounded);
+          assert(bridge.resonateFor('stone').ok===true,'third Resonance use must remain available');
+          bounded=cloneJson(state());bounded.heroResource.ember=0;bridge.setState(bounded);
+          var beforeFourth=state();
+          var fourth=bridge.resonateFor('ember');
+          assert(fourth.ok===false,'fourth Resonance in the same Ascension run must be rejected');
+          assert(fourth.state.sigils===beforeFourth.sigils && fourth.state.sigilResonanceUses===3,'run cap must prevent further Sigil spending or hidden power');
+
+          var ascendReset=cloneJson(fourth.state);
+          ascendReset.depth=101;ascendReset.maxDepthEver=Math.max(ascendReset.maxDepthEver,101);
+          ascendReset.enemyDepth=101;ascendReset.enemyHp=1;ascendReset.enemyMaxHp=1;ascendReset.ascendRewardedDepth=100;
+          bridge.setState(ascendReset);
+          bridge.ascendManual();
+          assert(state().sigilResonanceUses===0,'manual Ascend must reset the run-bounded Resonance allowance');
+          assert(ids.every(function(id){return state().wispUltimate[id]===true;}),'Ascension must still preserve every Ultimate');
+
+          var refreshBase=endgameState();
+          bridge.setState(refreshBase);
+          var refresh1=bridge.refreshQuest('q_tap_small');
+          assert(refresh1.ok===true,'Comets must have a valid post-Rest-Stop Daily Quest Refresh spend');
+          assert(refresh1.state.comets===refreshBase.comets-economy.questRefreshCost,'Quest Refresh must spend exactly its Comet cost');
+          assert(refresh1.state.questIds.length===3 && refresh1.state.questIds[0]!=='q_tap_small','Quest Refresh must replace one quest without adding extra quest slots');
+          assert(refresh1.state.dailyQuestRefreshes===1,'Quest Refresh count must persist deterministically');
+          assert(refresh1.state.owned.autoascend && refresh1.state.owned.offline24 && refresh1.state.owned.offline48 && refresh1.state.owned.rememberbulk,'refreshing a quest must not invalidate any finite Rest Stop purchase');
+
+          bridge.setState(refreshBase);
+          var refresh2=bridge.refreshQuest('q_tap_small');
+          assert(refresh2.ok===true && refresh2.state.questIds[0]===refresh1.state.questIds[0],'identical save/date/slot must choose the same deterministic replacement quest');
+
+          var large=endgameState();
+          large.sigils=987654321;
+          large.comets=876543210;
+          var largeAccepted=bridge.setState(large);
+          assert(largeAccepted.sigils===987654321 && largeAccepted.comets===876543210,'large existing Sigil/Comet balances must remain valid and uncapped');
+
+          finish('pass',{
+            ultimateSigilTotal:economy.ultimateSigilTotal,
+            sigilsThroughRift220:economy.sigilsThroughRift220,
+            restStopCometTotal:economy.restStopCometTotal,
+            deedCometTotal:economy.deedCometTotal,
+            resonanceCost:economy.sigilResonanceCost,
+            resonanceRunLimit:economy.sigilResonanceRunLimit,
+            questRefreshCost:economy.questRefreshCost,
+            maxQuestReward:economy.maxQuestCometReward,
+            deterministicReplacement:refresh1.state.questIds[0]
+          });
+          return;
+        }
+
         case 'self-test-bad-assertion':
           assert(s.depth===999999,'intentional harness self-test assertion');
           finish('pass');
@@ -2504,6 +2647,16 @@ def build_runner():
             'intentional Wisp pacing regression: Mythic cost compression was not detected'
           );
           finish('pass',{unexpected:'Wisp pacing regression was not detected'});
+          return;
+        }
+
+        case 'self-test-endgame-currency-regression': {
+          var unsafeEconomy=bridge.endgameEconomyContract();
+          assert(
+            unsafeEconomy.sigilResonanceRunLimit>100 || unsafeEconomy.questRefreshCost<unsafeEconomy.maxQuestCometReward,
+            'intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
           return;
         }
 
