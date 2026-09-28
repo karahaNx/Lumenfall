@@ -279,10 +279,11 @@ class Cdp:
 
 
 class WebViewSession:
-    def __init__(self, cdp, port, socket_name):
+    def __init__(self, cdp, port, socket_name, target_url):
         self.cdp = cdp
         self.port = port
         self.socket_name = socket_name
+        self.target_url = target_url
 
     def close(self):
         self.cdp.close()
@@ -324,7 +325,7 @@ def attach_webview(package, timeout=35):
             cdp = Cdp(local_ws_url(target["webSocketDebuggerUrl"], port))
             cdp.command("Runtime.enable")
             attached = True
-            return WebViewSession(cdp, port, socket_name)
+            return WebViewSession(cdp, port, socket_name, target.get("url"))
         except Exception as exc:
             detail = (
                 f"socket={socket_name} attach failed: "
@@ -354,6 +355,7 @@ def usable_runtime(session, timeout=30):
       url: location.href
     }))()"""
     last = None
+    last_error = None
     while time.monotonic() < deadline:
         try:
             last = session.cdp.evaluate(expression)
@@ -366,10 +368,14 @@ def usable_runtime(session, timeout=30):
                 and last.get("native")
             ):
                 return last
-        except Exception:
-            pass
+        except Exception as exc:
+            last_error = f"{type(exc).__name__}: {exc}"
         time.sleep(0.4)
-    fail(f"packaged app did not reach usable native WebView DOM: {last}")
+    fail(
+        "packaged app did not reach usable native WebView DOM; "
+        f"last result={json.dumps(last, sort_keys=True) if last is not None else None}; "
+        f"last Runtime/CDP error={last_error}"
+    )
 
 
 def materialize(value, now_ms=None):
@@ -590,7 +596,21 @@ def cold_launch(apk, package, activity):
     launch(package, activity)
     session = attach_webview(package)
     try:
-        runtime = usable_runtime(session)
+        try:
+            runtime = usable_runtime(session)
+        except SmokeError as exc:
+            diagnostics = collect_attach_diagnostics(package, str(exc))
+            diagnostics.update(
+                {
+                    "currentCdpTargetUrl": session.target_url,
+                    "currentWebViewSocket": session.socket_name,
+                    "lastSuccessfulCheckpoint": "packaged WebView attached; Runtime.enable succeeded",
+                }
+            )
+            fail(
+                "cold-launch usability checkpoint failed; "
+                f"diagnostics={json.dumps(diagnostics, sort_keys=True)}"
+            )
         log(f"cold launch usable: {runtime.get('url')}")
     finally:
         session.close()
