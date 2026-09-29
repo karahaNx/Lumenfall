@@ -278,7 +278,7 @@
   .node-info .lvl{font-size:.68rem;font-weight:700;margin-top:2px;}
   .locked-node{opacity:1;}
 
-  /* ---------- Lab: bulk buy + Long Studies ---------- */
+  /* ---------- Forge bulk buy + Lab Projects ---------- */
   .mult-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
   .mult-btn{
     flex:1;min-width:38px;padding:6px 4px;border-radius:8px;
@@ -946,14 +946,14 @@
     box-shadow:0 0 22px -15px var(--sigil);
   }
 
-  /* Lab */
-  #tab-research .node-card{
+  /* Forge */
+  #tab-forge .node-card{
     border-left:3px solid color-mix(in srgb,var(--shard) 70%,transparent);
     background:
       radial-gradient(circle at 100% 0%,color-mix(in srgb,var(--shard) 6%,transparent),transparent 35%),
       linear-gradient(145deg,color-mix(in srgb,var(--bg-elev-2) 92%,transparent),color-mix(in srgb,var(--bg-elev) 96%,transparent));
   }
-  #tab-research .node-card .shape{filter:drop-shadow(0 0 8px color-mix(in srgb,var(--shard) 42%,transparent));}
+  #tab-forge .node-card .shape{filter:drop-shadow(0 0 8px color-mix(in srgb,var(--shard) 42%,transparent));}
   .node-info .name,.study-card .name{font-weight:850;}
   .node-queue-toggle{
     min-height:24px;border-color:var(--soft-line);
@@ -1615,7 +1615,7 @@
   .hud .chip .glyph-icon{width:11px;height:11px;}
   .hud .chip .lbl{font-size:10px;line-height:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .hud .chip .val{grid-column:1/-1;font-size:12px;line-height:14px;min-width:0;}
-  nav.tabbar button{height:var(--nav-height);min-height:var(--nav-height);padding:4px 2px;}
+  nav.tabbar button{min-width:44px;height:var(--nav-height);min-height:var(--nav-height);padding:4px 2px;}
   nav.tabbar .lb{font-size:10px;}
   main.rift-scroll-locked{padding:6px 10px;}
   #tab-battle .stage{padding:8px 10px;gap:4px!important;}
@@ -1668,10 +1668,6 @@
   .formation-preset-btn span{display:block;font-size:10px;line-height:13px;color:var(--ink-dim);font-weight:500;overflow:hidden;text-overflow:ellipsis;}
   .formation-save-btn{font-size:11px;min-height:44px;}
   .auto-empower-all{width:100%;min-height:44px;margin-top:8px;}
-  .lab-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 0 12px;}
-  .lab-tab{min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg-elev);color:var(--ink-dim);font:700 12px 'Manrope',sans-serif;}
-  .lab-tab.active{border-color:var(--shard);color:var(--ink);background:color-mix(in srgb,var(--shard) 12%,var(--bg-elev));}
-  .lab-panel[hidden]{display:none;}
   .study-slot-summary{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;}
   .study-slot-summary strong{display:block;font-size:15px;}
   .study-slot-summary span{display:block;font-size:12px;color:var(--ink-dim);margin-top:3px;}
@@ -1834,9 +1830,10 @@
       <div class="chip"><span class="shape shape-star glyph-icon" style="background:var(--comet)"></span><span class="lbl">Comets</span><span class="val mono" id="hud-comet">0</span></div>
       <div class="chip"><span class="shape shape-octagon glyph-icon" style="background:var(--sigil)"></span><span class="lbl">Sigils</span><span class="val mono" id="hud-sigil">0</span></div>
     </header>
-    <nav class="tabbar">
+    <nav class="tabbar" aria-label="Main navigation">
       <button class="tab-btn active" data-tab="battle"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 20V11a6 8 0 0 1 12 0v9M3 21h18M9 20v-8a3 4 0 0 1 6 0v8M12 3V1"/></svg><span class="lb">Rift</span></button>
       <button class="tab-btn" data-tab="spirits"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c0 6-8 9-7 14a7 7 0 0 0 14 0c1-4-3-7-4-9l-3 6M9 16l3 4 3-4"/></svg><span class="lb">Wisps</span></button>
+      <button class="tab-btn" data-tab="forge"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="m4 3 7 1 5 5-4 4-5-5-3-1ZM12 13l7 8 3-3-8-7M3 21h8"/></svg><span class="lb">Forge</span></button>
       <button class="tab-btn" data-tab="research"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 2h6M10 2v7L4 19a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3L14 9V2M7 16h10M11 13h.01M14 19h.01"/></svg><span class="lb">Lab</span></button>
       <button class="tab-btn" data-tab="ascend"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 10-8 10-8-10Z M12 2v20M4 12h16M12 7l4 5-4 5-4-5Z"/></svg><span class="lb">Ascend</span></button>
       <button class="tab-btn" data-tab="deeds"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8v8a4 4 0 0 1-8 0ZM8 5H3v3a5 5 0 0 0 5 5M16 5h5v3a5 5 0 0 1-5 5M12 15v5M7 22h10M9 20h6"/></svg><span class="lb">Deeds</span></button>
@@ -1947,19 +1944,16 @@
       <div class="roster-journey" id="roster-journey"></div>
     </section>
 
+    <section class="tab-panel" id="tab-forge">
+      <h2 class="section-label">Rift Forge</h2>
+      <div class="section-sub">Instant upgrades with permanent bonuses — never lost on Ascend.</div>
+      <div id="research-list"></div>
+    </section>
+
     <section class="tab-panel" id="tab-research">
-      <div class="section-label">The Lab</div>
-      <div class="lab-tabs" role="tablist" aria-label="Lab sections">
-        <button class="lab-tab active" id="lab-tab-permanent" role="tab" aria-selected="true" aria-controls="lab-panel-permanent" tabindex="0" data-lab-view="permanent">Permanent Upgrades</button>
-        <button class="lab-tab" id="lab-tab-studies" role="tab" aria-selected="false" aria-controls="lab-panel-studies" tabindex="-1" data-lab-view="studies">Long Studies</button>
-      </div>
-      <div class="lab-panel" id="lab-panel-permanent" role="tabpanel" aria-labelledby="lab-tab-permanent">
-        <div class="section-sub">Permanent upgrades funded by Lumen and Shards, earned from every kill — never lost on Ascend.</div>
-        <div id="research-list"></div>
-      </div>
-      <div class="lab-panel" id="lab-panel-studies" role="tabpanel" aria-labelledby="lab-tab-studies" hidden>
-        <div id="study-list"></div>
-      </div>
+      <h2 class="section-label">Research Lab</h2>
+      <div class="section-sub">Research Projects take time and grant permanent bonuses — progress continues while you’re away.</div>
+      <div id="study-list"></div>
     </section>
 
     <section class="tab-panel" id="tab-ascend">
@@ -1968,7 +1962,7 @@
         <div style="font-size:.8rem;color:var(--ink-dim);width:100%;text-align:left;">Your first Ascend sets a Prism reward benchmark. Repeating at the same depth earns a 20% reserve reward; pushing beyond the benchmark adds the newly earned depth bonus. Ascending still resets the current run while permanent progression stays.</div>
         <div class="ascend-breakdown">
           <div class="ab-col ab-reset"><div class="ab-head">Resets</div><ul><li>Rift depth</li><li>Wisp levels</li><li>Current Lumen</li></ul></div>
-          <div class="ab-col ab-keep"><div class="ab-head">Keeps</div><ul><li>Wisp Rarity, Modules &amp; Ultimates</li><li>Lab research</li><li>Long Study progress</li><li>Prisms &amp; this tree</li><li>Comets, Motes, Sigils &amp; Deeds</li></ul></div>
+          <div class="ab-col ab-keep"><div class="ab-head">Keeps</div><ul><li>Wisp Rarity, Modules &amp; Ultimates</li><li>Rift Forge upgrades</li><li>Research Lab progress</li><li>Prisms &amp; this tree</li><li>Comets, Motes, Sigils &amp; Deeds</li></ul></div>
         </div>
         <div class="prism-preview mono" id="prism-preview">+0 Prisms</div>
         <button class="big-btn" id="ascend-btn">Ascend</button>
@@ -2057,7 +2051,7 @@
           <button class="reset-btn" id="reset-btn">Reset Save</button>
         </div>
         <div class="reset-confirm-row" id="reset-confirm-row" style="display:none;">
-          <div class="reset-warning">This permanently deletes every Wisp, Rarity tier, Lab research, Long Study, Prism, Motes, Comet and Deed. This cannot be undone.</div>
+          <div class="reset-warning">This permanently deletes every Wisp, Rarity tier, Rift Forge upgrade, Research Project, Prism, Motes, Comet and Deed. This cannot be undone.</div>
           <div class="reset-confirm-actions">
             <button class="mini-btn" id="reset-cancel-btn">Cancel</button>
             <button class="reset-btn" id="reset-confirm-btn">Yes, delete everything</button>
@@ -2239,7 +2233,7 @@ var ACHIEVEMENTS = [
   {id:'mythic',name:'Raise a Wisp to Mythic', reward:40, check:function(s){return SPIRITS.some(function(sp){return (s.heroRarity[sp.id]||0)>=5;});}},
   {id:'idle8', name:'Rest 8 hours offline', reward:15, check:function(s){return s.totalOfflineSeconds>=8*3600;}},
   {id:'autotap',   name:'Tireless Vigil',      reward:25, unlocks:'Auto-Tap — your Guardian strikes on its own, once a second', check:function(s){return s.ascendCount>=12;}},
-  {id:'labmaster', name:'The Lab Never Sleeps', reward:30, unlocks:'Auto-Empower — spare Lumen levels up your party for you, live or while you\'re offline', check:function(s){return RESEARCH.reduce(function(sum,r){return sum+(s.research[r.id]||0);},0)>=20;}},
+  {id:'labmaster', name:'The Forge Never Sleeps', reward:30, unlocks:'Auto-Empower — spare Lumen levels up your party for you, live or while you\'re offline', check:function(s){return RESEARCH.reduce(function(sum,r){return sum+(s.research[r.id]||0);},0)>=20;}},
   {id:'study1',    name:'First Discovery',     reward:15, check:function(s){return totalStudyLevels(s)>=1;}},
   {id:'study25',   name:'Devoted Scholar',     reward:50, check:function(s){return totalStudyLevels(s)>=25;}},
   {id:'allstudies',name:'Every Path Studied',  reward:35, check:function(s){return LONG_STUDIES.every(function(l){return (s.longStudyLevels[l.id]||0)>=1;});}},
@@ -2293,16 +2287,16 @@ var SHOP = [
   {id:'autoascend', name:'Auto-Ascend Ritual', desc:'Unlock automatic Ascension after your saved cleared-Rift target. Toggle it on or off anytime; push farther with it off, then manually Ascend to raise the target.', cost:100},
   {id:'offline24',  name:'Extended Rest',      desc:'Raise the offline earnings cap from 12 hours to 24 hours.', cost:140},
   {id:'offline48',  name:'Deep Rest',          desc:'Raise the offline earnings cap by another 24 hours, stacking with Extended Rest.', cost:160},
-  {id:'rememberbulk',name:'Loadout Memory',    desc:'The Lab remembers your last bulk-buy multiplier between visits, instead of resetting to 1x.', cost:50}
+  {id:'rememberbulk',name:'Loadout Memory',    desc:'The Rift Forge remembers your last bulk-buy multiplier between visits, instead of resetting to 1x.', cost:50}
 ];
 
 var MANIFESTO = [
   {eyebrow:'Our promise', title:'No pay-to-win, ever', body:'Lumenfall has nothing to buy with real money — every currency, from Lumen to Sigils, is earned by playing. Every upgrade you see is something you can reach yourself.'},
-  {eyebrow:'The "zone 80 wall"', title:'Progress never fully stalls', body:'Many idle RPGs stretch their upgrade paths thin enough that progress plateaus for days at a time. Every Ascend here guarantees Prisms the moment you qualify, and Rarity plus Lab research never get wiped — so a reset is always a net gain.'},
+  {eyebrow:'The "zone 80 wall"', title:'Progress never fully stalls', body:'Many idle RPGs stretch their upgrade paths thin enough that progress plateaus for days at a time. Every Ascend here guarantees Prisms the moment you qualify, and Rarity plus Rift Forge upgrades never get wiped — so a reset is always a net gain.'},
   {eyebrow:'"Present every few minutes"', title:'Actually idle', body:'Some idle games expect hours of daily babysitting or you hit a hard stop. Your Wisps keep fighting while you’re away, with generous, transparent offline earnings shown the moment you return.'},
   {eyebrow:'"24 heroes at once"', title:'A roster that unfolds', body:'Wisps unlock gradually as you go deeper, instead of dumping a full cast on a brand-new player.'},
-  {eyebrow:'Gear rarity RNG', title:'No loot boxes, no gacha', body:'Every upgrade — leveling, Rarity, Lab research — is a visible, deterministic purchase, and even a Luminous enemy always drops the same fixed amount of Motes. What you see is what you get, never a random range.'},
-  {eyebrow:'What actually makes an idle RPG feel like one', title:'A real party, with real roles', body:'Up to five Wisps — each with a class, a resource bar, and an active ability — fight beside your Guardian. Their Rarity tier and Lab investment matter, not just one flat number going up.'},
+  {eyebrow:'Gear rarity RNG', title:'No loot boxes, no gacha', body:'Every upgrade — leveling, Rarity, Rift Forge upgrades — is a visible, deterministic purchase, and even a Luminous enemy always drops the same fixed amount of Motes. What you see is what you get, never a random range.'},
+  {eyebrow:'What actually makes an idle RPG feel like one', title:'A real party, with real roles', body:'Up to five Wisps — each with a class, a resource bar, and an active ability — fight beside your Guardian. Their Rarity tier and Forge investment matter, not just one flat number going up.'},
   {eyebrow:'Real taps only', title:'Autoclickers earn nothing extra', body:'Manual tapping is capped to what a genuinely fast human can do, and only real touch or click input counts toward damage — a script mashing the Rift in the background gets no more than your Wisps were already earning on their own.'}
 ];
 
@@ -2312,7 +2306,7 @@ var QUEST_POOL = [
   {id:'q_kill_small', metric:'kills',         name:'Clear the Rift',      desc:'Defeat enemies',          goal:40,  reward:{comets:10}},
   {id:'q_kill_big',   metric:'kills',         name:'Deep Delve',          desc:'Defeat enemies',          goal:120, reward:{comets:18}},
   {id:'q_empower',    metric:'empowers',      name:'Grow Stronger',       desc:'Empower your Wisps',      goal:15,  reward:{comets:10}},
-  {id:'q_research',   metric:'research',      name:'Fund the Lab',        desc:'Buy Lab research levels', goal:5,   reward:{comets:10}},
+  {id:'q_research',   metric:'research',      name:'Fund the Forge',      desc:'Buy Rift Forge upgrade levels', goal:5,   reward:{comets:10}},
   {id:'q_boss',       metric:'bossKills',     name:'Boss Slayer',         desc:'Defeat a Rift boss',      goal:1,   reward:{comets:20}},
   {id:'q_luminous',   metric:'luminousKills', name:'Chase the Light',     desc:'Defeat a Luminous enemy', goal:1,   reward:{comets:15}},
   {id:'q_ascend',     metric:'ascends',       name:'Begin Again',         desc:'Ascend the Rift',         goal:1,   reward:{comets:25}}
@@ -3920,7 +3914,6 @@ function buyNode(node){
 }
 
 var labMultiplier = 1;
-var labView = 'permanent';
 var MULT_OPTIONS = [1, 5, 10, 25, 50, 100, 'max'];
 
 function geometricSum(base, growth, startLevel, count){
@@ -4028,7 +4021,7 @@ function renderRiftStudyStatus(){
   var markup=label+'<span>'+detail+'</span>';
   if(btn.innerHTML!==markup) btn.innerHTML=markup;
   btn.classList.toggle('has-open',open>0);
-  btn.setAttribute('aria-label',label+' — '+detail+'. Open Long Studies.');
+  btn.setAttribute('aria-label',label+' — '+detail+'. Open Research Lab.');
 }
 function findActiveStudy(id){
   return state.activeStudies.find(function(a){ return a.id===id; });
@@ -4289,7 +4282,7 @@ function presentControlStates(root){
       if(queueAttr==='study-queue') subject=LONG_STUDIES.find(function(n){return n.id===id;}).name;
       if(queueAttr==='autoascend-toggle') subject='Auto-Ascend';
     }
-    if(btn.hasAttribute('data-mult')){btn.setAttribute('aria-pressed',String(btn.classList.contains('active')));subject='Lab multiplier';}
+    if(btn.hasAttribute('data-mult')){btn.setAttribute('aria-pressed',String(btn.classList.contains('active')));subject='Forge multiplier';}
     if(btn.hasAttribute('data-speed-study')){
       var study=findActiveStudy(btn.getAttribute('data-speed-study'));
       var mult=Number(btn.getAttribute('data-speed'));
@@ -4648,7 +4641,7 @@ function showToast(msg){
 var TUTORIAL_STEPS = [
   {title:'Fight & grow', body:'Wisps fight automatically. Tap the Rift as your Guardian for extra damage, then spend Lumen to Empower the Wisps you want in your Active party.'},
   {title:'Build for the wall', body:'Formation Bonds reward different Wisp pairs for Push, Farm and Boss fights. If a Boss stops you, Farm your best cleared Rift and return stronger.'},
-  {title:'Ascend forever', body:'After enough progress you can Ascend for Prisms. Wisp Rarity, Modules, Ultimates, Lab research, Long Studies and other permanent systems stay with you — even while offline.'}
+  {title:'Ascend forever', body:'After enough progress you can Ascend for Prisms. Wisp Rarity, Modules, Ultimates, Rift Forge upgrades, Research Lab progress and other permanent systems stay with you — even while offline.'}
 ];
 
 function showTutorial(onComplete){
@@ -4967,7 +4960,7 @@ function renderSpirits(){
 }
 
 function renderResearch(){
-  var multHtml = '<div class="section-sub" style="margin:0 2px 10px;">Each node has its own Lab Queue toggle — turn it on and that node auto-researches the next affordable level on its own.</div>' +
+  var multHtml = '<div class="section-sub" style="margin:0 2px 10px;">Each upgrade has its own Forge Queue toggle — turn it on to buy its next affordable level automatically.</div>' +
     '<div class="mult-row" id="mult-row">' + MULT_OPTIONS.map(function(m){
     var label = m==='max' ? 'Max' : m+'x';
     var active = labMultiplier===m;
@@ -4991,7 +4984,7 @@ function renderResearch(){
       '<button class="buy-btn" data-research="'+node.id+'" '+(plan.affordable?'':'disabled')+' style="min-width:94px;">' +
         (node.lumenBase ? '<span class="cost mono">'+costIcon('lumen')+formatNum(plan.cost.lumen)+'</span>' : '') +
         (node.shardBase ? '<span class="cost mono">'+costIcon('shard')+formatNum(plan.cost.shard)+'</span>' : '') +
-        '<span class="label">Research &times;'+plan.count+'</span>' +
+        '<span class="label">Upgrade &times;'+plan.count+'</span>' +
       '</button>' +
     '</div>';
   });
@@ -5259,9 +5252,9 @@ function renderCosmetics(){
 }
 
 var CURRENCIES = [
-  {name:'Lumen', shape:'shape-triangle', color:'var(--lumen)', desc:'Earned from every kill. Spend it to recruit and empower Wisps, and to fund most of the Lab.'},
-  {name:'Shards', shape:'shape-hex', color:'var(--shard)', desc:'Also earned from every kill, in smaller amounts. Spend it to raise a Wisp’s Rarity tier and to fund the rest of the Lab.'},
-  {name:'Motes', shape:'shape-pentagon', color:'var(--mote)', desc:'Dropped only by rare Luminous enemies in the Rift, always a fixed amount. Spend it to speed up your active Long Study in the Lab.'},
+  {name:'Lumen', shape:'shape-triangle', color:'var(--lumen)', desc:'Earned from every kill. Spend it to recruit and empower Wisps, and to fund Rift Forge upgrades and Research Lab projects.'},
+  {name:'Shards', shape:'shape-hex', color:'var(--shard)', desc:'Also earned from every kill, in smaller amounts. Spend it to raise a Wisp’s Rarity tier and to fund Rift Forge upgrades and Research Lab projects.'},
+  {name:'Motes', shape:'shape-pentagon', color:'var(--mote)', desc:'Dropped only by rare Luminous enemies in the Rift, always a fixed amount. Spend it to speed up your active Research Project in the Research Lab.'},
   {name:'Prisms', shape:'shape-diamond', color:'var(--prism)', desc:'Earned only by Ascending — the deeper you clear first, the more you get. Spend it on the permanent Ascension Tree.'},
   {name:'Comets', shape:'shape-star', color:'var(--comet)', desc:'Earned from Deeds, Daily Quests and login streaks. Spend them on Rest Stop convenience; after all four purchases, they can refresh unclaimed Daily Quests without granting power.'},
   {name:'Sigils', shape:'shape-octagon', color:'var(--sigil)', desc:'Dropped by Rift bosses. First unlock Mythic Wisp Ultimates; after every Ultimate is owned, spend 25 to ready one Active Wisp ability, up to 3 times per Ascension run.'}
@@ -5467,40 +5460,9 @@ function showDailyOverlay(info){
 // ---------------------------------------------------------------
 // Tabs
 // ---------------------------------------------------------------
-function setLabView(view,moveFocus){
-  labView = view==='studies' ? 'studies' : 'permanent';
-  document.querySelectorAll('[data-lab-view]').forEach(function(btn){
-    var active=btn.getAttribute('data-lab-view')===labView;
-    btn.classList.toggle('active',active);
-    btn.setAttribute('aria-selected',String(active));
-    btn.tabIndex=active?0:-1;
-    if(active && moveFocus) btn.focus({preventScroll:true});
-  });
-  document.getElementById('lab-panel-permanent').hidden=labView!=='permanent';
-  document.getElementById('lab-panel-studies').hidden=labView!=='studies';
-  var main=document.querySelector('main');
-  if(main && document.getElementById('tab-research').classList.contains('active')) main.scrollTop=0;
-}
-function setupLabTabs(){
-  var tabs=Array.from(document.querySelectorAll('[data-lab-view]'));
-  tabs.forEach(function(btn,index){
-    btn.addEventListener('click',function(){setLabView(btn.getAttribute('data-lab-view'),false);});
-    btn.addEventListener('keydown',function(e){
-      var next=index;
-      if(e.key==='ArrowRight' || e.key==='ArrowDown') next=(index+1)%tabs.length;
-      else if(e.key==='ArrowLeft' || e.key==='ArrowUp') next=(index+tabs.length-1)%tabs.length;
-      else if(e.key==='Home') next=0;
-      else if(e.key==='End') next=tabs.length-1;
-      else return;
-      e.preventDefault();
-      setLabView(tabs[next].getAttribute('data-lab-view'),true);
-    });
-  });
-  setLabView(labView,false);
-}
 function openLongStudiesFromRift(){
   activateTab('research');
-  setLabView('studies',true);
+  document.querySelector('.tab-btn[data-tab="research"]').focus({preventScroll:true});
 }
 function showSettingsView(view){
   var home = document.getElementById('settings-home');
@@ -5550,7 +5512,8 @@ function activateTab(tabName){
   btn.setAttribute('aria-current','page');
   panel.classList.add('active');
   if(tabName==='spirits'){ renderFormationBonds(); renderRosterJourney(); }
-  if(tabName==='research') setLabView(labView,false);
+  if(tabName==='forge') renderResearch();
+  if(tabName==='research') renderLongStudies();
   if(tabName==='ascend') renderAscendSummary();
   if(tabName==='deeds') renderAchievements();
   var main = document.querySelector('main');
@@ -5558,11 +5521,25 @@ function activateTab(tabName){
   syncMainScrollMode(tabName);
 }
 function setupTabs(){
-  document.querySelectorAll('.tab-btn').forEach(function(btn){
+  var tabs=Array.from(document.querySelectorAll('.tab-btn'));
+  tabs.forEach(function(btn,index){
+    btn.id='nav-'+btn.getAttribute('data-tab');
+    document.getElementById('tab-'+btn.getAttribute('data-tab')).setAttribute('aria-labelledby',btn.id);
     btn.setAttribute('aria-current',btn.classList.contains('active') ? 'page' : 'false');
     btn.setAttribute('aria-controls','tab-'+btn.getAttribute('data-tab'));
     btn.addEventListener('click', function(){
       activateTab(btn.getAttribute('data-tab'));
+    });
+    btn.addEventListener('keydown',function(e){
+      var next=index;
+      if(e.key==='ArrowRight') next=(index+1)%tabs.length;
+      else if(e.key==='ArrowLeft') next=(index+tabs.length-1)%tabs.length;
+      else if(e.key==='Home') next=0;
+      else if(e.key==='End') next=tabs.length-1;
+      else return;
+      e.preventDefault();
+      tabs[next].focus({preventScroll:true});
+      activateTab(tabs[next].getAttribute('data-tab'));
     });
   });
 }
@@ -6920,7 +6897,6 @@ function init(){
   var dailyRolled = ensureDaily();
   restoreEnemyOrSpawn();
   setupTabs();
-  setupLabTabs();
   setupOverlayFocus();
   syncMainScrollMode();
   setupStars();

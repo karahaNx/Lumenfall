@@ -17,6 +17,8 @@ ROOT = Path(__file__).resolve().parent
 FIXTURES_PATH = ROOT / "fixtures.json"
 
 SCENARIOS = {
+    "r3-destinations": "fresh",
+    "r3-save-reload": "fresh",
     "research-duration": "fresh",
     "research-duration-reduced-motion": "fresh",
     "p2-07a-persistence-review": "fresh",
@@ -102,6 +104,7 @@ SCENARIOS = {
 PREP_SCENARIOS = {}
 
 NEGATIVE_SCENARIOS = {
+    "self-test-r3-shortcut": "fresh",
     "self-test-research-duration-days": "fresh",
     "self-test-research-duration-seconds": "fresh",
     "self-test-layout-collapse": "layout-dense-boss",
@@ -473,6 +476,16 @@ window.__lumenfallQaBridge = {
       return function(){if(kind==='intent') normalizeFormationRebuild=original;else reconcileFormationRebuild=original;};
     }
   },
+  r3: {
+    catalogues: function(){return {upgrades:RESEARCH.map(function(n){return n.id;}),projects:LONG_STUDIES.map(function(n){return n.id;})};},
+    plan: function(id){return getResearchBuyPlan(RESEARCH.find(function(n){return n.id===id;}));},
+    project: function(id){var n=LONG_STUDIES.find(function(n){return n.id===id;});return {duration:studyDuration(n,state.longStudyLevels[id]||0),cost:studyCost(n,state.longStudyLevels[id]||0)};},
+    wrongShortcut: function(){
+      var original=activateTab;
+      activateTab=function(name){original(name==='research'?'forge':name);};
+      return function(){activateTab=original;};
+    }
+  },
   studyPresentation: {
     format: function(sec){ return fmtStudyDuration(sec); },
     remaining: function(active){ return studyRemainingText(active); },
@@ -691,7 +704,6 @@ window.__lumenfallQaBridge = {
   applyFormationPreset: function(name){ return applyFormationPreset(name); },
   saveFormationPreset: function(name){ return saveFormationPreset(name); },
   activeBondIds: function(){ return activeFormationBonds().map(function(bond){return bond.id;}); },
-  setLabView: function(view,focus){ setLabView(view,!!focus); return labView; },
   autoEmpowerAll: function(enabled){ setAutoEmpowerAll(!!enabled); return JSON.parse(JSON.stringify(state.empowerQueue)); },
   simulate: function(seconds,kind,chunkSec,startMs){
     var begin = performance.now();
@@ -1474,6 +1486,19 @@ def build_runner():
           assertJsonEqual(JSON.parse(bridge.rawRecovery()).formationRebuild,expected.formationRebuild,'recovery intent');
           finish('pass',{intent:state().formationRebuild,active:state().activeParty});return;
         }
+        case 'r3-destinations':
+        case 'self-test-r3-shortcut':
+          bridge.freeze();
+          finish('pass',window.runR3DestinationsQa(bridge,ctx,assert));return;
+        case 'r3-save-reload':
+          bridge.freeze();bridge.resetFeedback();
+          if(phase()===0){
+            window.prepareR3Reload(bridge,ctx,assert);
+            bridge.feedbackSave();
+            localStorage.setItem('r3-expected',bridge.rawSave());
+            nextPhase(1);bridge.suppressUnloadSave();location.reload();return;
+          }
+          finish('pass',window.checkR3Reload(bridge,ctx,assert,JSON.parse(localStorage.getItem('r3-expected'))));return;
         case 'research-duration':
         case 'research-duration-reduced-motion':
         case 'self-test-research-duration-days':
@@ -2766,7 +2791,7 @@ def build_runner():
             var beforeLab=JSON.stringify(state());
             document.querySelector('[data-tab="battle"]').click();
             document.getElementById('rift-study-status').click();
-            assert(document.activeElement===document.getElementById('lab-tab-studies'),'Rift arrival focuses Long Studies tab');
+            assert(document.activeElement===document.querySelector('[data-tab="research"]'),'Rift arrival focuses Long Studies tab');
             var status=document.querySelector('.study-slot-summary');
             assert(status===document.getElementById('study-list').firstElementChild,'occupancy leads Study content');
             assert(status.textContent.indexOf('Studies '+count+' / 3')!==-1,'slot occupancy uses authoritative count');
@@ -2892,27 +2917,27 @@ def build_runner():
           studyStatus.focus();
           studyStatus.click();
           assert(document.getElementById('tab-research').classList.contains('active'),'Rift Study action must open the Lab');
-          assert(document.getElementById('lab-tab-studies').getAttribute('aria-selected')==='true' && !document.getElementById('lab-panel-studies').hidden,'Rift Study action must open Long Studies directly');
-          assert(document.activeElement===document.getElementById('lab-tab-studies'),'direct Rift to Long Studies navigation must move focus predictably');
+          assert(document.querySelector('[data-tab="research"]').getAttribute('aria-current')==='page' && document.getElementById('study-list').closest('.tab-panel').id==='tab-research','Rift Study action must open Long Studies directly');
+          assert(document.activeElement===document.querySelector('[data-tab="research"]'),'direct Rift to Long Studies navigation must move focus predictably');
 
           var beforeTabs=state();
           var gameplayBeforeTabs=JSON.stringify({research:beforeTabs.research,activeStudies:beforeTabs.activeStudies,studyQueue:beforeTabs.studyQueue,lumen:beforeTabs.lumen,shards:beforeTabs.shards});
-          document.getElementById('lab-tab-permanent').click();
-          document.getElementById('lab-tab-studies').click();
+          document.querySelector('[data-tab="forge"]').click();
+          document.querySelector('[data-tab="research"]').click();
           var afterTabs=state();
           assert(JSON.stringify({research:afterTabs.research,activeStudies:afterTabs.activeStudies,studyQueue:afterTabs.studyQueue,lumen:afterTabs.lumen,shards:afterTabs.shards})===gameplayBeforeTabs,'Lab tab switching must not mutate gameplay state');
-          document.getElementById('lab-tab-permanent').focus();
-          document.getElementById('lab-tab-permanent').dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));
-          assert(document.activeElement===document.getElementById('lab-tab-studies') && document.getElementById('lab-tab-studies').getAttribute('aria-selected')==='true','Lab tabs must support arrow-key selection and focus');
+          document.querySelector('[data-tab="forge"]').focus();
+          document.querySelector('[data-tab="forge"]').dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));
+          assert(document.activeElement===document.querySelector('[data-tab="research"]') && document.querySelector('[data-tab="research"]').getAttribute('aria-current')==='page','main destinations must support arrow-key selection and focus');
 
-          bridge.setLabView('permanent',false);
+          document.querySelector('[data-tab="forge"]').click();
           var beforeResearch=state();
           var beforeResearchLevel=beforeResearch.research.focus;
           var studiesBeforeResearch=JSON.stringify(beforeResearch.activeStudies);
           var researchButton=document.querySelector('[data-research="focus"]');
           assert(researchButton && !researchButton.disabled,'funded Permanent Research action must remain available');
           researchButton.click();
-          assert(state().research.focus>beforeResearchLevel,'Permanent Upgrades tab must preserve Research purchasing');
+          assert(state().research.focus>beforeResearchLevel,'Forge destination must preserve upgrade purchasing');
           assert(JSON.stringify(state().activeStudies)===studiesBeforeResearch,'Permanent Research must not disturb Long Studies');
 
           var studyState=cloneJson(state());
@@ -2922,7 +2947,7 @@ def build_runner():
           studyState.shards=1e12;
           bridge.setState(studyState);
           bridge.renderLayout();
-          bridge.setLabView('studies',false);
+          document.querySelector('[data-tab="research"]').click();
           var researchBeforeStudy=JSON.stringify(state().research);
           var beginStudy=document.querySelector('[data-study="guardmastery"]');
           assert(beginStudy && !beginStudy.disabled,'funded Long Study action must remain available');
@@ -2973,15 +2998,15 @@ def build_runner():
           });
           document.querySelector('[data-tab="research"]').click();
           document.getElementById('tab-research').getAnimations().forEach(function(animation){animation.finish();});
-          Array.from(document.querySelectorAll('[role="tab"]')).forEach(function(tab){
-            assert(tab.getBoundingClientRect().height>=44,'Lab tabs must retain practical touch targets');
+          Array.from(document.querySelectorAll('nav.tabbar .tab-btn')).forEach(function(tab){
+            assert(tab.getBoundingClientRect().height>=44 && tab.getBoundingClientRect().width>=44,'main destinations must retain practical touch targets');
           });
 
           finish('pass',{
             formation:afterFarm.activeParty,
             bonds:bridge.activeBondIds(),
             studyStatus:studyStatus.textContent.trim(),
-            labView:document.querySelector('[role="tab"][aria-selected="true"]').getAttribute('data-lab-view'),
+            destination:document.querySelector('nav.tabbar [aria-current="page"]').getAttribute('data-tab'),
             autoEmpower:'mixed-after-individual',
             deedProgress:tapsProgress.textContent.trim()
           });
@@ -3433,6 +3458,7 @@ def instrument_html(source, fixtures):
         "<script>" + (ROOT / "layout.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "accessibility.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "accessibility-controls.js").read_text(encoding="utf-8") + "</script>" +
+        "<script>" + (ROOT / "r3-destinations.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "research-duration.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "feedback.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "formation.js").read_text(encoding="utf-8") + "</script>" +

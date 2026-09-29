@@ -44,7 +44,14 @@ window.runRiftLayoutQa = async function(bridge, ctx, assert){
     var studyStatus=rect('#rift-study-status'),details=rect('#rift-details-btn'),depth=rect('#depth-label');
     assert(depth.right<=studyStatus.left+1 && studyStatus.right<=details.left+1,'Rift heading controls do not overlap');
     assert(/Studies \d+\/\d+/.test(q('#rift-study-status').textContent),'Rift Study occupancy remains visible');
-    document.querySelectorAll('nav.tabbar button').forEach(function(el){assert(el.getBoundingClientRect().height>=44,'navigation touch target');});
+    var tabs=Array.from(document.querySelectorAll('nav.tabbar button'));
+    assert(tabs.length===6,'six visible main destinations');
+    tabs.forEach(function(el,index){
+      var r=visible('[data-tab="'+el.dataset.tab+'"]');
+      assert(r.height>=44 && r.width>=44,'navigation 44px touch target');
+      if(index) assert(tabs[index-1].getBoundingClientRect().right<=r.left+1,'navigation does not overlap');
+      assert(el.querySelector('.lb').scrollWidth<=el.clientWidth,'navigation text is not clipped');
+    });
     var nav=visible('nav.tabbar');
     assert(rect('.stage').bottom<=nav.top+1,'stage clear of navigation');
     q('main').scrollTop=100;window.scrollTo(0,100);
@@ -93,10 +100,9 @@ window.runRiftLayoutQa = async function(bridge, ctx, assert){
     assert(icons.length>0,tab+' cost icons exist');
     icons.forEach(function(el){var r=el.getBoundingClientRect();assert(r.width>0 && r.width<=16 && r.height<=16,tab+' nested icon sizing');});
   });
-  q('[data-tab="research"]').click();
-  ['permanent','studies'].forEach(function(view){
-    bridge.setLabView(view,false);
-    if(view==='studies'){
+  ['forge','research'].forEach(function(view){
+    q('[data-tab="'+view+'"]').click();
+    if(view==='research'){
       var slots=visible('.study-slot-summary');
       assert(slots.top>=0 && slots.bottom<rect('nav.tabbar').top,'Study slot status is visible on Lab arrival');
       var choose=q('[data-study-choose]');
@@ -104,10 +110,17 @@ window.runRiftLayoutQa = async function(bridge, ctx, assert){
       assert(q('#study-list').scrollWidth<=q('#study-list').clientWidth+1,'Lab Study content does not overflow horizontally');
       document.querySelectorAll('.study-inspection>summary').forEach(function(el){assert(el.getBoundingClientRect().height>=44,'Study inspection has a practical target');});
     }
-    document.querySelectorAll('#lab-panel-'+view+' .study-inspection').forEach(function(el){el.open=true;});
-    var icons=Array.from(document.querySelectorAll('#lab-panel-'+view+' .cost-icon'));
+    document.querySelectorAll('#tab-'+view+' .study-inspection').forEach(function(el){el.open=true;});
+    var icons=Array.from(document.querySelectorAll('#tab-'+view+' .cost-icon'));
     assert(icons.length>0,'research '+view+' cost icons exist');
     icons.forEach(function(el){var r=el.getBoundingClientRect();assert(r.width>0 && r.width<=16 && r.height<=16,'research '+view+' nested icon sizing');});
+    assert(!q('main').classList.contains('rift-scroll-locked') && getComputedStyle(q('main')).overflowY==='auto',view+' main scroll enabled');
+    var last=Array.from(document.querySelectorAll('#tab-'+view+' button:not(:disabled),#tab-'+view+' summary')).pop();
+    assert(last,view+' final usable control exists');
+    last.scrollIntoView({block:'center',behavior:'instant'});
+    var end=last.getBoundingClientRect(),main=rect('main');
+    assert(end.top>=main.top && end.bottom<=main.bottom,view+' final control scrolls into main viewport');
+    assert(last.contains(document.elementFromPoint(end.left+end.width/2,end.top+end.height/2)),view+' final control hit test');
   });
   q('[data-tab="battle"]').click();check('push');
   // P2-06A: exercise real render paths for all regions, three boss traits and
