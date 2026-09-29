@@ -17,6 +17,12 @@ ROOT = Path(__file__).resolve().parent
 FIXTURES_PATH = ROOT / "fixtures.json"
 
 SCENARIOS = {
+    "p2-07a-formation-reconstruction": "fresh",
+    "p2-07a-save-reload": "fresh",
+    "p2-07a-backup-restore": "fresh",
+    "p2-07a-recovery": "fresh",
+    "p2-07a-chronology": "fresh",
+    "layout-p2-07a-reconstruction": "fresh",
     "p2-06b-live-feedback": "fresh",
     "p2-06b-reduced-motion": "fresh",
     "layout-fresh": "fresh",
@@ -328,6 +334,42 @@ applyOfflineProgress = function(){
 };
 
 window.__lumenfallQaBridge = {
+  formationTest: {
+    buy: function(id){ buySpirit(SPIRITS.find(function(sp){return sp.id===id;})); },
+    cost: function(id){ return spiritCost(SPIRITS.find(function(sp){return sp.id===id;})); },
+    tick: function(){ return autoEmpowerTick(); },
+    spent: function(before,after){
+      var saved=state,total={lumen:0,shards:0};
+      try{
+        state=JSON.parse(JSON.stringify(before));
+        SPIRITS.forEach(function(sp){
+          for(var level=before.spirits[sp.id];level<after.spirits[sp.id];level++){
+            state.spirits[sp.id]=level;total.lumen+=spiritCost(sp);
+          }
+        });
+        RESEARCH.forEach(function(node){
+          for(var level=before.research[node.id];level<after.research[node.id];level++){
+            var cost=researchCostForLevels(node,level,1);total.lumen+=cost.lumen;total.shards+=cost.shard;
+          }
+        });
+        after.activeStudies.forEach(function(active){
+          if(before.activeStudies.some(function(old){return old.id===active.id;})) return;
+          var node=LONG_STUDIES.find(function(node){return node.id===active.id;});
+          var cost=studyCost(node,before.longStudyLevels[node.id]||0);total.lumen+=cost.lumen;total.shards+=cost.shard;
+        });
+        return total;
+      }finally{state=saved;}
+    },
+    toggle: function(id){ toggleActive(id); },
+    corruptPrimary: function(){ localStorage.setItem(SAVE_KEY,'broken'); },
+    // Negative controls use real production entry points with one scoped mutation.
+    mutate: function(kind){
+      var original = kind==='intent' ? normalizeFormationRebuild : reconcileFormationRebuild;
+      if(kind==='intent') normalizeFormationRebuild=function(){return null;};
+      else reconcileFormationRebuild=function(snapshot){if(snapshot.formationRebuild) snapshot.activeParty=snapshot.formationRebuild.members.slice();};
+      return function(){if(kind==='intent') normalizeFormationRebuild=original;else reconcileFormationRebuild=original;};
+    }
+  },
   feedbackTick: function(enabled){
     var presenter=presentLiveRiftResult;
     if(enabled===false) presentLiveRiftResult=function(){};
@@ -833,7 +875,7 @@ def build_runner():
       );
     });
 
-    ['activeParty','spirits','research','longStudyLevels','achieved','dailyStats'].forEach(function(key){
+    ['activeParty','formationRebuild','activeFormationPreset','spirits','research','longStudyLevels','achieved','dailyStats'].forEach(function(key){
       assertJsonEqual(actual[key],expected[key],label+' '+key);
     });
 
@@ -1254,12 +1296,52 @@ def build_runner():
     if(!bridge || !bridge.getState){ finish('fail','test bridge unavailable'); return; }
     try{
       var s = state();
+      if(ctx.scenario==='layout-p2-07a-reconstruction'){
+        bridge.freeze();
+        window.runP207LayoutQa(bridge,ctx,assert).then(function(detail){finish('pass',detail);},function(error){finish('fail',error.message);});
+        return;
+      }
       if(ctx.scenario.startsWith('layout-') || ctx.scenario==='self-test-layout-collapse'){
         bridge.freeze();
         window.runRiftLayoutQa(bridge,ctx,assert).then(function(detail){ finish('pass',detail); },function(error){ finish('fail',error.message); });
         return;
       }
       switch(ctx.scenario){
+        case 'p2-07a-formation-reconstruction':
+          bridge.freeze();
+          finish('pass',window.runP207FormationQa(bridge,ctx,assert,assertProtectedParity));
+          return;
+        case 'p2-07a-chronology':
+          bridge.freeze();
+          finish('pass',window.runP207ChronologyQa(bridge,ctx,assert,assertProtectedParity,assertSummaryParity));
+          return;
+        case 'p2-07a-save-reload':
+        case 'p2-07a-backup-restore':
+        case 'p2-07a-recovery': {
+          bridge.freeze();
+          if(phase()===0){
+            var target=window.p207Seed(bridge,['void','tide','stone'],'boss');
+            bridge.setState(target);bridge.ascendManual();
+            var pending=state();pending.lumen=60;bridge.setState(pending);bridge.formationTest.buy('tide');
+            bridge.feedbackSave();
+            var expected=state();
+            localStorage.setItem('p207-expected',JSON.stringify(expected));
+            nextPhase(1);
+            if(ctx.scenario==='p2-07a-backup-restore'){
+              bridge.setState(bridge.freshStateSnapshot());
+              bridge.restoreBackup(backupCode(expected));
+            }else{
+              if(ctx.scenario==='p2-07a-recovery') bridge.formationTest.corruptPrimary();
+              bridge.suppressUnloadSave();location.reload();
+            }
+            return;
+          }
+          var expected=JSON.parse(localStorage.getItem('p207-expected'));
+          ['formationRebuild','activeParty','formationPresets','spirits','empowerQueue'].forEach(function(key){assertJsonEqual(state()[key],expected[key],ctx.scenario+' '+key);});
+          assert(state().schemaVersion===1,'partial reconstruction remains schema-v1');
+          assertJsonEqual(JSON.parse(bridge.rawRecovery()).formationRebuild,expected.formationRebuild,'recovery intent');
+          finish('pass',{intent:state().formationRebuild,active:state().activeParty});return;
+        }
         case 'p2-06b-live-feedback':
         case 'p2-06b-reduced-motion':
           bridge.freeze();
@@ -1559,7 +1641,7 @@ def build_runner():
 
         case 'parity-medium-farm': {
           var mediumPair = runParityPair(3600,'offline',1);
-          assert(mediumPair.direct.state.riftMode==='farm','medium Farm parity must remain in Farm mode');
+          assert(mediumPair.direct.state.riftMode==='farm','medium Farm parity must remain in Farm mode: '+JSON.stringify({mode:mediumPair.direct.state.riftMode,depth:mediumPair.direct.state.depth,ascends:mediumPair.direct.summary.ascends,retries:mediumPair.direct.summary.retries,active:mediumPair.direct.state.activeParty}));
           assert(mediumPair.direct.state.farmReturnDepth===90,'medium Farm parity must preserve Push return depth');
           assert(mediumPair.direct.summary.luminousKills>0 && mediumPair.direct.summary.motesGained>0,'medium Farm parity must exercise deterministic Luminous/Motes');
           assert(mediumPair.direct.summary.autoTaps>0,'medium Farm parity must exercise Auto-Tap');
@@ -3224,6 +3306,7 @@ def instrument_html(source, fixtures):
         "<script>" + (ROOT / "accessibility.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "accessibility-controls.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "feedback.js").read_text(encoding="utf-8") + "</script>" +
+        "<script>" + (ROOT / "formation.js").read_text(encoding="utf-8") + "</script>" +
         build_runner() + "\n</body>",
         1,
     )
@@ -3292,7 +3375,7 @@ def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
 
     if passed:
         print(f"PASS {scenario}" + (f" {viewport}" if viewport else ""))
-        if result_text and (viewport or scenario == "parity-long-high-power" or scenario.startswith("chronology-") or scenario.startswith("p1-05-")):
+        if result_text and (viewport or scenario == "parity-long-high-power" or scenario.startswith("chronology-") or scenario.startswith("p1-05-") or scenario.startswith("p2-07a-")):
             try:
                 payload = json.loads(html_lib.unescape(re.sub(r'<[^>]+>', '', result_text.group(1))).strip())
                 print("  detail: " + json.dumps(payload.get("detail"), sort_keys=True))
