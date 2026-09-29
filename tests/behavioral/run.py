@@ -17,6 +17,8 @@ ROOT = Path(__file__).resolve().parent
 FIXTURES_PATH = ROOT / "fixtures.json"
 
 SCENARIOS = {
+    "research-duration": "fresh",
+    "research-duration-reduced-motion": "fresh",
     "p2-07a-persistence-review": "fresh",
     "p2-07a-persist-save-reload": "fresh",
     "p2-07a-persist-backup-restore": "fresh",
@@ -100,6 +102,8 @@ SCENARIOS = {
 PREP_SCENARIOS = {}
 
 NEGATIVE_SCENARIOS = {
+    "self-test-research-duration-days": "fresh",
+    "self-test-research-duration-seconds": "fresh",
     "self-test-layout-collapse": "layout-dense-boss",
     "self-test-p1-05-selected": "accessibility-mixed-states",
     "self-test-p1-05-focus-return": "accessibility-mixed-states",
@@ -467,6 +471,19 @@ window.__lumenfallQaBridge = {
       if(kind==='intent') normalizeFormationRebuild=function(){return null;};
       else reconcileFormationRebuild=function(snapshot){if(snapshot.formationRebuild) snapshot.activeParty=snapshot.formationRebuild.members.slice();};
       return function(){if(kind==='intent') normalizeFormationRebuild=original;else reconcileFormationRebuild=original;};
+    }
+  },
+  studyPresentation: {
+    format: function(sec){ return fmtStudyDuration(sec); },
+    remaining: function(active){ return studyRemainingText(active); },
+    shared: function(sec){ return fmtDuration(sec); },
+    update: function(){ updateStudyProgress(); },
+    preview: function(id){ var node=LONG_STUDIES.find(function(n){return n.id===id;}); return studyDuration(node,state.longStudyLevels[id]||0); },
+    // One scoped presentation mutation per negative control, restored by caller.
+    mutate: function(kind){
+      var original=fmtStudyDuration;
+      fmtStudyDuration=kind==='days' ? function(sec){return original(sec%86400);} : function(sec){return original(sec).replace(/ \d{2}s$/,'');};
+      return function(){fmtStudyDuration=original;};
     }
   },
   feedbackTick: function(enabled){
@@ -1457,6 +1474,13 @@ def build_runner():
           assertJsonEqual(JSON.parse(bridge.rawRecovery()).formationRebuild,expected.formationRebuild,'recovery intent');
           finish('pass',{intent:state().formationRebuild,active:state().activeParty});return;
         }
+        case 'research-duration':
+        case 'research-duration-reduced-motion':
+        case 'self-test-research-duration-days':
+        case 'self-test-research-duration-seconds':
+          bridge.freeze();
+          finish('pass',window.runResearchDurationQa(bridge,ctx,assert));
+          return;
         case 'p2-06b-live-feedback':
         case 'p2-06b-reduced-motion':
           bridge.freeze();
@@ -2751,7 +2775,7 @@ def build_runner():
             assert(running.length===count,'every active Study remains visible');
             if(count){
               assert(running[0].dataset.runningStudy==='shardstudy','next completion accounts for speed, without mutating queue order');
-              assert(running[0].querySelector('[data-study-text]').textContent==='5m remaining · 2x','remaining display uses authoritative work divided by speed and existing duration precision');
+              assert(running[0].querySelector('[data-study-text]').textContent==='5m 50s remaining · 2x','remaining display preserves seconds from authoritative work divided by speed');
               var inspect=running[0].querySelector('details'),summary=inspect.querySelector('summary');
               assert(!inspect.open,'secondary speed controls begin collapsed');
               summary.focus();summary.click();bridge.renderLayout();
@@ -3409,6 +3433,7 @@ def instrument_html(source, fixtures):
         "<script>" + (ROOT / "layout.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "accessibility.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "accessibility-controls.js").read_text(encoding="utf-8") + "</script>" +
+        "<script>" + (ROOT / "research-duration.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "feedback.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "formation.js").read_text(encoding="utf-8") + "</script>" +
         build_runner() + "\n</body>",
@@ -3460,7 +3485,7 @@ def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
             "--dump-dom",
             url,
         ]
-        if scenario in ("p1-05-reduced-motion", "p2-06b-reduced-motion"):
+        if scenario in ("p1-05-reduced-motion", "p2-06b-reduced-motion", "research-duration-reduced-motion"):
             command.insert(-1, "--force-prefers-reduced-motion")
         completed = subprocess.run(command, capture_output=True, text=True, timeout=25)
         dom = completed.stdout

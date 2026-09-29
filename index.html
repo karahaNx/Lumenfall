@@ -5081,7 +5081,7 @@ function renderLongStudies(){
         ' <button class="node-queue-toggle '+(queueOn?'active':'')+'" data-study-queue="'+lnode.id+'">Queue '+(queueOn?'ON':'OFF')+'</button>' +
       '</div>' +
       '<div class="desc">'+lnode.desc+'</div>' +
-      '<div class="study-meta">Takes '+fmtDuration(dur)+' &middot; '+costIcon('lumen')+formatNum(cost.lumen)+' '+costIcon('shard')+formatNum(cost.shard)+'</div>' +
+      '<div class="study-meta">Takes '+fmtStudyDuration(dur)+' &middot; '+costIcon('lumen')+formatNum(cost.lumen)+' '+costIcon('shard')+formatNum(cost.shard)+'</div>' +
       '<button class="mini-btn" data-study="'+lnode.id+'" '+(affordable?'':'disabled')+' style="margin-top:10px;width:100%;">'+(openSlots>0?'Begin Study':'No open slots')+'</button>' +
     '</div>';
   });
@@ -6599,8 +6599,26 @@ function tick(){
   presentLiveRiftResult(feedbackBefore,sim);
 }
 
+// Research-only: round up so a positive remainder never reads as zero.
+// Keep fmtDuration's shared Deed, boss and offline wording unchanged.
+function fmtStudyDuration(sec){
+  if(!Number.isFinite(sec) || sec<0 || !Number.isSafeInteger(Math.ceil(sec))) return 'Time unavailable';
+  sec = Math.ceil(sec);
+  var d = Math.floor(sec/86400), h = Math.floor(sec%86400/3600);
+  var m = Math.floor(sec%3600/60), s = sec%60;
+  function pad(n){ return String(n).padStart(2,'0'); }
+  if(d>0) return d+'d '+pad(h)+'h '+pad(m)+'m '+pad(s)+'s';
+  if(h>0) return h+'h '+pad(m)+'m '+pad(s)+'s';
+  if(m>0) return m+'m '+pad(s)+'s';
+  return s+'s';
+}
 function studyRemainingText(active){
-  return fmtDuration(Math.max(0,active.remainingSec/active.speedMult))+' remaining · '+active.speedMult+'x';
+  if(!active || !Number.isFinite(active.remainingSec) || active.remainingSec<0 ||
+      !Number.isFinite(active.speedMult) || active.speedMult<=0) return 'Time unavailable';
+  // Membership in activeStudies still means pending authoritative completion.
+  if(active.remainingSec===0) return 'Finishing…';
+  var duration = fmtStudyDuration(Math.max(Number.MIN_VALUE,active.remainingSec/active.speedMult));
+  return duration==='Time unavailable' ? duration : duration+' remaining · '+active.speedMult+'x';
 }
 function updateStudyProgress(){
   state.activeStudies.forEach(function(active){
@@ -6609,7 +6627,8 @@ function updateStudyProgress(){
     if(!fillEl || !textEl) return;
     var pct = Math.max(0, Math.min(100, 100 - (active.remainingSec/active.totalDurationSec*100)));
     fillEl.style.width = pct+'%';
-    textEl.textContent = studyRemainingText(active);
+    var text = studyRemainingText(active);
+    if(textEl.textContent!==text) textEl.textContent = text;
   });
 }
 
