@@ -17,6 +17,17 @@ ROOT = Path(__file__).resolve().parent
 FIXTURES_PATH = ROOT / "fixtures.json"
 
 SCENARIOS = {
+    "buff-timing": "fresh",
+    "buff-save-reload": "fresh",
+    "forge-contracts": "fresh",
+    "forge-effects": "fresh",
+    "forge-chronology": "fresh",
+    "forge-save-reload": "fresh",
+    "forge-backup-restore": "fresh",
+    "forge-recovery": "fresh",
+    "forge-baseline": "fresh",
+    "forge-balance": "fresh",
+
     "r3-destinations": "fresh",
     "r3-save-reload": "fresh",
     "research-duration": "fresh",
@@ -348,6 +359,76 @@ applyOfflineProgress = function(){
 };
 
 window.__lumenfallQaBridge = {
+  buffTiming: {
+    restoreOldCalculation: function(){
+      var original=simulationBuffSecondsRemaining;
+      simulationBuffSecondsRemaining=function(nowMs){return state.buffUntil?(state.buffUntil-nowMs)/1000:0;};
+      return function(){simulationBuffSecondsRemaining=original;};
+    }
+  },
+  forge: {
+    nodes: function(){return JSON.parse(JSON.stringify(RESEARCH));},
+    plan: function(id,n){return getResearchBuyPlan(RESEARCH.find(function(x){return x.id===id;}),n);},
+    preview: function(id,n){return researchPreview(RESEARCH.find(function(x){return x.id===id;}),n);},
+    buy: function(id,n){labMultiplier=n;buyResearch(RESEARCH.find(function(x){return x.id===id;}));},
+    queue: function(){return autoLabQueueTick();},
+    cost: function(id,k,n){return researchCostForLevels(RESEARCH.find(function(x){return x.id===id;}),k,n);},
+    canonical: function(s){return acceptPersistedState(s,'forge-qa');},
+    chance: function(d){return eliteChance(d);},
+    spawn: function(){spawnEnemy();return JSON.parse(JSON.stringify(state));},
+    rewards: function(d){return {lumen:enemyRewardFor(d),shards:shardRewardFor(d),motes:motesDropFor(d),sigils:sigilsFromBoss(d)};},
+    rawResource: function(id){var sp=SPIRITS.find(function(x){return x.id===id;});return abilityRewardRaw(sp,state.spirits[id]);},
+    deeds: function(){return {total:ACHIEVEMENTS.reduce(function(n,a){return n+a.reward;},0),items:ACHIEVEMENTS.map(function(a){return {id:a.id,eligible:a.check(state),progress:deedProgress(a,state),text:deedProgressText(a,!!state.achieved[a.id]),reward:a.reward};})};},
+    achievements: function(){return applyAchievementChecks();},
+    auditEconomy: function(assert){
+      var original={research:autoLabQueueTick,empower:autoEmpowerTick,study:simulationStartQueuedStudies,ascend:applyAscendMutation};
+      var ledger={lumen:0,shards:0,resetLumen:0,researchLevels:0,studyStarts:0,forge:{lumen:0,shards:0}};
+      var copy=function(){return JSON.parse(JSON.stringify(state));};
+      function record(before,expected,label){
+        assert(before.lumen>=expected.lumen && before.shards>=expected.shards,label+' affordable');
+        assert(state.lumen===before.lumen-expected.lumen && state.shards===before.shards-expected.shards,label+' paid exactly once');
+        ledger.lumen+=expected.lumen;ledger.shards+=expected.shards;
+      }
+      autoLabQueueTick=function(){
+        var before=copy(),result=original.research(),cost={lumen:0,shards:0},count=0;
+        RESEARCH.forEach(function(n){
+          var k=before.research[n.id],end=state.research[n.id];
+          if(end>k){
+            assert(before.researchQueue[n.id] && before.maxDepthEver>=(n.unlockDepth||1),'queued purchase eligible');
+            assert(n.levelCap===undefined || end<=n.levelCap,'queue cap');
+            for(;k<end;k++){var c=researchCostForLevels(n,k,1);cost.lumen+=c.lumen;cost.shards+=c.shard;count++;}
+          }
+        });
+        assert(count<=20,'existing per-call queue limit');ledger.researchLevels+=count;ledger.forge.lumen+=cost.lumen;ledger.forge.shards+=cost.shards;record(before,cost,'Forge queue');return result;
+      };
+      autoEmpowerTick=function(){
+        var before=copy(),costs={};SPIRITS.forEach(function(sp){costs[sp.id]=spiritCost(sp);});
+        var result=original.empower(),cost={lumen:0,shards:0};
+        SPIRITS.forEach(function(sp){if(state.spirits[sp.id]>before.spirits[sp.id])cost.lumen+=costs[sp.id];});
+        record(before,cost,'Auto-Empower');return result;
+      };
+      simulationStartQueuedStudies=function(summary){
+        var before=copy(),result=original.study(summary),cost={lumen:0,shards:0};
+        state.activeStudies.forEach(function(a){if(!before.activeStudies.some(function(old){return old.id===a.id;})){
+          var n=LONG_STUDIES.find(function(n){return n.id===a.id;}),c=studyCost(n,before.longStudyLevels[a.id]);cost.lumen+=c.lumen;cost.shards+=c.shard;ledger.studyStarts++;
+        }});record(before,cost,'Study');return result;
+      };
+      applyAscendMutation=function(){var before=state.lumen,result=original.ascend();ledger.resetLumen+=before-state.lumen;return result;};
+      return {ledger:ledger,restore:function(){autoLabQueueTick=original.research;autoEmpowerTick=original.empower;simulationStartQueuedStudies=original.study;applyAscendMutation=original.ascend;}};
+    },
+    mutate: function(kind){
+      var saved={plan:getResearchBuyPlan,migrate:migrateSaveV0ToV1,deed:legacyResearchLevels,passive:passiveWispDpsAt};
+      if(kind==='cap') getResearchBuyPlan=function(node,n){
+        if(node.id==='arcanecal' && researchLevel(node.id)>=10)return {affordable:true,buyCount:1,count:1,cost:researchCostForLevels(node,researchLevel(node.id),1)};
+        return saved.plan(node,n);
+      };
+      if(kind==='migration') SAVE_MIGRATIONS[0]=function(s){var n=saved.migrate(s);if(s.labQueueOn && s.researchQueue===undefined)n.researchQueue.arcanecal=true;return n;};
+      if(kind==='deed') legacyResearchLevels=function(s){return RESEARCH.reduce(function(n,r){return n+(s.research[r.id]||0);},0);};
+      if(kind==='effect') passiveWispDpsAt=function(d){return saved.passive(d)*researchFactor('arcanecal');};
+      return function(){getResearchBuyPlan=saved.plan;SAVE_MIGRATIONS[0]=saved.migrate;legacyResearchLevels=saved.deed;passiveWispDpsAt=saved.passive;};
+    }
+  },
+
   formationTest: {
     canonical: function(s){return acceptPersistedState(s,'qa-review');},
     rates: function(){return {fill:(100/ABILITY_BASE_CYCLE_SEC)*fillRateMult(),dps:simulationPassiveDps(2000000000000)};},
@@ -705,12 +786,12 @@ window.__lumenfallQaBridge = {
   saveFormationPreset: function(name){ return saveFormationPreset(name); },
   activeBondIds: function(){ return activeFormationBonds().map(function(bond){return bond.id;}); },
   autoEmpowerAll: function(enabled){ setAutoEmpowerAll(!!enabled); return JSON.parse(JSON.stringify(state.empowerQueue)); },
-  simulate: function(seconds,kind,chunkSec,startMs){
+  simulate: function(seconds,kind,chunkSec,startMs,windowStartMs){
     var begin = performance.now();
     var remaining = Math.max(0,Number(seconds)||0);
     var chunk = Math.max(0,Number(chunkSec)||remaining||0);
     var clock = Number.isFinite(startMs) ? startMs : 2000000000000;
-    var offlineWindowStartMs = clock;
+    var offlineWindowStartMs = Number.isFinite(windowStartMs)?windowStartMs:clock;
     var aggregate = {
       lumenGained:0,shardGained:0,sigilsGained:0,motesGained:0,
       kills:0,bossKills:0,luminousKills:0,ascends:0,autoTaps:0,
@@ -1434,6 +1515,19 @@ def build_runner():
         window.runRiftLayoutQa(bridge,ctx,assert).then(function(detail){ finish('pass',detail); },function(error){ finish('fail',error.message); });
         return;
       }
+      if(ctx.scenario==='buff-timing'){
+        bridge.freeze();finish('pass',window.runBuffTimingQa(bridge,ctx,assert,assertProtectedParity));return;
+      }
+      if(ctx.scenario==='buff-save-reload'){
+        bridge.freeze();window.runBuffSaveQa(bridge,ctx,assert,assertProtectedParity,phase,nextPhase,finish);return;
+      }
+      if(ctx.scenario.startsWith('forge-')){
+        bridge.freeze();
+        if(['forge-save-reload','forge-backup-restore','forge-recovery'].includes(ctx.scenario)){
+          window.runForgePersistence(bridge,ctx,assert,phase,nextPhase,backupCode,finish);return;
+        }
+        finish('pass',window.runForgeQa(bridge,ctx,assert,assertProtectedParity,assertSummaryParity,parityApprox));return;
+      }
       switch(ctx.scenario){
         case 'p2-07a-persistence-review':
           bridge.freeze();
@@ -1551,7 +1645,8 @@ def build_runner():
           assert(!Object.prototype.hasOwnProperty.call(s,'labQueueOn'),'legacy labQueueOn must be migrated away');
           assert(!Object.prototype.hasOwnProperty.call(s,'activeStudy'),'legacy activeStudy must be migrated away');
           assert(s.activeStudies.length===1 && s.activeStudies[0].id==='wispascend','legacy activeStudy must migrate into activeStudies');
-          assert(Object.keys(s.researchQueue).every(function(id){ return s.researchQueue[id]===true; }),'legacy lab queue flag must migrate to researchQueue');
+          assert(['focus','sense','formation','resolve','charge'].every(function(id){return s.researchQueue[id]===true;}),'legacy global queue preserves five original ON choices');
+          assert(['arcanecal','conduction','luminoustracking'].every(function(id){return s.researchQueue[id]===false;}),'legacy global queue does not activate new IDs');
           assert(Object.keys(s.studyQueue).every(function(id){ return s.studyQueue[id]===true; }),'legacy autostudy flag must migrate to studyQueue');
           assert(s.autoAscendEnabled===true && s.autoAscendTargetDepth>=22,'legacy auto-ascend ownership must migrate to enabled target');
           assert(!Object.prototype.hasOwnProperty.call(s.owned,'autostudy'),'legacy owned.autostudy must be removed');
@@ -3462,6 +3557,8 @@ def instrument_html(source, fixtures):
         "<script>" + (ROOT / "research-duration.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "feedback.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "formation.js").read_text(encoding="utf-8") + "</script>" +
+        "<script>" + (ROOT / "forge.js").read_text(encoding="utf-8") + "</script>" +
+        "<script>" + (ROOT / "buff-timing.js").read_text(encoding="utf-8") + "</script>" +
         build_runner() + "\n</body>",
         1,
     )
@@ -3530,7 +3627,7 @@ def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
 
     if passed:
         print(f"PASS {scenario}" + (f" {viewport}" if viewport else ""))
-        if result_text and (viewport or scenario in ("parity-long-high-power", "parity-medium-farm") or scenario.startswith("chronology-") or scenario.startswith("p1-05-") or scenario.startswith("p2-07a-")):
+        if result_text and (viewport or scenario in ("parity-long-high-power", "parity-medium-farm") or scenario.startswith("chronology-") or scenario.startswith("p1-05-") or scenario.startswith("p2-07a-") or scenario.startswith("forge-") or scenario.startswith("buff-")):
             try:
                 payload = json.loads(html_lib.unescape(re.sub(r'<[^>]+>', '', result_text.group(1))).strip())
                 print("  detail: " + json.dumps(payload.get("detail"), sort_keys=True))
