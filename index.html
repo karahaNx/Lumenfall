@@ -1739,6 +1739,7 @@
   .startup-skip{border:0;background:none;width:100%;min-height:44px;color:var(--ink);font:600 12px 'Manrope',sans-serif;cursor:pointer;}
   body.app-paused *,body.app-paused *::before,body.app-paused *::after{animation-play-state:paused!important;}
 
+.formation-rebuild-note{font-size:.75rem;line-height:1.5;color:var(--ink);margin:8px 0;overflow-wrap:anywhere;}
 </style>
 </head>
 <body>
@@ -2370,6 +2371,7 @@ function freshState(){
     enemyDepth:0, enemyHp:0, enemyMaxHp:0, enemyIsLuminous:false,
     spirits:spirits, heroRarity:heroRarity, heroResource:heroResource, wispModules:wispModules, wispUltimate:wispUltimate, empowerQueue:empowerQueue, activeParty:['ember'],
     formationPresets:{push:['ember'],farm:['ember'],boss:['ember']}, activeFormationPreset:'push',
+    formationRebuild:null,
     nodes:nodes, research:research, researchQueue:researchQueue,
     longStudyLevels:longStudyLevels, activeStudies:[], studyQueue:studyQueue,
     achieved:achieved, owned:owned, riftTheme:'default',
@@ -2580,6 +2582,43 @@ function migratePersistedState(input){
   }
   return migrated;
 }
+// Optional schema-v1 intent: never stores levels, resources or combat benefits.
+function normalizeFormationRebuild(raw,snapshot){
+  if(!isPlainObject(raw) || !Array.isArray(raw.members)) return null;
+  var members = raw.members.filter(function(id,index){
+    if(typeof id!=='string' || raw.members.indexOf(id)!==index) return false;
+    return SPIRITS.some(function(sp){return sp.id===id && snapshot.maxDepthEver>=sp.unlockDepth;});
+  }).slice(0,5);
+  if(!members.length) return null;
+  var preset = FORMATION_PRESET_IDS.indexOf(raw.preset)!==-1 &&
+    snapshot.formationPresets[raw.preset].join(',')===members.join(',') ? raw.preset : '';
+  return {members:members,preset:preset};
+}
+function reconcileFormationRebuild(snapshot){
+  var intent = snapshot.formationRebuild;
+  if(!intent) return;
+  var powered = intent.members.filter(function(id){return (snapshot.spirits[id]||0)>0;});
+  // Ember is startup support only. Remove it once an intended member can fight.
+  // This projection never recruits or raises a level, including on save loading.
+  if(powered.length) snapshot.activeParty = powered;
+  else if((snapshot.spirits.ember||0)>0) snapshot.activeParty = ['ember'];
+  else snapshot.activeParty = [];
+  snapshot.activeFormationPreset = '';
+  if(powered.length===intent.members.length){
+    if(intent.preset && snapshot.formationPresets[intent.preset].join(',')===intent.members.join(',')){
+      snapshot.activeFormationPreset = intent.preset;
+    }
+    snapshot.formationRebuild = null;
+  }
+}
+function intendedFormationIds(){
+  return state.formationRebuild ? state.formationRebuild.members : [];
+}
+function autoEmpowerCandidateIds(){
+  return state.activeParty.concat(intendedFormationIds()).filter(function(id,index,ids){
+    return ids.indexOf(id)===index && SPIRITS.some(function(sp){return sp.id===id && state.maxDepthEver>=sp.unlockDepth;});
+  });
+}
 function normalizeCurrentSave(input){
   var fresh = freshState();
   var out = freshState();
@@ -2656,6 +2695,16 @@ function normalizeCurrentSave(input){
     : (sourcePresets ? '' : 'push');
   out.activeFormationPreset = requestedPreset &&
     out.activeParty.join(',')===out.formationPresets[requestedPreset].join(',') ? requestedPreset : '';
+
+  out.formationRebuild = normalizeFormationRebuild(source.formationRebuild,out);
+  reconcileFormationRebuild(out);
+  if(!out.activeParty.length){
+    // Intent can invalidate an otherwise powered but unrelated party. Apply the
+    // existing empty-party recovery now, then project again (Ember may be intended).
+    out.spirits.ember = Math.max(1,out.spirits.ember||0);
+    out.activeParty = ['ember'];
+    reconcileFormationRebuild(out);
+  }
 
   var nodes = isPlainObject(source.nodes) ? source.nodes : {};
   NODES.forEach(function(node){ out.nodes[node.id] = nonNegativeInt(nodes[node.id],fresh.nodes[node.id]); });
@@ -3684,13 +3733,17 @@ function doTap(stageEl){
 }
 
 function buySpirit(sp){
+  if(!sp || state.maxDepthEver<sp.unlockDepth) return;
+  var rebuilding = !!state.formationRebuild;
   var cost = spiritCost(sp);
   if(state.lumen < cost) return;
   var wasZero = state.spirits[sp.id]===0;
   state.lumen -= cost;
   state.spirits[sp.id]++;
   trackDaily('empowers');
-  if(wasZero && state.activeParty.length<5 && state.activeParty.indexOf(sp.id)===-1){
+  reconcileFormationRebuild(state);
+  if(rebuilding) renderPartyFormation();
+  if(!rebuilding && wasZero && state.activeParty.length<5 && state.activeParty.indexOf(sp.id)===-1){
     state.activeParty.push(sp.id);
     state.activeFormationPreset = '';
     renderPartyFormation();
@@ -3733,6 +3786,7 @@ function toggleActive(id){
     if(state.activeParty.length>=5){ showToast('Bench a Wisp first — max 5 Active.'); return; }
     state.activeParty.push(id);
   }
+  state.formationRebuild = null;
   state.activeFormationPreset = '';
   saveState();
   renderSpirits();
@@ -3768,6 +3822,7 @@ function applyFormationPreset(name){
     }
     return false;
   }
+  state.formationRebuild = null;
   state.activeParty = members.slice();
   state.activeFormationPreset = name;
   saveState();
@@ -3780,6 +3835,7 @@ function applyFormationPreset(name){
 function saveFormationPreset(name){
   if(FORMATION_PRESET_IDS.indexOf(name)===-1 || !state.activeParty.length) return false;
   if(!state.formationPresets) state.formationPresets={};
+  state.formationRebuild = null;
   state.formationPresets[name] = state.activeParty.slice(0,5);
   state.activeFormationPreset = name;
   saveState();
@@ -3788,7 +3844,7 @@ function saveFormationPreset(name){
   return true;
 }
 function applicableAutoEmpowerIds(){
-  return SPIRITS.filter(function(sp){return (state.spirits[sp.id]||0)>0;}).map(function(sp){return sp.id;});
+  return SPIRITS.filter(function(sp){return (state.spirits[sp.id]||0)>0 || intendedFormationIds().indexOf(sp.id)!==-1;}).map(function(sp){return sp.id;});
 }
 function autoEmpowerAllState(){
   var ids=applicableAutoEmpowerIds();
@@ -4096,6 +4152,10 @@ function ascendPrismGain(depth){
   return ascendPrismBreakdown(depth).gain;
 }
 function applyAscendMutation(){
+  // Capture before reset/temporary party mutation; repeated Ascension keeps intent.
+  state.formationRebuild = normalizeFormationRebuild(state.formationRebuild || {
+    members:state.activeParty.slice(),preset:state.activeFormationPreset
+  },state);
   var cleared = progressionDepth() - 1;
   var gain = ascendPrismGain(progressionDepth());
   state.prisms += gain;
@@ -4118,10 +4178,8 @@ function applyAscendMutation(){
     state.heroResource[sp.id] = 0;
   });
   state.spirits['ember'] = 1;
-  if(state.activeParty.indexOf('ember')===-1){
-    if(state.activeParty.length<5){ state.activeParty.unshift('ember'); }
-    else { state.activeParty[0] = 'ember'; }
-  }
+  state.activeParty = ['ember'];
+  reconcileFormationRebuild(state);
   spawnEnemy();
   return gain;
 }
@@ -4652,6 +4710,10 @@ function renderFormationPresets(){
       var sp=SPIRITS.find(function(item){return item.id===id;});
       return sp ? '<span class="formation-member">'+wispPortrait(sp)+sp.shortName+'</span>' : '';
     }).join('')+'</div>' +
+    (state.formationRebuild ? '<div class="formation-rebuild-note"><strong>Rebuilding chosen Formation</strong><div>'+intendedFormationIds().map(function(id){
+      var sp=SPIRITS.find(function(item){return item.id===id;});
+      return sp.shortName+': '+((state.spirits[id]||0)>0 ? 'Active' : 'Pending — no power or Bonds'+(state.achieved.labmaster ? (state.empowerQueue[id]===false ? ' · Auto-Empower OFF' : ' · Auto-Empower ON') : ' · Recruit manually'));
+    }).join('<br>')+'</div>'+(!intendedFormationIds().includes('ember') && state.activeParty.includes('ember') ? '<div>Ember: temporary startup support</div>' : '')+'</div>' : '')+
     '<div class="formation-preset-grid">';
   FORMATION_PRESET_IDS.forEach(function(name){
     var members=formationPresetMembers(name);
@@ -4826,9 +4888,10 @@ function renderSpirits(){
           '<button class="mini-btn ultimate-btn" data-ultimate="'+sp.id+'" '+(state.sigils<ultCost?'disabled':'')+'>Unlock Ultimate<span style="font-size:.6875rem;">'+costIcon('sigil')+ultCost+'</span></button>') +
       '</div>';
     var empowerOn = state.empowerQueue[sp.id]!==false;
-    var empowerHtml = (recruited && state.achieved.labmaster) ?
+    var pendingRebuild = intendedFormationIds().indexOf(sp.id)!==-1 && !recruited;
+    var empowerHtml = ((recruited || pendingRebuild) && state.achieved.labmaster) ?
       ' <button class="node-queue-toggle '+(empowerOn?'active':'')+'" data-empower-queue="'+sp.id+'">Auto-Empower '+(empowerOn?'ON':'OFF')+'</button>' : '';
-    html += '<div class="card hero-card rarity-'+tier+(active?' active-wisp':'')+(ultimateUnlocked(sp.id)?' has-ultimate':'')+'" data-wisp-card="'+sp.id+'" style="--wisp-color:'+sp.color+';--rarity-color:'+RARITY_COLORS[tier]+';">' +
+    html += '<div class="card hero-card rarity-'+tier+(pendingRebuild?' pending-rebuild':'')+(active?' active-wisp':'')+(ultimateUnlocked(sp.id)?' has-ultimate':'')+'" data-wisp-card="'+sp.id+'" style="--wisp-color:'+sp.color+';--rarity-color:'+RARITY_COLORS[tier]+';">' +
       '<div class="hero-top">'+
         wispPortrait(sp) +
         '<div class="hero-id">' +
@@ -4837,6 +4900,7 @@ function renderSpirits(){
         '</div>' +
         (recruited ? '<button class="active-toggle '+(active?'is-active':'')+'" data-toggle="'+sp.id+'" aria-pressed="'+(active?'true':'false')+'">'+(active?'Bench':'Field')+'</button>' : '') +
       '</div>' +
+      (pendingRebuild ? '<div class="formation-rebuild-note">Chosen Formation · Pending · No power or Bonds</div>' : '') +
       '<div class="hero-stats">' +
         '<span class="hero-stat-pill">Lv. '+level+'</span>' +
         '<span class="hero-stat-pill mono">'+formatNum(power)+' Wisp Power</span>' +
@@ -5507,8 +5571,9 @@ function setupTabs(){
 // Game loop
 // ---------------------------------------------------------------
 function autoEmpowerTick(){
+  if(!state.achieved.labmaster) return false;
   var cheapest = null, cheapestCost = Infinity;
-  state.activeParty.forEach(function(id){
+  autoEmpowerCandidateIds().forEach(function(id){
     if(state.empowerQueue[id]===false) return;
     var sp = SPIRITS.find(function(s){ return s.id===id; });
     if(!sp) return;
@@ -5518,6 +5583,7 @@ function autoEmpowerTick(){
   if(cheapest && state.lumen>=cheapestCost){
     state.lumen -= cheapestCost;
     state.spirits[cheapest.id]++;
+    reconcileFormationRebuild(state);
     trackDaily('empowers');
     return true;
   }
@@ -6052,13 +6118,14 @@ function simulationResolveTimestamp(nowMs,elapsedSec,policy,summary){
   }
 
   var spiritBefore = {};
-  state.activeParty.forEach(function(id){ spiritBefore[id]=state.spirits[id]||0; });
+  SPIRITS.forEach(function(sp){ spiritBefore[sp.id]=state.spirits[sp.id]||0; });
   var empowersBefore = summary.empowers;
   var empowerChecks = simulationProcessAutoEmpower(summary);
   var empowerPurchases = summary.empowers-empowersBefore;
   if(empowerPurchases){
     var empowered = [];
-    state.activeParty.forEach(function(id){
+    SPIRITS.forEach(function(sp){
+      var id=sp.id;
       var delta = (state.spirits[id]||0)-(spiritBefore[id]||0);
       if(delta>0) empowered.push({id:id,levels:delta});
     });
@@ -6348,10 +6415,15 @@ function advanceAuthoritativeTime(elapsedSec,options){
     // subtraction literally cannot advance the remaining clock and no state
     // event fires.
     if(next>0){
+      var ascendsBeforePassive = state.ascendCount;
       if(state.riftMode==='farm') simulationApplyFarmPassive(next,dps,policy,summary);
       else simulationApplyPushPassive(next,dps,policy,summary);
-      simulationAdvanceAbilityResources(next);
-      simulationAdvanceAutomationTimers(next);
+      // A kill can Ascend at this endpoint. The preceding interval belongs to
+      // the old run; do not credit its time to reset resources/purchase timers.
+      if(state.ascendCount===ascendsBeforePassive){
+        simulationAdvanceAbilityResources(next);
+        simulationAdvanceAutomationTimers(next);
+      }
       simulationAdvanceStudyProgress(next);
       var crossedFarmGrids = advanceFarmGridClock(next);
       if(hitsFarmGrid && crossedFarmGrids!==1){

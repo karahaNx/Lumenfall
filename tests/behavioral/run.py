@@ -17,6 +17,17 @@ ROOT = Path(__file__).resolve().parent
 FIXTURES_PATH = ROOT / "fixtures.json"
 
 SCENARIOS = {
+    "p2-07a-persistence-review": "fresh",
+    "p2-07a-persist-save-reload": "fresh",
+    "p2-07a-persist-backup-restore": "fresh",
+    "p2-07a-persist-recovery": "fresh",
+    "p2-07a-persist-reset": "fresh",
+    "p2-07a-formation-reconstruction": "fresh",
+    "p2-07a-save-reload": "fresh",
+    "p2-07a-backup-restore": "fresh",
+    "p2-07a-recovery": "fresh",
+    "p2-07a-chronology": "fresh",
+    "layout-p2-07a-reconstruction": "fresh",
     "p2-06b-live-feedback": "fresh",
     "p2-06b-reduced-motion": "fresh",
     "layout-fresh": "fresh",
@@ -50,6 +61,8 @@ SCENARIOS = {
     "save-failure-warning": "mid-game",
     "parity-short": "parity-early-simple",
     "parity-medium-farm": "parity-medium-farm",
+    "p2-07a-farm-retention": "parity-medium-farm",
+    "p2-07a-timer-boundary": "fresh",
     "parity-long-high-power": "parity-long-high-power",
     "parity-boss-short": "parity-boss-short",
     "parity-boss-retry": "parity-boss-retry",
@@ -328,6 +341,134 @@ applyOfflineProgress = function(){
 };
 
 window.__lumenfallQaBridge = {
+  formationTest: {
+    canonical: function(s){return acceptPersistedState(s,'qa-review');},
+    rates: function(){return {fill:(100/ABILITY_BASE_CYCLE_SEC)*fillRateMult(),dps:simulationPassiveDps(2000000000000)};},
+    // Observe real mutation entry points. Assertions run before and after them;
+    // no replacement simulator or production-only testing switch is introduced.
+    audit: function(assert,mutation){
+      var originals={retry:simulationMaybeRetryBoss,ascend:applyAscendMutation,
+        auto:simulationApplyAutoAscend,buy:autoEmpowerTick,death:simulationDefeatEnemy,
+        reconcile:reconcileFormationRebuild,advance:advanceAuthoritativeTime};
+      var counts={retries:0,ascends:0,purchases:0,rebuildPurchases:0,deaths:0};
+      var copy=function(x){return JSON.parse(JSON.stringify(x));};
+      function party(){
+        assert(state.activeParty.length>0 && state.activeParty.length<=5,'audit powered party bounds');
+        assert(state.activeParty.every(function(id){return state.spirits[id]>0;}),'audit powered-only party');
+        if(state.formationRebuild){
+          var ids=state.formationRebuild.members.filter(function(id){return state.spirits[id]>0;});
+          assert(state.activeParty.join(',')===(ids.length?ids:['ember']).join(','),'audit ordered intended projection');
+        }
+      }
+      simulationMaybeRetryBoss=function(policy,summary){
+        var before=copy(state),n=summary.retries;
+        var eligible=policy.allowBossRetreat && before.riftMode==='farm' && before.farmReturnDepth>0 &&
+          isBoss(before.farmReturnDepth) && isFinite(estimatedBossKillSeconds(before.farmReturnDepth));
+        var result=originals.retry(policy,summary);
+        if(mutation==='farm-exit' && before.riftMode==='farm' && !eligible){state.riftMode='push';result=true;}
+        if(result || state.riftMode!==before.riftMode){
+          assert(eligible,'audit unauthorized Farm exit');
+          assert(state.riftMode==='push' && state.depth===before.farmReturnDepth && state.farmReturnDepth===0 && state.farmDepth===0,'audit legal Boss retry destination');
+          assert(summary.retries===n+1,'audit retry counted once');counts.retries++;
+        }
+        return result;
+      };
+      applyAscendMutation=function(){
+        var before=copy(state),intended=before.formationRebuild?before.formationRebuild.members:before.activeParty;
+        assert(autoAscendReady() && ascendEligible() && clearedProgressionRift()>=autoAscendClearedTarget(),'audit premature Ascension');
+        var gain=originals.ascend();
+        if(mutation==='duplicate') originals.ascend();
+        assert(state.ascendCount===before.ascendCount+1,'audit duplicate Ascension');
+        assert(state.depth===1 && state.riftMode==='push','audit Ascension resets progression');
+        assert((state.formationRebuild?state.formationRebuild.members:state.activeParty).join(',')===intended.join(','),'audit Ascension preserves intent');
+        SPIRITS.forEach(function(sp){assert(state.spirits[sp.id]===(sp.id==='ember'?1:0),'audit normal reset levels');});
+        counts.ascends++;party();return gain;
+      };
+      simulationApplyAutoAscend=function(summary){
+        if(mutation==='premature' && !autoAscendReady()) applyAscendMutation();
+        return originals.auto(summary);
+      };
+      autoEmpowerTick=function(){
+        var before=copy(state),costs={},candidates=autoEmpowerCandidateIds();
+        SPIRITS.forEach(function(sp){costs[sp.id]=spiritCost(sp);});
+        var result=originals.buy();
+        if(mutation==='free' && result && before.formationRebuild && before.formationRebuild.members.some(function(id){return before.spirits[id]===0 && state.spirits[id]>0;})) state.lumen=before.lumen;
+        if(result){
+          var changed=SPIRITS.filter(function(sp){return state.spirits[sp.id]!==before.spirits[sp.id];});
+          assert(changed.length===1,'audit one purchase');var id=changed[0].id;
+          assert(before.achieved.labmaster && before.empowerQueue[id]!==false && candidates.indexOf(id)!==-1 && before.maxDepthEver>=changed[0].unlockDepth,'audit eligible purchase candidate');
+          assert(before.lumen>=costs[id] && state.lumen===before.lumen-costs[id],'audit paid exactly once');
+          assert(state.spirits[id]===before.spirits[id]+1,'audit one paid level');
+          assert(state.enemyHp===before.enemyHp && state.enemyDepth===before.enemyDepth && state.totalKills===before.totalKills,'audit purchase cannot apply retrospective damage');
+          candidates.forEach(function(other){if(before.empowerQueue[other]!==false) assert(costs[id]<=costs[other],'audit cheapest-next-purchase');});
+          counts.purchases++;
+          if(before.formationRebuild && before.formationRebuild.members.indexOf(id)!==-1 && before.spirits[id]===0) counts.rebuildPurchases++;
+          party();
+        }
+        return result;
+      };
+      simulationDefeatEnemy=function(policy,summary){
+        var before=copy(state),count=summary.kills;
+        var result=originals.death(policy,summary);
+        assert(summary.kills===count+1,'audit one defeated enemy');
+        if(state.ascendCount===before.ascendCount){
+          assert(state.riftMode===before.riftMode,'audit unauthorized death mode transition');
+          assert(state.depth===(before.riftMode==='farm'?before.farmDepth:before.depth+1),'audit legal Push progression');
+        }
+        counts.deaths++;party();return result;
+      };
+      if(mutation==='persist') reconcileFormationRebuild=function(s){
+        if(s.formationRebuild && !s.formationRebuild.members.some(function(id){return s.spirits[id]>0;}) && !s.spirits.ember)return;
+        originals.reconcile(s);
+      };
+      if(mutation==='timer'){
+        var source=String(originals.advance),guard='if(state.ascendCount===ascendsBeforePassive){';
+        assert(source.indexOf(guard)!==-1,'timer mutation anchor');
+        advanceAuthoritativeTime=eval('('+source.replace(guard,'if(true){')+')');
+      }
+      return {counts:counts,restore:function(){
+        simulationMaybeRetryBoss=originals.retry;applyAscendMutation=originals.ascend;
+        simulationApplyAutoAscend=originals.auto;autoEmpowerTick=originals.buy;
+        simulationDefeatEnemy=originals.death;reconcileFormationRebuild=originals.reconcile;
+        advanceAuthoritativeTime=originals.advance;
+      }};
+    },
+
+    buy: function(id){ buySpirit(SPIRITS.find(function(sp){return sp.id===id;})); },
+    cost: function(id){ return spiritCost(SPIRITS.find(function(sp){return sp.id===id;})); },
+    tick: function(){ return autoEmpowerTick(); },
+    spent: function(before,after){
+      var saved=state,total={lumen:0,shards:0};
+      try{
+        state=JSON.parse(JSON.stringify(before));
+        SPIRITS.forEach(function(sp){
+          for(var level=before.spirits[sp.id];level<after.spirits[sp.id];level++){
+            state.spirits[sp.id]=level;total.lumen+=spiritCost(sp);
+          }
+        });
+        RESEARCH.forEach(function(node){
+          for(var level=before.research[node.id];level<after.research[node.id];level++){
+            var cost=researchCostForLevels(node,level,1);total.lumen+=cost.lumen;total.shards+=cost.shard;
+          }
+        });
+        after.activeStudies.forEach(function(active){
+          if(before.activeStudies.some(function(old){return old.id===active.id;})) return;
+          var node=LONG_STUDIES.find(function(node){return node.id===active.id;});
+          var cost=studyCost(node,before.longStudyLevels[node.id]||0);total.lumen+=cost.lumen;total.shards+=cost.shard;
+        });
+        return total;
+      }finally{state=saved;}
+    },
+    toggle: function(id){ toggleActive(id); },
+    corruptPrimary: function(){ localStorage.setItem(SAVE_KEY,'broken'); },
+    // Negative controls use real production entry points with one scoped mutation.
+    mutate: function(kind){
+      var original = kind==='intent' ? normalizeFormationRebuild : reconcileFormationRebuild;
+      if(kind==='intent') normalizeFormationRebuild=function(){return null;};
+      else reconcileFormationRebuild=function(snapshot){if(snapshot.formationRebuild) snapshot.activeParty=snapshot.formationRebuild.members.slice();};
+      return function(){if(kind==='intent') normalizeFormationRebuild=original;else reconcileFormationRebuild=original;};
+    }
+  },
   feedbackTick: function(enabled){
     var presenter=presentLiveRiftResult;
     if(enabled===false) presentLiveRiftResult=function(){};
@@ -833,7 +974,7 @@ def build_runner():
       );
     });
 
-    ['activeParty','spirits','research','longStudyLevels','achieved','dailyStats'].forEach(function(key){
+    ['activeParty','formationRebuild','activeFormationPreset','spirits','research','longStudyLevels','achieved','dailyStats'].forEach(function(key){
       assertJsonEqual(actual[key],expected[key],label+' '+key);
     });
 
@@ -1254,12 +1395,68 @@ def build_runner():
     if(!bridge || !bridge.getState){ finish('fail','test bridge unavailable'); return; }
     try{
       var s = state();
+      if(ctx.scenario==='layout-p2-07a-reconstruction'){
+        bridge.freeze();
+        window.runP207LayoutQa(bridge,ctx,assert).then(function(detail){finish('pass',detail);},function(error){finish('fail',error.message);});
+        return;
+      }
       if(ctx.scenario.startsWith('layout-') || ctx.scenario==='self-test-layout-collapse'){
         bridge.freeze();
         window.runRiftLayoutQa(bridge,ctx,assert).then(function(detail){ finish('pass',detail); },function(error){ finish('fail',error.message); });
         return;
       }
       switch(ctx.scenario){
+        case 'p2-07a-persistence-review':
+          bridge.freeze();
+          finish('pass',window.runP207PersistenceReview(bridge,ctx,assert));
+          return;
+        case 'p2-07a-formation-reconstruction':
+          bridge.freeze();
+          finish('pass',window.runP207FormationQa(bridge,ctx,assert,assertProtectedParity));
+          return;
+        case 'p2-07a-chronology':
+          bridge.freeze();
+          finish('pass',window.runP207ChronologyQa(bridge,ctx,assert,assertProtectedParity,assertSummaryParity));
+          return;
+        case 'p2-07a-persist-reset':
+          bridge.freeze();
+          if(phase()===0){bridge.setState(window.p207Contradictory(bridge));bridge.feedbackSave();nextPhase(1);bridge.reset();return;}
+          assertFresh(s);assert(s.formationRebuild===null,'Reset clears pending intent');
+          assert(bridge.formationTest.canonical(s).formationRebuild===null,'Reset cannot resurrect intent');
+          finish('pass',{reset:true,intent:null});return;
+        case 'p2-07a-persist-save-reload':
+        case 'p2-07a-persist-backup-restore':
+        case 'p2-07a-persist-recovery':
+        case 'p2-07a-save-reload':
+        case 'p2-07a-backup-restore':
+        case 'p2-07a-recovery': {
+          bridge.freeze();
+          if(phase()===0){
+            var target=window.p207Seed(bridge,['void','tide','stone'],'boss');
+            bridge.setState(target);bridge.ascendManual();
+            var pending=state();pending.lumen=60;bridge.setState(pending);bridge.formationTest.buy('tide');
+            if(ctx.scenario.indexOf('p2-07a-persist-')===0) bridge.setState(window.p207Contradictory(bridge));
+            // Isolate persistence from the legitimate first-login daily reward.
+            var sameDay=state();sameDay.questDay=ctx.currentDay();sameDay.loginStreak=1;bridge.setState(sameDay);
+            bridge.feedbackSave();
+            var expected=state();
+            localStorage.setItem('p207-expected',JSON.stringify(expected));
+            nextPhase(1);
+            if(ctx.scenario.endsWith('backup-restore')){
+              bridge.setState(bridge.freshStateSnapshot());
+              bridge.restoreBackup(backupCode(expected));
+            }else{
+              if(ctx.scenario.endsWith('recovery')) bridge.formationTest.corruptPrimary();
+              bridge.suppressUnloadSave();location.reload();
+            }
+            return;
+          }
+          var expected=JSON.parse(localStorage.getItem('p207-expected'));
+          ['formationRebuild','activeParty','formationPresets','spirits','empowerQueue','lumen','shards','prisms','comets','motes','sigils','heroResource'].forEach(function(key){assertJsonEqual(state()[key],expected[key],ctx.scenario+' '+key);});
+          assert(state().schemaVersion===1,'partial reconstruction remains schema-v1');
+          assertJsonEqual(JSON.parse(bridge.rawRecovery()).formationRebuild,expected.formationRebuild,'recovery intent');
+          finish('pass',{intent:state().formationRebuild,active:state().activeParty});return;
+        }
         case 'p2-06b-live-feedback':
         case 'p2-06b-reduced-motion':
           bridge.freeze();
@@ -1557,26 +1754,15 @@ def build_runner():
           return;
         }
 
-        case 'parity-medium-farm': {
-          var mediumPair = runParityPair(3600,'offline',1);
-          assert(mediumPair.direct.state.riftMode==='farm','medium Farm parity must remain in Farm mode');
-          assert(mediumPair.direct.state.farmReturnDepth===90,'medium Farm parity must preserve Push return depth');
-          assert(mediumPair.direct.summary.luminousKills>0 && mediumPair.direct.summary.motesGained>0,'medium Farm parity must exercise deterministic Luminous/Motes');
-          assert(mediumPair.direct.summary.autoTaps>0,'medium Farm parity must exercise Auto-Tap');
-          assert(mediumPair.direct.summary.empowers>0,'medium Farm parity must exercise Auto-Empower');
-          assert(mediumPair.direct.summary.researchBought>0,'medium Farm parity must exercise queued Research');
-          assert(mediumPair.direct.summary.completedStudies.length>0,'medium Farm parity must exercise Long Study completion');
-          finish('pass',{
-            durationSec:3600,
-            kills:mediumPair.direct.summary.kills,
-            luminousKills:mediumPair.direct.summary.luminousKills,
-            motes:mediumPair.direct.summary.motesGained,
-            researchBought:mediumPair.direct.summary.researchBought,
-            studies:mediumPair.direct.summary.completedStudies.length,
-            wallMs:mediumPair.direct.wallMs
-          });
+        case 'p2-07a-farm-retention':
+        case 'parity-medium-farm':
+          bridge.freeze();
+          finish('pass',window.runP207FarmReview(bridge,ctx,assert,assertProtectedParity,assertSummaryParity,ctx.scenario==='p2-07a-farm-retention'));
           return;
-        }
+        case 'p2-07a-timer-boundary':
+          bridge.freeze();
+          finish('pass',window.runP207TimerReview(bridge,ctx,assert,assertProtectedParity,assertSummaryParity,parityApprox));
+          return;
 
         case 'parity-long-high-power': {
           var longBaseline = state();
@@ -3224,6 +3410,7 @@ def instrument_html(source, fixtures):
         "<script>" + (ROOT / "accessibility.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "accessibility-controls.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "feedback.js").read_text(encoding="utf-8") + "</script>" +
+        "<script>" + (ROOT / "formation.js").read_text(encoding="utf-8") + "</script>" +
         build_runner() + "\n</body>",
         1,
     )
@@ -3292,7 +3479,7 @@ def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
 
     if passed:
         print(f"PASS {scenario}" + (f" {viewport}" if viewport else ""))
-        if result_text and (viewport or scenario == "parity-long-high-power" or scenario.startswith("chronology-") or scenario.startswith("p1-05-")):
+        if result_text and (viewport or scenario in ("parity-long-high-power", "parity-medium-farm") or scenario.startswith("chronology-") or scenario.startswith("p1-05-") or scenario.startswith("p2-07a-")):
             try:
                 payload = json.loads(html_lib.unescape(re.sub(r'<[^>]+>', '', result_text.group(1))).strip())
                 print("  detail: " + json.dumps(payload.get("detail"), sort_keys=True))
