@@ -6457,8 +6457,47 @@ function advanceStudyOnlyTime(elapsedSec,clockStartMs,summary){
   return nowMs;
 }
 
+// Presentation observes only this tick's committed result. No event queue or
+// persisted marker: suppressed/rapid/offline events are deliberately discarded.
+var liveRiftFeedbackAt = -Infinity;
+function presentLiveRiftResult(before,sim){
+  if(!sim.kills || sim.ascends || document.hidden || startupIntroPlaying ||
+      !document.getElementById('tab-battle').classList.contains('active') ||
+      document.querySelector('dialog[open]') ||
+      Array.from(document.querySelectorAll('.overlay')).some(overlayVisible)) return;
+  var now = Date.now();
+  if(now-liveRiftFeedbackAt<1850 || document.querySelector('.rift-milestone')) return;
+  var milestone = 0;
+  if(before.mode==='push' && state.maxDepthEver>before.maxDepth){
+    // Keep the latest newly reached Wisp, otherwise the latest region. A boss
+    // entrance is relevant only if it is still the current encounter.
+    SPIRITS.forEach(function(sp){
+      if(sp.unlockDepth>before.maxDepth && sp.unlockDepth<=state.maxDepthEver) milestone=sp.unlockDepth;
+    });
+    if(!milestone){
+      var regionStart = Math.floor((state.maxDepthEver-1)/RIFT_ZONE_SPAN)*RIFT_ZONE_SPAN+1;
+      if(regionStart>before.maxDepth) milestone=regionStart;
+      else if(isBoss(state.depth) && state.depth>before.maxDepth) milestone=state.depth;
+      else if(before.maxDepth<16 && state.maxDepthEver>=16 && state.ascendCount===0) milestone=16;
+    }
+  }
+  if(!milestone && !sim.bossKills) return;
+  liveRiftFeedbackAt = now;
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(sim.bossKills && !reduced){
+    emitCombatVfx('boss-death','#ef5b6b');
+    flashBattleStage('victory');
+  }
+  if(milestone){
+    announceDepthMilestone(milestone,before.maxDepth);
+  } else if(before.mode==='push'){
+    var defeatedDepth = Math.floor((state.depth-1)/10)*10;
+    showRiftMilestone('BOSS DEFEATED',sim.bossKills===1 ? 'Rift '+defeatedDepth+' conquered' : sim.bossKills+' Bosses defeated','+'+formatNum(sim.sigilsGained)+' Sigils','#ff8552');
+  }
+}
 function tick(){
   if(document.hidden || resetInProgress || reloadInProgress) return;
+  var feedbackBefore = {mode:state.riftMode,maxDepth:state.maxDepthEver};
   var sim = advanceAuthoritativeTime(TICK_MS/1000,{kind:'live',visual:true,clockStartMs:Date.now()-TICK_MS});
 
   if(sim.ascends>0){
@@ -6485,6 +6524,7 @@ function tick(){
   updateBattleFast();
   updatePartyBars();
   checkAffordability();
+  presentLiveRiftResult(feedbackBefore,sim);
 }
 
 function studyRemainingText(active){
@@ -6894,6 +6934,9 @@ function init(){
   var resumeFlowBusy = false;
   document.addEventListener('visibilitychange', function(){
     if(document.hidden){
+      // Do not resume an interrupted milestone animation/banner on return.
+      document.querySelectorAll('.rift-milestone,.vfx-boss-death').forEach(function(el){ el.remove(); });
+      document.querySelector('#tab-battle .stage').classList.remove('impact-victory','impact-milestone','impact-boss');
       appHiddenAt = Date.now();
       saveState();
       return;

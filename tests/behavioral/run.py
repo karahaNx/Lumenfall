@@ -17,6 +17,8 @@ ROOT = Path(__file__).resolve().parent
 FIXTURES_PATH = ROOT / "fixtures.json"
 
 SCENARIOS = {
+    "p2-06b-live-feedback": "fresh",
+    "p2-06b-reduced-motion": "fresh",
     "layout-fresh": "fresh",
     "layout-dense": "layout-dense",
     "layout-boss": "layout-dense-boss",
@@ -326,6 +328,23 @@ applyOfflineProgress = function(){
 };
 
 window.__lumenfallQaBridge = {
+  feedbackTick: function(enabled){
+    var presenter=presentLiveRiftResult;
+    if(enabled===false) presentLiveRiftResult=function(){};
+    reloadInProgress=false;
+    try { tick(); } finally { presentLiveRiftResult=presenter; reloadInProgress=true; }
+    return JSON.parse(JSON.stringify(state));
+  },
+  resetFeedback: function(){
+    if(startupIntroFinish) startupIntroFinish();
+    document.querySelectorAll('.overlay,#startup-intro').forEach(function(el){el.style.display='none';});
+    liveRiftFeedbackAt=-Infinity;
+    document.querySelectorAll('.rift-milestone,.combat-vfx').forEach(function(el){el.remove();});
+  },
+  feedbackSave: function(){
+    reloadInProgress=false;
+    try { saveState(); } finally { reloadInProgress=true; }
+  },
   refreshAffordability: function(){ lastAffordabilityAt=0; checkAffordability(); },
   renderLayout: function(){ renderAll(); updateBattleFast(); },
   toast: function(message){ showToast(message); },
@@ -1241,6 +1260,11 @@ def build_runner():
         return;
       }
       switch(ctx.scenario){
+        case 'p2-06b-live-feedback':
+        case 'p2-06b-reduced-motion':
+          bridge.freeze();
+          finish('pass',window.runP206FeedbackQa(bridge,ctx,assert));
+          return;
         case 'fresh-load':
           assertFresh(s);
           assert(Array.isArray(s.questIds),'fresh questIds must be an array');
@@ -3199,6 +3223,7 @@ def instrument_html(source, fixtures):
         "<script>" + (ROOT / "layout.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "accessibility.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "accessibility-controls.js").read_text(encoding="utf-8") + "</script>" +
+        "<script>" + (ROOT / "feedback.js").read_text(encoding="utf-8") + "</script>" +
         build_runner() + "\n</body>",
         1,
     )
@@ -3248,7 +3273,7 @@ def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
             "--dump-dom",
             url,
         ]
-        if scenario == "p1-05-reduced-motion":
+        if scenario in ("p1-05-reduced-motion", "p2-06b-reduced-motion"):
             command.insert(-1, "--force-prefers-reduced-motion")
         completed = subprocess.run(command, capture_output=True, text=True, timeout=25)
         dom = completed.stdout
