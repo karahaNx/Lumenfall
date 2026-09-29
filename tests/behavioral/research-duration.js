@@ -8,7 +8,7 @@ window.runResearchDurationQa = function(b,ctx,assert){
   seed.maxDepthEver=101;seed.motes=1e9;
   seed.activeStudies=[{id:'guardmastery',remainingSec:729,totalDurationSec:300000,speedMult:1}];
   b.setState(seed);b.renderLayout();
-  document.querySelector('[data-tab="research"]').click();b.setLabView('studies');
+  document.querySelector('[data-tab="research"]').click();
   var label=document.querySelector('[data-study-text="guardmastery"]');
   // This first assertion fails on the unchanged baseline's real rendered card.
   ok(label.textContent==='12m 09s remaining · 1x','rendered countdown retains seconds: '+label.textContent);

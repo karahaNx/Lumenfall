@@ -13,12 +13,12 @@ window.runP105ControlQa = function(bridge,ctx,assert){
   }
   q('[data-tab="spirits"]').click();
   press('[data-empower-queue="ember"]',function(){return bridge.getState().empowerQueue.ember!==false;});
-  q('[data-tab="research"]').click();
+  q('[data-tab="forge"]').click();
   press('[data-queue="focus"]',function(){return !!bridge.getState().researchQueue.focus;});
-  bridge.setLabView('studies',false);
+  q('[data-tab="research"]').click();
   var study=q('[data-study-queue]'), studyId=study.getAttribute('data-study-queue');
   press('[data-study-queue="'+studyId+'"]',function(){return !!bridge.getState().studyQueue[studyId];});
-  bridge.setLabView('permanent',false);
+  q('[data-tab="forge"]').click();
   press('[data-mult="5"]',function(){return true;});
   q('[data-tab="deeds"]').click();
   press('[data-autoascend-toggle]',function(){return !!bridge.getState().autoAscendEnabled;});
@@ -36,8 +36,8 @@ window.runP105ControlQa = function(bridge,ctx,assert){
   function luminance(rgb){var c=rgb.map(function(n){n/=255;return n<=.04045?n/12.92:Math.pow((n+.055)/1.055,2.4);});return .2126*c[0]+.7152*c[1]+.0722*c[2];}
   q('[data-tab="research"]').click();
   var contrastResults={};
-  [['permanent','.mult-btn.active'],['studies','.speed-btn.active']].forEach(function(entry){
-    bridge.setLabView(entry[0],false);
+  [['forge','.mult-btn.active'],['research','.speed-btn.active']].forEach(function(entry){
+    q('[data-tab="'+entry[0]+'"]').click();
     var selector=entry[1];
     var el=q(selector);assert(el,selector+' fixture exists');var style=getComputedStyle(el);
     var a=luminance(rgb(style.color)),b=luminance(rgb(style.backgroundColor));
