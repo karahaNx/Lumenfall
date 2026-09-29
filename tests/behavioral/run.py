@@ -17,6 +17,8 @@ ROOT = Path(__file__).resolve().parent
 FIXTURES_PATH = ROOT / "fixtures.json"
 
 SCENARIOS = {
+    "forge-ui-mobile": "fresh",
+    "forge-ui-reduced-motion": "fresh",
     "buff-timing": "fresh",
     "buff-save-reload": "fresh",
     "forge-contracts": "fresh",
@@ -115,6 +117,8 @@ SCENARIOS = {
 PREP_SCENARIOS = {}
 
 NEGATIVE_SCENARIOS = {
+    "self-test-forge-ui-render": "fresh",
+    "self-test-forge-ui-bulk": "fresh",
     "self-test-r3-shortcut": "fresh",
     "self-test-research-duration-days": "fresh",
     "self-test-research-duration-seconds": "fresh",
@@ -154,6 +158,17 @@ def build_prelude(fixtures):
   var fixtures = {fixtures_json};
   var params = new URLSearchParams(location.search);
   var scenario = params.get('qaScenario') || '';
+  // Native UI tests hold interval callbacks only across immediate measurements.
+  // Keep real input/save handlers, animation frames and the production flags intact.
+  var uiMeasurementPaused=false;
+  if(scenario.startsWith('forge-ui-') || scenario.startsWith('self-test-forge-ui-')){{
+    var realSetInterval=window.setInterval.bind(window);
+    window.setInterval=function(callback,delay){{
+      var args=Array.prototype.slice.call(arguments,2);
+      return realSetInterval(function(){{if(!uiMeasurementPaused) callback.apply(window,args);}},delay);
+    }};
+  }}
+  window.__qaUiMeasurementPause=function(paused){{uiMeasurementPaused=!!paused;}};
   var fixtureName = params.get('qaFixture') || '';
   var phaseKey = 'lumenfall_qa_phase_' + scenario;
   var errors = [];
@@ -359,6 +374,7 @@ applyOfflineProgress = function(){
 };
 
 window.__lumenfallQaBridge = {
+  uiMeasurementPause: function(paused){ window.__qaUiMeasurementPause(paused); },
   buffTiming: {
     restoreOldCalculation: function(){
       var original=simulationBuffSecondsRemaining;
@@ -1520,6 +1536,9 @@ def build_runner():
       }
       if(ctx.scenario==='buff-save-reload'){
         bridge.freeze();window.runBuffSaveQa(bridge,ctx,assert,assertProtectedParity,phase,nextPhase,finish);return;
+      }
+      if(ctx.scenario.startsWith('forge-ui-') || ctx.scenario.startsWith('self-test-forge-ui-')){
+        window.__forgeUiReady=true;return; // Native CDP input driver owns this scenario.
       }
       if(ctx.scenario.startsWith('forge-')){
         bridge.freeze();
@@ -3586,6 +3605,18 @@ addEventListener('message',function(e){
 
 
 def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
+    if scenario.startswith(("forge-ui-", "self-test-forge-ui-")):
+        url = base_url + "/index.html?" + urlencode({"qaScenario": scenario, "qaFixture": fixture})
+        result = subprocess.run(["node", str(ROOT / "forge-ui.cjs"), chrome, url, scenario],
+                                capture_output=True, text=True, timeout=90)
+        try:
+            detail = json.loads(result.stdout)
+        except json.JSONDecodeError:
+            detail = {"status": "fail", "message": result.stdout + result.stderr}
+        passed = result.returncode == 0 and detail.get("status") == "pass"
+        print(("PASS " if passed else "FAIL ") + scenario)
+        print("  detail: " + json.dumps(detail, sort_keys=True))
+        return passed
     with tempfile.TemporaryDirectory(prefix=f"lumenfall-qa-{scenario}-") as profile:
         params = {"qaScenario": scenario, "qaFixture": fixture}
         page = "/index.html"
@@ -3673,6 +3704,18 @@ def main():
         stage = Path(td) / "www"
         shutil.copytree(web_root, stage)
         source = (stage / "index.html").read_text(encoding="utf-8")
+        # Causal controls alter only the throwaway staged app, never repository source.
+        if args.scenario == "self-test-forge-ui-render":
+            start = source.index("  var root=els['research-list'],main=document.querySelector('main');", source.index("function renderResearch(){"))
+            end = source.index("  els['research-list'].querySelectorAll('[data-mult]')", start)
+            source = source[:start] + """  replaceControlMarkup(els['research-list'],multHtml + html);
+  RESEARCH.forEach(function(node){updateResearchCard(node,els['research-list'].querySelector('[data-forge-card="'+node.id+'"]'));});
+  presentControlStates(els['research-list']);
+""" + source[end:]
+        if args.scenario == "self-test-forge-ui-bulk":
+            for rule in ("  #tab-forge .mult-row{gap:4px;}\n", "  #tab-forge .mult-btn{min-width:44px;min-height:44px;}\n"):
+                assert source.count(rule) == 1, "local Forge bulk rule must exist for negative control"
+                source = source.replace(rule, "")
         (stage / "index.html").write_text(instrument_html(source, fixtures), encoding="utf-8")
 
         (stage / "layout.html").write_text(LAYOUT_HOST, encoding="utf-8")

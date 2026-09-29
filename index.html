@@ -953,6 +953,9 @@
       radial-gradient(circle at 100% 0%,color-mix(in srgb,var(--shard) 6%,transparent),transparent 35%),
       linear-gradient(145deg,color-mix(in srgb,var(--bg-elev-2) 92%,transparent),color-mix(in srgb,var(--bg-elev) 96%,transparent));
   }
+  #tab-forge .node-queue-toggle{min-width:7em;}
+  #tab-forge .mult-row{gap:4px;}
+  #tab-forge .mult-btn{min-width:44px;min-height:44px;}
   #tab-forge .node-info{min-width:0;}
   #tab-forge .node-card > .shape{flex-shrink:0;}
   #tab-forge .node-card .shape{filter:drop-shadow(0 0 8px color-mix(in srgb,var(--shard) 42%,transparent));}
@@ -5074,9 +5077,32 @@ function renderResearch(){
       '</button>' +
     '</div>';
   });
-  replaceControlMarkup(els['research-list'],multHtml + html);
-  RESEARCH.forEach(function(node){updateResearchCard(node,els['research-list'].querySelector('[data-forge-card="'+node.id+'"]'));});
-  presentControlStates(els['research-list']);
+  var root=els['research-list'],main=document.querySelector('main');
+  var focused=root.contains(document.activeElement) ? document.activeElement : null;
+  var focusAttr=focused && ['data-mult','data-research','data-queue'].find(function(attr){return focused.hasAttribute(attr);});
+  var focusId=focusAttr && focused.getAttribute(focusAttr);
+  var scrollTop=main.scrollTop;
+  // Build the authoritative previews and control states off-DOM. Restoring
+  // focus on empty cards would clamp the scroll area before they reach full size.
+  var prepared=document.createElement('div');
+  prepared.innerHTML=multHtml + html;
+  RESEARCH.forEach(function(node){updateResearchCard(node,prepared.querySelector('[data-forge-card="'+node.id+'"]'));});
+  presentControlStates(prepared);
+  replaceControlMarkup(root,prepared.innerHTML);
+  main.scrollTop=scrollTop;
+  if(focusAttr){
+    var target=root.querySelector('['+focusAttr+'="'+focusId+'"]');
+    // A completed/unaffordable purchase falls back to this upgrade's Queue,
+    // rather than sending keyboard focus to a bulk control at the list's top.
+    if(target && target.disabled) target=root.querySelector('[data-queue="'+focusId+'"]');
+    if(target){
+      target.focus({preventScroll:true});
+      var rect=target.getBoundingClientRect(),viewport=main.getBoundingClientRect();
+      var bottom=Math.min(viewport.bottom,document.querySelector('nav.tabbar').getBoundingClientRect().top);
+      if(rect.top<viewport.top) main.scrollTop+=Math.floor(rect.top-viewport.top);
+      else if(rect.bottom>bottom) main.scrollTop+=Math.ceil(rect.bottom-bottom);
+    }
+  }
   els['research-list'].querySelectorAll('[data-mult]').forEach(function(btn){
     btn.addEventListener('click', function(){
       var v = btn.getAttribute('data-mult');
