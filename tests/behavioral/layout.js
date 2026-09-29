@@ -110,5 +110,38 @@ window.runRiftLayoutQa = async function(bridge, ctx, assert){
     icons.forEach(function(el){var r=el.getBoundingClientRect();assert(r.width>0 && r.width<=16 && r.height<=16,'research '+view+' nested icon sizing');});
   });
   q('[data-tab="battle"]').click();check('push');
-  return {viewport:[innerWidth,innerHeight],safeInsets:[params.get('safeTop'),params.get('safeBottom')],minimumEnemyHeight:minimum,hudHeight:hudHeight,party:initial.activeParty.length};
+  // P2-06A: exercise real render paths for all regions, three boss traits and
+  // deeper echoes at each supported viewport, including fresh and dense saves.
+  var landmarks=['verge','canopy','glass','observatory','basilica','crown'];
+  var regionBackgrounds=new Set(), bossColors=new Set();
+  var presentationDepths=[1,26,51,76,101,126,151,326,1229,10,20,30,60,80,110,130];
+  presentationDepths.forEach(function(depth){
+    var sample=JSON.parse(JSON.stringify(initial));
+    sample.depth=depth;sample.enemyDepth=depth;
+    sample.enemyMaxHp=bridge.enemyHpFor(depth);sample.enemyHp=sample.enemyMaxHp;
+    sample.enemyIsLuminous=false;sample.riftMode='push';
+    bridge.setState(sample);
+    var before=JSON.stringify(bridge.getState());
+    bridge.renderLayout();
+    assert(JSON.stringify(bridge.getState())===before,'presentation render must not mutate gameplay at Rift '+depth);
+    check('push');
+    var theme=Math.floor((depth-1)/25)%6;
+    var shown=Array.from(document.querySelectorAll('.region-landmark')).filter(function(el){return getComputedStyle(el).display!=='none';});
+    assert(shown.length===1 && shown[0].classList.contains('region-'+landmarks[theme]),'exactly the current region landmark is displayed');
+    assert(q('.rift-landscape').getAttribute('aria-hidden')==='true' && getComputedStyle(q('.rift-landscape')).pointerEvents==='none','scenery stays decorative and cannot intercept input');
+    if(depth<=126 && depth%10!==0) regionBackgrounds.add(getComputedStyle(q('#tab-battle .stage')).backgroundImage);
+    var boss=depth%10===0;
+    assert((getComputedStyle(q('.boss-regalia')).display!=='none')===boss,'boss regalia appears only during a boss encounter');
+    if(boss){
+      var trait=['regrowth','fractured','guardian'][(depth/10-1)%3];
+      var crests=Array.from(document.querySelectorAll('.boss-crest')).filter(function(el){return getComputedStyle(el).display!=='none';});
+      assert(crests.length===1 && crests[0].classList.contains('boss-crest-'+trait),'boss silhouette matches its authoritative trait');
+      bossColors.add(getComputedStyle(q('#enemy-glyph')).getPropertyValue('--creature-color').trim());
+      assert(q('.boss-regalia').getAttribute('aria-hidden')==='true','boss artwork remains decorative');
+    }
+  });
+  assert(regionBackgrounds.size===6,'six region backgrounds must remain visually distinct');
+  assert(bossColors.size===3,'boss traits retain distinct palettes');
+  bridge.setState(initial);bridge.renderLayout();
+  return {viewport:[innerWidth,innerHeight],safeInsets:[params.get('safeTop'),params.get('safeBottom')],minimumEnemyHeight:minimum,hudHeight:hudHeight,party:initial.activeParty.length,presentationStates:presentationDepths.length};
 };
