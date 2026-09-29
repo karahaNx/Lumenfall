@@ -1511,7 +1511,7 @@
     --land-light:#9ca7ee;--land-far:#19233b;--land-stone:#101b30;--land-edge:#384867;
     color:var(--ink);
     height:100%;min-height:0;padding:12px 12px 10px;gap:8px;
-    background:radial-gradient(ellipse at 50% 38%,#222946 0, #11182d 47%,#0b1121 100%)!important;
+    background:radial-gradient(ellipse at 50% 38%,var(--land-far) 0, #11182d 55%,#0b1121 100%)!important;
     border-color:#36405b;border-radius:20px;box-shadow:inset 0 1px 0 #62708a44,0 10px 30px #0003;
   }
   #tab-battle .stage::before{display:none;}
@@ -1534,6 +1534,11 @@
   .stage .battle-row{position:relative;isolation:isolate;flex:1;min-height:0;display:flex;flex-direction:column-reverse;align-items:stretch;gap:7px;margin:0 -4px;}
   .rift-landscape{position:absolute;inset:-38px -8px -8px;z-index:-1;overflow:hidden;border-radius:12px;pointer-events:none;}
   .rift-landscape>svg{position:absolute;width:100%;height:100%;opacity:.95;}
+  /* P2-06A: static, region-specific silhouettes; no added layout or animation. */
+  .region-landmark{display:none;}
+  [data-zone-theme="0"] .region-verge,[data-zone-theme="1"] .region-canopy,
+  [data-zone-theme="2"] .region-glass,[data-zone-theme="3"] .region-observatory,
+  [data-zone-theme="4"] .region-basilica,[data-zone-theme="5"] .region-crown{display:inline;}
   .zone-prop{display:none;}
   [data-zone-theme="0"] .zone-stars,[data-zone-theme="1"] .zone-roots,[data-zone-theme="2"] .zone-crystals,
   [data-zone-theme="3"] .zone-orbits,[data-zone-theme="4"] .zone-spires,[data-zone-theme="5"] .zone-crown{display:inline;}
@@ -1553,6 +1558,13 @@
   .boss-regalia{display:none;position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
   #tab-battle .stage .enemy-glyph.boss{width:clamp(100px,24vh,208px);}
   .enemy-glyph.boss .boss-regalia{display:block;}
+  .boss-regalia .boss-crest{display:none;}
+  .trait-regrowth .boss-crest-regrowth,.trait-fractured .boss-crest-fractured,
+  .trait-guardian .boss-crest-guardian{display:inline;}
+  #tab-battle .stage.trait-regrowth .enemy-glyph{--creature-color:#285c50;--creature-rim:#99d9a3;--creature-eye:#d8ffc1;}
+  #tab-battle .stage.trait-fractured .enemy-glyph{--creature-color:#674297;--creature-rim:#cb9eff;--creature-eye:#f0d4ff;}
+  #tab-battle .stage.trait-guardian .enemy-glyph{--creature-color:#806032;--creature-rim:#e7b964;--creature-eye:#fff0b8;}
+  #tab-battle .stage:is(.trait-regrowth,.trait-fractured,.trait-guardian) .enemy-stage::after{border-width:2px;border-style:double;border-color:var(--land-light);opacity:.35;}
   #tab-battle .stage .trait-regrowth .enemy-glyph{--creature-color:#285c50;--creature-rim:#99d9a3;--creature-eye:#d8ffc1;}
   #tab-battle .stage .trait-fractured .enemy-glyph{--creature-color:#674297;--creature-rim:#cb9eff;--creature-eye:#f0d4ff;}
   #tab-battle .stage .trait-guardian .enemy-glyph{--creature-color:#806032;--creature-rim:#e7b964;--creature-eye:#fff0b8;}
@@ -1847,15 +1859,47 @@
  <circle cx="200" cy="132" r="96" fill="var(--land-light)" opacity=".025"/>
  <circle cx="200" cy="132" r="78" fill="none" stroke="var(--land-light)" opacity=".12"/>
  <path d="M0 221 42 163 76 208 121 127 173 204 219 156 269 198 326 118 400 214V440H0Z" fill="var(--land-far)"/>
- <g fill="var(--land-stone)" stroke="var(--land-edge)" stroke-width="1">
+ <g class="region-landmark region-verge" fill="var(--land-stone)" stroke="var(--land-edge)" stroke-width="1">
  <path d="M41 349 49 133 62 120 78 129 85 343Z M46 144H80 M47 161H80 M52 178H76"/>
  <path d="M316 348 321 142 334 132 352 146 361 354Z M320 163H353 M321 180H354 M328 194H349"/>
  <path d="M84 331 90 97 116 70 136 70 128 98 111 115 107 331Z M267 335 271 116 252 95 255 70 281 80 302 106 309 337Z"/>
  <path d="M101 112 Q199 -8 288 113 L277 117 Q198 20 113 121Z"/>
- </g>
  <path d="M113 115 Q199 20 276 115L298 350H90Z" fill="url(#rift-mist)"/>
  <path d="M111 115 Q199 18 278 115" fill="none" stroke="var(--land-light)" stroke-width="2" opacity=".6"/>
  <g fill="var(--land-light)" opacity=".7"><path d="M63 172 67 180 63 188 59 180Z M337 185 341 193 337 201 333 193Z M194 55 199 47 204 55 199 63Z"/></g>
+ </g>
+ <g class="region-landmark region-canopy" fill="var(--land-stone)" stroke="var(--land-edge)" stroke-width="2">
+ <path d="M0 360 32 251 39 137 13 82 0 75V24L57 75 76 130 65 256 90 353Z M400 361 368 266 355 154 378 92 400 66V17L344 66 319 147 338 276 307 363Z"/>
+ <path d="M48 174 100 121 148 111 182 69 166 121 113 142 57 222Z M346 177 286 128 254 117 221 57 239 132 288 155 341 221Z"/>
+ <path d="M60 100 112 56 170 42 M338 93 297 44 245 26 M24 300 65 282 96 304 M372 307 337 291 308 320" fill="none" stroke="var(--land-light)" opacity=".45"/>
+ <path d="M84 73 104 39 119 64 103 94Z M279 62 296 22 311 51 298 77Z" fill="var(--land-light)" stroke="none" opacity=".35"/>
+ </g>
+ <g class="region-landmark region-glass" fill="var(--land-stone)" stroke="var(--land-light)" stroke-opacity=".55">
+ <path d="M9 337 24 126 72 55 93 192 71 349Z M71 349 97 220 126 163 143 284 127 358Z M265 353 279 194 321 62 348 175 363 354Z M348 354 367 220 393 157 400 352Z"/>
+ <path d="M72 55 60 254 71 349 24 126Z M321 62 309 246 265 353 279 194Z" fill="var(--land-light)" opacity=".13"/>
+ <path d="M125 59 160 31 181 76 157 114Z M214 90 247 55 267 106 239 134Z" fill="var(--land-far)"/>
+ <path d="M157 114 160 31 M239 134 247 55 M9 337 60 254 M309 246 363 354" fill="none"/>
+ </g>
+ <g class="region-landmark region-observatory" fill="none" stroke="var(--land-light)">
+ <circle cx="200" cy="157" r="120" stroke-width="3" opacity=".4"/>
+ <circle cx="200" cy="157" r="110" stroke-dasharray="2 13" opacity=".6"/>
+ <ellipse cx="200" cy="157" rx="126" ry="44" transform="rotate(-35 200 157)" opacity=".45"/>
+ <path d="M200 25V48 M200 267V291 M65 157H89 M311 157H335" stroke-width="3" opacity=".6"/>
+ <path d="M16 350V210L39 181 64 211V344 M335 346V211L359 180 386 210V353" fill="var(--land-stone)" stroke="var(--land-edge)"/>
+ <path d="M0 312Q100 288 200 312T400 312 M0 333Q100 309 200 333T400 333" opacity=".25"/>
+ </g>
+ <g class="region-landmark region-basilica" fill="var(--land-stone)" stroke="var(--land-edge)" stroke-width="2">
+ <path d="M17 355V130L51 31 86 130V350 M315 352V130L349 31 383 130V356 M91 351V140Q114 57 144 39L139 79Q116 111 116 151V351 M284 351V151Q284 111 261 79L256 39Q286 57 309 140V351"/>
+ <path d="M32 328V143L51 86 70 143V328 M331 328V143L349 86 369 143V328" fill="#090d20"/>
+ <path d="M112 150Q142 57 200 19Q258 57 288 150 M137 144Q157 78 200 47Q243 78 263 144" fill="none" stroke="var(--land-light)" opacity=".45"/>
+ <path d="M200 63 214 87 200 112 186 87Z" fill="var(--land-light)" opacity=".5"/>
+ </g>
+ <g class="region-landmark region-crown" stroke="var(--land-light)">
+ <circle cx="200" cy="106" r="69" fill="#100e20" stroke-width="3" opacity=".8"/>
+ <path d="M124 107A76 76 0 0 1 276 107 M200 17V2 M137 39 127 24 M263 39 273 24" fill="none" opacity=".6"/>
+ <path d="M0 245 34 212 92 230 67 252 43 294Z M307 240 355 211 400 247 369 286 343 262Z M65 135 96 112 123 129 104 150 87 185Z M284 150 311 127 340 144 318 185Z" fill="var(--land-stone)" stroke="var(--land-edge)"/>
+ <path d="M17 241 43 235 64 244 M329 237 355 228 379 246 M91 139 104 132 M303 153 318 148" fill="none" opacity=".6"/>
+ </g>
  <g class="zone-prop zone-stars" fill="var(--land-light)" opacity=".6"><path d="M24 93 27 103 37 106 27 109 24 119 21 109 11 106 21 103Z M366 71 368 78 375 80 368 82 366 89 364 82 357 80 364 78Z"/><circle cx="148" cy="34" r="1.3"/><circle cx="238" cy="22" r="1"/></g>
  <g class="zone-prop zone-roots" fill="none" stroke="var(--land-edge)" stroke-width="3" opacity=".65"><path d="M20 359 37 281 25 223 29 182 M36 279 61 255 64 211 M26 224 9 206 M379 359 367 293 377 244 369 202 M368 293 343 265 336 230"/></g>
  <g class="zone-prop zone-crystals" fill="var(--land-far)" stroke="var(--land-light)" stroke-opacity=".6"><path d="M16 342 9 280 29 244 40 300 31 347Z M37 350 40 305 58 279 60 333 48 354Z M337 345 343 288 361 257 372 318 356 353Z M370 357 372 324 390 300 391 347Z"/><path d="M29 244 27 335 M361 257 355 342"/></g>
@@ -1872,7 +1916,11 @@
 
           <div class="enemy-stage-wrap">
             <button type="button" class="enemy-stage" id="enemy-stage" aria-label="Guardian Tap — strike the enemy"><span class="guardian-label">Guardian Tap</span>
-              <div class="enemy-glyph" id="enemy-glyph"><svg class="creature-art" viewBox="0 0 160 160" aria-hidden="true"><use href="#creature-prowler"/></svg><svg class="boss-regalia" viewBox="0 0 160 160" aria-hidden="true"><path d="M44 37 34 8 60 25 80 2 100 25 126 8 116 37 98 30 80 40 62 30Z" fill="var(--creature-color)" stroke="var(--creature-eye)"/><path d="M20 66 4 50 9 103 36 116 27 88 M140 66 156 50 151 103 124 116 133 88" fill="var(--creature-color)" stroke="var(--creature-rim)"/><path d="M80 10 85 19 80 27 75 19Z" fill="#fff0cb"/></svg></div>
+              <div class="enemy-glyph" id="enemy-glyph"><svg class="creature-art" viewBox="0 0 160 160" aria-hidden="true"><use href="#creature-prowler"/></svg><svg class="boss-regalia" viewBox="0 0 160 160" aria-hidden="true" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5">
+                <g class="boss-crest boss-crest-regrowth"><path d="M48 45 30 31 24 9 35 19 40 5 43 29 61 35 M112 45 130 31 136 9 125 19 120 5 117 29 99 35 M28 82 7 63 14 92 31 105 M132 82 153 63 146 92 129 105"/><path d="M42 30Q65 13 80 34Q95 13 118 30 M13 82 30 94 M147 82 130 94" fill="none" stroke="var(--creature-eye)"/></g>
+                <g class="boss-crest boss-crest-fractured"><path d="M80 3 91 19 80 35 69 19Z M35 15 52 24 48 43 31 34Z M125 15 108 24 112 43 129 34Z M12 54 28 70 17 90 3 73Z M148 54 132 70 143 90 157 73Z"/><path d="M80 3V35 M35 15 48 43 M125 15 112 43 M12 54 17 90 M148 54 143 90" stroke="var(--creature-eye)"/></g>
+                <g class="boss-crest boss-crest-guardian"><path d="M44 37 34 8 60 25 80 2 100 25 126 8 116 37 98 30 80 40 62 30Z M20 66 4 50 9 103 36 116 27 88 M140 66 156 50 151 103 124 116 133 88"/><path d="M80 10 85 19 80 27 75 19Z" fill="var(--creature-eye)"/><path d="M13 69 19 97 28 103 M147 69 141 97 132 103" fill="none" stroke="var(--creature-eye)"/></g>
+              </svg></div>
             </button>
             <div class="hp-wrap">
               <div class="hp-bar-track"><div class="hp-bar-fill" id="hp-fill"></div></div>
