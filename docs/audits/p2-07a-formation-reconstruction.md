@@ -1,8 +1,10 @@
 # P2-07A — Formation reconstruction (review handoff)
 
-Status: implemented for review; **not merge-ready**. The existing medium-Farm
-endpoint assertion remains red. Do not merge before Lead/04 resolve that contract
-and 01 reviews persistence. P2-04 remains deferred/unmerged; P2-05/P2-08 untouched.
+Status: review corrections implemented; **Draft, do not merge**. The original
+implementation and #89 results below are historical. The 02_05 review-resolution
+section records current validation and known limits. 01 must re-review persistence
+and 04 must re-review Farm/timer coverage at the final correction SHA.
+P2-04 remains deferred/unmerged; P2-05/P2-08 untouched.
 
 Baseline: `df310f48128c5f131588521ac8873973f0fadf17` (GitHub main, reverified before
 publication). No open PRs were returned by the direct GitHub open-PR collection.
@@ -174,3 +176,185 @@ best-build selection, region modifiers, Boss traits, or P2-06 presentation logic
 **01 persistence review is still required. 04 QA review is still required.**
 Neither review has been performed by this implementation session. Draft PR only;
 no merge, no Android release and no main mutation.
+
+## 02_05 review resolution — 2026-09-29
+
+Continuation of Draft PR #30, not a new implementation. Remote main was verified
+as `df310f48128c5f131588521ac8873973f0fadf17`, and the remote branch/history/PR/checks
+still matched reviewed HEAD `71418803dab2b3f97a2ed8124ea9f966fd3babff`. A new local
+checkout of the existing branch was used. #89 logs independently confirmed the
+old composite endpoint assertion; no old workflow was rerun.
+
+### PERSIST-01 reproduction and minimal correction
+
+Before modifying production, the new `p2-07a-persistence-review` scenario ran
+against the exact reviewed production file. With unlocked `[tide,stone]`, both
+at zero, Ember zero, Gale one and `activeParty=['gale']`, it failed with
+`PERSIST-01 unrelated Gale retained: ["gale"]`; Chrome exited normally and there
+were no runtime errors.
+
+Production correction relative to reviewed HEAD is eight added lines:
+
+1. `reconcileFormationRebuild()` projects to an empty party when neither an
+   intended member nor Ember is powered, instead of retaining unrelated members.
+2. After that projection, `normalizeCurrentSave()` applies the existing
+   empty-party Ember recovery (`max(1, current Ember level)`) if necessary, then
+   reconciles again **inside the same normalization pass**.
+
+No powered intended members: powered Ember supplies startup support; if Ember
+also has zero power, canonical empty-party recovery supplies exactly level 1.
+One or more powered intended members: the actual party is their exact ordered
+subsequence, and unrelated Ember/Gale are not fielded. Non-Ember pending members
+remain level zero. Gale's level, ability resource and reserve progression remain
+intact; currencies, costs and automation settings are unchanged.
+
+The recovery grant is the established canonical Ember exception, not a purchase
+or free reconstruction of another Wisp. Reconciliation itself never grants a
+level. The second projection matters when Ember is intended: an Ember-only intent
+can finish and restore its matching preset in the **first** pass. Otherwise the
+ordered pending intent remains. On another pass the party is already valid, so
+there is no additional grant, projection change or stale-intent resurrection.
+
+Executed persistence coverage:
+
+- 162 focused assertions: exact contradiction, powered Ember, one/multiple powered
+  intended members, intended Ember, Ember-only completion, ordered completion,
+  malformed/absent intent, reserve/currency/resource preservation and cancellation.
+- Seven canonical cases each compare the **entire canonical object** after four
+  fixed-clock repetitions and after advancing the clock; all are identical.
+- No automatic reserve purchase with intended members/Ember OFF and Gale ON.
+- New actual page reload, backup restore and corrupt-primary recovery cases for
+  the corrected contradiction, plus the original partial reconstruction cases.
+  Exact roster, currency and resource comparisons are retained. Fixtures mark
+  today's login as already handled to isolate persistence from the legitimate
+  five-Comet first-login reward, rather than weakening currency assertions.
+- Reset clears pending intent; repeated partial Ascension, explicit cancellation,
+  fresh/current-v1/legacy/malformed compatibility remain in the complete suite.
+- The negative control restores the old Gale fall-through and fails the
+  projection assertion. Schema stays at 1; no downgrade-continuity promise.
+
+### Farm contract separation
+
+The original medium fixture is unchanged in `fixtures.json`. Its automatic Boss
+retry and Auto-Ascend permit Farm → Boss retry → Push → Ascension → reconstruction.
+An unconditional final Farm assertion therefore asserted retention beyond its
+preconditions, instead of validating the allowed transitions.
+
+Contract A, `p2-07a-farm-retention`, derives a controlled state from that fixture
+with Push return **91**, a non-Boss encounter. Existing `highestFarmableDepth()`
+normalizes its Farm depth to 89. No automatic Boss retry can become eligible,
+regardless of economic growth. Auto-Tap, Auto-Empower, Research, Studies and
+Auto-Ascend remain enabled. Across 3600 seconds, it requires exact Farm mode,
+Farm depth, return depth, zero retries and zero Ascensions. Direct/offline
+one-second reference and live one-second reference comparisons are strict.
+
+Contract B retains `parity-medium-farm` and all its economic coverage. Test-only
+wrappers observe actual production entry points, recording preconditions before
+mutations and checking their results:
+
+- Retry requires the existing offline policy, Farm mode, a Boss return and a
+  finite kill estimate; exactly one retry clears Farm fields and returns to that
+  exact Boss. Enemy defeat preserves Farm or advances Push by exactly one Rift.
+- Every Ascension requires eligibility and the cleared target before mutation;
+  count advances once, normal reset occurs, and exact intended order survives.
+- Every Auto-Empower purchase is unlocked/enabled, among allowed candidates,
+  cheapest, affordable, exactly one level and exactly one exact Lumen debit.
+  Enemy HP/depth/kills cannot change inside a purchase. Pending level-zero and
+  unrelated reserve members cannot contribute to the actual party.
+- Audited counts must match simulation summaries. The unmodified composite must
+  actually retry, Ascend and buy missing intended members. Observed counts are
+  diagnostics, **not hardcoded expected endpoints**.
+- Existing strict state/summary comparisons retain the original 3600-second
+  offline run against one-second reference; the integrated fractional split is
+  1234.5 + 2365.5 seconds. Live one-second reference also passes.
+- The existing focused chronology scenario separately proves identical damage
+  through the purchase boundary and additional rebuilt damage only afterward,
+  including strict 0.1-second reference and exact Ascension split.
+
+Targeted mutations force an unauthorized Farm exit, premature Ascension, duplicate
+Ascension, and refund a genuine missing-member reconstruction purchase. Each must
+fail its specific causal assertion, not merely throw or fail browser startup.
+
+### Exact reset-boundary timer coverage
+
+`p2-07a-timer-boundary` constructs a passive kill at 0.25 seconds, before automation
+or ability events, with both automation unlocks, nonzero old-run accumulators,
+three powered members and an ongoing Study. For both live/offline it checks:
+
+- 0.2499 seconds: no Ascension; normal ability/timer accrual.
+- 0.25 seconds: one Ascension; all reset ability bars and both timers exactly zero.
+- 0.2501 seconds: only the 0.0001 seconds after reset accrues to the new run.
+- Study progress remains continuous, and an Auto-Ascend-OFF control retains normal
+  non-Ascension accrual.
+- Strict 0.01-second reference and splits before, exactly at and immediately after
+  the boundary agree. Existing `1e-6` absolute / `1e-12` relative tolerances stand.
+- A test-only mutation replaces the existing accrual guard with its former
+  unconditional behavior and must fail the reset-ability assertion.
+
+No additional simulator production change was made; the reviewed narrow guard
+is retained verbatim.
+
+### Additional diagnostic limits for 04 / Lead
+
+Two exploratory tests outside the existing medium fixture's one-second reference
+contract exposed **pre-existing main behavior**, reproduced with the same inputs
+on unchanged `df310f4` as well as the correction:
+
+1. Medium Farm live 60-second direct vs 0.1-second chunks: total kills 50166 vs
+   50164. This occurs without Ascension and is not caused by reconstruction.
+2. The new isolated non-Boss-return fixture, offline 3600 seconds split at 1234.5:
+   enemy HP differs by approximately `1.9525e-6`, beyond the unchanged relative
+   tolerance of approximately `1.7127e-6`. Integer-grid split at 1234 passes.
+
+These diagnostic failures are **not counted as passes**. The isolated retention
+contract uses the established one-second reference and an integer-grid split;
+Contract B keeps its passing fractional split. No numeric tolerance was relaxed,
+no production Farm code was changed, and no general arbitrary-window equivalence
+is claimed for all Farm fixtures. 04/Lead should triage these baseline limitations
+separately; this bounded review correction does not redesign the simulator.
+
+### Validation and publication
+
+Current local results are recorded below after the final complete run. Local
+browser is Chromium 153.0.8010.0 through the inspected scratch-only Playwright
+CLI adapter; repository dependencies and workflows are unchanged. The adapter
+runs the real harness and waits for its result, including reloads and iframe
+viewport checks. CI uses its normal installed Chrome.
+
+- Final complete local suite: **77/77 scenarios, 97/97 expanded executions pass**.
+  Includes all seven newly added review scenarios, original Formation/chronology,
+  fresh/v1/legacy/malformed persistence, restore/recovery/Reset, all live/offline
+  reference and lifecycle scenarios, Ascension/Auto-Ascend integrity, Wisp formula,
+  pacing/role/economy contracts and both P2-06 feedback motion modes.
+- Focused persistence: **162 assertions**; original Formation contract rerun:
+  **323 assertions**, including its original two detected mutations.
+- Six new targeted mutations detected: retained Gale, unauthorized Farm exit,
+  premature Ascension, duplicate Ascension, free missing-member reconstruction,
+  old-run reset-timer accrual. These execute in default positive scenarios, so
+  normal CI covers them without workflow changes.
+- Existing negatives: **13/13 scenarios, 17/17 viewport-expanded failures detected**,
+  each from expected assertion/runtime markers; no browser-launch failure.
+- Existing mobile matrix **20/20** and pending Formation matrix **5/5** pass.
+  Strict P1-05 accessibility reports **zero findings**.
+- Existing workflow static-source validation passes: two inline JS syntax checks,
+  17 unique required IDs, cache/state/lifecycle guards. Test JS and Python syntax,
+  APK identity verifier self-test and `git diff --check` pass.
+- Composite diagnostics: one legitimate retry, 11 eligible Ascensions, 3593 paid
+  purchases including 41 missing intended-member purchases. These are observations
+  from the run, not expected constants in tests. Isolated retention has zero
+  retries/Ascensions and retains Farm 89 / Push return 91.
+- Runtime smoke step and final GitHub CI result are to be reported from the **new
+  automatic PR run** in the PR body/handoff. No old CI rerun or Android/native
+  lifecycle build is claimed locally.
+
+Scope review versus reviewed HEAD: only the eight-line persistence correction,
+focused Farm/timer/persistence tests and this review-resolution documentation.
+Combined diff versus main: the same four intended files only; original Formation
+implementation and narrow timer guard retained. `fixtures.json`, workflows,
+signing, Android/native configuration, dependencies, formulas/rewards/balance,
+P2-06 presentation, regions and Boss traits are unchanged by this correction.
+
+Publication remains one coherent review-resolution commit on the existing branch.
+PR #30 stays Draft and unmerged. Green CI alone is not merge approval: **01 must
+verify the correction SHA; 04 must verify that same SHA's Farm/timer contracts and
+consider the explicitly documented baseline diagnostic limits.**

@@ -2602,6 +2602,7 @@ function reconcileFormationRebuild(snapshot){
   // This projection never recruits or raises a level, including on save loading.
   if(powered.length) snapshot.activeParty = powered;
   else if((snapshot.spirits.ember||0)>0) snapshot.activeParty = ['ember'];
+  else snapshot.activeParty = [];
   snapshot.activeFormationPreset = '';
   if(powered.length===intent.members.length){
     if(intent.preset && snapshot.formationPresets[intent.preset].join(',')===intent.members.join(',')){
@@ -2697,6 +2698,13 @@ function normalizeCurrentSave(input){
 
   out.formationRebuild = normalizeFormationRebuild(source.formationRebuild,out);
   reconcileFormationRebuild(out);
+  if(!out.activeParty.length){
+    // Intent can invalidate an otherwise powered but unrelated party. Apply the
+    // existing empty-party recovery now, then project again (Ember may be intended).
+    out.spirits.ember = Math.max(1,out.spirits.ember||0);
+    out.activeParty = ['ember'];
+    reconcileFormationRebuild(out);
+  }
 
   var nodes = isPlainObject(source.nodes) ? source.nodes : {};
   NODES.forEach(function(node){ out.nodes[node.id] = nonNegativeInt(nodes[node.id],fresh.nodes[node.id]); });

@@ -157,3 +157,149 @@ window.runP207LayoutQa = async function(b,ctx,assert){
   document.querySelectorAll('.ascend-flash').forEach(function(el){el.remove();});q('#toast').classList.remove('show');
   return {viewport:[innerWidth,innerHeight],pending:5,temporaryEmber:true,reachableToggles:5};
 };
+
+// PERSIST-01: use historical unlocks, with no powered intended member or Ember.
+window.p207Contradictory = function(b){
+  var s=b.freshStateSnapshot();s.maxDepthEver=101;
+  s.formationRebuild={members:['tide','stone'],preset:''};
+  s.spirits.ember=0;s.spirits.gale=1;s.activeParty=['gale'];
+  s.lumen=12345;s.shards=456;s.heroResource.gale=37;
+  return s;
+};
+window.runP207PersistenceReview = function(b,ctx,assert){
+  var t=b.formationTest,checks=0;
+  function ok(value,label){checks++;assert(value,label);}
+  function same(a,c,label){ok(JSON.stringify(a)===JSON.stringify(c),label);}
+  var input=window.p207Contradictory(b),out=t.canonical(input);
+  ok(out.activeParty.join(',')==='ember','PERSIST-01 unrelated Gale retained: '+JSON.stringify(out.activeParty));
+  ok(out.spirits.ember===1,'canonical Ember recovery happens in first pass');
+  ok(out.spirits.tide===0 && out.spirits.stone===0,'pending members receive no free levels');
+  same(out.formationRebuild,input.formationRebuild,'intent retained');
+  var cases=[
+    {name:'unpowered Ember',levels:{},members:['tide','stone'],party:['ember']},
+    {name:'powered Ember',levels:{ember:3},members:['tide','stone'],party:['ember']},
+    {name:'one intended',levels:{stone:2},members:['tide','stone'],party:['stone']},
+    {name:'multiple intended',levels:{tide:2,stone:3},members:['stone','tide','void'],party:['stone','tide']},
+    {name:'intended Ember fallback',levels:{},members:['tide','ember','stone'],party:['ember']},
+    {name:'Ember completes fallback',levels:{},members:['ember'],party:['ember'],done:true},
+    {name:'completed ordered',levels:{tide:2,stone:3},members:['stone','tide'],party:['stone','tide'],done:true}
+  ];
+  cases.forEach(function(c){
+    var s=window.p207Contradictory(b);Object.assign(s.spirits,c.levels);
+    s.formationPresets.boss=c.members.slice();s.formationRebuild={members:c.members,preset:'boss'};
+    var n=t.canonical(s);same(n.activeParty,c.party,c.name+' first-pass active order');
+    same(n.formationRebuild,c.done?null:s.formationRebuild,c.name+' intent/completion');
+    ok(n.activeFormationPreset===(c.done?'boss':''),c.name+' preset association');
+    var expectedLevels=Object.assign({},s.spirits);
+    if(!c.members.some(function(id){return s.spirits[id]>0;}) && !s.spirits.ember) expectedLevels.ember=1;
+    same(n.spirits,expectedLevels,c.name+' only established Ember fallback grant');
+    ['lumen','shards','prisms','comets','motes','sigils','heroResource','empowerQueue','research','longStudyLevels'].forEach(function(k){same(n[k],s[k],c.name+' preserves '+k);});
+    for(var i=0;i<4;i++)same(t.canonical(n),n,c.name+' fixed-clock full canonical idempotence '+i);
+    b.advanceTime(1000);same(t.canonical(n),n,c.name+' later-clock canonical idempotence');
+  });
+  [undefined,null,[],{members:['unknown']},{members:'tide'}].forEach(function(intent){
+    var s=window.p207Contradictory(b);s.formationRebuild=intent;
+    var n=t.canonical(s);same(n.activeParty,['gale'],'absent/malformed keeps legitimate unrelated selection');
+    same(n.spirits,s.spirits,'absent/malformed does not grant Ember');ok(n.formationRebuild===null,'invalid intent discarded');same(t.canonical(n),n,'invalid intent idempotent');
+  });
+  b.setState(input);var s=b.getState();s.achieved.labmaster=true;s.empowerQueue.ember=false;s.empowerQueue.tide=false;s.empowerQueue.stone=false;
+  b.setState(s);ok(!t.tick(),'unrelated Gale cannot be auto-purchased after canonicalization');same(b.getState().spirits,s.spirits,'reserve progression intact');
+  t.toggle('gale');s=b.getState();ok(s.formationRebuild===null,'explicit powered selection cancels intent');
+  same(t.canonical(s).formationRebuild,null,'cancelled intent cannot resurrect');
+  var detected=false,audit=t.audit(assert,'persist');
+  try{var broken=t.canonical(input);assert(broken.activeParty.join(',')==='ember','PERSIST-01 negative retained Gale');}
+  catch(e){detected=e.message.indexOf('PERSIST-01 negative retained Gale')!==-1;}
+  finally{audit.restore();}
+  ok(detected,'negative PERSIST-01 detected by same projection contract');
+  return {checks:checks,cases:cases.map(function(c){return c.name;}),fullStateIdempotence:true,fixedClock:true,negativePersist:detected,schema:out.schemaVersion};
+};
+
+window.runP207FarmReview = function(b,ctx,assert,parity,summaryParity,isolated){
+  var seed=b.getState(),clock=2000000000000,t=b.formationTest;
+  // A non-Boss Push return has no automatic Boss retry path, regardless of
+  // power growth. Keep automation/Auto-Ascend enabled and the medium economy.
+  if(isolated){seed.farmReturnDepth=91;seed.maxDepthEver=Math.max(seed.maxDepthEver,91);b.setState(seed);seed=b.getState();}
+  var audit=t.audit(assert),direct,counts;
+  try{direct=b.simulateOfflineDirect(3600,clock);counts=JSON.parse(JSON.stringify(audit.counts));}
+  finally{audit.restore();}
+  if(isolated){
+    assert(direct.state.riftMode==='farm','isolated Farm must remain Farm');
+    assert(direct.state.depth===seed.farmDepth && direct.state.farmDepth===seed.farmDepth,'isolated Farm preserves correct depth');
+    assert(direct.state.farmReturnDepth===seed.farmReturnDepth,'isolated Farm preserves Push return');
+    assert(direct.summary.retries===0 && direct.summary.ascends===0 && direct.state.ascendCount===seed.ascendCount,'isolated Farm no exit or Ascension');
+  }else{
+    assert(seed.riftMode==='farm','integrated begins in Farm');
+    assert(counts.retries>0 && counts.ascends>0 && counts.rebuildPurchases>0,'integrated exercises eligible retry, Ascension and paid reconstruction');
+    assert(counts.retries===direct.summary.retries && counts.ascends===direct.summary.ascends && counts.purchases===direct.summary.empowers,'integrated summary accounts for every audited mutation');
+  }
+  b.setState(seed);var reference=b.simulate(3600,'offline',1,clock);
+  parity(direct.state,reference.state,'Farm review strict offline reference');summaryParity(direct.summary,reference.summary,'Farm review reference summary');
+  var splitAt=isolated?1234:1234.5;
+  b.setState(seed);b.simulate(splitAt,'offline',splitAt,clock);
+  var split=b.simulate(3600-splitAt,'offline',3600-splitAt,clock+splitAt*1000);
+  parity(split.state,direct.state,'Farm review split window');
+  b.setState(seed);var live=b.simulate(60,'live',60,clock);
+  b.setState(seed);var liveRef=b.simulate(60,'live',1,clock);
+  parity(live.state,liveRef.state,'Farm review live reference');summaryParity(live.summary,liveRef.summary,'Farm review live summary');
+  assert(direct.summary.luminousKills>0 && direct.summary.motesGained>0,'medium economy exercises Luminous/Motes');
+  assert(direct.summary.autoTaps>0 && direct.summary.empowers>0,'medium economy exercises both automations');
+  assert(direct.summary.researchBought>0 && direct.summary.completedStudies.length>0,'medium economy exercises Research/Study');
+  var negatives=[];
+  (isolated?['farm-exit']:['premature','duplicate','free']).forEach(function(kind){
+    b.setState(seed);var broken=t.audit(assert,kind),message='';
+    try{b.simulateOfflineDirect(kind==='farm-exit'||kind==='premature'?1:3600,clock);}
+    catch(e){message=e.message;}finally{broken.restore();}
+    var expected={'farm-exit':'audit unauthorized Farm exit',premature:'audit premature Ascension',duplicate:'audit duplicate Ascension',free:'audit paid exactly once'}[kind];
+    assert(message.indexOf(expected)!==-1,'targeted negative '+kind+' must fail its causal assertion: '+message);negatives.push(kind);
+  });
+  return {isolated:isolated,durationSec:3600,finalMode:direct.state.riftMode,farmDepth:direct.state.farmDepth,pushReturn:direct.state.farmReturnDepth,audited:counts,strictReference:true,split:true,negatives:negatives};
+};
+
+window.runP207TimerReview = function(b,ctx,assert,parity,summaryParity,near){
+  var clock=2000000000000,t=b.formationTest,boundary=0.25,epsilon=0.0001,results=[];
+  var seed=window.p207Seed(b,['tide','ember','stone'],'boss');
+  seed.depth=15;seed.enemyDepth=15;seed.enemyMaxHp=b.enemyHpFor(15);seed.enemyHp=seed.enemyMaxHp;
+  seed.activeParty.forEach(function(id){seed.spirits[id]=1;});
+  seed.owned.autoascend=true;seed.autoAscendEnabled=true;seed.autoAscendTargetDepth=16;
+  seed.achieved.autotap=true;seed.achieved.labmaster=true;seed._autoTapAccum=200;seed._autoEmpowerAccum=300;
+  Object.keys(seed.heroResource).forEach(function(id){seed.heroResource[id]=17;seed.empowerQueue[id]=false;});
+  seed.activeStudies=[{id:'wispascend',remainingSec:10,totalDurationSec:10,speedMult:1.5}];
+  b.setState(seed);seed=b.getState();var beforeRate=t.rates().fill;
+  seed.enemyHp=t.rates().dps*boundary;
+  assert(seed.enemyHp>0 && seed.enemyHp<seed.enemyMaxHp,'boundary fixture passive kill precedes other events');
+  function run(seconds,kind,chunk){b.setState(seed);return b.simulate(seconds,kind,chunk||seconds,clock);}
+  function checkAt(r,label){
+    assert(r.summary.ascends===1 && r.state.ascendCount===seed.ascendCount+1,label+' exactly one boundary Ascension');
+    Object.keys(r.state.heroResource).forEach(function(id){near(r.state.heroResource[id],0,label+' reset ability '+id);});
+    near(r.state._autoTapAccum,0,label+' reset Auto-Tap');near(r.state._autoEmpowerAccum,0,label+' reset Auto-Empower');
+  }
+  ['live','offline'].forEach(function(kind){
+    var before=run(boundary-epsilon,kind);
+    assert(before.summary.ascends===0,'immediately before no Ascension '+kind);
+    seed.activeParty.forEach(function(id){near(before.state.heroResource[id],17+beforeRate*(boundary-epsilon),'normal pre-boundary resource '+id);});
+    near(before.state._autoTapAccum,200+(boundary-epsilon)*1000,'normal pre-boundary tap');
+    near(before.state._autoEmpowerAccum,300+(boundary-epsilon)*1000,'normal pre-boundary empower');
+    var at=run(boundary,kind);checkAt(at,kind);
+    b.setState(at.state);var afterRate=t.rates().fill;
+    var after=run(boundary+epsilon,kind);
+    assert(after.summary.ascends===1,'immediately after no duplicate Ascension');
+    after.state.activeParty.forEach(function(id){near(after.state.heroResource[id],afterRate*epsilon,'post-boundary resource '+id);});
+    near(after.state._autoTapAccum,epsilon*1000,'post-boundary tap');near(after.state._autoEmpowerAccum,epsilon*1000,'post-boundary empower');
+    [before,at,after].forEach(function(r,i){var sec=[boundary-epsilon,boundary,boundary+epsilon][i];near(r.state.activeStudies[0].remainingSec,10-sec*1.5,'Study continuous across boundary');});
+    var reference=run(boundary+epsilon,kind,0.01);parity(after.state,reference.state,'timer strict reference '+kind);summaryParity(after.summary,reference.summary,'timer summary '+kind);
+    [boundary-epsilon,boundary,boundary+epsilon/2].forEach(function(split){
+      run(split,kind);var end=b.simulate(boundary+epsilon-split,kind,boundary+epsilon-split,clock+split*1000);
+      parity(end.state,after.state,'timer split '+kind+' '+split);
+    });
+    // Non-Ascension control retains the ordinary elapsed-time accrual.
+    var normal=JSON.parse(JSON.stringify(seed));normal.autoAscendEnabled=false;b.setState(normal);
+    var n=b.simulate(boundary+epsilon,kind,boundary+epsilon,clock);
+    near(n.state._autoTapAccum,200+(boundary+epsilon)*1000,'non-Ascension tap');near(n.state._autoEmpowerAccum,300+(boundary+epsilon)*1000,'non-Ascension empower');
+    normal.activeParty.forEach(function(id){near(n.state.heroResource[id],17+beforeRate*(boundary+epsilon),'non-Ascension ability '+id);});
+    results.push({kind:kind,before:true,exact:true,after:true,splits:3,study:true,normal:true});
+  });
+  var broken=t.audit(assert,'timer'),message='';
+  try{checkAt(run(boundary,'offline'),'negative old accrual');}catch(e){message=e.message;}finally{broken.restore();}
+  assert(message.indexOf('negative old accrual reset ability')!==-1,'old erroneous accrual must fail reset resource assertion: '+message);
+  return {boundarySec:boundary,offsetSec:epsilon,results:results,negativeOldAccrual:true};
+};
