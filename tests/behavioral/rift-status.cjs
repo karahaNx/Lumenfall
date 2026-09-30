@@ -40,7 +40,7 @@ function assert(v,m){if(!v)throw Error(m);}
 // again without any intervening focus/scroll correction, and pause for capture.
 async function advance(ms=350){await evaluate('window.__lumenfallQaBridge.uiMeasurementPause(false)');await new Promise(r=>setTimeout(r,ms));await evaluate('window.__lumenfallQaBridge.uiMeasurementPause(true)');}
 
-async function key(key){const spec=key==='Space'?{key:' ',code:'Space',windowsVirtualKeyCode:32}:key==='Enter'?{key:'Enter',code:'Enter',windowsVirtualKeyCode:13}:key==='Escape'?{key:'Escape',code:'Escape',windowsVirtualKeyCode:27}:{key,code:key,windowsVirtualKeyCode:{ArrowRight:39,ArrowLeft:37,Home:36,End:35,Tab:9}[key]};await send('Input.dispatchKeyEvent',{type:'rawKeyDown',...spec});await send('Input.dispatchKeyEvent',{type:'keyUp',...spec});}
+async function key(key,shift=false){const spec=key==='Space'?{key:' ',code:'Space',windowsVirtualKeyCode:32}:key==='Enter'?{key:'Enter',code:'Enter',windowsVirtualKeyCode:13}:key==='Escape'?{key:'Escape',code:'Escape',windowsVirtualKeyCode:27}:{key,code:key,windowsVirtualKeyCode:{ArrowRight:39,ArrowLeft:37,Home:36,End:35,Tab:9}[key]};await send('Input.dispatchKeyEvent',{type:'rawKeyDown',...spec,modifiers:shift?8:0});await send('Input.dispatchKeyEvent',{type:'keyUp',...spec,modifiers:shift?8:0});}
 async function touch(selector){const r=await evaluate(`riftStatusMobile.control(${JSON.stringify(selector)})`);assert(r.visible&&r.hit,'touch target visible before action');await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:r.x,y:r.y}]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});}
 async function shot(name){if(!process.env.LUMENFALL_QA_EVIDENCE_DIR)return;const r=await send('Page.captureScreenshot',{format:'png'});fs.mkdirSync(process.env.LUMENFALL_QA_EVIDENCE_DIR,{recursive:true});fs.writeFileSync(path.join(process.env.LUMENFALL_QA_EVIDENCE_DIR,name+'.png'),Buffer.from(r.data,'base64'));}
 async function swipe(delta,width,height){
@@ -73,7 +73,13 @@ async function run(){
    }
    await touch('[data-tab="battle"]');await advance();await evaluate('riftStatusMobile.measure()');
    await evaluate('document.querySelector("[data-tab=forge]").focus({preventScroll:true})');await key('ArrowRight');assert(await evaluate('document.activeElement.dataset.tab')==='research','native keyboard focuses Lab');await key('Home');assert(await evaluate('document.activeElement.dataset.tab')==='battle','native Home returns Rift');
-   await evaluate('document.querySelector("#rift-details-btn").focus({preventScroll:true})');await key('Space');assert(await evaluate('document.querySelector("#rift-details").open'),'Details opens');await key('Escape');assert(await evaluate('!document.querySelector("#rift-details").open&&document.activeElement.id==="rift-details-btn"'),'Details focus return');
+   assert(await evaluate('!document.querySelector("#rift-details-btn")&&!document.querySelector("#rift-details")'),'Details absent');
+   const order=await evaluate(`[...document.querySelectorAll('#tab-battle button:not(:disabled),#tab-battle [tabindex="0"]')].map(x=>x.id)`);
+   await evaluate('document.querySelector("#rift-push-btn").focus({preventScroll:true})');
+   for(const id of order.slice(1)){await key('Tab');assert(await evaluate('document.activeElement.id')===id,'native Tab reaches '+id);}
+   for(const id of order.slice(0,-1).reverse()){await key('Tab',true);assert(await evaluate('document.activeElement.id')===id,'native Shift+Tab reaches '+id);}
+   await evaluate('document.querySelector("#enemy-stage").focus({preventScroll:true})');await key('Tab');if(await evaluate('document.activeElement===document.body'))await key('Tab');assert(await evaluate('document.activeElement.id')==='settings-btn','native Tab returns to Settings after document boundary');
+   await key('Space');assert(await evaluate('document.querySelector("#settings-overlay").style.display')==='flex','Settings still opens');await key('Escape');assert(await evaluate('document.activeElement.id')==='settings-btn','Settings retains focus return');
    samples[samples.length-1].scroll=scroll;
   }
   records.push({profile:name,samples});await send('Target.disposeBrowserContext',{browserContextId:ctx.browserContextId},null);

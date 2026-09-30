@@ -81,11 +81,12 @@ async function run(){
   for(const value of ['1','5','10','25','50','100','max']){const s='[data-mult="'+value+'"]';await evaluate(`forgeUi.prepare(${JSON.stringify(s)},true)`);await key('Space');await advance();bulkStates.push(await evaluate(`forgeUi.checkBulkChoice(${JSON.stringify(value)})`));}
   await evaluate(`forgeUi.prepare('[data-mult="5"]',false);document.activeElement.blur()`);await touch('[data-mult="5"]');await advance();assert(await evaluate(`document.querySelector('[data-mult="5"]').getAttribute("aria-pressed")`)==="true","native touch bulk choice");
   await evaluate('forgeUi.affordability()');await advance();const affordability=await evaluate('forgeUi.checkAffordability()');
-  // Native navigation and Details; no shared focus-helper modification.
+  // Native navigation across remaining Rift controls; no shared focus-helper modification.
   await evaluate('forgeUi.prepare(\'[data-tab="forge"]\',true)');await key('ArrowRight');assert(await evaluate('document.activeElement.dataset.tab')==='research','Forge -> Lab keyboard focus');
   assert(await evaluate('document.querySelector("#tab-research").classList.contains("active")'),'Lab active');
   await key('Home');assert(await evaluate('document.activeElement.dataset.tab')==='battle','Home returns to Rift');
-  await evaluate('forgeUi.prepare("#rift-details-btn",true)');await key('Space');assert(await evaluate('document.querySelector("#rift-details").open'),'native Details opens');await key('Escape');assert(await evaluate('!document.querySelector("#rift-details").open && document.activeElement.id==="rift-details-btn"'),'Details closes and restores focus');
+  assert(await evaluate('!document.querySelector("#rift-details-btn") && !document.querySelector("#rift-details")'),'obsolete Details absent');
+  await evaluate('document.querySelector("#rift-push-btn").focus({preventScroll:true})');await key('Enter');assert(await evaluate('document.activeElement.id')==='rift-push-btn','native Push retains focus');
   const navigation=await evaluate('forgeUi.checkRift()');
   records.push({profile:name,startup,bulk,before,toggles,tickEvidence,purchases,bulkStates,affordability,navigation});
   await send('Target.disposeBrowserContext',{browserContextId:ctx.browserContextId},null);

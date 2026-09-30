@@ -1551,10 +1551,10 @@
   .stage .enemy-stage-wrap{width:100%;flex:1;min-height:0;gap:2px;}
   .stage .enemy-stage{width:100%;height:auto;flex:1;min-height:0;}
   .stage .enemy-stage::before{inset:8% 18%;filter:none;opacity:.4;}
-  .stage .enemy-stage::after{width:clamp(100px,23vh,200px);height:clamp(100px,23vh,200px);border:1px solid #99b6ef22;box-shadow:0 0 40px #8eaeff0a,inset 0 0 30px #b0a8ff0a;animation:none;}
+  .stage .enemy-stage::after{width:clamp(100px,23vh,200px);height:clamp(100px,23vh,200px);max-height:calc(100% - 8px);border:1px solid #99b6ef22;box-shadow:0 0 40px #8eaeff0a,inset 0 0 30px #b0a8ff0a;animation:none;}
   #tab-battle .stage .enemy-glyph{
     --creature-color:#504c80;--creature-rim:#b4a5dc;--creature-eye:#d5edff;
-    width:clamp(90px,22vh,190px);height:auto;aspect-ratio:1;max-height:95%;
+    width:clamp(90px,22vh,190px);height:auto;aspect-ratio:1;max-height:calc(100% - 40px);
     background:none;box-shadow:none;border-radius:0;clip-path:none;flex:none;
     filter:drop-shadow(0 12px 7px #0008) drop-shadow(0 0 12px #a6adfa33);animation:creatureFloat 4s ease-in-out infinite;
   }
@@ -1611,8 +1611,7 @@
   @keyframes dustRise{0%{transform:translate3d(0,15px,0);opacity:0;}30%,65%{opacity:.6;}100%{transform:translate3d(12px,-70px,0);opacity:0;}}
   .cost-icon,.shape.cost-icon{width:.85em;height:.85em;min-width:.85em;max-width:.85em;flex:none;display:inline-block;vertical-align:-.05em;}
 
-  /* P1-04: fixed HUD tracks and bounded Rift chrome protect the interaction region.
-     Secondary content lives in the independently scrollable details dialog. */
+  /* Fixed HUD tracks and bounded Rift chrome protect the interaction region. */
   .hud{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:calc(4px + var(--safe-top)) 10px 4px;}
   .hud-title-row{grid-column:1/-1;height:44px;margin:0;}
   .settings-btn{width:44px;height:44px;}
@@ -1624,15 +1623,13 @@
   nav.tabbar .lb{font-size:10px;}
   main.rift-scroll-locked{padding:6px 10px;}
   #tab-battle .stage{padding:8px 10px;gap:4px!important;}
-  .rift-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;flex:none;height:44px;}
+  .rift-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;flex:none;height:36px;}
   .stage .depth-label{min-width:0;font-size:16px;letter-spacing:.02em;text-align:left;}
   .stage .depth-label .region-label{font-size:10px;line-height:14px;letter-spacing:.04em;white-space:nowrap;}
-  .rift-details-btn{flex:none;min-width:90px;min-height:44px;border:1px solid #4f5975;border-radius:10px;background:#1c2339;color:#f0effb;font:600 12px 'Manrope',sans-serif;}
-  .rift-details-btn span{display:block;font-size:10px;font-weight:400;color:#b5c6dc;}
   .stage .rift-mode-row{height:44px;min-height:44px;padding:0;}
   .stage .rift-mode-btn{min-height:44px;font-size:12px;padding:6px;letter-spacing:.03em;white-space:nowrap;}
   .stage .rift-objective{height:48px;min-height:48px;padding:5px 8px;grid-template-columns:minmax(0,1fr) auto;gap:4px;}
-  .stage .objective-kind{display:none;} /* Mode/title already convey the kind; retain full explanation in Details. */
+  .stage .objective-kind{display:none;} /* Mode/title already convey the kind. */
   .stage .objective-copy strong{font-size:13px;line-height:18px;}
   .stage .objective-copy small{font-size:11px;line-height:16px;}
   .stage .enemy-name{font-size:14px;line-height:20px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -1646,26 +1643,13 @@
   .stage .stat-box{padding:4px 8px;min-width:0;}
   .stage .stat-box .k{font-size:10px;line-height:14px;letter-spacing:.03em;}
   .stage .stat-box .v{font-size:14px;line-height:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  #rift-details{width:min(460px,calc(100% - 24px));max-height:calc(100dvh - var(--safe-top) - var(--safe-bottom) - 24px);padding:0;border:1px solid var(--line);border-radius:18px;background:var(--bg-elev);color:var(--ink);overflow:hidden;}
-  #rift-details::backdrop{background:#060b18c9;}
-  #rift-details[open]{display:flex;flex-direction:column;}
-  .rift-details-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 14px;border-bottom:1px solid var(--line);flex:none;}
-  .rift-details-head h2{font:600 18px 'Cinzel',serif;margin:0;}
-  #rift-details-close{min-height:44px;min-width:64px;border:1px solid var(--line);border-radius:10px;background:var(--bg-elev-2);color:var(--ink);font:600 13px 'Manrope',sans-serif;}
-  .rift-details-scroll{padding:12px 14px;overflow-y:auto;overscroll-behavior:contain;min-height:0;touch-action:pan-y;}
-  .rift-details-scroll h3{font-size:14px;margin:16px 0 8px;}
-  #rift-details .rift-mode-note,#rift-details .bond-summary,#rift-details .tap-hint,#rift-details .buff-indicator,#rift-details .boss-regen-tag,#rift-objective-detail{font-size:13px;line-height:1.5;white-space:normal;margin:8px 0;}
-  #rift-details .party-col{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;width:100%;}
-  #rift-details .hero-chip{width:auto;min-width:0;padding:6px 2px;}
-  #rift-details .wisp-portrait{width:32px;height:32px;}
-  .rift-heading-actions{display:flex;align-items:stretch;gap:4px;flex:none;}
   /* Rift status reuses existing observers; no additional timers or effects. */
   #tab-battle .stage{gap:2px!important;}
   .stage .rift-mode-row{height:52px;min-height:52px;}
   .stage .enemy-name{position:absolute;top:4px;left:4px;right:4px;margin:0;text-align:center;pointer-events:none;}
-  .stage .stat-row{display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:4px;height:48px;min-height:48px;}
-  .stage .buff-indicator{font-size:11px;line-height:14px;color:var(--ink-dim);margin:0;padding:1px 2px;border-radius:10px;text-align:center;}
-  .stage .buff-indicator strong{display:block;font-size:12px;line-height:16px;color:var(--ink);}
+  .stage .stat-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;height:44px;min-height:44px;}
+  .stage .buff-indicator{align-self:stretch;border:0;background:none;font-size:11px;line-height:16px;color:var(--ink-dim);margin:0;padding:0;text-align:left;}
+  .stage .buff-indicator strong{display:inline;font-size:11px;line-height:16px;color:var(--ink);}
   .stage .buff-indicator.is-active strong{color:#a5e9bc;}
   .stage .bond-summary{font-size:11px;line-height:14px;color:#c3c9df;opacity:1;text-align:left;margin:0;}
   .lab-capacity-badge{position:absolute;top:2px;right:8px;min-width:16px;padding:0 3px;border:1px solid #a5e9bc;border-radius:8px;background:#18352d;color:#d4ffe5;font:700 10px/14px 'Manrope',sans-serif;pointer-events:none;}
@@ -1712,12 +1696,6 @@
   .formation-help{margin-top:12px;}
   .formation-help>summary{min-height:44px;cursor:pointer;padding:12px 2px;font-size:13px;font-weight:700;}
   .formation-help>summary:focus-visible{outline:2px solid var(--lumen);outline-offset:2px;}
-  #rift-details .chip-label,#rift-details .chip-power{font-size:11px;line-height:16px;max-width:100%;overflow:hidden;text-overflow:ellipsis;}
-  #rift-details .chip-bar-track{width:100%;max-width:40px;}
-  #rift-hp-detail{font-size:13px;line-height:1.5;overflow-wrap:anywhere;}
-  #rift-resources{margin:0;font-size:13px;}
-  #rift-resources>div{padding:6px 0;border-top:1px solid var(--line);}
-  #rift-resources dt{font-weight:700;}#rift-resources dd{margin:2px 0 0;overflow-wrap:anywhere;font-family:'Space Mono',monospace;}
   @media(max-height:650px){
     .hud .chip{height:30px;padding-top:1px;padding-bottom:1px;}
     #tab-battle .stage{padding-top:4px;padding-bottom:4px;}
@@ -1856,7 +1834,7 @@
   <main>
     <section class="tab-panel active" id="tab-battle">
       <div class="card stage">
-        <div class="rift-heading"><div class="depth-label" id="depth-label">Rift 1</div><div class="rift-heading-actions"><button class="rift-details-btn" id="rift-details-btn" aria-haspopup="dialog">Details<span id="rift-status">Combat &amp; party</span></button></div></div>
+        <div class="rift-heading"><div class="depth-label" id="depth-label">Rift 1</div></div>
         <div class="rift-mode-row">
           <button class="rift-mode-btn active" id="rift-push-btn">Push</button>
           <button class="rift-mode-btn" id="rift-farm-btn">Farm</button>
@@ -1942,8 +1920,8 @@
         <div class="stat-row">
           <div class="stat-box"><div class="k">Guardian tap</div><div class="v mono" id="stat-tap">1</div></div>
           <div class="stat-box"><div class="k">Wisp DPS est.</div><div class="v mono" id="stat-idle">0</div></div>
-          <div class="buff-indicator" id="buff-indicator">Boost · passive Wisps + Tap<strong>Inactive</strong></div>
         </div>
+        <div class="buff-indicator" id="buff-indicator">Boost · passive Wisps + Tap · <strong>Inactive</strong></div>
         <div class="bond-summary" id="bond-summary">No Formation Bond active.</div>
       </div>
     </section>
@@ -2005,23 +1983,6 @@
 
   </main>
 </div>
-
-
-<dialog id="rift-details" aria-labelledby="rift-details-title">
-  <div class="rift-details-head"><h2 id="rift-details-title">Rift details</h2><button id="rift-details-close" aria-label="Close Rift details">Close</button></div>
-  <div class="rift-details-scroll">
-    <div class="rift-mode-note" id="rift-mode-note">Push deeper until you hit a wall.</div>
-    <p id="rift-objective-detail"></p>
-    <p id="rift-hp-detail"></p>
-    <div class="boss-regen-tag" id="boss-regen-tag" style="display:none;">Boss — regenerates health. Grow stronger and come back.</div>
-    <h3>Active party</h3>
-    <div class="party-col" id="party-col"></div>
-    <div class="bond-summary" id="bond-detail"></div>
-        <div class="tap-hint">Your Wisps already fight on their own, even when you're gone — tap the Rift to strike as your Guardian and speed things up.</div>
-
-    <h3>Resources</h3><dl id="rift-resources"></dl>
-  </div>
-</dialog>
 
 <div class="overlay settings-overlay" id="settings-overlay" style="display:none;">
   <div class="settings-modal" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="settings-title">
@@ -3251,7 +3212,6 @@ function useSigilResonance(sp){
   state.heroResource[sp.id]=100;
   saveState();
   renderSpirits();
-  updatePartyBars();
   renderHud();
   showToast(sp.name+' resonates — '+sp.abilityName+' is ready.');
   return true;
@@ -3766,11 +3726,9 @@ function buySpirit(sp){
   state.spirits[sp.id]++;
   trackDaily('empowers');
   reconcileFormationRebuild(state);
-  if(rebuilding) renderPartyFormation();
   if(!rebuilding && wasZero && state.activeParty.length<5 && state.activeParty.indexOf(sp.id)===-1){
     state.activeParty.push(sp.id);
     state.activeFormationPreset = '';
-    renderPartyFormation();
   }
   checkAchievements();
   renderSpirits();
@@ -3814,7 +3772,6 @@ function toggleActive(id){
   state.activeFormationPreset = '';
   saveState();
   renderSpirits();
-  renderPartyFormation();
   updateBattleFast();
 }
 
@@ -3851,7 +3808,6 @@ function applyFormationPreset(name){
   state.activeFormationPreset = name;
   saveState();
   renderSpirits();
-  renderPartyFormation();
   updateBattleFast();
   showToast(FORMATION_PRESET_LABELS[name]+' formation active.');
   return true;
@@ -4332,22 +4288,8 @@ function triggerAbility(sp, level){
   emitCombatVfx(sp.abilityType==='support' ? 'support' : 'ability',sp.color);
   flashBattleStage(sp.abilityType==='support' ? 'support' : 'ability');
   if(burst>0) dealDamage(burst * formationContextDamageMult(state.depth) * bossAbilityDamageMult(state.depth));
-  flashChip(sp.id, sp.abilityName);
 }
 
-function flashChip(id, label){
-  var chip = els['party-col'].querySelector('[data-chip="'+id+'"]');
-  if(!chip) return;
-  chip.classList.add('pulse');
-  setTimeout(function(){ chip.classList.remove('pulse'); }, 300);
-  var sp = SPIRITS.find(function(s){ return s.id===id; });
-  var span = document.createElement('span');
-  span.className = 'chip-flash';
-  span.textContent = label;
-  if(sp) span.style.color = sp.color;
-  chip.appendChild(span);
-  setTimeout(function(){ span.remove(); }, 820);
-}
 
 // ---------------------------------------------------------------
 // Rendering
@@ -4463,7 +4405,7 @@ function replaceControlMarkup(root,html){
   }
 }
 
-// Custom overlays share one focus lifecycle. Native Rift Details retains showModal().
+// Custom overlays share one focus lifecycle.
 var overlayFocus = null;
 function overlayVisible(el){ return el && el.style.display!=='none' && getComputedStyle(el).visibility!=='hidden' && el.getClientRects().length>0; }
 function overlayControls(modal){
@@ -4472,7 +4414,6 @@ function overlayControls(modal){
 function setOverlayInert(active){
   document.querySelector('.shell').inert=!!active;
   document.querySelectorAll('.overlay').forEach(function(el){el.inert=!!active && el!==active;});
-  document.getElementById('rift-details').inert=!!active;
 }
 function focusOverlay(){
   if(!overlayFocus || !overlayVisible(overlayFocus.el)) return;
@@ -4480,8 +4421,6 @@ function focusOverlay(){
   (controls[0] || overlayFocus.modal).focus({preventScroll:true});
 }
 function openOverlay(el,dismiss,opener){
-  var details=document.getElementById('rift-details');
-  if(details.open) details.close();
   var modal=el.matches('[role="dialog"]') ? el : el.querySelector('[role="dialog"]');
   var trigger=opener || document.activeElement;
   if(overlayFocus && overlayFocus.el!==el) closeOverlay(overlayFocus.el);
@@ -4519,8 +4458,8 @@ function setupOverlayFocus(){
 }
 
 function cacheEls(){
-  ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','rift-push-btn','rift-farm-btn','rift-mode-note','rift-objective','lab-capacity-badge','enemy-name','boss-regen-tag','buff-indicator','enemy-stage','enemy-glyph',
-   'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','party-col','formation-presets','bond-card','bond-summary','bond-detail','research-list','study-list',
+  ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','rift-push-btn','rift-farm-btn','rift-objective','lab-capacity-badge','enemy-name','buff-indicator','enemy-stage','enemy-glyph',
+   'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','formation-presets','bond-card','bond-summary','research-list','study-list',
    'prism-preview','ascend-btn','ascend-note','node-list','ach-list','roster-journey','shop-list','theme-list','manifesto','toast',
    'daily-streak-badge','daily-quest-list','settings-overlay','settings-home','settings-encyclopedia','settings-title','settings-back','encyclopedia-content'
   ].forEach(function(id){ els[id]=document.getElementById(id); });
@@ -4553,9 +4492,6 @@ function renderRiftMode(){
   els['rift-farm-btn'].setAttribute('aria-label',els['rift-farm-btn'].disabled ? 'Farm unavailable — clear Rift 1 to unlock' : els['rift-farm-btn'].textContent);
   els['rift-farm-btn'].title = els['rift-farm-btn'].disabled ? 'Clear Rift 1 to unlock Farm' : '';
   if(els['rift-farm-btn'].disabled) els['rift-farm-btn'].innerHTML='Farm<span class="control-state">Clear Rift 1</span>';
-  els['rift-mode-note'].textContent = farming
-    ? 'Farming Rift '+state.farmDepth+' for resources. Push resumes at Rift '+state.farmReturnDepth+'.'
-    : 'Push deeper until you hit a wall. Farm always uses your highest cleared non-boss Rift.';
 }
 function nextRiftObjective(){
   var p = progressionDepth();
@@ -4678,16 +4614,11 @@ function updateBattleFast(){
     els['enemy-stage'].classList.add('trait-'+trait.id);
     if(battleStage) battleStage.classList.add('trait-'+trait.id);
   }
-  els['boss-regen-tag'].style.display = bossNow ? 'block' : 'none';
   if(bossNow){
     var regenPerSec = state.enemyMaxHp*bossRegenRate(state.depth);
     var yourDps = sustainedCombatDps(state.depth);
     var netDps = yourDps - regenPerSec;
     var enough = netDps > 0;
-    var eta = enough ? Math.ceil(Math.max(0,state.enemyHp)/netDps) : 0;
-    var wallHint = trait.id==='guardian' ? 'Tap or Farm' : 'Farm recommended';
-    els['boss-regen-tag'].textContent = trait.name+' · '+formatNum(yourDps)+'/s combat DPS vs '+formatNum(regenPerSec)+'/s regen · ' + (enough ? '~'+fmtDuration(eta) : wallHint);
-    els['boss-regen-tag'].classList.toggle('insufficient', !enough);
     els['enemy-stage'].classList.add(enough ? 'boss-ready' : 'boss-wall');
     if(battleStage) battleStage.classList.add(enough ? 'boss-ready' : 'boss-wall');
   }
@@ -4695,30 +4626,17 @@ function updateBattleFast(){
   els['stat-tap'].textContent = formatRiftNumber(tapDamage());
   els['stat-idle'].textContent = formatRiftNumber(sustainedWispDps(state.depth));
   var buffActive = state.buffUntil && Date.now() < state.buffUntil;
-  var buffText = 'Boost · passive Wisps + Tap<strong>Inactive</strong>';
+  var buffText = 'Boost · passive Wisps + Tap · <strong>Inactive</strong>';
   if(buffActive){
     var pct = Math.round((state.buffMult-1)*100);
     var secLeft = Math.max(0, Math.ceil((state.buffUntil-Date.now())/1000));
-    buffText = 'Boost · passive Wisps + Tap<strong>+'+pct+'% · '+secLeft+'s</strong>';
+    buffText = 'Boost · passive Wisps + Tap · <strong>+'+pct+'% · '+secLeft+'s</strong>';
   }
   if(els['buff-indicator'].innerHTML!==buffText) els['buff-indicator'].innerHTML=buffText;
   els['buff-indicator'].classList.toggle('is-active',!!buffActive);
-  document.getElementById('rift-status').textContent = buffActive ? 'Boost active' : 'Combat & party';
   renderHud();
-  if(document.getElementById('rift-details').open) renderRiftDetails();
 }
 
-function renderRiftDetails(){
-  var goal = nextRiftObjective();
-  document.getElementById('rift-objective-detail').textContent = goal.title+' — '+goal.detail;
-  document.getElementById('rift-hp-detail').textContent = 'HP: '+Math.max(0,state.enemyHp).toLocaleString()+' / '+state.enemyMaxHp.toLocaleString();
-  document.getElementById('rift-resources').innerHTML = [
-    ['Lumen',state.lumen],['Shards',state.shards],['Motes',state.motes],
-    ['Prisms',state.prisms],['Comets',state.comets],['Sigils',state.sigils]
-  ].map(function(resource){
-    return '<div><dt>'+resource[0]+'</dt><dd>'+resource[1].toLocaleString()+'</dd></div>';
-  }).join('');
-}
 
 function spawnFloatNum(text, stageEl, tone){
   var span = document.createElement('span');
@@ -4790,10 +4708,6 @@ function renderBondSummary(){
     ? 'Active Bonds: ' + active.map(function(b){ return b.name.replace(' Bond',''); }).join(' · ')
     : 'No Formation Bond active.';
   if(els['bond-summary'].textContent!==text) els['bond-summary'].textContent = text;
-  var detail = active.length
-    ? 'Active Bonds: ' + active.map(function(b){ return b.name.replace(' Bond','')+' ('+b.effect+')'; }).join(' · ')
-    : text;
-  if(els['bond-detail'].textContent!==detail) els['bond-detail'].textContent = detail;
 }
 function renderFormationPresets(){
   var root=els['formation-presets'];
@@ -4862,34 +4776,7 @@ function renderFormationBonds(){
 function wispPortrait(sp){
   return '<svg class="wisp-portrait" viewBox="0 0 64 64" style="--wisp-color:'+sp.color+'" aria-hidden="true"><use href="#wisp-'+sp.id+'"/></svg>';
 }
-function renderPartyFormation(){
-  var html = '';
-  state.activeParty.forEach(function(id){
-    var sp = SPIRITS.find(function(s){ return s.id===id; });
-    if(!sp) return;
-    var unpowered = (state.spirits[id]||0)<=0;
-    var power = chipEffectivePower(id);
-    html += '<div class="hero-chip'+(unpowered?' unpowered':'')+'" data-chip="'+id+'" style="--wisp-color:'+sp.color+';">'+
-      wispPortrait(sp)+
-      '<div class="chip-bar-track"><div class="chip-bar-fill" data-bar="'+id+'" style="background:'+RESOURCE_COLORS[sp.resource]+'"></div></div>'+
-      '<div class="chip-label">'+sp.shortName+'</div>'+
-      '<div class="chip-power" data-power="'+id+'">'+formatNum(power)+'</div>'+
-    '</div>';
-  });
-  if(state.activeParty.length===0){
-    html = '<div class="empty-party-note">No Wisps active — visit the Wisps tab to field one.</div>' + html;
-  }
-  els['party-col'].innerHTML = html;
-}
 
-function updatePartyBars(){
-  state.activeParty.forEach(function(id){
-    var bar = els['party-col'].querySelector('[data-bar="'+id+'"]');
-    if(bar) bar.style.width = (state.heroResource[id]||0)+'%';
-    var powerEl = els['party-col'].querySelector('[data-power="'+id+'"]');
-    if(powerEl){ powerEl.textContent = formatNum(chipEffectivePower(id)); }
-  });
-}
 
 function renderRosterJourney(){
   var el = els['roster-journey'];
@@ -5478,8 +5365,6 @@ function renderAll(){
   if(overlayFocus && !overlayVisible(overlayFocus.el)) closeOverlay(overlayFocus.el);
   renderHud();
   updateBattleFast();
-  renderPartyFormation();
-  updatePartyBars();
   renderSpirits();
   renderResearch();
   renderLongStudies();
@@ -6115,7 +6000,6 @@ function simulationTriggerAbility(sp,level,nowMs,policy,summary){
   if(policy.visual){
     emitCombatVfx(sp.abilityType==='support' ? 'support' : 'ability',sp.color);
     flashBattleStage(sp.abilityType==='support' ? 'support' : 'ability');
-    flashChip(sp.id,sp.abilityName);
   }
   if(burst>0){
     simulationDealDiscreteDamage(
@@ -6650,7 +6534,6 @@ var liveRiftFeedbackAt = -Infinity;
 function presentLiveRiftResult(before,sim){
   if(!sim.kills || sim.ascends || document.hidden || startupIntroPlaying ||
       !document.getElementById('tab-battle').classList.contains('active') ||
-      document.querySelector('dialog[open]') ||
       Array.from(document.querySelectorAll('.overlay')).some(overlayVisible)) return;
   var now = Date.now();
   if(now-liveRiftFeedbackAt<1850 || document.querySelector('.rift-milestone')) return;
@@ -6709,7 +6592,6 @@ function tick(){
     renderSideStats();
   }
   updateBattleFast();
-  updatePartyBars();
   checkAffordability();
   presentLiveRiftResult(feedbackBefore,sim);
 }
@@ -7066,13 +6948,6 @@ function init(){
     if(target) activateTab(target);
   });
   document.getElementById('ascend-btn').addEventListener('click', function(){ doAscend(false); });
-
-  document.getElementById('rift-details-btn').addEventListener('click', function(){
-    renderRiftDetails();
-    document.getElementById('rift-details').showModal();
-  });
-  document.getElementById('rift-details-close').addEventListener('click', function(){ document.getElementById('rift-details').close(); });
-  document.getElementById('rift-details').addEventListener('click', function(e){ if(e.target===this) this.close(); });
 
   document.getElementById('settings-btn').addEventListener('click', openSettings);
   document.getElementById('settings-close').addEventListener('click', closeSettings);

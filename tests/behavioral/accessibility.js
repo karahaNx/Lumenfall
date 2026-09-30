@@ -299,11 +299,9 @@
     assert(bridge.getState().riftMode==='farm','Farm state must remain understandable with reduced motion');
     q('#rift-push-btn').click();
     assert(bridge.getState().riftMode==='push','Push state must remain understandable with reduced motion');
-    q('#rift-details-btn').focus();
-    q('#rift-details-btn').click();
-    assert(q('#rift-details').open,'Details must open with reduced motion');
-    q('#rift-details-close').click();
-    assert(!q('#rift-details').open && document.activeElement===q('#rift-details-btn'),'Details close/focus return must not depend on motion');
+    assert(!q('#rift-details-btn') && !q('#rift-details'),'Details absent with reduced motion');
+    q('#rift-push-btn').focus();
+    assert(document.activeElement===q('#rift-push-btn'),'remaining Rift controls remain focusable');
     return {reduced:true};
   }
 

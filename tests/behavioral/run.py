@@ -1087,7 +1087,7 @@ window.__lumenfallQaBridge = {
     return {
       wisps:els['spirit-list'] ? els['spirit-list'].textContent : '',
       encyclopedia:document.getElementById('encyclopedia-content') ? document.getElementById('encyclopedia-content').textContent : '',
-      boss:els['boss-regen-tag'] ? els['boss-regen-tag'].textContent : '',
+      boss:els['rift-objective'] ? els['rift-objective'].textContent : '',
       buff:els['buff-indicator'] ? els['buff-indicator'].textContent : ''
     };
   },
@@ -2728,7 +2728,7 @@ def build_runner():
           assert(language.wisps.indexOf('Wisp Power')!==-1,'Wisp cards must label the canonical Wisp Power stat');
           assert(language.wisps.indexOf('Boosts passive Wisp damage and Guardian Tap')!==-1,'Support card wording must name its actual targets');
           assert(language.encyclopedia.indexOf('Ability Output')!==-1 && language.encyclopedia.indexOf('Guardian Tap')!==-1,'Encyclopedia must expose canonical output terms');
-          assert(language.boss.indexOf('combat DPS')!==-1,'Boss status must describe sustained combat DPS rather than generic power');
+          assert(!document.getElementById('rift-details') && language.boss.indexOf('Fractured Core')!==-1,'remaining Rift objective retains the actual Boss trait without obsolete Details text');
 
           finish('pass',{
             baseWispPower:emberBase.wispPower,
