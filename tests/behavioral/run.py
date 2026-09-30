@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import argparse
+import contextlib
+import io
 import html as html_lib
 import json
 import re
@@ -17,6 +19,20 @@ ROOT = Path(__file__).resolve().parent
 FIXTURES_PATH = ROOT / "fixtures.json"
 
 SCENARIOS = {
+    "forge-ui-process-contract": "fresh",
+    "forge-ui-mobile": "fresh",
+    "forge-ui-reduced-motion": "fresh",
+    "buff-timing": "fresh",
+    "buff-save-reload": "fresh",
+    "forge-contracts": "fresh",
+    "forge-effects": "fresh",
+    "forge-chronology": "fresh",
+    "forge-save-reload": "fresh",
+    "forge-backup-restore": "fresh",
+    "forge-recovery": "fresh",
+    "forge-baseline": "fresh",
+    "forge-balance": "fresh",
+
     "r3-destinations": "fresh",
     "r3-save-reload": "fresh",
     "research-duration": "fresh",
@@ -104,6 +120,11 @@ SCENARIOS = {
 PREP_SCENARIOS = {}
 
 NEGATIVE_SCENARIOS = {
+    "self-test-forge-ui-handler": "fresh",
+    "self-test-forge-ui-save": "fresh",
+    "self-test-forge-ui-exit": "fresh",
+    "self-test-forge-ui-render": "fresh",
+    "self-test-forge-ui-bulk": "fresh",
     "self-test-r3-shortcut": "fresh",
     "self-test-research-duration-days": "fresh",
     "self-test-research-duration-seconds": "fresh",
@@ -143,6 +164,30 @@ def build_prelude(fixtures):
   var fixtures = {fixtures_json};
   var params = new URLSearchParams(location.search);
   var scenario = params.get('qaScenario') || '';
+  // Native UI tests hold interval callbacks only across immediate measurements.
+  // Keep real input/save handlers, animation frames and the production flags intact.
+  var uiMeasurementPaused=false;
+  if(scenario.startsWith('forge-ui-') || scenario.startsWith('self-test-forge-ui-')){{
+    // Observe actual registered Queue callbacks, without changing event dispatch.
+    var realAddEventListener=EventTarget.prototype.addEventListener;
+    EventTarget.prototype.addEventListener=function(type,callback,options){{
+      if(type==='click' && typeof callback==='function' && this.matches && this.matches('[data-queue]')){{
+        var original=callback;
+        callback=function(event){{
+          var action=window.__qaForgeAction,previous=window.__qaForgeHandler;
+          if(action && action.id===this.dataset.queue){{action.handlers++;window.__qaForgeHandler=action;}}
+          try{{return original.call(this,event);}}finally{{window.__qaForgeHandler=previous;}}
+        }};
+      }}
+      return realAddEventListener.call(this,type,callback,options);
+    }};
+    var realSetInterval=window.setInterval.bind(window);
+    window.setInterval=function(callback,delay){{
+      var args=Array.prototype.slice.call(arguments,2);
+      return realSetInterval(function(){{if(!uiMeasurementPaused) callback.apply(window,args);}},delay);
+    }};
+  }}
+  window.__qaUiMeasurementPause=function(paused){{uiMeasurementPaused=!!paused;}};
   var fixtureName = params.get('qaFixture') || '';
   var phaseKey = 'lumenfall_qa_phase_' + scenario;
   var errors = [];
@@ -296,9 +341,25 @@ function qaLifecycleRecord(type,detail){
     detail:detail===undefined ? null : JSON.parse(JSON.stringify(detail))
   });
 }
+// Resolve only after the real startup completion callback (including its save).
+// This is installed before DOMContentLoaded/init in the throwaway instrumented app.
+if(window.__lumenfallQaContext.scenario.startsWith('forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('self-test-forge-ui-')){
+  var qaStartupResolve;
+  window.__qaForgeStartup={completed:false,callbacks:0,promise:new Promise(function(resolve){qaStartupResolve=resolve;})};
+  var qaOriginalPlayStartupIntro=playStartupIntro;
+  playStartupIntro=function(done){
+    return qaOriginalPlayStartupIntro.call(this,function(){
+      if(done) done.apply(this,arguments);
+      window.__qaForgeStartup.callbacks++;
+      window.__qaForgeStartup.completed=true;
+      qaStartupResolve({callbacks:window.__qaForgeStartup.callbacks,saves:qaLifecycleEvents.filter(function(e){return e.type==='save';}).length});
+    });
+  };
+}
 var qaOriginalSaveState = saveState;
 saveState = function(){
   var beforeLastSeen = state ? state.lastSeen : null;
+  if(window.__qaForgeHandler) window.__qaForgeHandler.saves++;
   var result = qaOriginalSaveState.apply(this,arguments);
   qaLifecycleRecord('save',{
     beforeLastSeen:beforeLastSeen,
@@ -348,6 +409,77 @@ applyOfflineProgress = function(){
 };
 
 window.__lumenfallQaBridge = {
+  uiMeasurementPause: function(paused){ window.__qaUiMeasurementPause(paused); },
+  buffTiming: {
+    restoreOldCalculation: function(){
+      var original=simulationBuffSecondsRemaining;
+      simulationBuffSecondsRemaining=function(nowMs){return state.buffUntil?(state.buffUntil-nowMs)/1000:0;};
+      return function(){simulationBuffSecondsRemaining=original;};
+    }
+  },
+  forge: {
+    nodes: function(){return JSON.parse(JSON.stringify(RESEARCH));},
+    plan: function(id,n){return getResearchBuyPlan(RESEARCH.find(function(x){return x.id===id;}),n);},
+    preview: function(id,n){return researchPreview(RESEARCH.find(function(x){return x.id===id;}),n);},
+    buy: function(id,n){labMultiplier=n;buyResearch(RESEARCH.find(function(x){return x.id===id;}));},
+    queue: function(){return autoLabQueueTick();},
+    cost: function(id,k,n){return researchCostForLevels(RESEARCH.find(function(x){return x.id===id;}),k,n);},
+    canonical: function(s){return acceptPersistedState(s,'forge-qa');},
+    chance: function(d){return eliteChance(d);},
+    spawn: function(){spawnEnemy();return JSON.parse(JSON.stringify(state));},
+    rewards: function(d){return {lumen:enemyRewardFor(d),shards:shardRewardFor(d),motes:motesDropFor(d),sigils:sigilsFromBoss(d)};},
+    rawResource: function(id){var sp=SPIRITS.find(function(x){return x.id===id;});return abilityRewardRaw(sp,state.spirits[id]);},
+    deeds: function(){return {total:ACHIEVEMENTS.reduce(function(n,a){return n+a.reward;},0),items:ACHIEVEMENTS.map(function(a){return {id:a.id,eligible:a.check(state),progress:deedProgress(a,state),text:deedProgressText(a,!!state.achieved[a.id]),reward:a.reward};})};},
+    achievements: function(){return applyAchievementChecks();},
+    auditEconomy: function(assert){
+      var original={research:autoLabQueueTick,empower:autoEmpowerTick,study:simulationStartQueuedStudies,ascend:applyAscendMutation};
+      var ledger={lumen:0,shards:0,resetLumen:0,researchLevels:0,studyStarts:0,forge:{lumen:0,shards:0}};
+      var copy=function(){return JSON.parse(JSON.stringify(state));};
+      function record(before,expected,label){
+        assert(before.lumen>=expected.lumen && before.shards>=expected.shards,label+' affordable');
+        assert(state.lumen===before.lumen-expected.lumen && state.shards===before.shards-expected.shards,label+' paid exactly once');
+        ledger.lumen+=expected.lumen;ledger.shards+=expected.shards;
+      }
+      autoLabQueueTick=function(){
+        var before=copy(),result=original.research(),cost={lumen:0,shards:0},count=0;
+        RESEARCH.forEach(function(n){
+          var k=before.research[n.id],end=state.research[n.id];
+          if(end>k){
+            assert(before.researchQueue[n.id] && before.maxDepthEver>=(n.unlockDepth||1),'queued purchase eligible');
+            assert(n.levelCap===undefined || end<=n.levelCap,'queue cap');
+            for(;k<end;k++){var c=researchCostForLevels(n,k,1);cost.lumen+=c.lumen;cost.shards+=c.shard;count++;}
+          }
+        });
+        assert(count<=20,'existing per-call queue limit');ledger.researchLevels+=count;ledger.forge.lumen+=cost.lumen;ledger.forge.shards+=cost.shards;record(before,cost,'Forge queue');return result;
+      };
+      autoEmpowerTick=function(){
+        var before=copy(),costs={};SPIRITS.forEach(function(sp){costs[sp.id]=spiritCost(sp);});
+        var result=original.empower(),cost={lumen:0,shards:0};
+        SPIRITS.forEach(function(sp){if(state.spirits[sp.id]>before.spirits[sp.id])cost.lumen+=costs[sp.id];});
+        record(before,cost,'Auto-Empower');return result;
+      };
+      simulationStartQueuedStudies=function(summary){
+        var before=copy(),result=original.study(summary),cost={lumen:0,shards:0};
+        state.activeStudies.forEach(function(a){if(!before.activeStudies.some(function(old){return old.id===a.id;})){
+          var n=LONG_STUDIES.find(function(n){return n.id===a.id;}),c=studyCost(n,before.longStudyLevels[a.id]);cost.lumen+=c.lumen;cost.shards+=c.shard;ledger.studyStarts++;
+        }});record(before,cost,'Study');return result;
+      };
+      applyAscendMutation=function(){var before=state.lumen,result=original.ascend();ledger.resetLumen+=before-state.lumen;return result;};
+      return {ledger:ledger,restore:function(){autoLabQueueTick=original.research;autoEmpowerTick=original.empower;simulationStartQueuedStudies=original.study;applyAscendMutation=original.ascend;}};
+    },
+    mutate: function(kind){
+      var saved={plan:getResearchBuyPlan,migrate:migrateSaveV0ToV1,deed:legacyResearchLevels,passive:passiveWispDpsAt};
+      if(kind==='cap') getResearchBuyPlan=function(node,n){
+        if(node.id==='arcanecal' && researchLevel(node.id)>=10)return {affordable:true,buyCount:1,count:1,cost:researchCostForLevels(node,researchLevel(node.id),1)};
+        return saved.plan(node,n);
+      };
+      if(kind==='migration') SAVE_MIGRATIONS[0]=function(s){var n=saved.migrate(s);if(s.labQueueOn && s.researchQueue===undefined)n.researchQueue.arcanecal=true;return n;};
+      if(kind==='deed') legacyResearchLevels=function(s){return RESEARCH.reduce(function(n,r){return n+(s.research[r.id]||0);},0);};
+      if(kind==='effect') passiveWispDpsAt=function(d){return saved.passive(d)*researchFactor('arcanecal');};
+      return function(){getResearchBuyPlan=saved.plan;SAVE_MIGRATIONS[0]=saved.migrate;legacyResearchLevels=saved.deed;passiveWispDpsAt=saved.passive;};
+    }
+  },
+
   formationTest: {
     canonical: function(s){return acceptPersistedState(s,'qa-review');},
     rates: function(){return {fill:(100/ABILITY_BASE_CYCLE_SEC)*fillRateMult(),dps:simulationPassiveDps(2000000000000)};},
@@ -705,12 +837,12 @@ window.__lumenfallQaBridge = {
   saveFormationPreset: function(name){ return saveFormationPreset(name); },
   activeBondIds: function(){ return activeFormationBonds().map(function(bond){return bond.id;}); },
   autoEmpowerAll: function(enabled){ setAutoEmpowerAll(!!enabled); return JSON.parse(JSON.stringify(state.empowerQueue)); },
-  simulate: function(seconds,kind,chunkSec,startMs){
+  simulate: function(seconds,kind,chunkSec,startMs,windowStartMs){
     var begin = performance.now();
     var remaining = Math.max(0,Number(seconds)||0);
     var chunk = Math.max(0,Number(chunkSec)||remaining||0);
     var clock = Number.isFinite(startMs) ? startMs : 2000000000000;
-    var offlineWindowStartMs = clock;
+    var offlineWindowStartMs = Number.isFinite(windowStartMs)?windowStartMs:clock;
     var aggregate = {
       lumenGained:0,shardGained:0,sigilsGained:0,motesGained:0,
       kills:0,bossKills:0,luminousKills:0,ascends:0,autoTaps:0,
@@ -1434,6 +1566,22 @@ def build_runner():
         window.runRiftLayoutQa(bridge,ctx,assert).then(function(detail){ finish('pass',detail); },function(error){ finish('fail',error.message); });
         return;
       }
+      if(ctx.scenario==='buff-timing'){
+        bridge.freeze();finish('pass',window.runBuffTimingQa(bridge,ctx,assert,assertProtectedParity));return;
+      }
+      if(ctx.scenario==='buff-save-reload'){
+        bridge.freeze();window.runBuffSaveQa(bridge,ctx,assert,assertProtectedParity,phase,nextPhase,finish);return;
+      }
+      if(ctx.scenario.startsWith('forge-ui-') || ctx.scenario.startsWith('self-test-forge-ui-')){
+        window.__forgeUiReady=true;return; // Native CDP input driver owns this scenario.
+      }
+      if(ctx.scenario.startsWith('forge-')){
+        bridge.freeze();
+        if(['forge-save-reload','forge-backup-restore','forge-recovery'].includes(ctx.scenario)){
+          window.runForgePersistence(bridge,ctx,assert,phase,nextPhase,backupCode,finish);return;
+        }
+        finish('pass',window.runForgeQa(bridge,ctx,assert,assertProtectedParity,assertSummaryParity,parityApprox));return;
+      }
       switch(ctx.scenario){
         case 'p2-07a-persistence-review':
           bridge.freeze();
@@ -1551,7 +1699,8 @@ def build_runner():
           assert(!Object.prototype.hasOwnProperty.call(s,'labQueueOn'),'legacy labQueueOn must be migrated away');
           assert(!Object.prototype.hasOwnProperty.call(s,'activeStudy'),'legacy activeStudy must be migrated away');
           assert(s.activeStudies.length===1 && s.activeStudies[0].id==='wispascend','legacy activeStudy must migrate into activeStudies');
-          assert(Object.keys(s.researchQueue).every(function(id){ return s.researchQueue[id]===true; }),'legacy lab queue flag must migrate to researchQueue');
+          assert(['focus','sense','formation','resolve','charge'].every(function(id){return s.researchQueue[id]===true;}),'legacy global queue preserves five original ON choices');
+          assert(['arcanecal','conduction','luminoustracking'].every(function(id){return s.researchQueue[id]===false;}),'legacy global queue does not activate new IDs');
           assert(Object.keys(s.studyQueue).every(function(id){ return s.studyQueue[id]===true; }),'legacy autostudy flag must migrate to studyQueue');
           assert(s.autoAscendEnabled===true && s.autoAscendTargetDepth>=22,'legacy auto-ascend ownership must migrate to enabled target');
           assert(!Object.prototype.hasOwnProperty.call(s.owned,'autostudy'),'legacy owned.autostudy must be removed');
@@ -3462,6 +3611,8 @@ def instrument_html(source, fixtures):
         "<script>" + (ROOT / "research-duration.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "feedback.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "formation.js").read_text(encoding="utf-8") + "</script>" +
+        "<script>" + (ROOT / "forge.js").read_text(encoding="utf-8") + "</script>" +
+        "<script>" + (ROOT / "buff-timing.js").read_text(encoding="utf-8") + "</script>" +
         build_runner() + "\n</body>",
         1,
     )
@@ -3488,7 +3639,56 @@ addEventListener('message',function(e){
 </script></body></html>"""
 
 
+def run_native_process(command, scenario, timeout=90):
+    try:
+        result = subprocess.run(command, capture_output=True, text=True, timeout=timeout)
+        stdout, stderr, exitcode = result.stdout, result.stderr, result.returncode
+        timed_out = False
+    except subprocess.TimeoutExpired as error:
+        def decoded(value):
+            return value.decode(errors="replace") if isinstance(value, bytes) else (value or "")
+        stdout, stderr, exitcode = decoded(error.stdout), decoded(error.stderr), None
+        timed_out = True
+    try:
+        detail = json.loads(stdout)
+        if not isinstance(detail, dict):
+            raise ValueError("driver JSON must be an object")
+    except (json.JSONDecodeError, ValueError) as error:
+        detail = {"status": "fail", "message": "Invalid driver JSON: " + str(error), "stdout": stdout}
+    passed = not timed_out and exitcode == 0 and detail.get("status") == "pass"
+    print(("PASS " if passed else "FAIL ") + scenario)
+    print("  process: " + json.dumps({"exitcode": exitcode, "timed_out": timed_out, "stderr": stderr}, sort_keys=True))
+    print("  detail: " + json.dumps(detail, sort_keys=True))
+    return passed
+
+
+def native_process_contract():
+    # Real subprocesses exercise the same reporter/gate as the browser driver.
+    cases = [
+        ("valid-pass", "console.log(JSON.stringify({status:'pass'}))", True, '"exitcode": 0', ""),
+        ("pass-nonzero", "console.log(JSON.stringify({status:'pass'}));console.error('intentional exit 7');process.exitCode=7", False, '"exitcode": 7', 'intentional exit 7'),
+        ("invalid-json", "console.log('not JSON');console.error('invalid payload evidence')", False, 'Invalid driver JSON', 'invalid payload evidence'),
+        ("timeout", "console.log(JSON.stringify({status:'pass'}));console.error('pending process evidence');setInterval(()=>{},1000)", False, '"timed_out": true', 'pending process evidence'),
+    ]
+    for name, script, expected, marker, stderr in cases:
+        report = io.StringIO()
+        with contextlib.redirect_stdout(report):
+            actual = run_native_process(["node", "-e", script], name, timeout=0.5 if name == "timeout" else 5)
+        evidence = report.getvalue()
+        print("  process control " + name + " (expected " + str(expected) + "):\n    " + evidence.strip().replace("\n", "\n    "))
+        if actual != expected or marker not in evidence or stderr not in evidence:
+            print("FAIL forge-ui-process-contract: " + name)
+            return False
+    print("PASS forge-ui-process-contract")
+    return True
+
+
 def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
+    if scenario == "forge-ui-process-contract":
+        return native_process_contract()
+    if scenario.startswith(("forge-ui-", "self-test-forge-ui-")):
+        url = base_url + "/index.html?" + urlencode({"qaScenario": scenario, "qaFixture": fixture})
+        return run_native_process(["node", str(ROOT / "forge-ui.cjs"), chrome, url, scenario], scenario)
     with tempfile.TemporaryDirectory(prefix=f"lumenfall-qa-{scenario}-") as profile:
         params = {"qaScenario": scenario, "qaFixture": fixture}
         page = "/index.html"
@@ -3530,7 +3730,7 @@ def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
 
     if passed:
         print(f"PASS {scenario}" + (f" {viewport}" if viewport else ""))
-        if result_text and (viewport or scenario in ("parity-long-high-power", "parity-medium-farm") or scenario.startswith("chronology-") or scenario.startswith("p1-05-") or scenario.startswith("p2-07a-")):
+        if result_text and (viewport or scenario in ("parity-long-high-power", "parity-medium-farm") or scenario.startswith("chronology-") or scenario.startswith("p1-05-") or scenario.startswith("p2-07a-") or scenario.startswith("forge-") or scenario.startswith("buff-")):
             try:
                 payload = json.loads(html_lib.unescape(re.sub(r'<[^>]+>', '', result_text.group(1))).strip())
                 print("  detail: " + json.dumps(payload.get("detail"), sort_keys=True))
@@ -3576,6 +3776,25 @@ def main():
         stage = Path(td) / "www"
         shutil.copytree(web_root, stage)
         source = (stage / "index.html").read_text(encoding="utf-8")
+        # Causal controls alter only the throwaway staged app, never repository source.
+        if args.scenario == "self-test-forge-ui-render":
+            start = source.index("  var root=els['research-list'],main=document.querySelector('main');", source.index("function renderResearch(){"))
+            end = source.index("  els['research-list'].querySelectorAll('[data-mult]')", start)
+            source = source[:start] + """  replaceControlMarkup(els['research-list'],multHtml + html);
+  RESEARCH.forEach(function(node){updateResearchCard(node,els['research-list'].querySelector('[data-forge-card="'+node.id+'"]'));});
+  presentControlStates(els['research-list']);
+""" + source[end:]
+        if args.scenario == "self-test-forge-ui-save":
+            start = source.index("function renderResearch(){")
+            # Inner function declarations may precede the handler; locate its unique save context.
+            marker = "      state.researchQueue[id] = !state.researchQueue[id];"
+            at = source.index(marker, start)
+            save = source.index("      saveState();", at)
+            source = source[:save] + "      saveState();\n" + source[save:]
+        if args.scenario == "self-test-forge-ui-bulk":
+            for rule in ("  #tab-forge .mult-row{gap:4px;}\n", "  #tab-forge .mult-btn{min-width:44px;min-height:44px;}\n"):
+                assert source.count(rule) == 1, "local Forge bulk rule must exist for negative control"
+                source = source.replace(rule, "")
         (stage / "index.html").write_text(instrument_html(source, fixtures), encoding="utf-8")
 
         (stage / "layout.html").write_text(LAYOUT_HOST, encoding="utf-8")
