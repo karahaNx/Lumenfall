@@ -50,6 +50,7 @@ async function swipe(delta,width,height){
  await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await new Promise(r=>setTimeout(r,70));
 }
 async function run(){
+ const negative=scenario.startsWith('self-test-rift-status-line');
  for(const [width,height,inset] of [[360,640,0],[360,640,24],[390,844,24]]){
   const motion=scenario.includes('reduced')?'reduce':'no-preference',name=`${width}x${height}-safe${inset}-${motion}`;
   const ctx=await send('Target.createBrowserContext',{},null),tab=await send('Target.createTarget',{url:'about:blank',browserContextId:ctx.browserContextId},null);session=(await send('Target.attachToTarget',{targetId:tab.targetId,flatten:true},null)).sessionId;
@@ -60,6 +61,24 @@ async function run(){
   for(const kind of ['fresh','dense','boss']){
    await evaluate(`riftStatusMobile.setup(${inset},${JSON.stringify(kind)})`);await advance();
    samples.push(await evaluate('riftStatusMobile.measure()'));await shot(name+'-'+kind);
+   if(negative){
+    const diagnostic=await evaluate(`(()=>{
+     const b=window.__lumenfallQaBridge,beforeState=JSON.stringify(b.getState()),beforeMarkup=document.querySelector('#buff-indicator').innerHTML;
+     const undo=riftStatusMobile.mutateBoostLine();let message=null;
+     try{riftStatusMobile.measure();}catch(error){message=error.message;}
+     const diagnostic={message,kind:${JSON.stringify(kind)},stateUnchanged:beforeState===JSON.stringify(b.getState()),
+      statusMarkupUnchanged:beforeMarkup===document.querySelector('#buff-indicator').innerHTML,
+      detailsAbsent:!document.querySelector('#rift-details')&&!document.querySelector('#rift-details-btn'),
+      rowChildren:[...document.querySelector('.stat-row').children].map(x=>x.id||x.className),
+      columns:getComputedStyle(document.querySelector('.stat-row')).gridTemplateColumns,
+      runtimeErrors:window.__lumenfallQaContext.errors.slice(),runtimeMarker:document.documentElement.getAttribute('data-qa-runtime-error')};
+     undo();diagnostic.restored=riftStatusMobile.measure();return diagnostic;
+    })()`);
+    assert(diagnostic.stateUnchanged&&diagnostic.statusMarkupUnchanged&&diagnostic.detailsAbsent&&!diagnostic.runtimeMarker&&diagnostic.runtimeErrors.length===0,'negative mutation preserves state/status/Details and has no runtime error: '+JSON.stringify(diagnostic));
+    if(diagnostic.message)assert(diagnostic.message==='numbers row contains only Guardian Tap and Wisp DPS','negative must fail at the specific row assertion: '+JSON.stringify(diagnostic));
+    samples[samples.length-1].negative=diagnostic;
+    continue;
+   }
    await evaluate('document.querySelector("[data-tab=research]").focus({preventScroll:true})');await key('Space');assert(await evaluate('document.querySelector("#tab-research").classList.contains("active")'),'native Lab button opens Lab');
    const scroll=[];
    for(const view of ['spirits','forge','research']){
@@ -84,7 +103,8 @@ async function run(){
   }
   records.push({profile:name,samples});await send('Target.disposeBrowserContext',{browserContextId:ctx.browserContextId},null);
  }
- return {status:'pass',scenario,records};
+ const failures=records.flatMap(r=>r.samples.filter(s=>s.negative?.message).map(s=>({profile:r.profile,kind:s.kind,message:s.negative.message})));
+ return {status:failures.length?'fail':'pass',scenario,records,...(negative?{failures,message:failures[0]?.message}: {})};
 }
 
 (async()=>{

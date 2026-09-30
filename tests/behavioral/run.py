@@ -123,6 +123,8 @@ SCENARIOS = {
 PREP_SCENARIOS = {}
 
 NEGATIVE_SCENARIOS = {
+    "self-test-rift-status-line": "fresh",
+    "self-test-rift-status-line-reduced-motion": "fresh",
     "self-test-rift-status-badge": "fresh",
     "self-test-rift-status-bond": "fresh",
     "self-test-rift-status-buff": "fresh",
@@ -173,7 +175,7 @@ def build_prelude(fixtures):
   // Native UI tests hold interval callbacks only across immediate measurements.
   // Keep real input/save handlers, animation frames and the production flags intact.
   var uiMeasurementPaused=false;
-  if(scenario.startsWith('forge-ui-') || scenario.startsWith('self-test-forge-ui-') || scenario.startsWith('rift-status-mobile') || scenario.startsWith('rift-status-reduced')){{
+  if(scenario.startsWith('forge-ui-') || scenario.startsWith('self-test-forge-ui-') || scenario.startsWith('rift-status-mobile') || scenario.startsWith('rift-status-reduced') || scenario.startsWith('self-test-rift-status-line')){{
     // Observe actual registered Queue callbacks, without changing event dispatch.
     var realAddEventListener=EventTarget.prototype.addEventListener;
     EventTarget.prototype.addEventListener=function(type,callback,options){{
@@ -1593,7 +1595,7 @@ def build_runner():
       if(ctx.scenario==='buff-save-reload'){
         bridge.freeze();window.runBuffSaveQa(bridge,ctx,assert,assertProtectedParity,phase,nextPhase,finish);return;
       }
-      if(ctx.scenario.startsWith('forge-ui-') || ctx.scenario.startsWith('self-test-forge-ui-') || ctx.scenario==='rift-status-mobile' || ctx.scenario==='rift-status-reduced-motion'){
+      if(ctx.scenario.startsWith('forge-ui-') || ctx.scenario.startsWith('self-test-forge-ui-') || ctx.scenario==='rift-status-mobile' || ctx.scenario==='rift-status-reduced-motion' || ctx.scenario.startsWith('self-test-rift-status-line')){
         window.__forgeUiReady=true;return; // Native CDP input driver owns this scenario.
       }
       if(ctx.scenario.startsWith('forge-')){
@@ -3715,7 +3717,7 @@ def native_process_contract():
 def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
     if scenario == "forge-ui-process-contract":
         return native_process_contract()
-    if scenario in ("rift-status-mobile", "rift-status-reduced-motion"):
+    if scenario in ("rift-status-mobile", "rift-status-reduced-motion") or scenario.startswith("self-test-rift-status-line"):
         url = base_url + "/index.html?" + urlencode({"qaScenario": scenario, "qaFixture": fixture})
         return run_native_process(["node", str(ROOT / "rift-status.cjs"), chrome, url, scenario], scenario)
     if scenario.startswith(("forge-ui-", "self-test-forge-ui-")):

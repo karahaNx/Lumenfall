@@ -94,6 +94,17 @@ window.riftStatusMobile=(()=>{
   document.documentElement.style.setProperty('--safe-top',inset+'px');document.documentElement.style.setProperty('--safe-bottom',inset+'px');
  }
  function rect(el){return el.getBoundingClientRect();}
+ // Restore only PR #34's third-column boost presentation. Keep the same
+ // status node/markup, production state, handlers and absence of Details.
+ function mutateBoostLine(){
+  var buff=q('#buff-indicator'),parent=buff.parentNode,next=buff.nextSibling;
+  var style=document.createElement('style');
+  style.textContent='.stage .stat-row{grid-template-columns:1fr 1fr 1.4fr;height:48px;min-height:48px;}' +
+   '.stage .buff-indicator{font-size:11px;line-height:14px;margin:0;padding:1px 2px;border-radius:10px;text-align:center;}' +
+   '.stage .buff-indicator strong{display:block;font-size:12px;line-height:16px;}';
+  document.head.appendChild(style);q('.stat-row').appendChild(buff);
+  return function(){parent.insertBefore(buff,next);style.remove();};
+ }
  function measure(){
   var m=q('main'),mr=rect(m),nav=rect(q('nav.tabbar')),enemy=rect(q('#enemy-stage'));
   ok(m.scrollTop===0&&m.scrollHeight<=m.clientHeight+1&&scrollY===0,'Rift remains scroll-free without clipped content');
@@ -123,5 +134,5 @@ window.riftStatusMobile=(()=>{
  }
  function locate(view){var all=[...document.querySelectorAll('#tab-'+view+' button:not(:disabled),#tab-'+view+' summary')],el=all[all.length-1],r=rect(el),m=rect(q('main'));return {visible:r.top>=m.top&&r.bottom<=m.bottom,delta:r.top<m.top?Math.min(300,m.top-r.top+12):-Math.min(300,r.bottom-m.bottom+12)};}
  function control(selector){var el=q(selector),r=rect(el),x=r.x+r.width/2,y=r.y+r.height/2;return {x,y,visible:r.width>0&&r.height>0&&r.top>=0&&r.bottom<=innerHeight,hit:el.contains(document.elementFromPoint(x,y))};}
- return {setup,measure,last,control,locate};
+ return {setup,measure,last,control,locate,mutateBoostLine};
 })();
