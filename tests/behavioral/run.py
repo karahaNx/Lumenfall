@@ -617,6 +617,8 @@ window.__lumenfallQaBridge = {
     }
   },
   riftStatus: {
+    visualMetrics: function(){return {regen:state.enemyMaxHp*bossRegenRate(state.depth),dps:sustainedCombatDps(state.depth),cycle:abilityCycleSeconds()};},
+    emit: function(id){emitCombatVfx('ability','#abcdef',id);},
     slots: function(){return studySlotCount();},
     projects: function(){return LONG_STUDIES.map(function(n){return {id:n.id,unlock:n.unlockDepth||1};});},
     bonds: function(){return JSON.parse(JSON.stringify(FORMATION_BONDS));},

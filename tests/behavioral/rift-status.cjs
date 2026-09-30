@@ -57,8 +57,8 @@ async function run(){
   await send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:true});await send('Emulation.setTouchEmulationEnabled',{enabled:true});await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:motion}]});await send('Page.enable');await send('Page.navigate',{url});
   for(let i=0;i<150&&!await evaluate('!!window.__forgeUiReady');i++)await new Promise(r=>setTimeout(r,20));
   await evaluate('document.fonts.ready');await evaluate('window.__lumenfallQaBridge.uiMeasurementPause(true);window.__lumenfallQaBridge.resetFeedback()');await evaluate('window.__qaForgeStartup.promise');
-  const samples=[];
-  for(const kind of ['fresh','dense','boss']){
+  const samples=[];records.push({profile:name,samples});
+  for(const kind of (negative?['fresh','dense','boss']:['fresh','dense','boss','boss-conditional'])){
    await evaluate(`riftStatusMobile.setup(${inset},${JSON.stringify(kind)})`);await advance();
    samples.push(await evaluate('riftStatusMobile.measure()'));await shot(name+'-'+kind);
    if(negative){
@@ -79,6 +79,9 @@ async function run(){
     samples[samples.length-1].negative=diagnostic;
     continue;
    }
+   // Extra conditional-Bond fixture measures Rift geometry only; the three
+   // established states below retain the complete native navigation contract.
+   if(kind==='boss-conditional')continue;
    await evaluate('document.querySelector("[data-tab=research]").focus({preventScroll:true})');await key('Space');assert(await evaluate('document.querySelector("#tab-research").classList.contains("active")'),'native Lab button opens Lab');
    const scroll=[];
    for(const view of ['spirits','forge','research']){
@@ -101,7 +104,7 @@ async function run(){
    await key('Space');assert(await evaluate('document.querySelector("#settings-overlay").style.display')==='flex','Settings still opens');await key('Escape');assert(await evaluate('document.activeElement.id')==='settings-btn','Settings retains focus return');
    samples[samples.length-1].scroll=scroll;
   }
-  records.push({profile:name,samples});await send('Target.disposeBrowserContext',{browserContextId:ctx.browserContextId},null);
+  await send('Target.disposeBrowserContext',{browserContextId:ctx.browserContextId},null);
  }
  const failures=records.flatMap(r=>r.samples.filter(s=>s.negative?.message).map(s=>({profile:r.profile,kind:s.kind,message:s.negative.message})));
  return {status:failures.length?'fail':'pass',scenario,records,...(negative?{failures,message:failures[0]?.message}: {})};

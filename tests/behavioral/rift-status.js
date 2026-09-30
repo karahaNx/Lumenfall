@@ -76,6 +76,38 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     var rebuilt=b.getState();rebuilt.lumen=1e20;b.setState(rebuilt);
     worst.ids.forEach(id=>{if(!b.getState().spirits[id])b.formationTest.buy(id);});b.renderLayout();
     ok(!b.getState().formationRebuild&&q('#bond-summary').textContent===worst.text,'legitimate reconstruction restores actual Bonds');
+    // Formation observers use committed levels/resources and the actual charge upgrade.
+    s=seed();s.activeParty=worst.ids;s.activeParty.forEach((id,i)=>{s.spirits[id]=2;s.heroResource[id]=i*20;});install(s);
+    function partyCheck(){
+      var state=b.getState(),cards=[...document.querySelectorAll('[data-rift-wisp]')];
+      same(cards.map(x=>x.dataset.riftWisp),state.activeParty,'portraits follow active formation order only');
+      cards.forEach(card=>{
+        var id=card.dataset.riftWisp,powered=state.spirits[id]>0,value=powered?state.heroResource[id]:0,bar=card.querySelector('[role="progressbar"]');
+        ok(Number(bar.getAttribute('aria-valuenow'))===Math.round(value),'bar reads real ability resource');
+        ok(parseFloat(bar.firstElementChild.style.width)===value,'visible bar matches accessible charge');
+        ok(card.querySelector('.rift-wisp-time').textContent===(powered?Math.ceil((1-value/100)*b.riftStatus.visualMetrics().cycle)+'s':'Lv 0'),'countdown uses actual charge speed and powered status');
+      });
+      var active=b.riftStatus.active();same([...document.querySelectorAll('[data-bond-effect]')].map(x=>x.textContent),active.map(x=>x.effect),'Rift shows exact complete active Bond effects');
+      ok(q('#rift-bond-effects').hidden===!active.length,'no stale effects when no Bond is active');
+    }
+    partyCheck();s.research.charge=10;install(s);partyCheck();
+    s.spirits[s.activeParty[0]]=0;install(s);partyCheck();
+    s.activeParty=s.activeParty.slice(1).reverse();install(s);partyCheck();
+    s=seed();install(s);partyCheck();ok(q('#boss-combat').hidden,'regen hidden for ordinary enemies');
+    s.depth=110;s.enemyDepth=110;s.enemyMaxHp=b.enemyHpFor(110);s.enemyHp=s.enemyMaxHp;install(s);
+    var metrics=b.riftStatus.visualMetrics(),boss=q('#boss-combat');
+    ok(!boss.hidden&&Number(boss.dataset.regen)===metrics.regen&&Number(boss.dataset.dps)===metrics.dps&&Number(boss.dataset.net)===metrics.dps-metrics.regen,'boss display uses authoritative regen and sustained DPS');
+    ok(boss.getAttribute('aria-label').includes('excluding manual taps'),'DPS estimate distinguishes manual taps');
+    s=seed();s.activeParty=['ember'];s.spirits.ember=1;s.heroResource.ember=99.9;install(s);q('[data-tab="battle"]').click();
+    b.advanceTime(100);b.feedbackTick(false);b.riftStatus.update();
+    ok(b.getState().heroResource.ember<5&&q('[data-rift-wisp="ember"] .rift-wisp-time').textContent==='CAST','production simulation cast resets charge and lights the casting Wisp');
+    b.advanceTime(700);b.riftStatus.update();
+    q('[data-tab="battle"]').click();b.resetFeedback();
+    var castId=b.getState().activeParty[0];for(var n=0;n<20;n++)b.riftStatus.emit(castId);b.riftStatus.update();
+    ok(q('[data-rift-wisp="'+castId+'"] .rift-wisp-time').textContent==='CAST','actual cast event marks the correct Wisp');
+    ok(document.querySelectorAll('.combat-vfx').length===(matchMedia('(prefers-reduced-motion: reduce)').matches?0:8),'effects are bounded and absent in reduced motion');
+    b.advanceTime(700);b.riftStatus.update();ok(!q('.rift-wisp.is-casting'),'cast marker expires');
+    b.resetFeedback();q('[data-tab="spirits"]').click();b.riftStatus.emit(castId);ok(!q('.combat-vfx'),'no effects accumulate off Rift');q('[data-tab="battle"]').click();
     s=seed();s.buffUntil=b.clockNow()+2000;s.buffMult=1.25;install(s);
     var before=b.getState();for(var i=0;i<6;i++){b.renderLayout();document.querySelectorAll('nav.tabbar button').forEach(x=>x.click());}same(b.getState(),before,'status rendering/navigation observer-only');
     function ticks(render){install(s);for(var i=0;i<8;i++){b.advanceTime(100);b.feedbackTick(false);if(render){b.renderLayout();document.querySelectorAll('nav.tabbar button').forEach(x=>x.click());}}return b.getState();}
@@ -89,7 +121,9 @@ window.riftStatusMobile=(()=>{
  function setup(inset,stateKind){
   kind=stateKind;var s=window.riftStatusSeed(b,ctx);
   if(kind==='fresh'){s.depth=1;s.maxDepthEver=1;s.enemyDepth=1;s.enemyMaxHp=b.enemyHpFor(1);s.enemyHp=s.enemyMaxHp;}
-  else {var worst=window.riftStatusWorst(b,ctx);s.activeParty=worst.ids;s.activeParty.forEach(id=>s.spirits[id]=1);s.buffUntil=b.clockNow()+60000;s.buffMult=1.5;s.lumen=1e12;s.shards=1e12;s.motes=1e9;if(kind==='boss'){s.depth=110;s.enemyDepth=110;s.enemyMaxHp=b.enemyHpFor(110);s.enemyHp=s.enemyMaxHp;}}
+  else {var worst=window.riftStatusWorst(b,ctx);s.activeParty=worst.ids;s.activeParty.forEach(id=>s.spirits[id]=1);s.buffUntil=b.clockNow()+60000;s.buffMult=1.5;s.lumen=1e12;s.shards=1e12;s.motes=1e9;if(kind.startsWith('boss')){s.depth=110;s.enemyDepth=110;s.enemyMaxHp=b.enemyHpFor(110);s.enemyHp=s.enemyMaxHp;}}
+  if(kind==='boss-conditional'){s.activeParty=['stone','titan','gale','thorn','ember'];s.activeParty.forEach(id=>s.spirits[id]=1);}
+  s.activeParty.forEach((id,i)=>s.heroResource[id]=20+i*15);
   b.setState(s);b.renderLayout();q('[data-tab="battle"]').click();
   document.documentElement.style.setProperty('--safe-top',inset+'px');document.documentElement.style.setProperty('--safe-bottom',inset+'px');
  }
@@ -124,6 +158,15 @@ window.riftStatusMobile=(()=>{
   var tabs=[...document.querySelectorAll('nav.tabbar button')];ok(tabs.length===6,'six main tabs');tabs.forEach((el,i)=>{var r=rect(el);ok(r.width>=44&&r.height>=44,'tab touch minimum');ok(el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)),'tab hit-test');if(i)ok(rect(tabs[i-1]).right<=r.left,'one non-overlapping nav row');});
   var active=b.riftStatus.active();ok(active.every(x=>q('#bond-summary').textContent.includes(x.name.replace(' Bond',''))),'all powered Bond names directly visible');
   if(kind!=='fresh')ok(active.length===window.riftStatusWorst(b,ctx).bonds.length&&q('#buff-indicator').textContent.includes('+50%'),'worst current Bonds and buff fixture survives live ticks');
+  ['#rift-party','#rift-bond-effects','#boss-combat'].forEach(selector=>{
+   var el=q(selector);if(el.hidden)return;var r=rect(el);ok(r.top>=mr.top&&r.bottom<=nav.top&&r.width>0,selector+' visible above navigation');
+   [el,...el.querySelectorAll('.rift-wisp-name,.rift-wisp-time,.rift-bond-effect,strong,.boss-net')].forEach(x=>ok(x.scrollWidth<=x.clientWidth+1&&x.scrollHeight<=x.clientHeight+1,selector+' full contents fit'));
+   boxes[selector]={x:r.x,y:r.y,width:r.width,height:r.height};
+  });
+  ok(rect(q('#rift-party')).bottom<=hp.top,'formation clear of HP');
+  ok(q('#boss-combat').hidden||hp.bottom<=rect(q('#boss-combat')).top&&rect(q('#boss-combat')).bottom<=stats.top,'boss figures clear of HP and numeric row');
+  ok(q('#rift-bond-effects').hidden||bonds.bottom<=rect(q('#rift-bond-effects')).top,'full Bond effects separate from names');
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){ok(!q('.combat-vfx')&&getComputedStyle(q('#enemy-stage'),'::after').animationName==='none','reduced motion has no combat effects or rotating aura');}
   ok(!document.documentElement.hasAttribute('data-qa-runtime-error'),'no runtime errors');
   return {kind,viewport:[innerWidth,innerHeight],fonts:document.fonts.size,boxes,bondText:q('#bond-summary').textContent,buff:q('#buff-indicator').textContent,enemyHeight:enemy.height,main:[m.clientHeight,m.scrollHeight]};
  }

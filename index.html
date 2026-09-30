@@ -1703,6 +1703,44 @@
   @media(prefers-reduced-motion:reduce){
     #tab-battle .stage .enemy-glyph,.rift-dust i{animation:none;}.rift-dust i{opacity:.35;}
   }
+
+  /* Live Formation: information stays visible while combat remains one tap surface. */
+  .rift-heading{display:grid;grid-template-columns:minmax(0,1fr) 160px;gap:4px;height:48px;}
+  .stage .depth-label{font-size:14px;}
+  .stage .depth-label .boss-tag{font-size:10px;}
+  .stage .depth-label .region-label{overflow:hidden;text-overflow:ellipsis;}
+  .stage .rift-heading .rift-mode-row{height:48px;min-height:48px;margin:0;gap:2px;padding:1px;}
+  .stage .rift-mode-btn{min-width:44px;min-height:44px;padding:2px;font-size:12px;}
+  .farm-depth{display:block;font:10px/12px 'IBM Plex Mono',monospace;}
+  .stage .rift-mode-btn .control-state{font-size:10px;line-height:12px;}
+  .stage .rift-objective{height:44px;min-height:44px;padding:3px 8px;}
+  #boss-combat{flex:none;padding:2px 7px;border-left:2px solid #dd8ea2;background:#2b1d304d;font-size:10px;line-height:12px;}
+  #boss-combat[hidden]{display:none;}
+  #boss-combat strong{display:block;color:#f3bbc8;font-size:11px;line-height:13px;}
+  .boss-net{display:block;color:#d0d8ee;}
+  .boss-net.positive{color:#a5e9bc;}.boss-net.negative{color:#ffb3be;}
+  .stage .enemy-stage-wrap{position:relative;}
+  #tab-battle .stage .enemy-stage{padding-bottom:54px;}
+  #tab-battle .stage .enemy-glyph{max-height:calc(100% - 24px);width:auto;height:clamp(60px,18vh,160px);max-width:150px;}
+  #tab-battle .stage .enemy-glyph.boss{width:auto;}
+  .stage .guardian-label{bottom:52px;font-size:10px;line-height:12px;opacity:.85;}
+  #rift-party{position:absolute;left:0;right:0;bottom:36px;height:50px;display:flex;justify-content:center;gap:4px;z-index:4;pointer-events:none;}
+  .rift-wisp{position:relative;width:calc((100% - 16px)/5);max-width:70px;min-width:0;height:50px;border:1px solid color-mix(in srgb,var(--wisp-color) 55%,#223047);border-radius:10px 10px 5px 5px;background:linear-gradient(155deg,color-mix(in srgb,var(--wisp-color) 15%,#0b1529),#0a1224);display:grid;grid-template-columns:26px minmax(0,1fr);grid-template-rows:12px 24px 4px;align-items:center;padding:2px;box-shadow:0 2px 9px #0006;}
+  #rift-party .wisp-portrait{width:26px;height:26px;grid-column:1;grid-row:2;filter:none;}
+  .rift-wisp-name{grid-column:1/-1;grid-row:1;font-size:10px;line-height:12px;color:#e7edfa;text-align:center;}
+  .rift-wisp-time{grid-column:2;grid-row:2;font:10px/12px 'IBM Plex Mono',monospace;color:#c4cfe4;text-align:center;}
+  .rift-charge{grid-column:1/-1;height:4px;border-radius:3px;background:#030818;overflow:hidden;width:100%;}
+  .rift-charge>span{display:block;height:100%;background:var(--wisp-color);box-shadow:0 0 8px var(--wisp-color);transition:width .1s linear;}
+  .rift-wisp.unpowered{border-style:dashed;}.rift-wisp.unpowered .rift-wisp-time{color:#c4cfe4;}
+  .rift-wisp.is-casting{border-color:#fff;box-shadow:0 0 14px color-mix(in srgb,var(--wisp-color) 65%,transparent);}
+  .rift-wisp.is-casting .rift-wisp-time{color:#fff;}
+  #rift-bond-effects{display:flex;gap:4px;flex:none;min-height:0;}
+  #rift-bond-effects[hidden]{display:none;}
+  .rift-bond-effect{flex:1;min-width:0;padding:3px 6px;border:1px solid #625287;border-radius:7px;background:linear-gradient(120deg,#37285280,#1a2034);font-size:10px;line-height:12px;color:#e4dcf6;}
+  .stage .enemy-stage::after{background:conic-gradient(from 0deg,transparent 0 15%,#b9b6ff33 16% 17%,transparent 18% 48%,#b9b6ff33 49% 50%,transparent 51% 82%,#b9b6ff33 83% 84%,transparent 85%);animation:riftOrbit 32s linear infinite;max-width:calc(100% - 18px);}
+  .vfx-ability{background:repeating-conic-gradient(var(--vfx-color) 0deg 5deg,transparent 6deg 45deg);}
+  @media(prefers-reduced-motion:reduce){.stage .enemy-stage::after{animation:none!important;}.rift-charge>span{transition:none;}}
+
   /* Shared state grammar: text + border/shape, never opacity or color alone. */
   button[data-state="unaffordable"],button[data-state="locked"],button[data-state="unavailable"]{border-style:dashed;background:var(--bg-elev);box-shadow:none;}
   button[data-state="maxed"],button[data-state="completed"]{border-style:solid;color:var(--good);background:var(--bg-elev);}
@@ -1834,11 +1872,11 @@
   <main>
     <section class="tab-panel active" id="tab-battle">
       <div class="card stage">
-        <div class="rift-heading"><div class="depth-label" id="depth-label">Rift 1</div></div>
+        <div class="rift-heading"><div class="depth-label" id="depth-label">Rift 1</div>
         <div class="rift-mode-row">
           <button class="rift-mode-btn active" id="rift-push-btn">Push</button>
           <button class="rift-mode-btn" id="rift-farm-btn">Farm</button>
-        </div>
+        </div></div>
 
         <div class="rift-objective" id="rift-objective"></div>
         <div class="battle-row"><div class="rift-landscape" aria-hidden="true">
@@ -1910,6 +1948,7 @@
                 <g class="boss-crest boss-crest-guardian"><path d="M44 37 34 8 60 25 80 2 100 25 126 8 116 37 98 30 80 40 62 30Z M20 66 4 50 9 103 36 116 27 88 M140 66 156 50 151 103 124 116 133 88"/><path d="M80 10 85 19 80 27 75 19Z" fill="var(--creature-eye)"/><path d="M13 69 19 97 28 103 M147 69 141 97 132 103" fill="none" stroke="var(--creature-eye)"/></g>
               </svg></div>
             </button>
+            <div id="rift-party" role="group" aria-label="Current Wisp formation"></div>
             <div class="hp-wrap">
               <div class="hp-bar-track"><div class="hp-bar-fill" id="hp-fill"></div></div>
               <div class="hp-text mono" id="hp-text">10 / 10</div>
@@ -1917,12 +1956,14 @@
             </div>
           </div>
         </div>
+        <div id="boss-combat" hidden></div>
         <div class="stat-row">
           <div class="stat-box"><div class="k">Guardian tap</div><div class="v mono" id="stat-tap">1</div></div>
           <div class="stat-box"><div class="k">Wisp DPS est.</div><div class="v mono" id="stat-idle">0</div></div>
         </div>
         <div class="buff-indicator" id="buff-indicator">Boost · passive Wisps + Tap · <strong>Inactive</strong></div>
         <div class="bond-summary" id="bond-summary">No Formation Bond active.</div>
+        <div id="rift-bond-effects" aria-label="Formation Bond bonuses"></div>
       </div>
     </section>
 
@@ -3532,10 +3573,18 @@ function restoreEnemyOrSpawn(){
 
 function gainLumen(n){ state.lumen += n; }
 
-function emitCombatVfx(type,color){
+function emitCombatVfx(type,color,wispId){
   var stageEl = els && els['enemy-stage'];
-  if(!stageEl) return;
+  if(!stageEl || document.hidden || !document.getElementById('tab-battle').classList.contains('active')) return;
+  if(wispId){
+    var card=document.querySelector('[data-rift-wisp="'+wispId+'"]');
+    if(card) card.setAttribute('data-cast-until',String(Date.now()+650));
+  }
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  // Bound simultaneous decorative nodes even when five abilities fire together.
+  if(stageEl.querySelectorAll('.combat-vfx').length>=8) return;
   var fx = document.createElement('span');
+  fx.setAttribute('aria-hidden','true');
   fx.className = 'combat-vfx vfx-'+type;
   if(color) fx.style.setProperty('--vfx-color',color);
   stageEl.appendChild(fx);
@@ -4285,7 +4334,7 @@ function triggerAbility(sp, level){
     state.buffUntil = Math.max(state.buffUntil||0,Date.now()+support.durationMs);
     state.buffMult = Math.max(state.buffMult||1,support.strength);
   }
-  emitCombatVfx(sp.abilityType==='support' ? 'support' : 'ability',sp.color);
+  emitCombatVfx(sp.abilityType==='support' ? 'support' : 'ability',sp.color,sp.id);
   flashBattleStage(sp.abilityType==='support' ? 'support' : 'ability');
   if(burst>0) dealDamage(burst * formationContextDamageMult(state.depth) * bossAbilityDamageMult(state.depth));
 }
@@ -4459,14 +4508,14 @@ function setupOverlayFocus(){
 
 function cacheEls(){
   ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','rift-push-btn','rift-farm-btn','rift-objective','lab-capacity-badge','enemy-name','buff-indicator','enemy-stage','enemy-glyph',
-   'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','formation-presets','bond-card','bond-summary','research-list','study-list',
+   'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','formation-presets','bond-card','bond-summary','rift-bond-effects','rift-party','boss-combat','research-list','study-list',
    'prism-preview','ascend-btn','ascend-note','node-list','ach-list','roster-journey','shop-list','theme-list','manifesto','toast',
    'daily-streak-badge','daily-quest-list','settings-overlay','settings-home','settings-encyclopedia','settings-title','settings-back','encyclopedia-content'
   ].forEach(function(id){ els[id]=document.getElementById(id); });
 }
 
 // Presentation only: the shared formatter can outgrow compact rows above its suffix range.
-// Keep authoritative numeric values intact; exact amounts remain inspectable in Details.
+// Keep authoritative numeric values intact; compact display does not change calculations.
 function formatRiftNumber(value){
   var text = formatNum(value);
   return value>=1e30 || text.length>10 ? Number(value).toExponential(2) : text;
@@ -4492,6 +4541,7 @@ function renderRiftMode(){
   els['rift-farm-btn'].setAttribute('aria-label',els['rift-farm-btn'].disabled ? 'Farm unavailable — clear Rift 1 to unlock' : els['rift-farm-btn'].textContent);
   els['rift-farm-btn'].title = els['rift-farm-btn'].disabled ? 'Clear Rift 1 to unlock Farm' : '';
   if(els['rift-farm-btn'].disabled) els['rift-farm-btn'].innerHTML='Farm<span class="control-state">Clear Rift 1</span>';
+  else els['rift-farm-btn'].innerHTML='Farm<span class="farm-depth">Rift '+formatRiftNumber(farming ? state.farmDepth : highestFarmableDepth(progressionDepth()))+'</span>';
 }
 function nextRiftObjective(){
   var p = progressionDepth();
@@ -4588,6 +4638,7 @@ function updateBattleFast(){
   renderRiftMode();
   renderRiftObjective();
   renderBondSummary();
+  renderRiftParty();
   renderLabCapacityBadge();
   els['hp-fill'].style.width = Math.max(0, (state.enemyHp/state.enemyMaxHp*100)) + '%';
   els['hp-text'].textContent = formatRiftNumber(Math.max(0,state.enemyHp)) + ' / ' + formatRiftNumber(state.enemyMaxHp);
@@ -4614,11 +4665,19 @@ function updateBattleFast(){
     els['enemy-stage'].classList.add('trait-'+trait.id);
     if(battleStage) battleStage.classList.add('trait-'+trait.id);
   }
+  els['boss-combat'].hidden=!bossNow;
   if(bossNow){
     var regenPerSec = state.enemyMaxHp*bossRegenRate(state.depth);
     var yourDps = sustainedCombatDps(state.depth);
     var netDps = yourDps - regenPerSec;
     var enough = netDps > 0;
+    var bossStatus=els['boss-combat'];
+    bossStatus.setAttribute('data-regen',String(regenPerSec));
+    bossStatus.setAttribute('data-dps',String(yourDps));
+    bossStatus.setAttribute('data-net',String(netDps));
+    var bossText='<strong>Regen +'+formatRiftNumber(regenPerSec)+' HP/s</strong><span class="boss-net '+(enough?'positive':'negative')+'">Auto DPS ≈ '+formatRiftNumber(yourDps)+' · Net '+(netDps>0?'+':netDps<0?'−':'')+formatRiftNumber(Math.abs(netDps))+'/s</span>';
+    if(bossStatus.innerHTML!==bossText)bossStatus.innerHTML=bossText;
+    bossStatus.setAttribute('aria-label','Boss regeneration '+regenPerSec+' HP per second. Estimated sustained damage '+yourDps+' per second, including abilities and Auto-Tap, excluding manual taps. Net '+netDps+' HP per second. Burst timing can change the result.');
     els['enemy-stage'].classList.add(enough ? 'boss-ready' : 'boss-wall');
     if(battleStage) battleStage.classList.add(enough ? 'boss-ready' : 'boss-wall');
   }
@@ -4708,6 +4767,39 @@ function renderBondSummary(){
     ? 'Active Bonds: ' + active.map(function(b){ return b.name.replace(' Bond',''); }).join(' · ')
     : 'No Formation Bond active.';
   if(els['bond-summary'].textContent!==text) els['bond-summary'].textContent = text;
+  var effects=els['rift-bond-effects'];
+  var html=active.map(function(b){
+    return '<div class="rift-bond-effect" data-bond-effect="'+b.id+'" aria-label="'+b.name+': '+b.effect+'">'+b.effect+'</div>';
+  }).join('');
+  if(effects.innerHTML!==html) effects.innerHTML=html;
+  effects.hidden=!active.length;
+}
+// Read the same resource and fill rate used by the authoritative simulation.
+// The DOM is retained between ticks; these observers never mutate save state.
+function renderRiftParty(){
+  var root=els['rift-party'];
+  var key=state.activeParty.join(',');
+  if(root.getAttribute('data-party')!==key){
+    root.setAttribute('data-party',key);
+    root.innerHTML=state.activeParty.map(function(id){
+      var sp=SPIRITS.find(function(x){return x.id===id;});
+      return '<div class="rift-wisp" data-rift-wisp="'+id+'" style="--wisp-color:'+sp.color+'">'+wispPortrait(sp)+
+        '<span class="rift-wisp-name">'+sp.shortName+'</span><span class="rift-wisp-time"></span>'+
+        '<div class="rift-charge" role="progressbar" aria-label="'+sp.name+' — '+sp.abilityName+'" aria-valuemin="0" aria-valuemax="100"><span></span></div></div>';
+    }).join('');
+  }
+  state.activeParty.forEach(function(id){
+    var card=root.querySelector('[data-rift-wisp="'+id+'"]'),bar=card.querySelector('.rift-charge');
+    var powered=(state.spirits[id]||0)>0,charge=powered ? Math.max(0,Math.min(100,state.heroResource[id]||0)) : 0;
+    var seconds=Math.max(0,(1-charge/100)*abilityCycleSeconds());
+    var casting=powered && Date.now()<Number(card.getAttribute('data-cast-until')||0);
+    var label=!powered ? 'Lv 0' : casting ? 'CAST' : charge>=100 ? 'Ready' : Math.ceil(seconds)+'s';
+    card.classList.toggle('unpowered',!powered);card.classList.toggle('is-casting',casting);
+    var time=card.querySelector('.rift-wisp-time');if(time.textContent!==label)time.textContent=label;
+    bar.querySelector('span').style.width=charge+'%';
+    bar.setAttribute('aria-valuenow',String(Math.round(charge)));
+    bar.setAttribute('aria-valuetext',!powered ? 'Unpowered — Empower this Wisp' : Math.round(charge)+'% charged; '+Math.ceil(seconds)+' seconds to next ability');
+  });
 }
 function renderFormationPresets(){
   var root=els['formation-presets'];
@@ -5998,7 +6090,7 @@ function simulationTriggerAbility(sp,level,nowMs,policy,summary){
   }
 
   if(policy.visual){
-    emitCombatVfx(sp.abilityType==='support' ? 'support' : 'ability',sp.color);
+    emitCombatVfx(sp.abilityType==='support' ? 'support' : 'ability',sp.color,sp.id);
     flashBattleStage(sp.abilityType==='support' ? 'support' : 'ability');
   }
   if(burst>0){
