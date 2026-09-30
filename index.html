@@ -1799,6 +1799,112 @@
   @keyframes wispBloom{0%{opacity:0;transform:translate(-50%,-50%) scale(.15) rotate(-45deg);}35%{opacity:.8;}100%{opacity:0;transform:translate(-50%,-50%) scale(1.4) rotate(30deg);}}
   @media(prefers-reduced-motion:reduce){.combat-vfx{display:none!important;}.rift-wisp.is-attacking .wisp-portrait{filter:none;}}
 
+  /* Shared world: illustrated chapter headers and material surfaces.
+     Decorations stay in their own boxes; Rift geometry is unchanged. */
+  #tab-spirits{--chapter:#c3adff;--chapter-deep:#302044;}
+  #tab-forge{--chapter:#ffc27b;--chapter-deep:#38241f;}
+  #tab-research{--chapter:#83e4df;--chapter-deep:#143338;}
+  #tab-ascend{--chapter:#c8b0ff;--chapter-deep:#29234b;}
+  #tab-deeds{--chapter:#f2d491;--chapter-deep:#332e25;}
+  .chapter-head{
+    position:relative;isolation:isolate;display:flex;align-items:center;
+    min-height:104px;margin:0 0 14px;padding:18px 16px;overflow:hidden;
+    border:1px solid color-mix(in srgb,var(--chapter) 42%,#29364f);border-radius:16px;
+    background:radial-gradient(ellipse at 90% 85%,var(--chapter-deep),transparent 65%),linear-gradient(115deg,#111b2e,#0c1424);
+    box-shadow:inset 0 1px #ffffff14,0 9px 20px -16px #000;
+  }
+  .chapter-head::before{content:'';position:absolute;inset:5px;border:1px solid color-mix(in srgb,var(--chapter) 12%,transparent);border-radius:11px;pointer-events:none;}
+  .chapter-copy{position:relative;z-index:1;max-width:65%;}
+  .chapter-kicker{display:block;font-size:10px;line-height:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--chapter);font-weight:800;margin-bottom:5px;}
+  .chapter-head h2{font-size:23px;line-height:1.2;color:#fff1dc;font-weight:600;text-shadow:0 2px 12px #081022;}
+  .chapter-art{position:absolute;right:-8px;bottom:0;width:180px;height:110px;pointer-events:none;}
+  .chapter-art .scene-sparks{transform-origin:center;}
+  .tab-panel.active .chapter-art .scene-sparks{animation:chapterAwaken 1.4s ease-out both;}
+  @keyframes chapterAwaken{from{opacity:.15;transform:translateY(7px);}to{opacity:1;transform:none;}}
+  .tab-panel:not(#tab-battle)>.section-sub{font-size:12px;line-height:1.55;margin:0 2px 14px;}
+  .tab-panel:not(#tab-battle) .card{
+    background:radial-gradient(ellipse at 100% 0%,color-mix(in srgb,var(--chapter) 8%,transparent),transparent 62%),linear-gradient(145deg,#1b2740,#111b2c);
+    border-color:#43506a;box-shadow:inset 0 1px #ffffff0b,0 8px 20px -15px #000;
+  }
+  .tab-panel:not(#tab-battle) .section-label{color:var(--chapter);letter-spacing:.1em;}
+  .tab-panel:not(#tab-battle) .section-label::after{background:linear-gradient(90deg,color-mix(in srgb,var(--chapter) 40%,transparent),transparent);}
+  .tab-panel:not(#tab-battle) .card:focus-within{border-color:var(--chapter);}
+  .tab-panel:not(#tab-battle) :is(.mini-btn,.buy-btn,.shop-card button):not(:disabled){
+    background:linear-gradient(150deg,color-mix(in srgb,var(--chapter) 17%,#152138),#111a2c);
+    border-color:color-mix(in srgb,var(--chapter) 70%,#4b5870);box-shadow:inset 0 1px #ffffff12;
+  }
+  .tab-panel:not(#tab-battle) :is(.mini-btn,.buy-btn,.speed-btn,.quest-claim-btn,.shop-card button):active:not(:disabled){
+    box-shadow:inset 0 0 0 1px #f6e2b7,inset 0 0 16px #ffffff20;transform:translateY(1px);
+  }
+  .hud{background:linear-gradient(150deg,#152039,#0b1427);border-bottom-color:#44516b;backdrop-filter:none;}
+  .hud .chip{border-radius:8px;border-color:#394760;background:linear-gradient(145deg,#202b43,#101a2e);}
+  .hud .chip .lbl{opacity:1;color:#bdc7da;}
+  .settings-btn,.settings-icon-btn{border-color:#56617c;background:linear-gradient(145deg,#2c3650,#141e32);color:#dfd9f3;}
+  nav.tabbar{background:linear-gradient(180deg,#15213a,#0c1528);border-top-color:#586179;backdrop-filter:none;}
+  nav.tabbar [data-tab="battle"]{--nav-accent:#f0c567;}
+  nav.tabbar [data-tab="spirits"]{--nav-accent:#c3adff;}
+  nav.tabbar [data-tab="forge"]{--nav-accent:#ffc27b;}
+  nav.tabbar [data-tab="research"]{--nav-accent:#83e4df;}
+  nav.tabbar [data-tab="ascend"]{--nav-accent:#c8b0ff;}
+  nav.tabbar [data-tab="deeds"]{--nav-accent:#f2d491;}
+  nav.tabbar button.active{color:var(--nav-accent);background:radial-gradient(ellipse at 50% 0%,color-mix(in srgb,var(--nav-accent) 15%,transparent),transparent 78%);}
+  nav.tabbar button.active::after{left:24%;right:24%;height:2px;opacity:1;}
+  #tab-spirits .hero-card:not(.locked){border-color:color-mix(in srgb,var(--wisp-color) 40%,#35445d);background:radial-gradient(ellipse at 0 0,color-mix(in srgb,var(--wisp-color) 13%,transparent),transparent 60%),linear-gradient(140deg,#1d2940,#121c30);}
+  #tab-spirits .hero-card::before{width:3px;opacity:1;}
+  .hero-top .wisp-portrait{width:58px;height:58px;padding:4px;border-radius:50%;border-color:color-mix(in srgb,var(--wisp-color) 65%,#303f59);background:radial-gradient(circle,color-mix(in srgb,var(--wisp-color) 22%,#101a2c),#0b1324 70%);box-shadow:0 0 0 3px #0c1728,inset 0 0 0 3px #172338;filter:none;}
+  #tab-spirits .hero-id .name{font-family:'Cinzel',serif;font-size:16px;line-height:1.3;color:#f9ebd7;}
+  #tab-spirits .hero-card .class-tag{color:color-mix(in srgb,var(--wisp-color,#c3adff) 55%,#fff)!important;}
+  #tab-spirits .hero-card.active-wisp{box-shadow:inset 0 2px color-mix(in srgb,var(--wisp-color) 60%,transparent),0 8px 20px -15px #000;}
+  .hero-stat-pill{border-radius:6px;background:#0f1b2e;border-color:#3c4b64;}
+  .hero-card .rarity-badge{border-radius:6px;}
+  .hero-card .module-row{border-color:#45506b;background:linear-gradient(145deg,#18243b,#0e182a);}
+  .hero-card .ultimate-badge{border-color:#c49667;background:linear-gradient(120deg,#3b2940,#28223c);color:#ffd5a7;}
+  .formation-preset-card .formation-lineup{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;padding:6px;background:#0d1729;border:1px solid #3e4b65;border-radius:10px;}
+  .formation-member{flex-direction:column;min-width:0;color:#ece5f8;}
+  #tab-forge .card.node-card{border-left:3px solid #cf955d;}
+  .upgrade-emblem{width:32px;height:38px;flex:none;color:var(--chapter);}
+  #tab-forge [data-forge-preview]{padding:8px;border:1px solid #3e4a61;border-radius:8px;background:#0e192b;}
+  #tab-forge .node-info>.name{color:#ffe0b6;}
+  #tab-forge .node-card.locked-node{border-left-color:#5b6477;}
+  .study-slot-summary{padding:10px;border:1px solid #446b74;border-radius:12px;background:linear-gradient(125deg,#19353b,#142438);}
+  .study-slot-summary strong{color:#c8fff0;}
+  #tab-research .card.study-running{border-left-color:#83e4df;background:radial-gradient(ellipse at 100% 0%,#26545b66,transparent 65%),linear-gradient(145deg,#182e3d,#111e31);}
+  .study-running-label{color:#a5ede5;letter-spacing:.06em;text-transform:uppercase;font-size:10px;}
+  .study-bar-track{height:12px;background:#0a1625;border-color:#4c6574;}
+  .study-bar-fill{background:linear-gradient(90deg,#497d9d,#8edecf);box-shadow:inset 0 1px #c6fff2;}
+  .study-card .name{color:#d0f1ec;}
+  .study-inspection{margin-top:8px;border-top:1px solid #40576a;}
+  .ascend-summary>.chapter-head{align-self:stretch;margin:-1px -1px 4px;text-align:left;min-height:116px;}
+  .ascend-summary .chapter-art{width:192px;height:118px;}
+  .prism-preview{padding:10px 20px;border:1px solid #8477ae;border-radius:12px;background:radial-gradient(ellipse at 50% 0%,#574072,#221e3c);color:#eadcff;text-shadow:0 0 18px #c7a2ff44;}
+  .ab-reset{border-top:2px solid #cb8194;}
+  .ab-keep{border-top:2px solid #85bfa5;}
+  .big-btn:not(:disabled){color:#20162f;background:linear-gradient(120deg,#c9b3ef,#e4c69d);border:1px solid #f0dbff;box-shadow:inset 0 1px #fff7,0 5px 20px -12px #c9b3ef;}
+  #tab-deeds .daily-card{border-top:2px solid #dbc38b;}
+  #tab-deeds .quest-row{border-bottom-color:#45536a;}
+  .quest-bar-fill{background:linear-gradient(90deg,#5b9f9e,#b0e5c4);}
+  #tab-deeds .ach-card .dot{width:16px;height:20px;margin-top:1px;border-radius:3px 3px 8px 8px;border:1px solid #7b8496;background:#233147;box-shadow:inset 0 2px #586477;}
+  #tab-deeds .ach-card.done .dot{border-color:#e4cd8e;background:linear-gradient(145deg,#efcf82,#968054);box-shadow:inset 0 2px #fff3c1;}
+  #tab-deeds .ach-card.done{border-color:#7e7155;background:linear-gradient(145deg,#2a2f36,#171e2b);}
+  #tab-deeds .ach-card.done .name{color:#f3dfad;opacity:1;}
+  #tab-deeds .shop-card{border-left-color:#8ac4b7;}
+  .theme-swatch{width:40px;height:40px;border:2px solid #8791ac;box-shadow:inset 0 0 0 4px #0e1829;}
+  .settings-modal,.modal{border-color:#687089;background:radial-gradient(ellipse at 100% 0%,#39314b88,transparent 65%),linear-gradient(145deg,#1b2941,#111a2c);}
+  .settings-head{border-bottom-color:#5b6279;background:#172238;backdrop-filter:none;}
+  .settings-row,.ency-card{border-color:#485775;background:linear-gradient(130deg,#25324b,#172238);}
+  .settings-row-title,.ency-name{color:#f6e9d7;}
+  .settings-section-title{color:#d4c299;}
+  .toast{border:1px solid #b3a078;border-radius:12px;background:linear-gradient(125deg,#27354d,#141e32);color:#fff0d2;box-shadow:0 8px 30px #0008,inset 0 1px #f8daa833;}
+  @media(max-height:700px){
+    .chapter-head{min-height:64px;padding:10px 14px;margin-bottom:10px;}
+    .chapter-kicker{font-size:9px;line-height:12px;margin-bottom:3px;}
+    .chapter-head h2{font-size:20px;}
+    .chapter-art{width:104px;height:64px;right:8px;}
+    .ascend-summary>.chapter-head{min-height:78px;}
+    .ascend-summary .chapter-art{width:128px;height:78px;}
+  }
+  @media(prefers-reduced-motion:reduce){.tab-panel.active .chapter-art .scene-sparks{animation:none;}}
+
   /* Shared state grammar: text + border/shape, never opacity or color alone. */
   button[data-state="unaffordable"],button[data-state="locked"],button[data-state="unavailable"]{border-style:dashed;background:var(--bg-elev);box-shadow:none;}
   button[data-state="maxed"],button[data-state="completed"]{border-style:solid;color:var(--good);background:var(--bg-elev);}
@@ -1830,7 +1936,74 @@
 <canvas id="stars"></canvas>
 <svg class="art-definitions" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs>
 
- <linearGradient id="creature-facet" x1="0" x2="1" y1="0" y2=".6"><stop stop-color="#e5f6ff" stop-opacity=".25"/><stop offset=".49" stop-color="#e5f6ff" stop-opacity=".03"/><stop offset=".5" stop-color="#020412" stop-opacity=".5"/><stop offset="1" stop-color="#020412" stop-opacity="0"/></linearGradient>
+
+ <radialGradient id="chapter-halo"><stop stop-color="currentColor" stop-opacity=".32"/><stop offset="1" stop-color="currentColor" stop-opacity="0"/></radialGradient>
+ <linearGradient id="chapter-metal" x2=".8" y2="1"><stop stop-color="#f0c693"/><stop offset=".45" stop-color="#8a6554"/><stop offset=".5" stop-color="#433c46"/><stop offset="1" stop-color="#292d3e"/></linearGradient>
+ <linearGradient id="chapter-crystal" x2="1" y2="1"><stop stop-color="#f3e7ff"/><stop offset=".42" stop-color="#ba9bff"/><stop offset="1" stop-color="#4b4a95"/></linearGradient>
+ <symbol id="chapter-ground" viewBox="0 0 180 110">
+  <ellipse cx="104" cy="63" rx="73" ry="61" fill="url(#chapter-halo)"/>
+  <path d="M32 104 103 82 176 103 104 124Z" fill="#0a1323" stroke="currentColor" stroke-opacity=".2"/>
+  <path d="m45 103 58-17 60 17M59 108l44-13 45 13" fill="none" stroke="currentColor" stroke-opacity=".14"/>
+ </symbol>
+ <symbol id="chapter-wisps" viewBox="0 0 180 110">
+  <use href="#chapter-ground"/>
+  <ellipse cx="106" cy="92" rx="48" ry="10" fill="none" stroke="#bba5ff" stroke-opacity=".4"/>
+  <path d="M68 69 106 29 145 69 105 87Z" fill="none" stroke="#d9b9ff" stroke-opacity=".45"/>
+  <g transform="translate(46 48) scale(.58)" style="color:#ffb87c"><use href="#wisp-ember" width="64" height="64"/></g>
+  <g transform="translate(116 48) scale(.58)" style="color:#81dfe9"><use href="#wisp-tide" width="64" height="64"/></g>
+  <g transform="translate(76 5) scale(.94)" style="color:#d5b5ff"><use href="#wisp-void" width="64" height="64"/></g>
+  <path d="M69 88v5m76-5v5M106 17v-6m-4 3h8" stroke="#dcc4ff" stroke-width="1.3"/>
+ </symbol>
+ <symbol id="chapter-forge" viewBox="0 0 180 110">
+  <use href="#chapter-ground"/>
+  <path d="M57 88 68 30Q102 5 140 30l13 58" fill="#161b2c" stroke="#7a6659" stroke-width="3"/>
+  <path d="M74 80V40Q103 22 132 40v40" fill="#3f2930" stroke="#b08461"/>
+  <path d="M98 83C73 64 114 53 101 32c38 34 9 37 25 50" fill="#e3834f" opacity=".7"/>
+  <path d="M109 86c-15-17 4-23 0-33 17 17 9 22 15 33" fill="#ffe5a5"/>
+  <path d="M49 64h99l-16 16h-18v13l13 7H77l13-7V80H66Z" fill="url(#chapter-metal)" stroke="#ddb187"/>
+  <path d="M52 66h89M90 82h24" stroke="#ffdea4"/>
+  <path d="m112 29 20-19 12 13-21 18Z" fill="#a68d77" stroke="#f8d2a2"/>
+  <path d="m125 34-16 18" stroke="#815c46" stroke-width="6"/>
+  <path d="m74 40-4-7m18 14 3-8m46 6 5-4" stroke="#ffd396" stroke-width="2"/>
+ </symbol>
+ <symbol id="chapter-lab" viewBox="0 0 180 110">
+  <use href="#chapter-ground"/>
+  <path d="M55 97V25h42m36 72V14h-24" fill="none" stroke="#4d8b92" stroke-width="3"/>
+  <path d="M42 95h118l-7 8H49Z" fill="#2d4656" stroke="#84b7bc"/>
+  <path d="M83 36h20m-15 0v17L70 84q-4 8 6 8h34q10 0 5-8L98 53V36" fill="#203d50" stroke="#adebe1" stroke-width="1.5"/>
+  <path d="m81 68-8 17q-2 4 4 4h31q6 0 3-5l-8-16Z" fill="#6bcebd" opacity=".85"/>
+  <path d="M90 57h7m-11 6h8" stroke="#bcefe6"/>
+  <circle cx="135" cy="56" r="16" fill="#214052" stroke="#abd9ec"/>
+  <path d="M121 59q14-9 28 0a14 14 0 0 1-28 0" fill="#a9a5f6"/>
+  <path d="M130 41V22h10v19m-5 31v19m-9 0h18" fill="none" stroke="#b0d3dd" stroke-width="2"/>
+  <path d="M53 25h22v13H55m-8 4h18" fill="none" stroke="#7fb3b1"/>
+  <circle cx="89" cy="77" r="2" fill="#d6fff4"/><circle cx="97" cy="82" r="3" fill="#b7f2df"/>
+ </symbol>
+ <symbol id="chapter-ascend" viewBox="0 0 180 110">
+  <use href="#chapter-ground"/>
+  <ellipse cx="109" cy="56" rx="42" ry="45" fill="none" stroke="#9279b5" stroke-width="2"/>
+  <path d="M75 81Q55 41 90 17m37 0q35 27 16 64" fill="none" stroke="#d6b782" stroke-width="3"/>
+  <path d="M109 13 131 51 110 84 90 52Z" fill="url(#chapter-crystal)" stroke="#e6d5ff"/>
+  <path d="m109 13 1 71-20-32 41-1-21 33" fill="none" stroke="#e6ceff" stroke-opacity=".6"/>
+  <path d="m70 91 39-13 40 13-40 14Z" fill="#292641" stroke="#99859e"/>
+  <ellipse cx="109" cy="90" rx="26" ry="6" fill="none" stroke="#c7a6ff"/>
+  <path d="m74 43 4 6-4 6-4-6Zm72 17 4 6-4 6-4-6Z" fill="#ddc6ff"/>
+ </symbol>
+ <symbol id="chapter-deeds" viewBox="0 0 180 110">
+  <use href="#chapter-ground"/>
+  <path d="M58 96V20l27-5v83m47 0V15l26 5v76" fill="#26303d" stroke="#5b666c"/>
+  <path d="M60 22h23v49l-12 10-11-10m74-49h22v49l-11 10-11-10" fill="#54534a" stroke="#a28d64"/>
+  <path d="M89 32h38v26q0 23-19 24-19-1-19-24Z" fill="url(#chapter-metal)" stroke="#ffe5a7" stroke-width="1.5"/>
+  <path d="M89 38H79v10q0 16 13 16m35-26h10v10q0 16-13 16" fill="none" stroke="#d7b580" stroke-width="3"/>
+  <path d="M108 82v10m-14 6 5-6h18l5 6Z" fill="#998359" stroke="#f6d895" stroke-width="2"/>
+  <path d="m108 42 4 8 9 1-7 7 2 9-8-4-8 4 2-9-7-7 9-1Z" fill="#f4d393"/>
+ </symbol>
+ <symbol id="upgrade-forge" viewBox="0 0 32 38">
+  <path d="M16 1 30 9v20l-14 8L2 29V9Z" fill="#262839" stroke="#c49467"/>
+  <path d="m9 10 8 1 6 6-6 6-6-6-3-1Zm10 12 6 7m-18 0h11" fill="none" stroke="#f4d4a4" stroke-width="1.5"/>
+ </symbol>
+
+<linearGradient id="creature-facet" x1="0" x2="1" y1="0" y2=".6"><stop stop-color="#e5f6ff" stop-opacity=".25"/><stop offset=".49" stop-color="#e5f6ff" stop-opacity=".03"/><stop offset=".5" stop-color="#020412" stop-opacity=".5"/><stop offset="1" stop-color="#020412" stop-opacity="0"/></linearGradient>
 <symbol id="creature-wisp" viewBox="0 0 160 160">
  <path d="M80 17 C49 30 31 63 42 93 L27 128 61 119 79 143 99 119 129 126 116 91 C129 64 110 37 80 17Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
  <path d="M80 17 C49 30 31 63 42 93 L27 128 61 119 79 143 99 119 129 126 116 91 C129 64 110 37 80 17Z" fill="url(#creature-facet)"/>
@@ -2026,6 +2199,7 @@
     </section>
 
     <section class="tab-panel" id="tab-spirits">
+      <header class="chapter-head"><div class="chapter-copy"><span class="chapter-kicker">Formation &amp; collection</span><h2>Wisps</h2></div><svg class="chapter-art" viewBox="0 0 180 110" aria-hidden="true" focusable="false" style="color:var(--chapter)"><use href="#chapter-wisps"/><g class="scene-sparks" fill="currentColor"><path d="m60 21 2 4 4 2-4 2-2 4-2-4-4-2 4-2Z"/><circle cx="150" cy="24" r="1.5"/><circle cx="163" cy="74" r="1"/><circle cx="53" cy="67" r="1.5"/></g></svg></header>
       <div id="formation-presets"></div>
       <details class="formation-help"><summary>Formation Bonds &amp; guidance</summary>
         <div class="section-sub">Up to 5 Wisps can be Active at once. Pair specific powered Wisps to activate simple Formation Bonds for Push, Farm or Boss fights.</div>
@@ -2036,20 +2210,20 @@
     </section>
 
     <section class="tab-panel" id="tab-forge">
-      <h2 class="section-label">Rift Forge</h2>
-      <div class="section-sub">Instant upgrades with permanent bonuses — never lost on Ascend.</div>
+      <header class="chapter-head"><div class="chapter-copy"><span class="chapter-kicker">Permanent power</span><h2>Rift Forge</h2></div><svg class="chapter-art" viewBox="0 0 180 110" aria-hidden="true" focusable="false" style="color:var(--chapter)"><use href="#chapter-forge"/><g class="scene-sparks" fill="currentColor"><path d="m60 21 2 4 4 2-4 2-2 4-2-4-4-2 4-2Z"/><circle cx="150" cy="24" r="1.5"/><circle cx="163" cy="74" r="1"/><circle cx="53" cy="67" r="1.5"/></g></svg></header>
+      <div class="section-sub">Instant, permanent upgrades. Kept on Ascend.</div>
       <div id="research-list"></div>
     </section>
 
     <section class="tab-panel" id="tab-research">
-      <h2 class="section-label">Research Lab</h2>
+      <header class="chapter-head"><div class="chapter-copy"><span class="chapter-kicker">Time into power</span><h2>Research Lab</h2></div><svg class="chapter-art" viewBox="0 0 180 110" aria-hidden="true" focusable="false" style="color:var(--chapter)"><use href="#chapter-lab"/><g class="scene-sparks" fill="currentColor"><path d="m60 21 2 4 4 2-4 2-2 4-2-4-4-2 4-2Z"/><circle cx="150" cy="24" r="1.5"/><circle cx="163" cy="74" r="1"/><circle cx="53" cy="67" r="1.5"/></g></svg></header>
       <div class="section-sub">Research Projects take time and grant permanent bonuses — progress continues while you’re away.</div>
       <div id="study-list"></div>
     </section>
 
     <section class="tab-panel" id="tab-ascend">
       <div class="card ascend-summary">
-        <div class="section-label" style="margin:0;">Ascend the Rift</div>
+        <header class="chapter-head"><div class="chapter-copy"><span class="chapter-kicker">A stronger beginning</span><h2>Ascend the Rift</h2></div><svg class="chapter-art" viewBox="0 0 180 110" aria-hidden="true" focusable="false" style="color:var(--chapter)"><use href="#chapter-ascend"/><g class="scene-sparks" fill="currentColor"><path d="m60 21 2 4 4 2-4 2-2 4-2-4-4-2 4-2Z"/><circle cx="150" cy="24" r="1.5"/><circle cx="163" cy="74" r="1"/><circle cx="53" cy="67" r="1.5"/></g></svg></header>
         <div style="font-size:.8rem;color:var(--ink-dim);width:100%;text-align:left;">Your first Ascend sets a Prism reward benchmark. Repeating at the same depth earns a 20% reserve reward; pushing beyond the benchmark adds the newly earned depth bonus. Ascending still resets the current run while permanent progression stays.</div>
         <div class="ascend-breakdown">
           <div class="ab-col ab-reset"><div class="ab-head">Resets</div><ul><li>Rift depth</li><li>Wisp levels</li><li>Current Lumen</li></ul></div>
@@ -2064,6 +2238,7 @@
     </section>
 
     <section class="tab-panel" id="tab-deeds">
+      <header class="chapter-head"><div class="chapter-copy"><span class="chapter-kicker">Milestones &amp; rewards</span><h2>Deeds &amp; Quests</h2></div><svg class="chapter-art" viewBox="0 0 180 110" aria-hidden="true" focusable="false" style="color:var(--chapter)"><use href="#chapter-deeds"/><g class="scene-sparks" fill="currentColor"><path d="m60 21 2 4 4 2-4 2-2 4-2-4-4-2 4-2Z"/><circle cx="150" cy="24" r="1.5"/><circle cx="163" cy="74" r="1"/><circle cx="53" cy="67" r="1.5"/></g></svg></header>
       <div class="card daily-card" id="daily-card">
         <div class="daily-head">
           <div class="section-label" style="margin:0;">Daily Quests</div>
@@ -5141,7 +5316,7 @@ function renderSpirits(){
 }
 
 function renderResearch(){
-  var multHtml = '<div class="section-sub" style="margin:0 2px 10px;">Each upgrade has its own Forge Queue toggle — turn it on to buy its next affordable level automatically.</div>' +
+  var multHtml = '<div class="section-sub" style="margin:0 2px 10px;">Queue ON buys the next affordable level automatically.</div>' +
     '<div class="mult-row" id="mult-row">' + MULT_OPTIONS.map(function(m){
     var label = m==='max' ? 'Max' : m+'x';
     var active = labMultiplier===m;
@@ -5153,7 +5328,7 @@ function renderResearch(){
     var level = state.research[node.id];
     var queueOn = !!state.researchQueue[node.id];
     html += '<div class="card node-card" data-forge-card="'+node.id+'">' +
-      '<span class="shape shape-hex" style="width:30px;height:30px;background:var(--shard);"></span>' +
+      '<svg class="upgrade-emblem" viewBox="0 0 32 38" aria-hidden="true" focusable="false"><use href="#upgrade-forge"/></svg>' +
       '<div class="node-info" style="flex:1;">' +
         '<div class="name">'+node.name+'</div>' +
         '<div class="desc">'+node.desc+'</div>' +
