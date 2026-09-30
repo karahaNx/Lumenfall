@@ -57,15 +57,15 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     s=seed();s.activeStudies=[{id:'guardmastery',totalDurationSec:150,remainingSec:.05,speedMult:1}];install(s);b.feedbackSave();b.dispatchVisibility(true);b.advanceTime(5000);b.dispatchVisibility(false);
     ok(b.getState().longStudyLevels.guardmastery===1,'resume commits actual Study completion');badge();
     s=seed();s.buffUntil=b.clockNow()+1500;s.buffMult=1.5;install(s);
-    ok(!q('#rift-details').open && q('#tab-battle #buff-indicator'),'boost is directly on Rift');
+    ok(!q('#rift-details') && !q('#rift-details-btn') && q('#tab-battle #buff-indicator'),'boost is directly on Rift');
     ok(q('#buff-indicator').textContent.includes('passive Wisps + Tap')&&q('#buff-indicator').textContent.includes('+50%'),'boost scope and multiplier');
-    b.advanceTime(500);b.riftStatus.update();ok(q('#buff-indicator').textContent.includes('1s'),'closed-Details countdown updates');
+    b.advanceTime(500);b.riftStatus.update();ok(q('#buff-indicator').textContent.includes('1s'),'direct Rift countdown updates');
     if(negative==='buff')undo=b.riftStatus.mutate('buff');
-    b.advanceTime(1000);b.riftStatus.update();ok(q('#buff-indicator').textContent.includes('Inactive')&&!q('#buff-indicator').textContent.includes('+50%'),'closed-Details buff expiry is neutral');
+    b.advanceTime(1000);b.riftStatus.update();ok(q('#buff-indicator').textContent.includes('Inactive')&&!q('#buff-indicator').textContent.includes('+50%'),'direct Rift buff expiry is neutral');
     s=seed();install(s);ok(q('#bond-summary').textContent==='No Formation Bond active.','neutral Bonds');
     var worst=window.riftStatusWorst(b,ctx);s.activeParty=worst.ids;s.activeParty.forEach(id=>s.spirits[id]=1);install(s);
     var active=b.riftStatus.active();ok(active.length===worst.bonds.length&&q('#bond-summary').textContent===worst.text,'every actual powered Bond name visible');
-    active.forEach(x=>ok(q('#bond-detail').textContent.includes(x.effect),'same-source detailed effects retained'));
+    active.forEach(x=>{var row=[...document.querySelectorAll('#bond-card .bond-row')].find(row=>row.querySelector('.bond-name').textContent.includes(x.name));ok(row && row.classList.contains('active') && row.querySelector('.bond-req').textContent===x.req && row.querySelector('.bond-effect').textContent===x.effect,'existing Formation retains active Bond requirements and full effects');});
     s.spirits[worst.bonds[0].ids[0]]=0;install(s);
     ok(!b.riftStatus.active().some(x=>x.id===worst.bonds[0].id)&&!q('#bond-summary').textContent.includes(worst.bonds[0].name.replace(' Bond','')),'unpowered members cannot show an active Bond');
     var remaining=b.riftStatus.active();
@@ -94,19 +94,33 @@ window.riftStatusMobile=(()=>{
   document.documentElement.style.setProperty('--safe-top',inset+'px');document.documentElement.style.setProperty('--safe-bottom',inset+'px');
  }
  function rect(el){return el.getBoundingClientRect();}
+ // Restore only PR #34's third-column boost presentation. Keep the same
+ // status node/markup, production state, handlers and absence of Details.
+ function mutateBoostLine(){
+  var buff=q('#buff-indicator'),parent=buff.parentNode,next=buff.nextSibling;
+  var style=document.createElement('style');
+  style.textContent='.stage .stat-row{grid-template-columns:1fr 1fr 1.4fr;height:48px;min-height:48px;}' +
+   '.stage .buff-indicator{font-size:11px;line-height:14px;margin:0;padding:1px 2px;border-radius:10px;text-align:center;}' +
+   '.stage .buff-indicator strong{display:block;font-size:12px;line-height:16px;}';
+  document.head.appendChild(style);q('.stat-row').appendChild(buff);
+  return function(){parent.insertBefore(buff,next);style.remove();};
+ }
  function measure(){
   var m=q('main'),mr=rect(m),nav=rect(q('nav.tabbar')),enemy=rect(q('#enemy-stage'));
   ok(m.scrollTop===0&&m.scrollHeight<=m.clientHeight+1&&scrollY===0,'Rift remains scroll-free without clipped content');
   ok(enemy.height>=120,'Guardian Tap >=120');
   var boxes={};
-  ['#enemy-stage','#hp-text','#buff-indicator','#bond-summary','#rift-push-btn','#rift-farm-btn','#rift-details-btn'].forEach(s=>{
+  ['#enemy-stage','#hp-text','#buff-indicator','#bond-summary','#rift-push-btn','#rift-farm-btn'].forEach(s=>{
    var el=q(s),r=rect(el);ok(r.top>=mr.top&&r.bottom<=nav.top&&r.left>=mr.left&&r.right<=mr.right,s+' fully visible');ok(el.scrollWidth<=el.clientWidth&&el.scrollHeight<=el.clientHeight+1,s+' text/content unclipped');
    if(el.tagName==='BUTTON'){ok(r.width>=44&&r.height>=44,s+' touch minimum');ok(el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)),s+' hit-test');}
    boxes[s]={x:r.x,y:r.y,width:r.width,height:r.height};
   });
-  var stats=rect(q('.stat-row')),bonds=rect(q('#bond-summary')),hp=rect(q('.hp-wrap'));
+  var stats=rect(q('.stat-row')),buff=rect(q('#buff-indicator')),bonds=rect(q('#bond-summary')),hp=rect(q('.hp-wrap'));
+  ok(!q('#rift-details') && !q('#rift-details-btn'),'obsolete Details absent');
+  ok(q('.stat-row').children.length===2 && !q('.stat-row').contains(q('#buff-indicator')),'numbers row contains only Guardian Tap and Wisp DPS');
+  ok(Math.abs(buff.left-bonds.left)<1 && buff.height<=16 && bonds.height<=16,'boost and Bonds each occupy one independent line');
   ['#rift-push-btn','#rift-farm-btn'].forEach(s=>ok(rect(q(s)).bottom<=rect(q('#rift-objective')).top,'mode control clear of objective'));
-  ok(hp.bottom<=stats.top&&stats.bottom<=bonds.top&&bonds.bottom<=nav.top,'HP, status and nav do not overlap');
+  ok(hp.bottom<=stats.top&&stats.bottom<=buff.top&&buff.bottom<=bonds.top&&bonds.bottom<=nav.top,'HP, status and nav do not overlap');
   var tabs=[...document.querySelectorAll('nav.tabbar button')];ok(tabs.length===6,'six main tabs');tabs.forEach((el,i)=>{var r=rect(el);ok(r.width>=44&&r.height>=44,'tab touch minimum');ok(el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)),'tab hit-test');if(i)ok(rect(tabs[i-1]).right<=r.left,'one non-overlapping nav row');});
   var active=b.riftStatus.active();ok(active.every(x=>q('#bond-summary').textContent.includes(x.name.replace(' Bond',''))),'all powered Bond names directly visible');
   if(kind!=='fresh')ok(active.length===window.riftStatusWorst(b,ctx).bonds.length&&q('#buff-indicator').textContent.includes('+50%'),'worst current Bonds and buff fixture survives live ticks');
@@ -120,5 +134,5 @@ window.riftStatusMobile=(()=>{
  }
  function locate(view){var all=[...document.querySelectorAll('#tab-'+view+' button:not(:disabled),#tab-'+view+' summary')],el=all[all.length-1],r=rect(el),m=rect(q('main'));return {visible:r.top>=m.top&&r.bottom<=m.bottom,delta:r.top<m.top?Math.min(300,m.top-r.top+12):-Math.min(300,r.bottom-m.bottom+12)};}
  function control(selector){var el=q(selector),r=rect(el),x=r.x+r.width/2,y=r.y+r.height/2;return {x,y,visible:r.width>0&&r.height>0&&r.top>=0&&r.bottom<=innerHeight,hit:el.contains(document.elementFromPoint(x,y))};}
- return {setup,measure,last,control,locate};
+ return {setup,measure,last,control,locate,mutateBoostLine};
 })();

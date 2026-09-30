@@ -38,11 +38,10 @@ window.runRiftLayoutQa = async function(bridge, ctx, assert){
     ['#hp-text','#enemy-name','#depth-label','#rift-objective','.objective-copy strong','.objective-copy small'].forEach(function(s){
       visible(s);assert(parseFloat(getComputedStyle(q(s)).fontSize)>=10,s+' legible size');
     });
-    ['#rift-push-btn','#rift-farm-btn','#rift-details-btn','#settings-btn'].forEach(function(s){
+    ['#rift-push-btn','#rift-farm-btn','#settings-btn'].forEach(function(s){
       var r=visible(s);assert(r.height>=44 && r.width>=44,s+' 44px touch target');
     });
-    var details=rect('#rift-details-btn'),depth=rect('#depth-label');
-    assert(depth.right<=details.left+1,'Rift heading controls do not overlap');
+    assert(!q('#rift-details-btn') && !q('#rift-details'),'Rift Details removed');
     assert(!q('#rift-study-status'),'obsolete Rift Study control removed');
     ['#buff-indicator','#bond-summary'].forEach(function(s){var r=visible(s);assert(r.bottom<=rect('nav.tabbar').top && q(s).scrollWidth<=q(s).clientWidth,s+' status readable on Rift');});
     var tabs=Array.from(document.querySelectorAll('nav.tabbar button'));
@@ -79,19 +78,7 @@ window.runRiftLayoutQa = async function(bridge, ctx, assert){
     q('#rift-push-btn').click();check('push');
     assert(bridge.getState().depth===initial.depth,'Push depth restored after Farm');
   } else assert(q('#rift-farm-btn').disabled,'fresh Farm remains unavailable');
-  q('#rift-details-btn').focus();q('#rift-details-btn').click();
-  assert(q('#rift-details').open,'details opens');
-  visible('#rift-details-close');
-  assert(q('#rift-hp-detail').textContent.indexOf('HP: ')===0,'exact HP remains inspectable');
-  assert(q('#rift-mode-note').textContent.length>0 && q('#rift-objective-detail').textContent.length>0,'mode/objective detail retained');
-  assert(document.querySelectorAll('#rift-resources dd').length===6,'all exact resource amounts inspectable');
-  assert(document.querySelectorAll('#party-col .hero-chip').length===initial.activeParty.length,'full party inspectable');
-  assert(parseFloat(getComputedStyle(q('#rift-details .chip-label')).fontSize)>=10,'party label readable');
-  var scroller=q('.rift-details-scroll');scroller.scrollTop=10000;
-  assert(scroller.scrollHeight<=scroller.clientHeight || scroller.scrollTop>0,'secondary details scroll independently');
-  assert(scrollY===0 && q('main').scrollTop===0,'details cannot scroll Rift');
-  q('#rift-details-close').click();assert(!q('#rift-details').open,'details closes');
-  assert(document.activeElement===q('#rift-details-btn'),'details returns focus');
+  assert(!q('#rift-details-btn') && !q('#rift-details'),'no obsolete Details controls/dialog');
   // Actual generated purchase markup: shared inline icons stay proportional in both Lab and Ascend.
   ['spirits','ascend'].forEach(function(tab){
     q('[data-tab="'+tab+'"]').click();
