@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import argparse
+import contextlib
+import io
 import html as html_lib
 import json
 import re
@@ -17,6 +19,7 @@ ROOT = Path(__file__).resolve().parent
 FIXTURES_PATH = ROOT / "fixtures.json"
 
 SCENARIOS = {
+    "forge-ui-process-contract": "fresh",
     "forge-ui-mobile": "fresh",
     "forge-ui-reduced-motion": "fresh",
     "buff-timing": "fresh",
@@ -117,6 +120,9 @@ SCENARIOS = {
 PREP_SCENARIOS = {}
 
 NEGATIVE_SCENARIOS = {
+    "self-test-forge-ui-handler": "fresh",
+    "self-test-forge-ui-save": "fresh",
+    "self-test-forge-ui-exit": "fresh",
     "self-test-forge-ui-render": "fresh",
     "self-test-forge-ui-bulk": "fresh",
     "self-test-r3-shortcut": "fresh",
@@ -162,6 +168,19 @@ def build_prelude(fixtures):
   // Keep real input/save handlers, animation frames and the production flags intact.
   var uiMeasurementPaused=false;
   if(scenario.startsWith('forge-ui-') || scenario.startsWith('self-test-forge-ui-')){{
+    // Observe actual registered Queue callbacks, without changing event dispatch.
+    var realAddEventListener=EventTarget.prototype.addEventListener;
+    EventTarget.prototype.addEventListener=function(type,callback,options){{
+      if(type==='click' && typeof callback==='function' && this.matches && this.matches('[data-queue]')){{
+        var original=callback;
+        callback=function(event){{
+          var action=window.__qaForgeAction,previous=window.__qaForgeHandler;
+          if(action && action.id===this.dataset.queue){{action.handlers++;window.__qaForgeHandler=action;}}
+          try{{return original.call(this,event);}}finally{{window.__qaForgeHandler=previous;}}
+        }};
+      }}
+      return realAddEventListener.call(this,type,callback,options);
+    }};
     var realSetInterval=window.setInterval.bind(window);
     window.setInterval=function(callback,delay){{
       var args=Array.prototype.slice.call(arguments,2);
@@ -322,9 +341,25 @@ function qaLifecycleRecord(type,detail){
     detail:detail===undefined ? null : JSON.parse(JSON.stringify(detail))
   });
 }
+// Resolve only after the real startup completion callback (including its save).
+// This is installed before DOMContentLoaded/init in the throwaway instrumented app.
+if(window.__lumenfallQaContext.scenario.startsWith('forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('self-test-forge-ui-')){
+  var qaStartupResolve;
+  window.__qaForgeStartup={completed:false,callbacks:0,promise:new Promise(function(resolve){qaStartupResolve=resolve;})};
+  var qaOriginalPlayStartupIntro=playStartupIntro;
+  playStartupIntro=function(done){
+    return qaOriginalPlayStartupIntro.call(this,function(){
+      if(done) done.apply(this,arguments);
+      window.__qaForgeStartup.callbacks++;
+      window.__qaForgeStartup.completed=true;
+      qaStartupResolve({callbacks:window.__qaForgeStartup.callbacks,saves:qaLifecycleEvents.filter(function(e){return e.type==='save';}).length});
+    });
+  };
+}
 var qaOriginalSaveState = saveState;
 saveState = function(){
   var beforeLastSeen = state ? state.lastSeen : null;
+  if(window.__qaForgeHandler) window.__qaForgeHandler.saves++;
   var result = qaOriginalSaveState.apply(this,arguments);
   qaLifecycleRecord('save',{
     beforeLastSeen:beforeLastSeen,
@@ -3604,19 +3639,56 @@ addEventListener('message',function(e){
 </script></body></html>"""
 
 
+def run_native_process(command, scenario, timeout=90):
+    try:
+        result = subprocess.run(command, capture_output=True, text=True, timeout=timeout)
+        stdout, stderr, exitcode = result.stdout, result.stderr, result.returncode
+        timed_out = False
+    except subprocess.TimeoutExpired as error:
+        def decoded(value):
+            return value.decode(errors="replace") if isinstance(value, bytes) else (value or "")
+        stdout, stderr, exitcode = decoded(error.stdout), decoded(error.stderr), None
+        timed_out = True
+    try:
+        detail = json.loads(stdout)
+        if not isinstance(detail, dict):
+            raise ValueError("driver JSON must be an object")
+    except (json.JSONDecodeError, ValueError) as error:
+        detail = {"status": "fail", "message": "Invalid driver JSON: " + str(error), "stdout": stdout}
+    passed = not timed_out and exitcode == 0 and detail.get("status") == "pass"
+    print(("PASS " if passed else "FAIL ") + scenario)
+    print("  process: " + json.dumps({"exitcode": exitcode, "timed_out": timed_out, "stderr": stderr}, sort_keys=True))
+    print("  detail: " + json.dumps(detail, sort_keys=True))
+    return passed
+
+
+def native_process_contract():
+    # Real subprocesses exercise the same reporter/gate as the browser driver.
+    cases = [
+        ("valid-pass", "console.log(JSON.stringify({status:'pass'}))", True, '"exitcode": 0', ""),
+        ("pass-nonzero", "console.log(JSON.stringify({status:'pass'}));console.error('intentional exit 7');process.exitCode=7", False, '"exitcode": 7', 'intentional exit 7'),
+        ("invalid-json", "console.log('not JSON');console.error('invalid payload evidence')", False, 'Invalid driver JSON', 'invalid payload evidence'),
+        ("timeout", "console.log(JSON.stringify({status:'pass'}));console.error('pending process evidence');setInterval(()=>{},1000)", False, '"timed_out": true', 'pending process evidence'),
+    ]
+    for name, script, expected, marker, stderr in cases:
+        report = io.StringIO()
+        with contextlib.redirect_stdout(report):
+            actual = run_native_process(["node", "-e", script], name, timeout=0.5 if name == "timeout" else 5)
+        evidence = report.getvalue()
+        print("  process control " + name + " (expected " + str(expected) + "):\n    " + evidence.strip().replace("\n", "\n    "))
+        if actual != expected or marker not in evidence or stderr not in evidence:
+            print("FAIL forge-ui-process-contract: " + name)
+            return False
+    print("PASS forge-ui-process-contract")
+    return True
+
+
 def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
+    if scenario == "forge-ui-process-contract":
+        return native_process_contract()
     if scenario.startswith(("forge-ui-", "self-test-forge-ui-")):
         url = base_url + "/index.html?" + urlencode({"qaScenario": scenario, "qaFixture": fixture})
-        result = subprocess.run(["node", str(ROOT / "forge-ui.cjs"), chrome, url, scenario],
-                                capture_output=True, text=True, timeout=90)
-        try:
-            detail = json.loads(result.stdout)
-        except json.JSONDecodeError:
-            detail = {"status": "fail", "message": result.stdout + result.stderr}
-        passed = result.returncode == 0 and detail.get("status") == "pass"
-        print(("PASS " if passed else "FAIL ") + scenario)
-        print("  detail: " + json.dumps(detail, sort_keys=True))
-        return passed
+        return run_native_process(["node", str(ROOT / "forge-ui.cjs"), chrome, url, scenario], scenario)
     with tempfile.TemporaryDirectory(prefix=f"lumenfall-qa-{scenario}-") as profile:
         params = {"qaScenario": scenario, "qaFixture": fixture}
         page = "/index.html"
@@ -3712,6 +3784,13 @@ def main():
   RESEARCH.forEach(function(node){updateResearchCard(node,els['research-list'].querySelector('[data-forge-card="'+node.id+'"]'));});
   presentControlStates(els['research-list']);
 """ + source[end:]
+        if args.scenario == "self-test-forge-ui-save":
+            start = source.index("function renderResearch(){")
+            # Inner function declarations may precede the handler; locate its unique save context.
+            marker = "      state.researchQueue[id] = !state.researchQueue[id];"
+            at = source.index(marker, start)
+            save = source.index("      saveState();", at)
+            source = source[:save] + "      saveState();\n" + source[save:]
         if args.scenario == "self-test-forge-ui-bulk":
             for rule in ("  #tab-forge .mult-row{gap:4px;}\n", "  #tab-forge .mult-btn{min-width:44px;min-height:44px;}\n"):
                 assert source.count(rule) == 1, "local Forge bulk rule must exist for negative control"
