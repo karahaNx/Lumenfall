@@ -1748,6 +1748,57 @@
   .vfx-ability{background:repeating-conic-gradient(var(--vfx-color) 0deg 5deg,transparent 6deg 45deg);}
   @media(prefers-reduced-motion:reduce){.stage .enemy-stage::after{animation:none!important;}.rift-charge>span{transition:none;}}
 
+  /* Keep combat paint inside its own rectangle, above a complete stat row. */
+  .stage .battle-row{overflow:hidden;border-radius:8px;}
+  .stage .rift-landscape{inset:0;}
+  .stage .stat-row{position:relative;z-index:1;align-items:stretch;}
+  .stage .stat-box{border-top-color:#596781;background:linear-gradient(150deg,#222d45,#131b2c);}
+  .stage .hp-bar-track{box-shadow:none;}
+  .stage .combat-vfx{z-index:1;}
+  .combat-vfx.wisp-cast{width:84px;height:84px;max-width:70%;border-radius:50%;background:none;box-shadow:none;animation:wispCast .8s ease-out forwards;}
+  .wisp-cast::before,.wisp-cast::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;}
+  .cast-ember::before{background:repeating-conic-gradient(from 15deg,#ffd88a 0 4deg,var(--vfx-color) 5deg 10deg,transparent 11deg 45deg);}
+  .cast-ember::after{inset:22%;background:radial-gradient(circle,#fff2c7,var(--vfx-color) 30%,transparent 70%);box-shadow:0 0 22px #ff912b66;}
+  .cast-void::before{border:5px double #c5adff;box-shadow:inset 0 0 20px #955eff88,0 0 18px #955eff66;transform:rotateX(35deg);}
+  .cast-void::after{inset:25%;background:#100f27;box-shadow:0 0 18px 5px var(--vfx-color);}
+  .combat-vfx.cast-void{animation:wispVortex .85s ease-out forwards;}
+  .cast-tide::before{border:3px solid #9beaff;box-shadow:0 0 0 10px #5abfd244,0 0 0 21px #5abfd21a;}
+  .cast-tide::after{inset:28%;border:2px solid #dbf9ff;}
+  .combat-vfx.cast-tide{animation:wispRipple .85s ease-out forwards;}
+  .cast-aurora::before{background:conic-gradient(from 45deg,transparent 0 12%,#efb0dbbb 13% 15%,transparent 16% 37%,#ffd5f5 38% 40%,transparent 41% 62%,#efb0dbbb 63% 65%,transparent 66% 87%,#ffd5f5 88% 90%,transparent 91%);}
+  .cast-aurora::after{inset:18%;border:2px solid #ffd5f5;transform:rotate(45deg);border-radius:12%;box-shadow:0 0 20px #df90c388;}
+  .combat-vfx.cast-aurora{animation:wispBlessing .85s ease-out forwards;}
+  .cast-stone::before{background:repeating-conic-gradient(from 5deg,transparent 0 15deg,#c2d9a4 16deg 20deg,transparent 21deg 60deg);clip-path:polygon(0 15%,40% 30%,55% 0,66% 36%,100% 45%,75% 64%,80% 100%,43% 77%,5% 95%,22% 50%);}
+  .cast-stone::after{inset:22%;border:4px solid #c2d9a4;border-radius:20%;transform:rotate(25deg);}
+  .combat-vfx.cast-stone{animation:wispSlam .7s ease-out forwards;}
+  .cast-titan::before{border:5px double #ffe09b;border-radius:15%;transform:rotate(45deg);box-shadow:0 0 18px #ffbd4255;}
+  .cast-titan::after{inset:27%;background:#fff1c9;clip-path:polygon(40% 0,60% 0,65% 35%,100% 40%,100% 60%,65% 65%,60% 100%,40% 100%,35% 65%,0 60%,0 40%,35% 35%);}
+  .combat-vfx.cast-titan{animation:wispSlam .8s ease-out forwards;}
+  .cast-gale::before{border:solid #b6f6ff;border-width:0 3px 0 0;border-radius:0;transform:skew(-25deg);box-shadow:-17px 0 #86dae699,17px 0 #86dae699;}
+  .cast-gale::after{inset:25%;border:solid #e5fdff;border-width:0 2px 2px 0;border-radius:0;transform:rotate(45deg);}
+  .combat-vfx.cast-gale{animation:wispVolley .65s ease-out forwards;}
+  .cast-thorn::before{background:repeating-conic-gradient(#b8f5ab 0 15deg,transparent 16deg 60deg);clip-path:polygon(50% 0,62% 30%,90% 15%,75% 48%,100% 70%,65% 70%,50% 100%,35% 70%,0 70%,25% 48%,10% 15%,38% 30%);}
+  .cast-thorn::after{inset:32%;border:2px solid #e4ffd8;}
+  .combat-vfx.cast-thorn{animation:wispBloom .8s ease-out forwards;}
+  .combat-vfx.vfx-shot{left:0;top:0;width:9px;height:9px;background:var(--vfx-color);box-shadow:0 0 9px var(--vfx-color);animation:wispShot .52s ease-in forwards;}
+  .vfx-shot::after{content:'';position:absolute;inset:2px;border-radius:inherit;background:#f7f3db;}
+  .vfx-shot.shot-ember{border-radius:70% 30% 60% 40%;width:11px;height:14px;}
+  .vfx-shot.shot-void,.vfx-shot.shot-aurora{clip-path:polygon(50% 0,63% 35%,100% 50%,63% 65%,50% 100%,37% 65%,0 50%,37% 35%);width:15px;height:15px;}
+  .vfx-shot.shot-stone,.vfx-shot.shot-titan{border-radius:2px;transform:rotate(30deg);}
+  .vfx-shot.shot-gale{width:4px;height:19px;border-radius:50%;}
+  .vfx-shot.shot-thorn{border-radius:0 90% 0 90%;width:9px;height:15px;}
+  .vfx-shot.shot-tide{background:none;border:2px solid #9ee8ff;}
+  .rift-wisp.is-attacking .wisp-portrait{filter:drop-shadow(0 0 4px var(--wisp-color));}
+  @keyframes wispShot{0%{opacity:0;transform:translate(var(--from-x),var(--from-y)) scale(.7);}15%{opacity:.85;}78%{opacity:.9;}100%{opacity:0;transform:translate(var(--to-x),var(--to-y)) scale(.3);}}
+  @keyframes wispCast{0%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(-15deg);}22%{opacity:.85;}100%{opacity:0;transform:translate(-50%,-50%) scale(1.45) rotate(30deg);}}
+  @keyframes wispVortex{0%{opacity:0;transform:translate(-50%,-50%) scale(1.3) rotate(0);}25%{opacity:.8;}100%{opacity:0;transform:translate(-50%,-50%) scale(.25) rotate(150deg);}}
+  @keyframes wispRipple{0%{opacity:0;transform:translate(-50%,-50%) scale(.2,.1);}20%{opacity:.75;}100%{opacity:0;transform:translate(-50%,-50%) scale(1.6,.65);}}
+  @keyframes wispBlessing{0%{opacity:0;transform:translate(-50%,-30%) scale(.35);}25%{opacity:.8;}100%{opacity:0;transform:translate(-50%,-80%) scale(1.2);}}
+  @keyframes wispSlam{0%{opacity:0;transform:translate(-50%,-80%) scale(.4,.9);}25%{opacity:.85;transform:translate(-50%,-50%) scale(.85,.5);}100%{opacity:0;transform:translate(-50%,-50%) scale(1.5,.75);}}
+  @keyframes wispVolley{0%{opacity:0;transform:translate(-50%,-100%) scale(.6);}30%{opacity:.85;}100%{opacity:0;transform:translate(-50%,0) scale(1.2);}}
+  @keyframes wispBloom{0%{opacity:0;transform:translate(-50%,-50%) scale(.15) rotate(-45deg);}35%{opacity:.8;}100%{opacity:0;transform:translate(-50%,-50%) scale(1.4) rotate(30deg);}}
+  @media(prefers-reduced-motion:reduce){.combat-vfx{display:none!important;}.rift-wisp.is-attacking .wisp-portrait{filter:none;}}
+
   /* Shared state grammar: text + border/shape, never opacity or color alone. */
   button[data-state="unaffordable"],button[data-state="locked"],button[data-state="unavailable"]{border-style:dashed;background:var(--bg-elev);box-shadow:none;}
   button[data-state="maxed"],button[data-state="completed"]{border-style:solid;color:var(--good);background:var(--bg-elev);}
@@ -1948,7 +1999,7 @@
 </div>
 
           <div class="enemy-stage-wrap">
-            <button type="button" class="enemy-stage" id="enemy-stage" aria-label="Guardian Tap — strike the enemy"><span class="enemy-name" id="enemy-name">Hollow Wisp</span><span class="guardian-label">Guardian Tap</span>
+            <button type="button" class="enemy-stage" id="enemy-stage" aria-label="Tap enemy to attack"><span class="enemy-name" id="enemy-name">Hollow Wisp</span><span class="guardian-label">Tap enemy to attack</span>
               <div class="enemy-glyph" id="enemy-glyph"><svg class="creature-art" viewBox="0 0 160 160" aria-hidden="true"><use href="#creature-prowler"/></svg><svg class="boss-regalia" viewBox="0 0 160 160" aria-hidden="true" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5">
                 <g class="boss-crest boss-crest-regrowth"><path d="M48 45 30 31 24 9 35 19 40 5 43 29 61 35 M112 45 130 31 136 9 125 19 120 5 117 29 99 35 M28 82 7 63 14 92 31 105 M132 82 153 63 146 92 129 105"/><path d="M42 30Q65 13 80 34Q95 13 118 30 M13 82 30 94 M147 82 130 94" fill="none" stroke="var(--creature-eye)"/></g>
                 <g class="boss-crest boss-crest-fractured"><path d="M80 3 91 19 80 35 69 19Z M35 15 52 24 48 43 31 34Z M125 15 108 24 112 43 129 34Z M12 54 28 70 17 90 3 73Z M148 54 132 70 143 90 157 73Z"/><path d="M80 3V35 M35 15 48 43 M125 15 112 43 M12 54 17 90 M148 54 143 90" stroke="var(--creature-eye)"/></g>
@@ -1965,8 +2016,8 @@
         </div>
         <div id="boss-combat" hidden></div>
         <div class="stat-row">
-          <div class="stat-box"><div class="k">Guardian tap</div><div class="v mono" id="stat-tap">1</div></div>
-          <div class="stat-box"><div class="k">Wisp DPS est.</div><div class="v mono" id="stat-idle">0</div></div>
+          <div class="stat-box"><div class="k">Tap damage</div><div class="v mono" id="stat-tap">1</div></div>
+          <div class="stat-box"><div class="k" title="Estimated Wisp damage per second, including abilities">Wisp damage/sec</div><div class="v mono" id="stat-idle">0</div></div>
         </div>
         <div class="buff-indicator" id="buff-indicator">Boost · passive Wisps + Tap · <strong>Inactive</strong></div>
         <div class="bond-summary" id="bond-summary">No Formation Bond active.</div>
@@ -3592,7 +3643,7 @@ function emitCombatVfx(type,color,wispId){
   if(!stageEl || document.hidden || !document.getElementById('tab-battle').classList.contains('active')) return;
   if(wispId){
     var card=document.querySelector('[data-rift-wisp="'+wispId+'"]');
-    if(card) card.setAttribute('data-cast-until',String(Date.now()+650));
+    if(card && type!=='shot') card.setAttribute('data-cast-until',String(Date.now()+650));
   }
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   // Bound simultaneous decorative nodes even when five abilities fire together.
@@ -3600,9 +3651,33 @@ function emitCombatVfx(type,color,wispId){
   var fx = document.createElement('span');
   fx.setAttribute('aria-hidden','true');
   fx.className = 'combat-vfx vfx-'+type;
+  if(type!=='shot'){
+    if(wispId)fx.classList.add('wisp-cast','cast-'+wispId);
+    var glyph=els['enemy-glyph'].getBoundingClientRect(),bounds=stageEl.getBoundingClientRect();
+    fx.style.top=(type==='support' ? stageEl.clientHeight-62 : glyph.y-bounds.y+glyph.height/2)+'px';
+  }
+  if(type==='shot' && card){
+    fx.classList.add('shot-'+wispId);
+    var from=card.getBoundingClientRect(),to=els['enemy-glyph'].getBoundingClientRect(),area=stageEl.getBoundingClientRect();
+    fx.style.setProperty('--from-x',(from.x-area.x+from.width/2-5)+'px');
+    fx.style.setProperty('--from-y',(from.y-area.y+14)+'px');
+    fx.style.setProperty('--to-x',(to.x-area.x+to.width/2-5)+'px');
+    fx.style.setProperty('--to-y',(to.y-area.y+to.height/2-5)+'px');
+    card.setAttribute('data-shot-until',String(Date.now()+300));
+  }
   if(color) fx.style.setProperty('--vfx-color',color);
   stageEl.appendChild(fx);
   setTimeout(function(){ if(fx.parentNode) fx.parentNode.removeChild(fx); },900);
+}
+// Sample the continuous passive-damage stream; this creates no damage event.
+var passiveFxAt=-Infinity,passiveFxIndex=0;
+function presentPassiveWispAttack(){
+  if(document.hidden || !els['enemy-stage'] || !document.getElementById('tab-battle').classList.contains('active') || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var now=Date.now();if(now-passiveFxAt<350)return;
+  var ids=poweredActiveIds();if(!ids.length)return;
+  var id=ids[passiveFxIndex%ids.length],sp=SPIRITS.find(function(x){return x.id===id;});
+  passiveFxAt=now;passiveFxIndex=(passiveFxIndex+1)%ids.length;
+  emitCombatVfx('shot',sp.color,id);
 }
 function flashBattleStage(kind){
   var stage = document.querySelector('#tab-battle .stage');
@@ -4818,6 +4893,7 @@ function renderRiftParty(){
     var casting=powered && Date.now()<Number(card.getAttribute('data-cast-until')||0);
     var label=!powered ? 'Lv 0' : casting ? 'CAST' : charge>=100 ? 'Ready' : Math.ceil(seconds)+'s';
     card.classList.toggle('unpowered',!powered);card.classList.toggle('is-casting',casting);
+    card.classList.toggle('is-attacking',powered && Date.now()<Number(card.getAttribute('data-shot-until')||0));
     var time=card.querySelector('.rift-wisp-time');if(time.textContent!==label)time.textContent=label;
     bar.querySelector('span').style.width=charge+'%';
     bar.setAttribute('aria-valuenow',String(Math.round(charge)));
@@ -5418,7 +5494,7 @@ var ENCYCLOPEDIA_MECHANICS = [
   {name:'Wisp Power', meta:'Combat stat', desc:'Level and Rarity set each Wisp’s Power. It feeds passive damage and that Wisp’s damaging or resource ability. Support buff strength is fixed by the ability and its Ultimate, not by Wisp Power.'},
   {name:'Passive Wisp Damage', meta:'Combat rule', desc:'Active Wisp Power is multiplied by passive-only permanent upgrades, applicable damage Bonds and active Support buffs. Modules and Ultimates do not increase passive damage.'},
   {name:'Ability Output', meta:'Combat / economy rule', desc:'Damaging abilities use Wisp Power, their relevant Module, Ultimate, damage Bonds and Boss ability modifiers. Gale/Thorn resource output uses Wisp Power, its Module, Ultimate and Dawnpriest; passive-only party upgrades and Support buffs do not increase ability output.'},
-  {name:'Guardian Tap', meta:'Guardian damage', desc:'Tap starts at 5 damage plus 2% of your general Active-Wisp passive power, then Tap upgrades apply. Support buffs and Guardian’s Mark also multiply it. Auto-Tap uses the same hit once per second.'},
+  {name:'Guardian Tap', meta:'Damage from tapping the enemy', desc:'This is your damage per tap on the enemy. Tap starts at 5 damage plus 2% of your general Active-Wisp passive power, then Tap upgrades apply. Support buffs and Guardian’s Mark also multiply it. Auto-Tap uses the same hit once per second.'},
   {name:'Rarity', meta:'Wisp progression', desc:'Rarity multiplies that Wisp’s Power, so it affects passive damage plus damaging/resource abilities. Every Rarity tier owned across the roster also adds +2% general passive-party power. Rarity does not strengthen Support buffs.'},
   {name:'Modules & Ultimates', meta:'Wisp progression', desc:'Modules are role-specific: Burst/Breaker Modules boost ability damage, Shard/Lumen Utility Modules boost their ability-generated resource, and Amplifier Modules boost Motes while Active. Ultimates double damage/resource ability output; Amplifier Ultimates change the buff from +25% for 4s to +50% for 8s.'},
   {name:'Endgame Currency Utility', meta:'Economy rule', desc:'After all eight Ultimates are owned, Sigils can ready one Active Wisp ability for 25 Sigils, at most 3 times per Ascension run. After all four Rest Stop purchases are owned, Comets can replace an unclaimed Daily Quest for at least the richest quest reward, so refreshing cannot generate extra Comets.'},
@@ -6529,6 +6605,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
     // subtraction literally cannot advance the remaining clock and no state
     // event fires.
     if(next>0){
+      if(policy.visual && policy.kind==='live' && dps>0)presentPassiveWispAttack();
       var ascendsBeforePassive = state.ascendCount;
       if(state.riftMode==='farm') simulationApplyFarmPassive(next,dps,policy,summary);
       else simulationApplyPushPassive(next,dps,policy,summary);

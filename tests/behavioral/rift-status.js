@@ -120,6 +120,22 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     var metrics=b.riftStatus.visualMetrics(),boss=q('#boss-combat');
     ok(!boss.hidden&&Number(boss.dataset.regen)===metrics.regen&&Number(boss.dataset.dps)===metrics.dps&&Number(boss.dataset.net)===metrics.dps-metrics.regen,'boss display uses authoritative regen and sustained DPS');
     ok(boss.getAttribute('aria-label').includes('excluding manual taps'),'DPS estimate distinguishes manual taps');
+    ok(q('.guardian-label').textContent==='Tap enemy to attack'&&q('#stat-tap').previousElementSibling.textContent==='Tap damage'&&q('#stat-idle').previousElementSibling.textContent==='Wisp damage/sec','Rift explains manual taps and Wisp damage per second');
+    var motion=matchMedia('(prefers-reduced-motion: reduce)').matches,styles=[];
+    ['ember','tide','stone','gale','thorn','void','aurora','titan'].forEach(id=>{
+      s=seed();s.activeParty=[id];s.spirits[id]=1;s.heroResource[id]=99.9;install(s);q('[data-tab="battle"]').click();b.resetFeedback();
+      b.advanceTime(400);b.feedbackTick(false);b.riftStatus.update();
+      var fx=q('.cast-'+id);ok(motion?!fx:!!fx,'actual '+id+' ability uses its own effect, suppressed in reduced motion');
+      if(fx)styles.push(fx.className);
+      ok(q('[data-rift-wisp="'+id+'"] .rift-wisp-time').textContent==='CAST','cast marker follows real '+id+' ability');
+    });
+    if(!motion)ok(new Set(styles).size===8,'eight distinct Wisp cast identities');
+    s=seed();s.activeParty=['ember'];s.spirits.ember=1;s.heroResource.ember=0;install(s);q('[data-tab="battle"]').click();b.resetFeedback();
+    var hp=b.getState().enemyHp;b.advanceTime(400);b.feedbackTick(false);b.riftStatus.update();
+    ok(b.getState().enemyHp<hp,'passive projectile accompanies authoritative continuous damage');
+    ok(motion?!q('.vfx-shot'):!!q('.vfx-shot.shot-ember'),'passive projectile uses its contributing Wisp identity');
+    ok(!q('.rift-wisp.is-casting'),'passive attack does not invent an ability cast');
+    b.resetFeedback();q('[data-tab="spirits"]').click();b.advanceTime(400);b.feedbackTick(false);ok(!q('.combat-vfx'),'no passive effects accumulate off Rift');
     s=seed();s.activeParty=['ember'];s.spirits.ember=1;s.heroResource.ember=99.9;install(s);q('[data-tab="battle"]').click();
     b.advanceTime(100);b.feedbackTick(false);b.riftStatus.update();
     ok(b.getState().heroResource.ember<5&&q('[data-rift-wisp="ember"] .rift-wisp-time').textContent==='CAST','production simulation cast resets charge and lights the casting Wisp');
@@ -188,6 +204,9 @@ window.riftStatusMobile=(()=>{
   });
   var cards=[...document.querySelectorAll('[data-rift-wisp]')];
   active.forEach(bond=>{var pair=cards.filter(x=>x.dataset.bond===bond.id);ok(pair.length===2&&Math.abs(cards.indexOf(pair[0])-cards.indexOf(pair[1]))===1,'mobile Bond partners adjacent');ok(rect(pair[1]).left-rect(pair[0]).right>=0&&rect(pair[1]).left-rect(pair[0]).right<=2.1,'Bond pair is close and does not overlap');});
+  var arena=rect(q('.battle-row')),landscape=rect(q('.rift-landscape'));
+  ok(getComputedStyle(q('.battle-row')).overflowY==='hidden'&&landscape.bottom<=arena.bottom+.1&&landscape.top>=arena.top-.1,'combat background paint is clipped inside the arena');
+  ok(arena.bottom<=stats.top&&getComputedStyle(q('.stat-row')).position==='relative','stat box top borders paint above the combat layer');
   ok(rect(q('#rift-party')).bottom<=hp.top,'formation clear of HP');
   ok(q('#boss-combat').hidden||hp.bottom<=rect(q('#boss-combat')).top&&rect(q('#boss-combat')).bottom<=stats.top,'boss figures clear of HP and numeric row');
   ok(q('#rift-bond-effects').hidden||bonds.bottom<=rect(q('#rift-bond-effects')).top,'full Bond effects separate from names');
