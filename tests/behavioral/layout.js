@@ -38,12 +38,13 @@ window.runRiftLayoutQa = async function(bridge, ctx, assert){
     ['#hp-text','#enemy-name','#depth-label','#rift-objective','.objective-copy strong','.objective-copy small'].forEach(function(s){
       visible(s);assert(parseFloat(getComputedStyle(q(s)).fontSize)>=10,s+' legible size');
     });
-    ['#rift-push-btn','#rift-farm-btn','#rift-study-status','#rift-details-btn','#settings-btn'].forEach(function(s){
+    ['#rift-push-btn','#rift-farm-btn','#rift-details-btn','#settings-btn'].forEach(function(s){
       var r=visible(s);assert(r.height>=44 && r.width>=44,s+' 44px touch target');
     });
-    var studyStatus=rect('#rift-study-status'),details=rect('#rift-details-btn'),depth=rect('#depth-label');
-    assert(depth.right<=studyStatus.left+1 && studyStatus.right<=details.left+1,'Rift heading controls do not overlap');
-    assert(/Studies \d+\/\d+/.test(q('#rift-study-status').textContent),'Rift Study occupancy remains visible');
+    var details=rect('#rift-details-btn'),depth=rect('#depth-label');
+    assert(depth.right<=details.left+1,'Rift heading controls do not overlap');
+    assert(!q('#rift-study-status'),'obsolete Rift Study control removed');
+    ['#buff-indicator','#bond-summary'].forEach(function(s){var r=visible(s);assert(r.bottom<=rect('nav.tabbar').top && q(s).scrollWidth<=q(s).clientWidth,s+' status readable on Rift');});
     var tabs=Array.from(document.querySelectorAll('nav.tabbar button'));
     assert(tabs.length===6,'six visible main destinations');
     tabs.forEach(function(el,index){

@@ -19,6 +19,9 @@ ROOT = Path(__file__).resolve().parent
 FIXTURES_PATH = ROOT / "fixtures.json"
 
 SCENARIOS = {
+    "rift-status-contract": "fresh",
+    "rift-status-mobile": "fresh",
+    "rift-status-reduced-motion": "fresh",
     "forge-ui-process-contract": "fresh",
     "forge-ui-mobile": "fresh",
     "forge-ui-reduced-motion": "fresh",
@@ -120,6 +123,9 @@ SCENARIOS = {
 PREP_SCENARIOS = {}
 
 NEGATIVE_SCENARIOS = {
+    "self-test-rift-status-badge": "fresh",
+    "self-test-rift-status-bond": "fresh",
+    "self-test-rift-status-buff": "fresh",
     "self-test-forge-ui-handler": "fresh",
     "self-test-forge-ui-save": "fresh",
     "self-test-forge-ui-exit": "fresh",
@@ -167,7 +173,7 @@ def build_prelude(fixtures):
   // Native UI tests hold interval callbacks only across immediate measurements.
   // Keep real input/save handlers, animation frames and the production flags intact.
   var uiMeasurementPaused=false;
-  if(scenario.startsWith('forge-ui-') || scenario.startsWith('self-test-forge-ui-')){{
+  if(scenario.startsWith('forge-ui-') || scenario.startsWith('self-test-forge-ui-') || scenario.startsWith('rift-status-mobile') || scenario.startsWith('rift-status-reduced')){{
     // Observe actual registered Queue callbacks, without changing event dispatch.
     var realAddEventListener=EventTarget.prototype.addEventListener;
     EventTarget.prototype.addEventListener=function(type,callback,options){{
@@ -343,7 +349,7 @@ function qaLifecycleRecord(type,detail){
 }
 // Resolve only after the real startup completion callback (including its save).
 // This is installed before DOMContentLoaded/init in the throwaway instrumented app.
-if(window.__lumenfallQaContext.scenario.startsWith('forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('self-test-forge-ui-')){
+if(window.__lumenfallQaContext.scenario.startsWith('forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('self-test-forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('rift-status-') || window.__lumenfallQaContext.scenario.startsWith('self-test-rift-status-')){
   var qaStartupResolve;
   window.__qaForgeStartup={completed:false,callbacks:0,promise:new Promise(function(resolve){qaStartupResolve=resolve;})};
   var qaOriginalPlayStartupIntro=playStartupIntro;
@@ -606,6 +612,21 @@ window.__lumenfallQaBridge = {
       if(kind==='intent') normalizeFormationRebuild=function(){return null;};
       else reconcileFormationRebuild=function(snapshot){if(snapshot.formationRebuild) snapshot.activeParty=snapshot.formationRebuild.members.slice();};
       return function(){if(kind==='intent') normalizeFormationRebuild=original;else reconcileFormationRebuild=original;};
+    }
+  },
+  riftStatus: {
+    slots: function(){return studySlotCount();},
+    projects: function(){return LONG_STUDIES.map(function(n){return {id:n.id,unlock:n.unlockDepth||1};});},
+    bonds: function(){return JSON.parse(JSON.stringify(FORMATION_BONDS));},
+    powered: function(){return poweredActiveIds();},
+    active: function(){return JSON.parse(JSON.stringify(activeFormationBonds()));},
+    update: function(){updateBattleFast();},
+    mutate: function(kind){
+      var name=kind==='badge'?renderLabCapacityBadge:(kind==='bond'?activeFormationBonds:updateBattleFast);
+      if(kind==='badge')renderLabCapacityBadge=function(){name();els['lab-capacity-badge'].textContent='99';els['lab-capacity-badge'].hidden=false;};
+      if(kind==='bond')activeFormationBonds=function(){return FORMATION_BONDS.slice();};
+      if(kind==='buff')updateBattleFast=function(){var text=els['buff-indicator'].innerHTML;name();els['buff-indicator'].innerHTML=text;};
+      return function(){if(kind==='badge')renderLabCapacityBadge=name;else if(kind==='bond')activeFormationBonds=name;else updateBattleFast=name;};
     }
   },
   r3: {
@@ -1572,7 +1593,7 @@ def build_runner():
       if(ctx.scenario==='buff-save-reload'){
         bridge.freeze();window.runBuffSaveQa(bridge,ctx,assert,assertProtectedParity,phase,nextPhase,finish);return;
       }
-      if(ctx.scenario.startsWith('forge-ui-') || ctx.scenario.startsWith('self-test-forge-ui-')){
+      if(ctx.scenario.startsWith('forge-ui-') || ctx.scenario.startsWith('self-test-forge-ui-') || ctx.scenario==='rift-status-mobile' || ctx.scenario==='rift-status-reduced-motion'){
         window.__forgeUiReady=true;return; // Native CDP input driver owns this scenario.
       }
       if(ctx.scenario.startsWith('forge-')){
@@ -2723,6 +2744,12 @@ def build_runner():
           return;
         }
 
+        case 'rift-status-contract':
+        case 'self-test-rift-status-badge':
+        case 'self-test-rift-status-bond':
+        case 'self-test-rift-status-buff': {
+          bridge.freeze();window.runRiftStatusQa(bridge,ctx,assert).then(function(detail){finish('pass',detail);},function(error){finish('fail',error.message);});return;
+        }
         case 'p1-05-accessibility-baseline': {
           var accessibilityAudit = window.P105AccessibilityQa.runAudit(bridge,ctx,assert);
           finish('pass',accessibilityAudit);
@@ -2939,7 +2966,8 @@ def build_runner():
             bridge.setState(labState);bridge.renderLayout();
             var beforeLab=JSON.stringify(state());
             document.querySelector('[data-tab="battle"]').click();
-            document.getElementById('rift-study-status').click();
+            document.querySelector('[data-tab="research"]').focus();
+            document.querySelector('[data-tab="research"]').click();
             assert(document.activeElement===document.querySelector('[data-tab="research"]'),'Rift arrival focuses Long Studies tab');
             var status=document.querySelector('.study-slot-summary');
             assert(status===document.getElementById('study-list').firstElementChild,'occupancy leads Study content');
@@ -3060,14 +3088,14 @@ def build_runner():
           bridge.setState(qol);
           bridge.renderLayout();
           document.querySelector('[data-tab="battle"]').click();
-          var studyStatus=document.getElementById('rift-study-status');
-          assert(/Studies 2\/3/.test(studyStatus.textContent) && /1 slot free/.test(studyStatus.textContent),'Rift Study indicator must report occupied and available slots');
-          assert(studyStatus.classList.contains('has-open'),'Rift Study indicator must visibly flag an open slot');
-          studyStatus.focus();
-          studyStatus.click();
-          assert(document.getElementById('tab-research').classList.contains('active'),'Rift Study action must open the Lab');
-          assert(document.querySelector('[data-tab="research"]').getAttribute('aria-current')==='page' && document.getElementById('study-list').closest('.tab-panel').id==='tab-research','Rift Study action must open Long Studies directly');
-          assert(document.activeElement===document.querySelector('[data-tab="research"]'),'direct Rift to Long Studies navigation must move focus predictably');
+          var badge=document.getElementById('lab-capacity-badge');
+          assert(!document.getElementById('rift-study-status'),'Rift Study control is removed');
+          assert(!badge.hidden && badge.textContent==='1','Lab badge reports authoritative free capacity');
+          var labButton=document.querySelector('[data-tab="research"]');
+          labButton.focus();labButton.click();
+          assert(document.getElementById('tab-research').classList.contains('active'),'Lab button opens Research Lab');
+          assert(labButton.getAttribute('aria-current')==='page' && document.getElementById('study-list').closest('.tab-panel').id==='tab-research','Lab button opens Projects directly');
+          assert(document.activeElement===labButton && !badge.hidden,'Lab navigation preserves focus and capacity badge');
 
           var beforeTabs=state();
           var gameplayBeforeTabs=JSON.stringify({research:beforeTabs.research,activeStudies:beforeTabs.activeStudies,studyQueue:beforeTabs.studyQueue,lumen:beforeTabs.lumen,shards:beforeTabs.shards});
@@ -3139,7 +3167,7 @@ def build_runner():
 
           document.querySelector('[data-tab="battle"]').click();
           document.getElementById('tab-battle').getAnimations().forEach(function(animation){animation.finish();});
-          assert(studyStatus.getBoundingClientRect().height>=44,'Rift Study action must retain a practical touch target');
+          assert(labButton.getBoundingClientRect().height>=44 && labButton.getBoundingClientRect().width>=44,'Lab access must retain a practical touch target');
           document.querySelector('[data-tab="spirits"]').click();
           document.getElementById('tab-spirits').getAnimations().forEach(function(animation){animation.finish();});
           Array.from(document.querySelectorAll('[data-formation-preset],[data-save-formation],[data-empower-all]')).forEach(function(control){
@@ -3154,7 +3182,7 @@ def build_runner():
           finish('pass',{
             formation:afterFarm.activeParty,
             bonds:bridge.activeBondIds(),
-            studyStatus:studyStatus.textContent.trim(),
+            labCapacity:badge.textContent.trim(),
             destination:document.querySelector('nav.tabbar [aria-current="page"]').getAttribute('data-tab'),
             autoEmpower:'mixed-after-individual',
             deedProgress:tapsProgress.textContent.trim()
@@ -3604,6 +3632,7 @@ def instrument_html(source, fixtures):
         raise SystemExit("Behavioral QA failed: expected exactly one </body> marker")
     source = source.replace(
         "</body>",
+        "<script>" + (ROOT / "rift-status.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "layout.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "accessibility.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "accessibility-controls.js").read_text(encoding="utf-8") + "</script>" +
@@ -3686,6 +3715,9 @@ def native_process_contract():
 def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
     if scenario == "forge-ui-process-contract":
         return native_process_contract()
+    if scenario in ("rift-status-mobile", "rift-status-reduced-motion"):
+        url = base_url + "/index.html?" + urlencode({"qaScenario": scenario, "qaFixture": fixture})
+        return run_native_process(["node", str(ROOT / "rift-status.cjs"), chrome, url, scenario], scenario)
     if scenario.startswith(("forge-ui-", "self-test-forge-ui-")):
         url = base_url + "/index.html?" + urlencode({"qaScenario": scenario, "qaFixture": fixture})
         return run_native_process(["node", str(ROOT / "forge-ui.cjs"), chrome, url, scenario], scenario)
