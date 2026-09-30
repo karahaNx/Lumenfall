@@ -1734,9 +1734,16 @@
   .rift-wisp.unpowered{border-style:dashed;}.rift-wisp.unpowered .rift-wisp-time{color:#c4cfe4;}
   .rift-wisp.is-casting{border-color:#fff;box-shadow:0 0 14px color-mix(in srgb,var(--wisp-color) 65%,transparent);}
   .rift-wisp.is-casting .rift-wisp-time{color:#fff;}
+  .rift-wisp[data-bond]{border-color:var(--bond-color);box-shadow:inset 0 2px var(--bond-color),0 2px 9px #0006;}
+  .rift-wisp.bond-start{margin-right:-2px;border-top-right-radius:3px;border-bottom-right-radius:3px;}
+  .rift-wisp.bond-end{border-top-left-radius:3px;border-bottom-left-radius:3px;}
+  .rift-wisp.bond-end:not(:last-child){margin-right:2px;}
+  .rift-bond-mark{color:var(--bond-color);font-size:9px;line-height:12px;margin-right:2px;}
+  .rift-wisp[data-bond] .rift-charge>span{background:var(--bond-color);box-shadow:0 0 8px var(--bond-color);}
+  .rift-wisp[data-bond].is-casting{box-shadow:inset 0 2px var(--bond-color),0 0 14px #ffffff70;}
   #rift-bond-effects{display:flex;gap:4px;flex:none;min-height:0;}
   #rift-bond-effects[hidden]{display:none;}
-  .rift-bond-effect{flex:1;min-width:0;padding:3px 6px;border:1px solid #625287;border-radius:7px;background:linear-gradient(120deg,#37285280,#1a2034);font-size:10px;line-height:12px;color:#e4dcf6;}
+  .rift-bond-effect{flex:1;min-width:0;padding:3px 6px;border:1px solid var(--bond-color);border-radius:7px;background:linear-gradient(120deg,color-mix(in srgb,var(--bond-color) 12%,#172034),#1a2034);font-size:10px;line-height:12px;color:#e4dcf6;}
   .stage .enemy-stage::after{background:conic-gradient(from 0deg,transparent 0 15%,#b9b6ff33 16% 17%,transparent 18% 48%,#b9b6ff33 49% 50%,transparent 51% 82%,#b9b6ff33 83% 84%,transparent 85%);animation:riftOrbit 32s linear infinite;max-width:calc(100% - 18px);}
   .vfx-ability{background:repeating-conic-gradient(var(--vfx-color) 0deg 5deg,transparent 6deg 45deg);}
   @media(prefers-reduced-motion:reduce){.stage .enemy-stage::after{animation:none!important;}.rift-charge>span{transition:none;}}
@@ -2176,6 +2183,13 @@ var FORMATION_BONDS = [
   {id:'duskguard', name:'Duskguard Bond', ids:['stone','titan'], req:'Stone + Titan', effect:'+35% passive & ability damage vs Bosses', tag:'Boss'},
   {id:'pathfinder', name:'Pathfinder Bond', ids:['gale','thorn'], req:'Gale + Thorn', effect:'+20% passive & ability damage vs non-Bosses', tag:'Push / Farm'}
 ];
+// Presentation identities stay stable across formations; shapes supplement color.
+var BOND_VISUALS = {
+  starcaller:{color:'#c4adff',mark:'◆'},
+  dawnpriest:{color:'#ffd079',mark:'●'},
+  duskguard:{color:'#7edbed',mark:'■'},
+  pathfinder:{color:'#abe58d',mark:'▲'}
+};
 var FORMATION_PRESET_IDS = ['push','farm','boss'];
 var FORMATION_PRESET_LABELS = {push:'Push',farm:'Farm',boss:'Boss'};
 
@@ -4763,13 +4777,14 @@ function showTutorial(onComplete){
 function renderBondSummary(){
   if(!els['bond-summary']) return;
   var active = activeFormationBonds();
-  var text = active.length
-    ? 'Active Bonds: ' + active.map(function(b){ return b.name.replace(' Bond',''); }).join(' · ')
+  var summary = active.length
+    ? 'Active Bonds: ' + active.map(function(b){return '<span style="color:'+BOND_VISUALS[b.id].color+'">'+b.name.replace(' Bond','')+'</span>';}).join(' · ')
     : 'No Formation Bond active.';
-  if(els['bond-summary'].textContent!==text) els['bond-summary'].textContent = text;
+  if(els['bond-summary'].innerHTML!==summary) els['bond-summary'].innerHTML = summary;
   var effects=els['rift-bond-effects'];
   var html=active.map(function(b){
-    return '<div class="rift-bond-effect" data-bond-effect="'+b.id+'" aria-label="'+b.name+': '+b.effect+'">'+b.effect+'</div>';
+    var visual=BOND_VISUALS[b.id];
+    return '<div class="rift-bond-effect" data-bond-effect="'+b.id+'" style="--bond-color:'+visual.color+'" aria-label="'+b.name+': '+b.effect+'"><span class="rift-bond-mark" aria-hidden="true">'+visual.mark+'</span><span class="rift-bond-copy">'+b.effect+'</span></div>';
   }).join('');
   if(effects.innerHTML!==html) effects.innerHTML=html;
   effects.hidden=!active.length;
@@ -4778,13 +4793,21 @@ function renderBondSummary(){
 // The DOM is retained between ticks; these observers never mutate save state.
 function renderRiftParty(){
   var root=els['rift-party'];
-  var key=state.activeParty.join(',');
+  var bonds=activeFormationBonds(),byId={},ordered=[];
+  // Group each powered Bond visually without changing simulation/save order.
+  bonds.forEach(function(bond){
+    state.activeParty.filter(function(id){return bond.ids.indexOf(id)!==-1;}).forEach(function(id){byId[id]=bond;ordered.push(id);});
+  });
+  state.activeParty.forEach(function(id){if(!byId[id])ordered.push(id);});
+  var key=state.activeParty.join(',')+'|'+bonds.map(function(b){return b.id;}).join(',');
   if(root.getAttribute('data-party')!==key){
     root.setAttribute('data-party',key);
-    root.innerHTML=state.activeParty.map(function(id){
-      var sp=SPIRITS.find(function(x){return x.id===id;});
-      return '<div class="rift-wisp" data-rift-wisp="'+id+'" style="--wisp-color:'+sp.color+'">'+wispPortrait(sp)+
-        '<span class="rift-wisp-name">'+sp.shortName+'</span><span class="rift-wisp-time"></span>'+
+    root.innerHTML=ordered.map(function(id,index){
+      var sp=SPIRITS.find(function(x){return x.id===id;}),bond=byId[id],visual=bond&&BOND_VISUALS[bond.id];
+      var position=bond ? (byId[ordered[index+1]]===bond?' bond-start':' bond-end') : '';
+      var marker=visual ? '<span class="rift-bond-mark" aria-hidden="true">'+visual.mark+'</span>' : '';
+      return '<div class="rift-wisp'+position+'" data-rift-wisp="'+id+'"'+(bond?' data-bond="'+bond.id+'"':'')+' role="group" aria-label="'+sp.name+(bond?' — '+bond.name:'')+'" style="--wisp-color:'+sp.color+(visual?';--bond-color:'+visual.color:'')+'">'+wispPortrait(sp)+
+        '<span class="rift-wisp-name">'+marker+sp.shortName+'</span><span class="rift-wisp-time"></span>'+
         '<div class="rift-charge" role="progressbar" aria-label="'+sp.name+' — '+sp.abilityName+'" aria-valuemin="0" aria-valuemax="100"><span></span></div></div>';
     }).join('');
   }

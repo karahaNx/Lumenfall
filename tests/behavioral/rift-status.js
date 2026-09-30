@@ -80,16 +80,38 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     s=seed();s.activeParty=worst.ids;s.activeParty.forEach((id,i)=>{s.spirits[id]=2;s.heroResource[id]=i*20;});install(s);
     function partyCheck(){
       var state=b.getState(),cards=[...document.querySelectorAll('[data-rift-wisp]')];
-      same(cards.map(x=>x.dataset.riftWisp),state.activeParty,'portraits follow active formation order only');
+      same(cards.map(x=>x.dataset.riftWisp).sort(),state.activeParty.slice().sort(),'portraits show exactly the active formation members');
       cards.forEach(card=>{
         var id=card.dataset.riftWisp,powered=state.spirits[id]>0,value=powered?state.heroResource[id]:0,bar=card.querySelector('[role="progressbar"]');
         ok(Number(bar.getAttribute('aria-valuenow'))===Math.round(value),'bar reads real ability resource');
         ok(parseFloat(bar.firstElementChild.style.width)===value,'visible bar matches accessible charge');
         ok(card.querySelector('.rift-wisp-time').textContent===(powered?Math.ceil((1-value/100)*b.riftStatus.visualMetrics().cycle)+'s':'Lv 0'),'countdown uses actual charge speed and powered status');
       });
-      var active=b.riftStatus.active();same([...document.querySelectorAll('[data-bond-effect]')].map(x=>x.textContent),active.map(x=>x.effect),'Rift shows exact complete active Bond effects');
+      var active=b.riftStatus.active();same([...document.querySelectorAll('[data-bond-effect]')].map(x=>x.querySelector('.rift-bond-copy').textContent),active.map(x=>x.effect),'Rift shows exact complete active Bond effects');
       ok(q('#rift-bond-effects').hidden===!active.length,'no stale effects when no Bond is active');
     }
+    // Deliberately interleave both pairs with the fifth Wisp in the middle.
+    s.activeParty=['ember','tide','stone','void','aurora'];install(s);partyCheck();
+    var savedParty=b.getState().activeParty.slice();
+    function installBond(){b.setState(s);savedParty=b.getState().activeParty.slice();b.renderLayout();}
+    var seenVisuals={};
+    function bondPresentation(){
+      var cards=[...document.querySelectorAll('[data-rift-wisp]')],active=b.riftStatus.active(),colors=[],marks=[];
+      active.forEach(bond=>{
+        var pair=cards.filter(x=>bond.ids.includes(x.dataset.riftWisp)),effect=q('[data-bond-effect="'+bond.id+'"]');
+        ok(pair.length===2&&Math.abs(cards.indexOf(pair[0])-cards.indexOf(pair[1]))===1,'Bond partners are adjacent even when save order is interleaved');
+        var color=effect.style.getPropertyValue('--bond-color'),mark=effect.querySelector('.rift-bond-mark').textContent;
+        pair.forEach(card=>ok(card.dataset.bond===bond.id&&card.style.getPropertyValue('--bond-color')===color&&card.querySelector('.rift-bond-mark').textContent===mark&&card.getAttribute('aria-label').includes(bond.name),'paired Wisps match bonus color, shape and accessible Bond name'));
+        colors.push(color);marks.push(mark);seenVisuals[bond.id]={color,mark};
+      });
+      ok(new Set(colors).size===active.length&&new Set(marks).size===active.length,'simultaneous Bonds have distinct colors and shapes');
+      cards.filter(x=>!active.some(bond=>bond.ids.includes(x.dataset.riftWisp))).forEach(card=>ok(!card.dataset.bond&&!card.querySelector('.rift-bond-mark'),'unpaired and unpowered Wisps have no stale Bond marking'));
+      same(b.getState().activeParty,savedParty,'visual grouping never changes stored formation order');
+    }
+    bondPresentation();s.spirits.void=0;installBond();bondPresentation();s.spirits.void=2;installBond();bondPresentation();
+    s.activeParty=['stone','gale','ember','titan','thorn'];s.activeParty.forEach(id=>s.spirits[id]=1);installBond();partyCheck();bondPresentation();
+    ok(Object.keys(seenVisuals).length===4&&new Set(Object.values(seenVisuals).map(x=>x.color)).size===4&&new Set(Object.values(seenVisuals).map(x=>x.mark)).size===4,'all four Bonds keep their own unique color and shape');
+    s.activeParty=worst.ids;s.activeParty.forEach(id=>s.spirits[id]=2);install(s);
     partyCheck();s.research.charge=10;install(s);partyCheck();
     s.spirits[s.activeParty[0]]=0;install(s);partyCheck();
     s.activeParty=s.activeParty.slice(1).reverse();install(s);partyCheck();
@@ -123,6 +145,7 @@ window.riftStatusMobile=(()=>{
   if(kind==='fresh'){s.depth=1;s.maxDepthEver=1;s.enemyDepth=1;s.enemyMaxHp=b.enemyHpFor(1);s.enemyHp=s.enemyMaxHp;}
   else {var worst=window.riftStatusWorst(b,ctx);s.activeParty=worst.ids;s.activeParty.forEach(id=>s.spirits[id]=1);s.buffUntil=b.clockNow()+60000;s.buffMult=1.5;s.lumen=1e12;s.shards=1e12;s.motes=1e9;if(kind.startsWith('boss')){s.depth=110;s.enemyDepth=110;s.enemyMaxHp=b.enemyHpFor(110);s.enemyHp=s.enemyMaxHp;}}
   if(kind==='boss-conditional'){s.activeParty=['stone','titan','gale','thorn','ember'];s.activeParty.forEach(id=>s.spirits[id]=1);}
+  if(kind==='dense'||kind==='boss')s.activeParty=['ember','tide','stone','void','aurora'];
   s.activeParty.forEach((id,i)=>s.heroResource[id]=20+i*15);
   b.setState(s);b.renderLayout();q('[data-tab="battle"]').click();
   document.documentElement.style.setProperty('--safe-top',inset+'px');document.documentElement.style.setProperty('--safe-bottom',inset+'px');
@@ -163,6 +186,8 @@ window.riftStatusMobile=(()=>{
    [el,...el.querySelectorAll('.rift-wisp-name,.rift-wisp-time,.rift-bond-effect,strong,.boss-net')].forEach(x=>ok(x.scrollWidth<=x.clientWidth+1&&x.scrollHeight<=x.clientHeight+1,selector+' full contents fit'));
    boxes[selector]={x:r.x,y:r.y,width:r.width,height:r.height};
   });
+  var cards=[...document.querySelectorAll('[data-rift-wisp]')];
+  active.forEach(bond=>{var pair=cards.filter(x=>x.dataset.bond===bond.id);ok(pair.length===2&&Math.abs(cards.indexOf(pair[0])-cards.indexOf(pair[1]))===1,'mobile Bond partners adjacent');ok(rect(pair[1]).left-rect(pair[0]).right>=0&&rect(pair[1]).left-rect(pair[0]).right<=2.1,'Bond pair is close and does not overlap');});
   ok(rect(q('#rift-party')).bottom<=hp.top,'formation clear of HP');
   ok(q('#boss-combat').hidden||hp.bottom<=rect(q('#boss-combat')).top&&rect(q('#boss-combat')).bottom<=stats.top,'boss figures clear of HP and numeric row');
   ok(q('#rift-bond-effects').hidden||bonds.bottom<=rect(q('#rift-bond-effects')).top,'full Bond effects separate from names');
