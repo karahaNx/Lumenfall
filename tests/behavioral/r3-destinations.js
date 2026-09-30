@@ -39,9 +39,9 @@ window.runR3DestinationsQa = function(b,ctx,assert){
   document.activeElement.dispatchEvent(new KeyboardEvent('keydown',{key:'End',bubbles:true}));
   ok(document.activeElement===nav[5] && q('#tab-deeds').classList.contains('active'),'End opens Deeds');
   function shortcut(){
-    go('battle');q('#rift-study-status').click();
-    ok(q('#tab-research').classList.contains('active') && !q('#tab-forge').classList.contains('active'),'R3 shortcut must open Lab, never Forge');
-    ok(document.activeElement===q('[data-tab="research"]'),'Rift shortcut focuses Lab navigation');
+    go('battle');q('[data-tab="research"]').focus();q('[data-tab="research"]').click();
+    ok(q('#tab-research').classList.contains('active') && !q('#tab-forge').classList.contains('active'),'R3 Lab navigation must open Lab, never Forge');
+    ok(document.activeElement===q('[data-tab="research"]'),'Lab button focuses Lab navigation');
     ok(!!q('[data-study-choose]'),'free slots retain Choose Study access');
   }
   shortcut();
@@ -103,8 +103,8 @@ window.runR3DestinationsQa = function(b,ctx,assert){
   if(ctx.scenario==='self-test-r3-shortcut'){b.r3.wrongShortcut();shortcut();}
   else {
     var restore=b.r3.wrongShortcut(),caught=false;
-    try{shortcut();}catch(e){caught=/R3 shortcut must open Lab/.test(e.message);}finally{restore();}
-    ok(caught,'causal negative control catches wrong Rift destination');shortcut();
+    try{shortcut();}catch(e){caught=/R3 Lab navigation must open Lab/.test(e.message);}finally{restore();}
+    ok(caught,'causal negative control catches wrong Lab destination');shortcut();
   }
   return {checks:checks,mainDestinations:6,bulkOptions:7,exactState:true,liveTickEquality:true,negativeControl:true};
 };
@@ -126,6 +126,8 @@ window.checkR3Reload = function(b,ctx,assert,expected){
   document.querySelector('[data-tab="forge"]').click();
   assert(document.querySelector('[data-mult="5"]').getAttribute('aria-pressed')==='true','remembered bulk restores in Forge');
   document.querySelector('[data-tab="research"]').click();
+  var badge=document.querySelector('#lab-capacity-badge'),free=b.riftStatus.slots()-s.activeStudies.length;
+  assert(badge.hidden===(free===0)&&badge.textContent===String(free),'capacity badge restores from actual loaded Study state');
   assert(document.querySelector('[data-study-text="guardmastery"]').textContent==='1m 15s remaining · 2x','active project countdown after reload');
   var count=0;
   while(b.getState().activeStudies.length && count++<750)b.feedbackTick(false);

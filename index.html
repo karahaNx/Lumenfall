@@ -1659,9 +1659,17 @@
   #rift-details .hero-chip{width:auto;min-width:0;padding:6px 2px;}
   #rift-details .wisp-portrait{width:32px;height:32px;}
   .rift-heading-actions{display:flex;align-items:stretch;gap:4px;flex:none;}
-  .rift-study-btn{min-width:82px;min-height:44px;padding:4px 6px;border:1px solid #4f5975;border-radius:10px;background:#1c2339;color:#f0effb;font:700 11px 'Manrope',sans-serif;white-space:nowrap;}
-  .rift-study-btn span{display:block;font-size:10px;line-height:13px;font-weight:500;color:#b5c6dc;}
-  .rift-study-btn.has-open{border-color:var(--good);color:var(--good);}
+  /* Rift status reuses existing observers; no additional timers or effects. */
+  #tab-battle .stage{gap:2px!important;}
+  .stage .rift-mode-row{height:52px;min-height:52px;}
+  .stage .enemy-name{position:absolute;top:4px;left:4px;right:4px;margin:0;text-align:center;pointer-events:none;}
+  .stage .stat-row{display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:4px;height:48px;min-height:48px;}
+  .stage .buff-indicator{font-size:11px;line-height:14px;color:var(--ink-dim);margin:0;padding:1px 2px;border-radius:10px;text-align:center;}
+  .stage .buff-indicator strong{display:block;font-size:12px;line-height:16px;color:var(--ink);}
+  .stage .buff-indicator.is-active strong{color:#a5e9bc;}
+  .stage .bond-summary{font-size:11px;line-height:14px;color:#c3c9df;opacity:1;text-align:left;margin:0;}
+  .lab-capacity-badge{position:absolute;top:2px;right:8px;min-width:16px;padding:0 3px;border:1px solid #a5e9bc;border-radius:8px;background:#18352d;color:#d4ffe5;font:700 10px/14px 'Manrope',sans-serif;pointer-events:none;}
+  .lab-capacity-badge[hidden]{display:none;}
   .formation-preset-card{padding:10px;margin-bottom:10px;}
   .formation-preset-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
   .formation-preset-title{font-size:.82rem;font-weight:800;}
@@ -1839,7 +1847,7 @@
       <button class="tab-btn active" data-tab="battle"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 20V11a6 8 0 0 1 12 0v9M3 21h18M9 20v-8a3 4 0 0 1 6 0v8M12 3V1"/></svg><span class="lb">Rift</span></button>
       <button class="tab-btn" data-tab="spirits"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c0 6-8 9-7 14a7 7 0 0 0 14 0c1-4-3-7-4-9l-3 6M9 16l3 4 3-4"/></svg><span class="lb">Wisps</span></button>
       <button class="tab-btn" data-tab="forge"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="m4 3 7 1 5 5-4 4-5-5-3-1ZM12 13l7 8 3-3-8-7M3 21h8"/></svg><span class="lb">Forge</span></button>
-      <button class="tab-btn" data-tab="research"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 2h6M10 2v7L4 19a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3L14 9V2M7 16h10M11 13h.01M14 19h.01"/></svg><span class="lb">Lab</span></button>
+      <button class="tab-btn" data-tab="research"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 2h6M10 2v7L4 19a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3L14 9V2M7 16h10M11 13h.01M14 19h.01"/></svg><span class="lb">Lab</span><span class="lab-capacity-badge" id="lab-capacity-badge" aria-hidden="true" hidden></span></button>
       <button class="tab-btn" data-tab="ascend"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 10-8 10-8-10Z M12 2v20M4 12h16M12 7l4 5-4 5-4-5Z"/></svg><span class="lb">Ascend</span></button>
       <button class="tab-btn" data-tab="deeds"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8v8a4 4 0 0 1-8 0ZM8 5H3v3a5 5 0 0 0 5 5M16 5h5v3a5 5 0 0 1-5 5M12 15v5M7 22h10M9 20h6"/></svg><span class="lb">Deeds</span></button>
     </nav>
@@ -1848,14 +1856,13 @@
   <main>
     <section class="tab-panel active" id="tab-battle">
       <div class="card stage">
-        <div class="rift-heading"><div class="depth-label" id="depth-label">Rift 1</div><div class="rift-heading-actions"><button class="rift-study-btn" id="rift-study-status">Studies 0/1<span>1 slot free</span></button><button class="rift-details-btn" id="rift-details-btn" aria-haspopup="dialog">Details<span id="rift-status">Combat &amp; party</span></button></div></div>
+        <div class="rift-heading"><div class="depth-label" id="depth-label">Rift 1</div><div class="rift-heading-actions"><button class="rift-details-btn" id="rift-details-btn" aria-haspopup="dialog">Details<span id="rift-status">Combat &amp; party</span></button></div></div>
         <div class="rift-mode-row">
           <button class="rift-mode-btn active" id="rift-push-btn">Push</button>
           <button class="rift-mode-btn" id="rift-farm-btn">Farm</button>
         </div>
 
         <div class="rift-objective" id="rift-objective"></div>
-        <div class="enemy-name" id="enemy-name">Hollow Wisp</div>
         <div class="battle-row"><div class="rift-landscape" aria-hidden="true">
  <svg viewBox="0 0 400 440" preserveAspectRatio="xMidYMid slice">
  <defs><linearGradient id="rift-mist" x2="0" y2="1"><stop stop-color="var(--land-light)" stop-opacity=".04"/><stop offset=".6" stop-color="var(--land-light)" stop-opacity=".18"/><stop offset="1" stop-color="#080d19" stop-opacity="0"/></linearGradient></defs>
@@ -1918,7 +1925,7 @@
 </div>
 
           <div class="enemy-stage-wrap">
-            <button type="button" class="enemy-stage" id="enemy-stage" aria-label="Guardian Tap — strike the enemy"><span class="guardian-label">Guardian Tap</span>
+            <button type="button" class="enemy-stage" id="enemy-stage" aria-label="Guardian Tap — strike the enemy"><span class="enemy-name" id="enemy-name">Hollow Wisp</span><span class="guardian-label">Guardian Tap</span>
               <div class="enemy-glyph" id="enemy-glyph"><svg class="creature-art" viewBox="0 0 160 160" aria-hidden="true"><use href="#creature-prowler"/></svg><svg class="boss-regalia" viewBox="0 0 160 160" aria-hidden="true" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5">
                 <g class="boss-crest boss-crest-regrowth"><path d="M48 45 30 31 24 9 35 19 40 5 43 29 61 35 M112 45 130 31 136 9 125 19 120 5 117 29 99 35 M28 82 7 63 14 92 31 105 M132 82 153 63 146 92 129 105"/><path d="M42 30Q65 13 80 34Q95 13 118 30 M13 82 30 94 M147 82 130 94" fill="none" stroke="var(--creature-eye)"/></g>
                 <g class="boss-crest boss-crest-fractured"><path d="M80 3 91 19 80 35 69 19Z M35 15 52 24 48 43 31 34Z M125 15 108 24 112 43 129 34Z M12 54 28 70 17 90 3 73Z M148 54 132 70 143 90 157 73Z"/><path d="M80 3V35 M35 15 48 43 M125 15 112 43 M12 54 17 90 M148 54 143 90" stroke="var(--creature-eye)"/></g>
@@ -1935,7 +1942,9 @@
         <div class="stat-row">
           <div class="stat-box"><div class="k">Guardian tap</div><div class="v mono" id="stat-tap">1</div></div>
           <div class="stat-box"><div class="k">Wisp DPS est.</div><div class="v mono" id="stat-idle">0</div></div>
+          <div class="buff-indicator" id="buff-indicator">Boost · passive Wisps + Tap<strong>Inactive</strong></div>
         </div>
+        <div class="bond-summary" id="bond-summary">No Formation Bond active.</div>
       </div>
     </section>
 
@@ -2007,8 +2016,7 @@
     <div class="boss-regen-tag" id="boss-regen-tag" style="display:none;">Boss — regenerates health. Grow stronger and come back.</div>
     <h3>Active party</h3>
     <div class="party-col" id="party-col"></div>
-    <div class="buff-indicator" id="buff-indicator" style="display:none;"></div>
-        <div class="bond-summary" id="bond-summary"></div>
+    <div class="bond-summary" id="bond-detail"></div>
         <div class="tap-hint">Your Wisps already fight on their own, even when you're gone — tap the Rift to strike as your Guardian and speed things up.</div>
 
     <h3>Resources</h3><dl id="rift-resources"></dl>
@@ -4100,18 +4108,15 @@ function studySlotCount(){
   if(n===7) return 4;
   return 5;
 }
-function renderRiftStudyStatus(){
-  var btn=els['rift-study-status'];
-  if(!btn) return;
-  var slots=studySlotCount();
-  var occupied=Math.min(slots,state.activeStudies.length);
-  var open=Math.max(0,slots-occupied);
-  var label='Studies '+occupied+'/'+slots;
-  var detail=open ? open+' slot'+(open===1?'':'s')+' free' : 'All slots active';
-  var markup=label+'<span>'+detail+'</span>';
-  if(btn.innerHTML!==markup) btn.innerHTML=markup;
-  btn.classList.toggle('has-open',open>0);
-  btn.setAttribute('aria-label',label+' — '+detail+'. Open Research Lab.');
+function renderLabCapacityBadge(){
+  var badge=els['lab-capacity-badge'];
+  var btn=document.querySelector('.tab-btn[data-tab="research"]');
+  var free=Math.max(0,studySlotCount()-state.activeStudies.length);
+  var text=String(free);
+  if(badge.textContent!==text) badge.textContent=text;
+  badge.hidden=free===0;
+  var label='Lab — '+free+' Study slot'+(free===1?'':'s')+' available';
+  if(btn.getAttribute('aria-label')!==label) btn.setAttribute('aria-label',label);
 }
 function findActiveStudy(id){
   return state.activeStudies.find(function(a){ return a.id===id; });
@@ -4514,8 +4519,8 @@ function setupOverlayFocus(){
 }
 
 function cacheEls(){
-  ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','rift-push-btn','rift-farm-btn','rift-mode-note','rift-objective','rift-study-status','enemy-name','boss-regen-tag','buff-indicator','enemy-stage','enemy-glyph',
-   'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','party-col','formation-presets','bond-card','bond-summary','research-list','study-list',
+  ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','rift-push-btn','rift-farm-btn','rift-mode-note','rift-objective','lab-capacity-badge','enemy-name','boss-regen-tag','buff-indicator','enemy-stage','enemy-glyph',
+   'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','party-col','formation-presets','bond-card','bond-summary','bond-detail','research-list','study-list',
    'prism-preview','ascend-btn','ascend-note','node-list','ach-list','roster-journey','shop-list','theme-list','manifesto','toast',
    'daily-streak-badge','daily-quest-list','settings-overlay','settings-home','settings-encyclopedia','settings-title','settings-back','encyclopedia-content'
   ].forEach(function(id){ els[id]=document.getElementById(id); });
@@ -4647,7 +4652,7 @@ function updateBattleFast(){
   renderRiftMode();
   renderRiftObjective();
   renderBondSummary();
-  renderRiftStudyStatus();
+  renderLabCapacityBadge();
   els['hp-fill'].style.width = Math.max(0, (state.enemyHp/state.enemyMaxHp*100)) + '%';
   els['hp-text'].textContent = formatRiftNumber(Math.max(0,state.enemyHp)) + ' / ' + formatRiftNumber(state.enemyMaxHp);
   var zone = riftZoneFor(state.depth);
@@ -4690,12 +4695,14 @@ function updateBattleFast(){
   els['stat-tap'].textContent = formatRiftNumber(tapDamage());
   els['stat-idle'].textContent = formatRiftNumber(sustainedWispDps(state.depth));
   var buffActive = state.buffUntil && Date.now() < state.buffUntil;
-  els['buff-indicator'].style.display = buffActive ? 'block' : 'none';
+  var buffText = 'Boost · passive Wisps + Tap<strong>Inactive</strong>';
   if(buffActive){
     var pct = Math.round((state.buffMult-1)*100);
     var secLeft = Math.max(0, Math.ceil((state.buffUntil-Date.now())/1000));
-    els['buff-indicator'].textContent = 'Passive + Tap boosted: +'+pct+'% ('+secLeft+'s left)';
+    buffText = 'Boost · passive Wisps + Tap<strong>+'+pct+'% · '+secLeft+'s</strong>';
   }
+  if(els['buff-indicator'].innerHTML!==buffText) els['buff-indicator'].innerHTML=buffText;
+  els['buff-indicator'].classList.toggle('is-active',!!buffActive);
   document.getElementById('rift-status').textContent = buffActive ? 'Boost active' : 'Combat & party';
   renderHud();
   if(document.getElementById('rift-details').open) renderRiftDetails();
@@ -4780,9 +4787,13 @@ function renderBondSummary(){
   if(!els['bond-summary']) return;
   var active = activeFormationBonds();
   var text = active.length
-    ? 'Active Bonds: ' + active.map(function(b){ return b.name.replace(' Bond','')+' ('+b.effect+')'; }).join(' · ')
+    ? 'Active Bonds: ' + active.map(function(b){ return b.name.replace(' Bond',''); }).join(' · ')
     : 'No Formation Bond active.';
   if(els['bond-summary'].textContent!==text) els['bond-summary'].textContent = text;
+  var detail = active.length
+    ? 'Active Bonds: ' + active.map(function(b){ return b.name.replace(' Bond','')+' ('+b.effect+')'; }).join(' · ')
+    : text;
+  if(els['bond-detail'].textContent!==detail) els['bond-detail'].textContent = detail;
 }
 function renderFormationPresets(){
   var root=els['formation-presets'];
@@ -5131,7 +5142,7 @@ function renderResearch(){
 function renderLongStudies(){
   var openInspections=Array.from(els['study-list'].querySelectorAll('details[open]')).map(function(el){return el.dataset.studyInspection;});
   var focusedInspection=document.activeElement && document.activeElement.dataset.studyDetails;
-  renderRiftStudyStatus();
+  renderLabCapacityBadge();
   var slots = studySlotCount();
   var openSlots = slots - state.activeStudies.length;
   var html = '<div class="study-slot-summary'+(openSlots>0?' has-open':'')+'"><div><strong>Studies '+state.activeStudies.length+' / '+slots+'</strong><span>'+(openSlots>0?openSlots+' slot'+(openSlots===1?'':'s')+' available':'All slots occupied')+'</span></div>' +
@@ -5575,10 +5586,6 @@ function showDailyOverlay(info){
 // ---------------------------------------------------------------
 // Tabs
 // ---------------------------------------------------------------
-function openLongStudiesFromRift(){
-  activateTab('research');
-  document.querySelector('.tab-btn[data-tab="research"]').focus({preventScroll:true});
-}
 function showSettingsView(view){
   var home = document.getElementById('settings-home');
   var encyclopedia = document.getElementById('settings-encyclopedia');
@@ -7049,7 +7056,6 @@ function init(){
 
   document.getElementById('rift-push-btn').addEventListener('click', enterPushMode);
   document.getElementById('rift-farm-btn').addEventListener('click', enterFarmMode);
-  document.getElementById('rift-study-status').addEventListener('click',openLongStudiesFromRift);
   document.getElementById('rift-objective').addEventListener('keydown',function(e){
     if(this.getAttribute('role')==='button' && (e.key==='Enter' || e.key===' ')){
       e.preventDefault(); if(!e.repeat) this.click();
