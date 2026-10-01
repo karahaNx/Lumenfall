@@ -103,7 +103,7 @@ async function run(){
     await evaluate(`riftStatusMobile.last(${JSON.stringify(view)})`);
     trace({profile:name,kind,view,phase:'end',duration:(Date.now()-viewStart)/1000,swipes:swipeCount-swipesBefore});
    }
-   await touch('[data-tab="battle"]');await advance();await evaluate('riftStatusMobile.measure()');
+   await touch('[data-tab="battle"]');samples[samples.length-1].entry=await evaluate('riftStatusMobile.entry()');await advance();await evaluate('riftStatusMobile.measure()');
    await evaluate('document.querySelector("[data-tab=forge]").focus({preventScroll:true})');await key('ArrowRight');assert(await evaluate('document.activeElement.dataset.tab')==='research','native keyboard focuses Lab');await key('Home');assert(await evaluate('document.activeElement.dataset.tab')==='battle','native Home returns Rift');
    assert(await evaluate('!document.querySelector("#rift-details-btn")&&!document.querySelector("#rift-details")'),'Details absent');
    const order=await evaluate(`[...document.querySelectorAll('#tab-battle button:not(:disabled),#tab-battle [tabindex="0"]')].filter(x=>x.getClientRects().length&&x.getBoundingClientRect().width>0&&x.getBoundingClientRect().height>0&&getComputedStyle(x).visibility!=='hidden').map(x=>x.id)`);

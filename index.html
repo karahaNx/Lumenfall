@@ -1652,6 +1652,8 @@
   main.rift-scroll-locked{padding:6px 10px;}
   .shell:has(#tab-battle.active) .hud .chip{display:flex;align-items:center;gap:3px;height:24px;padding:2px 4px;}
   .shell:has(#tab-battle.active) .hud .chip .val{flex:none;margin-left:auto;font-size:11px;line-height:16px;white-space:nowrap;}
+  #tab-battle.active{animation-name:riftPanelIn;}
+  @keyframes riftPanelIn{from{opacity:0;}to{opacity:1;}}
   #tab-battle .stage{padding:8px 10px;gap:4px!important;}
   .rift-heading{display:flex;flex-direction:column;align-items:stretch;gap:4px;flex:none;}
   .stage .depth-label{min-width:0;font-size:18px;line-height:22px;letter-spacing:.02em;text-align:center;}

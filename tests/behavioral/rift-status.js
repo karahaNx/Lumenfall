@@ -363,6 +363,14 @@ window.riftStatusMobile=(()=>{
   ok(!document.documentElement.hasAttribute('data-qa-runtime-error'),'no runtime errors');
   return {kind,viewport:[innerWidth,innerHeight],fonts:document.fonts.size,boxes,bondText:q('#bond-summary').textContent,buff:q('#buff-indicator').textContent,enemyHeight:enemy.height,main:[m.clientHeight,m.scrollHeight]};
  }
+ function entry(){
+  var panel=q('#tab-battle'),animations=document.getAnimations().filter(a=>a.effect&&a.effect.target===panel),saved=animations.map(a=>({animation:a,time:a.currentTime,state:a.playState}));
+  animations.forEach(a=>{a.pause();a.currentTime=0;});
+  try{
+   var m=q('main');ok(m.scrollTop===0&&m.scrollHeight<=m.clientHeight+1&&scrollY===0,'Rift entry animation remains scroll-free at its first frame');
+   return {height:m.clientHeight,content:m.scrollHeight,animations:animations.map(a=>a.animationName)};
+  }finally{saved.forEach(x=>{x.animation.currentTime=x.time;if(x.state==='running')x.animation.play();});}
+ }
  function last(view){
   var all=[...document.querySelectorAll('#tab-'+view+' button:not(:disabled),#tab-'+view+' summary')],el=all[all.length-1],r=rect(el),mr=rect(q('main'));
   ok(el&&r.top>=mr.top&&r.bottom<=mr.bottom,'native touch scroll reaches last '+view+' control '+JSON.stringify({top:r.top,bottom:r.bottom,area:[mr.top,mr.bottom],scroll:q('main').scrollTop,text:el.textContent}));var x=r.x+r.width/2,y=r.y+r.height/2;ok(el.contains(document.elementFromPoint(x,y)),'last '+view+' control hittable');
@@ -370,5 +378,5 @@ window.riftStatusMobile=(()=>{
  }
  function locate(view){var all=[...document.querySelectorAll('#tab-'+view+' button:not(:disabled),#tab-'+view+' summary')],el=all[all.length-1],r=rect(el),m=rect(q('main'));return {visible:r.top>=m.top&&r.bottom<=m.bottom,area:{top:m.top,bottom:m.bottom},delta:r.top<m.top?m.top-r.top+12:-(r.bottom-m.bottom+12)};}
  function control(selector){var el=q(selector),r=rect(el),x=r.x+r.width/2,y=r.y+r.height/2;return {x,y,visible:r.width>0&&r.height>0&&r.top>=0&&r.bottom<=innerHeight,hit:el.contains(document.elementFromPoint(x,y))};}
- return {setup,measure,last,control,locate,mutateBoostLine};
+ return {setup,measure,entry,last,control,locate,mutateBoostLine};
 })();
