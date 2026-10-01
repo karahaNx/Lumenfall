@@ -3,6 +3,7 @@ import argparse
 import contextlib
 import io
 import html as html_lib
+import hashlib
 import json
 import re
 import shutil
@@ -10,15 +11,19 @@ import subprocess
 import sys
 import tempfile
 import threading
+import time
 from functools import partial
+from html.parser import HTMLParser
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlencode
 
 ROOT = Path(__file__).resolve().parent
 FIXTURES_PATH = ROOT / "fixtures.json"
+RAW_ARTIFACT_ROOT = None
 
 SCENARIOS = {
+    "raw-process-contract": "fresh",
     "support-stacking": "fresh",
     "rift-status-stacking-mobile": "fresh",
     "rift-status-stacking-reduced-motion": "fresh",
@@ -3760,7 +3765,101 @@ def native_process_contract():
     return True
 
 
+def decoded_output(value):
+    if isinstance(value, bytes):
+        return value.decode("utf-8", errors="replace")
+    return value if isinstance(value, str) else ""
+
+
+class RawQaResult(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.results = []
+        self.runtime_markers = []
+        self.current = None
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if "data-qa-runtime-error" in attrs:
+            self.runtime_markers.append(attrs["data-qa-runtime-error"])
+        if attrs.get("id") == "qa-result":
+            self.current = {"tag": tag, "attrs": attrs, "text": "", "closed": False}
+            self.results.append(self.current)
+
+    def handle_data(self, data):
+        if self.current is not None:
+            self.current["text"] += data
+
+    def handle_endtag(self, tag):
+        if self.current is not None and tag == self.current["tag"]:
+            self.current["closed"] = True
+            self.current = None
+
+
+def raw_qa_observation(dom, scenario):
+    parser = RawQaResult()
+    parser.feed(dom)
+    parser.close()
+    observation = {"qa_count": len(parser.results), "qa_status": None,
+                   "qa_scenario": None, "json_status": None, "json_scenario": None,
+                   "runtime_markers": parser.runtime_markers,
+                   "runtime_error_count": None, "json_error": None, "valid": False}
+    payload = None
+    if len(parser.results) != 1:
+        observation["json_error"] = "Expected exactly one completed QA result"
+        return observation, payload
+    result = parser.results[0]
+    observation["qa_status"] = result["attrs"].get("data-status")
+    observation["qa_scenario"] = result["attrs"].get("data-scenario")
+    if result["tag"] != "pre" or not result["closed"]:
+        observation["json_error"] = "QA result is not a completed pre element"
+        return observation, payload
+    try:
+        def invalid_constant(value):
+            raise ValueError("Non-JSON constant: " + value)
+        payload = json.loads(result["text"], parse_constant=invalid_constant)
+        if not isinstance(payload, dict):
+            raise ValueError("QA JSON must be an object")
+        observation["json_status"] = payload.get("status")
+        observation["json_scenario"] = payload.get("scenario")
+        errors = payload.get("runtimeErrors")
+        if not isinstance(errors, list):
+            raise ValueError("QA runtimeErrors must be an array")
+        observation["runtime_error_count"] = len(errors)
+        if payload.get("scenario") != scenario:
+            raise ValueError("QA JSON scenario does not match requested scenario")
+        if payload.get("status") not in ("pass", "fail") or payload["status"] != observation["qa_status"]:
+            raise ValueError("QA JSON status does not match QA tag")
+        # The layout host has no data-scenario attribute; its JSON still identifies the scenario.
+        if observation["qa_scenario"] is not None and observation["qa_scenario"] != scenario:
+            raise ValueError("QA tag scenario does not match requested scenario")
+        observation["valid"] = True
+    except (json.JSONDecodeError, ValueError) as error:
+        observation["json_error"] = str(error)
+    return observation, payload
+
+
+def browser_identity(chrome):
+    path = Path(chrome).resolve()
+    identity = {"selected_path": str(chrome), "resolved_path": str(path)}
+    try:
+        with path.open("rb") as stream:
+            identity["sha256"] = hashlib.file_digest(stream, "sha256").hexdigest()
+    except OSError as error:
+        identity["identity_error"] = str(error)
+    try:
+        result = subprocess.run([chrome, "--version"], capture_output=True, text=True, timeout=2)
+        identity.update(version=decoded_output(result.stdout).strip()[:200], version_exitcode=result.returncode,
+                        version_stderr=decoded_output(result.stderr)[-400:])
+    except (subprocess.TimeoutExpired, OSError) as error:
+        identity["version_error"] = type(error).__name__ + ": " + str(error)[:400]
+    print("Browser identity: " + json.dumps(identity, sort_keys=True))
+
+
 def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
+    if scenario == "raw-process-contract":
+        from process_contract import run_contract
+        return run_contract(run_scenario)
     if scenario == "forge-ui-process-contract":
         return native_process_contract()
     if scenario in ("rift-status-mobile", "rift-status-reduced-motion") or scenario.startswith(("rift-status-stacking", "self-test-rift-status-line")):
@@ -3793,52 +3892,54 @@ def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
         ]
         if scenario in ("p1-05-reduced-motion", "p2-06b-reduced-motion", "research-duration-reduced-motion"):
             command.insert(-1, "--force-prefers-reduced-motion")
-        completed = subprocess.run(command, capture_output=True, text=True, timeout=25)
-        dom = completed.stdout
-        stderr = completed.stderr
+        started = time.monotonic()
+        try:
+            completed = subprocess.run(command, capture_output=True, text=True, timeout=25)
+            dom, stderr, exitcode = decoded_output(completed.stdout), decoded_output(completed.stderr), completed.returncode
+            timed_out = False
+        except subprocess.TimeoutExpired as error:
+            dom, stderr, exitcode = decoded_output(error.stdout), decoded_output(error.stderr), None
+            timed_out = True
+        elapsed = time.monotonic() - started
 
-    tag_match = re.search(r'<[^>]*\bid="qa-result"[^>]*>', dom)
-    status = None
-    if tag_match:
-        status_match = re.search(r'\bdata-status="([^"]+)"', tag_match.group(0))
-        if status_match:
-            status = status_match.group(1)
-
-    runtime_marker = re.search(r'\bdata-qa-runtime-error="([^"]+)"', dom)
-    passed = completed.returncode == 0 and status == "pass" and runtime_marker is None
-    result_text = re.search(r'<pre[^>]*\bid="qa-result"[^>]*>(.*?)</pre>', dom, flags=re.S)
+    observation, payload = raw_qa_observation(dom, scenario)
+    passed = (not timed_out and exitcode == 0 and observation["valid"]
+              and observation["qa_status"] == "pass" and not observation["runtime_markers"]
+              and observation["runtime_error_count"] == 0)
 
     if passed:
         print(f"PASS {scenario}" + (f" {viewport}" if viewport else ""))
-        if result_text and (viewport or scenario in ("parity-long-high-power", "parity-medium-farm") or scenario.startswith("chronology-") or scenario.startswith("p1-05-") or scenario.startswith("p2-07a-") or scenario.startswith("forge-") or scenario.startswith("buff-") or scenario.startswith("support-")):
-            try:
-                payload = json.loads(html_lib.unescape(re.sub(r'<[^>]+>', '', result_text.group(1))).strip())
-                print("  detail: " + json.dumps(payload.get("detail"), sort_keys=True))
-            except Exception:
-                pass
+        if viewport or scenario in ("parity-long-high-power", "parity-medium-farm") or scenario.startswith(("chronology-", "p1-05-", "p2-07a-", "forge-", "buff-", "support-")):
+            print("  detail: " + json.dumps(payload.get("detail"), sort_keys=True))
         return True
 
     print(f"FAIL {scenario}")
-    print(f"  chrome exit: {completed.returncode}")
-    print(f"  qa status: {status!r}")
-    if runtime_marker:
-        print(f"  runtime error marker: {runtime_marker.group(1)}")
-    if result_text:
-        print("  result:")
-        print(html_lib.unescape(re.sub(r'<[^>]+>', '', result_text.group(1))).strip())
+    process = {"exitcode": exitcode, "timed_out": timed_out, "elapsed_sec": elapsed, "timeout_sec": 25}
+    print("  process: " + json.dumps(process, sort_keys=True))
+    print("  observed QA: " + json.dumps(observation, sort_keys=True)[:2000])
+    if RAW_ARTIFACT_ROOT is not None:
+        RAW_ARTIFACT_ROOT.mkdir(parents=True, exist_ok=True)
+        directory = Path(tempfile.mkdtemp(prefix=scenario + "-", dir=RAW_ARTIFACT_ROOT))
+        (directory / "stdout.html").write_text(dom, encoding="utf-8")
+        (directory / "stderr.log").write_text(stderr, encoding="utf-8")
+        (directory / "process.json").write_text(json.dumps({"command": command, "fixture": fixture,
+                    "viewport": viewport, "process": process, "qa": observation}, indent=2), encoding="utf-8")
+        print("  raw artifacts: " + str(directory))
     if stderr.strip():
         print("  Chromium stderr tail:")
         print(stderr[-4000:])
-    if not tag_match:
-        print("  DOM tail:")
-        print(dom[-8000:])
+    if dom:
+        print("  stdout tail:")
+        print(dom[-2000:])
     return False
 
 
 def main():
+    global RAW_ARTIFACT_ROOT
     parser = argparse.ArgumentParser(description="Lumenfall stateful browser regression harness")
     parser.add_argument("--web-root", default="mobile/www", help="staged web root containing index.html")
     parser.add_argument("--scenario", choices=sorted(set(SCENARIOS) | set(PREP_SCENARIOS) | set(NEGATIVE_SCENARIOS)))
+    parser.add_argument("--raw-artifacts", help="directory for complete raw failed-process output")
     args = parser.parse_args()
 
     web_root = Path(args.web_root).resolve()
@@ -3848,6 +3949,8 @@ def main():
 
     fixtures = load_fixtures()
     chrome = find_chrome()
+    browser_identity(chrome)
+    RAW_ARTIFACT_ROOT = Path(args.raw_artifacts).resolve() if args.raw_artifacts else Path(tempfile.mkdtemp(prefix="lumenfall-qa-raw-"))
 
     all_scenarios = SCENARIOS | PREP_SCENARIOS | NEGATIVE_SCENARIOS
     selected = {args.scenario: all_scenarios[args.scenario]} if args.scenario else SCENARIOS
@@ -3876,6 +3979,8 @@ def main():
                 assert source.count(rule) == 1, "local Forge bulk rule must exist for negative control"
                 source = source.replace(rule, "")
         (stage / "index.html").write_text(instrument_html(source, fixtures), encoding="utf-8")
+        print("Staged source: " + json.dumps({"source_sha256": hashlib.sha256(source.encode("utf-8")).hexdigest(),
+              "instrumented_sha256": hashlib.sha256((stage / "index.html").read_bytes()).hexdigest()}, sort_keys=True))
 
         (stage / "layout.html").write_text(LAYOUT_HOST, encoding="utf-8")
 
