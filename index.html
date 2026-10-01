@@ -351,6 +351,12 @@
   .ach-card.done .ach-unlock{color:var(--ink-dim);}
   .ach-card .reward{font-size:.72rem;color:var(--comet);font-weight:700;flex:none;}
   .ach-progress{font-size:.7rem;color:var(--ink-dim);font-weight:700;margin-top:3px;}
+  .earned-effect{font-size:.74rem;line-height:1.5;color:var(--ink);margin-top:6px;overflow-wrap:anywhere;}
+  .earned-effect strong{color:var(--prism);}
+  .study-card .earned-effect strong{color:var(--mote);}
+  .effect-note,.deed-requirement,.deed-scope{font-size:.7rem;line-height:1.5;color:var(--ink-dim);margin-top:4px;}
+  .deed-scope{margin-top:6px;}
+  .ach-card .reward{white-space:nowrap;}
   .shop-card{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
   .shop-card .info{flex:1;}
   .shop-card .name{font-weight:700;font-size:.86rem;}
@@ -2886,9 +2892,69 @@ function deedProgressText(a,done){
   var progress = deedProgress(a,state);
   if(!progress) return '';
   var current = done ? progress.target : Math.min(progress.current,progress.target);
-  if(progress.duration) return fmtDuration(current)+' / '+fmtDuration(progress.target);
-  return formatNum(current)+' / '+formatNum(progress.target)+
-    ((a.id==='labmaster' || a.id==='labqueue') ? ' · Battle Focus, Shard Sense, Formation Training, Guardian’s Resolve and Swift Recovery levels only' : '');
+  if(progress.duration) return String(Math.floor(current/3600*100)/100)+' / 8 offline hours';
+  return formatNum(current)+' / '+formatNum(progress.target)+' '+deedPresentation(a).unit;
+}
+
+// Presentation metadata never participates in eligibility or one-time rewards.
+function deedPresentation(a){
+  var scope='Counts Battle Focus, Shard Sense, Formation Training, Guardian’s Resolve and Swift Recovery only. Other Forge upgrades do not count.';
+  var rows={
+    d10:['Reach Rift 10.','Rifts reached'],d25:['Reach Rift 25.','Rifts reached'],
+    d50:['Reach Rift 50.','Rifts reached'],d100:['Reach Rift 100.','Rifts reached'],d250:['Reach Rift 250.','Rifts reached'],
+    tap100:['Strike 100 times.','strikes'],tap1000:['Strike 1,000 times.','strikes'],tap10000:['Strike 10,000 times.','strikes'],
+    fullparty:['Place 5 Wisps in your Formation.','Formation slots'],
+    asc1:['Ascend once.','Ascensions'],asc5:['Ascend 5 times.','Ascensions'],asc10:['Ascend 10 times.','Ascensions'],
+    all:['Recruit every Wisp in one run.','recruited Wisps'],
+    mythic:['Raise one Wisp to Mythic.','rarity upgrades on one Wisp'],
+    idle8:['Accumulate 8 hours offline.','offline hours'],
+    autotap:['Ascend 12 times.','Ascensions'],
+    labmaster:['Gain 20 total levels in the 5 original Forge upgrades.','original Forge levels',scope],
+    study1:['Complete one Research Project level.','completed Project levels'],
+    study25:['Complete 25 Research Project levels in total.','completed Project levels'],
+    allstudies:['Complete at least one level of every Research Project.','Projects completed'],
+    labqueue:['Gain 60 total levels in the 5 original Forge upgrades.','original Forge levels',scope],
+    firstultimate:['Unlock one Wisp Ultimate.','Ultimate unlocked'],
+    modulemax:['Raise one Wisp Module to level 20.','levels on one Module','Uses your highest single Module level. Levels on different Wisps are not added together.']
+  };
+  var row=rows[a.id];
+  return {requirement:row[0],unit:row[1],scope:row[2]||''};
+}
+
+function earnedPercent(value){ return formatNum(Math.round(value*1000000)/10000); }
+// Isolated node contributions mirror the existing production operands. They
+// deliberately exclude other systems, which combine multiplicatively/additively.
+function nodeEarnedEffect(id){
+  var level=nodeLevel(id);
+  if(id==='starlight') return '+'+earnedPercent(level*0.10)+'% Lumen per kill';
+  if(id==='steady') return '+'+earnedPercent(level*0.08)+'% tap damage';
+  if(id==='swift') return '+'+earnedPercent(level*0.04)+'% Prisms per Ascend';
+  if(id==='momentum') return '+'+earnedPercent(momentumMult()-1)+'% passive Wisp damage and Wisp-powered tap base';
+  if(id==='reserves') return '+'+formatNum(level*2)+' hours to the offline cap';
+  if(id==='echo'){
+    var rate=Math.min(1,0.70+level*0.05);
+    return '+'+earnedPercent(rate-0.70)+' percentage points offline rate · '+earnedPercent(rate)+'% before Projects'+(rate>=1?' (node cap reached)':'');
+  }
+  var discount=costReduction();
+  return earnedPercent(discount)+'% Wisp recruiting discount · '+earnedPercent(1-discount)+'% cost'+(discount>=0.6?' (cost floor reached)':'');
+}
+function projectEarnedEffect(id){
+  var rows={
+    wispascend:[longStudyPowerMult()-1,'passive Wisp damage and Wisp-powered tap base'],
+    guardmastery:[longStudyTapMult()-1,'tap damage'],
+    riftattune:[longStudyOfflineBonus(),'percentage points offline rate'],
+    shardstudy:[longStudyShardMult()-1,'Shards per kill'],
+    lumenstudy:[longStudyLumenMult()-1,'Lumen per kill'],
+    formationstudy:[longStudyFormationMult()-1,'passive Wisp damage and Wisp-powered tap base'],
+    motestudy:[longStudyMoteMult()-1,'Motes from Luminous enemies'],
+    prismstudy:[longStudyPrismMult()-1,'Prisms per Ascend']
+  };
+  var row=rows[id];
+  return '+'+earnedPercent(row[0])+(id==='riftattune'?' ':'% ')+row[1];
+}
+function projectEarnedMarkup(id){
+  var level=longStudyLevel(id);
+  return '<div class="earned-effect" data-project-effect="'+id+'"><strong>Completed level '+level+'</strong><br>Current Project bonus: '+projectEarnedEffect(id)+(level===0?' · No earned bonus':'')+'</div>';
 }
 
 var RIFT_THEMES = [
@@ -5790,6 +5856,8 @@ function renderLongStudies(){
         '<div class="name"><span>'+(node?node.name:'')+' <span style="color:var(--mote);">Lv.'+((state.longStudyLevels[active.id]||0)+1)+'</span></span>' +
           ' <button class="node-queue-toggle '+(queueOnActive?'active':'')+'" data-study-queue="'+active.id+'">Queue '+(queueOnActive?'ON':'OFF')+'</button>' +
         '</div>' +
+        (node ? projectEarnedMarkup(active.id) : '') +
+        '<div class="effect-note">In progress: level '+(longStudyLevel(active.id)+1)+' · bonus earned only on completion.</div>' +
         '<div class="study-time" data-study-text="'+active.id+'">'+studyRemainingText(active)+'</div>' +
         '<div class="study-bar-track"><div class="study-bar-fill" data-study-bar="'+active.id+'" style="width:'+pct+'%;"></div></div>' +
         '<details class="study-inspection" data-study-inspection="'+active.id+'" '+(openInspections.indexOf(active.id)!==-1?'open':'')+'><summary data-study-details="'+active.id+'">'+(node?node.name:'Study')+' · Details &amp; speed</summary>' +
@@ -5831,6 +5899,8 @@ function renderLongStudies(){
         ' <button class="node-queue-toggle '+(queueOn?'active':'')+'" data-study-queue="'+lnode.id+'">Queue '+(queueOn?'ON':'OFF')+'</button>' +
       '</div>' +
       '<div class="desc">'+lnode.desc+'</div>' +
+      projectEarnedMarkup(lnode.id) +
+      '<div class="effect-note">Next: level '+(level+1)+' · bonus earned only on completion.</div>' +
       '<div class="study-meta">Takes '+fmtStudyDuration(dur)+' &middot; '+costIcon('lumen')+formatNum(cost.lumen)+' '+costIcon('shard')+formatNum(cost.shard)+'</div>' +
       '<button class="mini-btn" data-study="'+lnode.id+'" '+(affordable?'':'disabled')+' style="margin-top:10px;width:100%;">'+(openSlots>0?'Begin Study':'No open slots')+'</button>' +
     '</div>';
@@ -5912,6 +5982,8 @@ function renderNodes(){
         '<div class="name">'+node.name+'</div>' +
         '<div class="desc">'+node.desc+'</div>' +
         '<div class="lvl" style="color:var(--prism);">Level '+level+'</div>' +
+        '<div class="earned-effect" data-node-effect="'+node.id+'"><strong>Current node contribution:</strong> '+nodeEarnedEffect(node.id)+'</div>' +
+        '<div class="effect-note">From this node only; other upgrades contribute separately.</div>' +
       '</div>' +
       '<button class="buy-btn" data-node="'+node.id+'" '+(state.prisms<cost?'disabled':'')+' style="min-width:78px;">' +
         '<span class="cost mono">'+costIcon('prism')+formatNum(cost)+'</span><span class="label">Prisms</span>' +
@@ -5931,16 +6003,19 @@ function renderAchievements(){
   var html = '';
   ACHIEVEMENTS.forEach(function(a){
     var done = !!state.achieved[a.id];
+    var presentation = deedPresentation(a);
     var progress = deedProgress(a,state);
     var progressCurrent = progress ? (done ? progress.target : Math.min(progress.current,progress.target)) : 0;
     html += '<div class="card ach-card '+(done?'done':'')+'" data-state="'+(done?'completed':'available')+'">' +
       '<span class="dot"></span>' +
       '<div class="info">' +
         '<div class="name">'+a.name+(done?' · Completed':'')+'</div>' +
+        '<div class="deed-requirement" data-deed-requirement="'+a.id+'">'+presentation.requirement+'</div>' +
         '<div class="ach-progress mono" data-deed-progress="'+a.id+'" data-current="'+progressCurrent+'" data-target="'+(progress?progress.target:0)+'">'+deedProgressText(a,done)+'</div>' +
+        (presentation.scope ? '<div class="deed-scope">'+presentation.scope+'</div>' : '') +
         (a.unlocks ? '<div class="ach-unlock">Unlocks: '+a.unlocks+'</div>' : '') +
       '</div>' +
-      '<span class="reward mono">+'+a.reward+' '+costIcon('comet')+'</span>' +
+      '<span class="reward mono" aria-label="Reward: '+a.reward+' Comets">+'+a.reward+' '+costIcon('comet')+'</span>' +
     '</div>';
   });
   els['ach-list'].innerHTML = html;
