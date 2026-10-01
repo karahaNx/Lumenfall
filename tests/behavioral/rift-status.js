@@ -154,38 +154,59 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     // ordinary encounters and Bosses, with matching names and no state writes.
     var catalog=[...document.querySelectorAll('symbol[id^="creature-"]')].map(x=>x.id.slice(9));
     ok(catalog.length===23&&new Set(catalog).size===23,'23 unique enemy species are authored');
-    // SVG image rectangles have a getBBox even when their source is missing.
-    // Decode every packaged portrait, including species not in the current encounter.
+    // The stylized artwork is self-contained vector geometry in the original canvases.
+    // Inspect every portrait, including species not selected by this encounter.
     var enemyArtIds=['wisp','serpent','stalker','husk','warden','shade','leech','prowler','effigy','wraith','arachnid','scorpion','mantis','wyvern','gargoyle','behemoth','revenant','hydra','watcher','carapace','basilisk','crawler','harrier'];
     var wispArtIds=['ember','tide','stone','gale','thorn','void','aurora','titan'];
-    var rasterSpecs=enemyArtIds.map(id=>({id:'creature-'+id,file:'enemy-'+id,canvas:160,pixels:512})).concat(wispArtIds.map(id=>({id:'wisp-'+id,file:'wisp-'+id,canvas:64,pixels:384})));
-    var rasterSymbols=[...document.querySelectorAll('symbol[id^="creature-"],symbol[id^="wisp-"]')],rasterUrls=new Set();
-    ok(rasterSymbols.length===31&&rasterSpecs.every(spec=>rasterSymbols.some(symbol=>symbol.id===spec.id)),'exact 23 enemy and eight Wisp raster identities');
-    await Promise.all(rasterSpecs.map(async spec=>{
-      var symbol=document.getElementById(spec.id),art=symbol.firstElementChild;
-      ok(symbol.children.length===1&&art.localName==='image',spec.id+' contains one canonical raster image');
-      var href=art.getAttribute('href'),expected='branding/creatures-v3/'+spec.file+'.webp';
-      ok(href===expected,spec.id+' uses its exact packaged local artwork URL: '+href);
-      ok(symbol.getAttribute('viewBox')==='0 0 '+spec.canvas+' '+spec.canvas&&art.getAttribute('x')==='0'&&art.getAttribute('y')==='0'&&art.getAttribute('width')===String(spec.canvas)&&art.getAttribute('height')===String(spec.canvas)&&art.getAttribute('preserveAspectRatio')==='xMidYMid meet',spec.id+' retains its bounded portrait canvas');
-      rasterUrls.add(href);
-      var raster=new Image();
-      try{
-        // dump-dom can exhaust virtual time while a detached decode() is pending.
-        // Wait for the resource, then force and inspect decoded pixels synchronously.
-        await new Promise(function(resolve,reject){
-          raster.onload=resolve;
-          raster.onerror=function(){reject(new Error('image load failed'));};
-          raster.src=href;
+    var vectorSpecs=enemyArtIds.map(id=>({id:'creature-'+id,canvas:160})).concat(wispArtIds.map(id=>({id:'wisp-'+id,canvas:64})));
+    var vectorSymbols=[...document.querySelectorAll('symbol[id^="creature-"],symbol[id^="wisp-"]')],vectorArt=[];
+    ok(vectorSymbols.length===31&&vectorSpecs.every(spec=>vectorSymbols.some(symbol=>symbol.id===spec.id)),'exact 23 enemy and eight Wisp vector identities');
+    var probe=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    probe.setAttribute('aria-hidden','true');probe.setAttribute('focusable','false');
+    probe.style.cssText='position:fixed;left:0;top:0;opacity:0;pointer-events:none;--creature-color:#504c80;--creature-rim:#b4a5dc;--creature-eye:#d5edff';
+    document.body.appendChild(probe);
+    try{vectorSpecs.forEach(spec=>{
+      var symbol=document.getElementById(spec.id);
+      ok(symbol.getAttribute('viewBox')==='0 0 '+spec.canvas+' '+spec.canvas,spec.id+' retains its bounded portrait canvas');
+      ok(!symbol.querySelector('image,foreignObject,script'),spec.id+' uses self-contained vector artwork');
+      var primitives=symbol.querySelectorAll('path,polygon,polyline,circle,ellipse,rect,line');
+      ok(primitives.length>0,spec.id+' contains authored vector geometry');
+      [symbol,...symbol.querySelectorAll('*')].forEach(el=>{
+        [...el.attributes].forEach(attr=>{
+          if(attr.localName==='href')ok(attr.value.startsWith('#')&&!!document.getElementById(attr.value.slice(1)),spec.id+' has a resolved local SVG reference');
+          [...attr.value.matchAll(/url\(["']?(#[^"')]+)["']?\)/g)].forEach(match=>ok(!!document.getElementById(match[1].slice(1)),spec.id+' has a resolved paint server: '+match[1]));
         });
-        var canvas=document.createElement('canvas');
-        canvas.width=spec.pixels;canvas.height=spec.pixels;
-        var pixels=canvas.getContext('2d');pixels.drawImage(raster,0,0);
-        var decoded=pixels.getImageData(0,0,canvas.width,canvas.height).data;
-        ok(decoded.some(function(value,index){return index%4===3&&value>0;}),href+' decodes visible portrait pixels');
-      }catch(error){ok(false,'packaged artwork failed to decode: '+href+' ('+error.message+')');}
-      ok(raster.complete&&raster.naturalWidth===spec.pixels&&raster.naturalHeight===spec.pixels,href+' decodes at '+spec.pixels+' × '+spec.pixels);
-    }));
-    ok(rasterUrls.size===31,'31 unique packaged artwork URLs decode successfully');
+      });
+      probe.setAttribute('viewBox','0 0 '+spec.canvas+' '+spec.canvas);
+      probe.setAttribute('width',String(spec.canvas));probe.setAttribute('height',String(spec.canvas));
+      probe.innerHTML=symbol.innerHTML;
+      var bounds=probe.getBBox();
+      ok(bounds.width>spec.canvas/4&&bounds.height>spec.canvas/4&&bounds.x>=0&&bounds.y>=0&&bounds.x+bounds.width<=spec.canvas&&bounds.y+bounds.height<=spec.canvas,spec.id+' vector geometry stays inside its canvas');
+      var shapes=[...probe.querySelectorAll('path,polygon,polyline,circle,ellipse,rect,line')];
+      function hasPaint(value){
+        if(value==='none'||value==='rgba(0, 0, 0, 0)')return false;
+        if(value.startsWith('url(')){
+          var match=value.match(/#([^"')]+)/),server=match&&document.getElementById(match[1]);
+          return !!server&&[...server.querySelectorAll('stop')].some(stop=>Number(getComputedStyle(stop).stopOpacity)>0&&getComputedStyle(stop).stopColor!=='rgba(0, 0, 0, 0)');
+        }
+        return true;
+      }
+      var painted=shapes.filter(el=>{
+        var style=getComputedStyle(el),box=el.getBBox(),alpha=1;
+        for(var parent=el;parent&&parent!==probe;parent=parent.parentElement){var css=getComputedStyle(parent);if(css.display==='none'||css.visibility!=='visible')return false;alpha*=Number(css.opacity);}
+        var fill=hasPaint(style.fill)&&Number(style.fillOpacity)>0;
+        var stroke=hasPaint(style.stroke)&&Number(style.strokeOpacity)>0&&parseFloat(style.strokeWidth)>0;
+        return alpha>0&&(box.width>0||box.height>0)&&(fill||stroke);
+      });
+      ok(painted.length>0,spec.id+' has visible vector paint');
+      if(spec.id.startsWith('creature-')){
+        var colors=shapes.map(el=>getComputedStyle(el).fill);
+        probe.style.setProperty('--creature-color','#123456');
+        ok(shapes.some((el,i)=>getComputedStyle(el).fill!==colors[i]),spec.id+' primary material consumes its species/Boss color');
+        probe.style.setProperty('--creature-color','#504c80');
+      }
+      vectorArt.push({id:spec.id,canvas:spec.canvas,painted:painted.length,bounds:{x:bounds.x,y:bounds.y,width:bounds.width,height:bounds.height}});
+    });}finally{probe.remove();}
     q('[data-tab="battle"]').click();b.resetFeedback();
     var artCoverage={normal:[],boss:[]},speciesColors=new Set(),traitRims=new Set();
     ['normal','boss'].forEach(mode=>{
@@ -212,11 +233,11 @@ window.runRiftStatusQa=async function(b,ctx,assert){
             try{
               glyph.style.setProperty('--creature-rim','#123456');
               probe=getComputedStyle(painted).filter;
-              ok(filter!=='none'&&probe!=='none'&&probe!==filter,'Boss raster outline visibly consumes its --creature-rim trait accent');
+              ok(filter!=='none'&&probe!=='none'&&probe!==filter,'Boss outline visibly consumes its --creature-rim trait accent');
             }finally{
               if(priorRim)glyph.style.setProperty('--creature-rim',priorRim,priorPriority);else glyph.style.removeProperty('--creature-rim');
             }
-            ok(getComputedStyle(painted).filter===filter,'restoring the trait accent restores the raster outline');
+            ok(getComputedStyle(painted).filter===filter,'restoring the trait accent restores the artwork outline');
             traitRims.add(rim);
           }
         }
@@ -225,10 +246,10 @@ window.runRiftStatusQa=async function(b,ctx,assert){
       artCoverage[mode]=[...seen];
     });
     ok(speciesColors.size===23,'ordinary species retain distinct material palettes');
-    ok(traitRims.size===3,'all three Boss traits visibly color the painted silhouette rim');
+    ok(traitRims.size===3,'all three Boss traits visibly color the artwork silhouette rim');
     var portraits=[...document.querySelectorAll('symbol[id^="wisp-"]')];
     ok(portraits.length===8&&portraits.every(x=>document.querySelectorAll('[id="'+x.id+'"]').length===1),'all eight Wisp portraits have unique production symbols');
-    return {checks,worstNames:worst.text,worstMembers:worst.ids,observerOnly:true,queue:true,resume:true,artCoverage,rasterArt:{decoded:rasterUrls.size,enemies:512,wisps:384,traitRims:[...traitRims]}};
+    return {checks,worstNames:worst.text,worstMembers:worst.ids,observerOnly:true,queue:true,resume:true,artCoverage,vectorArt,traitRims:[...traitRims]};
   }finally{if(undo)undo();}
 };
 window.riftStatusMobile=(()=>{
