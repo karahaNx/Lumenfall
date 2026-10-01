@@ -62,6 +62,10 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     b.advanceTime(500);b.riftStatus.update();ok(q('#buff-indicator').textContent.includes('1s'),'direct Rift countdown updates');
     if(negative==='buff')undo=b.riftStatus.mutate('buff');
     b.advanceTime(1000);b.riftStatus.update();ok(q('#buff-indicator').textContent.includes('Inactive')&&!q('#buff-indicator').textContent.includes('+50%'),'direct Rift buff expiry is neutral');
+    s=seed();var boostNow=b.clockNow();s.supportBuffs={version:1,sources:{tide:{mult:1.25,until:boostNow+1000},aurora:{mult:1.5,until:boostNow+3000}}};install(s);
+    ok(q('#buff-indicator').textContent.includes('+75%')&&q('#buff-indicator').textContent.includes('next expiry 1s'),'identified boosts add and show earliest expiry');
+    b.advanceTime(1000);b.riftStatus.update();ok(q('#buff-indicator').textContent.includes('+50%')&&q('#buff-indicator').textContent.includes('2s'),'each source loses only its own bonus');
+    b.advanceTime(2000);b.riftStatus.update();ok(q('#buff-indicator').textContent.includes('Inactive'),'all identified sources expired');
     s=seed();install(s);ok(q('#bond-summary').textContent==='No Formation Bond active.','neutral Bonds');
     var worst=window.riftStatusWorst(b,ctx);s.activeParty=worst.ids;s.activeParty.forEach(id=>s.spirits[id]=1);install(s);
     var active=b.riftStatus.active();ok(active.length===worst.bonds.length&&q('#bond-summary').textContent===worst.text,'every actual powered Bond name visible');
@@ -90,6 +94,7 @@ window.riftStatusMobile=(()=>{
   kind=stateKind;var s=window.riftStatusSeed(b,ctx);
   if(kind==='fresh'){s.depth=1;s.maxDepthEver=1;s.enemyDepth=1;s.enemyMaxHp=b.enemyHpFor(1);s.enemyHp=s.enemyMaxHp;}
   else {var worst=window.riftStatusWorst(b,ctx);s.activeParty=worst.ids;s.activeParty.forEach(id=>s.spirits[id]=1);s.buffUntil=b.clockNow()+60000;s.buffMult=1.5;s.lumen=1e12;s.shards=1e12;s.motes=1e9;if(kind==='boss'){s.depth=110;s.enemyDepth=110;s.enemyMaxHp=b.enemyHpFor(110);s.enemyHp=s.enemyMaxHp;}}
+  if(kind!=='fresh' && ctx.scenario.startsWith('rift-status-stacking'))s.supportBuffs={version:1,sources:{tide:{mult:1.5,until:b.clockNow()+30000},aurora:{mult:1.5,until:b.clockNow()+60000}}};
   b.setState(s);b.renderLayout();q('[data-tab="battle"]').click();
   document.documentElement.style.setProperty('--safe-top',inset+'px');document.documentElement.style.setProperty('--safe-bottom',inset+'px');
  }
@@ -123,7 +128,8 @@ window.riftStatusMobile=(()=>{
   ok(hp.bottom<=stats.top&&stats.bottom<=buff.top&&buff.bottom<=bonds.top&&bonds.bottom<=nav.top,'HP, status and nav do not overlap');
   var tabs=[...document.querySelectorAll('nav.tabbar button')];ok(tabs.length===6,'six main tabs');tabs.forEach((el,i)=>{var r=rect(el);ok(r.width>=44&&r.height>=44,'tab touch minimum');ok(el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)),'tab hit-test');if(i)ok(rect(tabs[i-1]).right<=r.left,'one non-overlapping nav row');});
   var active=b.riftStatus.active();ok(active.every(x=>q('#bond-summary').textContent.includes(x.name.replace(' Bond',''))),'all powered Bond names directly visible');
-  if(kind!=='fresh')ok(active.length===window.riftStatusWorst(b,ctx).bonds.length&&q('#buff-indicator').textContent.includes('+50%'),'worst current Bonds and buff fixture survives live ticks');
+  if(kind!=='fresh' && !ctx.scenario.startsWith('rift-status-stacking'))ok(active.length===window.riftStatusWorst(b,ctx).bonds.length&&q('#buff-indicator').textContent.includes('+50%'),'worst current Bonds and buff fixture survives live ticks');
+  if(kind!=='fresh' && ctx.scenario.startsWith('rift-status-stacking'))ok(active.length===window.riftStatusWorst(b,ctx).bonds.length && q('#buff-indicator').textContent.includes('+100%') && q('#buff-indicator').textContent.includes('next expiry'),'additive worst boost survives live ticks');
   ok(!document.documentElement.hasAttribute('data-qa-runtime-error'),'no runtime errors');
   return {kind,viewport:[innerWidth,innerHeight],fonts:document.fonts.size,boxes,bondText:q('#bond-summary').textContent,buff:q('#buff-indicator').textContent,enemyHeight:enemy.height,main:[m.clientHeight,m.scrollHeight]};
  }

@@ -38,10 +38,10 @@ window.runBuffTimingQa=function(b,ctx,assert,parity){
   s=seed();s.spirits.tide=1;s.activeParty=['ember','tide'];s.buffUntil=clock+1000;s.buffMult=1.8;s.heroResource.tide=100-100/6;s.achieved.autotap=true;b.setState(s);
   var profile=b.wispFormulaSnapshot('tide').supportProfile,coincident=b.simulateTimeline(1,'live',clock);types=coincident.timeline.filter(function(e){return e.elapsedSec===1;}).map(function(e){return e.type;});
   ok(types.indexOf('buffExpire')<types.indexOf('ability') && types.indexOf('ability')<types.indexOf('autoTap'),'expiry -> support refresh -> tap event order');
-  ok(coincident.state.buffUntil===clock+1000+profile.durationMs && coincident.state.buffMult===profile.strength,'expired strength not retained across new cast');
+  ok(coincident.state.buffUntil===0 && coincident.state.buffMult===1 && coincident.state.supportBuffs.sources.tide.until===clock+1000+profile.durationMs && coincident.state.supportBuffs.sources.tide.mult===profile.strength,'expired strength not retained across new cast');
   s=seed();s.spirits.tide=1;s.activeParty=['ember','tide'];s.buffUntil=clock+10000;s.buffMult=1.8;b.setState(s);
-  b.triggerAbilityFor('tide','live',clock+500);ok(b.getState().buffUntil===clock+10000 && b.getState().buffMult===1.8,'shorter refresh retains max deadline and strength');
-  b.triggerAbilityFor('tide','live',clock+9000);ok(b.getState().buffUntil===clock+9000+profile.durationMs && b.getState().buffMult===1.8,'longer refresh extends deadline without weakening');
+  b.triggerAbilityFor('tide','live',clock+500);ok(b.getState().buffUntil===clock+10000 && b.getState().buffMult===1.8 && b.getState().supportBuffs.sources.tide.until===clock+4500,'new shorter cast preserves independent legacy entitlement');
+  b.triggerAbilityFor('tide','live',clock+9000);ok(b.getState().buffUntil===clock+10000 && b.getState().buffMult===1.8 && b.getState().supportBuffs.sources.tide.until===clock+9000+profile.durationMs,'source refresh extends only its own deadline, never legacy');
   var updated=b.getState();b.simulate(.25,'live',.25,clock+9000);ok(b.getState().buffUntil===updated.buffUntil,'next call derives refreshed deadline from current canonical field');
   // The original pre-purchase divergence is obligatory, including a scoped
   // negative control restoring the lossy epoch subtraction.

@@ -2351,7 +2351,7 @@ function freshState(){
     nodes:nodes, research:research, researchQueue:researchQueue,
     longStudyLevels:longStudyLevels, activeStudies:[], studyQueue:studyQueue,
     achieved:achieved, owned:owned, riftTheme:'default',
-    buffUntil:0, buffMult:1,
+    buffUntil:0, buffMult:1, supportBuffs:null,
     ascendCount:0, ascendRewardedDepth:0, sigilResonanceUses:0, totalTaps:0, totalKills:0, totalOfflineSeconds:0, luminousAccum:0,
     savedLabMultiplier:1,
     autoAscendEnabled:false, autoAscendTargetDepth:16,
@@ -2558,6 +2558,20 @@ function migratePersistedState(input){
   }
   return migrated;
 }
+// Schema-v1 additive, cast-time records. Do not prune by wall time here:
+// an expired-now record may still contribute during lastSeen offline catch-up.
+function normalizeSupportBuffs(raw){
+  if(!isPlainObject(raw) || raw.version!==1 || !isPlainObject(raw.sources)) return null;
+  var sources = {};
+  ['tide','aurora'].forEach(function(id){
+    var entry = raw.sources[id];
+    if(!isPlainObject(entry)) return;
+    if(!Number.isFinite(entry.until) || entry.until<=0) return;
+    if(entry.mult!==1.25 && entry.mult!==1.5) return;
+    sources[id] = {until:entry.until,mult:entry.mult};
+  });
+  return {version:1,sources:sources};
+}
 // Optional schema-v1 intent: never stores levels, resources or combat benefits.
 function normalizeFormationRebuild(raw,snapshot){
   if(!isPlainObject(raw) || !Array.isArray(raw.members)) return null;
@@ -2729,6 +2743,7 @@ function normalizeCurrentSave(input){
 
   out.buffUntil = finiteNonNegative(source.buffUntil,fresh.buffUntil);
   out.buffMult = Math.max(1,finiteNonNegative(source.buffMult,fresh.buffMult));
+  out.supportBuffs = normalizeSupportBuffs(source.supportBuffs);
   out.ascendCount = nonNegativeInt(source.ascendCount,fresh.ascendCount);
   out.sigilResonanceUses = boundedInt(source.sigilResonanceUses,fresh.sigilResonanceUses,0,SIGIL_RESONANCE_RUN_LIMIT);
   // Schema v1 remains compatible: older saves simply have no reward benchmark
@@ -3357,8 +3372,7 @@ function chipEffectivePower(id){
   var sp = SPIRITS.find(function(s){ return s.id===id; });
   if(!sp) return 0;
   var shareMult = passiveGlobalPowerMult() * formationGeneralDamageMult();
-  var buffActive = state.buffUntil && Date.now() < state.buffUntil;
-  return wispPower(sp,state.spirits[id]||0) * shareMult * (buffActive ? state.buffMult : 1);
+  return wispPower(sp,state.spirits[id]||0) * shareMult * simulationBuffMult(Date.now());
 }
 function guardianTapBaseDamage(){
   return 5 + effectivePartyPower()*0.02;
@@ -3367,16 +3381,14 @@ function guardianTapDamageAt(depth, partyBuffMult){
   return guardianTapBaseDamage() * tapMult() * (partyBuffMult||1) * bossTapDamageMult(depth);
 }
 function tapDamage(){
-  var buffActive = state.buffUntil && Date.now() < state.buffUntil;
-  return guardianTapDamageAt(state.depth, buffActive ? state.buffMult : 1);
+  return guardianTapDamageAt(state.depth, simulationBuffMult(Date.now()));
 }
 function passiveWispDpsAt(depth){
   var contextual = formationContextDamageMult(depth) / formationGeneralDamageMult();
   return effectivePartyPower() * contextual;
 }
 function idleDps(){
-  var buffActive = state.buffUntil && Date.now() < state.buffUntil;
-  return passiveWispDpsAt(state.depth) * (buffActive ? state.buffMult : 1);
+  return passiveWispDpsAt(state.depth) * simulationBuffMult(Date.now());
 }
 function supportAbilityProfile(sp){
   var ultimate = !!(sp && ultimateUnlocked(sp.id));
@@ -3387,16 +3399,15 @@ function supportAbilityProfile(sp){
 }
 function averageSupportBuffMult(){
   var cycle = abilityCycleSeconds();
-  var best = 1;
+  var total = 1;
   state.activeParty.forEach(function(id){
     var sp = SPIRITS.find(function(s){ return s.id===id; });
     if(!sp || sp.abilityType!=='support' || (state.spirits[id]||0)<=0) return;
     var profile = supportAbilityProfile(sp);
     var uptime = Math.min(1, (profile.durationMs/1000) / cycle);
-    var average = 1 + (profile.strength-1)*uptime;
-    if(average>best) best=average;
+    total += (profile.strength-1)*uptime;
   });
-  return best;
+  return total;
 }
 function abilityDamageCoefficient(sp){
   if(!sp) return 0;
@@ -4214,6 +4225,7 @@ function applyAscendMutation(){
   state.maxDepthEver = Math.max(state.maxDepthEver, cleared+1);
   state.buffUntil = 0;
   state.buffMult = 1;
+  state.supportBuffs = null;
   state.sigilResonanceUses = 0;
   state._autoTapAccum = 0;
   state._autoEmpowerAccum = 0;
@@ -4281,9 +4293,7 @@ function triggerAbility(sp, level){
   if(rewards.shards>0) state.shards += rewards.shards;
   if(rewards.lumen>0) gainLumen(rewards.lumen);
   if(sp.abilityType==='support'){
-    var support = supportAbilityProfile(sp);
-    state.buffUntil = Math.max(state.buffUntil||0,Date.now()+support.durationMs);
-    state.buffMult = Math.max(state.buffMult||1,support.strength);
+    applySupportCast(sp,Date.now());
   }
   emitCombatVfx(sp.abilityType==='support' ? 'support' : 'ability',sp.color);
   flashBattleStage(sp.abilityType==='support' ? 'support' : 'ability');
@@ -4625,15 +4635,17 @@ function updateBattleFast(){
 
   els['stat-tap'].textContent = formatRiftNumber(tapDamage());
   els['stat-idle'].textContent = formatRiftNumber(sustainedWispDps(state.depth));
-  var buffActive = state.buffUntil && Date.now() < state.buffUntil;
+  var buffNow = Date.now();
+  var buffFactor = simulationBuffMult(buffNow);
   var buffText = 'Boost · passive Wisps + Tap · <strong>Inactive</strong>';
-  if(buffActive){
-    var pct = Math.round((state.buffMult-1)*100);
-    var secLeft = Math.max(0, Math.ceil((state.buffUntil-Date.now())/1000));
-    buffText = 'Boost · passive Wisps + Tap · <strong>+'+pct+'% · '+secLeft+'s</strong>';
+  if(buffFactor>1){
+    var pct = Math.round((buffFactor-1)*100);
+    var secLeft = Math.max(0, Math.ceil(simulationNextBuffSeconds(buffNow)));
+    var expiryLabel = state.supportBuffs ? 'next expiry ' : '';
+    buffText = 'Boost · passive Wisps + Tap · <strong>+'+pct+'% · '+expiryLabel+secLeft+'s</strong>';
   }
   if(els['buff-indicator'].innerHTML!==buffText) els['buff-indicator'].innerHTML=buffText;
-  els['buff-indicator'].classList.toggle('is-active',!!buffActive);
+  els['buff-indicator'].classList.toggle('is-active',buffFactor>1);
   renderHud();
 }
 
@@ -5649,18 +5661,45 @@ function simulationTimelinePush(summary,elapsedSec,type,detail){
 // Interpret the persisted deadline at its stored precision on the same
 // whole-second/grid-phase clock as elapsed simulation. Never subtract a
 // rounded epoch "now" to obtain an interval on that more precise clock.
-function simulationBuffSecondsRemaining(nowMs,clock){
-  if(!state.buffUntil) return 0;
-  if(!clock) return (state.buffUntil-nowMs)/1000;
-  var deadlineWhole = Math.floor(state.buffUntil/1000);
-  var deadlineRemaining = 1-(state.buffUntil-deadlineWhole*1000)/1000;
+function supportDeadlineSecondsRemaining(until,nowMs,clock){
+  if(!until) return 0;
+  if(!clock) return (until-nowMs)/1000;
+  var deadlineWhole = Math.floor(until/1000);
+  var deadlineRemaining = 1-(until-deadlineWhole*1000)/1000;
   return (deadlineWhole-clock.wholeSec)+(clock.remainingSec-deadlineRemaining);
 }
+function simulationBuffSecondsRemaining(nowMs,clock){
+  return supportDeadlineSecondsRemaining(state.buffUntil,nowMs,clock);
+}
+function applySupportCast(sp,nowMs,clock){
+  if(!sp || (sp.id!=='tide' && sp.id!=='aurora') || (state.spirits[sp.id]||0)<=0 || state.activeParty.indexOf(sp.id)===-1) return;
+  var profile = supportAbilityProfile(sp);
+  if(!state.supportBuffs) state.supportBuffs = {version:1,sources:{}};
+  var sources = state.supportBuffs.sources;
+  var old = sources[sp.id];
+  // An expired cast cannot pass its strength into a later cast.
+  if(old && supportDeadlineSecondsRemaining(old.until,nowMs,clock)<=0) old = null;
+  sources[sp.id] = {
+    until:Math.max(old ? old.until : 0,nowMs+profile.durationMs),
+    mult:Math.max(old ? old.mult : 1,profile.strength)
+  };
+  // buffUntil/buffMult are an opaque legacy entitlement, never an aggregate.
+}
 function simulationExpireBuff(nowMs,clock){
-  if(!state.buffUntil || simulationBuffSecondsRemaining(nowMs,clock)>0) return false;
-  state.buffUntil = 0;
-  state.buffMult = 1;
-  return true;
+  var changed = false;
+  if(state.buffUntil && simulationBuffSecondsRemaining(nowMs,clock)<=0){
+    state.buffUntil = 0;
+    state.buffMult = 1;
+    changed = true;
+  }
+  var sources = state.supportBuffs && state.supportBuffs.sources;
+  if(sources) ['tide','aurora'].forEach(function(id){
+    if(sources[id] && supportDeadlineSecondsRemaining(sources[id].until,nowMs,clock)<=0){
+      delete sources[id];
+      changed = true;
+    }
+  });
+  return changed;
 }
 function simulationRecordAchievements(summary){
   var changed = applyAchievementChecks();
@@ -5670,15 +5709,28 @@ function simulationRecordAchievements(summary){
   return changed.length;
 }
 function simulationBuffMult(nowMs,clock){
-  return simulationBuffSecondsRemaining(nowMs,clock)>0 ? state.buffMult : 1;
+  var known = 1;
+  var sources = state.supportBuffs && state.supportBuffs.sources;
+  if(sources) ['tide','aurora'].forEach(function(id){
+    var entry = sources[id];
+    if(entry && supportDeadlineSecondsRemaining(entry.until,nowMs,clock)>0) known += entry.mult-1;
+  });
+  var legacy = simulationBuffSecondsRemaining(nowMs,clock)>0 ? state.buffMult : 1;
+  return Math.max(legacy,known);
 }
 function simulationPassiveDps(nowMs,clock){
   return passiveWispDpsAt(state.depth) * simulationBuffMult(nowMs,clock);
 }
 function simulationNextBuffSeconds(nowMs,clock){
   var remaining = simulationBuffSecondsRemaining(nowMs,clock);
-  if(remaining>0) return remaining;
-  return Infinity;
+  var next = remaining>0 ? remaining : Infinity;
+  var sources = state.supportBuffs && state.supportBuffs.sources;
+  if(sources) ['tide','aurora'].forEach(function(id){
+    if(!sources[id]) return;
+    var seconds = supportDeadlineSecondsRemaining(sources[id].until,nowMs,clock);
+    if(seconds>0) next = Math.min(next,seconds);
+  });
+  return next;
 }
 function simulationNextAbilitySeconds(){
   var fillPerSec = (100/ABILITY_BASE_CYCLE_SEC) * fillRateMult();
@@ -5976,7 +6028,7 @@ function simulationDealDiscreteDamage(amount,policy,summary){
   }
   return false;
 }
-function simulationTriggerAbility(sp,level,nowMs,policy,summary){
+function simulationTriggerAbility(sp,level,nowMs,policy,summary,clock){
   var burst = abilityRawBurst(sp,level);
   var rewards = abilityRewardPerCast(sp,level);
   var rewardScale = simulationRewardScale(policy);
@@ -5992,9 +6044,7 @@ function simulationTriggerAbility(sp,level,nowMs,policy,summary){
     summary.lumenGained += lumenGain;
   }
   if(sp.abilityType==='support'){
-    var support = supportAbilityProfile(sp);
-    state.buffUntil = Math.max(state.buffUntil||0,nowMs+support.durationMs);
-    state.buffMult = Math.max(state.buffMult||1,support.strength);
+    applySupportCast(sp,nowMs,clock);
   }
 
   if(policy.visual){
@@ -6009,7 +6059,7 @@ function simulationTriggerAbility(sp,level,nowMs,policy,summary){
     );
   }
 }
-function simulationProcessAbilities(nowMs,policy,summary){
+function simulationProcessAbilities(nowMs,policy,summary,clock){
   var fired = 0;
   var ids = state.activeParty.slice();
   for(var i=0;i<ids.length;i++){
@@ -6018,7 +6068,7 @@ function simulationProcessAbilities(nowMs,policy,summary){
     var sp = SPIRITS.find(function(s){ return s.id===id; });
     if(!sp) continue;
     state.heroResource[id] = 0;
-    simulationTriggerAbility(sp,state.spirits[id],nowMs,policy,summary);
+    simulationTriggerAbility(sp,state.spirits[id],nowMs,policy,summary,clock);
     fired++;
   }
   return fired;
@@ -6094,7 +6144,7 @@ function simulationResolveTimestamp(nowMs,elapsedSec,policy,summary,clock){
   }
 
   ascendsBefore = summary.ascends;
-  var abilities = simulationProcessAbilities(nowMs,policy,summary);
+  var abilities = simulationProcessAbilities(nowMs,policy,summary,clock);
   if(abilities){
     simulationTimelinePush(summary,elapsedSec,'ability',{count:abilities});
     actions += abilities;
@@ -6483,6 +6533,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
         spirits:JSON.parse(JSON.stringify(state.spirits||{})),
         buffUntil:state.buffUntil||0,
         buffMult:state.buffMult||1,
+        supportBuffs:state.supportBuffs ? JSON.parse(JSON.stringify(state.supportBuffs)) : null,
         activeStudies:JSON.parse(JSON.stringify(state.activeStudies||[])),
         passiveDps:simulationPassiveDps(nowMs,simulationClockPosition())
       });

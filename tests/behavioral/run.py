@@ -19,6 +19,16 @@ ROOT = Path(__file__).resolve().parent
 FIXTURES_PATH = ROOT / "fixtures.json"
 
 SCENARIOS = {
+    "support-stacking": "fresh",
+    "rift-status-stacking-mobile": "fresh",
+    "rift-status-stacking-reduced-motion": "fresh",
+    "support-save-reload": "fresh",
+    "support-backup-restore": "fresh",
+    "support-recovery": "fresh",
+    "support-resume": "fresh",
+    "support-recovery-resume": "fresh",
+    "support-visibility-resume": "fresh",
+    "support-reset": "fresh",
     "rift-status-contract": "fresh",
     "rift-status-mobile": "fresh",
     "rift-status-reduced-motion": "fresh",
@@ -175,7 +185,7 @@ def build_prelude(fixtures):
   // Native UI tests hold interval callbacks only across immediate measurements.
   // Keep real input/save handlers, animation frames and the production flags intact.
   var uiMeasurementPaused=false;
-  if(scenario.startsWith('forge-ui-') || scenario.startsWith('self-test-forge-ui-') || scenario.startsWith('rift-status-mobile') || scenario.startsWith('rift-status-reduced') || scenario.startsWith('self-test-rift-status-line')){{
+  if(scenario.startsWith('forge-ui-') || scenario.startsWith('self-test-forge-ui-') || scenario.startsWith('rift-status-stacking') || scenario.startsWith('rift-status-mobile') || scenario.startsWith('rift-status-reduced') || scenario.startsWith('self-test-rift-status-line')){{
     // Observe actual registered Queue callbacks, without changing event dispatch.
     var realAddEventListener=EventTarget.prototype.addEventListener;
     EventTarget.prototype.addEventListener=function(type,callback,options){{
@@ -418,11 +428,37 @@ applyOfflineProgress = function(){
 
 window.__lumenfallQaBridge = {
   uiMeasurementPause: function(paused){ window.__qaUiMeasurementPause(paused); },
+  supportTest: {
+    factor: function(now){return simulationBuffMult(now===undefined?Date.now():now);},
+    next: function(now){return simulationNextBuffSeconds(now);},
+    average: function(){return averageSupportBuffMult();},
+    manual: function(id){triggerAbility(SPIRITS.find(function(sp){return sp.id===id;}),state.spirits[id]||0);},
+    logicalCast: function(id,now,clock){simulationTriggerAbility(SPIRITS.find(function(sp){return sp.id===id;}),state.spirits[id],now,simulationPolicy('live',{visual:false}),simulationSummary(0),clock);},
+    ready: function(ids){ids.forEach(function(id){state.heroResource[id]=100;});},
+    outputs: function(){updateBattleFast();return {passive:idleDps(),tap:tapDamage(),chip:chipEffectivePower('ember'),text:els['buff-indicator'].textContent};},
+    // Scoped mutations live only in the throwaway instrumented test page.
+    mutate: function(kind){
+      var factor=simulationBuffMult,cast=applySupportCast;
+      if(kind==='max' || kind==='multiply' || kind==='legacy') simulationBuffMult=function(now,clock){
+        var entries=state.supportBuffs ? Object.values(state.supportBuffs.sources).filter(function(e){return supportDeadlineSecondsRemaining(e.until,now,clock)>0;}) : [];
+        var legacy=simulationBuffSecondsRemaining(now,clock)>0?state.buffMult:1;
+        if(kind==='max')return Math.max.apply(null,[legacy].concat(entries.map(function(e){return e.mult;})));
+        if(kind==='multiply')return Math.max(legacy,entries.reduce(function(n,e){return n*e.mult;},1));
+        return legacy+entries.reduce(function(n,e){return n+e.mult-1;},1)-1;
+      };
+      else applySupportCast=function(sp,now,clock){
+        var old=state.supportBuffs && state.supportBuffs.sources[sp.id];cast(sp,now,clock);
+        if(kind==='self' && old && old.until>now)state.supportBuffs.sources[sp.id].mult+=old.mult-1;
+        if(kind==='deadline' && state.supportBuffs){var entries=Object.values(state.supportBuffs.sources),until=Math.max.apply(null,entries.map(function(e){return e.until;}));entries.forEach(function(e){e.until=until;});}
+      };
+      return function(){simulationBuffMult=factor;applySupportCast=cast;};
+    }
+  },
   buffTiming: {
     restoreOldCalculation: function(){
-      var original=simulationBuffSecondsRemaining;
-      simulationBuffSecondsRemaining=function(nowMs){return state.buffUntil?(state.buffUntil-nowMs)/1000:0;};
-      return function(){simulationBuffSecondsRemaining=original;};
+      var original=supportDeadlineSecondsRemaining;
+      supportDeadlineSecondsRemaining=function(until,nowMs){return until?(until-nowMs)/1000:0;};
+      return function(){supportDeadlineSecondsRemaining=original;};
     }
   },
   forge: {
@@ -1158,7 +1194,7 @@ def build_runner():
       );
     });
 
-    ['activeParty','formationRebuild','activeFormationPreset','spirits','research','longStudyLevels','achieved','dailyStats'].forEach(function(key){
+    ['activeParty','formationRebuild','activeFormationPreset','supportBuffs','spirits','research','longStudyLevels','achieved','dailyStats'].forEach(function(key){
       assertJsonEqual(actual[key],expected[key],label+' '+key);
     });
 
@@ -1554,6 +1590,7 @@ def build_runner():
     out.totalKills = 0;
     out.buffUntil = 0;
     out.buffMult = 1;
+    out.supportBuffs = null;
     out._autoTapAccum = 0;
     out._autoEmpowerAccum = 0;
     return out;
@@ -1589,13 +1626,19 @@ def build_runner():
         window.runRiftLayoutQa(bridge,ctx,assert).then(function(detail){ finish('pass',detail); },function(error){ finish('fail',error.message); });
         return;
       }
+      if(ctx.scenario==='support-stacking'){
+        bridge.freeze();finish('pass',window.runSupportStacking(bridge,ctx,assert,assertProtectedParity));return;
+      }
+      if(ctx.scenario.startsWith('support-')){
+        bridge.freeze();window.runSupportPersistence(bridge,ctx,assert,assertProtectedParity,phase,nextPhase,backupCode,finish);return;
+      }
       if(ctx.scenario==='buff-timing'){
         bridge.freeze();finish('pass',window.runBuffTimingQa(bridge,ctx,assert,assertProtectedParity));return;
       }
       if(ctx.scenario==='buff-save-reload'){
         bridge.freeze();window.runBuffSaveQa(bridge,ctx,assert,assertProtectedParity,phase,nextPhase,finish);return;
       }
-      if(ctx.scenario.startsWith('forge-ui-') || ctx.scenario.startsWith('self-test-forge-ui-') || ctx.scenario==='rift-status-mobile' || ctx.scenario==='rift-status-reduced-motion' || ctx.scenario.startsWith('self-test-rift-status-line')){
+      if(ctx.scenario.startsWith('forge-ui-') || ctx.scenario.startsWith('self-test-forge-ui-') || ctx.scenario.startsWith('rift-status-stacking') || ctx.scenario==='rift-status-mobile' || ctx.scenario==='rift-status-reduced-motion' || ctx.scenario.startsWith('self-test-rift-status-line')){
         window.__forgeUiReady=true;return; // Native CDP input driver owns this scenario.
       }
       if(ctx.scenario.startsWith('forge-')){
@@ -2618,8 +2661,8 @@ def build_runner():
           var tideSupport = bridge.wispFormulaSnapshot('tide',100,1);
           assert(tideSupport.supportProfile.strength===1.25 && tideSupport.supportProfile.durationMs===4000,'Support strength/duration must ignore Wisp Power, Rarity and Module');
           var supportTrigger = bridge.triggerAbilityFor('tide','live',PARITY_CLOCK_MS);
-          assert(supportTrigger.after.buffMult===1.25,'Support ability must apply +25% passive/Tap buff');
-          assert(supportTrigger.after.buffUntil===PARITY_CLOCK_MS+4000,'Support ability must last 4 seconds without Ultimate');
+          assert(bridge.getState().supportBuffs.sources.tide.mult===1.25 && supportTrigger.after.buffMult===1,'Support ability must apply +25% passive/Tap buff');
+          assert(bridge.getState().supportBuffs.sources.tide.until===PARITY_CLOCK_MS+4000 && supportTrigger.after.buffUntil===0,'Support ability must last 4 seconds without Ultimate');
 
           var supportUltState = cloneJson(supportBaseState);
           supportUltState.wispUltimate.tide = true;
@@ -2627,7 +2670,7 @@ def build_runner():
           var tideUltimate = bridge.wispFormulaSnapshot('tide',100,1);
           assert(tideUltimate.supportProfile.strength===1.5 && tideUltimate.supportProfile.durationMs===8000,'Support Ultimate must become +50% for 8 seconds');
           var supportUltTrigger = bridge.triggerAbilityFor('tide','live',PARITY_CLOCK_MS);
-          assert(supportUltTrigger.after.buffMult===1.5 && supportUltTrigger.after.buffUntil===PARITY_CLOCK_MS+8000,'Support Ultimate runtime effect');
+          assert(bridge.getState().supportBuffs.sources.tide.mult===1.5 && bridge.getState().supportBuffs.sources.tide.until===PARITY_CLOCK_MS+8000 && supportUltTrigger.after.buffUntil===0 && supportUltTrigger.after.buffMult===1,'Support Ultimate runtime effect');
 
           var rewardState = cleanFormulaState(['gale','thorn','tide','aurora']);
           rewardState.wispModules.gale = 10;
@@ -3643,6 +3686,7 @@ def instrument_html(source, fixtures):
         "<script>" + (ROOT / "feedback.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "formation.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "forge.js").read_text(encoding="utf-8") + "</script>" +
+        "<script>" + (ROOT / "support-stacking.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "buff-timing.js").read_text(encoding="utf-8") + "</script>" +
         build_runner() + "\n</body>",
         1,
@@ -3717,7 +3761,7 @@ def native_process_contract():
 def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
     if scenario == "forge-ui-process-contract":
         return native_process_contract()
-    if scenario in ("rift-status-mobile", "rift-status-reduced-motion") or scenario.startswith("self-test-rift-status-line"):
+    if scenario in ("rift-status-mobile", "rift-status-reduced-motion") or scenario.startswith(("rift-status-stacking", "self-test-rift-status-line")):
         url = base_url + "/index.html?" + urlencode({"qaScenario": scenario, "qaFixture": fixture})
         return run_native_process(["node", str(ROOT / "rift-status.cjs"), chrome, url, scenario], scenario)
     if scenario.startswith(("forge-ui-", "self-test-forge-ui-")):
@@ -3764,7 +3808,7 @@ def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
 
     if passed:
         print(f"PASS {scenario}" + (f" {viewport}" if viewport else ""))
-        if result_text and (viewport or scenario in ("parity-long-high-power", "parity-medium-farm") or scenario.startswith("chronology-") or scenario.startswith("p1-05-") or scenario.startswith("p2-07a-") or scenario.startswith("forge-") or scenario.startswith("buff-")):
+        if result_text and (viewport or scenario in ("parity-long-high-power", "parity-medium-farm") or scenario.startswith("chronology-") or scenario.startswith("p1-05-") or scenario.startswith("p2-07a-") or scenario.startswith("forge-") or scenario.startswith("buff-") or scenario.startswith("support-")):
             try:
                 payload = json.loads(html_lib.unescape(re.sub(r'<[^>]+>', '', result_text.group(1))).strip())
                 print("  detail: " + json.dumps(payload.get("detail"), sort_keys=True))
