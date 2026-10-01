@@ -4,6 +4,28 @@ window.riftStatusSeed=function(b,ctx){
   s.enemyMaxHp=b.enemyHpFor(101);s.enemyHp=s.enemyMaxHp;s.questDay=ctx.currentDay();s.loginStreak=1;
   s.lumen=0;s.shards=0;return s;
 };
+window.riftGuidanceLineCheck=function(assert,phase){
+  var el=document.querySelector('#rift-objective'),style=getComputedStyle(el,'::after');
+  var diagnostic={phase,kind:el.querySelector('.objective-kind').textContent,
+    hidden:document.querySelector('#rift-objective-row').hidden,content:style.content,
+    width:style.width,height:style.height,background:style.backgroundImage,
+    shadow:style.boxShadow,progress:el.style.getPropertyValue('--objective-progress')};
+  // A generated pseudo-element must be absent even while its row is hidden;
+  // zero progress or clipping must not mask a line that returns on rerender.
+  assert(style.content==='none','Rift guidance has no drawn objective progress line: '+JSON.stringify(diagnostic));
+  return diagnostic;
+};
+window.riftGuidanceFixtures=function(b,ctx){
+  return [['Recruit-ready','WISP READY',3],['Upcoming unlock','WISP',1],['Boss','BOSS',10],['Farm','FARM',9]].map(function(f){
+    var s=window.riftStatusSeed(b,ctx),depth=f[2];
+    s.maxDepthEver=f[1]==='FARM'?10:depth;s.depth=depth;s.enemyDepth=depth;
+    s.enemyMaxHp=b.enemyHpFor(depth);s.enemyHp=s.enemyMaxHp;
+    Object.keys(s.empowerQueue).forEach(function(id){s.empowerQueue[id]=false;});
+    if(f[1]==='WISP READY')s.lumen=100;
+    if(f[1]==='FARM'){s.riftMode='farm';s.farmDepth=9;s.farmReturnDepth=10;}
+    return {name:f[0],kind:f[1],state:s};
+  });
+};
 window.riftStatusWorst=function(b,ctx){
   // Enumerate the existing legal five-member formations, rather than imposing
   // a new production Bond limit or assuming the default preset is the longest.
@@ -63,6 +85,18 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     q('#settings-btn').click();guidanceToggle.click();q('#settings-close').click();
     same(b.getState(),guidanceState,'guidance hide and restore never alter game state');
     ok(b.rawSave()===guidanceSave,'guidance preference never rewrites the canonical game save');
+    var guidanceLines=[];
+    window.riftGuidanceFixtures(b,ctx).forEach(function(fixture){
+      install(fixture.state);
+      ok(q('#rift-objective .objective-kind').textContent===fixture.kind,'guidance fixture renders '+fixture.name);
+      function check(phase){guidanceLines.push(window.riftGuidanceLineCheck(ok,fixture.name+' / '+phase));}
+      check('render');b.riftStatus.update();check('fast rerender');
+      dismiss.click();check('hidden');b.renderLayout();check('hidden rerender');
+      q('#settings-btn').click();guidanceToggle.click();q('#settings-close').click();
+      ok(!guidance.hidden,'Settings restores '+fixture.name+' guidance');
+      check('restored');b.riftStatus.update();check('restored rerender');
+    });
+    install(guidanceState);
     [1,15,40,60,90].forEach(depth=>{
       var s=seed();s.maxDepthEver=depth;s.depth=depth;s.enemyDepth=depth;s.enemyMaxHp=b.enemyHpFor(depth);s.enemyHp=s.enemyMaxHp;install(s);
       var slots=b.riftStatus.slots(),projects=b.riftStatus.projects().filter(x=>x.unlock<=depth);
@@ -293,7 +327,7 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     ok(traitRims.size===3,'all three Boss traits visibly color the artwork silhouette rim');
     var portraits=[...document.querySelectorAll('symbol[id^="wisp-"]')];
     ok(portraits.length===8&&portraits.every(x=>document.querySelectorAll('[id="'+x.id+'"]').length===1),'all eight Wisp portraits have unique production symbols');
-    return {checks,worstNames:worst.text,worstMembers:worst.ids,observerOnly:true,queue:true,resume:true,artCoverage,vectorArt,traitRims:[...traitRims]};
+    return {checks,guidanceLines,worstNames:worst.text,worstMembers:worst.ids,observerOnly:true,queue:true,resume:true,artCoverage,vectorArt,traitRims:[...traitRims]};
   }finally{if(undo)undo();}
 };
 window.riftStatusMobile=(()=>{
@@ -322,6 +356,7 @@ window.riftStatusMobile=(()=>{
   return function(){parent.insertBefore(buff,next);style.remove();};
  }
  function measure(){
+  var guidanceLine=window.riftGuidanceLineCheck(ok,'mobile / '+kind);
   var m=q('main'),mr=rect(m),nav=rect(q('nav.tabbar')),enemy=rect(q('#enemy-stage'));
   ok(m.scrollTop===0&&m.scrollHeight<=m.clientHeight+1&&scrollY===0,'Rift remains scroll-free without clipped content');
   ok(enemy.height>=120,'Guardian Tap >=120');
@@ -376,7 +411,7 @@ window.riftStatusMobile=(()=>{
   cards.forEach(card=>ok(!!card.querySelector('.rift-wisp-power')&&!!card.querySelector('.rift-wisp-state')&&!card.querySelector('.rift-wisp-time')&&!/\b\d+(?:\.\d+)?\s*(?:s|sec|seconds)\b/i.test(card.textContent),'mobile cards show power and state without an ability countdown'));
   if(matchMedia('(prefers-reduced-motion: reduce)').matches){ok(!q('.combat-vfx')&&getComputedStyle(q('#enemy-stage'),'::after').animationName==='none','reduced motion has no combat effects or rotating aura');}
   ok(!document.documentElement.hasAttribute('data-qa-runtime-error'),'no runtime errors');
-  return {kind,viewport:[innerWidth,innerHeight],fonts:document.fonts.size,boxes,bondText:q('#bond-summary').textContent,buff:q('#buff-indicator').textContent,enemyHeight:enemy.height,main:[m.clientHeight,m.scrollHeight]};
+  return {kind,guidanceLine,viewport:[innerWidth,innerHeight],fonts:document.fonts.size,boxes,bondText:q('#bond-summary').textContent,buff:q('#buff-indicator').textContent,enemyHeight:enemy.height,main:[m.clientHeight,m.scrollHeight]};
  }
  function entry(){
   var panel=q('#tab-battle'),animations=document.getAnimations().filter(a=>a.effect&&a.effect.target===panel),saved=animations.map(a=>({animation:a,time:a.currentTime,state:a.playState}));
