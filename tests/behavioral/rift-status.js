@@ -168,8 +168,21 @@ window.runRiftStatusQa=async function(b,ctx,assert){
       ok(href===expected,spec.id+' uses its exact packaged local artwork URL: '+href);
       ok(symbol.getAttribute('viewBox')==='0 0 '+spec.canvas+' '+spec.canvas&&art.getAttribute('x')==='0'&&art.getAttribute('y')==='0'&&art.getAttribute('width')===String(spec.canvas)&&art.getAttribute('height')===String(spec.canvas)&&art.getAttribute('preserveAspectRatio')==='xMidYMid meet',spec.id+' retains its bounded portrait canvas');
       rasterUrls.add(href);
-      var raster=new Image();raster.src=href;
-      try{await raster.decode();}catch(error){ok(false,'packaged artwork failed to decode: '+href+' ('+error.message+')');}
+      var raster=new Image();
+      try{
+        // dump-dom can exhaust virtual time while a detached decode() is pending.
+        // Wait for the resource, then force and inspect decoded pixels synchronously.
+        await new Promise(function(resolve,reject){
+          raster.onload=resolve;
+          raster.onerror=function(){reject(new Error('image load failed'));};
+          raster.src=href;
+        });
+        var canvas=document.createElement('canvas');
+        canvas.width=spec.pixels;canvas.height=spec.pixels;
+        var pixels=canvas.getContext('2d');pixels.drawImage(raster,0,0);
+        var decoded=pixels.getImageData(0,0,canvas.width,canvas.height).data;
+        ok(decoded.some(function(value,index){return index%4===3&&value>0;}),href+' decodes visible portrait pixels');
+      }catch(error){ok(false,'packaged artwork failed to decode: '+href+' ('+error.message+')');}
       ok(raster.complete&&raster.naturalWidth===spec.pixels&&raster.naturalHeight===spec.pixels,href+' decodes at '+spec.pixels+' × '+spec.pixels);
     }));
     ok(rasterUrls.size===31,'31 unique packaged artwork URLs decode successfully');
