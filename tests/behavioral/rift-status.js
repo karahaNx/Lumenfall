@@ -335,7 +335,19 @@ window.riftStatusMobile=(()=>{
   var stats=rect(q('.stat-row')),buff=rect(q('#buff-indicator')),bonds=rect(q('#bond-summary')),hp=rect(q('.hp-wrap'));
   ok(!q('#rift-details') && !q('#rift-details-btn'),'obsolete Details absent');
   ok(q('.stat-row').children.length===2 && !q('.stat-row').contains(q('#buff-indicator')),'numbers row contains only Guardian Tap and Wisp DPS');
-  ok(Math.abs(buff.left-bonds.left)<1 && buff.height<=16 && bonds.height<=16,'boost and Bonds each occupy one independent line');
+  ['#buff-indicator','#bond-summary'].forEach(selector=>{
+   var el=q(selector),range=document.createRange();range.selectNodeContents(el);
+   var text=range.getBoundingClientRect(),lineHeight=parseFloat(getComputedStyle(el).lineHeight);
+   ok(Number.isFinite(lineHeight)&&text.width>0&&text.height>0&&text.height<=lineHeight+1,selector+' text occupies one independent line');
+  });
+  [q('.stat-row'),...q('.stat-row').querySelectorAll('.stat-box,.k,.v')].forEach(el=>{
+   ok(el.scrollHeight<=el.clientHeight+1,'numeric row and stat boxes fit their full vertical content: '+el.className+' scroll='+el.scrollHeight+' client='+el.clientHeight+' text='+el.textContent);
+   if(el.classList.contains('stat-box')){
+    var box=rect(el),label=rect(el.querySelector('.k')),value=rect(el.querySelector('.v'));
+    ok(box.top>=stats.top&&box.bottom<=stats.bottom&&label.top>=box.top&&label.bottom<=value.top&&value.bottom<=box.bottom,'stat label and value remain inside their numeric surface without overlap');
+    var surface=getComputedStyle(el);ok(surface.backgroundImage!=='none'||surface.backgroundColor!=='rgba(0, 0, 0, 0)','stat boxes retain painted surfaces over the scenic background');
+   }
+  });
   if(!guidance.hidden){
    ['#rift-push-btn','#rift-farm-btn'].forEach(s=>ok(rect(q(s)).bottom<=rect(guidance).top,'mode control clear of objective'));
    ok(rect(q('#rift-objective')).right<=rect(q('#rift-objective-dismiss')).left,'guidance dismiss is separate from the objective action');
@@ -346,16 +358,19 @@ window.riftStatusMobile=(()=>{
   if(kind!=='fresh')ok(active.length===window.riftStatusWorst(b,ctx).bonds.length&&q('#buff-indicator').textContent.includes('+50%'),'worst current Bonds and buff fixture survives live ticks');
   ['#rift-party','#rift-bond-effects','#boss-combat'].forEach(selector=>{
    var el=q(selector);if(el.hidden)return;var r=rect(el);ok(r.top>=mr.top&&r.bottom<=nav.top&&r.width>0,selector+' visible above navigation');
-   [el,...el.querySelectorAll('.rift-wisp-name,.rift-wisp-power,.rift-wisp-state,.rift-bond-effect,strong,.boss-net')].forEach(x=>ok(x.scrollWidth<=x.clientWidth+1&&x.scrollHeight<=x.clientHeight+1,selector+' full contents fit'));
+   [el,...el.querySelectorAll('.rift-wisp-name,.rift-wisp-power,.rift-wisp-state,.rift-bond-effect,strong,.boss-net')].forEach(x=>ok(x.scrollWidth<=x.clientWidth+1&&x.scrollHeight<=x.clientHeight+1,selector+' full contents fit: '+x.className+' scroll='+x.scrollWidth+'x'+x.scrollHeight+' client='+x.clientWidth+'x'+x.clientHeight+' text='+x.textContent));
    boxes[selector]={x:r.x,y:r.y,width:r.width,height:r.height};
   });
   var cards=[...document.querySelectorAll('[data-rift-wisp]')];
   active.forEach(bond=>{var pair=cards.filter(x=>x.dataset.bond===bond.id);ok(pair.length===2&&Math.abs(cards.indexOf(pair[0])-cards.indexOf(pair[1]))===1,'mobile Bond partners adjacent');ok(rect(pair[1]).left-rect(pair[0]).right>=0&&rect(pair[1]).left-rect(pair[0]).right<=2.1,'Bond pair is close and does not overlap');});
-  var arena=rect(q('.battle-row')),landscape=rect(q('.rift-landscape'));
-  ok(getComputedStyle(q('.battle-row')).overflowY==='hidden'&&landscape.bottom<=arena.bottom+.1&&landscape.top>=arena.top-.1,'combat background paint is clipped inside the arena');
+  var arena=rect(q('.battle-row')),landscapeEl=q('.rift-landscape'),landscape=rect(landscapeEl),stageEl=q('#tab-battle .stage'),stage=rect(stageEl);
+  ok(stageEl.contains(landscapeEl)&&landscape.left>=stage.left-.1&&landscape.right<=stage.right+.1&&landscape.top>=stage.top-.1&&landscape.bottom<=stage.bottom+.1,'shared scenic background stays inside the outer Rift stage');
+  ok(landscapeEl.getAttribute('aria-hidden')==='true'&&getComputedStyle(landscapeEl).pointerEvents==='none','shared scenic background stays decorative and cannot intercept input');
+  ok(arena.top>=(guidance.hidden?rect(q('.rift-heading')).bottom:rect(guidance).bottom)&&arena.bottom<=buff.top,'integrated combat region stays below guidance and above boost');
   ok(arena.bottom<=stats.top&&getComputedStyle(q('.stat-row')).position==='relative','stat box top borders paint above the combat layer');
   var party=rect(q('#rift-party'));
-  ok(!q('.battle-row').contains(q('#rift-party'))&&arena.bottom<=hp.top&&hp.bottom<=party.top&&party.bottom<=buff.top,'standalone formation follows the arena and HP, before boost');
+  ok(!q('#enemy-stage').contains(q('#rift-party'))&&enemy.bottom<=hp.top&&hp.bottom<=party.top&&party.bottom<=buff.top,'formation follows the attack surface and HP, before boost');
+  ok(q('.battle-row').contains(q('#enemy-stage'))&&q('.battle-row').contains(q('.hp-wrap'))&&q('.battle-row').contains(q('#boss-combat'))&&q('.battle-row').contains(q('#rift-party')),'attack surface, HP, Boss regen and formation share the integrated scenic region');
   ok(q('#boss-combat').hidden||hp.bottom<=rect(q('#boss-combat')).top&&rect(q('#boss-combat')).bottom<=party.top,'boss regen sits between HP and the standalone formation');
   ok(q('#rift-bond-effects').hidden||bonds.bottom<=rect(q('#rift-bond-effects')).top&&rect(q('#rift-bond-effects')).bottom<=stats.top,'full Bond effects separate from names and precede the numeric row');
   cards.forEach(card=>ok(!!card.querySelector('.rift-wisp-power')&&!!card.querySelector('.rift-wisp-state')&&!card.querySelector('.rift-wisp-time')&&!/\b\d+(?:\.\d+)?\s*(?:s|sec|seconds)\b/i.test(card.textContent),'mobile cards show power and state without an ability countdown'));

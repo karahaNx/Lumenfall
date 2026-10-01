@@ -1650,41 +1650,44 @@
   nav.tabbar button{min-width:44px;height:var(--nav-height);min-height:var(--nav-height);padding:4px 2px;}
   nav.tabbar .lb{font-size:10px;}
   main.rift-scroll-locked{padding:6px 10px;}
-  .shell:has(#tab-battle.active) .hud .chip{display:flex;align-items:center;gap:3px;height:24px;padding:2px 4px;}
-  .shell:has(#tab-battle.active) .hud .chip .val{flex:none;margin-left:auto;font-size:11px;line-height:16px;white-space:nowrap;}
+  .shell:has(#tab-battle.active){--nav-height:48px;}
+  .shell:has(#tab-battle.active) .hud .brand{text-transform:uppercase;font-family:'Cinzel',serif;}
+  .shell:has(#tab-battle.active) .hud{gap:4px;padding:calc(4px + var(--safe-top)) 10px 4px;background:#171930;}
+  .shell:has(#tab-battle.active) .hud .chip{display:flex;align-items:center;gap:3px;height:24px;padding:2px 3px;border-color:#343950;background:linear-gradient(180deg,#222540,#191d34);box-shadow:inset 0 1px 0 #ffffff0a;}
+  .shell:has(#tab-battle.active) .hud .chip .val{flex:none;margin-left:auto;font-size:10px;line-height:16px;white-space:nowrap;}
   #tab-battle.active{animation-name:riftPanelIn;}
   @keyframes riftPanelIn{from{opacity:0;}to{opacity:1;}}
-  #tab-battle .stage{padding:8px 10px;gap:4px!important;}
-  .rift-heading{display:flex;flex-direction:column;align-items:stretch;gap:4px;flex:none;}
-  .stage .depth-label{min-width:0;font-size:18px;line-height:22px;letter-spacing:.02em;text-align:center;}
-  .stage .depth-label .boss-tag{font-size:11px;}
-  .stage .depth-label .region-label{font-size:10px;line-height:14px;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .stage .rift-heading .rift-mode-row{height:46px;min-height:46px;margin:0;gap:2px;padding:1px;}
-  .stage .rift-mode-btn{min-width:44px;min-height:44px;font-size:12px;padding:2px 6px;letter-spacing:.03em;white-space:nowrap;}
-  #rift-objective-row{display:flex;align-items:stretch;gap:4px;flex:none;min-height:44px;}
+  #tab-battle .stage{--ink:#f0effb;--ink-dim:#b5b4cb;--bg-elev:#13192d;--bg-elev-2:#1c2339;--line:#30364d;--danger:#ff7b92;--lumen:#e7c67e;--prism:#bd9bef;--shard:#82d2ec;--mote:#ffb4d5;--good:#9ed9b1;padding:8px 10px;gap:4px!important;background:radial-gradient(ellipse at 50% 38%,#222946 0,#11182d 47%,#0b1121 100%)!important;}
+  .rift-heading{display:flex;flex-direction:column;align-items:stretch;gap:4px;flex:none;position:relative;z-index:2;}
+  .stage .depth-label{min-width:0;font-size:18px;line-height:23px;letter-spacing:.08em;text-align:center;}
+  .stage .depth-label .boss-tag{font:inherit;color:#ff849e;}
+  .stage .depth-label .region-label{font-size:10px;line-height:14px;letter-spacing:.16em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .stage .rift-heading .rift-mode-row{height:46px;min-height:46px;margin:0;gap:3px;padding:1px;background:#090f20a6;border-radius:12px;}
+  .stage .rift-mode-btn{min-width:44px;min-height:44px;font-size:12px;padding:3px 6px;letter-spacing:.09em;white-space:nowrap;}
+  #rift-objective-row{position:relative;z-index:2;display:flex;align-items:stretch;gap:0;flex:none;min-height:44px;border:1px solid #3d4963;border-radius:11px;background:#141d30;box-shadow:inset 0 1px 0 #ffffff09;overflow:hidden;}
   #rift-objective-row[hidden]{display:none;}
-  .stage .rift-objective{flex:1;min-width:0;height:44px;min-height:44px;padding:3px 8px;grid-template-columns:minmax(0,1fr) auto;gap:4px;}
-  #rift-objective-dismiss{flex:none;width:44px;height:44px;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:9px;background:#141d30;color:var(--ink-dim);font:22px/1 'Manrope',sans-serif;cursor:pointer;}
-  #rift-objective-dismiss:focus-visible{outline:2px solid var(--lumen);outline-offset:1px;}
-  .stage .objective-kind{display:none;} /* Mode/title already convey the kind. */
-  .stage .objective-copy strong{font-size:13px;line-height:18px;}
-  .stage .objective-copy small{font-size:11px;line-height:16px;}
-  .stage .enemy-name{position:absolute;top:4px;left:4px;right:4px;font-size:14px;line-height:20px;margin:0;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;}
-  .stage .battle-row{min-height:120px;gap:0;margin:0;}
+  .stage .rift-objective{flex:1;min-width:0;height:44px;min-height:44px;padding:4px 7px;grid-template-columns:auto minmax(0,1fr) auto;gap:7px;border:0;border-radius:0;background:transparent;box-shadow:none;}
+  #rift-objective-dismiss{flex:none;width:44px;height:44px;min-width:44px;min-height:44px;border:0;border-left:1px solid #3d496355;border-radius:0;background:transparent;color:var(--ink-dim);font:20px/1 'Manrope',sans-serif;cursor:pointer;}
+  #rift-objective-dismiss:focus-visible{outline:2px solid var(--lumen);outline-offset:-3px;}
+  .stage .objective-kind{display:block;font-size:9px;line-height:12px;letter-spacing:.05em;padding:3px 5px;white-space:nowrap;}
+  .stage .objective-copy strong{font-size:12px;line-height:16px;}
+  .stage .objective-copy small{font-size:11px;line-height:14px;}
+  .stage .enemy-name{position:absolute;top:0;left:4px;right:4px;font-size:15px;line-height:22px;margin:0;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;}
+  .stage .battle-row{min-height:0;flex-direction:column;gap:5px;margin:0 -4px;}
   .stage .enemy-stage-wrap{position:relative;min-height:120px;gap:0;}
-  .stage .enemy-stage{min-height:120px;overflow:hidden;container-type:size;}
-  .guardian-label{position:absolute;bottom:3px;z-index:3;font-size:11px;line-height:14px;color:#eee1c3;pointer-events:none;text-shadow:0 1px 4px #000;}
-  .stage .hp-wrap{flex:none;align-self:center;width:100%;max-width:340px;height:26px;}
-  .stage .hp-text{font-size:12px;line-height:16px;margin-top:3px;white-space:nowrap;}
+  .stage .enemy-stage{min-height:120px;overflow:visible;container-type:size;}
+  .guardian-label{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;pointer-events:none;}
+  .stage .hp-wrap{flex:none;align-self:center;width:90%;max-width:340px;height:24px;}
+  .stage .hp-text{font-size:11px;line-height:14px;margin-top:3px;white-space:nowrap;}
   .stage .stat-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;height:44px;min-height:44px;}
-  .stage .stat-box{padding:4px 8px;min-width:0;}
+  .stage .stat-box{padding:3px 8px;min-width:0;}
   .stage .stat-box .k{font-size:10px;line-height:14px;letter-spacing:.03em;}
-  .stage .stat-box .v{font-size:14px;line-height:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .stage .stat-box .v{font-size:14px;line-height:22px;margin-top:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   /* Status follows the arena and the independent Wisp cards. */
-  .stage .buff-indicator{align-self:stretch;border:1px solid #7468aa55;border-radius:20px;background:#1c1930;font-size:11px;line-height:14px;color:var(--ink-dim);margin:0;padding:0 8px;text-align:center;}
+  .stage .buff-indicator{position:relative;z-index:2;align-self:center;max-width:100%;border:1px solid #91c7b647;border-radius:999px;background:#91c7b614;font-size:11px;line-height:14px;color:#a5dabc;margin:0;padding:4px 9px;text-align:center;}
   .stage .buff-indicator strong{display:inline;font-size:11px;line-height:14px;color:var(--ink);}
   .stage .buff-indicator.is-active strong{color:#a5e9bc;}
-  .stage .bond-summary{font-size:11px;line-height:14px;color:#c3c9df;opacity:1;text-align:center;margin:0;}
+  .stage .bond-summary{position:relative;z-index:2;font-size:11px;line-height:14px;color:#c3c9df;opacity:1;text-align:center;margin:0;}
   .lab-capacity-badge{position:absolute;top:2px;right:8px;min-width:16px;padding:0 3px;border:1px solid #a5e9bc;border-radius:8px;background:#18352d;color:#d4ffe5;font:700 10px/14px 'Manrope',sans-serif;pointer-events:none;}
   .lab-capacity-badge[hidden]{display:none;}
   .formation-preset-card{padding:10px;margin-bottom:10px;}
@@ -1738,21 +1741,21 @@
   }
 
   /* Standalone Formation cards keep portrait, charge, name and power in reading order. */
-  .farm-depth{display:block;font:10px/12px 'IBM Plex Mono',monospace;}
+  .farm-depth{display:inline;margin-left:4px;font:inherit;letter-spacing:inherit;}
   .stage .rift-mode-btn .control-state{font-size:10px;line-height:12px;}
-  #boss-combat{flex:none;padding:3px 7px;border-left:2px solid #dd8ea2;background:#2b1d304d;font-size:11px;line-height:13px;}
+  #boss-combat{flex:none;align-self:center;width:90%;max-width:340px;padding:3px 7px;border:1px solid #ed8aa744;border-radius:11px;background:#131c2fee;color:#f3bbc8;font-size:11px;line-height:13px;text-align:center;}
   #boss-combat[hidden]{display:none;}
-  #boss-combat strong{display:block;color:#f3bbc8;font-size:11px;line-height:13px;}
-  .boss-net{display:block;color:#d0d8ee;}
+  #boss-combat strong{display:inline;color:#f3bbc8;font-size:11px;line-height:13px;}
+  .boss-net{display:inline;color:#d0d8ee;}.boss-net::before{content:" · ";}
   .boss-net.positive{color:#a5e9bc;}.boss-net.negative{color:#ffb3be;}
   #tab-battle .stage .enemy-stage{padding:0;}
-  #tab-battle .stage .enemy-glyph{max-height:calc(100% - 36px);width:auto;height:clamp(80px,30vh,270px);max-width:80%;}
+  #tab-battle .stage .enemy-glyph{max-height:calc(100% - 26px);width:auto;height:clamp(100px,24vh,220px);max-width:80%;margin-top:14px;}
   #tab-battle .stage .enemy-glyph.boss{width:auto;}
-  #rift-party{position:relative;display:flex;flex:none;justify-content:center;gap:4px;height:76px;z-index:4;pointer-events:none;}
-  .rift-wisp{position:relative;width:calc((100% - 16px)/5);max-width:70px;min-width:0;height:76px;border:1px solid color-mix(in srgb,var(--wisp-color) 55%,#223047);border-radius:10px 10px 5px 5px;background:linear-gradient(155deg,color-mix(in srgb,var(--wisp-color) 15%,#0b1529),#0a1224);display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:34px 3px 12px 13px;gap:1px;align-items:center;justify-items:center;padding:4px;box-shadow:0 2px 9px #0006;}
-  #rift-party .wisp-portrait{width:34px;height:34px;grid-column:1;grid-row:1;filter:none;}
-  .rift-wisp-name{grid-column:1;grid-row:3;font-size:10px;line-height:12px;color:#e7edfa;text-align:center;white-space:nowrap;}
-  .rift-wisp-power{grid-column:1;grid-row:4;font:11px/13px 'IBM Plex Mono',monospace;color:#f0d990;text-align:center;}
+  #rift-party{position:relative;display:flex;flex:none;justify-content:center;gap:6px;height:61px;z-index:4;pointer-events:none;}
+  .rift-wisp{position:relative;width:calc((100% - 24px)/5);max-width:58px;min-width:0;height:61px;border:1px solid color-mix(in srgb,var(--wisp-color) 30%,#29334e);border-radius:11px;background:linear-gradient(155deg,#263049e0,#101a2eed);display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:27px 3px 13px 14px;gap:0;align-items:center;justify-items:center;padding:1px 3px;box-shadow:inset 0 1px 0 #ffffff0c,0 2px 9px #0004;}
+  #rift-party .wisp-portrait{width:27px;height:27px;grid-column:1;grid-row:1;filter:drop-shadow(0 0 5px color-mix(in srgb,var(--wisp-color) 22%,transparent));}
+  .rift-wisp-name{grid-column:1;grid-row:3;font-size:10px;line-height:13px;color:#c7cbe0;text-align:center;white-space:nowrap;}
+  .rift-wisp-power{grid-column:1;grid-row:4;font:10px/14px 'IBM Plex Mono',monospace;color:#f0effb;text-align:center;}
   .rift-wisp-state{position:absolute;top:2px;right:2px;padding:0 2px;border-radius:3px;background:#0b132ade;font:10px/12px 'IBM Plex Mono',monospace;color:#c4cfe4;text-align:center;}
   .rift-wisp-state:empty{display:none;}
   .rift-charge{grid-column:1;grid-row:2;height:3px;border-radius:3px;background:#030818;overflow:hidden;width:100%;}
@@ -1761,44 +1764,49 @@
   .rift-wisp.is-casting{border-color:#fff;box-shadow:0 0 14px color-mix(in srgb,var(--wisp-color) 65%,transparent);}
   .rift-wisp.is-casting .rift-wisp-state{color:#fff;}
   .rift-wisp[data-bond]{border-color:var(--bond-color);box-shadow:inset 0 2px var(--bond-color),0 2px 9px #0006;}
-  .rift-wisp.bond-start{margin-right:-2px;border-top-right-radius:3px;border-bottom-right-radius:3px;}
-  .rift-wisp.bond-end{border-top-left-radius:3px;border-bottom-left-radius:3px;}
-  .rift-wisp.bond-end:not(:last-child){margin-right:2px;}
+  .rift-wisp.bond-start{margin-right:-4px;}
+  .rift-wisp.bond-end{border-radius:11px;}
+  .rift-wisp.bond-end:not(:last-child){margin-right:4px;}
   .rift-bond-mark{color:var(--bond-color);font-size:9px;line-height:12px;margin-right:2px;}
   .rift-wisp[data-bond] .rift-charge>span{background:var(--bond-color);box-shadow:0 0 8px var(--bond-color);}
   .rift-wisp[data-bond].is-casting{box-shadow:inset 0 2px var(--bond-color),0 0 14px #ffffff70;}
-  #rift-bond-effects{display:flex;gap:4px;flex:none;min-height:0;}
+  #rift-bond-effects{position:relative;z-index:2;display:flex;gap:4px;flex:none;min-height:0;}
   #rift-bond-effects[hidden]{display:none;}
-  .rift-bond-effect{flex:1;min-width:0;padding:3px 6px;border:1px solid var(--bond-color);border-radius:7px;background:linear-gradient(120deg,color-mix(in srgb,var(--bond-color) 12%,#172034),#1a2034);font-size:10px;line-height:12px;color:#e4dcf6;}
+  .rift-bond-effect{flex:1;min-width:0;padding:2px 5px;border:0;border-left:2px solid var(--bond-color);border-radius:3px;background:color-mix(in srgb,var(--bond-color) 7%,transparent);font-size:10px;line-height:12px;color:#d2d1e4;}
   .stage .enemy-stage::after{background:conic-gradient(from 0deg,transparent 0 15%,#b9b6ff33 16% 17%,transparent 18% 48%,#b9b6ff33 49% 50%,transparent 51% 82%,#b9b6ff33 83% 84%,transparent 85%);animation:riftOrbit 32s linear infinite;width:min(200px,65cqh,65cqw);height:min(200px,65cqh,65cqw);max-width:none;max-height:none;}
   .vfx-ability{background:repeating-conic-gradient(var(--vfx-color) 0deg 5deg,transparent 6deg 45deg);}
   @media(prefers-reduced-motion:reduce){.stage .enemy-stage::after{animation:none!important;}.rift-charge>span{transition:none;}}
 
   @media(max-height:680px){
-    .shell:has(#tab-battle.active) .hud{gap:3px;padding:calc(2px + var(--safe-top)) 10px 2px;}
+    .shell:has(#tab-battle.active) .hud{gap:3px;padding:calc(1px + var(--safe-top)) 10px 1px;}
     .shell:has(#tab-battle.active) .hud .chip{height:20px;padding:1px 3px;}
-    main.rift-scroll-locked{padding:4px 10px;}
+    main.rift-scroll-locked{padding:2px 10px;}
     #tab-battle .stage{padding:3px 8px;gap:1px!important;}
     .rift-heading{display:grid;grid-template-columns:minmax(0,1fr) 160px;gap:4px;height:44px;}
     .stage .depth-label{font-size:14px;line-height:18px;text-align:left;}
     .stage .rift-heading .rift-mode-row{height:44px;min-height:44px;padding:0;}
+    .stage .rift-mode-btn{font-size:12px;letter-spacing:0;padding:2px;}
+    .farm-depth{display:block;margin:0;font:10px/12px 'IBM Plex Mono',monospace;}
+    .stage .battle-row{gap:2px;}
     .stage .hp-wrap{height:24px;}
     .stage .hp-text{font-size:11px;line-height:14px;margin-top:2px;}
     #boss-combat{padding:1px 6px;}
-    #rift-party,.rift-wisp{height:54px;}
-    .rift-wisp{grid-template-rows:22px 3px 12px 13px;gap:0;padding:1px 3px;}
-    #rift-party .wisp-portrait{width:22px;height:22px;}
+    #rift-party,.rift-wisp{height:58px;}
+    .rift-wisp{grid-template-rows:24px 3px 13px 14px;gap:0;padding:1px 3px;}
+    #rift-party .wisp-portrait{width:24px;height:24px;}
     .rift-wisp-power{font-size:10px;}
-    .stage .buff-indicator{border:0;background:none;padding:0;line-height:16px;}
+    .stage .buff-indicator{padding:0 8px;line-height:14px;}
     .stage .stat-box{padding:2px 7px;}
     .rift-bond-effect{padding:2px 5px;}
   }
 
-  /* Keep combat paint inside its own rectangle, above a complete stat row. */
-  .stage .battle-row{overflow:hidden;border-radius:8px;}
-  .stage .rift-landscape{inset:0;}
+  /* One continuous scenic field extends through HP, Boss status and the Formation. */
+  .stage .battle-row{overflow:visible;border-radius:0;}
+  .stage .rift-landscape{inset:-30px -4px -14px;border-radius:0;}
+  .stage .region-landmark{opacity:.24;}
+  .stage .rift-architecture{opacity:1;}
   .stage .stat-row{position:relative;z-index:1;align-items:stretch;}
-  .stage .stat-box{border-top-color:#596781;background:linear-gradient(150deg,#222d45,#131b2c);}
+  .stage .stat-box{border-color:#35425a88;border-radius:11px;background:linear-gradient(140deg,#26304b77,#131b2c);}
   .stage .hp-bar-track{box-shadow:none;}
   .stage .combat-vfx{z-index:1;}
   .combat-vfx.wisp-cast{width:84px;height:84px;max-width:70%;border-radius:50%;background:none;box-shadow:none;animation:wispCast .8s ease-out forwards;}
@@ -2453,6 +2461,15 @@
  <circle cx="200" cy="132" r="96" fill="var(--land-light)" opacity=".025"/>
  <circle cx="200" cy="132" r="78" fill="none" stroke="var(--land-light)" opacity=".12"/>
  <path d="M0 221 42 163 76 208 121 127 173 204 219 156 269 198 326 118 400 214V440H0Z" fill="var(--land-far)"/>
+ <g class="rift-architecture" fill="var(--land-stone)" stroke="var(--land-edge)" stroke-width="1">
+ <path d="M41 349 49 133 62 120 78 129 85 343Z M46 144H80 M47 161H80 M52 178H76"/>
+ <path d="M316 348 321 142 334 132 352 146 361 354Z M320 163H353 M321 180H354 M328 194H349"/>
+ <path d="M84 331 90 97 116 70 136 70 128 98 111 115 107 331Z M267 335 271 116 252 95 255 70 281 80 302 106 309 337Z"/>
+ <path d="M101 112 Q199 -8 288 113 L277 117 Q198 20 113 121Z"/>
+ <path d="M113 115 Q199 20 276 115L298 350H90Z" fill="url(#rift-mist)"/>
+ <path d="M111 115 Q199 18 278 115" fill="none" stroke="var(--land-light)" stroke-width="2" opacity=".6"/>
+ <g fill="var(--land-light)" opacity=".7"><path d="M63 172 67 180 63 188 59 180Z M337 185 341 193 337 201 333 193Z M194 55 199 47 204 55 199 63Z"/></g>
+ </g>
  <g class="region-landmark region-verge" fill="var(--land-stone)" stroke="var(--land-edge)" stroke-width="1">
  <path d="M41 349 49 133 62 120 78 129 85 343Z M46 144H80 M47 161H80 M52 178H76"/>
  <path d="M316 348 321 142 334 132 352 146 361 354Z M320 163H353 M321 180H354 M328 194H349"/>
@@ -2517,13 +2534,13 @@
               </svg></div>
             </button>
           </div>
-        </div>
-        <div class="hp-wrap">
+          <div class="hp-wrap">
           <div class="hp-bar-track"><div class="hp-bar-fill" id="hp-fill"></div></div>
           <div class="hp-text mono" id="hp-text">10 / 10</div>
         </div>
         <div id="boss-combat" hidden></div>
         <div id="rift-party" role="group" aria-label="Current Wisp formation"></div>
+        </div>
         <div class="buff-indicator" id="buff-indicator">Boost · passive Wisps + Tap · <strong>Inactive</strong></div>
         <div class="bond-summary" id="bond-summary">No Formation Bond active.</div>
         <div id="rift-bond-effects" aria-label="Formation Bond bonuses"></div>
