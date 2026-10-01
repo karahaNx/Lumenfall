@@ -1566,6 +1566,31 @@
   .boss-regalia .boss-crest{display:none;}
   .trait-regrowth .boss-crest-regrowth,.trait-fractured .boss-crest-fractured,
   .trait-guardian .boss-crest-guardian{display:inline;}
+
+  /* Species palettes retain their own anatomy; Boss trait accents override below. */
+  #tab-battle .stage .enemy-glyph[data-creature="wisp"]{--creature-color:#3f445b;--creature-rim:#8790b0;--creature-eye:#c7dbea;}
+  #tab-battle .stage .enemy-glyph[data-creature="serpent"]{--creature-color:#344f4c;--creature-rim:#788e7a;--creature-eye:#b9e4a3;}
+  #tab-battle .stage .enemy-glyph[data-creature="stalker"]{--creature-color:#544341;--creature-rim:#a48775;--creature-eye:#e6b597;}
+  #tab-battle .stage .enemy-glyph[data-creature="husk"]{--creature-color:#494838;--creature-rim:#958f71;--creature-eye:#d1d9a5;}
+  #tab-battle .stage .enemy-glyph[data-creature="warden"]{--creature-color:#3b4c58;--creature-rim:#889da8;--creature-eye:#bce9e0;}
+  #tab-battle .stage .enemy-glyph[data-creature="shade"]{--creature-color:#343043;--creature-rim:#807a96;--creature-eye:#d3b6d2;}
+  #tab-battle .stage .enemy-glyph[data-creature="leech"]{--creature-color:#65404c;--creature-rim:#9a727c;--creature-eye:#e5bdbe;}
+  #tab-battle .stage .enemy-glyph[data-creature="prowler"]{--creature-color:#3b4753;--creature-rim:#84909a;--creature-eye:#c6d8bf;}
+  #tab-battle .stage .enemy-glyph[data-creature="effigy"]{--creature-color:#48513a;--creature-rim:#8c946f;--creature-eye:#bedda1;}
+  #tab-battle .stage .enemy-glyph[data-creature="wraith"]{--creature-color:#334957;--creature-rim:#7d9b9d;--creature-eye:#b4e5df;}
+  #tab-battle .stage .enemy-glyph[data-creature="arachnid"]{--creature-color:#5a3d3c;--creature-rim:#a37866;--creature-eye:#e7ae7e;}
+  #tab-battle .stage .enemy-glyph[data-creature="scorpion"]{--creature-color:#62513a;--creature-rim:#ac956c;--creature-eye:#e2c391;}
+  #tab-battle .stage .enemy-glyph[data-creature="mantis"]{--creature-color:#3b5443;--creature-rim:#7f9c73;--creature-eye:#c3d5a1;}
+  #tab-battle .stage .enemy-glyph[data-creature="wyvern"]{--creature-color:#4b3845;--creature-rim:#926a80;--creature-eye:#edbaa1;}
+  #tab-battle .stage .enemy-glyph[data-creature="gargoyle"]{--creature-color:#50545a;--creature-rim:#969d9b;--creature-eye:#ccd8b1;}
+  #tab-battle .stage .enemy-glyph[data-creature="behemoth"]{--creature-color:#564c43;--creature-rim:#a29179;--creature-eye:#ddb391;}
+  #tab-battle .stage .enemy-glyph[data-creature="revenant"]{--creature-color:#3d4b59;--creature-rim:#82959f;--creature-eye:#c7e3d2;}
+  #tab-battle .stage .enemy-glyph[data-creature="hydra"]{--creature-color:#30524d;--creature-rim:#6b9982;--creature-eye:#c5d9a1;}
+  #tab-battle .stage .enemy-glyph[data-creature="watcher"]{--creature-color:#514057;--creature-rim:#9782a4;--creature-eye:#d8b6df;}
+  #tab-battle .stage .enemy-glyph[data-creature="carapace"]{--creature-color:#374e51;--creature-rim:#7c9b98;--creature-eye:#d1bb82;}
+  #tab-battle .stage .enemy-glyph[data-creature="basilisk"]{--creature-color:#4a5440;--creature-rim:#939f76;--creature-eye:#dec07e;}
+  #tab-battle .stage .enemy-glyph[data-creature="crawler"]{--creature-color:#604333;--creature-rim:#a7896b;--creature-eye:#e6bd7b;}
+  #tab-battle .stage .enemy-glyph[data-creature="harrier"]{--creature-color:#3d4859;--creature-rim:#8c94ae;--creature-eye:#d5c2a6;}
   #tab-battle .stage.trait-regrowth .enemy-glyph{--creature-color:#285c50;--creature-rim:#99d9a3;--creature-eye:#d8ffc1;}
   #tab-battle .stage.trait-fractured .enemy-glyph{--creature-color:#674297;--creature-rim:#cb9eff;--creature-eye:#f0d4ff;}
   #tab-battle .stage.trait-guardian .enemy-glyph{--creature-color:#806032;--creature-rim:#e7b964;--creature-eye:#fff0b8;}
@@ -2036,89 +2061,302 @@
   <path d="m9 10 8 1 6 6-6 6-6-6-3-1Zm10 12 6 7m-18 0h11" fill="none" stroke="#f4d4a4" stroke-width="1.5"/>
  </symbol>
 
-<linearGradient id="creature-facet" x1="0" x2="1" y1="0" y2=".6"><stop stop-color="#e5f6ff" stop-opacity=".25"/><stop offset=".49" stop-color="#e5f6ff" stop-opacity=".03"/><stop offset=".5" stop-color="#020412" stop-opacity=".5"/><stop offset="1" stop-color="#020412" stop-opacity="0"/></linearGradient>
-<symbol id="creature-wisp" viewBox="0 0 160 160">
- <path d="M80 17 C49 30 31 63 42 93 L27 128 61 119 79 143 99 119 129 126 116 91 C129 64 110 37 80 17Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
- <path d="M80 17 C49 30 31 63 42 93 L27 128 61 119 79 143 99 119 129 126 116 91 C129 64 110 37 80 17Z" fill="url(#creature-facet)"/>
- <path d="M80 31C53 43 48 77 60 94l20 25 22-28C115 65 95 46 80 31Z" fill="#0a1128"/><path d="M49 65 65 50M103 104l-8 18M57 101l6 14" fill="none" stroke="var(--creature-rim)" stroke-width="2"/><path d="m59 67 15 8-12 9m39-17-15 8 12 9" fill="var(--creature-eye)"/><path d="m80 93 6 11-6 13-6-13Z" fill="var(--creature-eye)"/>
- </symbol><symbol id="creature-serpent" viewBox="0 0 160 160">
- <path d="M111 28 139 44 121 70 98 62 C65 73 61 102 91 106 124 111 121 139 82 141 43 142 26 117 37 91 45 70 77 57 91 50Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
- <path d="M111 28 139 44 121 70 98 62 C65 73 61 102 91 106 124 111 121 139 82 141 43 142 26 117 37 91 45 70 77 57 91 50Z" fill="url(#creature-facet)"/>
- <path d="M98 40 112 28l24 16-15 7-7 18-16-7 14-9Z" fill="#0c142c"/><path d="M89 62C59 76 43 109 68 124c21 12 40-2 29-11" fill="none" stroke="var(--creature-rim)" stroke-width="6" opacity=".55"/><path d="m66 79 13 7m-22 6 13 6m-16 10 15 1m-7 13 10-7m8 13 3-10" fill="none" stroke="#10203a" stroke-width="3"/><path d="m112 41 15 4-13 8Z" fill="var(--creature-eye)"/><path d="m123 57-6 12-1-12" fill="#e5f6ff"/>
- </symbol><symbol id="creature-stalker" viewBox="0 0 160 160">
- <path d="M34 25 66 51 93 49 128 22 119 70 138 94 111 94 120 135 88 119 72 137 53 117 30 129 41 89 23 85 42 65Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
- <path d="M34 25 66 51 93 49 128 22 119 70 138 94 111 94 120 135 88 119 72 137 53 117 30 129 41 89 23 85 42 65Z" fill="url(#creature-facet)"/>
- <path d="m34 25 31 34-14 5Zm94-3-17 41-18-7Z" fill="var(--creature-rim)" opacity=".5"/><path d="m65 55 29-2 21 30-21 25-18 11-25-31Z" fill="#111a30"/><path d="m52 72 22 5-17 8m50-13-20 5 17 8" fill="var(--creature-eye)"/><path d="m70 93 10-6 11 6-11 10Zm-4 15 13 6 16-8" fill="var(--creature-rim)"/><path d="m42 93 9 20m64-20-9 20" stroke="var(--creature-rim)" stroke-width="2"/>
- </symbol><symbol id="creature-husk" viewBox="0 0 160 160">
- <path d="M54 28 104 25 120 51 112 88 131 128 101 118 84 141 60 124 27 134 47 88 40 53Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
- <path d="M54 28 104 25 120 51 112 88 131 128 101 118 84 141 60 124 27 134 47 88 40 53Z" fill="url(#creature-facet)"/>
- <path d="m57 36 44-3 12 21-11 36-9 22-28-4-13-23-5-27Z" fill="var(--creature-rim)" opacity=".5"/><path d="m56 58 18 7-6 18-14-8m49-18-18 9 6 15 13-9m-30 26 6-10 7 11Z" fill="#0b1429"/><path d="m61 65 8 3m20 0 9-4" stroke="var(--creature-eye)" stroke-width="3"/><path d="m66 94 3 10m7-9 1 13m9-12-1 12m8-15-2 10M52 106l-11 17m63-19 15 20" stroke="#17203b" stroke-width="3"/>
- </symbol><symbol id="creature-warden" viewBox="0 0 160 160">
- <path d="M80 16 107 39 136 45 125 88 106 118 80 145 53 118 34 89 24 45 55 38Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
- <path d="M80 16 107 39 136 45 125 88 106 118 80 145 53 118 34 89 24 45 55 38Z" fill="url(#creature-facet)"/>
- <path d="m80 21 18 29-18 10-18-10Zm-25 22-5 48-21-39m77-9 25 9-20 39Z" fill="var(--creature-rim)" opacity=".45"/><path d="m56 51 24 9 25-9-6 52-19 25-20-25Z" fill="#102039"/><path d="m52 66 22 6v8l-20-7m54-7-22 6v8l19-7" fill="var(--creature-eye)"/><path d="M80 62v66m-20-27 20 8 19-8m-46 11 27 24 27-24" fill="none" stroke="var(--creature-rim)" stroke-width="2"/>
- </symbol><symbol id="creature-shade" viewBox="0 0 160 160">
- <path d="M78 14 C38 31 25 70 39 96 L18 132 57 116 74 144 96 119 139 132 119 96 C134 60 110 25 78 14Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
- <path d="M78 14 C38 31 25 70 39 96 L18 132 57 116 74 144 96 119 139 132 119 96 C134 60 110 25 78 14Z" fill="url(#creature-facet)"/>
- <path d="M78 27C52 42 43 73 55 95l23 21 29-21c15-28-4-56-29-68Z" fill="#0a1025"/><path d="M79 32C67 55 68 80 52 98l-15 24m63-67c9 33-5 59-20 77m29-36 16 25" fill="none" stroke="var(--creature-rim)" stroke-width="2" opacity=".6"/><path d="m56 65 18 9-13 6m40-15-17 9 13 6" fill="var(--creature-eye)"/><path d="m70 95 9-12 11 12-10 14Z" fill="var(--creature-rim)" opacity=".65"/>
- </symbol><symbol id="creature-leech" viewBox="0 0 160 160">
- <path d="M72 25 C117 12 143 51 125 83 L137 102 114 101 112 125 94 116 78 142 60 120 37 126 40 106 18 94 38 83 C24 58 44 32 72 25Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
- <path d="M72 25 C117 12 143 51 125 83 L137 102 114 101 112 125 94 116 78 142 60 120 37 126 40 106 18 94 38 83 C24 58 44 32 72 25Z" fill="url(#creature-facet)"/>
- <path d="M57 39c31-23 60 0 61 29-14-21-34-33-61-29Z" fill="var(--creature-rim)" opacity=".6"/><ellipse cx="79" cy="86" rx="27" ry="31" fill="#09132b" stroke="var(--creature-rim)" stroke-width="4"/><path d="m57 68 13 8-4-15m13-7 1 17 9-15m13 15-15 7 19 6m-1 16-14-8 7 20m-22 1 4-16-17 11m-13-17 17-4-17-8" fill="var(--creature-eye)"/><ellipse cx="79" cy="86" rx="10" ry="14" fill="#020713"/><path d="m37 98 11 7m66-8 13 4m-41 24-7 12" stroke="var(--creature-rim)" stroke-width="2"/>
- </symbol><symbol id="creature-prowler" viewBox="0 0 160 160">
- <path d="M37 24 71 50 90 48 124 24 114 74 137 111 109 104 115 133 87 115 78 137 60 117 34 130 44 101 23 107 45 72Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
- <path d="M37 24 71 50 90 48 124 24 114 74 137 111 109 104 115 133 87 115 78 137 60 117 34 130 44 101 23 107 45 72Z" fill="url(#creature-facet)"/>
- <path d="m37 24 28 34-14 11Zm87 0-15 44-15-12Z" fill="var(--creature-rim)" opacity=".6"/><path d="m69 53 21-1 24 31-15 16-21 17-28-30Z" fill="#0c1830"/><path d="m50 68 22 6-15 9m52-15-21 6 14 9" fill="var(--creature-eye)"/><path d="m66 91 13-7 14 7-14 10Z" fill="var(--creature-rim)"/><path d="m59 98 8 17 1-14m31-4-9 19-1-15" fill="#e5f6ff"/><path d="m42 104 10 7m58-9-9 8m-28 15 6 7 5-9" fill="none" stroke="var(--creature-rim)" stroke-width="2"/>
- </symbol><symbol id="creature-effigy" viewBox="0 0 160 160">
- <path d="M80 13 97 45 122 30 111 60 141 73 107 85 117 132 87 111 80 145 71 111 42 132 54 85 19 73 49 60 38 30 63 45Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
- <path d="M80 13 97 45 122 30 111 60 141 73 107 85 117 132 87 111 80 145 71 111 42 132 54 85 19 73 49 60 38 30 63 45Z" fill="url(#creature-facet)"/>
- <path d="m80 20 11 29-11 10-12-10-1 35 13 39 12-39-1-35m-46 3 34 7 38-8m-60 45 22-11 25 13" fill="none" stroke="var(--creature-rim)" stroke-width="3"/><path d="m63 53 33-1 4 30-21 28-19-28Z" fill="#111a31"/><path d="m64 66 11 7-12 3m32-10-11 7 12 3" fill="var(--creature-eye)"/><path d="m79 82 6 10-6 8-6-8Z" fill="var(--creature-rim)"/><path d="m47 112 13-14m40 0 12 14M37 72l16 5m55 0 16-5" stroke="#0b1831" stroke-width="3"/>
- </symbol><symbol id="creature-wraith" viewBox="0 0 160 160">
- <path d="M80 15 105 33 116 67 111 89 139 132 98 119 80 145 64 120 23 134 45 90 40 66 53 33Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
- <path d="M80 15 105 33 116 67 111 89 139 132 98 119 80 145 64 120 23 134 45 90 40 66 53 33Z" fill="url(#creature-facet)"/>
- <path d="m80 25 20 15 8 37-28 34-30-35 10-36Z" fill="#091327"/><path d="m80 25-7 35-16 39-8 21m51-80-7 45 12 35m-28-9 3 25" fill="none" stroke="var(--creature-rim)" stroke-width="2" opacity=".65"/><path d="m57 64 17 7-14 8m43-15-17 7 14 8" fill="var(--creature-eye)"/><path d="m70 89 10 6 11-6-11 18Z" fill="var(--creature-rim)" opacity=".7"/><path d="m36 116 17-3m55-1 17 4" stroke="var(--creature-rim)" stroke-width="2"/>
- </symbol><symbol id="wisp-ember" viewBox="0 0 64 64">
- <circle cx="32" cy="32" r="30" fill="currentColor" opacity=".06"/>
- <path d="M30 4c5 17-13 18-9 30-8-2-8-8-8-8-9 16 0 31 17 33 20 2 31-18 21-31-3 6-7 7-7 7C48 22 37 16 30 4Z" fill="currentColor" stroke="#ffd392" stroke-width="1.3"/>
- <path d="M30 16c1 13-13 20-8 30 2 9 17 12 23 0-10 4-4-10-15-13 3 8-9 8-6 0Z" fill="#ff7837"/><path d="M31 32c-10 10-9 20 2 23 11-3 9-13 5-18-1 5-4 7-4 7Z" fill="#ffe7a2"/>
- <path d="m24 35 6 2m7 0 6-2" stroke="#482038" stroke-width="2.5" stroke-linecap="round"/><path d="m14 13 2 4m32-8-2 4M8 43l-2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-</symbol><symbol id="wisp-tide" viewBox="0 0 64 64">
- <circle cx="32" cy="32" r="30" fill="currentColor" opacity=".06"/>
- <path d="M34 5C29 22 12 22 12 40c0 13 10 21 24 19 14-3 21-13 15-24-2 9-10 11-14 6 12-7 11-25-3-36Z" fill="currentColor" stroke="#bbf4ff" stroke-width="1.3"/>
- <path d="M34 14c2 12-13 19-13 29 1 9 14 11 21 4-17 4-18-10-8-16 8-5 5-12 0-17Z" fill="#d1fcff" fill-opacity=".65"/><path d="M15 42c7 13 25 16 35 1-3 13-21 23-32 9Z" fill="#3367b5"/>
- <path d="M22 36q3-3 6 0m7 0q3-3 6 0" fill="none" stroke="#102e55" stroke-width="2.5" stroke-linecap="round"/><circle cx="48" cy="13" r="3" fill="#d5ffff" fill-opacity=".8"/><circle cx="10" cy="26" r="2" fill="currentColor"/>
-</symbol><symbol id="wisp-stone" viewBox="0 0 64 64">
- <circle cx="32" cy="32" r="30" fill="currentColor" opacity=".06"/>
- <path d="m17 14 18-7 16 12 7 21-10 13-17 7-19-12-6-17Z" fill="currentColor" stroke="#e1ead4" stroke-width="1.3"/>
- <path d="m17 14 12 15-17 19-6-17Zm18-7-6 22 22-10Z" fill="#d7dec4" fill-opacity=".65"/><path d="m29 29 19 24-17 7-19-12Z" fill="#33483e"/><path d="m29 29 22-10 7 21-10 13Z" fill="#526154"/>
- <path d="m17 29 10 4m10-1 10-5" stroke="#e3ffd5" stroke-width="3" stroke-linecap="round"/><path d="m24 43 8 4 9-6" fill="none" stroke="#becd9c" stroke-width="2"/><path d="m35 10-3 11 5 4m-23 20 8-8" fill="none" stroke="#7ddab5" stroke-width="1.5"/>
-</symbol><symbol id="wisp-gale" viewBox="0 0 64 64">
- <circle cx="32" cy="32" r="30" fill="currentColor" opacity=".06"/>
- <path d="M30 22 17 10l2 17L4 22l13 20 13 10 19-13L60 18 42 25l3-16Z" fill="currentColor" stroke="#dafff2" stroke-width="1.3" stroke-linejoin="round"/>
- <path d="m17 10 13 12 12 3-5 16-9-4-9-10Z" fill="#e7fff2" fill-opacity=".6"/><path d="m4 22 18 10 6 5-11 5Zm38 3 18-7-17 18-6 5Z" fill="#488f90"/>
- <path d="m28 37 9 4-8 18 1-10-9 2Z" fill="#d8ffee"/><path d="m24 29 5 3m8 0 5-3" stroke="#16404b" stroke-width="2.5" stroke-linecap="round"/><path d="M6 49q6 5 12 1m26-3q9 1 12-7" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round"/>
-</symbol><symbol id="wisp-thorn" viewBox="0 0 64 64">
- <circle cx="32" cy="32" r="30" fill="currentColor" opacity=".06"/>
- <path d="M30 23C11 23 7 12 9 6c14 0 24 5 23 16C39 8 50 8 58 12c-3 12-10 17-23 14Z" fill="currentColor" stroke="#d6f6aa" stroke-width="1.2"/>
- <path d="m20 23 22-1 10 13-7 17-15 8-16-11-3-14Z" fill="#719f65" stroke="currentColor" stroke-width="1.3"/><path d="m20 23 10 9 12-10-8 19-4 19-4-19-15-6Z" fill="#c4e298"/>
- <path d="m17 35 10 4m9 0 10-5" stroke="#153c33" stroke-width="3" stroke-linecap="round"/><path d="m25 48 6 3 7-4" fill="none" stroke="#d6ffc1" stroke-width="1.7"/><path d="m15 12 16 12m17-7-15 8" fill="none" stroke="#4b7851" stroke-width="1.5"/>
- <path d="m12 40-6 8 9-1m33-7 9 6-10 3" fill="currentColor"/>
-</symbol><symbol id="wisp-void" viewBox="0 0 64 64">
- <circle cx="32" cy="32" r="30" fill="currentColor" opacity=".06"/>
- <path d="m32 3 7 14 15-7-6 17 13 6-14 6 6 16-17-7-6 13-6-14-16 7 6-16L2 30l14-5-6-16 16 8Z" fill="currentColor" fill-opacity=".6"/>
- <circle cx="32" cy="32" r="20" fill="#7762b5" stroke="#e2c5ff" stroke-width="1.4"/><path d="M20 17c-9 16 5 34 23 29-14 15-37-2-28-18Z" fill="#b39aec"/><circle cx="34" cy="31" r="13" fill="#11172e"/>
- <path d="m28 27 3 3m7 0 3-3" stroke="#f2e5ff" stroke-width="2.5" stroke-linecap="round"/><path d="M5 42c8 5 45-4 53-21" fill="none" stroke="#edc6ff" stroke-width="1.5"/><circle cx="54" cy="24" r="2.2" fill="#fff0fc"/>
-</symbol><symbol id="wisp-aurora" viewBox="0 0 64 64">
- <circle cx="32" cy="32" r="30" fill="currentColor" opacity=".06"/>
- <path d="M29 26C19 7 9 13 4 8c1 17 8 29 23 30L12 52l18-6 4 14 7-19c15-9 17-19 18-28-10 9-14-7-26 12Z" fill="currentColor" stroke="#ffe9ff" stroke-width="1.2"/>
- <path d="M4 8c9 18 11 14 25 18L19 34C9 27 6 18 4 8Zm29 17c11-13 16-2 26-12-8 15-11 9-21 20Z" fill="#c4eeeb"/><path d="m29 26 5-10 6 11-4 17-6 2-6-11Z" fill="#fff1d6"/>
- <path d="m28 29 3 2m4 0 3-2" stroke="#805177" stroke-width="2" stroke-linecap="round"/><ellipse cx="33" cy="11" rx="10" ry="3" fill="none" stroke="#ffeecf" stroke-width="1.5"/><path d="m11 43 2 4 4 2-4 2-2 4-2-4-4-2 4-2Z" fill="#fff1da"/>
-</symbol><symbol id="wisp-titan" viewBox="0 0 64 64">
- <circle cx="32" cy="32" r="30" fill="currentColor" opacity=".06"/>
- <path d="m12 10 13 8 7-14 8 14 13-8-3 23 7 10-12 11-13 7-15-8-11-12 8-10Z" fill="currentColor" stroke="#fff0bd" stroke-width="1.3" stroke-linejoin="round"/>
- <path d="m12 10 13 8 7-14v22l-17 5Zm20 16 18 7 7 10-12 11-13 7Z" fill="#956f52"/><path d="m17 29 15-3 14 5-3 17-11 9-12-9Z" fill="#3c3e53"/><path d="m17 29 15-3v31l-12-9Z" fill="#665865"/>
- <path d="m21 34 8 3m7 0 8-3" stroke="#fff4c7" stroke-width="2.8" stroke-linecap="round"/><path d="m26 45 6 6 7-6" fill="none" stroke="#dfb87d" stroke-width="2"/><path d="m32 12 4 8-4 5-4-5Z" fill="#ffedb4"/>
-</symbol></defs></svg>
+<linearGradient id="beast-hide" x1="0" y1="0" x2=".85" y2="1"><stop stop-color="#e4e3c7" stop-opacity=".26"/><stop offset=".38" stop-color="#d2d2c3" stop-opacity="0"/><stop offset="1" stop-color="#040a14" stop-opacity=".6"/></linearGradient>
+<symbol id="creature-wisp" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M79 9 103 43 113 65 146 83 121 88 132 119 100 107 90 148 73 124 48 149 51 113 17 125 34 88 10 77 45 57 50 25 66 43Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="M79 9 103 43 113 65 146 83 121 88 132 119 100 107 90 148 73 124 48 149 51 113 17 125 34 88 10 77 45 57 50 25 66 43Z" fill="url(#beast-hide)"/>
+ <path d="M79 30 93 57 103 75 85 105 66 96 51 75 63 55Z" fill="#0a111d" />
+ <path d="m55 66 18 9-11 7m38-16-18 10 14 4" fill="var(--creature-eye)" />
+ <path d="m67 89 8 2 4 12 5-13 9-2-13 27Z" fill="#d2c8ad" />
+ <path d="m45 66-12 13 18-4m56 21 15 11M77 119l-10 15" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+ <path d="m24 25 8 19 8-26-7 10m83 98 6 23 9-16" fill="var(--creature-color)" />
+</g></symbol>
+<symbol id="creature-serpent" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M144 28 117 16 103 30 105 48C75 47 38 58 21 83 2 114 22 144 58 145c32 1 54-23 39-45-10-14-29-9-30 1 18-5 23 17 3 24-27 8-46-14-28-35 12-14 47-23 71-25l18 6 21-26-15-1Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="M144 28 117 16 103 30 105 48C75 47 38 58 21 83 2 114 22 144 58 145c32 1 54-23 39-45-10-14-29-9-30 1 18-5 23 17 3 24-27 8-46-14-28-35 12-14 47-23 71-25l18 6 21-26-15-1Z" fill="url(#beast-hide)"/>
+ <path d="M28 90c-16 33 10 50 36 39-23 3-34-16-24-29l16-14Z" fill="#26333b" />
+ <path d="m109 34 9-13 25 8-13 14-17 8-8-5Z" fill="#0a111d" />
+ <path d="m119 29 16 1-15 10Z" fill="var(--creature-eye)" />
+ <path d="m120 52 4 15 7-17 3 10 5-19" fill="#d2c8ad" />
+ <path d="M36 81l8 9m2-18 9 10m6-16 7 11m9-14 5 10M19 103l14 3m-11 14 16-2m-3 19 7-12m12 18 1-12m21 6-4-11" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+</g></symbol>
+<symbol id="creature-stalker" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="m62 25 21-13 17 19-4 25 17 12 12 24 23 28-4 25-12-27-22-15-12-19-4 26 15 25-4 22-15-6 2-17-14-13-17 25-22 8-7-7 22-16 7-24-10-29-18 11-5 21-9 15-6-7 3-28 26-33 14-3Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="m62 25 21-13 17 19-4 25 17 12 12 24 23 28-4 25-12-27-22-15-12-19-4 26 15 25-4 22-15-6 2-17-14-13-17 25-22 8-7-7 22-16 7-24-10-29-18 11-5 21-9 15-6-7 3-28 26-33 14-3Z" fill="url(#beast-hide)"/>
+ <path d="m63 32 20-9 10 13-7 23-17-3Z" fill="#0a111d" />
+ <path d="m64 36 12 7-9 3m22-12-10 9 9-1" fill="var(--creature-eye)" />
+ <path d="m69 50 6 13 5-12 5 5 2-11" fill="#d2c8ad" />
+ <path d="m65 64 14 9 13-9-10 39-14-12Z" fill="#24313a" />
+ <path d="m42 79 14-9m46 16 7 11m-50-29 4 27m12 1 7 10" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+ <path d="m8 119 8-2-3 13 8-9-1 11 6-9m112 11 6-10 3 12-6-1 2 11" fill="#d2c8ad" />
+</g></symbol>
+<symbol id="creature-husk" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="m62 17 27-7 17 20-7 28 11 17 22 6 1 25-14 16-10-7 10-12-3-8-13-6-10 17 9 22-2 26-17-2 3-27-10-16-14 16-2 23-21 3-4-10 13-4 1-24 14-21-6-23-14 18-15-3-3-30 11-13 6 8-6 13 2 10 10-7 12-4Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="m62 17 27-7 17 20-7 28 11 17 22 6 1 25-14 16-10-7 10-12-3-8-13-6-10 17 9 22-2 26-17-2 3-27-10-16-14 16-2 23-21 3-4-10 13-4 1-24 14-21-6-23-14 18-15-3-3-30 11-13 6 8-6 13 2 10 10-7 12-4Z" fill="url(#beast-hide)"/>
+ <path d="m67 22 18-5 14 14-7 23-19 6-12-24Z" fill="#9b9a85" stroke="#0a111d" stroke-width="1.5" />
+ <path d="m64 33 12 6-8 9m28-17-14 9 9 5m-14 0 4-4 3 8Z" fill="#0a111d" />
+ <path d="m67 37 6 3m13 0 7-4" fill="var(--creature-eye)" />
+ <path d="m72 51 3 9 4-8 4 7 4-10" fill="#d2c8ad" />
+ <path d="M65 70l18 6 15-7m-32 13 15 5 13-7m-26 16 10 3 12-6M51 117l9 6m30 0 10 5" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+ <path d="m139 60-7 75 4 7 6-71 12-8-1-16-13-9-8 18Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" />
+</g></symbol>
+<symbol id="creature-warden" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="m61 19 19-10 23 15-4 22 26 3 17 29-5 57-30 8-16-13-4 18-22 1-4-24-19 16-29-11-1-54 21-23 30-6Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="m61 19 19-10 23 15-4 22 26 3 17 29-5 57-30 8-16-13-4 18-22 1-4-24-19 16-29-11-1-54 21-23 30-6Z" fill="url(#beast-hide)"/>
+ <path d="m64 27 17-8 14 10-3 28-14 12-15-15Z" fill="#182735" stroke="var(--creature-rim)" stroke-width="1.6" />
+ <path d="m62 37 14 6-11 4m29-11-14 7 12 4" fill="var(--creature-eye)" />
+ <path d="m53 65 23 10 32-9-11 40-18 14-26-13Z" fill="#2f3e46" />
+ <path d="m79 73v46m-22-35 21 6 23-7m-43 12 20 7 18-7" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+ <path d="m16 75 29-13 17 18-5 43-18 15-20-10Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="m16 75 29-13 17 18-5 43-18 15-20-10Z" fill="url(#beast-hide)"/>
+ <path d="m24 84 15-9 14 10-6 32-10 10-11-11Z" fill="#0a111d" />
+ <path d="m36 87 5 12-5 18-5-18Z" fill="var(--creature-eye)" />
+ <path d="m128 68-3 46 10 12 12-9-9-17-3-33Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" />
+</g></symbol>
+<symbol id="creature-shade" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M80 29 94 47 113 24 147 11 143 44 159 51 145 74 134 105 112 85 96 91 88 137 74 151 66 124 68 87 49 95 29 113 22 80 4 64 20 43 14 9 52 28 67 47Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="M80 29 94 47 113 24 147 11 143 44 159 51 145 74 134 105 112 85 96 91 88 137 74 151 66 124 68 87 49 95 29 113 22 80 4 64 20 43 14 9 52 28 67 47Z" fill="url(#beast-hide)"/>
+ <path d="m18 18 40 28 9 36-18-10-16 27-8-28-14-8 16-23Zm126 2-34 26-15 37 17-9 18 20 4-21 17-19-15-13Z" fill="#283244" />
+ <path d="m73 47 17-6 7 23-12 32-15-9-6-22Z" fill="#0a111d" />
+ <path d="m69 58 10 5-8 3m24-10-11 7 10 2" fill="var(--creature-eye)" />
+ <path d="m37 35 16 15 6 21m63-34-15 19-5 15m-23 32-4 28" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+ <path d="m73 76 7 5 11-5-9 14Z" fill="#d2c8ad" />
+</g></symbol>
+<symbol id="creature-leech" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M25 37C69 12 112 36 107 66c-5 26-26 27-28 44 1 16 30 15 45 0l-6 20c-25 20-62 19-72-1-10-18 0-40 23-50 15-6 12-19 0-20l-21 4-25-10Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="M25 37C69 12 112 36 107 66c-5 26-26 27-28 44 1 16 30 15 45 0l-6 20c-25 20-62 19-72-1-10-18 0-40 23-50 15-6 12-19 0-20l-21 4-25-10Z" fill="url(#beast-hide)"/>
+ <path d="M80 72c-8 16-35 27-26 47 6 17 39 21 53 10-37 2-53-7-35-29l17-19Z" fill="#374044" />
+ <path d="M25 33 42 32 61 47 59 68 39 79 19 66 13 48Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="M25 33 42 32 61 47 59 68 39 79 19 66 13 48Z" fill="url(#beast-hide)"/>
+ <path d="M29 42 43 43 51 55 42 67 28 63 23 52Z" fill="#0a111d" />
+ <path d="m24 45 9 5-2-12 7 12 9-10-4 15 11 2-12 3 2 12-8-9-9 6 3-12-8-6Z" fill="#d2c8ad" />
+ <path d="m90 46-11 9m20 2-12 5m9 16-10-8m-10 21-8-6m-8 17-10-3m11 18-10 3m22 6-4 10m17-8 1 10m15-13 6 7" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+ <path d="m61 22 7-13 5 22m14-1 12-11-2 23" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" />
+</g></symbol>
+<symbol id="creature-prowler" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M19 55 12 25 34 48 61 55 104 60 122 74 143 62 150 37 150 77 130 94 127 127 111 132 98 129 110 119 106 102 74 93 60 109 60 130 37 132 32 125 44 117 38 95 20 87 5 74 15 65Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="M19 55 12 25 34 48 61 55 104 60 122 74 143 62 150 37 150 77 130 94 127 127 111 132 98 129 110 119 106 102 74 93 60 109 60 130 37 132 32 125 44 117 38 95 20 87 5 74 15 65Z" fill="url(#beast-hide)"/>
+ <path d="m31 52 28 8 11 28-21 18-8-17-16-8-18-8Z" fill="#293640" />
+ <path d="m11 66 18-7 14 13-20 14-13-4Z" fill="#0a111d" />
+ <path d="m21 61 14 7-12 3" fill="var(--creature-eye)" />
+ <path d="m12 78 5 12 6-7 5 8 3-13" fill="#d2c8ad" />
+ <path d="m61 60 40 7 12 16-40-5-17 11Z" fill="#46525b" />
+ <path d="m74 69 4 9m12-7 4 9m14-4 5 7M46 103l6 16m63-18 2 15" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+ <path d="m37 126-2 7 9-2 5 3 6-2m51-5-4 7 9-2 5 2 9-3" fill="#d2c8ad" />
+ <path d="m44 56 7-17 9 24 9-17 9 18" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" />
+</g></symbol>
+<symbol id="creature-effigy" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M65 35 49 20 28 20 18 5 22 26 42 30 45 48 31 65 12 49 4 52 27 77 48 78 41 103 21 120 9 120 11 128 34 128 50 113 45 145 63 135 74 109 81 120 88 144 105 150 99 131 93 109 113 100 137 115 153 109 135 103 121 84 112 74 123 53 144 49 151 32 138 39 118 40 106 58 93 47 112 25 107 11 103 30 83 43 78 23 66 11 69 34Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="M65 35 49 20 28 20 18 5 22 26 42 30 45 48 31 65 12 49 4 52 27 77 48 78 41 103 21 120 9 120 11 128 34 128 50 113 45 145 63 135 74 109 81 120 88 144 105 150 99 131 93 109 113 100 137 115 153 109 135 103 121 84 112 74 123 53 144 49 151 32 138 39 118 40 106 58 93 47 112 25 107 11 103 30 83 43 78 23 66 11 69 34Z" fill="url(#beast-hide)"/>
+ <path d="m57 55 21-8 23 15-9 27-18 15-20-22Z" fill="#6a6752" stroke="#0a111d" stroke-width="1.5" />
+ <path d="m59 65 12 5-7 9m32-11-13 4 8 10M72 87l6-9 5 11Z" fill="#0a111d" />
+ <path d="m61 68 9 4m14 0 10-2" fill="var(--creature-eye)" />
+ <path d="m38 30 13 26m65-7-8 24m-56 7 5 20-13 21m31-18-7 26m20-30 9 26M21 57l13 15" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+ <path d="m68 94 4 9 5-8 3 8 5-11" fill="#d2c8ad" />
+</g></symbol>
+<symbol id="creature-wraith" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M65 19 91 9 107 35 108 61 128 82 149 78 149 91 128 103 108 89 99 123 125 146 98 140 82 155 71 130 49 150 54 119 34 133 47 97 36 94 17 105 4 93 8 78 23 84 42 68 49 39Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="M65 19 91 9 107 35 108 61 128 82 149 78 149 91 128 103 108 89 99 123 125 146 98 140 82 155 71 130 49 150 54 119 34 133 47 97 36 94 17 105 4 93 8 78 23 84 42 68 49 39Z" fill="url(#beast-hide)"/>
+ <path d="M78 26 95 33 98 54 82 77 62 63 61 44Z" fill="#0a111d" />
+ <path d="m65 45 13 7-11 4m30-14-13 10 11 1" fill="var(--creature-eye)" />
+ <path d="m75 65 7 4 9-8-7 16Z" fill="#d2c8ad" />
+ <path d="m63 76 13 15-6 34 13-17 13 24 4-35-7-22Z" fill="#303341" />
+ <path d="m53 45-1 26-15 17m65-25 9 18 13 9m-66 9-8 23m25-26-1 30m14-33 5 26" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+ <path d="m7 80 8 4-3 10 9-1 2 8-11-1-8-8m131-12 4 7 8-8 4 5-8 12-11-2" fill="#d2c8ad" />
+</g></symbol>
+<symbol id="creature-arachnid" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M53 57 55 30 80 16 111 29 121 51 105 82 91 100 67 97 49 78Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="M53 57 55 30 80 16 111 29 121 51 105 82 91 100 67 97 49 78Z" fill="url(#beast-hide)"/>
+ <path d="m55 40 22-13 27 10 6 21-21 15-21-7Z" fill="#283944" />
+ <path d="m57 66-21-24-9-26-6 7 7 29 24 26m47-10 20-26 15-27 5 7-12 29-23 27M52 78 23 65 6 44l-4 8 16 26 31 11m52-10 30-17 25-27 2 9-19 31-34 15M53 88l-32 7-17 30 6 1 21-22 30-7m37-9 34 3 24 30-5 6-29-25-31-5M61 97l-20 22-9 31 8 1 12-24 17-24m18 0 18 26 9 24 8-1-9-31-20-24" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" />
+ <path d="m60 76 19-13 22 14-3 24-18 18-21-15Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="m60 76 19-13 22 14-3 24-18 18-21-15Z" fill="url(#beast-hide)"/>
+ <path d="m63 83 8 5-9 4m35-11-8 6 8 4M73 77l5 6 4-6 4 5-6 7-8-5Z" fill="var(--creature-eye)" />
+ <path d="m61 101 7 23 11-14-8 3-2-14m24 1-7 14-2-6 6 17 12-21Z" fill="#d2c8ad" />
+</g></symbol>
+<symbol id="creature-scorpion" viewBox="0 0 160 160"><g transform="translate(3 0) scale(.96)" stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M43 85 72 72 97 82 102 105 87 125 58 124 43 107Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="M43 85 72 72 97 82 102 105 87 125 58 124 43 107Z" fill="url(#beast-hide)"/>
+ <path d="M94 89c12-15 20-33 16-52-4-21-19-26-31-20l-11 15 16 5-3-12c19-1 17 33 6 46Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" />
+ <path d="m65 31 6-19 15 6-8 10 2 18Z" fill="#d2c8ad" />
+ <path d="m49 89-17-16-2-17-9-20-14 6 1 24 15 19 16 11m48-1 32-11 11-18 21-9 6 14-14 19-26 9-13 8" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" />
+ <path d="m7 41 5-11 13 9-7 2 5 10-15 7m130 12 17-15-1 17-11 13 1-12-10 7" fill="#d2c8ad" />
+ <path d="m47 99-23 12-12 22 7 4 14-19 20-11m-3 7-15 21-1 15 8 1 3-16 13-16m33-17 26 6 17 21-5 5-22-18-23-3m-3 11 23 18 4 18-8 3-6-16-21-14" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" />
+ <path d="m62 83 7 37m14-38-3 38m18-55 10 5m-6-22 12 5m-10-23 10 4" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+ <path d="m49 89 13 4-10 6m41-9-14 5 10 4" fill="var(--creature-eye)" />
+</g></symbol>
+<symbol id="creature-mantis" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="m71 20 26-6 17 11-13 18-14 9 9 25-1 33-12 36-16-4-7-33 6-30 8-18-8-12-20-17Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="m71 20 26-6 17 11-13 18-14 9 9 25-1 33-12 36-16-4-7-33 6-30 8-18-8-12-20-17Z" fill="url(#beast-hide)"/>
+ <path d="m61 23 18 11 13 1 19-13-14 18-22 4Z" fill="#283443" />
+ <path d="m55 25 18 10-15 3m49-14-13 12 13-1" fill="var(--creature-eye)" />
+ <path d="m74 54-30 13-27 42L3 83l7-38 16-24-6 31 3 26 21-29 20-7m24 19 31 11 24 29 6-26-10-35 18 25 1 47-13 14-32-35-20-5" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" />
+ <path d="m18 46-5 15 10-2-5 12 8 2m124-10-7 5 7 5-5 6 6 6" fill="#d2c8ad" />
+ <path d="m67 102-31 16-12 32 10 1 10-27 27-8m17-6 25 6 12 35 9-2-13-43-31-10" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" />
+ <path d="M75 71l11 5m-16 9 17 5m-19 8 18 5m-16 9 15 5" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+</g></symbol>
+<symbol id="creature-wyvern" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M79 57 61 47 40 17 6 4 18 37 3 70 36 63 46 95 64 80 65 109 83 129 112 132 148 113 128 117 107 111 91 94 99 75 112 90 126 66 157 76 143 42 152 10 120 24 101 48 94 36 100 16 83 25 74 42Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="M79 57 61 47 40 17 6 4 18 37 3 70 36 63 46 95 64 80 65 109 83 129 112 132 148 113 128 117 107 111 91 94 99 75 112 90 126 66 157 76 143 42 152 10 120 24 101 48 94 36 100 16 83 25 74 42Z" fill="url(#beast-hide)"/>
+ <path d="m40 25 21 33-14 26-11-29-24 3 13-23-10-20Zm81 8-18 29 10 16 12-22 24 8-13-24 9-19Z" fill="#384c5b" />
+ <path d="m80 30 14-7-4 20 13 12-17 11-19-12 8-7Z" fill="#0a111d" stroke="var(--creature-rim)" stroke-width="1.4" />
+ <path d="m85 47 9 5-12 3" fill="var(--creature-eye)" />
+ <path d="m75 60 5 10 4-6 4 6 4-8" fill="#d2c8ad" />
+ <path d="m33 22 10 32m85-27-4 27M72 80l11 18 16 10m5 7 16 9" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+ <path d="m66 93-18 29-9 8 16 2 17-27m21 4 4 23-10 14 18-7 2-23" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" />
+ <path d="m43 128-8 9 12-5 8 5-1-7m40 14-9 7 13-3 7 3-2-11" fill="#d2c8ad" />
+</g></symbol>
+<symbol id="creature-gargoyle" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M53 59 35 25 5 17 17 58 4 86 33 78 40 107 26 127 27 145 49 144 59 129 76 137 101 132 111 146 137 143 130 121 119 104 126 80 155 86 141 56 153 16 127 30 108 60 95 49 101 17 82 29 64 13 63 49Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="M53 59 35 25 5 17 17 58 4 86 33 78 40 107 26 127 27 145 49 144 59 129 76 137 101 132 111 146 137 143 130 121 119 104 126 80 155 86 141 56 153 16 127 30 108 60 95 49 101 17 82 29 64 13 63 49Z" fill="url(#beast-hide)"/>
+ <path d="m17 26 18 12 14 29-13 26-5-25-17 4 12-18m113-16-19 31 7 22 7-24 17 7-13-18 14-32Z" fill="#343f49" />
+ <path d="m61 50 23-10 22 16-9 31-19 9-24-20Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="m61 50 23-10 22 16-9 31-19 9-24-20Z" fill="url(#beast-hide)"/>
+ <path d="m57 61 20 8-14 5m36-14-13 10 13 1" fill="var(--creature-eye)" />
+ <path d="m65 79 6 13 7-9 6 9 7-16-13 7Z" fill="#d2c8ad" />
+ <path d="m57 94 18 12 25-14m-43 16 17 6 26-9m-59 9 9 20m56-20 9 19" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+ <path d="m59 126 19 8 20-9-8 18-18 9Z" fill="var(--creature-color)" />
+</g></symbol>
+<symbol id="creature-behemoth" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M23 59 41 40 67 28 104 30 130 48 143 69 139 110 127 111 125 139 105 140 99 115 71 118 61 139 40 139 37 117 16 112 5 97 10 76Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="M23 59 41 40 67 28 104 30 130 48 143 69 139 110 127 111 125 139 105 140 99 115 71 118 61 139 40 139 37 117 16 112 5 97 10 76Z" fill="url(#beast-hide)"/>
+ <path d="m42 45 33-11 28 5 25 21-16 36-31 8-32-15Z" fill="#38454b" />
+ <path d="m11 69 24-11 27 12 5 25-20 26-29-11-12-15Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="m11 69 24-11 27 12 5 25-20 26-29-11-12-15Z" fill="url(#beast-hide)"/>
+ <path d="m14 68-5-35 15 22 12 9m12 9 17-29-3 31-7 10m-45 10 11 11-3-22m38 20-2-20-7 25" fill="#d2c8ad" />
+ <path d="m18 77 17 5-11 5m30-8-12 3 8 5" fill="var(--creature-eye)" />
+ <path d="m62 34 12-22 9 19 14-16 6 18 15-13 3 25" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" />
+ <path d="m45 104 5 23m20-74 8 30m12-38 8 38m14-27 8 31M114 117v15" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+ <path d="m40 135 3 7 5-6 6 5 7-4m45-1 1 6 6-5 6 5 7-5" fill="#d2c8ad" />
+</g></symbol>
+<symbol id="creature-revenant" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="m65 18 21-8 16 11-4 27 16 11 9 28-8 20-15-2-7-12-3 20 8 27-2 15-23-2 4-12-11-15-7 17-20 10-13-5 19-18 5-27-9-27-15 7-8 20-11-4 5-30 20-19 18-1Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="m65 18 21-8 16 11-4 27 16 11 9 28-8 20-15-2-7-12-3 20 8 27-2 15-23-2 4-12-11-15-7 17-20 10-13-5 19-18 5-27-9-27-15 7-8 20-11-4 5-30 20-19 18-1Z" fill="url(#beast-hide)"/>
+ <path d="m69 22 16-5 10 9-4 26-11 6-14-11Z" fill="#d2c8ad" stroke="#0a111d" stroke-width="1.5" />
+ <path d="m67 32 11 5-6 9m19-15-11 8 11 4m-12 0 4 6-8 1Z" fill="#0a111d" />
+ <path d="m70 36 6 3m7 0 6-3" fill="var(--creature-eye)" />
+ <path d="m71 50 4 10 4-9 4 8 5-12" fill="#d2c8ad" />
+ <path d="m51 59 28 13 25-11-7 26-21 19-20-16Z" fill="#354654" />
+ <path d="m59 71 18 9 17-7m-14 11-2 15m-28 31 13-5m21-8 12 11" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+ <path d="m136 9-7 143 5 0 11-139 9 28-3 17-15 6-3-10 9-14-8-13-15-8Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" />
+ <path d="m54 107-9 22 15-13 10 15 5-21Z" fill="#412f3c" />
+</g></symbol>
+<symbol id="creature-hydra" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M40 114 42 95 30 80 27 48 19 30 28 13 49 11 60 30 53 43 45 41 45 68 57 76 62 55 66 38 60 22 72 7 92 9 104 25 92 39 90 61 94 77 108 59 110 43 100 32 103 17 125 14 143 26 144 39 124 42 124 66 114 89 121 112 111 136 92 143 77 132 59 141 34 128 12 120 7 102 24 117Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="M40 114 42 95 30 80 27 48 19 30 28 13 49 11 60 30 53 43 45 41 45 68 57 76 62 55 66 38 60 22 72 7 92 9 104 25 92 39 90 61 94 77 108 59 110 43 100 32 103 17 125 14 143 26 144 39 124 42 124 66 114 89 121 112 111 136 92 143 77 132 59 141 34 128 12 120 7 102 24 117Z" fill="url(#beast-hide)"/>
+ <path d="m47 41-3 20 16 22 12 37-20-30-16-14-3-35m48-3-6 29 10 54 1-45 4-33m33-3-5 21-18 31 14-11 13-29Z" fill="#324951" />
+ <path d="m27 23 14 5-12 4m39-11 17 6-16 4m32-7 15 4-12 5" fill="var(--creature-eye)" />
+ <path d="m34 39 3 11 6-11 7 6-3-12m27 6 5 13 6-11 5 6-1-13m27 7 3 10 6-10 8 4-4-12" fill="#d2c8ad" />
+ <path d="m57 96 9 10m14-11 3 15m17-22-7 21m-41 13 11 7m28-6 11 4" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+ <path d="m38 114-15 16 1 14 16-7 15-15m47-2 12 26 17-1-1-12-20-22" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" />
+</g></symbol>
+<symbol id="creature-watcher" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M49 41 36 28 16 29 6 46l12-8 18-1 12 19m64-9 13-21 26-2 6 16-16-6-12 11-9 18M47 87 19 91 6 108l3 23 4-18 17-11 21 1m62-12 23 7 14 14 5 22 5-32-20-22-24-4M55 111l-16 16 2 26 8-17 18-14m29-13 7 31 15 15-5-33-8-14" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" />
+ <path d="M55 30 90 23 118 46 131 76 112 108 80 125 43 108 29 76 35 49Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="M55 30 90 23 118 46 131 76 112 108 80 125 43 108 29 76 35 49Z" fill="url(#beast-hide)"/>
+ <path d="M41 67Q81 28 121 70 86 120 41 67Z" fill="#0a111d" />
+ <path d="M48 68Q81 42 113 70 86 107 48 68Z" fill="#b0c2a0" />
+ <path d="M66 64 79 55 93 66 91 86 77 94 63 83Z" fill="var(--creature-eye)" />
+ <path d="m77 55 7 20-6 20-6-21Z" fill="#0a111d" />
+ <path d="m47 90 9 2 3 11 7-9 6 16 9-13 8 9 5-17 14 1 8-16" fill="#d2c8ad" />
+ <path d="m46 45 9-6m11-5 10-2m22 8 10 9M45 105l8 6m46-4 9-7" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+</g></symbol>
+<symbol id="creature-carapace" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="m48 68-24-19L7 19l1 20 15 24 18 14m64-10 32-22 14-28-1 22-12 25-25 15M43 91 18 99 2 117l7 4 20-13 17-4m66-12 28 4 16 18-3 8-22-16-20-2M52 114l-14 17-7 20 9 1 13-19 15-9m29-8 17 17 8 18 10-1-9-27-16-16" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" />
+ <path d="M47 45 63 25 86 17 108 32 122 63 119 99 101 128 76 144 53 127 38 96 36 64Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="M47 45 63 25 86 17 108 32 122 63 119 99 101 128 76 144 53 127 38 96 36 64Z" fill="url(#beast-hide)"/>
+ <path d="M81 27 109 43 115 67 111 101 83 133Z" fill="#34424b" />
+ <path d="M75 27 48 51 43 84 55 116 73 131Z" fill="#596463" />
+ <path d="M79 29v110m-28-79 19 8m21-4 19-10m-61 28 20 5m20-1 20-6m-52 22 13 4m17 0 15-10" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+ <path d="m61 34 7-19 21-2 12 23-16 19-22-7Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="m61 34 7-19 21-2 12 23-16 19-22-7Z" fill="url(#beast-hide)"/>
+ <path d="m62 29 13 5-10 4m31-10-14 7 12 2" fill="var(--creature-eye)" />
+ <path d="m64 17-4-13 15 4 1 12m17-3 3-14-14 8-1 10" fill="#d2c8ad" />
+</g></symbol>
+<symbol id="creature-basilisk" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M5 79 25 64 45 54 66 61 100 58 121 71 143 70 154 47 153 82 128 99 93 103 63 93 39 92 26 101 11 94Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="M5 79 25 64 45 54 66 61 100 58 121 71 143 70 154 47 153 82 128 99 93 103 63 93 39 92 26 101 11 94Z" fill="url(#beast-hide)"/>
+ <path d="m37 60 30 9 27-5 23 13-14 16-38-9-24 2-21-7Z" fill="#3c5054" />
+ <path d="m45 87-16 29-15 7 14 5 20-13 11-22m15 3-8 22 3 15 15 1-8-14 12-21m19-1 12 12-3 20 13 1 1-24-13-17" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" />
+ <path d="m22 68-5-30 16 22 7-21 7 20m13 2 6-20 9 23 8-17 9 18 9-14 11 19" fill="#d2c8ad" />
+ <path d="m21 73 16 2-14 7" fill="var(--creature-eye)" />
+ <path d="m8 86 27 0 17-5-17 14-20-1Z" fill="#0a111d" />
+ <path d="m13 87 5 8 5-8 4 5 4-6 5 4 4-8" fill="#d2c8ad" />
+ <path d="m60 70 5 12m14-14 5 17m18-15 4 12" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+</g></symbol>
+<symbol id="creature-crawler" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M135 32 138 12l8-7-3 27M121 37l-9-17-14-6 4 9 15 22M91 47 76 31 60 26l4 9 18 20M65 68 47 51 26 49l1 8 22 10M46 89l-22-10-19 7 3 7 21-4M38 110l-23 3-11 21 8 2 12-16M57 130l-15 18 6 6 14-16m31-17 12 17 5 17 8-3-6-19-13-20m-1-34 22 11 17 23 6-3-11-24-27-16m5-19 22 5 17 17 6-7-20-18-20-5" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" />
+ <path d="M131 25 150 33 149 52 126 66 106 69 93 86 102 103 94 127 67 143 41 134 30 113 37 90 57 74 67 52 91 37 111 38Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="M131 25 150 33 149 52 126 66 106 69 93 86 102 103 94 127 67 143 41 134 30 113 37 90 57 74 67 52 91 37 111 38Z" fill="url(#beast-hide)"/>
+ <path d="m49 122 18 7 15-9 1-15-5-23 18-25 24-3 13-11-21 0-14 2-18 14-15 28-20 16-1 14Z" fill="#2c414b" />
+ <path d="m122 33 13 17m-31-8 13 16m-31-11 17 16m-29-6 18 14M62 77l17 12m-35 4 25 8m-33 7 25 5m-21 14 22-4m7 15 4-14m20-1-15-6" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+ <path d="m136 35 8 8-11 0" fill="var(--creature-eye)" />
+ <path d="m143 49 11 7-11 4 9 4-21 6 8-12" fill="#d2c8ad" />
+</g></symbol>
+<symbol id="creature-harrier" viewBox="0 0 160 160"><g stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M76 47 57 38 36 17 7 9 18 32 3 28 18 58 5 56 24 81 52 95 60 117 42 136 58 135 72 123 70 152 84 140 92 117 112 91 145 61 131 63 155 27 136 31 144 7 111 24 94 44 91 24 79 14 69 25Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="M76 47 57 38 36 17 7 9 18 32 3 28 18 58 5 56 24 81 52 95 60 117 42 136 58 135 72 123 70 152 84 140 92 117 112 91 145 61 131 63 155 27 136 31 144 7 111 24 94 44 91 24 79 14 69 25Z" fill="url(#beast-hide)"/>
+ <path d="m17 18 28 17 15 27-28-18 14 30-27-24m116-32-19 18-12 31 22-23-10 29 26-29Z" fill="#465662" />
+ <path d="m73 36 17-7 17 15-11 13-17 6-10-12Z" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5" /><path d="m73 36 17-7 17 15-11 13-17 6-10-12Z" fill="url(#beast-hide)"/>
+ <path d="m77 39 13 7-13 2" fill="var(--creature-eye)" />
+ <path d="m92 46 23 11-17 0-8 14 4-16-12-5Z" fill="#d2c8ad" />
+ <path d="m60 72 15 14 16-12-13 35Z" fill="#1b2b36" />
+ <path d="m34 53 20 26m72-32-27 34m-31 6 7 9m15-17-8 24" fill="none" stroke="var(--creature-rim)" stroke-width="1.7" />
+ <path d="m60 115-5 17 10-5 3 8 3-10m19-9 7 11-2 11 9-5-2-14" fill="#d2c8ad" />
+</g></symbol>
+<symbol id="wisp-ember" viewBox="0 0 64 64"><g transform="scale(.4)" stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M20 72 8 44 35 52 38 24 58 43 73 8 91 38 121 17 113 53 143 37 133 73 151 99 128 135 98 128 78 153 58 129 25 138 9 108Z" fill="#25252d" stroke="#a85e38" stroke-width="2" />
+ <path d="M32 64 37 38 53 57 67 46 77 21 87 48 105 38 105 66 124 60 115 104 92 128 73 135 48 116Z" fill="#4d3e3b" />
+ <path d="M22 77 43 84 36 117 25 132 13 106Zm115-15-22 27 6 36 12-12 14-16Z" fill="#6b4333" />
+ <path d="M49 65 76 52 109 64 99 98 78 119 56 99Z" fill="#0a111d" stroke="#c57640" stroke-width="2" />
+ <path d="m48 73 24 9-17 5m54-16-26 11 20 4" fill="#ff9f43" />
+ <path d="m57 95 17 5 26-8-8 20-14 11-16-13Z" fill="#d57a37" />
+ <path d="m62 99 3 10 5-8 5 13 5-14 5 8 6-11" fill="#e8d0a0" />
+ <path d="M30 54 42 75 36 94M113 47l-8 20m20 34-9 9m-48 18 8 13 9-15" fill="none" stroke="#ff892e" stroke-width="2.5" />
+ <path d="m8 27 10 14-4-21m124-8-2 17 9-21M67 6l-6 21 10-12" fill="#cf5929" />
+ <path d="M47 64 59 58m37 0 10 5" fill="none" stroke="#d9b484" stroke-width="1.5" />
+</g></symbol><symbol id="wisp-tide" viewBox="0 0 64 64"><g transform="scale(.4)" stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M148 32 118 40 111 19 96 42 67 29 75 51 48 61 29 49 36 80 11 96 24 105 6 116 33 122 55 114 73 118 67 137 43 149 86 144 111 126 126 100 132 69Z" fill="#253e4d" stroke="#648d9a" stroke-width="2" />
+ <path d="M128 45 112 65 95 67 72 83 40 95 22 106 49 111 82 99 105 101 115 115 124 87Z" fill="#496270" />
+ <path d="m125 49-14 31-15 6 9-16-24 11-10 10-40 10 35-26 28-15Z" fill="#182936" />
+ <path d="m89 74 15-4-8 11-16 3" fill="#88ecdf" />
+ <path d="M25 109 55 113 92 101 111 103 95 116 63 124 43 121Z" fill="#0a111d" />
+ <path d="m43 113 4 10 6-12 5 9 5-13 8 9 4-12 7 10 5-14 7 7 3-12" fill="#c6d5c4" />
+ <path d="m61 136 26-9 16-16-7 22-14 8Z" fill="#365568" />
+ <path d="M122 70 118 77m-1 7-4 7m-2 6-3 6M69 55l10 10m16-19 6 13" fill="none" stroke="#81b4be" stroke-width="2" />
+ <path d="m14 78 15 11-8-23 12 6-5-21M124 22l5 10 7-24" fill="#507f93" />
+</g></symbol><symbol id="wisp-stone" viewBox="0 0 64 64"><g transform="scale(.4)" stroke-linejoin="miter" stroke-linecap="square">
+ <path d="m8 67 23-19 16 4 8-26 35-13 24 23 1 20 28 4 12 37-14 42-24-5-18 20-38-4-15-20-24 3L5 98Z" fill="#3e4a44" stroke="#778775" stroke-width="2" />
+ <path d="M55 26 84 17 75 47 44 62Z" fill="#81927b" />
+ <path d="M84 17 109 38 101 65 75 47Z" fill="#576b5b" />
+ <path d="M12 70 32 54 45 65 27 98 7 99Z" fill="#667664" />
+ <path d="M119 63 140 66 151 96 133 91 116 107Z" fill="#687469" />
+ <path d="m43 70 34-17 31 18-7 41-26 22-31-20Z" fill="#192b2c" stroke="#67766c" stroke-width="2" />
+ <path d="m48 79 23 4-16 7m48-13-24 8 20 5" fill="#bddd9e" />
+ <path d="m52 102 16 5 9-9 17 8-18 17Z" fill="#617363" />
+ <path d="M80 26 73 41l10 15-7 17M35 64l-11 17 10 16-7 21m92-40 12 17-6 21M63 134l14 7 19-13" fill="none" stroke="#a4dba1" stroke-width="2.5" />
+ <path d="M49 122 27 99 22 123 15 123 11 100 7 129 19 140 42 135Z" fill="#263d36" />
+ <path d="m37 37 6 9 2-24m74-2-2 24 10-6" fill="#82927a" />
+</g></symbol><symbol id="wisp-gale" viewBox="0 0 64 64"><g transform="scale(.4)" stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M79 50 63 28 30 14 37 40 8 26 29 60 4 57 32 88 51 101 57 127 69 113 66 148 85 132 95 105 124 87 150 51 122 61 145 24 110 42 120 9 91 28Z" fill="#243a46" stroke="#739eaa" stroke-width="2" />
+ <path d="m30 14 33 14 16 22-20 8Zm90-5-10 33-24 20 5-34Z" fill="#62828b" />
+ <path d="m8 26 46 40-25-6m93 1 23-37-41 48M4 57l43 27-15 4m92-1 26-36-37 27" fill="#415d69" />
+ <path d="m60 61 22-17 20 18-12 25-12 18-16-21Z" fill="#0a111d" stroke="#6ca5b3" stroke-width="2" />
+ <path d="m79 44 8 21-12 13 18 2-15 24-9-28Z" fill="#b3c7c6" />
+ <path d="m61 65 15 5-13 5m29-10-7 6 9-1" fill="#c8f9e4" />
+ <path d="m58 103 7 11-8 13 13-6-6 17-10-6m34-28 8 7-2 19-7-8-5 10 2-20" fill="#839995" />
+ <path d="m40 37 17 13M28 64l16 9m70-24-15 12m27 0-17 13" fill="none" stroke="#a2bbc0" stroke-width="1.5" />
+</g></symbol><symbol id="wisp-thorn" viewBox="0 0 64 64"><g transform="scale(.4)" stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M46 66 33 42 13 31 6 11 20 25 24 8 31 41 46 31 45 9 54 28 58 49 78 61 99 47 104 21 122 4 114 28 133 19 152 24 130 31 139 45 112 39 115 59 105 73 126 94 146 88 135 113 109 130 95 148 74 154 49 138 41 119 17 108 25 95 12 78 38 91Z" fill="#343f33" stroke="#697e57" stroke-width="2" />
+ <path d="m51 68 27-11 27 15-5 31-13 17-18 9-21-28Z" fill="#a29f78" stroke="#29342c" stroke-width="2" />
+ <path d="m49 79 22 6-11 16-12-7m55-16-22 8 9 14 12-9M72 107l6-13 7 14Z" fill="#13251e" />
+ <path d="m53 85 12 4m22 0 12-6" fill="none" stroke="#aed086" stroke-width="2" />
+ <path d="m65 119 4 13 6-11 4 13 5-14 5 9 3-17" fill="#beb79a" />
+ <path d="M43 116l-13-7 9-7m74 8 14-10M56 131l13 8m21-7-11 9M39 58l-11-5" fill="none" stroke="#91a470" stroke-width="2" />
+ <path d="m29 115-10 14 24-6 8 23-2-24m69-1 19 4-12-12-7-22" fill="#4e6447" />
+</g></symbol><symbol id="wisp-void" viewBox="0 0 64 64"><g transform="scale(.4)" stroke-linejoin="miter" stroke-linecap="square">
+ <path d="m77 24 25-19-4 27 33-16-10 30 32 7-24 18 25 25-34 1 13 35-29-14-5 36-22-26-29 25 6-37-32 11 14-31L6 77l27-13L7 38l32 5L33 12l28 22Z" fill="#29223e" stroke="#79619b" stroke-width="2" />
+ <path d="M62 39 86 32 112 47 119 79 105 108 74 124 42 110 29 82 41 52Z" fill="#503856" />
+ <path d="M46 58 68 47 98 48 111 71 101 97 76 112 46 97 36 79Z" fill="#090f20" />
+ <path d="m45 63 13-9 1 17 9-20 8 19 9-21 4 22 15-15-5 23 12-3-11 14 2 15-14-6-9 18-8-16-14 12 2-17-16 3 7-17Z" fill="#9687a1" />
+ <path d="M55 73q23-23 43 1-23 28-43-1Z" fill="#c6a5da" />
+ <path d="m75 59 6 15-7 16-5-16Z" fill="#100e23" />
+ <path d="M43 48 24 41m28 66-10 25m60-21 11 21m9-70 22-7M67 35l-8-16" fill="none" stroke="#a78bbf" stroke-width="2" />
+ <path d="M28 107Q8 120 15 144L5 133l2-19 14-13m107-5q23 12 22 32l8-21-17-20" fill="#342d4c" />
+</g></symbol><symbol id="wisp-aurora" viewBox="0 0 64 64"><g transform="scale(.4)" stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M58 67 38 47 16 13 17 45 4 27 12 76 45 99 63 136 77 151 96 128 112 96 143 68 152 24 133 44 141 9 110 42 99 66 86 30 73 14Z" fill="#3e3849" stroke="#9c8492" stroke-width="2" />
+ <path d="m16 13 42 54-9 14-26-38Zm125-4-31 33-17 40 17-7 24-33Z" fill="#a2aaa8" />
+ <path d="M13 51 49 87 33 83 12 69m131-22-37 41 17-8 18-18M36 85l26 18-9 7-16-11m88-16-30 20 11 2Z" fill="#947385" />
+ <path d="m69 44 12-17 14 20-1 35-13 21-19-22Z" fill="#232c39" stroke="#baaaa0" stroke-width="2" />
+ <path d="m69 53 13 5 12-8-4 21-9 5-14-9Z" fill="#888d98" />
+ <path d="m67 59 13 5 13-7-9 14Z" fill="#f0c5b8" />
+ <path d="m62 91 16 10 20-16-12 43-8 21-10-26Z" fill="#283746" />
+ <path d="m72 105 7 11 8-12-8 31Z" fill="#d1ae8d" />
+ <path d="M21 38 44 67m85-27-17 24M37 91l17 11m57-13-12 10" fill="none" stroke="#e0baa6" stroke-width="2" />
+ <path d="m121 88-7 46-8 9 12-2 3 14 5-11-1-49Z" fill="#c1b29a" />
+</g></symbol><symbol id="wisp-titan" viewBox="0 0 64 64"><g transform="scale(.4)" stroke-linejoin="miter" stroke-linecap="square">
+ <path d="M32 65 15 29 12 8 35 35 48 46 53 18 70 31 80 5 92 32 110 20 112 45 128 31 149 6 141 42 125 65 151 85 143 126 118 121 99 148 60 151 40 124 15 133 5 92Z" fill="#423d38" stroke="#9b825b" stroke-width="2" />
+ <path d="m16 15 19 20 19 26-21 9-18-41m132-5-20 39-25-2 25-31Z" fill="#b9a076" />
+ <path d="m8 91 24-18 17 13-12 26-19 12m132-39-30-12-16 16 20 24 19-4Z" fill="#625344" />
+ <path d="m53 55 25-17 31 18-2 53-25 30-29-28Z" fill="#202834" stroke="#9d8a6e" stroke-width="2" />
+ <path d="m78 38 9 32-7 50-8-49Z" fill="#8b7659" />
+ <path d="m52 68 22 9-17 7m52-17-23 10 18 7" fill="#f5d393" />
+ <path d="m60 96 14 3 7-6 15 4-6 23-10 9-14-9Z" fill="#111b29" />
+ <path d="m65 108 9 2m8-1 9-3M39 97l-11 14m96-16 11 13M66 136l15 8 16-12" fill="none" stroke="#c1a174" stroke-width="2" />
+ <path d="m77 14 7 19-5 13-6-12Z" fill="#ddb269" />
+ <path d="m18 82-6-22 17 15m114 1 10-18-1 28" fill="#8f7956" />
+</g></symbol></defs></svg>
 
 <div class="shell">
   <div class="topbar">
@@ -2630,7 +2868,7 @@ var DAILY_LOGIN_REWARDS = [
 ];
 
 var ENEMY_ADJ = ['Hollow','Dusk','Rift-Touched','Withering','Umbral','Ashen','Fractured','Silent','Creeping','Starved'];
-var ENEMY_NOUN = ['Wisp','Serpent','Stalker','Husk','Warden','Shade','Leech','Prowler','Effigy','Wraith'];
+var ENEMY_NOUN = ['Wisp','Serpent','Stalker','Husk','Warden','Shade','Leech','Prowler','Effigy','Wraith','Arachnid','Scorpion','Mantis','Wyvern','Gargoyle','Behemoth','Revenant','Hydra','Watcher','Carapace','Basilisk','Crawler','Harrier'];
 
 var RIFT_ZONE_SPAN = 25;
 var RIFT_ZONES = [

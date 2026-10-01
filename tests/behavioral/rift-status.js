@@ -150,7 +150,36 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     var before=b.getState();for(var i=0;i<6;i++){b.renderLayout();document.querySelectorAll('nav.tabbar button').forEach(x=>x.click());}same(b.getState(),before,'status rendering/navigation observer-only');
     function ticks(render){install(s);for(var i=0;i<8;i++){b.advanceTime(100);b.feedbackTick(false);if(render){b.renderLayout();document.querySelectorAll('nav.tabbar button').forEach(x=>x.click());}}return b.getState();}
     var now=b.clockNow();var a=ticks(false);ctx.setClock(now);var c=ticks(true);same(a,c,'same controlled production ticks give exact state/economy equality');
-    return {checks,worstNames:worst.text,worstMembers:worst.ids,observerOnly:true,queue:true,resume:true};
+    // Exercise the production selector: catalog art must be reachable in both
+    // ordinary encounters and Bosses, with matching names and no state writes.
+    var catalog=[...document.querySelectorAll('symbol[id^="creature-"]')].map(x=>x.id.slice(9));
+    ok(catalog.length===23&&new Set(catalog).size===23,'23 unique enemy species are authored');
+    q('[data-tab="battle"]').click();b.resetFeedback();
+    var artCoverage={normal:[],boss:[]},speciesColors=new Set();
+    ['normal','boss'].forEach(mode=>{
+      var seen=new Set();
+      for(var n=1;n<=46;n++){
+        var depth=mode==='boss'?n*10:n;
+        if(mode==='normal'&&depth%10===0)continue;
+        var sample=seed();sample.depth=depth;sample.enemyDepth=depth;
+        sample.enemyMaxHp=b.enemyHpFor(depth);sample.enemyHp=sample.enemyMaxHp;
+        b.setState(sample);var prior=b.getState();b.riftStatus.update();
+        var glyph=q('#enemy-glyph'),kind=glyph.dataset.creature,ref=q('.creature-art use').getAttribute('href');
+        ok(ref==='#creature-'+kind&&!!document.getElementById(ref.slice(1)),'encounter references existing matching creature art');
+        var bounds=q('.creature-art use').getBBox();
+        ok(bounds.width>40&&bounds.height>40&&bounds.x>=0&&bounds.y>=0&&bounds.x+bounds.width<=160&&bounds.y+bounds.height<=160,'creature silhouette stays inside its 160px canvas: '+kind);
+        ok(q('#enemy-name').textContent.toLowerCase().endsWith(' '+kind),'encounter name agrees with creature identity');
+        ok(glyph.classList.contains('boss')===(mode==='boss'),'art selection preserves Boss presentation');
+        same(b.getState(),prior,'species rendering is observer-only');seen.add(kind);
+        if(mode==='normal')speciesColors.add(getComputedStyle(glyph).getPropertyValue('--creature-color').trim());
+      }
+      ok(seen.size===23&&catalog.every(id=>seen.has(id)),mode+' encounters reach all 23 authored enemy species');
+      artCoverage[mode]=[...seen];
+    });
+    ok(speciesColors.size===23,'ordinary species retain distinct material palettes');
+    var portraits=[...document.querySelectorAll('symbol[id^="wisp-"]')];
+    ok(portraits.length===8&&portraits.every(x=>document.querySelectorAll('[id="'+x.id+'"]').length===1),'all eight Wisp portraits have unique production symbols');
+    return {checks,worstNames:worst.text,worstMembers:worst.ids,observerOnly:true,queue:true,resume:true,artCoverage};
   }finally{if(undo)undo();}
 };
 window.riftStatusMobile=(()=>{
