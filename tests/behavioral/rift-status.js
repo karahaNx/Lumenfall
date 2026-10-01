@@ -24,6 +24,15 @@ window.runRiftStatusQa=async function(b,ctx,assert){
   function same(a,c,m){ok(JSON.stringify(a)===JSON.stringify(c),m);}
   function seed(){return window.riftStatusSeed(b,ctx);}
   function install(s){b.setState(s);b.renderLayout();}
+  function powerText(id,state){
+    // Independent share of the existing effective-party formula, including
+    // the active support buff, is the original chip's passive contribution.
+    var m=b.wispFormulaSnapshot(id),value=m.totalActivePartyPower>0?m.wispPower/m.totalActivePartyPower*m.effectivePartyPower:0;
+    if(state.buffUntil&&b.clockNow()<state.buffUntil)value*=state.buffMult;
+    if(value<1000)return String(Math.round(value*10)/10);
+    var units=['','K','M','B','T','Qa','Qi','Sx','Sp','Oc'],tier=Math.min(Math.floor(Math.log10(value)/3),units.length-1);
+    return (value/Math.pow(10,tier*3)).toFixed(2)+units[tier];
+  }
   function badge(){
     var free=Math.max(0,b.riftStatus.slots()-b.getState().activeStudies.length),el=q('#lab-capacity-badge');
     ok(el.hidden===(free===0)&&el.textContent===String(free),'Lab capacity badge matches committed free slots');
@@ -35,6 +44,25 @@ window.runRiftStatusQa=async function(b,ctx,assert){
   var undo=negative&&negative!=='buff'?b.riftStatus.mutate(negative):null;
   try{
     ok(!q('#rift-study-status,.rift-study-btn'),'Rift Study DOM/control removed entirely');
+    var guidance=q('#rift-objective-row'),dismiss=q('#rift-objective-dismiss'),guidanceToggle=q('#rift-guidance-toggle'),guidanceKey='lumenfall_rift_guidance_hidden_v1';
+    ok(guidance&&guidance.contains(q('#rift-objective'))&&guidance.contains(dismiss),'guidance and its separate dismiss control share the objective row');
+    ok(!guidance.hidden&&guidanceToggle.getAttribute('aria-pressed')==='true','Rift guidance is shown by default and Settings reports shown');
+    ok(dismiss.tagName==='BUTTON'&&!!dismiss.getAttribute('aria-label'),'guidance dismiss is a named native button');
+    var guidanceState=b.getState(),guidanceSave=b.rawSave();
+    dismiss.focus({preventScroll:true});dismiss.click();
+    ok(guidance.hidden&&guidanceToggle.getAttribute('aria-pressed')==='false'&&localStorage.getItem(guidanceKey)==='1','dismiss hides guidance and stores only the device preference');
+    ok(document.activeElement===q('#enemy-stage'),'dismissing focused guidance returns focus to the enemy');
+    dismiss.focus();q('#rift-objective').focus();
+    ok(document.activeElement===q('#enemy-stage')&&!dismiss.getClientRects().length&&!q('#rift-objective').getClientRects().length,'hidden guidance cannot receive focus or expose controls');
+    q('#settings-btn').click();guidanceToggle.focus();guidanceToggle.click();
+    ok(!guidance.hidden&&guidanceToggle.getAttribute('aria-pressed')==='true'&&localStorage.getItem(guidanceKey)===null,'Settings restores guidance and clears the hidden preference');
+    ok(document.activeElement===guidanceToggle,'restoring guidance leaves focus on the Settings toggle');
+    q('#settings-close').click();
+    var priorFocus=document.activeElement;dismiss.click();
+    ok(document.activeElement===priorFocus,'programmatic dismissal outside guidance does not steal focus');
+    q('#settings-btn').click();guidanceToggle.click();q('#settings-close').click();
+    same(b.getState(),guidanceState,'guidance hide and restore never alter game state');
+    ok(b.rawSave()===guidanceSave,'guidance preference never rewrites the canonical game save');
     [1,15,40,60,90].forEach(depth=>{
       var s=seed();s.maxDepthEver=depth;s.depth=depth;s.enemyDepth=depth;s.enemyMaxHp=b.enemyHpFor(depth);s.enemyHp=s.enemyMaxHp;install(s);
       var slots=b.riftStatus.slots(),projects=b.riftStatus.projects().filter(x=>x.unlock<=depth);
@@ -82,10 +110,15 @@ window.runRiftStatusQa=async function(b,ctx,assert){
       var state=b.getState(),cards=[...document.querySelectorAll('[data-rift-wisp]')];
       same(cards.map(x=>x.dataset.riftWisp).sort(),state.activeParty.slice().sort(),'portraits show exactly the active formation members');
       cards.forEach(card=>{
-        var id=card.dataset.riftWisp,powered=state.spirits[id]>0,value=powered?state.heroResource[id]:0,bar=card.querySelector('[role="progressbar"]');
+        var id=card.dataset.riftWisp,powered=state.spirits[id]>0,value=powered?state.heroResource[id]:0,bar=card.querySelector('[role="progressbar"]'),power=card.querySelector('.rift-wisp-power'),status=card.querySelector('.rift-wisp-state');
         ok(Number(bar.getAttribute('aria-valuenow'))===Math.round(value),'bar reads real ability resource');
         ok(parseFloat(bar.firstElementChild.style.width)===value,'visible bar matches accessible charge');
-        ok(card.querySelector('.rift-wisp-time').textContent===(powered?Math.ceil((1-value/100)*b.riftStatus.visualMetrics().cycle)+'s':'Lv 0'),'countdown uses actual charge speed and powered status');
+        ok(bar.getAttribute('aria-valuemin')==='0'&&bar.getAttribute('aria-valuemax')==='100','ability charge retains its accessible percentage range');
+        ok(bar.getAttribute('aria-valuetext')===(powered?Math.round(value)+'% charged; '+Math.ceil((1-value/100)*b.riftStatus.visualMetrics().cycle)+' seconds to next ability':'Unpowered — Empower this Wisp'),'ability timing remains accessible and uses actual charge speed');
+        var expectedPower=powerText(id,state);
+        ok(power&&power.textContent===expectedPower&&power.title==='Passive Wisp power'&&power.getAttribute('aria-label')==='Passive Wisp power: '+expectedPower,'Rift card displays its authoritative passive Wisp power');
+        ok(status&&status.textContent===(!powered?'Lv 0':card.classList.contains('is-casting')?'CAST':value>=100?'Ready':''),'card state is only unpowered, casting, ready or empty');
+        ok(!card.querySelector('.rift-wisp-time')&&!/\b\d+(?:\.\d+)?\s*(?:s|sec|seconds)\b/i.test(card.textContent),'Rift card has no visible ability countdown');
       });
       var active=b.riftStatus.active();same([...document.querySelectorAll('[data-bond-effect]')].map(x=>x.querySelector('.rift-bond-copy').textContent),active.map(x=>x.effect),'Rift shows exact complete active Bond effects');
       ok(q('#rift-bond-effects').hidden===!active.length,'no stale effects when no Bond is active');
@@ -113,6 +146,16 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     ok(Object.keys(seenVisuals).length===4&&new Set(Object.values(seenVisuals).map(x=>x.color)).size===4&&new Set(Object.values(seenVisuals).map(x=>x.mark)).size===4,'all four Bonds keep their own unique color and shape');
     s.activeParty=worst.ids;s.activeParty.forEach(id=>s.spirits[id]=2);install(s);
     partyCheck();s.research.charge=10;install(s);partyCheck();
+    var powerId=s.activeParty[0],beforePower=q('[data-rift-wisp="'+powerId+'"] .rift-wisp-power').textContent;
+    s.spirits[powerId]+=3;install(s);partyCheck();
+    ok(q('[data-rift-wisp="'+powerId+'"] .rift-wisp-power').textContent!==beforePower,'displayed passive power responds to committed Wisp levels');
+    beforePower=q('[data-rift-wisp="'+powerId+'"] .rift-wisp-power').textContent;
+    s.buffUntil=b.clockNow()+2000;s.buffMult=1.5;install(s);partyCheck();
+    ok(q('[data-rift-wisp="'+powerId+'"] .rift-wisp-power').textContent!==beforePower,'displayed passive power includes the active support buff');
+    b.advanceTime(2000);b.riftStatus.update();partyCheck();
+    ok(q('[data-rift-wisp="'+powerId+'"] .rift-wisp-power').textContent===beforePower,'displayed passive power drops the expired support buff');
+    s.heroResource[powerId]=100;install(s);partyCheck();
+    ok(q('[data-rift-wisp="'+powerId+'"] .rift-wisp-state').textContent==='Ready','full real charge displays Ready without seconds');
     s.spirits[s.activeParty[0]]=0;install(s);partyCheck();
     s.activeParty=s.activeParty.slice(1).reverse();install(s);partyCheck();
     s=seed();install(s);partyCheck();ok(q('#boss-combat').hidden,'regen hidden for ordinary enemies');
@@ -127,22 +170,23 @@ window.runRiftStatusQa=async function(b,ctx,assert){
       b.advanceTime(400);b.feedbackTick(false);b.riftStatus.update();
       var fx=q('.cast-'+id);ok(motion?!fx:!!fx,'actual '+id+' ability uses its own effect, suppressed in reduced motion');
       if(fx)styles.push(fx.className);
-      ok(q('[data-rift-wisp="'+id+'"] .rift-wisp-time').textContent==='CAST','cast marker follows real '+id+' ability');
+      ok(q('[data-rift-wisp="'+id+'"] .rift-wisp-state').textContent==='CAST','cast marker follows real '+id+' ability');
     });
     if(!motion)ok(new Set(styles).size===8,'eight distinct Wisp cast identities');
     s=seed();s.activeParty=['ember'];s.spirits.ember=1;s.heroResource.ember=0;install(s);q('[data-tab="battle"]').click();b.resetFeedback();
     var hp=b.getState().enemyHp;b.advanceTime(400);b.feedbackTick(false);b.riftStatus.update();
     ok(b.getState().enemyHp<hp,'passive projectile accompanies authoritative continuous damage');
     ok(motion?!q('.vfx-shot'):!!q('.vfx-shot.shot-ember'),'passive projectile uses its contributing Wisp identity');
+    var shot=q('.vfx-shot');if(shot)ok(parseFloat(shot.style.getPropertyValue('--from-y'))>=24&&parseFloat(shot.style.getPropertyValue('--from-y'))<=q('#enemy-stage').clientHeight-12,'passive shot origin stays inside the arena with standalone cards');
     ok(!q('.rift-wisp.is-casting'),'passive attack does not invent an ability cast');
     b.resetFeedback();q('[data-tab="spirits"]').click();b.advanceTime(400);b.feedbackTick(false);ok(!q('.combat-vfx'),'no passive effects accumulate off Rift');
     s=seed();s.activeParty=['ember'];s.spirits.ember=1;s.heroResource.ember=99.9;install(s);q('[data-tab="battle"]').click();
     b.advanceTime(100);b.feedbackTick(false);b.riftStatus.update();
-    ok(b.getState().heroResource.ember<5&&q('[data-rift-wisp="ember"] .rift-wisp-time').textContent==='CAST','production simulation cast resets charge and lights the casting Wisp');
+    ok(b.getState().heroResource.ember<5&&q('[data-rift-wisp="ember"] .rift-wisp-state').textContent==='CAST','production simulation cast resets charge and lights the casting Wisp');
     b.advanceTime(700);b.riftStatus.update();
     q('[data-tab="battle"]').click();b.resetFeedback();
     var castId=b.getState().activeParty[0];for(var n=0;n<20;n++)b.riftStatus.emit(castId);b.riftStatus.update();
-    ok(q('[data-rift-wisp="'+castId+'"] .rift-wisp-time').textContent==='CAST','actual cast event marks the correct Wisp');
+    ok(q('[data-rift-wisp="'+castId+'"] .rift-wisp-state').textContent==='CAST','actual cast event marks the correct Wisp');
     ok(document.querySelectorAll('.combat-vfx').length===(matchMedia('(prefers-reduced-motion: reduce)').matches?0:8),'effects are bounded and absent in reduced motion');
     b.advanceTime(700);b.riftStatus.update();ok(!q('.rift-wisp.is-casting'),'cast marker expires');
     b.resetFeedback();q('[data-tab="spirits"]').click();b.riftStatus.emit(castId);ok(!q('.combat-vfx'),'no effects accumulate off Rift');q('[data-tab="battle"]').click();
@@ -281,8 +325,9 @@ window.riftStatusMobile=(()=>{
   var m=q('main'),mr=rect(m),nav=rect(q('nav.tabbar')),enemy=rect(q('#enemy-stage'));
   ok(m.scrollTop===0&&m.scrollHeight<=m.clientHeight+1&&scrollY===0,'Rift remains scroll-free without clipped content');
   ok(enemy.height>=120,'Guardian Tap >=120');
-  var boxes={};
-  ['#enemy-stage','#hp-text','#buff-indicator','#bond-summary','#rift-push-btn','#rift-farm-btn'].forEach(s=>{
+  var boxes={},guidance=q('#rift-objective-row'),visibleSelectors=['#enemy-stage','#hp-text','#buff-indicator','#bond-summary','#rift-push-btn','#rift-farm-btn'];
+  if(!guidance.hidden)visibleSelectors.push('#rift-objective-row','#rift-objective-dismiss');
+  visibleSelectors.forEach(s=>{
    var el=q(s),r=rect(el);ok(r.top>=mr.top&&r.bottom<=nav.top&&r.left>=mr.left&&r.right<=mr.right,s+' fully visible');ok(el.scrollWidth<=el.clientWidth&&el.scrollHeight<=el.clientHeight+1,s+' text/content unclipped');
    if(el.tagName==='BUTTON'){ok(r.width>=44&&r.height>=44,s+' touch minimum');ok(el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)),s+' hit-test');}
    boxes[s]={x:r.x,y:r.y,width:r.width,height:r.height};
@@ -291,14 +336,17 @@ window.riftStatusMobile=(()=>{
   ok(!q('#rift-details') && !q('#rift-details-btn'),'obsolete Details absent');
   ok(q('.stat-row').children.length===2 && !q('.stat-row').contains(q('#buff-indicator')),'numbers row contains only Guardian Tap and Wisp DPS');
   ok(Math.abs(buff.left-bonds.left)<1 && buff.height<=16 && bonds.height<=16,'boost and Bonds each occupy one independent line');
-  ['#rift-push-btn','#rift-farm-btn'].forEach(s=>ok(rect(q(s)).bottom<=rect(q('#rift-objective')).top,'mode control clear of objective'));
-  ok(hp.bottom<=stats.top&&stats.bottom<=buff.top&&buff.bottom<=bonds.top&&bonds.bottom<=nav.top,'HP, status and nav do not overlap');
+  if(!guidance.hidden){
+   ['#rift-push-btn','#rift-farm-btn'].forEach(s=>ok(rect(q(s)).bottom<=rect(guidance).top,'mode control clear of objective'));
+   ok(rect(q('#rift-objective')).right<=rect(q('#rift-objective-dismiss')).left,'guidance dismiss is separate from the objective action');
+  }else ok(!q('#rift-objective-dismiss').getClientRects().length&&!q('#rift-objective').getClientRects().length,'hidden guidance exposes no rendered controls');
+  ok(hp.bottom<=buff.top&&buff.bottom<=bonds.top&&bonds.bottom<=stats.top&&stats.bottom<=nav.top,'HP, status, bottom numeric row and nav do not overlap');
   var tabs=[...document.querySelectorAll('nav.tabbar button')];ok(tabs.length===6,'six main tabs');tabs.forEach((el,i)=>{var r=rect(el);ok(r.width>=44&&r.height>=44,'tab touch minimum');ok(el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)),'tab hit-test');if(i)ok(rect(tabs[i-1]).right<=r.left,'one non-overlapping nav row');});
   var active=b.riftStatus.active();ok(active.every(x=>q('#bond-summary').textContent.includes(x.name.replace(' Bond',''))),'all powered Bond names directly visible');
   if(kind!=='fresh')ok(active.length===window.riftStatusWorst(b,ctx).bonds.length&&q('#buff-indicator').textContent.includes('+50%'),'worst current Bonds and buff fixture survives live ticks');
   ['#rift-party','#rift-bond-effects','#boss-combat'].forEach(selector=>{
    var el=q(selector);if(el.hidden)return;var r=rect(el);ok(r.top>=mr.top&&r.bottom<=nav.top&&r.width>0,selector+' visible above navigation');
-   [el,...el.querySelectorAll('.rift-wisp-name,.rift-wisp-time,.rift-bond-effect,strong,.boss-net')].forEach(x=>ok(x.scrollWidth<=x.clientWidth+1&&x.scrollHeight<=x.clientHeight+1,selector+' full contents fit'));
+   [el,...el.querySelectorAll('.rift-wisp-name,.rift-wisp-power,.rift-wisp-state,.rift-bond-effect,strong,.boss-net')].forEach(x=>ok(x.scrollWidth<=x.clientWidth+1&&x.scrollHeight<=x.clientHeight+1,selector+' full contents fit'));
    boxes[selector]={x:r.x,y:r.y,width:r.width,height:r.height};
   });
   var cards=[...document.querySelectorAll('[data-rift-wisp]')];
@@ -306,9 +354,11 @@ window.riftStatusMobile=(()=>{
   var arena=rect(q('.battle-row')),landscape=rect(q('.rift-landscape'));
   ok(getComputedStyle(q('.battle-row')).overflowY==='hidden'&&landscape.bottom<=arena.bottom+.1&&landscape.top>=arena.top-.1,'combat background paint is clipped inside the arena');
   ok(arena.bottom<=stats.top&&getComputedStyle(q('.stat-row')).position==='relative','stat box top borders paint above the combat layer');
-  ok(rect(q('#rift-party')).bottom<=hp.top,'formation clear of HP');
-  ok(q('#boss-combat').hidden||hp.bottom<=rect(q('#boss-combat')).top&&rect(q('#boss-combat')).bottom<=stats.top,'boss figures clear of HP and numeric row');
-  ok(q('#rift-bond-effects').hidden||bonds.bottom<=rect(q('#rift-bond-effects')).top,'full Bond effects separate from names');
+  var party=rect(q('#rift-party'));
+  ok(!q('.battle-row').contains(q('#rift-party'))&&arena.bottom<=hp.top&&hp.bottom<=party.top&&party.bottom<=buff.top,'standalone formation follows the arena and HP, before boost');
+  ok(q('#boss-combat').hidden||hp.bottom<=rect(q('#boss-combat')).top&&rect(q('#boss-combat')).bottom<=party.top,'boss regen sits between HP and the standalone formation');
+  ok(q('#rift-bond-effects').hidden||bonds.bottom<=rect(q('#rift-bond-effects')).top&&rect(q('#rift-bond-effects')).bottom<=stats.top,'full Bond effects separate from names and precede the numeric row');
+  cards.forEach(card=>ok(!!card.querySelector('.rift-wisp-power')&&!!card.querySelector('.rift-wisp-state')&&!card.querySelector('.rift-wisp-time')&&!/\b\d+(?:\.\d+)?\s*(?:s|sec|seconds)\b/i.test(card.textContent),'mobile cards show power and state without an ability countdown'));
   if(matchMedia('(prefers-reduced-motion: reduce)').matches){ok(!q('.combat-vfx')&&getComputedStyle(q('#enemy-stage'),'::after').animationName==='none','reduced motion has no combat effects or rotating aura');}
   ok(!document.documentElement.hasAttribute('data-qa-runtime-error'),'no runtime errors');
   return {kind,viewport:[innerWidth,innerHeight],fonts:document.fonts.size,boxes,bondText:q('#bond-summary').textContent,buff:q('#buff-indicator').textContent,enemyHeight:enemy.height,main:[m.clientHeight,m.scrollHeight]};
