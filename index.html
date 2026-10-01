@@ -1861,9 +1861,18 @@
   .hero-card .ultimate-badge{border-color:#c49667;background:linear-gradient(120deg,#3b2940,#28223c);color:#ffd5a7;}
   .formation-preset-card .formation-lineup{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;padding:6px;background:#0d1729;border:1px solid #3e4b65;border-radius:10px;}
   .formation-member{flex-direction:column;min-width:0;color:#ece5f8;}
-  #tab-forge .card.node-card{border-left:3px solid #cf955d;}
+  #tab-forge .card.node-card{display:block;border-left:3px solid #cf955d;padding:12px;}
+  .forge-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .forge-head .node-info{flex:1;min-width:0;}
+  .forge-head .lvl{color:#d0c2a7;font-size:11px;margin-top:3px;}
+  .forge-description{font-size:12px;line-height:1.45;color:var(--ink-dim);}
+  .forge-actions{display:flex;align-items:stretch;gap:8px;margin-top:10px;}
+  #tab-forge .forge-actions .node-queue-toggle{margin:0;min-width:100px;flex:none;border-radius:10px;}
+  #tab-forge .forge-actions .buy-btn{flex:1;min-width:0;flex-direction:row;flex-wrap:wrap;justify-content:center;gap:2px 10px;}
+  .forge-actions .buy-btn .label,.forge-actions .buy-btn .control-state{flex-basis:100%;text-align:center;}
+  .forge-actions .buy-btn .cost{font-size:12px;}
   .upgrade-emblem{width:32px;height:38px;flex:none;color:var(--chapter);}
-  #tab-forge [data-forge-preview]{padding:8px;border:1px solid #3e4a61;border-radius:8px;background:#0e192b;}
+  #tab-forge [data-forge-preview]{white-space:pre-line;overflow-wrap:anywhere;font-size:12px;line-height:1.45;margin-top:8px;padding:8px 10px;border:1px solid #3e4a61;border-radius:8px;background:#0e192b;}
   #tab-forge .node-info>.name{color:#ffe0b6;}
   #tab-forge .node-card.locked-node{border-left-color:#5b6477;}
   .study-slot-summary{padding:10px;border:1px solid #446b74;border-radius:12px;background:linear-gradient(125deg,#19353b,#142438);}
@@ -1904,6 +1913,30 @@
     .ascend-summary .chapter-art{width:128px;height:78px;}
   }
   @media(prefers-reduced-motion:reduce){.tab-panel.active .chapter-art .scene-sparks{animation:none;}}
+
+
+  /* Collection and progression: legible inset panels with distinct materials. */
+  .wisp-progression .hero-ability{padding:10px;border:1px solid #475473;border-radius:9px;background:#101c30;}
+  .wisp-progression .ability-desc{font-size:12px;line-height:1.5;}
+  .wisp-progression .ability-label{font-size:9px;}
+  .wisp-progression .hero-ability strong{font-size:13px;}
+  .wisp-progression .module-effect{line-height:1.5;}
+  .study-card .study-meta{padding:8px 10px;border-radius:8px;background:#0c1b2c;border:1px solid #365365;line-height:1.5;}
+  #tab-ascend .node-card{position:relative;align-items:flex-start;border-left:3px solid #9c8bc4;}
+  #tab-ascend .node-card>.shape{margin-top:5px;background:linear-gradient(135deg,#e3d6ff 0 35%,#b390e5 36% 58%,#5e4d8c 59%)!important;}
+  #tab-ascend .node-card.locked-node{border-left-color:#566077;}
+  #tab-ascend .node-card.locked-node>.shape{filter:saturate(0);opacity:.6;}
+  #tab-ascend .node-info .name{color:#ebddff;}
+  #tab-ascend .node-info .desc{line-height:1.55;margin:5px 0;}
+  #tab-ascend .node-info .lvl{display:inline-block;padding:3px 7px;border-radius:5px;border:1px solid #65547b;background:#171c33;}
+  #tab-deeds .quest-reward,.ach-card .reward{padding:3px 7px;border:1px solid #426b69;border-radius:6px;background:#142e36;}
+  #tab-deeds .quest-progress-text{font-size:11px;line-height:1.45;}
+  #tab-deeds .quest-claim-btn:not(:disabled){background:linear-gradient(140deg,#c4ecc3,#88ceb4);border-color:#dcf4ce;box-shadow:inset 0 1px #fff8;}
+  #tab-deeds .shop-card .desc,.theme-info .desc{line-height:1.5;}
+  .theme-swatch{position:relative;isolation:isolate;overflow:hidden;border-radius:10px;}
+  .theme-swatch::before{content:'';position:absolute;inset:6px 9px;background:linear-gradient(125deg,#fff9 0 35%,#ffffff15 36% 57%,#08102188 58%);clip-path:polygon(50% 0,100% 40%,80% 85%,50% 100%,20% 85%,0 40%);}
+  .ency-card .ency-top{padding-bottom:8px;border-bottom:1px solid #455572;}
+  .ency-card .ency-desc{line-height:1.6;}
 
   /* Shared state grammar: text + border/shape, never opacity or color alone. */
   button[data-state="unaffordable"],button[data-state="locked"],button[data-state="unavailable"]{border-style:dashed;background:var(--bg-elev);box-shadow:none;}
@@ -2007,74 +2040,85 @@
 <symbol id="creature-wisp" viewBox="0 0 160 160">
  <path d="M80 17 C49 30 31 63 42 93 L27 128 61 119 79 143 99 119 129 126 116 91 C129 64 110 37 80 17Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
  <path d="M80 17 C49 30 31 63 42 93 L27 128 61 119 79 143 99 119 129 126 116 91 C129 64 110 37 80 17Z" fill="url(#creature-facet)"/>
- <path d="M80 31 63 57 80 112 99 57Z" fill="#070b1a" opacity=".6"/>
- <path d="M80 32 80 50 M64 94 80 115 96 94" fill="none" stroke="var(--creature-rim,#ba87e4)" opacity=".6"/>
- <path d="M54 73 72 81 57 86 M106 73 88 81 103 86" fill="#e9fcff" stroke="var(--creature-eye,#acf0ff)" stroke-width="1.5" stroke-linejoin="round"/>
- <path d="M80 89 87 102 80 116 73 102Z" fill="var(--creature-eye,#acf0ff)" opacity=".8"/>
+ <path d="M80 31C53 43 48 77 60 94l20 25 22-28C115 65 95 46 80 31Z" fill="#0a1128"/><path d="M49 65 65 50M103 104l-8 18M57 101l6 14" fill="none" stroke="var(--creature-rim)" stroke-width="2"/><path d="m59 67 15 8-12 9m39-17-15 8 12 9" fill="var(--creature-eye)"/><path d="m80 93 6 11-6 13-6-13Z" fill="var(--creature-eye)"/>
  </symbol><symbol id="creature-serpent" viewBox="0 0 160 160">
  <path d="M111 28 139 44 121 70 98 62 C65 73 61 102 91 106 124 111 121 139 82 141 43 142 26 117 37 91 45 70 77 57 91 50Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
  <path d="M111 28 139 44 121 70 98 62 C65 73 61 102 91 106 124 111 121 139 82 141 43 142 26 117 37 91 45 70 77 57 91 50Z" fill="url(#creature-facet)"/>
- <path d="M80 31 63 57 80 112 99 57Z" fill="#070b1a" opacity=".6"/>
- <path d="M80 32 80 50 M64 94 80 115 96 94" fill="none" stroke="var(--creature-rim,#ba87e4)" opacity=".6"/>
- <path d="M112 46 124 48 114 53" fill="#e9fcff" stroke="var(--creature-eye,#acf0ff)" stroke-width="1.5" stroke-linejoin="round"/>
- <path d="M80 89 87 102 80 116 73 102Z" fill="var(--creature-eye,#acf0ff)" opacity=".8"/>
+ <path d="M98 40 112 28l24 16-15 7-7 18-16-7 14-9Z" fill="#0c142c"/><path d="M89 62C59 76 43 109 68 124c21 12 40-2 29-11" fill="none" stroke="var(--creature-rim)" stroke-width="6" opacity=".55"/><path d="m66 79 13 7m-22 6 13 6m-16 10 15 1m-7 13 10-7m8 13 3-10" fill="none" stroke="#10203a" stroke-width="3"/><path d="m112 41 15 4-13 8Z" fill="var(--creature-eye)"/><path d="m123 57-6 12-1-12" fill="#e5f6ff"/>
  </symbol><symbol id="creature-stalker" viewBox="0 0 160 160">
  <path d="M34 25 66 51 93 49 128 22 119 70 138 94 111 94 120 135 88 119 72 137 53 117 30 129 41 89 23 85 42 65Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
  <path d="M34 25 66 51 93 49 128 22 119 70 138 94 111 94 120 135 88 119 72 137 53 117 30 129 41 89 23 85 42 65Z" fill="url(#creature-facet)"/>
- <path d="M80 31 63 57 80 112 99 57Z" fill="#070b1a" opacity=".6"/>
- <path d="M80 32 80 50 M64 94 80 115 96 94" fill="none" stroke="var(--creature-rim,#ba87e4)" opacity=".6"/>
- <path d="M54 70 72 77 57 81 M108 70 88 77 104 81" fill="#e9fcff" stroke="var(--creature-eye,#acf0ff)" stroke-width="1.5" stroke-linejoin="round"/>
- <path d="M80 89 87 102 80 116 73 102Z" fill="var(--creature-eye,#acf0ff)" opacity=".8"/>
+ <path d="m34 25 31 34-14 5Zm94-3-17 41-18-7Z" fill="var(--creature-rim)" opacity=".5"/><path d="m65 55 29-2 21 30-21 25-18 11-25-31Z" fill="#111a30"/><path d="m52 72 22 5-17 8m50-13-20 5 17 8" fill="var(--creature-eye)"/><path d="m70 93 10-6 11 6-11 10Zm-4 15 13 6 16-8" fill="var(--creature-rim)"/><path d="m42 93 9 20m64-20-9 20" stroke="var(--creature-rim)" stroke-width="2"/>
  </symbol><symbol id="creature-husk" viewBox="0 0 160 160">
  <path d="M54 28 104 25 120 51 112 88 131 128 101 118 84 141 60 124 27 134 47 88 40 53Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
  <path d="M54 28 104 25 120 51 112 88 131 128 101 118 84 141 60 124 27 134 47 88 40 53Z" fill="url(#creature-facet)"/>
- <path d="M80 31 63 57 80 112 99 57Z" fill="#070b1a" opacity=".6"/>
- <path d="M80 32 80 50 M64 94 80 115 96 94" fill="none" stroke="var(--creature-rim,#ba87e4)" opacity=".6"/>
- <path d="M56 63 73 68 57 74 M103 61 86 68 102 72" fill="#e9fcff" stroke="var(--creature-eye,#acf0ff)" stroke-width="1.5" stroke-linejoin="round"/>
- <path d="M80 89 87 102 80 116 73 102Z" fill="var(--creature-eye,#acf0ff)" opacity=".8"/>
+ <path d="m57 36 44-3 12 21-11 36-9 22-28-4-13-23-5-27Z" fill="var(--creature-rim)" opacity=".5"/><path d="m56 58 18 7-6 18-14-8m49-18-18 9 6 15 13-9m-30 26 6-10 7 11Z" fill="#0b1429"/><path d="m61 65 8 3m20 0 9-4" stroke="var(--creature-eye)" stroke-width="3"/><path d="m66 94 3 10m7-9 1 13m9-12-1 12m8-15-2 10M52 106l-11 17m63-19 15 20" stroke="#17203b" stroke-width="3"/>
  </symbol><symbol id="creature-warden" viewBox="0 0 160 160">
  <path d="M80 16 107 39 136 45 125 88 106 118 80 145 53 118 34 89 24 45 55 38Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
  <path d="M80 16 107 39 136 45 125 88 106 118 80 145 53 118 34 89 24 45 55 38Z" fill="url(#creature-facet)"/>
- <path d="M80 31 63 57 80 112 99 57Z" fill="#070b1a" opacity=".6"/>
- <path d="M80 32 80 50 M64 94 80 115 96 94" fill="none" stroke="var(--creature-rim,#ba87e4)" opacity=".6"/>
- <path d="M51 63 73 70 54 79 M109 63 87 70 106 79" fill="#e9fcff" stroke="var(--creature-eye,#acf0ff)" stroke-width="1.5" stroke-linejoin="round"/>
- <path d="M80 89 87 102 80 116 73 102Z" fill="var(--creature-eye,#acf0ff)" opacity=".8"/>
+ <path d="m80 21 18 29-18 10-18-10Zm-25 22-5 48-21-39m77-9 25 9-20 39Z" fill="var(--creature-rim)" opacity=".45"/><path d="m56 51 24 9 25-9-6 52-19 25-20-25Z" fill="#102039"/><path d="m52 66 22 6v8l-20-7m54-7-22 6v8l19-7" fill="var(--creature-eye)"/><path d="M80 62v66m-20-27 20 8 19-8m-46 11 27 24 27-24" fill="none" stroke="var(--creature-rim)" stroke-width="2"/>
  </symbol><symbol id="creature-shade" viewBox="0 0 160 160">
  <path d="M78 14 C38 31 25 70 39 96 L18 132 57 116 74 144 96 119 139 132 119 96 C134 60 110 25 78 14Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
  <path d="M78 14 C38 31 25 70 39 96 L18 132 57 116 74 144 96 119 139 132 119 96 C134 60 110 25 78 14Z" fill="url(#creature-facet)"/>
- <path d="M80 31 63 57 80 112 99 57Z" fill="#070b1a" opacity=".6"/>
- <path d="M80 32 80 50 M64 94 80 115 96 94" fill="none" stroke="var(--creature-rim,#ba87e4)" opacity=".6"/>
- <path d="M54 67 73 73 57 80 M105 67 86 73 103 80" fill="#e9fcff" stroke="var(--creature-eye,#acf0ff)" stroke-width="1.5" stroke-linejoin="round"/>
- <path d="M80 89 87 102 80 116 73 102Z" fill="var(--creature-eye,#acf0ff)" opacity=".8"/>
+ <path d="M78 27C52 42 43 73 55 95l23 21 29-21c15-28-4-56-29-68Z" fill="#0a1025"/><path d="M79 32C67 55 68 80 52 98l-15 24m63-67c9 33-5 59-20 77m29-36 16 25" fill="none" stroke="var(--creature-rim)" stroke-width="2" opacity=".6"/><path d="m56 65 18 9-13 6m40-15-17 9 13 6" fill="var(--creature-eye)"/><path d="m70 95 9-12 11 12-10 14Z" fill="var(--creature-rim)" opacity=".65"/>
  </symbol><symbol id="creature-leech" viewBox="0 0 160 160">
  <path d="M72 25 C117 12 143 51 125 83 L137 102 114 101 112 125 94 116 78 142 60 120 37 126 40 106 18 94 38 83 C24 58 44 32 72 25Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
  <path d="M72 25 C117 12 143 51 125 83 L137 102 114 101 112 125 94 116 78 142 60 120 37 126 40 106 18 94 38 83 C24 58 44 32 72 25Z" fill="url(#creature-facet)"/>
- <path d="M80 31 63 57 80 112 99 57Z" fill="#070b1a" opacity=".6"/>
- <path d="M80 32 80 50 M64 94 80 115 96 94" fill="none" stroke="var(--creature-rim,#ba87e4)" opacity=".6"/>
- <path d="M57 66 73 76 58 83 M104 66 87 76 103 83" fill="#e9fcff" stroke="var(--creature-eye,#acf0ff)" stroke-width="1.5" stroke-linejoin="round"/>
- <path d="M80 89 87 102 80 116 73 102Z" fill="var(--creature-eye,#acf0ff)" opacity=".8"/>
+ <path d="M57 39c31-23 60 0 61 29-14-21-34-33-61-29Z" fill="var(--creature-rim)" opacity=".6"/><ellipse cx="79" cy="86" rx="27" ry="31" fill="#09132b" stroke="var(--creature-rim)" stroke-width="4"/><path d="m57 68 13 8-4-15m13-7 1 17 9-15m13 15-15 7 19 6m-1 16-14-8 7 20m-22 1 4-16-17 11m-13-17 17-4-17-8" fill="var(--creature-eye)"/><ellipse cx="79" cy="86" rx="10" ry="14" fill="#020713"/><path d="m37 98 11 7m66-8 13 4m-41 24-7 12" stroke="var(--creature-rim)" stroke-width="2"/>
  </symbol><symbol id="creature-prowler" viewBox="0 0 160 160">
  <path d="M37 24 71 50 90 48 124 24 114 74 137 111 109 104 115 133 87 115 78 137 60 117 34 130 44 101 23 107 45 72Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
  <path d="M37 24 71 50 90 48 124 24 114 74 137 111 109 104 115 133 87 115 78 137 60 117 34 130 44 101 23 107 45 72Z" fill="url(#creature-facet)"/>
- <path d="M80 31 63 57 80 112 99 57Z" fill="#070b1a" opacity=".6"/>
- <path d="M80 32 80 50 M64 94 80 115 96 94" fill="none" stroke="var(--creature-rim,#ba87e4)" opacity=".6"/>
- <path d="M51 68 71 76 55 82 M109 68 89 76 105 82" fill="#e9fcff" stroke="var(--creature-eye,#acf0ff)" stroke-width="1.5" stroke-linejoin="round"/>
- <path d="M80 89 87 102 80 116 73 102Z" fill="var(--creature-eye,#acf0ff)" opacity=".8"/>
+ <path d="m37 24 28 34-14 11Zm87 0-15 44-15-12Z" fill="var(--creature-rim)" opacity=".6"/><path d="m69 53 21-1 24 31-15 16-21 17-28-30Z" fill="#0c1830"/><path d="m50 68 22 6-15 9m52-15-21 6 14 9" fill="var(--creature-eye)"/><path d="m66 91 13-7 14 7-14 10Z" fill="var(--creature-rim)"/><path d="m59 98 8 17 1-14m31-4-9 19-1-15" fill="#e5f6ff"/><path d="m42 104 10 7m58-9-9 8m-28 15 6 7 5-9" fill="none" stroke="var(--creature-rim)" stroke-width="2"/>
  </symbol><symbol id="creature-effigy" viewBox="0 0 160 160">
  <path d="M80 13 97 45 122 30 111 60 141 73 107 85 117 132 87 111 80 145 71 111 42 132 54 85 19 73 49 60 38 30 63 45Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
  <path d="M80 13 97 45 122 30 111 60 141 73 107 85 117 132 87 111 80 145 71 111 42 132 54 85 19 73 49 60 38 30 63 45Z" fill="url(#creature-facet)"/>
- <path d="M80 31 63 57 80 112 99 57Z" fill="#070b1a" opacity=".6"/>
- <path d="M80 32 80 50 M64 94 80 115 96 94" fill="none" stroke="var(--creature-rim,#ba87e4)" opacity=".6"/>
- <path d="M58 64 73 72 60 79 M102 64 87 72 100 79" fill="#e9fcff" stroke="var(--creature-eye,#acf0ff)" stroke-width="1.5" stroke-linejoin="round"/>
- <path d="M80 89 87 102 80 116 73 102Z" fill="var(--creature-eye,#acf0ff)" opacity=".8"/>
+ <path d="m80 20 11 29-11 10-12-10-1 35 13 39 12-39-1-35m-46 3 34 7 38-8m-60 45 22-11 25 13" fill="none" stroke="var(--creature-rim)" stroke-width="3"/><path d="m63 53 33-1 4 30-21 28-19-28Z" fill="#111a31"/><path d="m64 66 11 7-12 3m32-10-11 7 12 3" fill="var(--creature-eye)"/><path d="m79 82 6 10-6 8-6-8Z" fill="var(--creature-rim)"/><path d="m47 112 13-14m40 0 12 14M37 72l16 5m55 0 16-5" stroke="#0b1831" stroke-width="3"/>
  </symbol><symbol id="creature-wraith" viewBox="0 0 160 160">
  <path d="M80 15 105 33 116 67 111 89 139 132 98 119 80 145 64 120 23 134 45 90 40 66 53 33Z" fill="var(--creature-color,#504c80)" stroke="var(--creature-rim,#ba87e4)" stroke-width="1.2"/>
  <path d="M80 15 105 33 116 67 111 89 139 132 98 119 80 145 64 120 23 134 45 90 40 66 53 33Z" fill="url(#creature-facet)"/>
- <path d="M80 31 63 57 80 112 99 57Z" fill="#070b1a" opacity=".6"/>
- <path d="M80 32 80 50 M64 94 80 115 96 94" fill="none" stroke="var(--creature-rim,#ba87e4)" opacity=".6"/>
- <path d="M53 66 73 73 57 81 M106 66 87 73 102 81" fill="#e9fcff" stroke="var(--creature-eye,#acf0ff)" stroke-width="1.5" stroke-linejoin="round"/>
- <path d="M80 89 87 102 80 116 73 102Z" fill="var(--creature-eye,#acf0ff)" opacity=".8"/>
- </symbol><symbol id="wisp-ember" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="currentColor" opacity=".07"/><path d="M32 5 C31 22 10 25 15 43 C19 61 48 61 51 42 C54 32 44 22 43 17 L35 32 C29 26 37 15 32 5Z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M32 34 C19 48 33 57 40 47Z" fill="none" stroke="#fff3d8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="3" fill="#fff9e9"/></symbol><symbol id="wisp-tide" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="currentColor" opacity=".07"/><path d="M32 6 C25 21 10 34 15 47 C20 63 46 60 50 45 C54 32 39 20 32 6Z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M23 34 Q32 25 42 35 M22 42 Q32 34 44 43" fill="none" stroke="#fff3d8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="3" fill="#fff9e9"/></symbol><symbol id="wisp-stone" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="currentColor" opacity=".07"/><path d="M20 13 43 13 53 29 48 51 33 59 15 49 10 28Z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M19 29 27 31 M37 31 45 29 M24 43 40 43" fill="none" stroke="#fff3d8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="3" fill="#fff9e9"/></symbol><symbol id="wisp-gale" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="currentColor" opacity=".07"/><path d="M8 34 35 8 31 25 56 20 35 43 34 57 26 43 12 48Z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M18 34 43 27 29 40" fill="none" stroke="#fff3d8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="3" fill="#fff9e9"/></symbol><symbol id="wisp-thorn" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="currentColor" opacity=".07"/><path d="M32 7 38 23 54 15 46 33 57 43 39 44 32 59 25 44 8 43 18 33 10 15 26 23Z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M32 21 32 47 M22 29 32 37 42 29" fill="none" stroke="#fff3d8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="3" fill="#fff9e9"/></symbol><symbol id="wisp-void" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="currentColor" opacity=".07"/><path d="M32 6 40 23 58 32 40 40 32 58 24 40 6 32 24 24Z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M32 22 41 32 32 42 23 32Z" fill="none" stroke="#fff3d8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="3" fill="#fff9e9"/></symbol><symbol id="wisp-aurora" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="currentColor" opacity=".07"/><path d="M32 8 39 24 55 31 39 38 32 55 25 38 9 31 25 24Z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M13 17 Q32 3 51 17 M11 48 Q32 62 53 48" fill="none" stroke="#fff3d8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="3" fill="#fff9e9"/></symbol><symbol id="wisp-titan" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="currentColor" opacity=".07"/><path d="M17 11 27 19 32 6 38 19 48 11 50 29 47 48 32 59 17 48 13 29Z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M21 29 27 32 M37 32 43 29 M24 42 32 49 40 42" fill="none" stroke="#fff3d8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="3" fill="#fff9e9"/></symbol></defs></svg>
+ <path d="m80 25 20 15 8 37-28 34-30-35 10-36Z" fill="#091327"/><path d="m80 25-7 35-16 39-8 21m51-80-7 45 12 35m-28-9 3 25" fill="none" stroke="var(--creature-rim)" stroke-width="2" opacity=".65"/><path d="m57 64 17 7-14 8m43-15-17 7 14 8" fill="var(--creature-eye)"/><path d="m70 89 10 6 11-6-11 18Z" fill="var(--creature-rim)" opacity=".7"/><path d="m36 116 17-3m55-1 17 4" stroke="var(--creature-rim)" stroke-width="2"/>
+ </symbol><symbol id="wisp-ember" viewBox="0 0 64 64">
+ <circle cx="32" cy="32" r="30" fill="currentColor" opacity=".06"/>
+ <path d="M30 4c5 17-13 18-9 30-8-2-8-8-8-8-9 16 0 31 17 33 20 2 31-18 21-31-3 6-7 7-7 7C48 22 37 16 30 4Z" fill="currentColor" stroke="#ffd392" stroke-width="1.3"/>
+ <path d="M30 16c1 13-13 20-8 30 2 9 17 12 23 0-10 4-4-10-15-13 3 8-9 8-6 0Z" fill="#ff7837"/><path d="M31 32c-10 10-9 20 2 23 11-3 9-13 5-18-1 5-4 7-4 7Z" fill="#ffe7a2"/>
+ <path d="m24 35 6 2m7 0 6-2" stroke="#482038" stroke-width="2.5" stroke-linecap="round"/><path d="m14 13 2 4m32-8-2 4M8 43l-2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</symbol><symbol id="wisp-tide" viewBox="0 0 64 64">
+ <circle cx="32" cy="32" r="30" fill="currentColor" opacity=".06"/>
+ <path d="M34 5C29 22 12 22 12 40c0 13 10 21 24 19 14-3 21-13 15-24-2 9-10 11-14 6 12-7 11-25-3-36Z" fill="currentColor" stroke="#bbf4ff" stroke-width="1.3"/>
+ <path d="M34 14c2 12-13 19-13 29 1 9 14 11 21 4-17 4-18-10-8-16 8-5 5-12 0-17Z" fill="#d1fcff" fill-opacity=".65"/><path d="M15 42c7 13 25 16 35 1-3 13-21 23-32 9Z" fill="#3367b5"/>
+ <path d="M22 36q3-3 6 0m7 0q3-3 6 0" fill="none" stroke="#102e55" stroke-width="2.5" stroke-linecap="round"/><circle cx="48" cy="13" r="3" fill="#d5ffff" fill-opacity=".8"/><circle cx="10" cy="26" r="2" fill="currentColor"/>
+</symbol><symbol id="wisp-stone" viewBox="0 0 64 64">
+ <circle cx="32" cy="32" r="30" fill="currentColor" opacity=".06"/>
+ <path d="m17 14 18-7 16 12 7 21-10 13-17 7-19-12-6-17Z" fill="currentColor" stroke="#e1ead4" stroke-width="1.3"/>
+ <path d="m17 14 12 15-17 19-6-17Zm18-7-6 22 22-10Z" fill="#d7dec4" fill-opacity=".65"/><path d="m29 29 19 24-17 7-19-12Z" fill="#33483e"/><path d="m29 29 22-10 7 21-10 13Z" fill="#526154"/>
+ <path d="m17 29 10 4m10-1 10-5" stroke="#e3ffd5" stroke-width="3" stroke-linecap="round"/><path d="m24 43 8 4 9-6" fill="none" stroke="#becd9c" stroke-width="2"/><path d="m35 10-3 11 5 4m-23 20 8-8" fill="none" stroke="#7ddab5" stroke-width="1.5"/>
+</symbol><symbol id="wisp-gale" viewBox="0 0 64 64">
+ <circle cx="32" cy="32" r="30" fill="currentColor" opacity=".06"/>
+ <path d="M30 22 17 10l2 17L4 22l13 20 13 10 19-13L60 18 42 25l3-16Z" fill="currentColor" stroke="#dafff2" stroke-width="1.3" stroke-linejoin="round"/>
+ <path d="m17 10 13 12 12 3-5 16-9-4-9-10Z" fill="#e7fff2" fill-opacity=".6"/><path d="m4 22 18 10 6 5-11 5Zm38 3 18-7-17 18-6 5Z" fill="#488f90"/>
+ <path d="m28 37 9 4-8 18 1-10-9 2Z" fill="#d8ffee"/><path d="m24 29 5 3m8 0 5-3" stroke="#16404b" stroke-width="2.5" stroke-linecap="round"/><path d="M6 49q6 5 12 1m26-3q9 1 12-7" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round"/>
+</symbol><symbol id="wisp-thorn" viewBox="0 0 64 64">
+ <circle cx="32" cy="32" r="30" fill="currentColor" opacity=".06"/>
+ <path d="M30 23C11 23 7 12 9 6c14 0 24 5 23 16C39 8 50 8 58 12c-3 12-10 17-23 14Z" fill="currentColor" stroke="#d6f6aa" stroke-width="1.2"/>
+ <path d="m20 23 22-1 10 13-7 17-15 8-16-11-3-14Z" fill="#719f65" stroke="currentColor" stroke-width="1.3"/><path d="m20 23 10 9 12-10-8 19-4 19-4-19-15-6Z" fill="#c4e298"/>
+ <path d="m17 35 10 4m9 0 10-5" stroke="#153c33" stroke-width="3" stroke-linecap="round"/><path d="m25 48 6 3 7-4" fill="none" stroke="#d6ffc1" stroke-width="1.7"/><path d="m15 12 16 12m17-7-15 8" fill="none" stroke="#4b7851" stroke-width="1.5"/>
+ <path d="m12 40-6 8 9-1m33-7 9 6-10 3" fill="currentColor"/>
+</symbol><symbol id="wisp-void" viewBox="0 0 64 64">
+ <circle cx="32" cy="32" r="30" fill="currentColor" opacity=".06"/>
+ <path d="m32 3 7 14 15-7-6 17 13 6-14 6 6 16-17-7-6 13-6-14-16 7 6-16L2 30l14-5-6-16 16 8Z" fill="currentColor" fill-opacity=".6"/>
+ <circle cx="32" cy="32" r="20" fill="#7762b5" stroke="#e2c5ff" stroke-width="1.4"/><path d="M20 17c-9 16 5 34 23 29-14 15-37-2-28-18Z" fill="#b39aec"/><circle cx="34" cy="31" r="13" fill="#11172e"/>
+ <path d="m28 27 3 3m7 0 3-3" stroke="#f2e5ff" stroke-width="2.5" stroke-linecap="round"/><path d="M5 42c8 5 45-4 53-21" fill="none" stroke="#edc6ff" stroke-width="1.5"/><circle cx="54" cy="24" r="2.2" fill="#fff0fc"/>
+</symbol><symbol id="wisp-aurora" viewBox="0 0 64 64">
+ <circle cx="32" cy="32" r="30" fill="currentColor" opacity=".06"/>
+ <path d="M29 26C19 7 9 13 4 8c1 17 8 29 23 30L12 52l18-6 4 14 7-19c15-9 17-19 18-28-10 9-14-7-26 12Z" fill="currentColor" stroke="#ffe9ff" stroke-width="1.2"/>
+ <path d="M4 8c9 18 11 14 25 18L19 34C9 27 6 18 4 8Zm29 17c11-13 16-2 26-12-8 15-11 9-21 20Z" fill="#c4eeeb"/><path d="m29 26 5-10 6 11-4 17-6 2-6-11Z" fill="#fff1d6"/>
+ <path d="m28 29 3 2m4 0 3-2" stroke="#805177" stroke-width="2" stroke-linecap="round"/><ellipse cx="33" cy="11" rx="10" ry="3" fill="none" stroke="#ffeecf" stroke-width="1.5"/><path d="m11 43 2 4 4 2-4 2-2 4-2-4-4-2 4-2Z" fill="#fff1da"/>
+</symbol><symbol id="wisp-titan" viewBox="0 0 64 64">
+ <circle cx="32" cy="32" r="30" fill="currentColor" opacity=".06"/>
+ <path d="m12 10 13 8 7-14 8 14 13-8-3 23 7 10-12 11-13 7-15-8-11-12 8-10Z" fill="currentColor" stroke="#fff0bd" stroke-width="1.3" stroke-linejoin="round"/>
+ <path d="m12 10 13 8 7-14v22l-17 5Zm20 16 18 7 7 10-12 11-13 7Z" fill="#956f52"/><path d="m17 29 15-3 14 5-3 17-11 9-12-9Z" fill="#3c3e53"/><path d="m17 29 15-3v31l-12-9Z" fill="#665865"/>
+ <path d="m21 34 8 3m7 0 8-3" stroke="#fff4c7" stroke-width="2.8" stroke-linecap="round"/><path d="m26 45 6 6 7-6" fill="none" stroke="#dfb87d" stroke-width="2"/><path d="m32 12 4 8-4 5-4-5Z" fill="#ffedb4"/>
+</symbol></defs></svg>
 
 <div class="shell">
   <div class="topbar">
@@ -2400,7 +2444,7 @@ var ABILITY_DESC = {
   dps: 'Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it.',
   ranged: 'Ability damage + Shards. Module boosts the Shards; Ultimate doubles both.',
   druid: 'Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both.',
-  support: 'Boosts passive Wisp damage and Guardian Tap by +25% for 4s. Ultimate: +50% for 8s.'
+  support: 'Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s.'
 };
 
 var FORMATION_BONDS = [
@@ -2444,8 +2488,8 @@ function legacyResearchLevels(s){
 var RESEARCH = [
   {id:'focus', effectPerLevel:0.08,     name:'Battle Focus',       desc:'+8% Lumen from every kill, per level.',                  lumenBase:200, lumenGrowth:1.5,  shardBase:0,  shardGrowth:1},
   {id:'sense', effectPerLevel:0.08,     name:'Shard Sense',        desc:'+8% Shards from every kill, per level.',                 lumenBase:150, lumenGrowth:1.5,  shardBase:20, shardGrowth:1.5},
-  {id:'formation', effectPerLevel:0.05, name:'Formation Training', desc:'+5% passive Wisp damage per level; also raises the Wisp-powered part of Guardian Tap.', lumenBase:0, lumenGrowth:1, shardBase:40, shardGrowth:1.6},
-  {id:'resolve', effectPerLevel:0.1,   name:"Guardian's Resolve", desc:'+10% Guardian tap damage, per level.',                   lumenBase:150, lumenGrowth:1.45, shardBase:0,  shardGrowth:1},
+  {id:'formation', effectPerLevel:0.05, name:'Formation Training', desc:'+5% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.', lumenBase:0, lumenGrowth:1, shardBase:40, shardGrowth:1.6},
+  {id:'resolve', effectPerLevel:0.1,   name:"Guardian's Resolve", desc:'+10% tap damage, per level.',                   lumenBase:150, lumenGrowth:1.45, shardBase:0,  shardGrowth:1},
   {id:'charge', effectPerLevel:0.08,    name:'Swift Recovery',     desc:'+8% faster Wisp ability charge, per level.',              lumenBase:0,   lumenGrowth:1,    shardBase:30, shardGrowth:1.55},
   {id:'arcanecal', name:'Arcane Calibration', desc:'+3 percentage points to the damaging Wisp ability factor per level. Burst, Breaker, Gale and Thorn only; no passive or Tap bonus.', unlockDepth:12, levelCap:10, effectPerLevel:0.03, lumenBase:15000, lumenGrowth:1.60, shardBase:120, shardGrowth:1.60},
   {id:'conduction', name:'Resource Conduction', desc:'+4 percentage points to the ability resource factor per level. Gale Shards and Thorn Lumen only; rounded per cast, not kill rewards.', unlockDepth:18, levelCap:10, effectPerLevel:0.04, lumenBase:90000, lumenGrowth:1.60, shardBase:280, shardGrowth:1.60},
@@ -2458,17 +2502,17 @@ var NODES = [
   {id:'echo',      name:'Echoing Rest',        desc:'+5% offline earning rate, per level (caps at 100%).', baseCost:2, growth:1.40},
   {id:'bonds',     name:'Cheaper Bonds',       desc:'−3% Wisp recruiting cost, per level (floor 40%).',  baseCost:2, growth:1.45},
   {id:'swift',     name:'Swift Ascension',     desc:'+4% Prisms earned per Ascend, per level.', baseCost:3, growth:1.50},
-  {id:'momentum',  name:'Eternal Momentum',    desc:'+6% passive Wisp damage per level; also raises the Wisp-powered part of Guardian Tap.', baseCost:5, growth:1.55, requiresAchievement:'asc5'},
+  {id:'momentum',  name:'Eternal Momentum',    desc:'+6% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.', baseCost:5, growth:1.55, requiresAchievement:'asc5'},
   {id:'reserves',  name:'Deep Reserves',       desc:'+2 hours to your offline cap, per level.', baseCost:6, growth:1.60, requiresAchievement:'d100'}
 ];
 
 var LONG_STUDIES = [
-  {id:'wispascend',   name:'Wisp Ascendancy',     desc:'+15% passive Wisp damage permanently; also raises the Wisp-powered part of Guardian Tap.', unlockDepth:1, baseDurationSec:180, durationGrowth:1.6, lumenBase:800, lumenGrowth:1.8, shardBase:80, shardGrowth:1.8},
-  {id:'guardmastery', name:"Guardian's Mastery",  desc:'+20% Guardian tap damage, permanently.',                           unlockDepth:1,  baseDurationSec:150, durationGrowth:1.6, lumenBase:600,  lumenGrowth:1.8, shardBase:40,  shardGrowth:1.8},
+  {id:'wispascend',   name:'Wisp Ascendancy',     desc:'+15% passive Wisp damage permanently; also raises the Wisp-powered part of your tap damage.', unlockDepth:1, baseDurationSec:180, durationGrowth:1.6, lumenBase:800, lumenGrowth:1.8, shardBase:80, shardGrowth:1.8},
+  {id:'guardmastery', name:"Guardian's Mastery",  desc:'+20% tap damage, permanently.',                           unlockDepth:1,  baseDurationSec:150, durationGrowth:1.6, lumenBase:600,  lumenGrowth:1.8, shardBase:40,  shardGrowth:1.8},
   {id:'riftattune',   name:'Rift Attunement',     desc:'+10% offline earning rate, permanently (stacks past 100%).',      unlockDepth:1,  baseDurationSec:240, durationGrowth:1.6, lumenBase:500,  lumenGrowth:1.8, shardBase:100, shardGrowth:1.8},
   {id:'shardstudy',   name:'Shard Attunement',    desc:'+8% Shards earned per kill, permanently.',                        unlockDepth:15, baseDurationSec:200, durationGrowth:1.6, lumenBase:400,  lumenGrowth:1.8, shardBase:150, shardGrowth:1.8},
   {id:'lumenstudy',   name:'Lumen Wellspring',    desc:'+8% Lumen earned per kill, permanently.',                         unlockDepth:25, baseDurationSec:260, durationGrowth:1.6, lumenBase:1400, lumenGrowth:1.8, shardBase:120, shardGrowth:1.8},
-  {id:'formationstudy',name:'Formation Insight',  desc:'+5% passive Wisp damage permanently; also raises the Wisp-powered part of Guardian Tap.', unlockDepth:40, baseDurationSec:320, durationGrowth:1.6, lumenBase:2200, lumenGrowth:1.8, shardBase:220, shardGrowth:1.8},
+  {id:'formationstudy',name:'Formation Insight',  desc:'+5% passive Wisp damage permanently; also raises the Wisp-powered part of your tap damage.', unlockDepth:40, baseDurationSec:320, durationGrowth:1.6, lumenBase:2200, lumenGrowth:1.8, shardBase:220, shardGrowth:1.8},
   {id:'motestudy',     name:'Luminous Sense',     desc:'+10% Motes gained from Luminous enemies, permanently.',           unlockDepth:60, baseDurationSec:380, durationGrowth:1.6, lumenBase:3200, lumenGrowth:1.8, shardBase:320, shardGrowth:1.8},
   {id:'prismstudy',    name:'Ascendant Clarity',  desc:'+5% Prisms earned per Ascend, permanently.',                      unlockDepth:90, baseDurationSec:450, durationGrowth:1.6, lumenBase:4800, lumenGrowth:1.8, shardBase:480, shardGrowth:1.8}
 ];
@@ -3327,7 +3371,7 @@ function isBoss(depth){ return depth>0 && depth%10===0; }
 var BOSS_TRAITS = [
   {id:'regrowth', name:'Regrowth', regen:0.009, abilityMult:1, tapMult:1, hint:'High regeneration — sustained Wisp damage matters.'},
   {id:'fractured', name:'Fractured Core', regen:0.005, abilityMult:1.75, tapMult:1, hint:'Wisp abilities deal +75% damage.'},
-  {id:'guardian', name:"Guardian's Mark", regen:0.006, abilityMult:1, tapMult:3, hint:'Guardian taps deal x3 damage.'}
+  {id:'guardian', name:"Guardian's Mark", regen:0.006, abilityMult:1, tapMult:3, hint:'Your taps deal x3 damage.'}
 ];
 function bossTraitFor(depth){
   if(!isBoss(depth)) return null;
@@ -5328,17 +5372,13 @@ function renderResearch(){
     var level = state.research[node.id];
     var queueOn = !!state.researchQueue[node.id];
     html += '<div class="card node-card" data-forge-card="'+node.id+'">' +
-      '<svg class="upgrade-emblem" viewBox="0 0 32 38" aria-hidden="true" focusable="false"><use href="#upgrade-forge"/></svg>' +
-      '<div class="node-info" style="flex:1;">' +
-        '<div class="name">'+node.name+'</div>' +
-        '<div class="desc">'+node.desc+'</div>' +
-        '<div class="desc" data-forge-preview style="white-space:pre-line;margin-top:8px;overflow-wrap:anywhere;"></div>' +
-        '<div class="lvl" style="color:var(--shard);">Level '+level+(node.levelCap===undefined?' · No level cap':' / '+node.levelCap)+
-          ' <button class="node-queue-toggle '+(queueOn?'active':'')+'" data-queue="'+node.id+'">Queue '+(queueOn?'ON':'OFF')+'</button>' +
-        '</div>' +
-      '</div>' +
-      '<button class="buy-btn" data-research="'+node.id+'" style="min-width:94px;">' +
-      '</button>' +
+      '<div class="forge-head"><svg class="upgrade-emblem" viewBox="0 0 32 38" aria-hidden="true" focusable="false"><use href="#upgrade-forge"/></svg>' +
+        '<div class="node-info"><div class="name">'+node.name+'</div>' +
+          '<div class="lvl">Level '+level+(node.levelCap===undefined?' · No level cap':' / '+node.levelCap)+'</div></div></div>' +
+      '<div class="desc forge-description">'+node.desc+'</div>' +
+      '<div class="desc" data-forge-preview></div>' +
+      '<div class="forge-actions"><button class="node-queue-toggle '+(queueOn?'active':'')+'" data-queue="'+node.id+'">Queue '+(queueOn?'ON':'OFF')+'</button>' +
+        '<button class="buy-btn" data-research="'+node.id+'"></button></div>' +
     '</div>';
   });
   var root=els['research-list'],main=document.querySelector('main');
@@ -5669,14 +5709,14 @@ var ENCYCLOPEDIA_MECHANICS = [
   {name:'Wisp Power', meta:'Combat stat', desc:'Level and Rarity set each Wisp’s Power. It feeds passive damage and that Wisp’s damaging or resource ability. Support buff strength is fixed by the ability and its Ultimate, not by Wisp Power.'},
   {name:'Passive Wisp Damage', meta:'Combat rule', desc:'Active Wisp Power is multiplied by passive-only permanent upgrades, applicable damage Bonds and active Support buffs. Modules and Ultimates do not increase passive damage.'},
   {name:'Ability Output', meta:'Combat / economy rule', desc:'Damaging abilities use Wisp Power, their relevant Module, Ultimate, damage Bonds and Boss ability modifiers. Gale/Thorn resource output uses Wisp Power, its Module, Ultimate and Dawnpriest; passive-only party upgrades and Support buffs do not increase ability output.'},
-  {name:'Guardian Tap', meta:'Damage from tapping the enemy', desc:'This is your damage per tap on the enemy. Tap starts at 5 damage plus 2% of your general Active-Wisp passive power, then Tap upgrades apply. Support buffs and Guardian’s Mark also multiply it. Auto-Tap uses the same hit once per second.'},
+  {name:'Tap damage (Guardian Tap)', meta:'Damage from tapping the enemy', desc:'This is your damage per tap on the enemy. Tap starts at 5 damage plus 2% of your general Active-Wisp passive power, then Tap upgrades apply. Support buffs and Guardian’s Mark also multiply it. Auto-Tap uses the same hit once per second.'},
   {name:'Rarity', meta:'Wisp progression', desc:'Rarity multiplies that Wisp’s Power, so it affects passive damage plus damaging/resource abilities. Every Rarity tier owned across the roster also adds +2% general passive-party power. Rarity does not strengthen Support buffs.'},
   {name:'Modules & Ultimates', meta:'Wisp progression', desc:'Modules are role-specific: Burst/Breaker Modules boost ability damage, Shard/Lumen Utility Modules boost their ability-generated resource, and Amplifier Modules boost Motes while Active. Ultimates double damage/resource ability output; Amplifier Ultimates change the buff from +25% for 4s to +50% for 8s.'},
   {name:'Endgame Currency Utility', meta:'Economy rule', desc:'After all eight Ultimates are owned, Sigils can ready one Active Wisp ability for 25 Sigils, at most 3 times per Ascension run. After all four Rest Stop purchases are owned, Comets can replace an unclaimed Daily Quest for at least the richest quest reward, so refreshing cannot generate extra Comets.'},
-  {name:'Wisp Roles', meta:'Build label', desc:'Roles describe authoritative ability output: Burst delivers the highest raw ability coefficient; Breaker delivers heavy ability hits and the Stone + Titan Duskguard pair specializes against bosses; Amplifier buffs passive Wisp damage and Guardian Tap; Shard Utility and Lumen Utility add their named resource to ability casts. These are output and utility roles, not defensive combat roles.'},
+  {name:'Wisp Roles', meta:'Build label', desc:'Roles describe authoritative ability output: Burst delivers the highest raw ability coefficient; Breaker delivers heavy ability hits and the Stone + Titan Duskguard pair specializes against bosses; Amplifier buffs passive Wisp damage and your tap damage; Shard Utility and Lumen Utility add their named resource to ability casts. These are output and utility roles, not defensive combat roles.'},
   {name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the run for Prisms. Your first reward sets a cleared-Rift benchmark; repeats at or below it earn a 20% reserve reward, while pushing beyond it adds a new-depth bonus. Permanent systems stay.'},
   {name:'Luminous Enemies', meta:'Rare encounter', desc:'Rare non-boss enemies that drop Motes. Their appearance chance rises as you push deeper.'},
-  {name:'Boss Traits', meta:'Boss mechanic', desc:'Regrowth regenerates 0.9% max HP/s. Fractured Core regenerates 0.5%/s and takes +75% from Wisp ability hits only. Guardian’s Mark regenerates 0.6%/s and makes manual Guardian Tap and Auto-Tap deal x3; passive Wisp damage is unchanged by those trait bonuses.'},
+  {name:'Boss Traits', meta:'Boss mechanic', desc:'Regrowth regenerates 0.9% max HP/s. Fractured Core regenerates 0.5%/s and takes +75% from Wisp ability hits only. Guardian’s Mark regenerates 0.6%/s and makes your manual taps and Auto-Tap deal x3; passive Wisp damage is unchanged by those trait bonuses.'},
   {name:'Offline Progress', meta:'Idle system', desc:'Combat, Wisp abilities, Auto-Tap, Farm, Auto-Ascend, Long Studies and automation continue while you are away. If Auto-Empower makes you strong enough after a boss retreat, the game retries the saved Boss automatically.'}
 ];
 

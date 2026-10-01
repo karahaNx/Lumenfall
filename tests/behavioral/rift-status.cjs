@@ -4,7 +4,10 @@
 const {spawn}=require('node:child_process'),fs=require('node:fs'),os=require('node:os'),path=require('node:path');
 const [chrome,url,scenario]=process.argv.slice(2),profile=fs.mkdtempSync(path.join(os.tmpdir(),'lumenfall-forge-ui-'));
 const browser=spawn(process.env.LUMENFALL_QA_CDP_CHROME||chrome,['--headless=new','--no-sandbox','--disable-gpu','--disable-dev-shm-usage','--remote-debugging-pipe','--user-data-dir='+profile,'about:blank'],{stdio:['ignore','ignore','pipe','pipe','pipe']});
-let seq=0,buffer='',stderr='',session,records=[];const pending=new Map(),listeners=[],shutdownEvents=[];
+let seq=0,buffer='',stderr='',session,records=[];
+const traceStart=Date.now();let swipeCount=0;
+function trace(info){if(process.env.LUMENFALL_QA_TRACE)process.stderr.write(JSON.stringify({seconds:(Date.now()-traceStart)/1000,...info})+'\n');}
+const pending=new Map(),listeners=[],shutdownEvents=[];
 let browserClosed=false;
 function rejectPending(message){for(const p of pending.values()){clearTimeout(p.timer);p.reject(Error(message+' '+p.method));}pending.clear();}
 const browserCompletion=new Promise(resolve=>{
@@ -43,8 +46,13 @@ async function advance(ms=350){await evaluate('window.__lumenfallQaBridge.uiMeas
 async function key(key,shift=false){const spec=key==='Space'?{key:' ',code:'Space',windowsVirtualKeyCode:32}:key==='Enter'?{key:'Enter',code:'Enter',windowsVirtualKeyCode:13}:key==='Escape'?{key:'Escape',code:'Escape',windowsVirtualKeyCode:27}:{key,code:key,windowsVirtualKeyCode:{ArrowRight:39,ArrowLeft:37,Home:36,End:35,Tab:9}[key]};await send('Input.dispatchKeyEvent',{type:'rawKeyDown',...spec,modifiers:shift?8:0});await send('Input.dispatchKeyEvent',{type:'keyUp',...spec,modifiers:shift?8:0});}
 async function touch(selector){const r=await evaluate(`riftStatusMobile.control(${JSON.stringify(selector)})`);assert(r.visible&&r.hit,'touch target visible before action');await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:r.x,y:r.y}]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});}
 async function shot(name){if(!process.env.LUMENFALL_QA_EVIDENCE_DIR)return;const r=await send('Page.captureScreenshot',{format:'png'});fs.mkdirSync(process.env.LUMENFALL_QA_EVIDENCE_DIR,{recursive:true});fs.writeFileSync(path.join(process.env.LUMENFALL_QA_EVIDENCE_DIR,name+'.png'),Buffer.from(r.data,'base64'));}
-async function swipe(delta,width,height){
- const x=width/2,y=delta<0?height*.72:height*.35,dy=Math.sign(delta)*Math.min(240,Math.max(48,Math.abs(delta)));
+async function swipe(loc,width){
+ swipeCount++;
+ // Use the observed scroll surface for a full native gesture. Fixed viewport
+ // fractions left most of the usable surface unused on the taller profiles.
+ const {delta,area}=loc,span=area.bottom-area.top-48;
+ assert(span>48,'native swipe has a usable scroll surface');
+ const x=width/2,y=delta<0?area.bottom-24:area.top+24,dy=Math.sign(delta)*Math.min(span,Math.max(48,Math.abs(delta)));
  await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
  for(let i=1;i<=6;i++){await send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:y+dy*i/6}]});await new Promise(r=>setTimeout(r,16));}
  await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await new Promise(r=>setTimeout(r,70));
@@ -85,13 +93,15 @@ async function run(){
    await evaluate('document.querySelector("[data-tab=research]").focus({preventScroll:true})');await key('Space');assert(await evaluate('document.querySelector("#tab-research").classList.contains("active")'),'native Lab button opens Lab');
    const scroll=[];
    for(const view of ['spirits','forge','research']){
+    const viewStart=Date.now(),swipesBefore=swipeCount;trace({profile:name,kind,view,phase:'start'});
     await touch(`[data-tab="${view}"]`);
     // Real touch scroll: no scrollIntoView/focus assistance to reach last control.
-    for(let i=0;i<35;i++){const loc=await evaluate(`riftStatusMobile.locate(${JSON.stringify(view)})`);if(loc.visible)break;await swipe(loc.delta,width,height);}
+    for(let i=0;i<35;i++){const loc=await evaluate(`riftStatusMobile.locate(${JSON.stringify(view)})`);if(loc.visible)break;await swipe(loc,width);}
     scroll.push(await evaluate(`riftStatusMobile.last(${JSON.stringify(view)})`));
     const target=scroll[scroll.length-1];await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:target.x,y:target.y}]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await advance();
-    for(let i=0;i<35;i++){const loc=await evaluate(`riftStatusMobile.locate(${JSON.stringify(view)})`);if(loc.visible)break;await swipe(loc.delta,width,height);}
+    for(let i=0;i<35;i++){const loc=await evaluate(`riftStatusMobile.locate(${JSON.stringify(view)})`);if(loc.visible)break;await swipe(loc,width);}
     await evaluate(`riftStatusMobile.last(${JSON.stringify(view)})`);
+    trace({profile:name,kind,view,phase:'end',duration:(Date.now()-viewStart)/1000,swipes:swipeCount-swipesBefore});
    }
    await touch('[data-tab="battle"]');await advance();await evaluate('riftStatusMobile.measure()');
    await evaluate('document.querySelector("[data-tab=forge]").focus({preventScroll:true})');await key('ArrowRight');assert(await evaluate('document.activeElement.dataset.tab')==='research','native keyboard focuses Lab');await key('Home');assert(await evaluate('document.activeElement.dataset.tab')==='battle','native Home returns Rift');
