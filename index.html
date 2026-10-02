@@ -2893,7 +2893,7 @@ function deedProgressText(a,done){
   if(!progress) return '';
   var current = done ? progress.target : Math.min(progress.current,progress.target);
   if(progress.duration) return String(Math.floor(current/3600*100)/100)+' / 8 offline hours';
-  return formatNum(current)+' / '+formatNum(progress.target)+' '+deedPresentation(a).unit;
+  return current.toLocaleString('en-US')+' / '+progress.target.toLocaleString('en-US')+' '+deedPresentation(a).unit;
 }
 
 // Presentation metadata never participates in eligibility or one-time rewards.

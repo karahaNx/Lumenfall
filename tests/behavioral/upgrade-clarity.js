@@ -75,6 +75,13 @@ window.runUpgradeClarityQa=function(b,ctx,assert){
       ok(q('[data-deed-requirement="'+id+'"]').textContent.length>0,id+' concrete requirement');
       ok(p.textContent.includes('/')&&/[a-z]/i.test(p.textContent),id+' progress has unit');
       if(id==='idle8') ok(p.textContent===(at?'8':'7.99')+' / 8 offline hours','offline hours never round up to unearned target');
+      else {
+        var visible=p.textContent.split(' / ');
+        var exact=function(n){return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,',');};
+        ok(visible[0]===exact(Math.min(item.progress.current,item.progress.target)),id+' visible current is exact before/at threshold');
+        ok(visible[1].startsWith(exact(item.progress.target)+' '),id+' visible target is exact and retains unit');
+        if(!at) ok(visible[0]!==exact(item.progress.target),id+' visible progress cannot imply unearned target');
+      }
       ok(!b.getState().achieved[id],'eligible rendering does not award '+id);
       if(at){
         b.forge.achievements();var earned=b.getState();ok(earned.achieved[id],id+' unchanged grant operation');
