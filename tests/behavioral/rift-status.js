@@ -50,7 +50,10 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     // Independent share of the existing effective-party formula, including
     // the active support buff, is the original chip's passive contribution.
     var m=b.wispFormulaSnapshot(id),value=m.totalActivePartyPower>0?m.wispPower/m.totalActivePartyPower*m.effectivePartyPower:0;
-    if(state.buffUntil&&b.clockNow()<state.buffUntil)value*=state.buffMult;
+    var now=b.clockNow(),known=1,sources=state.supportBuffs&&state.supportBuffs.version===1?state.supportBuffs.sources:null;
+    ['tide','aurora'].forEach(sourceId=>{var source=sources&&sources[sourceId];if(source&&now<source.until)known+=source.mult-1;});
+    var legacy=state.buffUntil&&now<state.buffUntil?state.buffMult:1;
+    value*=Math.max(legacy,known);
     if(value<1000)return String(Math.round(value*10)/10);
     var units=['','K','M','B','T','Qa','Qi','Sx','Sp','Oc'],tier=Math.min(Math.floor(Math.log10(value)/3),units.length-1);
     return (value/Math.pow(10,tier*3)).toFixed(2)+units[tier];
@@ -124,6 +127,10 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     b.advanceTime(500);b.riftStatus.update();ok(q('#buff-indicator').textContent.includes('1s'),'direct Rift countdown updates');
     if(negative==='buff')undo=b.riftStatus.mutate('buff');
     b.advanceTime(1000);b.riftStatus.update();ok(q('#buff-indicator').textContent.includes('Inactive')&&!q('#buff-indicator').textContent.includes('+50%'),'direct Rift buff expiry is neutral');
+    s=seed();var boostNow=b.clockNow();s.supportBuffs={version:1,sources:{tide:{mult:1.25,until:boostNow+1000},aurora:{mult:1.5,until:boostNow+3000}}};install(s);
+    ok(q('#buff-indicator').textContent.includes('+75%')&&q('#buff-indicator').textContent.includes('next expiry 1s'),'identified boosts add and show earliest expiry');
+    b.advanceTime(1000);b.riftStatus.update();ok(q('#buff-indicator').textContent.includes('+50%')&&q('#buff-indicator').textContent.includes('2s'),'each source loses only its own bonus');
+    b.advanceTime(2000);b.riftStatus.update();ok(q('#buff-indicator').textContent.includes('Inactive'),'all identified sources expired');
     s=seed();install(s);ok(q('#bond-summary').textContent==='No Formation Bond active.','neutral Bonds');
     var worst=window.riftStatusWorst(b,ctx);s.activeParty=worst.ids;s.activeParty.forEach(id=>s.spirits[id]=1);install(s);
     var active=b.riftStatus.active();ok(active.length===worst.bonds.length&&q('#bond-summary').textContent===worst.text,'every actual powered Bond name visible');
@@ -339,6 +346,7 @@ window.riftStatusMobile=(()=>{
   else {var worst=window.riftStatusWorst(b,ctx);s.activeParty=worst.ids;s.activeParty.forEach(id=>s.spirits[id]=1);s.buffUntil=b.clockNow()+60000;s.buffMult=1.5;s.lumen=1e12;s.shards=1e12;s.motes=1e9;if(kind.startsWith('boss')){s.depth=110;s.enemyDepth=110;s.enemyMaxHp=b.enemyHpFor(110);s.enemyHp=s.enemyMaxHp;}}
   if(kind==='boss-conditional'){s.activeParty=['stone','titan','gale','thorn','ember'];s.activeParty.forEach(id=>s.spirits[id]=1);}
   if(kind==='dense'||kind==='boss')s.activeParty=['ember','tide','stone','void','aurora'];
+  if(kind!=='fresh' && ctx.scenario.startsWith('rift-status-stacking'))s.supportBuffs={version:1,sources:{tide:{mult:1.5,until:b.clockNow()+30000},aurora:{mult:1.5,until:b.clockNow()+60000}}};
   s.activeParty.forEach((id,i)=>s.heroResource[id]=20+i*15);
   b.setState(s);b.renderLayout();q('[data-tab="battle"]').click();
   document.documentElement.style.setProperty('--safe-top',inset+'px');document.documentElement.style.setProperty('--safe-bottom',inset+'px');
@@ -390,7 +398,8 @@ window.riftStatusMobile=(()=>{
   ok(hp.bottom<=buff.top&&buff.bottom<=bonds.top&&bonds.bottom<=stats.top&&stats.bottom<=nav.top,'HP, status, bottom numeric row and nav do not overlap');
   var tabs=[...document.querySelectorAll('nav.tabbar button')];ok(tabs.length===6,'six main tabs');tabs.forEach((el,i)=>{var r=rect(el);ok(r.width>=44&&r.height>=44,'tab touch minimum');ok(el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)),'tab hit-test');if(i)ok(rect(tabs[i-1]).right<=r.left,'one non-overlapping nav row');});
   var active=b.riftStatus.active();ok(active.every(x=>q('#bond-summary').textContent.includes(x.name.replace(' Bond',''))),'all powered Bond names directly visible');
-  if(kind!=='fresh')ok(active.length===window.riftStatusWorst(b,ctx).bonds.length&&q('#buff-indicator').textContent.includes('+50%'),'worst current Bonds and buff fixture survives live ticks');
+  if(kind!=='fresh' && !ctx.scenario.startsWith('rift-status-stacking'))ok(active.length===window.riftStatusWorst(b,ctx).bonds.length&&q('#buff-indicator').textContent.includes('+50%'),'worst current Bonds and buff fixture survives live ticks');
+  if(kind!=='fresh' && ctx.scenario.startsWith('rift-status-stacking'))ok(active.length===window.riftStatusWorst(b,ctx).bonds.length && q('#buff-indicator').textContent.includes('+100%') && q('#buff-indicator').textContent.includes('next expiry'),'additive worst boost survives live ticks');
   ['#rift-party','#rift-bond-effects','#boss-combat'].forEach(selector=>{
    var el=q(selector);if(el.hidden)return;var r=rect(el);ok(r.top>=mr.top&&r.bottom<=nav.top&&r.width>0,selector+' visible above navigation');
    [el,...el.querySelectorAll('.rift-wisp-name,.rift-wisp-power,.rift-wisp-state,.rift-bond-effect,strong,.boss-net')].forEach(x=>ok(x.scrollWidth<=x.clientWidth+1&&x.scrollHeight<=x.clientHeight+1,selector+' full contents fit: '+x.className+' scroll='+x.scrollWidth+'x'+x.scrollHeight+' client='+x.clientWidth+'x'+x.clientHeight+' text='+x.textContent));
