@@ -34,6 +34,7 @@ SCENARIOS = {
     "support-recovery-resume": "fresh",
     "support-visibility-resume": "fresh",
     "support-reset": "fresh",
+    "upgrade-effects-and-deeds": "fresh",
     "rift-status-contract": "fresh",
     "rift-status-mobile": "fresh",
     "rift-status-reduced-motion": "fresh",
@@ -432,6 +433,11 @@ applyOfflineProgress = function(){
 };
 
 window.__lumenfallQaBridge = {
+  upgradeClarity: {
+    render: function(){renderNodes();renderLongStudies();renderAchievements();},
+    metrics: function(){return {lumen:lumenMult(),tap:tapMult(),momentum:momentumMult(),offline:offlineRate(),costReduction:costReduction(),offlineCap:offlineCapHours(),prisms:prismMult()};},
+    effects: function(){return {nodes:NODES.map(function(n){return {id:n.id,text:nodeEarnedEffect(n.id)};}),projects:LONG_STUDIES.map(function(n){return {id:n.id,text:projectEarnedEffect(n.id)};})};}
+  },
   uiMeasurementPause: function(paused){ window.__qaUiMeasurementPause(paused); },
   supportTest: {
     factor: function(now){return simulationBuffMult(now===undefined?Date.now():now);},
@@ -1720,6 +1726,9 @@ def build_runner():
             nextPhase(1);bridge.suppressUnloadSave();location.reload();return;
           }
           finish('pass',window.checkR3Reload(bridge,ctx,assert,JSON.parse(localStorage.getItem('r3-expected'))));return;
+        case 'upgrade-effects-and-deeds':
+          bridge.freeze();
+          finish('pass',window.runUpgradeClarityQa(bridge,ctx,assert));return;
         case 'research-duration':
         case 'research-duration-reduced-motion':
         case 'self-test-research-duration-days':
@@ -3690,6 +3699,7 @@ def instrument_html(source, fixtures):
         "<script>" + (ROOT / "accessibility-controls.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "r3-destinations.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "research-duration.js").read_text(encoding="utf-8") + "</script>" +
+        "<script>" + (ROOT / "upgrade-clarity.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "feedback.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "formation.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "forge.js").read_text(encoding="utf-8") + "</script>" +
@@ -3909,7 +3919,7 @@ def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
 
     if passed:
         print(f"PASS {scenario}" + (f" {viewport}" if viewport else ""))
-        if viewport or scenario in ("parity-long-high-power", "parity-medium-farm") or scenario.startswith(("chronology-", "p1-05-", "p2-07a-", "forge-", "buff-", "support-")):
+        if viewport or scenario in ("upgrade-effects-and-deeds", "parity-long-high-power", "parity-medium-farm") or scenario.startswith(("chronology-", "p1-05-", "p2-07a-", "forge-", "buff-", "support-")):
             print("  detail: " + json.dumps(payload.get("detail"), sort_keys=True))
         return True
 
