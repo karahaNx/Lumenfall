@@ -371,6 +371,14 @@
   .auto-ascend-target-label{display:block;margin-top:8px;font-size:.72rem;font-weight:700;color:var(--prism);}
   .auto-ascend-target{display:block;width:100%;min-width:0;min-height:44px;margin-top:4px;padding:8px;
     border:1px solid var(--soft-line);border-radius:8px;background:var(--bg-elev);color:var(--ink);font:inherit;font-size:.8rem;color-scheme:dark;}
+  .auto-ascend-nav{margin-top:8px;}
+  .auto-ascend-nav[hidden]{display:none;}
+  .auto-ascend-nav .nav-row{display:flex;gap:6px;margin-top:6px;}
+  .auto-ascend-nav .nav-row button{flex:1;min-width:0;min-height:44px;padding:6px;font-size:.7rem;}
+  .auto-ascend-find-label{display:block;font-size:.72rem;color:var(--ink-dim);}
+  .auto-ascend-find{width:100%;min-width:0;min-height:44px;padding:6px;border:1px solid var(--soft-line);border-radius:8px;background:var(--bg-elev);color:var(--ink);font:inherit;font-size:.75rem;}
+  .auto-ascend-nav .find-row input{flex:2;}
+  .auto-ascend-range{margin-top:6px;font-size:.7rem;color:var(--ink-dim);overflow-wrap:anywhere;}
   .theme-card{display:flex;align-items:center;gap:12px;margin-bottom:10px;cursor:pointer;border-color:transparent;}
   .theme-card.active{border-color:var(--good);}
   .theme-card.locked-node{cursor:default;}
@@ -4415,20 +4423,57 @@ function autoAscendClearedTarget(){
 function autoAscendReady(){
   return !!(state.riftMode!=='farm' && state.owned.autoascend && state.autoAscendEnabled && ascendEligible() && clearedProgressionRift()>=autoAscendClearedTarget());
 }
+// This ceiling is the existing safe-integer input boundary, never a save clamp.
 function autoAscendHighestClearedTarget(){
-  return Math.max(15,Math.floor(state.maxDepthEver||1)-1);
+  return Math.min(Number.MAX_SAFE_INTEGER,Math.max(15,Math.floor(state.maxDepthEver||1)-1));
 }
+var autoAscendWindowStart=null; // Local view only; never persisted.
 function renderAutoAscendTarget(select){
   var highest=autoAscendHighestClearedTarget(),target=autoAscendClearedTarget();
-  var key=highest+'|'+(target>highest?target:'');
+  if(highest<=214) autoAscendWindowStart=15;
+  else if(autoAscendWindowStart===null || !select.dataset.optionsKey)
+    autoAscendWindowStart=Math.max(15,Math.min(target,highest)-99);
+  else if(autoAscendWindowStart>highest) autoAscendWindowStart=Math.max(15,highest-199);
+  var start=autoAscendWindowStart;
+  var count=Math.min(200,highest-start+1);
+  var end=start+count-1,pinned=target<start || target>end;
+  var key=start+'|'+end+'|'+(pinned?target:'');
   if(select.dataset.optionsKey!==key){
     var options=document.createDocumentFragment();
-    for(var cleared=15;cleared<=highest;cleared++) options.appendChild(new Option('Clear Rift '+cleared,String(cleared)));
-    if(target>highest) options.appendChild(new Option('Clear Rift '+target+' (saved target)',String(target)));
+    // Offset arithmetic stays exact even at the final safe-integer endpoint.
+    for(var offset=0;offset<count;offset++){
+      var cleared=start+offset;
+      options.appendChild(new Option('Clear Rift '+cleared,String(cleared)));
+    }
+    if(pinned) options.appendChild(new Option('Clear Rift '+target+' (saved target)',String(target)));
     select.replaceChildren(options);
     select.dataset.optionsKey=key;
   }
+  select.dataset.windowStart=String(start);select.dataset.windowEnd=String(end);
   select.value=String(target);
+  var card=select.closest('[data-autoascend-card]'),nav=card.querySelector('[data-autoascend-nav]');
+  nav.hidden=highest<=214;
+  card.querySelector('[data-autoascend-earlier]').disabled=start===15;
+  card.querySelector('[data-autoascend-later]').disabled=end===highest;
+  card.querySelector('[data-autoascend-range]').textContent='Showing Rifts '+start+'–'+end+'. Find moves this list without changing your target.';
+  presentControlStates(nav);
+}
+function findAutoAscendRift(value){
+  var cleared=Number(value),select=els['shop-list'].querySelector('[data-autoascend-target]');
+  if(!state.owned.autoascend || !select || typeof value!=='string' || String(cleared)!==value ||
+    !Number.isSafeInteger(cleared) || cleared<15 || cleared>autoAscendHighestClearedTarget()) return false;
+  autoAscendWindowStart=Math.max(15,cleared-99);
+  renderAutoAscendTarget(select);
+  return true;
+}
+function shiftAutoAscendWindow(direction){
+  var select=els['shop-list'].querySelector('[data-autoascend-target]');
+  if(!state.owned.autoascend || !select || (direction!==-1 && direction!==1)) return false;
+  var start=Number(select.dataset.windowStart),end=Number(select.dataset.windowEnd);
+  if(direction===-1){if(start===15) return false;autoAscendWindowStart=Math.max(15,start-200);}
+  else {if(end===autoAscendHighestClearedTarget()) return false;autoAscendWindowStart=end+1;}
+  renderAutoAscendTarget(select);
+  return true;
 }
 function setAutoAscendClearedTarget(value){
   var cleared=Number(value);
@@ -6080,7 +6125,12 @@ function renderAchievements(){
       var enabled = !!state.autoAscendEnabled;
       extra = '<label class="auto-ascend-target-label">Auto-Ascend after clearing' +
         '<select class="auto-ascend-target" data-autoascend-target aria-describedby="auto-ascend-target-help"></select></label>' +
-        '<div class="desc" id="auto-ascend-target-help">ON: automatically Ascend after the selected Rift is defeated. OFF: keep pushing. Manual Ascend keeps this target.</div>';
+        '<div class="desc" id="auto-ascend-target-help">ON: automatically Ascend after the selected Rift is defeated. OFF: keep pushing. Manual Ascend keeps this target.</div>' +
+        '<div class="auto-ascend-nav" data-autoascend-nav hidden>' +
+          '<div class="nav-row"><button type="button" data-autoascend-earlier>Earlier Rifts</button><button type="button" data-autoascend-later>Later Rifts</button></div>' +
+          '<label class="auto-ascend-find-label">Find Rift (move list)<span class="nav-row find-row"><input class="auto-ascend-find" data-autoascend-find type="text" inputmode="numeric" aria-describedby="auto-ascend-range"><button type="button" data-autoascend-find-go>Find</button></span></label>' +
+          '<div class="auto-ascend-range" id="auto-ascend-range" data-autoascend-range aria-live="polite"></div>' +
+        '</div>';
       buttonHtml = '<button data-autoascend-toggle class="'+(enabled?'owned':'')+'">'+(enabled?'ON':'OFF')+'</button>';
     } else {
       buttonHtml = '<button data-shop="'+item.id+'" class="'+(owned?'owned':'')+'" '+((owned||state.comets<item.cost)?'disabled':'')+'>' +
@@ -6111,6 +6161,12 @@ function renderAchievements(){
   if(autoTarget){
     renderAutoAscendTarget(autoTarget);
     autoTarget.onchange=function(){if(setAutoAscendClearedTarget(autoTarget.value)) renderShop();};
+    var card=autoTarget.closest('[data-autoascend-card]'),find=card.querySelector('[data-autoascend-find]');
+    card.querySelector('[data-autoascend-earlier]').onclick=function(){shiftAutoAscendWindow(-1);};
+    card.querySelector('[data-autoascend-later]').onclick=function(){shiftAutoAscendWindow(1);};
+    var findGo=card.querySelector('[data-autoascend-find-go]');
+    findGo.onclick=function(){find.setAttribute('aria-invalid',String(!findAutoAscendRift(find.value)));};
+    find.onkeydown=function(event){if(event.key==='Enter'){event.preventDefault();findGo.click();}};
   }
 }
 function renderShop(){ renderAchievements(); }

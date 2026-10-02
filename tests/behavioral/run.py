@@ -153,6 +153,7 @@ PREP_SCENARIOS = {}
 
 NEGATIVE_SCENARIOS = {
     "self-test-auto-ascend-target-manual": "fresh",
+    "self-test-auto-ascend-target-window": "fresh",
     "self-test-rift-status-line": "fresh",
     "self-test-rift-status-line-reduced-motion": "fresh",
     "self-test-rift-status-badge": "fresh",
@@ -449,6 +450,9 @@ applyOfflineProgress = function(){
 window.__lumenfallQaBridge = {
   autoTarget: {
     render: function(){renderShop();},
+    find: function(value){return findAutoAscendRift(value);},
+    shift: function(direction){return shiftAutoAscendWindow(direction);},
+    flags: function(){return {resetInProgress:resetInProgress,reloadInProgress:reloadInProgress};},
     input: function(value){var old=reloadInProgress;reloadInProgress=false;try{return setAutoAscendClearedTarget(value);}finally{reloadInProgress=old;}},
     change: function(value){var old=reloadInProgress;reloadInProgress=false;try{var el=els['shop-list'].querySelector('[data-autoascend-target]');el.value=value;el.dispatchEvent(new Event('change',{bubbles:true}));}finally{reloadInProgress=old;}},
     check: function(){var old=reloadInProgress;reloadInProgress=false;try{return checkAutoAscend();}finally{reloadInProgress=old;}},
@@ -1665,7 +1669,7 @@ def build_runner():
       if(ctx.scenario==='auto-ascend-target-mobile' || ctx.scenario==='auto-ascend-target-reduced-motion'){
         window.__autoAscendTargetReady=true;return;
       }
-      if(ctx.scenario==='auto-ascend-target-contract' || ctx.scenario==='self-test-auto-ascend-target-manual'){
+      if(ctx.scenario==='auto-ascend-target-contract' || ctx.scenario==='self-test-auto-ascend-target-manual' || ctx.scenario==='self-test-auto-ascend-target-window'){
         bridge.freeze();finish('pass',window.runAutoTargetContract(bridge,ctx,assert,assertProtectedParity));return;
       }
       if(ctx.scenario.startsWith('auto-ascend-target-')){
@@ -4006,6 +4010,11 @@ def main():
         shutil.copytree(web_root, stage)
         source = (stage / "index.html").read_text(encoding="utf-8")
         # Causal controls alter only the throwaway staged app, never repository source.
+        if args.scenario == "self-test-auto-ascend-target-window":
+            rule = "var count=Math.min(200,highest-start+1);"
+            assert source.count(rule) == 1
+            source = source.replace(rule, "var count=highest-start+1;", 1)
+
         if args.scenario == "self-test-auto-ascend-target-manual":
             rule = "function doAscend(auto){"
             assert source.count(rule) == 1

@@ -6,7 +6,69 @@ window.autoTargetSeed=function(b,clear,enabled){
   return s;
 };
 window.autoTargetObservation=function(b){
-  return {state:b.getState(),primary:b.rawSave(),recovery:b.rawRecovery(),events:b.lifecycleTrace(),persistence:b.persistenceStatus()};
+  return {state:b.getState(),primary:b.rawSave(),recovery:b.rawRecovery(),events:b.lifecycleTrace(),persistence:b.persistenceStatus(),flags:b.autoTarget.flags()};
+};
+window.runAutoTargetWindows=function(b,assert){
+  var checks=0,records=[],copy=x=>JSON.parse(JSON.stringify(x));
+  function ok(v,m){checks++;assert(v,m);}
+  function same(a,c,m){ok(JSON.stringify(a)===JSON.stringify(c),m);}
+  function el(){return document.querySelector('[data-autoascend-target]');}
+  function windowInfo(){var s=el();return {start:Number(s.dataset.windowStart),end:Number(s.dataset.windowEnd),values:Array.from(s.options).map(o=>o.value),value:s.value,key:s.dataset.optionsKey};}
+  function budget(){
+    var w=windowInfo(),target=b.getState().autoAscendTargetDepth-1;
+    var pinned=target<w.start||target>w.end,count=w.end-w.start+1;
+    ok(count>=1&&count<=200&&w.values.length===count+(pinned?1:0),'window budget <=200 consecutive options plus at most one saved target');
+    for(var i=0;i<count;i++)ok(w.values[i]===String(w.start+i),'window integer continuity '+i);
+    ok(w.value===String(target),'window preserves precise current target');
+    if(pinned)ok(w.values.at(-1)===String(target)&&el().options[el().options.length-1].textContent.endsWith('(saved target)'),'pinned current/saved target exact');
+    return w;
+  }
+  [214,215,216,10001,Math.pow(2,53),1e30,Number.MAX_VALUE].forEach(function(history){
+    var s=autoTargetSeed(b,43,false);s.maxDepthEver=history;b.setState(s);b.feedbackSave();
+    var before=autoTargetObservation(b);b.autoTarget.render();same(autoTargetObservation(b),before,'high-history render whole observer '+history);
+    var highest=Math.min(Number.MAX_SAFE_INTEGER,Math.max(15,history-1));
+    ok(b.getState().maxDepthEver===history,'canonical high history unchanged');
+    ok(document.querySelector('[data-autoascend-nav]').hidden===(highest<=214),'small history has no navigation');
+    ok(b.autoTarget.find('15'),'Find minimum');var first=budget();ok(first.start===15&&first.end===Math.min(214,highest),'exact first window endpoints');
+    if(highest>214){
+      ok(!b.autoTarget.shift(-1),'Earlier cannot pass global minimum');
+      ok(b.autoTarget.shift(1),'Later advances');var second=budget();ok(second.start===first.end+1,'adjacent windows have no gap');
+      ok(b.autoTarget.shift(-1),'Earlier returns');same(windowInfo(),first,'Earlier restores first window and selected target');
+    }
+    [43,55,10000,highest].filter(x=>x<=highest).forEach(function(clear){
+      ok(b.autoTarget.find(String(clear)),'Find exact historical target '+clear);
+      var w=budget();ok(w.start<=clear&&w.end>=clear&&w.values.includes(String(clear)),'Find makes requested target available');
+      same(autoTargetObservation(b),before,'navigation is whole state/save/recovery/events/flags observer');
+    });
+    ok(!b.autoTarget.shift(1),'Later cannot pass last historical endpoint');
+    var last=budget();ok(last.end===highest,'highest safe historical endpoint included');
+    ['', 'NaN','Infinity','43.5','14',' 43','43.0','9007199254740992',null,43].forEach(function(value){
+      var prior=windowInfo();ok(!b.autoTarget.find(value),'invalid Find rejected '+String(value));same(windowInfo(),prior,'invalid Find leaves window');same(autoTargetObservation(b),before,'invalid Find whole observer');
+    });
+    if(highest<Number.MAX_SAFE_INTEGER){ok(!b.autoTarget.find(String(highest+1)),'Find rejects unearned endpoint');same(autoTargetObservation(b),before,'outside history Find observer');}
+    b.autoTarget.render();b.refreshAffordability();same(autoTargetObservation(b),before,'repeated high render/affordability whole observer');
+    records.push({history,highest,first,last});
+  });
+  // Non-safe existing legacy values stay exact; safe new choices remain possible.
+  [Math.pow(2,53),Math.pow(2,53)+2,1e30,Number.MAX_VALUE].forEach(function(internal){
+    var s=autoTargetSeed(b,43,false);s.maxDepthEver=Math.pow(2,53);s.autoAscendTargetDepth=internal;b.setState(s);b.feedbackSave();
+    var before=autoTargetObservation(b);b.autoTarget.render();budget();
+    ok(b.getState().autoAscendTargetDepth===internal,'non-safe legacy internal preserved');
+    ok(b.autoTarget.find('55'),'Find55 with huge saved target');budget();same(autoTargetObservation(b),before,'huge saved target navigation pure');
+    b.autoTarget.change('55');var after=autoTargetObservation(b),expected=copy(before.state);expected.autoAscendTargetDepth=56;expected.lastSeen=b.clockNow();
+    same(after.state,expected,'safe native selection replaces legacy only by explicit choice');
+    ok(after.events.length===before.events.length+1,'explicit legacy replacement saves once');
+  });
+  // Every safe input at the arithmetic endpoint remains selectable; N=X+1 is exact.
+  var s=autoTargetSeed(b,43,false);s.maxDepthEver=1e30;b.setState(s);b.feedbackSave();b.autoTarget.render();
+  var before=autoTargetObservation(b);b.autoTarget.find(String(Number.MAX_SAFE_INTEGER));same(autoTargetObservation(b),before,'global safe maximum Find is pure');
+  b.autoTarget.change(String(Number.MAX_SAFE_INTEGER));ok(b.getState().autoAscendTargetDepth===Math.pow(2,53),'highest safe clear stores exact N=clear+1');budget();
+  b.autoTarget.find('15');before=autoTargetObservation(b);ok(!b.autoTarget.input('215'),'unoffered valid integer is rejected');same(autoTargetObservation(b),before,'unoffered selection whole observer');
+  // Native navigation handlers remain single after repeated renders.
+  b.autoTarget.find('15');for(var n=0;n<10;n++)b.autoTarget.render();before=autoTargetObservation(b);
+  document.querySelector('[data-autoascend-later]').click();ok(windowInfo().start===215,'one Later click advances exactly one window');same(autoTargetObservation(b),before,'real Later click does not save');
+  var find=document.querySelector('[data-autoascend-find]');find.value='55';document.querySelector('[data-autoascend-find-go]').click();ok(windowInfo().values.includes('55'),'real Find handler navigates');same(autoTargetObservation(b),before,'real Find handler whole observer');
+  return {checks,records};
 };
 window.runAutoTargetContract=function(b,ctx,assert,parity){
   var checks=0,records=[],copy=x=>JSON.parse(JSON.stringify(x));
@@ -85,6 +147,7 @@ window.runAutoTargetContract=function(b,ctx,assert,parity){
   s=b.freshStateSnapshot();s.maxDepthEver=56;s.depth=43;s.enemyDepth=43;s.enemyHp=s.enemyMaxHp=b.enemyHpFor(43);s.comets=10000;b.setState(s);b.autoTarget.render();
   var item=b.autoTarget.shopItem(),funds=s.comets;document.querySelector('[data-shop="autoascend"]').click();
   var bought=b.getState();ok(bought.comets===funds-item.cost&&bought.owned.autoascend&&bought.autoAscendEnabled&&bought.autoAscendTargetDepth===56,'purchase gates/cost/default unchanged');
+  var windows=runAutoTargetWindows(b,assert);checks+=windows.checks;
   // Exact live/offline/direct/split state parity at the target and Study boundary.
   s=window.autoTargetSeed(b,55,true);s.depth=55;s.enemyDepth=55;s.enemyHp=1;s.enemyMaxHp=b.enemyHpFor(55);s.spirits.ember=100;s.heroResource.ember=100;
   s.nodes.echo=6;s.activeStudies=[{id:'guardmastery',totalDurationSec:150,remainingSec:.5,speedMult:2}];b.setState(s);s=b.getState();
@@ -93,7 +156,7 @@ window.runAutoTargetContract=function(b,ctx,assert,parity){
   b.setState(s);b.simulate(.25,'offline',.25,b.clockNow());var split=b.simulate(1.75,'offline',1.75,b.clockNow()+250,b.clockNow());parity(split.state,results.offline.state,'new target split boundary');
   ok(results.offline.summary.ascends===1&&results.offline.state.autoAscendTargetDepth===56,'one boundary Ascend fixed target');
   ok(results.offline.state.longStudyLevels.guardmastery===1,'Study completion/reward survives Ascend');
-  return {checks,records,parity:results,existingAssertionsChanged:[]};
+  return {checks,records,windows,parity:results,existingAssertionsChanged:[]};
 };
 
 window.runAutoTargetPersistence=function(b,ctx,assert,phase,nextPhase,finish){
