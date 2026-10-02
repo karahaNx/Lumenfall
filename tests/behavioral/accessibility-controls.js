@@ -31,6 +31,47 @@ window.runP105ControlQa = function(bridge,ctx,assert){
   bridge.setState(poor);bridge.refreshAffordability();
   assert(purchase.disabled && purchase.dataset.state==='unaffordable','live affordability restores shortage state');
 
+  // Empower/Recruit keep the shortage in their accessible name, with a
+  // single content line and the native disabled purchase gate intact.
+  q('[data-tab="spirits"]').click();
+  [1,95].forEach(function(level){
+    ['ember','tide'].forEach(function(id){
+      var compact=bridge.freshStateSnapshot();compact.maxDepthEver=101;
+      compact.spirits[id]=id==='ember'?level:0;
+      compact.nodes.bonds=id==='tide'&&level===95?20:0;
+      bridge.setState(compact);var cost=bridge.formationTest.cost(id);
+      compact.lumen=cost-1;bridge.setState(compact);bridge.renderLayout();
+      var selector='[data-empower="'+id+'"]',button=q(selector);
+      var snapshot=JSON.stringify(bridge.getState()),save=bridge.rawSave(),events=JSON.stringify(bridge.lifecycleTrace());
+      button.click();
+      assert(JSON.stringify(bridge.getState())===snapshot&&bridge.rawSave()===save&&JSON.stringify(bridge.lifecycleTrace())===events,'disabled Empower/Recruit cannot change state/save/events');
+      bridge.renderLayout();bridge.refreshAffordability();
+      assert(JSON.stringify(bridge.getState())===snapshot&&bridge.rawSave()===save&&JSON.stringify(bridge.lifecycleTrace())===events,'Empower presentation remains observer-only');
+      [false,true].forEach(function(affordable){
+        var next=bridge.getState();next.lumen=cost-(affordable?0:1);bridge.setState(next);bridge.refreshAffordability();button=q(selector);
+        var label=button.querySelector('strong'),price=button.querySelector('.mono');
+        var r=button.getBoundingClientRect(),a=label.getBoundingClientRect(),p=price.getBoundingClientRect(),style=getComputedStyle(button);
+        assert(button.disabled===!affordable&&button.dataset.state===(affordable?'available':'unaffordable'),'Empower native affordability state');
+        assert(!button.querySelector('.control-state')&&!/Need Lumen/.test(button.textContent),'no visible Empower shortage/status line');
+        assert(label.textContent===(id==='ember'?'Empower':'Recruit'),'Empower/Recruit wording retained');
+        var name=button.getAttribute('aria-label');
+        assert(name.includes(label.textContent)&&name.includes(price.textContent.trim())&&name.includes(id==='ember'?'Ember Wisp':'Tide Sprite')&&name.includes('Lumen'),'Empower accessible identity/action/price/unit');
+        assert(/Need Lumen/.test(name)===!affordable,'Empower accessible reason follows live affordability');
+        // This synchronous runner freezes panelIn at scale(.995). Layout CSS
+        // dimensions stay exact; the native mobile driver measures settled rects.
+        assert(r.width>0&&r.height>0&&button.offsetWidth>=44&&button.offsetHeight>=44&&style.flexDirection==='row'&&style.flexWrap==='nowrap','Empower touch target and horizontal layout');
+        assert(Math.min(a.bottom,p.bottom)>Math.max(a.top,p.top)&&a.right<=p.left,'Empower label and price share one line without overlap');
+        assert(button.scrollWidth<=button.clientWidth,'Empower contents do not overflow');
+      });
+      var before=bridge.getState();button=q(selector);button.click();
+      var bought=bridge.getState();
+      assert(bought.spirits[id]===before.spirits[id]+1&&bought.lumen===0,'exact-price Empower/Recruit buys once and debits exact Lumen');
+      button=q(selector);assert(button.disabled,'next Empower unaffordable after exact-price purchase');button.click();
+      assert(JSON.stringify(bridge.getState())===JSON.stringify(bought),'disabled repeat cannot double purchase');
+    });
+  });
+  bridge.setState(ctx.fixtures['accessibility-mixed-states'].save);bridge.renderLayout();
+
   // Selected controls need real contrast, not merely passing shell token contrast.
   function rgb(css){var c=document.createElement('canvas').getContext('2d');c.fillStyle=css;c.fillRect(0,0,1,1);return Array.from(c.getImageData(0,0,1,1).data).slice(0,3);}
   function luminance(rgb){var c=rgb.map(function(n){n/=255;return n<=.04045?n/12.92:Math.pow((n+.055)/1.055,2.4);});return .2126*c[0]+.7152*c[1]+.0722*c[2];}
