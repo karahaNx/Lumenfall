@@ -1717,9 +1717,8 @@
   .roster-group-label{font-size:12px;font-weight:800;color:var(--ink-dim);margin:2px 0;}
   #tab-spirits .hero-card{margin:0;padding:12px;}
   #tab-spirits .hero-top{margin-bottom:6px;}
-  .wisp-empower-action{width:100%;min-height:44px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;}
+  .wisp-empower-action{width:100%;min-width:44px;min-height:44px;margin:8px 0;display:flex;flex-direction:row;justify-content:space-between;align-items:center;gap:8px;flex-wrap:nowrap;white-space:nowrap;}
   .wisp-empower-action:not(:disabled){border-color:var(--lumen);color:var(--lumen);}
-  .wisp-empower-action .control-state{width:100%;text-align:left;}
   .wisp-progression{border-top:1px solid var(--line);margin-top:4px;}
   .wisp-progression>summary{min-height:44px;padding:12px 0;cursor:pointer;font-size:12px;color:var(--ink-dim);font-weight:700;}
   .wisp-progression>summary:focus-visible{outline:2px solid var(--lumen);outline-offset:2px;}
@@ -5047,10 +5046,11 @@ function presentControlStates(root){
       if(kind==='unavailable') reason='In progress';
     }
     btn.setAttribute('data-state',kind);
-    if(reason && btn.textContent.toLowerCase().indexOf(reason.toLowerCase())===-1){
+    if(reason && !btn.hasAttribute('data-empower') && btn.textContent.toLowerCase().indexOf(reason.toLowerCase())===-1){
       var label=document.createElement('span');label.className='control-state';label.textContent=reason;btn.appendChild(label);
     }
     var name=(subject?subject+' — ':'')+controlText(btn).replace(/\s+/g,' ').trim();
+    if(btn.hasAttribute('data-empower') && reason) name+=' — '+reason;
     if(btn.getAttribute('aria-label')!==name) btn.setAttribute('aria-label',name);
   });
 }
