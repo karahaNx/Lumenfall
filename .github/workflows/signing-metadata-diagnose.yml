@@ -1,0 +1,308 @@
+name: Signing metadata diagnose 131
+
+# Temporary metadata-only workflow. Retain the branch until Lead decides cleanup.
+'on':
+  push:
+    branches: ['01/signing-metadata-diagnose-131']
+    paths: ['.github/workflows/signing-metadata-diagnose.yml']
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: lumenfall-signing-metadata-diagnose-131
+  cancel-in-progress: false
+
+jobs:
+  signing-metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_PROMPT_DISABLED: '1'
+    steps:
+      - name: Read and verify signing metadata in three rounds
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import datetime
+          import json
+          import os
+          import re
+          import subprocess
+          import sys
+          import urllib.error
+          import urllib.request
+          
+          REPO = "karahaNx/Lumenfall"
+          BRANCH = "01/signing-metadata-diagnose-131"
+          FROZEN_MAIN = "df78d51181a59d247bf4fc9abf1c7e05237e9c2b"
+          TAG = "lumenfall-signing-v1"
+          RELEASE_ID = 396126590
+          ASSET_ID = 586981383
+          ASSET_NAME = "Lumenfall-debug.keystore"
+          ASSET_DIGEST = "sha256:0f628d30730e7e8f1a34a4df60a13227540533141d9481d0e837100db900d65c"
+          API = "https://api.github.com"
+          QUERY = 'query LumenfallSigningMetadataV1 { repository(owner:"karahaNx", name:"Lumenfall") { release(tagName:"lumenfall-signing-v1") { databaseId isDraft tagName } } }'
+          MAX_BODY = 262144
+          REQUEST_TIMEOUT = 6
+          CLI_TIMEOUT = 20
+          
+          
+          def utc():
+              return datetime.datetime.now(datetime.timezone.utc).isoformat()
+          
+          
+          def integer(value):
+              return value if type(value) is int else None
+          
+          
+          def boolean(value):
+              return value if type(value) is bool else None
+          
+          
+          def exact_text(value, expected):
+              return expected if value == expected else "[UNEXPECTED_VALUE]"
+          
+          
+          def pattern_text(value, pattern):
+              return value if isinstance(value, str) and re.fullmatch(pattern, value) else None
+          
+          
+          def error_category(value):
+              text = str(value).lower()
+              if "rate limit" in text:
+                  return "rate_limit"
+              if any(x in text for x in ("forbidden", "not accessible", "bad credentials", "unauthorized")):
+                  return "access_failure"
+              if any(x in text for x in ("not found", "could not resolve")):
+                  return "not_found"
+              return "unspecified_error"
+          
+          
+          def release_fields(value, graphql=False):
+              value = value if isinstance(value, dict) else {}
+              return {
+                  "id": integer(value.get("databaseId" if graphql else "id")),
+                  "draft": boolean(value.get("isDraft" if graphql else "draft")),
+                  "tag_name": exact_text(value.get("tagName" if graphql else "tag_name"), TAG),
+              }
+          
+          
+          def asset_fields(value):
+              value = value if isinstance(value, dict) else {}
+              return {
+                  "id": integer(value.get("id")),
+                  "name": exact_text(value.get("name"), ASSET_NAME),
+                  "size": integer(value.get("size")),
+                  "state": exact_text(value.get("state"), "uploaded"),
+                  "digest": pattern_text(value.get("digest"), r"sha256:[0-9a-f]{64}"),
+              }
+          
+          
+          def filter_response(kind, status, headers, payload):
+              # Only this allowlist crosses the output boundary. Never emit raw body/headers/errors.
+              result = {
+                  "http_status": integer(status),
+                  "request_id": pattern_text(headers.get("X-GitHub-Request-Id"), r"[0-9A-Fa-f:]{1,100}"),
+                  "has_next_page": 'rel="next"' in headers.get("Link", ""),
+                  "errors_count": 0,
+                  "errors": [],
+                  "data": None,
+              }
+              if kind == "assets" and isinstance(payload, list):
+                  result["data"] = {"count": len(payload), "assets": [asset_fields(x) for x in payload[:100]]}
+                  return result
+              if not isinstance(payload, dict):
+                  return result
+              if kind == "graphql":
+                  errors = payload.get("errors", [])
+                  if not isinstance(errors, list):
+                      errors = [{"message": "invalid errors shape"}]
+                  result["errors_count"] = len(errors)
+                  for error in errors[:10]:
+                      error = error if isinstance(error, dict) else {}
+                      extensions = error.get("extensions", {})
+                      extensions = extensions if isinstance(extensions, dict) else {}
+                      result["errors"].append({
+                          "type": pattern_text(error.get("type"), r"[A-Z][A-Z0-9_]{0,63}"),
+                          "code": pattern_text(extensions.get("code"), r"[A-Z][A-Z0-9_]{0,63}"),
+                          "category": error_category(error.get("message", "")),
+                      })
+                  data = payload.get("data", {})
+                  repository = data.get("repository", {}) if isinstance(data, dict) else {}
+                  value = repository.get("release") if isinstance(repository, dict) else None
+                  result["data"] = release_fields(value, graphql=True)
+              elif kind in ("release", "published"):
+                  result["data"] = release_fields(payload)
+              elif kind == "asset":
+                  result["data"] = asset_fields(payload)
+              elif kind == "main":
+                  obj = payload.get("object", {})
+                  result["data"] = {"sha": pattern_text(obj.get("sha") if isinstance(obj, dict) else None, r"[0-9a-f]{40}")}
+              elif kind == "run":
+                  result["data"] = {
+                      "id": integer(payload.get("id")),
+                      "attempt": integer(payload.get("run_attempt")),
+                      "head_sha": pattern_text(payload.get("head_sha"), r"[0-9a-f]{40}"),
+                      "event": exact_text(payload.get("event"), "push"),
+                  }
+              elif kind == "jobs":
+                  jobs = payload.get("jobs", [])
+                  if isinstance(jobs, list):
+                      result["data"] = {"count": len(jobs), "jobs": [{
+                          "id": integer(x.get("id")),
+                          "name": exact_text(x.get("name"), "signing-metadata"),
+                      } for x in jobs[:100] if isinstance(x, dict)]}
+              return result
+          
+          
+          def emit(kind, round_number, fields):
+              print("LUMENFALL_METADATA " + json.dumps({"utc": utc(), "round": round_number, "check": kind, **fields}, sort_keys=True), flush=True)
+          
+          
+          class NoRedirect(urllib.request.HTTPRedirectHandler):
+              def redirect_request(self, req, fp, code, msg, headers, newurl):
+                  return None
+          
+          
+          def request(kind, path, round_number=0):
+              method = "POST" if kind == "graphql" else "GET"
+              body = json.dumps({"query": QUERY}).encode() if kind == "graphql" else None
+              req = urllib.request.Request(API + path, data=body, method=method, headers={
+                  "Authorization": "Bearer " + os.environ["GH_TOKEN"],
+                  "Accept": "application/vnd.github+json",
+                  "Content-Type": "application/json",
+                  "X-GitHub-Api-Version": "2022-11-28",
+                  "User-Agent": "Lumenfall-Signing-Metadata-V1",
+              })
+              status, headers, payload, transport = None, {}, None, None
+              try:
+                  opener = urllib.request.build_opener(NoRedirect())
+                  try:
+                      response = opener.open(req, timeout=REQUEST_TIMEOUT)
+                  except urllib.error.HTTPError as error:
+                      response = error
+                  with response:
+                      status = response.code
+                      # Read only JSON metadata, bounded in memory; never follow asset redirects.
+                      headers = {k: response.headers.get(k, "") for k in ("X-GitHub-Request-Id", "Link")}
+                      raw = response.read(MAX_BODY + 1)
+                      if len(raw) > MAX_BODY:
+                          transport = "metadata_body_too_large"
+                      else:
+                          try:
+                              payload = json.loads(raw)
+                          except (ValueError, UnicodeError):
+                              transport = "invalid_json"
+              except (TimeoutError, urllib.error.URLError):
+                  transport = "network_or_timeout"
+              except Exception:
+                  transport = "request_error"
+              result = filter_response(kind, status, headers, payload)
+              result["transport_error"] = transport
+              emit(kind, round_number, result)
+              return result
+          
+          
+          def expected_release():
+              return {"id": RELEASE_ID, "draft": True, "tag_name": TAG}
+          
+          
+          def expected_asset():
+              return {"id": ASSET_ID, "name": ASSET_NAME, "size": 2682, "state": "uploaded", "digest": ASSET_DIGEST}
+          
+          
+          def good_response(result):
+              return result["http_status"] == 200 and not result.get("transport_error") and result["errors_count"] == 0 and not result["has_next_page"]
+          
+          
+          def cli_view(round_number):
+              exit_code, payload, category = None, None, None
+              try:
+                  process = subprocess.run(["gh", "release", "view", TAG, "--repo", REPO, "--json", "databaseId,isDraft,tagName"], capture_output=True, text=True, timeout=CLI_TIMEOUT)
+                  exit_code = process.returncode
+                  if exit_code == 0:
+                      try:
+                          payload = json.loads(process.stdout)
+                      except ValueError:
+                          category = "invalid_cli_json"
+                  else:
+                      category = error_category(process.stderr)
+              except subprocess.TimeoutExpired:
+                  category = "cli_timeout"
+              except Exception:
+                  category = "cli_execution_error"
+              fields = {"exit_code": exit_code, "error_category": category, "data": release_fields(payload, graphql=True)}
+              emit("gh_release_view", round_number, fields)
+              return exit_code == 0 and category is None and fields["data"] == expected_release()
+          
+          
+          def main():
+              run_id = int(os.environ["GITHUB_RUN_ID"])
+              attempt = int(os.environ["GITHUB_RUN_ATTEMPT"])
+              head = pattern_text(os.environ["GITHUB_SHA"], r"[0-9a-f]{40}")
+              if not head or attempt != 1 or os.environ.get("GITHUB_REF") != "refs/heads/" + BRANCH or os.environ.get("GITHUB_REPOSITORY") != REPO or os.environ.get("GITHUB_EVENT_NAME") != "push":
+                  emit("final", 0, {"status": "FAIL", "reason": "unexpected_execution_context"})
+                  return 1
+              process = subprocess.run(["gh", "--version"], capture_output=True, text=True, timeout=5)
+              first_line = process.stdout.splitlines()[0] if process.stdout else ""
+              version = pattern_text(first_line, r"gh version [0-9A-Za-z.+-]+(?: \([0-9-]+\))?")
+              emit("context", 0, {
+                  "run_id": run_id, "attempt": attempt, "head_sha": head,
+                  "job_name": "signing-metadata", "gh_version": version,
+                  "image_os": pattern_text(os.environ.get("ImageOS"), r"[A-Za-z0-9_-]{1,40}"),
+                  "image_version": pattern_text(os.environ.get("ImageVersion"), r"[0-9.]{1,40}"),
+                  "declared_permissions": {"contents": "write", "actions": "write"},
+                  "api_version_header": "2022-11-28", "graphql_query_version": "LumenfallSigningMetadataV1",
+              })
+              if process.returncode != 0 or version is None:
+                  emit("final", 0, {"status": "FAIL", "reason": "gh_version_unavailable"})
+                  return 1
+              run = request("run", f"/repos/{REPO}/actions/runs/{run_id}")
+              jobs = request("jobs", f"/repos/{REPO}/actions/runs/{run_id}/jobs?per_page=100&page=1")
+              expected_run = {"id": run_id, "attempt": 1, "head_sha": head, "event": "push"}
+              job_data = jobs.get("data") or {}
+              job_list = job_data.get("jobs", [])
+              if not good_response(run) or run["data"] != expected_run or not good_response(jobs) or job_data.get("count") != 1 or len(job_list) != 1 or job_list[0]["name"] != "signing-metadata" or job_list[0]["id"] is None:
+                  emit("final", 0, {"status": "FAIL", "reason": "run_job_identity_unverified"})
+                  return 1
+              round_results = []
+              for number in range(1, 4):
+                  emit("round_start", number, {"status": "STARTED"})
+                  current = request("main", f"/repos/{REPO}/git/ref/heads/main", number)
+                  if not good_response(current) or current["data"] != {"sha": FROZEN_MAIN}:
+                      emit("final", number, {"status": "FAIL", "reason": "main_drift_or_access_failure", "completed_rounds": round_results})
+                      return 1
+                  cli_ok = cli_view(number)
+                  graphql = request("graphql", "/graphql", number)
+                  release = request("release", f"/repos/{REPO}/releases/{RELEASE_ID}", number)
+                  assets = request("assets", f"/repos/{REPO}/releases/{RELEASE_ID}/assets?per_page=100&page=1", number)
+                  asset = request("asset", f"/repos/{REPO}/releases/assets/{ASSET_ID}", number)
+                  request("published", f"/repos/{REPO}/releases/tags/{TAG}", number)
+                  checks = {
+                      "cli": cli_ok,
+                      "graphql": good_response(graphql) and graphql["data"] == expected_release(),
+                      "release": good_response(release) and release["data"] == expected_release(),
+                      "assets": good_response(assets) and assets["data"] == {"count": 1, "assets": [expected_asset()]},
+                      "asset": good_response(asset) and asset["data"] == expected_asset(),
+                  }
+                  passed = all(checks.values())
+                  round_results.append(passed)
+                  emit("round_result", number, {"status": "PASS" if passed else "FAIL", "checks": checks})
+              passed = len(round_results) == 3 and all(round_results)
+              emit("final", 0, {"status": "PASS" if passed else "FAIL", "rounds": round_results, "scope": "lookup_metadata_only"})
+              return 0 if passed else 1
+          
+          
+          if __name__ == "__main__":
+              try:
+                  result = main()
+              except Exception:
+                  # No exception text/traceback: either could contain credential or raw response data.
+                  emit("final", 0, {"status": "FAIL", "reason": "unexpected_internal_error"})
+                  result = 1
+              sys.exit(result)
+          PY
