@@ -14,7 +14,7 @@ window.runR3DestinationsQa = function(b,ctx,assert){
   var catalogue=b.r3.catalogues(),seed=window.seedR3(b,ctx);
   b.setState(seed);b.renderLayout();
   same(catalogue.upgrades,['focus','sense','formation','resolve','charge','arcanecal','conduction','luminoustracking'],'five original direct upgrades followed by three Forge v1 additions');
-  ok(catalogue.projects.length===8,'eight original timed projects');
+  same(catalogue.projects,['wispascend','guardmastery','riftattune','shardstudy','lumenstudy','formationstudy','motestudy','prismstudy','measuredinquiry'],'eight original timed projects plus Measured Inquiry');
   var nav=Array.from(document.querySelectorAll('nav.tabbar .tab-btn'));
   same(nav.map(function(n){return n.dataset.tab;}),['battle','spirits','forge','research','ascend','deeds'],'six ordered main destinations');
   ok(!q('[data-lab-view],.lab-tabs,[id^="lab-panel-"]'),'obsolete subnavigation removed entirely');

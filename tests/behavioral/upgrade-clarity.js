@@ -65,7 +65,7 @@ window.runUpgradeClarityQa=function(b,ctx,assert){
       else if(id==='fullparty'){s.maxDepthEver=101;s.activeParty=Object.keys(s.spirits).slice(0,at?5:4);s.activeParty.forEach(function(k){s.spirits[k]=1;});}
       else if(id==='all')Object.keys(s.spirits).forEach(function(k,i,arr){s.spirits[k]=at||i<arr.length-1?1:0;});
       else if(id==='mythic')s.heroRarity.ember=at?5:4;
-      else if(id==='allstudies')Object.keys(s.longStudyLevels).forEach(function(k,i,arr){s.longStudyLevels[k]=at||i<arr.length-1?1:0;});
+      else if(id==='allstudies')Object.keys(projectRates).forEach(function(k,i,arr){s.longStudyLevels[k]=at||i<arr.length-1?1:0;});
       else if(id==='firstultimate'){s.heroRarity.ember=5;s.wispUltimate.ember=at;}
       pureRender(s);var item=b.forge.deeds().items.find(function(a){return a.id===id;});
       ok(item.eligible===at,id+' unchanged eligibility before/at threshold');
