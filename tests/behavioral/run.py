@@ -23,6 +23,15 @@ FIXTURES_PATH = ROOT / "fixtures.json"
 RAW_ARTIFACT_ROOT = None
 
 SCENARIOS = {
+    "lab-motes-contracts": "fresh",
+    "lab-motes-chronology": "fresh",
+    "lab-motes-ui": "fresh",
+    "lab-motes-native": "fresh",
+    "lab-motes-reduced-motion": "fresh",
+    "lab-motes-save-reload": "fresh",
+    "lab-motes-backup-restore": "fresh",
+    "lab-motes-recovery": "fresh",
+    "lab-motes-reset": "fresh",
     "nav-workshop-contract": "fresh",
     "inquiry-contracts": "fresh",
     "inquiry-chronology": "fresh",
@@ -215,7 +224,7 @@ def build_prelude(fixtures):
   // Native UI tests hold interval callbacks only across immediate measurements.
   // Keep real input/save handlers, animation frames and the production flags intact.
   var uiMeasurementPaused=false;
-  if(scenario==='auto-ascend-target-mobile' || scenario==='auto-ascend-target-reduced-motion' || scenario.startsWith('forge-ui-') || scenario.startsWith('self-test-forge-ui-') || scenario.startsWith('rift-status-stacking') || scenario.startsWith('rift-status-mobile') || scenario.startsWith('rift-status-reduced') || scenario.startsWith('self-test-rift-status-line')){{
+  if(scenario==='lab-motes-native' || scenario==='lab-motes-reduced-motion' || scenario==='auto-ascend-target-mobile' || scenario==='auto-ascend-target-reduced-motion' || scenario.startsWith('forge-ui-') || scenario.startsWith('self-test-forge-ui-') || scenario.startsWith('rift-status-stacking') || scenario.startsWith('rift-status-mobile') || scenario.startsWith('rift-status-reduced') || scenario.startsWith('self-test-rift-status-line')){{
     // Observe actual registered Queue callbacks, without changing event dispatch.
     var realAddEventListener=EventTarget.prototype.addEventListener;
     EventTarget.prototype.addEventListener=function(type,callback,options){{
@@ -391,7 +400,7 @@ function qaLifecycleRecord(type,detail){
 }
 // Resolve only after the real startup completion callback (including its save).
 // This is installed before DOMContentLoaded/init in the throwaway instrumented app.
-if(window.__lumenfallQaContext.scenario==='auto-ascend-target-mobile' || window.__lumenfallQaContext.scenario==='auto-ascend-target-reduced-motion' || window.__lumenfallQaContext.scenario.startsWith('forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('self-test-forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('rift-status-') || window.__lumenfallQaContext.scenario.startsWith('self-test-rift-status-')){
+if(window.__lumenfallQaContext.scenario==='lab-motes-native' || window.__lumenfallQaContext.scenario==='lab-motes-reduced-motion' || window.__lumenfallQaContext.scenario==='auto-ascend-target-mobile' || window.__lumenfallQaContext.scenario==='auto-ascend-target-reduced-motion' || window.__lumenfallQaContext.scenario.startsWith('forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('self-test-forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('rift-status-') || window.__lumenfallQaContext.scenario.startsWith('self-test-rift-status-')){
   var qaStartupResolve;
   window.__qaForgeStartup={completed:false,callbacks:0,promise:new Promise(function(resolve){qaStartupResolve=resolve;})};
   var qaOriginalPlayStartupIntro=playStartupIntro;
@@ -457,6 +466,18 @@ applyOfflineProgress = function(){
 };
 
 window.__lumenfallQaBridge = {
+  labMotes: {
+    manual: function(id,speed){return applySpeedTier(id,speed);},
+    direct: function(seconds,kind,start){var result=advanceAuthoritativeTime(seconds,{kind:kind||'live',visual:false,clockStartMs:start||2000000000000,offlineWindowStartMs:start||2000000000000,captureTimeline:true});return {state:JSON.parse(JSON.stringify(state)),summary:result};},
+    withDps: function(dps,fn){var original=simulationPassiveDps;simulationPassiveDps=function(){return dps;};try{return fn();}finally{simulationPassiveDps=original;}},
+    mutate: function(kind){
+      var start=commitStudyStart,plan=studyMotesPlan,boundary=simulationKillsUntilStudyMotes;
+      if(kind==='free-carry')commitStudyStart=function(node){var result=start(node);if(result&&state.studyUseMotes[node.id])findActiveStudy(node.id).speedMult=state.studySpeedTargets[node.id];return result;};
+      if(kind==='fallback')studyMotesPlan=function(node){var result=plan(node);if(result&&state.motes<result.cost){result.target=1.5;result.cost=speedTierCost(1.5);}return result;};
+      if(kind==='batch-end')simulationKillsUntilStudyMotes=function(){return Infinity;};
+      return function(){commitStudyStart=start;studyMotesPlan=plan;simulationKillsUntilStudyMotes=boundary;};
+    }
+  },
   inquiry: {
     nodes: function(){return JSON.parse(JSON.stringify(LONG_STUDIES));},
     originals: function(){return LEGACY_STUDY_IDS.slice();},
@@ -978,7 +999,7 @@ window.__lumenfallQaBridge = {
     var aggregate = {
       lumenGained:0,shardGained:0,sigilsGained:0,motesGained:0,
       kills:0,bossKills:0,luminousKills:0,ascends:0,autoTaps:0,
-      empowers:0,researchBought:0,studiesStarted:0,retreats:0,retries:0,
+      empowers:0,researchBought:0,studiesStarted:0,studySpeedPurchases:0,studyMotesSpent:0,retreats:0,retries:0,
       fastForwardedKills:0,iterations:0,retreated:false,
       completedStudies:[],closedStudies:[],achievements:[],ascendGains:[]
     };
@@ -986,7 +1007,7 @@ window.__lumenfallQaBridge = {
       [
         'lumenGained','shardGained','sigilsGained','motesGained',
         'kills','bossKills','luminousKills','ascends','autoTaps','empowers',
-        'researchBought','studiesStarted','retreats','retries',
+        'researchBought','studiesStarted','studySpeedPurchases','studyMotesSpent','retreats','retries',
         'fastForwardedKills','iterations'
       ].forEach(function(key){ aggregate[key] += part[key]||0; });
       aggregate.retreated = aggregate.retreated || !!part.retreated;
@@ -1292,7 +1313,7 @@ def build_runner():
   function assertSummaryParity(actual,expected,label){
     [
       'kills','bossKills','luminousKills','sigilsGained','motesGained','ascends',
-      'autoTaps','empowers','researchBought','studiesStarted','retreats','retries'
+      'autoTaps','empowers','researchBought','studiesStarted','studySpeedPurchases','studyMotesSpent','retreats','retries'
     ].forEach(function(key){
       assert((actual[key]||0)===(expected[key]||0),label+' summary '+key+' must match exactly');
     });
@@ -1724,6 +1745,14 @@ def build_runner():
       }
       if(ctx.scenario.startsWith('forge-ui-') || ctx.scenario.startsWith('self-test-forge-ui-') || ctx.scenario.startsWith('rift-status-stacking') || ctx.scenario==='rift-status-mobile' || ctx.scenario==='rift-status-reduced-motion' || ctx.scenario.startsWith('self-test-rift-status-line')){
         window.__forgeUiReady=true;return; // Native CDP input driver owns this scenario.
+      }
+      if(ctx.scenario.startsWith('lab-motes-')){
+        if(ctx.scenario==='lab-motes-native'||ctx.scenario==='lab-motes-reduced-motion'){window.__labMotesNativeReady=true;return;}
+        bridge.freeze();
+        if(['lab-motes-save-reload','lab-motes-backup-restore','lab-motes-recovery','lab-motes-reset'].includes(ctx.scenario)){
+          window.runLabMotesPersistence(bridge,ctx,assert,phase,nextPhase,backupCode,finish);return;
+        }
+        finish('pass',window.runLabMotesQa(bridge,ctx,assert,assertProtectedParity,assertSummaryParity));return;
       }
       if(ctx.scenario.startsWith('inquiry-')){
         bridge.freeze();
@@ -3793,6 +3822,7 @@ def instrument_html(source, fixtures):
         "<script>" + (ROOT / "auto-ascend-target.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "buff-timing.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "measured-inquiry.js").read_text(encoding="utf-8") + "</script>" +
+        "<script>" + (ROOT / "lab-motes.js").read_text(encoding="utf-8") + "</script>" +
         build_runner() + "\n</body>",
         1,
     )
@@ -3955,6 +3985,9 @@ def browser_identity(chrome):
 
 
 def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
+    if scenario in ("lab-motes-native", "lab-motes-reduced-motion"):
+        url = base_url + "/index.html?" + urlencode({"qaScenario": scenario, "qaFixture": fixture})
+        return run_native_process(["node", str(ROOT / "lab-motes.cjs"), chrome, url, scenario], scenario)
     if scenario == "raw-process-contract":
         from process_contract import run_contract
         return run_contract(run_scenario)
@@ -3962,7 +3995,7 @@ def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
         return native_process_contract()
     if scenario in ("rift-status-mobile", "rift-status-reduced-motion") or scenario.startswith(("rift-status-stacking", "self-test-rift-status-line")):
         url = base_url + "/index.html?" + urlencode({"qaScenario": scenario, "qaFixture": fixture})
-        return run_native_process(["node", str(ROOT / "rift-status.cjs"), chrome, url, scenario], scenario)
+        return run_native_process(["node", str(ROOT / "rift-status.cjs"), chrome, url, scenario], scenario, timeout=120)
     if scenario in ("auto-ascend-target-mobile", "auto-ascend-target-reduced-motion"):
         url = base_url + "/index.html?" + urlencode({"qaScenario": scenario, "qaFixture": fixture})
         return run_native_process(["node", str(ROOT / "auto-ascend-target.cjs"), chrome, url, scenario], scenario)
@@ -4010,7 +4043,7 @@ def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
 
     if passed:
         print(f"PASS {scenario}" + (f" {viewport}" if viewport else ""))
-        if viewport or scenario in ("upgrade-effects-and-deeds", "parity-long-high-power", "parity-medium-farm") or scenario.startswith(("auto-ascend-target-", "chronology-", "p1-05-", "p2-07a-", "forge-", "buff-", "support-", "inquiry-")):
+        if viewport or scenario in ("upgrade-effects-and-deeds", "parity-long-high-power", "parity-medium-farm") or scenario.startswith(("auto-ascend-target-", "chronology-", "p1-05-", "p2-07a-", "forge-", "buff-", "support-", "inquiry-", "lab-motes-")):
             print("  detail: " + json.dumps(payload.get("detail"), sort_keys=True))
         return True
 
@@ -4104,7 +4137,7 @@ def main():
         failures = []
         try:
             for scenario, fixture in selected.items():
-                viewports = LAYOUT_VIEWPORTS if scenario.startswith('layout-') or scenario=='self-test-layout-collapse' else [None]
+                viewports = [(320,844,0,0),(390,844,0,0),(430,844,0,0)] if scenario=='lab-motes-ui' else LAYOUT_VIEWPORTS if scenario.startswith('layout-') or scenario=='self-test-layout-collapse' else [None]
                 for viewport in viewports:
                     if not run_scenario(chrome, base_url, scenario, fixture, viewport):
                         failures.append(f"{scenario} {viewport}")

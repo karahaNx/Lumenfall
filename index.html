@@ -293,6 +293,11 @@
   .study-bar-fill{height:100%;width:0%;background:linear-gradient(90deg, var(--mote), color-mix(in srgb, var(--mote) 70%, var(--comet)));transition:width .3s linear;}
   .study-time{font-size:.7rem;color:var(--ink-dim);margin-top:5px;}
   .speed-row{display:flex;flex-wrap:wrap;gap:6px;}
+  .study-motes-controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px;}
+  .study-motes-controls label{flex:1;min-width:140px;font-size:.74rem;color:var(--ink-dim);}
+  .study-motes-controls select{display:block;width:100%;min-height:44px;margin-top:4px;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--bg-elev);color:var(--ink);font:inherit;}
+  .study-motes-controls button{min-height:44px;}
+  .study-motes-controls select:focus-visible{outline:2px solid var(--mote);outline-offset:2px;}
   .speed-btn{
     flex:1;min-width:54px;padding:6px 4px;border-radius:8px;
     border:1px solid var(--line);background:var(--bg-elev);color:var(--ink);
@@ -3104,12 +3109,12 @@ var COMET_QUEST_REFRESH_BASE_COST = 25;
 // State
 // ---------------------------------------------------------------
 function freshState(){
-  var spirits = {}, nodes = {}, research = {}, researchQueue = {}, heroRarity = {}, heroResource = {}, wispModules = {}, wispUltimate = {}, empowerQueue = {}, achieved = {}, owned = {}, longStudyLevels = {}, studyQueue = {};
+  var spirits = {}, nodes = {}, research = {}, researchQueue = {}, heroRarity = {}, heroResource = {}, wispModules = {}, wispUltimate = {}, empowerQueue = {}, achieved = {}, owned = {}, longStudyLevels = {}, studyQueue = {}, studyUseMotes = {}, studySpeedTargets = {};
   SPIRITS.forEach(function(sp){ spirits[sp.id] = 0; heroRarity[sp.id] = 0; heroResource[sp.id] = 0; wispModules[sp.id] = 0; wispUltimate[sp.id] = false; empowerQueue[sp.id] = true; });
   spirits['ember'] = 1;
   NODES.forEach(function(n){ nodes[n.id] = 0; });
   RESEARCH.forEach(function(r){ research[r.id] = 0; researchQueue[r.id] = false; });
-  LONG_STUDIES.forEach(function(l){ longStudyLevels[l.id] = 0; studyQueue[l.id] = false; });
+  LONG_STUDIES.forEach(function(l){ longStudyLevels[l.id] = 0; studyQueue[l.id] = false; studyUseMotes[l.id] = false; studySpeedTargets[l.id] = 1.5; });
   return {
     schemaVersion:SAVE_SCHEMA_VERSION,
     lumen:0, shards:0, prisms:0, comets:0, motes:0, sigils:0,
@@ -3120,7 +3125,7 @@ function freshState(){
     formationPresets:{push:['ember'],farm:['ember'],boss:['ember']}, activeFormationPreset:'push',
     formationRebuild:null,
     nodes:nodes, research:research, researchQueue:researchQueue,
-    longStudyLevels:longStudyLevels, activeStudies:[], studyQueue:studyQueue,
+    longStudyLevels:longStudyLevels, activeStudies:[], studyQueue:studyQueue, studyUseMotes:studyUseMotes, studySpeedTargets:studySpeedTargets,
     achieved:achieved, owned:owned, riftTheme:'default',
     buffUntil:0, buffMult:1, supportBuffs:null,
     ascendCount:0, ascendRewardedDepth:0, sigilResonanceUses:0, totalTaps:0, totalKills:0, totalOfflineSeconds:0, luminousAccum:0,
@@ -3494,13 +3499,21 @@ function normalizeCurrentSave(input){
     var speed = Number(active.speedMult);
     var validSpeed = speed===1 || LAB_SPEED_TIERS.indexOf(speed)!==-1;
     if(!Number.isFinite(remaining) || !Number.isFinite(total) || total<=0 || !validSpeed) return false;
-    active.remainingSec = Math.max(0,Math.min(total,remaining));
-    active.totalDurationSec = total;
-    active.speedMult = speed;
     seenStudies[active.id] = true;
     return true;
   }).slice(0,5).map(function(active){
-    return {id:active.id,remainingSec:active.remainingSec,totalDurationSec:active.totalDurationSec,speedMult:active.speedMult};
+    var total=Number(active.totalDurationSec);
+    return {id:active.id,remainingSec:Math.max(0,Math.min(total,Number(active.remainingSec))),totalDurationSec:total,speedMult:Number(active.speedMult)};
+  });
+
+  var useMotes = isPlainObject(source.studyUseMotes) ? source.studyUseMotes : {};
+  var speedTargets = isPlainObject(source.studySpeedTargets) ? source.studySpeedTargets : {};
+  LONG_STUDIES.forEach(function(node){
+    var validTarget=LAB_SPEED_TIERS.indexOf(speedTargets[node.id])!==-1;
+    var paid=out.activeStudies.find(function(active){return active.id===node.id;});
+    out.studySpeedTargets[node.id]=validTarget ? speedTargets[node.id] : paid && paid.speedMult>1 ? paid.speedMult : fresh.studySpeedTargets[node.id];
+    // Malformed or missing targets cannot turn an ON value into spending intent.
+    out.studyUseMotes[node.id]=validTarget && useMotes[node.id]===true;
   });
 
   var achieved = isPlainObject(source.achieved) ? source.achieved : {};
@@ -4994,17 +5007,24 @@ function startStudy(node){
 }
 function applySpeedTier(studyId, mult){
   var active = findActiveStudy(studyId);
-  if(!active) return;
   var node=LONG_STUDIES.find(function(n){return n.id===studyId;});
-  if(node && node.levelCap!==undefined && longStudyLevel(studyId)>=node.levelCap) return;
-  if(mult<=active.speedMult) return;
+  if(!node || !active || active.remainingSec<=SIM_EPS || state.maxDepthEver<(node.unlockDepth||1) || LAB_SPEED_TIERS.indexOf(mult)===-1) return false;
+  if(node.levelCap!==undefined && longStudyLevel(studyId)>=node.levelCap) return false;
+  if(mult<=active.speedMult) return false;
   var cost = speedTierCost(mult);
-  if(state.motes<cost) return;
+  if(state.motes<cost) return false;
   state.motes -= cost;
   active.speedMult = mult;
+  state.studySpeedTargets[studyId] = mult;
   saveState();
   renderLongStudies();
   renderHud();
+  return true;
+}
+function studyMotesPlan(node){
+  var active=findActiveStudy(node.id),target=state.studySpeedTargets[node.id];
+  if(state.studyUseMotes[node.id]!==true || LAB_SPEED_TIERS.indexOf(target)===-1 || !active || active.remainingSec<=SIM_EPS || state.maxDepthEver<(node.unlockDepth||1) || (node.levelCap!==undefined && longStudyLevel(node.id)>=node.levelCap) || active.speedMult>=target) return null;
+  return {active:active,target:target,cost:speedTierCost(target)};
 }
 // Closing paid overcap work is progress, but is never an earned completion.
 function finishStudyRecord(index){
@@ -5209,7 +5229,7 @@ function controlText(node){
 }
 // Shared presentation states read existing eligibility; they never grant or deny purchases.
 function presentControlStates(root){
-  var toggles = ['empower-queue','queue','study-queue','autoascend-toggle'];
+  var toggles = ['empower-queue','queue','study-queue','study-use-motes','autoascend-toggle'];
   root.querySelectorAll('button').forEach(function(btn){
     btn.querySelectorAll('.control-state').forEach(function(label){label.remove();});
     var reason='', kind=btn.disabled?'unavailable':'available', subject='';
@@ -5223,10 +5243,10 @@ function presentControlStates(root){
     var queueAttr=toggles.find(function(attr){return btn.hasAttribute('data-'+attr);});
     if(queueAttr){
       var id=btn.getAttribute('data-'+queueAttr);
-      var on=queueAttr==='empower-queue' ? state.empowerQueue[id]!==false : queueAttr==='queue' ? !!state.researchQueue[id] : queueAttr==='study-queue' ? !!state.studyQueue[id] : !!state.autoAscendEnabled;
+      var on=queueAttr==='empower-queue' ? state.empowerQueue[id]!==false : queueAttr==='queue' ? !!state.researchQueue[id] : queueAttr==='study-queue' ? !!state.studyQueue[id] : queueAttr==='study-use-motes' ? state.studyUseMotes[id]===true : !!state.autoAscendEnabled;
       btn.setAttribute('aria-pressed',String(on));
       if(queueAttr==='queue') subject=RESEARCH.find(function(n){return n.id===id;}).name;
-      if(queueAttr==='study-queue') subject=LONG_STUDIES.find(function(n){return n.id===id;}).name;
+      if(queueAttr==='study-queue' || queueAttr==='study-use-motes') subject=LONG_STUDIES.find(function(n){return n.id===id;}).name;
       if(queueAttr==='autoascend-toggle') subject='Auto-Ascend';
     }
     if(btn.hasAttribute('data-mult')){btn.setAttribute('aria-pressed',String(btn.classList.contains('active')));subject='Forge multiplier';}
@@ -6028,6 +6048,13 @@ function renderResearch(){
   });
 }
 
+function studyMotesMarkup(node){
+  var on=state.studyUseMotes[node.id]===true,target=state.studySpeedTargets[node.id];
+  return '<div class="study-motes-controls"><button class="node-queue-toggle '+(on?'active':'')+'" data-study-use-motes="'+node.id+'">Use Motes '+(on?'ON':'OFF')+'</button>'+
+    '<label>Repeat speed<select data-study-speed-target="'+node.id+'" aria-label="'+node.name+' — Repeat speed">'+LAB_SPEED_TIERS.map(function(mult){
+      return '<option value="'+mult+'" '+(mult===target?'selected':'')+'>'+mult+'x · '+speedTierCost(mult)+' Motes per level</option>';
+    }).join('')+'</select></label></div>';
+}
 function renderLongStudies(){
   var openInspections=Array.from(els['study-list'].querySelectorAll('details[open]')).map(function(el){return el.dataset.studyInspection;});
   var focusedInspection=document.activeElement && document.activeElement.dataset.studyDetails;
@@ -6054,6 +6081,7 @@ function renderLongStudies(){
           'In progress: level '+(longStudyLevel(active.id)+1)+' · bonus earned only on completion.'+(active.id==='measuredinquiry'?' Next: '+earnedPercent(0.02*studyEffectiveLevel(node,longStudyLevel(active.id)+1))+'% less work.':''))+'</div>' +
         '<div class="study-time" data-study-text="'+active.id+'">'+studyRemainingText(active)+'</div>' +
         '<div class="study-bar-track"><div class="study-bar-fill" data-study-bar="'+active.id+'" style="width:'+pct+'%;"></div></div>' +
+        (node ? studyMotesMarkup(node) : '') +
         '<details class="study-inspection" data-study-inspection="'+active.id+'" '+(openInspections.indexOf(active.id)!==-1?'open':'')+'><summary data-study-details="'+active.id+'">'+(node?node.name:'Study')+' · Details &amp; speed</summary>' +
         (node ? '<div class="desc">'+node.desc+'</div>' : '') +
         '<div class="section-sub" style="margin:8px 0;">Spend Motes to speed this Study up:</div>' +
@@ -6095,10 +6123,11 @@ function renderLongStudies(){
         'Next: level '+(level+1)+' · bonus earned only on completion.'+(lnode.id==='measuredinquiry'?' Next: '+earnedPercent(0.02*studyEffectiveLevel(lnode,level+1))+'% less work.':''))+'</div>' +
       (plan.maxed?'':'<div class="study-meta" id="study-price-'+lnode.id+'">Takes '+fmtStudyDuration(dur)+' &middot; '+costIcon('lumen')+formatNum(cost.lumen)+' '+costIcon('shard')+formatNum(cost.shard)+'</div>') +
       '<button class="mini-btn" data-study="'+lnode.id+'" '+(plan.maxed?'':'aria-describedby="study-price-'+lnode.id+'" ')+(plan.affordable?'':'disabled')+' style="margin-top:10px;width:100%;">'+(plan.maxed?'Maxed':plan.reason==='unavailable'?'Unavailable':openSlots>0?'Begin Study':'No open slots')+'</button>' +
+      studyMotesMarkup(lnode) +
     '</div>';
   });
 
-  html += '<div class="section-sub">Unlocking more Studies by pushing deeper raises the slot cap. Studies progress while you’re away. A Study’s Lab Queue begins its next level when a slot and currency are free.</div>';
+  html += '<div class="section-sub">Unlocking more Studies by pushing deeper raises the slot cap. Studies progress while you’re away. Study Queue begins the next paid level. Use Motes buys the selected repeat speed for each active level, including manual starts, as soon as its full price is available. OFF keeps speed already paid for.</div>';
   replaceControlMarkup(els['study-list'],html);
   if(focusedInspection){
     var restoredInspection=els['study-list'].querySelector('[data-study-details="'+focusedInspection+'"]');
@@ -6127,6 +6156,21 @@ function renderLongStudies(){
       state.studyQueue[id] = !state.studyQueue[id];
       saveState();
       renderLongStudies();
+    });
+  });
+  els['study-list'].querySelectorAll('[data-study-use-motes]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var id=btn.getAttribute('data-study-use-motes');
+      state.studyUseMotes[id]=!state.studyUseMotes[id];
+      saveState();renderLongStudies();
+    });
+  });
+  els['study-list'].querySelectorAll('[data-study-speed-target]').forEach(function(select){
+    select.addEventListener('change',function(){
+      var target=Number(select.value);
+      if(LAB_SPEED_TIERS.indexOf(target)===-1) return;
+      state.studySpeedTargets[select.getAttribute('data-study-speed-target')]=target;
+      saveState();renderLongStudies();
     });
   });
 }
@@ -6649,7 +6693,7 @@ function autoEmpowerTick(){
  *   5. Auto-Tap;
  *   6. Auto-Empower;
  *   7. queued Research purchases;
- *   8. Long Study completion, then queued Study starts;
+ *   8. Long Study completion, then queued paid starts and repeat-speed buys;
  *   9. Boss retry, then Boss retreat if the current Boss is still unwinnable.
  *
  * Window/chunk boundaries are not a separate gameplay priority. The same
@@ -6684,7 +6728,7 @@ function simulationSummary(elapsedSec){
     elapsedSec:elapsedSec,
     lumenGained:0, shardGained:0, sigilsGained:0, motesGained:0,
     kills:0, bossKills:0, luminousKills:0, ascends:0, autoTaps:0,
-    empowers:0, researchBought:0, studiesStarted:0, completedStudies:[], closedStudies:[],
+    empowers:0, researchBought:0, studiesStarted:0, studySpeedPurchases:0, studyMotesSpent:0, completedStudies:[], closedStudies:[],
     achievements:[], retreated:false, retreats:0, retries:0,
     fastForwardedKills:0, iterations:0, ascendGains:[]
   };
@@ -6874,11 +6918,51 @@ function simulationCurrencyKillsNeeded(cost,lumenPerKill,shardPerKill){
   var shardKills = shardDeficit<=0 ? 0 : (shardPerKill>0 ? Math.max(1,Math.ceil(shardDeficit/shardPerKill-1e-12)) : Infinity);
   return Math.max(lumenKills,shardKills);
 }
+function simulationBuyStudySpeeds(summary,elapsedSec){
+  var bought=0;
+  // Shared Motes follow catalogue order, independent of active/UI ordering.
+  LONG_STUDIES.forEach(function(node){
+    var plan=studyMotesPlan(node);
+    if(!plan || state.motes<plan.cost) return;
+    state.motes-=plan.cost;
+    plan.active.speedMult=plan.target;
+    summary.studySpeedPurchases++;
+    summary.studyMotesSpent+=plan.cost;
+    simulationTimelinePush(summary,elapsedSec,'studySpeed',{id:node.id,speed:plan.target,cost:plan.cost});
+    bought++;
+  });
+  return bought;
+}
+function simulationKillsUntilStudyMotes(){
+  var depth=state.farmDepth||state.depth;
+  var reward=Math.max(1,Math.round(motesDropFor(depth)*(1+supportMoteBonus())));
+  var chance=eliteChance(depth);
+  var accum=Math.max(0,Math.min(0.999999999999,state.luminousAccum||0));
+  var first=state.enemyIsLuminous ? 1 : 0,best=Infinity;
+  LONG_STUDIES.forEach(function(node){
+    var plan=studyMotesPlan(node);
+    if(!plan) return;
+    var deficit=plan.cost-state.motes;
+    if(deficit<=0){best=0;return;}
+    // Any positive deficit needs a real Luminous reward, however small it is.
+    var luminousNeeded=Math.max(1,Math.ceil(deficit/reward));
+    if(luminousNeeded<=first){best=Math.min(best,1);return;}
+    if(chance<=0) return;
+    var crossings=luminousNeeded-first;
+    var kills=Math.max(2,Math.ceil((crossings-accum-1e-12)/chance)+1);
+    if(!Number.isSafeInteger(kills)) return;
+    // Match the actual batch/spawn crossing arithmetic, including its epsilon.
+    if(Math.floor(accum+(kills-1)*chance+1e-12)<crossings) kills++;
+    if(kills>2 && Math.floor(accum+(kills-2)*chance+1e-12)>=crossings) kills--;
+    best=Math.min(best,kills);
+  });
+  return best;
+}
 function simulationKillsUntilEconomyMutation(rewardScale){
   var depth = state.farmDepth||state.depth;
   var lumenPerKill = enemyRewardFor(depth)*rewardScale;
   var shardPerKill = shardRewardFor(depth)*rewardScale;
-  var best = Infinity;
+  var best = simulationKillsUntilStudyMotes();
 
   RESEARCH.forEach(function(node){
     if(!state.researchQueue[node.id]) return;
@@ -7252,6 +7336,7 @@ function simulationResolveTimestamp(nowMs,elapsedSec,policy,summary,clock){
     actions += studiesStarted;
   }
 
+  actions += simulationBuyStudySpeeds(summary,elapsedSec);
   actions += simulationRecordAchievements(summary);
 
   if(simulationMaybeRetryBoss(policy,summary)){
@@ -7606,6 +7691,7 @@ function advanceStudyOnlyTime(elapsedSec,clockStartMs,summary){
   var nowMs = Number.isFinite(clockStartMs) ? clockStartMs : Date.now();
   simulationCompleteDueStudies(summary);
   simulationStartQueuedStudies(summary);
+  simulationBuyStudySpeeds(summary,0);
   while(remaining>SIM_EPS){
     var next = Math.min(remaining,simulationNextStudySeconds());
     if(!Number.isFinite(next)) break;
@@ -7615,6 +7701,7 @@ function advanceStudyOnlyTime(elapsedSec,clockStartMs,summary){
       nowMs += next*1000;
     }
     var actions = simulationCompleteDueStudies(summary)+simulationStartQueuedStudies(summary);
+    actions += simulationBuyStudySpeeds(summary,Math.max(0,Number(elapsedSec)||0)-remaining);
     if(next<=SIM_EPS && actions===0) break;
   }
   return nowMs;
@@ -7677,7 +7764,8 @@ function tick(){
   }
   if(sim.empowers>0) renderSpirits();
   if(sim.researchBought>0) renderResearch();
-  if(sim.completedStudies.length || sim.closedStudies.length || sim.studiesStarted>0) renderLongStudies();
+  if(sim.studySpeedPurchases>0) saveState();
+  if(sim.completedStudies.length || sim.closedStudies.length || sim.studiesStarted>0 || sim.studySpeedPurchases>0) renderLongStudies();
   else updateStudyProgress();
 
   if(sim.kills>0 || sim.ascends>0){
@@ -7876,6 +7964,8 @@ function applyOfflineProgress(){
     shardEarned:sim.shardGained,
     sigilsEarned:sim.sigilsGained,
     motesEarned:sim.motesGained,
+    studySpeedPurchases:sim.studySpeedPurchases,
+    studyMotesSpent:sim.studyMotesSpent,
     ascends:sim.ascends,
     completedStudies:sim.completedStudies,
     closedStudies:sim.closedStudies,
