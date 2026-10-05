@@ -11,6 +11,7 @@ Filer i samme række er kandidater; indlæs kun det, som den konkrete opgave kr�
 | Measured Inquiry | `tasks/MEASURED_INQUIRY_001.md`, `tasks/MEASURED_INQUIRY_001_REQUIREMENTS.txt` | Originalkrav før implementering/review |
 | Forge/Lab-beslutning og begrundelser | `decisions/2026-10-04-forge-lab.txt` | Ved scope-/designspørgsmål |
 | PR41 Core/QA/Lead-accept | `decisions/2026-10-05-pr41-review.txt` | Ved integration eller vurdering af reviewgrænser |
+| Afsluttet integration og APK132 | `decisions/2026-10-05-integration-release.txt` | Ved release-provenance eller statuskontrol |
 | Context integration | `tasks/CONTEXT_SETUP_001.md` | Kun dokumentationsopgaven |
 | Overdragelse/checkpoint | `HANDOFF_TEMPLATE.md` | Ved milepæl/handoff |
 | Produktkode | `../index.html` på relevant commit | Målrettede afsnit; udvid ved afhængigheder |
@@ -35,8 +36,9 @@ pakken skal uploades igen, hvis den ikke kan hentes i den nye chat.
 
 Originalmandatets SHA256 er `1df86fd6eefa6416b8b6225051d244dbe79797769777537017b273f92a1732db`.
 GitHub-diff/CI: PR41 og run37209757818 på kandidat10f2ff5f… er observerede
-receipts. Core+QA+Lead har scoped accept på exact kandidat; dette er fortsat
-ikke en accepteret release eller writer-/mergetilladelse. Kopier er versionsmærkede;
+receipts. Core+QA+Lead har scoped accept på exact kandidat; PR41 er efterfølgende merged
+og APK132 accepteret. Se den daterede integrationsbeslutning for receipts.
+Ingen ny writer-/merge-/buildtilladelse følger af indekset. Kopier er versionsmærkede;
 opdater ikke historiske originals for at få dem til at ligne nuværende status.
 
 ## Projektets Kilder

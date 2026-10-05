@@ -430,8 +430,8 @@ Protect:
 Læs [PROJECT_STATE.md](PROJECT_STATE.md) for det verificerede snapshot.
 P2-06 region-/bossfeedback og P2-07A Formation reconstruction er integreret;
 Forge/Lab-separation, Forge v1 og PR36–40 er integreret. P2-04 er fortsat
-deferred/unmerged; P2-05 er deferred. Measured Inquiry er i en observeret
-Draft PR og afventer frossen aflevering og uafhængigt review. Flere Forge/Lab-
+deferred/unmerged; P2-05 er deferred. Measured Inquiry er scoped accepteret,
+merged via PR41 og udgivet i Android0.1.132; context setup er på main via PR42. Flere Forge/Lab-
 udvidelser vurderes i separate, begrundede scopes; Opening Focus er parkeret.
 
 Historiske krav nedenfor bevares til sporbarhed. De erstatter ikke en aktuel
