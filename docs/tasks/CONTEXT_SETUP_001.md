@@ -1,27 +1,24 @@
 # CTX-001 — målrettet opstart og vedvarende projektstatus
 
-Brugerautoriseret 5. oktober 2026; ejer 00_09, GPT-6.1 Sol · High.
-Status: klar til separat docs-Draft PR efter scoped PR41 Core+QA+Lead-accept
-og 02_07's rapporterede stop/freeze/frigivelse 2026-10-05T11:12:18+02:00.
-00_09 har eksklusiv writerlease til nedenstående docs-scope indtil frossen
-aflevering. Branch `00/context-engineering-setup` fra exact main
-`df78d51181a59d247bf4fc9abf1c7e05237e9c2b`. Main-integration er udestående.
+Status: **afsluttet og integreret**.00_09 · GPT-6.1 Sol · High.
+17 dokumentationsfiler i [PR42](https://github.com/karahaNx/Lumenfall/pull/42),
+head `dfce390b5ed65f5a3cbaa6938aacdb299da3dc7e`, CI37289272606 attempt1/success.
+Merge `21c10e594c1e4049a72595d007ccb24b54b5747c`, tree `5b29c88c435056b327be397b0bbee82d97815efe`.
+Den efterfølgende PR41-merge bevarede alle17 docs-blobs; dette docs-checkpoint
+ajourfører status/opgavekort/indeks og registrerer den afsluttede udgivelse.
 
-Scope: kort AGENTS.md, eksisterende status/ownership/roadmap/README, egne
-rolledokumenter, kildeindeks, handoffskabelon, aktuelle opgavehenvisninger og
-kort dateret Lead-reviewbeslutning. Det er17 dokumentationsfiler.
-Originalt Lab-mandat og Lead-beslutning kopieres uændret for kravsporbarhed.
-Gameplay, tests, native, workflows, signing og releases ændres ikke.
+Brugerens efterfølgende “Ja go” godkendte de to merges i rækkefølge og normal
+automatisk Android-publicering. Det oprindelige docs-only mandat og Draft-
+aflevering findes i Git-historikken på head ovenfor. Ingen gameplay, tests,
+native, workflows eller signing er ændret af docs-opgaven/statusopdateringen.
 
-Live main/tree, alle39 branches, PR41 head, CI og alle fem aktive runqueries
-er genverificeret uændrede 2026-10-05T09:13:17.200Z. Ny branch er ledig.
-Anvend den validerede docs-kandidat på denne isolerede branch og åbn én docs-
-Draft PR. Standard PR-CI kan følge denne handling; ingen manuel genkørsel.
-Merge/release er ikke del af denne opgave. Dokumentationsmerge udløser med
-nuværende Android paths ikke APK-build; genkontrollér trigger før handling.
+Opstart: AGENTS.md → egen rolle via CHAT_OWNERSHIP.md → PROJECT_STATE.md →
+aktuel konkret opgave. Originalkrav læses før arbejde på dem; øvrig historik,
+ZIP'er og logs hentes via CONTEXT_INDEX efter behov. Ingen fuld ZIP-læsning
+ved opstart og ingen garanti om deaktiveret komprimering eller tabsfri samtale.
+Originalt Measured Inquiry-mandat er bevaret byteidentisk; indeks og relative
+links er kontrolleret. Se [integration/release](../decisions/2026-10-05-integration-release.txt).
 
-Accept: ingen startup-læsning af hele ZIP/audit/logarkiv; alle gældende krav er
-tilgængelige, relevante originalkrav læses før handling, links og manifest er
-kontrolleret, fælles startfiler er målt, og remote status rapporteres præcist.
-Efter afleveret/frossen kandidat er writerleasen frigivet. Flere skriverunder,
-merge af docs/PR41 eller en Android-build kræver et nyt konkret mandat.
+Ingen aktiv writer efter checkpoint; ingen ekstra build, dispatch/rerun,
+signingændring eller manuel cleanup er bestilt. Fremtidige Lead-opgaver skal
+holde PROJECT_STATE kort og opdatere krav/beslutninger ved milepæle.

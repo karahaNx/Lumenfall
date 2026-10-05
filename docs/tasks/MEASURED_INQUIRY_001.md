@@ -1,21 +1,24 @@
 # LAB-001 — Measured Inquiry
 
-Aktuel Lead: 00_09. 02_07 har meldt stop, freeze og frigivet writerlease via
-brugerens overførte svar 2026-10-05T11:12:18+02:00. Ingen ny gameplayopgave
-eller writer til PR41-integration er tildelt. Lead har genlæst GitHub uændret;
-den anden chats lokale processtatus er workerens rapport, ikke Leads måling.
-Baseline `df78d51181a59d247bf4fc9abf1c7e05237e9c2b`; remote scope og alle tekniske krav står i
-[det uændrede originalmandat](MEASURED_INQUIRY_001_REQUIREMENTS.txt).
-Læs mandatet fuldt før implementering eller scoped review; dette kort er et indeks.
+Status: **afsluttet, merged og udgivet i Android 0.1.132**.
+00_09 · GPT-6.1 Sol · High. Brugerens “Ja go” den5. oktober2026 godkendte
+PR42 først, PR41 bagefter og PR41s normale automatiske build/publicering.
+02_07s kandidat blev bevaret; ingen ny gameplayopgave eller writer er tildelt.
 
-Observeret 2026-10-05T09:13:17.200Z: [PR41](https://github.com/karahaNx/Lumenfall/pull/41)
-Draft/open/unmerged, head `10f2ff5facef78a7c1d8293b6a8d07be888f7350`, tree
-`d1910132973d117c75c3d4ace4867e86f372110e`, CI `37209757818` attempt1/success.
-01_06 Core og 04_05 QA har scoped ACCEPT. 00_09 har valideret pakker/evidens og
-accepterer exact kandidat inden for de bestilte scopes. Beslutning og grænser:
-[Lead-review](../decisions/2026-10-05-pr41-review.txt).
+Originalt kravgrundlag: [uændret mandat](MEASURED_INQUIRY_001_REQUIREMENTS.txt).
+Læs det fuldt før en ny ændring/review af systemet; kortet er kun et indeks.
+Original baseline `df78d51181a59d247bf4fc9abf1c7e05237e9c2b`.
+Accepteret [PR41](https://github.com/karahaNx/Lumenfall/pull/41)-head `10f2ff5facef78a7c1d8293b6a8d07be888f7350`;
+tree `d1910132973d117c75c3d4ace4867e86f372110e`, CI37209757818 attempt1/success.
+Scoped Core+QA+Lead-accept: [historisk reviewbeslutning](../decisions/2026-10-05-pr41-review.txt).
 
-00: aflever separat CTX-001 docs-kandidat; disponér derefter konkret integration.
-01/04: reviews afsluttet; afvent nyt konkret mandat. 03: intet nyt mandat.
-Ingen merge, Android-build, manuel dispatch/rerun eller release er autoriseret.
-Accept gælder kun exact head/tree; kandidatændring kræver vurdering af nye checks.
+Mergecommit `635896267023a7e166a6dbbfa1dd745e896fbbf4` har PR42-merge og den accepterede head som parents.
+Kombineret tree `0e2264f89021e3f4544b47189ee44f74e7d3dfca` er det på forhånd beregnede resultat.
+Produkt-/testbytes er uændrede fra accepteret kandidat. Run37293151872,
+attempt1/success, publicerede 0.1.132; APK-index matcher kandidatens SHA256.
+Detaljer: [integration/release](../decisions/2026-10-05-integration-release.txt).
+
+01/04: reviews afsluttet.03: intet nyt mandat.02: meldt stop/freeze og writer
+frigivet; processtatus er rapporteret, remote commit målt. Ingen aktiv writer.
+Gamle Draft-/mergeforbud beskrev datidens scope; brugerens efterfølgende
+integrationsmandat er udført og afsluttet. Nye ændringer kræver konkret scope.

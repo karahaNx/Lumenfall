@@ -1,0 +1,66 @@
+Lumenfall — afsluttet integration og Android132
+00_09 — Lead / Architecture · GPT-6.1 Sol · High
+Remote snapshot 2026-10-05T10:01:28.209Z; lokale APK-kontroller udført samme dag.
+
+MANDAT OG EJERSKAB
+Brugerens “Ja go”5. oktober2026 efter konkret integrationsforslag godkendte:
+merge exactPR42 først, exactPR41 derefter og normal automatisk Android-build
+med rolling publicering fra PR41-merge.00_09 var eneste integrationswriter.
+02_07 havde meldt stop/freeze og frigivet writer; Core/QA var afsluttet.
+Efter dette docs-checkpoint er writer frigivet; ingen næste opgave bestilt.
+Ingen manuel dispatch/rerun/retryloop, signingændring, ekstra build eller
+manual oprydning af branches/releases er udført. Det uændrede workflows
+normale publicering og egne legacy-cleanup-steps fulgte den godkendte run.
+
+GIT-INTEGRATION — OBSERVERET
+Udgangsmain df78d51181a59d247bf4fc9abf1c7e05237e9c2b.
+PR42 head dfce390b5ed65f5a3cbaa6938aacdb299da3dc7e, CI37289272606 attempt1/success.
+Regulær merge 21c10e594c1e4049a72595d007ccb24b54b5747c, parents [udgangsmain, PR42head],
+tree5b29c88c435056b327be397b0bbee82d97815efe. Intet Android-run på denne SHA.
+PR41 head 10f2ff5facef78a7c1d8293b6a8d07be888f7350, CI37209757818 attempt1/success.
+Regulær merge 635896267023a7e166a6dbbfa1dd745e896fbbf4, parents [PR42merge, PR41head],
+tree0e2264f89021e3f4544b47189ee44f74e7d3dfca,80 blobs. Det matcher præcis den forud beregnede
+disjunkte integration. Samtlige17 docs-blobs matcher PR42 og alle øvrige
+produkt/test/asset/native/workflow-blobs matcher den accepterede PR41-kandidat.
+Begge PR'er er closed/merged. Alle39 øvrige branches er uændrede; ingen slettet.
+
+REVIEWGRUNDLAG OG GRÆNSER
+Core scopedACCEPT:30 scenarier+13 egne runtimechecks. QA scopedACCEPT:
+129 scenarier/149 cases,12 forventede negative harnessafvisninger og585
+egne checks.00_09 kontrollerede manifest, originalkrav, patch, immutable
+blobindeks, processreceipts og inkluderede relevante whole outputs.
+Ingen ny fuld gameplaysuite kørt af Lead efter merge, fordi accepterede
+produkt-/testbytes er identiske. Android-run udførte egne source/smokechecks.
+Detaljer og originalpakkernes genfinding: CONTEXT_INDEX og historisk
+2026-10-05-pr41-review.txt. Balance er ikke bevist af katalogregning.
+
+ANDROID — ACCEPTET VERIFICERET RELEASE
+Run37293151872, eventpush, head635896267023a7e166a6dbbfa1dd745e896fbbf4, run_number132,
+attempt1/completed/success. Job111708076073, alle27 steps success.
+Normal build og publicering: ingen manuel genkørsel.
+Release396102072, tagandroid-latest peger på produktmerge ovenfor.
+Asset612166562 Lumenfall.apk,6830500 bytes, created2026-10-05T09:56:56Z.
+SHA256 d59d24f2d9bf54c6329efe1f5bec9142773e7663b03a89fd7ba9ae4b5e9d49a4
+Packagecom.lumenfall.app, versionCode132, versionName0.1.132.
+Eksisterende certifikat SHA256 A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21
+Identiteten bestod CI før publicering. Lead downloadede det publicerede APK,
+kontrollerede GitHub-digest/størrelse og fuld ZIP-CRC og kørte den byteidentiske
+repo-verifier lokalt med officielle Google build-tools35.0.0 (officiel
+archive checksum kontrolleret). aapt og apksigner verify gav exit0.
+APK assets/public/index.html SHA256 2f858652d71e515cc1482ad5d8a182053b8d3b3c70be2f8fc09fc35a1548ecbe
+Alle15 inkluderede repo-filer fra index/fonts/branding matcher Git-blobs
+på produktcommit. APK132 er derfor accepteret inden for disse scopes.
+Fysisk Android, TalkBack og install/update er ikke udført i denne session.
+Ingen ændring af keystore/hemmeligheder; signing-kontinuitet er verificeret.
+
+STATUS OG BEVAREDE ÅBNE FORHOLD
+Ved snapshot40 branches,0 åbne PR'er og0 runs i hver af de fem aktive queries.
+00_09 afslutter docs-status og frigiver writer. Ingen ny specialistopgave.
+SamsungA40/crDroid udgået af aktiv backlog/fremtidige acceptkrav på brugerens
+instruks; historiske originals uændrede. OpeningFocus parkeret; flere Forge-
+upgrades ønskes senere, men intet scope er bestilt. P2-04/native og P2-05
+release-hardening deferred. Signing-diagnosebranch131 må ikke merges/cleanup
+uden særskilt scope. Run131 attempt1-rootcause ukendt; ingen retrytilladelse
+udledes af det. Find-P3 announcement separat/nonblocking; Farm recommended
+kræver ønsket adfærd præciseret.02_07s lokale processtatus er rapporteret,
+ikke uafhængigt målt; ukendt lokalt workerarbejde er ikke rekonstrueret.
