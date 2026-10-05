@@ -1,32 +1,17 @@
-# Lumenfall — Chat Ownership
+# Lumenfall — roller og skriveejerskab
 
-Use these boundaries after the project is split into focused chats.
+Læs kun egen rolle ved opstart. Fælles regler står i `../AGENTS.md`;
+aktuelle chatnumre, opgaver og writer står i `PROJECT_STATE.md`.
 
-## 00 — Lead / Architecture
+| Rolle | Rolledokument | Ansvar |
+| --- | --- | --- |
+| 00 Lead / Architecture | [00_LEAD.md](agents/00_LEAD.md) | Scope, beslutninger, status, integration |
+| 01 Core / Android / APK | [01_CORE.md](agents/01_CORE.md) | Save-infrastruktur, native Android, signing, workflows |
+| 02 Gameplay / Progression | [02_GAMEPLAY.md](agents/02_GAMEPLAY.md) | Combat, progression, økonomi, Lab/Forge, simulation |
+| 03 UI / Visuals / Branding | [03_VISUALS.md](agents/03_VISUALS.md) | Mobil UX, grafik, layout, formulering af godkendt adfærd |
+| 04 Debug / QA | [04_QA.md](agents/04_QA.md) | Uafhængigt review, regressions- og runtime-evidens |
 
-Owns roadmap, architecture, cross-system decisions and integration planning. Reads `main` first. Avoids large feature implementation unless coordinating an integration.
-
-## 01 — Core / Android / APK
-
-Owns Capacitor, Android lifecycle, signing, GitHub Actions, native icon/splash generation, save/load infrastructure and release delivery.
-
-## 02 — Gameplay / Progression
-
-Owns combat, Rift Push/Farm, bosses, Wisps, Formation Bonds, currencies, progression, Ascension, Lab systems and balance.
-
-## 03 — UI / Visuals / Branding
-
-Owns visual language, logo usage, startup presentation, layout, animation, artwork and mobile UX. Gameplay rules should not be changed merely to achieve a visual result.
-
-## 04 — Debug / QA
-
-Owns regression testing, runtime debugging, state invariants, performance checks and Android-specific reproduction. It validates work from the other areas rather than redesigning systems by default.
-
-## Shared rules
-
-1. GitHub `main` is the source of truth.
-2. Read the current implementation before changing it.
-3. Do not overwrite another subsystem unnecessarily.
-4. Keep commits scoped and explain touched files.
-5. Feature branches are preferred when multiple chats are actively writing code at the same time.
-6. Merge only after CI / QA is green.
+En rolle er ikke en writer-tilladelse. Lead tildeler én repo-writer ad gangen
+med scope, baseline og eksplicit stop/frigivelse. Læsende reviews kan fortsætte.
+Et review gælder præcist commit/tree og kontrakt. Kandidatændring kræver en
+vurdering af hvilke acceptresultater, der skal fornyes.

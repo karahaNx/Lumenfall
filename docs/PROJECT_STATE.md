@@ -1,59 +1,60 @@
-# Lumenfall — Project State
+# Lumenfall — aktuel projektstatus
 
-_Last updated: 2026-09-29_
-_Consolidated against `main` @ `2f3a65ce974953cb0f216e25ea10a242bd9a6a7c`._
+Snapshot: 2026-10-05T09:13:17.200Z. Repository: `karahaNx/Lumenfall`.
+Main observeret: `df78d51181a59d247bf4fc9abf1c7e05237e9c2b`. Tree: `d1d128a82f6bc204655dc662a5239f98dca51059`.
+SHA'er er checkpoints; kontrollér live før handling. Denne fil er en kort status,
+ikke det fulde kravgrundlag eller en ny writer-/merge-/buildtilladelse.
 
-## Source of truth
-GitHub `main` is authoritative. New chats reconstruct current state from the repository. Merged implementation and automated contracts override stale planning text.
+## Produkt og accepteret baseline
+Android-only, mobil idle RPG med Capacitor/WebView. P0/P1-kontrakter er etableret.
+Region-/bossfeedback og Formation reconstruction er integreret; P2-06 er ikke
+en ny ustartet opgave. Forge/Lab-separation og Forge v1 er integreret.
+Seneste accepterede produktforbedringer: PR36 live formation/Bonds/boost,
+PR37 additive support stacking, PR38 kumulative effekter og Deed-unlocks,
+PR39 kompakt Empower/Recruit og PR40 Auto-Ascend-targets med bounded navigation.
+De er på main; PR40/releaseblokken er lukket ifølge accepteret Lead-handoff.
 
-## Product
-Lumenfall is an Android-only, mobile-first idle RPG packaged with Capacitor. Core systems include Rift Push/Farm, auto combat and Guardian Tap, Wisps and Formation Bonds, bosses, Ascension/permanent upgrades, Lab Research/Long Studies, Deeds/dailies, offline progression, backup/restore, Auto-Ascend and Auto-Empower.
+## Aktive opgaver og ejerskab
+Lead: **00_09**. Core: **01_06**. Gameplay: **02_07**. Visuals: **03_05**. QA: **04_05**.
 
-## Milestone status
+| Opgave | Status og næste handling |
+| --- | --- |
+| Measured Inquiry | PR41 exact kandidat har scoped Core+QA+Lead-accept. 02_07 har meldt stop, freeze og frigivet writerlease via brugerens svar 2026-10-05T11:12:18+02:00. GitHub-kandidat er genverificeret uændret. Se `tasks/MEASURED_INQUIRY_001.md`. |
+| Uafhængigt Core/QA-review | Afsluttet: 01_06 Core30 scenarier+13 egne checks; 04_05 QA129 scenarier/149 cases,12 negative afvisninger+585 egne checks. Begge scoped ACCEPT; rapporter og Lead-evidenskontrol er modtaget. Intet yderligere 03-review bestilt. |
+| Context setup | 00_09 er eneste writer under CTX-001: kun17 docs-filer på `00/context-engineering-setup`, én docs-Draft PR. Kandidaten afleveres frossen; derefter ingen yderligere remote skrivning uden nyt mandat. Integration til main afventer. Se `tasks/CONTEXT_SETUP_001.md`. |
 
-### P0 — complete
-P0-01 through P0-05 are complete.
+PR41 observeret head: `10f2ff5facef78a7c1d8293b6a8d07be888f7350`, tree `d1910132973d117c75c3d4ace4867e86f372110e`.
+Pre-merge run `37209757818`: attempt1/success på denne head. Lead har efter-
+kontrolleret manifest, originalkrav, patch,67-blobindeks, testreceipts og relevante
+rå outputs. Se `decisions/2026-10-05-pr41-review.txt`. Ingen aktive runs i de fem
+statusqueries ved snapshot. PR41 er fortsat Draft/open/unmerged; accepts giver
+ikke merge-, workflow- eller buildtilladelse. Lead har ikke kørt en ny fuld suite.
 
-### P1 — complete
-P1-01 through P1-06 are established, including final APK identity, chronological offline automation, Wisp semantics, mobile Rift layout, accessibility coverage and deterministic lifecycle/offline regression coverage.
+## Låste beslutninger
+Kun Measured Inquiry er valgt i første Forge/Lab-tranche: unlock60, cap10,
+2% mindre work pr. completed level, max20%, kun nye betalte legacy8-starter.
+Aktive snapshots bevares; ingen selvdiscount eller legacy-capnerf. Schema1
+bevares; sikker downgrade-roundtrip er ikke lovet. Læs originalmandatet før
+implementering/review. Opening Focus er parkeret; flere Forge-upgrades er
+fortsat ønsket senere. Katalogets formeltal er reproduceret, balance ikke bevist.
 
-### P2 — completed product improvements
-Integrated on `main`:
-- P2-01A — Ascension integrity plus boss/background behavior.
-- P2-01B — Wisp rarity/module progression pacing.
-- P2-01C — Sigil/Comet endgame utility.
-- P2-02A — Formation quick access/presets, Rift Long Study visibility, Permanent Upgrades/Long Studies split, Auto-Empower All and Deed progress.
-- P2-02B — Wisp and Lab mobile hierarchy.
-- P2-03A — Wisp role integrity aligned with actual combat mechanics.
-- P2-03B — Auto-Ascend cleared-Rift integrity.
+## Release og udestående forhold
+Accepteret Android: **0.1.131**, build run `37156346912` attempt2 ifølge handoff.
+Live release `396102072`, asset `609203044`, 6828796 bytes;
+SHA256 `0cb6cbe35e4371db7a7a30c4c73573e4cdd88439c32057f60c5128aacfebab96` er uændret.
+Run131 attempt1-rootcause er ukendt. Signing-diagnosebranch må ikke merges
+som produktændring; cleanup kræver særskilt scope. Native P2-04 er deferred,
+Fysisk Android/TalkBack/install er ikke valideret her. Samsung A40 og dens
+crDroid-specifikke support er udgået på brugerens instruks 2026-10-05;
+det er hverken aktiv backlog eller et fremtidigt accept-/releasekrav.
+Find-P3 announcement
+er separat/nonblocking; Farm recommended kræver præcisering af ønsket adfærd.
 
-The gameplay/UX improvement program represented by these tasks is substantially complete.
-
-### P2-04 — blocked/deferred, not merged
-Native Android lifecycle validation remains unmerged. APK build/identity, emulator boot/install and packaged WebView execution were demonstrated, but GitHub-hosted Android emulator/ADB transport instability prevented a complete green native lifecycle smoke and required 3/3 unchanged-code stability.
-
-No production gameplay/save regression was demonstrated by the P2-04 failures. Do not continue emulator parameter roulette without new causal evidence. P2-04 is not a global blocker for independent product development.
-
-## Current direction
-**Next product milestone: P2-06 — Artwork, motion and late-game presentation refinement.**
-
-P2-06 improves the existing game rather than adding systems for their own sake: stronger region identity, Wisp/boss differentiation, cosmetic/milestone presentation, motion/feedback and overall visual progression while preserving compact mobile readability, no-scroll Rift behavior, accessibility, frame pacing and battery behavior.
-
-**After P2-06: P2-07 — Late-game system expansion decision.** Lead + Gameplay reassess the current game and decide whether additional mechanics are justified by a concrete player decision/problem.
-
-**P2-05 — Production release hardening** is deferred until the product is closer to a release candidate. It must preserve established signing and APK identity guarantees.
-
-## Coordination
-- `main` is the only production source of truth.
-- 03 owns P2-06 presentation; 02 reviews gameplay meaning; 04 owns performance/accessibility/regression acceptance; 00 controls scope and merge order.
-- Do not redefine gameplay semantics from UI code.
-- Overlapping `index.html` production changes merge sequentially unless 00 confirms isolation.
-- P2-04 stays isolated and unmerged until its native acceptance criteria can genuinely be satisfied.
-- P2-05 is not active.
-- New late-game mechanics wait for P2-07.
-
-## Current QA baseline
-Preserve established behavioral, persistence, live/offline parity, chronology, Wisp formula, compact viewport, accessibility, negative-self-test, browser-runtime and APK identity contracts. P2-06 must add presentation without weakening these guarantees.
-
-## Immediate next action
-03 — UI / Visuals / Branding audits current `main` specifically for P2-06, produces a bounded implementation plan from current product evidence, then implements and validates the highest-value presentation refinements. 02 and 04 review semantics/performance where affected. 00 prevents scope expansion into P2-07 mechanics during P2-06.
+Næste Lead-handling: aflever den separate context-Draft PR og dens eksakte
+candidate/CI-receipt; disponér derefter integration i en konkret rækkefølge med
+én writer. Docs-merge samt PR41-integration og Android/release kræver særskilt
+aktuelt mandat. Workerens fulde sluthandoff er ikke blevet genskabt;
+reviews gælder dens publicerede immutable commit, ikke ukendte lokale ændringer.
+Workerens lokale processtatus er rapporteret, ikke målt af Lead. Live main,
+alle39 branches, PR41 og alle fem aktive runqueries var uændrede ved snapshot.
+Detaljer og originalpakker: `CONTEXT_INDEX.md` efter behov.
