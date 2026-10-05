@@ -25,9 +25,16 @@ automatisk indlæsning fra et eksternt repository.
 oprettet Draft PR frigiver ikke automatisk writer. Andre roller må undersøge
 read-only og forberede lokale forslag. Brugeren overfører selv opgavefiler;
 brug ikke beskedværktøjer eller subagenter. Omdøb ingen chats.
-Merge, Android-build, dispatch/rerun, release, signing og cleanup kræver et
-aktuelt mandat til netop handlingen. En dokumentationsopgave giver ikke disse
-tilladelser. Læs workflow-triggere før en remote handling.
+Brugerens stående godkendelse fra 2026-10-05 ("Du har altid godkendelse.")
+gælder nødvendige handlinger i det aftalte Lumenfall-scope. Lead behøver ikke
+bede om gentagen godkendelse til sådanne handlinger. Scope, writer, aktuelle
+baselines og workflow-triggere skal stadig kontrolleres. Nye arbejdsområder
+fastlægges gennem brugerens opgave eller et konkret Lead-mandat.
+
+Merge, Android-build, dispatch/rerun, release, signing og cleanup skal ligge
+inden for det aktuelle scope og den gældende godkendelse. En rent afgrænset
+dokumentationsopgave udvider ikke produkt-/release-scope. Læs workflow-triggere
+før en remote handling.
 
 ## Kontekst og checkpoint
 Hold regler, egen rolle, kort status og aktuel opgave i startkonteksten.
