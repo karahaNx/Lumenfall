@@ -23,6 +23,14 @@ FIXTURES_PATH = ROOT / "fixtures.json"
 RAW_ARTIFACT_ROOT = None
 
 SCENARIOS = {
+    "inquiry-contracts": "fresh",
+    "inquiry-chronology": "fresh",
+    "inquiry-ui": "fresh",
+    "inquiry-ui-reduced-motion": "fresh",
+    "inquiry-save-reload": "fresh",
+    "inquiry-backup-restore": "fresh",
+    "inquiry-recovery": "fresh",
+    "inquiry-reset": "fresh",
     "raw-process-contract": "fresh",
     "support-stacking": "fresh",
     "auto-ascend-target-contract": "fresh",
@@ -448,6 +456,30 @@ applyOfflineProgress = function(){
 };
 
 window.__lumenfallQaBridge = {
+  inquiry: {
+    nodes: function(){return JSON.parse(JSON.stringify(LONG_STUDIES));},
+    originals: function(){return LEGACY_STUDY_IDS.slice();},
+    plan: function(id){return getStudyStartPlan(typeof id==='string'?LONG_STUDIES.find(function(n){return n.id===id;}):id);},
+    start: function(id){return startStudy(typeof id==='string'?LONG_STUDIES.find(function(n){return n.id===id;}):id);},
+    autoFill: function(){return autoFillStudySlots();},
+    queued: function(){var summary=simulationSummary(0);simulationStartQueuedStudies(summary);return summary;},
+    tail: function(seconds){var summary=simulationSummary(seconds);advanceStudyOnlyTime(seconds,2000000000000,summary);return {state:JSON.parse(JSON.stringify(state)),summary:summary};},
+    due: function(){var summary=simulationSummary(0);return {handled:simulationCompleteDueStudies(summary),summary:summary};},
+    oldComplete: function(seconds){return advanceActiveStudies(seconds);},
+    boundary: function(){return simulationKillsUntilEconomyMutation(1);},
+    cost: function(id,k){return studyCost(LONG_STUDIES.find(function(n){return n.id===id;}),k);},
+    duration: function(id,k){return studyDuration(LONG_STUDIES.find(function(n){return n.id===id;}),k);},
+    speedCost: function(speed){return speedTierCost(speed);},
+    mutate: function(kind){
+      var original=kind==='entry' ? simulationCompleteDueStudies : kind==='handled' ? simulationCompleteDueStudies : studyDuration;
+      if(kind==='entry'){
+        var first=true;simulationCompleteDueStudies=function(summary){if(first){first=false;return 0;}return original(summary);};
+      }else if(kind==='handled'){
+        simulationCompleteDueStudies=function(summary){var before=summary.completedStudies.length;original(summary);return summary.completedStudies.length-before;};
+      }else studyDuration=function(node,k){var work=original(node,k);return node.id==='measuredinquiry'?Math.round(work*(1-measuredInquiryReduction())):work;};
+      return function(){if(kind==='entry'||kind==='handled')simulationCompleteDueStudies=original;else studyDuration=original;};
+    }
+  },
   autoTarget: {
     render: function(){renderShop();},
     find: function(value){return findAutoAscendRift(value);},
@@ -947,7 +979,7 @@ window.__lumenfallQaBridge = {
       kills:0,bossKills:0,luminousKills:0,ascends:0,autoTaps:0,
       empowers:0,researchBought:0,studiesStarted:0,retreats:0,retries:0,
       fastForwardedKills:0,iterations:0,retreated:false,
-      completedStudies:[],achievements:[],ascendGains:[]
+      completedStudies:[],closedStudies:[],achievements:[],ascendGains:[]
     };
     function merge(part){
       [
@@ -958,6 +990,7 @@ window.__lumenfallQaBridge = {
       ].forEach(function(key){ aggregate[key] += part[key]||0; });
       aggregate.retreated = aggregate.retreated || !!part.retreated;
       (part.completedStudies||[]).forEach(function(name){ aggregate.completedStudies.push(name); });
+      (part.closedStudies||[]).forEach(function(name){ aggregate.closedStudies.push(name); });
       (part.achievements||[]).forEach(function(id){ if(aggregate.achievements.indexOf(id)===-1) aggregate.achievements.push(id); });
       (part.ascendGains||[]).forEach(function(gain){ aggregate.ascendGains.push(gain); });
       aggregate.endDepth = part.endDepth;
@@ -1265,6 +1298,7 @@ def build_runner():
     parityApprox(actual.lumenGained||0,expected.lumenGained||0,label+' summary lumenGained');
     parityApprox(actual.shardGained||0,expected.shardGained||0,label+' summary shardGained');
     assertJsonEqual(actual.completedStudies||[],expected.completedStudies||[],label+' summary completedStudies');
+    assertJsonEqual(actual.closedStudies||[],expected.closedStudies||[],label+' summary closedStudies');
     assertJsonEqual(actual.ascendGains||[],expected.ascendGains||[],label+' summary ascendGains');
   }
   function runParityPair(seconds,kind,referenceChunk){
@@ -1690,6 +1724,13 @@ def build_runner():
       if(ctx.scenario.startsWith('forge-ui-') || ctx.scenario.startsWith('self-test-forge-ui-') || ctx.scenario.startsWith('rift-status-stacking') || ctx.scenario==='rift-status-mobile' || ctx.scenario==='rift-status-reduced-motion' || ctx.scenario.startsWith('self-test-rift-status-line')){
         window.__forgeUiReady=true;return; // Native CDP input driver owns this scenario.
       }
+      if(ctx.scenario.startsWith('inquiry-')){
+        bridge.freeze();
+        if(['inquiry-save-reload','inquiry-backup-restore','inquiry-recovery','inquiry-reset'].includes(ctx.scenario)){
+          window.runInquiryPersistence(bridge,ctx,assert,phase,nextPhase,backupCode,finish);return;
+        }
+        finish('pass',window.runInquiryQa(bridge,ctx,assert,assertProtectedParity,assertSummaryParity));return;
+      }
       if(ctx.scenario.startsWith('forge-')){
         bridge.freeze();
         if(['forge-save-reload','forge-backup-restore','forge-recovery'].includes(ctx.scenario)){
@@ -1819,7 +1860,8 @@ def build_runner():
           assert(s.activeStudies.length===1 && s.activeStudies[0].id==='wispascend','legacy activeStudy must migrate into activeStudies');
           assert(['focus','sense','formation','resolve','charge'].every(function(id){return s.researchQueue[id]===true;}),'legacy global queue preserves five original ON choices');
           assert(['arcanecal','conduction','luminoustracking'].every(function(id){return s.researchQueue[id]===false;}),'legacy global queue does not activate new IDs');
-          assert(Object.keys(s.studyQueue).every(function(id){ return s.studyQueue[id]===true; }),'legacy autostudy flag must migrate to studyQueue');
+          assert(['wispascend','guardmastery','riftattune','shardstudy','lumenstudy','formationstudy','motestudy','prismstudy'].every(function(id){ return s.studyQueue[id]===true; }),'legacy autostudy preserves eight original ON choices');
+          assert(s.studyQueue.measuredinquiry===false,'legacy autostudy must not activate Measured Inquiry');
           assert(s.autoAscendEnabled===true && s.autoAscendTargetDepth>=22,'legacy auto-ascend ownership must migrate to enabled target');
           assert(!Object.prototype.hasOwnProperty.call(s.owned,'autostudy'),'legacy owned.autostudy must be removed');
           assert(s.schemaVersion===1,'legacy save must migrate to current schema');
@@ -3742,6 +3784,7 @@ def instrument_html(source, fixtures):
         "<script>" + (ROOT / "support-stacking.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "auto-ascend-target.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "buff-timing.js").read_text(encoding="utf-8") + "</script>" +
+        "<script>" + (ROOT / "measured-inquiry.js").read_text(encoding="utf-8") + "</script>" +
         build_runner() + "\n</body>",
         1,
     )
@@ -3940,7 +3983,7 @@ def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
             "--dump-dom",
             url,
         ]
-        if scenario in ("p1-05-reduced-motion", "p2-06b-reduced-motion", "research-duration-reduced-motion"):
+        if scenario in ("p1-05-reduced-motion", "p2-06b-reduced-motion", "research-duration-reduced-motion", "inquiry-ui-reduced-motion"):
             command.insert(-1, "--force-prefers-reduced-motion")
         started = time.monotonic()
         try:
@@ -3959,7 +4002,7 @@ def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
 
     if passed:
         print(f"PASS {scenario}" + (f" {viewport}" if viewport else ""))
-        if viewport or scenario in ("upgrade-effects-and-deeds", "parity-long-high-power", "parity-medium-farm") or scenario.startswith(("auto-ascend-target-", "chronology-", "p1-05-", "p2-07a-", "forge-", "buff-", "support-")):
+        if viewport or scenario in ("upgrade-effects-and-deeds", "parity-long-high-power", "parity-medium-farm") or scenario.startswith(("auto-ascend-target-", "chronology-", "p1-05-", "p2-07a-", "forge-", "buff-", "support-", "inquiry-")):
             print("  detail: " + json.dumps(payload.get("detail"), sort_keys=True))
         return True
 

@@ -2833,6 +2833,8 @@ var NODES = [
   {id:'reserves',  name:'Deep Reserves',       desc:'+2 hours to your offline cap, per level.', baseCost:6, growth:1.60, requiresAchievement:'d100'}
 ];
 
+// Existing slot, Deed and v0 automation contracts are independent of additions.
+var LEGACY_STUDY_IDS = Object.freeze(['wispascend','guardmastery','riftattune','shardstudy','lumenstudy','formationstudy','motestudy','prismstudy']);
 var LONG_STUDIES = [
   {id:'wispascend',   name:'Wisp Ascendancy',     desc:'+15% passive Wisp damage permanently; also raises the Wisp-powered part of your tap damage.', unlockDepth:1, baseDurationSec:180, durationGrowth:1.6, lumenBase:800, lumenGrowth:1.8, shardBase:80, shardGrowth:1.8},
   {id:'guardmastery', name:"Guardian's Mastery",  desc:'+20% tap damage, permanently.',                           unlockDepth:1,  baseDurationSec:150, durationGrowth:1.6, lumenBase:600,  lumenGrowth:1.8, shardBase:40,  shardGrowth:1.8},
@@ -2841,7 +2843,8 @@ var LONG_STUDIES = [
   {id:'lumenstudy',   name:'Lumen Wellspring',    desc:'+8% Lumen earned per kill, permanently.',                         unlockDepth:25, baseDurationSec:260, durationGrowth:1.6, lumenBase:1400, lumenGrowth:1.8, shardBase:120, shardGrowth:1.8},
   {id:'formationstudy',name:'Formation Insight',  desc:'+5% passive Wisp damage permanently; also raises the Wisp-powered part of your tap damage.', unlockDepth:40, baseDurationSec:320, durationGrowth:1.6, lumenBase:2200, lumenGrowth:1.8, shardBase:220, shardGrowth:1.8},
   {id:'motestudy',     name:'Luminous Sense',     desc:'+10% Motes gained from Luminous enemies, permanently.',           unlockDepth:60, baseDurationSec:380, durationGrowth:1.6, lumenBase:3200, lumenGrowth:1.8, shardBase:320, shardGrowth:1.8},
-  {id:'prismstudy',    name:'Ascendant Clarity',  desc:'+5% Prisms earned per Ascend, permanently.',                      unlockDepth:90, baseDurationSec:450, durationGrowth:1.6, lumenBase:4800, lumenGrowth:1.8, shardBase:480, shardGrowth:1.8}
+  {id:'prismstudy',    name:'Ascendant Clarity',  desc:'+5% Prisms earned per Ascend, permanently.',                      unlockDepth:90, baseDurationSec:450, durationGrowth:1.6, lumenBase:4800, lumenGrowth:1.8, shardBase:480, shardGrowth:1.8},
+  {id:'measuredinquiry', name:'Measured Inquiry', desc:'2% less work per completed level, up to 20%, for future starts of Wisp Ascendancy, Guardian’s Mastery, Rift Attunement, Shard Attunement, Lumen Wellspring, Formation Insight, Luminous Sense and Ascendant Clarity. Running Studies and Measured Inquiry itself are unchanged.', unlockDepth:60, levelCap:10, baseDurationSec:600, durationGrowth:1.6, lumenBase:30000, lumenGrowth:1.8, shardBase:1200, shardGrowth:1.8}
 ];
 
 var LAB_SPEED_TIERS = [1.5, 2, 3, 4, 5, 6, 7, 8];
@@ -2869,7 +2872,7 @@ var ACHIEVEMENTS = [
   {id:'labmaster', name:'The Forge Never Sleeps', reward:30, unlocks:'Auto-Empower — spare Lumen levels up your party for you, live or while you\'re offline', check:function(s){return legacyResearchLevels(s)>=20;}},
   {id:'study1',    name:'First Discovery',     reward:15, check:function(s){return totalStudyLevels(s)>=1;}},
   {id:'study25',   name:'Devoted Scholar',     reward:50, check:function(s){return totalStudyLevels(s)>=25;}},
-  {id:'allstudies',name:'Every Path Studied',  reward:35, check:function(s){return LONG_STUDIES.every(function(l){return (s.longStudyLevels[l.id]||0)>=1;});}},
+  {id:'allstudies',name:'Every Path Studied',  reward:35, check:function(s){return LEGACY_STUDY_IDS.every(function(id){return (s.longStudyLevels[id]||0)>=1;});}},
   {id:'labqueue',  name:'Endless Curiosity',   reward:40, check:function(s){return legacyResearchLevels(s)>=60;}},
   {id:'firstultimate', name:'Awakened Power',  reward:45, check:function(s){return SPIRITS.some(function(sp){return !!(s.wispUltimate && s.wispUltimate[sp.id]);});}},
   {id:'modulemax', name:'Perfect Synergy',     reward:45, unlocks:'Cosmetics: Radiant Rift aura', check:function(s){return SPIRITS.some(function(sp){return (s.wispModules[sp.id]||0)>=MODULE_MAX_LEVEL;});}}
@@ -2890,7 +2893,7 @@ function deedProgress(a,s){
     autotap:[s.ascendCount,12],
     labmaster:[researchLevels(),20],
     study1:[totalStudyLevels(s),1],study25:[totalStudyLevels(s),25],
-    allstudies:[LONG_STUDIES.filter(function(l){return (s.longStudyLevels[l.id]||0)>=1;}).length,LONG_STUDIES.length],
+    allstudies:[LEGACY_STUDY_IDS.filter(function(id){return (s.longStudyLevels[id]||0)>=1;}).length,LEGACY_STUDY_IDS.length],
     labqueue:[researchLevels(),60],
     firstultimate:[SPIRITS.some(function(sp){return !!(s.wispUltimate&&s.wispUltimate[sp.id]);})?1:0,1],
     modulemax:[Math.max.apply(null,SPIRITS.map(function(sp){return (s.wispModules&&s.wispModules[sp.id])||0;})),MODULE_MAX_LEVEL]
@@ -2910,6 +2913,7 @@ function deedProgressText(a,done){
 // Presentation metadata never participates in eligibility or one-time rewards.
 function deedPresentation(a){
   var scope='Counts Battle Focus, Shard Sense, Formation Training, Guardian’s Resolve and Swift Recovery only. Other Forge upgrades do not count.';
+  var studyScope='Counts Wisp Ascendancy, Guardian’s Mastery, Rift Attunement, Shard Attunement, Lumen Wellspring, Formation Insight, Luminous Sense and Ascendant Clarity only. Measured Inquiry does not count.';
   var rows={
     d10:['Reach Rift 10.','Rifts reached'],d25:['Reach Rift 25.','Rifts reached'],
     d50:['Reach Rift 50.','Rifts reached'],d100:['Reach Rift 100.','Rifts reached'],d250:['Reach Rift 250.','Rifts reached'],
@@ -2921,9 +2925,9 @@ function deedPresentation(a){
     idle8:['Accumulate 8 hours offline.','offline hours'],
     autotap:['Ascend 12 times.','Ascensions'],
     labmaster:['Gain 20 total levels in the 5 original Forge upgrades.','original Forge levels',scope],
-    study1:['Complete one Research Project level.','completed Project levels'],
-    study25:['Complete 25 Research Project levels in total.','completed Project levels'],
-    allstudies:['Complete at least one level of every Research Project.','Projects completed'],
+    study1:['Complete one level in the 8 listed Research Projects.','completed Project levels',studyScope],
+    study25:['Complete 25 levels in total in the 8 listed Research Projects.','completed Project levels',studyScope],
+    allstudies:['Complete at least one level in each of the 8 listed Research Projects.','Projects completed',studyScope],
     labqueue:['Gain 60 total levels in the 5 original Forge upgrades.','original Forge levels',scope],
     firstultimate:['Unlock one Wisp Ultimate.','Ultimate unlocked'],
     modulemax:['Raise one Wisp Module to level 20.','levels on one Module','Uses your highest single Module level. Levels on different Wisps are not added together.']
@@ -2950,6 +2954,7 @@ function nodeEarnedEffect(id){
   return earnedPercent(discount)+'% Wisp recruiting discount · '+earnedPercent(1-discount)+'% cost'+(discount>=0.6?' (cost floor reached)':'');
 }
 function projectEarnedEffect(id){
+  if(id==='measuredinquiry') return earnedPercent(measuredInquiryReduction())+'% less work for future starts of the 8 listed Studies';
   var rows={
     wispascend:[longStudyPowerMult()-1,'passive Wisp damage and Wisp-powered tap base'],
     guardmastery:[longStudyTapMult()-1,'tap damage'],
@@ -2965,7 +2970,9 @@ function projectEarnedEffect(id){
 }
 function projectEarnedMarkup(id){
   var level=longStudyLevel(id);
-  return '<div class="earned-effect" data-project-effect="'+id+'"><strong>Completed level '+level+'</strong><br>Current Project bonus: '+projectEarnedEffect(id)+(level===0?' · No earned bonus':'')+'</div>';
+  var node=LONG_STUDIES.find(function(n){return n.id===id;});
+  var preserved=node.levelCap!==undefined && level>node.levelCap ? ' · Preserved; effect capped at level '+node.levelCap : '';
+  return '<div class="earned-effect" data-project-effect="'+id+'"><strong>Completed level '+level+preserved+'</strong><br>Current Project bonus: '+projectEarnedEffect(id)+(level===0?' · No earned bonus':'')+'</div>';
 }
 
 var RIFT_THEMES = [
@@ -3074,7 +3081,7 @@ function freshState(){
   };
 }
 function totalStudyLevels(s){
-  return LONG_STUDIES.reduce(function(sum,l){ return sum + (s.longStudyLevels[l.id]||0); }, 0);
+  return LEGACY_STUDY_IDS.reduce(function(sum,id){ return sum + (s.longStudyLevels[id]||0); }, 0);
 }
 function todayStr(){
   var d = new Date();
@@ -3238,7 +3245,7 @@ function migrateSaveV0ToV1(input){
 
   if(studyQueueWasMissing){
     migrated.studyQueue = {};
-    LONG_STUDIES.forEach(function(l){ migrated.studyQueue[l.id] = !!legacyOwned.autostudy; });
+    LEGACY_STUDY_IDS.forEach(function(id){ migrated.studyQueue[id] = !!legacyOwned.autostudy; });
   }
 
   if(!Array.isArray(migrated.activeStudies)) migrated.activeStudies = [];
@@ -4863,7 +4870,18 @@ function autoLabQueueTick(){
   return boughtAny;
 }
 
-function studyDuration(node, level){ return Math.round(node.baseDurationSec * Math.pow(node.durationGrowth, level)); }
+function studyEffectiveLevel(node,level){
+  level=nonNegativeInt(level,0);
+  return node.levelCap===undefined ? level : Math.min(level,node.levelCap);
+}
+function measuredInquiryReduction(){
+  var node=LONG_STUDIES.find(function(n){return n.id==='measuredinquiry';});
+  return 0.02*studyEffectiveLevel(node,longStudyLevel(node.id));
+}
+function studyDuration(node, level){
+  var work=Math.round(node.baseDurationSec * Math.pow(node.durationGrowth, level));
+  return LEGACY_STUDY_IDS.indexOf(node.id)===-1 ? work : Math.round(work*(1-measuredInquiryReduction()));
+}
 function studyCost(node, level){
   return {
     lumen: Math.round(node.lumenBase * Math.pow(node.lumenGrowth, level)),
@@ -4874,7 +4892,7 @@ function unlockedLongStudies(){
   return LONG_STUDIES.filter(function(l){ return state.maxDepthEver >= (l.unlockDepth||1); });
 }
 function studySlotCount(){
-  var n = unlockedLongStudies().length;
+  var n = unlockedLongStudies().filter(function(node){return LEGACY_STUDY_IDS.indexOf(node.id)!==-1;}).length;
   if(n<=2) return 1;
   if(n<=5) return 2;
   if(n===6) return 3;
@@ -4894,23 +4912,38 @@ function renderLabCapacityBadge(){
 function findActiveStudy(id){
   return state.activeStudies.find(function(a){ return a.id===id; });
 }
+function getStudyStartPlan(node){
+  node=node && LONG_STUDIES.find(function(n){return n.id===node.id;});
+  if(!node) return {node:null,eligible:false,affordable:false,reason:'unknown'};
+  var level=longStudyLevel(node.id),cost=studyCost(node,level),duration=studyDuration(node,level);
+  var unlocked=state.maxDepthEver>=(node.unlockDepth||1);
+  var maxed=node.levelCap!==undefined && level>=node.levelCap;
+  var valid=Number.isFinite(cost.lumen) && cost.lumen>=0 && Number.isFinite(cost.shard) && cost.shard>=0 && Number.isFinite(duration) && duration>0;
+  var reason=!unlocked ? 'locked' : maxed ? 'maxed' : findActiveStudy(node.id) ? 'active' : state.activeStudies.length>=studySlotCount() ? 'slots' : !valid ? 'unavailable' : '';
+  var eligible=!reason;
+  if(eligible && (state.lumen<cost.lumen || state.shards<cost.shard)) reason='unaffordable';
+  return {node:node,level:level,cost:cost,duration:duration,unlocked:unlocked,maxed:maxed,eligible:eligible,affordable:!reason,reason:reason};
+}
+function commitStudyStart(node){
+  var plan=getStudyStartPlan(node);
+  if(!plan.affordable) return false;
+  state.lumen-=plan.cost.lumen;
+  state.shards-=plan.cost.shard;
+  state.activeStudies.push({id:plan.node.id,remainingSec:plan.duration,totalDurationSec:plan.duration,speedMult:1});
+  return true;
+}
 function startStudy(node){
-  if(state.activeStudies.length >= studySlotCount()) return;
-  if(findActiveStudy(node.id)) return;
-  var level = state.longStudyLevels[node.id]||0;
-  var cost = studyCost(node, level);
-  if(state.lumen<cost.lumen || state.shards<cost.shard) return;
-  state.lumen -= cost.lumen;
-  state.shards -= cost.shard;
-  var dur = studyDuration(node, level);
-  state.activeStudies.push({id:node.id, remainingSec:dur, totalDurationSec:dur, speedMult:1});
+  if(!commitStudyStart(node)) return false;
   saveState();
   renderLongStudies();
   updateBattleFast();
+  return true;
 }
 function applySpeedTier(studyId, mult){
   var active = findActiveStudy(studyId);
   if(!active) return;
+  var node=LONG_STUDIES.find(function(n){return n.id===studyId;});
+  if(node && node.levelCap!==undefined && longStudyLevel(studyId)>=node.levelCap) return;
   if(mult<=active.speedMult) return;
   var cost = speedTierCost(mult);
   if(state.motes<cost) return;
@@ -4920,24 +4953,33 @@ function applySpeedTier(studyId, mult){
   renderLongStudies();
   renderHud();
 }
+// Closing paid overcap work is progress, but is never an earned completion.
+function finishStudyRecord(index){
+  var active=state.activeStudies[index];
+  var node=LONG_STUDIES.find(function(n){return n.id===active.id;});
+  var level=longStudyLevel(active.id);
+  var earned=!!node && (node.levelCap===undefined || level<node.levelCap);
+  if(earned) state.longStudyLevels[active.id]=level+1;
+  state.activeStudies.splice(index,1);
+  return {earned:earned,name:node ? node.name : active.id};
+}
 function advanceActiveStudies(elapsedSec){
   var completed = [];
   for(var i=state.activeStudies.length-1; i>=0; i--){
     var active = state.activeStudies[i];
     active.remainingSec -= elapsedSec * active.speedMult;
-    if(active.remainingSec <= 0){
-      var node = LONG_STUDIES.find(function(n){ return n.id===active.id; });
-      state.longStudyLevels[active.id] = (state.longStudyLevels[active.id]||0) + 1;
-      state.activeStudies.splice(i, 1);
-      completed.push(node ? node.name : active.id);
+    if(active.remainingSec <= SIM_EPS){
+      var result=finishStudyRecord(i);
+      if(result.earned) completed.push(result.name);
     }
   }
   return completed;
 }
 function autoFillStudySlots(){
+  advanceActiveStudies(0);
   var openSlots = studySlotCount() - state.activeStudies.length;
   if(openSlots<=0) return false;
-  var candidates = unlockedLongStudies().filter(function(l){ return state.studyQueue[l.id] && !findActiveStudy(l.id); });
+  var candidates = LONG_STUDIES.filter(function(l){ return state.studyQueue[l.id] && getStudyStartPlan(l).eligible; });
   candidates.sort(function(a,b){
     var ca = studyCost(a, state.longStudyLevels[a.id]||0);
     var cb = studyCost(b, state.longStudyLevels[b.id]||0);
@@ -4946,11 +4988,7 @@ function autoFillStudySlots(){
   var started = false;
   for(var i=0; i<candidates.length && state.activeStudies.length<studySlotCount(); i++){
     var lnode = candidates[i];
-    var cost = studyCost(lnode, state.longStudyLevels[lnode.id]||0);
-    if(state.lumen>=cost.lumen && state.shards>=cost.shard){
-      startStudy(lnode);
-      started = true;
-    }
+    if(startStudy(lnode)) started=true;
   }
   return started;
 }
@@ -5125,6 +5163,10 @@ function presentControlStates(root){
     var spId=btn.getAttribute('data-empower') || btn.getAttribute('data-rarity') || btn.getAttribute('data-module') || btn.getAttribute('data-ultimate') || btn.getAttribute('data-sigil-resonate') || btn.getAttribute('data-empower-queue') || btn.getAttribute('data-toggle');
     var sp=spId && SPIRITS.find(function(item){return item.id===spId;});
     if(sp) subject=sp.name;
+    if(btn.hasAttribute('data-study')){
+      var studyNode=LONG_STUDIES.find(function(n){return n.id===btn.getAttribute('data-study');});
+      if(studyNode) subject=studyNode.name;
+    }
     var queueAttr=toggles.find(function(attr){return btn.hasAttribute('data-'+attr);});
     if(queueAttr){
       var id=btn.getAttribute('data-'+queueAttr);
@@ -5142,6 +5184,7 @@ function presentControlStates(root){
       btn.setAttribute('aria-pressed',String(!!study && study.speedMult===mult));
       if(!study){btn.disabled=true;kind='completed';reason='Completed';}
       else if(study.speedMult>=mult) kind='completed';
+      else if(LONG_STUDIES.some(function(n){return n.id===study.id && n.levelCap!==undefined && longStudyLevel(n.id)>=n.levelCap;})){kind='maxed';reason='Maxed';}
       else if(btn.disabled){kind='unaffordable';reason='Need Motes';}
     }
     if(btn.hasAttribute('data-theme-select')) kind=btn.getAttribute('aria-pressed')==='true'?'selected':'available';
@@ -5173,8 +5216,12 @@ function presentControlStates(root){
       if(btn.hasAttribute('data-node')){var node=NODES.find(function(n){return n.id===btn.getAttribute('data-node');});subject=node.name;cost.prism=nodeCost(node);}
       if(btn.hasAttribute('data-study')){
         var node=LONG_STUDIES.find(function(n){return n.id===btn.getAttribute('data-study');});subject=node.name;
-        if(state.activeStudies.length>=studySlotCount()){kind='unavailable';reason='No open slots';}
-        else cost=studyCost(node,state.longStudyLevels[node.id]||0);
+        var plan=getStudyStartPlan(node);
+        if(plan.maxed){kind='maxed';reason='Maxed';}
+        else if(!plan.unlocked){kind='locked';reason='Reach Rift '+node.unlockDepth;}
+        else if(plan.reason==='slots'){kind='unavailable';reason='No open slots';}
+        else if(plan.reason==='unavailable'){kind='unavailable';reason='Price or time unavailable';}
+        else cost=plan.cost;
       }
       if(btn.hasAttribute('data-shop')){
         var item=SHOP.find(function(n){return n.id===btn.getAttribute('data-shop');});subject=item.name;
@@ -5945,15 +5992,17 @@ function renderLongStudies(){
     // Presentation-only ordering uses the simulation's remaining-work / speed relationship.
     state.activeStudies.slice().sort(function(a,b){return a.remainingSec/a.speedMult-b.remainingSec/b.speedMult;}).forEach(function(active,index){
       var node = LONG_STUDIES.find(function(n){ return n.id===active.id; });
+      var maxed=node && node.levelCap!==undefined && longStudyLevel(active.id)>=node.levelCap;
       var pct = Math.max(0, Math.min(100, 100-(active.remainingSec/active.totalDurationSec*100)));
       var queueOnActive = !!state.studyQueue[active.id];
       html += '<div class="card study-card study-running" data-running-study="'+active.id+'">' +
-        '<div class="study-running-label">'+(index===0?'Next completion':'Running')+'</div>' +
-        '<div class="name"><span>'+(node?node.name:'')+' <span style="color:var(--mote);">Lv.'+((state.longStudyLevels[active.id]||0)+1)+'</span></span>' +
+        '<div class="study-running-label">'+(maxed?'Finishing paid Study':index===0?'Next completion':'Running')+'</div>' +
+        '<div class="name"><span>'+(node?node.name:'')+' <span style="color:var(--mote);">Lv.'+(longStudyLevel(active.id)+(maxed?0:1))+(maxed?' · Maxed':'')+'</span></span>' +
           ' <button class="node-queue-toggle '+(queueOnActive?'active':'')+'" data-study-queue="'+active.id+'">Queue '+(queueOnActive?'ON':'OFF')+'</button>' +
         '</div>' +
         (node ? projectEarnedMarkup(active.id) : '') +
-        '<div class="effect-note">In progress: level '+(longStudyLevel(active.id)+1)+' · bonus earned only on completion.</div>' +
+        '<div class="effect-note">'+(maxed?'Level cap already reached. Paid work finishes without another level or bonus.':
+          'In progress: level '+(longStudyLevel(active.id)+1)+' · bonus earned only on completion.'+(active.id==='measuredinquiry'?' Next: '+earnedPercent(0.02*studyEffectiveLevel(node,longStudyLevel(active.id)+1))+'% less work.':''))+'</div>' +
         '<div class="study-time" data-study-text="'+active.id+'">'+studyRemainingText(active)+'</div>' +
         '<div class="study-bar-track"><div class="study-bar-fill" data-study-bar="'+active.id+'" style="width:'+pct+'%;"></div></div>' +
         '<details class="study-inspection" data-study-inspection="'+active.id+'" '+(openInspections.indexOf(active.id)!==-1?'open':'')+'><summary data-study-details="'+active.id+'">'+(node?node.name:'Study')+' · Details &amp; speed</summary>' +
@@ -5965,8 +6014,8 @@ function renderLongStudies(){
             var isActive = active.speedMult===mult;
             var acquired = active.speedMult>=mult;
             var affordable = state.motes>=mcost;
-            return '<button class="speed-btn '+(isActive?'active':'')+'" data-speed="'+mult+'" data-speed-study="'+active.id+'" '+((acquired||!affordable)?'disabled':'')+'>'+mult+'x' +
-              (acquired ? (isActive?' · Current':' · Unlocked') : '<span class="speed-cost">'+costIcon('mote')+formatNum(mcost)+'</span>') +
+            return '<button class="speed-btn '+(isActive?'active':'')+'" data-speed="'+mult+'" data-speed-study="'+active.id+'" '+((acquired||!affordable||maxed)?'disabled':'')+'>'+mult+'x' +
+              (acquired ? (isActive?' · Current':' · Unlocked') : maxed ? ' · Unavailable' : '<span class="speed-cost">'+costIcon('mote')+formatNum(mcost)+'</span>') +
               '</button>';
           }).join('') +
         '</div></details>' +
@@ -5977,28 +6026,26 @@ function renderLongStudies(){
   html += '<h3 class="study-choices-title" id="study-choices" tabindex="-1">'+(openSlots>0 ? 'Choose a Study to begin' : 'Study choices — no open slots')+'</h3>';
   LONG_STUDIES.forEach(function(lnode){
     if(findActiveStudy(lnode.id)) return;
-    var unlocked = state.maxDepthEver >= (lnode.unlockDepth||1);
-    if(!unlocked){
+    var plan=getStudyStartPlan(lnode);
+    if(!plan.unlocked){
       html += '<div class="card study-card locked-node" data-state="locked" aria-disabled="true" style="margin-bottom:10px;">' +
         '<div class="name">???</div>' +
         '<div class="desc lock-note">Unlocks at Rift '+lnode.unlockDepth+'</div>' +
       '</div>';
       return;
     }
-    var level = state.longStudyLevels[lnode.id]||0;
-    var cost = studyCost(lnode, level);
-    var dur = studyDuration(lnode, level);
-    var affordable = openSlots>0 && state.lumen>=cost.lumen && state.shards>=cost.shard;
+    var level=plan.level,cost=plan.cost,dur=plan.duration;
     var queueOn = !!state.studyQueue[lnode.id];
-    html += '<div class="card study-card" style="margin-bottom:10px;">' +
+    html += '<div class="card study-card" data-study-card="'+lnode.id+'" data-state="'+(plan.maxed?'maxed':plan.affordable?'affordable':'unavailable')+'" style="margin-bottom:10px;">' +
       '<div class="name">'+lnode.name+' <span style="color:var(--mote);">Lv.'+level+'</span>' +
         ' <button class="node-queue-toggle '+(queueOn?'active':'')+'" data-study-queue="'+lnode.id+'">Queue '+(queueOn?'ON':'OFF')+'</button>' +
       '</div>' +
       '<div class="desc">'+lnode.desc+'</div>' +
       projectEarnedMarkup(lnode.id) +
-      '<div class="effect-note">Next: level '+(level+1)+' · bonus earned only on completion.</div>' +
-      '<div class="study-meta">Takes '+fmtStudyDuration(dur)+' &middot; '+costIcon('lumen')+formatNum(cost.lumen)+' '+costIcon('shard')+formatNum(cost.shard)+'</div>' +
-      '<button class="mini-btn" data-study="'+lnode.id+'" '+(affordable?'':'disabled')+' style="margin-top:10px;width:100%;">'+(openSlots>0?'Begin Study':'No open slots')+'</button>' +
+      '<div class="effect-note">'+(plan.maxed?'Maxed at level '+lnode.levelCap+'. Queue '+(queueOn?'ON':'OFF')+' retained; no new starts.':
+        'Next: level '+(level+1)+' · bonus earned only on completion.'+(lnode.id==='measuredinquiry'?' Next: '+earnedPercent(0.02*studyEffectiveLevel(lnode,level+1))+'% less work.':''))+'</div>' +
+      (plan.maxed?'':'<div class="study-meta">Takes '+fmtStudyDuration(dur)+' &middot; '+costIcon('lumen')+formatNum(cost.lumen)+' '+costIcon('shard')+formatNum(cost.shard)+'</div>') +
+      '<button class="mini-btn" data-study="'+lnode.id+'" '+(plan.affordable?'':'disabled')+' style="margin-top:10px;width:100%;">'+(plan.maxed?'Maxed':plan.reason==='unavailable'?'Unavailable':openSlots>0?'Begin Study':'No open slots')+'</button>' +
     '</div>';
   });
 
@@ -6029,6 +6076,7 @@ function renderLongStudies(){
       e.stopPropagation();
       var id = btn.getAttribute('data-study-queue');
       state.studyQueue[id] = !state.studyQueue[id];
+      saveState();
       renderLongStudies();
     });
   });
@@ -6565,7 +6613,7 @@ function simulationSummary(elapsedSec){
     elapsedSec:elapsedSec,
     lumenGained:0, shardGained:0, sigilsGained:0, motesGained:0,
     kills:0, bossKills:0, luminousKills:0, ascends:0, autoTaps:0,
-    empowers:0, researchBought:0, studiesStarted:0, completedStudies:[],
+    empowers:0, researchBought:0, studiesStarted:0, completedStudies:[], closedStudies:[],
     achievements:[], retreated:false, retreats:0, retries:0,
     fastForwardedKills:0, iterations:0, ascendGains:[]
   };
@@ -6698,23 +6746,22 @@ function simulationAdvanceStudyProgress(elapsedSec){
   });
 }
 function simulationCompleteDueStudies(summary){
-  var completed = 0;
+  var handled = 0,earned = 0;
   for(var i=state.activeStudies.length-1;i>=0;i--){
     var active = state.activeStudies[i];
     if(active.remainingSec>SIM_EPS) continue;
-    var node = LONG_STUDIES.find(function(n){ return n.id===active.id; });
-    state.longStudyLevels[active.id] = (state.longStudyLevels[active.id]||0)+1;
-    state.activeStudies.splice(i,1);
-    summary.completedStudies.push(node ? node.name : active.id);
-    completed++;
+    var result=finishStudyRecord(i);
+    if(result.earned){summary.completedStudies.push(result.name);earned++;}
+    else summary.closedStudies.push(result.name);
+    handled++;
   }
-  if(completed) simulationRecordAchievements(summary);
-  return completed;
+  if(earned) simulationRecordAchievements(summary);
+  return handled;
 }
 function simulationStartQueuedStudies(summary){
   var started = 0;
-  var candidates = unlockedLongStudies().filter(function(node){
-    return state.studyQueue[node.id] && !findActiveStudy(node.id);
+  var candidates = LONG_STUDIES.filter(function(node){
+    return state.studyQueue[node.id] && getStudyStartPlan(node).eligible;
   });
   candidates.sort(function(a,b){
     var ca = studyCost(a,state.longStudyLevels[a.id]||0);
@@ -6723,13 +6770,7 @@ function simulationStartQueuedStudies(summary){
   });
   for(var i=0;i<candidates.length && state.activeStudies.length<studySlotCount();i++){
     var node = candidates[i];
-    var level = state.longStudyLevels[node.id]||0;
-    var cost = studyCost(node,level);
-    if(state.lumen<cost.lumen || state.shards<cost.shard) continue;
-    state.lumen -= cost.lumen;
-    state.shards -= cost.shard;
-    var duration = studyDuration(node,level);
-    state.activeStudies.push({id:node.id,remainingSec:duration,totalDurationSec:duration,speedMult:1});
+    if(!commitStudyStart(node)) continue;
     started++;
     summary.studiesStarted++;
   }
@@ -6777,10 +6818,11 @@ function simulationKillsUntilEconomyMutation(rewardScale){
   });
 
   if(state.activeStudies.length<studySlotCount()){
-    unlockedLongStudies().forEach(function(node){
-      if(!state.studyQueue[node.id] || findActiveStudy(node.id)) return;
-      var cost = studyCost(node,state.longStudyLevels[node.id]||0);
-      best = Math.min(best,simulationCurrencyKillsNeeded(cost,lumenPerKill,shardPerKill));
+    LONG_STUDIES.forEach(function(node){
+      if(!state.studyQueue[node.id]) return;
+      var plan=getStudyStartPlan(node);
+      if(!plan.eligible) return;
+      best = Math.min(best,simulationCurrencyKillsNeeded(plan.cost,lumenPerKill,shardPerKill));
     });
   }
   return best;
@@ -7114,14 +7156,19 @@ function simulationResolveTimestamp(nowMs,elapsedSec,policy,summary,clock){
   }
 
   var completedBefore = summary.completedStudies.length;
-  var completedStudies = simulationCompleteDueStudies(summary);
-  if(completedStudies){
+  var closedBefore = summary.closedStudies.length;
+  var handledStudies = simulationCompleteDueStudies(summary);
+  var earnedStudies = summary.completedStudies.length-completedBefore;
+  if(earnedStudies){
     simulationTimelinePush(summary,elapsedSec,'studyComplete',{
-      count:completedStudies,
+      count:earnedStudies,
       names:summary.completedStudies.slice(completedBefore)
     });
-    actions += completedStudies;
   }
+  if(summary.closedStudies.length>closedBefore) simulationTimelinePush(summary,elapsedSec,'studyClose',{
+    count:summary.closedStudies.length-closedBefore,names:summary.closedStudies.slice(closedBefore)
+  });
+  actions += handledStudies;
 
   var activeBefore = {};
   state.activeStudies.forEach(function(active){ activeBefore[active.id]=true; });
@@ -7486,6 +7533,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
 function advanceStudyOnlyTime(elapsedSec,clockStartMs,summary){
   var remaining = Math.max(0,Number(elapsedSec)||0);
   var nowMs = Number.isFinite(clockStartMs) ? clockStartMs : Date.now();
+  simulationCompleteDueStudies(summary);
   simulationStartQueuedStudies(summary);
   while(remaining>SIM_EPS){
     var next = Math.min(remaining,simulationNextStudySeconds());
@@ -7547,9 +7595,10 @@ function tick(){
     saveState();
     showAscendFlash(sim.ascendGains[sim.ascendGains.length-1]||0,true);
   }
-  if(sim.completedStudies.length){
+  if(sim.completedStudies.length || sim.closedStudies.length){
     saveState();
     sim.completedStudies.forEach(function(name){ showToast('Study complete: '+name+' advanced a level!'); });
+    sim.closedStudies.forEach(function(name){ showToast('Study finished: '+name+' — level cap already reached.'); });
   }
   if(sim.achievements.length){
     renderAchievements();
@@ -7557,7 +7606,7 @@ function tick(){
   }
   if(sim.empowers>0) renderSpirits();
   if(sim.researchBought>0) renderResearch();
-  if(sim.completedStudies.length || sim.studiesStarted>0) renderLongStudies();
+  if(sim.completedStudies.length || sim.closedStudies.length || sim.studiesStarted>0) renderLongStudies();
   else updateStudyProgress();
 
   if(sim.kills>0 || sim.ascends>0){
@@ -7645,16 +7694,16 @@ function checkAffordability(){
   els['study-list'].querySelectorAll('[data-study]').forEach(function(btn){
     var lnode = LONG_STUDIES.find(function(n){ return n.id===btn.getAttribute('data-study'); });
     if(!lnode) return;
-    var level = state.longStudyLevels[lnode.id]||0;
-    var cost = studyCost(lnode, level);
-    btn.disabled = openStudySlots<=0 || state.lumen<cost.lumen || state.shards<cost.shard;
+    btn.disabled = !getStudyStartPlan(lnode).affordable;
   });
   els['study-list'].querySelectorAll('[data-speed-study]').forEach(function(btn){
     var active = findActiveStudy(btn.getAttribute('data-speed-study'));
     if(!active) return;
     var mult = parseFloat(btn.getAttribute('data-speed'));
     var acquired = active.speedMult>=mult;
-    btn.disabled = acquired || state.motes<speedTierCost(mult);
+    var node=LONG_STUDIES.find(function(n){return n.id===active.id;});
+    var maxed=node && node.levelCap!==undefined && longStudyLevel(active.id)>=node.levelCap;
+    btn.disabled = acquired || maxed || state.motes<speedTierCost(mult);
   });
   ['spirit-list','research-list','study-list','node-list','shop-list'].forEach(function(id){presentControlStates(els[id]);});
   var autoTarget=els['shop-list'].querySelector('[data-autoascend-target]');
@@ -7758,6 +7807,7 @@ function applyOfflineProgress(){
     motesEarned:sim.motesGained,
     ascends:sim.ascends,
     completedStudies:sim.completedStudies,
+    closedStudies:sim.closedStudies,
     retreated:sim.retreated,
     endDepth:state.depth,
     pushDepth:progressionDepth(),
@@ -7853,7 +7903,7 @@ function playStartupIntro(done){
 }
 
 function hasMeaningfulOfflineProgress(offline){
-  return !!(offline && (offline.earned>1 || offline.completedStudies.length || offline.ascends>0 || offline.shardEarned>1 || offline.sigilsEarned>0 || offline.motesEarned>0));
+  return !!(offline && (offline.earned>1 || offline.completedStudies.length || offline.closedStudies.length || offline.ascends>0 || offline.shardEarned>1 || offline.sigilsEarned>0 || offline.motesEarned>0));
 }
 function offlineReturnMessage(offline){
   var msg = 'You were away for ' + fmtDuration(offline.elapsedSec) + '. Your Wisps kept the Rift lit and gathered ' + formatNum(offline.earned) + ' Lumen' +
@@ -7864,6 +7914,7 @@ function offlineReturnMessage(offline){
   if(offline.retreated){ msg += ' After the Boss remained an impossible wall for 5 minutes offline, they switched to Farm at Rift ' + offline.endDepth + '. Your Push point at Rift ' + offline.pushDepth + ' is still saved.'; }
   if(offline.completedStudies.length===1){ msg += ' Your Long Study "' + offline.completedStudies[0] + '" finished while you were away!'; }
   else if(offline.completedStudies.length>1){ msg += ' Your Long Studies "' + offline.completedStudies.join('", "') + '" finished while you were away!'; }
+  if(offline.closedStudies.length){ msg += ' Paid work for "'+offline.closedStudies.join('", "')+'" finished with the level cap already reached; no additional levels were earned.'; }
   return msg;
 }
 function showReturnFlow(offline,dailyWasRolled){
