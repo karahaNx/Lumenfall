@@ -28,6 +28,16 @@ If you installed one of the older APKs from before stable signing was introduced
 
 Inside Lumenfall, **Settings → Save Backup** can copy/restore your save code for future reinstalls or device changes.
 
+## Start for projektchats og agents
+
+Læs [AGENTS.md](AGENTS.md), kun [egen rolle](docs/CHAT_OWNERSHIP.md),
+[kort aktuel status](docs/PROJECT_STATE.md) og den konkrete Lead-opgave.
+Brug [kildeindekset](docs/CONTEXT_INDEX.md) til detaljer efter behov.
+Nye handoffs følger [skabelonen](docs/HANDOFF_TEMPLATE.md); gamle arkiver,
+audits og fulde logs indlæses ikke samlet ved opstart.
+Ved adgang gennem GitHub-værktøjer skal opstartsprompten eksplicit bede om
+AGENTS.md; filnavnet alene garanterer ikke automatisk indlæsning.
+
 ## Project structure
 
 ```

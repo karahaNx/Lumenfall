@@ -1,7 +1,8 @@
 # Lumenfall Development Roadmap
 
-_Last consolidated: 2026-09-29_  
-_Current execution status consolidated against `main` @ `2f3a65ce974953cb0f216e25ea10a242bd9a6a7c`._
+_Historisk programgrundlag fra 2026-09-29; statusindgang opdateret 2026-10-05._
+_Aktuel udførelse, writer og næste handling findes i [PROJECT_STATE.md](PROJECT_STATE.md).
+Detaljerne nedenfor er historiske design-/acceptkrav, ikke nye arbejdsordrer._
 
 ## Purpose
 
@@ -424,18 +425,17 @@ Protect:
 
 # P2 — Refine systems, native lifecycle and long-term presentation
 
-## Current execution status (2026-09-29)
+## Aktuel udførelse
 
-- P2-01A/B/C: complete on `main`.
-- P2-02A/B: complete on `main`.
-- P2-03A/B: complete on `main`.
-- P2-04: blocked/deferred and unmerged after reproducible GitHub-hosted emulator/ADB instability prevented a complete green native smoke and 3/3 stability. It is not a global blocker for independent product work.
-- P2-05: deferred until closer to a release candidate.
-- **P2-06: next active product milestone.**
-- P2-07: follows P2-06 as a deliberate late-game depth decision; do not pre-empt it by adding mechanics during P2-06.
+Læs [PROJECT_STATE.md](PROJECT_STATE.md) for det verificerede snapshot.
+P2-06 region-/bossfeedback og P2-07A Formation reconstruction er integreret;
+Forge/Lab-separation, Forge v1 og PR36–40 er integreret. P2-04 er fortsat
+deferred/unmerged; P2-05 er deferred. Measured Inquiry er i en observeret
+Draft PR og afventer frossen aflevering og uafhængigt review. Flere Forge/Lab-
+udvidelser vurderes i separate, begrundede scopes; Opening Focus er parkeret.
 
-
-P2 should not be pulled forward merely because an item is easy. These tasks depend on the P0/P1 contracts being stable enough that later tuning is meaningful.
+Historiske krav nedenfor bevares til sporbarhed. De erstatter ikke en aktuel
+Lead-opgave og skal ikke læses fuldt ved opstart.
 
 ## P2-01 — Gameplay semantic and economy cleanup
 
