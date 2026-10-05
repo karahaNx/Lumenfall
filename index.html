@@ -1662,7 +1662,6 @@
   nav.tabbar button{min-width:44px;height:var(--nav-height);min-height:var(--nav-height);padding:4px 2px;}
   nav.tabbar .lb{font-size:10px;}
   main.rift-scroll-locked{padding:6px 10px;}
-  .shell:has(#tab-battle.active){--nav-height:48px;}
   .shell:has(#tab-battle.active) .hud .brand{text-transform:uppercase;font-family:'Cinzel',serif;}
   .shell:has(#tab-battle.active) .hud{gap:4px;padding:calc(4px + var(--safe-top)) 10px 4px;background:#171930;}
   .shell:has(#tab-battle.active) .hud .chip{display:flex;align-items:center;gap:3px;height:24px;padding:2px 3px;border-color:#343950;background:linear-gradient(180deg,#222540,#191d34);box-shadow:inset 0 1px 0 #ffffff0a;}
@@ -2027,6 +2026,52 @@
   body.app-paused *,body.app-paused *::before,body.app-paused *::after{animation-play-state:paused!important;}
 
 .formation-rebuild-note{font-size:.75rem;line-height:1.5;color:var(--ink);margin:8px 0;overflow-wrap:anywhere;}
+
+  /* NAV-001 navigation. Five stable main destinations. */
+  :root{--nav-lift:8px;}
+  .shell,.shell:has(#tab-battle.active){--nav-height:54px;}
+  @media(max-height:650px){
+    .shell,.shell:has(#tab-battle.active){--nav-height:48px;}
+    /* Reclaim decorative vertical padding for the raised nav on short Rifts. */
+    #tab-battle .stage{padding-top:0;padding-bottom:0;}
+  }
+  main{margin-bottom:calc(var(--nav-height) + var(--safe-bottom) + var(--nav-lift));}
+  #toast{bottom:calc(var(--nav-height) + var(--safe-bottom) + var(--nav-lift) + 8px);}
+  nav.tabbar{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));isolation:isolate;overflow:visible;background:linear-gradient(180deg,#142037,#0b1528);border-top-color:#344158;box-shadow:0 -8px 28px -18px #0008;}
+  nav.tabbar button{min-width:0;min-height:44px;padding:3px 2px;display:grid;grid-template-rows:minmax(0,1fr) 12px;gap:1px;justify-items:center;align-items:center;color:#a5b1c7;transition:color .18s ease;}
+  nav.tabbar button:active{transform:none;}
+  nav.tabbar .nav-icon{position:relative;isolation:isolate;width:36px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:10px;transition:background .18s ease,box-shadow .18s ease,color .18s ease;}
+  nav.tabbar .nav-icon::after{content:'';position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;opacity:0;}
+  nav.tabbar .nav-feedback .nav-icon::after{animation:navHalo .3s ease-out;}
+  nav.tabbar .nav-feedback .nav-art{animation:navLight .28s ease-out;}
+  @keyframes navHalo{0%{opacity:.7;box-shadow:0 0 0 0 color-mix(in srgb,currentColor 35%,transparent);}100%{opacity:0;box-shadow:0 0 0 5px color-mix(in srgb,currentColor 8%,transparent);}}
+  @keyframes navLight{0%{filter:brightness(1.18) drop-shadow(0 0 3px currentColor);}100%{filter:none;}}
+  nav.tabbar .nav-art{width:22px;height:22px;stroke-width:1.7;}
+  nav.tabbar button .lb{font-size:10px;line-height:12px;white-space:nowrap;letter-spacing:0;}
+  nav.tabbar button.active .lb{visibility:hidden;}
+  nav.tabbar button.active{--nav-accent:#edf1fa;color:var(--nav-accent);background:none;}
+  nav.tabbar button.active .nav-icon{background:linear-gradient(180deg,#2a3750,#1b283f);box-shadow:inset 0 1px #e6eeff25,inset 0 0 0 1px #c7d5ef17,0 2px 8px #0002;}
+  nav.tabbar button.active .nav-art{stroke-width:1.9;filter:none;}
+  nav.tabbar button.active::after{width:4px;height:4px;left:calc(50% - 2px);right:auto;bottom:7px;border-radius:50%;background:#c7d2e5;opacity:.9;}
+  nav.tabbar [data-tab="battle"] .nav-icon{position:absolute;top:-7px;width:42px;height:42px;border-radius:50%;border:1px solid #7b6b46;background:linear-gradient(145deg,#27344b,#101c30);box-shadow:0 3px 10px #0006,inset 0 1px #f0c56724;}
+  nav.tabbar [data-tab="battle"] .nav-art{width:26px;height:26px;color:#f0c567;}
+  nav.tabbar [data-tab="battle"] .lb{grid-row:2;}
+  nav.tabbar [data-tab="battle"].active{--nav-accent:#f0c567;}
+  nav.tabbar [data-tab="battle"]::after{content:none;display:none;}
+  nav.tabbar [data-tab="battle"].active .nav-icon{border-color:#bfa16a;background:radial-gradient(circle at 50% 25%,#3e403e,#162138 78%);box-shadow:0 0 14px #f0c56718,inset 0 1px #f0c56724;}
+  nav.tabbar button:active .nav-art{filter:brightness(1.15);}
+  nav.tabbar .lab-capacity-badge{top:2px;right:calc(50% - 28px);z-index:2;}
+  .workshop-head[hidden]{display:none;}
+  .workshop-head{margin:0 0 14px;}
+  .workshop-title{font-family:'Cinzel',serif;font-size:18px;font-weight:600;margin:0 0 10px;color:#f9ebd7;}
+  .workshop-tabs{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:4px;border:1px solid #42516b;border-radius:13px;background:#0e192b;}
+  .workshop-btn{position:relative;min-height:44px;border:1px solid transparent;border-radius:9px;background:transparent;color:#bdc7da;display:flex;align-items:center;justify-content:center;gap:7px;font:700 13px 'Manrope',sans-serif;cursor:pointer;}
+  .workshop-btn svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+  .workshop-btn[aria-selected="true"]{color:#ffe0b6;border-color:#8d6b45;background:linear-gradient(145deg,#3d302b,#242437);}
+  .workshop-btn[data-tab="research"][aria-selected="true"]{color:#b8f1ed;border-color:#437774;background:linear-gradient(145deg,#234047,#182b39);}
+  .workshop-tabs .lab-capacity-badge{position:static;}
+  @media(prefers-reduced-motion:reduce){nav.tabbar button,nav.tabbar .nav-icon{transition:none;}nav.tabbar .nav-feedback .nav-icon::after,nav.tabbar .nav-feedback .nav-art{animation:none;}}
+
 </style>
 </head>
 <body>
@@ -2444,16 +2489,21 @@
       <div class="chip"><span class="shape shape-octagon glyph-icon" style="background:var(--sigil)"></span><span class="lbl">Sigils</span><span class="val mono" id="hud-sigil">0</span></div>
     </header>
     <nav class="tabbar" aria-label="Main navigation">
-      <button class="tab-btn active" data-tab="battle"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 20V11a6 8 0 0 1 12 0v9M3 21h18M9 20v-8a3 4 0 0 1 6 0v8M12 3V1"/></svg><span class="lb">Rift</span></button>
-      <button class="tab-btn" data-tab="spirits"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c0 6-8 9-7 14a7 7 0 0 0 14 0c1-4-3-7-4-9l-3 6M9 16l3 4 3-4"/></svg><span class="lb">Wisps</span></button>
-      <button class="tab-btn" data-tab="forge"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="m4 3 7 1 5 5-4 4-5-5-3-1ZM12 13l7 8 3-3-8-7M3 21h8"/></svg><span class="lb">Forge</span></button>
-      <button class="tab-btn" data-tab="research"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 2h6M10 2v7L4 19a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3L14 9V2M7 16h10M11 13h.01M14 19h.01"/></svg><span class="lb">Lab</span><span class="lab-capacity-badge" id="lab-capacity-badge" aria-hidden="true" hidden></span></button>
-      <button class="tab-btn" data-tab="ascend"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 10-8 10-8-10Z M12 2v20M4 12h16M12 7l4 5-4 5-4-5Z"/></svg><span class="lb">Ascend</span></button>
-      <button class="tab-btn" data-tab="deeds"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8v8a4 4 0 0 1-8 0ZM8 5H3v3a5 5 0 0 0 5 5M16 5h5v3a5 5 0 0 1-5 5M12 15v5M7 22h10M9 20h6"/></svg><span class="lb">Deeds</span></button>
-    </nav>
+<button class="tab-btn" data-tab="spirits"><span class="nav-icon"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c0 6-8 9-7 14a7 7 0 0 0 14 0c1-4-3-7-4-9l-3 6M9 16l3 4 3-4"/></svg></span><span class="lb">Wisps</span></button>
+<button class="tab-btn" data-tab="workshop" aria-label="Workshop"><span class="nav-icon"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18l-3 5H7L3 9V7ZM8 12v4l-3 4h14l-3-4v-4M9 4h8v3"/></svg></span><span class="lb">Workshop</span><span class="lab-capacity-badge" id="lab-capacity-badge" aria-hidden="true" hidden></span></button>
+<button class="tab-btn active" data-tab="battle"><span class="nav-icon"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 20V11a6 8 0 0 1 12 0v9M3 21h18M9 20v-8a3 4 0 0 1 6 0v8M12 3V1"/></svg></span><span class="lb">Rift</span></button>
+<button class="tab-btn" data-tab="ascend"><span class="nav-icon"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.8 9.4a7.5 7.5 0 1 1-13.6 0M7.8 8.2 12 4l4.2 4.2M7.8 12.7l4.2-4.2 4.2 4.2"/></svg></span><span class="lb">Ascend</span></button>
+<button class="tab-btn" data-tab="deeds"><span class="nav-icon"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8v8a4 4 0 0 1-8 0ZM8 5H3v3a5 5 0 0 0 5 5M16 5h5v3a5 5 0 0 1-5 5M12 15v5M7 22h10M9 20h6"/></svg></span><span class="lb">Deeds</span></button>
+</nav>
   </div>
 
   <main>
+<div class="workshop-head" id="workshop-head" hidden>
+<h2 class="workshop-title">Workshop</h2>
+<div class="workshop-tabs" role="tablist" aria-label="Workshop sections">
+<button class="workshop-btn" id="nav-forge" data-tab="forge" role="tab" aria-selected="true" aria-controls="tab-forge" type="button"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="m4 3 7 1 5 5-4 4-5-5-3-1ZM12 13l7 8 3-3-8-7M3 21h8"/></svg><span>Forge</span></button>
+<button class="workshop-btn" id="nav-research" data-tab="research" role="tab" aria-selected="false" aria-controls="tab-research" type="button" tabindex="-1"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 2h6M10 2v7L4 19a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3L14 9V2M7 16h10M11 13h.01M14 19h.01"/></svg><span>Lab</span><span class="lab-capacity-badge" id="workshop-lab-badge" aria-hidden="true" hidden></span></button>
+</div></div>
     <section class="tab-panel active" id="tab-battle">
       <div class="card stage">
         <div class="rift-heading"><div class="depth-label" id="depth-label">Rift 1</div>
@@ -4825,7 +4875,7 @@ function updateResearchCard(node,card){
   var model=researchPreview(node),p=model.plan,btn=card.querySelector('[data-research]');
   var preview=card.querySelector('[data-forge-preview]'),text=researchPreviewText(node,model);
   if(preview.textContent!==text) preview.textContent=text;
-  var label=p.reason==='locked'?'Reach Rift '+node.unlockDepth:p.maxed?'Maxed':p.buyCount?'Upgrade ×'+p.buyCount:'Cannot afford';
+  var label=p.reason==='locked'?'Reach Rift '+node.unlockDepth:p.maxed?'Maxed':p.buyCount?'Upgrade ×'+p.buyCount:'Upgrade';
   var displayed=p.buyCount?p.cost:p.needed;
   var html=(node.lumenBase && Number.isFinite(displayed.lumen)?'<span class="cost mono">'+costIcon('lumen')+formatNum(displayed.lumen)+'</span>':'')+
     (node.shardBase && Number.isFinite(displayed.shard)?'<span class="cost mono">'+costIcon('shard')+formatNum(displayed.shard)+'</span>':'')+'<span class="label">'+label+'</span>';
@@ -4901,13 +4951,16 @@ function studySlotCount(){
 }
 function renderLabCapacityBadge(){
   var badge=els['lab-capacity-badge'];
-  var btn=document.querySelector('.tab-btn[data-tab="research"]');
+  var btn=document.getElementById('nav-research');
   var free=Math.max(0,studySlotCount()-state.activeStudies.length);
   var text=String(free);
   if(badge.textContent!==text) badge.textContent=text;
   badge.hidden=free===0;
   var label='Lab — '+free+' Study slot'+(free===1?'':'s')+' available';
   if(btn.getAttribute('aria-label')!==label) btn.setAttribute('aria-label',label);
+  var secondary=document.getElementById('workshop-lab-badge');
+  secondary.textContent=text; secondary.hidden=badge.hidden;
+  document.querySelector('.tab-btn[data-tab="workshop"]').setAttribute('aria-label','Workshop — Forge and '+label);
 }
 function findActiveStudy(id){
   return state.activeStudies.find(function(a){ return a.id===id; });
@@ -5185,7 +5238,7 @@ function presentControlStates(root){
       if(!study){btn.disabled=true;kind='completed';reason='Completed';}
       else if(study.speedMult>=mult) kind='completed';
       else if(LONG_STUDIES.some(function(n){return n.id===study.id && n.levelCap!==undefined && longStudyLevel(n.id)>=n.levelCap;})){kind='maxed';reason='Maxed';}
-      else if(btn.disabled){kind='unaffordable';reason='Need Motes';}
+      else if(btn.disabled){kind='unaffordable';reason='';}
     }
     if(btn.hasAttribute('data-theme-select')) kind=btn.getAttribute('aria-pressed')==='true'?'selected':'available';
     if(btn.disabled && btn.matches('[data-empower],[data-rarity],[data-module],[data-ultimate],[data-sigil-resonate],[data-quest-refresh],[data-research],[data-node],[data-study],[data-shop]')){
@@ -5227,11 +5280,7 @@ function presentControlStates(root){
         var item=SHOP.find(function(n){return n.id===btn.getAttribute('data-shop');});subject=item.name;
         if(state.owned[item.id]) kind='completed';else cost.comet=item.cost;
       }
-      if(kind==='unaffordable'){
-        var resourceKeys={lumen:['lumen','Lumen'],shard:['shards','Shards'],mote:['motes','Motes'],prism:['prisms','Prisms'],comet:['comets','Comets'],sigil:['sigils','Sigils']};
-        var missing=Object.keys(resourceKeys).filter(function(key){return (cost[key]||0)>state[resourceKeys[key][0]];}).map(function(key){return resourceKeys[key][1];});
-        reason=missing.length?'Need '+missing.join(' + '):'Insufficient resources';
-      }
+      if(kind==='unaffordable') reason='';
     }
     if(btn.hasAttribute('data-quest-claim')){
       var id=btn.getAttribute('data-quest-claim');
@@ -6044,8 +6093,8 @@ function renderLongStudies(){
       projectEarnedMarkup(lnode.id) +
       '<div class="effect-note">'+(plan.maxed?'Maxed at level '+lnode.levelCap+'. Queue '+(queueOn?'ON':'OFF')+' retained; no new starts.':
         'Next: level '+(level+1)+' · bonus earned only on completion.'+(lnode.id==='measuredinquiry'?' Next: '+earnedPercent(0.02*studyEffectiveLevel(lnode,level+1))+'% less work.':''))+'</div>' +
-      (plan.maxed?'':'<div class="study-meta">Takes '+fmtStudyDuration(dur)+' &middot; '+costIcon('lumen')+formatNum(cost.lumen)+' '+costIcon('shard')+formatNum(cost.shard)+'</div>') +
-      '<button class="mini-btn" data-study="'+lnode.id+'" '+(plan.affordable?'':'disabled')+' style="margin-top:10px;width:100%;">'+(plan.maxed?'Maxed':plan.reason==='unavailable'?'Unavailable':openSlots>0?'Begin Study':'No open slots')+'</button>' +
+      (plan.maxed?'':'<div class="study-meta" id="study-price-'+lnode.id+'">Takes '+fmtStudyDuration(dur)+' &middot; '+costIcon('lumen')+formatNum(cost.lumen)+' '+costIcon('shard')+formatNum(cost.shard)+'</div>') +
+      '<button class="mini-btn" data-study="'+lnode.id+'" '+(plan.maxed?'':'aria-describedby="study-price-'+lnode.id+'" ')+(plan.affordable?'':'disabled')+' style="margin-top:10px;width:100%;">'+(plan.maxed?'Maxed':plan.reason==='unavailable'?'Unavailable':openSlots>0?'Begin Study':'No open slots')+'</button>' +
     '</div>';
   });
 
@@ -6490,46 +6539,68 @@ function syncMainScrollMode(tabName){
   }
   if(battleActive && main.scrollTop!==0) main.scrollTop = 0;
 }
+var workshopSection='forge';
 function activateTab(tabName){
-  var btn = document.querySelector('.tab-btn[data-tab="'+tabName+'"]');
-  var panel = document.getElementById('tab-'+tabName);
+  if(tabName==='workshop') tabName=workshopSection;
+  var inWorkshop=tabName==='forge' || tabName==='research';
+  var destination=inWorkshop ? 'workshop' : tabName;
+  var btn=document.querySelector('.tab-btn[data-tab="'+destination+'"]');
+  var panel=document.getElementById('tab-'+tabName);
   if(!btn || !panel) return;
-  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-current','false'); });
-  document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
-  btn.classList.add('active');
-  btn.setAttribute('aria-current','page');
-  panel.classList.add('active');
-  if(tabName==='spirits'){ renderFormationBonds(); renderRosterJourney(); }
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');b.setAttribute('aria-current','false');});
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
+  btn.classList.add('active'); btn.setAttribute('aria-current','page'); panel.classList.add('active');
+  document.getElementById('workshop-head').hidden=!inWorkshop;
+  if(inWorkshop){
+    workshopSection=tabName;
+    document.querySelectorAll('.workshop-btn').forEach(function(b){var chosen=b.dataset.tab===tabName;b.setAttribute('aria-selected',String(chosen));b.tabIndex=chosen ? 0 : -1;});
+  }
+  if(tabName==='spirits'){renderFormationBonds();renderRosterJourney();}
   if(tabName==='forge') renderResearch();
   if(tabName==='research') renderLongStudies();
   if(tabName==='ascend') renderAscendSummary();
   if(tabName==='deeds') renderAchievements();
-  var main = document.querySelector('main');
-  if(main) main.scrollTop = 0;
+  var main=document.querySelector('main'); if(main) main.scrollTop=0;
   syncMainScrollMode(tabName);
 }
 function setupTabs(){
-  var tabs=Array.from(document.querySelectorAll('.tab-btn'));
-  tabs.forEach(function(btn,index){
-    btn.id='nav-'+btn.getAttribute('data-tab');
-    document.getElementById('tab-'+btn.getAttribute('data-tab')).setAttribute('aria-labelledby',btn.id);
-    btn.setAttribute('aria-current',btn.classList.contains('active') ? 'page' : 'false');
-    btn.setAttribute('aria-controls','tab-'+btn.getAttribute('data-tab'));
-    btn.addEventListener('click', function(){
-      activateTab(btn.getAttribute('data-tab'));
+  function playNavFeedback(btn){
+    btn.classList.remove('nav-feedback');
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    void btn.offsetWidth;
+    btn.classList.add('nav-feedback');
+  }
+  function wire(group, workshop){
+    group.forEach(function(btn,index){
+      var name=btn.dataset.tab;
+      if(!workshop){
+        btn.id='nav-'+name;
+        if(name==='workshop') btn.setAttribute('aria-controls','tab-forge tab-research');
+        else{btn.setAttribute('aria-controls','tab-'+name);document.getElementById('tab-'+name).setAttribute('aria-labelledby',btn.id);}
+        btn.setAttribute('aria-current',btn.classList.contains('active') ? 'page' : 'false');
+        btn.setAttribute('aria-label',btn.querySelector('.lb').textContent);
+      } else {
+        var panel=document.getElementById('tab-'+name);
+        panel.setAttribute('role','tabpanel');panel.setAttribute('aria-labelledby',btn.id);
+      }
+      btn.addEventListener('click',function(){activateTab(name);if(!workshop) playNavFeedback(btn);});
+      if(!workshop){
+        var finishFeedback=function(e){if(e.animationName==='navHalo') btn.classList.remove('nav-feedback');};
+        btn.addEventListener('animationend',finishFeedback);
+      }
+      btn.addEventListener('keydown',function(e){
+        var next=index;
+        if(e.key==='ArrowRight') next=(index+1)%group.length;
+        else if(e.key==='ArrowLeft') next=(index+group.length-1)%group.length;
+        else if(e.key==='Home') next=0;
+        else if(e.key==='End') next=group.length-1;
+        else return;
+        e.preventDefault();activateTab(group[next].dataset.tab);group[next].focus({preventScroll:true});if(!workshop) playNavFeedback(group[next]);
+      });
     });
-    btn.addEventListener('keydown',function(e){
-      var next=index;
-      if(e.key==='ArrowRight') next=(index+1)%tabs.length;
-      else if(e.key==='ArrowLeft') next=(index+tabs.length-1)%tabs.length;
-      else if(e.key==='Home') next=0;
-      else if(e.key==='End') next=tabs.length-1;
-      else return;
-      e.preventDefault();
-      tabs[next].focus({preventScroll:true});
-      activateTab(tabs[next].getAttribute('data-tab'));
-    });
-  });
+  }
+  wire(Array.from(document.querySelectorAll('.tab-btn')),false);
+  wire(Array.from(document.querySelectorAll('.workshop-btn')),true);
 }
 
 // ---------------------------------------------------------------

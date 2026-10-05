@@ -84,7 +84,7 @@ async function run(){
   // Native navigation across remaining Rift controls; no shared focus-helper modification.
   await evaluate('forgeUi.prepare(\'[data-tab="forge"]\',true)');await key('ArrowRight');assert(await evaluate('document.activeElement.dataset.tab')==='research','Forge -> Lab keyboard focus');
   assert(await evaluate('document.querySelector("#tab-research").classList.contains("active")'),'Lab active');
-  await key('Home');assert(await evaluate('document.activeElement.dataset.tab')==='battle','Home returns to Rift');
+  await key('Home');assert(await evaluate('document.activeElement.dataset.tab')==='forge','Workshop Home returns Forge');await evaluate('document.querySelector("[data-tab=workshop]").focus({preventScroll:true})');await key('ArrowRight');assert(await evaluate('document.activeElement.dataset.tab')==='battle','main ArrowRight returns to Rift');
   assert(await evaluate('!document.querySelector("#rift-details-btn") && !document.querySelector("#rift-details")'),'obsolete Details absent');
   await evaluate('document.querySelector("#rift-push-btn").focus({preventScroll:true})');await key('Enter');assert(await evaluate('document.activeElement.id')==='rift-push-btn','native Push retains focus');
   const navigation=await evaluate('forgeUi.checkRift()');

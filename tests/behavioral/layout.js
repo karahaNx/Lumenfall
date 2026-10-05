@@ -45,7 +45,7 @@ window.runRiftLayoutQa = async function(bridge, ctx, assert){
     assert(!q('#rift-study-status'),'obsolete Rift Study control removed');
     ['#buff-indicator','#bond-summary'].forEach(function(s){var r=visible(s);assert(r.bottom<=rect('nav.tabbar').top && q(s).scrollWidth<=q(s).clientWidth,s+' status readable on Rift');});
     var tabs=Array.from(document.querySelectorAll('nav.tabbar button'));
-    assert(tabs.length===6,'six visible main destinations');
+    assert(tabs.length===5,'five visible main destinations');
     tabs.forEach(function(el,index){
       var r=visible('[data-tab="'+el.dataset.tab+'"]');
       assert(r.height>=44 && r.width>=44,'navigation 44px touch target');
