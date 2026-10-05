@@ -107,7 +107,7 @@ window.runRiftStatusQa=async function(b,ctx,assert){
       for(var n=0;n<=slots;n++){
         s.activeStudies=projects.slice(0,n).map(x=>({id:x.id,totalDurationSec:200,remainingSec:100,speedMult:1}));install(s);
         ok(badge()===slots-n,'empty/one/multiple/full capacity');
-        var before=b.getState();q('[data-tab="research"]').focus();q('[data-tab="research"]').click();badge();
+        var before=b.getState();q('[data-tab="workshop"]').click();q('[data-tab="research"]').focus();q('[data-tab="research"]').click();badge();
         ok(q('#tab-research').classList.contains('active'),'badge/button opens Lab directly');same(b.getState(),before,'Lab opening cannot dismiss capacity or mutate state');
         ok(!!q('[data-study-choose]')===(n<slots),'Choose Study follows same slot state');
         q('[data-tab="battle"]').click();badge();
@@ -396,7 +396,7 @@ window.riftStatusMobile=(()=>{
    ok(rect(q('#rift-objective')).right<=rect(q('#rift-objective-dismiss')).left,'guidance dismiss is separate from the objective action');
   }else ok(!q('#rift-objective-dismiss').getClientRects().length&&!q('#rift-objective').getClientRects().length,'hidden guidance exposes no rendered controls');
   ok(hp.bottom<=buff.top&&buff.bottom<=bonds.top&&bonds.bottom<=stats.top&&stats.bottom<=nav.top,'HP, status, bottom numeric row and nav do not overlap');
-  var tabs=[...document.querySelectorAll('nav.tabbar button')];ok(tabs.length===6,'six main tabs');tabs.forEach((el,i)=>{var r=rect(el);ok(r.width>=44&&r.height>=44,'tab touch minimum');ok(el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)),'tab hit-test');if(i)ok(rect(tabs[i-1]).right<=r.left,'one non-overlapping nav row');});
+  var tabs=[...document.querySelectorAll('nav.tabbar button')];ok(tabs.length===5,'five main tabs');tabs.forEach((el,i)=>{var r=rect(el);ok(r.width>=44&&r.height>=44,'tab touch minimum');ok(el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)),'tab hit-test');if(i)ok(rect(tabs[i-1]).right<=r.left,'one non-overlapping nav row');});
   var active=b.riftStatus.active();ok(active.every(x=>q('#bond-summary').textContent.includes(x.name.replace(' Bond',''))),'all powered Bond names directly visible');
   if(kind!=='fresh' && !ctx.scenario.startsWith('rift-status-stacking'))ok(active.length===window.riftStatusWorst(b,ctx).bonds.length&&q('#buff-indicator').textContent.includes('+50%'),'worst current Bonds and buff fixture survives live ticks');
   if(kind!=='fresh' && ctx.scenario.startsWith('rift-status-stacking'))ok(active.length===window.riftStatusWorst(b,ctx).bonds.length && q('#buff-indicator').textContent.includes('+100%') && q('#buff-indicator').textContent.includes('next expiry'),'additive worst boost survives live ticks');

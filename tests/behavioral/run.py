@@ -23,6 +23,7 @@ FIXTURES_PATH = ROOT / "fixtures.json"
 RAW_ARTIFACT_ROOT = None
 
 SCENARIOS = {
+    "nav-workshop-contract": "fresh",
     "inquiry-contracts": "fresh",
     "inquiry-chronology": "fresh",
     "inquiry-ui": "fresh",
@@ -1790,6 +1791,8 @@ def build_runner():
           assertJsonEqual(JSON.parse(bridge.rawRecovery()).formationRebuild,expected.formationRebuild,'recovery intent');
           finish('pass',{intent:state().formationRebuild,active:state().activeParty});return;
         }
+        case 'nav-workshop-contract':
+          bridge.freeze();finish('pass',window.runNavWorkshopQa(bridge,ctx,assert));return;
         case 'r3-destinations':
         case 'self-test-r3-shortcut':
           bridge.freeze();
@@ -3105,6 +3108,7 @@ def build_runner():
             bridge.setState(labState);bridge.renderLayout();
             var beforeLab=JSON.stringify(state());
             document.querySelector('[data-tab="battle"]').click();
+            document.querySelector('[data-tab="workshop"]').click();
             document.querySelector('[data-tab="research"]').focus();
             document.querySelector('[data-tab="research"]').click();
             assert(document.activeElement===document.querySelector('[data-tab="research"]'),'Rift arrival focuses Long Studies tab');
@@ -3231,9 +3235,9 @@ def build_runner():
           assert(!document.getElementById('rift-study-status'),'Rift Study control is removed');
           assert(!badge.hidden && badge.textContent==='1','Lab badge reports authoritative free capacity');
           var labButton=document.querySelector('[data-tab="research"]');
-          labButton.focus();labButton.click();
+          document.querySelector('[data-tab="workshop"]').click();labButton.focus();labButton.click();
           assert(document.getElementById('tab-research').classList.contains('active'),'Lab button opens Research Lab');
-          assert(labButton.getAttribute('aria-current')==='page' && document.getElementById('study-list').closest('.tab-panel').id==='tab-research','Lab button opens Projects directly');
+          assert(labButton.getAttribute('aria-selected')==='true' && document.querySelector('[data-tab="workshop"]').getAttribute('aria-current')==='page' && document.getElementById('study-list').closest('.tab-panel').id==='tab-research','Lab button opens Projects directly');
           assert(document.activeElement===labButton && !badge.hidden,'Lab navigation preserves focus and capacity badge');
 
           var beforeTabs=state();
@@ -3244,7 +3248,7 @@ def build_runner():
           assert(JSON.stringify({research:afterTabs.research,activeStudies:afterTabs.activeStudies,studyQueue:afterTabs.studyQueue,lumen:afterTabs.lumen,shards:afterTabs.shards})===gameplayBeforeTabs,'Lab tab switching must not mutate gameplay state');
           document.querySelector('[data-tab="forge"]').focus();
           document.querySelector('[data-tab="forge"]').dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));
-          assert(document.activeElement===document.querySelector('[data-tab="research"]') && document.querySelector('[data-tab="research"]').getAttribute('aria-current')==='page','main destinations must support arrow-key selection and focus');
+          assert(document.activeElement===document.querySelector('[data-tab="research"]') && document.querySelector('[data-tab="research"]').getAttribute('aria-selected')==='true','Workshop sections must support arrow-key selection and focus');
 
           document.querySelector('[data-tab="forge"]').click();
           var beforeResearch=state();
@@ -3306,6 +3310,9 @@ def build_runner():
 
           document.querySelector('[data-tab="battle"]').click();
           document.getElementById('tab-battle').getAnimations().forEach(function(animation){animation.finish();});
+          var workshopButton=document.querySelector('[data-tab="workshop"]');
+          assert(workshopButton.getBoundingClientRect().height>=44 && workshopButton.getBoundingClientRect().width>=44,'Workshop access must retain a practical touch target');
+          workshopButton.click();
           assert(labButton.getBoundingClientRect().height>=44 && labButton.getBoundingClientRect().width>=44,'Lab access must retain a practical touch target');
           document.querySelector('[data-tab="spirits"]').click();
           document.getElementById('tab-spirits').getAnimations().forEach(function(animation){animation.finish();});
@@ -3775,6 +3782,7 @@ def instrument_html(source, fixtures):
         "<script>" + (ROOT / "layout.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "accessibility.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "accessibility-controls.js").read_text(encoding="utf-8") + "</script>" +
+        "<script>" + (ROOT / "nav-workshop.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "r3-destinations.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "research-duration.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "upgrade-clarity.js").read_text(encoding="utf-8") + "</script>" +

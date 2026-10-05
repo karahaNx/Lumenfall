@@ -16,7 +16,7 @@ window.runR3DestinationsQa = function(b,ctx,assert){
   same(catalogue.upgrades,['focus','sense','formation','resolve','charge','arcanecal','conduction','luminoustracking'],'five original direct upgrades followed by three Forge v1 additions');
   same(catalogue.projects,['wispascend','guardmastery','riftattune','shardstudy','lumenstudy','formationstudy','motestudy','prismstudy','measuredinquiry'],'eight original timed projects plus Measured Inquiry');
   var nav=Array.from(document.querySelectorAll('nav.tabbar .tab-btn'));
-  same(nav.map(function(n){return n.dataset.tab;}),['battle','spirits','forge','research','ascend','deeds'],'six ordered main destinations');
+  same(nav.map(function(n){return n.dataset.tab;}),['spirits','workshop','battle','ascend','deeds'],'five ordered main destinations');
   ok(!q('[data-lab-view],.lab-tabs,[id^="lab-panel-"]'),'obsolete subnavigation removed entirely');
   ok(q('#research-list').closest('.tab-panel').id==='tab-forge','direct upgrades belong only to Forge');
   ok(q('#study-list').closest('.tab-panel').id==='tab-research','projects belong only to Lab');
@@ -26,20 +26,26 @@ window.runR3DestinationsQa = function(b,ctx,assert){
   ok(q('#node-list').closest('.tab-panel').id==='tab-ascend','Ascension Tree remains under Ascend');
   nav.forEach(function(btn){
     btn.focus();btn.click();
-    var panel=q('#'+btn.getAttribute('aria-controls'));
-    ok(panel.classList.contains('active') && panel.getAttribute('aria-labelledby')===btn.id,'navigation aria relation '+btn.dataset.tab);
+    var panel=q('.tab-panel.active');
+    var controlIds=btn.getAttribute('aria-controls').split(' ');
+    ok(controlIds.indexOf(panel.id)!==-1 && panel.getAttribute('aria-labelledby')===(btn.dataset.tab==='workshop'?'nav-'+panel.id.slice(4):btn.id),'navigation aria relation '+btn.dataset.tab);
     ok(document.activeElement===btn && btn.getAttribute('aria-current')==='page','selected destination retains focus');
     ok(document.querySelectorAll('nav.tabbar [aria-current="page"]').length===1,'one selected destination');
   });
+  go('research');go('battle');go('workshop');
+  ok(q('#tab-research').classList.contains('active'),'Workshop remembers Lab in this session');
+  go('forge');ok(q('#tab-forge').classList.contains('active'),'direct Forge overrides remembered Lab');
   go('forge');var forge=q('[data-tab="forge"]');forge.focus();
   forge.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));
   ok(document.activeElement===q('[data-tab="research"]') && q('#tab-research').classList.contains('active'),'keyboard moves Forge to Lab');
   document.activeElement.dispatchEvent(new KeyboardEvent('keydown',{key:'Home',bubbles:true}));
-  ok(document.activeElement===nav[0] && q('#tab-battle').classList.contains('active'),'Home opens Rift');
+  ok(document.activeElement===forge && q('#tab-forge').classList.contains('active'),'Workshop Home opens Forge');
+  nav[2].focus();nav[2].dispatchEvent(new KeyboardEvent('keydown',{key:'Home',bubbles:true}));
+  ok(document.activeElement===nav[0] && q('#tab-spirits').classList.contains('active'),'main Home opens Wisps');
   document.activeElement.dispatchEvent(new KeyboardEvent('keydown',{key:'End',bubbles:true}));
-  ok(document.activeElement===nav[5] && q('#tab-deeds').classList.contains('active'),'End opens Deeds');
+  ok(document.activeElement===nav[4] && q('#tab-deeds').classList.contains('active'),'End opens Deeds');
   function shortcut(){
-    go('battle');q('[data-tab="research"]').focus();q('[data-tab="research"]').click();
+    go('battle');go('workshop');q('[data-tab="research"]').focus();q('[data-tab="research"]').click();
     ok(q('#tab-research').classList.contains('active') && !q('#tab-forge').classList.contains('active'),'R3 Lab navigation must open Lab, never Forge');
     ok(document.activeElement===q('[data-tab="research"]'),'Lab button focuses Lab navigation');
     ok(!!q('[data-study-choose]'),'free slots retain Choose Study access');
@@ -106,7 +112,7 @@ window.runR3DestinationsQa = function(b,ctx,assert){
     try{shortcut();}catch(e){caught=/R3 Lab navigation must open Lab/.test(e.message);}finally{restore();}
     ok(caught,'causal negative control catches wrong Lab destination');shortcut();
   }
-  return {checks:checks,mainDestinations:6,bulkOptions:7,exactState:true,liveTickEquality:true,negativeControl:true};
+  return {checks:checks,mainDestinations:5,workshopSections:2,bulkOptions:7,exactState:true,liveTickEquality:true,negativeControl:true};
 };
 window.prepareR3Reload = function(b,ctx,assert){
   var s=window.seedR3(b,ctx);s.owned.rememberbulk=true;

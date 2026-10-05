@@ -90,10 +90,11 @@ async function run(){
    // Extra conditional-Bond fixture measures Rift geometry only; the three
    // established states below retain the complete native navigation contract.
    if(kind==='boss-conditional')continue;
-   await evaluate('document.querySelector("[data-tab=research]").focus({preventScroll:true})');await key('Space');assert(await evaluate('document.querySelector("#tab-research").classList.contains("active")'),'native Lab button opens Lab');
+   await touch('[data-tab="workshop"]');await evaluate('document.querySelector("[data-tab=research]").focus({preventScroll:true})');await key('Space');assert(await evaluate('document.querySelector("#tab-research").classList.contains("active")'),'native Lab button opens Lab');
    const scroll=[];
    for(const view of ['spirits','forge','research']){
     const viewStart=Date.now(),swipesBefore=swipeCount;trace({profile:name,kind,view,phase:'start'});
+    if(view==='forge'||view==='research')await touch('[data-tab="workshop"]');
     await touch(`[data-tab="${view}"]`);
     // Real touch scroll: no scrollIntoView/focus assistance to reach last control.
     for(let i=0;i<35;i++){const loc=await evaluate(`riftStatusMobile.locate(${JSON.stringify(view)})`);if(loc.visible)break;await swipe(loc,width);}
@@ -104,7 +105,7 @@ async function run(){
     trace({profile:name,kind,view,phase:'end',duration:(Date.now()-viewStart)/1000,swipes:swipeCount-swipesBefore});
    }
    await touch('[data-tab="battle"]');samples[samples.length-1].entry=await evaluate('riftStatusMobile.entry()');await advance();await evaluate('riftStatusMobile.measure()');
-   await evaluate('document.querySelector("[data-tab=forge]").focus({preventScroll:true})');await key('ArrowRight');assert(await evaluate('document.activeElement.dataset.tab')==='research','native keyboard focuses Lab');await key('Home');assert(await evaluate('document.activeElement.dataset.tab')==='battle','native Home returns Rift');
+   await touch('[data-tab="workshop"]');await evaluate('document.querySelector("[data-tab=forge]").focus({preventScroll:true})');await key('ArrowRight');assert(await evaluate('document.activeElement.dataset.tab')==='research','native keyboard focuses Lab');await key('Home');assert(await evaluate('document.activeElement.dataset.tab')==='forge','Workshop Home returns Forge');await evaluate('document.querySelector("[data-tab=workshop]").focus({preventScroll:true})');await key('ArrowRight');assert(await evaluate('document.activeElement.dataset.tab')==='battle','native main ArrowRight returns Rift');
    assert(await evaluate('!document.querySelector("#rift-details-btn")&&!document.querySelector("#rift-details")'),'Details absent');
    const order=await evaluate(`[...document.querySelectorAll('#tab-battle button:not(:disabled),#tab-battle [tabindex="0"]')].filter(x=>x.getClientRects().length&&x.getBoundingClientRect().width>0&&x.getBoundingClientRect().height>0&&getComputedStyle(x).visibility!=='hidden').map(x=>x.id)`);
    await evaluate('document.querySelector("#rift-push-btn").focus({preventScroll:true})');

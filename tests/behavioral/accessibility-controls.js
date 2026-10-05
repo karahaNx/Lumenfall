@@ -25,14 +25,14 @@ window.runP105ControlQa = function(bridge,ctx,assert){
 
   var poor=bridge.getState();poor.lumen=0;poor.shards=0;bridge.setState(poor);bridge.renderLayout();
   var purchase=q('[data-research="focus"]');
-  assert(purchase.disabled && purchase.dataset.state==='unaffordable' && /Need/.test(purchase.textContent),'visible resource shortage');
+  assert(purchase.disabled && purchase.dataset.state==='unaffordable' && purchase.querySelector('.label').textContent==='Upgrade' && !/Need|Cannot afford/i.test(purchase.textContent+' '+purchase.getAttribute('aria-label')),'silent resource shortage retains native disabled and Upgrade label');
   var rich=bridge.getState();rich.lumen=1e100;rich.shards=1e100;bridge.setState(rich);bridge.refreshAffordability();
   assert(!purchase.disabled && purchase.dataset.state==='available' && !/Need/.test(purchase.textContent),'live affordability clears stale reason');
   bridge.setState(poor);bridge.refreshAffordability();
   assert(purchase.disabled && purchase.dataset.state==='unaffordable','live affordability restores shortage state');
 
-  // Empower/Recruit keep the shortage in their accessible name, with a
-  // single content line and the native disabled purchase gate intact.
+  // Empower/Recruit retain action, price and native disabled; currency shortage
+  // copy is absent from both visible and accessible names (NAV-001 v4).
   q('[data-tab="spirits"]').click();
   [1,95].forEach(function(level){
     ['ember','tide'].forEach(function(id){
@@ -56,7 +56,7 @@ window.runP105ControlQa = function(bridge,ctx,assert){
         assert(label.textContent===(id==='ember'?'Empower':'Recruit'),'Empower/Recruit wording retained');
         var name=button.getAttribute('aria-label');
         assert(name.includes(label.textContent)&&name.includes(price.textContent.trim())&&name.includes(id==='ember'?'Ember Wisp':'Tide Sprite')&&name.includes('Lumen'),'Empower accessible identity/action/price/unit');
-        assert(/Need Lumen/.test(name)===!affordable,'Empower accessible reason follows live affordability');
+        assert(!/Need|Cannot afford|Insufficient resources/i.test(name),'Empower accessible action and price have no shortage copy');
         // This synchronous runner freezes panelIn at scale(.995). Layout CSS
         // dimensions stay exact; the native mobile driver measures settled rects.
         assert(r.width>0&&r.height>0&&button.offsetWidth>=44&&button.offsetHeight>=44&&style.flexDirection==='row'&&style.flexWrap==='nowrap','Empower touch target and horizontal layout');

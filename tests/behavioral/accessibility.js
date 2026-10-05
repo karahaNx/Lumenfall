@@ -162,8 +162,8 @@
       return (el.matches('[data-research],[data-module],[data-rarity],[data-ultimate],[data-study],[data-shop]')) &&
         !/maxed|claimed|owned|no open slots/i.test(accessibleName(el));
     });
-    if(!unaffordable || !stateReason(unaffordable,['unaffordable','not enough','need','insufficient'])){
-      add(findings,'state-unaffordable','An unaffordable purchase must expose why it is disabled in machine-readable/accessibly named form.');
+    if(!unaffordable || unaffordable.dataset.state!=='unaffordable' || !unaffordable.disabled || !accessibleName(unaffordable) || !unaffordable.querySelector('.cost-icon') || /Need|Cannot afford|Insufficient resources/i.test(accessibleName(unaffordable))){
+      add(findings,'state-unaffordable','An unaffordable purchase must retain native disabled, data-state, accessible action/price and no currency-shortage warning.');
     }
 
     resetPresentation(bridge,ctx,'accessibility-locked');
