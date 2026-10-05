@@ -11,6 +11,8 @@ Filer i samme række er kandidater; indlæs kun det, som den konkrete opgave kr�
 | Measured Inquiry | `tasks/MEASURED_INQUIRY_001.md`, `tasks/MEASURED_INQUIRY_001_REQUIREMENTS.txt` | Originalkrav før implementering/review |
 | Forge/Lab-beslutning og begrundelser | `decisions/2026-10-04-forge-lab.txt` | Ved scope-/designspørgsmål |
 | PR41 Core/QA/Lead-accept | `decisions/2026-10-05-pr41-review.txt` | Ved integration eller vurdering af reviewgrænser |
+| NAV-001 kontrakt og afsluttet opgave | `tasks/NAV_001.md`, `tasks/NAV_001_REQUIREMENTS.txt` | NAV-review, regression eller nye nav-ændringer |
+| NAV-integration, APK133 og stående godkendelse | `decisions/2026-10-05-nav001-integration-release.txt` | Aktuel release/status/mandat |
 | Afsluttet integration og APK132 | `decisions/2026-10-05-integration-release.txt` | Ved release-provenance eller statuskontrol |
 | Context integration | `tasks/CONTEXT_SETUP_001.md` | Kun dokumentationsopgaven |
 | Overdragelse/checkpoint | `HANDOFF_TEMPLATE.md` | Ved milepæl/handoff |
@@ -47,3 +49,14 @@ Vedligehold den aktuelle status i GitHub; kildekopier mærkes med commit/dato.
 Læg ikke hele historikarkivet, lange logs eller alle tidligere handoffs ind som
 obligatorisk opstartsmateriale. Adgang til en kilde er ikke det samme som at
 dens indhold er indlæst i modellens arbejdskontekst.
+
+## NAV-001 originaler
+Lumenfall_NAV_001_Lead_Accept_00_11_2026-10-05.zip er den komplette
+Lead-evidenspakke med Core/QA-originaler, v4-krav og raw-indeks.
+Library `libfile_680a4122c4a08191a8b757b3c25b7d56`, SHA256
+`0217c9ba97cf9b32c290a54061d750fbd1a0827f00eea86447ebc7218150544a`. Pakkens pre-integration-status er historisk;
+den nye daterede integrationsbeslutning og PROJECT_STATE er aktuelle.
+Ved næste LAB-scope: Lumenfall_00_11_Lead_Context_2026-10-05.zip,
+Library `libfile_d42a1d05bf08819186ed6f4943028979` → Source_Index.txt →
+LAB/LAB_MOTES_001_LOCAL.zip; læs kun originale LAB-krav og relevante kilder.
+Lokale prototypes, testhooks og storageprefixer må ikke promoveres til produktet.

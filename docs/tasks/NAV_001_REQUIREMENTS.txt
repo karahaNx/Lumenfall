@@ -1,0 +1,138 @@
+Lumenfall NAV-001 — fem bundmenuer og Workshop
+00_10 Lead / Architecture · 2026-10-05
+Model/effort: GPT-6.1-sol · high.
+
+BRUGERKRAV
+Se USER_REQUEST.txt for den bevarede ordlyd og alle fem originale links.
+Højst fem bundikoner; let genkendelige funktioner. Forge og Lab skal samles
+under én hovedmenu. Rift skal ligge i midten, være lidt hævet og lidt større.
+Den aktive bundmenu viser ikke sit navn. Designet skal passe til Lumenfall.
+
+LEAD-FORSLAG OG KONKRET PROTOTYPE
+Rækkefølge: Wisps | Workshop | Rift | Ascend | Deeds.
+Workshop er valgt, fordi det forklarer Forge og Lab uden et nyt lorebegreb.
+Ikoner: eksisterende Wisp-flamme, enkel ambolt, Rift-portal, Ascend-opstigning,
+Deeds-trofæ. Bevar særskilte silhuetter, også uden farver.
+Revision 2 følger brugerens ønske om et mere elegant og moderne udtryk.
+Alle fire sideikoner bruger samme kølige perlehvide aktive farve, rolig blågrå
+markering og lille indikatorprik. Tidligere gul/violet farvekodning i bundmenuen
+udgår. Rift beholder et afdæmpet guldaccent som den hævede hoveddestination.
+Ascend vises som to opadgående vinkler i en åben ring: opstigning og ny cyklus.
+Det adskiller handlingen fra Prism-valutaens krystal. Reset/keeps-forklaring
+bliver på Ascend-siden; ikonet alene forklarer ikke konsekvenserne.
+Rift-ikon 26 px versus 22 px; Rift-medaljon 42 px; løft 7 px over baren.
+Tallene er afprøvet forslag, ikke et mandat til at bryde responsive layouts.
+Reserver plads til den hævede del, så status, indhold og toast ikke dækkes.
+Aktiv label skjules visuelt med sin plads bevaret; navigation flytter sig ikke.
+Tilgængeligt navn skal blive ved med at være læsbart for skærmlæser.
+Rift forbliver hævet og større, også når en anden destination er aktiv.
+Navnets synlighed afhænger kun af hvilken hovedmenu der er aktiv.
+
+REVISION 3 — FAST RIFT OG TRYKEFFEKT
+Læs USER_REFINEMENT_03.txt og de to originalbilleder i reference/.
+Egen reproduktion før rettelsen: ved 390x844 flyttede Rift ned fra y783 til
+y789, fordi baren skiftede fra 55 til 49 px samlet højde ved Rift-ankomst.
+Barens højde afhænger nu kun af skærmhøjde, aldrig af den valgte menu.
+54 px knaphøjde på almindelige skærme, 48 px ved højde <=650 px; border og
+safe-area tillægges som tidligere. Rift er samme sted, aktiv eller inaktiv.
+Fjern Rift-prikken helt; medaljonens guldmarkering viser allerede valget.
+Sideikonernes diskrete aktive prik bevares. Den oprindelige translate/scale
+på nav-knappens :active udgår, også mens knappen fysisk holdes nede.
+Tryk: øjeblikkelig svag lysning. Ved normal bevægelsesindstilling følger én
+300 ms ring som toner ud og et 280 ms lysglimt. Ingen ikonflytning, skalering,
+hop, vedvarende puls, ekstra pointer-hitflade eller gameplay-handling.
+Keyboardvalg får samme korte feedback; gentagne tryk skal kunne starte den igen.
+Ved reduceret bevægelse vises kun statisk trykmarkering, uden haloanimation.
+
+
+WORKSHOP
+Én hoveddestination med faste Forge/Lab-faner oven over det eksisterende indhold.
+Ingen mellemside med to store kort: den ville lægge et ekstra valg i rutinen.
+Forge og Lab beholder begge synlige navne i disse underfaner, også når valgt.
+Dette er en bevidst fortolkning: kravet om skjult navn gælder bundmenuen.
+Første åbning vælger Forge. Senere åbninger i samme session husker sidste fane.
+Genstart/reload vælger som udgangspunkt Forge. Ingen ny canonical saveværdi.
+Eksisterende direkte genveje til forge/research skal åbne netop den fane og
+markere Workshop aktiv; senest valgt fane må ikke overstyre en direkte genvej.
+Lab-kapacitetsbadge vises på Workshop og på Lab-underfanen. Tilgængeligt navn
+forklarer, at antallet er ledige Lab Study slots, ikke nye Forge-upgrades.
+Badge- og labelopdatering må ikke stjæle fokus eller ændre valgt destination.
+
+REVISION 4 — STILLE VALUTAMANGEL
+Læs USER_REFINEMENT_04.txt. Brugeren ønsker ingen Need Lumen/Shards/Motes/
+Prisms/Comets/Sigils, Cannot afford eller tilsvarende valutaadvarsler under
+Wisp-opgraderinger, Workshop-moduler og de øvrige opgraderingsvisninger.
+Manglende valuta vises alene som inaktiv/disabled købsknap. Handlingens navn,
+den faktiske pris og valutaikonet bevares; priser skal stadig kunne vurderes.
+Fjern teksterne fra den fælles presentControlStates-producer, herunder
+ARIA-labels, og fra Forge-labelens særskilte fallback i updateResearchCard.
+Skjul ikke blot teksten med CSS; dynamiske opdateringer må ikke genindsætte den.
+Forge-køb uden råd har label Upgrade, aldrig Cannot afford eller Upgrade ×0.
+Den fælles præsentationsregel dækker også Lab Study starts/speed, Ascend-noder
+og øvrige relevante købskontroller. Native disabled og data-state=unaffordable
+bevares; gameplay-affordability, købsbeløb og debitering ændres ikke.
+Andre stopårsager som Maxed, Reach Rift, No open slots, Recruit first og
+run limits bevares. De kan ikke forklares korrekt ved kun at antyde valutamangel.
+Bevar synlige og tilgængelige priser samt eksisterende actionnavne. Native
+disabled skal fortsat blive annonceret korrekt for skærmlæsere.
+Tilpas tests/behavioral/accessibility-controls.js: gamle ARIA-krav om Need Lumen
+afløses af native disabled, korrekt action/pris og fravær af valutamangeltekster.
+Vurder også accessibility.js' stateReason-krav for unaffordable; ikke en generel
+fjernelse af unlock-/state-/tilgængelighedstests.
+
+ADSKILLELSE AF NAVIGATION OG GAMEPLAY
+Samlingen er kun navigation. Forge forbliver øjeblikkelige permanente køb.
+Lab forbliver tidsbaserede Studies. Bevar alle levels, priser, caps, queues,
+aktive snapshots, Measured Inquiry, autosystemer og completed-before-start.
+Ingen omlægning af schema, save/recovery, offline- eller Ascend-adfærd.
+Ingen ny driftopgave fra ældre audits. A40/crDroid er ikke et acceptkrav.
+Eksisterende brandmark og skrifter er fortsat kilder til den visuelle identitet.
+
+ACCEPT OG REGRESSION
+Præcis fem synlige hoveddestinationer, Rift som tredje, stabile koordinater.
+Kun aktiv bundlabel skjult; øvrige labels læsbare ved alle afprøvede bredder.
+Mindst 44x44 px effektive trykflader; ingen overlap, clipping eller vandret scroll.
+Test kort Rift-viewport, dense/full party, boss, toast, lange labels, safe areas,
+Lab slots 0 og flere, reduced motion samt modal åbning/lukning og fokusretur.
+En korrekt valgt bunddestination og én korrekt Workshop-underfane.
+Keyboard: fem bundvalg, særskilt tofanegruppe, korrekt fokus/ARIA og wrap.
+Bevar alle seks funktioners adgang, køb/queues, Find/genveje og study shortcuts.
+Tilpas eksisterende seks-destinationskontrakter til fem hovedvalg plus to
+Workshop-underfaner; slet ikke checks blot for at opnå grøn validering.
+Se særligt tests/behavioral/layout.js, run.py (r3-destinations, Lab-tab/focus),
+accessibility.js, rift-status.js og Forge UI/Research Duration scenarierne.
+Kør relevante eksisterende tests og alle obligatoriske premergechecks.
+En ny kandidat skal fryses og have scoped Core/QA/Lead-review før integration.
+
+REFERENCEADGANG
+Alle fem links er åbnet via web-opslag. De konkrete billeder for Raafi G.s
+Bottom Navigation Bar og Bardia Adibis Navbar er visuelt inspiceret fra deres
+offentlige CDN-billeder. Dribbble-shot i browser krævede human verification;
+det blev ikke udført. Trad3r-animation og præcis freud-shot er ikke visuelt
+verificeret. Ingen påstand om at have set eller reproduceret deres animationer.
+Inspiration: fem valg, tydelige silhuetter, tilbageholdt aktiv markering og
+diskret større center. Lumenfalls egen kode/branding bestemmer det færdige UI.
+
+VERIFIKATIONENS GRÆNSE
+Dette er en lokal funktionel designprototype og et implementeringsgrundlag.
+Den er ikke en accepteret produktkandidat, GitHub PR eller ny Android-version.
+19 lokale UI-kontroller passerede på første revision. Revision 2 bestod 20
+kontroller på 320x568, 360x640 og 390x844; nav-checks.json og refinement-checks.json
+skelner de to afprøvninger. Ingen konsolfejl observeret ved afprøvningerne.
+Revision 3: seks samlede layoutkontroller på de samme tre størrelser bekræfter
+uændret Rift-position på alle fem destinationer, skjult Rift-prik, trykflader,
+labels og ingen overflow/Rift-scroll. Resultater i press-checks.json.
+Browseren brugte reduceret bevægelse ved afprøvningen. Animationens normale
+afvikling er derfor ikke runtime-verificeret her; CSS/JavaScript er syntaxkontrolleret.
+Revision 4: kildekontrol finder ingen currency Need/Cannot afford/Insufficient
+resources-producer. Eksisterende buy*-handlers er sammenlignet byte-for-byte.
+Wisp-visningen blev observeret i en frisk browserfane: fire køb uden råd var
+native disabled med priser og uden varsler, og Module/Rarity viste korrekte
+andre states. Endelig Workshop-/Lab-/Ascend-/Deeds-runtimekontrol blev ikke
+gennemført på grund af debugger-/browserforbindelsesfejl. Se scarcity-checks.json.
+De eksisterende screenshots er revision 3 og skal ikke bruges som bevis for
+den nye fjernelse af tekster. Ingen frisk revision 4-screenshot er leveret.
+Det er ikke den fulde behavioral-suite, save/offline-review, fysisk Android
+eller TalkBack-test. Safe-area, dense og reduced-motion matrice mangler endnu.
+Prototypens storage-nøgler har særskilt nav-proposal-prefix for lokal isolation.
+De må IKKE overføres til produktkode. Brug original main til implementering.
