@@ -23,6 +23,7 @@ FIXTURES_PATH = ROOT / "fixtures.json"
 RAW_ARTIFACT_ROOT = None
 
 SCENARIOS = {
+    "lab-motes-conservation": "fresh",
     "lab-motes-contracts": "fresh",
     "lab-motes-chronology": "fresh",
     "lab-motes-ui": "fresh",
@@ -471,11 +472,36 @@ window.__lumenfallQaBridge = {
     direct: function(seconds,kind,start){var result=advanceAuthoritativeTime(seconds,{kind:kind||'live',visual:false,clockStartMs:start||2000000000000,offlineWindowStartMs:start||2000000000000,captureTimeline:true});return {state:JSON.parse(JSON.stringify(state)),summary:result};},
     withDps: function(dps,fn){var original=simulationPassiveDps;simulationPassiveDps=function(){return dps;};try{return fn();}finally{simulationPassiveDps=original;}},
     mutate: function(kind){
-      var start=commitStudyStart,plan=studyMotesPlan,boundary=simulationKillsUntilStudyMotes;
+      var start=commitStudyStart,plan=studyMotesPlan,boundary=simulationKillsUntilStudyMotes,farm=simulationApplyFarmPassive;
+      if(kind==='double-round')simulationApplyFarmPassive=function simulationApplyFarmPassive(elapsedSec,dps,policy,summary){
+  if(elapsedSec<=0 || dps<=0) return;
+  var damage = dps*elapsedSec;
+  if(damage+SIM_EPS < state.enemyHp){
+    state.enemyHp -= damage;
+    return;
+  }
+
+  var maxHp = state.enemyMaxHp>0 ? state.enemyMaxHp : enemyHpFor(state.depth);
+  var remainingDamage = Math.max(0,damage-state.enemyHp);
+  var additionalKills = Math.floor(remainingDamage/maxHp+1e-12);
+  // Avoid catastrophic cancellation from subtracting a huge kills*maxHp
+  // product from a similarly huge damage value. Modulo preserves the
+  // represented damage remainder directly and is compositional across the
+  // fixed Farm batching boundaries.
+  var leftover = remainingDamage%maxHp;
+  if(leftover<SIM_EPS) leftover=0;
+  if(leftover>=maxHp-SIM_EPS){
+    additionalKills++;
+    leftover=0;
+  }
+
+  simulationBatchFarmKills(1+additionalKills,policy,summary);
+  if(leftover>0) state.enemyHp = Math.max(SIM_EPS,state.enemyMaxHp-leftover);
+};
       if(kind==='free-carry')commitStudyStart=function(node){var result=start(node);if(result&&state.studyUseMotes[node.id])findActiveStudy(node.id).speedMult=state.studySpeedTargets[node.id];return result;};
       if(kind==='fallback')studyMotesPlan=function(node){var result=plan(node);if(result&&state.motes<result.cost){result.target=1.5;result.cost=speedTierCost(1.5);}return result;};
       if(kind==='batch-end')simulationKillsUntilStudyMotes=function(){return Infinity;};
-      return function(){commitStudyStart=start;studyMotesPlan=plan;simulationKillsUntilStudyMotes=boundary;};
+      return function(){commitStudyStart=start;studyMotesPlan=plan;simulationKillsUntilStudyMotes=boundary;simulationApplyFarmPassive=farm;};
     }
   },
   inquiry: {
@@ -1749,6 +1775,7 @@ def build_runner():
       if(ctx.scenario.startsWith('lab-motes-')){
         if(ctx.scenario==='lab-motes-native'||ctx.scenario==='lab-motes-reduced-motion'){window.__labMotesNativeReady=true;return;}
         bridge.freeze();
+        if(ctx.scenario==='lab-motes-conservation'){finish('pass',window.runFarmConservationQa(bridge,ctx,assert));return;}
         if(['lab-motes-save-reload','lab-motes-backup-restore','lab-motes-recovery','lab-motes-reset'].includes(ctx.scenario)){
           window.runLabMotesPersistence(bridge,ctx,assert,phase,nextPhase,backupCode,finish);return;
         }
@@ -3823,6 +3850,7 @@ def instrument_html(source, fixtures):
         "<script>" + (ROOT / "buff-timing.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "measured-inquiry.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "lab-motes.js").read_text(encoding="utf-8") + "</script>" +
+        "<script>" + (ROOT / "farm-conservation.js").read_text(encoding="utf-8") + "</script>" +
         build_runner() + "\n</body>",
         1,
     )
