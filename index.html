@@ -3214,6 +3214,7 @@ function trackDaily(metric, n){
   state.dailyStats[metric] = (state.dailyStats[metric]||0) + (n||1);
 }
 var pendingDailyReward = null;
+var pendingDailyRewardQueue = [];
 function ensureDaily(){
   var today = todayStr();
   if(state.questDay === today) return false;
@@ -3227,7 +3228,9 @@ function ensureDaily(){
   var reward = loginRewardFor(state.loginStreak);
   state.comets += reward.comets||0;
   if(reward.prisms) state.prisms += reward.prisms;
-  pendingDailyReward = {streak: state.loginStreak, reward: reward};
+  var presentation = {streak: state.loginStreak, reward: reward};
+  if(pendingDailyReward) pendingDailyRewardQueue.push(presentation);
+  else pendingDailyReward = presentation;
   return true;
 }
 
@@ -4511,7 +4514,9 @@ function renderAutoAscendTarget(select){
       options.appendChild(new Option('Clear Rift '+cleared,String(cleared)));
     }
     if(pinned) options.appendChild(new Option('Clear Rift '+target+' (saved target)',String(target)));
-    select.replaceChildren(options);
+    // Keep the existing select/focus; replaceChildren is absent in WebView60.
+    while(select.firstChild) select.removeChild(select.firstChild);
+    select.appendChild(options);
     select.dataset.optionsKey=key;
   }
   select.dataset.windowStart=String(start);select.dataset.windowEnd=String(end);
@@ -5184,6 +5189,7 @@ function performReset(){
   pendingDailyReward = null;
 
   // Stop the old session from progressing visually while the reload begins.
+  pendingDailyRewardQueue = [];
   document.body.classList.add('app-paused');
   var settingsOverlay = document.getElementById('settings-overlay');
   if(settingsOverlay) settingsOverlay.style.display = 'none';
@@ -6491,7 +6497,7 @@ function renderSideStats(force){
   renderDaily(!!force);
 }
 
-function showDailyOverlay(info){
+function showDailyOverlay(info,onDone){
   var overlay = document.getElementById('daily-overlay');
   if(!overlay) return;
   var reward = info.reward;
@@ -6503,6 +6509,7 @@ function showDailyOverlay(info){
     closeOverlay(overlay);
     claimBtn.removeEventListener('click', handler);
     renderDaily(true);
+    if(onDone) onDone();
   }
   claimBtn.addEventListener('click', handler);
   openOverlay(overlay,handler);
@@ -7894,7 +7901,10 @@ function simulateOfflineRun(effectiveSec,options){
   });
 }
 
-function* offlineProgressSteps(now,lastSeen,elapsedSec,effectiveSec){
+function offlineProcessingClock(){
+  return typeof performance!=='undefined' && performance.now ? performance.now() : 0;
+}
+function* offlineProgressSteps(now,lastSeen,elapsedSec,effectiveSec,processingStart){
   var sim = yield* advanceAuthoritativeTime(effectiveSec,{
     kind:'offline',visual:false,clockStartMs:lastSeen,
     offlineWindowStartMs:lastSeen,resumable:true
@@ -7904,8 +7914,26 @@ function* offlineProgressSteps(now,lastSeen,elapsedSec,effectiveSec){
     yield* advanceStudyOnlyTime(elapsedSec-effectiveSec,lastSeen+effectiveSec*1000,sim,true);
   }
   state.totalOfflineSeconds += effectiveSec;
+  // Input and live ticks were suspended while the offline transaction ran.
+  // Replay that foreground time with the existing live policy before committing.
+  // Stop at normal live-tick granularity rather than chasing a moving clock.
+  var processedMs = 0;
+  var completedMs = Math.max(0,offlineProcessingClock()-processingStart);
+  while(completedMs-processedMs>=TICK_MS){
+    var processing = yield* advanceAuthoritativeTime((completedMs-processedMs)/1000,{
+      kind:'live',visual:false,clockStartMs:now+processedMs,resumable:true
+    });
+    ['lumenGained','shardGained','sigilsGained','motesGained','ascends','kills','iterations','fastForwardedKills'].forEach(function(key){
+      sim[key] += processing[key];
+    });
+    sim.completedStudies = sim.completedStudies.concat(processing.completedStudies);
+    sim.closedStudies = sim.closedStudies.concat(processing.closedStudies);
+    processedMs = completedMs;
+    completedMs = Math.max(processedMs,offlineProcessingClock()-processingStart);
+  }
   applyAchievementChecks();
-  state.lastSeen = now;
+  // A wall-clock correction changes the save endpoint, not earned live time.
+  state.lastSeen = Date.now();
   return {
     elapsedSec:elapsedSec,effectiveSec:effectiveSec,
     earned:sim.lumenGained,shardEarned:sim.shardGained,
@@ -7938,7 +7966,7 @@ function applyOfflineProgress(done){
   }
   var effectiveSec = Math.min(elapsedSec,offlineCapHours()*3600);
   var job = {base:state,working:clonePersistedValue(state),done:done,timer:null};
-  job.cursor = offlineProgressSteps(now,lastSeen,elapsedSec,effectiveSec);
+  job.cursor = offlineProgressSteps(now,lastSeen,elapsedSec,effectiveSec,offlineProcessingClock());
   offlineCatchup = job;
   offlinePending = true;
   var completedResult = null;
@@ -7964,7 +7992,7 @@ function applyOfflineProgress(done){
       if(done){
         // No intermediate save advances lastSeen. Primary success owns the
         // whole window; recovery-write failure must not roll it back.
-        var saved = saveState(now);
+        var saved = saveState(state.lastSeen);
         if(!saved && state===job.working){
           state = job.base;
           offlinePending = true;
@@ -8083,7 +8111,11 @@ function offlineReturnMessage(offline){
 }
 function showReturnFlow(offline,dailyWasRolled){
   function maybeShowDaily(){
-    if(dailyWasRolled && pendingDailyReward){ showDailyOverlay(pendingDailyReward); }
+    if(pendingDailyReward){
+      var reward = pendingDailyReward;
+      pendingDailyReward = pendingDailyRewardQueue.shift() || null;
+      showDailyOverlay(reward,maybeShowDaily);
+    }
   }
 
   if(hasMeaningfulOfflineProgress(offline)){
@@ -8242,6 +8274,8 @@ function init(){
         var welcomeComets = pendingDailyReward.reward.comets||0;
         if(welcomeComets>0) showToast('Welcome gift — +'+welcomeComets+' Comets');
       }
+      pendingDailyReward = null;
+      pendingDailyRewardQueue = [];
       showRiftMilestone('FIRST GOAL','Reach Rift 3','Awaken Tide Sprite','#3aa0c9');
     });
   } else {

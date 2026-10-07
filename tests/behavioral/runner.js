@@ -482,7 +482,7 @@
     var bridge = window.__lumenfallQaBridge;
     if(!bridge || !bridge.getState){ finish('fail','test bridge unavailable'); return; }
     try{
-      if(ctx.scenario==='offline-catchup-ui'){window.__offlineCatchupReady=true;return;}
+      if(ctx.scenario==='offline-catchup-ui' || ctx.scenario==='offline-catchup-legacy-dom'){window.__offlineCatchupReady=true;return;}
       await waitForCatchup();
       var s = state();
       if(ctx.scenario==='layout-p2-07a-reconstruction'){

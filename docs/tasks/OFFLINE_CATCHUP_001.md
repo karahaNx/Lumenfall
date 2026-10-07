@@ -1,60 +1,33 @@
-# OFFLINE-CATCHUP-001 — complete long offline Auto-Ascend
+# OFFLINE-CATCHUP-001 — long offline Auto-Ascend
 
-Owner: current Codex feature-owner chat; Lead / Architecture. Codex is based on GPT-6; exact variant and effort control are not exposed. Communication: English.
+Owner: this feature chat. Communication: English. Codex is based on GPT-6; exact variant/effort controls are not exposed.
 
-Status: **implemented, integrated and published as Android0.1.134; required physical-device acceptance pending**. The feature and owner chat remain open. No next feature has started. The final documentation checkpoint releases this owner's repository writer after verified publication; no other writer is declared released.
+Status: initial implementation/Node migration integrated via PR51 and published as APK0.1.134. Acceptance is OPEN. The user asked whether testing could run here; an isolated Android8.1/API27/WebView61 emulator now runs locally. It reproduced an unsupported replaceChildren call in the advanced-save Auto-Ascend selector before catch-up. Both PR51 P2 findings were reproduced and fixed in focused [PR54](https://github.com/karahaNx/Lumenfall/pull/54). Its automated review found clock-jump and second-midnight edges; the revision uses monotonic processing time and queued daily presentations. No new gameplay rule or other feature.
 
-Original request: [unaltered user request](OFFLINE_CATCHUP_001_REQUEST.txt). Preserved diagnostics/save: `../qa/offline-autoascend-2026-10-07/`. Current release/CI/device instructions: [release evidence](../qa/offline-catchup-001/release/README.md).
+Original request: [unaltered request](OFFLINE_CATCHUP_001_REQUEST.txt). Original diagnostics/save: ../qa/offline-autoascend-2026-10-07/. Preserve originals. User follow-ups authorize JavaScript in place of Python, GitHub publication and "then finish the job"; the latest user asks: "Cant we test it directly inside here?". Standing authorization covers necessary fixes, tests, integration and established Android publication. Current [feature workflow](../project/FEATURE_WORKFLOW.md) supersedes historical role/writer ceremonies; do not invent an old handover.
 
-## Authorization and scope
+## Goal and preservation
 
-The original mandate owns reproduction, implementation, review, integration, Android build/publication and verification, with standing user authorization. Follow-ups on 7 October 2026:
+Finish the permitted window with Auto-Ascend without total-event exhaustion, blocked normal return, lost/duplicate progress or broken save/recovery. Preserve chronology, online/offline parity, balance/caps/rewards/accounting, formation intent, Study beyond combat cap, mobile accessibility, WebView60, package com.lumenfall.app and established signing. No schema or native identity change. No PR46/B2 work, subagents, messages, new/renamed chats or next feature.
 
-> If Javascript can be used instead of all the python, then lets do that aswell.
->
-> You must publish it to the github, so it knows it.
->
-> then finish the job
+## Baselines and durable evidence
 
-The latest completion instruction supersedes the earlier publication-only stop and authorizes necessary feature integration/release. Historical 02_07 writer release remains **unknown**; no handover is invented. PR46/B2 were untouched. The current authorization/decision is preserved in [integration decision](../decisions/2026-10-07-offline-catchup-integration.md); [publication decision](../decisions/2026-10-07-offline-catchup-publication.md) preserves the earlier narrower checkpoint.
+Original product blob ea44431c163569548973d9e489f75345749a07ee/main67c3e99c24587f6c13fc65cfd27f8dcb8e289602 fails ON Clear21/stored22 at8h after250001 events/23808.744627645367s, with unchanged normalization; OFF8h passes. Archived originals and raw reruns: [QA index](../qa/offline-catchup-001/README.md).
 
-One goal: finish the entire permitted offline window with Auto-Ascend without total-event exhaustion, UI blockage, partial/duplicate progress or broken save/recovery. Preserve chronology, online/offline parity, balance, caps, rewards, accounting, formation intent, studies beyond the combat cap, mobile accessibility, WebView60 and established package/signing. No new gameplay rule, schema or UI feature.
+PR51 exact head bd71a8608d133f99971a74a79e300e1f5db254df passed CI37625068008 (132 scenarios/12 required negatives) and merged at0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd. Android build37626819252 produced0.1.134, versionCode134,6833971bytes, SHA25609e53527d8a968801f6457297558efcb4ffcf5b260af47f202447e57455b6f6c. Official aapt/apksigner, certificate/v1/v2, CRC, all15 product/font/branding assets and extracted V8 6.0 probe pass. Those engine/modern-browser results did not establish legacy DOM/device acceptance. PR52 retains the release checkpoint and raw logs; it must be reconciled with current main and the corrected release before integration.
 
-## Baseline and original reproduction
+Follow-up baseline: main e0775c5 (focused-chat docs/context-tooling update); product still SHA2564a9fac11b413071f9b722e2c50e0e46839d9de26e3214b52f619c279fc5d5607. Isolated branch feature/offline-catchup-legacy-webview, worktree /workspace/lumenfall-legacy. Existing current-main rules and other task status must be preserved. [Follow-up evidence](../qa/offline-catchup-001/legacy-webview/README.md) records native startup failure and before/after regressions.
 
-Original verified main: `67c3e99c24587f6c13fc65cfd27f8dcb8e289602`; product blob `ea44431c163569548973d9e489f75345749a07ee`. Previously accepted APK0.1.133/package com.lumenfall.app/build37363152517. Original open PR46: Draft, head `3cdebc236e9ee5081a4bca4e323b11f43aa0d46d`.
+## Implementation and checks
 
-Unchanged archived Node24 driver/original save: normalization changes no fields. ON Clear21/stored target22,8h, throws after250001 iterations at23808.744627645367 elapsed seconds. OFF8h completes106128 iterations/773 kills. A meaningful regression rejects the immutable original failure. Raw receipts remain in `../qa/offline-catchup-001/baseline/`; these are VM results, not Android acceptance.
+Original fix keeps the scheduler clock/grid across bounded generator batches (256 events;8ms target checked every32 events), resolves whole timestamps atomically, uses detached working state, commits a complete endpoint via primary before recovery, and preserves base/retry on cancellation/error. Study-only tail is cooperative; busy flags clear and stale intro callbacks are invalidated. Active scripts/CI/recovery now use Node20+, with byte-identical historical originals.
 
-## Implementation and local acceptance
+Follow-up replaces only selector child replacement with removeChild/appendChild, keeping the select/focus/handlers. It simulates suspended foreground processing through the existing live scheduler before the atomic commit, at existing100ms live-tick granularity, without expanding offline cap/accounting. Pending daily presentation survives failed/cancelled retries and is consumed only when shown (or fresh welcome gift presented).
 
-The scheduler retains its exact clock/grid across bounded generator batches; each timestamp resolves atomically before yielding. Maximum 256 events/batch,8ms target checked every32 events. Study-only time beyond combat cap is cooperative too. Catch-up uses detached working state, so tick/input/autosave cannot consume partial progress. A successful primary save commits one captured endpoint; recovery-write failure does not undo that primary commit. Cancellation/background/failure preserve the base and retryable window. Busy flags clear; return generations invalidate stale startup callbacks. The terminal guard excludes a successfully reached endpoint. No game balance/cap/schema or native identity changes.
+Acceptance: original Clear21/Clear20/OFF8h,72h cap/96h Study, Motes/automation/accounting and whole/split numerical policy; cold/resume/repeated return, interruption/restart/failure/recovery and primary/recovery/backup; full suite/12 negatives, selector focus behavior and missing replaceChildren DOM regression; actual new APK package/version/certificate/assets and native lifecycle/storage cases. Modern desktop/native WebView61 is not exact WebView60/TalkBack/physical-device acceptance. Keep any required untested acceptance open.
 
-Product SHA256: `4a9fac11b413071f9b722e2c50e0e46839d9de26e3214b52f619c279fc5d5607`; Git blob `90e4678cb28fa833fdacbc01d1744d9465f6a356`.
+Changed files: root index.html; targeted behavioral runner/prelude/registrations, offline core/UI regressions; this task and focused evidence. No balance/cap/schema/assets/mobile/signing/workflow changes in the follow-up. Self-review and automated findings must be recorded honestly; independent human review is not claimed.
 
-Core evidence covers original ON Clear21/Clear20/OFF8h,72h cap,96h Study beyond cap, exact work-budget equivalence, existing whole/split numerical policy, research/Study/Motes/Empower ordering, earned/spent accounting, formation intent, interruption/restart, runtime/primary/recovery failures and backup/recovery. Fixed original ON8h completes302400 kills/14400 ascends. Browser tests cover real startup, pointer Claim, visibility/resume/repeated return, event-loop progress, reload interruption and retry. Self-review checks the full contract; no independent reviewer approval is claimed. Modern Chrome results do not establish native Android/WebView60/TalkBack acceptance.
+## Next action
 
-The user-requested migration replaces all six active Python scripts and inline CI helpers with Node.js20+. Original browser assertions/registrations/source contract are retained; shared recovery/ZIP/process/server helpers and additional tooling controls pass. Archived originals remain byte-identical, including the hash-recorded recovery helper under `publication_originals/`. Established Android Java/Gradle/SDK formats/signing/release steps remain unchanged. No active Python runtime is required.
-
-Local gates:132 scenarios/152 expanded PASS results;12 required negatives plus5 translated-mutation negatives;31 raw-result controls, real timeout and two causal mutation/undo checks. Node20.19.5 syntax/tooling/process checks and five layout viewports pass. Context/source/smoke/APK verifier self-test/fixture-tool checks pass;1509 archive checks and the exact96-file B2 tree/modes remain intact. Original local/fix/migration evidence: [QA index](../qa/offline-catchup-001/README.md).
-
-## Publication, integration and Android release
-
-Publication-only checkpoint: feature branch `feature/offline-catchup-001`, initial head `82ed0518c3efac43c7662cf97dc5e747fb0e6a82`, Draft PR51 opened12:57:28 UTC on 7 October 2026 against docs-only main `b2a1f440e8ad9fed34b37551e468224310d2a6f6`. First CI37624792096 was cancelled after the publication receipt updated the head and is not final acceptance.
-
-Final implementation head: `bd71a8608d133f99971a74a79e300e1f5db254df`. [Exact-head CI37625068008](https://github.com/karahaNx/Lumenfall/actions/runs/37625068008) succeeds, including132 scenarios,12 required negatives, Node tooling/source/staging and guarded startup. It used Node20/Chrome154.0.8037.97. Full raw logs are saved in the release evidence.
-
-[PR51](https://github.com/karahaNx/Lumenfall/pull/51) was marked ready, then merged with the expected validated head into **`0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd`**. Live main/52 branches/open PRs/recent runs were inspected before integration; PR46 was unchanged and no competing active run was observed. The integrated tree exactly equals the tested head. Integrated source/context/archive checks pass; no relevant implementation/test/workflow delta required a repeated full suite.
-
-The normal main push produced [Android build37626819252](https://github.com/karahaNx/Lumenfall/actions/runs/37626819252), run number134, success at13:15:58 UTC. No unnecessary dispatch. Release0.1.134/package com.lumenfall.app/versionCode134 uses the established certificate:
-`A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21`.
-
-The actual [published APK](https://github.com/karahaNx/Lumenfall/releases/download/android-latest/Lumenfall.apk), asset618745109,6833971 bytes, has SHA256 **`09e53527d8a968801f6457297558efcb4ffcf5b260af47f202447e57455b6f6c`**. Official build-tools35 aapt/apksigner verify package/version, unchanged certificate and v1/v2 signatures. CRC passes and all 15 product/font/branding assets match main. Actual extracted APK product passes Node8.3.0/V8 6.0.286.52 ON8h execution,302400 kills/14400 ascends,1181 cooperative batches. This is an engine probe, not native device acceptance.
-
-## Required remaining acceptance and next action
-
-No physical Android device/emulator is connected. Signing-compatible installation, native lifecycle/storage, supported WebView60 DOM and TalkBack acceptance remain **pending**. The original request says: "If physical device access is absent, finish available work and request the concrete remaining device test; keep the feature open until required acceptance is recorded."
-
-Use [DEVICE_ACCEPTANCE.txt](../qa/offline-catchup-001/release/DEVICE_ACCEPTANCE.txt): upgrade preserving the real backup/save, original ON Clear21/8h return/Claim/live play, Clear20/OFF, cap/Study, repeated return, background/force-stop during catch-up then restart, save/reload/backup/recovery, WebView60 and TalkBack. Report installed app/device/Android/WebView versions, elapsed offline windows and each PASS/FAIL/NOT TESTED. Backup restoration resets lastSeen; importing an old backup timestamp alone is not a long-window device test.
-
-Save concrete results in GitHub after rechecking live baseline; fix any reproduced failure within this feature. Do not mark feature complete or archive until required acceptance is recorded. The final documentation checkpoint's PR description provides its publication/validation receipt and actual release of this owner's repository writer scope. Historical 02_07 release stays unknown, and PR46/B2 ownership/reviews remain unchanged. No repository writer is reserved during the device-test wait.
+Finish focused before/after checks, required exact-head CI/review, publish/integrate the corrected source and verify its new signed APK. Run the installed-app native cases here, record results/limits and dispose of both PR51 findings. Reconcile PR52 with current main, preserving other docs changes and recording the latest release/native evidence. Do not archive or mark complete until required acceptance is recorded; no next feature.
