@@ -2,7 +2,7 @@
 
 Owner: current Codex feature-owner chat; Lead / Architecture. Codex is based on GPT-6; exact variant and effort control are not exposed. Communication: English (current user instruction).
 
-Status: implementation and local verification pass; feature remains open. GitHub feature-branch and PR publication is explicitly authorized by the user on 7 October 2026. The prior writer status remains unknown; no release by 02_07 is inferred. Main integration, Android release and required device acceptance remain pending.
+Status: published on GitHub in [Draft PR #51](https://github.com/karahaNx/Lumenfall/pull/51); implementation and local verification pass; feature remains open. GitHub feature-branch and PR publication is explicitly authorized by the user on 7 October 2026. The prior writer status remains unknown; no release by 02_07 is inferred. Main integration, Android release and required device acceptance remain pending.
 
 Baseline: live main `67c3e99c24587f6c13fc65cfd27f8dcb8e289602`, verified against Git transport and GitHub connector on 7 October 2026. Product index blob `ea44431c163569548973d9e489f75345749a07ee`. Accepted APK reported as 0.1.133, package com.lumenfall.app, build 37363152517. Only open PR: #46, Draft, head 3cdebc236e9ee5081a4bca4e323b11f43aa0d46d; no recent active workflow. PR46/B2 are outside scope.
 
@@ -26,7 +26,7 @@ Implementation index SHA256: `4a9fac11b413071f9b722e2c50e0e46839d9de26e3214b52f6
 
 Retain the authoritative scheduler and its internal clock across cooperative work batches, and isolate catch-up from live state until completion. No new gameplay/workflow rule. Persist English preference in active AGENTS/bootstrap/project instructions/new-account prompt; historical originals remain unchanged.
 
-Next: publish the validated branch and open its feature PR under the latest explicit user instruction; prior-writer handover remains required before main integration. All132 full-suite scenarios and12 required negatives pass; source/context/archive/smoke/APK-verifier-self-test checks pass. V8 6.0 product-script execution passes. Self-review and exact evidence are in `../qa/offline-catchup-001/README.md` and `validation.json`. Required physical-device acceptance remains pending. Publication scope is this feature branch, its PR, and continuation evidence. The prior product writer has not been declared released.
+Next: finish exact-head PR validation/review and resolve prior-writer handover before main integration. The branch and Draft PR #51 have been published under the latest explicit user instruction. All132 full-suite scenarios and12 required negatives pass; source/context/archive/smoke/APK-verifier-self-test checks pass. V8 6.0 product-script execution passes. Self-review and exact evidence are in `../qa/offline-catchup-001/README.md` and `validation.json`. Required physical-device acceptance remains pending. Publication scope is this feature branch, its PR, and continuation evidence. The prior product writer has not been declared released.
 
 
 ## Integration and Android acceptance still required
@@ -46,3 +46,13 @@ User instruction, 7 October 2026:
 This current instruction authorizes a scoped publication checkpoint: the existing OFFLINE-CATCHUP-001 implementation, JavaScript tooling migration, original request, decisions, test receipts and remaining acceptance steps on `feature/offline-catchup-001`, plus a draft PR to main. The instruction supersedes the earlier publication stop; it does not prove the earlier writer released ownership. Main integration and Android/device acceptance remain open.
 
 Preflight at 12:54 UTC: main `b2a1f440e8ad9fed34b37551e468224310d2a6f6`; all advertised branch refs inspected; only open PR is Draft #46 on `3cdebc236e9ee5081a4bca4e323b11f43aa0d46d`; no active runs among the latest 30. The requested feature branch does not already exist remotely. The latest JavaScript-policy documentation is incorporated, with the environment guide updated to the verified Node tools. Pre-merge CI runs on PR creation/update; Android builds require main changes or explicit dispatch. Published PR/head/CI status will be recorded in this task’s publication receipt.
+
+## Publication receipt — 7 October 2026
+
+- Repository: `karahaNx/Lumenfall`; [feature branch](https://github.com/karahaNx/Lumenfall/tree/feature/offline-catchup-001).
+- [Draft PR #51](https://github.com/karahaNx/Lumenfall/pull/51) opened at 12:57:28 UTC against main `b2a1f440e8ad9fed34b37551e468224310d2a6f6` and attached to this owner chat.
+- First published head: `82ed0518c3efac43c7662cf97dc5e747fb0e6a82`. It contains the original fix `c04b479`, JavaScript migration `b4873fd`, and documentation-only reconciliation/publication mandate. This receipt is a subsequent documentation commit; the current published head is read from the PR or branch ref.
+- Local validation: 132 scenarios, 12 required negatives plus five translated-mutation controls, Node20 syntax/tooling/process/layout checks, source/smoke/setup/APK identity fixture checks, and 1509 archive checks pass. Incorporating current main and this receipt changes no validated game/test/script/workflow bytes.
+- GitHub CI first started as [run 37624792096](https://github.com/karahaNx/Lumenfall/actions/runs/37624792096). APK-verifier self-test, Node tooling checks, source validation and staging succeeded before the behavioral suite began. Publishing this receipt triggers ordinary exact-head CI; the earlier run is historical and is not final-head acceptance. Follow the current PR checks for completion.
+- Requests, decisions, full raw validation receipts and remaining acceptance are saved in this branch. [Publication decision](../decisions/2026-10-07-offline-catchup-publication.md).
+- Status: published candidate; no main merge or new Android APK. Prior product-writer release, independent integration/review requirements and physical Android/WebView60/TalkBack acceptance remain pending. Publication scope stops after this checkpoint and does not declare 02_07 released. The owner chat remains open.

@@ -31,3 +31,5 @@ Migration validation:132 scenarios/152 viewport-expanded PASS results, zero fail
 ## Publication checkpoint
 
 On 7 October 2026 the user explicitly required GitHub publication. The feature branch and draft PR now have a scoped publication mandate; prior writer release remains unknown. The new main checkpoint `b2a1f440e8ad9fed34b37551e468224310d2a6f6` adds JavaScript-policy documentation only. Incorporating it changes no validated game, test, script or workflow bytes. Earlier local-only receipts above are historical checkpoints. The current publication receipt and remaining integration/release/device acceptance are in the feature task.
+
+Published at `feature/offline-catchup-001` in [Draft PR #51](https://github.com/karahaNx/Lumenfall/pull/51). First published head: `82ed0518c3efac43c7662cf97dc5e747fb0e6a82`. The feature task now records the publication receipt, current continuation sources and unresolved acceptance. PR checks identify the latest head and CI outcome. No main integration or APK/device acceptance is claimed.
