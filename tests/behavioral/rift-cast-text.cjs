@@ -119,7 +119,8 @@ async function run() {
         s.spirits[sp.id]=1;s.heroResource[sp.id]=50;b.install(s);
         check(document.querySelector('.rift-charge').getAttribute('aria-valuenow')==='50','real charge value');result.push(inspect(sp.id,'charging'));
         s.heroResource[sp.id]=100;b.install(s);
-        if(!${baselineObservation})check(document.querySelector('.rift-charge').getAttribute('aria-valuetext').indexOf('Ready; 100%')===0,'ready state accessible');result.push(inspect(sp.id,'ready'));
+        result.push(inspect(sp.id,'ready'));
+        if(!${baselineObservation})check(document.querySelector('.rift-charge').getAttribute('aria-valuetext').indexOf('Ready; 100%')===0,'ready state accessible');
         s.heroResource[sp.id]=0;b.install(s);var before=JSON.stringify(b.get());b.cast(sp.id);
         if(!${baselineObservation})check(document.querySelector('.rift-charge').getAttribute('aria-valuetext').indexOf('Casting; 0%')===0,'cast state accessible');
         check(document.querySelector('.rift-wisp').classList.contains('is-casting'),'cosmetic cast class retained');
