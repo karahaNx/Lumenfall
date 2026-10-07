@@ -3236,6 +3236,10 @@ var isNewGame = false;
 var resetInProgress = false;
 var resetBootPending = false;
 var reloadInProgress = false;
+var offlineCatchup = null;
+var offlinePending = false;
+var resumeFlowBusy = false;
+var returnFlowGeneration = 0;
 
 function persistenceError(code,message){
   var error = new Error(message);
@@ -3695,20 +3699,22 @@ function loadState(){
   return freshState();
 }
 
-function saveState(){
+function saveState(clockMs){
   if(resetInProgress || reloadInProgress) return;
+  if(offlineCatchup || offlinePending) return false;
   if(persistenceBlocked) return false;
   try{
     var candidate = clonePersistedValue(state);
     candidate.schemaVersion = SAVE_SCHEMA_VERSION;
-    candidate.lastSeen = Date.now();
+    candidate.lastSeen = Number.isFinite(clockMs) ? clockMs : Date.now();
     var canonical = acceptPersistedState(candidate,'runtime');
     var serialized = JSON.stringify(canonical);
 
     localStorage.setItem(SAVE_KEY,serialized);
-    localStorage.setItem(RECOVERY_SAVE_KEY,serialized);
-
+    // Once primary storage succeeds it owns the endpoint, even if recovery
+    // storage subsequently fails. Retrying must not award this window again.
     state = canonical;
+    localStorage.setItem(RECOVERY_SAVE_KEY,serialized);
     if(resetBootPending){
       localStorage.removeItem(RESET_PENDING_KEY);
       resetBootPending = false;
@@ -3787,6 +3793,8 @@ function restoreSaveBackup(){
 
     // From this point onward the validated restored backup on disk is authoritative.
     // Block autosave/beforeunload from writing the pre-restore in-memory state over it.
+    cancelOfflineCatchup();
+    offlinePending = false;
     reloadInProgress = true;
     document.body.classList.add('app-paused');
     var settingsOverlay = document.getElementById('settings-overlay');
@@ -5162,6 +5170,8 @@ function doAscend(auto){
 
 function performReset(){
   if(resetInProgress) return;
+  cancelOfflineCatchup();
+  offlinePending = false;
   resetInProgress = true;
 
   try{
@@ -6659,7 +6669,8 @@ function autoEmpowerTick(){
  * independent from the 100 ms UI tick and from offline loop chunk size.
  */
 var SIM_EPS = 1e-9;
-var SIM_EVENT_LIMIT = 250000;
+var SIM_BATCH_EVENTS = 256;
+var SIM_BATCH_MS = 8;
 
 function simulationPolicy(kind,options){
   options = options || {};
@@ -7268,6 +7279,9 @@ function simulationResolveTimestamp(nowMs,elapsedSec,policy,summary,clock){
   return actions;
 }
 function advanceAuthoritativeTime(elapsedSec,options){
+  // A cursor retains this scheduler's exact clock/phase across yields. Calling
+  // the synchronous facade still uses the identical event ordering.
+  function* run(){
   options = options || {};
   elapsedSec = Math.max(0,Number(elapsedSec)||0);
   var policy = simulationPolicy(options.kind||'live',options);
@@ -7415,11 +7429,17 @@ function advanceAuthoritativeTime(elapsedSec,options){
   }
   simulationResolveTimestamp(initialNowMs,0,policy,summary,simulationClockPosition());
 
+  var batchEvents = 0;
+  var batchStarted = simulationWorkNow();
   while(remaining>0){
-    summary.iterations++;
-    if(summary.iterations>SIM_EVENT_LIMIT){
-      throw new Error('Authoritative simulation event limit exceeded after '+summary.iterations+' iterations');
+    if(options.resumable && (batchEvents>=SIM_BATCH_EVENTS ||
+        (batchEvents%32===0 && simulationWorkNow()-batchStarted>=SIM_BATCH_MS))){
+      yield {elapsedSec:currentElapsedSec(),iterations:summary.iterations};
+      batchEvents = 0;
+      batchStarted = simulationWorkNow();
     }
+    batchEvents++;
+    summary.iterations++;
 
     var nowMs = simulationNowMs();
 
@@ -7579,7 +7599,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
       });
     }
 
-    if(elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && actions===0){
+    if(remaining>0 && elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && actions===0){
       throw new Error('Authoritative simulation stalled without elapsed-time or state progress | '+JSON.stringify({
         elapsedInRun:elapsedInRun,
         elapsedWholeSec:elapsedWholeSec,
@@ -7600,13 +7620,30 @@ function advanceAuthoritativeTime(elapsedSec,options){
   summary.pushDepth = progressionDepth();
   summary.clockEndMs = clockStartMs + elapsedSec*1000;
   return summary;
+  }
+  var cursor = run();
+  if(options && options.resumable) return cursor;
+  var step;
+  do{ step = cursor.next(); }while(!step.done);
+  return step.value;
 }
-function advanceStudyOnlyTime(elapsedSec,clockStartMs,summary){
+function simulationWorkNow(){
+  return typeof performance!=='undefined' && performance.now ? performance.now() : Date.now();
+}
+function advanceStudyOnlyTime(elapsedSec,clockStartMs,summary,resumable){
+  function* run(){
   var remaining = Math.max(0,Number(elapsedSec)||0);
   var nowMs = Number.isFinite(clockStartMs) ? clockStartMs : Date.now();
   simulationCompleteDueStudies(summary);
   simulationStartQueuedStudies(summary);
+  var batchEvents = 0, batchStarted = simulationWorkNow();
   while(remaining>SIM_EPS){
+    if(resumable && (batchEvents>=SIM_BATCH_EVENTS || simulationWorkNow()-batchStarted>=SIM_BATCH_MS)){
+      yield null;
+      batchEvents = 0;
+      batchStarted = simulationWorkNow();
+    }
+    batchEvents++;
     var next = Math.min(remaining,simulationNextStudySeconds());
     if(!Number.isFinite(next)) break;
     if(next>SIM_EPS){
@@ -7618,6 +7655,12 @@ function advanceStudyOnlyTime(elapsedSec,clockStartMs,summary){
     if(next<=SIM_EPS && actions===0) break;
   }
   return nowMs;
+  }
+  var cursor = run();
+  if(resumable) return cursor;
+  var step;
+  do{ step = cursor.next(); }while(!step.done);
+  return step.value;
 }
 
 // Presentation observes only this tick's committed result. No event queue or
@@ -7659,6 +7702,7 @@ function presentLiveRiftResult(before,sim){
 }
 function tick(){
   if(document.hidden || resetInProgress || reloadInProgress) return;
+  if(offlineCatchup || offlinePending) return;
   var feedbackBefore = {mode:state.riftMode,maxDepth:state.maxDepthEver};
   var sim = advanceAuthoritativeTime(TICK_MS/1000,{kind:'live',visual:true,clockStartMs:Date.now()-TICK_MS});
 
@@ -7850,42 +7894,91 @@ function simulateOfflineRun(effectiveSec,options){
   });
 }
 
-function applyOfflineProgress(){
+function* offlineProgressSteps(now,lastSeen,elapsedSec,effectiveSec){
+  var sim = yield* advanceAuthoritativeTime(effectiveSec,{
+    kind:'offline',visual:false,clockStartMs:lastSeen,
+    offlineWindowStartMs:lastSeen,resumable:true
+  });
+  // Studies keep their existing real-time semantics beyond the combat cap.
+  if(elapsedSec>effectiveSec){
+    yield* advanceStudyOnlyTime(elapsedSec-effectiveSec,lastSeen+effectiveSec*1000,sim,true);
+  }
+  state.totalOfflineSeconds += effectiveSec;
+  applyAchievementChecks();
+  state.lastSeen = now;
+  return {
+    elapsedSec:elapsedSec,effectiveSec:effectiveSec,
+    earned:sim.lumenGained,shardEarned:sim.shardGained,
+    sigilsEarned:sim.sigilsGained,motesEarned:sim.motesGained,
+    ascends:sim.ascends,completedStudies:sim.completedStudies,
+    closedStudies:sim.closedStudies,retreated:sim.retreated,
+    endDepth:state.depth,pushDepth:progressionDepth(),
+    kills:sim.kills,iterations:sim.iterations,
+    fastForwardedKills:sim.fastForwardedKills
+  };
+}
+function cancelOfflineCatchup(){
+  var job = offlineCatchup;
+  if(!job) return;
+  clearTimeout(job.timer);
+  offlineCatchup = null;
+  offlinePending = true;
+  resumeFlowBusy = false;
+  if(job.done) job.done(null,new Error('Offline catch-up cancelled'));
+}
+function applyOfflineProgress(done){
+  if(offlineCatchup) return null;
   var now = Date.now();
   var lastSeen = state.lastSeen||now;
   var elapsedSec = Math.max(0,(now-lastSeen)/1000);
-  if(elapsedSec < 5) return null;
-
-  var capSec = offlineCapHours()*3600;
-  var effectiveSec = Math.min(elapsedSec,capSec);
-  var sim = simulateOfflineRun(effectiveSec,{clockStartMs:lastSeen});
-
-  // Long Studies are real-time progression and intentionally continue past the
-  // combat earning cap. Combat, Auto-Tap, Auto-Empower and Research do not.
-  if(elapsedSec>effectiveSec){
-    advanceStudyOnlyTime(elapsedSec-effectiveSec,lastSeen+effectiveSec*1000,sim);
+  if(elapsedSec < 5){
+    offlinePending = false;
+    if(done) done(null,null);
+    return null;
   }
+  var effectiveSec = Math.min(elapsedSec,offlineCapHours()*3600);
+  var job = {base:state,working:clonePersistedValue(state),done:done,timer:null};
+  job.cursor = offlineProgressSteps(now,lastSeen,elapsedSec,effectiveSec);
+  offlineCatchup = job;
+  offlinePending = true;
+  var completedResult = null;
 
-  state.totalOfflineSeconds += effectiveSec;
-  checkAchievements();
-
-  return {
-    elapsedSec:elapsedSec,
-    effectiveSec:effectiveSec,
-    earned:sim.lumenGained,
-    shardEarned:sim.shardGained,
-    sigilsEarned:sim.sigilsGained,
-    motesEarned:sim.motesGained,
-    ascends:sim.ascends,
-    completedStudies:sim.completedStudies,
-    closedStudies:sim.closedStudies,
-    retreated:sim.retreated,
-    endDepth:state.depth,
-    pushDepth:progressionDepth(),
-    kills:sim.kills,
-    iterations:sim.iterations,
-    fastForwardedKills:sim.fastForwardedKills
-  };
+  function pump(){
+    if(offlineCatchup!==job) return;
+    var step, error = null;
+    state = job.working;
+    try{ step = job.cursor.next(); }
+    catch(e){ error = e; }
+    finally{
+      job.working = state;
+      state = job.base;
+    }
+    if(!error && !step.done){
+      if(done){ job.timer = setTimeout(pump,0); return; }
+      return;
+    }
+    offlineCatchup = null;
+    if(!error){
+      state = job.working;
+      offlinePending = false;
+      if(done){
+        // No intermediate save advances lastSeen. Primary success owns the
+        // whole window; recovery-write failure must not roll it back.
+        var saved = saveState(now);
+        if(!saved && state===job.working){
+          state = job.base;
+          offlinePending = true;
+          error = new Error('Offline progress could not be saved');
+        }
+      }
+      if(!error) completedResult = step.value;
+    }
+    if(done) done(completedResult,error);
+    else if(error) throw error;
+  }
+  if(done){ pump(); }
+  else { while(offlineCatchup===job) pump(); }
+  return completedResult;
 }
 
 function fmtDuration(sec){
@@ -8081,6 +8174,65 @@ function init(){
 
   var welcomeOverlay = document.getElementById('welcome-overlay');
 
+  var appHiddenAt = 0;
+  function finishReturn(offline,dailyWasRolled,error,generation){
+    if(generation!==returnFlowGeneration) return;
+    resumeFlowBusy = false;
+    document.body.classList.toggle('app-paused',document.hidden);
+    if(error){
+      if(!document.hidden) showToast('Offline progress is safe. Return again to retry, or restore a backup in Settings.');
+      return;
+    }
+    if(document.hidden) return;
+    renderAll();
+    var settingsOverlay = document.getElementById('settings-overlay');
+    if(settingsOverlay && settingsOverlay.style.display!=='none') closeSettings();
+    playStartupIntro(function(){
+      try{ if(!document.hidden && generation===returnFlowGeneration) showReturnFlow(offline,dailyWasRolled); }
+      finally{ resumeFlowBusy = false; }
+    });
+  }
+  function beginReturn(dailyWasRolled){
+    var generation = ++returnFlowGeneration;
+    resumeFlowBusy = true;
+    try{
+      applyOfflineProgress(function(offline,error){
+        if(!error && !offline) saveState();
+        finishReturn(offline,dailyWasRolled,error,generation);
+      });
+    }catch(error){
+      offlinePending = true;
+      finishReturn(null,dailyWasRolled,error,generation);
+    }
+  }
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden){
+      document.querySelectorAll('.rift-milestone,.vfx-boss-death').forEach(function(el){ el.remove(); });
+      document.querySelector('#tab-battle .stage').classList.remove('impact-victory','impact-milestone','impact-boss');
+      appHiddenAt = Date.now();
+      returnFlowGeneration++;
+      resumeFlowBusy = false;
+      cancelOfflineCatchup();
+      saveState();
+      return;
+    }
+    if(isNewGame || resumeFlowBusy || !appHiddenAt) return;
+    var awayMs = Date.now()-appHiddenAt;
+    appHiddenAt = 0;
+    if(awayMs < 1000 && !offlinePending) return;
+    beginReturn(ensureDaily());
+  });
+  // Cooperative simulation releases the event loop with a detached working
+  // state. Suspend gameplay input/autosave until that transaction settles.
+  ['pointerdown','click','keydown','change','input'].forEach(function(type){
+    document.addEventListener(type,function(e){
+      var recoveryInput = e.target.closest && (e.target.closest('#settings-overlay') || e.target.closest('#settings-btn'));
+      if(offlineCatchup || (offlinePending && !recoveryInput)){
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+    },true);
+  });
   if(isNewGame){
     playStartupIntro(function(){
       isNewGame = false;
@@ -8093,53 +8245,11 @@ function init(){
       showRiftMilestone('FIRST GOAL','Reach Rift 3','Awaken Tide Sprite','#3aa0c9');
     });
   } else {
-
-    // Apply offline progress before any startup save can advance lastSeen.
-    var offline = applyOfflineProgress();
-    saveState();
-
-    renderAll();
-    playStartupIntro(function(){
-      showReturnFlow(offline,dailyRolled);
-    });
+    // The visibility handlers exist before the first cooperative batch.
+    beginReturn(dailyRolled);
   }
-
-  setInterval(tick, TICK_MS);
-  setInterval(function(){
-    if(!document.hidden) saveState();
-  }, 5000);
-
-  var appHiddenAt = 0;
-  var resumeFlowBusy = false;
-  document.addEventListener('visibilitychange', function(){
-    if(document.hidden){
-      // Do not resume an interrupted milestone animation/banner on return.
-      document.querySelectorAll('.rift-milestone,.vfx-boss-death').forEach(function(el){ el.remove(); });
-      document.querySelector('#tab-battle .stage').classList.remove('impact-victory','impact-milestone','impact-boss');
-      appHiddenAt = Date.now();
-      saveState();
-      return;
-    }
-
-    if(isNewGame || resumeFlowBusy || !appHiddenAt) return;
-    var awayMs = Date.now()-appHiddenAt;
-    appHiddenAt = 0;
-    if(awayMs < 1000) return;
-
-    resumeFlowBusy = true;
-    var rolledOnResume = ensureDaily();
-    var resumeOffline = applyOfflineProgress();
-    saveState();
-    renderAll();
-
-    var settingsOverlay = document.getElementById('settings-overlay');
-    if(settingsOverlay && settingsOverlay.style.display!=='none') closeSettings();
-
-    playStartupIntro(function(){
-      showReturnFlow(resumeOffline,rolledOnResume);
-      resumeFlowBusy = false;
-    });
-  });
+  setInterval(tick,TICK_MS);
+  setInterval(function(){ if(!document.hidden) saveState(); },5000);
   window.addEventListener('beforeunload', function(){
     if(!resetInProgress && !reloadInProgress) saveState();
   });

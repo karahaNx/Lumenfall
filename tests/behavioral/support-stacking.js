@@ -70,7 +70,7 @@ window.runSupportStacking=function(b,ctx,assert,parity){
   ['max','multiply','deadline','self','legacy'].forEach(function(kind){var undo=q.mutate(kind),caught='';try{if(kind==='deadline')stagger();else if(kind==='self')refresh();else if(kind==='legacy')legacy();else{seed(['tide','aurora']);cast('tide',T);cast('aurora',T);factor(T,1.5,'causal additive');}}catch(e){caught=e.message;}finally{undo();}ok(caught.startsWith(kind==='deadline'?'stagger':kind==='self'?'same source':kind==='legacy'?'legacy floor':'causal additive'),'causal mutation '+kind+' fails intended assertion: '+caught);negatives.push({kind,caught});});
   return {checks,records,negatives,schema:1};
 };
-window.runSupportPersistence=function(b,ctx,assert,parity,phase,nextPhase,backupCode,finish){
+window.runSupportPersistence=async function(b,ctx,assert,parity,phase,nextPhase,backupCode,finish){
   var key='support-persist-'+ctx.scenario,copy=x=>JSON.parse(JSON.stringify(x)),q=b.supportTest;
   if(phase()===0){
     var now=b.clockNow(),s=window.supportStackSeed(b,ctx,['ember']);s.buffUntil=now+8000;s.buffMult=1.8;s.supportBuffs={version:1,sources:{tide:{mult:1.25,until:now+12345.625},aurora:{mult:1.5,until:now+9234.375}}};
@@ -89,7 +89,8 @@ window.runSupportPersistence=function(b,ctx,assert,parity,phase,nextPhase,backup
     if(!ctx.scenario.endsWith('resume')){finish('pass',{route:ctx.scenario,sources:s.supportBuffs,legacy:{until:s.buffUntil,mult:s.buffMult}});return;}
     record.expected=b.previewOffline(s,15,record.start);localStorage.setItem(key,JSON.stringify(record));
     if(ctx.scenario==='support-visibility-resume'){
-      b.clearLifecycleTrace();b.dispatchVisibility(true);b.advanceTime(15000);b.dispatchVisibility(false);
+      b.clearLifecycleTrace();b.autoTarget.visibility(true);b.advanceTime(15000);await b.autoTarget.visibility(false);
+      while(b.getFlags().offlineBusy) await new Promise(resolve=>setTimeout(resolve,0));
       parity(b.getState(),record.expected.state,'source visibility resume');var before=copy(b.getState());b.dispatchVisibility(false);parity(b.getState(),before,'duplicate visibility adds no time/damage');
       assert(b.lifecycleTrace().filter(e=>e.type==='offline'&&e.detail.result).length===1,'visibility catch-up exactly once');finish('pass',{visibilityResumeSeconds:15,sources:b.getState().supportBuffs});return;
     }

@@ -35,7 +35,7 @@ Læs docs/project/FEATURE_WORKFLOW.md. Én feature pr. ejerchat; arkivér efter
 verificeret integration, gemt status og writer-frigivelse. Fortæl mig, når
 en ny regel er nødvendig. Gem krav, beslutninger og testbeviser løbende i GitHub.
 Brug docs/CONTEXT_INDEX.md til målrettet opslag. Læs ikke hele arkivet.
-Brug ikke subagenter/beskedværktøjer. Svar på dansk.
+Brug ikke subagenter/beskedværktøjer. Communicate in English.
 Min konkrete feature/opgave: [indsæt ét mål eller en sti i docs/tasks/].
 ```
 

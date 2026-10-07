@@ -1,14 +1,12 @@
 # Lumenfall — aktuel projektstatus
 
-Opdateret 7. oktober 2026 ved brugerens bestilling af et selvstændigt Codex-
-projekt. Repository: `karahaNx/Lumenfall`, standardbranch `main`.
+Updated 7 October 2026 for OFFLINE-CATCHUP-001 (local candidate, not yet integrated). Repository: `karahaNx/Lumenfall`, standardbranch `main`.
 Kontrollér live GitHub før handling; SHA'er er checkpoints.
 
 ## Produkt og aktuel kandidat
 
 Produktbaseline: `1ddc246eb62782a61ec5c486cd5f51ea170bb338`, tree
-`bfb3970b29485b3e8ece1c72bb60186eb2ba755e`. Dette docs-checkpoint ændrer ingen
-produkt-, test-, mobile-, signing- eller workflowbytes fra den baseline.
+`bfb3970b29485b3e8ece1c72bb60186eb2ba755e`. Live main `67c3e99c24587f6c13fc65cfd27f8dcb8e289602` was verified for this feature; its product bytes match that baseline. The isolated OFFLINE-CATCHUP-001 candidate is still local and is not a released product.
 Accepteret APK: **0.1.133**, package `com.lumenfall.app`, run `37363152517`.
 Receipts: `decisions/2026-10-05-nav001-integration-release.txt`.
 P0/P1, Forge/Lab, Formation, Measured Inquiry og NAV-001 er integreret.
@@ -19,7 +17,7 @@ P0/P1, Forge/Lab, Formation, Measured Inquiry og NAV-001 er integreret.
 | Tidligere lokal B2 | Tree `4c07cd5d66cb5928eb99623ff86efaa81e268829`: Core/QA BLOCKED; obligatorisk BigInt bryder WebView 60-baseline. |
 | Ny B2-runtimekandidat | Tree `758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef`; kodecommit `013f526` på Gameplay-arkivgrenen. Worker rapporterer Number/DataView-fix, 7 gates, 142 scenarier og 12 fangede negatives. **Nye scoped Core-/QA-reviews mangler.** |
 | FEEDBACK-REVISION-001 | 29 punkter, fuld original og fire billeder. Efter PR46: først F20/F21 Echoing Rest cap 6 / Cheaper Bonds cap 20, købsgates og gammel-save-politik. Øvrige scopes følger dependencies. |
-| Offline / Auto-Ascend | Ny diagnose på produktbaseline: 8 timers offline ON rammer eventbudgettet i VM-test. Se `project/KNOWN_ISSUES.md`. Ingen lifecycle-/Androidaccept eller produktrettelse. |
+| OFFLINE-CATCHUP-001 | Local bounded/transactional catch-up candidate; original failure reproduced and focused core/Chrome return-flow tests pass. Writer status is still unknown (user confirmed); no remote write/integration/new APK/device acceptance. See `tasks/OFFLINE_CATCHUP_001.md` and `qa/offline-catchup-001/README.md`. Feature remains open. |
 
 Ny kandidats index SHA256:
 `7c25b0b57722bda4ad6842b173bf9a390f2fa39942ad91206675a20e779d4d9b`.
@@ -52,7 +50,7 @@ og åbne B2-/PR46-reviews ændres ikke. Nye features følger
 Næste B2-handling: kontrollér live baseline, læs ny leverings START/identity,
 genskab det præcise tree separat, og udsted nye scoped Core-/QA-reviews.
 Gem reviewdelta i denne status. Integrér efter kandidataccept og handover.
-Offline-fejlen kræver eget mandat; den foldes ikke ind i PR46.
+OFFLINE-CATCHUP-001 now has its own user mandate and isolated local branch `feature/offline-catchup-001`. It is not folded into PR46. The prior writer must explicitly release before repository publication; this feature has acquired no remote writer. English is the current user preference.
 
 Historisk status: `project/PROJECT_STATE_2026-10-05_HISTORICAL.md`.
 Ældre recovery-status bevares byteidentisk; denne fil er den aktuelle indgang.

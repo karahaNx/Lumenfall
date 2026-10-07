@@ -17,6 +17,7 @@ Filer i samme række er kandidater; indlæs kun det, som den konkrete opgave kr�
 | Core-review og 45 originale TXT/ZIP-filer | `handoffs/01_06/2026-10-07/SOURCE_INDEX.md` | Core-proveniens; tidligere BLOCKED gælder gamle bytes |
 | Lead-recovery, original feedback og fire billeder | `recovery/2026-10-07/SOURCE_INDEX.txt`, `recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/` | Originalkrav og dependencies |
 | Åbne problemer og ny offline-diagnose | `project/KNOWN_ISSUES.md`, `project/SAVE_OFFLINE_AUTOASCEND_DIAGNOSE_2026-10-07.txt` | Særskilt offline-scope |
+| Current offline fix and acceptance | `tasks/OFFLINE_CATCHUP_001.md` → `qa/offline-catchup-001/README.md` | Local candidate and precise next action; not yet a release |
 | Offline-originalsave, driver og rå VM-resultater | `qa/offline-autoascend-2026-10-07/Source_Index.txt`, `qa/offline-autoascend-2026-10-07/README_REPRO.txt` | Reproduktion på fast produktbaseline; bevaret via PR47 |
 | Integritet og historiske manifeststier | `../scripts/codex/check_context.py --archives`, `decisions/2026-10-07-codex-project-ready.md` | Genfinding og docs-integration |
 | Measured Inquiry | `tasks/MEASURED_INQUIRY_001.md`, `tasks/MEASURED_INQUIRY_001_REQUIREMENTS.txt` | Originalkrav før implementering/review |

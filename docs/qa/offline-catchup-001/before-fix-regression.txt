@@ -1,0 +1,17 @@
+<anonymous_script>:4622
+      throw new Error('Authoritative simulation event limit exceeded after '+summary.iterations+' iterations');
+      ^
+
+Error: Authoritative simulation event limit exceeded after 250001 iterations
+    at advanceAuthoritativeTime (eval at app (/workspace/lumenfall-offline/tests/behavioral/offline-catchup.cjs:27:2), <anonymous>:4622:13)
+    at simulateOfflineRun (eval at app (/workspace/lumenfall-offline/tests/behavioral/offline-catchup.cjs:27:2), <anonymous>:5046:10)
+    at Object.applyOfflineProgress [as apply] (eval at app (/workspace/lumenfall-offline/tests/behavioral/offline-catchup.cjs:27:2), <anonymous>:5062:13)
+    at runAsync (/workspace/lumenfall-offline/tests/behavioral/offline-catchup.cjs:44:6)
+    at Object.<anonymous> (/workspace/lumenfall-offline/tests/behavioral/offline-catchup.cjs:64:10)
+    at Module._compile (node:internal/modules/cjs/loader:1872:14)
+    at Object..js (node:internal/modules/cjs/loader:2003:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+
+Node.js v24.19.0

@@ -23,6 +23,8 @@ FIXTURES_PATH = ROOT / "fixtures.json"
 RAW_ARTIFACT_ROOT = None
 
 SCENARIOS = {
+    "offline-catchup-core": "fresh",
+    "offline-catchup-ui": "offline-catchup-device",
     "nav-workshop-contract": "fresh",
     "inquiry-contracts": "fresh",
     "inquiry-chronology": "fresh",
@@ -201,7 +203,11 @@ def find_chrome():
 
 
 def load_fixtures():
-    return json.loads(FIXTURES_PATH.read_text(encoding="utf-8"))
+    fixtures = json.loads(FIXTURES_PATH.read_text(encoding="utf-8"))
+    seed = json.loads((ROOT.parent.parent / "docs/qa/offline-autoascend-2026-10-07/device_backup.json").read_text())
+    seed["lastSeen"] = "__NOW_MINUS_8H__"
+    fixtures["offline-catchup-device"] = {"save": seed}
+    return fixtures
 
 
 def build_prelude(fixtures):
@@ -214,8 +220,8 @@ def build_prelude(fixtures):
   var scenario = params.get('qaScenario') || '';
   // Native UI tests hold interval callbacks only across immediate measurements.
   // Keep real input/save handlers, animation frames and the production flags intact.
-  var uiMeasurementPaused=false;
-  if(scenario==='auto-ascend-target-mobile' || scenario==='auto-ascend-target-reduced-motion' || scenario.startsWith('forge-ui-') || scenario.startsWith('self-test-forge-ui-') || scenario.startsWith('rift-status-stacking') || scenario.startsWith('rift-status-mobile') || scenario.startsWith('rift-status-reduced') || scenario.startsWith('self-test-rift-status-line')){{
+  var uiMeasurementPaused=scenario.startsWith('offline-catchup-');
+  if(scenario.startsWith('offline-catchup-') || scenario.startsWith('support-') || scenario==='rift-status-contract' || scenario==='auto-ascend-target-mobile' || scenario==='auto-ascend-target-reduced-motion' || scenario.startsWith('forge-ui-') || scenario.startsWith('self-test-forge-ui-') || scenario.startsWith('rift-status-stacking') || scenario.startsWith('rift-status-mobile') || scenario.startsWith('rift-status-reduced') || scenario.startsWith('self-test-rift-status-line')){{
     // Observe actual registered Queue callbacks, without changing event dispatch.
     var realAddEventListener=EventTarget.prototype.addEventListener;
     EventTarget.prototype.addEventListener=function(type,callback,options){{
@@ -274,6 +280,7 @@ def build_prelude(fixtures):
   function materialize(value){{
     if(value==='__NOW_PLUS_10M__') return Date.now()+600000;
     if(value==='__NOW__') return Date.now();
+    if(value==='__NOW_MINUS_8H__') return Date.now()-28800000;
     if(value==='__NOW_MINUS_60S__') return Date.now()-60000;
     if(value==='__TODAY__'){{
       var d = new Date();
@@ -430,33 +437,26 @@ ensureDaily = function(){
   });
   return result;
 };
-var qaOriginalApplyOfflineProgress = applyOfflineProgress;
-applyOfflineProgress = function(){
+var qaOriginalOfflineSteps = offlineProgressSteps;
+offlineProgressSteps = function*(){
   var before = state ? {
-    lastSeen:state.lastSeen,
-    totalOfflineSeconds:state.totalOfflineSeconds,
-    totalKills:state.totalKills,
-    lumen:state.lumen,
-    shards:state.shards,
-    ascendCount:state.ascendCount
+    lastSeen:state.lastSeen,totalOfflineSeconds:state.totalOfflineSeconds,
+    totalKills:state.totalKills,lumen:state.lumen,shards:state.shards,ascendCount:state.ascendCount
   } : null;
-  var result = qaOriginalApplyOfflineProgress.apply(this,arguments);
+  var result = yield* qaOriginalOfflineSteps.apply(this,arguments);
   qaLifecycleRecord('offline',{
-    before:before,
-    result:result,
-    after:state ? {
-      lastSeen:state.lastSeen,
-      totalOfflineSeconds:state.totalOfflineSeconds,
-      totalKills:state.totalKills,
-      lumen:state.lumen,
-      shards:state.shards,
-      ascendCount:state.ascendCount
-    } : null
+    before:before,result:result,
+    after:state ? {lastSeen:state.lastSeen,totalOfflineSeconds:state.totalOfflineSeconds,
+      totalKills:state.totalKills,lumen:state.lumen,shards:state.shards,ascendCount:state.ascendCount} : null
   });
   return result;
 };
 
 window.__lumenfallQaBridge = {
+  offlineTest: {
+    seed:function(){return JSON.parse(JSON.stringify(window.__lumenfallQaContext.fixtures['offline-catchup-device'].save));},
+    failNext:function(){var original=simulationResolveTimestamp;simulationResolveTimestamp=function(){simulationResolveTimestamp=original;throw new Error('injected offline failure');};}
+  },
   inquiry: {
     nodes: function(){return JSON.parse(JSON.stringify(LONG_STUDIES));},
     originals: function(){return LEGACY_STUDY_IDS.slice();},
@@ -485,12 +485,12 @@ window.__lumenfallQaBridge = {
     render: function(){renderShop();},
     find: function(value){return findAutoAscendRift(value);},
     shift: function(direction){return shiftAutoAscendWindow(direction);},
-    flags: function(){return {resetInProgress:resetInProgress,reloadInProgress:reloadInProgress};},
+    flags: function(){return {resetInProgress:resetInProgress,reloadInProgress:reloadInProgress,offlineBusy:!!offlineCatchup,offlinePending:offlinePending,resumeFlowBusy:resumeFlowBusy};},
     input: function(value){var old=reloadInProgress;reloadInProgress=false;try{return setAutoAscendClearedTarget(value);}finally{reloadInProgress=old;}},
     change: function(value){var old=reloadInProgress;reloadInProgress=false;try{var el=els['shop-list'].querySelector('[data-autoascend-target]');el.value=value;el.dispatchEvent(new Event('change',{bubbles:true}));}finally{reloadInProgress=old;}},
     check: function(){var old=reloadInProgress;reloadInProgress=false;try{return checkAutoAscend();}finally{reloadInProgress=old;}},
     manual: function(){var old=reloadInProgress;reloadInProgress=false;try{return doAscend(false);}finally{reloadInProgress=old;}},
-    visibility: function(hidden){var old=reloadInProgress;reloadInProgress=false;try{return window.__lumenfallQaBridge.dispatchVisibility(hidden);}finally{reloadInProgress=old;}},
+    visibility: async function(hidden){var old=reloadInProgress;reloadInProgress=false;try{var result=window.__lumenfallQaBridge.dispatchVisibility(hidden);while(offlineCatchup)await new Promise(function(resolve){setTimeout(resolve,0);});return result;}finally{reloadInProgress=old;}},
     shopItem: function(){return JSON.parse(JSON.stringify(SHOP.find(function(x){return x.id==='autoascend';})));}
   },
   upgradeClarity: {
@@ -784,7 +784,7 @@ window.__lumenfallQaBridge = {
   renderLayout: function(){ renderAll(); updateBattleFast(); },
   toast: function(message){ showToast(message); },
   getState: function(){ return JSON.parse(JSON.stringify(state)); },
-  getFlags: function(){ return {resetInProgress:resetInProgress, resetBootPending:resetBootPending, reloadInProgress:reloadInProgress}; },
+  getFlags: function(){ return {resetInProgress:resetInProgress, resetBootPending:resetBootPending, reloadInProgress:reloadInProgress, offlineBusy:!!offlineCatchup, offlinePending:offlinePending, resumeFlowBusy:resumeFlowBusy}; },
   rawSave: function(){ return localStorage.getItem(SAVE_KEY); },
   rawRecovery: function(){ return localStorage.getItem(RECOVERY_SAVE_KEY); },
   persistenceStatus: function(){ return persistenceStatus(); },
@@ -1203,7 +1203,7 @@ window.__lumenfallQaBridge = {
       buff:els['buff-indicator'] ? els['buff-indicator'].textContent : ''
     };
   },
-  freeze: function(){ reloadInProgress = true; document.body.classList.add('app-paused'); }
+  freeze: function(){ if(window.__qaUiMeasurementPause)window.__qaUiMeasurementPause(true); reloadInProgress = true; document.body.classList.add('app-paused'); }
 };
 '''
 
@@ -1591,7 +1591,10 @@ def build_runner():
     assert(offline>daily,label+' offline simulation must occur after daily check');
     assert(resumeSave>offline,label+' resume save must occur after offline simulation');
   }
-  function runResumeWindow(seconds,label){
+  async function waitForCatchup(){
+    while(window.__lumenfallQaBridge.getFlags().offlineBusy) await new Promise(function(resolve){setTimeout(resolve,0);});
+  }
+  async function runResumeWindow(seconds,label){
     var lifecycleBridge = window.__lumenfallQaBridge;
     var startMs = lifecycleBridge.clockNow();
     var baseline = state();
@@ -1605,6 +1608,7 @@ def build_runner():
     lifecycleBridge.advanceTime(seconds*1000);
     var endMs = lifecycleBridge.clockNow();
     lifecycleBridge.dispatchVisibility(false);
+    await waitForCatchup();
     var actual = state();
     assertLifecycleState(actual,expected.state,label);
     var trace = lifecycleBridge.lifecycleTrace();
@@ -1686,10 +1690,12 @@ def build_runner():
     assert(s.schemaVersion===1,'fresh state must use current save schema');
     assert(s.activeFormationPreset==='push' && s.formationPresets.push.join(',')==='ember','fresh formation preset defaults must preserve Ember without a schema bump');
   }
-  function run(){
+  async function run(){
     var bridge = window.__lumenfallQaBridge;
     if(!bridge || !bridge.getState){ finish('fail','test bridge unavailable'); return; }
     try{
+      if(ctx.scenario==='offline-catchup-ui'){window.__offlineCatchupReady=true;return;}
+      await waitForCatchup();
       var s = state();
       if(ctx.scenario==='layout-p2-07a-reconstruction'){
         bridge.freeze();
@@ -2374,7 +2380,7 @@ def build_runner():
         }
 
         case 'lifecycle-background-resume': {
-          var resume = runResumeWindow(30,'background/resume');
+          var resume = await runResumeWindow(30,'background/resume');
           assert(resume.actual.totalKills>resume.baseline.totalKills,'background/resume must advance combat');
           assert(resume.actual.lumen>resume.baseline.lumen,'background/resume must advance offline economy');
           assert(resume.actual.lastSeen===resume.endMs,'resume save must own the consumed window endpoint');
@@ -2393,8 +2399,9 @@ def build_runner():
           var initialOffline = s.totalOfflineSeconds;
           var previousLastSeen = s.lastSeen;
           var cycleDetails = [];
-          windows.forEach(function(seconds,index){
-            var cycle = runResumeWindow(seconds,'resume cycle '+(index+1));
+          for(var index=0;index<windows.length;index++){
+            var seconds = windows[index];
+            var cycle = await runResumeWindow(seconds,'resume cycle '+(index+1));
             assert(cycle.actual.lastSeen>previousLastSeen,'resume cycle timestamps must be monotonic');
             previousLastSeen = cycle.actual.lastSeen;
             cycleDetails.push({
@@ -2402,7 +2409,7 @@ def build_runner():
               kills:cycle.actual.totalKills-cycle.baseline.totalKills,
               lastSeen:cycle.actual.lastSeen
             });
-          });
+          }
           s=state();
           parityApprox(
             s.totalOfflineSeconds,
@@ -2451,7 +2458,7 @@ def build_runner():
         }
 
         case 'lifecycle-partial-enemy': {
-          var partial = runResumeWindow(6,'partial enemy resume');
+          var partial = await runResumeWindow(6,'partial enemy resume');
           assert(partial.baseline.enemyDepth===3 && partial.baseline.enemyHp<partial.baseline.enemyMaxHp,'partial fixture must begin with damaged enemy');
           assert(partial.expected.summary.kills===1,'partial fixture must kill exactly the damaged enemy once');
           assert(partial.actual.totalKills===partial.baseline.totalKills+1,'damaged enemy reward/death must occur exactly once');
@@ -2472,7 +2479,7 @@ def build_runner():
         }
 
         case 'lifecycle-boss-background-short': {
-          var shortBossLife = runResumeWindow(30,'short Boss background intent');
+          var shortBossLife = await runResumeWindow(30,'short Boss background intent');
           assert(shortBossLife.baseline.riftMode==='push' && shortBossLife.baseline.depth===20,'short Boss fixture must begin on Push Boss 20');
           assert(shortBossLife.expected.summary.retreats===0,'short Boss background must not retreat');
           assert(shortBossLife.actual.riftMode==='push','short screen-off must preserve Push mode');
@@ -2489,7 +2496,7 @@ def build_runner():
         }
 
         case 'lifecycle-boss-retry': {
-          var bossLife = runResumeWindow(720,'boss retreat/Farm/retry lifecycle');
+          var bossLife = await runResumeWindow(720,'boss retreat/Farm/retry lifecycle');
           var retreat = firstTimelineEvent(bossLife.expected,'bossRetreat');
           var retry = firstTimelineEvent(bossLife.expected,'bossRetry');
           assert(retreat && retry,'lifecycle Boss reference must retreat and retry');
@@ -2516,7 +2523,7 @@ def build_runner():
         }
 
         case 'lifecycle-auto-ascend': {
-          var ascendLife = runResumeWindow(30,'Auto-Ascend offline lifecycle');
+          var ascendLife = await runResumeWindow(30,'Auto-Ascend offline lifecycle');
           var ascendEvent = firstTimelineEvent(ascendLife.expected,'autoAscend');
           assert(ascendEvent && ascendEvent.elapsedSec>0 && ascendEvent.elapsedSec<30,'Auto-Ascend must occur chronologically inside the offline window');
           assert(ascendLife.expected.summary.ascends===1,'Auto-Ascend fixture must ascend exactly once');
@@ -3694,7 +3701,7 @@ def build_runner():
         }
 
         case 'self-test-lifecycle-duplicate': {
-          var duplicateProbe = runResumeWindow(20,'lifecycle duplicate negative control');
+          var duplicateProbe = await runResumeWindow(20,'lifecycle duplicate negative control');
           bridge.setLastSeen(duplicateProbe.startMs);
           bridge.applyOfflineNow();
           assertOfflineExactlyOnce(
@@ -3955,6 +3962,11 @@ def browser_identity(chrome):
 
 
 def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
+    if scenario == "offline-catchup-core":
+        return run_native_process(["node", str(ROOT / "offline-catchup.cjs")], scenario, timeout=300)
+    if scenario == "offline-catchup-ui":
+        url = base_url + "/index.html?" + urlencode({"qaScenario": scenario, "qaFixture": fixture})
+        return run_native_process(["node", str(ROOT / "offline-catchup-ui.cjs"), chrome, url, scenario], scenario, timeout=150)
     if scenario == "raw-process-contract":
         from process_contract import run_contract
         return run_contract(run_scenario)

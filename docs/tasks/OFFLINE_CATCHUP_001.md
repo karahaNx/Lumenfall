@@ -1,0 +1,36 @@
+# OFFLINE-CATCHUP-001 — complete long offline Auto-Ascend
+
+Owner: current Codex feature-owner chat; Lead / Architecture. Codex is based on GPT-6; exact variant and effort control are not exposed. Communication: English (current user instruction).
+
+Status: local implementation and verification pass; feature remains open; remote publication/integration blocked by unresolved writer ownership. User confirmed on 7 October 2026 that writer status is still unknown. No release by 02_07 is inferred. This chat holds no remote repository writer yet.
+
+Baseline: live main `67c3e99c24587f6c13fc65cfd27f8dcb8e289602`, verified against Git transport and GitHub connector on 7 October 2026. Product index blob `ea44431c163569548973d9e489f75345749a07ee`. Accepted APK reported as 0.1.133, package com.lumenfall.app, build 37363152517. Only open PR: #46, Draft, head 3cdebc236e9ee5081a4bca4e323b11f43aa0d46d; no recent active workflow. PR46/B2 are outside scope.
+
+Original request: [unaltered request](OFFLINE_CATCHUP_001_REQUEST.txt). Original diagnostics/save remain unchanged in `docs/qa/offline-autoascend-2026-10-07/`.
+
+## Contract and acceptance
+
+Complete the entire permitted offline window with Auto-Ascend, preserving chronology, online/offline gameplay, balance, formation intent, rewards and accounting. Yield to the UI with bounded work; no larger total event limit. Commit only complete catch-up; interruption, failures and storage errors must preserve an authoritative save and allow retry without partial or duplicate awards. Clear lifecycle busy flags on every exit. Preserve studies beyond the combat cap, backup/recovery, package/signing and WebView 60.
+
+Test original ON Clear21, ON Clear20, OFF, long absence/72-hour cap, research/Study and automation/Motes boundaries, whole/split numerical policy, cold start/resume/repeated return/cancellation/restart/recovery. Run full pre-merge gates and 12 required negatives. Review exact bytes, integrate only after writer handover, build/publish and verify immutable Android identity, then obtain required Android/device acceptance. Keep this feature open until all required acceptance is recorded. No next feature or archive early.
+
+## Evidence
+
+Unchanged archived driver with Node 24.19.0 and exact product blob: ON through applyOfflineProgress at 8 hours throws after 250001 iterations, elapsed 23808.744627645367 seconds; normalization changes no fields. OFF completes 8 hours, 106128 iterations and 773 kills. Original raw rerun files are stored in `docs/qa/offline-catchup-001/baseline/` (VM evidence, not Android).
+
+## Decisions and next action
+
+Implementation index SHA256: `4a9fac11b413071f9b722e2c50e0e46839d9de26e3214b52f619c279fc5d5607`; Git blob `90e4678cb28fa833fdacbc01d1744d9465f6a356`. Local branch: `feature/offline-catchup-001`, isolated worktree `/workspace/lumenfall-offline`. No PR/integration/new APK exists.
+
+Retain the authoritative scheduler and its internal clock across cooperative work batches, and isolate catch-up from live state until completion. No new gameplay/workflow rule. Persist English preference in active AGENTS/bootstrap/project instructions/new-account prompt; historical originals remain unchanged.
+
+Next: obtain concrete 02_07 writer handover before remote writes. All132 full-suite scenarios and12 required negatives pass; source/context/archive/smoke/APK-verifier-self-test checks pass. V8 6.0 product-script execution passes. Self-review and exact evidence are in `../qa/offline-catchup-001/README.md` and `validation.json`. Required physical-device acceptance remains pending. Writer has not been acquired or released by this feature.
+
+
+## Integration and Android acceptance still required
+
+1. Obtain explicit release of the prior writer, then assign this feature's writer scope with baseline/stop conditions. Recheck live main, all branches/open PRs/active runs immediately before the first remote write. Do not modify PR46/B2.
+2. Publish this candidate and evidence on its feature branch; create a feature PR and attach it to this owner chat. Read current workflow triggers; normal PR CI must pass on the exact candidate. Review any integration delta before merge.
+3. Merge exact validated bytes. The existing Android workflow automatically runs on main product-index changes; do not add an unnecessary dispatch. Verify integrated product bytes, rerun relevant integrated gates, and verify the successful APK's package `com.lumenfall.app`, workflow versionCode/versionName, source commit and certificate SHA256 `A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21`. Use only the existing signing identity. Preserve the resulting APK hash and release/run receipt.
+4. On the exact new APK, preserve an original backup and test cold return/resume for Clear21/20 and OFF, long absence/cap, return-panel claim and subsequent live play, repeated return, background/force-stop during catch-up then restart, save/reload/backup/recovery. Record installed version, device/Android/WebView version (including supported WebView60), signing-compatible upgrade and results. Obtain required physical-device/TalkBack acceptance; modern Chrome and V8 probes do not replace it.
+5. Save decisions/test receipts/integration/APK/device identity and actual writer release in GitHub. Archive only this owner chat after all required acceptance; do not start another feature early. Currently there is no remote writer for this feature to release.

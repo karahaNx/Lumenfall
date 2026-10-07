@@ -101,5 +101,5 @@ Gem kritiske krav, rettelser, beslutninger og fremdrift ved milepæle; brug
 Bevar save/recovery, chronology, offline-parity, mobiltilgængelighed og signing
 inden for opgavens scope. Kør relevante eksisterende checks; tekniske gates
 findes i `.github/workflows/pre-merge-validation.yml`. Oplys begrænsninger.
-Svar på dansk. Angiv model og effort for hver ny arbejdsopgave. Lever filer,
+Communicate in English. State the model and available effort setting honestly for each new task. Lever filer,
 så brugeren kan hente TXT og ZIP på telefonen uden manuel samling.
