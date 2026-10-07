@@ -1993,6 +1993,7 @@
   .wisp-progression .module-effect{line-height:1.5;}
   .study-card .study-meta{padding:8px 10px;border-radius:8px;background:#0c1b2c;border:1px solid #365365;line-height:1.5;}
   #tab-ascend .node-card{position:relative;align-items:flex-start;border-left:3px solid #9c8bc4;}
+  #tab-ascend .node-info{min-width:0;overflow-wrap:break-word;word-break:break-word;overflow-wrap:anywhere;}
   #tab-ascend .node-card>.shape{margin-top:5px;background:linear-gradient(135deg,#e3d6ff 0 35%,#b390e5 36% 58%,#5e4d8c 59%)!important;}
   #tab-ascend .node-card.locked-node{border-left-color:#566077;}
   #tab-ascend .node-card.locked-node>.shape{filter:saturate(0);opacity:.6;}
@@ -2908,7 +2909,7 @@ var NODES = [
   {id:'starlight', name:'Starlight Affinity', desc:'+10% Lumen from every kill, per level.', baseCost:1, growth:1.35},
   {id:'steady',    name:'Steady Hands',        desc:'+8% tap damage, per level.',              baseCost:1, growth:1.30},
   {id:'echo',      name:'Echoing Rest',        desc:'+5% offline earning rate, per level (caps at 100%).', baseCost:2, growth:1.40},
-  {id:'bonds',     name:'Cheaper Bonds',       desc:'−3% Wisp recruiting cost, per level (floor 40%).',  baseCost:2, growth:1.45},
+  {id:'bonds',     name:'Cheaper Recruitment', desc:'3 percentage points more Wisp recruiting discount per level, up to 60%. Recruiting costs at least 40% of the normal price. Level cap: 20.', levelCap:20, baseCost:2, growth:1.45},
   {id:'swift',     name:'Swift Ascension',     desc:'+4% Prisms earned per Ascend, per level.', baseCost:3, growth:1.50},
   {id:'momentum',  name:'Eternal Momentum',    desc:'+6% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.', baseCost:5, growth:1.55, requiresAchievement:'asc5'},
   {id:'reserves',  name:'Deep Reserves',       desc:'+2 hours to your offline cap, per level.', baseCost:6, growth:1.60, requiresAchievement:'d100'}
@@ -3032,7 +3033,7 @@ function nodeEarnedEffect(id){
     return '+'+earnedPercent(rate-0.70)+' percentage points offline rate · '+earnedPercent(rate)+'% before Projects'+(rate>=1?' (node cap reached)':'');
   }
   var discount=costReduction();
-  return earnedPercent(discount)+'% Wisp recruiting discount · '+earnedPercent(1-discount)+'% cost'+(discount>=0.6?' (cost floor reached)':'');
+  return earnedPercent(discount)+'% Wisp recruiting discount · '+earnedPercent(1-discount)+'% of normal price · Price at least 40% of normal (max 60% discount)'+(discount>=0.6?' (cost floor reached)':'');
 }
 function projectEarnedEffect(id){
   if(id==='measuredinquiry') return earnedPercent(measuredInquiryReduction())+'% less work for future starts of the 8 listed Studies';
@@ -3986,6 +3987,7 @@ function enterPushMode(){
 }
 
 function nodeLevel(id){ return state.nodes[id]||0; }
+function nodeAtCap(node){ return node.levelCap!==undefined && nodeLevel(node.id)>=node.levelCap; }
 function researchLevel(id){ return state.research[id]||0; }
 function researchEffectiveLevel(node,level){
   level = nonNegativeInt(level,0);
@@ -4921,6 +4923,9 @@ function applyRiftTheme(){
 }
 
 function buyNode(node){
+  // Resolve current metadata so a stale caller cannot bypass the purchase cap.
+  node = node && NODES.find(function(n){ return n.id===node.id; });
+  if(!node || nodeAtCap(node)) return;
   var cost = nodeCost(node);
   if(state.prisms < cost) return;
   state.prisms -= cost;
@@ -5444,7 +5449,8 @@ function presentControlStates(root){
       if(btn.hasAttribute('data-research')){var node=RESEARCH.find(function(n){return n.id===btn.getAttribute('data-research');});subject=node.name;var plan=getResearchBuyPlan(node);cost=plan.needed;
         if(plan.maxed){kind='maxed';reason='Maxed';}
         else if(!plan.unlocked){kind='locked';reason='Reach Rift '+node.unlockDepth;}}
-      if(btn.hasAttribute('data-node')){var node=NODES.find(function(n){return n.id===btn.getAttribute('data-node');});subject=node.name;cost.prism=nodeCost(node);}
+      if(btn.hasAttribute('data-node')){var node=NODES.find(function(n){return n.id===btn.getAttribute('data-node');});subject=node.name;
+        if(nodeAtCap(node)){kind='maxed';reason='Maxed';}else cost.prism=nodeCost(node);}
       if(btn.hasAttribute('data-study')){
         var node=LONG_STUDIES.find(function(n){return n.id===btn.getAttribute('data-study');});subject=node.name;
         var plan=getStudyStartPlan(node);
@@ -6391,18 +6397,21 @@ function renderNodes(){
       return;
     }
     var level = state.nodes[node.id];
-    var cost = nodeCost(node);
+    var maxed = nodeAtCap(node);
+    var cost = maxed ? 0 : nodeCost(node);
+    var levelText = 'Level '+(node.levelCap===undefined ? level : Math.min(level,node.levelCap))+(node.levelCap===undefined ? '' : ' / '+node.levelCap);
+    if(node.levelCap!==undefined && level>node.levelCap) levelText += ' · '+level.toLocaleString('en-US')+' purchased levels preserved';
     html += '<div class="card node-card">' +
       '<span class="shape shape-diamond" style="width:30px;height:30px;background:var(--prism);"></span>' +
       '<div class="node-info" style="flex:1;">' +
         '<div class="name">'+node.name+'</div>' +
         '<div class="desc">'+node.desc+'</div>' +
-        '<div class="lvl" style="color:var(--prism);">Level '+level+'</div>' +
+        '<div class="lvl" style="color:var(--prism);">'+levelText+'</div>' +
         '<div class="earned-effect" data-node-effect="'+node.id+'"><strong>Current node contribution:</strong> '+nodeEarnedEffect(node.id)+'</div>' +
         '<div class="effect-note">From this node only; other upgrades contribute separately.</div>' +
       '</div>' +
-      '<button class="buy-btn" data-node="'+node.id+'" '+(state.prisms<cost?'disabled':'')+' style="min-width:78px;">' +
-        '<span class="cost mono">'+costIcon('prism')+formatNum(cost)+'</span><span class="label">Prisms</span>' +
+      '<button class="buy-btn" data-node="'+node.id+'" '+(maxed || state.prisms<cost?'disabled':'')+' style="min-width:78px;">' +
+        (maxed ? '<span class="label">Maxed</span>' : '<span class="cost mono">'+costIcon('prism')+formatNum(cost)+'</span><span class="label">Prisms</span>') +
       '</button>' +
     '</div>';
   });
