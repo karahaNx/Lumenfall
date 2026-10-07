@@ -13,9 +13,14 @@ Foreslået mål: højst 400 ord; udvid kun med nødvendige uafsluttede oplysning
     Repository og relevant branch:
     Model og effort:
     Aktuel opgave + originalkravets sti:
+    Feature-ID, ejerchat og acceptkriterier:
     Checkpoint og observationstid:
     Writer, tilladelser og stopbetingelse:
     Færdigt / igang / blokeret / ukendt:
+    PR + integrationscommit + relevante testbeviser:
+    APK/run/device-evidens hvis relevant; ellers ikke relevant med begrundelse:
+    Nye/ændrede regler + brugerbeslutningens sti:
+    Writer-frigivelse og arkivstatus (udført / afventer):
     Næste konkrete handling:
     Nye oplysninger som endnu ikke er i repository:
     Læs ved opstart: AGENTS.md, egen rolle, PROJECT_STATE og aktuel opgave.
@@ -39,6 +44,9 @@ Foreslået mål: højst 400 ord; udvid kun med nødvendige uafsluttede oplysning
 4. Startup: målt tekstmængde for de obligatoriske fælles filer; ingen ordre om
    at udskrive/læse hele arkivet. Ingen påstand om præcis kontekstprocent.
 5. Status: observationer, workerpåstande og accepterede resultater er adskilt.
+6. Featureafslutning: acceptkriterier består på integrationsversionen, nødvendige
+   filer kan læses fra GitHub, og writer er frigivet. Arkivér derefter ejerchatten
+   efter `project/FEATURE_WORKFLOW.md`. En blokeret opgave er ikke afsluttet.
 
 Fuld semantisk bevarelse af en chatopsummering kan ikke garanteres. Arkivér
 tilgængelige originaler og kritiske facts løbende. Ved manglende adgang: rapportér

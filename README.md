@@ -43,6 +43,12 @@ audits og fulde logs indlæses ikke samlet ved opstart.
 Ved adgang gennem GitHub-værktøjer skal opstartsprompten eksplicit bede om
 AGENTS.md; filnavnet alene garanterer ikke automatisk indlæsning.
 
+Én feature pr. ejerchat, med verificeret integration før arkivering:
+[FEATURE_WORKFLOW.md](docs/project/FEATURE_WORKFLOW.md).
+For at fortsætte fra en ny ChatGPT-konto med GitHub-adgang:
+[ACCOUNT_RECOVERY.md](docs/project/ACCOUNT_RECOVERY.md), inklusive startprompt.
+Regler, krav, beslutninger og testbeviser gemmes løbende i repositoryet.
+
 ## Project structure
 
 ```

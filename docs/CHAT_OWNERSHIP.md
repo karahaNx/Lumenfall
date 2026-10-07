@@ -2,6 +2,9 @@
 
 Læs kun egen rolle ved opstart. Fælles regler står i `../AGENTS.md`;
 aktuelle chatnumre, opgaver og writer står i `PROJECT_STATE.md`.
+Rollerne beskriver ekspertise. Hver ny feature har sin egen ejerchat og sit
+eget mål efter `project/FEATURE_WORKFLOW.md`; historiske rollechatnumre er
+genfindingsreferencer, ikke krav om at genbruge én chat til flere features.
 
 | Rolle | Rolledokument | Ansvar |
 | --- | --- | --- |
