@@ -1,4 +1,4 @@
-/* P2-07A: behavioral tests only; injected by run.py, never shipped. */
+/* P2-07A: behavioral tests only; injected by run.cjs, never shipped. */
 window.p207Seed = function(bridge,members,preset){
   var s=bridge.freshStateSnapshot();
   s.depth=101;s.maxDepthEver=101;s.enemyDepth=101;s.enemyMaxHp=bridge.enemyHpFor(101);s.enemyHp=s.enemyMaxHp;

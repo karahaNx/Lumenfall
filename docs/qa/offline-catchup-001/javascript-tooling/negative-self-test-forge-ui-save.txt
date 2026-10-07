@@ -1,0 +1,7 @@
+Browser identity: { "selected_path": "/tmp/lumenfall-browser-bin/google-chrome", "resolved_path": "/tmp/lumenfall-browser-bin/google-chrome", "sha256": "ab08e9070de7575567e67f543e56f8fc9512f5e6c479bbfdb87ca7c0c9c2de49", "version": "Google Chrome 155.0.8059.39", "version_exitcode": 0, "version_stderr": "[1007/123647.283437:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /tmp/lumenfall-browser-download/extracted/opt/google/chrome/CHROME_VERSION_EXTRA\n" }
+Staged source: { "source_sha256": "7f0bc40f6f440f64b52f3a1de0434ef667d5826ad7752c2caff21f2752ea2dac", "instrumented_sha256": "9c6f9285a5051d4e13d8494f095b0310d06435bfc059034d095e2e0fc639e7b7" }
+FAIL self-test-forge-ui-save
+  process: { "exitcode": 1, "timed_out": false, "stderr": "" }
+  detail: { "status": "fail", "scenario": "self-test-forge-ui-save", "message": "Error: exactly one Queue handler and associated save: {\"before\":1,\"after\":3,\"handlers\":1,\"handlerSaves\":2}\n    at ok (<anonymous>:6:31)\n    at Object.checkAction (<anonymous>:16:448)\n    at <anonymous>:1:9", "records": [], "teardown": { "pendingBeforeClose": 0, "events": [ { "event": "browser-close", "code": 0, "signal": null, "pending": 0 }, { "event": "profile-removed", "browserClosed": true } ], "browser": { "code": 0, "signal": null }, "pendingAfterClose": 0, "profileRemoved": true } }
+
+Behavioral QA failed: self-test-forge-ui-save null

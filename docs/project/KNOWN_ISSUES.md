@@ -6,7 +6,7 @@ writer findes i `../PROJECT_STATE.md`.
 | ID | Evidens / begrænsning | Næste kontrol |
 | --- | --- | --- |
 | B2-RUNTIME | Ældre tree 4c07… er BLOCKED på BigInt/WebView60. Ny tree 758d… har worker-PASS, men mangler nye uafhængige reviews. | Scoped Core/QA på nye bytes; faktisk Android-runtime efter eget mandat. |
-| OFFLINE-EVENT-LIMIT | Rapport på main 1ddc…: Auto-Ascend ON, target22/Clear21 og 8 timers offline rammer SIM_EVENT_LIMIT ved iteration 250001 efter ca. 6t36m49s simuleret tid. OFF gennemfører i samme VM-fixture. | Match APK-version; reproducér cold launch og resume/persistence. Design bounded catch-up med chronology/parity og checkpoint, ikke blot et større eventbudget. |
+| OFFLINE-EVENT-LIMIT | Rapport på main 1ddc…: Auto-Ascend ON, target22/Clear21 og 8 timers offline rammer SIM_EVENT_LIMIT ved iteration 250001 efter ca. 6t36m49s simuleret tid. OFF gennemfører i samme VM-fixture. | OFFLINE-CATCHUP-001 has a local bounded/transactional fix and focused core/browser evidence. Still open: writer handover, exact-byte GitHub integration, compatible signed APK and physical Android/WebView60 acceptance. See `../tasks/OFFLINE_CATCHUP_001.md`. |
 | MOBILE-CLIPPING | Historisk intermittent gate04-fejl bevaret. Ny workersuite rapporterer PASS; årsag er stadig ukendt. | Relevant QA-vurdering; gamle PASS/FAIL er ikke fysisk Androidaccept. |
 | FEEDBACK-29 | 29 originale krav og fire billeder er registreret, ikke samlet implementeret. | Følg feedbackprioriteringer og dependencies. |
 

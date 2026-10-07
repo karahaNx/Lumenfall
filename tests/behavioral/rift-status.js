@@ -119,7 +119,7 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     s=seed();s.maxDepthEver=1;s.depth=1;s.enemyDepth=1;s.enemyMaxHp=b.enemyHpFor(1);s.enemyHp=s.enemyMaxHp;s.lumen=1e9;s.shards=1e9;
     install(s);var capacity=b.riftStatus.slots();s.activeStudies=b.riftStatus.projects().filter(x=>x.unlock<=1).slice(0,capacity).map(x=>({id:x.id,totalDurationSec:200,remainingSec:100,speedMult:1}));s.activeStudies[0].remainingSec=.05;s.studyQueue.wispascend=true;install(s);b.feedbackTick(false);
     ok(badge()===0&&b.getState().activeStudies.some(x=>x.id==='wispascend'),'queue autostart refills before badge render');
-    s=seed();s.activeStudies=[{id:'guardmastery',totalDurationSec:150,remainingSec:.05,speedMult:1}];install(s);b.feedbackSave();b.dispatchVisibility(true);b.advanceTime(5000);b.dispatchVisibility(false);
+    s=seed();s.activeStudies=[{id:'guardmastery',totalDurationSec:150,remainingSec:.05,speedMult:1}];install(s);b.feedbackSave();b.autoTarget.visibility(true);b.advanceTime(5000);await b.autoTarget.visibility(false);
     ok(b.getState().longStudyLevels.guardmastery===1,'resume commits actual Study completion');badge();
     s=seed();s.buffUntil=b.clockNow()+1500;s.buffMult=1.5;install(s);
     ok(!q('#rift-details') && !q('#rift-details-btn') && q('#tab-battle #buff-indicator'),'boost is directly on Rift');

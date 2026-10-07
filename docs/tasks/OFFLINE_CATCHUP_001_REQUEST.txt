@@ -1,0 +1,114 @@
+LUMENFALL — FIX OFFLINE AUTO-ASCEND
+Feature: OFFLINE-CATCHUP-001. Prepared 7 October 2026, 13:31 Copenhagen.
+Repository: karahaNx/Lumenfall. Start from current verified main.
+Use English in all communication from now on; the user's current language
+instruction overrides the Danish instruction in existing repository files.
+
+USER REQUEST AND AUTHORIZATION
+The user requested: take one feature in a new chat, make it work, implement it,
+verify it, and only then continue with another feature. The selected first
+feature is the reproducible long-offline Auto-Ascend failure.
+Own this feature from reproduction through implementation, review, integration,
+Android build/publication and verification. Necessary actions in this scope
+have standing user authorization; do not repeatedly request general approval.
+Do not claim completion at a local patch or draft PR. Report any actual blockers
+precisely and continue work that does not depend on them.
+
+ONE GOAL
+The game must complete the permitted offline window with Auto-Ascend enabled,
+without exhausting its simulation event budget, blocking normal return flow,
+losing or duplicating progress/rewards, or breaking save/recovery.
+Preserve established gameplay, chronological event ordering and online/offline
+parity. No new balance, caps, reward formulas or UI feature is authorized here.
+Do not combine this task with PR46, the B2 candidate or the 29 feedback features.
+
+STARTUP AND OWNERSHIP
+Read current AGENTS.md, PROJECT_BOOTSTRAP.txt, the Lead row in
+docs/CHAT_OWNERSHIP.md, docs/agents/00_LEAD.md, docs/PROJECT_STATE.md and
+docs/project/CODEX_START.md. Use the current feature workflow and only targeted
+sources. Run python3 scripts/codex/check_context.py.
+Check live main, branches, open PRs, active workflows and writer ownership
+before remote changes. Use an isolated checkout/branch. Respect one repo writer
+at a time: historical B2 writer-release uncertainty is not evidence of release.
+Prepare local work while resolving any genuine ownership conflict; do not
+modify PR46 or its candidate. No subagents, unsolicited additional chats or
+message tools. Do not rename existing chats.
+Create docs/tasks/OFFLINE_CATCHUP_001.md with this original request, precise
+scope, feature-owner identity, baseline, writer, acceptance criteria, evidence
+and next action. Save important findings and user corrections in GitHub.
+Persist the user's English preference in the active instructions as part of
+this feature's documentation, preserving historical originals unchanged.
+
+VERIFIED CHECKPOINTS — RECHECK LIVE
+Main:67c3e99c24587f6c13fc65cfd27f8dcb8e289602 at2026-10-07T11:31Z.
+Accepted APK:0.1.133, package com.lumenfall.app; successful build37363152517.
+Main product index.html blob:ea44431c163569548973d9e489f75345749a07ee.
+The status-review checkout eb00fdf32593b96967752d34c29420aeaa847f8a has identical
+product/test/mobile/workflow bytes to baseline1ddc246eb62782a61ec5c486cd5f51ea170bb338.
+The subsequent live main commit changes documentation only.
+Only open PR observed:#46, Draft, head3cdebc236e9ee5081a4bca4e323b11f43aa0d46d.
+CI37611783966 on d2732dcfe810c7acdfdbd80f3beeb1a72809e1fd passed130 scenarios,
+12 negative controls and browser startup. This suite does not cover the
+documented long-offline failure sufficiently and does not prove this fix.
+
+ORIGINAL EVIDENCE — READ THESE TARGETED SOURCES
+docs/project/KNOWN_ISSUES.md
+docs/project/SAVE_OFFLINE_AUTOASCEND_DIAGNOSE_2026-10-07.txt
+docs/qa/offline-autoascend-2026-10-07/Source_Index.txt
+docs/qa/offline-autoascend-2026-10-07/README_REPRO.txt
+docs/qa/offline-autoascend-2026-10-07/reproduce.cjs
+docs/qa/offline-autoascend-2026-10-07/device_backup.json
+Relevant root index.html and existing tests/behavioral/ code.
+Do not print the full save or edit any preserved originals.
+
+INDEPENDENT STATUS-CHAT REPRODUCTION
+Node24.19.0, archived driver, product blob above, original device save.
+Save normalization changed no fields.
+Auto-Ascend ON, stored target22 meaning Clear21,8 hours via applyOfflineProgress:
+  Authoritative simulation event limit exceeded after250001 iterations.
+  elapsedSec23808.744627645367 =6h36m48.745s; incomplete window.
+  Partial in-memory count11904 ascends and249999 kills is not a completed save.
+Auto-Ascend OFF, same save,8 hours via direct offline simulator:
+  PASS,106128 iterations,773 kills.
+These are VM results, not Android lifecycle or persistence acceptance.
+The separate Chromium data-URL smoke and local browser suite timed out in
+the status-chat environment; classify this as an environment limitation.
+Diagnose the new environment and use real passing checks; do not reuse the
+timeout as a claimed game regression or a claimed successful browser run.
+
+IMPLEMENTATION AND ACCEPTANCE
+1. Reproduce the original failure unchanged and add a meaningful regression
+   that fails before the fix. Inspect actual cold-start and resume entry paths.
+2. Implement bounded/resumable catch-up or a justified equivalent that finishes
+   the entire permitted window. Simply increasing SIM_EVENT_LIMIT is inadequate:
+   this save has a72-hour cap, and a long synchronous loop can block WebView.
+3. Test original Auto-Ascend ON Clear21, Clear20, OFF, long absence and the cap.
+   Cover research/Study boundaries, Motes and automation ordering, formation
+   reconstruction intent, earned/spent accounting and whole/split equivalence
+   under the existing numerical policy. Include study-only time beyond the cap.
+4. Exercise cold launch, background/resume, repeated return, interruption/restart,
+   failure/cancellation and recovery. Ensure busy flags clear on every exit and
+   offline progress is neither partially consumed nor awarded twice. Preserve
+   save/reload/backup/recovery and established signing/package compatibility.
+5. Run relevant existing regression gates, the full suite and negative controls
+   required by .github/workflows/pre-merge-validation.yml. Test real UI return
+   flow and supported runtime; modern Chrome does not prove WebView60 support.
+6. Review the change against its contract, then integrate the exact validated
+   bytes into main after confirming ownership. Read workflow triggers first.
+   Verify the integrated version and its new APK package, version and immutable
+   signing certificate. Never create a replacement signing identity.
+7. Complete required Android/device checks. If physical device access is absent,
+   finish available work and request the concrete remaining device test; keep
+   the feature open until required acceptance is recorded. Report tested version,
+   evidence and limits; do not claim everything in the game is proven correct.
+8. Save implementation, decisions, test evidence, integrated commit/APK identity,
+   known limits and writer release in GitHub. Archive only this feature-owner
+   chat after verified completion, following the current feature workflow.
+   Then return a clear completion report; do not start the next feature early.
+
+DELIVERY
+English. State the model and available effort setting honestly at task start.
+Explain what changed, why, how the integrated release was tested and any
+remaining limitation. Provide convenient TXT/ZIP handoff artifacts if needed.
+Tell the user before applying a new gameplay/workflow rule; routine fixes
+within this agreed contract do not require repeated general permission.

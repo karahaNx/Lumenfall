@@ -1,0 +1,26 @@
+{
+  "pre-merge-validation": {
+    "steps": 10,
+    "changedSteps": [
+      "APK identity verifier self-test",
+      "Validate game source",
+      "Stateful behavioral regression suite",
+      "Behavioral harness negative self-test",
+      "Install runtime error guard in staged copy",
+      "Browser runtime smoke test"
+    ],
+    "permissionsUnchanged": true,
+    "concurrencyUnchanged": true
+  },
+  "build-android": {
+    "steps": 21,
+    "changedSteps": [
+      "Validate game source",
+      "Browser runtime smoke test",
+      "Set Android app version",
+      "Verify final APK identity"
+    ],
+    "permissionsUnchanged": true,
+    "concurrencyUnchanged": true
+  }
+}
