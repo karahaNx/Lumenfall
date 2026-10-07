@@ -159,6 +159,8 @@ async function run() {
         var original=JSON.stringify(state);selectRiftTheme('ember');selectRiftTheme('unknown');
         a(JSON.stringify(state)===original,'locked and unknown selection have no effect');
         a(document.querySelectorAll('.theme-card[data-state="locked"]').length===5,'five locked themes');
+        state.maxDepthEver=50;checkAchievements();renderCosmetics();
+        a(themeUnlocked(RIFT_THEMES.find(function(t){return t.id==='ember';})) && state.riftTheme==='default' && activeRiftTheme().id==='default','earning a Deed unlocks without selecting its cosmetic');
         state.riftTheme='radiant';renderCosmetics();a(state.riftTheme==='radiant' && activeRiftTheme().id==='default','stale locked preference preserved but not granted');
         a(document.querySelectorAll('[data-theme-select][aria-pressed="true"]').length===1,'exactly one effective selection');
         q.fixture('normal',true);state=acceptPersistedState(state,'runtime');

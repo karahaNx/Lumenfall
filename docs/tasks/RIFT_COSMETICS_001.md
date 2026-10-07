@@ -29,7 +29,7 @@ Ingen historisk rollechat er omdøbt eller overtaget.
 Anbefalet model/effort: GPT-6.1 Sol / High; faktisk model/effort er ikke
 attesteret af tilgængelig kørselsmetadata.
 
-Observeret live main via fetch og GitHub 2026-10-07 kl. 15:11 København:
+Opstartsbaseline observeret via fetch og GitHub 2026-10-07 kl. 15:11 København:
 `b2a1f440e8ad9fed34b37551e468224310d2a6f6`.
 Produktets `index.html` er fortsat blob
 `ea44431c163569548973d9e489f75345749a07ee`, SHA256
@@ -41,6 +41,18 @@ FEATURE_WORKFLOW, CODEX_START og JavaScript-first-beslutningen er læst.
 Privat checkout: `/workspace/RIFT_COSMETICS_001`.
 Lokal featurebranch: `feature/rift-cosmetics-001`, startet fra ovenstående main.
 Det oprindelige `/workspace/Lumenfall` er ikke produktredigeret.
+
+**Baseline-opdatering:** kl. 15:32:50 København viste ny live fetch main
+`0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd` (offline catch-up og Node tooling).
+Den private branch blev rebased uden konflikt. Den aktuelle lokale kandidat
+bygger på denne main, ikke på den ældre produktbaseline. Ny main-indexblob:
+`90e4678cb28fa833fdacbc01d1744d9465f6a356`; SHA256
+`4a9fac11b413071f9b722e2c50e0e46839d9de26e3214b52f619c279fc5d5607`.
+Aktuelle AGENTS, CODEX_START og ændrede scope/publiceringsbeslutninger blev
+genlæst. De tidligere Python-resultater accepterer ikke den rebased kandidat;
+aktuelle kontroller bruger Node.js-harnesset. Andre chats' publiceringsmandat
+overfører ikke writer til denne feature. Aktuel AGENTS beder om engelsk
+kommunikation; denne bestilling og dens originalkrav bevares på dansk.
 
 PR46 kontrolleret live ved opstart: open/Draft, head
 `3cdebc236e9ee5081a4bca4e323b11f43aa0d46d`, endnu ikke merged.
@@ -91,7 +103,7 @@ normalisering. Ingen pris, reward, cap, gameplaytal eller save-schema ændres.
 - Ingen migration/refund er nødvendig: ingen køb, currency eller ownership fjernes.
 - WebView 60, package `com.lumenfall.app`, signing og deterministiske køb bevares.
 - Luminous Motes-belønninger, simulation, bulk/queue, chronology og offline-policy ændres ikke.
-- Nye scripts er JavaScript. Eksisterende Python-harness/gates genbruges uden omskrivning af deres assertions eller arkiverede originaler.
+- Nye scripts er JavaScript. Aktuelle Node.js-harness/gates genbruges uden omskrivning af deres assertions eller arkiverede originaler.
 
 ## Dependencies og koordinering
 
@@ -119,8 +131,47 @@ normalisering. Ingen pris, reward, cap, gameplaytal eller save-schema ændres.
 - Relevante eksisterende checks består på kandidat, og gentages på integreret version.
 - Integrationscommit, relevante APK/signing/devicechecks, gemt GitHub-status og writer-frigivelse kræves før afslutning/arkivering.
 
-Lokale resultater og næste handling udfyldes ved freeze; rå logs/billeder,
-kandidatidentitet og reproduktionskommandoer følger den telefonvenlige ZIP.
+**Lokal kandidat efter rebase:** index SHA256
+`7a3b4c47c2702277982060fff737126df7994f66f6cae2921ae735b7c378f2e6`.
+Ingen produktbytes blev ændret efter de nedenstående checks.
+
+| Kontrol | Lokal status på denne kandidat |
+| --- | --- |
+| `node tests/behavioral/rift-cosmetics.cjs --negative` | PASS, 113 records: 108 mobile state/theme-målinger og fem handler/persistence/input/negative-kontrakter |
+| Baseline versus kandidat | 108 sammenligninger; 0 ændringer i tapområde, HP-track, HP-tekst og enemy-name |
+| 320×640 / 390×844 / 430×915 | Normal, boss, Luminous; alle seks themes. Reduced motion på alle tre bredder; 130% root font på 320/390 |
+| Persistence | Alle seks primary/recovery og backup-code roundtrips; faktisk reload, corrupt-primary recovery og restore-handler/reload med Ember |
+| Native input | Enter vælger; fokus bevares ved selection og render; touch gennem aura giver faktisk Guardian Tap damage |
+| Kontrast / kontroller | Caption 15.41:1; native theme-buttons mindst 44px, selected/unlocked som tekst og ARIA. Stor tekst passer i knapperne |
+| Existing Node scenarios | 9 PASS: upgrade-effects-and-deeds (941 checks), p1-05-control-regressions, p1-05-reduced-motion, rift-status-contract, rift-status-mobile, restore-roundtrip, recovery-from-corrupt-primary, parity-short, chronology-simultaneous-order |
+| Negatives | Skjult aura fanges; eksisterende selected-state-negative fejler som forventet |
+| Source / syntax / context | Aktuelle Node source/context-gates PASS; begge inline scripts parser ES2017 med Acorn 8.15.0; git diff --check PASS |
+| APK identity verifier | Eksisterende Node self-test PASS. Ingen ny APK er bygget eller verificeret |
+
+Rå resultater, komplette relevante logs og før/efter-PNG'er ligger i
+`../qa/rift-cosmetics-2026-10-07/`. Browser: Chromium 151.0.7922.173;
+Node: 24.19.0. Målrettet ny driver bruger CDP og Node built-ins, og har kun
+testinstrumentering i den serverede kopi. Produktionsfilen indeholder ingen
+QA-bridge. Målinger pauser intervalsimulation efter rigtig startup; eksisterende
+parity/chronology-scenarier tester motoren særskilt.
+
+Miljøbegrænsning: Chromium CLI `--dump-dom --virtual-time-budget` fik timeout
+på den første opstartsbaseline. Existing scenario-resultater er kørt med en
+JavaScript/CDP-adapter, der venter på det samme harness' faktiske `qa-result`
+og returnerer DOM; assertions er uændrede. Den native Rift-mobile-driver kører
+direkte mod `/usr/bin/chromium`. Adapter, fejlreceipt og reproduktion bevares;
+almindelig CLI-/CI-accept eller en fuld default-suite på denne feature påstås ikke.
+
+Stor tekst på 320×640 viser stadig eksisterende clipping i Rift-regionheaderen,
+og Guidance hide flytter stadig tapområdet. Begge findes også på baseline;
+de er ikke opstået ved cosmetic-valg og skal koordineres med F07-layoutarbejdet.
+HP er læsbar, og overlayet dækker ikke HP/nav/Guardian Tap-kontrollerne.
+
+**Mangler:** scoped Lead/Core/QA-accept, koordineret GitHub-checkpoint,
+integration og ny verification på den integrerede feature, APK/package/signing,
+fysisk Android/WebView60/TalkBack. Grammar/SVG-kontrol er ikke deviceaccept.
+Ingen nye regler eller gameplaytal er indført. Ingen fælles writer er taget
+eller frigivet. Eget arbejde freezes lokalt; ejerchatten forbliver åben.
 
 ## Næste handling
 
