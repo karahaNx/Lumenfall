@@ -1,0 +1,43 @@
+Reproduktion — 01_06 PR46 R2, read-only
+
+1 Udpak ZIP til en privat mappe. Opret under denne mappe head/ og r1/:
+head = codeload.github.com/karahaNx/Lumenfall/tar.gz/3cdebc236e9ee5081a4bca4e323b11f43aa0d46d
+r1   = codeload.github.com/karahaNx/Lumenfall/tar.gz/d1e988816ed10b8f851521938a117a4d84d29e1b
+Udpak hver archive med strip-components1. Alle93/91 blobs blev kontrolleret her;
+se live-tree/final receipts. Denne review-ZIP indeholder11 ændrede sourcefiler,
+R1/base index, originals og beviser, ikke fuldt checkout/browser/dependencies.
+
+2 Flyt reproduce/* til review-roden. Scripts tilpasser kun private paths og
+candidate-label; Core assertions er samme1195 som fra R1, nu faktisk kørt på R2.
+run_subset har tilføjet permanent lab-motes-conservation som44. scenario.
+Hent official Chrome Headless Shell153.0.8010.0/linux64 fra:
+https://storage.googleapis.com/chrome-for-testing-public/153.0.8010.0/linux64/chrome-headless-shell-linux64.zip
+Udpak til runtime/chrome-headless-shell-linux64/chrome-headless-shell; chmod+x.
+Browser SHA1346545781835e04ece3434a16d656ad5cbe60a6a179a43dff43f79a21f9a4ad.
+Playwright findes via CODEX_PRIMARY_RUNTIME_NODE_MODULES+'/playwright'.
+Runtime her: Node24.19.0, Python3.12.14, Chrome153.0.8010.0.
+Opret evidence/. De oprindelige canonical save/startupguards er bevaret.
+Intervals pauses i staged browser; actual startup completion observeres.
+
+3 Kør:
+python run_subset.py       #44 scoped scenarios, forventet0
+python run_independent.py  #12grupper/1195, forventet0
+python run_b1.py           #180R2 positive rows;12forventede R1fails, forventet0
+python run_residual.py     #C-B2 real motor, forventet1 med raw mismatch
+node minimum_arithmetic.cjs head/index.html #C-B2 supplemental, forventet1
+
+run_b1/run_residual bruger kun exact source + samme kandidat-prelude og private
+closure-access. Ingen produktfunktion rettet. Kun fixture-DPS bestemmes eksplicit
+og gendannes; reward/spawn/HP/motor/cap/purchase er originale. Servers/browsers
+lukkes i finally. C-B2 bruger fullHP11,1sek og OFF; exact BigInt oracle.
+
+run_controls.py: sourcegate plus12 forventede failures. Den bevarede første
+wrapper har forkert label-check ('QA FAIL'); se control_parser_diagnostic og
+control_receipts for korrigeret klassificering fra komplette logs. Dette var en
+observerfejl, ikke product failure. Der er ingen ny testkørsel udledt af parsing.
+
+WORKER_RAW_FINAL.tar.xz bevarer alle570 final gate04/05-filer. inspect_worker_raw.py læser
+original RAW tar i input/R2/RAW/ fra det oprindelige review-handoff; alternativt
+brug WORKER_RAW_FINAL.tar.xz, som har de samme final processpaths. evidence/worker_raw_inspection.json indeholder
+allerede vores komplette parserobservations/payloads, metadata og resultatliste.
+Ingen påstand om at dette er nyt browserreplay af hele workerens suite.

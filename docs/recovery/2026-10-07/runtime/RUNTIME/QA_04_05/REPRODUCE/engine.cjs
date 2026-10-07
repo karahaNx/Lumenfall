@@ -1,0 +1,10 @@
+const fs=require('fs'),path=require('path'),http=require('http'),{chromium}=require(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES+'/playwright');
+const root=__dirname,[,,label,fixture,out]=process.argv;
+const server=http.createServer((req,res)=>fs.readFile(path.join(root,'stage',new URL(req.url,'http://localhost').pathname),(e,d)=>{res.statusCode=e?404:200;res.end(e?'missing':d)}));
+(async()=>{await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser,context,closed=false;let started=new Date().toISOString();try{
+ browser=await chromium.launch({executablePath:process.env.LUMENFALL_CHROME,args:['--no-sandbox','--disable-dev-shm-usage']});context=await browser.newContext();let page=await context.newPage(),pageErrors=[];page.on('pageerror',e=>pageErrors.push(String(e)));
+ await page.goto(`http://127.0.0.1:${server.address().port}/${label}/index.html?qaScenario=lab-motes-native&qaFixture=fresh`);await page.waitForFunction(()=>!!window.ownQA);
+ let result=await page.evaluate('('+fs.readFileSync(path.resolve(root,fixture),'utf8')+')()');if(fixture.endsWith('own_motor.js'))result.scan=await page.evaluate(()=>ownScan);
+ result.pageErrors=pageErrors;result.execution={started,source:label,fixture,command:process.argv,chrome:await browser.version()};await context.close();context=null;await browser.close();browser=null;closed=true;result.teardown={browserClosed:true,contextClosed:true};fs.writeFileSync(path.resolve(root,out),JSON.stringify(result));
+ console.log(JSON.stringify({source:label,status:result.status,cases:result.cases,checks:result.checks,scan:result.scan&&{cases:result.scan.tested,bad:result.scan.bad.length},records:result.records?.length,failedRecords:result.records?.filter(r=>r.status==='fail').map(r=>({name:r.name,message:r.message})),rows:result.rows?.length,errorCount:result.errors?.length,pageErrors,closed}));if(result.status==='fail'||pageErrors.length)process.exitCode=1;
+}finally{if(context)await context.close();if(browser)await browser.close();await new Promise(r=>server.close(r));}})().catch(e=>{console.error(e.stack);process.exitCode=1});

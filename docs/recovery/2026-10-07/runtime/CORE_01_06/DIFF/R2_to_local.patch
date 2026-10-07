@@ -1,0 +1,274 @@
+diff --git a/docs/tasks/LAB_MOTES_B1_001.md b/docs/tasks/LAB_MOTES_B1_001.md
+index cb9bfad650bbd922ea5d591027bcdab403132512..26b4f7f9e9d647a30730f67b70ca80f799f1fdd2 100644
+--- a/docs/tasks/LAB_MOTES_B1_001.md
++++ b/docs/tasks/LAB_MOTES_B1_001.md
+@@ -1,5 +1,9 @@
+ # LAB-MOTES-B1-001 — farm kill conservation
+ 
++Subsequent R2 review found B2 in quotient recovery at large safe counts. The
++local correction and exact represented-input proof are documented in
++`LAB_MOTES_B2_001.md`; this B1 record is historical evidence, not R2 acceptance.
++
+ R1 PR46 is blocked: a Motes boundary exposed a pre-existing double rounding
+ in simulationApplyFarmPassive. The kill quotient could round up and its modulo
+ remainder could count that same kill again. Fixed scope: this arithmetic and
+diff --git a/docs/tasks/LAB_MOTES_B2_001.md b/docs/tasks/LAB_MOTES_B2_001.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..fc946cc6692d7b16049a95484f0246998ce0e605
+--- /dev/null
++++ b/docs/tasks/LAB_MOTES_B2_001.md
+@@ -0,0 +1,51 @@
++# LAB-MOTES-B2-001 — exact represented farm quotient
++
++R2 (`3cdebc236e9ee5081a4bca4e323b11f43aa0d46d`) is blocked by Core C-B2
++and QA B2. Subtracting a modulo remainder from a large double can round back
++to the original damage; rounding the resulting division then creates an extra
++safe-integer kill. The local 02_08 candidate corrects that quotient only.
++
++`simulationWholeHpUnits` divides represented damage by represented maximum HP
++using integer arithmetic. Game maximum HP is integral: for positive integral H,
++floor(floor(D)/H) = floor(D/H), and BigInt conversion preserves those exact
++represented integers. Fractional finite H is decoded as a binary significand
++and exponent; shifting to a common exponent and integer division produces the
++same exact floor. The IEEE exponent range bounds the work; there is no loop
++over kills and no gameplay cap. Conversion back to Number is exact when the
++quotient/final count is safe. Existing modulo, partial-HP carry, 1e-12 relative
++and SIM_EPS=1e-9 absolute boundary rules are unchanged.
++
++Supported certification: finite positive damage and maximum/current HP in the
++physical game range (maximum HP starts at 11), safely representable kill counts.
++Nonphysical tiny-HP worlds, Infinity/overflow, unsafe counts and arbitrary
++sub-ULP accumulated work remain outside certification. The nonfinite fallback
++does not certify such inputs. No prices, reward/spawn policies, Motes boundaries,
++Study intent, persistence, navigation, native configuration or workflows change.
++Exact kills do not imply exact large rewards: represented multiplication,
++summation and existing offline 0.7 policy still apply. Distinct represented
++whole/split damage can legitimately produce different HP or rounded totals.
++
++The permanent `lab-motes-numerical` scenario exercises the real scheduler,
++farm/reward/spawn and Study engine for Core's `2**55+16` minimum and QA's
++normalized Titan1635/Mythic natural-DPS stress state without overriding DPS.
++It decodes actual per-segment damage and consumes current enemy HP in its
++independent oracle, checking kills, HP, spawn policy, represented rewards,
++Motes payment and post-payment work across whole/split and live/offline cases.
++The exact old R2 farm function must fail each minimum; undo passes. The old
++R1 double-round and three LAB causal controls remain required separately.
++
++Private deterministic boundary verification covers 7,945 represented inputs,
++ordinary counts, 2^50/2^51/2^52 and the safe-integer limit, integral/fractional
++HP through 1e250, neighboring representable multiples, partial/full HP and
++cancellation. It checks quotient threshold inequalities directly. The 167
++inputs inside existing boundary tolerances are explicitly classified rather
++than presented as exact-rational equality. R2 has 370 count failures in this
++matrix; the local candidate has zero quotient/count failures outside those
++unchanged boundary rules. This matrix has stubbed batch side effects and is
++not full-engine economy evidence. Original reviewer diagnostics remain sources,
++not acceptance; all seven final gates and exact-candidate Core/QA review apply.
++
++Writer handover from 02_07 is undocumented at the start of this local recovery.
++02_08 phase A permits local proposals/tests only. This file is not a remote
++R3, writer-release receipt, integration approval or release instruction.
++Physical Android/TalkBack and BigInt execution on a physical WebView are untested.
+diff --git a/index.html b/index.html
+index 734ceaf1ff4911f68cc880e8a77967f86bad61cb..9237448c152ed94fd0afca489e3c6634b8d2d39a 100644
+--- a/index.html
++++ b/index.html
+@@ -7107,7 +7107,7 @@ function simulationApplyFarmPassive(elapsedSec,dps,policy,summary){
+   // avoids both a rounded quotient/modulo counting the same boundary twice
+   // and cancellation of a small current HP from a huge damage value.
+   var remainder = damage%maxHp;
+-  var kills = Math.round((damage-remainder)/maxHp);
++  var kills = simulationWholeHpUnits(damage,maxHp);
+   // Retain the existing 1e-12 quotient and SIM_EPS HP boundary tolerances,
+   // applying a carry once to this shared decomposition, never twice.
+   if(remainder>=maxHp-SIM_EPS || remainder/maxHp+1e-12>=1){
+@@ -7127,6 +7127,26 @@ function simulationApplyFarmPassive(elapsedSec,dps,policy,summary){
+   simulationBatchFarmKills(kills,policy,summary);
+   if(leftover>0) state.enemyHp = Math.max(SIM_EPS,state.enemyMaxHp-leftover);
+ }
++function simulationWholeHpUnits(damage,maxHp){
++  // A rounded division/subtraction cannot recover an exact integer quotient
++  // near 2^53. Divide the represented values exactly, without a per-kill loop.
++  // Game maximum HP is integral; floor(D)/H has the same floor as D/H.
++  if(!Number.isFinite(damage) || !Number.isFinite(maxHp)) return Math.floor(damage/maxHp);
++  if(Number.isInteger(maxHp)) return Number(BigInt(Math.floor(damage))/BigInt(maxHp));
++  // Fractional finite HP uses its binary significand and exponent. The shifts
++  // are bounded by the IEEE double exponent range, independent of kill count.
++  var view = new DataView(new ArrayBuffer(16));
++  view.setFloat64(0,damage);
++  view.setFloat64(8,maxHp);
++  var dhi=view.getUint32(0),hhi=view.getUint32(8);
++  var de=(dhi>>>20)&2047,he=(hhi>>>20)&2047;
++  var dn=(BigInt(dhi&1048575)<<32n)|BigInt(view.getUint32(4));
++  var hn=(BigInt(hhi&1048575)<<32n)|BigInt(view.getUint32(12));
++  if(de) dn+=1n<<52n;
++  if(he) hn+=1n<<52n;
++  var shift=(de?de-1075:-1074)-(he?he-1075:-1074);
++  return Number(shift>=0 ? (dn<<BigInt(shift))/hn : dn/(hn<<BigInt(-shift)));
++}
+ function simulationPassiveKillSeconds(dps){
+   if(state.riftMode==='farm') return Infinity;
+   if(isBoss(state.depth)){
+diff --git a/tests/behavioral/farm-numerical.js b/tests/behavioral/farm-numerical.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..0cb03983e84b611ed05d9a82ba9edd54f513e1d0
+--- /dev/null
++++ b/tests/behavioral/farm-numerical.js
+@@ -0,0 +1,71 @@
++/* B2: consume exact represented damage/current HP, independent of production quotient. */
++window.runFarmNumericalQa=function(b,ctx,assert){
++  var t=b.labMotes,checks=0,rows=[],clock=2000000000000;
++  function ok(v,m){checks++;assert(v,'B2 exact damage oracle: '+m);}
++  function near(a,c,m){ok(Math.abs(a-c)<1e-7,m+' ('+a+' vs '+c+')');}
++  function units(x){
++    var v=new DataView(new ArrayBuffer(8));v.setFloat64(0,x);
++    var bits=v.getBigUint64(0),e=Number((bits>>52n)&2047n);
++    var mantissa=(bits&((1n<<52n)-1n))+(e?1n<<52n:0n);
++    return mantissa<<BigInt(e?e-1:0);
++  }
++  function seed(natural,use){
++    var s=b.freshStateSnapshot();Object.assign(s,{riftMode:'farm',depth:1,enemyDepth:1,farmDepth:1,farmReturnDepth:2,maxDepthEver:130,enemyMaxHp:11,enemyHp:natural?8.03:11,enemyIsLuminous:false,luminousAccum:.975,motes:natural?59:0,lumen:0,shards:0,questDay:ctx.currentDay()});
++    s.activeStudies=[{id:'guardmastery',remainingSec:300,totalDurationSec:600,speedMult:1}];s.studyUseMotes.guardmastery=use;s.studySpeedTargets.guardmastery=3;
++    if(natural){s.activeParty=['titan'];s.spirits.titan=1635;s.heroRarity.titan=5;s.heroRarity.ember=1;s.heroResource.titan=0;s.research.formation=500;s.longStudyLevels.formationstudy=500;s.longStudyLevels.wispascend=500;s.nodes.momentum=500;s.ascendCount=5;s.achieved.asc5=true;}
++    return s;
++  }
++  function verifySegments(trace,kind){
++    var total=0,luminous=0,lumen=0,shards=0,motes=0,damage=0n;
++    trace.rows.forEach(function(r){
++      var D=units(r.damage),h=units(r.before.enemyHp),H=units(r.before.enemyMaxHp);
++      var expected=D<h?0:Number(1n+(D-h)/H);
++      var threshold=h+BigInt(expected)*H,deficit=threshold-D;
++      // Existing boundary tolerances may promote a represented near-threshold
++      // input. This is a separate, explicit classification, never an extra
++      // tolerance for the two quotient counterexamples.
++      var tolerant=r.kills===expected+1 && deficit>0n && (deficit<=units(1e-9)||deficit<=units(r.before.enemyMaxHp*1e-12));
++      ok(r.kills===expected||tolerant,'one reward per defeated HP threshold');
++      var rem=expected===0?h-D:H-(D-h)%H;
++      var expectedHp=tolerant?11:Number(rem>>1022n)/Math.pow(2,52);
++      near(r.after.enemyHp,expectedHp,'partial HP carry for actual represented segment');
++      var count=r.kills,acc=r.before.luminousAccum,chance=.03;
++      // Retain the existing represented batch-spawn policy, including its
++      // epsilon and summation order. Large spawn totals are not exact reals.
++      var lk=(r.before.enemyIsLuminous?1:0)+(count>1?Math.floor(acc+(count-1)*chance+1e-12):0);
++      var after=acc+count*chance,crossings=Math.floor(after+1e-12),final=after-crossings;
++      ok(r.luminous===lk,'represented luminous spawn policy');
++      near(r.after.luminousAccum,Math.max(0,Math.min(.999999999999,final)),'spawn accumulator');
++      ok(r.after.enemyIsLuminous===(Math.floor(after+1e-12)>Math.floor(acc+Math.max(0,count-1)*chance+1e-12)),'next luminous enemy');
++      var scale=kind==='offline'?.7:1;
++      total+=count;luminous+=lk;lumen+=6*scale*count;shards+=scale*count;motes+=lk;damage+=D;
++    });
++    return {kills:total,luminous:luminous,lumen:lumen,shards:shards,motes:motes,damageUnits:String(damage)};
++  }
++  function run(natural,use,kind,split){
++    var s=seed(natural,use),normalized=b.setState(s),dps=natural?t.naturalDps():2**55+16,seconds=natural?.9:1;
++    if(natural){ok(dps===40052722017724424,'actual natural product DPS');var costs=t.numericCosts();Object.values(costs).forEach(function(c){if(typeof c==='object')Object.values(c).forEach(function(v){ok(Number.isFinite(v)&&v>=0,'finite normalized next price');});else ok(Number.isFinite(c)&&c>0,'finite normalized next price');});ok(normalized.spirits.titan===1635&&normalized.research.formation===500,'normalization preserves stress investments');}
++    var trace=t.traceFarm(function(){
++      function execute(){var a=t.direct(split||seconds,kind,clock);if(!split)return a;var z=t.direct(seconds-split,kind,clock+split*1000);['kills','luminousKills','lumenGained','shardGained','motesGained','studySpeedPurchases','studyMotesSpent'].forEach(function(k){z.summary[k]+=a.summary[k];});z.summary.timeline=a.summary.timeline.concat(z.summary.timeline.map(function(e){return Object.assign({},e,{elapsedSec:e.elapsedSec+split});}));return z;}
++      return natural?execute():t.withDps(dps,execute);
++    });
++    var r=trace.result,o=verifySegments(trace,kind),expected=natural?3277040892359271:3275345183542180;
++    ok(r.summary.kills===expected&&r.state.totalKills===expected,'documented safe kill count');
++    ok(r.summary.kills===o.kills&&r.summary.luminousKills===o.luminous,'segment kill and spawn ledger');
++    ok(r.summary.lumenGained===o.lumen&&r.state.lumen===o.lumen,'represented Lumen policy and sum');
++    ok(r.summary.shardGained===o.shards&&r.state.shards===o.shards,'represented Shard policy and sum');
++    var buys=natural&&use?1:0;
++    ok(r.summary.studySpeedPurchases===buys&&r.summary.studyMotesSpent===buys*60,'one full-price actual Motes purchase');
++    ok(r.state.motes===s.motes+o.motes-buys*60,'Motes ledger');
++    var payment=buys?r.summary.timeline.find(function(e){return e.type==='studySpeed';}).elapsedSec:null;
++    if(buys)near(payment,(8.03+11)/dps,'first enabling Luminous reward time');
++    near(r.state.activeStudies[0].remainingSec,300-seconds-(buys?(seconds-payment)*2:0),'only post-payment Study work');
++    ok(!r.summary.abilityCasts&&!r.summary.ascends&&!r.summary.completedStudies.length,'no unrelated economy event');
++    var out={natural:natural,use:use,kind:kind,split:split,expected:expected,kills:r.summary.kills,hp:r.state.enemyHp,motes:r.state.motes,work:r.state.activeStudies[0].remainingSec,representedDamageExact:(dps*seconds).toFixed(0),ledger:o,segments:trace.rows.length};rows.push(out);return out;
++  }
++  [false,true].forEach(function(natural){(natural?[false,true]:[false]).forEach(function(use){['live','offline'].forEach(function(kind){[0,natural?.01:.5].forEach(function(split){run(natural,use,kind,split);});});});});
++  // The actual old R2 function is embedded byte-for-byte in the private bridge.
++  // Reject each minimum separately; restoration must pass both again.
++  [false,true].forEach(function(natural){var undo=t.mutate('rounded-quotient'),caught=false;try{run(natural,false,'live',0);}catch(e){caught=/B2 exact damage oracle/.test(e.message);}finally{undo();}ok(caught,'exact old R2 must fail '+(natural?'natural':'Core')+' oracle');run(natural,false,'live',0);});
++  return {checks:checks,rows:rows,causalControl:'both exact old-R2 minima rejected; undo passes',limit:'represented damage per segment; original spawn/reward rounding; split HP differs when represented damage differs'};
++};
+diff --git a/tests/behavioral/run.py b/tests/behavioral/run.py
+index 313a96ddbd6a3e7ce3405554079919352cb2c1bf..0377ea70f270ab4421b2ebeb3582101b34dc64ce 100644
+--- a/tests/behavioral/run.py
++++ b/tests/behavioral/run.py
+@@ -23,6 +23,7 @@ FIXTURES_PATH = ROOT / "fixtures.json"
+ RAW_ARTIFACT_ROOT = None
+ 
+ SCENARIOS = {
++    "lab-motes-numerical": "fresh",
+     "lab-motes-conservation": "fresh",
+     "lab-motes-contracts": "fresh",
+     "lab-motes-chronology": "fresh",
+@@ -468,6 +469,17 @@ applyOfflineProgress = function(){
+ 
+ window.__lumenfallQaBridge = {
+   labMotes: {
++    naturalDps: function(){return simulationPassiveDps(2000000000000);},
++    numericCosts: function(){return {titan:spiritCost(SPIRITS.find(function(s){return s.id==='titan';})),formation:researchCostForLevels(RESEARCH.find(function(s){return s.id==='formation';}),state.research.formation,1),momentum:nodeCost(NODES.find(function(s){return s.id==='momentum';})),formationStudy:studyCost(LONG_STUDIES.find(function(s){return s.id==='formationstudy';}),state.longStudyLevels.formationstudy),wispAscend:studyCost(LONG_STUDIES.find(function(s){return s.id==='wispascend';}),state.longStudyLevels.wispascend)};},
++    traceFarm: function(fn){
++      var original=simulationApplyFarmPassive,rows=[];
++      simulationApplyFarmPassive=function(seconds,dps,policy,summary){
++        var before=JSON.parse(JSON.stringify(state)),kills=summary.kills,luminous=summary.luminousKills;
++        original(seconds,dps,policy,summary);
++        rows.push({seconds:seconds,damage:dps*seconds,before:before,after:JSON.parse(JSON.stringify(state)),kills:summary.kills-kills,luminous:summary.luminousKills-luminous});
++      };
++      try{return {result:fn(),rows:rows};}finally{simulationApplyFarmPassive=original;}
++    },
+     manual: function(id,speed){return applySpeedTier(id,speed);},
+     direct: function(seconds,kind,start){var result=advanceAuthoritativeTime(seconds,{kind:kind||'live',visual:false,clockStartMs:start||2000000000000,offlineWindowStartMs:start||2000000000000,captureTimeline:true});return {state:JSON.parse(JSON.stringify(state)),summary:result};},
+     withDps: function(dps,fn){var original=simulationPassiveDps;simulationPassiveDps=function(){return dps;};try{return fn();}finally{simulationPassiveDps=original;}},
+@@ -497,6 +509,39 @@ window.__lumenfallQaBridge = {
+ 
+   simulationBatchFarmKills(1+additionalKills,policy,summary);
+   if(leftover>0) state.enemyHp = Math.max(SIM_EPS,state.enemyMaxHp-leftover);
++};
++      if(kind==='rounded-quotient')simulationApplyFarmPassive=function simulationApplyFarmPassive(elapsedSec,dps,policy,summary){
++  if(elapsedSec<=0 || dps<=0) return;
++  var damage = dps*elapsedSec;
++  if(damage+SIM_EPS < state.enemyHp){
++    state.enemyHp -= damage;
++    return;
++  }
++
++  var maxHp = state.enemyMaxHp>0 ? state.enemyMaxHp : enemyHpFor(state.depth);
++  // Decompose damage before subtracting the partially damaged enemy. This
++  // avoids both a rounded quotient/modulo counting the same boundary twice
++  // and cancellation of a small current HP from a huge damage value.
++  var remainder = damage%maxHp;
++  var kills = Math.round((damage-remainder)/maxHp);
++  // Retain the existing 1e-12 quotient and SIM_EPS HP boundary tolerances,
++  // applying a carry once to this shared decomposition, never twice.
++  if(remainder>=maxHp-SIM_EPS || remainder/maxHp+1e-12>=1){
++    kills++;
++    remainder=0;
++  }
++  var difference = remainder-state.enemyHp;
++  var leftover;
++  if(difference>=-SIM_EPS || difference/maxHp>=-1e-12){
++    kills++;
++    leftover=Math.max(0,difference);
++  } else {
++    leftover=maxHp+ difference;
++  }
++  if(leftover<SIM_EPS) leftover=0;
++
++  simulationBatchFarmKills(kills,policy,summary);
++  if(leftover>0) state.enemyHp = Math.max(SIM_EPS,state.enemyMaxHp-leftover);
+ };
+       if(kind==='free-carry')commitStudyStart=function(node){var result=start(node);if(result&&state.studyUseMotes[node.id])findActiveStudy(node.id).speedMult=state.studySpeedTargets[node.id];return result;};
+       if(kind==='fallback')studyMotesPlan=function(node){var result=plan(node);if(result&&state.motes<result.cost){result.target=1.5;result.cost=speedTierCost(1.5);}return result;};
+@@ -1776,6 +1821,7 @@ def build_runner():
+         if(ctx.scenario==='lab-motes-native'||ctx.scenario==='lab-motes-reduced-motion'){window.__labMotesNativeReady=true;return;}
+         bridge.freeze();
+         if(ctx.scenario==='lab-motes-conservation'){finish('pass',window.runFarmConservationQa(bridge,ctx,assert));return;}
++        if(ctx.scenario==='lab-motes-numerical'){finish('pass',window.runFarmNumericalQa(bridge,ctx,assert));return;}
+         if(['lab-motes-save-reload','lab-motes-backup-restore','lab-motes-recovery','lab-motes-reset'].includes(ctx.scenario)){
+           window.runLabMotesPersistence(bridge,ctx,assert,phase,nextPhase,backupCode,finish);return;
+         }
+@@ -3851,6 +3897,7 @@ def instrument_html(source, fixtures):
+         "<script>" + (ROOT / "measured-inquiry.js").read_text(encoding="utf-8") + "</script>" +
+         "<script>" + (ROOT / "lab-motes.js").read_text(encoding="utf-8") + "</script>" +
+         "<script>" + (ROOT / "farm-conservation.js").read_text(encoding="utf-8") + "</script>" +
++        "<script>" + (ROOT / "farm-numerical.js").read_text(encoding="utf-8") + "</script>" +
+         build_runner() + "\n</body>",
+         1,
+     )

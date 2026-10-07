@@ -1,0 +1,99 @@
+LAB-MOTES-B1-001 — scoped rettelse til02_07
+Lead00_13;00_14 overtager ved næste Lead-chat. 2026-10-06. Dansk.
+Model: GPT-6.1 Sol. Effort: Ekstra høj. Repository: karahaNx/Lumenfall.
+
+NYT ENKELT WRITER-MANDAT
+02_07 er eneste repo-writer til at rette dokumenteret QA-blocker B1 i PR46.
+Din tidligere writer blev frigivet; dette er et nyt, afgrænset mandat.
+Øvrige roller er read-only/afsluttet. Ingen subagenter/beskedværktøjer eller
+chatomdøbning. Brugerens stående godkendelse gælder dette nødvendige scope.
+Udstedelse beviser ikke workerstart. Lead har ikke ændret repositoryet.
+
+BASE OG BRANCH
+Main/base: 1ddc246eb62782a61ec5c486cd5f51ea170bb338
+Main tree: bfb3970b29485b3e8ece1c72bb60186eb2ba755e
+Tidligere frossen R1-head: d1e988816ed10b8f851521938a117a4d84d29e1b
+R1-tree: a702bc475b1d07e967727444dd15c56807c1123a
+Fortsæt på eksisterende02/lab-motes-repeat-v1 og eksisterende DraftPR46.
+Bevar R1-historik; lav ny scoped commit, ingen amend/rebase/reset/force-push.
+Kontrollér frisk main,alle branches,åbne PR'er,aktive runs,PR-head/tree og writer
+før remote skrivning. SHA'er er checkpoints. Ved drift: vurder og dokumentér
+konkret betydning; ingen stiltiende ændring af baseline eller parallelt scope.
+Læs live AGENTS,egen rolle i CHAT_OWNERSHIP/02_GAMEPLAY.md,PROJECT_STATE og
+workflows. PROJECT_STATEs gamle Lead/writer suppleres af dette aktuelle mandat.
+Derefter originale LAB-mandat/userkrav/requirements fuldt,QA_REPORT.txt/B1,
+QA_RAW/blocker-repro-results.json og LEAD_FUNCTION_REPRO.json. Brug kildeindekset.
+
+LEADS BESLUTNING OG EVIDENS
+PR46 er BLOCKED for integration på R1. Core rapporterede scoped ACCEPT, men
+QA's dokumenterede økonomiske counterexample forhindrer samlet accept.
+QA: alle7 workflowgates grønne, men43 ON/OFF-afvigelser i826 egne fixtures.
+Lead har reproduceret den præcise farm-funktions dobbelte afrunding isoleret;
+batch-sideeffekter var stubbed. QA har det fulde motor/base/head-bevis.
+simulationApplyFarmPassive er byteidentisk på base/R1: floor(...+1e-12)
+runder quotient op, derefter runder modulo-restens near-max-gren samme kill
+op igen. R1's nye interne Motes-boundary aktiverer den gamle fejl.
+Det er både en gammel splitfejl og en ny ON-regression, ikke ny balance.
+
+B1 — MINIMUMSREPRODUKTION OG ORACLE
+Farm Rift1,enemyMaxHp11,enemyHp8.03,enemyIsLuminous=false,luminousAccum0.975,
+chance0.03,DPS1100,0.9s,Motes59,Lumen/Shards1e9,maxDepthEver130,farmReturnDepth2.
+Aktiv guardmastery300work,total600,1x,Use Motes ON,target3x,Queue OFF;
+ingen bonus til research/modules/rewards. Samme input med OFF er kontrol.
+990HP skade rækker til90 kills, ikke91. Første normale kill bruger8.03HP;
+kill2 er Luminous og giver1Mote. Betaling60 sker ved0.0173s.
+Ved den første grænse skal der være2 kills, ikke3.
+Efter0.9s:90 kills,3 Luminous,Lumen1,000,000,540,Shards1,000,000,090,
+enemyHp cirka8.03,luminousAccum cirka0.675.
+ON: ét3x/60-køb ved0.0173s,Motes2,remainingWork297.3346.
+OFF: intet køb,Motes62,remainingWork299.1.
+Explicit split0.0173+0.8827 og samlet0.9s skal være kompositionelle.
+Bevis også før/exact/efter grænsen med uafhængig skade/spawn/reward-oracle.
+
+TILLADT RETTELSE
+Ret den afgrænsede farm-kill/remainder-beregning og nødvendige regressioner,
+så quotient/carry/remainder kun tæller hvert kill én gang. Dokumentér den
+numeriske regel og dens støttede grænser. Bevar hensynet til store damage-
+værdier og cancellation; undgå en lokal løsning, der ødelægger andre HP-skalaer.
+Bevar den faktiske Luminous-affordability-boundary og korrekt betalingstid.
+Det er ikke en løsning at fjerne boundary eller betale ved batchslut.
+Ingen større SIM_EPS,lempede tolerancer,slukkede orakler eller ændrede rewards.
+Ingen ændring i priser,Study-intent/Queue,save/schema/recovery,NAV,native,
+signing/workflows,combatbalance,upgrades/design eller farm-indikator.
+Forventede filer:index.html,relevante tests/behavioral og scoped B1-taskkort.
+Hvis en nødvendig ændring kræver bredere scope, aflever konkret afhængighed.
+
+ACCEPTKONTROLLER FØR REMOTE PUSH
+1 Reproducer R1-fail med uafhængig oracle, og vis den nye motor giver ovenstående
+  kills/rewards/Motes/work. OFF/ON må kun afvige ved tilsigtede Study-køb/work.
+2 Hele QA's826 conservation-fixtures og alle43 counterexamples skal undersøges
+  på ny source. Vis nul uberettigede økonomiafvigelser; accounting må tage højde
+  for faktisk tilsigtede bonusændringer. Bevar rå parametre og outcomes.
+3 Vary partial HP,current Luminous,accumulator,chance,rounded rewards,multiple
+  budgets,HP/damage-skalaer,near-multiples på begge sider og little deficits.
+  Whole/split/live/offline skal bevare kills,Luminous/rewards,remainder og work.
+4 Bevis boundary virker,inklusive completion/start/cap/buff/Ascend og actual
+  offline study-only tail. Alle LAB-pris/repeat/default/persistence-kontrakter,
+  Measured Inquiry/legacy8 og farm/push-regressioner bevares.
+5 Tilføj permanent regression i eksisterende harness og et meningsfuldt kausalt
+  control: gammel double-round adfærd skal give oracle-FAIL og undo skal bestå.
+  Ingen test der blot kopierer den korrigerede beregningsformel som oracle.
+6 Kør alle7 workflowgates og alle12 negatives på endelige bytes før push.
+  Bevar de3 LAB-mutants og eksisterende timeout/source/runtime-kontroller.
+  Ingen kode/testændring mens slutgates kører. Diagnostiske failures gemmes
+  særskilt fra den sidste frosne pass; rå kommandoer/exits skal afleveres.
+
+REMOTE,FREEZE OG GENREVIEW
+Kun efter lokal slutvalidering: push den scoped nye commit til eksisterende
+branch. Almindelig PR-CI er tilladt. PR46 forbliver Draft; ret titel/body ved
+behov så den beskriver den endelige implementering og ærlige resultater.
+Ingen merge/ready,Android-build,dispatch/rerun,release eller cleanup.
+Hvis CI fejler: læs konkret fejl og aflever diagnose; ingen blind genkørsel.
+Freeze exact R2 base/parent/head/tree/sourcehash,aflever TXT+ZIP til aktuel Lead
+med R1→R2 og main→R2 diff,originaler,egne rå tests,CI-receipts/limits/source-index
+og manifest. Frigiv writer udtrykkeligt og afslut kendte egne skriveprocesser.
+Ingen ekstra commit efter freeze/frigivelse. Gem brugerfiler via Library-skillen.
+R1's Core-accept overføres ikke automatisk: ny chronology/economy Core-review
+og uafhængig QA-genreview er påkrævet før Lead-integration/release.
+Fysisk Android/TalkBack er fortsat ukendt. A40/Opening Focus genåbnes ikke.
+CONTENT-DESIGN og03-farm-opgaven afventer separat Lead-scope.

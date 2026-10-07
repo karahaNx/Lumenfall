@@ -1,0 +1,37 @@
+B1 numeric rule and scope
+
+Damage = dps * elapsedSec remains the represented finite double. Decompose it
+into full maximum-HP units and modulo remainder before consuming current HP.
+Recover the integer quotient from the same represented decomposition. A
+near-max remainder is promoted once; current partial HP is consumed against
+that coherent remainder. No initial damage-currentHP cancellation occurs.
+Existing 1e-12 quotient and SIM_EPS=1e-9 HP tolerances are retained.
+No reward, price, rate, boundary, schema or workflow changes.
+
+Known minimum oracle: damaged enemy8.03/11, DPS1100, time0.9. 90 kills,
+3 Luminous, Lumen1000000540, Shards1000000090, enemyHp~8.03, accum~0.675.
+ON:60 paid at0.0173, Motes2, work297.3346. OFF:Motes62, work299.1.
+
+576 isolated arithmetic comparisons use BigInt exact rational representations
+of the incoming IEEE doubles; HP scales through1e250 and counts through2^50.
+56 whole/split checks use explicit per-enemy thresholds before/exact/after.
+Batch side effects are stubbed ONLY in these isolated arithmetic tests.
+826 actual-engine conservation fixtures, all43 R1 counterexamples and the
+minimum engine/browser repro supply economy/chronology evidence separately.
+
+Boundaries: positive finite maximum/current HP and finite damage; counts must
+remain representable. No promise of arbitrary sub-ULP work or unbounded kills.
+Actual game HP starts at11. Infinity/overflow/nonphysical tiny-HP worlds are
+not certified by this scoped fix. Physical Android/TalkBack remain unknown.
+
+Diagnostic drafts: removing quotient epsilon fixed the minimum but lost
+three high-HP exact boundaries. Reconciling post-subtraction remainder passed
+the826 fixtures but lost tiny currentHP at enormous damage. Neither draft is
+the final source. Their failure outputs and the interrupted gate run are
+preserved under diagnostics; only gates/execution.json is the final suite.
+
+The aggregate local gate04 console file stops after32 printed PASS lines.
+Reason unknown. Exit0 and complete subprocess raw stdout/stderr/exits remain;
+all160 real browser/native outputs were replayed and verified complete PASS
+covering138 distinct scenarios, plus the two process contracts in the140
+default-scenario run. This is disclosed, not silently labelled a full log.

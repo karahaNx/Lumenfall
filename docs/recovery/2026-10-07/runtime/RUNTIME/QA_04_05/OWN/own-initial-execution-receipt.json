@@ -1,0 +1,12 @@
+{
+  "receiptKind": "observed tool results and shell continuation, not reconstructed timing",
+  "entries": [
+    {"command": "LUMENFALL_CHROME=$PWD/b2_qa_runtime/bin/google-chrome node b2_qa/engine.cjs local fixtures/b2-own.js evidence/local-b2.json", "exitcode": 1, "session": 98542, "rawPreservedAs": "evidence/own-harness-initial.json", "classification": "own harness observation errors; correction explained in harness-correction.txt"},
+    {"command": "LUMENFALL_CHROME=$PWD/b2_qa_runtime/bin/google-chrome node b2_qa/engine.cjs local fixtures/own_motor.js evidence/local-b1.json", "exitcode": 0, "session": 32491, "stdout": "{source:local,status:pass,checks:16193,scan:{cases:826,bad:0},records:100,failedRecords:[],pageErrors:[],closed:true}", "raw": "evidence/local-b1.json"},
+    {"command": "LUMENFALL_CHROME=$PWD/b2_qa_runtime/bin/google-chrome node b2_qa/engine.cjs local fixtures/b2-own.js evidence/local-b2.json", "exitcode": 0, "session": 43380, "raw": "evidence/local-b2.json", "scope": "first corrected supplemental run; Core OFF starts59 Motes, later exact run starts0"},
+    {"command": "LUMENFALL_CHROME=$PWD/b2_qa_runtime/bin/google-chrome node b2_qa/mobile.cjs", "exitcode": 0, "evidence": "evidence/mobile-own.json", "exitEvidence": "shell && continued into target-rift.py", "rows": 6, "checks": 78},
+    {"command": "python b2_qa/adversarial.py && node b2_qa/adversarial.cjs", "exitcode": 1, "classification": "strict exact-floor residuals retained; same R2 legacy boundary outputs classified separately"},
+    {"command": "node b2_qa/runtime-check.cjs", "exitcode": 0, "meaning": "check reporter exited0; payload contains expected local compatibility FAIL", "raw": "evidence/runtime-check.json"},
+    {"command": "node b2_qa/classify.cjs", "exitcode": 0, "raw": "evidence/own-diagnostic-classification.json"}
+  ]
+}

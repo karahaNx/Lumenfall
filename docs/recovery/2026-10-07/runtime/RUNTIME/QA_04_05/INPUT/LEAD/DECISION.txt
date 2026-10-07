@@ -1,0 +1,47 @@
+LUMENFALL — 00_15 Lead beslutning, 2026-10-06T13:58:49.752406+00:00
+STATUS: LOCAL_EVIDENCE_VERIFIED / REMOTE_WRITER_HANDOVER_PENDING.
+Dette er ikke fuld gameplay-/Core-/QA-/integrationsaccept.
+
+FROSSEN LOKAL KANDIDAT — INGEN REMOTE R3
+Base/main 1ddc246eb62782a61ec5c486cd5f51ea170bb338.
+Remote PR46 er stadig Draft/R2 3cdebc236e9ee5081a4bca4e323b11f43aa0d46d,
+branch 02/lab-motes-repeat-v1; proposed parent er R2.
+Lokalt full tree 4c07cd5d66cb5928eb99623ff86efaa81e268829.
+index.html SHA256 3de412b53421f173d3826ddf6336f066abf43cc09d88cbbc0e23bf6984212ed9.
+Five R2→local files: index.html, tests/behavioral/farm-numerical.js,
+tests/behavioral/run.py, docs/tasks/LAB_MOTES_B1_001.md og LAB_MOTES_B2_001.md.
+13 SOURCE-filer dækker main→local scope; øvrige filer hentes fra exact R2.
+
+02_07's B2-stop, processer og writerfrigivelse er ukendt. 02_08 har kun udført
+fase A; kandidaten er frosset og kendte egne processer meldt afsluttet.
+Ingen writer overtages. Reviewrollen er remote read-only, lokale tests i egen
+isoleret kopi er autoriseret. Ingen repo-write/PR-kommentar/metadata/push,
+ready/merge/build/dispatch/rerun/release/signing/cleanup. Ingen subagenter eller
+beskedværktøjer; brugeren overfører filer. Omdøb ingen chats.
+
+Lead har selv verificeret input-CRC, 65 payloadhashes, 1322 rawhashes og 13
+sourcehashes. Originale LAB/B1/B2-kilder er sammenlignet byteidentisk med
+Lead-opstartspakken. Full tree er uafhængigt genberegnet fra live R2 Git-tree
+med de lokale sourceblobs og matcher angivet tree. Rå outputs er genlæst:
+161 afsluttede PASS browser/native-invocations; 141 scenarier, hvoraf to er
+processkontrakter; 12 negative controls er faktisk FAIL/fanget. Permanent B2
+rå motorkørsel indeholder 340 assertions/14 rows. Lead's egne isolated exact-
+farmfunktion+helper giver korrekte whole/split-counts for begge minima; batch
+sideeffekter er stubbet og natural-DPS-værdien er et reviewfixture. Lead har
+ikke genkørt hele motoren eller natural-DPS-produceren. Worker PASS er ikke dit review.
+
+Første gate04 fejlede rift-status-stacking-mobile / enemy-stage clipping /
+safe24 boss-conditional. Målrettet local/R2 PASS og én fuld uændret gentagelse
+PASS. Årsag stadig ukendt. Ingen UI-fix er foretaget eller accepteret. Original
+fejl og alle logs er bevaret. Ingen same-head R3-CI findes. Fysisk Android/
+TalkBack og fysisk WebView/BigInt er utestet. A40 er udgået.
+
+Næste: uafhængigt lokale Core/QA-forreview parallelt med afklaring af 02_07.
+Et lokalreview bindes til exact tree og sourcehashes. Efter writerfrigivelse
+og normal R3-push skal hver reviewer give et kort exact-commit addendum:
+kontrollér actual base/parent/head/fulltree, alle relevante kildefiler, ny
+CI-receipt og nye oplysninger. Et localreview bliver ikke automatisk remote
+accept. Hvis tree/baseline/kontrakt ændres, vurder ny test/reviewscope; ingen
+stille retarget eller blind gentagelse. Samme uændrede bytes kræver ikke endnu
+en fuld suite alene fordi commitnavnet nu eksisterer, men metadata/CI skal
+fortsat bindes og begge reviewbeslutninger afleveres til Lead 00_15.

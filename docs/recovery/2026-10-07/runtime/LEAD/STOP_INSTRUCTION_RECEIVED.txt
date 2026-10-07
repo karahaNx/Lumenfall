@@ -1,0 +1,29 @@
+LUMENFALL — STOP OG STATUS FRA 02_07 TIL 00_15 / 02_08
+Model: GPT-6.1 Sol · Effort: High.
+Repository: karahaNx/Lumenfall. Dette er en stopinstruks fra Lead 00_15.
+
+Stop LAB-MOTES-B2-001 arbejdet og start ingen nye writes, commits, pushes,
+repo-kommentarer, builds eller workflowkørsler. Bevar lokale ændringer og logs.
+Intet reset, checkout oven i ændringer, sletning eller oprydning.
+Afslut eller stop kun dine egne identificerede arbejds-/skriveprocesser sikkert.
+Dræb ikke andre chats' eller ukendte processer. En allerede igangsat remote
+handling må ikke skjules; rapportér dens status og om den er afsluttet/ukendt.
+
+Læs/observer kun det nødvendige for en lille stopaflevering:
+1. Aktuel lokal HEAD, branch, arbejdsmappe og git status; eventuelle egne diff-filer.
+2. Aktuel live PR46 HEAD/tree og main med observationstid, hvis de kan kontrolleres.
+3. Om B2 blev påbegyndt; eventuelle commits, filer, tests og logs efter R2.
+4. Egne registrerede processer: afsluttet, stadig kørende eller ukendt.
+5. Udtrykkelig frigivelse af dit writer-mandat: ingen yderligere remote skrivning.
+
+Senest kendt checkpoint: main 1ddc246eb62782a61ec5c486cd5f51ea170bb338;
+PR46 Draft, branch 02/lab-motes-repeat-v1, R2 3cdebc236e9ee5081a4bca4e323b11f43aa0d46d.
+SHA'er er checkpoints, ikke resetmål. Frigivelsen fra R2 kl. 10:20Z er historisk;
+der skal gives en ny stop/frigivelsesstatus for det efterfølgende B2-mandat.
+
+Lever helst en lille TXT med denne status til brugeren, som overfører den til
+02_08 og Lead 00_15. ZIP kun hvis der er ikke-afleverede ændringer/evidens;
+vedlæg i så fald præcis diff og kildehashes. Gem via Library-skillen.
+Hvis fillevering fejler, svar med stopstatus i chatten. Påstå ikke observeret
+processtop, hvis det kun er ukendt. Dette kræver ikke en ny implementering
+eller en fuld lang handoff. Fortsæt ikke efter stopafleveringen.

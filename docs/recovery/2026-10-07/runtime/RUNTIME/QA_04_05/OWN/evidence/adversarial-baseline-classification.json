@@ -1,0 +1,126 @@
+{
+  "cases": 6516,
+  "exactCountRows": 6216,
+  "singleOldThresholdPromotionRows": 299,
+  "strictResidualRows": [
+    {
+      "input": {
+        "H": 107,
+        "damage": 7012458.999999999,
+        "exactDamage": "7529570517385215/1073741824",
+        "hp": 9.731593308970332e-11
+      },
+      "strictOracle": {
+        "expected": 65537,
+        "hpExpected": 1.0286385077051818e-09,
+        "nextThresholdDeficit": 1.0286385077051818e-09
+      },
+      "local": {
+        "kills": 65538,
+        "hp": 107
+      },
+      "r2": {
+        "kills": 65538,
+        "hp": 107
+      },
+      "sameAsR2": true,
+      "classification": "composed unchanged EPS guards at remainder\u2248H and currentHP<EPS"
+    },
+    {
+      "input": {
+        "H": 5017085352268982000,
+        "damage": 446520596351939400000,
+        "exactDamage": "446520596351939379200",
+        "hp": 1856321580339523300
+      },
+      "strictOracle": {
+        "expected": 89,
+        "hpExpected": 1856321580339566300,
+        "nextThresholdDeficit": 1856321580339566300
+      },
+      "local": {
+        "kills": 89,
+        "hp": 1856321580339523600
+      },
+      "r2": {
+        "kills": 89,
+        "hp": 1856321580339523600
+      },
+      "sameAsR2": true,
+      "classification": "unchanged carry-zeroing HP policy within old H*1e-12 threshold"
+    },
+    {
+      "input": {
+        "H": 1e+40,
+        "damage": 8.899999999999999e+41,
+        "exactDamage": "889999999999999914606855305842813105602560",
+        "hp": 3.7e+39
+      },
+      "strictOracle": {
+        "expected": 89,
+        "hpExpected": 3.7000000000001126e+39,
+        "nextThresholdDeficit": 3.7000000000001126e+39
+      },
+      "local": {
+        "kills": 89,
+        "hp": 3.700000000000001e+39
+      },
+      "r2": {
+        "kills": 89,
+        "hp": 3.700000000000001e+39
+      },
+      "sameAsR2": true,
+      "classification": "unchanged carry-zeroing HP policy within old H*1e-12 threshold"
+    },
+    {
+      "input": {
+        "H": 1e+125,
+        "damage": 8.899999999999999e+126,
+        "exactDamage": "8899999999999998504636089272647353961550400671683428670568853937076523890818135957430578254146905019166570088442950770076155904",
+        "hp": 3.6999999999999996e+124
+      },
+      "strictOracle": {
+        "expected": 89,
+        "hpExpected": 3.7000000000000823e+124,
+        "nextThresholdDeficit": 3.7000000000000823e+124
+      },
+      "local": {
+        "kills": 89,
+        "hp": 3.6999999999999996e+124
+      },
+      "r2": {
+        "kills": 89,
+        "hp": 3.6999999999999996e+124
+      },
+      "sameAsR2": true,
+      "classification": "unchanged carry-zeroing HP policy within old H*1e-12 threshold"
+    },
+    {
+      "input": {
+        "H": 1e+200,
+        "damage": 8.899999999999998e+201,
+        "exactDamage": "8899999999999998472890020701237729072378206035304000759217013056969275374480593463987844367520745609917643240958727070398277856927062380792205397091593606208777789885665458978202732046037731800952864768",
+        "hp": 3.6999999999999998e+199
+      },
+      "strictOracle": {
+        "expected": 89,
+        "hpExpected": 3.7000000000001256e+199,
+        "nextThresholdDeficit": 3.7000000000001256e+199
+      },
+      "local": {
+        "kills": 89,
+        "hp": 3.6999999999999998e+199
+      },
+      "r2": {
+        "kills": 89,
+        "hp": 3.6999999999999998e+199
+      },
+      "sameAsR2": true,
+      "classification": "unchanged carry-zeroing HP policy within old H*1e-12 threshold"
+    }
+  ],
+  "quotientErrors": 0,
+  "oldR2CountErrors": 406,
+  "noTestToleranceChanged": true,
+  "notClaimedAllStrictPASS": true
+}

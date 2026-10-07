@@ -1,0 +1,25 @@
+LUMENFALL — 04_05 QA / lokal B2-forreview fra Lead 00_15
+Model: GPT-6.1 Sol · Effort: Ekstra høj. Dansk.
+Læs denne TXT først, derefter kun målrettede kilder via Source_Index.txt.
+Læs live AGENTS.md eksplicit → din række i docs/CHAT_OWNERSHIP.md →
+docs/agents/04_QA.md → docs/PROJECT_STATE.md. Derefter LOCAL_STATE.txt og
+TASK_REVIEW.txt. Læs ikke hele ZIP'en/historikken ved opstart.
+
+Kandidaten er kun lokal: tree 4c07cd5d66cb5928eb99623ff86efaa81e268829,
+index SHA256 3de412b53421f173d3826ddf6336f066abf43cc09d88cbbc0e23bf6984212ed9.
+Remote PR46 er stadig R2 3cdebc236e9ee5081a4bca4e323b11f43aa0d46d / Draft;
+main 1ddc246eb62782a61ec5c486cd5f51ea170bb338. Verificér live igen.
+02_07 B2-writerfrigivelse er ukendt; denne read-only-reviewopgave er autoriseret
+uafhængigt af writerhandover. Egne lokale tests i privat kopi er tilladt nu.
+Ingen remote writes, beskedværktøjer, subagenter, integration eller build.
+
+Dit forreview bindes til frozen bytes/tree, og du afleverer PROVISIONAL_QA_
+ACCEPT_ON_LOCAL_TREE eller BLOCKED med egen reproduktion/evidens/limits til 00_15.
+Efter den senere R3-push skal actual commit/tree/base/parent/kildefiler og CI
+bindes i et nyt kort revieweraddendum; lokale resultater er ikke automatisk
+remote accept. Ændrede bytes/baseline kræver ny scope-/testvurdering.
+
+Den kendte første mobile clipping-FAIL er bevaret, én uændret repeat er PASS;
+årsag ukendt, ingen UI-fix. Lead har hash/tree/rawreplay+isolated arithmetic-
+kontrol, ikke fuld motoraccept. Læs originalerne før relevant review og genkør
+kritiske minima selv. Fysisk Android/TalkBack er utestet. A40 er udgået.

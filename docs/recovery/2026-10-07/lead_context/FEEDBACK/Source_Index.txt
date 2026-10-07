@@ -1,0 +1,69 @@
+SOURCE_INDEX — FEEDBACK-REVISION-001
+Læs efter behov. Ingen ordre om at indlæse hele pakken eller gammel historik.
+Originalkravene er autoritative; fremstillingsforslag i TASK er tydeligt markeret.
+
+OPSTART
+BOOTSTRAP.txt — kort prompt til eksisterende 00_15; samme bytes som ekstern TXT.
+LEAD_DELTA.txt — samlet scope/prioritet, dependencies og vigtigste fund.
+ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt — brugerens fulde kravtekst.
+Aktuelle live regler/status hentes fra karahaNx/Lumenfall efter BOOTSTRAP.
+
+IMPLEMENTERING / REVIEW
+TASK_FEEDBACK_REVISION_001.txt — F01–F29 og acceptkriterier; læs de relevante
+afsnit plus deres afhængigheder, originalkrav og kode før implementering.
+EVIDENCE/FINDINGS.txt — egen scoped kode-/formelkontrol, ikke fuldmotoraccept.
+EVIDENCE/main-index.html — uændret main snapshot (488044 bytes);
+Git blob ea44431c163569548973d9e489f75345749a07ee.
+EVIDENCE/formula_probe.cjs — eksekverer udvalgte uændrede main-funktioner.
+EVIDENCE/formula_probe_results.json — udfald, inkl.40 Prism-kombinationer.
+EVIDENCE/REMOTE_SNAPSHOT.json — læste branch-navne/main/PR46 og run-status;
+branch-SHA'er ud over main/PR46 er ikke verificeret.
+COVERAGE.txt — originalens ønsker koblet til F-punkter.
+STARTUP_MEASUREMENT.txt — målt ordmængde; ingen kontekstprocentgaranti.
+
+BILLEDER — rækkefølgen er fra brugerens anden upload i denne samtale
+ORIGINAL/IMAGES/01-17355.jpg — Billede1, lang Auto-Ascend med Earlier/Later/Find.
+  Fjernes som layoutmodel; F01–03. Original libfile_b59e27dba95481919d0b83959f22e074.
+ORIGINAL/IMAGES/02-17354.jpg — Billede2, ønsket enkel dropdown + ON/OFF.
+  Placering skal flyttes til Ascend; tydeligere tilstand kræves. F01–03.
+  Original libfile_36ae76bf2a6881919cd98a4ca37ac57b.
+ORIGINAL/IMAGES/03-17363.jpg — aktiv Lab med gentagne levels/titel/fold og tiers.
+  F08–12. Original libfile_1308ca5674b88191bee5fed99382d723.
+ORIGINAL/IMAGES/04-17362.jpg — Wisp-upgrades med fold-pil.
+  F04/F06/F16. Original libfile_08b264db3bb08191b9b5db60ad54ce83.
+Alle fire lokale JPEG-originalbytes er kopieret uændret og hashført.
+Billedernes konkrete APK/saveversion er ukendt.
+
+REGLER — LÆSTE EKSPORTSNAPSHOTS, HISTORISK STATUS
+BASELINE/AGENTS.txt
+BASELINE/CHAT_OWNERSHIP.txt
+BASELINE/00_LEAD.txt
+BASELINE/PROJECT_STATE_SNAPSHOT.txt — dateret5.okt; ikke aktuel writerkvittering.
+BASELINE/CONTEXT_INDEX.txt
+BASELINE/HANDOFF_TEMPLATE.txt
+Disse teksteksporter er referencesnapshots, ikke garanti for live uændret kode.
+
+PR46 / B2-DEPENDENCIES
+DEPENDENCIES/B2_QA_STATUS_04_05.txt — læst fuld QA-TXT, teksteksport.
+  Kilde libfile_53bd2d7b9c688191ae55d420f8025b37,
+  Lumenfall_B2_QA_04_05_Til_00_15_2026-10-06(1).txt.
+Seneste læste Lead-mandat til02_08:
+  Lumenfall_B2_Runtime_Fix_Til_02_08_2026-10-06.txt
+  libfile_a66fdccbb8dc81918b4b0ad3b0b0b8c2.
+  Kun lokal faseA; bevar WebView60, ingen obligatorisk native BigInt.
+  FaseB kræver dokumenteret writer/process-stop og ny preflight.
+  Originalens bytes er ikke inkluderet; 00_15 bruger sin eksisterende pakke.
+QA ZIP med raw evidence:
+  Lumenfall_B2_QA_04_05_Til_00_15_2026-10-06(1).zip
+  libfile_c378102d5ee08191abbc1ab9e8fdc6bd (ikke genindlæst her).
+Gameplay lokal B2-pakke:
+  Lumenfall_B2_Local_02_08_Til_00_15_2026-10-06 (1).zip
+  libfile_47d4ed9c215c81919b4cffedf51fd4ba (ikke genindlæst her).
+Denne nye feedbackpakke er ikke en fuld erstatning for PR46-handoffet.
+Alle nye originale feedbackkrav og billeder er derimod inkluderet.
+
+INTEGRITET
+MANIFEST.json indeholder relativ sti, bytes og SHA256 for alle payloads.
+Manifestet hasher ikke sig selv. ZIP CRC og komplet filoversigt verificeres.
+Ingen rekursive gamle ZIP'er, buildartifacts eller obligatoriske rålogs.
+

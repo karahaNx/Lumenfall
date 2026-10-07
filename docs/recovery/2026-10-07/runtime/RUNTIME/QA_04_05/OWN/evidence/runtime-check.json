@@ -1,0 +1,95 @@
+{
+  "node": "v24.19.0",
+  "parser": "8.15.0",
+  "method": "Grammar-target parse checks plus modern VM with BigInt deliberately unavailable; no old Chromium or Android device execution claimed",
+  "rows": [
+    {
+      "source": "r2",
+      "scripts": 2,
+      "parse": [
+        {
+          "ecmaVersion": 2017,
+          "status": "pass",
+          "failures": []
+        },
+        {
+          "ecmaVersion": 2018,
+          "status": "pass",
+          "failures": []
+        },
+        {
+          "ecmaVersion": 2019,
+          "status": "pass",
+          "failures": []
+        },
+        {
+          "ecmaVersion": 2020,
+          "status": "pass",
+          "failures": []
+        }
+      ],
+      "missingBigInt": {
+        "status": "pass",
+        "kills": 90
+      }
+    },
+    {
+      "source": "local",
+      "scripts": 2,
+      "parse": [
+        {
+          "ecmaVersion": 2017,
+          "status": "fail",
+          "failures": [
+            {
+              "script": 1,
+              "message": "Identifier directly after number (4338:33)",
+              "position": 219501,
+              "token": "&2047;\n  var dn=(BigInt(dhi&1048575)<<32n)|BigInt(view.getUint32(4));\n  var hn=(BigInt(hhi&1048575)<"
+            }
+          ]
+        },
+        {
+          "ecmaVersion": 2018,
+          "status": "fail",
+          "failures": [
+            {
+              "script": 1,
+              "message": "Identifier directly after number (4338:33)",
+              "position": 219501,
+              "token": "&2047;\n  var dn=(BigInt(dhi&1048575)<<32n)|BigInt(view.getUint32(4));\n  var hn=(BigInt(hhi&1048575)<"
+            }
+          ]
+        },
+        {
+          "ecmaVersion": 2019,
+          "status": "fail",
+          "failures": [
+            {
+              "script": 1,
+              "message": "Identifier directly after number (4338:33)",
+              "position": 219501,
+              "token": "&2047;\n  var dn=(BigInt(dhi&1048575)<<32n)|BigInt(view.getUint32(4));\n  var hn=(BigInt(hhi&1048575)<"
+            }
+          ]
+        },
+        {
+          "ecmaVersion": 2020,
+          "status": "pass",
+          "failures": []
+        }
+      ],
+      "missingBigInt": {
+        "status": "fail",
+        "message": "TypeError: BigInt is not a function"
+      }
+    }
+  ],
+  "config": {
+    "appId": "com.lumenfall.app",
+    "appName": "Lumenfall",
+    "webDir": "www",
+    "backgroundColor": "#081027"
+  },
+  "lockedCapacitor": "6.2.1"
+}

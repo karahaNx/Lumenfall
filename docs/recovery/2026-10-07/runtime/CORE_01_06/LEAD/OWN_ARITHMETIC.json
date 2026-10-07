@@ -1,0 +1,77 @@
+{
+  "scope": "Own Lead isolated exact function/helper execution; batch side effects stubbed. Natural DPS is the reviewed fixture value, not a rerun of its producer.",
+  "oracle": "IEEE represented per-part damage to BigInt units; partial HP then full enemies",
+  "source_sha256": "3de412b53421f173d3826ddf6336f066abf43cc09d88cbbc0e23bf6984212ed9",
+  "core": {
+    "whole": {
+      "dpsDecimalText": "36028797018963980",
+      "parts": [
+        1
+      ],
+      "representedWholeDamageExactInteger": "36028797018963984",
+      "hp": 11,
+      "expectedKills": 3275345183542180,
+      "actualKills": 3275345183542180,
+      "finalHp": 7,
+      "batchCalls": [
+        3275345183542180
+      ],
+      "safe": true,
+      "match": true
+    },
+    "split": {
+      "dpsDecimalText": "36028797018963980",
+      "parts": [
+        0.5,
+        0.5
+      ],
+      "representedWholeDamageExactInteger": null,
+      "hp": 11,
+      "expectedKills": 3275345183542180,
+      "actualKills": 3275345183542180,
+      "finalHp": 7,
+      "batchCalls": [
+        1637672591771090,
+        1637672591771090
+      ],
+      "safe": true,
+      "match": true
+    }
+  },
+  "qaReportedNaturalDps": {
+    "whole": {
+      "dpsDecimalText": "40052722017724424",
+      "parts": [
+        0.9
+      ],
+      "representedWholeDamageExactInteger": "36047449815951984",
+      "hp": 8.03,
+      "expectedKills": 3277040892359271,
+      "actualKills": 3277040892359271,
+      "finalHp": 5.029999999999999,
+      "batchCalls": [
+        3277040892359271
+      ],
+      "safe": true,
+      "match": true
+    },
+    "split": {
+      "dpsDecimalText": "40052722017724424",
+      "parts": [
+        0.01,
+        0.89
+      ],
+      "representedWholeDamageExactInteger": null,
+      "hp": 8.03,
+      "expectedKills": 3277040892359271,
+      "actualKills": 3277040892359271,
+      "finalHp": 8.78,
+      "batchCalls": [
+        36411565470658,
+        3240629326888613
+      ],
+      "safe": true,
+      "match": true
+    }
+  }
+}

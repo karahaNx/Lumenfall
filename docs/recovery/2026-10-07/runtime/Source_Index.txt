@@ -1,0 +1,38 @@
+02_09 — målrettet kildeindeks
+OPSTART: BOOTSTRAP.txt → liveAGENTS/egenrolle/PROJECT_STATE → CURRENT_STATE.txt
+→ LEAD/TASK_02_09_RECOVERY_001.txt. Historiske START-filer læses ikke ved opstart.
+
+FØR IMPLEMENTATION
+RUNTIME/TASK_LAB_MOTES_B2_RUNTIME_001.txt: hele runtimefix-kontrakten.
+RUNTIME/QA_04_05/ORIGINALS/LAB/{USER_REQUEST,REQUIREMENTS,TASK_LAB_MOTES_001}.txt
+RUNTIME/QA_04_05/ORIGINALS/TASK_LAB_MOTES_B1_001.txt ogTASK_LAB_MOTES_B2_001.txt:
+alle fem fuldeoriginals. Lokal faseA/Lead00_16/rolle02_09 følger dette rootmandat.
+RUNTIME/QA_04_05/OWN/identity.json: blokeret tree/sourcehashes.
+RUNTIME/QA_04_05/SOURCE/:13overlayfiler. Øvrige bytes hentes fra exactR2.
+RUNTIME/QA_04_05/REFERENCE/: exactR1/R2kontroller.
+
+RUNTIME/B2/MOTOR/GATES — EFTER BEHOV
+RUNTIME/Source_Index.txt ogRUNTIME/QA_04_05/Source_Index.txt: præcise bevispaths.
+RUNTIME/QA_04_05/REPRODUCE_README.txt ogREPRODUCE/: actualmotor/Fraction/gates.
+RUNTIME/QA_04_05/OWN/RUNTIME_BLOCKER.txt ogQA_REPORT.txt: gammelblokering.
+RUNTIME/QA_04_05/BASE_SOURCES/mobile/* ogOWN/runtime-sources/: låstCapacitor.
+RUNTIME/QA_04_05/RAW_EVIDENCE.tar.xz ogRAW_MANIFEST.json: fuld781rawpakke.
+RUNTIME/LEAD/runtime_reproduce.cjs/.json: begrænset grammar/API-kontrol medstubs.
+CORE_01_06/CORE_REPORT.txt ogSource_Index.txt: fulloriginal CoreBLOCKED.
+CORE_01_06/reproduce/REPRODUCE.txt ogRUNTIME_SOURCES/: actualoldV8kontrol.
+CORE_01_06/OWN_RAW.tar.xz +OWN_RAW_MANIFEST.json:132egnebeviser.
+CORE_01_06/WORKER_RAW_CURRENT.tar.xz +WORKER_RAW_MANIFEST.json:1322workerraw.
+Targetedtar udtrækkes i egenkopi med filter=data. Ingen fuld loglæsning vedstart.
+
+PROVENIENS / STATUS
+LEAD/WORKER_RESULT_RECEIVED.txt: gamle02_08levering, ikke ny runtimefix.
+LEAD/STOP_INSTRUCTION_RECEIVED.txt: gammelLeadinstruks, ikke writerfrigivelse.
+LEAD/DECISION_00_16.txt: tidligere modtagelsesbeslutning; nyereCURRENT_STATE og
+TASK_02_09_RECOVERY_001 gælder forchat/rolle/recovery/remotehold.
+RECEIPTS/live_main_02_09.json oglive_pr46_02_09.json: freshGETs08:31:12Z.
+RECEIPTS/RULES/: aktuelle indgange som snapshots; læs live ved opstart.
+RECEIPTS/startup_measurement_02_09.json: måltt tekst/ord, ikke kontekstprocent.
+RECEIPTS/input_verification.json: egenkontrol af tidligereworker/Coreinput.
+RECEIPTS/runtime_recheck.json ognote:00_16boundedreplay, ikke fuldmotor.
+HISTORY/*: tidligere02_08opstart/index ogmanifest, ingen aktivordre.
+MANIFEST.json: allepayloads undtagenmanifestetselv. Ingen rekursiveZIP'er.

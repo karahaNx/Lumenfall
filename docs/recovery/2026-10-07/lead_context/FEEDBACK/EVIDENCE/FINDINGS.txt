@@ -1,0 +1,86 @@
+MÅLRETTET FORMELKONTROL — uændret live main
+main: 1ddc246eb62782a61ec5c486cd5f51ea170bb338
+index.html Git blob: ea44431c163569548973d9e489f75345749a07ee
+SHA256: f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4
+Bytes: 488044. Git blob blev kontrolleret på de lokale bytes.
+
+Scope:
+Egen læsning og isoleret eksekvering af uændrede navngivne main-funktioner
+med stubbet state/UI. Script og 40 Prism-rækker er inkluderet.
+Dette er ikke fuldmotor, native Android, bruger-save eller en acceptkandidat.
+
+Reproduktion:
+node EVIDENCE/formula_probe.cjs EVIDENCE/main-index.html
+Output skal matche EVIDENCE/formula_probe_results.json.
+Node-version ved prøven: 24.19.0. Node bruges kun som analyseværktøj,
+ikke som dokumentation af understøttet produkt-WebView.
+
+1. Echoing Rest
+offlineRate = min(1, 0.70 + level*0.05) + Lab offlineBonus.
+Tree-effektloft nås ved level 6. buyNode mangler capgate.
+Prøve: level6, 1,000,000 Prisms → buy → level7, 999,984 Prisms.
+Effekt før/efter: 1.0. Købet har kostet 16 uden ny effekt.
+Lab kan separat få total offline-rate over 100%; det er et andet system.
+
+2. Cheaper Bonds
+costReduction = min(0.6, level*0.03). Level20 når 60% recruit-rabat.
+buyNode mangler også denne gate. Prøve efter Echo-køb:
+999,984 Prisms → 996,608 Prisms for level20→21; begge effekt=0.6.
+Koster 3376 uden ny effekt. "Floor40%" er prisgulv, ikke 40% effekt.
+Navn og tekst kan forveksles med Formation Bonds.
+
+3. Swift Recovery og support
+Cycle = 6 / (1+0.08*chargeLevel). Node-data har intet levelCap.
+Level0/7/100/1000 giver 6/3.84615/0.66667/0.07407 sek.
+Normal support varer4s; Ultimate support varer8s.
+averageSupportBuffMult bruger uptime=min(1,duration/cycle).
+Dermed sustained 100% Ultimate-uptime allerede ved level0, og normal
+100% fra level7. Et nyt charge-cap alene gør ikke Ultimate-boost sværere.
+Dette er sustained gennemsnit; første cast/startfase og faktisk expiry
+skal også testes i produktmotoren ved rettelsen.
+
+4. Prisms
+prismMult=(1+0.04*SwiftLevel)*(1+0.05*completedPrismLabLevel).
+full=floor(2*sqrt(clearedRift)*prismMult).
+Repeat: max(1,floor(full*0.20)), plus kun ny cleared-depth-difference
+fra benchmark; samlet gain begrænset til full.
+For cleared20, ingen Lab, Swift0: første8, repeat1.
+Swift1: første9, repeat1. Swift5: første10, repeat2.
+Bonusserne indgår altså i main; de er ikke generelt frakoblet.
+Nested floors kan maskere små procentbonusser. Brugerens aktuelle 5-
+Prism-eksempel kan ikke genskabes uden de præcise levels/benchmark/save.
+Prøven påstår hverken korrekt balance eller at preview og payout aldrig
+afviger. F05 kræver fuldmotorreproduktion og UI-/økonomiaccept.
+Data-matrixen varierer Swift0/1/5/10/25 × Lab0/1/5/10 × first/repeat.
+
+5. Wisp-bidrag
+BasePower ved lige level/rarity: Ember1 og Titan88000. Den isolerede ratio
+er88000, men deres basepriser er10 og2,200,000. Dette er ikke en fair
+equal-budget sammenligning og beviser ikke brugerens90% damageandel.
+Support-output/Bonds og økonomi tælles ofte som indirekte værdi.
+F17 kræver reel equal-budget holdkontrol og synligt marginalt bidrag.
+
+6. Resonate
+25 Sigils fylder heroResource til100. Kræver alle Ultimates, Active Wisp,
+rekrutteret Wisp, under100 resource, og under3 samlede bruger pr. run.
+State.sigilResonanceUses nulstilles ved Ascend. Ingen permanent bonus/level.
+Brugerens forvirring er konsistent med en knap der ligner en upgrade.
+
+7. Offline12h følger ikke af at fjerne Deep Rest alene
+offlineCapHours=12 + offline24?12 + offline48?24 + reservesLevel*2
+(med korrekt parentesering i main). F26 kræver også Extended Rest og
+Deep Reserves håndteret, og bevaret købsværdi gennem save-overgang.
+
+8. Dubletter er konkrete i main
+Lumen per kill: Tree Starlight, Forge Battle Focus, Lab Lumen Wellspring.
+Tap damage: Tree Steady Hands, Forge Guardian's Resolve, Lab Guardian's Mastery.
+Passive damage: Tree Momentum, Forge Formation Training, Lab Wisp Ascendancy
+og Formation Insight. Pris/growth/currency alene giver ikke egen effekt.
+F29 kræver matrix og designbeslutning; ingen uanmeldt sletning af levels.
+
+Kildegrænser:
+Produktforhold er observeret på det angivne main-commit. Screenshots
+viser brugerens rendering; deres APK-/save-identitet er ukendt.
+QA-rapporten er modtaget evidens, ikke denne afleverings egen QA-genkørsel.
+Intet her accepterer PR46/R3, mobilUI, migration, release eller rebalance.
+

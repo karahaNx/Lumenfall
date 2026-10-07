@@ -1,0 +1,67 @@
+[
+  {
+    "label": "r1",
+    "fixture": "own_motor.js",
+    "command": [
+      "node",
+      "/workspace/scratch/c0c23f4097e9/b2_qa/engine.cjs",
+      "r1",
+      "fixtures/own_motor.js",
+      "evidence/r1-b1.json"
+    ],
+    "exitcode": 1,
+    "seconds": 10.208816853002645
+  },
+  {
+    "label": "r2",
+    "fixture": "own_motor.js",
+    "command": [
+      "node",
+      "/workspace/scratch/c0c23f4097e9/b2_qa/engine.cjs",
+      "r2",
+      "fixtures/own_motor.js",
+      "evidence/r2-b1.json"
+    ],
+    "exitcode": 0,
+    "seconds": 10.204120353999315
+  },
+  {
+    "label": "r1",
+    "fixture": "extra_cases.js",
+    "command": [
+      "node",
+      "/workspace/scratch/c0c23f4097e9/b2_qa/engine.cjs",
+      "r1",
+      "fixtures/extra_cases.js",
+      "evidence/r1-diag.json"
+    ],
+    "exitcode": 1,
+    "seconds": 6.260236827998597
+  },
+  {
+    "label": "r2",
+    "fixture": "extra_cases.js",
+    "command": [
+      "node",
+      "/workspace/scratch/c0c23f4097e9/b2_qa/engine.cjs",
+      "r2",
+      "fixtures/extra_cases.js",
+      "evidence/r2-diag.json"
+    ],
+    "exitcode": 1,
+    "seconds": 7.243927526003972
+  },
+  {
+    "label": "local",
+    "fixture": "extra_cases.js",
+    "command": [
+      "node",
+      "/workspace/scratch/c0c23f4097e9/b2_qa/engine.cjs",
+      "local",
+      "fixtures/extra_cases.js",
+      "evidence/local-diag.json"
+    ],
+    "exitcode": 1,
+    "seconds": 6.409009841001534
+  }
+]

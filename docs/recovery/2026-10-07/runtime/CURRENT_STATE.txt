@@ -1,0 +1,50 @@
+02_09 — CURRENT STATE fra Lead00_16, 7. oktober2026
+
+OBSERVERET LIVE
+2026-10-07T08:31:12Z (10:31 København): main/base
+1ddc246eb62782a61ec5c486cd5f51ea170bb338,
+tree bfb3970b29485b3e8ece1c72bb60186eb2ba755e.
+PR46 open/Draft; branch02/lab-motes-repeat-v1; R2/proposed parent
+3cdebc236e9ee5081a4bca4e323b11f43aa0d46d.
+Dette er relevant read-only baseline, ikke fuld branch/run/writerpreflight.
+
+SENESTE VERIFICEREDE LOKALE LEVERING
+Tree4c07cd5d66cb5928eb99623ff86efaa81e268829.
+index SHA2563de412b53421f173d3826ddf6336f066abf43cc09d88cbbc0e23bf6984212ed9.
+13 main→local SOURCE-filer, fem R2→local ændringer. Ingen remoteR3.
+02_08-genafleveringen er byteidentisk med gammel QA/Core-kandidat, ikke ny fix.
+Worker65 payloads/1322raw; Core92payloads/132ownraw/1322workerraw blev
+hash-/størrelses-/CRC-verificeret af00_16. Alle13sourcefiler matcher.
+
+ACCEPT OG BLOCKER
+QA04_05 BLOCKED QA-B2-RUNTIME-01; Core01_06 BLOCKED C-RT-B2.
+Numeriske minima er lukket på gamle bytes i moderne engines ifølge reviews;
+produktets BigInt/literals bryder eksisterende WebView60-baseline.
+Core rapporterer faktisk Node8.17/V86.2 parserFAIL ved32n for hovedscriptet;
+R2 parserPASS. Lead har selv genkørt boundedgrammar/API-fravær-kontrol på
+Node24 med batchstubs; ingen ny fysiskAndroid eller fuldmotoraccept.
+Bevar60. Ingen alternativ runtime-upgrade er valgt eller tilladt.
+
+UKENDT / RAPPORTERET
+Brugeren rapporterer, at02_08 vedvarende viser forbindelsesafbrydelse og
+ikke kan lave nyt arbejde, også efter forsøg på en lille statusbesked.
+Screenshot viste "Connection interrupted. Waiting for the complete answer".
+Det beviser ikke, at lokale processer er stoppet. Dens arbejde siden gamle
+frozen aflevering er ukendt; ingen ny kode eller beviser er modtaget.
+02_07's senereB2-processer/ændringer/frigivelse er stadig ukendt.
+Den modtagne stop-TXT er en Leadinstruks, ikke02_07's faktiske svar.
+Ingen adgang til eller sikker gendannelse af02_08's nyere scratch påstås.
+
+TILLADELSE
+02_09 må arbejde lokalt i en ny egen isoleret kopi, uafhængigt af gammel
+writerfrigivelse. Ingen remote writes, docswrite, push, PR-kommentar/metadata,
+ready/merge/build/dispatch/rerun/release/signing/cleanup. Ingen parallelle
+repo-writers. Gamle betingede faseB-instrukser er på hold for denne recovery.
+Stående brugergodkendelse gælder; der kræves ingen ny generel bekræftelse.
+
+BEVAREDE LIMITS / ANDRE SCOPES
+1340 diagnostics har123strict rows/379assertionfejl; gamle rawFAILs bevares.
+Intermittentmobileclipping er uafklaret; ingen accepteretUI-fix.
+FysiskAndroid/WebView/TalkBack utestet. A40 er udgået af aktive krav.
+Alle29 feedbackpunkter er separate fremtidige scopes efterPR46; ikke del af
+denne arithmetic-recovery. Ingen bred audit/genstart af færdige opgaver.

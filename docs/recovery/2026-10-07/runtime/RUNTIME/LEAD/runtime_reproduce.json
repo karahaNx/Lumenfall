@@ -1,0 +1,96 @@
+{
+  "created": "2026-10-06T17:40:03.731Z",
+  "role": "00_15 Lead / Architecture",
+  "node": "v24.19.0",
+  "parser": "8.15.0",
+  "scope": "Independent bounded grammar and exact farm/helper availability controls. Batch side effects are stubbed. Modern Node VM; not execution on Chrome60, Android, the whole motor or natural product DPS.",
+  "expectedBlockerConfirmed": true,
+  "rows": [
+    {
+      "label": "remote_R2",
+      "file": "QA_04_05/REFERENCE/R2_index.html",
+      "sha256": "8de74bbb7ab31be18405c40e20114d8421c34fe78eeb134dd12016153311fa17",
+      "inlineScripts": 2,
+      "grammar": [
+        {
+          "ecmaVersion": 2017,
+          "pass": true,
+          "failures": []
+        },
+        {
+          "ecmaVersion": 2018,
+          "pass": true,
+          "failures": []
+        },
+        {
+          "ecmaVersion": 2019,
+          "pass": true,
+          "failures": []
+        },
+        {
+          "ecmaVersion": 2020,
+          "pass": true,
+          "failures": []
+        }
+      ],
+      "BigIntAbsent": {
+        "pass": true,
+        "kills": 90,
+        "hp": 8.03
+      }
+    },
+    {
+      "label": "blocked_local",
+      "file": "QA_04_05/SOURCE/index.html",
+      "sha256": "3de412b53421f173d3826ddf6336f066abf43cc09d88cbbc0e23bf6984212ed9",
+      "inlineScripts": 2,
+      "grammar": [
+        {
+          "ecmaVersion": 2017,
+          "pass": false,
+          "failures": [
+            {
+              "script": 1,
+              "message": "Identifier directly after number (4338:33)",
+              "offset": 219501,
+              "near": ";\n  var dn=(BigInt(dhi&1048575)<<32n)|BigInt(view.getUint32(4));\n  var hn=(BigIn"
+            }
+          ]
+        },
+        {
+          "ecmaVersion": 2018,
+          "pass": false,
+          "failures": [
+            {
+              "script": 1,
+              "message": "Identifier directly after number (4338:33)",
+              "offset": 219501,
+              "near": ";\n  var dn=(BigInt(dhi&1048575)<<32n)|BigInt(view.getUint32(4));\n  var hn=(BigIn"
+            }
+          ]
+        },
+        {
+          "ecmaVersion": 2019,
+          "pass": false,
+          "failures": [
+            {
+              "script": 1,
+              "message": "Identifier directly after number (4338:33)",
+              "offset": 219501,
+              "near": ";\n  var dn=(BigInt(dhi&1048575)<<32n)|BigInt(view.getUint32(4));\n  var hn=(BigIn"
+            }
+          ]
+        },
+        {
+          "ecmaVersion": 2020,
+          "pass": true,
+          "failures": []
+        }
+      ],
+      "BigIntAbsent": {
+        "pass": false,
+        "error": "TypeError: BigInt is not a function"
+      }
+    }
+  ]
+}

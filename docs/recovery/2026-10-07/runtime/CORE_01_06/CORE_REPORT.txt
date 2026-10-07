@@ -1,0 +1,219 @@
+LUMENFALL — 01_06 Core til 00_15 — 2026-10-06
+RESULTAT: BLOCKED — C-RT-B2, ny BigInt/WebView-kompatibilitetsblocker.
+Kun uafhængigt FORREVIEW af frossen lokal kandidat. Ingen remote R3-accept.
+
+B2-regnerettelsen består mine afgrænsede checks på moderne runtime. De to
+tidligere B2-minima er numerisk CLOSED på exact local tree. Det giver ikke
+lokal Core-accept, fordi produktets nye BigInt-syntaks kræver en runtime,
+som den eksisterende Android-konfiguration ikke dokumenterer som minimum.
+
+PRÆCIS IDENTITET
+Repo: karahaNx/Lumenfall; PR46; branch 02/lab-motes-repeat-v1; open/Draft.
+Base/main: 1ddc246eb62782a61ec5c486cd5f51ea170bb338
+Base tree: bfb3970b29485b3e8ece1c72bb60186eb2ba755e
+Remote R2 / proposed parent: 3cdebc236e9ee5081a4bca4e323b11f43aa0d46d
+R2 tree: 70073a55d7f5fe428ae82223627603498cc372b6
+LOCAL tree: 4c07cd5d66cb5928eb99623ff86efaa81e268829
+LOCAL index.html SHA256:
+3de412b53421f173d3826ddf6336f066abf43cc09d88cbbc0e23bf6984212ed9
+LOCAL index.html Gitblob: 9237448c152ed94fd0afca489e3c6634b8d2d39a
+R2 index SHA256:
+8de74bbb7ab31be18405c40e20114d8421c34fe78eeb134dd12016153311fa17
+
+Egen baseline: alle 93 R2-blobs kontrolleret mod live full Git-tree. De 13
+afleverede SOURCE-filer er overlagt i en ny privat kopi med korrekte modes.
+git write-tree matcher local tree; alle 95 indeksblobs matcher stadig bytes
+efter tests. Ingen commit, remote eller produktimplementering er oprettet.
+Fem R2→local-filer: index.html, farm-numerical.js, behavioral/run.py og de
+to B1/B2-taskdokumenter. Hele R2→local-patch er læst; øvrig motor er uændret.
+
+Input-ZIP: Lumenfall_B2_Local_CORE_Review_00_15_Til_01_06_2026-10-06(1).zip
+SHA256: 4306be2a126b8b2cd1c69865f7f9ac1fbe6b774f56cfa4f40300420c10ddf6d9
+12.722.233 bytes; 77 entries / 76 payloads. CRC, paths, hashes, størrelser,
+fuld manifestdækning og extracted bytes: PASS. Alle 1.322 worker-rawfiler
+er også hash-/størrelsesverificeret med fuld dækning.
+
+C-RT-B2 — KONKRET BLOCKER
+mobile/package-lock.json låser @capacitor/android og core/cli til 6.2.1.
+Jeg hentede den præcise officielle android-6.2.1.tgz; SHA512-integrity matcher
+lockfilen. Bridge.java definerer DEFAULT_ANDROID_WEBVIEW_VERSION=60, og
+CapConfig.java bruger denne værdi, når android.minWebViewVersion mangler.
+Projektets capacitor.config.json har ingen højere grænse og ingen errorPath.
+Workflow kopierer index.html direkte til www; ingen BigInt-transpilering.
+
+Den officielle V8-kilde angiver BigInt fra Chrome 67. Kandidaten indfører
+32n/1n/52n i hovedscriptet. På en engine uden denne syntaks fejler hele
+hovedscriptets parsing, også før den nye helper kaldes. Et integralt HP-
+branchvalg beskytter derfor ikke startup. Den tilladte 60–66-range er et
+konkret kompatibilitetshul; dette er ikke en påstand om en bestemt telefon.
+
+Egne syntaxcommands på de uændrede to produkt-inline-scripts:
+Node24.19.0 / V8 13.6: R2 og local begge scripts exit0.
+Node8.17.0 / V8 6.2.414.78: R2 begge exit0; local hovedscript exit1 ved 32n,
+SyntaxError: Invalid or unexpected token. Local andet script exit0.
+Dette er en faktisk ældre V8-parser, ikke en fysisk Android/WebView-test.
+Moderne Chrome153 guarded startup, 390×844: PASS uden page-/console-errors.
+
+Capacitors versioncheck er desuden ikke en automatisk stopbarriere: uden
+errorPath logger den et for lavt WebView og fortsætter loading. En løs
+ændring af minWebViewVersion alene dokumenterer derfor ikke en sikker gate.
+Huawei/provider-path har sin egen grænse; ingen kompatibilitet er opfundet.
+
+Før accept kræves enten kompatibel præcis aritmetik inden for det eksisterende
+runtime-scope eller en eksplicit Lead-godkendt og reviewet runtimekontrakt med
+passende håndtering og evidens for de understøttede providers. Dette review
+autoriserer ingen native-/workflow-/signingændring eller produktrettelse.
+A40 er fortsat udgået og er ikke gjort til et nyt acceptkrav.
+
+Faktiske kilder er med i RUNTIME_SOURCES; officielle referencer:
+https://v8.dev/features/bigint
+https://v8.dev/blog/v8-release-67
+https://github.com/ionic-team/capacitor/blob/6.2.1/android/capacitor/src/main/java/com/getcapacitor/Bridge.java
+https://github.com/ionic-team/capacitor/blob/6.2.1/android/capacitor/src/main/java/com/getcapacitor/CapConfig.java
+
+EGNE B2-MOTORBEVISER
+Ny privat instrumentering af advanceAuthoritativeTime og den faktiske
+farmfunktion. Python Fraction dekoder indgående binary64-hex uafhængigt af
+produktionshelperen. Ingen arbitrary decimal-integer-oracle eller per-kill-
+produktloop. Natural-DPS kommer fra simulationPassiveDps uden override.
+
+Core: HP11/11, accum.975, Guardian300/600/1x, Use OFF, DPS 2**55+16, 1s.
+Exact represented damage: 36028797018963984.
+Expected/actual local: 3275345183542180 kills; remainder4; næste HP7.
+Whole og .5+.5: samme damage, count og HP i live/offline.
+
+QA: HP8.03/11, 59 Motes, target3, Queue OFF, Titan1635/Mythic, Ember rarity1,
+Formation research500, Formation Insight500, Wisp Ascendancy500, Momentum500,
+ascendCount5/asc5. Normalisering bevarer inputs; næste priser er endelige.
+Natural DPS40052722017724424; .9s represented damage36047449815951984.
+Expected/actual local: 3277040892359271 kills. OFF/ON, whole/.01+.89 og
+live/offline består. OFF split-damage er 15/4 mindre end whole; HP5.03 vs8.78
+er derfor legitimt. Split krydser ikke en ny killthreshold. ONs rewardboundary
+skaber andre repræsenterede segments; identisk ON/OFF-HP er ikke krævet.
+
+ON betaler præcis60 én gang efter den enabling Luminous-reward; arbejdet før
+betalingen er1x, efter3x. Eventtiden er ca4.44e-16s ved dette ekstreme stress-
+input; faktisk trace og uændret boundaryaritmetik bevares. Ingen completion,
+Ascend eller Empower forklarer countforskellen. Det er et ekstremt normaliseret
+stress-save, ingen påstand om gennemspillet progression eller fysisk session.
+
+48 rows / 1.088 assertions: exact R2 12 rows; local source 12, exact-old-R2-
+installation12, restoration12. Både original R2 og den bytepræcise gamle
+farmfunktion giver fire strikte fejl hver: begge minima, whole/OFF, begge
+policies. Local og restoration giver nul. Motorbrowser exit0; separate strikte
+oraclephase-commands giver baseline-R2 exit1, exact-old-R2 exit1, source exit0,
+restored exit0. Disse phasecommands evaluerer bevaret faktisk motorraw og
+udgiver sig ikke for nye browserkørsler. Alle inputs/states/traces er bevaret.
+
+NUMERISK BEVIS OG GRÆNSER
+For D≥0 og positivt integralt H gælder floor(floor(D)/H)=floor(D/H).
+BigInt-dividering af disse repræsenterede heltal undgår den afrundede
+quotient. Fractional finite H dekodes til præcis significand/exponent og fælles
+skalering; shifts er begrænset af binary64, uafhængigt af kill-count.
+Tilbagekonvertering til Number er præcis for safe quotient/final count.
+Remainder, partial HP, carry og eksisterende SIM_EPS/1e-12-regler er uændret.
+Ingen ny cap, større EPS, batchslutbetaling eller billigere Motes-fallback.
+
+Egen isolated helpermatrix: 3.219 represented inputs, HP integral/fractional
+fra1e-200 til1e250, nær ULP-grænser, counts2^50/51/52 og tæt på safe limit.
+Python-rational-oracle: local0 quotientfejl; gamle R2-formel156 fejl; exit0.
+Dette isolerede helpercheck certificerer ikke alene batchsideeffekter.
+
+Egen audit af de afleverede7.945 raw matrixrows: local0 quotientfejl og0
+countfejl uden for gamle EPS;167 eksplicitte gamle boundarypromotions. R2 har
+370 countafvigelser;63 af de forkerte outputs overskrider safe final count.
+Local har ingen unsafe final count i matrixen. Dette er audit af workerraw,
+ikke egen genkørsel af7.945 motorinputs. Ugyldige/negative HP, nonfinite skade,
+unsafe slutcounts og tiny-HP-relative-EPS giver ingen ny stresscertificering.
+Produktets gamle relative tolerance kan fortsat promovere nær en threshold;
+den er bevaret og særskilt klassificeret, ikke udlagt som strict exact kills.
+
+B1, ØKONOMI OG PERSISTENCE — SELV GENKØRT
+36/36 aktuelle relevante regressionsscenarier: exit0,71.920s. Inkluderer ny
+permanent B2, B1 conservation, LAB contracts/chronology/UI/save/backup/recovery/
+Reset, Inquiry/cap/legacy8, Forge/shared økonomi, chronology og lifecycle.
+Ingen fuld default-suite eller nye unrelated produktreviews er påstået.
+Permanent B1 dækker826 fixtures og exact-old-double-round-kontrol/undo.
+Permanent B2 dækker340 assertions/14 rows med caught old-R2/undo.
+
+12 egne Core-grupper /1.195 assertions: PASS. Strict type/pure/idempotent
+normalisering og gamle saves; tiers1.5/2/3/4/5/6/7/8 med fuld pris
+14/26/60/110/176/258/357/473; under/exact budget; Queue/Use uafhængigt;
+manual start/køb, targetændring og OFF; knappe shared budgets/catalogue order
+trods omvendt active/UI-order; completion/closure/cap → betalt start → speed;
+reward/buff-expiry/same-kill Ascend; faktisk12h offlinecap+study-only tail.
+Real reload, backup restore→reload, corrupt primary→recovery, beskyttet future
+primary, Ascend→save og Reset→reload bevarer de krævede maps/paid snapshots.
+
+180 egne B1-motorrows /1.988 assertions pr. kilde på R2 og local: PASS.
+Minimum HP8.03/11,DPS1100,.9s:90 kills,3 Luminous. ON Motes2/work297.3346;
+OFF Motes62/work299.1.60-køb ved.0173s; før/exact/efter samt whole/split,
+live/offline og flere partialHP/chances/budgets består. En ekstra bevaret
+safe-count-probe tæt på limit giver R2 +1 kill, local korrekt count.
+
+Uændret workflow-sourcevalidator exit0; APK-identity-verifier self-test exit0
+(ingen APK-build); alle12 workflow-negative controls faktisk exit1 og fanget.
+Guard installeret kun i privat stagingcopy; moderne startup-smoke exit0.
+Chrome for Testing153.0.8010.0 binary SHA256:
+1346545781835e04ece3434a16d656ad5cbe60a6a179a43dff43f79a21f9a4ad
+
+BEVARET DIAGNOSTIK OG QA-AFHÆNGIGHED
+Workerens1340 ekstra forløb har fortsat123 strict-error rows/379 assertions;
+de er ikke omdøbt til grøn stresstest. R2/local economic results og strict
+errors er ens på de samme inputs. Min rational-audit af311 lokale segments
+fra disse123 rows finder0 uforklarede countafvigelser og40 gamle EPS-promotions.
+Workerens separate622 represented rewardoperations/123cases er rapporteret
+PASS; det erstatter ikke den oprindelige FAIL-aggregate eller egne motorchecks.
+De43 oprindelige B1-counterexamples er rapporteret korrigeret på R2 og local;
+mine egne afgrænsede B1-tests er angivet særskilt ovenfor.
+
+Første gate04: faktisk exit1, rift-status-stacking-mobile, #enemy-stage
+text/content unclipped, safe24/boss-conditional ifølge workerdiagnosen.
+Original raw/payload/teardown er bevaret. Jeg har læst fejlen og de målrettede
+local/R2 PASS samt én uændret fullsuite-repeat PASS. Root cause ukendt; et
+uændret Push-path beviser ikke årsagen. Ingen UI-rettelse er accepteret.
+Dette Core-resultat giver ingen visuel clearance; den afgrænsning ligger hos QA.
+Fysisk Android, TalkBack og fysisk WebView/BigInt er fortsat unknown/untested.
+
+Jeg har selv parsed workerens bevarede finalraw:161 positive browser/native-
+results/139 real scenarios,2 metakontrakter=141 defaultscenarier;12 negatives
+faktisk FAIL/fanget;191 processreceipts uden parsefejl. De syv finalgates er
+rapporteret exit0 med komplet aggregate. De er worker-evidens, ikke egne gates.
+
+PROVENIENS, SMÅ OBSERVATIONSKORREKTIONER OG STOP
+Live AGENTS, ejerskab, kun egen01_CORE og PROJECT_STATE er læst; de fire blobs
+er uændrede ved slutkontrol. START/TASK/LOCAL_STATE/Leadmandat, alle tre LAB-
+originaler og B1/B2-originaler er læst fuldt. Ældre writerinstruktioner er
+historiske kilder. Mandatet angiver GPT-6.1 Sol · Ekstra høj; ingen verificeret
+runtime-modelidentitet påstås. 02_07-writerfrigivelse er fortsat ukendt og
+blokkerede ikke dette autoriserede lokale review.
+
+Et genbrugt eget Core-fixturescript havde en statisk R2-candidate-label i raw
+independent.json. Command/sourcehash beviser local tree; original raw er
+bevaret, separat metadata_label_correction.json forklarer fejlen, og fremtidig
+driverlabel er korrigeret. Ingen assertion eller produktbyte blev ændret.
+ps-inventory fejlede med 'fatal library error, lookup self' efter vellykket
+kildeverifikation. Direkte /proc-scan læste31 cmdlines og fandt0 egne browser/
+Node-testprocesser. Driver-finally og servershutdown er afsluttet.
+
+Live slut: main/R2/Draft uændret;44 branches; alene PR46 åben; queued/
+in_progress/waiting/pending/requested alle0. Remote R2 CI37447570925,
+attempt1 completed/success, er kun læst. Der findes ingen local-tree R3-CI.
+Ingen subagent, besked, chatomdøbning, produktimplementering, remote commit/
+push/post/review/metadata/ready/merge/build/sign/dispatch/rerun/release/cleanup.
+Alle kendte egne runtimeprocesser er afsluttet. Remote read-only STOP.
+
+STATUSDELTA OG NÆSTE BESLUTNING
+C-B2/Core og QA minimum: numerisk CLOSED kun på exact local tree.
+C-RT-B2: OPEN/BLOCKER. Samlet01_06 lokal Core: BLOCKED.
+Original clipping: unresolved; visuel accept kræver QA's vurdering.
+Ingen automatisk remote R3-accept. Efter en eventuel autoriseret push kræves
+exact commit/base/parent/tree/sourcehash og ny CI-receipt i et kort addendum.
+Ændret tree eller runtimekontrakt kræver vurdering af nyt test-/reviewscope.
+Brugeren overfører selv denne TXT/ZIP til00_15.
+
+PAKKE
+Source_Index.txt peger på originaler, exact sources, blocker, reproducere og
+egne/raw/worker-beviser. MANIFEST.json dækker alle payloads. OWN_RAW.tar.xz og
+WORKER_RAW_CURRENT.tar.xz har hver fuld hash-/størrelsesmanifest. Ingen APK,
+dependencies, signingmateriale, credentials eller rekursiv gammel review-ZIP.
