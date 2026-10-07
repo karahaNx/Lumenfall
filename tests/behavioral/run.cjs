@@ -41,7 +41,7 @@ function instrumentHtml(source, fixtures) {
   const marker = '\n})();\n</script>\n<script>\nif(window.Capacitor';
   replaceOnce(marker, '\n' + read('bridge.js') + marker, 'main game IIFE marker changed; test bridge could not be installed');
   const modules = ['rift-status', 'layout', 'accessibility', 'accessibility-controls', 'nav-workshop', 'r3-destinations',
-    'research-duration', 'upgrade-clarity', 'feedback', 'formation', 'forge', 'support-stacking', 'auto-ascend-target', 'buff-timing', 'measured-inquiry'];
+    'research-duration', 'upgrade-clarity', 'feedback', 'formation', 'forge', 'support-stacking', 'auto-ascend-target', 'buff-timing', 'measured-inquiry', 'lab-motes', 'farm-conservation', 'farm-numerical'];
   replaceOnce('</body>', modules.map(name => '<script>' + read(name + '.js') + '</script>').join('') +
     '<script id="qa-behavior-runner">\n' + read('runner.js') + '\n</script>\n</body>', 'expected exactly one </body> marker');
   return source;
@@ -89,6 +89,7 @@ async function browserIdentity(chrome) {
 async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, options = {}) {
   const log = options.log || console.log;
   const urlFor = page => baseUrl + page + '?' + new URLSearchParams({ qaScenario: scenario, qaFixture: fixture });
+  if (scenario === 'lab-motes-offline-integration') return runNativeProcess([process.execPath, path.join(ROOT, 'lab-motes-offline.cjs')], scenario, 90000, options);
   if (scenario === 'offline-catchup-core') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-catchup.cjs')], scenario, 300000, options);
   if (scenario === 'offline-catchup-ui' || scenario === 'offline-catchup-legacy-dom') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-catchup-ui.cjs'), chrome, urlFor('/index.html'), scenario], scenario, 210000, options);
   if (scenario === 'raw-process-contract') return require('./process_contract.cjs').runContract(runScenario, log);
@@ -97,7 +98,9 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
   if (['rift-status-mobile', 'rift-status-reduced-motion'].includes(scenario) || scenario.startsWith('rift-status-stacking') || scenario.startsWith('self-test-rift-status-line')) driver = 'rift-status.cjs';
   if (['auto-ascend-target-mobile', 'auto-ascend-target-reduced-motion'].includes(scenario)) driver = 'auto-ascend-target.cjs';
   if (scenario.startsWith('forge-ui-') || scenario.startsWith('self-test-forge-ui-')) driver = 'forge-ui.cjs';
-  if (driver) return runNativeProcess([process.execPath, path.join(ROOT, driver), chrome, urlFor('/index.html'), scenario], scenario, 90000, options);
+  if (scenario === 'lab-motes-runtime') driver = 'farm-runtime.cjs';
+  if (['lab-motes-native', 'lab-motes-reduced-motion'].includes(scenario)) driver = 'lab-motes.cjs';
+  if (driver) return runNativeProcess([process.execPath, path.join(ROOT, driver), chrome, urlFor('/index.html'), scenario], scenario, driver === 'rift-status.cjs' ? 120000 : 90000, options);
   const profile = temporary('lumenfall-qa-' + scenario + '-');
   const params = { qaScenario: scenario, qaFixture: fixture };
   if (viewport) ['width', 'height', 'safeTop', 'safeBottom'].forEach((key, i) => { params[key] = viewport[i]; });
@@ -119,7 +122,7 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
   if (passed) {
     log('PASS ' + scenario + (viewport ? ' ' + JSON.stringify(viewport) : ''));
     if (viewport || ['upgrade-effects-and-deeds', 'parity-long-high-power', 'parity-medium-farm'].includes(scenario) ||
-        ['auto-ascend-target-', 'chronology-', 'p1-05-', 'p2-07a-', 'forge-', 'buff-', 'support-', 'inquiry-'].some(prefix => scenario.startsWith(prefix))) log('  detail: ' + reportJson(payload?.detail ?? null));
+        ['auto-ascend-target-', 'chronology-', 'p1-05-', 'p2-07a-', 'forge-', 'buff-', 'support-', 'inquiry-', 'lab-motes-'].some(prefix => scenario.startsWith(prefix))) log('  detail: ' + reportJson(payload?.detail ?? null));
     return true;
   }
   log('FAIL ' + scenario);
@@ -187,7 +190,7 @@ async function main(argv = process.argv.slice(2)) {
     server = await serve(stage);
     const baseUrl = 'http://127.0.0.1:' + server.address().port;
     for (const [scenario, fixture] of Object.entries(selected)) {
-      const viewports = scenario.startsWith('layout-') || scenario === 'self-test-layout-collapse' ? LAYOUT_VIEWPORTS : [null];
+      const viewports = scenario === 'lab-motes-ui' ? [[320,844,0,0],[390,844,0,0],[430,844,0,0]] : scenario.startsWith('layout-') || scenario === 'self-test-layout-collapse' ? LAYOUT_VIEWPORTS : [null];
       for (const viewport of viewports) if (!await runScenario(chrome, baseUrl, scenario, fixture, viewport, { rawArtifactRoot })) failures.push(scenario + ' ' + JSON.stringify(viewport));
     }
   } finally {
