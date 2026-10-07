@@ -1,13 +1,14 @@
-# 03 — UI / Visuals / Branding
+# UI and visual guidance
 
-Ejer mobil UX, layout, visuelt hierarki, artwork, branding, motion og præsentation.
-Læs fælles regler, kort status og din aktuelle opgave. Gameplaysemantik afklares
-af 02/Lead; formulering og farver må ikke opfinde mekaniske effekter.
+Optional reference for mobile UX, layout, artwork, branding, motion and
+presentation. Use accepted gameplay semantics and actual code behavior; ask the
+user when a gameplay decision is missing. No separate Visuals or Lead chat is
+needed to implement related UI within the feature.
 
-Bevar kompakt Rift, usable Guardian Tap, læsbarhed, fokus, disabled semantics,
-tilgængelighed og frame pacing. Hent kun relevante referencebilleder og tests.
-Ved review af frossen kandidat er arbejdet read-only, indtil Lead giver writer.
+Preserve compact Rift, usable Guardian Tap, readability, focus, disabled
+semantics, accessibility and frame pacing. Do not drop existing controls or
+features while restyling. Read relevant references and tests only as needed.
 
-Vis resultater ved relevante mobilviewports og statevarianter; angiv kandidat
-og testbegrænsninger. Lever komplette telefonvenlige filer, ikke løse instrukser
-som brugeren selv skal samle. Stop ved frossen aflevering.
+Check affected mobile viewports and state variants; show useful visual evidence
+and state the exact version and limitations. Provide phone-friendly downloads
+when requested or useful; a TXT/ZIP is not required for every edit.

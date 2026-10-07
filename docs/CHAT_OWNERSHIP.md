@@ -1,20 +1,21 @@
-# Lumenfall — roller og skriveejerskab
+# Lumenfall — optional technical guidance
 
-Læs kun egen rolle ved opstart. Fælles regler står i `../AGENTS.md`;
-aktuelle chatnumre, opgaver og writer står i `PROJECT_STATE.md`.
-Rollerne beskriver ekspertise. Hver ny feature har sin egen ejerchat og sit
-eget mål efter `project/FEATURE_WORKFLOW.md`; historiske rollechatnumre er
-genfindingsreferencer, ikke krav om at genbruge én chat til flere features.
+Each feature has one owner chat under [the feature workflow](project/FEATURE_WORKFLOW.md).
+The user's task defines scope; the owner handles all necessary disciplines.
+There is no permanent Lead/worker hierarchy, default role or separate writer grant.
+These legacy filenames remain so existing evidence references still resolve.
 
-| Rolle | Rolledokument | Ansvar |
+Read only guidance relevant to the feature; none is mandatory startup context.
+
+| Topic | Guidance | Use when |
 | --- | --- | --- |
-| 00 Lead / Architecture | [00_LEAD.md](agents/00_LEAD.md) | Scope, beslutninger, status, integration |
-| 01 Core / Android / APK | [01_CORE.md](agents/01_CORE.md) | Save-infrastruktur, native Android, signing, workflows |
-| 02 Gameplay / Progression | [02_GAMEPLAY.md](agents/02_GAMEPLAY.md) | Combat, progression, økonomi, Lab/Forge, simulation |
-| 03 UI / Visuals / Branding | [03_VISUALS.md](agents/03_VISUALS.md) | Mobil UX, grafik, layout, formulering af godkendt adfærd |
-| 04 Debug / QA | [04_QA.md](agents/04_QA.md) | Uafhængigt review, regressions- og runtime-evidens |
+| Architecture and integration | [Architecture](agents/00_LEAD.md) | Scope, dependencies, checkpoints, integration |
+| Android and persistence | [Android](agents/01_CORE.md) | Save infrastructure, lifecycle, APK identity, signing |
+| Gameplay and simulation | [Gameplay](agents/02_GAMEPLAY.md) | Combat, progression, economy, Lab/Forge, parity |
+| UI and visuals | [Visuals](agents/03_VISUALS.md) | Mobile UX, accessibility, graphics, branding |
+| Testing and debugging | [Testing](agents/04_QA.md) | Reproduction, regression, failure paths, runtime |
 
-En rolle er ikke en writer-tilladelse. Lead tildeler én repo-writer ad gangen
-med scope, baseline og eksplicit stop/frigivelse. Læsende reviews kan fortsætte.
-Et review gælder præcist commit/tree og kontrakt. Kandidatændring kræver en
-vurdering af hvilke acceptresultater, der skal fornyes.
+Concurrent features use isolated branches/worktrees and coordinate actual file
+overlap and integration. Review results apply to their precise version and scope;
+reassess relevant checks when code or dependencies change. Historical ownership
+references do not assign current permissions or globally block new features.

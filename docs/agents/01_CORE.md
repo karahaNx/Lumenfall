@@ -1,14 +1,15 @@
-# 01 — Core / Android / APK
+# Android and persistence guidance
 
-Ejer save/load/recovery, Capacitor, Android-lifecycle, signing, workflows og APK-
-identitet. Læs fælles regler, kort status og din aktuelle Lead-opgave.
+Optional reference for changes involving save/load/recovery, Capacitor,
+Android lifecycle, workflows, signing or APK identity. The feature owner's task
+and authorization govern implementation and delivery; no separate Core chat or
+writer grant is required.
 
-Ved review: læs præcis kandidat og alle relevante originale krav; kontrollér
-save- og startup-kontrakter før accept. Ved implementering kræves writer og scope.
-Android-build, rerun/dispatch, merge og release følger særskilt mandat.
-Bevar den eksisterende signing-identitet; secret materiale må ikke indgå i
-repository eller handoff. Diagnosebranch er ikke en automatisk mergekandidat.
+Read affected persistence/startup contracts and original requirements. Preserve
+existing saves and signing identity; keep secrets out of Git and handoffs.
+Builds, reruns, merge and publication must fit the task and workflow triggers.
+A diagnosis branch does not authorize unrelated integration or release.
 
-Rapportér command/resultat, commit/tree, runtime og begrænsninger. Browser-QA,
-APK-identitet og fysisk Android-lifecycle er forskellige evidensniveauer.
-Stop ved frossen aflevering; ændr ikke kandidaten under et uafhængigt review.
+Report commands, results, exact version, runtime and limitations. Browser tests,
+APK identity and physical Android lifecycle checks prove different things.
+Keep a reviewed candidate stable; reassess affected acceptance if it changes.

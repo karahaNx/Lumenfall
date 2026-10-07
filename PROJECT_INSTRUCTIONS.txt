@@ -1,26 +1,31 @@
-Lumenfall: karahaNx/Lumenfall, branch main. Communicate in English.
-Use JavaScript/Node.js for active tools. Preserve archived originals unchanged.
-Følg rodens AGENTS.md og PROJECT_BOOTSTRAP.txt. Læs kun egen rolle,
-docs/PROJECT_STATE.md og brugerens konkrete opgave ved opstart.
-Uden tildelt rolle: Lead / Architecture, uden automatisk produkt-writer.
-Én feature pr. ejerchat; arkivér først efter verificeret integration, gemt
-status og writer-frigivelse. Se docs/project/FEATURE_WORKFLOW.md.
-Fortæl brugeren, når en ny regel er nødvendig; gem beslutningen i GitHub.
-Brug JavaScript til kode, tests, CI-logik og hjælpescripts, hvor muligt.
-HTML er fortsat tilladt. Nye scripts bruger JavaScript/Node.js; eksisterende
-værktøjer omlægges i relevant scope med bevaret testdækning. Historiske
-originaler bevares. Se docs/decisions/2026-10-07-javascript-first.md.
-Gem projektviden løbende. Ny konto: docs/project/ACCOUNT_RECOVERY.md.
-Miljø/checks: docs/project/CODEX_START.md. Kilder: docs/CONTEXT_INDEX.md.
+Lumenfall: karahaNx/Lumenfall. Communicate in English.
+Follow root AGENTS.md. Read PROJECT_BOOTSTRAP.txt, docs/PROJECT_STATE.md and
+the current docs/tasks/<FEATURE_ID>.md; create the task document when needed.
 
-Implementeret produktadfærd findes i rodens index.html på verificeret commit.
-docs/handoffs, docs/recovery og archive bevarer kandidater, originalkrav,
-beslutninger og rå beviser. Gamle mandater er kilder, ikke nye arbejdsordrer.
-Seneste B2-kandidat findes lokalt; B2-review behøver ingen gammel chat eller
-ekstern ZIP. Worker-rapport er ikke uafhængig accept.
+One feature/task per owner chat. The user assigns scope; the owner implements,
+fixes, tests, documents and delivers across all relevant areas. Technical guides
+are optional references. No default Lead, permanent role chats or writer grants.
+Standing authorization applies to necessary work in the assigned scope.
+Use isolated branches/worktrees for concurrent features, coordinate overlapping
+changes/integration and preserve other chats' uncommitted work.
 
-Hold status kort og ajour. Bevar originalkrav og fejlrapporter.
-Én repo-writer; konkret scope og frisk preflight før remote handling.
-Stående godkendelse gælder bestilt scope. Ingen subagenter/beskedværktøjer.
-Ingen automatisk PR46-integration, signingændring eller APK-publicering
-følger af dokumentationsopstart.
+Keep changes small. Preserve existing features, assets, saves, game contracts
+and test gates outside the requested change. Record baseline checks, cover new
+behavior and review the full diff. Fix introduced regressions before completion.
+Checkpoint requirements, versions, decisions, checks, blockers and next action
+at meaningful milestones and before context compaction/handoff; reread when
+uncertain. Store durable project knowledge in GitHub, not only in chat.
+
+Use JavaScript/Node.js 20+ where technically possible. HTML/native Android and
+necessary declarative formats remain valid. Preserve archived originals.
+Tell the user before applying a new binding rule. Missing gameplay decisions
+need clarification; routine implementation does not need repeated approval.
+Do not create/rename chats or use subagents/message tools without a user request.
+
+Environment/checks: docs/project/CODEX_START.md. Sources: docs/CONTEXT_INDEX.md.
+Completion/archive: docs/project/FEATURE_WORKFLOW.md. New account:
+docs/project/ACCOUNT_RECOVERY.md. Archive only after verified integration,
+relevant acceptance and saved status. TXT/ZIP exports are optional when useful.
+Historical mandates, audits and candidates are evidence, not new work orders;
+restore candidates separately. Documentation changes do not authorize a game
+release, signing change or unrelated PR integration.
