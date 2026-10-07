@@ -63,6 +63,11 @@ async function run(){
  assert(returnGeometry.overlay.x===0 && returnGeometry.overlay.y===0 && returnGeometry.overlay.width===returnGeometry.viewport.width && returnGeometry.overlay.height===returnGeometry.viewport.height,'return overlay covers viewport without CSS inset: '+JSON.stringify(returnGeometry));
  assert(returnGeometry.button.y>=0 && returnGeometry.button.y+returnGeometry.button.height<=returnGeometry.viewport.height && returnGeometry.hit,'return Continue is visible and receives real input: '+JSON.stringify(returnGeometry));
  records.push({case:'return panel legacy positioning/input',returnGeometry});
+ if(scenario==='offline-catchup-legacy-dom'){
+  const paint=await evaluate(`(()=>{const s=getComputedStyle(document.querySelector('#welcome-overlay .modal'));return {backgroundColor:s.backgroundColor,backgroundImage:s.backgroundImage};})()`);
+  assert(paint.backgroundImage!=='none' || (paint.backgroundColor!=='transparent' && paint.backgroundColor!=='rgba(0, 0, 0, 0)'),'legacy return dialog has a painted background: '+JSON.stringify(paint));
+  records.push({case:'legacy dialog background without color-mix/alpha hex',paint});
+ }
  await click('welcome-claim');assert(await evaluate('document.getElementById("welcome-overlay").style.display==="none"'),'real click completes return flow');
  records.push({case:'cold8h',before,cold});
  // Actual production visibility handler, with controlled visibility and clock.
