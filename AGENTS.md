@@ -30,6 +30,48 @@ Læs ikke alle arkiver eller alle rollefiler ved opstart.
 - Historiske audits/roadmaps giver ikke nye arbejdsordrer. Manglende evidens
   må ikke rekonstrueres som fakta.
 
+## Spilregler
+- Lumenfall er et Android idle RPG med Wisps i Rift. Produktet distribueres
+  som APK; HTML/JavaScript kører i appens WebView.
+- Progression og køb er deterministiske med synlige priser/effekter. Bevar
+  kontrakten uden loot boxes/gacha og de faste Luminous Motes-belønninger.
+- Bevar kronologisk simulation, online/offline-parity, automation og save/
+  recovery. Kendte fejl står i `docs/project/KNOWN_ISSUES.md`; et krav om parity
+  er ikke bevis for, at alle nuværende forløb består.
+- Bevar mobiltilgængelighed, WebView 60-baseline, package `com.lumenfall.app`
+  og den eksisterende Android-signering. Konkrete mekanikker, caps, balance
+  og migrationer følger accepterede krav og kode på verificeret commit.
+Detaljer findes via `docs/CONTEXT_INDEX.md`; kandidater og historiske mandater
+må ikke præsenteres som implementerede spilregler.
+
+## Nye eller ændrede regler
+Fortæl brugeren, når en ny regel er nødvendig, før den anvendes som bindende
+regel: angiv den konkrete tekst, hvorfor den behøves, og hvilken adfærd eller
+arbejdsgang den påvirker. Gem brugerens beslutning og begrundelsen i GitHub,
+opdatér denne fil og berørte krav i samme scope, og nævn regelændringen ved
+levering. Opfind ikke gameplaybeslutninger; afklar dem, hvis de mangler.
+Brugerens aktuelle instruktioner har forrang, og stående godkendelse gælder
+fortsat nødvendige handlinger i bestilt scope.
+
+## Én chat, én feature
+Hver ny feature har én ejerchat med ét konkret mål og et opgavedokument i
+`docs/tasks/`. Hold nødvendige fixes, tests og dokumentation i samme feature;
+andre features får hver sin nye chat. Roller er ekspertise, ikke permanente
+featurechats. Opret kun nye chats, når brugeren beder om det.
+Følg [featureworkflowet](docs/project/FEATURE_WORKFLOW.md): færdig betyder
+implementeret, verificeret på den integrerede version og gemt i GitHub.
+En lokal kandidat eller åben PR afslutter ikke featuren. Arkivér ejerchatten
+efter verificeret afslutning, gemt status og writer-frigivelse; rapportér det,
+hvis arkivværktøjet mangler. Blokeret/ukendt arbejde forbliver åbent.
+
+## Fortsættelse uafhængigt af ChatGPT-konto
+GitHub er den varige kilde til kode, regler, krav, beslutninger, checkpoints,
+testbeviser og næste handling. Gem nye kritiske oplysninger løbende og før
+arkivering; chat, Memory, Library og cloudmiljø må ikke være eneste kopi.
+Følg [kontoskiftguiden](docs/project/ACCOUNT_RECOVERY.md) ved ny konto.
+En ny ChatGPT-konto kræver fortsat adgang til GitHub og et nyt miljøsetup;
+gamle chats og forbindelser følger ikke automatisk med.
+
 ## Samarbejde
 Én repo-writer ad gangen. Lead tildeler scope og frigivelse; en grøn CI eller
 oprettet Draft PR frigiver ikke automatisk writer. Andre roller må undersøge

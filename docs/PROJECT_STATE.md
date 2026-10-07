@@ -42,6 +42,13 @@ Brugerens aktuelle docs-mandat omfatter at gøre opstart/kilder klar på main.
 Dette scope frigives efter dokumenteret integration; øvrige writerforhold
 ændres ikke. Stående godkendelse fra 5. oktober gælder bestilt scope.
 
+Workflowmandat 7. oktober: `tasks/WORKFLOW_CONTINUITY_001.md` bevarer brugerens
+krav om regler, én feature pr. chat og fortsættelse fra ny ChatGPT-konto.
+Lead i denne ejerchat har kun docs-writer til det bestilte scope. Den konkrete
+integration og writer-frigivelse registreres i opgavedokumentet; produktwriter
+og åbne B2-/PR46-reviews ændres ikke. Nye features følger
+`project/FEATURE_WORKFLOW.md`; kontoskift følger `project/ACCOUNT_RECOVERY.md`.
+
 Næste B2-handling: kontrollér live baseline, læs ny leverings START/identity,
 genskab det præcise tree separat, og udsted nye scoped Core-/QA-reviews.
 Gem reviewdelta i denne status. Integrér efter kandidataccept og handover.

@@ -8,6 +8,9 @@ Filer i samme række er kandidater; indlæs kun det, som den konkrete opgave kr�
 | Arbejdsregler og læserækkefølge | `../AGENTS.md` | Opstart |
 | Egen rolle | `CHAT_OWNERSHIP.md` → én fil i `agents/` | Opstart |
 | Aktuelt snapshot, writer og åbne opgaver | `PROJECT_STATE.md` | Opstart; kontrollér live drift |
+| Én feature pr. chat og afslutning før arkivering | `project/FEATURE_WORKFLOW.md` | Ny feature og afslutning |
+| Ny ChatGPT-konto, startprompt og uafhængig backup | `project/ACCOUNT_RECOVERY.md` | Kontoskift eller recovery |
+| Brugerens workflowkrav fra 7. oktober | `tasks/WORKFLOW_CONTINUITY_001.md` | Regler og dokumentationsaccept |
 | Codex-miljø, commands og næste B2-handling | `project/CODEX_START.md`, `../PROJECT_BOOTSTRAP.txt` | Ny repo-session |
 | Nyeste B2-runtimekandidat, fulde originals og beviser | `handoffs/02_08/2026-10-07/START_HER.txt` → `Source_Index.txt`, `SUMMARY/identity.json` | Nyt scoped kandidat-review; ikke produkt-main |
 | Alle 96 kandidatfiler og præcis gendannelse | `handoffs/02_08/2026-10-07/SOURCE_SNAPSHOT_MANIFEST.json`, `../scripts/recovery/restore_candidate.py` | Review uden netadgang/ekstern ZIP |

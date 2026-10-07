@@ -4,6 +4,9 @@ Vælg `karahaNx/Lumenfall` og branch `main`. Rodens `AGENTS.md` viser opstart;
 `PROJECT_BOOTSTRAP.txt` og `docs/PROJECT_STATE.md` giver aktuel status.
 En ny projektchat behøver ikke gamle chats eller eksterne ZIP-filer for B2-
 review. Find kilder efter behov via [CONTEXT_INDEX.md](../CONTEXT_INDEX.md).
+Ny ChatGPT-konto: følg [ACCOUNT_RECOVERY.md](ACCOUNT_RECOVERY.md) og dens
+startprompt. Hver ny feature får én ejerchat efter
+[FEATURE_WORKFLOW.md](FEATURE_WORKFLOW.md); arkivér efter verificeret integration.
 
 ## Miljø
 
