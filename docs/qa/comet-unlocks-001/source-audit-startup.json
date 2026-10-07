@@ -1,0 +1,414 @@
+{
+  "scope": "Observed unchanged main tables/functions, isolated VM with save/UI stubs. Calendar earnings assume stated completion; not measured player pacing, full engine, UI, migration or Android acceptance.",
+  "sourceSha256": "f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4",
+  "functionHashes": {
+    "freshState": "85bd473ba4a3c4a868752a90d25b515f83828c67e1790c701471634c3708caa4",
+    "dateSeed": "3d9100ebdd177932e31f81047915bb7e18b84dc308be6a26e1d96f2c153edc9b",
+    "dailyQuestEligible": "ad1b07a50a28e1064c7ada31f9839d733b6f8e4e135c29c1470bf05645a1e3c8",
+    "pickDailyQuests": "2232c4e3af6c97b42d2d7704739baa0dd738b98c14c740de0d64f2e42eeefc1d",
+    "loginRewardFor": "294a2c4411440f17759ff75adb7746ed541b0cb7b18cb8e7137d83ef071a0e61",
+    "restStopComplete": "879a1305e97568be78005f89e099ce1900723b4378aec8cd45e443e79cec8fa3",
+    "maxDailyQuestCometReward": "cbff9756683b36f2db63a6937bc0d13f54f00d29186237d4b3aa6bd78f7ccd84",
+    "dailyQuestRefreshCost": "9cc6a0a0de0cb9d8fb8eeffb9250d0b4abfe917e9c98ced2ad8e55c1834f2fd0",
+    "buyShopItem": "b66da38f4b442f5a5cb422ac1ef659763fada4ce74fd6948e05531f4cb8b3fa0",
+    "isPlainObject": "0f3f3ca7c0b0fb3e044a0a2a8b9ec014cf26cbd74e536defa01df691fed06633",
+    "finiteNonNegative": "b92135f0433c6515a33d5a2fdcda1f6088b52f6dff124426b53843cfdf5ee322",
+    "nonNegativeInt": "58bcf4e2d0b250c1725ee6b86abb13034134bff62264a7482c7efc21e1545e06",
+    "boundedInt": "ca117568cb8ad450761d19f4a93a9a574b99843ed92fc5cba000f24ef912a5ef",
+    "strictBool": "238adcd85c3f3d95588d210ddb469d9c533b6d7ebc3d5ff255250b4c2a9f3245",
+    "normalizeSupportBuffs": "d85103be9cd1e497c3bbc7f0fa142cad128d3ba88b92ed8cf655ceeb1ad942f6",
+    "normalizeFormationRebuild": "e3152054fcb3874c8e8f2623ad4cc931d8ee436a4c31edbf9f4b400c4733bdc7",
+    "reconcileFormationRebuild": "d0b8a31d12c52f63eff8ab1f9709c5f5a304ed6608f0b9a42c809b709ea7e129",
+    "normalizeCurrentSave": "81a5153d1f4940048cb556bf586658c73e02e156122dbdbade93f06d5c820b3a",
+    "isBoss": "7db9ac47b7412aba7f86d004bd45b43952053dcc904ec18c57b3cfe941785487"
+  },
+  "oneTimeDeedComets": 683,
+  "shop": [
+    {
+      "id": "autoascend",
+      "name": "Auto-Ascend Ritual",
+      "cost": 100,
+      "desc": "Choose which Rift to defeat before automatic Ascension. Toggle it on or off anytime. Your chosen target persists across Ascensions."
+    },
+    {
+      "id": "offline24",
+      "name": "Extended Rest",
+      "cost": 140,
+      "desc": "Raise the offline earnings cap from 12 hours to 24 hours."
+    },
+    {
+      "id": "offline48",
+      "name": "Deep Rest",
+      "cost": 160,
+      "desc": "Raise the offline earnings cap by another 24 hours, stacking with Extended Rest."
+    },
+    {
+      "id": "rememberbulk",
+      "name": "Loadout Memory",
+      "cost": 50,
+      "desc": "The Rift Forge remembers your last bulk-buy multiplier between visits, instead of resetting to 1x."
+    }
+  ],
+  "refreshCost": 25,
+  "maxQuestReward": 25,
+  "currencyMatrix": [
+    {
+      "system": "Forge",
+      "currency": "Lumen/Shards",
+      "id": "focus",
+      "name": "Battle Focus",
+      "effect": "+8% Lumen from every kill, per level.",
+      "cap": null
+    },
+    {
+      "system": "Forge",
+      "currency": "Lumen/Shards",
+      "id": "sense",
+      "name": "Shard Sense",
+      "effect": "+8% Shards from every kill, per level.",
+      "cap": null
+    },
+    {
+      "system": "Forge",
+      "currency": "Lumen/Shards",
+      "id": "formation",
+      "name": "Formation Training",
+      "effect": "+5% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.",
+      "cap": null
+    },
+    {
+      "system": "Forge",
+      "currency": "Lumen/Shards",
+      "id": "resolve",
+      "name": "Guardian's Resolve",
+      "effect": "+10% tap damage, per level.",
+      "cap": null
+    },
+    {
+      "system": "Forge",
+      "currency": "Lumen/Shards",
+      "id": "charge",
+      "name": "Swift Recovery",
+      "effect": "+8% faster Wisp ability charge, per level.",
+      "cap": null
+    },
+    {
+      "system": "Forge",
+      "currency": "Lumen/Shards",
+      "id": "arcanecal",
+      "name": "Arcane Calibration",
+      "effect": "+3 percentage points to the damaging Wisp ability factor per level. Burst, Breaker, Gale and Thorn only; no passive or Tap bonus.",
+      "cap": 10
+    },
+    {
+      "system": "Forge",
+      "currency": "Lumen/Shards",
+      "id": "conduction",
+      "name": "Resource Conduction",
+      "effect": "+4 percentage points to the ability resource factor per level. Gale Shards and Thorn Lumen only; rounded per cast, not kill rewards.",
+      "cap": 10
+    },
+    {
+      "system": "Forge",
+      "currency": "Lumen/Shards",
+      "id": "luminoustracking",
+      "name": "Luminous Tracking",
+      "effect": "+0.5 percentage points Luminous chance per level for future eligible encounters; total chance at most 35%. No extra Motes per kill.",
+      "cap": 10
+    },
+    {
+      "system": "Tree",
+      "currency": "Prisms",
+      "id": "starlight",
+      "name": "Starlight Affinity",
+      "effect": "+10% Lumen from every kill, per level.",
+      "cap": null
+    },
+    {
+      "system": "Tree",
+      "currency": "Prisms",
+      "id": "steady",
+      "name": "Steady Hands",
+      "effect": "+8% tap damage, per level.",
+      "cap": null
+    },
+    {
+      "system": "Tree",
+      "currency": "Prisms",
+      "id": "echo",
+      "name": "Echoing Rest",
+      "effect": "+5% offline earning rate, per level (caps at 100%).",
+      "cap": null
+    },
+    {
+      "system": "Tree",
+      "currency": "Prisms",
+      "id": "bonds",
+      "name": "Cheaper Bonds",
+      "effect": "−3% Wisp recruiting cost, per level (floor 40%).",
+      "cap": null
+    },
+    {
+      "system": "Tree",
+      "currency": "Prisms",
+      "id": "swift",
+      "name": "Swift Ascension",
+      "effect": "+4% Prisms earned per Ascend, per level.",
+      "cap": null
+    },
+    {
+      "system": "Tree",
+      "currency": "Prisms",
+      "id": "momentum",
+      "name": "Eternal Momentum",
+      "effect": "+6% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.",
+      "cap": null
+    },
+    {
+      "system": "Tree",
+      "currency": "Prisms",
+      "id": "reserves",
+      "name": "Deep Reserves",
+      "effect": "+2 hours to your offline cap, per level.",
+      "cap": null
+    },
+    {
+      "system": "Lab",
+      "currency": "Lumen/Shards",
+      "id": "wispascend",
+      "name": "Wisp Ascendancy",
+      "effect": "+15% passive Wisp damage permanently; also raises the Wisp-powered part of your tap damage.",
+      "cap": null
+    },
+    {
+      "system": "Lab",
+      "currency": "Lumen/Shards",
+      "id": "guardmastery",
+      "name": "Guardian's Mastery",
+      "effect": "+20% tap damage, permanently.",
+      "cap": null
+    },
+    {
+      "system": "Lab",
+      "currency": "Lumen/Shards",
+      "id": "riftattune",
+      "name": "Rift Attunement",
+      "effect": "+10% offline earning rate, permanently (stacks past 100%).",
+      "cap": null
+    },
+    {
+      "system": "Lab",
+      "currency": "Lumen/Shards",
+      "id": "shardstudy",
+      "name": "Shard Attunement",
+      "effect": "+8% Shards earned per kill, permanently.",
+      "cap": null
+    },
+    {
+      "system": "Lab",
+      "currency": "Lumen/Shards",
+      "id": "lumenstudy",
+      "name": "Lumen Wellspring",
+      "effect": "+8% Lumen earned per kill, permanently.",
+      "cap": null
+    },
+    {
+      "system": "Lab",
+      "currency": "Lumen/Shards",
+      "id": "formationstudy",
+      "name": "Formation Insight",
+      "effect": "+5% passive Wisp damage permanently; also raises the Wisp-powered part of your tap damage.",
+      "cap": null
+    },
+    {
+      "system": "Lab",
+      "currency": "Lumen/Shards",
+      "id": "motestudy",
+      "name": "Luminous Sense",
+      "effect": "+10% Motes gained from Luminous enemies, permanently.",
+      "cap": null
+    },
+    {
+      "system": "Lab",
+      "currency": "Lumen/Shards",
+      "id": "prismstudy",
+      "name": "Ascendant Clarity",
+      "effect": "+5% Prisms earned per Ascend, permanently.",
+      "cap": null
+    },
+    {
+      "system": "Lab",
+      "currency": "Lumen/Shards",
+      "id": "measuredinquiry",
+      "name": "Measured Inquiry",
+      "effect": "2% less work per completed level, up to 20%, for future starts of Wisp Ascendancy, Guardian’s Mastery, Rift Attunement, Shard Attunement, Lumen Wellspring, Formation Insight, Luminous Sense and Ascendant Clarity. Running Studies and Measured Inquiry itself are unchanged.",
+      "cap": 10
+    }
+  ],
+  "calendar": [
+    {
+      "maxDepthEver": 1,
+      "days": 365,
+      "assumption": "continuous seven-day login streak; either no quest completion or all three selected quests completed; no refresh spending or one-time Deeds",
+      "loginOnlyMean": 17.964383561643835,
+      "allSelectedCompletedMean": 54.06575342465754,
+      "min": 33,
+      "max": 83,
+      "priceAnchors": [
+        {
+          "price": 50,
+          "priceDividedByMeanDays": 0.9247998378433161
+        },
+        {
+          "price": 140,
+          "priceDividedByMeanDays": 2.589439545961285
+        },
+        {
+          "price": 160,
+          "priceDividedByMeanDays": 2.9593594810986112
+        }
+      ]
+    },
+    {
+      "maxDepthEver": 5,
+      "days": 365,
+      "assumption": "continuous seven-day login streak; either no quest completion or all three selected quests completed; no refresh spending or one-time Deeds",
+      "loginOnlyMean": 17.964383561643835,
+      "allSelectedCompletedMean": 53.635616438356166,
+      "min": 33,
+      "max": 83,
+      "priceAnchors": [
+        {
+          "price": 50,
+          "priceDividedByMeanDays": 0.9322163763600143
+        },
+        {
+          "price": 140,
+          "priceDividedByMeanDays": 2.61020585380804
+        },
+        {
+          "price": 160,
+          "priceDividedByMeanDays": 2.9830924043520457
+        }
+      ]
+    },
+    {
+      "maxDepthEver": 8,
+      "days": 365,
+      "assumption": "continuous seven-day login streak; either no quest completion or all three selected quests completed; no refresh spending or one-time Deeds",
+      "loginOnlyMean": 17.964383561643835,
+      "allSelectedCompletedMean": 56.87123287671233,
+      "min": 33,
+      "max": 88,
+      "priceAnchors": [
+        {
+          "price": 50,
+          "priceDividedByMeanDays": 0.8791791116677907
+        },
+        {
+          "price": 140,
+          "priceDividedByMeanDays": 2.4617015126698143
+        },
+        {
+          "price": 160,
+          "priceDividedByMeanDays": 2.8133731573369305
+        }
+      ]
+    },
+    {
+      "maxDepthEver": 10,
+      "days": 365,
+      "assumption": "continuous seven-day login streak; either no quest completion or all three selected quests completed; no refresh spending or one-time Deeds",
+      "loginOnlyMean": 17.964383561643835,
+      "allSelectedCompletedMean": 57.52328767123288,
+      "min": 33,
+      "max": 93,
+      "priceAnchors": [
+        {
+          "price": 50,
+          "priceDividedByMeanDays": 0.8692131834635168
+        },
+        {
+          "price": 140,
+          "priceDividedByMeanDays": 2.4337969136978472
+        },
+        {
+          "price": 160,
+          "priceDividedByMeanDays": 2.781482187083254
+        }
+      ]
+    },
+    {
+      "maxDepthEver": 16,
+      "days": 365,
+      "assumption": "continuous seven-day login streak; either no quest completion or all three selected quests completed; no refresh spending or one-time Deeds",
+      "loginOnlyMean": 17.964383561643835,
+      "allSelectedCompletedMean": 61.54794520547945,
+      "min": 33,
+      "max": 100,
+      "priceAnchors": [
+        {
+          "price": 50,
+          "priceDividedByMeanDays": 0.8123748052526152
+        },
+        {
+          "price": 140,
+          "priceDividedByMeanDays": 2.2746494547073226
+        },
+        {
+          "price": 160,
+          "priceDividedByMeanDays": 2.5995993768083685
+        }
+      ]
+    },
+    {
+      "maxDepthEver": 250,
+      "days": 365,
+      "assumption": "continuous seven-day login streak; either no quest completion or all three selected quests completed; no refresh spending or one-time Deeds",
+      "loginOnlyMean": 17.964383561643835,
+      "allSelectedCompletedMean": 61.54794520547945,
+      "min": 33,
+      "max": 100,
+      "priceAnchors": [
+        {
+          "price": 50,
+          "priceDividedByMeanDays": 0.8123748052526152
+        },
+        {
+          "price": 140,
+          "priceDividedByMeanDays": 2.2746494547073226
+        },
+        {
+          "price": 160,
+          "priceDividedByMeanDays": 2.5995993768083685
+        }
+      ]
+    }
+  ],
+  "directBuy": {
+    "afterFirst": 950,
+    "afterRepeat": 950,
+    "owned": true
+  },
+  "insufficient": {
+    "comets": 49,
+    "owned": false
+  },
+  "legacy": {
+    "gateBefore": true,
+    "ownedBefore": {
+      "autoascend": true,
+      "offline24": true,
+      "offline48": true,
+      "rememberbulk": true
+    },
+    "autoAscendOnlyBefore": false,
+    "withRemovedShopRows": {
+      "gateAfter": true,
+      "ownedAfter": {
+        "autoascend": true
+      }
+    },
+    "autoAscendOnlyAfter": true
+  }
+}
