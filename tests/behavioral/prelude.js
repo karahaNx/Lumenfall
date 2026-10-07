@@ -7,6 +7,13 @@
     // WebView60/61 has no ParentNode.replaceChildren. Exercise real startup,
     // catch-up and selector rendering without the newer browser convenience API.
     delete Element.prototype.replaceChildren;
+    // Legacy WebView also ignores the CSS inset shorthand. Preserve any authored
+    // longhand fallbacks, then exercise real intro/return geometry and input.
+    document.addEventListener('DOMContentLoaded',function(){
+      document.querySelectorAll('style').forEach(function(style){
+        style.textContent=style.textContent.replace(/\binset\s*:[^;}]*;?/g,'');
+      });
+    });
   }
   // Native UI tests hold interval callbacks only across immediate measurements.
   // Keep real input/save handlers, animation frames and the production flags intact.

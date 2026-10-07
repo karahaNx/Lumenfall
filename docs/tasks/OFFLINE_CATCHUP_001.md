@@ -1,5 +1,19 @@
 # OFFLINE-CATCHUP-001 — long offline Auto-Ascend
 
+Current continuation: PR54 integrated at458dbbc25f14c06149b4379ba6475ed16ad58a57;
+signed APK0.1.135 published. Actual Android8.1/API27/WebView61 completes the
+original8h window (+302400 kills/+14400 ascends), one primary commit/recovery,
+3262 frames/no errors, but Continue is off-screen because CSS inset is unsupported.
+The focused feature/offline-catchup-legacy-layout branch replaces only functional
+overlay/intro positioning with legacy longhands; product JavaScript is unchanged.
+Its registered missing-inset/missing-replaceChildren test fails released bytes
+without timeout and passes corrected geometry, hit-testing and real Continue input,
+cold/resume/interruption/failure/retry/daily flows. Evidence:
+[legacy positioning](../qa/offline-catchup-001/legacy-layout/README.md).
+Next: full exact-head CI, integration, new signed APK, unmodified native UI/storage
+verification, then reconcile PR52 documentation. Physical WebView60/TalkBack
+acceptance remains open; do not archive. Earlier paragraphs below are historical.
+
 Owner: this feature chat. Communication: English. Codex is based on GPT-6; exact variant/effort controls are not exposed.
 
 Status: initial implementation/Node migration integrated via PR51 and published as APK0.1.134. Acceptance is OPEN. The user asked whether testing could run here; an isolated Android8.1/API27/WebView61 emulator now runs locally. It reproduced an unsupported replaceChildren call in the advanced-save Auto-Ascend selector before catch-up. Both PR51 P2 findings were reproduced and fixed in focused [PR54](https://github.com/karahaNx/Lumenfall/pull/54). Its automated review found clock-jump and second-midnight edges; the revision uses monotonic processing time and queued daily presentations. No new gameplay rule or other feature.
