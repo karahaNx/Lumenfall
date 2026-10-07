@@ -6,18 +6,19 @@ Filer i samme række er kandidater; indlæs kun det, som den konkrete opgave kr�
 | Behov | Kilde | Hvornår |
 | --- | --- | --- |
 | Arbejdsregler og læserækkefølge | `../AGENTS.md` | Opstart |
-| Egen rolle | `CHAT_OWNERSHIP.md` → én fil i `agents/` | Opstart |
-| Aktuelt snapshot, writer og åbne opgaver | `PROJECT_STATE.md` | Opstart; kontrollér live drift |
+| Optional technical guidance | `CHAT_OWNERSHIP.md` → relevant files in `agents/` | Only when needed; no role assignment |
+| Current snapshot, active features and overlap | `PROJECT_STATE.md` | Startup; verify relevant live state |
 | Én feature pr. chat og afslutning før arkivering | `project/FEATURE_WORKFLOW.md` | Ny feature og afslutning |
 | Ny ChatGPT-konto, startprompt og uafhængig backup | `project/ACCOUNT_RECOVERY.md` | Kontoskift eller recovery |
 | Brugerens workflowkrav fra 7. oktober | `tasks/WORKFLOW_CONTINUITY_001.md` | Regler og dokumentationsaccept |
-| Codex-miljø, commands og næste B2-handling | `project/CODEX_START.md`, `../PROJECT_BOOTSTRAP.txt` | Ny repo-session |
+| Feature ownership and game-preservation safeguards | `tasks/FEATURE_CHAT_WORKFLOW_001.md`, `decisions/2026-10-07-feature-chat-workflow.md` | Current workflow decision; supersedes permanent role/writer gates |
+| Codex environment and commands | `project/CODEX_START.md`, `../PROJECT_BOOTSTRAP.txt` | New repo session; task selects the next action |
 | Nyeste B2-runtimekandidat, fulde originals og beviser | `handoffs/02_08/2026-10-07/START_HER.txt` → `Source_Index.txt`, `SUMMARY/identity.json` | Nyt scoped kandidat-review; ikke produkt-main |
 | Alle 96 kandidatfiler og præcis gendannelse | `handoffs/02_08/2026-10-07/SOURCE_SNAPSHOT_MANIFEST.json`, `../scripts/recovery/restore_candidate.cjs` | Review uden netadgang/ekstern ZIP |
 | Core-review og 45 originale TXT/ZIP-filer | `handoffs/01_06/2026-10-07/SOURCE_INDEX.md` | Core-proveniens; tidligere BLOCKED gælder gamle bytes |
 | Lead-recovery, original feedback og fire billeder | `recovery/2026-10-07/SOURCE_INDEX.txt`, `recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/` | Originalkrav og dependencies |
 | Åbne problemer og ny offline-diagnose | `project/KNOWN_ISSUES.md`, `project/SAVE_OFFLINE_AUTOASCEND_DIAGNOSE_2026-10-07.txt` | Særskilt offline-scope |
-| Current offline fix and acceptance | `tasks/OFFLINE_CATCHUP_001.md` → `qa/offline-catchup-001/README.md` | Local candidate and precise next action; not yet a release |
+| Offline fix and remaining acceptance | `tasks/OFFLINE_CATCHUP_001.md` → `qa/offline-catchup-001/README.md`; `PROJECT_STATE.md` | Earlier task records are publication checkpoints; verify current integration/device state |
 | Offline-originalsave, driver og rå VM-resultater | `qa/offline-autoascend-2026-10-07/Source_Index.txt`, `qa/offline-autoascend-2026-10-07/README_REPRO.txt` | Reproduktion på fast produktbaseline; bevaret via PR47 |
 | Integritet og historiske manifeststier | `../scripts/codex/check_context.cjs --archives`, `decisions/2026-10-07-codex-project-ready.md` | Genfinding og docs-integration |
 | Measured Inquiry | `tasks/MEASURED_INQUIRY_001.md`, `tasks/MEASURED_INQUIRY_001_REQUIREMENTS.txt` | Originalkrav før implementering/review |
@@ -31,7 +32,7 @@ Filer i samme række er kandidater; indlæs kun det, som den konkrete opgave kr�
 | Produktkode | `../index.html` på relevant commit | Målrettede afsnit; udvid ved afhængigheder |
 | Adfærd, parity og negative controls | `../tests/behavioral/` | Relevante scenarier og harness før QA/ændring |
 | CI-checks | `../.github/workflows/pre-merge-validation.yml` | Før PR-validering; run.cjs viser aktuelle controls |
-| Android/signing/publish | `../.github/workflows/build-android.yml`, `../scripts/verify_apk_identity.cjs`, `../mobile/` | Kun Core/release-opgave og triggerkontrol |
+| Android/signing/publish | `../.github/workflows/build-android.yml`, `../scripts/verify_apk_identity.cjs`, `../mobile/` | Relevant app/release scope and trigger checks |
 | Branding og mobilreferencer | `../branding/README.md`, `brand-reference/README.md` | Relevant UI/branding-opgave |
 | Historisk program og audits | `ROADMAP.md`, `audits/` | Baggrund til en konkret beslutning; ikke automatisk backlog |
 

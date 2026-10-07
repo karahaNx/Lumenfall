@@ -30,24 +30,25 @@ Inside Lumenfall, **Settings → Save Backup** can copy/restore your save code f
 
 ## Start i Codex / projektchats
 
-Vælg `karahaNx/Lumenfall` på `main`. Læs [AGENTS.md](AGENTS.md),
-[PROJECT_BOOTSTRAP.txt](PROJECT_BOOTSTRAP.txt), kun [egen rolle](docs/CHAT_OWNERSHIP.md)
-og [kort aktuel status](docs/PROJECT_STATE.md).
-Uden tildelt rolle starter en ny projektchat som Lead / Architecture.
-[CODEX_START.md](docs/project/CODEX_START.md) har miljøsetup, commands og næste
-konkrete handling. Nyeste B2-kandidat, originale krav, Core/QA-rapporter og
-rå beviser kan læses fra main; de er arkiv-/reviewkilder, ikke produktaccept.
-Brug [kildeindekset](docs/CONTEXT_INDEX.md) til detaljer efter behov.
-Nye handoffs følger [skabelonen](docs/HANDOFF_TEMPLATE.md); gamle arkiver,
-audits og fulde logs indlæses ikke samlet ved opstart.
-Ved adgang gennem GitHub-værktøjer skal opstartsprompten eksplicit bede om
-AGENTS.md; filnavnet alene garanterer ikke automatisk indlæsning.
+Start from current `main` or the feature's branch. Read [AGENTS.md](AGENTS.md),
+[PROJECT_BOOTSTRAP.txt](PROJECT_BOOTSTRAP.txt), [current status](docs/PROJECT_STATE.md)
+and the current `docs/tasks/<FEATURE_ID>.md`. The user's task assigns one goal
+to one owner chat, which handles implementation, fixes, tests and delivery.
+There is no permanent Lead/worker hierarchy. [Technical guidance](docs/CHAT_OWNERSHIP.md)
+is optional; read relevant code and sources through [the index](docs/CONTEXT_INDEX.md).
+[CODEX_START.md](docs/project/CODEX_START.md) provides setup and checks.
 
-Én feature pr. ejerchat, med verificeret integration før arkivering:
-[FEATURE_WORKFLOW.md](docs/project/FEATURE_WORKFLOW.md).
-For at fortsætte fra en ny ChatGPT-konto med GitHub-adgang:
-[ACCOUNT_RECOVERY.md](docs/project/ACCOUNT_RECOVERY.md), inklusive startprompt.
-Regler, krav, beslutninger og testbeviser gemmes løbende i repositoryet.
+Keep changes small, preserve existing features/saves/test gates and review the
+complete diff. Save short [checkpoints](docs/HANDOFF_TEMPLATE.md) at milestones
+and before context compaction/handoff. Resume from their exact version and next
+action. Archived candidates and audits are evidence, not automatic work orders.
+With GitHub-tool-only access, explicitly request AGENTS.md.
+
+Follow [one feature per chat](docs/project/FEATURE_WORKFLOW.md), with verified
+integration and relevant acceptance before archiving. Requirements, decisions
+and test evidence are saved in GitHub; TXT/ZIP exports are optional when useful.
+For a new ChatGPT account, use [account recovery](docs/project/ACCOUNT_RECOVERY.md)
+and its start prompt.
 
 JavaScript er projektets standard for kode, tests, CI-logik og hjælpescripts,
 hvor det er teknisk muligt. HTML er fortsat tilladt. Nye scripts bruger Node.js;

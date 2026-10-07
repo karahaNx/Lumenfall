@@ -1,41 +1,33 @@
-LUMENFALL — START I CODEX
-Repository: karahaNx/Lumenfall. Vælg main i Lumenfall-miljøet.
-English (current user preference). Anbefalet Lead-model: GPT-6.1 Sol, indsats Ekstra høj.
-Omdøb ingen eksisterende chats. Ingen subagenter eller beskedværktøjer.
-Én ny feature pr. ejerchat. Fortæl brugeren, når en ny regel er nødvendig.
-JavaScript til kode, tests, CI-logik og hjælpescripts, hvor teknisk muligt;
-HTML er fortsat tilladt. Eksisterende værktøjer omlægges i relevant scope
-med verificeret adfærd. Historiske originaler bevares byteidentisk.
-Arkivér efter verificeret integration og gemt status; en åben PR er ikke færdig.
-Workflow: docs/project/FEATURE_WORKFLOW.md.
-Ny ChatGPT-konto: docs/project/ACCOUNT_RECOVERY.md. GitHub-adgang kræves.
+LUMENFALL — START IN CODEX
+Repository: karahaNx/Lumenfall. Start from current main or the feature's branch.
+Communicate in English. One feature/task, one owner chat; no permanent Lead,
+Core, Gameplay, Visuals or QA chats and no separate writer-assignment ceremony.
 
-Læs kun: AGENTS.md → egen række i docs/CHAT_OWNERSHIP.md → egen rollefil →
-docs/PROJECT_STATE.md. Uden tildelt rolle: Lead / Architecture.
-docs/project/CODEX_START.md har miljø, commands og konkret næste handling.
-Brug docs/CONTEXT_INDEX.md til målrettet opslag; læs ikke hele repoet/arkivet.
+Read: AGENTS.md → docs/PROJECT_STATE.md → docs/tasks/<FEATURE_ID>.md.
+The user's task defines scope. The owner handles implementation, necessary
+fixes, testing, documentation and delivery across all affected areas.
+Use docs/project/FEATURE_WORKFLOW.md for checkpoints and completion,
+docs/project/CODEX_START.md for setup/checks and docs/CONTEXT_INDEX.md for
+targeted sources. Optional technical guides do not assign roles or permissions.
+Run node scripts/codex/check_context.cjs --task docs/tasks/<FEATURE_ID>.md
+to validate this feature's checkpoint/links/startup budget. Verify its baseline/PR.
+Do not start unrelated B2/PR46 work merely because an older prompt mentions it.
 
-AKTUELT
-Produktkode: main med accepteret APK 0.1.133. Nye docs ændrer ikke spillet.
-PR46 er Draft på R2 3cdebc236e9ee5081a4bca4e323b11f43aa0d46d.
-Nyere B2-kandidat: tree 758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef,
-arkiveret af 02_08 på kodecommit 013f526; klar til nye scoped reviews.
-Den erstatter BigInt med Number/DataView og bevarer WebView 60-baseline.
-Worker-PASS er rapporteret; nye Core-/QA-reviews og fysisk Android mangler.
-Koden og hele afleveringen ligger i docs/handoffs/02_08/2026-10-07/.
+Make small changes and preserve existing game features, saves and test gates.
+Record baseline failures, cover changed behavior, review the complete diff and
+resolve introduced regressions. Keep the task checkpoint current before context
+compaction or handoff; resume from its exact version and next action.
+Standing authorization covers necessary actions in the assigned scope.
+For concurrent features, use isolated branches/worktrees and coordinate actual
+overlap/integration. Do not overwrite others' work or replace live game code
+with a prototype/archive. Historical writer releases do not block new tasks.
 
-29 feedbackpunkter, fulde originalkrav og fire billeder ligger i
-docs/recovery/2026-10-07/lead_context/FEEDBACK/.
-Separat nyt offline/Auto-Ascend-fund ligger i docs/project/KNOWN_ISSUES.md.
-De gamle recovery/Core-statusfiler beskriver den tidligere blokerede kandidat.
-Den aktuelle PROJECT_STATE har forrang for nuværende status.
+Use JavaScript/Node.js 20+ where technically possible; HTML/native Android and
+necessary declarative formats remain valid. Preserve historical originals.
+Notify the user before applying a new rule. Do not create/rename other chats or
+use subagents/message tools without an explicit user request.
 
-FØRSTE HANDLING
-Kør node scripts/codex/check_context.cjs. Kontroller checkout og live PR46.
-Ved fortsættelse af B2: læs 02_08 START_HER.txt og SUMMARY/identity.json,
-genskab kandidaten separat og forbered nye Core-/QA-reviewscopes.
-Bevar produkt-main og PR46 indtil reviews og konkret writerhandover.
-02_08s eget lokale stop er dokumenteret; 02_07s senere B2-release er ukendt.
-Stående godkendelse gælder; ingen gentagen generel godkendelse.
-Miljøindstillinger er eksterne: repoet kan ikke bevise browser/setup i dit
-valgte Codex-miljø. Brug CODEX_START-vejledningen.
+Save requirements, decisions and evidence in GitHub. Archive the owner chat
+only after verified integration, relevant acceptance and saved status; open PRs
+or blocked checks remain open work. TXT/ZIP exports are optional when useful.
+New account: docs/project/ACCOUNT_RECOVERY.md; GitHub access and setup are needed.
