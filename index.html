@@ -2106,6 +2106,28 @@
 #tab-forge.active,#tab-research.active,#tab-ascend.active { animation-name: upgradePanelIn; }
 #tab-forge .mult-btn { flex-basis: 3.5em; }
 @keyframes upgradePanelIn { from { opacity:0;transform:translateY(7px); } to { opacity:1;transform:none; } }
+  /* RIFT_COSMETICS_001: SVG/rgba fallbacks also render on WebView 60. */
+  #tab-battle .stage[data-rift-theme="ember"]{--land-light:#ffc087;--land-far:#482638;--land-edge:#b77751;}
+  #tab-battle .stage[data-rift-theme="void"]{--land-light:#c9a6ff;--land-far:#352052;--land-edge:#8560bd;}
+  #tab-battle .stage[data-rift-theme="aurora"]{--land-light:#8ef0dd;--land-far:#29354a;--land-edge:#b776a8;}
+  #tab-battle .stage[data-rift-theme="solar"]{--land-light:#ffe79b;--land-far:#403322;--land-edge:#b99d57;}
+  #tab-battle .stage[data-rift-theme="radiant"]{--land-light:#e5c8ff;--land-far:#313354;--land-edge:#8fbfc8;}
+  .rift-cosmetic-aura{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;}
+  .rift-cosmetic-aura .cosmetic-pattern{display:none;}
+  [data-rift-theme="ember"] .cosmetic-ember,[data-rift-theme="void"] .cosmetic-void,
+  [data-rift-theme="aurora"] .cosmetic-aurora,[data-rift-theme="solar"] .cosmetic-solar,
+  [data-rift-theme="radiant"] .cosmetic-radiant{display:inline;}
+  #tab-battle .enemy-stage[data-rift-theme]:not([data-rift-theme="default"])::before,
+  #tab-battle .enemy-stage[data-rift-theme]:not([data-rift-theme="default"])::after{display:none;}
+  #tab-battle .enemy-stage .enemy-glyph{position:relative;z-index:2;}
+  .rift-cosmetic-name{position:absolute;left:8px;bottom:4px;z-index:3;max-width:calc(100% - 16px);padding:3px 7px;border:1px solid #61718d;border-radius:6px;background:#10182b;color:#f1edff;font:600 .6875rem/1.4 'Manrope',sans-serif;pointer-events:none;}
+  .cosmetic-aurora{animation:riftCosmeticPulse 5s ease-in-out infinite;}
+  .cosmetic-radiant{transform-origin:160px 160px;animation:riftCosmeticOrbit 24s linear infinite;}
+  @keyframes riftCosmeticPulse{0%,100%{opacity:.65;}50%{opacity:1;}}
+  @keyframes riftCosmeticOrbit{to{transform:rotate(360deg);}}
+  .theme-card[data-theme-select]{min-height:44px;}
+  .theme-active-tag{flex:none;max-width:90px;white-space:normal;line-height:1.4;}
+  @media(prefers-reduced-motion:reduce){.cosmetic-aurora,.cosmetic-radiant{animation:none;opacity:1;}}
 </style>
 </head>
 <body>
@@ -2622,6 +2644,45 @@
 
           <div class="enemy-stage-wrap">
             <button type="button" class="enemy-stage" id="enemy-stage" aria-label="Tap enemy to attack"><span class="comet-trail" aria-hidden="true"></span><span class="comet-crest" aria-hidden="true">✦</span><span class="enemy-name" id="enemy-name">Hollow Wisp</span><span class="guardian-label">Tap enemy to attack</span>
+              <svg class="rift-cosmetic-aura" viewBox="0 0 320 320" aria-hidden="true" focusable="false">
+                <defs>
+                  <radialGradient id="cosmetic-ember-glow"><stop stop-color="#ff9d53" stop-opacity=".32"/><stop offset="1" stop-color="#ff9d53" stop-opacity="0"/></radialGradient>
+                  <radialGradient id="cosmetic-void-glow"><stop stop-color="#ad79f2" stop-opacity=".32"/><stop offset="1" stop-color="#ad79f2" stop-opacity="0"/></radialGradient>
+                  <radialGradient id="cosmetic-solar-glow"><stop stop-color="#ffe195" stop-opacity=".28"/><stop offset="1" stop-color="#ffe195" stop-opacity="0"/></radialGradient>
+                </defs>
+                <g class="cosmetic-pattern cosmetic-ember" fill="none" stroke="#ffb878">
+                  <circle cx="160" cy="160" r="148" fill="url(#cosmetic-ember-glow)" stroke="none"/>
+                  <circle cx="160" cy="160" r="119" stroke-width="3" stroke-dasharray="26 10 4 10"/>
+                  <circle cx="160" cy="160" r="129" stroke-width="1" opacity=".5"/>
+                </g>
+                <g class="cosmetic-pattern cosmetic-void" fill="none" stroke="#c49bff">
+                  <circle cx="160" cy="160" r="150" fill="url(#cosmetic-void-glow)" stroke="none"/>
+                  <path d="M160 24 278 92 278 228 160 296 42 228 42 92Z" stroke-width="2"/>
+                  <path d="M160 41 263 101 263 219 160 279 57 219 57 101Z" stroke-width="1" opacity=".5"/>
+                  <path d="M160 14 166 24 160 34 154 24ZM160 286 166 296 160 306 154 296Z" fill="#c49bff"/>
+                </g>
+                <g class="cosmetic-pattern cosmetic-aurora" fill="none" stroke-width="4">
+                  <path d="M35 181C0 74 97 14 184 39S318 143 282 225" stroke="#8cf0dc"/>
+                  <path d="M285 139C320 246 223 306 136 281S2 177 38 95" stroke="#f1a1d2"/>
+                  <circle cx="160" cy="160" r="113" stroke="#b8dbe8" stroke-width="1" opacity=".55"/>
+                </g>
+                <g class="cosmetic-pattern cosmetic-solar" fill="none" stroke="#ffe39a">
+                  <circle cx="160" cy="160" r="150" fill="url(#cosmetic-solar-glow)" stroke="none"/>
+                  <circle cx="160" cy="160" r="115" stroke-width="3"/>
+                  <circle cx="160" cy="160" r="133" stroke-width="14" stroke-dasharray="2 33"/>
+                  <path d="M132 35 138 16 160 31 182 16 188 35" stroke-width="3"/>
+                </g>
+                <g class="cosmetic-pattern cosmetic-radiant" fill="none" stroke-width="5">
+                  <path d="M160 35A125 125 0 0 1 268 97" stroke="#f0d77b"/>
+                  <path d="M273 108A125 125 0 0 1 273 212" stroke="#c9b8f0"/>
+                  <path d="M268 223A125 125 0 0 1 166 285" stroke="#eaa9dc"/>
+                  <path d="M154 285A125 125 0 0 1 52 223" stroke="#8cbce8"/>
+                  <path d="M47 212A125 125 0 0 1 47 108" stroke="#5ee6d0"/>
+                  <path d="M52 97A125 125 0 0 1 148 35" stroke="#ffa17b"/>
+                  <circle cx="160" cy="160" r="138" stroke="#ded7fb" stroke-width="1" opacity=".55"/>
+                </g>
+              </svg>
+              <span class="rift-cosmetic-name" id="rift-cosmetic-name" aria-hidden="true">Starlight</span>
               <div class="enemy-glyph" id="enemy-glyph"><svg class="creature-art" viewBox="0 0 160 160" aria-hidden="true"><use href="#creature-prowler"/></svg><svg class="boss-regalia" viewBox="0 0 160 160" aria-hidden="true" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5">
                 <g class="boss-crest boss-crest-regrowth"><path d="M18 116Q3 90 11 61 M142 116Q157 90 149 61"/><path d="M10 78Q1 70 8 60Q17 69 10 78Z M11 99Q4 90 17 84Q20 94 11 99Z M150 78Q159 70 152 60Q143 69 150 78Z M149 99Q156 90 143 84Q140 94 149 99Z" fill="var(--creature-rim)" stroke="var(--creature-eye)"/></g>
                 <g class="boss-crest boss-crest-fractured"><path d="M11 52 17 62 11 72 5 62Z M8 83 14 93 8 103 2 93Z M149 52 155 62 149 72 143 62Z M152 83 158 93 152 103 146 93Z" fill="var(--creature-color)"/><path d="M11 58V66 M8 89V97 M149 58V66 M152 89V97" stroke="var(--creature-eye)"/></g>
@@ -3093,11 +3154,11 @@ function projectEarnedMarkup(id){
 
 var RIFT_THEMES = [
   {id:'default', name:'Starlight',    desc:'The Rift as it always looked.', unlockAchievement:null,     accent:null},
-  {id:'ember',   name:'Ember Veil',   desc:'A warm ember aura around the Rift.', unlockAchievement:'d50',    accent:'#e08a2e'},
-  {id:'void',    name:'Void Bloom',   desc:'A deep violet aura around the Rift.', unlockAchievement:'asc5',   accent:'#8a5fd6'},
-  {id:'aurora',  name:'Aurora Pulse', desc:'A rose-teal aura around the Rift.', unlockAchievement:'mythic', accent:'#d16fa8'},
-  {id:'solar',   name:'Solar Crown',  desc:'A golden aura around the Rift.', unlockAchievement:'d250',   accent:'#d1a72e'},
-  {id:'radiant', name:'Radiant',      desc:'A prismatic aura cycling through every currency color.', unlockAchievement:'modulemax', accent:null}
+  {id:'ember',   name:'Ember Veil',   desc:'An ember ring and warm light across the Rift.', unlockAchievement:'d50',    accent:'#e08a2e'},
+  {id:'void',    name:'Void Bloom',   desc:'Violet facets and a deep violet Rift glow.', unlockAchievement:'asc5',   accent:'#8a5fd6'},
+  {id:'aurora',  name:'Aurora Pulse', desc:'Rose-teal waves that gently pulse. Still with reduced motion.', unlockAchievement:'mythic', accent:'#d16fa8'},
+  {id:'solar',   name:'Solar Crown',  desc:'A golden crown of rays around the Rift.', unlockAchievement:'d250',   accent:'#d1a72e'},
+  {id:'radiant', name:'Radiant',      desc:'An orbit of every currency color. Still with reduced motion.', unlockAchievement:'modulemax', accent:null}
 ];
 
 var SHOP = [
@@ -4959,17 +5020,28 @@ function buyUltimate(sp){
 }
 
 function themeUnlocked(theme){ return !theme.unlockAchievement || !!state.achieved[theme.unlockAchievement]; }
+function activeRiftTheme(){
+  var theme = RIFT_THEMES.find(function(t){ return t.id===state.riftTheme; });
+  // A stale/locked preference never grants an unlock. Keep its saved value intact.
+  return theme && themeUnlocked(theme) ? theme : RIFT_THEMES[0];
+}
 function selectRiftTheme(themeId){
   var theme = RIFT_THEMES.find(function(t){ return t.id===themeId; });
   if(!theme || !themeUnlocked(theme)) return;
   state.riftTheme = themeId;
+  saveState();
   applyRiftTheme();
   renderCosmetics();
 }
 function applyRiftTheme(){
   var stageEl = document.getElementById('enemy-stage');
   if(!stageEl) return;
-  var theme = RIFT_THEMES.find(function(t){ return t.id===state.riftTheme; }) || RIFT_THEMES[0];
+  var theme = activeRiftTheme();
+  stageEl.setAttribute('data-rift-theme',theme.id);
+  var battleStage = document.querySelector('#tab-battle .stage');
+  if(battleStage) battleStage.setAttribute('data-rift-theme',theme.id);
+  var caption = document.getElementById('rift-cosmetic-name');
+  if(caption) caption.textContent = theme.name;
   stageEl.classList.toggle('theme-radiant', theme.id==='radiant');
   stageEl.classList.toggle('comet-trail-equipped',!!state.cometCosmetics.trail);
   stageEl.classList.toggle('comet-crest-equipped',!!state.cometCosmetics.crest);
@@ -6602,10 +6674,12 @@ function renderAchievements(){
 function renderShop(){ renderAchievements(); }
 
 function renderCosmetics(){
+  applyRiftTheme();
   var html = '';
+  var selected = activeRiftTheme();
   RIFT_THEMES.forEach(function(theme){
     var unlocked = themeUnlocked(theme);
-    var active = state.riftTheme===theme.id;
+    var active = selected.id===theme.id;
     if(!unlocked){
       var reqAch = ACHIEVEMENTS.find(function(a){ return a.id===theme.unlockAchievement; });
       html += '<div class="card theme-card locked-node" data-state="locked" aria-disabled="true">' +
@@ -6614,11 +6688,11 @@ function renderCosmetics(){
       '</div>';
       return;
     }
-    var swatch = theme.accent ? theme.accent : 'conic-gradient(from 0deg, var(--lumen), var(--shard), var(--mote), var(--prism), var(--comet), var(--sigil), var(--lumen))';
+    var swatch = theme.accent ? theme.accent : theme.id==='radiant' ? 'linear-gradient(120deg,#f0d77b,#c9b8f0,#eaa9dc,#5ee6d0,#ffa17b)' : '#9ca7ee';
     html += '<button type="button" class="card theme-card '+(active?'active':'')+'" aria-pressed="'+active+'" data-theme-select="'+theme.id+'">' +
       '<div class="theme-swatch" style="background:'+swatch+';"></div>' +
       '<div class="theme-info"><div class="name">'+theme.name+'</div><div class="desc">'+theme.desc+'</div></div>' +
-      '<span class="theme-active-tag">'+(active?'✓ Equipped':'Equip')+'</span>' +
+      '<span class="theme-active-tag">'+(active?'✓ Selected':'Unlocked · Select')+'</span>' +
     '</button>';
   });
   [{slot:'trail',id:'rifttrail'},{slot:'crest',id:'starfallcrest'}].forEach(function(item){
