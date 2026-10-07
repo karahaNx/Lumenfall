@@ -13,7 +13,12 @@ startprompt. Hver ny feature får én ejerchat efter
 Webkode/adfærdstests kræver **Node.js 20+**, **Git** og en
 Chromium-browser på PATH: `google-chrome`, `google-chrome-stable`, `chromium`
 eller `chromium-browser`. Der er ingen root package.json/npm-testkommando.
-Brug Node.js-harnesset; aktive tools kræver ingen Python eller ekstra npm-pakker.
+Brugerens [sprogregel](../decisions/2026-10-07-javascript-first.md) gør
+JavaScript/Node.js til standard for nye tests, testkørsel, CI-logik og
+hjælpescripts. HTML er fortsat tilladt. The active harness, validation,
+CI helpers and recovery tools now use Node.js and need no Python or extra
+npm packages. Migration evidence is in
+`docs/qa/offline-catchup-001/javascript-tooling/`.
 
 Hvis miljøet understøtter et setup-script, kan det sættes til:
 
