@@ -38,6 +38,24 @@ function compare(a,b,label='state'){
  }
  assert.equal(a,b,label);
 }
+// The frozen product has no repeat-speed fields. Assert their exact legacy OFF
+// defaults separately, then retain the complete original state/summary oracle.
+function baselineSummary(actual,expected,label){
+ assert.equal(actual.studySpeedPurchases,0,label+' no legacy repeat purchases');
+ assert.equal(actual.studyMotesSpent,0,label+' no legacy repeat spending');
+ const {studySpeedPurchases,studyMotesSpent,...existing}=actual;
+ assert.deepEqual(existing,expected,label);
+}
+function baselineState(actual,expected,seed,label){
+ const ids=Object.keys(expected.longStudyLevels);
+ assert.deepEqual(actual.studyUseMotes,Object.fromEntries(ids.map(id=>[id,false])),label+' legacy OFF intent');
+ assert.deepEqual(actual.studySpeedTargets,Object.fromEntries(ids.map(id=>{
+  const paid=(seed.activeStudies||[]).find(study=>study.id===id);
+  return [id,paid&&paid.speedMult>1?paid.speedMult:1.5];
+ })),label+' remembered legacy paid tier');
+ const {studyUseMotes,studySpeedTargets,...existing}=actual;
+ assert.deepEqual(existing,expected,label);
+}
 function runAsync(seed,seconds,batch=256){
  const x=app(seed,source,seconds),before=copy(x.b.get());x.b.batch(batch);
  let result=null,error=null,callbacks=0;
@@ -91,7 +109,7 @@ for(const seed of [original,clear20,off]){
   const old=app(seed,baseline,seconds),next=app(seed,source,seconds);
   const a=old.b.advance(seconds,{kind:'offline',visual:false,clockStartMs:seed.lastSeen});
   const b=next.b.advance(seconds,{kind:'offline',visual:false,clockStartMs:seed.lastSeen});
-  assert.deepEqual(b,a,'unchanged baseline summary '+seconds);assert.deepEqual(next.b.get(),old.b.get(),'unchanged baseline state '+seconds);
+  baselineSummary(b,a,'unchanged baseline summary '+seconds);baselineState(next.b.get(),old.b.get(),seed,'unchanged baseline state '+seconds);
  }
 }
 const all=copy(original);all.research.focus=0;Object.keys(all.empowerQueue).forEach(k=>all.empowerQueue[k]=true);
@@ -99,7 +117,7 @@ all.researchQueue.focus=true;all.studyQueue.riftattune=true;
 for(const kind of ['live','offline']){
  const whole=app(all),split=app(all),old=app(all,baseline),options={kind,visual:false,clockStartMs:all.lastSeen};
  const sum=whole.b.advance(3600,options);const oldSum=old.b.advance(3600,options);
- assert.deepEqual(sum,oldSum,'economy/order baseline '+kind);assert.deepEqual(whole.b.get(),old.b.get(),'baseline chronology '+kind);
+ baselineSummary(sum,oldSum,'economy/order baseline '+kind);baselineState(whole.b.get(),old.b.get(),all,'baseline chronology '+kind);
  for(let i=0;i<4;i++)split.b.advance(900,{...options,clockStartMs:all.lastSeen+i*900000,offlineWindowStartMs:all.lastSeen});
  compare(split.b.get(),whole.b.get(),'whole/split '+kind);
  assert(sum.motesGained>0&&sum.empowers>0&&sum.researchBought>0,'Motes, Research and Empower chronology exercised');

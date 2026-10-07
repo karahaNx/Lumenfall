@@ -80,7 +80,7 @@
   function assertSummaryParity(actual,expected,label){
     [
       'kills','bossKills','luminousKills','sigilsGained','motesGained','ascends',
-      'autoTaps','empowers','researchBought','studiesStarted','retreats','retries'
+      'autoTaps','empowers','researchBought','studiesStarted','studySpeedPurchases','studyMotesSpent','retreats','retries'
     ].forEach(function(key){
       assert((actual[key]||0)===(expected[key]||0),label+' summary '+key+' must match exactly');
     });
@@ -518,6 +518,17 @@
       }
       if(ctx.scenario.startsWith('forge-ui-') || ctx.scenario.startsWith('self-test-forge-ui-') || ctx.scenario.startsWith('rift-status-stacking') || ctx.scenario==='rift-status-mobile' || ctx.scenario==='rift-status-reduced-motion' || ctx.scenario.startsWith('self-test-rift-status-line')){
         window.__forgeUiReady=true;return; // Native CDP input driver owns this scenario.
+      }
+      if(ctx.scenario.startsWith('lab-motes-')){
+        if(ctx.scenario==='lab-motes-runtime'){bridge.freeze();window.__farmRuntimeReady=true;return;}
+        if(ctx.scenario==='lab-motes-native'||ctx.scenario==='lab-motes-reduced-motion'){window.__labMotesNativeReady=true;return;}
+        bridge.freeze();
+        if(ctx.scenario==='lab-motes-conservation'){finish('pass',window.runFarmConservationQa(bridge,ctx,assert));return;}
+        if(ctx.scenario==='lab-motes-numerical'){finish('pass',window.runFarmNumericalQa(bridge,ctx,assert));return;}
+        if(['lab-motes-save-reload','lab-motes-backup-restore','lab-motes-recovery','lab-motes-reset'].includes(ctx.scenario)){
+          window.runLabMotesPersistence(bridge,ctx,assert,phase,nextPhase,backupCode,finish);return;
+        }
+        finish('pass',window.runLabMotesQa(bridge,ctx,assert,assertProtectedParity,assertSummaryParity));return;
       }
       if(ctx.scenario.startsWith('inquiry-')){
         bridge.freeze();
