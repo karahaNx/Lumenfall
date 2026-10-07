@@ -8,12 +8,14 @@
 const fs = require('node:fs'), path = require('node:path'), os = require('node:os');
 const http = require('node:http'), {spawn} = require('node:child_process');
 const assert = require('node:assert/strict');
-const root = path.resolve(__dirname, '../..');
+const repositoryRoot = path.resolve(__dirname, '../..');
 const args = process.argv.slice(2);
 function option(name, fallback) {
   const at = args.indexOf(name);
   return at < 0 ? fallback : args[at + 1];
 }
+const root = path.resolve(option('--web-root', repositoryRoot));
+const quiet = args.includes('--quiet');
 const evidence = path.resolve(option('--evidence', path.join(os.tmpdir(), 'lumenfall-save-ui-evidence')));
 const mutant = option('--mutant', null);
 const chrome = option('--chrome', process.env.LUMENFALL_QA_CDP_CHROME || 'chromium');
@@ -221,6 +223,10 @@ async function runProfile(base, width, height, scale, motion) {
   await paste(valid); await tap('restore-save-backup'); await key('Escape');
   assert.equal((await snapshot()).focus, 'settings-btn', 'Escape closes settings and restores opener focus');
   unchanged(original, await snapshot(), 'Escape cancels pending Restore');
+  await tap('settings-btn'); await tap('save-backup-btn');
+  await paste(valid); await tap('restore-save-backup'); await tap('settings-close');
+  unchanged(original, await snapshot(), 'Close cancels pending Restore');
+  assert.equal((await snapshot()).focus, 'settings-btn', 'Close restores opener focus');
   await tap('settings-btn'); await tap('reset-btn');
   const resetPrompt = await snapshot();
   unchanged(original, resetPrompt, 'Reset request waits for its own confirmation');
@@ -252,14 +258,21 @@ async function runProfile(base, width, height, scale, motion) {
   assert.equal(reset.lumen, 0, 'confirmed Reset clears currency');
   assert.equal(reset.prisms, 0, 'confirmed Reset clears Prisms');
   // Known backgrounds: flat action panel and brighter endpoints of existing gradients.
-  const contrast = [
-    {text: [246, 233, 215], bg: [37, 50, 75]}, {text: [181, 180, 203], bg: [37, 50, 75]},
-    {text: [240, 239, 251], bg: [31, 35, 68]}, {text: [189, 155, 239], bg: [31, 35, 68]},
-    {text: [181, 180, 203], bg: [43, 45, 70]}
-  ].map(pair => ratio(pair.text, pair.bg));
+  const styles = await evaluate(`(()=>{const css=s=>getComputedStyle(document.querySelector(s));return {
+    rowBackground:css('#save-backup-btn').backgroundImage,
+    title:css('#save-backup-btn .settings-row-title').color,sub:css('#save-backup-btn .settings-row-sub').color,
+    copy:css('#copy-save-backup').color,restore:css('#save-restore-confirm-btn').color,
+    actionBackground:css('#copy-save-backup').backgroundColor,note:css('#save-restore-warning').color
+  };})()`);
+  const rgb = color => color.match(/[\d.]+/g).slice(0,3).map(Number);
+  // Assert the gradient assumption, then use measured text/action colors.
+  assert(styles.rowBackground.includes('rgb(37, 50, 75)') && styles.rowBackground.includes('rgb(23, 34, 56)'), 'known row gradient endpoints');
+  const contrast = [ratio(rgb(styles.title), [37, 50, 75]), ratio(rgb(styles.sub), [37, 50, 75]),
+    ratio(rgb(styles.copy), rgb(styles.actionBackground)), ratio(rgb(styles.restore), rgb(styles.actionBackground)),
+    ratio(rgb(styles.note), [43, 45, 70])];
   assert(contrast.every(value => value >= 4.5), 'save/restore text contrast >=4.5:1');
   records.push({name, placement, home, backup, confirm, contrast, restored: {depth: state.depth, lumen: state.lumen, totalOfflineSeconds: state.totalOfflineSeconds}, reset: {depth: reset.depth, lumen: reset.lumen}});
-  console.log('PASS ' + name);
+  if (!quiet) console.log('PASS ' + name);
   await send('Target.disposeBrowserContext', {browserContextId: context.browserContextId}, null);
   session = undefined;
 }
