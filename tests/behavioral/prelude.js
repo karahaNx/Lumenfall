@@ -7,11 +7,13 @@
     // WebView60/61 has no ParentNode.replaceChildren. Exercise real startup,
     // catch-up and selector rendering without the newer browser convenience API.
     delete Element.prototype.replaceChildren;
-    // Legacy WebView also ignores the CSS inset shorthand. Preserve any authored
-    // longhand fallbacks, then exercise real intro/return geometry and input.
+    // Legacy WebView ignores inset, color-mix and eight-digit hex colors.
+    // Preserve authored fallbacks; test actual return geometry, paint and input.
     document.addEventListener('DOMContentLoaded',function(){
       document.querySelectorAll('style').forEach(function(style){
-        style.textContent=style.textContent.replace(/\binset\s*:[^;}]*;?/g,'');
+        style.textContent=style.textContent.replace(/\binset\s*:[^;}]*;?/g,'')
+          .replace(/\bcolor-mix\(/g,'unsupported-color-mix(')
+          .replace(/#[0-9a-f]{8}\b/gi,'unsupported-alpha-hex');
       });
     });
   }
