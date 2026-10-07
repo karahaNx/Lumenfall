@@ -427,7 +427,7 @@
 
   /* ---------- Modal / intro ---------- */
   .overlay{
-    position:fixed;inset:0;z-index:20;
+    position:fixed;top:0;right:0;bottom:0;left:0;z-index:20;
     background:color-mix(in srgb, var(--bg) 80%, transparent);
     backdrop-filter:blur(6px);
     display:flex;align-items:center;justify-content:center;padding:24px;
@@ -507,7 +507,7 @@
 
   /* ---------- xaribapps startup intro ---------- */
   .startup-intro{
-    position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;
+    position:fixed;top:0;right:0;bottom:0;left:0;z-index:1000;display:none;align-items:center;justify-content:center;
     overflow:hidden;isolation:isolate;cursor:pointer;background:#05050b;color:#f7f5ff;
     opacity:1;visibility:visible;transition:opacity .42s ease,visibility .42s ease;
     -webkit-tap-highlight-color:transparent;
