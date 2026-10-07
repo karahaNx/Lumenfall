@@ -1,66 +1,91 @@
-# Lumenfall — én chat, én feature
+# Lumenfall — one feature, one chat
 
-Brugerens regel fra 7. oktober 2026: hver ny feature har én ejerchat. Rollerne
-i `../CHAT_OWNERSHIP.md` beskriver ekspertise; tidligere rollechatnumre er historik.
-Nødvendige fixes, relevante reviews, tests og dokumentation hører til featuren.
-Et andet produktmål kræver sin egen chat. Brugeren opretter/bestiller næste chat;
-agenten opretter ikke selv flere chats eller subagenter.
+The feature owner handles implementation, necessary fixes, tests, documentation
+and delivery across all relevant areas. The user's task and standing approval
+define scope. Technical guides are optional references; no permanent role chats,
+Lead assignment or writer-release ceremony is required.
 
-## Start og løbende checkpoint
+Keep one concrete goal per chat. Record unrelated findings for separate tasks.
+Create a new chat only when the user asks; do not rename chats or use subagents/
+message tools without an explicit request. A maintenance task uses this same
+focused workflow.
 
-1. Læs rodens `AGENTS.md`, bootstrap, egen rolle og `../PROJECT_STATE.md`.
-   Kontrollér live main, relevant kandidat/PR og skriveejerskab.
-2. Opret eller opdatér ét `docs/tasks/<FEATURE_ID>.md` med originalkrav,
-   ét mål, scope, ejerchat, writer, baseline, acceptkriterier og næste handling.
-   Brugerens bestilling fastlægger scope; stående godkendelse gælder fortsat.
-3. Gem krav, brugerrettelser, beslutninger og nødvendige originaler i GitHub
-   ved milepæle. Bevar rå testbeviser eller stabile præcise referencer til dem.
-   Kopiér nødvendige udløbende CI-/Library-filer, før de bliver eneste kilde.
-4. Hvis en ny regel behøves, fortæl brugeren den konkrete regel og begrundelsen
-   før bindende anvendelse. Gem beslutningen og opdatér AGENTS/berørte krav.
-   Gameplayvalg uden beslutning afklares; rutineimplementering kræver ikke en
-   ny generel godkendelse.
+## Start and protect the baseline
 
-## Afslutning før arkivering
+1. Read root `AGENTS.md`, bootstrap, `../PROJECT_STATE.md` and the feature task.
+   Check the checkout, relevant current main/PR and actual overlapping work.
+   Use an isolated branch/worktree when features run concurrently. Coordinate
+   overlapping files/shared status and serialize main integration.
+2. Create or update `docs/tasks/<FEATURE_ID>.md` with original requirements,
+   one goal, scope, owner, baseline and acceptance criteria. Include existing
+   behavior/features that the change must preserve and relevant save migrations.
+3. Read affected code and original requirements. Record relevant baseline checks
+   and known failures before behavior changes; add focused regression coverage.
+   Avoid unrelated refactors, broad rewrites and tooling migrations.
+4. Implement small changes. Preserve other work and existing features/save data.
+   Review the complete diff for accidental deletions and scope drift. Fix newly
+   introduced failures; do not remove features, skip gates or weaken tests to pass.
+5. Before new binding rules, tell the user the exact rule, reason and effect and
+   save their decision. Clarify missing gameplay choices; do not repeatedly ask
+   permission for routine work already authorized.
 
-Alle relevante punkter skal være opfyldt og kunne kontrolleres:
+## Short checkpoints and continuation
 
-- Featuren findes i den integrerede kode på main. Angiv PR og integrationscommit;
-  en prototype, worker-PASS eller åben PR er fortsat igangværende arbejde.
-- Acceptkriterier er opfyldt med relevante checks på den integrerede version.
-  Bevar hvad der blev kørt, resultat og præcis version. Tidligere review/CI skal
-  vurderes igen, hvis integration ændrer relevante bytes eller afhængigheder.
-- For en appfeature: den relevante APK er bygget/publiceret, dens package,
-  version og signing er verificeret, og nødvendige Android-/devicechecks er
-  udført. Manglende påkrævet deviceaccept holder opgaven åben. Dokumentation
-  kræver dokumentationskontrol og GitHub-integration; APK/device er ikke relevant.
-- `docs/PROJECT_STATE.md` og opgavedokumentet har status, beslutninger, beviser,
-  kendte begrænsninger og næste handling. Intet nødvendigt findes kun i chatten.
-- Writer er frigivet efter dette scope. Frigivelse gælder ikke andre writers.
-- Giv brugeren en kort aflevering: hvad der er implementeret, hvor det findes,
-  kontrolresultater og eventuelle nye regler.
+Update the task after meaningful milestones and user corrections, and before
+context compaction/handoff. Keep the next action precise. Commit/publish coherent
+work within scope; incomplete work must be labelled as incomplete.
 
-Arkivér derefter kun ejerchatten med appens arkivværktøj. Brugerens workflowregel
-autoriserer denne arkivering efter dokumenteret afslutning. Brug den faktiske
-chatidentitet; omdøb eller arkivér ikke andre chats. Hvis værktøjet ikke er
-tilgængeligt eller fejler, oplys at manuel arkivering mangler. Meld aldrig en
-arkivering som udført uden succesrespons. Blokeret/ukendt arbejde forbliver åbent.
-Arkivering er oprydning; GitHub indeholder den fortsættelige projektviden.
+Save original requirements, decisions, current versions, changed files, check
+results, blockers and next action in GitHub. Preserve needed raw evidence or
+stable references; copy expiring artifacts before they become the only source.
+Use [the handoff template](../HANDOFF_TEMPLATE.md) when continuing elsewhere.
+TXT/ZIP packages are optional for requested phone/offline use.
 
-## Kort opgaveskabelon
+When context becomes uncertain, reread the checkpoint and affected code before
+editing. Resume the same feature from its recorded branch/version; do not expand
+scope, guess missing requirements or repeat completed work. Continue in the same
+chat when possible; a replacement chat requires the user's request. Record known
+limitations and the next action if required acceptance is blocked.
+
+## Completion before archiving
+
+All relevant criteria must be verified:
+
+- The agreed change is integrated into main; record PR and integration commit.
+  A prototype, local test pass or open PR is not completion.
+- Acceptance checks and required CI gates pass on the integrated version; record
+  commands, outcomes and versions. Reassess affected results after conflict
+  resolution or dependency changes. Review findings are fixed, or a justified
+  disposition is recorded without bypassing acceptance. Do not claim independent
+  review when only self-review/automated checks were performed.
+- For an app feature, build/publish the required APK within authorized scope,
+  verify package/version/signing and complete required Android/device acceptance.
+  Missing required device acceptance keeps the feature open. Documentation-only
+  work needs document/tooling checks and GitHub integration, not a new APK.
+- The task and `../PROJECT_STATE.md` contain supported status, decisions,
+  evidence, limitations and next action. Required context is not only in chat.
+- Shared-file work for this task has stopped; do not claim another chat's work
+  or historical ownership has been released. Give a short delivery with changes,
+  location, check results, limitations and new rules.
+
+Then archive only the owner chat using the app's actual chat identity and archive
+tool. The user's workflow authorizes archiving after verified completion. Do not
+rename/archive other chats. If tooling is missing or fails, report that manual
+archiving remains; never claim success without a successful response. Blocked or
+unknown acceptance remains open. GitHub retains the continuation knowledge.
+
+## Compact task checkpoint
 
 ```text
-Feature-ID og ét mål:
-Originalkrav og rettelser (stier):
-Ejerchat, rolle, writer og stopbetingelse:
-Baseline og observationstid:
-Scope og acceptkriterier:
-Status: igang / blokeret / verificeret integreret:
-Beslutninger, begrundelser og nye regler:
-PR, integrationscommit og APK/run hvis relevant:
-Testbeviser og begrænsninger på integrationsversionen:
-Writer-frigivelse og arkivstatus:
-Næste konkrete handling:
+Feature-ID and one goal:
+Original requirements and corrections (paths):
+Owner chat, scope and acceptance criteria:
+Baseline commit, feature branch/worktree and changed files:
+Existing behavior to preserve and relevant known failures:
+Status: in progress / blocked / integrated, acceptance pending / complete:
+Decisions and reasons, including new rules:
+Checks: command, result, exact version and evidence path:
+PR, integration commit and APK/run/device evidence when relevant:
+Blockers/limitations, overlapping work and archive status:
+Next concrete action:
 ```
-
-Ved større overdragelser bruges [HANDOFF_TEMPLATE.md](../HANDOFF_TEMPLATE.md).

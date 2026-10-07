@@ -1,53 +1,55 @@
-# Lumenfall — handoff og checkpoint
+# Lumenfall — short continuation checkpoint
 
-Brug ved milepæle og før ny chat. Gem kritiske nye krav og brugerrettelser straks
-i et relevant opgave-/beslutningsdokument; vent ikke på et fuldt handoff.
-Dokumentér writer og præcis kandidat ved freeze. Lead opdaterer kort status.
-En worker uden docs-writer afleverer en statusdelta i sin pakke i stedet for
-at skrive samtidig i PROJECT_STATE.
+Use the feature task as the normal checkpoint. Update it after meaningful
+milestones/user corrections and before context compaction or handoff. Commit/
+publish coherent work within scope. A separate package is only needed when
+requested or useful for phone/offline access.
 
-## Lille start-TXT
-Foreslået mål: højst 400 ord; udvid kun med nødvendige uafsluttede oplysninger.
+## Checkpoint
 
-    Rolle/chat og aktuel Lead:
-    Repository og relevant branch:
-    Model og effort:
-    Aktuel opgave + originalkravets sti:
-    Feature-ID, ejerchat og acceptkriterier:
-    Checkpoint og observationstid:
-    Writer, tilladelser og stopbetingelse:
-    Færdigt / igang / blokeret / ukendt:
-    PR + integrationscommit + relevante testbeviser:
-    APK/run/device-evidens hvis relevant; ellers ikke relevant med begrundelse:
-    Nye/ændrede regler + brugerbeslutningens sti:
-    Writer-frigivelse og arkivstatus (udført / afventer):
-    Næste konkrete handling:
-    Nye oplysninger som endnu ikke er i repository:
-    Læs ved opstart: AGENTS.md, egen rolle, PROJECT_STATE og aktuel opgave.
-    Hent øvrige kilder via indeks efter behov. Læs ikke hele ZIP'en ved opstart.
+Aim for at most 400 words of current status, with paths to detailed originals
+and evidence. Include necessary unfinished facts even if that requires more.
 
-## Kildepakke
-- Start-TXT, kompakt filindeks og manifest med relative stier, størrelse og SHA256.
-- Alle aktuelle originalkrav og endnu ikke integrerede rettelser/beslutninger.
-- Aktuel leveringsstatus og nødvendige receipts, reproduktioner og begrænsninger.
-- Referencer til afsluttet evidens: præcis fil/commit/version/digest og adgangsvej.
-  Inkludér originalen, hvis den ellers ikke kan genfindes. Undgå rekursive kopier
-  af gamle handoffarkiver. Manifestet selv er ikke en selvhashende payload.
+```text
+Feature-ID, one goal and owner chat:
+Original requirements and corrections (paths):
+Repository, baseline commit, branch/worktree and working-tree state:
+Scope, acceptance criteria and existing behavior to preserve:
+Changed files, decisions/reasons and new rules:
+Complete / in progress / blocked / unknown:
+Checks: command, outcome, exact version and evidence path:
+PR and integration commit; APK/run/device evidence when relevant:
+Known failures, unresolved reviews and actual overlapping work:
+Archive status:
+Next concrete action:
+Required information not yet in GitHub:
+Startup: AGENTS.md, PROJECT_STATE.md and this feature's task/checkpoint.
+Read affected code and originals as needed; do not read the entire archive.
+```
 
-## Kontrol før levering
-1. Dækning: mål, gældende krav, alle nye rettelser, beslutninger/begrundelser,
-   permissions/writer, aktuel kandidat, åbne problemer og næste handling har kilder.
-2. Integritet: ZIP CRC og alle manifestpayloads, fuld filoversigt, ingen manglende
-   eller uventede filer. Kontrollér originale krav byteidentisk.
-3. Genfinding: åbne/fornyede krav er tilgængelige for næste chat; ekstern reference
-   er ikke en adgangsgaranti. Angiv præcist manglende materiale.
-4. Startup: målt tekstmængde for de obligatoriske fælles filer; ingen ordre om
-   at udskrive/læse hele arkivet. Ingen påstand om præcis kontekstprocent.
-5. Status: observationer, workerpåstande og accepterede resultater er adskilt.
-6. Featureafslutning: acceptkriterier består på integrationsversionen, nødvendige
-   filer kan læses fra GitHub, og writer er frigivet. Arkivér derefter ejerchatten
-   efter `project/FEATURE_WORKFLOW.md`. En blokeret opgave er ikke afsluttet.
+On continuation, verify the current checkout/relevant PR and reread uncertain
+requirements before editing. Resume this feature; do not restart completed work
+or use an old candidate to overwrite the live product. No Lead/role/writer
+handoff is required. Coordinate actual overlapping edits or main integration.
 
-Fuld semantisk bevarelse af en chatopsummering kan ikke garanteres. Arkivér
-tilgængelige originaler og kritiske facts løbende. Ved manglende adgang: rapportér
-det; gæt ikke. At læse filer ind fylder kontekst, uanset om de hedder AGENTS.md.
+## Optional export package
+
+Include the checkpoint, compact file index, required original requests/corrections,
+decisions and evidence that cannot be retrieved reliably. Reference already saved
+sources by exact path/commit/version; avoid recursive copies of old handoffs.
+For a package, include a manifest of relative paths, sizes and SHA256 values and
+verify payload hashes and ZIP CRC. Keep original evidence byte-identical.
+
+## Verify before delivery
+
+- Requirements, decisions, changed files, versions, check results, blockers and
+  next action have sources. Distinguish reported results from verified evidence.
+- Original requirements and needed evidence are retrievable without the old chat;
+  external references alone do not establish future access.
+- Completion satisfies [the feature workflow](project/FEATURE_WORKFLOW.md), with
+  integrated checks and required app acceptance. Open or blocked work stays open.
+- Record actual archive success or that archiving remains. Do not archive other
+  chats or claim another feature's work has stopped.
+
+A summary does not replace original requirements or raw evidence. Save critical
+facts continuously; report missing material rather than reconstructing it.
