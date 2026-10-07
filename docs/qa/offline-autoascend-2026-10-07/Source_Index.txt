@@ -1,0 +1,30 @@
+SOURCE_INDEX — læs START_DIAGNOSE.txt først
+Repository: https://github.com/karahaNx/Lumenfall
+Baseline: 1ddc246eb62782a61ec5c486cd5f51ea170bb338
+Index blob: ea44431c163569548973d9e489f75345749a07ee
+
+Original backup: backup_code.txt (uændrede bytes fra vedhæftningen lumenfall)
+Decoded snapshot: device_backup.json
+Raw output: short_results.json; long_results.json; offline_entry_results.json
+Reproduction: reproduce.cjs; README_REPRO.txt
+
+Relevante produktkilder på fast baseline:
+https://github.com/karahaNx/Lumenfall/blob/1ddc246eb62782a61ec5c486cd5f51ea170bb338/index.html
+3347–3383: formationRebuild / candidates
+3384–3591: normalisering og save accept
+3724–3738: backup decode / encode
+3889–3896: current-run Ascension eligibility
+3936–3952: Prism/offline bonus og cap
+4098–4103: Wisp-price
+4472–4482: schema-v1 target N betyder clear N-1
+5070–5140: Prism repeat-reward og Ascension reset
+6609–6627: Auto-Empower
+6630–6662: authoritative contract og eventbudget
+6908–6918: simulation Auto-Ascend
+7270–7602: elapsed-time loop / exception
+7842–7889: offline entry
+8009–8160: cold init og resume kaldsvej
+
+Arbejdsregler: AGENTS.md, docs/CHAT_OWNERSHIP.md, docs/agents/04_QA.md.
+Status: docs/PROJECT_STATE.md på samme commit. Device APK unknown.
+Read-only review; ingen produktrettelse eller remote handling.
