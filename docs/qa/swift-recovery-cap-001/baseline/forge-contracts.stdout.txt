@@ -1,0 +1,34 @@
+Browser identity: {"resolved_path": "/usr/bin/chromium", "selected_path": "/usr/bin/chromium", "sha256": "2c8d32d29dc6781c35ae196ea83299d507ac88fc339301abe74672feda299779", "version": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)", "version_exitcode": 0, "version_stderr": ""}
+Staged source: {"instrumented_sha256": "6a7bdf5fc95047c3c3b4fea4327573d560fbc30ecca1a050a54c7778eec60c72", "source_sha256": "f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4"}
+FAIL forge-contracts
+  process: {"elapsed_sec": 25.03212073800006, "exitcode": null, "timed_out": true, "timeout_sec": 25}
+  observed QA: {"json_error": "Expected exactly one completed QA result", "json_scenario": null, "json_status": null, "qa_count": 0, "qa_scenario": null, "qa_status": null, "runtime_error_count": null, "runtime_markers": [], "valid": false}
+  raw artifacts: /workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/baseline/failed-processes/forge-contracts-6pad27e4
+  Chromium stderr tail:
+eedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[1078:1078:1007/131627.102486:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[1078:1102:1007/131627.102488:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[1078:1102:1007/131627.102570:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[1078:1078:1007/131627.103868:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[1078:1078:1007/131627.108470:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+
+(process:1078): dconf-CRITICAL **: 13:16:27.120: unable to create directory '/home/agent/.cache/dconf': Read-only file system.  dconf will not work properly.
+
+(process:1078): dconf-CRITICAL **: 13:16:27.121: unable to create directory '/home/agent/.cache/dconf': Read-only file system.  dconf will not work properly.
+
+(process:1078): dconf-CRITICAL **: 13:16:27.121: unable to create directory '/home/agent/.cache/dconf': Read-only file system.  dconf will not work properly.
+[1078:1114:1007/131627.163138:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:279] Failed to adjust OOM score of renderer with pid 1162: Read-only file system (30)
+[1078:1114:1007/131627.196507:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:279] Failed to adjust OOM score of renderer with pid 1172: Read-only file system (30)
+[1078:1114:1007/131627.197521:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:279] Failed to adjust OOM score of renderer with pid 1173: Read-only file system (30)
+[1078:1102:1007/131627.227211:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[1078:1102:1007/131627.227252:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[1078:1078:1007/131627.227460:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[1078:1078:1007/131627.227824:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[1078:1102:1007/131627.227933:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[1078:1078:1007/131627.260628:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[1078:1078:1007/131627.261297:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[1078:1102:1007/131627.261467:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[1078:1078:1007/131627.279617:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[1078:1102:1007/131627.279778:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[1078:1078:1007/131627.296700:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+

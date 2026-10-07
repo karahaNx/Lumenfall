@@ -1,0 +1,30 @@
+node:child_process:981
+    throw err;
+    ^
+
+<ref *1> Error: spawnSync git EPERM
+    at Object.spawnSync (node:internal/child_process:1160:20)
+    at spawnSync (node:child_process:928:24)
+    at execFileSync (node:child_process:971:15)
+    at Object.<anonymous> (/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/baseline-probe.cjs:98:10)
+    at Module._compile (node:internal/modules/cjs/loader:1872:14)
+    at Object..js (node:internal/modules/cjs/loader:2003:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5) {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'spawnSync git',
+  path: 'git',
+  spawnargs: [ 'rev-parse', 'HEAD' ],
+  error: [Circular *1],
+  status: 0,
+  signal: null,
+  output: [ null, 'b2a1f440e8ad9fed34b37551e468224310d2a6f6\n', '' ],
+  pid: 863,
+  stdout: 'b2a1f440e8ad9fed34b37551e468224310d2a6f6\n',
+  stderr: ''
+}
+
+Node.js v24.19.0

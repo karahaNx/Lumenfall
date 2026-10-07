@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/workspace/Lumenfall-swift-recovery/tests/behavioral/run.py", line 4123, in <module>
+    main()
+  File "/workspace/Lumenfall-swift-recovery/tests/behavioral/run.py", line 4109, in main
+    if not run_scenario(chrome, base_url, scenario, fixture, viewport):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Lumenfall-swift-recovery/tests/behavioral/run.py", line 3972, in run_scenario
+    with tempfile.TemporaryDirectory(prefix=f"lumenfall-qa-{scenario}-") as profile:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/tempfile.py", line 950, in __exit__
+    self.cleanup()
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/tempfile.py", line 954, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/shutil.py", line 759, in rmtree
+    _rmtree_safe_fd(stack, onexc)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/shutil.py", line 703, in _rmtree_safe_fd
+    onexc(func, path, err)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/shutil.py", line 662, in _rmtree_safe_fd
+    os.rmdir(name, dir_fd=dirfd)
+OSError: [Errno 39] Directory not empty: '/tmp/lumenfall-qa-forge-effects-fiqxk937/Default'
