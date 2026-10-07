@@ -90,7 +90,7 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
   const log = options.log || console.log;
   const urlFor = page => baseUrl + page + '?' + new URLSearchParams({ qaScenario: scenario, qaFixture: fixture });
   if (scenario === 'offline-catchup-core') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-catchup.cjs')], scenario, 300000, options);
-  if (scenario === 'offline-catchup-ui' || scenario === 'offline-catchup-legacy-dom') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-catchup-ui.cjs'), chrome, urlFor('/index.html'), scenario], scenario, 150000, options);
+  if (scenario === 'offline-catchup-ui' || scenario === 'offline-catchup-legacy-dom') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-catchup-ui.cjs'), chrome, urlFor('/index.html'), scenario], scenario, 210000, options);
   if (scenario === 'raw-process-contract') return require('./process_contract.cjs').runContract(runScenario, log);
   if (scenario === 'forge-ui-process-contract') return nativeProcessContract(log);
   let driver = null;

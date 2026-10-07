@@ -38,7 +38,7 @@ function assert(v,m){if(!v)throw Error(m);}
 
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function until(expression,label,timeout=60000){
- const start=Date.now();while(Date.now()-start<timeout){const errors=await evaluate('window.__lumenfallQaContext ? window.__lumenfallQaContext.errors : []');assert(errors.length===0,'runtime error during '+label+': '+JSON.stringify(errors));if(await evaluate(expression))return;await delay(20);}throw Error(label+' timed out');
+ const start=Date.now();while(Date.now()-start<timeout){try{const errors=await evaluate('window.__lumenfallQaContext ? window.__lumenfallQaContext.errors : []');assert(errors.length===0,'runtime error during '+label+': '+JSON.stringify(errors));if(await evaluate(expression))return;}catch(e){if(!/Inspected target navigated or closed|Execution context was destroyed|Cannot find context with specified id/.test(e.message))throw e;}await delay(20);}throw Error(label+' timed out');
 }
 async function stateSummary(){return evaluate(`(()=>{const b=window.__lumenfallQaBridge,s=b.getState(),p=JSON.parse(b.rawSave());return {flags:b.getFlags(),kills:s.totalKills,ascends:s.ascendCount,lastSeen:s.lastSeen,offline:s.totalOfflineSeconds,primaryKills:p.totalKills,primaryLastSeen:p.lastSeen,recoveryMatches:b.rawSave()===b.rawRecovery(),heartbeat:window.offlineHeartbeat,errors:window.__lumenfallQaContext.errors.length};})()`);}
 async function click(id){const r=await evaluate(`(()=>{const e=document.getElementById(${JSON.stringify(id)});const r=e.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`);await send('Input.dispatchMouseEvent',{type:'mousePressed',button:'left',clickCount:1,...r});await send('Input.dispatchMouseEvent',{type:'mouseReleased',button:'left',clickCount:1,...r});}
@@ -88,21 +88,32 @@ async function run(){
  records.push({case:'failure/retry',failed,recovered});
  // A cancelled/failed first return must still present its daily-rollover reward
  // after retry, even though ensureDaily has already updated the in-memory day.
- if(await evaluate('document.getElementById("daily-overlay").style.display!=="none"'))await click('daily-claim');
+ await until('document.getElementById("startup-intro").style.display==="none"','earlier retry intro finishes');
+ await until('document.getElementById("welcome-overlay").style.display!=="none"','earlier retry return panel');
+ await click('welcome-claim');
+ for(let presentations=0;await evaluate('document.getElementById("daily-overlay").style.display!=="none"');presentations++){
+  assert(presentations<10,'earlier daily presentations drain in finite order');await click('daily-claim');
+ }
  await evaluate('(()=>{const b=window.__lumenfallQaBridge,d=new Date(b.clockNow());b.dispatchVisibility(true);b.setLocalClock(d.getFullYear(),d.getMonth(),d.getDate()+1,12,0,0);b.offlineTest.failNext();b.dispatchVisibility(false);})()');
  assert((await stateSummary()).flags.offlinePending,'daily rollover failure retains window');
  const rolledComets=await evaluate('window.__lumenfallQaBridge.getState().comets');
- await evaluate('(()=>{const b=window.__lumenfallQaBridge;b.dispatchVisibility(true);b.dispatchVisibility(false);})()');
+ const firstStreak=await evaluate('window.__lumenfallQaBridge.getState().loginStreak');
+ await evaluate('(()=>{const b=window.__lumenfallQaBridge,d=new Date(b.clockNow());b.dispatchVisibility(true);b.setLocalClock(d.getFullYear(),d.getMonth(),d.getDate()+1,12,0,0);b.dispatchVisibility(false);})()');
+ const retryComets=await evaluate('window.__lumenfallQaBridge.getState().comets');
+ assert(retryComets>rolledComets,'next rollover awards its own existing reward');
  await until('!window.__lumenfallQaBridge.getFlags().offlineBusy','daily rollover retry');
  await until('document.getElementById("startup-intro").style.display==="none"','daily retry intro finishes');
  await until('document.getElementById("welcome-overlay").style.display!=="none"','daily retry return panel');
  await click('welcome-claim');
  assert(await evaluate('document.getElementById("daily-overlay").style.display!=="none"'),'daily reward presented after failure retry');
- assert(await evaluate('window.__lumenfallQaBridge.getState().comets')===rolledComets,'daily reward not awarded twice');
+ assert(await evaluate('document.getElementById("daily-title").textContent')==='Day '+firstStreak+' streak','failed first rollover presentation survives another midnight');
+ assert(await evaluate('window.__lumenfallQaBridge.getState().comets')===retryComets,'daily reward not awarded twice');
+ await click('daily-claim');
+ assert(await evaluate('document.getElementById("daily-title").textContent')==='Day '+(firstStreak+1)+' streak','next rollover presentation follows first in order');
  await click('daily-claim');
  await evaluate('(()=>{const b=window.__lumenfallQaBridge;b.dispatchVisibility(true);b.advanceTime(1000);b.dispatchVisibility(false);})()');
  assert(await evaluate('document.getElementById("daily-overlay").style.display==="none"'),'daily presentation consumed once');
- records.push({case:'daily rollover/failure/retry',comets:rolledComets});
+ records.push({case:'daily rollover/failure/retry across next midnight',firstStreak,comets:retryComets});
  await send('Target.disposeBrowserContext',{browserContextId:ctx.browserContextId},null);
  return {status:'pass',scenario,records};
 }

@@ -13,7 +13,7 @@ assert.equal(require('node:crypto').createHash('sha1').update('blob '+Buffer.byt
 const original=JSON.parse(fs.readFileSync(path.join(root,'docs/qa/offline-autoascend-2026-10-07/device_backup.json'),'utf8'));
 const copy=x=>JSON.parse(JSON.stringify(x)),records=[];
 function app(seed,html=source,seconds=0){
- let now=seed.lastSeen+seconds*1000,seq=0,fault=null,primaryFail=false,recoveryFail=false;
+ let now=seed.lastSeen+seconds*1000,monotonic=0,seq=0,fault=null,primaryFail=false,recoveryFail=false;
  const queue=[],writes=[],storage=new Map([['lumenfall_save_v2',JSON.stringify(seed)],['lumenfall_save_recovery_v1',JSON.stringify(seed)]]);
  const date=class extends Date {static now(){return now;}};
  const document={readyState:'loading',addEventListener(){}};
@@ -24,9 +24,9 @@ function app(seed,html=source,seconds=0){
  },removeItem:k=>storage.delete(k)};
  const bridge=`window.qa={set:s=>state=acceptPersistedState(s),get:()=>state,apply:applyOfflineProgress,advance:advanceAuthoritativeTime,study:advanceStudyOnlyTime,summary:simulationSummary,load:loadState,backup:currentSaveBackup,decode:decodeSaveBackup,save:saveState,cancel:typeof cancelOfflineCatchup==='function'?cancelOfflineCatchup:()=>{},flags:()=>({busy:typeof offlineCatchup!=='undefined'&&!!offlineCatchup,pending:typeof offlinePending!=='undefined'&&offlinePending,resume:typeof resumeFlowBusy!=='undefined'&&resumeFlowBusy}),batch:n=>{if(typeof SIM_BATCH_EVENTS!=='undefined')SIM_BATCH_EVENTS=n;},fault:()=>{simulationResolveTimestamp=function(){throw Error('injected simulation failure');};}};`;
  const script=html.match(/<script>\s*([\s\S]*?)<\/script>/)[1].replace("if(document.readyState==='loading'){",bridge+"if(document.readyState==='loading'){");
- new Function('window','document','localStorage','Date','setTimeout','clearTimeout',script)(window,document,localStorage,date,(fn)=>{queue.push({id:++seq,fn});return seq;},id=>{const i=queue.findIndex(x=>x.id===id);if(i>=0)queue.splice(i,1);});
+ new Function('window','document','localStorage','Date','setTimeout','clearTimeout','performance',script)(window,document,localStorage,date,(fn)=>{queue.push({id:++seq,fn});return seq;},id=>{const i=queue.findIndex(x=>x.id===id);if(i>=0)queue.splice(i,1);},{now:()=>monotonic});
  const b=window.qa;b.set(copy(seed));
- return {b,storage,writes,queue,clock:v=>now=v,failPrimary:v=>primaryFail=v,failRecovery:v=>recoveryFail=v,
+ return {b,storage,writes,queue,clock:v=>now=v,monotonic:v=>monotonic=v,failPrimary:v=>primaryFail=v,failRecovery:v=>recoveryFail=v,
   drain(){let batches=0;while(queue.length){queue.shift().fn();batches++;assert(batches<100000,'bounded number of work batches');}return batches;}};
 }
 function approx(a,b,label){const tolerance=Math.max(1e-6,Math.max(Math.abs(a),Math.abs(b))*1e-12);assert(Number.isFinite(a)&&Number.isFinite(b)&&Math.abs(a-b)<=tolerance,`${label}: ${a} vs ${b}, tolerance ${tolerance}`);}
@@ -132,7 +132,7 @@ const backup=on.x.b.backup();assert.deepEqual(on.x.b.decode(backup),on.committed
 for(const seconds of [28800,72*3600]){
  const slow=app(original,source,seconds);let error,result;
  slow.b.apply((r,e)=>{result=r;error=e;});
- slow.clock(original.lastSeen+(seconds+60)*1000);slow.drain();assert.ifError(error);
+ slow.clock(original.lastSeen+(seconds+60)*1000);slow.monotonic(60000);slow.drain();assert.ifError(error);
  assert.equal(slow.b.get().lastSeen,original.lastSeen+(seconds+60)*1000,'processing time reaches completed save endpoint');
  const reference=app(original,source,seconds);reference.b.apply();
  reference.b.advance(60,{kind:'live',visual:false,clockStartMs:original.lastSeen+seconds*1000});
@@ -140,5 +140,13 @@ for(const seconds of [28800,72*3600]){
  compare(slow.b.get(),reference.b.get(),'processing time live parity '+seconds);
  approx(slow.b.get().totalOfflineSeconds-original.totalOfflineSeconds,seconds,'processing time does not expand offline cap/accounting');
  records.push({case:'processing time '+seconds,kills:result.kills,lastSeen:slow.b.get().lastSeen});
+}
+for(const jump of [-7*86400000,7*86400000]){
+ const shifted=app(original,source,28800);let error;shifted.b.apply((r,e)=>{error=e;});
+ shifted.clock(original.lastSeen+28800000+60000+jump);shifted.monotonic(60000);shifted.drain();assert.ifError(error);
+ const reference=app(original,source,28800);reference.b.apply();reference.b.advance(60,{kind:'live',visual:false,clockStartMs:original.lastSeen+28800000});
+ reference.b.get().lastSeen=original.lastSeen+28800000+60000+jump;
+ compare(shifted.b.get(),reference.b.get(),'monotonic processing with wall-clock jump '+jump);
+ records.push({case:'wall-clock jump '+jump,kills:shifted.b.get().totalKills-original.totalKills,lastSeen:shifted.b.get().lastSeen});
 }
 console.log(JSON.stringify({status:'pass',scenario:'offline-catchup-core',wallMs:performance.now()-start,records},null,2));
