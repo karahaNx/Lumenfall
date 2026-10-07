@@ -1,0 +1,40 @@
+SUPPORT_UPTIME_001 — brugerrettelser i denne ejerchat, 7. oktober 2026
+Disse svar er autoritative originaler; foreslåede tal er særskilt markeret.
+
+Spørgsmål:
+Skal to færdigudbyggede Tide/Aurora kunne holde et lavere boost permanent ved
+forskudte casts, mens det fulde dobbelte boost stadig har pauser? F18 siger
+“sværere”, men fastlægger ikke dette.
+Brugerens præcise svar:
+Nej, der skal altid være pauser, også med begge supports
+
+Spørgsmål:
+Har Lead eller SWIFT_RECOVERY_CAP_001-ejeren allerede besluttet Swift
+Recovery-cap/minimumscyklus og early/mid/late-uptime-mål? Angiv gerne tallene
+og beslutningskilden. De læste Lead-kilder markerer dem stadig som uafklarede.
+Brugerens præcise svar:
+Nej ikke noget endnu
+
+Konsekvens af første svar:
+Union-uptime (mindst én aktiv support) skal have pauser også ved maksimal
+effekt, begge Ultimates og optimale forskudte casts. Per-source pauser alene
+opfylder ikke kravet. Der var på dette tidspunkt ingen accepterede numeriske tal.
+
+Senere konkret spørgsmål:
+Det lokale forslag bruger normal buff 1s, Ultimate 1,5s og Swift-cap 10
+(minimumscyklus 3⅓s). Ved charge 0/5/10 giver Ultimate 25/35/45 % uptime pr.
+Wisp og højst 50/70/90 % med begge; dermed mindst 10 % samlet pause sent.
+Skal disse tal være designkontrakten til koordinering og review? Forslaget
+står i docs/tasks/SUPPORT_UPTIME_001.md.
+Brugerens præcise svar:
+Ja, fastlæg disse tal til Lead/Swift-review
+
+Aktuel numerisk beslutning:
+Normal1s, Ultimate1.5s, Swift-cap10/mincycle10/3s og charge-ankre0/5/10 er
+dermed fastlagt til Lead/Swift-review. Det er ikke integration/QA/migration-
+accept eller en samtidig remote writer-tildeling.
+
+Afventer også valg af gammel Ultimate-købsværdi-politik: Lead/Core-kompensation
+før implementering eller bevaret ownership/earned expiry uden Sigil-refund.
+Ingen produktkode er ændret. Privat profile-patch og eksplicit Swift-stub i
+motorproben er et lokalt reviewforslag, ikke en færdig feature.
