@@ -3,6 +3,11 @@
   var fixtures = __QA_FIXTURES_JSON__;
   var params = new URLSearchParams(location.search);
   var scenario = params.get('qaScenario') || '';
+  if(scenario==='offline-catchup-legacy-dom'){
+    // WebView60/61 has no ParentNode.replaceChildren. Exercise real startup,
+    // catch-up and selector rendering without the newer browser convenience API.
+    delete Element.prototype.replaceChildren;
+  }
   // Native UI tests hold interval callbacks only across immediate measurements.
   // Keep real input/save handlers, animation frames and the production flags intact.
   var uiMeasurementPaused=scenario.startsWith('offline-catchup-');

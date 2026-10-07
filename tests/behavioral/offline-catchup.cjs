@@ -127,4 +127,18 @@ for(const failure of ['cancel','simulation','primary','recovery']){
 const recovery=app(on.committed,source,0);recovery.storage.set('lumenfall_save_v2','broken');
 recovery.b.set(recovery.b.load());assert.equal(recovery.b.apply(),null);assert.deepEqual(recovery.b.get(),on.committed);
 const backup=on.x.b.backup();assert.deepEqual(on.x.b.decode(backup),on.committed,'backup/reload compatible schema');
+// Real cooperative work can outlast the captured return clock. It must not
+// disappear when the next autosave records the current time, even after the cap.
+for(const seconds of [28800,72*3600]){
+ const slow=app(original,source,seconds);let error,result;
+ slow.b.apply((r,e)=>{result=r;error=e;});
+ slow.clock(original.lastSeen+(seconds+60)*1000);slow.drain();assert.ifError(error);
+ assert.equal(slow.b.get().lastSeen,original.lastSeen+(seconds+60)*1000,'processing time reaches completed save endpoint');
+ const reference=app(original,source,seconds);reference.b.apply();
+ reference.b.advance(60,{kind:'live',visual:false,clockStartMs:original.lastSeen+seconds*1000});
+ reference.b.get().lastSeen=original.lastSeen+(seconds+60)*1000;
+ compare(slow.b.get(),reference.b.get(),'processing time live parity '+seconds);
+ approx(slow.b.get().totalOfflineSeconds-original.totalOfflineSeconds,seconds,'processing time does not expand offline cap/accounting');
+ records.push({case:'processing time '+seconds,kills:result.kills,lastSeen:slow.b.get().lastSeen});
+}
 console.log(JSON.stringify({status:'pass',scenario:'offline-catchup-core',wallMs:performance.now()-start,records},null,2));

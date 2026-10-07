@@ -4511,7 +4511,9 @@ function renderAutoAscendTarget(select){
       options.appendChild(new Option('Clear Rift '+cleared,String(cleared)));
     }
     if(pinned) options.appendChild(new Option('Clear Rift '+target+' (saved target)',String(target)));
-    select.replaceChildren(options);
+    // Keep the existing select/focus; replaceChildren is absent in WebView60.
+    while(select.firstChild) select.removeChild(select.firstChild);
+    select.appendChild(options);
     select.dataset.optionsKey=key;
   }
   select.dataset.windowStart=String(start);select.dataset.windowEnd=String(end);
@@ -7904,6 +7906,22 @@ function* offlineProgressSteps(now,lastSeen,elapsedSec,effectiveSec){
     yield* advanceStudyOnlyTime(elapsedSec-effectiveSec,lastSeen+effectiveSec*1000,sim,true);
   }
   state.totalOfflineSeconds += effectiveSec;
+  // Input and live ticks were suspended while the offline transaction ran.
+  // Replay that foreground time with the existing live policy before committing.
+  // Stop at normal live-tick granularity rather than chasing a moving clock.
+  var completedClock = Date.now();
+  while(completedClock-now>=TICK_MS){
+    var processing = yield* advanceAuthoritativeTime((completedClock-now)/1000,{
+      kind:'live',visual:false,clockStartMs:now,resumable:true
+    });
+    ['lumenGained','shardGained','sigilsGained','motesGained','ascends','kills','iterations','fastForwardedKills'].forEach(function(key){
+      sim[key] += processing[key];
+    });
+    sim.completedStudies = sim.completedStudies.concat(processing.completedStudies);
+    sim.closedStudies = sim.closedStudies.concat(processing.closedStudies);
+    now = completedClock;
+    completedClock = Date.now();
+  }
   applyAchievementChecks();
   state.lastSeen = now;
   return {
@@ -7964,7 +7982,7 @@ function applyOfflineProgress(done){
       if(done){
         // No intermediate save advances lastSeen. Primary success owns the
         // whole window; recovery-write failure must not roll it back.
-        var saved = saveState(now);
+        var saved = saveState(state.lastSeen);
         if(!saved && state===job.working){
           state = job.base;
           offlinePending = true;
@@ -8083,7 +8101,11 @@ function offlineReturnMessage(offline){
 }
 function showReturnFlow(offline,dailyWasRolled){
   function maybeShowDaily(){
-    if(dailyWasRolled && pendingDailyReward){ showDailyOverlay(pendingDailyReward); }
+    if(pendingDailyReward){
+      var reward = pendingDailyReward;
+      pendingDailyReward = null;
+      showDailyOverlay(reward);
+    }
   }
 
   if(hasMeaningfulOfflineProgress(offline)){
@@ -8242,6 +8264,7 @@ function init(){
         var welcomeComets = pendingDailyReward.reward.comets||0;
         if(welcomeComets>0) showToast('Welcome gift — +'+welcomeComets+' Comets');
       }
+      pendingDailyReward = null;
       showRiftMilestone('FIRST GOAL','Reach Rift 3','Awaken Tide Sprite','#3aa0c9');
     });
   } else {
