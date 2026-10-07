@@ -60,3 +60,11 @@ Ved næste LAB-scope: Lumenfall_00_11_Lead_Context_2026-10-05.zip,
 Library `libfile_d42a1d05bf08819186ed6f4943028979` → Source_Index.txt →
 LAB/LAB_MOTES_001_LOCAL.zip; læs kun originale LAB-krav og relevante kilder.
 Lokale prototypes, testhooks og storageprefixer må ikke promoveres til produktet.
+
+## Offline / Auto-Ascend — enhedsbackup 2026-10-07
+
+Læs `qa/offline-autoascend-2026-10-07/START_DIAGNOSE.txt`, derefter
+`qa/offline-autoascend-2026-10-07/Source_Index.txt`. Backup, rå resultater,
+reproduce.cjs og original ZIP ligger i samme mappe. Reproduceret på
+main `1ddc246eb62782a61ec5c486cd5f51ea170bb338`: 8 timer ON rammer
+250.000-eventsgrænsen; OFF gennemfører. Evidens, ikke produktfix eller APK-accept.

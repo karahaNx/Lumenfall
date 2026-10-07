@@ -47,3 +47,16 @@ Testværksted0.2:52 lokale prototypechecks;7 manuelle punkter ikke accepteret.
 De52 checks er ikke NAV-/Android-accept. Server/browserstatus fra tidligere
 chat er ikke genmålt. Næste Lead-scope: planlæg LAB-MOTES via originale krav
 og korrekt live base; ingen bred historisk audit eller automatisk genstart af færdige opgaver.
+
+## Tillæg 2026-10-07 — save/offline-diagnose arkiveret
+
+Denne chats diagnosearbejde er lagt på main efter brugerens direkte mandat.
+Se `qa/offline-autoascend-2026-10-07/START_DIAGNOSE.txt` via CONTEXT_INDEX.
+Offline Auto-Ascend eventlimit-fejl er reproduceret på ovenstående main-base;
+ingen rettelse eller fysisk APK-test. Kun dokumentations-/evidenswriter i
+denne handling; frigivet efter upload. Ældre rolletildelinger/status ovenfor
+er historiske og skal verificeres mod nyere Lead-handoffs.
+Live kontrol før upload: PR46 er Draft på `3cdebc236e9ee5081a4bca4e323b11f43aa0d46d`;
+nyere arkiver findes på `00/recovery-project-2026-10-07`,
+`01/core-archive-2026-10-07` og `02/gameplay-archive-2026-10-07`.
+De er ikke integreret/acceptet af denne upload. Ingen aktive runs blandt seneste fem.
