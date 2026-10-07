@@ -1,62 +1,52 @@
 # Lumenfall — aktuel projektstatus
 
-Snapshot: 2026-10-05T19:32:23.429865+00:00. Repository: `karahaNx/Lumenfall`.
-Produktcommit: `d32c0043b73d8ddc9f7600022c4f7a133899652e`; tree
-`8c07e411458cad5e39b27e8b577910ce20aa0d0e`. `android-latest` peger på produktet.
-SHA'er er checkpoints; kontrollér live før handling. Originalkrav og receipts
-hentes via CONTEXT_INDEX; dette er kort status.
+Opdateret 7. oktober 2026 ved brugerens bestilling af et selvstændigt Codex-
+projekt. Repository: `karahaNx/Lumenfall`, standardbranch `main`.
+Kontrollér live GitHub før handling; SHA'er er checkpoints.
 
-## Afsluttet produkt og review
-Android-only idle RPG med Capacitor/WebView. P0/P1, region-/bossfeedback,
-Formation reconstruction, Forge/Lab-separation, Forge v1 og PR36–41 er integreret.
-Measured Inquiry er udgivet siden0.1.132; context setup er integreret via PR42/43.
+## Produkt og aktuel kandidat
 
-| Opgave | Status |
-| --- | --- |
-| NAV-001 | PR44 merged: fem bunddestinationer, Workshop Forge/Lab, fast hævet Rift, stille valutamangel med action/pris bevaret. Se `tasks/NAV_001.md`. |
-| Core/QA/Lead | Scoped ACCEPT på `5be2c0319b9ce11fd8a29f0bb795d7de606858ae`. Merge-tree matcher præcist kandidaten. Core36 scenarier+162 egne assertions; QA130 scenarier/148 browser-/driverresultater+12 negatives+367 native+564 egne checks+6 mutationer. |
-| LAB-MOTES-001 | Lokalt forslag; ingen produktimplementation/writer/PR. Næste scope planlægges mod korrekt live base efter NAV. |
-
-Lead: **00_11**. Core:**01_06**. Gameplay:**02_07**. Visuals:**03_05**. QA:**04_05**.
-Efter dette docs-checkpoint er00_11s integrationswriter frigivet; ingen næste
-writer tildelt. 03_05 meldte frigivelse; Core/QA meldte read-only stop.
-Brugerens stående godkendelse5. oktober2026 gælder nødvendige handlinger i
-det aftalte scope uden gentagen forespørgsel; se AGENTS og integrationsbeslutningen.
-
-## Accepteret Android
-**0.1.133**, package `com.lumenfall.app`, run `37363152517`, attempt1/success,
-produkt-head ovenfor; alle27 jobtrin success. Release `396102072`, asset
-`613482246`,6832416 bytes. SHA256
-`1d508a80233001ded14791aa6dd0d49c65615753b28072c4acd8b36c71e74581`.
-Final APK-identitet/signatur bestod både CI og lokal repo-verifier. Alle15
-indlejrede index/font/branding-filer matcher kandidaten; GitHub-digest og CRC består.
-Fysisk Android/TalkBack/install er ikke udført. Ingen manuel dispatch/rerun
-eller signingændring. Det eksisterende workflows normale cleanup/publicering fulgte runnen.
+Produktbaseline: `1ddc246eb62782a61ec5c486cd5f51ea170bb338`, tree
+`bfb3970b29485b3e8ece1c72bb60186eb2ba755e`. Dette docs-checkpoint ændrer ingen
+produkt-, test-, mobile-, signing- eller workflowbytes fra den baseline.
+Accepteret APK: **0.1.133**, package `com.lumenfall.app`, run `37363152517`.
 Receipts: `decisions/2026-10-05-nav001-integration-release.txt`.
+P0/P1, Forge/Lab, Formation, Measured Inquiry og NAV-001 er integreret.
 
-## Bevarede beslutninger og næste handling
-Measured Inquiry: unlock60, cap10,2% mindre work pr. completed level, max20%,
-kun nye betalte legacy8-starter. Aktive snapshots/rå levels og schema1 bevares;
-ingen selvdiscount/legacy-capnerf eller lovet sikker downgrade.
-Opening Focus parkeret; flere Forge-upgrades ønskes senere. A40/crDroid er
-udgået af aktiv backlog/fremtidige acceptkrav; originals bevares. P2-04/native
-og P2-05/release-hardening deferred. Signing-diagnosebranch131 bevares;
-Run131 attempt1-rootcause ukendt. Find-P3 separat/nonblocking; Farm recommended
-kræver brugerens ønskede adfærd præciseret.
-Testværksted0.2:52 lokale prototypechecks;7 manuelle punkter ikke accepteret.
-De52 checks er ikke NAV-/Android-accept. Server/browserstatus fra tidligere
-chat er ikke genmålt. Næste Lead-scope: planlæg LAB-MOTES via originale krav
-og korrekt live base; ingen bred historisk audit eller automatisk genstart af færdige opgaver.
+| Arbejde | Status og næste handling |
+| --- | --- |
+| PR46 / LAB-MOTES | Observeret open/Draft på R2 `3cdebc236e9ee5081a4bca4e323b11f43aa0d46d`. R2s grønne CI accepterer ikke nyere bytes. |
+| Tidligere lokal B2 | Tree `4c07cd5d66cb5928eb99623ff86efaa81e268829`: Core/QA BLOCKED; obligatorisk BigInt bryder WebView 60-baseline. |
+| Ny B2-runtimekandidat | Tree `758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef`; kodecommit `013f526` på Gameplay-arkivgrenen. Worker rapporterer Number/DataView-fix, 7 gates, 142 scenarier og 12 fangede negatives. **Nye scoped Core-/QA-reviews mangler.** |
+| FEEDBACK-REVISION-001 | 29 punkter, fuld original og fire billeder. Efter PR46: først F20/F21 Echoing Rest cap 6 / Cheaper Bonds cap 20, købsgates og gammel-save-politik. Øvrige scopes følger dependencies. |
+| Offline / Auto-Ascend | Ny diagnose på produktbaseline: 8 timers offline ON rammer eventbudgettet i VM-test. Se `project/KNOWN_ISSUES.md`. Ingen lifecycle-/Androidaccept eller produktrettelse. |
 
-## Tillæg 2026-10-07 — save/offline-diagnose arkiveret
+Ny kandidats index SHA256:
+`7c25b0b57722bda4ad6842b173bf9a390f2fa39942ad91206675a20e779d4d9b`.
+Fuld aflevering, alle 96 kildefiler og egne beviser: `handoffs/02_08/2026-10-07/`.
+De 1.340 diagnostikforløb har fortsat 379 strikte assertionfejl på R2/ny kandidat
+ifølge worker; ingen samlet grøn stresstest påstås. Fysisk Android/WebView60/
+TalkBack og tidligere intermittent clipping-rootcause er utestet/ukendt.
+Bevar runtimebaseline 60.
 
-Denne chats diagnosearbejde er lagt på main efter brugerens direkte mandat.
-Se `qa/offline-autoascend-2026-10-07/START_DIAGNOSE.txt` via CONTEXT_INDEX.
-Offline Auto-Ascend eventlimit-fejl er reproduceret på ovenstående main-base;
-ingen rettelse eller fysisk APK-test. Kun dokumentations-/evidenswriter i
-denne handling; frigivet efter upload. Ældre rolletildelinger/status ovenfor
-er historiske og skal verificeres mod nyere Lead-handoffs.
-Live kontrol før upload: PR46 er Draft på `3cdebc236e9ee5081a4bca4e323b11f43aa0d46d`;
-nyere arkiver findes på `00/recovery-project-2026-10-07`,
-`01/core-archive-2026-10-07` og `02/gameplay-archive-2026-10-07`.
-De er ikke integreret/acceptet af denne upload. Ingen aktive runs blandt seneste fem.
+## Ejerskab og konkret fortsættelse
+
+Historiske chats: Lead 00_16, Core 01_06, Gameplay 02_08; 02_09-recovery blev
+udstedt før den nyere 02_08-levering; Visuals 03_05, QA 04_05.
+En ny Codex-projektchat starter som Lead, medmindre brugeren tildeler en rolle.
+02_08s eget lokale kandidatstop/processlukning er dokumenteret i leveringen.
+02_07s senere B2-writerrelease er fortsat ukendt. Arkivpublicering tildeler
+ingen ny produkt-writer og opdaterer ikke PR46.
+
+Brugerens aktuelle docs-mandat omfatter at gøre opstart/kilder klar på main.
+Dette scope frigives efter dokumenteret integration; øvrige writerforhold
+ændres ikke. Stående godkendelse fra 5. oktober gælder bestilt scope.
+
+Næste B2-handling: kontrollér live baseline, læs ny leverings START/identity,
+genskab det præcise tree separat, og udsted nye scoped Core-/QA-reviews.
+Gem reviewdelta i denne status. Integrér efter kandidataccept og handover.
+Offline-fejlen kræver eget mandat; den foldes ikke ind i PR46.
+
+Historisk status: `project/PROJECT_STATE_2026-10-05_HISTORICAL.md`.
+Ældre recovery-status bevares byteidentisk; denne fil er den aktuelle indgang.
+P2-04/native, P2-05/release-hardening og A40 forbliver deferred/udgået.

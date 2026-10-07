@@ -1,0 +1,8 @@
+from pathlib import Path
+import hashlib,subprocess,json
+r=Path(__file__).resolve().parent;repo=r/'repo';src=json.loads((r/'evidence/source-paths.json').read_text());tree=json.loads((r/'evidence/frozen-identity.json').read_text())['tree'];frozen=json.loads((r/'evidence/frozen.json').read_text());assert all(hashlib.sha256((repo/p).read_bytes()).hexdigest()==v for p,v in frozen.items())
+blobs=[]
+for p in src:
+ mode,kind,sha,path=subprocess.check_output(['git','ls-tree',tree,p],cwd=repo,text=True).strip().split(None,3);assert path==p and kind=='blob';data=(repo/p).read_bytes();assert subprocess.check_output(['git','hash-object',p],cwd=repo,text=True).strip()==sha;blobs.append({'path':p,'mode':mode,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'gitblob':sha})
+identity={'repository':'karahaNx/Lumenfall','phase':'isolated local A only','Lead':'00_16','base':'1ddc246eb62782a61ec5c486cd5f51ea170bb338','baseTree':'bfb3970b29485b3e8ece1c72bb60186eb2ba755e','proposedParentAndLocalHEAD':'3cdebc236e9ee5081a4bca4e323b11f43aa0d46d','parentTree':'70073a55d7f5fe428ae82223627603498cc372b6','blockedTree':'4c07cd5d66cb5928eb99623ff86efaa81e268829','newTree':tree,'indexSHA256':frozen['index.html'],'source':blobs,'frozenTrackedFiles':len(frozen),'ownRemoteWrite':False,'remoteR3Commit':None,'CIOnNewTree':None,'02_07WriterRelease':'UNKNOWN; STOP instruction is not actual release','review':'Fresh exact-candidate Core/QA review required; old acceptance not transferred'}
+(r/'evidence/identity.json').write_text(json.dumps(identity,indent=2));print({'tree':tree,'overlayFiles':len(blobs),'frozenFiles':len(frozen)})

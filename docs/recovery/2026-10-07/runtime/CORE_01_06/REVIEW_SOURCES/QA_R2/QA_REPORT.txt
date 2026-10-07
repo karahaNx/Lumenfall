@@ -1,0 +1,173 @@
+PR46 R2 — QA fra 04_05 til Lead 00_14 — 2026-10-06
+RESULTAT: BLOCKED på ny B2. B1’s oprindelige minimum og 43 counterexamples er rettet.
+
+BESLUTNING
+R2 skaber stadig en ekstra kill og Shard ved stor, sikkert repræsenterbar kill-count.
+Det er bevist med en uafhængig BigInt-oracle og den faktiske økonomimotor, også
+med naturlig DPS uden override. Grøn CI og standardgates ophæver ikke fejlen.
+BLOCKER_B2.txt indeholder minimum, expected/actual og kaldvej. QA har ikke rettet
+produktkode, lavet et commit eller udført en ekstern handling.
+
+IDENTITET OG LÆSEGRUNDLAG
+Repo karahaNx/Lumenfall; PR46; 02/lab-motes-repeat-v1; open/Draft.
+Base/main: 1ddc246eb62782a61ec5c486cd5f51ea170bb338
+Base tree: bfb3970b29485b3e8ece1c72bb60186eb2ba755e
+R1/parent: d1e988816ed10b8f851521938a117a4d84d29e1b
+R1 tree: a702bc475b1d07e967727444dd15c56807c1123a
+R2/head: 3cdebc236e9ee5081a4bca4e323b11f43aa0d46d
+R2 tree: 70073a55d7f5fe428ae82223627603498cc372b6
+index SHA256: 8de74bbb7ab31be18405c40e20114d8421c34fe78eeb134dd12016153311fa17
+R2 er én commit efter R1: fire B1-filer og 11 filer i samlet main→R2 scope.
+
+Egen private kilde matcher alle 11 afleverede SOURCE-filer og exact HEAD-blobs.
+Begge full-index patches matcher Git-diff byte for byte. Pre-merge-workflow er
+uændret fra main. Tracked diff og source-hash er uændret efter alle kontroller.
+Live før 11:25:32.137Z og efter 11:45:24.903Z: samme base/head/tree, 44 branches,
+kun PR46 åben og nul aktive runs i alle fem statustyper. EVIDENCE/live-final.json
+bevarer den ekstra kontrol umiddelbart før aflevering. Same-head CI37447570925,
+#128, attempt1 completed/success er læst, ikke trigget.
+Workerens freeze/release 10:20:41.359452Z er afleveret historik.
+
+Live AGENTS, egen ejerskabsrække, 04_QA og PROJECT_STATE er læst, sammen med
+00_14-mandat/kontrakt, alle tre LAB-originaler, B1-task, gammel QA_REPORT og
+R2’s numeriske regel. Hele R1→R2 patch og relevante funktioner/kaldere er
+reviewet; samlet PR-scope og byteidentiske originalkrav bevares i pakken.
+Gamle Lead/statusfelter giver ikke en ny writer eller overført R2-accept.
+
+EGNE B1-BEVISER
+Alle 826 fixtures er genkørt på både exact R1 og exact R2 med en ny, uafhængig
+ledger, der forbruger én fjendes HP ad gangen, følger hvert luminous-spawn og
+reward og bogfører betalingstid, fuld pris og arbejde efter betaling.
+Alle rå inputs samt ON/OFF-states/summaries er bevaret. Oraclen kopierer ikke
+den rettede farmfunktions quotient-formel.
+R1: præcis 43 ledgerfejl, plus fem exact-boundary motorgrupper.
+R2: nul ledgerfejl. Alle 43 fixturekeys matcher de oprindelige counterexamples;
+samtlige reproduceres som R1 FAIL / R2 PASS.
+
+Minimum HP8.03/11, DPS1100, .9s: 90 kills, 3 Luminous, Lumen1000000540,
+Shards1000000090, HP~8.03, accumulator~.675. ON: Motes2/work297.3346;
+OFF: Motes62/work299.1. Ved .0173s: to kills; den anden er Luminous og muliggør
+60-købet. Whole og split .0173+.8827 passer i live/offline.
+20 egne minimumsforløb dækker før/exact/efter/whole og split, begge togglestates
+og begge policies. 209 assertions inkluderer en lokal installation af den exact
+R1-farmfunktion: kill-oraclen fejler; undo består. Old-funktionens bytes matcher
+R1 Git-source. Ingen større EPS eller ændrede gamle testtolerancer.
+
+100 egne motorgrupper består, 16193 assertions: alle tiers/priser under/exact/
+over budget; uafhængig Queue/Use Motes; manuel start/køb; targetændring; OFF;
+fuld pris igen pr. level; intet gratis carry, billigere fallback eller delta-rabat.
+Flere knappe budgets og omvendt active/render-order følger katalogrækkefølge.
+Closed/locked/unknown/maxed samt immutable/idempotent normalisering er dækket.
+48 egne rewardboundary-grupper bruger partial HP, begge luminous-flags, flere
+accumulators/chances og de faktisk rundede rewards med research/MoteStudy/support.
+Completion/start/Inquiry-cap/buff-kollision og den faktiske 12h offline study-only
+resttid består. De tre LAB-mutants free-carry/fallback/batch-end bliver fanget,
+og undo består. Default-suiten dækker desuden overcap, legacy8/Inquiry, Push og
+same-kill Ascend/completion. Instrumentering findes kun i private staged copies.
+
+NY STRESS OG B2
+560 ekstra isolated exact-rational inputs: 550 PASS / 10 FAIL, exit1.
+HP-skalaer gennem 1e220 og counts gennem 2^52-1 supplerer workerens 576/56
+rapporterede arithmetic/split-checks gennem 2^50. Kun isolated arithmetic stubber
+batch-sideeffekter; den efterfølgende B2-økonomirepro bruger faktisk motor.
+
+Natural-DPS minimum: Titan level1635/Mythic, Ember rarity1, Formation research500,
+Formation Insight500, Wisp Ascendancy500, Momentum500; HP8.03/11 på Farmdepth1.
+Input normaliseres, og næste upgrade-priser er endelige. Produktets DPS er
+40052722017724424; .9s giver exact represented damage36047449815951984.
+Expected3277040892359271 kills. OFF/whole giver3277040892359272, med én ekstra
+live Shard. OFF split .01+.89 og ON/whole giver3277040892359271. Offline har
+samme kill-fejl. Ingen bonus-completion, ability, Auto-Tap, Empower eller Ascend
+forklarer forskellen. Count ligger under grænsen for sikre heltal.
+Dette er et ekstremt normaliseret stress-save, ingen påstand om en fysisk session
+eller om faktisk gennemspillet progression. Det opfylder R2’s erklærede scope
+med positive finite HP/damage og safe counts. 36 særskilte natural-DPS-forløb
+med ordinære Wisp-levels1/40/80 beviser også motorvejen på almindelige skalaer.
+
+BigInt dekoder de indgående IEEE doubles til fælles 2^-1074-enheder. Desuden
+kan dette input kontrolleres med integerdivision: damage/11 giver quotient
+3277040892359271 og remainder3; partial HP8.03 kan ikke dræbes af remainder3.
+Kandidatens damage-remainder afrundes tilbage til damage; division bliver
+3277040892359271.5, og Math.round skaber den ekstra kill. Split-oraclen bruger
+summen af de faktisk repræsenterede delskader; forskellen krydser ikke næste
+rigtige killthreshold. Begge strikte B2-kommandoer afslutter med exit1.
+
+1340 yderligere faktiske motorforløb er bevaret: 1296 scaled-boundary-forløb,
+36 ordinære natural-DPS-forløb og otte tilsigtede bonusændringer.
+Scaled-inputs bruger depth1/7/33/73/157/301, partial .07/.4999/.99999, begge
+luminous-flags, accum.999, positiv deficit1e-10, DPS/H3/97/10000, begge sider
+og exact threshold samt whole/split/live/offline.
+1217 rows er rene; 123 diagnostikrows har 379 strikte assertionsfejl. De er ikke
+omdøbt til PASS. 64 rows har en near-exact killthreshold-forventningsforskel;
+60 giver samme kill-count i R1. Resten er især absolut1e-7 Lumen-sammenligning
+på meget store skalaer, hvor repræsenteret summationsorden giver decimal/ULP-
+forskelle. Samme 1340 inputs er kørt på R1 til afgrænsning. Disse diagnostikker
+tæller ikke som sikre selvstændige nye blockers eller grøn stresscertificering.
+Ingen oracle er lempet for at få dem til at bestå.
+
+Alle 36 ordinære natural-DPS-rows og otte bonusrows er rene. En egen timestamp-
+ledger for LumenStudy følger completion OFF .04 / ON .024866666666666665 og
+purchase .0173; hvert kill bruger den bonus, der gælder på kill-tidspunktet.
+Live rewards OFF15162/ON15186, offline10613.4/10630.2; whole/split passer.
+Den tilsigtede økonomiforskel forklares ved timestamps, ikke blot ON/OFF-lighed.
+
+PERSISTENCE OG MOBIL
+Fem faktiske persistencepaths består: reload, backup restore→reload, corrupt
+primary→recovery, manual Ascend→save og Reset→reload. Intent/targets/Queue og
+betalte work-snapshots bevares, hvor krævet; primary==recovery. Reset nulstiller.
+Seks nye egne mobile inputs består: 320/390/430 × normal/reduced motion,
+59 Motes/pending3x, rigtig touch-focus, native ArrowDown/Space, aria-pressed,
+renderfocus, Queue-uafhængighed, mindst44px/navngivne controls, ingen overflow,
+NAV’s fem destinationsrækkefølge og scroll-free Rift. Ingen pageerrors.
+Default-suiten kører også seks native Lab-profiler med rigtige ticks, exact60-
+køb, save/recovery, OFF/lower target og korrekt browser/profile-teardown.
+En første egen UI-draft forsøgte at tappe skjult Lab før Workshop. Testautomation
+blev korrigeret til NAV-001-flow; fejloutput bevares, de seks finalprofiler er friske.
+Fysisk Android/TalkBack: unknown/untested. Ingen APK/build; A40/Opening Focus
+og content/farm-design er ikke genåbnet.
+
+FROZEN GATES OG RÅ DÆKNING
+Alle syv uændrede workflowkommandoer afslutter med exit0:
+01 APK identity verifier self-test (ingen APK-build).
+02 Validate game source.
+03 Stage web assets i throwaway mobile/www.
+04 Stateful behavioral regression suite, 605.268s.
+05 Behavioral harness negative self-test, alle12 required FAILs fanget.
+06 Install runtime error guard i staged copy.
+07 Browser runtime smoke test, 390×844, ingen uncaught/rejection/runtimefejl.
+Chrome for Testing153.0.8010.0; binary SHA256:
+1346545781835e04ece3434a16d656ad5cbe60a6a179a43dff43f79a21f9a4ad
+
+Egen gate04: 162 PASS-invocations og komplet slutlinje
+“Behavioral QA passed: 140 deterministic scenario(s).”
+166 subprocesses: 160 positive browser/driveroutputs dækker 138 scenarier,
+plus to processkontrakter =140 defaultscenarier. Alle forventede viewport-
+invocations er dækket; browserexits0/no timeout/statusPASS. De øvrige seks
+processes er version/metakontrakt-probes, inkl. intentionel timeout/exit7.
+Disse er process-controls, ikke produktfejl. Native drivers kræver graceful
+browser-close, fjernet profile og afsluttede CDP-kald.
+Alle12 required negative DOM-outputs har FAIL; Chromeexit0 er korrekt for et
+rapporteret DOM-assertion/runtimeFAIL, som harness opdager. Source/runtime/
+timeout-controls består. Observeren ændrer ikke subprocess options eller resultater.
+Komplet stdout/stderr, commands, exits og gate07 DOM/Chrome/http-logs er bevaret.
+
+INPUT, WORKER OG CI
+Alle179 reviewpayloads/168 R2-payloads har korrekt hash/size og ZIPCRC.
+Workerarkivets778 filer er hashverificeret. Individuelle raw processresults dækker
+160 komplette positive browseroutputs/138 scenarier plus de to metakontrakter.
+Workeraggregate04 stopper stadig efter32 PASS-linjer; årsag uafklaret. Den er
+ikke godkendt som komplet log. Egen ny aggregate/raw er komplet.
+Worker/Lead/CI og historiske reviews er særskilt evidens, ikke egen R2-accept.
+
+AFLEVERING
+B1’s oprindelige fixtures: CLOSED på exact R2. B2: OPEN/BLOCKER. PR46 R2: BLOCKED.
+Der kræves robust quotient og permanent B2-motorregression før ny frozen-kandidat
+og begge reviews. Et smallere supportinterval kræver eksplicit begrundelse/proof;
+testmatrixens øvre count må ikke stiltiende blive produktets grænse.
+Ingen EPS-forøgelse, slukket rewardboundary, batchslutbetaling eller løsnet oracle.
+Alle egne runtimeprocesser er afsluttet, source er uændret. Ingen subagent,
+beskedværktøj, chatomdøbning, produktrepo/remote-write, commit/push/post/ready/
+merge/build/sign/dispatch/rerun/release/cleanup. Brugeren overfører selv pakken.
+ZIP indeholder 666 egne rå evidensfiler lossless-komprimeret og seks egne mobile
+screenshots. Workerens14MB arkiv med screenshots er ikke duplikeret; hash-map,
+receipt og kontrolscript bevares, sammen med egne komplette reviewbeviser.

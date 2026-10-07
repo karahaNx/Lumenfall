@@ -1,0 +1,47 @@
+LAB-MOTES-001 — lokale krav fra 00_10 Lead
+2026-10-05. Model og effort: GPT-6.1-sol · high.
+
+AUTORITET
+Læs USER_REQUEST.txt som brugerkrav. Nedenstående er Lead-valg til lokal
+implementering og review; prototype er ikke accepteret produktkode.
+Basen er frossen NAV-001 revision 4, source SHA-256
+31e71143bf969ee0c68498d933517cbdfaf308cfd93fcb4e51dfe4d034391736.
+
+ADFÆRD
+Pr. kendt Long Study: selvstændig Use Motes ON/OFF og et valgt hastighedstrin.
+Study Queue styrer start af næste level. Use Motes styrer betaling af hastighed
+for et aktivt level, også ved manuel start. De to toggles må ikke sammenblandes.
+Alle eksisterende 1.5x–8x-trin og speedTierCost-priser bevares. Et mål på 3x
+købes direkte for 60 Motes; 1.5x/2x købes ikke på vejen. Prisen betales igen
+på hvert level. Ingen dobbeltbetaling for et aktivt level, der allerede har
+valgt eller højere hastighed. Lavere nyt mål sænker ikke allerede betalt speed.
+Ved valutamangel fortsætter arbejdet ved sin nuværende betalte hastighed
+(1x på et nyt level), med uændret mål; køb sker ved første autoritative tidspunkt
+med tilstrækkelig Motes. Ingen Need/Cannot afford-varsler i købsknapper.
+Manuelt hastighedskøb husker trin. Queue er OFF indtil spilleren aktiverer den.
+OFF stopper nye køb og fjerner ikke betalt hastighed. Maxed/closed/ukendt
+Study kan ikke bruge Motes. Visuel sortering ændrer ikke prioritering: kendt
+Study-deklarationsrækkefølge ved fælles budget. Balancen må aldrig blive negativ.
+
+SAVE OG SIMULATION
+Nye valg gemmes pr. Study, overlever save/reload/backup/recovery og Ascend.
+Gamle saves har OFF. Et aktivt betalt trin kan være default for det huskede mål.
+Kun kendte IDs, strikte booleans og eksisterende hastighedstrin accepteres.
+Reset nulstiller alle nye indstillinger. Normalisering må ikke aktivere spending.
+Betaling hører til den autoritative simulation, med nye betalte starts og
+eksisterende pending targets behandlet efter Study completion/start ved samme
+timestamp. Intet forudbetalt arbejde eller instant earned level. Farm-batches
+skal deles ved den konkrete Luminous-reward, som muliggør købet; køb må ikke
+forsinkes til slutningen af en stor offline-batch. Study-only restperioder
+behandler samme valg. Bevar alle eksisterende timing- og økonomikontrakter.
+
+GRÆNSE OG REVIEW
+Ingen remote writer er tildelt LAB-MOTES-001 gennem denne lokale prototype.
+Der er ingen PR, merge, APK-build, signing eller release. NAV-001 til 03_05
+er stadig en separat opgave; LAB må ikke give to samtidige repo-writers.
+Ved produktion: genverificér live main/branches/PRs/runs/ejerskab og fastlæg
+rækkefølge med NAV. Scoped Gameplay-writer plus Core save- og uafhængigt
+QA-review kræves før Lead-accept. Gamle SHA'er er checkpoints.
+Fulde eksisterende regressioner, offline/live-parity, persistence/recovery,
+mobile og fysisk Android skal vurderes på præcis frossen kandidat.
+Prototype-storageprefixer og testhooks må aldrig komme i produktion.

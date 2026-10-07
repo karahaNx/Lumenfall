@@ -1,0 +1,87 @@
+Du er: 01_06 — Core / Android / APK
+Permanent rolle: 01 — Core / Android / APK
+Projekt: Lumenfall
+Repository: karahaNx/Lumenfall
+Lead: 00_06 — Lead / Architecture
+Du overtager fra 01_05. Omdøb ingen eksisterende chats.
+Work · GPT 6.1 Sol · High
+
+FORTSÆT DEN ÅBNE OPGAVE — INGEN NY AUDIT
+Brugeren har bedt om chat-skifte på grund af langsom chat. Arbejdet skal fortsætte fra den seneste konkrete Lead-opgave, ikke fra den oprindelige passive 01_05-handoff.
+Den seneste opgave er vedlagt som lead/01_05_PR40_Praecis_Repeat_Afslutning.txt. Den gælder nu som fortsættelsesopgave for 01_06; rolleafsenderen i originalfilen er bevaret. Læs hele denne fil først. Start ingen andre workers.
+
+AKTUEL REVIEWSTATUS
+PR #40: Auto-Ascend target selector.
+Tidligere P1 Fund1: startup blokerede på canonical accepteret høj historik, også owned/OFF. Fundet blev reproduceret på gammel HEAD 9348a48364dcd88b77b9d1bc00763b83c6f8e768.
+Startup-rettelsen på ny HEAD d3daa23d04315ec21776de69b0df960d24cb19b6 er testet og Fund1 LUKKET. Lead har udtrykkeligt accepteret lukningen.
+11 positive genuine bootcases bestod med fuld state, valid primary-prioritet, recovery, Settings og levende callbacks. Nav/window: 11195 assertions i 12 profiler PASS; window <=200 plus højst ét pinned saved/current target. Ingen cap på lagret history/target.
+Original own19-genkørsel på ny HEAD: 14 PASS / 5 FAIL. Denne historik må aldrig ommærkes til 19 PASS.
+Separat backup purity bestod med intervalpause efter genuine boot-snapshot; Lead har accepteret denne måling. Den er ikke livenessbevis.
+De fire resterende repeat-load-FAIL skyldes enemyHp 6.4 -> 6.400000000000001. Samme eksisterende restoreEnemyOrSpawn-projektion er observeret på main, parent og ny HEAD; funktionen er byteidentisk. Alle øvrige statefelter og centrale target/reward-checks matcher.
+Tidligere rapport angav derfor samlet IKKE ACCEPTABEL endnu under den oprindelige strikte oracle, uden en ny startup/target/reward/save-loss-regression.
+Lead har efterfølgende autoriseret en eksakt lokal oracle-revision til de fire fixtures. Der foreligger ingen dokumenteret afsluttende kørsel af denne revision i den tilgængelige evidens. Det er den resterende opgave; ingen endelig persistence-accept eller mergeaccept gives ved denne handoff.
+
+DET PRÆCISE RESTARBEJDE
+1. Læs seneste Lead-opgave og eksisterende reviewrapport/evidens. Genverificér GitHub-checkpoint før og efter arbejdet; checkpoints nedenfor er historiske og er ikke live-genverificeret under denne handoff.
+2. Genkør KUN:
+   07-cross-43-cold
+   07-cross-43-visibility
+   07-cross-55-cold
+   07-cross-55-visibility
+3. Behold literals, fixtures, clocks, deadlines, handlers/saveguard og gameplayforløb. Før repeat: assertér enemyHp præcis 6.4, enemyMaxHp 11 og enemyDepth/depth 1.
+4. Kopiér expected state dybt, og ændr alene kopiens enemyHp til literal 6.400000000000001. Actual state, save og loader må ikke repareres.
+5. Efter zero-time genuine repeat coldload: strict equality af HELE actual state, canonical primary og recovery mod expected. Target 44/56; Prisms 23/24 fra starting 10; Comets 22 fra starting 7; Study 1; én kill/Ascend; benchmark 43/55; depth 1 og alle metadata/andre felter skal matche præcist.
+6. Yderligere zero-time reload skal bevare hele den allerede projicerede state bitpræcist. Ved ny forskel: stop og rapportér; udvid ingen undtagelse.
+7. Scratch-negative: extra HP-afvigelse 6.400000000000002 skal give præcis assertion-FAIL. Dokumentér faktisk source-restored positiv undo. Target-/rewardafvigelser må heller ikke accepteres. Ingen epsilon, rounding, HP-exclusion eller generel ULP-tolerance.
+8. Vis lille review-driverdiff og mærk nye resultater REVIDERET ORACLE. Genbrug de 14 tidligere PASS, isoleret backup-PASS samt boot/window/negative-beviser. Genkør ikke own19 fuldt, 121-suite eller bred audit uden konkret grund.
+9. Aflevér samlet ACCEPTABEL/IKKE ACCEPTABEL på præcis testet HEAD/tree/base med Fund1 LUKKET, de fire nye resultater, whole before/expected/actual state/primary/recovery, driverdiff, hashes, fulde stdout/stderr/process/deadline/no-timeout, negative/undo, begrænsninger og SHA256-manifest i TXT+ZIP til 00_06. Bevar gamle FAIL-kvitteringer.
+
+IMMUTABLE LEAD-CHECKPOINT — HISTORISK, SKAL GENVERIFICERES
+PR: https://github.com/karahaNx/Lumenfall/pull/40
+Branch: 02/auto-ascend-target-selector
+Status ved sidste dokumenterede kontrol: open / Draft / unmerged.
+HEAD: d3daa23d04315ec21776de69b0df960d24cb19b6
+Tree: d1d128a82f6bc204655dc662a5239f98dca51059
+Eneste parent: 9348a48364dcd88b77b9d1bc00763b83c6f8e768
+Main/base: 3a89a8cb4084193326daa5dab68cf9a89ef71512
+Main tree: 134b5f21f414f56ecd446220c8ffc54a0621ca3e
+Candidate index.html SHA256: a2797073f985da25803c61e2626ef54f662dfbc5d0dbd240156e47cff76acd96
+CI #121: run 37078662885, job/check 111074143527; attempt 1, pull_request, completed/success på HEAD.
+Required check: Lumenfall pre-merge validation / app 15368.
+Main Android-version ved checkpoint: 0.1.130.
+Ved drift: rapportér til Lead før afhængig afslutning. Overskriv intet; overfør ikke reviewaccept til ændret HEAD.
+
+RUNTIME OG GENBRUG
+Dokumenteret egen runtime: Chromium Headless Shell 153.0.8010.0 via Playwright; Node 24.19.0; Python 3.12.14.
+Browser SHA256: 1346545781835e04ece3434a16d656ad5cbe60a6a179a43dff43f79a21f9a4ad
+Tidligere executable: /workspace/scratch/f5911b1189e0/startup-runtime/chrome-headless-shell-linux64/chrome-headless-shell
+Eksisterende source-dirs: startup-source, startup-main-source, startup-parent-source.
+Aktuel oprindelig/adapted driver: startup-own19/pr40-evidence/review.cjs og prepare.py.
+Isoleret backupdriver: startup-own19-purity/pr40-evidence/review.cjs.
+Rå tidligere egen evidens: startup-evidence og startup-own19/pr40-evidence.
+Stierne er kun genbrugsmuligheder. En ny chat kan få et andet workspace; antag ikke at de stadig findes. ZIP indeholder kilder og evidens til genskabelse. Browserbinary medfølger ikke. Genbrug runtime hvis tilgængelig og hash matcher; download ikke browser på ny uden behov.
+Udtræk den tidligere review-ZIP under evidence/ for at få egne drivere, assertions, prepared pages, rå FAIL/PASS og runtime/hashkvitteringer. Genskab kun nødvendige dele; ændr kun setup-stier, hvis miljøet kræver det, og dokumentér det.
+
+PAKKENS INDHOLD
+- Denne handoff og START_01_06.txt.
+- Seneste Lead-opgave ordret samt den foregående startup-genreviewopgave.
+- Tidligere egen genreviewrapport og fuld evidens-ZIP (inklusive own19-drivere og gamle failures).
+- Den oprindelige PR40-persistence-evidens-ZIP.
+- Verificeret candidate/source, main og parent som reviewinput; genverificér identity før brug.
+- SHA256SUMS.txt og PACKAGING_VERIFICATION.json.
+Lead-wrapperens selvstændige øvrige filer var ikke tilgængelige i denne handoff. Lead-beslutningen/oracle-revisionen står i den ordret vedlagte seneste opgave. Ingen påstand om ny genkørsel af runtime eller CI under denne handoff.
+
+AFSLUTTET HISTORIK — GENSTART IKKE
+PR #32 R3: persistence ACCEPTABEL på cbcc957612f9c4cb53c31c341ab03f3ebf4b065b, base 5cf20483bc85c027139fc86dfbff077e2b94c86e. Afsluttet.
+PR #33 Forge v1: persistence ACCEPTABEL kun på 9fc260969c278b623ce4452b4ca518a01a4ed471, base 84b3ed9420533099882ba00599891c08e2cf27da, tree fbd898643c4aba88b4da09ec9d2bb23e4e090d8a. Senere ændringer/merge er ikke dækket af den gamle accept. Afsluttet.
+PR #37: 01_05 persistence/legacy ACCEPTABEL på den faktisk testede HEAD med prefix 8e46a31, 24 egne checks, numeriske offline-orakler og kausal negative/undo. Afsluttet og ikke en ny opgave. Den fulde identitet skal hentes fra den gamle PR37-aflevering, hvis den nogensinde bliver relevant; prefix er ikke et nyt checkpoint.
+
+GRÆNSER
+READ-ONLY REVIEW. Ingen repository-edits, branch/commit/push, PR/reviewpublicering, Ready, merge eller manuel CI-trigger/rerun. Lokal review-driver/scratch-negative er kun tilladt i det afgrænsede Lead-scope.
+Ingen Android-build, APK, signing, emulator, ADB, fysisk Android/A40/TalkBack-accept. Grøn browser/CI giver ikke fysisk deviceaccept.
+Ingen gameplay-/UI-implementering, balancing eller nye persistence-regler. Ingen workers startes; 04_04's QA er en separat eksisterende Lead-opgave.
+P2-04/P2-05 forbliver udskudt. Genstart ikke PR #31/#32/#33/#37 eller brede tidligere audits.
+Brug canonical parse/migrate/validate/normalize; loading efter syntetisk startstate må ikke omgå loaderen eller reparere actual-resultatet. Adskil egne kørsler, genbrugt evidens, implementørens resultater, Lead-beslutninger og CI.
+
+FØRSTE SVAR / FORTSÆTTELSE
+Bekræft kort overtagelsen som 01_06 og fortsæt den fire-scenario afslutning efter læsning og live-verifikation. Bed ikke brugeren om at gentage den allerede vedlagte Lead-opgave. Ved manglende nødvendige bytes/runtime: genskab kun nødvendigt materiale eller rapportér konkret blokering; opfind ingen resultater.

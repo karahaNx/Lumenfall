@@ -3,3 +3,10 @@
 *.ico binary
 *.apk binary
 *.exe binary
+
+# Preserve original evidence bytes, including CRLF and historical patch whitespace.
+docs/recovery/** -text
+docs/handoffs/** -text
+archive/** -text
+docs/qa/offline-autoascend-2026-10-07/** -text
+docs/project/SAVE_OFFLINE_AUTOASCEND_DIAGNOSE_2026-10-07.txt -text

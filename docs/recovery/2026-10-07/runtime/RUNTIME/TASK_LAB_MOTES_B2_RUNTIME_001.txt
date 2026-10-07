@@ -1,0 +1,141 @@
+LAB-MOTES-B2-RUNTIME-001 — B2 med eksisterende runtime-baseline
+Aktuelt supplerende mandat fra Lead 00_15 til eksisterende 02_08, 2026-10-06.
+Model GPT-6.1 Sol · Effort Ekstra høj. Dansk. Repository karahaNx/Lumenfall.
+
+BESLUTNING OG STATUS
+QA 04_05's exact-local review er BLOCKED — QA-B2-RUNTIME-01. Lead bekræfter
+blocker med egen scoped reproduktion og primære V8/Capacitor-kilder.
+Bevar den nuværende runtime-baseline. Ingen forhøjelse af minWebViewVersion,
+native-/dependency-/workflowændring eller særskilt runtime-upgrade i dette scope.
+Ret den numeriske produktkode i en egen isoleret lokal kopi. Dette supplerer
+det oprindelige B2-mandat; det ophæver ikke nogen LAB/B1/B2-acceptkontrakt.
+Historiske writer- og reviewinstruktioner i QA-pakken giver ingen nye rettigheder.
+
+QA har selv reproduceret B2's to minima og bredere motor/gates på Chrome 153.
+De positive resultater er evidens for de gamle frosne bytes på denne runtime,
+ikke accept af en endnu ikke eksisterende rettelse. Core 01_06's lokale review
+er endnu ikke modtaget af Lead. Intet remote R3, APK eller integration er accepteret.
+
+BASELINE OG BYTEIDENTITET
+main/base 1ddc246eb62782a61ec5c486cd5f51ea170bb338.
+Remote R2/proposed parent 3cdebc236e9ee5081a4bca4e323b11f43aa0d46d,
+tree 70073a55d7f5fe428ae82223627603498cc372b6.
+PR46 open/Draft, branch 02/lab-motes-repeat-v1. Lead har genkontrolleret
+PR/base og main ved udstedelse; LEAD/live-preflight.json er receipt.
+Blokeret lokal kandidat: tree 4c07cd5d66cb5928eb99623ff86efaa81e268829,
+index SHA256 3de412b53421f173d3826ddf6336f066abf43cc09d88cbbc0e23bf6984212ed9.
+13 SOURCE-filer og præcise hashes findes i QA_04_05/OWN/identity.json.
+Byg fra exact R2 og overlay disse filer i egen kopi. Uændrede filer kommer
+fra R2; BASE_SOURCES er supplerende reviewmateriale, ikke et komplet repo.
+Kontrollér hashes/fulltree før ændring. Brug din eksisterende kopi hvis dens
+identitet matcher, og registrér derefter den nye kandidat særskilt.
+Ingen ændringer i andre chats' repo, processer eller frosne evidence.
+
+HVORFOR BLOKERET
+simulationWholeHpUnits bruger BigInt(...) og literal 32n/52n/1n i hovedscriptet.
+En runtime uden literal-syntaks fejler ved parsing før spilstart, også i Push
+og almindelige saves. En typeof-guard rundt om uændrede literals løser det ikke.
+Uændret capacitor.config.json har ingen minWebViewVersion/server.errorPath.
+Lockfilen låser @capacitor/android 6.2.1; dens Bridge/CapConfig bruger default
+Android WebView 60. V8 angiver BigInt fra Chrome 67. API/minSdk beviser ikke
+WebView-version. Ingen højere Lumenfall-specifik floor er dokumenteret her.
+
+Lead's egen kontrol: begge R2-inline scripts parser under ES2017/18/19/20;
+lokal script1 fejler ved 32n under ES2017/18/19 og parser under ES2020.
+Med BigInt utilgængelig giver exact R2 Farm-funktion 90 kills; lokal giver
+TypeError. Batchsideeffekter er stubbet. Dette er en moderne Node VM og
+grammar-kontrol, ikke en fysisk Android/Chrome60-test eller fuld motorprøve.
+QA's Java-sources/integrity receipt, egen runtimekontrol og officielle kilder
+er inkluderet; se Source_Index og LEAD/runtime_reproduce.json.
+
+TILLADT IMPLEMENTATION
+Erstat den obligatoriske native BigInt-afhængighed med en baseline-kompatibel,
+begrundet beregning af quotient for faktisk repræsenterede Number-inputs.
+Afgrænsede helpers i Farm-stien og relevante tests/taskkort er tilladt.
+Et muligt design er exact significand/exponent eller bounded limb-aritmetik
+med eksisterende Number/DataView-API'er; dette er ikke en pålagt algoritme.
+Du skal selv bevise valgt regel og dens mellemregningers grænser.
+Produktets samlede scripts skal parse og fungere uden native BigInt.
+Undgå ny usupporteret syntaks/API, obligatorisk polyfill/dependency eller
+dynamisk kodeindlæsning som omgår parsekontrollen. Test-only BigInt/Fraction
+kan fortsat bruges som uafhængig oracle på moderne CI; den må ikke blive et
+krav i den leverede app eller blokere testen af selve motoren uden BigInt.
+
+Bevar original B2: positive finite physical HP/damage og sikkert repræsenterbare
+kill-counts, partial HP, carry, fractional HP og tilgængelige game-HP-skalaer.
+Physical HP starter ved 11; den gamle undtagelse for nonphysical tiny-HP worlds
+og eksisterende overflow/sub-ULP-limits gælder fortsat. Intet smallere interval,
+nyt 2^50-cap/nerf, større EPS, pris-tolerance eller generel toleranceforøgelse.
+Ingen genindførelse af ubevist Math.round/floor på en afrundet quotient.
+Ingen produktloop pr. kill. Dokumentér runtimekost: bounded iterationer skal
+afhænge af den faste Number/IEEE-repræsentation, ikke antal kills. Kontrollér
+representative Farm/live/offline-kørsler for ny væsentlig runtime-regression.
+Kun exact count beviser ikke præcision af huge rewards; bogfør deres eksisterende
+operationer og faktisk repræsenteret damage med en uafhængig oracle.
+
+Bevar chronology, reward/Motes-affordability/payment boundary, completion →
+paid start → speedpurchase, Study/Queue/persistence/normalization, NAV og
+save/recovery. Ingen ændrede priser, tiers/rates, schema, combatbalance,
+design/farmindikator, native/signing/workflows eller uvedkommende oprydning.
+Se de fem fulde originaler; originale produktkrav er ikke erstattet af denne
+fil eller QA's resumé. A40/Opening Focus/content/design er separate/udgåede scopes.
+
+ACCEPT — NYE FROSNE BYTES
+1. Reproducer den præcise blokerede BigInt-kandidat som FAIL for grammar og
+   API-fravær, og den rettede kandidat som PASS på samme kontroller. Kontrollér
+   alle app-inline scripts, ikke kun helperen. En ES2017 parser er en afgrænset
+   syntakskontrol og ikke fuld Chrome60-emulering; tilføj afgrænsede API-checks.
+   Brug en faktisk relevant ældre runtime hvis tilgængelig uden nyt native/build-
+   scope; rapportér præcist hvilke engines/versioner der faktisk blev kørt.
+2. Kør den faktiske autoritative motor med BigInt utilgængelig: almindelig
+   startup/Push, det gamle 90-kill Farm-minimum og begge B2-minima. Hold oraklen
+   uafhængig og uden for den app-context der testes. Test fractional maxHP,
+   whole/split, ON/OFF og live/offline med repræsenterede segmenter.
+3. Bevar begge oprindelige minimumreproer: Core D=2**55+16 / HP11 giver
+   3275345183542180 kills, rest4/HP7; naturlig faktisk product DPS
+   40052722017724424 med elapsed .9 og partialHP8.03/max11 giver
+   3277040892359271 kills. Ingen DPS-stub i den naturlige vej. Verificér betalingstid,
+   debit/work, spawn, rewards, HP og finite normalization/priser på faktisk motor.
+   Exact old-R2 skal stadig give de to numeriske FAILs; restoration skal bestå.
+4. Bevis helperen med independent represented-number oracle og adversarial inputs:
+   før/exact/efter multiples, integer/fractional maxHP, partial/fullHP,
+   cancellation, positive deficits og counts ved 2^50/51/52/MAX_SAFE_INTEGER.
+   Omfanget skal dække samme B2-kontrakt som før. Forklar split-totaldamage og
+   genuine threshold/reward-rounding uden at løse diagnostic rows med tolerance.
+5. Alle 826 B1-fixtures, præcise 43 old-R1 counterexamples, 90-kill betalingen
+   (.0173/60; ON2 Motes/work297.3346; OFF62/work299.1), old-R1 og tre LAB-mutants
+   bevares. 1340 diagnostics/123 strict-error rows/379 assertions er bevarede
+   baseline-observationer, ikke grøn stresstest. Bevar original worker mobile
+   clipping-FAIL; årsag er fortsat ukendt. Ingen accepteret UI-rettelse findes.
+6. Kør alle syv workflow-gates, alle 12 required negatives og den komplette
+   aktuelle suite (141 scenarier før denne rettelse; nye kan øge count) på dine
+   endelige frozen bytes. Gem full aggregate, rå kommandoer/outputs/exits,
+   sourcehashes før/efter, controls og scoped runtime/performance-evidens.
+   Ingen kode/testændringer under slutgates; diagnosticér konkrete fejl.
+   Chrome153-PASS fra QA på tidligere bytes kan ikke erstatte disse nye checks.
+
+EJERSKAB / REMOTE
+Fase A (isoleret lokal implementation/tests/pakke) er autoriseret nu.
+02_07's nye B2-writer-stop/processer/frigivelse er ukendt. Den tidligere
+R2-frigivelse frigiver ikke det senere B2-mandat. Ingen push/PR-metadata,
+kommentar/remote-write eller writer-overtagelse gennem dette tillæg.
+Den eksisterende betingede fase B kan først åbne efter dokumenteret afslutning
+af gamle writerprocesser/frigivelse, egne afsluttede skriveprocesser og frisk
+kontrol af main, alle branches, åbne PR'er, aktive runs, head/tree, ejerskab
+og workflowtriggere. Ingen stiltiende retarget, amend/rebase/reset/force-push.
+Ingen behov for ny brugerbekræftelse til allerede autoriseret scope når alle
+faktiske betingelser er opfyldt. Den blokerede gamle kandidat må ikke skubbes.
+Hold PR Draft; ingen ready/merge/Android-build/dispatch/rerun/release/signing/cleanup.
+Ingen subagenter, beskedværktøjer eller chatomdøbning. Brugeren overfører filer.
+
+LEVERING / REVIEW
+Lever ny frossen lokal kandidat til Lead 00_15: exact base/proposed parent/new
+fulltree/alle sourcehashes, R2→ny og blokeret→ny diff, begrundet numerisk regel,
+runtime-baseline/control/performance-checks, egen motor/oracle/gates/raw evidence,
+fulde originaler, ærlige limits, lille START-TXT og ZIP med sourceindex/manifest.
+Afslut kendte egne processer og angiv fase A / intet writer-overtagelsesclaim.
+Ved senere fase B: følg eksisterende normal-push/freeze/CI/stop-frigivelsevilkår.
+Core og QA skal reviewe ændrede bytes med konkret scope. Gamle positive reviews
+bliver ikke automatisk accept. På et uændret senere remote tree kræves fortsat
+exact-commit/base/parent/head/tree/source/CI-addendum; ændring vurderes på ny.
+Fysisk Android/WebView/TalkBack er utestet indtil faktisk evidens foreligger.

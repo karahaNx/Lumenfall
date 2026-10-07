@@ -1,0 +1,85 @@
+TASK_02_09_RECOVERY_001 — aktuelt mandat fra00_16
+Model GPT-6.1 Sol · Effort Ekstra høj. Repository karahaNx/Lumenfall.
+
+MÅL OG KILDEPRIORITET
+Genskab den sidste verificerede B2-kandidat privat og afslut den manglende
+runtimekorrektion med nye frozen bytes og faktiske egne kontroller. Den fulde
+runtimekontrakt i RUNTIME/TASK_LAB_MOTES_B2_RUNTIME_001.txt og de fem originale
+LAB/B1/B2-krav gælder uændret. Denne fil supplerer dem med rolle02_09,
+Lead00_16, recovery-afgrænsning og remotehold. Ældre opstarts-/reviewfiler er
+historiske kilder; de gør dig ikke til02_08, Core eller QA.
+
+HVAD RECOVERY BETYDER
+02_08 er praktisk utilgængelig ifølge brugeren. Vi har hverken en ny kandidat,
+et processtop eller dokumenteret nyere arbejdsstatus fra den chat. Forsøg
+ikke at rekonstruere dens ukendte fremdrift som fakta. Gamle worker/Core/QA
+sources og rå beviser er fuldt bevaret her. En ny egen implementering på disse
+kendte bytes er autoriseret; ingen genbrug af ukendt nyere produktkode.
+Eventuel senere02_08-levering skal gemmes særskilt og vurderes af Lead; ingen
+automatisk overlay eller overskrivning af din nye kandidat.
+
+OPSTART OG PRIVAT GENSKABELSE
+1. Læs den korte startup, live fællesregler og kun egen Gameplayrolle. Den
+   gamle PROJECT_STATE dateret5oktober er ikke nutidigt writerbevis.
+2. Verificér live main ogPR46. SHA'er er checkpoints, ikke resetmål. Rapportér
+   afvigelser og vurder deres betydning; fortsæt read-only undersøgelse uden
+   at retargete, rebase, force-pushe eller skrive remote.
+3. Opret en ny privat kopi fra exactR2. Overlæg de13 SOURCE-filer fra
+   RUNTIME/QA_04_05/SOURCE, kontroller hver hash og beregn fulltree. Uændrede
+   filer kommer fra R2; BASE_SOURCES er ikke et komplet repository.
+   Det genskabte tree skal matche4c07cd5d66cb5928eb99623ff86efaa81e268829.
+4. Brug ikke02_07/02_08's mapper/processer. Kontroller og registrer kun egne
+   processer; stop ikke ukendte processer. Bevar alle inputbeviser.
+5. Giv en kort første opdatering om adgang, baseline og privat arbejdsmappe.
+   Manglende originaler/bytes rapporteres konkret, ikke med gæt eller PASS.
+
+IMPLEMENTATION / ACCEPT
+Læs det fulde runtime-mandat og fulde originals før relevant kodearbejde.
+Bevar WebView60 og alle eksisterende arithmetic/runtime/productgrænser.
+Erstat nativeBigInt-afhængighed med begrundet baseline-kompatibel beregning
+af quotient for repræsenterede Numbers. Ingen per-kill-loop, nycap, størreEPS,
+billigereMotes, ændret schema, native/dependencies/workflows/signing/balance.
+Core's rapport nævner alternativ runtimekontrakt; den er ikke autoriseret.
+
+Alle runtime-mandatets acceptpunkter1–6 gælder for dine nye frozen bytes:
+samtlige inline-scripts, API-fravær, faktisk motor udenBigInt, startup/Push,
+90-killB1, begge B2-minima med naturalDPS, independent represented-number
+oracle, fractionalHP, safe-count-skalaer, whole/split/live/offline, payment/
+chronology/persistence,826B1fixtures/43oldR1cases/mutants, performance og alle
+syv endelige workflowgates med12requirednegatives og fuld aktuel suite.
+Bevar1340diagnosticFAILs, rewards-policy, numericlimits ogmobileclippinglogs.
+Tidligere positive moderne-runtime-tests overføres ikke som ny accept.
+
+KØRSLER OG CHECKPOINTS
+Arbejd sekventielt: baseline/control → helperbevis → actualmotor/kausale
+kontroller → relevante regressioner → freeze → endeligegates → aflevering.
+Brug eksisterende drivere og sourceindex; ingen bred historiklæsning.
+Undgå samtidige egne browser/testkørsler, som gør ressourcer og fejl uklare.
+Registrer kommando/session, start, output, exit/timeout og sourcehashes.
+Lad lange processer yield/polle, så du kan give opdateringer undervejs.
+Gem et lille checkpoint efter genskabelse, efter egen helper/motorverification
+og efter slutgates. Ingen ny brugerbesked kræves for hver milepæl.
+Efter et tooltimeout: kontroller egen session/output før nyt forsøg; skab
+ikke duplikerede kørsler. Diagnosticér en konkret fejl før nødvendigt repeat.
+Det ændrer ingen assertions, thresholds eller requiredgate-kontrakter.
+
+REMOTE / STOPBETINGELSER
+Kun lokal faseA er åben. Ingen writer-overtagelse, push, commit til remote,
+docswrite/PR-kommentar/metadata, ready/merge/build/dispatch/rerun/release/
+signing/cleanup. Historiske conditionalfaseB-mandater åbner ikke remote nu.
+Lead skal vurdere ny kandidat, tildele scoped Core/QA-review og dokumentere
+gammel writer-/proceshandover før et nyt konkret remotecheckpoint.
+Ingen ny generel brugergodkendelse kræves i det allerede autoriserede scope.
+Ingen subagenter/beskedværktøjer eller chatomdøbning. Brugeren overfører filer.
+
+LEVERING TIL00_16
+Lever lille START-TXT og målrettetZIP med exactbase/proposedparent/newtree,
+alle13eventuelt yderligere scopedsourcehashes, R2→ny ogblokeret→nydiff,
+begrundet regel/mellemregningsgrænser/runtimekost, dine faktiske egne kontroller,
+færdige råcommands/outputs/exits/controls, sourcehashes før/efterslutgates,
+fulde originaler, sourceindex/manifest og ærlige limits. Ingen rekursiveZIP'er.
+Afslut kendte egne processer og rapportér phaseA/ingenremote-writer. Det
+frisætter ikke02_07/02_08. Kandidaten fryses; nye reviews kræves på ændredebytes.
+Hvis færdiggørelse blokeres, aflever konkret checkpoint/årsag/filer; påstå ikke
+færdig runtimefix eller accept. Ved lang chat: samme lillebootstrap/context-
+metode og dokumenteret egen kandidat/processtatus.

@@ -1,0 +1,73 @@
+Til 01_06 — Core / State & Save
+Fra 00_08 — Lead / Architecture
+Lumenfall · Signing-/release-diagnose · 2026-10-04
+Work · GPT 6.1 Sol · High
+STATUS: FORBEREDT AF 00_07; IKKE SENDT. Aktiveres én gang af 00_08 via brugeren.
+Læs denne TXT først. Fortsæt afsluttet PR40-accept; ingen ny persistenceaudit.
+
+OPGAVE
+Find den konkrete, dokumenterbare årsag eller den præcise adgangs-/evidensgrænse
+for Androidrun131s signing-download failure. Returnér en mindst mulig plan for
+at få eksisterende signingidentitet tilbage i pipeline og udgive PR40.
+Dette mandat er READ-ONLY. Ingen repo-/release-/tag-/workflow-/secretændring,
+keystore-download/generering/udskiftning, dispatch/rerun eller workers.
+Du får ingen repository-writer-lease.
+
+FROSSET CHECKPOINT
+Main/merge df78d51181a59d247bf4fc9abf1c7e05237e9c2b
+Tree d1d128a82f6bc204655dc662a5239f98dca51059
+PR40 merged fra d3daa23d04315ec21776de69b0df960d24cb19b6.
+Run131 https://github.com/karahaNx/Lumenfall/actions/runs/37156346912
+ID37156346912, attempt1, push/main, exact main, completed/failure.
+Job111300392521, step7 Restore and verify stable Android signing key.
+Log21:49:33Z: release not found; Established Android signing keystore could not
+be downloaded. Refusing to build or publish. exit1.
+Workflow: gh release view lumenfall-signing-v1 først, dernæst gh release
+download --pattern Lumenfall-debug.keystore. Fejlen kom fra downloadgrenen.
+Lead 2026-10-03T21:59Z læste både releases/tags/lumenfall-signing-v1 og
+git/ref/tags/lumenfall-signing-v1: begge404. Rootcause er IKKE fastslået.
+Skeln mellem manglende release/tag, assetmangel, adgang og midlertidig fejl.
+Gradle cleanupPASS er ikke buildPASS. Alle downstreamAPK-steps skipped.
+
+BEVARET IDENTITET OG RELEASE
+Expected appID com.lumenfall.app.
+Expected cert SHA256:
+A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21
+Ingen certmismatch eller tabt privatekey er påvist.
+Aktuel production0.1.130, android-latest-tag3a89a8cb4084193326daa5dab68cf9a89ef71512.
+Asset606480838 Lumenfall.apk,6826519bytes,
+API sha256:5e3a1c8d7218458bb9666ab2043b32db94d1922a9481275bd7d2cbac7e5a2fa7
+Ingen nyAPK0.1.131.
+Forrige success Androidrun130 ID37063897794 kan bruges som smal kontrast.
+
+FREMGANG
+Genlæs kort aktuelle main/run/release/signingmetadata og påvis eventuel drift.
+Læs det vedlagte faktiske workflow og log. Sammenhold om nødvendigt signing/
+releasecleanup-publish-sekvens i samme workflow og forrige successfulrun130.
+Undersøg kun ikke-hemmelige release/tag/assetmetadata og allerede maskerede
+logs med tilgængelig adgang. Fortæl tydeligt hvis API-adgangen ikke kan afgøre
+eksistens/adgang. Gentag ikke samme404 og lav ikke ny bredQA.
+Hvis årsag kan bevises, peg på eksakt handling/kodelinje/tidspunkt og kausal
+sammenhæng; adskil observation fra hypotese. Et forslag må aldrig erstatte
+den etablerede key med en ny eller fjerne certifikatgaten.
+Hvis eksisterende release/nøgle ikke kan lokaliseres gennem metadata, afslut
+med præcist manglende bevis og hvilken eksisterende backup/ejerhandling der
+skal verificeres i en særskilt opgave. Undlad secrets/credentialprobes.
+Kun rapportér et konkret retry-forslag hvis underliggende disposition gør det
+begrundet; udfør det ikke under dette mandat.
+
+AFLEVERING
+Selvstændig TXT+ZIP til00_08 med:
+- formel FUND / IKKE FASTSLÅET / BLOKERET AF ADGANG;
+- aktuelle SHA/run/attempt/release/signingmetadata og rå read-only receipts;
+- eksakt observeret fejlgren, minimal succes-kontrast og evidensbegrænsninger;
+- mindst mulig konkret fix-/retryplan, nødvendigt ejerskab og bevaret certgate;
+- tydelig bekræftelse: ingen ændringer, keydownload eller manualbuild/rerun;
+- SHA256manifest. Ingen nøglemateriale eller credentials i afleveringen.
+Model/effort for en efterfølgende opgave besluttes af Lead, ikke af dig.
+
+PAKKE
+Integration.zip er komplet allerede udført integration, ikke nyt merge-mandat.
+Integration_Lead_Check.json og live receipts er Leads friske afgrænsede check.
+build-contract/build-android.yml og verify_apk_identity.py er verificerede bytes
+fra kandidatens tree, som er identisk main; brug dem som kilder.

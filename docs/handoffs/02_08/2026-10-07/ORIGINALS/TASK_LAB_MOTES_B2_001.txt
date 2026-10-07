@@ -1,0 +1,147 @@
+LAB-MOTES-B2-001 — robust farm quotient / R3 til 02_07
+Udstedt af Lead 00_14,2026-10-06. 00_15 overtager ved næste Lead-chat.
+Repository karahaNx/Lumenfall. Dansk. Model GPT-6.1 Sol · Effort Ekstra høj.
+
+NYT ENKELT WRITER-MANDAT
+02_07 er eneste repo-writer til at rette B2/C-B2 i eksisterende DraftPR46.
+R2-writer blev frigivet 10:20:41.359452Z; dette er et nyt afgrænset mandat.
+Core 01_06 og QA 04_05 har afleveret BLOCKED/read-only stop og lukkede egne
+processer. Lead har kun læst, lavet isoleret lokal evidens og opgavepakker.
+Mandatets udstedelse er ikke bevis for workerstart. Ingen parallel writer.
+Brugeren overfører selv ZIP til eksisterende02_07; ingen subagenter,
+beskedværktøjer eller chatomdøbning. Stående godkendelse gælder dette scope.
+
+BASE OG KANDIDAT
+Main/base:1ddc246eb62782a61ec5c486cd5f51ea170bb338
+Base tree:bfb3970b29485b3e8ece1c72bb60186eb2ba755e
+R1:d1e988816ed10b8f851521938a117a4d84d29e1b
+R2/head:3cdebc236e9ee5081a4bca4e323b11f43aa0d46d
+R2 tree:70073a55d7f5fe428ae82223627603498cc372b6
+R2 index SHA256:8de74bbb7ab31be18405c40e20114d8421c34fe78eeb134dd12016153311fa17
+Branch 02/lab-motes-repeat-v1,PR46 open/Draft. Bevar historik; ny scoped commit
+oven på frisk verificeret R2. Ingen amend/rebase/reset/force-push.
+Kontrollér live AGENTS eksplicit → kun egen række/02_GAMEPLAY → PROJECT_STATE.
+Derefter dette mandat,Source_Index og fulde relevante originaler. Før remote
+skrivning: frisk main,alle branches, åbne PR’er, aktive runs,PR head/tree og ejerskab,
+samt workflowtriggere. Gamle PROJECT_STATE Lead/writer er suppleret her.
+SHA'er er checkpoints. Drift vurderes konkret; ingen stiltiende retarget.
+
+BESLUTNING OG KILDER
+Begge exact R2-reviews er BLOCKED. B1s oprindelige minimum og alle 43 gamle
+counterexamples er rettet; det overføres som positiv evidens,ikke R3-accept.
+C-B2 og QA-B2 har samme årsag: Math.round((damage-remainder)/maxHp) kan
+recovere for stor quotient. Et sikkert heltalsresultat gør ikke mellemregningen
+præcis. Subtraction kan runde tilbage til damage; division bliver q+.5, round
+skaber én ekstra kill. Workerens576 inputs til 2^50 dækkede ikke hele safe-count-
+påstanden. Lead indfører ikke et 2^50 gameplay-cap eller snævrere supportinterval.
+Ret robust inden for positive finite HP/damage og sikkert repræsenterbare
+kill-counts. Bevar R2s undtagelse for nonphysical tiny-HP worlds; faktisk game-HP starter ved 11.
+Dokumentér hvad der sker på de numeriske grænser; ingen løfte om
+vilkårlige sub-ULP input eller unbounded/overflow. Et reelt nødvendigt bredere
+scope afleveres som konkret afhængighed før implementation uden for dette.
+
+Læs CORE_R2/C_B2_DETAIL.txt + REPRODUCER.txt og primære residualbeviser;
+QA_R2/BLOCKER_B2.txt + QA_REPORT.txt + REPRO_README.txt. Læs alle tre komplette
+LAB-originaler og B1-mandatet under ORIGINALS/ fuldt. Reviewmandaterne inde i
+CORE_R2/QA_R2 er historiske reviewkilder,ikke rolle-/writerinstruktion til dig.
+Læs den aktuelle ændrede funktion med kaldere og NUMERICAL_RULE fra R2.
+Source-index er målrettet; ingen ordre om at læse hele ZIP/gammel historik.
+
+MINIMUM A — CORE, FAKTISK MOTOR MED DPS-FIXTURE
+Farm Rift 1, maxHP/currentHP 11, Luminous=false, accumulator .975; ingen bonus/automation/
+køb. Guardian work 300/total 600/1x, Use Motes OFF, Lumen/Shards/Motes/totalKills 0.
+DPS expression 2 ** 55 + 16, elapsed 1s. Exact represented damage 36028797018963984.
+BigInt(D)//11=3275345183542180;rest 4; næste HP 7. Begge counts er safeintegers.
+R2 whole 1s giver 3275345183542181; split .5+.5 giver 3275345183542180.
+Live Shards følger disse præcise counts. Offline bruger eksisterende.7 policy
+men samme kills. Ingen repræsenteret totaldamage-forskel mellem de to halvdele.
+Læs rå command/result/active assert; driverexit1 er forventet blockerbevis.
+
+MINIMUM B — QA, NATURAL PRODUCT DPS / INGEN DPS-STUB
+Læs hele fixed normaliserede input i QA_R2/EVIDENCE/natural-high-results.json
+og FIXTURES/natural_high.js. Farm depth 1, partial HP 8.03/max 11, Luminous=false,
+accumulator .975, Motes 59, guardmastery 300/600/1x, target 3x, Queue OFF. Party Titan,
+level 1635, Mythic 5, Ember rarity 1, resource Titan 0, Formation research 500,
+Formation Insight 500, Wisp Ascendancy 500, Momentum 500, ascendCount 5/asc5=true.
+Alle øvrige queues OFF. Brug faktisk product simulationPassiveDps.
+DPS 40052722017724424; elapsed .9; exact represented damage 36047449815951984.
+Expected 3277040892359271 kills. OFF/whole giver 3277040892359272 i R2;
+OFF split .01+.89 og ON whole/ON split giver 3277040892359271. Live Shards følger
+kills; offline-par har samme killfejl. Ingen completion/ability/AutoTap/Empower/
+Ascend forklarer den. Normaliserede felter og næste priser er finite.
+Dette er ekstremt stress-save,ikke dokumenteret normal gennemspillet historie.
+Det opfylder den erklærede numeric grænse og må ikke afvises pga.sjældenhed.
+
+ORACLE-FÆLDER
+Brug expression/IEEE-bitdecoder og exact damage-string,ikke shortest JSON-number
+som vilkårligt præcist Pythoninteger. Fx D kan serialiseres som...3980,men det
+repræsenterede heltal er...3984. For split: summér faktiske repræsenterede del-
+skader i rational oracle. Natural split har-15/4 skade versuswhole,men krydser
+ikke næste killthreshold; korrekt kills er stadig ens. Kræv ikke identisk HP
+for repræsenteret forskellig skade. Skeln dette fra C-B2s præcis ens totaldamage.
+Lead/reproduce_b2.cjs/.json er egen exact-funktionsrepro med batch-sideeffekter
+stubbet; begge wholefail/splitpass er bekræftet. Lead har ikke genkørt QA's
+naturlige DPS-producer eller fulde motor; reviews indeholder motorbeviserne.
+
+TILLADT SCOPE
+Robust quotient/remainder/partial-HP/carry i simulationApplyFarmPassive,
+nødvendige afgrænsede helpers/regressioner og B2-taskkort/numeric dokumentation.
+Bevar batched runtime,ikke en per-kill produktloop over enorme counts.
+Permanent faktisk-motorregression skal fange begge minima,inkl.natural-DPS-
+vejen og old-R2-funktion FAIL/undoPASS. Testens oracle skal være uafhængig af
+produktionsformlen. Bevar old-R1 B1-control og de tre LAB-mutants.
+Forventede filer:index.html,relevante tests/behavioral og scoped taskkort.
+Ingen større EPS/price tolerance,løsnede gamle assertions,slukkede controls,
+ændrede rewards/priser/tiers/rates/boundaries/Studyintent/Queue/save/schema/
+recovery/NAV/workflows/native/signing/combatbalance/design eller farmindikator.
+Ingen nerf/cap af gamle uncapped investeringer. Rigtig Motes-affordability-
+boundary og betalingstid bevares; ikke batchslutbetaling/fjernelse af boundary.
+Nye exact-rational orakler skal begrunde eksisterende boundarytolerancer og
+representation/summationsgrænser; diagnostic assertionfejl må ikke bare farvesgrønne.
+
+ACCEPT FØR REMOTE PUSH
+1 Reproducer R2s begge minima som FAIL med independent oracle og faktisk motor.
+  BevisR3 korrekte counts/spawn/reward/HP/Motes/work for whole/split,ON/OFF,
+  live/offline. Kontroller naturlig DPS uden stub,finite normalization/priser.
+2 Dæk safe-count-intervallet systematisk: almindelige counts, omkring 2^50,
+  2^51,2^52 og safeinteger-grænsen med representable D/H og partial HP. Near-
+  multiples før/exact/efter,partial+fullHP,små HP mod huge damage,cancellation,
+  tilgængelige game-HP-skalaer og positive deficits. Supplér reviewerernes
+  560/3200/576/56 datasæt med egne deterministiske/adversarial valg og proof
+  af beregningsreglen. Kun exact count giver ikke automatisk præcise store rewards;
+  bogfør actual policies/represented damage med uafhængig oracle.
+3 Alle 826 B1conservationfixtures,alle 43 gamlecounterexamples og minimum 90 kills
+  består. Bevar actual .0173/60-køb, Motes 2/work 297.3346 ON og 62/299.1 OFF.
+4 Undersøg QA's1340 additional motorcases/123 diagnostikrows. Bevar originals,
+  klassificér sammeinputR1/R2/R3 og identificér R2-specifikke afvigelser. De123
+  er ikke alle nye blockers eller bestået samlet stresstest. Ingen stiltiende
+  ignorance af de nye count-afvigelser; ingen generel toleranceforøgelse.
+5 Bevar chronology completion/closure/cap → paid start → speedpurchase,
+  simultaneous Luminous/buff/Ascend,flereStudies/knaptbudget/deklarationsorder,
+  actual offline study-only tail,MeasuredInquiry/legacy8,Farm/Push og alle
+  LAB price/repeat/default/persistence/strict-pure-normalization-kontrakter.
+6 Permanent B2oracle på faktisk motor,exact gammel R2-funktion skal fejle, undo
+  bestå; old R1 B1-control og alle LAB/runtime/source/timeout controls bevares.
+  Brug ikke den korrigerede quotientformel som testoracle. Bevar almindelig
+  batched funktion og mobilruntime uden ny native/dependency/workflowændring.
+7 Kør alle 7 workflow-gates, alle 12 required negatives og nye regressions på endelige
+  frozen bytes før push. Alle 140 eksisterende scenarier skal fortsat være dækket;
+  nye tests kan øge count. Gem komplet final aggregate plus rawprocessoutputs/
+  cmds/exits/sourcehashes før/efter. Ingen kode/testændring under slutgates.
+  DiagnostiskeFAILs/forventedecontrols er særskilte; samlet PASS-optælling er ikke
+  proof af numeric grænse. Workerens gamle aggregate-tail er ikke kompletbevis.
+
+REMOTE/FREEZE/FRIGIVELSE
+Efter lokal slutvalidering: én ny scoped commit,normal push til eksisterende
+branch/DraftPR46; almindelig automatisk PR-CI er tilladt. Hold PR Draft og ajourfør
+PRtitle/body til ærlig finalimplementation/validation. Ingenready/merge,
+Androidbuild,dispatch/rerun,release/signing/cleanup. Ved CI-fejl: læs konkrete errors
+og afleverdiagnose; ingen blind genkørsel. Ingen løfte om atCI aldrigkanfejle.
+Freeze R3 exact base/parent/head/tree/alle kildefiler/sourcehash,
+R2→R3 + main→R3 diff,originaler,egen oracle/engine/raw validation,CIreceipt/limits,
+sourceindex/manifest; aflever lilleTXT+ZIP tilaktuelLead 00_14/00_15.
+Gem brugerfiler viaLibrary-skillen. Frigiv writer udtrykkeligt og afslut kendte egne
+skriveprocesser. Intet ekstra commit efter freeze/frigivelse. Begge Core+QA skal
+genreviewe exact R3 før Lead-integration/release; R1/R2-positives er kun kilder.
+Fysisk Android/TalkBack fortsat ukendt. A40/Opening Focus/CONTENT-DESIGN/Farm 03
+forbliver separate/udgåede scopes.

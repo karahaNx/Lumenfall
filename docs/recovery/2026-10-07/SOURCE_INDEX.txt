@@ -1,0 +1,47 @@
+LUMENFALL — målrettet indgang til nyt projekt
+START: PROJECT_BOOTSTRAP.txt → liveAGENTS → egenLeadrolle →
+docs/project/RECOVERY_CURRENT_STATE.md. PROJECT_INSTRUCTIONS.txt er korte
+projektinstruktioner. Ingen ordre om at læse hele repository eller logs.
+
+AKTUEL 02_09-OPGAVE
+docs/recovery/2026-10-07/runtime/CURRENT_STATE.txt
+docs/recovery/2026-10-07/runtime/LEAD/TASK_02_09_RECOVERY_001.txt
+docs/recovery/2026-10-07/runtime/Source_Index.txt
+Disse fastlægger recoveryrolle/Lead/lokalphaseA ogudtrykkeligremotehold.
+runtime/RUNTIME/TASK_LAB_MOTES_B2_RUNTIME_001.txt: fuldruntimekontrakt.
+runtime/RUNTIME/QA_04_05/ORIGINALS/: fuldeLAB/B1/B2-originaler.
+runtime/RUNTIME/QA_04_05/SOURCE/: blokeretkandidat, ingen produktintegration.
+runtime/CORE_01_06/CORE_REPORT.txt + Source_Index.txt: faktiskCoreBLOCKED.
+runtime/RUNTIME/QA_04_05/Source_Index.txt: præciseråQA/motor/gatepaths.
+runtime/CORE_01_06/OWN_RAW.tar.xz: egneCorebeviser.
+runtime/CORE_01_06/WORKER_RAW_CURRENT.tar.xz:1322workerraw.
+runtime/RUNTIME/QA_04_05/RAW_EVIDENCE.tar.xz:781QAraw.
+Store råarkiver læses/downloades kun efterbehov; de erGitHubkilder nu.
+
+FEEDBACK — ORIGINALER OG PRIORITETER
+lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt
+lead_context/FEEDBACK/ORIGINAL/IMAGES/: fireoriginaler, billede2 ønsketAutoAscend.
+lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt ogSource_Index.txt
+lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt
+lead_context/BACKLOG/FEEDBACK_REGISTER.tsv ogNEXT_SCOPE.txt
+Præfiks foralle relativepaths ovenfor: docs/recovery/2026-10-07/.
+FeedbackTASK er krav/designkilde, ikke en samlet aktivwriterordre.
+
+PROVENIENS / GENFINDING
+ARCHIVE_COVERAGE.json: hvertoriginalpakke-payload→kanoniskGitHubsti/hash/bytes.
+MANIFEST.json: alle nyepublicerede recoverypayloads, ikke selfhash.
+RECEIPTS/PUBLISH_PREFLIGHT.json: baselines/allebranches/PRs/runs/workflowtriggere.
+runtime/RECEIPTS/: tidligereinput/runtimereplay ogrolleindgange.
+transmittals/: alletilgængelige eksterneTXT'er/ældrestopinstrukser.
+worker_delivery/: bytebevaredeworkeroriginaler/reproducer uden duplikatraw.
+preparation_scripts/: tidligerelokalepakkeopbygninger, privatpaths erproveniens.
+scripts/recovery/restore_package.py: genskab enlogiskoriginalpakke lokalt og
+verificér hverpayload. Det eringenoriginalZIP-containerbytegaranti.
+Produktkoden er root index.html påmainbaseline; reviewerSOURCE/index.html
+underrecovery erblokeret ogmåikke forveksles medproductroot.
+
+STOR RAW-KILDE
+Det logiske runtime/RUNTIME/QA_04_05/RAW_EVIDENCE.tar.xz er gemt som
+RAW_EVIDENCE.tar.xz.parts/{PARTS.json,part-00000.bin,part-00001.bin}.
+restore_package.py samler/verificerer den automatisk ved restore af en pakke
+med denne kilde. Payload og SHA256 er uændrede; GitHub-transport krævede split.

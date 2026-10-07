@@ -1,0 +1,44 @@
+04_05 independent numerical reasoning, 2026-10-06.
+
+Represented input, not decimal JSON spelling, is authoritative. All own Python
+adversarial expectations use Fraction(float), with exact floor((D-hp)/H)+1.
+Own browser checks decode input floats onto common 2^-1074 integer units;
+they do not reconstruct quotient from rounded product subtraction. Segment
+damage is the actual represented DPS*segmentSeconds and each segment's actual
+before HP. Whole/split HP is not required equal when represented damage differs.
+
+For positive finite integral H, floor(floor(D)/H)=floor(D/H): the fractional
+part discarded from D cannot cross an integral multiple of H. BigInt converts
+the represented integer, including integers larger than MAX_SAFE_INTEGER,
+exactly. This avoids R2's rounded division after cancellation. For fractional
+positive finite H, the helper reconstructs binary significands and exponent
+ratio and performs exact integer division. The finite IEEE exponent range
+bounds shifts and operand sizes independently of number of kills. Conversion
+of the quotient back to Number is exact while the quotient/final count stays
+in the safe integer range. The helper adds no per-kill product loop or cap.
+
+The pre-existing modulo/partial-HP/carry, absolute SIM_EPS=1e-9 and relative
+1e-12 guards are byte-identical outside the quotient call/helper. Therefore an
+exact mathematical floor and product's old boundary policy are distinct.
+Own 6516 adversarial inputs retain their strict results: local quotient has
+zero mismatches, count has 6216 exact rows, 299 old single promotions, and one
+strict remaining row shared byte-for-byte in result with R2. That final row
+has H=107, currentHP=9.731593308970332e-11 (<SIM_EPS), damage exact
+7529570517385215/1073741824. The remainder is 107-2^-30. The full-HP guard
+promotes because 2^-30<1e-9, then currentHP<1e-9 is also defeated. Combined
+next-threshold deficit is 1.0286385077051818e-9. This is composed unchanged
+boundary policy, not an independently exact count PASS. Five strict HP rows
+(including that row) are preserved; the other four have a remainder near H
+zeroed by the old relative carry tolerance. R2 and local outputs match exactly
+for all five. No generic tolerance was widened to hide these observations.
+
+Certification limits: positive finite physical game maxHP begins at11; tested
+integral scales through1e200 and supplemental fractional17.25/43.1. Ordinary
+and near2^50/51/52/MAX_SAFE_INTEGER counts, partial HP, adjacent represented
+multiples, cancellation and positive deficits are covered. Tests are finite
+coverage plus algebraic quotient proof, not proof of all scheduler inputs.
+No arbitrary sub-ULP input history, nonphysical tiny maxHP worlds, nonfinite
+damage/overflow, negative inputs, unbounded unsafe final counts, arbitrary
+precision rewards or historical normal playthrough of the extreme Titan save
+is claimed. Large rewards and spawn accumulators retain represented operation
+order and may round, even when kill counts are exactly safe integers.

@@ -1,0 +1,115 @@
+Til 01_06 — Core / Android / APK
+Fra 00_07 — Lead / Architecture
+Lumenfall · karahaNx/Lumenfall · 2026-10-03
+Work · GPT 6.1 Sol · High
+
+FORTSÆTTELSE — READ-ONLY, KUN LOKAL REVIEW-DRIVER
+Din aflevering Lumenfall_PR40_Praecis_Repeat_01_06_2026-10-03.zip er læst.
+Din stopbeslutning accepteres. PR40 forbliver kodefrosset; ingen samlet
+persistence-/integrationsaccept, repository-writer, merge eller APK-frigivelse.
+Dette erstatter kun orchestration-delen af den seneste repeat-opgave.
+Alle præcise produktorakler og stopreglen består.
+
+CHECKPOINT — GENVERIFICÉR FØR OG EFTER
+Main/base: 3a89a8cb4084193326daa5dab68cf9a89ef71512
+Main tree: 134b5f21f414f56ecd446220c8ffc54a0621ca3e
+PR40: https://github.com/karahaNx/Lumenfall/pull/40
+Branch: 02/auto-ascend-target-selector; open/Draft/unmerged.
+HEAD: d3daa23d04315ec21776de69b0df960d24cb19b6
+Tree: d1d128a82f6bc204655dc662a5239f98dca51059
+Parent: 9348a48364dcd88b77b9d1bc00763b83c6f8e768
+index.html SHA256: a2797073f985da25803c61e2626ef54f662dfbc5d0dbd240156e47cff76acd96
+CI121 run37078662885/check111074143527: success på HEAD; app15368.
+00_07 har live-genverificeret dette checkpoint. Android130/releaseasset606480838
+er uændret. Denne beslutning udløser ingen build eller remoteændring.
+
+HVAD DER FAKTISK ER BEVIST
+Lead har kontrolleret din manifest250/250, processreceipts og 43-cold-resultat:
+whole state/primary/recovery matcher expected efter begge zero-time reloads.
+43-visibility fejler før repeat. Det lokale r er ikke bevaret ved failure.
+Efterfølgende collector-state HP6.1000000000000005 og saves HP6.2 kan ikke
+bruges som den præcise værdi ved den tidligere assertion.
+Ingen ny selector-, reward- eller persistence-produktregression er bevist.
+55-cases og nye negatives/undo er ikke udført; de må ikke kaldes PASS.
+
+KONKRET TESTPROBLEM OG LEADS NYE AUTORISATION
+Den eksisterende driver deler fixtureopstilling, study1-ændring/save, inputread,
+visibility og unloadforberedelse over flere await page.evaluate-kald.
+Det efterlader browserens eventloop åbent for normale intervaller.
+Produktets tick bruger TICK_MS/1000 og kan derfor ændre HP, selv når den
+syntetiske Date.now står stille. Dette er et statisk bevist timinghul;
+at det forklarer den konkrete FAIL er endnu en inferens.
+
+Du må nu ændre KUN den lokale orchestration og testobserver for disse fire
+fixtures, så deres eksisterende handlinger sker atomisk i browserens JS-task.
+Behold produktkode, source, fixtures, clocks, 5500ms catchup, rewards,
+handlers, deadlines og sammenligningskrav. Ingen epsilon eller nye HP-værdier.
+
+1. Først én målrettet observationskørsel af den oprindelige 43-visibility:
+   Bevar det faktiske lokale r, input og fulde state/primary/recovery ved
+   assertionen, også ved FAIL. Registrér relevante lifecycle/tickevents hvis
+   allerede tilgængelige. Collector senere er separat. Ingen ændret expected.
+   Denne diagnostiske FAIL er ikke en ny produkt-PASS.
+
+2. Flyt fixture-seed, study1=false, normal save, input-snapshot og den
+   oprindelige visibility(true)->advanceTime(5500)->visibility(false)->snapshot
+   ->duplicate visibility(false)-kontrol til én synkron browser-task.
+   Genbrug seedens nøjagtige literals og oprindelige callbacks; flyt deres
+   udførelse, ændr ikke deres semantik. Gem hele input/before/snapshot.
+   Snapshot og assertions skal ske før unload-guard aktiveres.
+   For cold-ruten samles seed/study/save/input/catchup/unloadforberedelse
+   tilsvarende uden mellemliggende Node/browser-roundtrips.
+
+3. Sikr også repeat-grænsen: snapshot, eksakt before-check, expected-kopi
+   og genuine unloadforberedelse skal være i samme synkrone task.
+   Ved boot bruges den eksisterende DOMContentLoaded-observation efter init;
+   en målrettet testobserver kan straks forberede den næste reelle reload.
+   Den eksisterende suppressUnloadSave må alene bruges som den oprindelige
+   unloadforberedelse, nu umiddelbart efter målingen og før den faktiske
+   navigation. Dokumentér flags før/efter og efter ny genuine boot.
+   Ingen clearInterval, pause, reset-/reload-flag-toggle for at få callbacks
+   til at køre, apprestorehelper, actual state/save-reparation eller tick-mock.
+   Ingen manuel frigivelse af reloadInProgress. Den normale nye init skal
+   genskabe flags. Ingen liveness-accept udledes af denne reloadmåling;
+   den tidligere særskilte unpaused-liveness-evidens står fortsat separat.
+
+4. Genkør kun de fire cases med den atomiske orchestration:
+   07-cross-43-cold, 07-cross-43-visibility,
+   07-cross-55-cold, 07-cross-55-visibility.
+   43-cold genkøres her fordi driverens orchestration ændres, ikke fordi den
+   tidligere PASS er tilbagekaldt. Stop ved enhver anden faktisk forskel.
+
+UÆNDRET PRÆCIS ORACLE
+Før repeat: enemyHp===6.4, enemyMaxHp===11, enemyDepth===1, depth===1.
+Deep-copy hele before-state; ændr alene expected.enemyHp til det allerede
+uafhængigt observerede literal6.400000000000001. Actual må ikke ændres.
+Genuine zero-time reload: HELE state, canonical primary og recovery skal
+matche expected strengt. Yderligere zero-time reload skal bevare alle tre
+bitpræcist. Target44/56, Prisms23/24 fra10, Comets22 fra7, Study1, én kill/
+Ascend, benchmark43/55, lastSeenT+5500, 5.5s catchup og øvrige felter består.
+Ingen afrunding, HP-exclusion eller generel ULP-undtagelse.
+
+KAUSAL KONTROL
+Når alle fire består: extra actual HP6.400000000000002 skal give den konkrete
+whole-state assertion-FAIL. Dokumentér faktisk write-back/source-restored
+positiv undo på samme testcase/driver. Bevar præcise target-/reward-checks;
+demonstrér særskilt at en scratch-target- og rewardafvigelse også afvises.
+Disse negative mutations må kun ligge i disposable lokal teststage.
+Ingen mutation af repository eller positive actual-resultater for at få PASS.
+
+AFLEVERING TIL 00_07
+Samlet ACCEPTABEL/IKKE ACCEPTABEL på exact HEAD/tree/base i TXT+ZIP.
+Mærk resultater REVIDERET ORACLE / ATOMISK ORCHESTRATION; behold 14PASS/5FAIL
+og den nye 43-visibility-FAIL som historik. Lever lille driver/observerdiff,
+rå input/before/expected/actual state+primary+recovery, fase/clock/flags,
+stdout/stderr, process exit/deadline/no-timeout, source/runtime/driver hashes,
+negative/actualundo og SHA256-manifest. Medtag nødvendige positive og restored
+stagebytes eller reproducerbar construction, ikke kun hashpåstande.
+Ingen ny own19-/121-suite, bred audit, QA-genstart eller browserdownload uden
+konkret behov. QA Window/UI accepteres separat af Lead; P3 Find-feedback er
+backlog. Startup Fund1 forbliver LUKKET.
+
+Hvis atomisk orchestration stadig ikke giver den eksakte6.4-fixture: stop med
+bevaret r og input; opfind ingen ny HP-projektion. Lead afgør næste scope.
+Ingen remote-edits, Ready, reviewpublicering, merge, APK, manuel CI eller nye
+workers. Brugeren overfører denne opgave til den eksisterende 01_06-chat.

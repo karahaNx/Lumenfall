@@ -1,0 +1,157 @@
+LUMENFALL — 02_08 til 00_16 — B2-runtimekorrektion, 7. oktober 2026
+Model: GPT-6.1 Sol · Effort: Ekstra høj. Dansk. FASE A / lokal FORREVIEW.
+
+RESULTAT OG IDENTITET
+Obligatorisk BigInt er erstattet i produktets Farm-helper med exact binær
+division af repræsenterede Number-significands. WebView 60-baseline bevares.
+Ny lokal kandidat, ikke remote R3 eller Core-/QA-accept:
+base/main 1ddc246eb62782a61ec5c486cd5f51ea170bb338
+base tree bfb3970b29485b3e8ece1c72bb60186eb2ba755e
+parent/lokal HEAD R2 3cdebc236e9ee5081a4bca4e323b11f43aa0d46d
+parent tree 70073a55d7f5fe428ae82223627603498cc372b6
+blokeret tree 4c07cd5d66cb5928eb99623ff86efaa81e268829
+NY FULLTREE 758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef
+NY index SHA256 7c25b0b57722bda4ad6842b173bf9a390f2fa39942ad91206675a20e779d4d9b
+Alle 14 main→ny sourcefiler, Gitblobs/modes/størrelser/SHA256:
+SUMMARY/identity.json. Alle 96 tracked kildebytes frozen før/efter gates og
+slutkontrol. R2→ny ændrer seks filer; blokeret→ny fire. Alle øvrige produktbytes
+uden for Farm-funktionsområdet er byteidentiske med exact R2. Ingen commit lavet.
+
+NUMERISK REGEL OG KOST
+M*2^E-dekodning bruger kun Number, ArrayBuffer/DataView og 32-bit words.
+Normaliserede significands er heltal i [2^52,2^53). Ved safe quotient er
+exponentforskellen højst53: binær division kræver højst54 bits. Remainder
+holdes under divisor efter hver subtraktion; fordobling er et præcist lige
+heltal under2^54, og næste subtraktion giver et repræsenterbart heltal under2^53.
+Hvert quotient-prefix er safe. Subnormal-normalisering er højst52 shifts pr.
+input. Ingen produktloop pr.kill, cap, polyfill, dependency eller runtimefloor-
+ændring. Fuld proof/mellemregningsgrænser står i SOURCE/docs/tasks/B2-taskkortet.
+Modulo, partialHP/carry og gamle SIM_EPS=1e-9 / relative1e-12 regler bevares.
+
+20606 IEEE-bitkodede inputs med uafhængig Python Fraction-oracle: 0 quotient-
+fejl på Node24 og faktisk Node8/V8 6.2. De oprindelige7945 inputs genkøres;
+nye ordinary/near-multiple/2^50/51/52/MAX_SAFE/fractional/physical skalaer,
+partial/fullHP, cancellation og positive deficits supplerer dem. Isolerede
+nonphysical inputs certificerer kun helperen, ikke økonomi i tiny-HP worlds.
+426 præcis lige-damage halves:0 fejl;6 historiske near-boundaryrows særskilt.
+
+Matrixens COUNT/HP er ikke omdøbt til strict-green stresstest. Der er
+1074 klassificerede gamle boundarypromotions,
+2 yderligere strict-count-diagnostikrows fra sammensatte eksisterende EPS-
+grænser og296 strict-HP-residualforskelle (gamle snaps/representation). Alle
+20606 nye outputs er identiske med den gamle exact BigInt-helper på moderne
+engine; de to EPS-branches forklares eksplicit i SUMMARY/composed-eps-diagnostics.
+Ingen tolerance ændret. Exact quotient er uafhængigt bevist for alle rows.
+Old-R2 har1151 strict-countforskelle i samme matrix; kandidatens2 er bevarede
+EPS-diagnostik, ikke nye quotientfejl. Rå misfits og inputs findes i OWN_RAW.
+
+RUNTIME OG FAKTISK MOTOR
+Alle to app-inline scripts: ny PASS ES2017/18/19/20 og actual Node8.17.0 /
+V8 6.2.414.78 syntaxcheck. Blokeret kandidat FAIL i hovedscriptet på oldV8 og
+ES2017/18/19 ved BigInt-literal; moderne API-fravær giver TypeError. Ny helper
+og R2 giver B1s90 kills uden BigInt; batchsideeffekter er stubbet kun i dette
+isolerede API-check. Node8 har faktisk udført alle20606 helper-/Farm-probes.
+Det er ikke fysisk WebView60 eller et fuldt old-browser-motorreview.
+
+Permanent NY lab-motes-runtime:40 faktiske motorrows/1029assertions på
+Chrome153.0.8010.0 med BigInt/getBigInt64/getBigUint64 utilgængelige i appen.
+Oracle kører eksternt i Node. Startup, almindelig Push, B1, begge B2-minima,
+fractionalHP, ON/OFF, whole/split, live/offline, spawn/HP/rewards/Motes/work
+består. FractionalHP er en privat fixture, ingen ændring i game-HP-policy.
+Den eksisterende permanente lab-motes-numerical og alle gamle controls bevares.
+Begge exact-old-R2 minima afvises af oraklen; restoration består.
+
+Core original: repræsenteret D=36028797018963984, HP11 giver3275345183542180
+kills, rest4/HP7; OFF whole og.5+.5 samme damage/count/HP, live/offline.
+Natural original: faktisk product DPS40052722017724424, elapsed.9, partial8.03 /
+max11 giver3277040892359271 kills. Ingen DPS-stub i denne naturlige vej.
+Finite normalisering/priser, reward/spawn, enabling60-køb og post-paymentwork
+kontrolleres. Natural OFF-split har15/4 mindre faktisk damage; HP-forskel er
+legitim. UseON har actual traced rewardsegments og korrekt betalingstid.
+Separat ny browserkørsel på exact R2-source reproducerer begge OFF/whole FAILs
+(+1 kill), med exit1/fuld raw/teardown. Shortest JSON-numbertekst bruges aldrig
+som et vilkårligt præcist integer-oracle; minimum-ledger har IEEE-restored values.
+
+B1 / LAB / DIAGNOSTIK
+Alle826 conservationfixtures består. De præcise43 gamle fixturekeys genfindes:
+R1 FAIL43, R2 FAIL0, NY FAIL0. Egne100 QA-motorgrupper/16193assertions består
+på ny source uden BigInt. B1 minimum90 kills/3Luminous: ON2Motes/work297.3346,
+OFF62/work299.1;60-betalingen.0173 og split samt før/exact/efter bevares.
+Old-R1 double-round og tre LAB-mutationer samt persistence, pris/repeat, Queue,
+strict/pure normalisering, chronology, paid active snapshots, Inquiry/legacy8,
+NAV, actual offline/study-only tail og Farm/Push kontrolleres i gates/motor.
+
+Samme1340 diagnostikinputs R1/R2/NY er genkørt. R1:809 strikte assertionfejl;
+R2/NY:379 identiske strikte fejl. Alle R2/NY resultater/state/summaries er ens.
+123 originale diagnostikrows traces:311 segments, NY271 exact counts/40 gamle
+EPS-promotions,0 uforklarede count-/rewardoperationer.622 reward-operationer
+består en Fraction-oracle med binary64-rounding efter rate*scale, product*count
+og previous+gain. Original strict aggregate er fortsat FAIL; ingen grøn
+stresstest påstås. R1/R2s96 countdeltarows blandt1340 bevares separat.
+
+SLUTGATES OG PERFORMANCE
+Alle7 uændrede workflow-gates exit0 på NY frozen bytes; ingen source-/test-
+ændring under eller efter dem.142 defaultscenarier,164 printedPASSinvocations,
+162 faktisk replayverificerede browser/nativeoutputs/140 real scenarios plus
+2 processmetakontrakter;12 required negatives faktisk FAIL/fanget. Komplet
+aggregate, cmds/stdout/stderr/exits/teardown/screens/før-efterhashes bevares.
+Ny gate04 exit0 på første kørsel,500.925sekunder. Ingen CI på dette lokale tree.
+
+Helpermedians ca0.8–0.9us på oldV8 og1.0–1.1us på modern Node. R2s ubeviste
+hurtige arithmetic er billigere. Faktiske engine medians R2→NY (ms/forløb):
+live-ordinary-off: 0.0201 → 0.0242; scheduleriterations 1 → 1.
+live-ordinary-on: 0.0235 → 0.0321; scheduleriterations 2 → 2.
+offline-hour-on: 20.7280 → 22.3620; scheduleriterations 4202 → 4202.
+live-safe-huge: 0.0200 → 0.0201; scheduleriterations 1 → 1.
+
+Der er målbar meromkostning; ingen påstand om identisk performance. Ved1time
+simuleret offline er forskellen ca1.6ms, uændret4202 scheduleriterations;
+huge safe-count-flow er omtrent uændret, uden per-kill skalering. Browser-
+wallclock/snapshot og timingstøj begrænser målingen; fysisk mobil er ukendt.
+Første benchmark på R2 med verbose captureTimeline:true ramte dens gamle
+traceguard. FAIL/raw bevares; normal captureTimeline:false bruges i ny scoped
+måling uden nogen produktguardændring. En første kandidatmåling overlappede
+et senere causalbrowsercheck; den er bevaret. NY blev målt igen alene, og kun
+den isolerede kandidatmåling indgår i sammenligningen. Ingen gate blev genkørt. Første egen pakkekontrol afviste et stadig åbent
+assembly-log i rawarkivet. Den afsluttede FAIL er bevaret; den endelige aktive
+assembly-receipt holdes uden for sit eget arkiv, så hashkontrollen er stabil.
+
+ÆRLIGE LIMITS OG PROVENIENS
+Fysisk Android/WebView60/TalkBack/install er ikke udført. Node8 oldV8 er relevant
+legacy engine, ikke præcisChrome60 emulering. Normaliseret Titanstress er ikke
+bevis for gennemspillet progression. Overflow/nonfinite/unsafe counts,
+nonphysical tiny-HP worlds og arbitrary sub-ULP accumulated work er ikke
+certificeret. Exact kills lover ikke exact-real huge rewards.
+
+Original worker mobileclipping-FAIL, komplet raw/exit/commands, bevares i
+HISTORICAL/WORKER_RAW_CURRENT.tar.xz: evidence/initial-gate04. Den nye suites
+mobileprofiler består; rootcause for den tidligere intermittens er fortsat
+ukendt. Ingen UI-fix/toleranceændring eller påstand om fremtidig fejlfri CI.
+De tre initiale nye runtime-driverFAILs var private observerfejl: forkert
+startuphook, betaling efter første splitpart og reward-summationens gruppering.
+De fulde developmentoutputs/teardowns bevares. Rettet driver blev frozen før
+slutgates. Produktquotienthelperen ændredes ikke efter første implementation.
+
+Inputmanifest257entries/256payloads/CRC/hashcoverage består. Worker1322raw,
+Core132raw og QA781raw er alle fuldt hash-/størrelsesverificeret. Afleveringen
+inkluderer fulde fem LAB/B1/B2-originaler plus runtime-mandat, aktuelle Lead-
+originaler, fulde Core/QA-rapporter og original workerraw1322/Core raw132.
+QA's store781rawarkiv genleveres ikke, da det allerede er modtaget af Lead;
+modtagelses-/hashreceipt bevares. Ingen rekursiv gammel ZIP, APK, dependencies,
+credentials eller signingmateriale. OWN_RAW er tabsfri, fuldt manifestverificeret.
+
+EJERSKAB / STOP / NÆSTE SKRIDT
+Frisk read-only slut-GET: main/base og PR46/R2 uændret; PR46 open/Draft. Ingen
+fuld branch/run/writerpreflight, da remote handling ikke udføres. Ingen egen
+push/commit/PRmetadata/comment/ready/merge/build/dispatch/rerun/release/cleanup.
+Alle kendte egne kode-, browser- og serverprocesser er afsluttet;96 sourcebytes
+og fulltree er uændrede. Eget lokale phaseA-kodearbejde STOP/frozen. Ingen
+remote repo-writer blev overtaget eller frigivet på02_07s vegne.
+02_07 senereB2-processer/ændringer/writerrelease er stadig UNKNOWN. Stop-TXT
+beviser kun en Leadinstruks. Remote phaseB holdes efter00_16s beslutning indtil
+review af nye bytes og dokumenteret handover. Ingen ny generel brugertilladelse
+er nødvendig; Lead-kandidat/writercheckpoint mangler, ikke stående godkendelse.
+00_16 skal nu tildele scoped nye Core-/QA-reviews på dette præcise tree. Gamle
+positive reviews/CI/gates bliver ikke automatisk accept af ændrede bytes.
+Brugeren overfører selv START-TXT og ZIP; ingen subagenter/beskedværktøjer/chats
+omdøbt. SOURCE-index styrer målrettet læsning; læs ikke hele archive ved opstart.

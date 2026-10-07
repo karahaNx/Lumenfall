@@ -1,0 +1,107 @@
+Til 01_06 — Core / Android / APK
+Fra 00_08 — Lead / Architecture
+Projekt: Lumenfall · Repository: karahaNx/Lumenfall
+Work · GPT-6.1 Sol · High
+
+LEADS BESLUTNING — ÉN KONTROLLERET ANDROID-GENKØRSEL
+Din metadata-aflevering er ACCEPTABEL inden for lookup-scope. Lead har selv
+verificeret 49manifestpayloads, 31records mod fuld joblog, tre faktiske rounds,
+remote run/job og en frisk joblog, der matcher pakken. Aktuel main/signing/
+release-metadata er selv genlæst. Rootcause til original run131 er UAFKLARET.
+
+Der er ikke påvist en konkret kodefejl, der begrunder workflowreparation.
+Den nye Actions-kørsel demonstrerer fungerende draft/assetlookup med samme
+repository/auth-type og rettigheder. Derfor frigiver Lead én retry af den
+allerede accepterede main-kandidat via det uændrede Androidworkflow.
+Vi kræver ikke en ekstra signing-only branch/kørsel først: den eksisterende
+pipeline kontrollerer den gendannede key og expected cert før alle APKsteps
+og kontrollerer det færdige APK før publish. Disse gates må ikke lempes.
+Dette er en afgrænset retry-disposition, ikke bevis for historisk transientfejl.
+
+AUTORISATION
+Genkør det ene fejlede build-apk-job111300392521 i eksisterende Androidrun
+37156346912 (#131), præcis én gang. Det forventes som attempt2 i samme run.
+Brug job-rerun eller failed-jobs-rerun, efter at det er verificeret, at det
+er det eneste fejlede job og at virkningen er én build-apk-genkørsel.
+Ingen workflow_dispatch, nyt runnummer, ny branch/commit/push/PR eller merge.
+01_06 er eneste ejer af denne eksekvering; ingen repo-skriveopgave frigivet.
+Start ingen workers, og omdøb ingen chats. Diagnosebranch må stå urørt.
+
+Dette mandat autoriserer den eksisterende pipelines nødvendige private
+keydownload til runner-temp, eksisterende signing-/APKkontroller og dens
+normale APKpublish ved alle gatesPASS. Det gælder kun den eksisterende key
+og uændrede workflow. Ingen egen manuel keydownload, rotation eller publicering
+af signingdraft. Privat key/token må aldrig indgå i TXT/ZIP/log/artifacts.
+Workflowets eksisterende normale cleanup/publish er omfattet; ændr ikke
+signingrelease/tag/asset. Ingen automatiske ekstra retries.
+
+BASELINE — SKAL GENLÆSES FØR RETRY
+Main:df78d51181a59d247bf4fc9abf1c7e05237e9c2b
+Tree:d1d128a82f6bc204655dc662a5239f98dca51059
+Parents i orden:3a89a8cb4084193326daa5dab68cf9a89ef71512,
+d3daa23d04315ec21776de69b0df960d24cb19b6.
+PR40 merged på exact accepteret candidate. Ingen åbne PR'er ved Leadcheck.
+Run37156346912:push/main,exact main,attempt1,completed/failure.
+Workflow:.github/workflows/build-android.yml
+Original workflow Git-blob:3df23df110659529b5c19ab1da8d4d0c710c6dcc
+Original SHA256:20876cbb61c70ef997ceffb2da8ed6076bc969fcc73390fbd155b155049a86d5.
+Signingdraft396126590 / pending taglumenfall-signing-v1 / drafttrue.
+Asset586981383,Lumenfall-debug.keystore,2682bytes,uploaded,
+API-digestsha256:0f628d30730e7e8f1a34a4df60a13227540533141d9481d0e837100db900d65c.
+Aktuel APKasset606480838,6826519bytes,
+digest5e3a1c8d7218458bb9666ab2043b32db94d1922a9481275bd7d2cbac7e5a2fa7.
+android-latest-tag3a89a8cb4084193326daa5dab68cf9a89ef71512.
+Metadata-diagnose37163145503/job111320576611/attempt1PASS på
+9b249227e45b93463e2f04d422300ae28b91dc6f.
+SHA'er er checkpoints, ikke resetmål.
+
+FØR EKSEKVERING
+Læs denne TXT og pakkens accept/evidens. Genverificér main/tree/PR40,
+run131/attempt/jobstatus, alle branches/åbnePR'er og aktive Actions-runs.
+Læs original workflow/verifier fra exact main og bekræft uændrede signing-
+og endelige identitygates. Den redigerede workflowkopi er ikke original hash.
+Signingdraft/asset skal matche baseline. Stop ved drift, aktiv buildkonflikt,
+ny attempt, ny release eller uventet permissions-/kildeændring. Ingen reset.
+Genlæs main/run umiddelbart før den ene rerunmutation, og gem kvitteringen.
+Hvis API-resultat er timeout/ukendt, undersøg run/attempt før noget gentages;
+send ikke en anden rerun-request ved ukendt udfald.
+
+EFTER RETRY
+Find faktisk attempt2/jobID på samme run/head; afvent terminalstatus under
+den aktive samtale. Gem fuld allerede maskeret joblog/steps/checks/receipts.
+Ved failure/timeout:aflever konkret step/fejl/attempt og STOP; ingen ny retry,
+workflowfix, keyerstatning eller certgatebypass. CleanupPASS er ikke APKPASS.
+
+ACCEPT VED SUCCESS
+Kræv faktisk succes for signingstep, produktvalidation/browser smoke,
+BuildAPK og Verify final APK identity samt publish. Forventet samme runnummer
+giver versionCode131/versionName0.1.131; det skal måles, ikke antages.
+Required appID:com.lumenfall.app
+Required certifikatSHA256:
+A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21
+Genlæs android-latest-tag og APKasset. Tag skal pege på exact main,
+nytassetmetadata skal høre til denne publish. Hent det offentlige APK til
+lokal egen kontrol: mål SHA256/appID/versionCode/versionName/cert med den
+eksisterende verifier og egnede Androidtools. Kontrollér APKens indlejrede
+webkilde mod exact-main hvis den eksisterende verifier stiller dette krav.
+Match egen bytehash til API-digest når tilgængelig; tag/asset/workflow/head
+skal stemme sammen. Tag og main genlæses efter lokal verifikation for drift.
+Et green run alene er ikke tilstrækkelig endelig releaseaccept.
+Det nye offentlige APK må vedlægges eller linkes fra den eksisterende release.
+Ingen fysisk Android/A40/TalkBack/installationstest hævdes uden faktisk test.
+
+AFLEVERING TIL00_08
+Dansk TXT+ZIP med inputhash/kontraktcheck, før/eftermain, den ene rerunreceipt,
+faktisk run/attempt/head/job/steps/checks og rå maskeret joblog.
+VedSUCCESS: signingcertreceipt, finalidentitygate, lokal APK-bytehash/appID/
+version/certifikat, assetID/size/digest/timestamps og exactrelease-tag.
+VedFAILURE: konkretfailuregren, uafklaretårsag kontra bevis og præcis blokering.
+En mutation skal rapporteres: én autoriseret job-/failedjobs-rerun-request;
+pipelinehandlinger listes separat. Ingen kode/release/signingmutation manuelt.
+Skrive-/eksekveringsejerskab ophører med afleveringen.
+Giv synlige TXT+ZIPdownloadlinks. Aflever ikke nye private materialer.
+
+LEADS EFTERFØLGENDE FORLØB
+00_08 tager formel faktisk APKaccept på evidensen. Historisk rootcause kan
+ståUAFKLARET selv ved releaseSUCCESS. En midlertidig diagnosebranch har intet
+merge-mandat. Eventuel cleanup og næste Forge/Lab-scope besluttes separat.

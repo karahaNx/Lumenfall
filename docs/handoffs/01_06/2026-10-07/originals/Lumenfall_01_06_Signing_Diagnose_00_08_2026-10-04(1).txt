@@ -1,0 +1,208 @@
+Lumenfall — Signing-diagnose
+Fra 01_06 — Core / Android / APK
+Til 00_08 — Lead / Architecture
+2026-10-04 Europe/Copenhagen
+Repository: karahaNx/Lumenfall
+
+RESULTAT
+Releaseblokken består. Den etablerede private draft-release og det præcise keystore-asset findes og er tilgængelige med den nuværende autoriserede konto.
+Build 131 fejlede i downloadkommandoens releaseopslag med “release not found”.
+Den underliggende årsag til det fejlede opslag er UAFKLARET.
+Ingen repo-, signing-, release- eller CI-mutation. Ingen nøgle eller APK hentet.
+Dette er read-only diagnose, ingen reparations-, merge- eller APK-accept.
+
+1. LIVE CHECKPOINT — INGEN OBSERVERET DRIFT
+Før-læsninger fra 2026-10-03T23:06:37Z; efter-læsninger 23:13:37Z UTC
+(se hvert receipts tidsstempel for den præcise tid).
+Main: df78d51181a59d247bf4fc9abf1c7e05237e9c2b
+Tree: d1d128a82f6bc204655dc662a5239f98dca51059
+Parents i orden:
+3a89a8cb4084193326daa5dab68cf9a89ef71512
+d3daa23d04315ec21776de69b0df960d24cb19b6
+PR40 closed/merged til main; head d3daa23d04315ec21776de69b0df960d24cb19b6.
+Ingen åbne PR'er. Disse checkpoints er ikke resetmål.
+
+Run 37156346912 / Android #131 / attempt1 / push main:
+completed/failure på exact main.
+Job 111300392521 / build-apk:
+step7 Restore and verify stable Android signing key = failure.
+Efterfølgende workflowtrin 8–22 er skipped, herunder APK-build,
+endelig identity-kontrol og publish. Post-job-cleanup kørte.
+Runnummer 131 er ikke en målt APK-version.
+
+android-latest-tag:
+3a89a8cb4084193326daa5dab68cf9a89ef71512
+Release ID396102072; Lumenfall.apk ID606480838;
+6826519bytes; updated2026-10-02T20:58:48Z.
+API-digest:
+sha256:5e3a1c8d7218458bb9666ab2043b32db94d1922a9481275bd7d2cbac7e5a2fa7
+Uændret før/efter. Seneste vellykkede release er 0.1.130,
+bekræftet af run130s version-/identity-output, ikke ny APK-måling.
+
+2. SIGNING-RELEASE OG ASSET — FINDES
+Releases/list page1 per_page100: 11 releases; page2: tom.
+Blandt dem findes:
+Release ID396126590
+Navn: Lumenfall signing key — PRIVATE
+Pending tag_name: lumenfall-signing-v1
+draft=true; published_at=null
+Created2026-09-24T22:29:52Z; updated2026-09-24T22:29:53Z.
+Releasebeskrivelsen instruerer: behold den private draft.
+
+Assetnavn: Lumenfall-debug.keystore — exact kontraktmatch
+Asset ID586981383; state=uploaded; 2682bytes
+Created/updated2026-09-24T22:29:53Z; download_count89.
+API-digest:
+sha256:0f628d30730e7e8f1a34a4df60a13227540533141d9481d0e837100db900d65c
+GET release by ID, assetliste og asset-JSON lykkedes.
+Assetliste page1: ét asset; page2: tom.
+Release- og assetmetadata er identiske før/efter, også download_count.
+Dette er metadata, ikke en frisk nøgleintegritets-/certifikatmåling.
+
+Published release-by-tag og Git-ref tags/lumenfall-signing-v1 giver404.
+Alle 13 matchende tagrefs er læst; signingref findes ikke.
+En drafts pending tag_name kræver ikke en eksisterende publiceret Git-tag.
+GitHub beskriver release-by-tag som opslag af en publiceret release.
+404 her er derfor ikke evidens for tab eller sletning af draft/nøgle.
+
+Nuværende konto har push/admin-adgang; det er ikke run131s GITHUB_TOKEN.
+Begge sammenlignede joblogs viser Actions:write, Contents:write, Metadata:read.
+Et andet token eller manglende deklareret Contents:write er ikke påvist.
+Vi har ikke runnerens tidligere token eller dens individuelle HTTP-svar.
+
+3. EXACT WORKFLOW OG KONKRET FAILURE-GREN
+Exact main .github/workflows/build-android.yml:
+Git blob 3df23df110659529b5c19ab1da8d4d0c710c6dcc
+Original SHA256:
+20876cbb61c70ef997ceffb2da8ed6076bc969fcc73390fbd155b155049a86d5
+Integrationpakkens originale bytes giver samme Git-blob og er dermed verificeret.
+Workflowbytes på run130s SHA og exact main er identiske.
+Afleverede kopier har redigerede passwordværdier og derfor andre filhashes.
+
+Kontrakten bruger github.token, pending tag lumenfall-signing-v1,
+exact assetpattern Lumenfall-debug.keystore, --clobber og RUNNER_TEMP.
+Kun gh release view har >/dev/null 2>&1.
+gh release download har IKKE denne redirection.
+
+Faktisk runtime-output i job131:
+2026-10-03T21:49:33.4532513Z release not found
+2026-10-03T21:49:33.4574329Z
+##[error]Established Android signing keystore could not be downloaded. Refusing to build or publish.
+2026-10-03T21:49:33.4583669Z
+##[error]Process completed with exit code 1.
+
+Det første view-gate aborterede ikke; downloadkommandoen returnerede nonzero.
+Workflowets exit1 er wrapperens exitkode, ikke en separat måling af gh's kode.
+Nøglens nonempty-/keytool-/certifikatgates blev ikke nået.
+Echoet shell-kildetekst i loggen er ikke bevis for kørt certifikatkontrol.
+
+Min tidligere statuskommentar om skjult download-stderr var forkert.
+Den fulde log indeholder gh's “release not found”; underliggende API-status,
+GraphQL-resultat og request-ID findes derimod ikke i loggen.
+
+4. SNÆVER SAMMENLIGNING MED SENESTE SUCCES
+Run130 37063897794 / job111026833563 / attempt1 / success,
+på 3a89a8cb4084193326daa5dab68cf9a89ef71512.
+Samme workflow og samme runner-image:
+ubuntu24/20260927.320.
+Imageinventaret angiver GitHub CLI2.101.0. Joblogs måler ikke gh --version.
+
+Run130 faktisk output:
+2026-10-02T20:58:11.1639193Z Verified established Android signing certificate SHA256: A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21
+2026-10-02T20:58:15.6116358Z Android versionCode=130, versionName=0.1.130
+2026-10-02T20:58:44.1573085Z Endelig APK-kontrol rapporterer samme certifikat.
+Det er en historisk succesreceipt, ikke frisk måling af dagens private key.
+
+Officiel CLI-kode v2.101.0:
+Både view og download bruger shared.FetchRelease for en angivet tag.
+FetchRelease forsøger både published REST-opslag og draft-opslag:
+GraphQL release(tagName) -> draft/databaseID -> REST release-by-ID.
+En succes fra en af grenene accepteres; “release not found” kan maskere den
+anden grens mere konkrete fejl, når begge opslag fejler.
+downloadRun stopper ved FetchRelease-fejl før assetpattern/binary-download.
+
+Inferens under imageversionens kode: run131 fejlede ved det gentagne
+releaseopslag, før assetvalg, assettransport eller lokal filskrivning.
+Draft-status alene er ikke en generel CLI-inkompatibilitet.
+Præcis gh-version/binary og de interne HTTP-svar mangler, så inferensen
+må ikke omskrives til en bevist transient GraphQL-fejl eller slettet release.
+
+5. FAKTA KONTRA HYPOTESER
+Bevist: eksisterende draft/asset, exact assetnavn, nuværende metadataadgang,
+view-gate passeret, download “release not found”, identisk workflow,
+historisk run130-succes og ingen observeret checkpointdrift.
+
+Ikke understøttet som forklaring:
+- permanent tab af release eller privat key;
+- ændret/manglende assetnavn;
+- certifikatmismatch eller korrupt key i run131;
+- at gh release view nødvendigvis fejlede;
+- at draft generelt ikke kan bruges af gh release download.
+
+UAFKLARET:
+En kortvarig/API-/GraphQL-synlighedsfejl eller runnerens konkrete
+adgang til draftopslaget kan forklare forskellen mellem view og download.
+Der er ingen konkrete HTTP-receipts, der afgør hvilken.
+Nuværende kontos succes kan ikke bevise Actions-adgang på fejltidspunktet.
+Assettransport/redirect/diskfejl er ikke det primære spor for netop
+“release not found” i den undersøgte CLI-version.
+
+6. BACKUP-REFERENCER
+Den eksisterende draft/asset er den dokumenterede operationelle key-kilde.
+Exact-main docs/audits/01-core-android-audit.md anbefaler en uafhængig
+beskyttet backup, men angiver ingen verificerbar separat lokation/receipt.
+Der er dermed ingen selvstændig recovery-backup dokumenteret i de læste kilder.
+Det beviser ikke, at en ekstern backup ikke findes.
+Auditens beskrivelse af automatisk key-regenerering er historisk:
+det aktuelle workflow er fail-closed og genererer ikke en erstatningskey.
+
+7. ÉN ANBEFALING TIL 00_08
+Giv et særskilt, afgrænset mandat til en signing-only diagnose i samme
+Actions-repository/auth-kontekst. Behold den private draft og eksisterende key.
+
+Mindste ekstra kontrol er metadataopslag uden nøglehentning:
+- mål gh --version og runner-image;
+- gentag draft-releaseopslaget for lumenfall-signing-v1;
+- læs GraphQL release(tagName), REST release ID396126590 og
+  JSON-metadata for asset ID586981383 med Actions-token;
+- gem redigeret exitstatus, HTTP-status/request-ID og GraphQL-resultat,
+  uden Authorization, token, signeret URL eller responsebody med privat materiale.
+Sammenhold også deklarerede tokenrettigheder.
+Denne kontrol kræver ny eksekvering og adgang til en aktuel Actions-kontekst;
+den er ikke udført under denne opgaves read-only-mandat.
+
+Før et APK-retry skal Lead have dokumenteret disposition af lookupfejlen
+og stabil adgang til den samme draft/asset med runnercredential.
+En særskilt autoriseret signing-only nøglekontrol kan derefter hente den
+eksisterende key kun til et beskyttet, midlertidigt område og bevise
+assetdigest samt expected certifikat; kun hash/metadata afleveres,
+privat materiale fjernes fra temp og må aldrig uploades/logges.
+Keymetadata-digest og certifikatfingerprint er forskellige målinger.
+Hvis separat recovery-backup findes, skal ejeren levere lokations-/adgangs-
+og fingerprintreceipt sikkert; en ny nøgle er ikke en recoverykopi.
+Ingen blind rerun, publicering af signingdraft, rotation eller afinstallation.
+
+Appidentitet der skal bevares:
+applicationId com.lumenfall.app
+Expected certifikat SHA256:
+A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21
+
+8. EVIDENS OG SLUTSTATUS
+Pakken indeholder før/efter-receipts, alle nødvendige release-/assetsider,
+tagrefs, redigerede fulde job130/131-logs, exact-workflow-identitet,
+historisk backup-reference og versionsbundet offentlig CLI-kilde.
+Inputmanifest:6/6 SHA256-match. Integration-ZIP CRC PASS;
+49 ZIP-entries inklusive katalogentry (48 filer).
+Ingen gammel audit genstartet; ingen workers startet.
+Tekniske tool-allowlist400 er ikke brugt som GitHub404/adgangsbevis.
+
+Primære referencer:
+https://docs.github.com/en/rest/releases/releases
+https://docs.github.com/en/rest/releases/assets
+https://github.com/cli/cli/blob/v2.101.0/pkg/cmd/release/shared/fetch.go
+https://github.com/cli/cli/blob/v2.101.0/pkg/cmd/release/download/download.go
+https://github.com/cli/cli/blob/v2.101.0/pkg/cmd/release/view/view.go
+
+Status: DIAGNOSE AFLEVERET; ROOT CAUSE UAFKLARET; RELEASEBLOK BESTÅR.
+Alle mutationshandlinger i repo/signing/release/CI: INGEN.
+00_08 skal give et nyt konkret mandat før diagnoseeksekvering/reparation/retry.

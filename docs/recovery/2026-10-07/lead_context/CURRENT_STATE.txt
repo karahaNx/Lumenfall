@@ -1,0 +1,68 @@
+LUMENFALL — aktuelt Lead-checkpoint fra 00_15 til 00_16
+7. oktober 2026, Europe/Copenhagen. Observationstid: RECEIPTS/live.json.
+
+Dette er en lokal statusdelta; docs/PROJECT_STATE.md er ikke remote ændret.
+Brugerens stående godkendelse gælder ifølge AGENTS; writer og action-scope er stadig
+faktiske betingelser. Én repo-writer. Ingen beskedværktøjer/subagenter/chatomdøbning.
+
+PR46 / B2
+main/base 1ddc246eb62782a61ec5c486cd5f51ea170bb338, tree
+bfb3970b29485b3e8ece1c72bb60186eb2ba755e.
+Remote R2 3cdebc236e9ee5081a4bca4e323b11f43aa0d46d, tree
+70073a55d7f5fe428ae82223627603498cc372b6; branch 02/lab-motes-repeat-v1.
+Kun PR46 open/Draft. 44 branches incl. verificeret tom næste side.
+0 queued og 0 in_progress runs observeret; øvrige kø-/runstatusser ikke påstået.
+Det er checkpoints, ikke resetmål eller writer-stopbevis.
+
+Blokeret lokal kandidat (ingen remote R3): tree
+4c07cd5d66cb5928eb99623ff86efaa81e268829;
+index SHA256 3de412b53421f173d3826ddf6336f066abf43cc09d88cbbc0e23bf6984212ed9.
+Proposed parent R2.13 SOURCE-filer main→local; fem filer R2→local.
+QA 04_05 BLOCKED: ny obligatorisk BigInt/literals i hovedscriptet konflikter
+med Capacitor 6.2.1 default WebView 60. Officielle BigInt-supportfloor 67,
+locked Java-sources/config og scoped grammar/API-fravær beviser gap.
+Lead bevarer den eksisterende baseline; konkret runtimefixmandat sendt til 02_08.
+
+QA's egne positive moderne-engine-fund er kilder, ikke ny kandidataccept:
+16 B2-motorrækker/494 checks inkl. natural product DPS; begge exact oldR2 FAIL/
+restorationPASS. 826 B1-fixtures/43 gamle cases, 100 grupper/16193 checks,
+384 motorstresscases/768 segmentchecks, 6516 Fraction-inputs. 7 gates,
+141 scenarier/161 real browser/nativechecks/12 caught negatives; mobile 6
+contexts / 78 checks. 1340 diagnostics: 1217 clean / 123 strict rows / 379 errors bevaret,
+ikke fuld grøn stresstest. Original mobile clipping-FAIL bevaret; årsag ukendt.
+Fysisk Android/WebView/TalkBack utestet. Rewards ved huge counts er repræsenteret
+afrundede; ingen unbounded/sub-ULP garanti. QA's egne processer meldt lukket.
+Lead har ikke genkørt hele denne motor/suite. Egen bounded grammar/farm-VM
+med batchstub bekræfter R2 PASS/local FAIL uden BigInt. Se B2_RUNTIME/LEAD/.
+
+Writer: 02_07s B2-start/stop/processer/ny frigivelse UKENDT. Den gamle R2-release
+10:20Z frigiver ikke det senere B2-mandat. 02_08 kun lokal fase A; intet writer-
+overtagelsesclaim. Eksisterende conditional fase B i mandat er uændret og
+kræver faktisk dokumenteret stop/release plus egen proceslukning/livepreflight.
+Core 01_06's gamle lokale forreview er afventet; resultat ikke modtaget.
+Ny runtimefix-kandidat fra 02_08 er afventet; ikke modtaget.
+Core/QA-review på ændrede bytes kræves. Ingen same-head R3-CI/accept/APK.
+
+NY FEEDBACK
+FEEDBACK-REVISION-001 er registreret. 29 F-punkter med fuld original og 4 billeder.
+Ingen produktimplementation, balanceaccept, migration eller remote docswrite.
+Se DECISIONS/FEEDBACK_REGISTERED_001.txt og BACKLOG/FEEDBACK_REGISTER.tsv.
+F05's konkrete 5-Prism-save og F17's 90%-Titan-save er ikke modtaget/reproduceret.
+Lead har genkørt den leverede isolerede formelprobe mod byteverificeret main;
+output matcher, inkl. 40 Prism-rækker og faktisk buyNode-debit uden effekt
+på Echo 6→7 og Bonds 20→21. Det er ikke fuldmotor-/save-/UI-accept.
+
+BEVAREDE ANDRE SCOPES
+Accepteret Android 0.1.133/NAV/MeasuredInquiry er beskrevet i live repo's ældre
+PROJECT_STATE og receipts; denne overdragelse har ikke genverificeret APK'en.
+A40/crDroid er udgået af aktivt scope; ikke nyt acceptkrav. Opening Focus,
+CONTENT-DESIGN/Farm recommended og deferred native/release-hardening er
+separate scopes. Feedback-guidance F07 giver ikke i sig selv nyt farmindikator-design.
+Ingen bred audit/genstart af allerede afsluttede opgaver.
+
+NÆSTE KONKRETE HANDLING
+1 Modtag/behandl ny 02_08 runtimekandidat og dokumenteret 02_07 writerstop.
+  Afslut PR46 gennem gældende frozen-bytes/Core/QA/remote-gates.
+2 Derefter afgrænsede feedbackmandater. Første: Echo/Bonds correctness med
+  legacy-value/migrationdesign, ikke alle 29 punkter i én PR.
+3 Nye model-/effortangivelser ved hver opgave; brugeren overfører filer.

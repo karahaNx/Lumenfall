@@ -1,0 +1,52 @@
+LEAD_DELTA — FEEDBACK-REVISION-001
+Til eksisterende 00_15. Nyt scope fra bruger, 7. oktober 2026.
+Krav/evidensaflevering; spillet er ikke ændret gennem denne pakke.
+
+29 F-punkter i TASK dækker hele ORIGINAL, med fire screenshotreferencer.
+Originalen går forud for fortolkninger og designforslag.
+
+Hovedændringer:
+- Auto-Ascend som billede 2: én dropdown, tydelig ON/OFF, på Ascend.
+  Unlock i Deeds bevares. Alle tilladte Rift-mål skal kunne vælges.
+- Wisps har ingen fold-pil før alle endelige upgrade-spor er maxed.
+- Stabil Rift-guidance under valuta; ingen Cast-tekst på kampvisningen.
+- Lab har én titel/targetlevel, effekttekst før start, tid i baren.
+  Speed up åbnes med knap; queue speed gemmes separat og bruger betalte
+  præcise tiers offline, med 1x når kun selve næste Lab er betalelig.
+- Formation preset autosaver ved rosterændringer; flere end fire Bonds.
+  Bond-partnere står kun i Bonds. Titan og supports måles på reel holdværdi.
+- Prism-beregning, Echoing Rest, Cheaper Bonds og Swift Recovery har
+  korrekt forklaring og købsgates; samtlige tilsvarende handlers.
+- Eksklusive effekter til Lab/Forge/Tree og en målt fælles progression.
+- Save Backup ved Reset. Tydelige Rift-cosmetics.
+- Loadout Memory som baseline; 12h offline for alle uden forlængelser.
+  Nye Comet-eksklusive unlocks erstatter de fjernede køb.
+
+Egen målrettet kodekontrol på live main:
+Echo level 6→7 bruger 16 Prisms; offline-rate er stadig 100%.
+Cheaper Bonds level 20→21 bruger 3376 Prisms; rabat er stadig 60%.
+Swift Recovery mangler cap; cycle=6/(1+0.08*level).
+Support Ultimate varer 8s mod grundcycle 6s: sustained 100% uptime allerede
+ved charge level 0. Nyt cap alene gør ikke permanent boost sværere.
+Prism Tree-/Lab-modifiers indgår i main, men nested flooring og 20% repeat
+kan maskere små køb. Brugerens konkrete 5-Prism-save er ikke reproduceret.
+Resonate er 25 Sigils for resource=100, 3 gange samlet pr. run; ikke upgrade.
+Alle fund er scoped; ingen fuldmotor/mobil/save-migrationsaccept her.
+
+PR46 er fortsat Draft/R2. Seneste læste 00_15-mandat holder 02_08 lokal fase A
+åben for WebView-60-kompatibel B2-korrektion. Writer-frigivelse er ukendt.
+Pak denne feedback som nye opgaver; fold den ikke ind i arithmetic-PR'en.
+
+Anbefalet rækkefølge:
+0. Eksisterende PR46/B2-runtime-gate.
+1. Correctness: Prism og effekt-caps med gammel-save-politik.
+2. Mobilklarhed: enkle kontroller, fast layout og Lab-visning.
+3. Formation/roller: autosave, Bonds, bidrag og support-uptime.
+4. Progression/identitet: exclusive effekter, 12h, Comets og samlet tuning.
+
+Undgå at tolke "eksponentiel" som identiske eksponenter for alle systemer.
+Mål time-to-upgrade, TTK, Ascend/time og marginal holdværdi. Et integer-
+reward behøver ikke stige ved hvert lille procentkøb. Gem gennemsigtig
+beregning og stærk nok effekt over flere køb.
+Alle nye tal og indholdsideer i TASK er forslag som Lead konkretiserer
+inden kodning; de er ikke allerede brugeraccepterede produktværdier.

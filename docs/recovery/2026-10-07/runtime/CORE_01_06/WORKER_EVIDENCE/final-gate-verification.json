@@ -1,0 +1,1761 @@
+{
+  "status": "PASS",
+  "defaultScenarios": 141,
+  "browserOrNativeInvocations": 161,
+  "realScenarios": 139,
+  "metaContracts": 2,
+  "completeAggregate": true,
+  "requiredNegatives": 12,
+  "negativeScenarios": [
+    "self-test-bad-assertion",
+    "self-test-uncaught-error",
+    "self-test-unhandled-rejection",
+    "self-test-parity-regression",
+    "self-test-chronology-regression",
+    "self-test-wisp-formula-regression",
+    "self-test-wisp-pacing-regression",
+    "self-test-endgame-currency-regression",
+    "self-test-wisp-role-regression",
+    "self-test-p1-05-selected",
+    "self-test-p1-05-focus-return",
+    "self-test-lifecycle-duplicate"
+  ],
+  "sourceUnchanged": true,
+  "gates": [
+    {
+      "gate": "gate-01",
+      "name": "APK identity verifier self-test",
+      "started": "2026-10-06T12:59:23.977021+00:00",
+      "exitcode": 0,
+      "seconds": 0.0675872830033768
+    },
+    {
+      "gate": "gate-02",
+      "name": "Validate game source",
+      "started": "2026-10-06T12:59:24.049458+00:00",
+      "exitcode": 0,
+      "seconds": 0.30638107000049786
+    },
+    {
+      "gate": "gate-03",
+      "name": "Stage web assets",
+      "started": "2026-10-06T12:59:24.369947+00:00",
+      "exitcode": 0,
+      "seconds": 0.017250110002350993
+    },
+    {
+      "gate": "gate-04",
+      "name": "Stateful behavioral regression suite",
+      "started": "2026-10-06T13:16:22.108861+00:00",
+      "exitcode": 0,
+      "seconds": 768.6808338460032
+    },
+    {
+      "gate": "gate-05",
+      "name": "Behavioral harness negative self-test",
+      "started": "2026-10-06T13:29:10.809654+00:00",
+      "exitcode": 0,
+      "seconds": 24.140374822000013
+    },
+    {
+      "gate": "gate-06",
+      "name": "Install runtime error guard in staged copy",
+      "started": "2026-10-06T13:29:34.955016+00:00",
+      "exitcode": 0,
+      "seconds": 0.05089257300278405
+    },
+    {
+      "gate": "gate-07",
+      "name": "Browser runtime smoke test",
+      "started": "2026-10-06T13:29:35.013392+00:00",
+      "exitcode": 0,
+      "seconds": 1.3155037849974178
+    }
+  ],
+  "records": [
+    {
+      "scenario": "lab-motes-numerical",
+      "path": "gates/gate-04/processes/7-0002/process.json",
+      "status": "pass",
+      "detail": {
+        "checks": 340,
+        "rows": [
+          {
+            "natural": false,
+            "use": false,
+            "kind": "live",
+            "split": 0,
+            "expected": 3275345183542180,
+            "kills": 3275345183542180,
+            "hp": 7,
+            "motes": 98260355506266,
+            "work": 299,
+            "representedDamageExact": "36028797018963984",
+            "ledger": {
+              "kills": 3275345183542180,
+              "luminous": 98260355506266,
+              "lumen": 19652071101253080,
+              "shards": 3275345183542180,
+              "motes": 98260355506266,
+              "damageUnits": "7292309700590025977850314939847315830727145782563253774651567483640991779146832570797052266954773211848737111329399781668303598886704814520810211105355092048306603261558778980331037284111573453586142199218665296526245931449077930949439963867212907022890079781536522558110268979539110921368724566316863704414164675180453238272068025587859456"
+            },
+            "segments": 1
+          },
+          {
+            "natural": false,
+            "use": false,
+            "kind": "live",
+            "split": 0.5,
+            "expected": 3275345183542180,
+            "kills": 3275345183542180,
+            "hp": 7,
+            "motes": 98260355506266,
+            "work": 299,
+            "representedDamageExact": "36028797018963984",
+            "ledger": {
+              "kills": 3275345183542180,
+              "luminous": 98260355506266,
+              "lumen": 19652071101253080,
+              "shards": 3275345183542180,
+              "motes": 98260355506266,
+              "damageUnits": "7292309700590025977850314939847315830727145782563253774651567483640991779146832570797052266954773211848737111329399781668303598886704814520810211105355092048306603261558778980331037284111573453586142199218665296526245931449077930949439963867212907022890079781536522558110268979539110921368724566316863704414164675180453238272068025587859456"
+            },
+            "segments": 2
+          },
+          {
+            "natural": false,
+            "use": false,
+            "kind": "offline",
+            "split": 0,
+            "expected": 3275345183542180,
+            "kills": 3275345183542180,
+            "hp": 7,
+            "motes": 98260355506266,
+            "work": 299,
+            "representedDamageExact": "36028797018963984",
+            "ledger": {
+              "kills": 3275345183542180,
+              "luminous": 98260355506266,
+              "lumen": 13756449770877154,
+              "shards": 2292741628479526,
+              "motes": 98260355506266,
+              "damageUnits": "7292309700590025977850314939847315830727145782563253774651567483640991779146832570797052266954773211848737111329399781668303598886704814520810211105355092048306603261558778980331037284111573453586142199218665296526245931449077930949439963867212907022890079781536522558110268979539110921368724566316863704414164675180453238272068025587859456"
+            },
+            "segments": 1
+          },
+          {
+            "natural": false,
+            "use": false,
+            "kind": "offline",
+            "split": 0.5,
+            "expected": 3275345183542180,
+            "kills": 3275345183542180,
+            "hp": 7,
+            "motes": 98260355506266,
+            "work": 299,
+            "representedDamageExact": "36028797018963984",
+            "ledger": {
+              "kills": 3275345183542180,
+              "luminous": 98260355506266,
+              "lumen": 13756449770877154,
+              "shards": 2292741628479526,
+              "motes": 98260355506266,
+              "damageUnits": "7292309700590025977850314939847315830727145782563253774651567483640991779146832570797052266954773211848737111329399781668303598886704814520810211105355092048306603261558778980331037284111573453586142199218665296526245931449077930949439963867212907022890079781536522558110268979539110921368724566316863704414164675180453238272068025587859456"
+            },
+            "segments": 2
+          },
+          {
+            "natural": true,
+            "use": false,
+            "kind": "live",
+            "split": 0,
+            "expected": 3277040892359271,
+            "kills": 3277040892359271,
+            "hp": 5.029999999999999,
+            "motes": 98311226770838,
+            "work": 299.1,
+            "representedDamageExact": "36047449815951984",
+            "ledger": {
+              "kills": 3277040892359271,
+              "luminous": 98311226770779,
+              "lumen": 19662245354155624,
+              "shards": 3277040892359271,
+              "motes": 98311226770779,
+              "damageUnits": "7296085068730880994390700782572878467154700824006709735667259032801018941406106291624756640761294702535792317875883831770202133234015420332369506180578062294962962949886714435435278532018530843812727308737404132697900896715755988517333573217247432359047325059660116393551750130363617648065282657819671758183751130326323491295401414498451456"
+            },
+            "segments": 1
+          },
+          {
+            "natural": true,
+            "use": false,
+            "kind": "live",
+            "split": 0.01,
+            "expected": 3277040892359271,
+            "kills": 3277040892359271,
+            "hp": 8.78,
+            "motes": 98311226770838,
+            "work": 299.1,
+            "representedDamageExact": "36047449815951984",
+            "ledger": {
+              "kills": 3277040892359271,
+              "luminous": 98311226770779,
+              "lumen": 19662245354155628,
+              "shards": 3277040892359271,
+              "motes": 98311226770779,
+              "damageUnits": "7296085068730880235382250880158059645297150628066808299829822417268075103026013688760983260778743857684353437486666974818660142045970752620586740983852524043662713172117302229744937494894675727061823275887842853048772102442961981409805510374649812541159741375311780115514038209018231826814977850705287262485022972903800003891497385397846016"
+            },
+            "segments": 2
+          },
+          {
+            "natural": true,
+            "use": false,
+            "kind": "offline",
+            "split": 0,
+            "expected": 3277040892359271,
+            "kills": 3277040892359271,
+            "hp": 5.029999999999999,
+            "motes": 98311226770838,
+            "work": 299.1,
+            "representedDamageExact": "36047449815951984",
+            "ledger": {
+              "kills": 3277040892359271,
+              "luminous": 98311226770779,
+              "lumen": 13763571747908936,
+              "shards": 2293928624651489.5,
+              "motes": 98311226770779,
+              "damageUnits": "7296085068730880994390700782572878467154700824006709735667259032801018941406106291624756640761294702535792317875883831770202133234015420332369506180578062294962962949886714435435278532018530843812727308737404132697900896715755988517333573217247432359047325059660116393551750130363617648065282657819671758183751130326323491295401414498451456"
+            },
+            "segments": 1
+          },
+          {
+            "natural": true,
+            "use": false,
+            "kind": "offline",
+            "split": 0.01,
+            "expected": 3277040892359271,
+            "kills": 3277040892359271,
+            "hp": 8.78,
+            "motes": 98311226770838,
+            "work": 299.1,
+            "representedDamageExact": "36047449815951984",
+            "ledger": {
+              "kills": 3277040892359271,
+              "luminous": 98311226770779,
+              "lumen": 13763571747908936,
+              "shards": 2293928624651489.5,
+              "motes": 98311226770779,
+              "damageUnits": "7296085068730880235382250880158059645297150628066808299829822417268075103026013688760983260778743857684353437486666974818660142045970752620586740983852524043662713172117302229744937494894675727061823275887842853048772102442961981409805510374649812541159741375311780115514038209018231826814977850705287262485022972903800003891497385397846016"
+            },
+            "segments": 2
+          },
+          {
+            "natural": true,
+            "use": true,
+            "kind": "live",
+            "split": 0,
+            "expected": 3277040892359271,
+            "kills": 3277040892359271,
+            "hp": 2,
+            "motes": 98311226770778,
+            "work": 297.3,
+            "representedDamageExact": "36047449815951984",
+            "ledger": {
+              "kills": 3277040892359271,
+              "luminous": 98311226770779,
+              "lumen": 19662245354155628,
+              "shards": 3277040892359271,
+              "motes": 98311226770779,
+              "damageUnits": "7296085068730881607669528303724282179936863758762339446888328813317540663870525729979995522291077683000785974463180919038020743760062545589256215843030100452917647223601190342344292616893809321051041595101003313495486557488646446206394916801450422004773891029101858714987713621674258480289205212429841563183124735560592658373857789018636288"
+            },
+            "segments": 2
+          },
+          {
+            "natural": true,
+            "use": true,
+            "kind": "live",
+            "split": 0.01,
+            "expected": 3277040892359271,
+            "kills": 3277040892359271,
+            "hp": 7.1875,
+            "motes": 98311226770778,
+            "work": 297.3,
+            "representedDamageExact": "36047449815951984",
+            "ledger": {
+              "kills": 3277040892359271,
+              "luminous": 98311226770779,
+              "lumen": 19662245354155628,
+              "shards": 3277040892359271,
+              "motes": 98311226770779,
+              "damageUnits": "7296085068730880557707839272050449476367252654378809127313208161830301687444730962685109013315215680956295523258097600255054322616600755254623390654226439205285635031020170124472654182205809742878957682992443543314191725411281403040981096535857047923362733599086660197035545463813141427559616895921609677466550784459435167465123882096132096"
+            },
+            "segments": 3
+          },
+          {
+            "natural": true,
+            "use": true,
+            "kind": "offline",
+            "split": 0,
+            "expected": 3277040892359271,
+            "kills": 3277040892359271,
+            "hp": 2,
+            "motes": 98311226770778,
+            "work": 297.3,
+            "representedDamageExact": "36047449815951984",
+            "ledger": {
+              "kills": 3277040892359271,
+              "luminous": 98311226770779,
+              "lumen": 13763571747908936,
+              "shards": 2293928624651489.5,
+              "motes": 98311226770779,
+              "damageUnits": "7296085068730881607669528303724282179936863758762339446888328813317540663870525729979995522291077683000785974463180919038020743760062545589256215843030100452917647223601190342344292616893809321051041595101003313495486557488646446206394916801450422004773891029101858714987713621674258480289205212429841563183124735560592658373857789018636288"
+            },
+            "segments": 2
+          },
+          {
+            "natural": true,
+            "use": true,
+            "kind": "offline",
+            "split": 0.01,
+            "expected": 3277040892359271,
+            "kills": 3277040892359271,
+            "hp": 7.1875,
+            "motes": 98311226770778,
+            "work": 297.3,
+            "representedDamageExact": "36047449815951984",
+            "ledger": {
+              "kills": 3277040892359271,
+              "luminous": 98311226770779,
+              "lumen": 13763571747908936,
+              "shards": 2293928624651489.5,
+              "motes": 98311226770779,
+              "damageUnits": "7296085068730880557707839272050449476367252654378809127313208161830301687444730962685109013315215680956295523258097600255054322616600755254623390654226439205285635031020170124472654182205809742878957682992443543314191725411281403040981096535857047923362733599086660197035545463813141427559616895921609677466550784459435167465123882096132096"
+            },
+            "segments": 3
+          },
+          {
+            "natural": false,
+            "use": false,
+            "kind": "live",
+            "split": 0,
+            "expected": 3275345183542180,
+            "kills": 3275345183542180,
+            "hp": 7,
+            "motes": 98260355506266,
+            "work": 299,
+            "representedDamageExact": "36028797018963984",
+            "ledger": {
+              "kills": 3275345183542180,
+              "luminous": 98260355506266,
+              "lumen": 19652071101253080,
+              "shards": 3275345183542180,
+              "motes": 98260355506266,
+              "damageUnits": "7292309700590025977850314939847315830727145782563253774651567483640991779146832570797052266954773211848737111329399781668303598886704814520810211105355092048306603261558778980331037284111573453586142199218665296526245931449077930949439963867212907022890079781536522558110268979539110921368724566316863704414164675180453238272068025587859456"
+            },
+            "segments": 1
+          },
+          {
+            "natural": true,
+            "use": false,
+            "kind": "live",
+            "split": 0,
+            "expected": 3277040892359271,
+            "kills": 3277040892359271,
+            "hp": 5.029999999999999,
+            "motes": 98311226770838,
+            "work": 299.1,
+            "representedDamageExact": "36047449815951984",
+            "ledger": {
+              "kills": 3277040892359271,
+              "luminous": 98311226770779,
+              "lumen": 19662245354155624,
+              "shards": 3277040892359271,
+              "motes": 98311226770779,
+              "damageUnits": "7296085068730880994390700782572878467154700824006709735667259032801018941406106291624756640761294702535792317875883831770202133234015420332369506180578062294962962949886714435435278532018530843812727308737404132697900896715755988517333573217247432359047325059660116393551750130363617648065282657819671758183751130326323491295401414498451456"
+            },
+            "segments": 1
+          }
+        ],
+        "causalControl": "both exact old-R2 minima rejected; undo passes",
+        "limit": "represented damage per segment; original spawn/reward rounding; split HP differs when represented damage differs"
+      }
+    },
+    {
+      "scenario": "lab-motes-conservation",
+      "path": "gates/gate-04/processes/7-0003/process.json",
+      "status": "pass",
+      "detail": {
+        "checks": 16735,
+        "fixtures": 826,
+        "causalControl": "old-double-round rejected; undo passes",
+        "boundaryRows": [
+          {
+            "seconds": 0.01729999,
+            "use": false,
+            "kind": "live",
+            "kills": 1,
+            "motes": 59,
+            "work": 299.98270001
+          },
+          {
+            "seconds": 0.01729999,
+            "use": false,
+            "kind": "offline",
+            "kills": 1,
+            "motes": 59,
+            "work": 299.98270001
+          },
+          {
+            "seconds": 0.01729999,
+            "use": true,
+            "kind": "live",
+            "kills": 1,
+            "motes": 59,
+            "work": 299.98270001
+          },
+          {
+            "seconds": 0.01729999,
+            "use": true,
+            "kind": "offline",
+            "kills": 1,
+            "motes": 59,
+            "work": 299.98270001
+          },
+          {
+            "seconds": 0.0173,
+            "use": false,
+            "kind": "live",
+            "kills": 2,
+            "motes": 60,
+            "work": 299.9827
+          },
+          {
+            "seconds": 0.0173,
+            "use": false,
+            "kind": "offline",
+            "kills": 2,
+            "motes": 60,
+            "work": 299.9827
+          },
+          {
+            "seconds": 0.0173,
+            "use": true,
+            "kind": "live",
+            "kills": 2,
+            "motes": 0,
+            "work": 299.9827
+          },
+          {
+            "seconds": 0.0173,
+            "use": true,
+            "kind": "offline",
+            "kills": 2,
+            "motes": 0,
+            "work": 299.9827
+          },
+          {
+            "seconds": 0.01730001,
+            "use": false,
+            "kind": "live",
+            "kills": 2,
+            "motes": 60,
+            "work": 299.98269999
+          },
+          {
+            "seconds": 0.01730001,
+            "use": false,
+            "kind": "offline",
+            "kills": 2,
+            "motes": 60,
+            "work": 299.98269999
+          },
+          {
+            "seconds": 0.01730001,
+            "use": true,
+            "kind": "live",
+            "kills": 2,
+            "motes": 0,
+            "work": 299.98269997
+          },
+          {
+            "seconds": 0.01730001,
+            "use": true,
+            "kind": "offline",
+            "kills": 2,
+            "motes": 0,
+            "work": 299.98269997
+          },
+          {
+            "seconds": 0.9,
+            "use": false,
+            "kind": "live",
+            "kills": 90,
+            "motes": 62,
+            "work": 299.1
+          },
+          {
+            "seconds": 0.9,
+            "use": false,
+            "kind": "offline",
+            "kills": 90,
+            "motes": 62,
+            "work": 299.1
+          },
+          {
+            "seconds": 0.9,
+            "use": true,
+            "kind": "live",
+            "kills": 90,
+            "motes": 2,
+            "work": 297.3346
+          },
+          {
+            "seconds": 0.9,
+            "use": true,
+            "kind": "offline",
+            "kills": 90,
+            "motes": 2,
+            "work": 297.3346
+          }
+        ],
+        "minimum": {
+          "kills": 90,
+          "luminous": 3,
+          "motes": 2,
+          "work": 297.3346
+        }
+      }
+    },
+    {
+      "scenario": "lab-motes-contracts",
+      "path": "gates/gate-04/processes/7-0004/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "lab-motes-chronology",
+      "path": "gates/gate-04/processes/7-0005/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "lab-motes-ui",
+      "path": "gates/gate-04/processes/7-0006/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "lab-motes-ui",
+      "path": "gates/gate-04/processes/7-0007/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "lab-motes-ui",
+      "path": "gates/gate-04/processes/7-0008/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "lab-motes-native",
+      "path": "gates/gate-04/processes/7-0009/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "lab-motes-reduced-motion",
+      "path": "gates/gate-04/processes/7-0010/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "lab-motes-save-reload",
+      "path": "gates/gate-04/processes/7-0011/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "lab-motes-backup-restore",
+      "path": "gates/gate-04/processes/7-0012/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "lab-motes-recovery",
+      "path": "gates/gate-04/processes/7-0013/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "lab-motes-reset",
+      "path": "gates/gate-04/processes/7-0014/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "nav-workshop-contract",
+      "path": "gates/gate-04/processes/7-0015/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "inquiry-contracts",
+      "path": "gates/gate-04/processes/7-0016/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "inquiry-chronology",
+      "path": "gates/gate-04/processes/7-0017/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "inquiry-ui",
+      "path": "gates/gate-04/processes/7-0018/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "inquiry-ui-reduced-motion",
+      "path": "gates/gate-04/processes/7-0019/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "inquiry-save-reload",
+      "path": "gates/gate-04/processes/7-0020/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "inquiry-backup-restore",
+      "path": "gates/gate-04/processes/7-0021/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "inquiry-recovery",
+      "path": "gates/gate-04/processes/7-0022/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "inquiry-reset",
+      "path": "gates/gate-04/processes/7-0023/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "support-stacking",
+      "path": "gates/gate-04/processes/7-0025/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "auto-ascend-target-contract",
+      "path": "gates/gate-04/processes/7-0026/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "auto-ascend-target-legacy16",
+      "path": "gates/gate-04/processes/7-0027/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "auto-ascend-target-legacy44",
+      "path": "gates/gate-04/processes/7-0028/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "auto-ascend-target-legacy56",
+      "path": "gates/gate-04/processes/7-0029/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "auto-ascend-target-legacy130",
+      "path": "gates/gate-04/processes/7-0030/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "auto-ascend-target-recovery",
+      "path": "gates/gate-04/processes/7-0031/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "auto-ascend-target-resume",
+      "path": "gates/gate-04/processes/7-0032/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "auto-ascend-target-reset",
+      "path": "gates/gate-04/processes/7-0033/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "auto-ascend-target-manual-reload",
+      "path": "gates/gate-04/processes/7-0034/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "auto-ascend-target-cold-resume",
+      "path": "gates/gate-04/processes/7-0035/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "auto-ascend-target-mobile",
+      "path": "gates/gate-04/processes/7-0036/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "auto-ascend-target-reduced-motion",
+      "path": "gates/gate-04/processes/7-0037/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "rift-status-stacking-mobile",
+      "path": "gates/gate-04/processes/7-0038/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "rift-status-stacking-reduced-motion",
+      "path": "gates/gate-04/processes/7-0039/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "support-save-reload",
+      "path": "gates/gate-04/processes/7-0040/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "support-backup-restore",
+      "path": "gates/gate-04/processes/7-0041/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "support-recovery",
+      "path": "gates/gate-04/processes/7-0042/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "support-resume",
+      "path": "gates/gate-04/processes/7-0043/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "support-recovery-resume",
+      "path": "gates/gate-04/processes/7-0044/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "support-visibility-resume",
+      "path": "gates/gate-04/processes/7-0045/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "support-reset",
+      "path": "gates/gate-04/processes/7-0046/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "upgrade-effects-and-deeds",
+      "path": "gates/gate-04/processes/7-0047/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "rift-status-contract",
+      "path": "gates/gate-04/processes/7-0048/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "rift-status-mobile",
+      "path": "gates/gate-04/processes/7-0049/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "rift-status-reduced-motion",
+      "path": "gates/gate-04/processes/7-0050/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "forge-ui-mobile",
+      "path": "gates/gate-04/processes/7-0055/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "forge-ui-reduced-motion",
+      "path": "gates/gate-04/processes/7-0056/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "buff-timing",
+      "path": "gates/gate-04/processes/7-0057/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "buff-save-reload",
+      "path": "gates/gate-04/processes/7-0058/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "forge-contracts",
+      "path": "gates/gate-04/processes/7-0059/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "forge-effects",
+      "path": "gates/gate-04/processes/7-0060/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "forge-chronology",
+      "path": "gates/gate-04/processes/7-0061/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "forge-save-reload",
+      "path": "gates/gate-04/processes/7-0062/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "forge-backup-restore",
+      "path": "gates/gate-04/processes/7-0063/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "forge-recovery",
+      "path": "gates/gate-04/processes/7-0064/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "forge-baseline",
+      "path": "gates/gate-04/processes/7-0065/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "forge-balance",
+      "path": "gates/gate-04/processes/7-0066/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "r3-destinations",
+      "path": "gates/gate-04/processes/7-0067/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "r3-save-reload",
+      "path": "gates/gate-04/processes/7-0068/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "research-duration",
+      "path": "gates/gate-04/processes/7-0069/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "research-duration-reduced-motion",
+      "path": "gates/gate-04/processes/7-0070/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-07a-persistence-review",
+      "path": "gates/gate-04/processes/7-0071/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-07a-persist-save-reload",
+      "path": "gates/gate-04/processes/7-0072/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-07a-persist-backup-restore",
+      "path": "gates/gate-04/processes/7-0073/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-07a-persist-recovery",
+      "path": "gates/gate-04/processes/7-0074/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-07a-persist-reset",
+      "path": "gates/gate-04/processes/7-0075/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-07a-formation-reconstruction",
+      "path": "gates/gate-04/processes/7-0076/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-07a-save-reload",
+      "path": "gates/gate-04/processes/7-0077/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-07a-backup-restore",
+      "path": "gates/gate-04/processes/7-0078/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-07a-recovery",
+      "path": "gates/gate-04/processes/7-0079/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-07a-chronology",
+      "path": "gates/gate-04/processes/7-0080/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-p2-07a-reconstruction",
+      "path": "gates/gate-04/processes/7-0081/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-p2-07a-reconstruction",
+      "path": "gates/gate-04/processes/7-0082/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-p2-07a-reconstruction",
+      "path": "gates/gate-04/processes/7-0083/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-p2-07a-reconstruction",
+      "path": "gates/gate-04/processes/7-0084/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-p2-07a-reconstruction",
+      "path": "gates/gate-04/processes/7-0085/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-06b-live-feedback",
+      "path": "gates/gate-04/processes/7-0086/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-06b-reduced-motion",
+      "path": "gates/gate-04/processes/7-0087/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-fresh",
+      "path": "gates/gate-04/processes/7-0088/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-fresh",
+      "path": "gates/gate-04/processes/7-0089/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-fresh",
+      "path": "gates/gate-04/processes/7-0090/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-fresh",
+      "path": "gates/gate-04/processes/7-0091/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-fresh",
+      "path": "gates/gate-04/processes/7-0092/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-dense",
+      "path": "gates/gate-04/processes/7-0093/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-dense",
+      "path": "gates/gate-04/processes/7-0094/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-dense",
+      "path": "gates/gate-04/processes/7-0095/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-dense",
+      "path": "gates/gate-04/processes/7-0096/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-dense",
+      "path": "gates/gate-04/processes/7-0097/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-boss",
+      "path": "gates/gate-04/processes/7-0098/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-boss",
+      "path": "gates/gate-04/processes/7-0099/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-boss",
+      "path": "gates/gate-04/processes/7-0100/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-boss",
+      "path": "gates/gate-04/processes/7-0101/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-boss",
+      "path": "gates/gate-04/processes/7-0102/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-accessibility-states",
+      "path": "gates/gate-04/processes/7-0103/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-accessibility-states",
+      "path": "gates/gate-04/processes/7-0104/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-accessibility-states",
+      "path": "gates/gate-04/processes/7-0105/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-accessibility-states",
+      "path": "gates/gate-04/processes/7-0106/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "layout-accessibility-states",
+      "path": "gates/gate-04/processes/7-0107/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p1-05-accessibility-baseline",
+      "path": "gates/gate-04/processes/7-0108/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p1-05-accessibility-contract",
+      "path": "gates/gate-04/processes/7-0109/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p1-05-control-regressions",
+      "path": "gates/gate-04/processes/7-0110/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p1-05-reduced-motion",
+      "path": "gates/gate-04/processes/7-0111/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "fresh-load",
+      "path": "gates/gate-04/processes/7-0112/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "midgame-load",
+      "path": "gates/gate-04/processes/7-0113/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "mature-load",
+      "path": "gates/gate-04/processes/7-0114/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "legacy-load",
+      "path": "gates/gate-04/processes/7-0115/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "corrupted-load",
+      "path": "gates/gate-04/processes/7-0116/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "malformed-daily-load",
+      "path": "gates/gate-04/processes/7-0117/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "farm-load",
+      "path": "gates/gate-04/processes/7-0118/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "farm-roundtrip",
+      "path": "gates/gate-04/processes/7-0119/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "enemy-normal-reload",
+      "path": "gates/gate-04/processes/7-0120/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "enemy-boss-reload",
+      "path": "gates/gate-04/processes/7-0121/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "active-studies-load",
+      "path": "gates/gate-04/processes/7-0122/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "auto-ascend-load",
+      "path": "gates/gate-04/processes/7-0123/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "reset-roundtrip",
+      "path": "gates/gate-04/processes/7-0124/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "restore-roundtrip",
+      "path": "gates/gate-04/processes/7-0125/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "malformed-backup-rejection",
+      "path": "gates/gate-04/processes/7-0126/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "recovery-from-corrupt-primary",
+      "path": "gates/gate-04/processes/7-0127/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "unsupported-future-load",
+      "path": "gates/gate-04/processes/7-0128/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "legacy-backup-restore",
+      "path": "gates/gate-04/processes/7-0129/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "future-backup-rejection",
+      "path": "gates/gate-04/processes/7-0130/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "recovery-offline-once",
+      "path": "gates/gate-04/processes/7-0131/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "save-failure-warning",
+      "path": "gates/gate-04/processes/7-0132/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "parity-short",
+      "path": "gates/gate-04/processes/7-0133/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "parity-medium-farm",
+      "path": "gates/gate-04/processes/7-0134/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-07a-farm-retention",
+      "path": "gates/gate-04/processes/7-0135/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-07a-timer-boundary",
+      "path": "gates/gate-04/processes/7-0136/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "parity-long-high-power",
+      "path": "gates/gate-04/processes/7-0137/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "parity-boss-short",
+      "path": "gates/gate-04/processes/7-0138/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "parity-boss-retry",
+      "path": "gates/gate-04/processes/7-0139/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "parity-auto-ascend",
+      "path": "gates/gate-04/processes/7-0140/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "chronology-research-mid-window",
+      "path": "gates/gate-04/processes/7-0141/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "chronology-study-mid-window",
+      "path": "gates/gate-04/processes/7-0142/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "chronology-auto-empower-mid-window",
+      "path": "gates/gate-04/processes/7-0143/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "chronology-auto-ascend-mid-window",
+      "path": "gates/gate-04/processes/7-0144/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "chronology-boss-retry",
+      "path": "gates/gate-04/processes/7-0145/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "chronology-simultaneous-order",
+      "path": "gates/gate-04/processes/7-0146/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "lifecycle-background-resume",
+      "path": "gates/gate-04/processes/7-0147/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "lifecycle-repeated-resume",
+      "path": "gates/gate-04/processes/7-0148/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "lifecycle-cold-restart",
+      "path": "gates/gate-04/processes/7-0149/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "lifecycle-partial-enemy",
+      "path": "gates/gate-04/processes/7-0150/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "lifecycle-boss-background-short",
+      "path": "gates/gate-04/processes/7-0151/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "lifecycle-boss-retry",
+      "path": "gates/gate-04/processes/7-0152/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "lifecycle-auto-ascend",
+      "path": "gates/gate-04/processes/7-0153/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-ascend-integrity",
+      "path": "gates/gate-04/processes/7-0154/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-03b-auto-ascend-integrity",
+      "path": "gates/gate-04/processes/7-0155/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-wisp-progression-pacing",
+      "path": "gates/gate-04/processes/7-0156/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-endgame-currency-utility",
+      "path": "gates/gate-04/processes/7-0157/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-03a-wisp-role-integrity",
+      "path": "gates/gate-04/processes/7-0158/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-03a-wisp-role-integrity-mature",
+      "path": "gates/gate-04/processes/7-0159/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-03a-wisp-role-integrity-endgame",
+      "path": "gates/gate-04/processes/7-0160/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-02a-core-qol",
+      "path": "gates/gate-04/processes/7-0161/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-02b-wisp-hierarchy",
+      "path": "gates/gate-04/processes/7-0162/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "p2-02b-lab-hierarchy",
+      "path": "gates/gate-04/processes/7-0163/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "lifecycle-long-study",
+      "path": "gates/gate-04/processes/7-0164/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "lifecycle-lab-queue",
+      "path": "gates/gate-04/processes/7-0165/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "lifecycle-daily-rollover",
+      "path": "gates/gate-04/processes/7-0166/process.json",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "scenario": "wisp-formula-contract",
+      "path": "gates/gate-04/processes/7-0167/process.json",
+      "status": "pass",
+      "detail": null
+    }
+  ],
+  "metaProbeReceipts": [
+    {
+      "gate": "gate-04",
+      "path": "gates/gate-04/processes/7-0001/process.json",
+      "process": {
+        "command": [
+          "/workspace/scratch/d55491df75da/02_08_local/runtime/bin/google-chrome",
+          "--version"
+        ],
+        "timeout": 2,
+        "cwd": "/workspace/scratch/d55491df75da/02_08_local/repo",
+        "timed_out": false,
+        "exitcode": 0,
+        "elapsed_seconds": 0.029369857998972293
+      }
+    },
+    {
+      "gate": "gate-04",
+      "path": "gates/gate-04/processes/7-0024/process.json",
+      "process": {
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "-u",
+          "-c",
+          "import sys,time;print('<html><body><pre id=\"qa-result\" data-status=\"pass\" data-scenario=\"support-stacking\">{\"scenario\": \"support-stacking\", \"status\": \"pass\", \"detail\": {}, \"runtimeErrors\": []}</pre></body></html>',flush=True);print('bounded child pending',file=sys.stderr,flush=True);time.sleep(10)"
+        ],
+        "timeout": 0.25,
+        "cwd": "/workspace/scratch/d55491df75da/02_08_local/repo",
+        "timed_out": true,
+        "exitcode": null,
+        "elapsed_seconds": 0.2585973710010876
+      }
+    },
+    {
+      "gate": "gate-04",
+      "path": "gates/gate-04/processes/7-0051/process.json",
+      "process": {
+        "command": [
+          "node",
+          "-e",
+          "console.log(JSON.stringify({status:'pass'}))"
+        ],
+        "timeout": 5,
+        "cwd": "/workspace/scratch/d55491df75da/02_08_local/repo",
+        "timed_out": false,
+        "exitcode": 0,
+        "elapsed_seconds": 0.08091541300018434
+      }
+    },
+    {
+      "gate": "gate-04",
+      "path": "gates/gate-04/processes/7-0052/process.json",
+      "process": {
+        "command": [
+          "node",
+          "-e",
+          "console.log(JSON.stringify({status:'pass'}));console.error('intentional exit 7');process.exitCode=7"
+        ],
+        "timeout": 5,
+        "cwd": "/workspace/scratch/d55491df75da/02_08_local/repo",
+        "timed_out": false,
+        "exitcode": 7,
+        "elapsed_seconds": 0.09571841700017103
+      }
+    },
+    {
+      "gate": "gate-04",
+      "path": "gates/gate-04/processes/7-0053/process.json",
+      "process": {
+        "command": [
+          "node",
+          "-e",
+          "console.log('not JSON');console.error('invalid payload evidence')"
+        ],
+        "timeout": 5,
+        "cwd": "/workspace/scratch/d55491df75da/02_08_local/repo",
+        "timed_out": false,
+        "exitcode": 0,
+        "elapsed_seconds": 0.09507094100263203
+      }
+    },
+    {
+      "gate": "gate-04",
+      "path": "gates/gate-04/processes/7-0054/process.json",
+      "process": {
+        "command": [
+          "node",
+          "-e",
+          "console.log(JSON.stringify({status:'pass'}));console.error('pending process evidence');setInterval(()=>{},1000)"
+        ],
+        "timeout": 0.5,
+        "cwd": "/workspace/scratch/d55491df75da/02_08_local/repo",
+        "timed_out": true,
+        "exitcode": null,
+        "elapsed_seconds": 0.5068041039994569
+      }
+    },
+    {
+      "gate": "gate-05",
+      "path": "gates/gate-05/processes/14674-0001/process.json",
+      "process": {
+        "command": [
+          "/workspace/scratch/d55491df75da/02_08_local/runtime/bin/google-chrome",
+          "--version"
+        ],
+        "timeout": 2,
+        "cwd": "/workspace/scratch/d55491df75da/02_08_local/repo",
+        "timed_out": false,
+        "exitcode": 0,
+        "elapsed_seconds": 0.02594504999797209
+      }
+    },
+    {
+      "gate": "gate-05",
+      "path": "gates/gate-05/processes/14764-0001/process.json",
+      "process": {
+        "command": [
+          "/workspace/scratch/d55491df75da/02_08_local/runtime/bin/google-chrome",
+          "--version"
+        ],
+        "timeout": 2,
+        "cwd": "/workspace/scratch/d55491df75da/02_08_local/repo",
+        "timed_out": false,
+        "exitcode": 0,
+        "elapsed_seconds": 0.024024648999329656
+      }
+    },
+    {
+      "gate": "gate-05",
+      "path": "gates/gate-05/processes/14851-0001/process.json",
+      "process": {
+        "command": [
+          "/workspace/scratch/d55491df75da/02_08_local/runtime/bin/google-chrome",
+          "--version"
+        ],
+        "timeout": 2,
+        "cwd": "/workspace/scratch/d55491df75da/02_08_local/repo",
+        "timed_out": false,
+        "exitcode": 0,
+        "elapsed_seconds": 0.019389383000088856
+      }
+    },
+    {
+      "gate": "gate-05",
+      "path": "gates/gate-05/processes/14942-0001/process.json",
+      "process": {
+        "command": [
+          "/workspace/scratch/d55491df75da/02_08_local/runtime/bin/google-chrome",
+          "--version"
+        ],
+        "timeout": 2,
+        "cwd": "/workspace/scratch/d55491df75da/02_08_local/repo",
+        "timed_out": false,
+        "exitcode": 0,
+        "elapsed_seconds": 0.014958259998820722
+      }
+    },
+    {
+      "gate": "gate-05",
+      "path": "gates/gate-05/processes/15032-0001/process.json",
+      "process": {
+        "command": [
+          "/workspace/scratch/d55491df75da/02_08_local/runtime/bin/google-chrome",
+          "--version"
+        ],
+        "timeout": 2,
+        "cwd": "/workspace/scratch/d55491df75da/02_08_local/repo",
+        "timed_out": false,
+        "exitcode": 0,
+        "elapsed_seconds": 0.015252078999765217
+      }
+    },
+    {
+      "gate": "gate-05",
+      "path": "gates/gate-05/processes/15120-0001/process.json",
+      "process": {
+        "command": [
+          "/workspace/scratch/d55491df75da/02_08_local/runtime/bin/google-chrome",
+          "--version"
+        ],
+        "timeout": 2,
+        "cwd": "/workspace/scratch/d55491df75da/02_08_local/repo",
+        "timed_out": false,
+        "exitcode": 0,
+        "elapsed_seconds": 0.01584281500254292
+      }
+    },
+    {
+      "gate": "gate-05",
+      "path": "gates/gate-05/processes/15210-0001/process.json",
+      "process": {
+        "command": [
+          "/workspace/scratch/d55491df75da/02_08_local/runtime/bin/google-chrome",
+          "--version"
+        ],
+        "timeout": 2,
+        "cwd": "/workspace/scratch/d55491df75da/02_08_local/repo",
+        "timed_out": false,
+        "exitcode": 0,
+        "elapsed_seconds": 0.0315549570004805
+      }
+    },
+    {
+      "gate": "gate-05",
+      "path": "gates/gate-05/processes/15300-0001/process.json",
+      "process": {
+        "command": [
+          "/workspace/scratch/d55491df75da/02_08_local/runtime/bin/google-chrome",
+          "--version"
+        ],
+        "timeout": 2,
+        "cwd": "/workspace/scratch/d55491df75da/02_08_local/repo",
+        "timed_out": false,
+        "exitcode": 0,
+        "elapsed_seconds": 0.027235036999627482
+      }
+    },
+    {
+      "gate": "gate-05",
+      "path": "gates/gate-05/processes/15391-0001/process.json",
+      "process": {
+        "command": [
+          "/workspace/scratch/d55491df75da/02_08_local/runtime/bin/google-chrome",
+          "--version"
+        ],
+        "timeout": 2,
+        "cwd": "/workspace/scratch/d55491df75da/02_08_local/repo",
+        "timed_out": false,
+        "exitcode": 0,
+        "elapsed_seconds": 0.02516040999762481
+      }
+    },
+    {
+      "gate": "gate-05",
+      "path": "gates/gate-05/processes/15481-0001/process.json",
+      "process": {
+        "command": [
+          "/workspace/scratch/d55491df75da/02_08_local/runtime/bin/google-chrome",
+          "--version"
+        ],
+        "timeout": 2,
+        "cwd": "/workspace/scratch/d55491df75da/02_08_local/repo",
+        "timed_out": false,
+        "exitcode": 0,
+        "elapsed_seconds": 0.01617400900067878
+      }
+    },
+    {
+      "gate": "gate-05",
+      "path": "gates/gate-05/processes/15569-0001/process.json",
+      "process": {
+        "command": [
+          "/workspace/scratch/d55491df75da/02_08_local/runtime/bin/google-chrome",
+          "--version"
+        ],
+        "timeout": 2,
+        "cwd": "/workspace/scratch/d55491df75da/02_08_local/repo",
+        "timed_out": false,
+        "exitcode": 0,
+        "elapsed_seconds": 0.017824377999204444
+      }
+    },
+    {
+      "gate": "gate-05",
+      "path": "gates/gate-05/processes/15658-0001/process.json",
+      "process": {
+        "command": [
+          "/workspace/scratch/d55491df75da/02_08_local/runtime/bin/google-chrome",
+          "--version"
+        ],
+        "timeout": 2,
+        "cwd": "/workspace/scratch/d55491df75da/02_08_local/repo",
+        "timed_out": false,
+        "exitcode": 0,
+        "elapsed_seconds": 0.017080256999179255
+      }
+    }
+  ]
+}

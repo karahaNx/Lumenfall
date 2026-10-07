@@ -1,0 +1,52 @@
+01_06 — kun privat lokal genprøve; ingen remote operationer tilladt.
+
+1. Hent exact R2 source archive fra:
+https://codeload.github.com/karahaNx/Lumenfall/tar.gz/3cdebc236e9ee5081a4bca4e323b11f43aa0d46d
+Udpak til review/r2. Kopiér til review/head og overlay SOURCE/13-filer.
+Bevar modes fra R2; nye filer100644. Privat git init/add/write-tree skal give
+4c07cd5d66cb5928eb99623ff86efaa81e268829. Lav ingen commit eller remote.
+
+2. Læg disse reproduce-filer i review/reproduce. Opret links head→../head,
+runtime→../runtime; mkdir evidence. scripts bruger egne stagingmapper og
+localhost med ephemeral porte. Dér er tests eneste sourceinstrumentering.
+
+3. Runtimefiler (de medfølger ikke som dependencies):
+Chrome153.0.8010.0:
+https://storage.googleapis.com/chrome-for-testing-public/153.0.8010.0/linux64/chrome-headless-shell-linux64.zip
+Udpak i review/runtime; gør chrome-headless-shell executable.
+Binary SHA2561346545781835e04ece3434a16d656ad5cbe60a6a179a43dff43f79a21f9a4ad.
+Legacy syntaxengine:
+https://nodejs.org/dist/v8.17.0/node-v8.17.0-linux-x64.tar.xz
+Udpak i review/runtime. Det er Node8/V8-parsercheck, ingen Androiddevice-test.
+Exact Capacitor package:
+https://registry.npmjs.org/@capacitor/android/-/android-6.2.1.tgz
+Gem review/runtime/capacitor-android-6.2.1.tgz; låst SHA512 skal matche lockfil.
+Playwright via CODEX_PRIMARY_RUNTIME_NODE_MODULES; Node24/Python3.12 brugt.
+
+4. Kommandoer, fra review/reproduce:
+python run_independent.py            exit0:12 grupper/1195 assertions
+python run_b1.py                     exit0:180rows/1988 pr.kilde
+python run_b2.py                     exit0:48rows/1088 inkl.expectedcontrols
+python verify_b2_phase.py baseline-R2 exit1:4 strict oracle FAILs
+python verify_b2_phase.py source       exit0
+python verify_b2_phase.py exact-old-R2 exit1:4 strict oracle FAILs
+python verify_b2_phase.py restored     exit0
+python arithmetic_exact.py           exit0:3219 helperinputs,0local/156oldfejl
+python run_runtime.py                exit0 som dokumenterende kommando;
+                                     indeholder faktisk legacy syntaxexit1
+python run_subset.py                 exit0:36valgte scenarios
+python run_controls.py               exit0:sourcevalidator0+12negatives1
+python run_smoke.py                  exit0:APKverifier+guard+modernstartup
+
+Observerne ændrer ikke produktkilde eller gamle assertions. Phasecommands
+evaluerer egen bevaret motorraw; deres exit1 er bevidst og ikke launchfailure.
+Metadata-labelkorrektionen er forklaret særskilt; original raw er bevaret.
+
+5. Udpak WORKER_RAW_CURRENT.tar.xz til review/worker_raw og placer arkivet i
+review/input/RAW_CURRENT.tar.xz. Følgende er read-only audits af eksisterende
+workerdata, ikke nye motorreplays:
+python inspect_worker_raw.py         exit0:161positive/139scenarios+12negatives
+python audit_numeric_evidence.py     exit0:7945rows+123diagnosticcases
+
+ZIP/raw-manifester kontrollerer størrelser/SHA256 og komplet filecoverage.
+Fysisk Android/TalkBack/WebView er ikke med i dette reproduktionsscope.

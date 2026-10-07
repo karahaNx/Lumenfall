@@ -1,0 +1,3 @@
+()=>{let b=ownQA,rows=[],D=2**55+16,expected=Number(BigInt(D)/11n),clock=2000000000000;
+ for(let kind of ['live','offline'])for(let split of [0,.5]){let s=b.fresh();Object.assign(s,{riftMode:'farm',depth:1,enemyDepth:1,farmDepth:1,farmReturnDepth:2,maxDepthEver:130,enemyMaxHp:11,enemyHp:11,enemyIsLuminous:false,luminousAccum:.975,motes:0,lumen:0,shards:0,questDay:new Date().toISOString().slice(0,10)});s.activeStudies=[{id:'guardmastery',remainingSec:300,totalDurationSec:600,speedMult:1}];b.set(s);let a=b.run(split||1,D,kind,clock),z=split?b.run(1-split,D,kind,clock+split*1000):a;let kills=a.summary.kills+(split?z.summary.kills:0);rows.push({kind,split,exactDamage:String(BigInt(D)),expected,kills,parts:split?[a,z]:[a],result:z});}
+ return {rows};}

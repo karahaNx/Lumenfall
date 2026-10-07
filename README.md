@@ -14,7 +14,7 @@ This repository is now **Android-only**.
 
 Every relevant push to `main` automatically runs **Build Android APK** and publishes the finished file to the fixed **Lumenfall Android — Latest** release.
 
-Because the repository is private, GitHub will require you to be signed in to the account that has access to the repo.
+Repository visibility and account access are controlled by GitHub.
 
 You can also open **Releases** in the repository and select **Lumenfall Android — Latest**. There is only one distributed app file: `Lumenfall.apk`.
 
@@ -28,10 +28,15 @@ If you installed one of the older APKs from before stable signing was introduced
 
 Inside Lumenfall, **Settings → Save Backup** can copy/restore your save code for future reinstalls or device changes.
 
-## Start for projektchats og agents
+## Start i Codex / projektchats
 
-Læs [AGENTS.md](AGENTS.md), kun [egen rolle](docs/CHAT_OWNERSHIP.md),
-[kort aktuel status](docs/PROJECT_STATE.md) og den konkrete Lead-opgave.
+Vælg `karahaNx/Lumenfall` på `main`. Læs [AGENTS.md](AGENTS.md),
+[PROJECT_BOOTSTRAP.txt](PROJECT_BOOTSTRAP.txt), kun [egen rolle](docs/CHAT_OWNERSHIP.md)
+og [kort aktuel status](docs/PROJECT_STATE.md).
+Uden tildelt rolle starter en ny projektchat som Lead / Architecture.
+[CODEX_START.md](docs/project/CODEX_START.md) har miljøsetup, commands og næste
+konkrete handling. Nyeste B2-kandidat, originale krav, Core/QA-rapporter og
+rå beviser kan læses fra main; de er arkiv-/reviewkilder, ikke produktaccept.
 Brug [kildeindekset](docs/CONTEXT_INDEX.md) til detaljer efter behov.
 Nye handoffs følger [skabelonen](docs/HANDOFF_TEMPLATE.md); gamle arkiver,
 audits og fulde logs indlæses ikke samlet ved opstart.

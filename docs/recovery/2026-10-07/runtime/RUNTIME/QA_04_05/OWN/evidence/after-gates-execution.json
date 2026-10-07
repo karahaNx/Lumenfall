@@ -1,0 +1,62 @@
+[
+  {
+    "source": "local",
+    "command": [
+      "node",
+      "/workspace/scratch/c0c23f4097e9/b2_qa/engine.cjs",
+      "local",
+      "fixtures/b2-own.js",
+      "evidence/local-b2-exact.json"
+    ],
+    "exitcode": 0,
+    "seconds": 1.9446514750015922
+  },
+  {
+    "source": "r1",
+    "command": [
+      "node",
+      "/workspace/scratch/c0c23f4097e9/b2_qa/engine.cjs",
+      "r1",
+      "fixtures/diag-trace-own.js",
+      "evidence/r1-diag-trace.json"
+    ],
+    "exitcode": 0,
+    "seconds": 2.0913653309980873
+  },
+  {
+    "source": "r2",
+    "command": [
+      "node",
+      "/workspace/scratch/c0c23f4097e9/b2_qa/engine.cjs",
+      "r2",
+      "fixtures/diag-trace-own.js",
+      "evidence/r2-diag-trace.json"
+    ],
+    "exitcode": 0,
+    "seconds": 2.6113080300056026
+  },
+  {
+    "source": "local",
+    "command": [
+      "node",
+      "/workspace/scratch/c0c23f4097e9/b2_qa/engine.cjs",
+      "local",
+      "fixtures/diag-trace-own.js",
+      "evidence/local-diag-trace.json"
+    ],
+    "exitcode": 0,
+    "seconds": 2.2320843000052264
+  },
+  {
+    "source": "local",
+    "command": [
+      "node",
+      "/workspace/scratch/c0c23f4097e9/b2_qa/engine.cjs",
+      "local",
+      "fixtures/engine-safe-counts.js",
+      "evidence/local-engine-safe-counts.json"
+    ],
+    "exitcode": 0,
+    "seconds": 5.657778624998173
+  }
+]

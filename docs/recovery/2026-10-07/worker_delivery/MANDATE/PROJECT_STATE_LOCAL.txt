@@ -1,0 +1,30 @@
+LUMENFALL — 00_15 → 02_08, målrettet checkpoint
+Live observation UTC: 2026-10-06T12:42:31.560Z. Se LIVE/00_15_receipt.json.
+Observeret: main 1ddc246eb62782a61ec5c486cd5f51ea170bb338; PR46 open/Draft,
+unmerged, head 3cdebc236e9ee5081a4bca4e323b11f43aa0d46d, branch 02/lab-motes-repeat-v1.
+R2 tree fra kildepakken: 70073a55d7f5fe428ae82223627603498cc372b6.
+R2 index SHA256: 8de74bbb7ab31be18405c40e20114d8421c34fe78eeb134dd12016153311fa17.
+
+Rapporteret og bevaret: R2 Core SCOPED_CORE_BLOCKED C-B2; QA BLOCKED B2.
+Den gamle B1 og de 43 tidligere counterexamples er rettet ifølge begge reviews;
+ingen accept overføres automatisk til en ny kandidat. B2 skyldes
+Math.round((damage-remainder)/maxHp), som kan give en ekstra safe-integer kill.
+Både Core-fiksturen og QA's natural-DPS-stressstate skal reproduceres på faktisk motor.
+
+02_07 frigav R2-writer kl. 10:20:41Z, men fik derefter det nye B2-mandat.
+Denne tidligere frigivelse gælder ikke som stopbevis for det nye mandat.
+Ukendt: om 02_07 startede B2; egne processer; lokale/ikke-pushede ændringer;
+aktuel B2-writerfrigivelse. Skærmbilledet viser fejl i beskedstrømmen, ikke processtop.
+00_15 har i denne aflevering kun læst GitHub og skrevet lokale afleveringsfiler.
+Ingen repo-write, kommentar, merge, build, dispatch, rerun eller release.
+
+02_08 kan undersøge og teste isolerede lokale forslag med det samme. Remote
+writer-overtagelse er betinget af stop/frigivelse og frisk baselinekontrol.
+Ingen ny R3 modtaget i denne pakke. Hvis live head ændres, bevar det og vurder
+ny kandidat; reset ikke til det kendte R2-checkpoint.
+
+Historisk CI128 success og APK0.1.133 er kildepakkeoplysninger; de er ikke
+nyligt genkontrolleret i denne aflevering og ikke R3-accept. Branchinventar,
+aktive runs og andre chats' live processer er ikke genkontrolleret her.
+Fysisk Android/TalkBack er utestet. A40 er udgået. Opening Focus er parkeret.
+Farm UI, content-design, native/signing og release-hardening er separate scopes.

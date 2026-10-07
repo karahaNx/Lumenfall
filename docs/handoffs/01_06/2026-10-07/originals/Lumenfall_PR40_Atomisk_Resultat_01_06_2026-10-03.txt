@@ -1,0 +1,135 @@
+Til 00_07 — Lead / Architecture
+Fra 01_06 — Core / Android / APK
+Lumenfall · PR #40 · 2026-10-03
+Work · GPT 6.1 Sol · High
+
+KONKLUSION: IKKE ACCEPTABEL ENDNU
+Atomisk 43-cold når præcis before-repeat HP6.5, ikke den autoriserede6.4.
+Input og det faktiske lokale r er bevaret ved assertionen, før unload-guard.
+Jeg har fulgt den eksplicitte stopregel og har ikke ændret expected eller
+opfundet en ny HP-projektion. Startup Fund1 forbliver LUKKET.
+Ingen ny selector-/reward-/persistence-produktregression er bevist.
+
+CHECKPOINT — LIVE UÆNDRET FØR OG EFTER
+PR: https://github.com/karahaNx/Lumenfall/pull/40
+Branch: 02/auto-ascend-target-selector; open/Draft/unmerged.
+HEAD: d3daa23d04315ec21776de69b0df960d24cb19b6
+Tree: d1d128a82f6bc204655dc662a5239f98dca51059
+Eneste parent: 9348a48364dcd88b77b9d1bc00763b83c6f8e768
+Main/base: 3a89a8cb4084193326daa5dab68cf9a89ef71512
+Main tree: 134b5f21f414f56ecd446220c8ffc54a0621ca3e
+index.html SHA256:
+a2797073f985da25803c61e2626ef54f662dfbc5d0dbd240156e47cff76acd96
+Alle65 kandidatblobs er igen hashkontrolleret mod tidligere live HEAD-tree-
+identity; den samme immutable tree er live-genverificeret før og efter.
+CI121 run37078662885, attempt1/pull_request/completed/success på HEAD.
+Required check111074143527: Lumenfall pre-merge validation/app15368/success.
+Leads release130/asset606480838-status er genbrugt Lead-verifikation, ikke
+selvstændigt nyt release-/APK-review. Ingen remoteændring eller CI-trigger.
+
+1. NY DIAGNOSTISK OBSERVATION AF OPRINDELIG43-VISIBILITY
+Én målrettet kørsel med original orchestration og uændret revideret oracle.
+Eneste ændring: input, seedens before og det faktiske lokale r gemmes før
+assertionen, så de også findes ved failure. Senere collector står separat.
+Denne gang returnerede driveren PASS/exit0,1.904s, ingen60s proces-timeout.
+Observeret r.enemyHp6.4; input.enemyHp0.9999999999999999; r.primary HP6.4.
+Det er en diagnostisk observation af den oprindelige orchestration og tælles
+ikke som en af de nye atomiske fire-case-accepttests. Tidligere43-visibility-
+FAIL forbliver FAIL. Ingen årsagsforklaring bliver bevist alene af dette replay.
+Hele r/input/before er i diagnostic/pr40-evidence/assertion-observation.json.
+
+2. REVIDERET ORACLE / ATOMISK ORCHESTRATION
+07-cross-43-cold: FAIL, Nodeexit1,1.554s, ingen60s proces-timeout.
+Præcis assertion: "exact authorized HP fixture before repeat".
+
+Hele seed, study1=false, normal save, input-snapshot,5500ms clock-advance og
+oprindelig suppressUnloadSave er udført i én synkron browser-task. Næste
+genuine coldload kører den normale init/load/offlinebane. DOMContentLoaded-
+observeren læser boot-snapshot, gemmer det faktiske r og udfører de oprindelige
+checks i samme task før repeat-unloadforberedelse.
+
+Det præcise lokale r ved assertionen:
+  enemyHp6.5; enemyMaxHp11; enemyDepth1; depth1.
+  Canonical primary HP6.5; canonical recovery HP6.5.
+  Target44; Prisms23 fra10; Comets22 fra7; Study guardmastery1;
+  activeStudies[]; én kill; én Ascend; benchmark43;
+  lastSeen2000000005500; totalOfflineSeconds5.5.
+Hele state/primary/recovery matcher hinanden i de oprindelige checks før
+fixtureforudsætningen. De centrale literals/reward/metadata/events-assertions
+gennemføres uden failure før den præcise6.4-forudsætning.
+Seedens deklarerede enemyHp-literal er uændret1. Den eksisterende b.setState
+giver i seedens snapshot og canonical input HP0.9999999999999999. Jeg reparerer
+ikke dette actual-input; den samme værdi ses i den diagnostiske observation.
+
+Guard/clock/fase-evidens:
+  Før genuine cold-unload: reload=false/reset=false, clockT.
+  Oprindelig suppressUnloadSave efter målingen: reload=true/reset=false,
+  clockT+5500; state og begge saves er uændrede af unloadforberedelsen.
+  Ny genuine init/boot: reload=false/reset=false, clockT+5500, phaseKey1.
+  Ingen manuel frigivelse af reloadInProgress, og ingen intervalpause.
+De fulde før/efter-guards, snapshots og request er i atomic-proof.json.
+
+Stopreglen udløses FØR expected-kopien konstrueres. Derfor findes ingen
+expected/actual repeat-resultater til denne case. Den efterfølgende zero-time
+repeat og ekstra reload er ikke udført. Manglende evidens er ikke PASS.
+
+07-cross-43-visibility: IKKE KØRT i atomisk driver efter stop.
+07-cross-55-cold: IKKE KØRT efter stop.
+07-cross-55-visibility: IKKE KØRT efter stop.
+Extra-HP6.400000000000002, target/reward negatives og source-restored undo:
+IKKE KØRT. Leads forudsætning om alle fire atomiske PASS er ikke opfyldt.
+Den planlagte negative/undo-del i atomic_run.py nås ikke. Positive stagebytes
+er bevaret; ingen ny negative mutation er skrevet eller anvendt.
+
+3. HVAD DRIVERÆNDRINGEN DÆKKER
+atomic-review-driver.diff begrænser ændringen til orchestration af de fire
+cross-cases. De øvrige cases er uændrede og frasorteres med originalt filter.
+atomic-observer.diff viser den lokale synkrone observer og boot-hook.
+Seed-body og alle oprindelige centrale assertions er automatisk udtrukket
+ordret fra den eksisterende driver; kun udførelsessted/-rækkefølge over tasks
+ændres. Visibility-grenen samler den oprindelige hidden/advance/visible/
+snapshot/duplicate-kontrol i én task, men den er ikke runtime-testet efter stop.
+Expected-kopien ville alene få det eksisterende6.400000000000001-literal;
+repeat- og ekstra-boot ville compare hele state/primary/recovery strengt.
+Dette implementerede, men ikke nåede forløb er ikke kørselsbevis.
+
+Ingen clearInterval/pause/tick-mock, ingen produktændring, ingen actual/save-
+reparation, ingen reset-/reload-flag-toggle for at få callbacks til at køre.
+Original suppressUnloadSave er kun brugt ved den faktiske navigation, efter
+måling; ny init frigiver selv guard. Ingen liveness-accept udledes herfra.
+Ingen deadlineændring, epsilon, rounding, HP-exclusion eller ny HP-undtagelse.
+
+4. BEVISGRÆNSE / NÆSTE LEAD-SCOPE
+Det statiske eventloop-hul i den gamle driver står fortsat. Den nye atomiske
+kørsel beviser konkret, at det tilladte samlede forløb på denne runtime giver
+6.5 i43-cold, og derfor ikke opfylder den nuværende6.4-fixturekontrakt.
+Jeg konkluderer ikke, at et bestemt interleavet tick forklarer den gamle FAIL;
+den forklaring er fortsat en inferens. Ingen ny produktregression påstås.
+Lead skal afgøre næste scope for den eksakte fixture/expected-kontrakt.
+01_06 har ingen tilladelse til selv at indføre6.5 eller udvide HP-undtagelsen.
+
+5. HISTORIK / GENBRUG
+Original own19 forbliver14PASS/5FAIL. Tidligere nye43-cold precise PASS,
+43-visibility fixture-FAIL,55-not-run og negative/undo-not-run bevares.
+De14 gamle PASS, isoleret backup purity-PASS,11 genuine bootcases og11195
+window/nav-assertions i12 profiler er eksisterende egen evidens, ikke genkørt.
+Backup purity er ikke liveness. Startup Fund1 er fortsat LUKKET.
+00_07s QA Window/UI-accept er en separat Lead-beslutning, ikke min nye kørsel.
+Den vedlagte Lead-manifest5/5 er verificeret, inklusive tidligere evidence-ZIP.
+Previous review-manifest250/250 og ældre248/248 er allerede verificeret i
+sidste aflevering; original evidence og FAIL-historik ligger i nested ZIP.
+
+6. RUNTIME / PAKKE / GRÆNSER
+Chromium Headless Shell153.0.8010.0 via Playwright, Node24.19.0.
+Browserbinary genbrugt på samme path og verificeret SHA256:
+1346545781835e04ece3434a16d656ad5cbe60a6a179a43dff43f79a21f9a4ad
+Ingen browserdownload. Python/runtime/driver/observer/stage/sourcehashes i
+final-identity.json og manifest. Fulde Node stdout/stderr, exit/deadline og
+elapsed, observerede pageerrors samt rå r/input/seed/save/flags er vedlagt.
+Ingen pageerrors i atomisk boot. Ingen særskilt rå Chromium-stderr/exit påstås.
+Positive observerstagebytes og construction-scripts er inkluderet, ikke kun
+hashpåstande. Driveren er stoppet ved første atomiske difference; ingen bred
+audit, own19-/121-fuldkørsel, UI-QA-genstart, nye workers, repository-edit,
+push, Ready, reviewpublicering, merge, APK, signing eller manuel CI.
+Ingen fysisk Android/A40/TalkBack-accept og ingen integrations-/mergeaccept.
+Aflevering til00_07 i TXT+ZIP på exact HEAD/tree/base ovenfor.

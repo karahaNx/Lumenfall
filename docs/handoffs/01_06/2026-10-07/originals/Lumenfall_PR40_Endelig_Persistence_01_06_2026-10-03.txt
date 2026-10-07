@@ -1,0 +1,151 @@
+Til 00_07 — Lead / Architecture
+Fra 01_06 — Core / Android / APK
+Lumenfall · PR #40 · 2026-10-03
+Work · GPT 6.1 Sol · High
+
+KONKLUSION: ACCEPTABEL PÅ PRÆCIS TESTET HEAD/TREE/BASE
+Den smalle persistence-afslutning består den endelige Lead-kontrakt.
+Startup Fund1: LUKKET. Fire egne nye atomiske candidate-cases består med
+bitpræcis whole-state/primary/recovery gennem begge genuine zero-time reloads.
+Tre separate actual-mutations afvises ved den tilsigtede whole-state assertion;
+tre faktiske source-restored positive undo består. Ingen produktkode ændret.
+Dette er persistence-accept, ikke Ready-, integrations-, merge- eller APK-frigivelse.
+
+IMMUTABLE CHECKPOINT — LIVE VERIFICERET FØR OG EFTER
+PR: https://github.com/karahaNx/Lumenfall/pull/40
+Branch: 02/auto-ascend-target-selector; open/Draft/unmerged.
+HEAD: d3daa23d04315ec21776de69b0df960d24cb19b6
+Tree: d1d128a82f6bc204655dc662a5239f98dca51059
+Eneste parent: 9348a48364dcd88b77b9d1bc00763b83c6f8e768
+Main/base: 3a89a8cb4084193326daa5dab68cf9a89ef71512
+Main tree: 134b5f21f414f56ecd446220c8ffc54a0621ca3e
+Candidate index.html SHA256:
+a2797073f985da25803c61e2626ef54f662dfbc5d0dbd240156e47cff76acd96
+Alle65 sourceblobs matcher tidligere live Git-blob/SHA256-identity på den
+uændrede tree samt de nye vedlagte candidate-inputbytes. Efterkontrol består.
+CI121 run37078662885, attempt1/pull_request/completed/success på exact HEAD.
+Check111074143527: Lumenfall pre-merge validation/app15368/success.
+Ingen checkpoint-drift; remote checks er observeret, ikke manuelt genstartet.
+
+EGNE NYE RESULTATER
+Label: KORRIGERET ATOMISK ORACLE / UÆNDRET EXPECTED STATE
+
+Case                         Resultat   Node exit   Processekunder
+07-cross-43-cold              PASS       0           3.860
+07-cross-43-visibility        PASS       0           2.531
+07-cross-55-cold              PASS       0           2.589
+07-cross-55-visibility        PASS       0           2.113
+
+Alle fire har præcis before-repeat HP6.5/max11, enemyDepth/depth1 og
+Ember-resource75. Expected er en dyb kopi af HELE before-state og forbliver
+urørt. Ingen HP-overskrivning eller restorehelper i forventningsoraclen.
+Begge efterfølgende genuine zero-time reloads bevarer hele runtime state,
+canonical primary og recovery bitpræcist mod den uændrede expected-state.
+
+Uændrede centrale literals og gameplaychecks:
+  Clear43 -> target44, Prisms23 fra10; Clear55 -> target56, Prisms24 fra10.
+  Comets22 fra7 (+15 én gang); guardmastery1; activeStudies[];
+  én kill; én Ascend; benchmark43/55; depth1;
+  lastSeen2000000005500; offline5.5s; én faktisk offline-call.
+  Ingen duplikeret betaling ved repeat; metadata/save-events er bounded.
+Duplicate visibility(false)-kontrollen er uændret og observer-pure.
+Fulde input/seed-before/inputSnapshot/beforeRepeat/expected/bootPhases med
+state, primary, recovery, events, clocks, fase og flags findes i hver
+*.corrected.atomic-proof.json. Positive resultater har ingen pageerrors.
+
+ATOMISK ORCHESTRATION / GUARD
+Den allerede godkendte seed/lifecycle/unload/DOMContentLoaded-orchestration
+er bevaret. Seed/study/save/input/catchup/unload ligger i synkrone browsertasks.
+Bootmålinger og assertions ligger umiddelbart efter normal init, før guard.
+Oprindelig suppressUnloadSave bruges kun til den forestående genuine
+navigation. Flags er reload=false/reset=false ved hver ny genuine boot;
+unloadforberedelse ændrer alene guard til reload=true/reset=false og ændrer
+ikke state eller diskbytes. Ny init er den eneste guard-frigivelse.
+Ingen intervalpause, clearInterval, tick-mock eller manuel flagfrigivelse.
+Dette reload-review bruges ikke som nyt livenessbevis.
+
+KAUSAL NEGATIVE / ACTUAL SOURCE-RESTORED UNDO
+Tre disposable lokale stages wrapper den oprindelige restoreEnemyOrSpawn.
+Wrapperen kalder først original callback og muterer kun i sessionens
+repeat-fase, efter et gyldigt before6.5-snapshot. Produktrepo er urørt.
+
+Mutation                        Actual / expected                 Exit / tid
+extra-hp.negative               6.500000000000001 / 6.5           1 / 1.909s
+extra-target.negative           target45 / target44              1 / 1.679s
+extra-reward.negative           Prisms24 / Prisms23              1 / 3.123s
+
+Alle tre fejler præcis ved "REVISED ORACLE full repeat state actual=...";
+det er den eksisterende assertiontekst, mens resultaternes label er korrigeret.
+Før-snapshot og expected er gyldige og uændrede. Hele diffen består af netop
+det ene muterede field i hver case; alle øvrige statefelter matcher. Begge
+canonical saves indeholder samme actual mutation. Ingen fixturefailure,
+runtime-pageerror eller timeout bruges som negative-bevis.
+
+Efter hver mutation er de faktiske positive stagebytes skrevet tilbage,
+hashkontrolleret og samme43-cold kørt igen med uændret driver:
+  extra-hp.source-restored-undo: PASS/exit0,2.179s.
+  extra-target.source-restored-undo: PASS/exit0,2.384s.
+  extra-reward.source-restored-undo: PASS/exit0,2.169s.
+Alle tre undo bevarer hele expected state og begge saves gennem begge reloads.
+Original positiv pagehash og hver restored pagehash er identiske:
+b9069e40e0d1aa6cc40f640ce23944e598900820615ef00f4506c3d31022c62a
+Positive/negative/restored HTML-bytes, tre små mutationdiffs, præcise diffJSON,
+process/stdout/stderr og source-restored-receipts.json er vedlagt.
+Negative FAIL er kontrolresultater, ikke produkt-PASS.
+
+PRÆCIS DRIVER-/ORACLE-DIFF
+oracle-observer.diff ændrer alene before6.4 til6.5, tilføjer exact Ember75,
+fjerner expected.enemyHp-overskrivningen og retter resultatlabel.
+Alle setup-literals, clocks5500ms, produktcallbacks, heltals-/eventassertions
+og whole-state-comparisons er uændrede. review-driver.diff ændrer alene
+browserbinary-stien, fordi den gamle scratch-runtime var forsvundet.
+Ingen epsilon, rounding, HP-exclusion, dynamisk gættet HP eller general ULP-regel.
+Actual state og saves er aldrig repareret i positive tests.
+
+RUNTIME / PROCESS / IDENTITET
+Chromium Headless Shell153.0.8010.0 via Playwright; Node24.19.0.
+Den tidligere executable manglede. Samme version blev derfor genskabt, og
+den faktisk anvendte binary matcher præcis den tidligere SHA256:
+1346545781835e04ece3434a16d656ad5cbe60a6a179a43dff43f79a21f9a4ad
+En første scratch-extraction blev trunkeret og nåede ikke produktkørsel;
+intakt runtime blev verificeret på den endelige path før alle ti tests.
+Setupfejl tælles ikke som produktresultater. Path/version/hash/Python står
+i runtime.json, final-identity.json og runtime-recovery.json.
+Driver SHA256:
+bc972d1cdf040b95ded715fbf70b0e1a80ac6d21ee3512ff3be58c6ae6a084ba
+Observer SHA256:
+cc6c914beb07d443a7c47d9d874c332a146ae2320dd213051621230277b450e1
+Ti målrettede Nodeprocesser:7 positive exit0 og3 tilsigtede negative exit1;
+alle er under den uændrede60s ydre deadline uden proces-timeout. Driverens
+page.goto-/5000ms boot-wait og oprindelige exception/filter-gates er uændrede.
+Fuld Node stdout/stderr, exit/elapsed/deadline/argv og stagehash pr.process
+er gemt. Browser-pageerrors er observeret; særskilt rå Chromium-stderr/exit
+fra Playwright hævdes ikke. Ingen bred suite er kørt.
+
+GENBRUGT LEAD-/EGEN EVIDENS OG HISTORIK
+Den nye Lead-taskmanifest121/121 er verificeret. Seks supplied Lead-results
+(main/parent/head43-cold samt headens øvrige tre cases) er læst og kontrolleret:
+whole before/input er ens på main/parent/head; begge reloads bevarer hele
+state/primary/recovery. Ingen main/parent-kørsel er gentaget her.
+Parentens separate atomic-proof-fil stopper ved repeat; dens samlede result-
+JSON indeholder additional-fasen og PASS. Validation bruger de komplette
+result-JSON'er og påstår ikke, at den korte proof-fil alene dækker additional.
+Leads støttekontroller er ikke ommærket som mine egne nye executions.
+
+Original own19 forbliver14PASS/5FAIL. Tidligere43-cold revideret PASS,
+visibility prerequisite FAIL og atomisk6.4-forudsætning FAIL bevares i
+historical ZIP med nested original evidence. Historical manifest144/144
+er verificeret igen. De gamle FAIL kvitteringer er ikke rettet eller ommærket.
+Tidligere14PASS,11 genuine bootcases,11195 window/nav-assertions i12profiler,
+isolated backup purity samt særskilt unpaused-livenessbevis genbruges inden
+for deres scope. Backup purity er ikke liveness. Startup Fund1 er LUKKET.
+QA Window/UI-accept og P3 Find-backlog er separate Lead-beslutninger.
+
+GRÆNSER / AFLEVERING
+ACCEPTABEL betyder den afgrænsede persistence-vurdering på exact HEAD/tree/base.
+Ingen fysisk Android/A40/TalkBack, APK/signing/emulator eller deviceaccept.
+Ingen repo-edit, branch/commit/push, reviewpublicering, Ready, merge, APK,
+manuel CI, nye workers, ny own19-/121-suite, bred audit eller QA-genstart.
+00_07 tager selv næste integrationsbeslutning efter kontrol af TXT+ZIP.
+Manifest, komplet rå evidens, sourceinputs, stagebytes og reproduktionsstøtte
+følger med. Accept overføres ikke til en ændret kandidat.

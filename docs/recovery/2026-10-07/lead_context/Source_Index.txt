@@ -1,0 +1,55 @@
+00_16 — målrettet indgang
+START_00_16.txt → CURRENT_STATE.txt → DECISIONS/FEEDBACK_REGISTERED_001.txt.
+Læs live AGENTS, egen Lead-rolle og PROJECT_STATE ved opstart. Læs ikke hele
+pakken. MANIFEST.json angiver alle payloads med størrelse og SHA256.
+
+NY FEEDBACK
+FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt: fuld autoritativ original.
+FEEDBACK/ORIGINAL/IMAGES/: fire originale billeder. Rækkefølge og betydning
+står i FEEDBACK/Source_Index.txt. Billede 2 viser den ønskede Auto-Ascend-kontrol.
+FEEDBACK/TASK_FEEDBACK_REVISION_001.txt: fulde F01–29 og acceptkriterier.
+FEEDBACK/COVERAGE.txt: originalønsker → F-punkter.
+BACKLOG/FEEDBACK_REGISTER.tsv: hele registret med status, roller og afhængigheder.
+NEXT_SCOPE.txt: første fremtidige scope; giver ikke writer-tilladelse.
+FEEDBACK/BOOTSTRAP.txt og LEAD_DELTA.txt: præcis modtagne instrukser.
+
+EGNE FEEDBACKKONTROLLER
+RECEIPTS/live.json: frisk main, PR46, index-blob, branches, åbne PR'er samt
+queued/in_progress runs. Rå GET-responses ligger i RECEIPTS/remote*.json;
+regler og den ældre repo-status ligger i RECEIPTS/RULES/.
+RECEIPTS/input_verification.json: 23 hashes, CRC, bootstrap og snapshot-identitet.
+RECEIPTS/formula_probe_own.json: egen genkørsel af den leverede scoped probe.
+FEEDBACK/EVIDENCE/formula_probe.cjs, formula_probe_results.json, main-index.html
+og FINDINGS.txt: source, metode og indsendte fund. Leveret driver er genbrugt;
+ingen uafhængig fuldmotor-, save- eller mobilaccept påstås. Main-bytes er
+matchet med det frisk verificerede Git-blob.
+
+AKTIV B2-RUNTIME
+B2_RUNTIME/START_HER.txt og TASK_LAB_MOTES_B2_RUNTIME_001.txt: aktuelt
+Lead 00_15-mandat til 02_08, bevaret fuldt. Kun lokal fase A er åben nu.
+B2_RUNTIME/LEAD/live-preflight.json: tidligere receipt ved udstedelsen;
+den friske status findes i RECEIPTS/live.json.
+B2_RUNTIME/LEAD/runtime_reproduce.cjs og runtime_reproduce.json:
+Lead's scoped grammar/farm-VM-kontrol med batch-stub.
+B2_RUNTIME/QA_04_05/QA_REPORT.txt og OWN/RUNTIME_BLOCKER.txt:
+BLOCKED på præcist lokalt tree. OWN/identity.json angiver 13 sourcehashes.
+B2_RUNTIME/QA_04_05/SOURCE/: alle 13 scoped filer i den blokerede kandidat.
+B2_RUNTIME/QA_04_05/REFERENCE/: exact R1/R2 index-bytes til kontroller.
+B2_RUNTIME/QA_04_05/ORIGINALS/LAB/: fulde USER_REQUEST, REQUIREMENTS og
+TASK_LAB_MOTES_001. ORIGINALS/TASK_LAB_MOTES_B1_001.txt og
+TASK_LAB_MOTES_B2_001.txt: de komplette B1/B2-mandater.
+B2_RUNTIME/QA_04_05/Source_Index.txt og REPRODUCE_README.txt:
+præcise motor-, gate-, diagnostic-, runtime- og logpaths.
+B2_RUNTIME/QA_04_05/RAW_EVIDENCE.tar.xz og RAW_MANIFEST.json:
+alle 781 raw-payloads. Udtræk efter behov ved QA_04_05-roden i egen kopi.
+Ingen rekursive gamle ZIP'er. Hele det aktuelle QA-input og runtimefix-mandatet
+er bevaret, så næste Lead kan fortsætte uden gamle scratchpaths eller manuel samling.
+
+GENFINDING OG BEGRÆNSNINGER
+RECEIPTS/artifact_catalog.json: kendte filidentiteter, navne og hashes fra
+tidligere vellykkede leveringer/modtagelser. Feedback/B2-bytes er inkluderet.
+Intet nyt Core-resultat, ny 02_08-runtimefix eller 02_07-frigivelse er modtaget.
+Historiske PROJECT_STATE/opgavesnapshots beviser ikke writerfrigivelse.
+A40 er udgået. Fysisk Android/WebView/TalkBack, årsagen til mobile clipping,
+5-Prism-save og 90%-Titan-save er ukendte. Gamle positive resultater er
+ikke accept af den kommende kandidat.
