@@ -5,6 +5,10 @@ Uden tildelt rolle: Lead / Architecture, uden automatisk produkt-writer.
 Én feature pr. ejerchat; arkivér først efter verificeret integration, gemt
 status og writer-frigivelse. Se docs/project/FEATURE_WORKFLOW.md.
 Fortæl brugeren, når en ny regel er nødvendig; gem beslutningen i GitHub.
+Brug JavaScript til kode, tests, CI-logik og hjælpescripts, hvor muligt.
+HTML er fortsat tilladt. Nye scripts bruger JavaScript/Node.js; eksisterende
+værktøjer omlægges i relevant scope med bevaret testdækning. Historiske
+originaler bevares. Se docs/decisions/2026-10-07-javascript-first.md.
 Gem projektviden løbende. Ny konto: docs/project/ACCOUNT_RECOVERY.md.
 Miljø/checks: docs/project/CODEX_START.md. Kilder: docs/CONTEXT_INDEX.md.
 

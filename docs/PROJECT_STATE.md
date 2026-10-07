@@ -49,6 +49,13 @@ integration og writer-frigivelse registreres i opgavedokumentets PR49-receipt; p
 og åbne B2-/PR46-reviews ændres ikke. Nye features følger
 `project/FEATURE_WORKFLOW.md`; kontoskift følger `project/ACCOUNT_RECOVERY.md`.
 
+Sprogregel 7. oktober: JavaScript til kode, tests, CI-logik og hjælpescripts,
+hvor teknisk muligt; HTML er fortsat tilladt. Nyt og ændret arbejde følger
+reglen. Aktive Python-værktøjer er endnu ikke omlagt; de erstattes i relevant
+scope med verificeret dækning/adfærd. Reglen ændrer ingen produktbytes eller
+historiske originaler. Opgave/receipt: `tasks/JAVASCRIPT_FIRST_001.md`;
+beslutning: `decisions/2026-10-07-javascript-first.md`.
+
 Næste B2-handling: kontrollér live baseline, læs ny leverings START/identity,
 genskab det præcise tree separat, og udsted nye scoped Core-/QA-reviews.
 Gem reviewdelta i denne status. Integrér efter kandidataccept og handover.

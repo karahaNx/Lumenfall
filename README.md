@@ -49,6 +49,11 @@ For at fortsætte fra en ny ChatGPT-konto med GitHub-adgang:
 [ACCOUNT_RECOVERY.md](docs/project/ACCOUNT_RECOVERY.md), inklusive startprompt.
 Regler, krav, beslutninger og testbeviser gemmes løbende i repositoryet.
 
+JavaScript er projektets standard for kode, tests, CI-logik og hjælpescripts,
+hvor det er teknisk muligt. HTML er fortsat tilladt. Nye scripts bruger Node.js;
+eksisterende aktive værktøjer omlægges i relevant scope med bevaret testdækning.
+Se [sprogreglen og overgangen](docs/decisions/2026-10-07-javascript-first.md).
+
 ## Project structure
 
 ```
