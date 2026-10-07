@@ -75,3 +75,25 @@ gate/protection changes were made. The normal push queues Android run37655590959
 number136. Functional overlay/intro positioning uses legacy longhands; product
 JavaScript is byte-identical to actual135. New signed-release/native verification
 and the documentation checkpoint remain necessary before delivery.
+
+Final continuation: PR56 validated head187e09f1a44e7baf3e5af83d2f7c480d2a265628, full CI37663184859/
+job112936048840133/12, is integrated at1ffdc5e3af37754bf0541207caab3a6bb4537e51; whole tree equals
+validated head. The single equivalent rgba color fixes actual136 modal paint.
+The automated review evidence finding is addressed by187e09f committed corrected
+136 adapter/pass receipt. Later historical adapter findings are disposed by
+hash-pinned guarded future136 reproduction (not rerun) and actual137 composite
+runtime-asserting/distinct-state restore acceptance. The older backup result
+proves export/UI reload only; raw executed adapters/receipts are preserved.
+No independent human review is claimed.
+
+Normal main publication produces signed137 in run37665516076, same package/
+certificate, APK SHA25644f0bc792ad3510f006019fba6182b5551f17c8e18d9e2fc8f6816da474148f5. Official signature/identity/CRC/all15 assets,
+actual extracted V8 6.0 full matrix, signed in-place136→137 storage preservation
+and actual137 native600s UI/lifecycle/failure/recovery/backup/processing checks
+PASS. Full native8h remains separately136 proof on identical game JavaScript.
+Physical exact WebView60/TalkBack checks remain pending under original point7.
+[Final release evidence](../qa/offline-catchup-001/android-137/README.md).
+PR52 saves current status/evidence without product/test/mobile/workflow delta;
+its exact-head CI and final documentation integration are recorded in its PR
+body to avoid a self-referential commit receipt. Shared-file work stops after
+that integration; no other writer release is asserted. Feature/chat stays open.

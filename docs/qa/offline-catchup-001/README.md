@@ -1,6 +1,6 @@
 # OFFLINE-CATCHUP-001 evidence
 
-Current status: PR51/PR54 integrated. APK134 fails legacy DOM startup; actual signed135 completes the original native8h transaction but Continue is off-screen on WebView61. PR55 fixes functional positioning with unchanged game JavaScript. [135 release/native evidence](native-release/README.md) and [positioning regression](legacy-layout/README.md) preserve those findings. Required physical WebView60/TalkBack acceptance remains open. The sections below retain earlier checkpoints.
+Current status: PR51/54/55/56 integrated; signed137 verified. Available source/engine/emulator checks PASS, with native137600s UI/storage cases and separate136 full native8h proof on identical game JavaScript. Historical134 DOM,135 positioning and136 paint failures are preserved. [Current137 receipt](android-137/README.md) and [remaining device checklist](android-137/DEVICE_ACCEPTANCE.txt). Physical exact WebView60/TalkBack acceptance remains OPEN; no archive. Earlier checkpoints below are historical.
 
 Candidate: product index SHA256 `4a9fac11b413071f9b722e2c50e0e46839d9de26e3214b52f619c279fc5d5607`, Git blob `90e4678cb28fa833fdacbc01d1744d9465f6a356`. Base: verified live main 67c3e99c24587f6c13fc65cfd27f8dcb8e289602. This identifies the original local checkpoint; the current integrated release is recorded above.
 

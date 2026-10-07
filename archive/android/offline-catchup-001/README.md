@@ -20,3 +20,15 @@ Build37645420468/source458dbbc25f14c06149b4379ba6475ed16ad58a57,
 same package/certificate. It completes the native8h transaction, but Continue
 is off-screen on WebView61; PR55 corrects functional positioning.
 Receipt: ../../../docs/qa/offline-catchup-001/native-release/README.md.
+
+APK0.1.136 is preserved unchanged:6834584bytes, SHA256
+2c175583c546f64a7a0ae651803b94ed2c134fe86573bdb8e96edbf2eadbdab0,
+source891f4a4/build37655590959. Its full native8h numeric/storage cases pass;
+modal paint fails on WebView61. PR56 fixes the color syntax only.
+
+Current verified APK0.1.137: 6834604bytes; SHA256
+44f0bc792ad3510f006019fba6182b5551f17c8e18d9e2fc8f6816da474148f5,
+source1ffdc5e3af37754bf0541207caab3a6bb4537e51/build37665516076, same package/certificate.
+Native137600s UI/storage and actual extracted engine matrix PASS; required
+physical exact WebView60/TalkBack acceptance remains open.
+[Current receipt](../../../docs/qa/offline-catchup-001/android-137/README.md).
