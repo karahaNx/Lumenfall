@@ -39,13 +39,22 @@ ny mekanik/cap/balancebeslutning tilføjes.
 
 ## Levering
 
-Status: dokumentationskandidat klar til GitHub-integration. Docs-writer aktiv
-indtil dokumenteret integration. GitHub PR/integrationscommit og afsluttende
-beviser tilføjes ved levering.
-Arkivstatus: afventer verificeret afslutning og succes fra appens arkivværktøj.
-Næste handling: dokumentationskontrol, GitHub-integration og writer-frigivelse.
+Integration: [PR #49](https://github.com/karahaNx/Lumenfall/pull/49), branch
+`docs/workflow-continuity-2026-10-07` → `main`. Første GitHub-kandidatcommit:
+`7786e233e3336904df285b988feb7e11ec016c2e`. Aktuel HEAD og integration aflæses
+fra PR'en. Accept 1–4 er kontrolleret i kandidaten; accept 5 kræver merged PR
+og afsluttende kontrol på integrationen.
 
-Kandidatkontrol:
+PR-beskrivelsen er leveringsreceipt: integrationscommit, påkrævet CI-run,
+kontrol af integrerede blobs, writer-frigivelse og faktisk arkivresultat gemmes
+der ved afslutning. Dette undgår en ny docs-PR blot for at indsætte dens eget
+endelige commit. Kontroller PR'ens live merged-status og receipt ved genstart.
+Docs-writer gælder kun denne opgave og frigives ved verificeret integration;
+andre writers ændres ikke. Ejerchatten arkiveres efter afslutning; før da
+forbliver den aktiv. Ingen ny produkthandling følger af dette dokument.
+Næste produktarbejde vælges særskilt fra PROJECT_STATE i sin egen ejerchat.
+
+Første kandidatkontrol:
 - `git diff --check`: PASS.
 - `python3 scripts/codex/check_context.py --archives`: PASS; 21 indgange,
   22 lokale Markdown-links, obligatorisk Lead-opstart 15.017 bytes; 1.509
@@ -54,3 +63,7 @@ Kandidatkontrol:
   UTF-8 og code fences bestod. Kun AGENTS/README/bootstrap/instruktioner/docs.
 - Produktbytes og historiske originals er bevaret. APK/devicechecks er ikke
   relevante; almindelig PR-CI kører efter GitHub-publicering.
+- Lokal mirror → bundle → verify → frisk clone → context/archive-check: PASS,
+  exit 0. Den friske kopi læste regler, status, opgave og bevarede kilder uden
+  gammel chat eller Library. Prøven bruger lokale refs og beviser ikke login
+  fra en anden konto eller backup af alle remote branches/artifacts/signering.
