@@ -1,5 +1,9 @@
 # LAB-MOTES-B1-001 — farm kill conservation
 
+Subsequent R2 review found B2 in quotient recovery at large safe counts. The
+local correction and exact represented-input proof are documented in
+`LAB_MOTES_B2_001.md`; this B1 record is historical evidence, not R2 acceptance.
+
 R1 PR46 is blocked: a Motes boundary exposed a pre-existing double rounding
 in simulationApplyFarmPassive. The kill quotient could round up and its modulo
 remainder could count that same kill again. Fixed scope: this arithmetic and

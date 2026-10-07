@@ -23,6 +23,8 @@ FIXTURES_PATH = ROOT / "fixtures.json"
 RAW_ARTIFACT_ROOT = None
 
 SCENARIOS = {
+    "lab-motes-numerical": "fresh",
+    "lab-motes-runtime": "fresh",
     "lab-motes-conservation": "fresh",
     "lab-motes-contracts": "fresh",
     "lab-motes-chronology": "fresh",
@@ -401,7 +403,7 @@ function qaLifecycleRecord(type,detail){
 }
 // Resolve only after the real startup completion callback (including its save).
 // This is installed before DOMContentLoaded/init in the throwaway instrumented app.
-if(window.__lumenfallQaContext.scenario==='lab-motes-native' || window.__lumenfallQaContext.scenario==='lab-motes-reduced-motion' || window.__lumenfallQaContext.scenario==='auto-ascend-target-mobile' || window.__lumenfallQaContext.scenario==='auto-ascend-target-reduced-motion' || window.__lumenfallQaContext.scenario.startsWith('forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('self-test-forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('rift-status-') || window.__lumenfallQaContext.scenario.startsWith('self-test-rift-status-')){
+if(window.__lumenfallQaContext.scenario==='lab-motes-runtime' || window.__lumenfallQaContext.scenario==='lab-motes-native' || window.__lumenfallQaContext.scenario==='lab-motes-reduced-motion' || window.__lumenfallQaContext.scenario==='auto-ascend-target-mobile' || window.__lumenfallQaContext.scenario==='auto-ascend-target-reduced-motion' || window.__lumenfallQaContext.scenario.startsWith('forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('self-test-forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('rift-status-') || window.__lumenfallQaContext.scenario.startsWith('self-test-rift-status-')){
   var qaStartupResolve;
   window.__qaForgeStartup={completed:false,callbacks:0,promise:new Promise(function(resolve){qaStartupResolve=resolve;})};
   var qaOriginalPlayStartupIntro=playStartupIntro;
@@ -468,6 +470,18 @@ applyOfflineProgress = function(){
 
 window.__lumenfallQaBridge = {
   labMotes: {
+    withHp: function(hp,fn){var original=enemyHpFor;enemyHpFor=function(){return hp;};try{return fn();}finally{enemyHpFor=original;}},
+    naturalDps: function(){return simulationPassiveDps(2000000000000);},
+    numericCosts: function(){return {titan:spiritCost(SPIRITS.find(function(s){return s.id==='titan';})),formation:researchCostForLevels(RESEARCH.find(function(s){return s.id==='formation';}),state.research.formation,1),momentum:nodeCost(NODES.find(function(s){return s.id==='momentum';})),formationStudy:studyCost(LONG_STUDIES.find(function(s){return s.id==='formationstudy';}),state.longStudyLevels.formationstudy),wispAscend:studyCost(LONG_STUDIES.find(function(s){return s.id==='wispascend';}),state.longStudyLevels.wispascend)};},
+    traceFarm: function(fn){
+      var original=simulationApplyFarmPassive,rows=[];
+      simulationApplyFarmPassive=function(seconds,dps,policy,summary){
+        var before=JSON.parse(JSON.stringify(state)),kills=summary.kills,luminous=summary.luminousKills;
+        original(seconds,dps,policy,summary);
+        rows.push({seconds:seconds,damage:dps*seconds,before:before,after:JSON.parse(JSON.stringify(state)),kills:summary.kills-kills,luminous:summary.luminousKills-luminous});
+      };
+      try{return {result:fn(),rows:rows};}finally{simulationApplyFarmPassive=original;}
+    },
     manual: function(id,speed){return applySpeedTier(id,speed);},
     direct: function(seconds,kind,start){var result=advanceAuthoritativeTime(seconds,{kind:kind||'live',visual:false,clockStartMs:start||2000000000000,offlineWindowStartMs:start||2000000000000,captureTimeline:true});return {state:JSON.parse(JSON.stringify(state)),summary:result};},
     withDps: function(dps,fn){var original=simulationPassiveDps;simulationPassiveDps=function(){return dps;};try{return fn();}finally{simulationPassiveDps=original;}},
@@ -496,6 +510,39 @@ window.__lumenfallQaBridge = {
   }
 
   simulationBatchFarmKills(1+additionalKills,policy,summary);
+  if(leftover>0) state.enemyHp = Math.max(SIM_EPS,state.enemyMaxHp-leftover);
+};
+      if(kind==='rounded-quotient')simulationApplyFarmPassive=function simulationApplyFarmPassive(elapsedSec,dps,policy,summary){
+  if(elapsedSec<=0 || dps<=0) return;
+  var damage = dps*elapsedSec;
+  if(damage+SIM_EPS < state.enemyHp){
+    state.enemyHp -= damage;
+    return;
+  }
+
+  var maxHp = state.enemyMaxHp>0 ? state.enemyMaxHp : enemyHpFor(state.depth);
+  // Decompose damage before subtracting the partially damaged enemy. This
+  // avoids both a rounded quotient/modulo counting the same boundary twice
+  // and cancellation of a small current HP from a huge damage value.
+  var remainder = damage%maxHp;
+  var kills = Math.round((damage-remainder)/maxHp);
+  // Retain the existing 1e-12 quotient and SIM_EPS HP boundary tolerances,
+  // applying a carry once to this shared decomposition, never twice.
+  if(remainder>=maxHp-SIM_EPS || remainder/maxHp+1e-12>=1){
+    kills++;
+    remainder=0;
+  }
+  var difference = remainder-state.enemyHp;
+  var leftover;
+  if(difference>=-SIM_EPS || difference/maxHp>=-1e-12){
+    kills++;
+    leftover=Math.max(0,difference);
+  } else {
+    leftover=maxHp+ difference;
+  }
+  if(leftover<SIM_EPS) leftover=0;
+
+  simulationBatchFarmKills(kills,policy,summary);
   if(leftover>0) state.enemyHp = Math.max(SIM_EPS,state.enemyMaxHp-leftover);
 };
       if(kind==='free-carry')commitStudyStart=function(node){var result=start(node);if(result&&state.studyUseMotes[node.id])findActiveStudy(node.id).speedMult=state.studySpeedTargets[node.id];return result;};
@@ -1773,9 +1820,11 @@ def build_runner():
         window.__forgeUiReady=true;return; // Native CDP input driver owns this scenario.
       }
       if(ctx.scenario.startsWith('lab-motes-')){
+        if(ctx.scenario==='lab-motes-runtime'){bridge.freeze();window.__farmRuntimeReady=true;return;}
         if(ctx.scenario==='lab-motes-native'||ctx.scenario==='lab-motes-reduced-motion'){window.__labMotesNativeReady=true;return;}
         bridge.freeze();
         if(ctx.scenario==='lab-motes-conservation'){finish('pass',window.runFarmConservationQa(bridge,ctx,assert));return;}
+        if(ctx.scenario==='lab-motes-numerical'){finish('pass',window.runFarmNumericalQa(bridge,ctx,assert));return;}
         if(['lab-motes-save-reload','lab-motes-backup-restore','lab-motes-recovery','lab-motes-reset'].includes(ctx.scenario)){
           window.runLabMotesPersistence(bridge,ctx,assert,phase,nextPhase,backupCode,finish);return;
         }
@@ -3851,6 +3900,7 @@ def instrument_html(source, fixtures):
         "<script>" + (ROOT / "measured-inquiry.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "lab-motes.js").read_text(encoding="utf-8") + "</script>" +
         "<script>" + (ROOT / "farm-conservation.js").read_text(encoding="utf-8") + "</script>" +
+        "<script>" + (ROOT / "farm-numerical.js").read_text(encoding="utf-8") + "</script>" +
         build_runner() + "\n</body>",
         1,
     )
@@ -4013,6 +4063,9 @@ def browser_identity(chrome):
 
 
 def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
+    if scenario == "lab-motes-runtime":
+        url = base_url + "/index.html?" + urlencode({"qaScenario": scenario, "qaFixture": fixture})
+        return run_native_process(["node", str(ROOT / "farm-runtime.cjs"), chrome, url, scenario], scenario)
     if scenario in ("lab-motes-native", "lab-motes-reduced-motion"):
         url = base_url + "/index.html?" + urlencode({"qaScenario": scenario, "qaFixture": fixture})
         return run_native_process(["node", str(ROOT / "lab-motes.cjs"), chrome, url, scenario], scenario)
