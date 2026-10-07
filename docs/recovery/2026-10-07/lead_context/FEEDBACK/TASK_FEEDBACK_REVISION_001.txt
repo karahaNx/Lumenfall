@@ -1,0 +1,345 @@
+LUMENFALL — FEEDBACK-REVISION-001
+Brugerkrav, acceptkontrakt og rækkefølge til eksisterende Lead 00_15
+Dato: 7. oktober 2026, Europe/Copenhagen
+Status: NYT BRUGERSCOPE. Kravspakke og målrettet kodekontrol; ingen produktrettelse.
+Originalen i ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt er autoritativ.
+Billeder 1–4 er indekseret i Source_Index.txt. Ved konflikt går originalen forud.
+
+A. MANDAT OG AFHÆNGIGHEDER
+
+Brugeren har bedt om nedenstående produktændringer. Der kræves ikke endnu en
+generel godkendelse. Stående godkendelse er dokumenteret i AGENTS.md.
+Denne pakke overfører ikke den eksisterende repo-writer fra 02_07/02_08.
+00_15 afklarer den dokumenterede writerstatus og tildeler ét afgrænset scope
+ad gangen. Ingen beskedværktøjer/subagenter; brugeren overfører opgavefiler.
+
+Live læsning under denne aflevering:
+- main 1ddc246eb62782a61ec5c486cd5f51ea170bb338.
+- Kun PR46 åben, Draft. Head 3cdebc236e9ee5081a4bca4e323b11f43aa0d46d.
+- 44 branch-navne læst, inklusive tom slutside.
+- 0 queued og 0 in_progress runs; øvrige statuskategorier ikke inventeret.
+- PROJECT_STATE er ældre end seneste B2-mandat og angiver forkert aktuel Lead.
+  Den kan ikke alene bruges til writer eller taskstatus.
+- Seneste læste Lead-mandat LAB-MOTES-B2-RUNTIME-001 til 02_08 bevarer
+  WebView 60; ny lokal korrektion uden obligatorisk native BigInt.
+- QA's lokale B2-kandidat er BLOCKED. Grøn remote R2-CI accepterer ikke
+  en nyere lokal kandidat. Writer-stop/frigivelse er fortsat udokumenteret
+  i de læste kilder. Ingen ny fælles gameplay-rebalance ind i PR46.
+
+Næste Lead-handling: registrér dette nye scope, lad aktuel PR46-rettelse
+afsluttes gennem den eksisterende reviewproces, og udsted derefter første
+afgrænsede produktmandat. Read-only designarbejde kan forberedes imens.
+
+B. KRAV OG ACCEPT
+
+F01 — Enkel Auto-Ascend
+Én Rift-dropdown som billede 2. Fjern Earlier Rifts, Later Rifts og Find.
+Alle gyldige, valgbare mål skal stadig kunne nås i den ene kontrol, også
+Rift 219 og højere. En kort liste med kun fem muligheder er ikke accept.
+Virtuel/tilgængelig liste er mulig hvis et stort native select måles tungt.
+Valg af Rift må ikke i sig selv tænde/slukke Auto-Ascend.
+
+F02 — Auto-Ascend på Ascend
+Unlock/køb kan fortsat ligge i Deeds. Efter unlock ligger den ene operative
+ON/OFF- og mål-kontrol på Ascend. Deeds viser status/genvej fremfor endnu
+et uafhængigt sæt kontroller. State og valgt mål bevares ved manuel Ascend,
+auto Ascend, restart, backup/restore og offlineafvikling. Kun en faktisk
+clearet Rift udløser auto Ascend; skærmens næste Rift er ikke clear-bevis.
+
+F03 — Tydelig ON/OFF
+Stor tekst, tydelig valgt tilstand og kontrast; betydningen må ikke kræve
+farvesyn. Kontrol mindst 44px og korrekt switch/pressed semantics.
+OFF/ON og målvalget skal kunne læses uden forklaringsafsnittets hjælp.
+
+F04 — Wisps er åbne, indtil deres relevante upgrades er maxed
+Ingen fold-pil på en Wisp med ufærdig Rarity, Module eller Ultimate.
+Først når alle dens afsluttelige upgrade-spor er maxed, må upgradeafsnittet
+skjules. Empower er i nuværende kode uncapped; det skal ikke være en evig
+forhindring for dette UI. Lead definerer eksplicit hvilke endelige spor
+der menes med "alt maxed"; anbefaling: Mythic + Module-cap + Ultimate.
+En købekontrol må ikke forsvinde, fordi man mangler valuta eller et unlock.
+Resonate er en forbrugsaktion og hører ikke til i denne maxed-betingelse.
+
+F05 — Prism-beregning og forklaring
+Undersøg brugerens "Rift 20 giver altid 5" som et rapporteret problem.
+Lås samme cleared Rift, benchmark, Swift Ascension-level og completed Lab-level,
+og sammenlign uden bonus, Tree alene, Lab alene og begge. Preview og faktisk
+udbetaling skal være identiske i manuel/auto og live/offline.
+Vis forståelig opdeling: grundbelønning, Tree/Lab-effekt, eventuel repeatregel,
+afrunding og belønning nu. Bonusser skal påvirke de rette økonomioperander.
+Midlertidigt uændret heltal beviser ikke alene en fejl; en stor nok bonus
+skal være målbart synlig. Undgå flere tabsafrundinger end kontrakten kræver.
+Lead skal vælge/dokumentere heltalsregel og repeatpolitik. Fraktionscarry
+er et muligt designvalg, ikke en allerede besluttet save-schemaændring.
+Ingen +1 pr. upgrade-hack og ingen afskaffelse af anti-loop-reglen i stilhed.
+
+F06 — Resonate forklares
+Nuværende funktion bruger 25 Sigils til straks at fylde ability resource
+til 100. Det er ikke en permanent upgrade. Kan bruges efter alle Ultimates
+er købt; 3 anvendelser samlet pr. run, ikke 3 pr. Wisp. Ny tekst/knap skal
+forklare handling, pris og fælles begrænsning. Lead kan ændre selve mekanikken
+i et senere konkret design; forklaringsrettelsen skal vise den faktiske kode.
+
+F07 — Fast Rift-layout og Guidance
+Guidance-notifikation lige under currencies. Show hints/Hide hints styrer
+indholdet, uden at kampbilledet eller tapområdet skifter position. Brug et
+reserveret, målt område eller et overlay der ikke dækker kontroller.
+Test bounding boxes før/efter i samme viewport, inkl. lange hints og større
+tekst. Valutalinjer, boss-HP og kampområdet skal blive på deres plads.
+Skjulte hints skal heller ikke opfanges af skærmlæser eller fokus.
+
+F08 — Lab-tid i progress bar
+Tid tilbage og aktuel hastighed integreres i baren. Teksten skal læses
+uafhængigt af barens fyld, også ved 0%, næsten færdig og reduced motion.
+Baren skal bevare meningsfuld progressbar-ARIA.
+
+F09 — Én Lab-levelangivelse
+Vis kun det level der arbejdes på i det aktive kort. Fjern Completed level
+og In progress: level. I ledige kort vises næste levels effekt, pris og tid.
+Optjent effekt og næste effekt må ikke forveksles; brug kort formulering
+som "Ved færdiggørelse: ...", uden flere level-statuslinjer.
+
+F10 — Ingen gentaget Lab-titel/fold-pil
+Aktivt kort skal ikke gentage f.eks. Guardian's Mastery i et ekstra
+"Details & speed"-afsnit med ned-pil. Titel står én gang.
+En synlig, kort effektforklaring bliver på kortet.
+
+F11 — Speed up som selvstændig kontrol
+Én Speed up-knap åbner muligheder i et tilgængeligt panel/dialog. Det skal
+kunne lukkes og returnere fokus. Vis tier, pris, aktuelt valg og queue speed up.
+Tierlisten må ikke permanent gøre alle Lab-kort lange.
+
+F12 — Separat Lab queue og speed queue
+Queue speed up gemmer brugerens præcise tier separat fra køen til næste Lab-level.
+Hvert nyt betalt level starter 1x. Har spilleren råd til den valgte tier,
+betales dens fulde pris og hastigheden anvendes. Hvis kun Lab-starten er
+betalelig, skal dette level starte ved 1x. Tier-intent beholdes; senere
+faktiske Motes-rewards kan udløse betaling efter den fastlagte tidskontrakt.
+Ingen gratis fornyelse, billigere fallback-tier eller dobbeltdebit.
+Det virker offline, på tværs af restart/Ascend og ved flere konkurrerende Studies.
+PR46 har allerede dette beslægtede scope. Genbrug accepteret kontrakt efter
+aktuel runtime/B2-lukning, og undgå et konkurrerende betalingssystem.
+
+F13 — Fjern Cast-tekst på Rift
+Fjern gentagen synlig Cast/ability-status hvor resource/cooldownbaren allerede
+viser dette. Bevar ability-navn og programmatisk tilgængelig status efter behov.
+
+F14 — Formation autosave
+Brugeren vælger Push/Farm/Boss og redigerer derefter dens Wisps. Hver relevant
+Field/Bench/rosterændring gemmer straks i det valgte preset. Ingen Save-knap.
+Skift af preset må ikke overskrive det preset man forlader med det nye presets
+medlemmer. Tomt/nyt preset skal kunne redigeres. Bevar aktive/tilsigtede
+medlemmer korrekt efter Ascend: Ember-only reset må ikke overskrive det
+gemte ønskede late-game-hold. Pending medlemmer giver ingen DPS/Bonds.
+Test skift mellem tre presets, partysizegrænse, reload og recovery.
+
+F15 — Flere Formation Bonds og reelle valg
+Tilføj mere end de fire nuværende Bonds med forskellige bonusser og brugbare
+formationer. Forslag/antal og prisbalance godkendes i Lead-designet før kode.
+Ingen formation må automatisk slå alle alternativer i Push, Farm og Boss.
+Angiv combo, effekt, stackingregel og hvorfor den er værd at vælge.
+
+F16 — Bond-partnere ét sted
+Vis Wisp-navnene som giver en Bond i Formation Bonds. Fjern dem fra Wisp
+ability-tekster. Evnen skal forklare sin egen effekt. Samme Bond-logik skal
+fortsat bruges af alle simuleringsveje; fjernelsen er ikke en gameplay-nerf.
+
+F17 — Synlig rollefordeling, mindre Titan-afhængighed
+Brugerens ca. 90% Titan-DPS er rapporteret, ikke målt på en modtaget save.
+Mål lige investeringsbudgetter og faktiske mid-/late-game-hold. Det er ikke
+nok at sammenligne alle på samme level, fordi basepriserne er forskellige.
+Vis bidrag fra rå skade, supports øgede holdskade, Bonds og ressourcegevinst.
+Buffbidrag må ikke tælles to gange i total-DPS. Sammenlign hold med/uden Wisp.
+Tidlige damage-Wisps skal have en varig mekanisk grund til at blive valgt,
+og Titan må ikke være et universelt obligatorisk damagevalg. Support-Wisps
+behøver ikke samme rå DPS som en damage-Wisp for at have synlig værdi.
+
+F18 — Sværere permanent Tide/Aurora boost
+Fastsæt tidlige/mellem/sene uptime-mål. Hurtig ability-charge alene må ikke
+gøre permanent boost trivialt. Nuværende 6s cycle og 8s Ultimate-duration
+giver allerede 100% sustained uptime ved charge level 0; et nyt charge-cap
+alene løser derfor ikke kravet. Bevar additive kilder (+25/+50 pr. aktiv buff)
+indtil et konkret nyt stackingdesign er besluttet. Match live/offline/average
+og expiry ved tickgrænser; ændrede varighedsregler kræver gamle-save-review.
+
+F19 — Swift Recovery har et rigtigt cap
+Definér både max købbar level og en positiv minimum cycle time. UI,
+single/bulk/Max/queue-køb og simulation skal overholde samme effektivt cap.
+Gamle saves over loftet skal håndteres eksplicit; man må ikke blot skjule
+levelen og stadig lade den gamle effekt gøre abilities næsten instant.
+
+F20 — Echoing Rest stopper ved faktisk effektloft
+Den nuværende base er 70% offline-rate og +5 procentpoint pr. level.
+Loftet 100% før Lab er nået ved level 6. Blokér køb, inkl. queue/direct handler,
+når næste køb ikke giver effekt. Forklar forskellen på offline-rate og
+offline-tidsloft. Gamle overskydende køb kræver en overgang med værdi bevaret.
+
+F21 — Cheaper Bonds forklares og capper
+"Floor 40%" betyder mindst 40% af normal recruit-pris, dvs. højst 60% rabat.
+Vis "Recruit-rabat X% · Pris mindst 40%" eller tilsvarende klart.
+Nuværende effektloft er level 20. Ingen yderligere betaling uden ny effekt.
+Navnet må ikke få brugeren til at tro det opgraderer Formation Bonds.
+
+F22 — Save Backup ved Reset Save
+Flyt eksisterende Backup/Restore-adgang til Save-afsnittet ved Reset.
+Bevar eksport, kopiering, import/restore, validering og bekræftelse af erstatning.
+Backup og Reset skal være separate handlinger; reset må ikke ske ved backup.
+
+F23 — Fjern No level cap-tekst fra Forge
+Fjern denne synlige standardtekst hvor den står. Reelle caps, pris og effekt
+skal fortsat vises. Dette er en tekstændring, ikke beslutning om uncapped
+simulation. Swift Recovery følger F19.
+
+F24 — Deed-cosmetics er synlige på Rift
+Kontrollér hver allerede optjent/valgt cosmetic og dens konkrete virkning
+på Rift. Vis tema/effekt tydeligt; en lille indstillingslabel er ikke nok.
+Bevar læsbar HP, tapområde og reduced-motion-alternativ. Købt/unlocked og
+valgt er to tilstande som begge skal være forståelige.
+
+F25 — Loadout Memory er indbygget
+Fjern købet/gaten i Deeds/Comet Rest Stop. Forge husker valgt bulk-buy-
+multiplier fra start, restart og skærmskift. Nuværende Loadout Memory handler
+om Forge-multiplier; F14 er et særskilt krav til Formation-hold.
+Gamle ejerflags må ikke fortsat være nødvendige for hukommelse.
+
+F26 — Præcis 12 timers offline-cap for alle
+Offline-cap skal altid være 12 timer, uden mulighed for længere tid.
+Fjern Deep Rest og også Extended Rest samt Deep Reserves' +hours-effekt
+eller erstat dem med andre eksklusive effekter. Ellers er brugerkravet ikke
+opfyldt. "Indbygget Deep Rest" betyder her indbygget 12h-policy, ikke 48h.
+12h gælder både earnings og alle øvrige relevante offline-systemer efter
+Leadens eksplicitte kontrakt; Lab-arbejde versus earnings skal afklares i
+design før kode, fordi den nuværende replayvej deler tidsgrænse.
+Offline-rate kan ændres uafhængigt af tidsloftet. Overgang og gammel elapsed
+tid må ikke behandles så samme offlineperiode udbetales flere gange.
+
+F27 — Nye Comet-eksklusive unlocks
+Erstat de fjernede convenience/timecap-køb med nye unlocks som kun kan købes
+for Comets i Deeds. De skal have egne effekter og må ikke være kopier af
+Forge/Lab/Tree. Lav mindst en lille konkret indholdstabel med unlock,
+effekt, cap, pris, visning og review. Cosmetics kan supplere funktionelle
+unlocks; brugerkravet er ikke løst med omdøbte generiske +damage-køb.
+
+F28 — Sammenhængende kurve for hele spillet
+Design fælles pacing-principper for Rift HP/rewards, Empower, Rarity,
+Modules, Ultimates, Forge, Labs og Tree. Starten skal hverken være trivial
+eller langsom; undgå brat overgang fra hurtig fremgang til en massiv væg.
+Eksponentiel skal forstås som kontrolleret vækst, ikke samme eksponent på
+alt. Pris, effekt og indtjening skal passe sammen. De nuværende Lab-priser
+vokser eksponentielt mens mange effekter er lineære; mål realtid/ROI.
+Del kurven i early/mid/late, kontinuitet ved unlocks og caps, og mål TTK,
+tid til næste upgrade, time-to-Ascend, reward/time og ressource-sinks.
+Uendeligt idle-endgame må gerne blive gradvist langsommere, men en legitim
+farm/Ascend-vej skal fortsat give målbar fremgang.
+
+F29 — Lab, Forge og Tree har hver sin identitet
+Lav en effekt/currency-matrix over alle eksisterende og nye upgrades.
+Direkte dubletter med andet navn/valuta skal fjernes, fusioneres eller
+omformes. Forge har eksklusive, dyrere/senere unlocks. Lab har eksklusive
+effekter med tidsinvestering og navngiven valuta. Tree har eksklusive
+prestige-effekter. Pris/currency alene skaber ikke en eksklusiv effekt.
+Bevar gennemskuelig stacking og dokumentér overgangen for købte levels.
+Endelig currency-fordeling og nye effekter er et Lead-designvalg, ikke
+allerede accepterede tal i denne pakke.
+
+C. ANBEFALET GENNEMFØRELSE
+
+Trin 0 — Luk aktuel PR46-B2-runtime gennem eksisterende Lead-gates.
+Ingen genstart af afsluttede audits eller masse-reruns. Ny feedback skal
+registreres nu, men ikke udvide den eksisterende arithmetic-PR.
+
+Trin 1 — CORRECTNESS-001 (02 Gameplay; scoped 01/04 review)
+F05/F19/F20/F21. Dokumentér beregning, caps og gamle-save-politik.
+Swift cap skal koordineres med supportdesignet i F18; Echo/Bonds kan løses
+afgrænset først. UI viser reelle beregninger fremfor at gætte.
+
+Trin 2 — MOBILE-CLARITY-001 (03 Visuals; adfærdsdele hos 02)
+F01–04/F06–13/F16/F22–24. F12 genbruger accepteret PR46-semantik.
+Auto-Ascend-listens adgang og maxed-Wisp-reglen kræver små autoritative
+modelhjælpere; undgå UI-kode der udleder betaling/caps af tekst.
+
+Trin 3 — FORMATION-AND-ROLES-001 (02; 03 formatterer)
+F14/F15/F17/F18. Test roster autosave og Ascend-rebuild før udvidede Bonds.
+Sammenlign formationer på samme økonomiske investering.
+
+Trin 4 — PROGRESSION-AND-IDENTITY-001 (02; 00 designbeslutning)
+F25–29 samt finjustering af F15/F17–19.
+Løs eksklusive effekter, currency-sinks og gammel-save-overgang før den
+fulde curve simulation. Tuning af dubletter først og omdesign bagefter
+giver en ugyldig balancebaseline.
+
+Den konkrete rækkefølge kan justeres af 00_15 for mindre risiko, men ingen
+krav må forsvinde. Hver kandidat fryses; review gælder præcise bytes/kontrakt.
+APK først efter relevante checks og Core/QA-accept, via normale workflows.
+
+D. BALANCEFORSLAG TIL STRESSTEST — IKKE GODKENDTE PRODUKTTAL
+
+En krævet identitetsmatrix skal mindst indeholde:
+- Lumen: aktuel run-rekruttering/Empower.
+- Shards/Forge: permanente Wisp-ability- og ressource-mekanikker.
+  Eksisterende Arcane Calibration, Resource Conduction og Luminous Tracking
+  er kandidater til at bevare den særskilte Forge-identitet.
+- Lab: tidskrævende forskning der ændrer studie-/arbejdsregler og andre
+  eksklusive effekter; Motes fortsat bruges til Speed up. Valuta for selve
+  forskningen fastlægges eksplicit uden at bryde kø-tilfældet i F12.
+- Prisms/Tree: prestige/Ascend-progression og eksklusive run-regler.
+- Sigils: Ultimates og tydeligt beskrevet Resonate-forbrug.
+- Comets/Deeds: unikke unlocks og Rift-cosmetics.
+
+Forslag til nye Comet-unlocks som ikke blot er endnu en +damage-multiplier:
+1. Rift Trail: permanent, valgbar visuel comet-trail på kampområdet.
+2. Starfall Crest: særskilt valgbar Guardian-/Ascend-effekt med reduced-motion.
+3. Deed Contract: ekstra daglig kontrakttype der giver Comets og ikke kopierer
+   Lab/Forge/Tree; reward og farming-loop skal måles før pris.
+4. Formation Spotlight: valgbare tydelige Bond-visuals og combat-look.
+Funktionelle unlocks skal bidrage med egne valg, og nødvendigt grund-UI
+må ikke gøres til betalingsgate. Disse fire ideer er designforslag; Lead
+kan vælge bedre alternativer i brugerens scope. Ingen priser er gættet.
+
+Målbar balanceaccept:
+- Simulér fresh, eksisterende saves, lav/høj valuta, stærk/svag build,
+  early/mid/late, og offline 0/1/6/12/24h med den valgte 12h-policy.
+- Sammenlign mindst Push/Farm/Boss, Titan og alternativer, med equal-budget.
+- Fremlæg baseline versus kandidat for TTK, upgrade-wait, Ascend-cycle,
+  bonus pr. investeret valuta, support-uptime og hver Wisp's marginale værdi.
+- Lead fastsætter talvinduer før balancekodning. Ingen "føles bedre"-accept.
+- Fuld effekt behøver ikke opstå ved hvert lille procentkøb på en heltals-
+  belønning; den samlede investering og UI skal være redeligt repræsenteret.
+
+E. SAVE-OVERGANG OG VERIFIKATION
+
+Brugeren ejer allerede køb. Foreslået overgang, som Lead konkretiserer:
+- Arkivér tidligere rå levels/owned data; slet dem ikke som en bekvem normalisering.
+- Dokumentér om cap-overlevels refunderes og hvilken original-cost-politik der
+  gælder. Ved købte Deep/Extended Rest/Reserves og Loadout Memory skal værdien
+  overføres/refunderes én gang. Kompensation er et forslag; beløb og strategi
+  er ikke accepteret eller implementeret.
+- Migration skal være idempotent og gælde canonical save, recovery og backup.
+  Restore af samme gamle backup må ikke blive en refund/currency-loop.
+- Købte/aktive Labs snapshots må ikke reprissættes i stilhed.
+- Antag ikke at et gammelt save kan nedgraderes sikkert til en gammel APK.
+- Save schema, offline chronology og WebView 60 er eksisterende
+  afhængigheder. Ingen ny BigInt-syntaks eller workflow/signingændring.
+
+Verifikation er målrettet det ændrede scope:
+Caps: handler, bulk/Max, kø, legacy-overlevels og ingen debit uden effekt.
+Prisms: first/repeat/new-depth, modifier thresholds, manuelt/auto,
+cleared-Rift-grænse, live/offline, preview=payout og høje tal.
+UI: 320/390/430px, større tekst, 44px, fokus, kontrast og reduced motion.
+Formation: preset-isolation, autosave, pending/rebuild, ascend/restart/recovery.
+Lab: separate intents, exact tier-price, ingen Motes, offline reward-boundary,
+konkurrerende queues, stop/start og tab/render uden mutation.
+Balance: equal-budget simulations, time metrics, support bidrag og caps.
+Cosmetics: unlocked/selected, synlig virkning, reduced motion.
+Backup: export/restore/regression. Ingen fysisk Android/TalkBack-accept her.
+
+F. MODEL OG EFFORT FOR NYE OPGAVER
+
+00_15 Lead/design/integration: GPT-6.1 Sol · Ekstra høj.
+02_08 gameplay/formler/progression: GPT-6.1 Sol · Ekstra høj.
+03_05 UI/tekst/layout: GPT-6.1 Sol · High.
+01_06 save/migration/runtime-review: GPT-6.1 Sol · Ekstra høj.
+04_05 uafhængig QA/rebalance-review: GPT-6.1 Sol · Ekstra høj.
+Dette er modelanbefalinger til næste prompts, ikke attestering af kørt model.
+Eksisterende chats omdøbes ikke.
+

@@ -1,0 +1,32 @@
+[
+  {
+    "label": "r2",
+    "command": [
+      "python3",
+      "tests/behavioral/run.py",
+      "--web-root",
+      "/workspace/scratch/c0c23f4097e9/b2_qa/target-rift/r2/web",
+      "--scenario",
+      "rift-status-stacking-mobile",
+      "--raw-artifacts",
+      "/workspace/scratch/c0c23f4097e9/b2_qa/target-rift/r2/failed-raw"
+    ],
+    "exitcode": 0,
+    "seconds": 100.5859663759984
+  },
+  {
+    "label": "local",
+    "command": [
+      "python3",
+      "tests/behavioral/run.py",
+      "--web-root",
+      "/workspace/scratch/c0c23f4097e9/b2_qa/target-rift/local/web",
+      "--scenario",
+      "rift-status-stacking-mobile",
+      "--raw-artifacts",
+      "/workspace/scratch/c0c23f4097e9/b2_qa/target-rift/local/failed-raw"
+    ],
+    "exitcode": 0,
+    "seconds": 99.98627821300033
+  }
+]

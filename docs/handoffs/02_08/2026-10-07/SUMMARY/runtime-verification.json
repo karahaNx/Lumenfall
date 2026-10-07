@@ -1,0 +1,330 @@
+{
+  "status": "PASS",
+  "versions": {
+    "modern": {
+      "node": "24.19.0",
+      "acorn": "8.17.0",
+      "ada": "3.4.4",
+      "amaro": "1.1.10",
+      "ares": "1.34.6",
+      "brotli": "1.2.0",
+      "cldr": "48.0",
+      "icu": "78.3",
+      "llhttp": "9.4.3",
+      "merve": "1.2.2",
+      "modules": "137",
+      "napi": "10",
+      "nbytes": "0.1.4",
+      "ncrypto": "0.0.1",
+      "nghttp2": "1.69.0",
+      "nghttp3": "",
+      "ngtcp2": "",
+      "openssl": "3.5.7",
+      "simdjson": "4.6.4",
+      "simdutf": "6.4.0",
+      "sqlite": "3.53.3",
+      "tz": "2026b",
+      "undici": "7.29.0",
+      "unicode": "17.0",
+      "uv": "1.52.1",
+      "uvwasi": "0.0.23",
+      "v8": "13.6.233.17-node.51",
+      "zlib": "1.3.2.1-motley-3246f1b",
+      "zstd": "1.5.7"
+    },
+    "oldV8": {
+      "http_parser": "2.8.0",
+      "node": "8.17.0",
+      "v8": "6.2.414.78",
+      "uv": "1.23.2",
+      "zlib": "1.2.11",
+      "ares": "1.10.1-DEV",
+      "modules": "57",
+      "nghttp2": "1.39.2",
+      "napi": "4",
+      "openssl": "1.0.2s",
+      "icu": "60.1",
+      "unicode": "10.0",
+      "cldr": "32.0",
+      "tz": "2017c"
+    }
+  },
+  "apiProbe": {
+    "exit": 0,
+    "stdout": "{\"BigInt\":\"undefined\",\"DataView\":\"function\",\"ArrayBuffer\":\"function\",\"setFloat64\":\"function\",\"getUint32\":\"function\",\"isFinite\":\"function\"}\n",
+    "stderr": ""
+  },
+  "records": [
+    {
+      "label": "R2",
+      "script": 0,
+      "grammar": [
+        {
+          "ecmaVersion": 2017,
+          "pass": true,
+          "error": null
+        },
+        {
+          "ecmaVersion": 2018,
+          "pass": true,
+          "error": null
+        },
+        {
+          "ecmaVersion": 2019,
+          "pass": true,
+          "error": null
+        },
+        {
+          "ecmaVersion": 2020,
+          "pass": true,
+          "error": null
+        }
+      ],
+      "oldV8": {
+        "command": [
+          "/workspace/scratch/d55491df75da/runtime_fix/runtime/node-v8.17.0-linux-x64/bin/node",
+          "--check",
+          "/workspace/scratch/d55491df75da/runtime_fix/evidence/runtime/R2-script-0.js"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "modern": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    {
+      "label": "R2",
+      "script": 1,
+      "grammar": [
+        {
+          "ecmaVersion": 2017,
+          "pass": true,
+          "error": null
+        },
+        {
+          "ecmaVersion": 2018,
+          "pass": true,
+          "error": null
+        },
+        {
+          "ecmaVersion": 2019,
+          "pass": true,
+          "error": null
+        },
+        {
+          "ecmaVersion": 2020,
+          "pass": true,
+          "error": null
+        }
+      ],
+      "oldV8": {
+        "command": [
+          "/workspace/scratch/d55491df75da/runtime_fix/runtime/node-v8.17.0-linux-x64/bin/node",
+          "--check",
+          "/workspace/scratch/d55491df75da/runtime_fix/evidence/runtime/R2-script-1.js"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "modern": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    {
+      "label": "R2",
+      "type": "missing-BigInt-helper",
+      "error": null,
+      "kills": 90,
+      "hp": 8.03,
+      "stubbedBatchSideEffects": true
+    },
+    {
+      "label": "blocked",
+      "script": 0,
+      "grammar": [
+        {
+          "ecmaVersion": 2017,
+          "pass": false,
+          "error": "Identifier directly after number (4338:33)"
+        },
+        {
+          "ecmaVersion": 2018,
+          "pass": false,
+          "error": "Identifier directly after number (4338:33)"
+        },
+        {
+          "ecmaVersion": 2019,
+          "pass": false,
+          "error": "Identifier directly after number (4338:33)"
+        },
+        {
+          "ecmaVersion": 2020,
+          "pass": true,
+          "error": null
+        }
+      ],
+      "oldV8": {
+        "command": [
+          "/workspace/scratch/d55491df75da/runtime_fix/runtime/node-v8.17.0-linux-x64/bin/node",
+          "--check",
+          "/workspace/scratch/d55491df75da/runtime_fix/evidence/runtime/blocked-script-0.js"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "/workspace/scratch/d55491df75da/runtime_fix/evidence/runtime/blocked-script-0.js:4338\n  var dn=(BigInt(dhi&1048575)<<32n)|BigInt(view.getUint32(4));\n                               ^^\n\nSyntaxError: Invalid or unexpected token\n    at checkScriptSyntax (bootstrap_node.js:504:5)\n    at startup (bootstrap_node.js:195:11)\n    at bootstrap_node.js:625:3\n"
+      },
+      "modern": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    {
+      "label": "blocked",
+      "script": 1,
+      "grammar": [
+        {
+          "ecmaVersion": 2017,
+          "pass": true,
+          "error": null
+        },
+        {
+          "ecmaVersion": 2018,
+          "pass": true,
+          "error": null
+        },
+        {
+          "ecmaVersion": 2019,
+          "pass": true,
+          "error": null
+        },
+        {
+          "ecmaVersion": 2020,
+          "pass": true,
+          "error": null
+        }
+      ],
+      "oldV8": {
+        "command": [
+          "/workspace/scratch/d55491df75da/runtime_fix/runtime/node-v8.17.0-linux-x64/bin/node",
+          "--check",
+          "/workspace/scratch/d55491df75da/runtime_fix/evidence/runtime/blocked-script-1.js"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "modern": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    {
+      "label": "blocked",
+      "type": "missing-BigInt-helper",
+      "error": "TypeError: BigInt is not a function",
+      "kills": 0,
+      "hp": 8.03,
+      "stubbedBatchSideEffects": true
+    },
+    {
+      "label": "new",
+      "script": 0,
+      "grammar": [
+        {
+          "ecmaVersion": 2017,
+          "pass": true,
+          "error": null
+        },
+        {
+          "ecmaVersion": 2018,
+          "pass": true,
+          "error": null
+        },
+        {
+          "ecmaVersion": 2019,
+          "pass": true,
+          "error": null
+        },
+        {
+          "ecmaVersion": 2020,
+          "pass": true,
+          "error": null
+        }
+      ],
+      "oldV8": {
+        "command": [
+          "/workspace/scratch/d55491df75da/runtime_fix/runtime/node-v8.17.0-linux-x64/bin/node",
+          "--check",
+          "/workspace/scratch/d55491df75da/runtime_fix/evidence/runtime/new-script-0.js"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "modern": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    {
+      "label": "new",
+      "script": 1,
+      "grammar": [
+        {
+          "ecmaVersion": 2017,
+          "pass": true,
+          "error": null
+        },
+        {
+          "ecmaVersion": 2018,
+          "pass": true,
+          "error": null
+        },
+        {
+          "ecmaVersion": 2019,
+          "pass": true,
+          "error": null
+        },
+        {
+          "ecmaVersion": 2020,
+          "pass": true,
+          "error": null
+        }
+      ],
+      "oldV8": {
+        "command": [
+          "/workspace/scratch/d55491df75da/runtime_fix/runtime/node-v8.17.0-linux-x64/bin/node",
+          "--check",
+          "/workspace/scratch/d55491df75da/runtime_fix/evidence/runtime/new-script-1.js"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "modern": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    {
+      "label": "new",
+      "type": "missing-BigInt-helper",
+      "error": null,
+      "kills": 90,
+      "hp": 8.03,
+      "stubbedBatchSideEffects": true
+    }
+  ],
+  "limits": "All production inline scripts tested. Actual Node8/V8 6.2 parsing and helper execution; modern grammar/API absence controls. Not physical Android or exact Chrome60 emulation."
+}

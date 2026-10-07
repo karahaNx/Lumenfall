@@ -1,0 +1,51 @@
+Lumenfall — PR41 — samlet Lead-reviewbeslutning
+00_09 · 2026-10-05 · GPT-6.1 Sol · High
+
+SCOPED ACCEPT af Measured Inquiry på exact offentliggjort kandidat:
+Head 10f2ff5facef78a7c1d8293b6a8d07be888f7350
+Tree d1910132973d117c75c3d4ace4867e86f372110e
+Eneste parent/base df78d51181a59d247bf4fc9abf1c7e05237e9c2b
+Base tree d1d128a82f6bc204655dc662a5239f98dca51059
+index.html SHA256
+2f858652d71e515cc1482ad5d8a182053b8d3b3c70be2f8fc09fc35a1548ecbe
+
+01_06 Core: scoped ACCEPT;30 scenarier og13 egne checks PASS. Save/schema,
+canonical maps, actual save/reload/restore/recovery/Ascension, betalte snapshots,
+raw overcap, neutral disposal og scheduler-entry er dækket. Ingen Core-blocker.
+
+04_05 QA: scoped ACCEPT; egen fuld suite129 scenarier/149 cases PASS, alle8
+Inquiry-scenarier,12 krævede negative harness-afvisninger og585 egne checks.
+Kausal mutation+restore dækker selvdiscount, entry og handled-vs-earned.
+Gameplay/runtime/mobile UI/reduced motion-regression har ingen nye produktfund.
+
+00_09 har efterkontrolleret begge ZIP CRC/manifest:52 Core- og211 QA-payloads.
+Originalkrav og begge exact patches matcher Leads originaler. Core67-blobindeks
+matcher immutable Git-tree. Samtlige147 positive procesreceipts er konsistente;
+46 medlagte hele outputs er hashkontrolleret og reparset, alle12 negative hele
+outputs reparset. 101 øvrige hele HTML-outputs er ikke i QA-ZIP; deres parsed
+resultater/proces- og hashreceipts er med. Lead har ikke kørt en ny fuld suite.
+Fire mobile screenshots er visuelt kontrolleret. Dette er evidenskontrol af
+uafhængige reviews, ikke et løfte om alle fremtidige saves/enheder eller balance.
+
+Kendt schema1-downgrade er usikkert som udtrykkeligt aftalt: gammel app kan
+strippe Inquiry. Ingen ny schema-/versionsstrategi er tilføjet. Legacy8 slots,
+Deeds og v0-seeding er kontrolleret; ingen legacy-capnerf/retroaktiv forkortelse.
+
+Live-checkpoint2026-10-05T08:47:07.632Z: main/head uændrede,39 branches,
+kun PR41 open/Draft/unmerged, CI37209757818 attempt1/success; ingen aktive
+in_progress/queued/waiting/requested/pending runs. Ingen Lead remote mutation.
+
+Efterfølgende status 2026-10-05T11:12:18+02:00: brugeren har overført 02_07's
+bekræftelse på stop, frossen exact kandidat og frigivet writerlease. Ingen kendte
+egne processer, ikke-afleverede kodeændringer eller remote handlinger er meldt.
+Workerens processer er ikke live-målt af Lead. Main, alle39 branches, PR41 og CI
+er uændrede ved Leads genkontrol2026-10-05T09:13:17.200Z; ingen aktive runs.
+Freeze/frigivelse accepteres som workerens rapport. Det giver ikke merge/build.
+Fysisk Android/TalkBack/APK-installation er heller ikke verificeret her.
+Efterfølgende brugerafgrænsning 2026-10-05: Samsung A40 er udgået af aktivt
+scope og fremtidige acceptkrav. Originale Core/QA-rapporter bevares uændret.
+
+Næste: 00_09 har docs-writer under CTX-001 til én separat context-Draft PR.
+Aflever kandidaten frossen og disponér derefter næste scope. PR41-integration,
+Android-build/rerun og release skal følge et særskilt konkret mandat.
+Originale reviewpakker er indekseret i CONTEXT_INDEX.md; bevar dem uændrede.

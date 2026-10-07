@@ -1,0 +1,49 @@
+02_08 — målrettet kildeindeks
+Start: BOOTSTRAP.txt → live rolle/regler → RESULT.txt → IDENTITY.json.
+
+MANDATE/TASK_02_08_RECOVERY.txt: hele aktuelle fase A/B- og writer-kontrakt.
+ORIGINALS/TASK_LAB_MOTES_B2_001.txt: originalt B2-mandat, fuldt/byteidentisk.
+ORIGINALS/TASK_LAB_MOTES_B1_001.txt og ORIGINALS/LAB/*: originale B1/LAB-krav.
+MANDATE/STOP_02_07.txt: stopinstruks til gammel chat, aldrig et stopbevis.
+
+SOURCE/: alle filer i main→lokal scope, identiske med IDENTITY's staged tree.
+DIFF/R2_to_local.patch: fem scoped ændrede/tilføjede filer.
+DIFF/main_to_local.patch: samlet PR46 + lokal B2, ingen commit/push.
+REFERENCE/R1_farm_function.js og R2_farm_function.js: exact gamle kontroller.
+SOURCE/tests/behavioral/farm-numerical.js: permanent B2-motor/oracle/undo.
+SOURCE/docs/tasks/LAB_MOTES_B2_001.md: beregningsbevis, numeric grænser.
+
+EVIDENCE/final-gate-verification.json + FINAL_GATES/: endelige gates, komplet
+aggregate og selvstændig replay af hver browser/native-output og 12 negatives.
+EVIDENCE/all43-comparison.json: præcis alle oprindelige 43 fixturekeys.
+EVIDENCE/diagnostic-all1340-comparison.json: samme input R1/R2/lokal; original
+strict FAIL bevaret, ingen ændrede assertions/tolerancer.
+EVIDENCE/diagnostic-count-classification.json: alle 123 rows; rational IEEE-
+damage/oracle og carry. JSON-int gøres først til IEEE-float, ikke vilkårlig integer.
+EVIDENCE/diagnostic-reward-policy.json: 622 separate rational/IEEE rewardchecks.
+EVIDENCE/mobile-diagnostic-decision.json: første fulde gates FAIL på native
+Rift-clipping, målrettede R2/lokal PASS, begrundet én fuld gentagelse.
+EVIDENCE/live-final.json: frisk main/PR observation; stopstatus er stadig ukendt.
+
+RAW_CURRENT.tar.xz + RAW_MANIFEST.json: egne komplette slut- og diagnosticlogs,
+cmds/exits/raw DOM/native JSON, matrices, før/efter sourcehashes og screenshots.
+Læs kun målrettede tar-members, Python tarfile r:xz; udtræk i privat mappe med
+filter=data. Det oprindelige gate04 FAIL ligger i evidence/initial-gate04/.
+Endelige outputs ligger i gates/gate-04..07; første 01..03 genbruges på samme
+frosne bytes. Originaler under historical-raw er referencer, ikke nye kørsler.
+Matrix: evidence/local-numeric.json (7945), split-numeric.json (426),
+own-arithmetic-results.json (560) og arithmetic_probe.json (3200/3 EPS-rækker).
+Motor: evidence/r2-core/, r2-natural/ FAIL; local-core/, local-natural/ PASS;
+permanent-b2/ PASS og local-motor/ 826 fixtures + 100 grupper.
+
+REPRODUCE/: private scripts/orakler; ingen hooks i produktet. Genskab privat
+repo på exact R2, overlay SOURCE, og placer scripts så deres repo/QA_R2-
+understier matcher. LUMENFALL_CHROME peger på egen Chrome; runtime modules
+kommer fra CODEX_PRIMARY_RUNTIME_NODE_MODULES. Bevar alle sourcehashes.
+Reviewernes scripts er uændrede bortset fra private source/output-stier.
+
+REVIEW_SOURCES/: originale blocker/status-/numeric kilder, ikke nye mandater.
+Input: Lumenfall_02_08_Context_2026-10-06(1).zip, Library ID
+libfile_dd300c3009ec81919e8d1a9bba867406. Dens 262 manifestpayloads og alle
+11 afleverede R2-kildefiler blev hash-/byteverificeret ved lokal overtagelse.
+MANIFEST.json: payloadstørrelser og SHA256. Ingen rekursiv historik-ZIP.

@@ -1,0 +1,482 @@
+name: Build Android APK
+# Verification trigger after P1-06 merge; workflow behavior unchanged.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'branding/**'
+      - 'fonts/**'
+      - 'mobile/**'
+      - 'scripts/verify_apk_identity.py'
+      - '.github/workflows/build-android.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: lumenfall-android-main
+  cancel-in-progress: true
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Verify Android SDK
+        shell: bash
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          test -n "$ANDROID_HOME"
+          test -d "$ANDROID_HOME"
+
+      - name: Restore and verify stable Android signing key
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_SIGNING_SHA256: "A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21"
+        shell: bash
+        run: |
+          set -euo pipefail
+          SIGNING_TAG="lumenfall-signing-v1"
+          KEYSTORE_DIR="$RUNNER_TEMP/lumenfall-signing"
+          KEYSTORE_FILE="$KEYSTORE_DIR/Lumenfall-debug.keystore"
+          KEYTOOL_OUTPUT="$KEYSTORE_DIR/keytool-output.txt"
+
+          mkdir -p "$KEYSTORE_DIR" "$HOME/.android"
+
+          if ! gh release view "$SIGNING_TAG" >/dev/null 2>&1; then
+            echo "::error::Established Android signing release '$SIGNING_TAG' is missing or inaccessible. Refusing to generate replacement signing material."
+            exit 1
+          fi
+
+          if ! gh release download "$SIGNING_TAG" \
+            --pattern "Lumenfall-debug.keystore" \
+            --dir "$KEYSTORE_DIR" \
+            --clobber; then
+            echo "::error::Established Android signing keystore could not be downloaded. Refusing to build or publish."
+            exit 1
+          fi
+
+          if [ ! -s "$KEYSTORE_FILE" ]; then
+            echo "::error::Established Android signing keystore is missing or empty. Refusing to build or publish."
+            exit 1
+          fi
+
+          if ! keytool -list -v \
+            -keystore "$KEYSTORE_FILE" \
+            -storepass android \
+            -alias androiddebugkey >"$KEYTOOL_OUTPUT" 2>/dev/null; then
+            echo "::error::Established Android signing keystore is unreadable, corrupt, or invalid for the expected signing alias. Refusing to build or publish."
+            exit 1
+          fi
+
+          ACTUAL_SIGNING_SHA256="$(awk -F'SHA256: ' '/SHA256:/{print $2; exit}' "$KEYTOOL_OUTPUT" | tr -d '\r')"
+          rm -f "$KEYTOOL_OUTPUT"
+
+          if [ -z "$ACTUAL_SIGNING_SHA256" ]; then
+            echo "::error::Could not determine the Android signing certificate fingerprint. Refusing to build or publish."
+            exit 1
+          fi
+
+          if [ "$ACTUAL_SIGNING_SHA256" != "$EXPECTED_SIGNING_SHA256" ]; then
+            echo "::error::Android signing certificate mismatch. Expected $EXPECTED_SIGNING_SHA256 but restored $ACTUAL_SIGNING_SHA256. Refusing to build or publish."
+            exit 1
+          fi
+
+          cp "$KEYSTORE_FILE" "$HOME/.android/debug.keystore"
+          chmod 600 "$HOME/.android/debug.keystore"
+
+          echo "Verified established Android signing certificate SHA256: $ACTUAL_SIGNING_SHA256"
+
+      - name: Install Capacitor dependencies
+        working-directory: mobile
+        run: npm ci --no-audit --no-fund
+
+      - name: Validate game source
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re, sys, tempfile, subprocess
+
+          src = Path("index.html").read_text(encoding="utf-8")
+
+          required_ids = [
+              "settings-btn", "settings-overlay", "startup-intro",
+              "enemy-stage", "enemy-glyph", "rift-objective",
+              "spirit-list", "roster-journey",
+              "research-list", "study-list", "node-list", "ach-list",
+              "daily-card", "rift-push-btn", "rift-farm-btn", "ascend-btn"
+          ]
+
+          all_ids = re.findall(r'\sid="([^"]+)"', src)
+          duplicates = sorted({x for x in all_ids if all_ids.count(x) > 1})
+          if duplicates:
+              raise SystemExit(f"QA failed: duplicate HTML ids: {duplicates}")
+
+          id_set = set(all_ids)
+          for element_id in required_ids:
+              count = all_ids.count(element_id)
+              if count != 1:
+                  raise SystemExit(f"QA failed: id={element_id!r} occurs {count} times")
+
+          literal_id_refs = set(re.findall(r'document\.getElementById\([\'"]([^\'"]+)[\'"]\)', src))
+          missing_refs = sorted(literal_id_refs - id_set)
+          if missing_refs:
+              raise SystemExit(f"QA failed: getElementById references missing from HTML: {missing_refs}")
+
+          cache_match = re.search(r'function cacheEls\(\)\{(.*?)\n\}', src, flags=re.S)
+          if not cache_match:
+              raise SystemExit("QA failed: cacheEls() not found")
+          cached_ids = set(re.findall(r"'([^']+)'", cache_match.group(1)))
+          stale_cached_ids = sorted(cached_ids - id_set)
+          if stale_cached_ids:
+              raise SystemExit(f"QA failed: cacheEls references missing from HTML: {stale_cached_ids}")
+
+          forbidden = [
+              'data-tab="about"',
+              'Lumenfall-Setup.exe',
+              'serviceWorker.register',
+              'manifest.webmanifest',
+              'BOSS_REGEN_PER_SEC',
+              'studio-splash',
+              'Xarib Productions',
+              'intro-overlay',
+              'prismGain()',
+              'offline-preview',
+              'function renderOfflinePreview(',
+              'function computeOfflinePreview(',
+              'id="luminous-tag"',
+              'Luminous — bonus Motes on defeat'
+          ]
+          for token in forbidden:
+              if token in src:
+                  raise SystemExit(f"QA failed: forbidden legacy token remains: {token}")
+
+          scripts = re.findall(r'<script(?:\s[^>]*)?>(.*?)</script>', src, flags=re.S)
+          if not scripts:
+              raise SystemExit("QA failed: no inline JavaScript found")
+
+          with tempfile.TemporaryDirectory() as td:
+              for i, code in enumerate(scripts, start=1):
+                  p = Path(td) / f"script-{i}.js"
+                  p.write_text(code, encoding="utf-8")
+                  result = subprocess.run(["node", "--check", str(p)], capture_output=True, text=True)
+                  if result.returncode != 0:
+                      print(result.stdout)
+                      print(result.stderr, file=sys.stderr)
+                      raise SystemExit(f"QA failed: inline script {i} has a syntax error")
+
+          required_features = [
+              "function sustainedCombatDps(depth)",
+              "function renderEncyclopedia()",
+              "function restoreSaveBackup()",
+              "var BOSS_TRAITS = [",
+              "var RIFT_ZONES = [",
+              "function playStartupIntro(done)",
+              "STARTUP_INTRO_COOLDOWN_MS = 3 * 60 * 60 * 1000",
+              "function nextRiftObjective()",
+              "function showRiftMilestone(",
+              "function renderRosterJourney()",
+              "function showAscendFlash(",
+              "function ascendPrismGain(",
+              "function dailyQuestEligible(q,s)",
+              "var resetInProgress = false;",
+              "var resetBootPending = false;",
+              "var reloadInProgress = false;",
+              "RESET_PENDING_KEY = 'lumenfall_reset_pending_v1'",
+              "localStorage.setItem(RESET_PENDING_KEY,'1');",
+              "if(resetInProgress || reloadInProgress) return;",
+              "if(!resetInProgress && !reloadInProgress) saveState();",
+              "function restoreEnemyOrSpawn()",
+              "reloadInProgress = true;",
+              "restoreEnemyOrSpawn();",
+              "spawnEnemy(false);",
+              "if(battleActive && main.scrollTop!==0) main.scrollTop = 0;",
+              "Lumenfall visual system",
+              "branding/lumenfall-mark.svg"
+          ]
+          for token in required_features:
+              if token not in src:
+                  raise SystemExit(f"QA failed: required feature missing: {token}")
+
+          restore_match = re.search(r'function restoreSaveBackup\(\)\{(.*?)\n\}', src, flags=re.S)
+          if not restore_match or "reloadInProgress = true;" not in restore_match.group(1):
+              raise SystemExit("QA failed: save restore is not protected from reload/autosave overwrite")
+          if "function tick(){\n  if(document.hidden || resetInProgress || reloadInProgress) return;" not in src:
+              raise SystemExit("QA failed: game loop is not suspended during reset/restore reload")
+
+          if "renderRiftMode();\n  renderRiftObjective();" not in src:
+              raise SystemExit("QA failed: expected Rift fast-render path changed")
+          rift_mode_match = re.search(r'function renderRiftMode\(\)\{(.*?)\n\}', src, flags=re.S)
+          if rift_mode_match and "syncMainScrollMode" in rift_mode_match.group(1):
+              raise SystemExit("QA failed: scroll sync regressed into the 100ms Rift render loop")
+
+          print(f"QA passed: {len(scripts)} scripts syntax-checked, {len(required_ids)} unique IDs verified, cache/state lifecycle guards present.")
+          PY
+
+      - name: Stage Android web assets
+        working-directory: mobile
+        run: |
+          rm -rf www
+          mkdir -p www/fonts www/branding
+          cp ../index.html www/index.html
+          cp -r ../fonts/. www/fonts/
+          cp -r ../branding/. www/branding/
+
+      - name: Browser runtime smoke test
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          CHROME="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME" ]; then
+            echo "No supported Chromium browser found on the runner."
+            exit 1
+          fi
+
+          python3 -m http.server 4173 --directory mobile/www >/tmp/lumenfall-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" >/dev/null 2>&1 || true' EXIT
+
+          ready=0
+          for _ in $(seq 1 20); do
+            if curl --fail --silent http://127.0.0.1:4173/index.html >/dev/null && curl --fail --silent http://127.0.0.1:4173/branding/lumenfall-mark.svg >/dev/null; then
+              ready=1
+              break
+            fi
+            sleep 0.25
+          done
+          if [ "$ready" -ne 1 ]; then
+            cat /tmp/lumenfall-http.log
+            exit 1
+          fi
+
+          "$CHROME" \
+            --headless=new \
+            --no-sandbox \
+            --disable-gpu \
+            --disable-dev-shm-usage \
+            --window-size=390,844 \
+            --virtual-time-budget=1800 \
+            --dump-dom \
+            http://127.0.0.1:4173/index.html \
+            >/tmp/lumenfall-dom.html 2>/tmp/lumenfall-chrome.log
+
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          dom = Path("/tmp/lumenfall-dom.html").read_text(encoding="utf-8")
+
+          checks = {
+              "Rift zone runtime render": 'data-zone-index="0"' in dom,
+              "Rift scroll lock": bool(re.search(r'<main[^>]*class="[^"]*rift-scroll-locked', dom)),
+              "Enemy runtime render": bool(re.search(r'id="enemy-name"[^>]*>\s*[^<\s][^<]*<', dom)),
+              "HUD runtime render": bool(re.search(r'id="hud-lumen"[^>]*>\s*0(?:\.0)?\s*<', dom)),
+          }
+          failed = [name for name, ok in checks.items() if not ok]
+          if failed:
+              print(Path("/tmp/lumenfall-dom.html").read_text(encoding="utf-8")[:12000])
+              raise SystemExit("Browser smoke test failed: " + ", ".join(failed))
+
+          print("Browser smoke test passed: game initialized and rendered at a 390x844 mobile viewport.")
+          PY
+
+      - name: Generate Android project
+        working-directory: mobile
+        run: npx cap add android
+
+      - name: Set Android app version
+        env:
+          BUILD_NUMBER: ${{ github.run_number }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+
+          path = Path("mobile/android/app/build.gradle")
+          text = path.read_text()
+
+          version_code = int(os.environ["BUILD_NUMBER"])
+          version_name = f"0.1.{version_code}"
+
+          old_code = "versionCode 1"
+          old_name = 'versionName "1.0"'
+          if old_code not in text or old_name not in text:
+              raise SystemExit("Could not find Capacitor default Android version fields")
+
+          text = text.replace(old_code, f"versionCode {version_code}", 1)
+          text = text.replace(old_name, f'versionName "{version_name}"', 1)
+          path.write_text(text)
+
+          print(f"Android versionCode={version_code}, versionName={version_name}")
+          PY
+
+      - name: Stage Android icon and splash sources
+        working-directory: mobile
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets
+          node <<'NODE'
+          const sharp = require('sharp');
+          const markPath = '../branding/lumenfall-mark.svg';
+          const bg = { r: 8, g: 16, b: 39, alpha: 1 };
+
+          async function transparentCanvas(size, markSize) {
+            const mark = await sharp(markPath).resize(markSize, markSize, { fit: 'contain' }).png().toBuffer();
+            return sharp({ create: { width: size, height: size, channels: 4, background: { r:0,g:0,b:0,alpha:0 } } })
+              .composite([{ input: mark, gravity: 'center' }]).png().toBuffer();
+          }
+
+          async function main() {
+            const iconMark = await transparentCanvas(1024, 820);
+            await sharp({ create: { width: 1024, height: 1024, channels: 4, background: bg } })
+              .composite([{ input: iconMark }]).png().toFile('assets/icon.png');
+
+            // Adaptive foreground stays inside Android's safe zone.
+            const foreground = await transparentCanvas(1024, 610);
+            await sharp(foreground).png().toFile('assets/icon-foreground.png');
+
+            await sharp({ create: { width: 1024, height: 1024, channels: 4, background: bg } })
+              .png().toFile('assets/icon-background.png');
+
+            // Native splash: minimal, centered and safe across portrait crops.
+            const splashMark = await transparentCanvas(2732, 920);
+            await sharp({ create: { width: 2732, height: 2732, channels: 4, background: bg } })
+              .composite([{ input: splashMark }]).png().toFile('assets/splash.png');
+          }
+
+          main().catch(err => { console.error(err); process.exit(1); });
+          NODE
+
+      - name: Generate Android icons and splash
+        working-directory: mobile
+        run: npx capacitor-assets generate --android
+
+      - name: Sync Capacitor
+        working-directory: mobile
+        run: npx cap sync android
+
+      - name: Build APK
+        working-directory: mobile/android
+        shell: bash
+        run: |
+          set -euo pipefail
+          chmod +x gradlew
+
+          KEYSTORE_FILE="$RUNNER_TEMP/lumenfall-signing/Lumenfall-debug.keystore"
+          test -s "$KEYSTORE_FILE"
+
+          ./gradlew assembleDebug --no-daemon \
+            -Pandroid.injected.signing.store.file="$KEYSTORE_FILE" \
+            -Pandroid.injected.signing.store.password=android \
+            -Pandroid.injected.signing.key.alias=androiddebugkey \
+            -Pandroid.injected.signing.key.password=android
+
+      - name: Prepare APK
+        run: |
+          cp mobile/android/app/build/outputs/apk/debug/app-debug.apk Lumenfall.apk
+          test -s Lumenfall.apk
+          ls -lh Lumenfall.apk
+
+      - name: Verify final APK identity
+        env:
+          EXPECTED_PACKAGE_ID: "com.lumenfall.app"
+          EXPECTED_VERSION_CODE: "${{ github.run_number }}"
+          EXPECTED_VERSION_NAME: "0.1.${{ github.run_number }}"
+          EXPECTED_SIGNING_SHA256: "A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21"
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          BUILD_TOOLS_DIR=""
+          while IFS= read -r candidate; do
+            if [ -x "$candidate/aapt" ] && [ -x "$candidate/apksigner" ]; then
+              BUILD_TOOLS_DIR="$candidate"
+              break
+            fi
+          done < <(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d -print | sort -Vr)
+
+          if [ -z "$BUILD_TOOLS_DIR" ]; then
+            echo "::error::Could not find Android build-tools containing both aapt and apksigner."
+            exit 1
+          fi
+
+          python3 scripts/verify_apk_identity.py \
+            --apk Lumenfall.apk \
+            --aapt "$BUILD_TOOLS_DIR/aapt" \
+            --apksigner "$BUILD_TOOLS_DIR/apksigner" \
+            --expected-package "$EXPECTED_PACKAGE_ID" \
+            --expected-version-code "$EXPECTED_VERSION_CODE" \
+            --expected-version-name "$EXPECTED_VERSION_NAME" \
+            --expected-cert-sha256 "$EXPECTED_SIGNING_SHA256"
+
+      - name: Remove legacy Actions artifacts
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh api --paginate "repos/$GITHUB_REPOSITORY/actions/artifacts?per_page=100" --jq '.artifacts[].id' |
+          while read -r artifact_id; do
+            if [ -n "$artifact_id" ]; then
+              gh api --method DELETE "repos/$GITHUB_REPOSITORY/actions/artifacts/$artifact_id"
+            fi
+          done
+
+      - name: Remove legacy EXE and AAB release assets
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100" --jq '.[] | .assets[] | select((.name | endswith(".exe")) or (.name | endswith(".aab"))) | .id' |
+          while read -r asset_id; do
+            if [ -n "$asset_id" ]; then
+              gh api --method DELETE "repos/$GITHUB_REPOSITORY/releases/assets/$asset_id"
+            fi
+          done
+
+      - name: Publish latest APK release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          git tag -f android-latest "$GITHUB_SHA"
+          git push origin --force refs/tags/android-latest
+
+          if gh release view android-latest >/dev/null 2>&1; then
+            gh release upload android-latest Lumenfall.apk --clobber
+            gh release edit android-latest \
+              --title "Lumenfall Android — Latest" \
+              --notes "Automatically built from the latest main branch. Android APK only."
+          else
+            gh release create android-latest Lumenfall.apk \
+              --title "Lumenfall Android — Latest" \
+              --notes "Automatically built from the latest main branch. Android APK only."
+          fi

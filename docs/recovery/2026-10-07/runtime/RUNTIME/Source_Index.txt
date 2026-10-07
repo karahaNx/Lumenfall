@@ -1,0 +1,50 @@
+LUMENFALL — målrettet kildeindeks til 02_08
+
+START
+START_HER.txt → TASK_LAB_MOTES_B2_RUNTIME_001.txt (aktuel Lead-beslutning).
+LEAD/live-preflight.json: egen seneste PR/main-kontrol; ingen fuld writer-preflight.
+LEAD/runtime_reproduce.cjs/.json: egen scoped grammar/BigInt-fraværsrepro,
+med batchstub og udtrykkelige begrænsninger. Kør node LEAD/runtime_reproduce.cjs
+fra pakkens rod hvis nødvendigt; skriver kun egen resultatfil.
+
+FULD KONTRAKT — LÆS FØR RELEVANT IMPLEMENTATION
+QA_04_05/ORIGINALS/LAB/USER_REQUEST.txt
+QA_04_05/ORIGINALS/LAB/REQUIREMENTS.txt
+QA_04_05/ORIGINALS/LAB/TASK_LAB_MOTES_001.txt
+QA_04_05/ORIGINALS/TASK_LAB_MOTES_B1_001.txt
+QA_04_05/ORIGINALS/TASK_LAB_MOTES_B2_001.txt
+Disse er komplette, byteidentiske originaler. Historisk writer/rolle suppleret
+af det aktuelle mandat; ingen ordre om at overtage 02_07 eller blive QA.
+
+BLOCKER / RUNTIME
+QA_04_05/QA_REPORT.txt, OWN/RUNTIME_BLOCKER.txt, OWN/evidence/runtime-check.json
+QA_04_05/BASE_SOURCES/mobile/{capacitor.config.json,package.json,package-lock.json}
+QA_04_05/OWN/runtime-sources/receipt.json og package/capacitor/src/main/java/
+com/getcapacitor/{Bridge.java,CapConfig.java}: låst6.2.1, default60. Receiptens
+npm-integritetskontrol er QA-rapporteret; Lead har læst de konkrete sources.
+QA_04_05/REPRODUCE/acorn-8.15.0.js: parser, kun kontrol/testmateriale.
+Primære kilder: https://v8.dev/features/bigint
+https://capacitorjs.com/docs/v6/android og https://capacitorjs.com/docs/v6/config
+
+KANDIDAT / SAMMENLIGNING
+QA_04_05/OWN/identity.json: exact blokeret tree og alle13 SOURCE-hashes.
+QA_04_05/SOURCE/: alle main→lokal scope-filer; ingen ny rettelse her.
+QA_04_05/REFERENCE/{R1,R2}_index.html: exact gamle funktioner/kontroller.
+QA_04_05/INPUT/DIFF/{R2_to_local,main_to_local}.patch: kandidatdiff.
+QA_04_05/BASE_SOURCES/: uændrede review-assets/harness/native/workflows;
+resten af repo hentes fra exact R2, ikke fra main eller ved gæt.
+
+MOTOR / ORACLE / GAMLE BEVISER — EFTER BEHOV
+QA_04_05/OWN/{NUMERICAL_REVIEW,ORACLE_INDEPENDENCE,VALIDATION_SUMMARY}.txt
+QA_04_05/REPRODUCE_README.txt + REPRODUCE/: QA's motor-/Fraction-drivere.
+QA_04_05/Source_Index.txt: præcise rå minimum-, B1-, safe-count-, diagnostics-,
+mobile- og gate-paths. Gamle reviewmandater er historiske kilder.
+QA_04_05/RAW_EVIDENCE.tar.xz og RAW_MANIFEST.json: 781 bytebevarede rawfiler;
+udtræk målrettet i din egen QA-kopi efter behov. Arkivets logical OWN/ og
+ORIGINAL_FAIL/ paths er relative til QA_04_05, ikke denne pakkes rod.
+QA_04_05/MANIFEST.json: inputpakke142 payloads. Den er uændret inkluderet.
+MANIFEST.json her: samtlige nye pakkepayloads undtagen manifest selv.
+LEAD/INPUT_VERIFICATION.json: Lead's input-/raw-/sourcekontrol og egne limits.
+
+Denne pakke indeholder den aktuelle QA-levering fuldt som kilde, ikke den
+gamle samtale. Filer læses via indekset; hele arkivet skal ikke ind i startkonteksten.

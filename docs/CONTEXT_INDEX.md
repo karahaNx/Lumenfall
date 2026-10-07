@@ -8,6 +8,14 @@ Filer i samme række er kandidater; indlæs kun det, som den konkrete opgave kr�
 | Arbejdsregler og læserækkefølge | `../AGENTS.md` | Opstart |
 | Egen rolle | `CHAT_OWNERSHIP.md` → én fil i `agents/` | Opstart |
 | Aktuelt snapshot, writer og åbne opgaver | `PROJECT_STATE.md` | Opstart; kontrollér live drift |
+| Codex-miljø, commands og næste B2-handling | `project/CODEX_START.md`, `../PROJECT_BOOTSTRAP.txt` | Ny repo-session |
+| Nyeste B2-runtimekandidat, fulde originals og beviser | `handoffs/02_08/2026-10-07/START_HER.txt` → `Source_Index.txt`, `SUMMARY/identity.json` | Nyt scoped kandidat-review; ikke produkt-main |
+| Alle 96 kandidatfiler og præcis gendannelse | `handoffs/02_08/2026-10-07/SOURCE_SNAPSHOT_MANIFEST.json`, `../scripts/recovery/restore_candidate.py` | Review uden netadgang/ekstern ZIP |
+| Core-review og 45 originale TXT/ZIP-filer | `handoffs/01_06/2026-10-07/SOURCE_INDEX.md` | Core-proveniens; tidligere BLOCKED gælder gamle bytes |
+| Lead-recovery, original feedback og fire billeder | `recovery/2026-10-07/SOURCE_INDEX.txt`, `recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/` | Originalkrav og dependencies |
+| Åbne problemer og ny offline-diagnose | `project/KNOWN_ISSUES.md`, `project/SAVE_OFFLINE_AUTOASCEND_DIAGNOSE_2026-10-07.txt` | Særskilt offline-scope |
+| Offline-originalsave, driver og rå VM-resultater | `qa/offline-autoascend-2026-10-07/Source_Index.txt`, `qa/offline-autoascend-2026-10-07/README_REPRO.txt` | Reproduktion på fast produktbaseline; bevaret via PR47 |
+| Integritet og historiske manifeststier | `../scripts/codex/check_context.py --archives`, `decisions/2026-10-07-codex-project-ready.md` | Genfinding og docs-integration |
 | Measured Inquiry | `tasks/MEASURED_INQUIRY_001.md`, `tasks/MEASURED_INQUIRY_001_REQUIREMENTS.txt` | Originalkrav før implementering/review |
 | Forge/Lab-beslutning og begrundelser | `decisions/2026-10-04-forge-lab.txt` | Ved scope-/designspørgsmål |
 | PR41 Core/QA/Lead-accept | `decisions/2026-10-05-pr41-review.txt` | Ved integration eller vurdering af reviewgrænser |
@@ -24,6 +32,11 @@ Filer i samme række er kandidater; indlæs kun det, som den konkrete opgave kr�
 | Historisk program og audits | `ROADMAP.md`, `audits/` | Baggrund til en konkret beslutning; ikke automatisk backlog |
 
 ## Eksterne originalpakker
+De aktuelle Lead/Core/Gameplay-kilder fra 7. oktober ligger nu i main som
+angivet ovenfor. Tabellen nedenfor er ældre historik, ikke obligatorisk
+opstartsmateriale. PROJECT_STATE og den nye kandidatlevering er aktuelle;
+ældre recovery-/reviewstatus må ikke overskrive dem.
+
 Bevar originalerne. Lokal hashkontrol beviser intakte inkluderede bytes, ikke
 at hele den tidligere samtale er bevaret. Indekset nedenfor giver genfinding;
 pakken skal uploades igen, hvis den ikke kan hentes i den nye chat.
@@ -60,11 +73,3 @@ Ved næste LAB-scope: Lumenfall_00_11_Lead_Context_2026-10-05.zip,
 Library `libfile_d42a1d05bf08819186ed6f4943028979` → Source_Index.txt →
 LAB/LAB_MOTES_001_LOCAL.zip; læs kun originale LAB-krav og relevante kilder.
 Lokale prototypes, testhooks og storageprefixer må ikke promoveres til produktet.
-
-## Offline / Auto-Ascend — enhedsbackup 2026-10-07
-
-Læs `qa/offline-autoascend-2026-10-07/START_DIAGNOSE.txt`, derefter
-`qa/offline-autoascend-2026-10-07/Source_Index.txt`. Backup, rå resultater,
-reproduce.cjs og original ZIP ligger i samme mappe. Reproduceret på
-main `1ddc246eb62782a61ec5c486cd5f51ea170bb338`: 8 timer ON rammer
-250.000-eventsgrænsen; OFF gennemfører. Evidens, ikke produktfix eller APK-accept.

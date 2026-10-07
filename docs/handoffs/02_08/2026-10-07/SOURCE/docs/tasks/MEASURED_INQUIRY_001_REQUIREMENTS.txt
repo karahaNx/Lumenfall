@@ -1,0 +1,210 @@
+Lumenfall — Measured Inquiry — afgrænset implementeringsmandat
+Fra: 00_09 — Lead / Architecture
+Til: 02_07 — Gameplay / Progression
+Model: GPT-6.1 Sol · Effort: High
+Dato: 2026-10-04 · Europe/Copenhagen
+Repository: karahaNx/Lumenfall
+
+LEADS BESLUTNING
+Dit fulde 8+8-katalog og read-only talgrundlag er accepteret som grundlag.
+00_09 har kontrolleret ZIP CRC, alle 43 manifestpayloads og reproduceret
+results.json + checkpoints.csv byteidentisk: 72 checkpoints, 3 syntetiske
+profiler. Dette beviser formeltallene, ikke gameplay-/Android-QA eller balance.
+
+Implementér nu KUN Measured Inquiry og de nødvendige tilknyttede kontrakter.
+Opening Focus er PARKERET. Depth40 garanterer ikke charge7; første point er
+domineret ved charge<=6, og senere er effekten begrænset til en lille first-cast-
+fordel per rekruttering. Den foreslåede seed-/Ascension-integration er ikke
+tilstrækkeligt begrundet af den viste produktgevinst. Ingen openingfocus-ID,
+resource-seed, combat-/recruit-/support-/Ascend-ændring må implementeres.
+Flere Forge-upgrades er fortsat et senere produktarbejde, ikke aflyst.
+
+Du har eksklusiv repo-writerlease til dette scope efter brugerens overførsel
+af denne opgave. 01_06, 03_05 og 04_05 afventer frossen kandidat. Ingen
+subagenter, beskedværktøjer, andre writers eller omdøbning af chats.
+
+1. BASELINE OG REMOTE MANDAT
+Main: df78d51181a59d247bf4fc9abf1c7e05237e9c2b
+Tree: d1d128a82f6bc204655dc662a5239f98dca51059
+Parents i rækkefølge:
+3a89a8cb4084193326daa5dab68cf9a89ef71512
+d3daa23d04315ec21776de69b0df960d24cb19b6
+index.html SHA256:
+a2797073f985da25803c61e2626ef54f662dfbc5d0dbd240156e47cff76acd96
+
+Frisk 00_09-kontrol: alle 38 branches matcher din efterreceipt, main uændret,
+0 åbne PR'er, 0 queued/in_progress/waiting/requested/pending runs.
+android-latest -> exact main; release396102072, APKasset609203044,
+6828796 bytes, digest0cb6cbe35e4371db7a7a30c4c73573e4cdd88439c32057f60c5128aacfebab96.
+Android0.1.131/PR40-accept er lukket. Ingen ny releaseopgave.
+
+Genlæs live main/tree/parents, alle branches, åbne PR'er, aktive runs og
+ejerskabs-/agentregler før skrivning. Checkpoints er ikke resetmål.
+Branchforslag: 02/lab-measured-inquiry-v1 fra exact main. Opret kun hvis
+navnet er ledigt; genbrug/overskriv ingen andens branch. Ved relevant main-
+eller writerdrift: aflever konkret drift og afvent ny baseline før remote write.
+Urelateret branchdrift dokumenteres og vurderes, ikke automatisk reset/cleanup.
+
+Autoriseret: featurebranch, scoped commits/push og én Draft PR mod main.
+Valider lokalt før remote push/PR. Normal automatisk pre-merge CI på PR'en er
+autoriseret som følge af dette mandat; ingen manuel workflow-dispatch/rerun,
+Android-build, merge, release-, signing- eller diagnosebranchhandling.
+En mislykket CI skal diagnosticeres med konkrete receipts; ingen retryloop.
+
+2. LÅST PRODUKTKONTRAKT
+Nyt LONG_STUDIES-ID: measuredinquiry. UI-navn: Measured Inquiry.
+Unlock: maxDepthEver >= 60. Levelcap10. Ingen ekstra study-slot.
+Completed raw level k bevares; effektivt e=min(nonNegativeInt(k),10).
+Priser ved start på raw level k:
+Lumen = Math.round(30000 * Math.pow(1.8,k));
+Shards = Math.round(1200 * Math.pow(1.8,k)).
+Eget work = Math.round(600 * Math.pow(1.6,k)) sekunder.
+Ét betalt start per næste level, speedMult1, ingen bulk eller gratis start.
+Bonus optjenes først ved autoritativ completion, ikke start/UI/load.
+Cap0->10: 13351752 Lumen + 534070 Shards, 108951 nominelle worksekunder
+uden speed. Tallene gælder dette design, ikke faktisk historisk spend.
+
+Kun nye betalte starter af de originale 8 studies får discount:
+legacyWork = Math.round(node.baseDurationSec * Math.pow(node.durationGrowth,k));
+actualWork = Math.round(legacyWork * (1 - 0.02*e));
+hvor k er det pågældende target-studys completed level på starttidspunktet.
+Inquirylevel0 skal give bitidentisk gammel duration. Effektcap20% mindre work,
+factor0.8. Inquiry må aldrig forkorte sig selv eller fremtidige katalog-ID'er
+uden nyt designmandat. Ingen pris-/Mote-/income-/offlineRate-/combatcapændring.
+
+Snapshots ved start: actualWork i totalDurationSec og remainingSec, speed1.
+Bevar aktive record-bytes/værdier gennem Inquiry-completion, queue-toggle,
+render, save/load, restore/recovery og Ascension. Ingen genberegning af
+allerede betalt varighed og ingen pending-levelbonus. Eksisterende Mote-tiers
+og fuldpriser uændrede; capdiscount+8x giver ca0.1 af oprindelig nominal wall-
+time, ikke80x. Next study starter speed1 uanset tidligere tier.
+
+3. ORIGINALT KATALOG, DEEDS OG SLOTS
+Indfør en eksplicit frozen liste for disse 8 IDs:
+wispascend, guardmastery, riftattune, shardstudy, lumenstudy,
+formationstudy, motestudy, prismstudy.
+Kun denne liste er discount-targets, v0 autostudy-queue-seeding og grundlag
+for eksisterende study-slotudvidelse samt First Discovery, Devoted Scholar
+og Every Path Studied (checks, progress og kravtekst, ikke kun UI).
+Bevar slotmatrix: maxDepth1–39=2,40–59=3,60–89=4,90+=5.
+Measured Inquiry optager et almindeligt slot; den giver ikke flere slots.
+Depth60 er allerede nået ved unlock; ny kataloglængde skal ikke hæve cap.
+
+Bevar alle Deed-ID'er/rewards/sticky achieved-flags og one-time pool683.
+Inquiry tæller ikke mod de eksisterende 1/25/all8-study-Deeds. Gør denne
+spillerrelevante undtagelse tydelig i scope-teksten, fx “Measured Inquiry does
+not count.” Every Path Studied skal sige at de 8 navngivne studies er kravet,
+ikke “every Project” når kataloget nu har9. Ingen nye Deeds eller valutaer.
+Generel statistik kan stadig summere hele kataloget, hvis nødvendig;
+bland ikke denne sum sammen med de frosne Deed-checks.
+Bevar legacyResearchLevels med de samme 5 IDs og uændrede20/60-krav.
+
+4. CAP, KØ OG HÆNDELSESRÆKKEFØLGE
+Et fælles eligibility-resultat skal styre manual startStudy, autoFillStudySlots,
+simulationStartQueuedStudies, simulationKillsUntilEconomyMutation og berørt UI.
+Kontrollér kendt ID, unlock, cap, active duplicate, slot og affordable valuta
+samt finite/nonnegative cost og finite positive duration før betaling.
+Blocked start må ændre hverken valuta, level, active records eller tidsgrænse.
+Bevar rå legacy levels; finite-gates er ikke nye gameplay-caps eller migration.
+Vær eksplicit om nødvendige finite-startguards i berørte fælles paths.
+
+Queue defaultOFF for nye, current og v0 saves. QueueON kan bevares ved cap,
+men maxed study springes over uden nyt køb, wasted currency eller 0-tidsloop.
+Cap9 active completion -> raw10 én gang, slot frigøres, næste køb blokeret.
+Raw>=10 + allerede active record fra et overcap/future/forged save:
+bevar raw/remaining/total/speed indtil record er due; fjern derefter record
+uden levelgrant, valuta/refund, Deed-credit eller falsk “advanced a level”.
+UI skal vise preserved/maxed ejerskab og neutral afslutning, ikke ny Lv14-bonus.
+Samme completionregel i advanceActiveStudies og simulationCompleteDueStudies.
+
+TO OBLIGATORISKE LEAD-TILFØJELSER TIL DIT DESIGN
+A) En due overcap-record, der fjernes uden bonus, er stadig et faktisk
+statefremskridt for schedulerens actions/continue-guard. Den må ikke returnere
+“ingen handling” og få advanceStudyOnlyTime til at stoppe resten af fraværet.
+Hold antal håndterede records og faktisk earned-completion/advarsler adskilt,
+så tidslinje/UI ikke opfinder optjente levels for at holde scheduler kørende.
+B) Alle allerede due completions ved en automatisk start-boundary skal
+behandles før de nye queued starts, også ved indgangen til study-only-tail.
+Baseline advanceStudyOnlyTime starter først køen, så den path skal vurderes
+konkret for due Inquiry ved remainingSec0. Et legacy-study, der auto-startes
+efter Inquiry-completion i samme boundary, bruger det NYT completed level.
+Et study, der allerede var active før boundary, bevarer sit snapshot.
+Normal manual start bruger kun faktisk committed completed level ved click;
+render/“Finishing…” må ikke selv færdiggøre Inquiry eller give pending bonus.
+Bevar øvrig chronology/epsilon/oracle; ingen ny generel sim-refaktor.
+
+5. SAVE- OG SCOPEGRÆNSER
+Bevar schema1, primary/recovery-key, backup-prefix og gældende recovery,
+transaction-/restore-/resetguards. Nye ID'er default0/OFF gennem de eksisterende
+canonical maps. Raw overcap bevares; kun effektiv effekt/køb begrænses.
+V0-seeding kun frozen8; ingen gratis Inquiry-queue for gamle autostudy-ejere.
+Full Reset nulstiller alt som før; Ascension bevarer studies, queueflags og
+aktive snapshots som før. Intet refundflag, currency-credit eller load-clamp.
+
+Lead accepterer for denne additive udvidelse den eksisterende schema1-
+begrænsning: gammel appkode kan strippe ukendte IDs/active record og gemme
+stripped canonical state. Der loves ikke sikker downgrade-roundtrip. En urørt
+backup fra ny app kan kun bruges i kompatibel ny app. Dokumentér dette præcist
+til Core-review; byg ingen ny versionsstrategi eller schemaændring her.
+
+Tilladte produktionsændringer: index.htmls studie-data, frosne ID-liste,
+Deed-scope/slots/v0-seeding, study-start/completion/boundary og nødvendig
+presentation/affordability. Relevante behavioral-/UI-tests og én kort scoped
+design/QA-note under docs er tilladt. Ingen workflows/mobile/font/branding-
+ændringer, nye Forge-ID'er, balanceskift i gamle upgrades eller Find/A40-fixes.
+
+6. UI-KONTRAKT
+Brug eksisterende Lab-layout, states, touch/fokus/aria og Details/speed-flow.
+projectEarnedEffect/Markup skal have en eksplicit measuredinquiry-case;
+append af ID uden den hardcoded-case kan crashe eksisterende render.
+Vis kumulativ optjent work-reduktion 0/2/…/20%, klart næste pending bonus,
+unlock60, cost/duration og maxed ved10. “20% less work” er korrekt; “20%
+faster” er forkert (ved samme øvrige betingelser er throughput25% højere).
+Forklar at effekten gælder fremtidige starts af de8 angivne studies, ikke
+igangværende studies eller Inquiry selv. Undgå intern schema/legacy-kode i UI.
+Maxed har ingen aktiv Begin, “Next level11”, købscost eller extra bonus.
+QueueON-at-cap vises som bevaret valg med ingen nye starts. Intet UI-redesign.
+
+7. VERIFIKATION FØR AFLEVERING
+Kør alle eksisterende krævede pre-merge checks og målrettede nye behavioral-
+kontrakter med konkrete outputs. Udvid tests for det nye scope; svæk ikke de
+eksisterende source/persistence/chronology/PR40-orakler for at få PASS.
+Dokumentér legitimt ændrede katalogantagelser separat fra uændrede baseline-
+stateforventninger. Ingen ny bred gammel PR40-audit; eksisterende CI-kontroller
+skal fortsat bestå. Vælg meningsfulde behaviors frem for implementation-mirror.
+
+Minimum positive/negative cases:
+- depth59 locked / depth60 unlocked; default0/OFF; precise cost/work0,5,9,10;
+- start med0/5/10 Inquiry på legacy targets; selv-duration altid uændret;
+- start blocked ved cap/manglende L/manglende S/fulde slots/duplicate/ugyldigt ID;
+  ingen valuta- eller stateændring; nonfinite legacy-start afvises uden clamp;
+- cap9->10 præcis én completion; queueON-at-cap ingen start/0-tids-loop;
+- raw13 bevares + due overcap record fjernes uden grant/false summary/refund;
+  en anden legacy study skal stadig fuldføres senere i SAMME offline tail;
+- Inquiry+legacy simultaneous completions, arrayrækkefølge uafhængig; nye queued
+  legacy starts bruger nye bonus, eksisterende aktive snapshots uændrede;
+- due Inquiry remaining0 ved study-only-entry + ledigt slot/legacy queue;
+  completion før nyt start, også når combatcap er nået; ingen dobbelte rewards;
+- live versus offline/study-only parity på relevante completion/start events;
+  tidsopdeling/resume ændrer ikke completed levels, spend eller snapshots;
+- slotmatrix1/39/40/59/60/89/90 og9-kataloget; First/25/EveryPath og pool683;
+- fresh/current/v0 defaults, old autostudy migrerer kun8, raw/snapshotbevarelse
+  ved save/reload/restore/recovery/Ascension; malformed/future-save guards intakte;
+- Mote-speed8x uændret473, næste start1x, ingen retroaktiv work-reduktion;
+- Lab fresh/dense/running/cap/overcap, fokus/aria/disabled og kompakt mobile UI;
+  øvrig Rift no-scroll/layout, support, Forge og AutoAscend uændret.
+
+8. FREEZE OG AFLEVERING TIL 00_09
+Åbn én Draft PR, vent på dens normale required CI og aflever efter checks.
+Rapportér exact base/head/tree/parents/indexSHA, hele PR-diff mod base og
+scope/touched files, CI run/check-ID/status samt konkrete lokale testreceipts.
+Freeze kandidat efter aflevering: ingen yderligere skrivning uden nyt mandat.
+Ingen merge/build/release på eget initiativ. 00_09 disponerer derefter
+uafhængige Core/QA-reviews og eventuelt UI-review på exact frozen candidate.
+
+Aflever telefonvenlig standalone TXT + kompakt ZIP med START_HER, status,
+scope/design, diff/patch, konkrete tests/outputs, sourceidentitet, før/efter-
+reporeceipts og SHA256SUMS.json med fuld payloaddækning. Ingen APK, nøgle,
+token, gamle historik-ZIP'er eller dependency-mapper. Begge som downloadlinks.
+Dette writer-mandat slutter ved den frosne aflevering. Ingen ekstra Forge-
+implementering eller omstart af lukket releaseblok udledes af mandatet.

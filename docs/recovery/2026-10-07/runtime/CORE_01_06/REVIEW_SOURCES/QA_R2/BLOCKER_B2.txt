@@ -1,0 +1,77 @@
+BLOCKER B2 — PR46 R2 — ny quotient-afrunding skaber én ekstra kill
+Status: BLOCKED. Produktkode er ikke ændret af QA.
+Kandidat: 3cdebc236e9ee5081a4bca4e323b11f43aa0d46d; tree70073a55d7f5fe428ae82223627603498cc372b6; index SHA2568de74bbb7ab31be18405c40e20114d8421c34fe78eeb134dd12016153311fa17.
+
+MINIMUM PÅ FAKTISK MOTOR MED KONTROLLERET DPS
+Farm depth1; maxHP11; currentHP8.03; luminous=false; accum.975/chance.03;
+Motes59, Lumen/Shards0; guardmastery work300/total600/1x,target3x,QueueOFF.
+DPS55043995445639384; elapsed.9; repræsenteret damage49539595901075448.
+Expected4503599627370495 kills. OFF/whole actual4503599627370496.
+ON/whole actual4503599627370495; ON/split.01+.89 actual4503599627370496.
+Dette er virkelig advanceAuthoritativeTime → simulationApplyFarmPassive →
+simulationBatchFarmKills med virkelige spawn/reward/study-sideeffekter;
+kun DPS er kontrolleret i dette minimum. B2 forekommer også uden dette override:
+
+FAST NATURAL-DPS GAME-STATE / INGEN DPS-STUB
+freshState + Farmdepth1, farmReturnDepth2,maxDepthEver130;
+HP8.03/11,luminous=false,accum.975; Motes59,Lumen/Shards0;
+activeParty[titan]; Titanlevel1635,Mythic rarity5; Ember rarity1 (samling),
+heroResourceTitan0; Formation research500,Formation Insight500,
+Wisp Ascendancy500,Eternal Momentum500,ascendCount5/asc5=true.
+Guardmastery work300/total600/1x,chosen3x,QueueOFF. Ingen øvrige queues.
+Den fulde normaliserede input/state er gemt i natural-high-results.json.
+Produktets simulationPassiveDps giver40052722017724424.
+Tiden.9s giver eksakt double-damage36047449815951984.
+Alle statfelter normaliseres; alle viste næste upgrade-priser er positive/endelige,
+bl.a. Titan1.3356042003914366e93,Formation research4.592522781097145e103,
+Momentum7.325193299589476e95. Ingen Infinity eller ulovlig HP-verden.
+Dette er et ekstremt stress-save, ikke en påstand om at en spiller har gennemspillet
+historien eller en fysisk session. 36 særskilte natural-DPS-cases med ordinære
+Wisp-levels1/40/80 beviser den ekstra reachable-motorvej på normale skalaer.
+R2s erklærede numeriske scope er positive finite HP/damage + safe kill-counts;
+B2-inputtet opfylder dette. Den understøttede grænse er ikke angivet som2^50.
+
+NATURAL RESULTATER (live, fra nul Shards)
+Use Motes OFF, whole.9: kills3277040892359272,Shards3277040892359272.
+Use Motes OFF, split.01+.89: kills3277040892359271,Shards3277040892359271.
+Use Motes ON, whole.9: kills3277040892359271,Shards3277040892359271.
+Use Motes ON, split.01+.89: kills3277040892359271,Shards3277040892359271.
+Expected3277040892359271 i alle disse forløb; egne offline-par følger samme kills.
+Ingen Auto-Tap,Empower,Study-start/Study-completion/Ascend/ability-event i.9s.
+Guardmastery ændrer ikke passiv DPS, og ingen bonus bliver færdig. ON betaler
+60 ved den reelle rewardboundary; at OFF har én ekstra Shard er uberettiget.
+
+UAFHÆNGIG ORACLE OG ÅRSAG
+Integer-damage36047449815951984 /11 har exact quotient3277040892359271,
+remainder3. CurrentHP8.03>3: remainder kan ikke dræbe den partiale fjende;
+kill-count skal derfor være3277040892359271, sikkert under2^53-1.
+Oracle dekoder indgående IEEE doubles til fælles BigInt-enheder2^-1074,
+forbruger currentHP og måler hele efterfølgende HP11-enheder. Den kopierer
+ikke kandidatens rounded quotient/modulo-formel. Desuden kan alle integer-damage
+felter her kontrolleres direkte med BigInt division/remainder.
+Kandidatlinje: Math.round((damage-remainder)/maxHp).
+Ved stor damage afrunder subtraction damage-remainder tilbage til damage;
+her bliver divisionen3277040892359271.5, og Math.round giver3277040892359272.
+Det er ikke near-HP-EPS, ulovlig Infinity eller usikker heltals-count.
+Split-oraclen bruger også summen af de faktiske repræsenterede delskader:
+natural split skiller sig med -15/4 damage fra whole, men begge giver stadig
+exact3277040892359271. Forskellen krydser ikke næste rigtige killthreshold.
+
+REPRO OG RÅ EVIDENS
+FIXTURES/natural_high.js + natural_high.cjs + own_bridge.js + stage_own.py.
+node pr46_r2_qa/natural_high.cjs: final fixed1635 fixture, exit1 (strict FAIL).
+FIXTURES/own_arithmetic.cjs:560 exact-rational inputs,550PASS/10FAIL,exit1.
+EVIDENCE/b2-repro-execution.json indeholder commands/tider/exits; komplette
+stdout/stderr og alle motorstates/parts ligger i RAW/own-processes.tar.xz.
+EVIDENCE/natural-high-results.json og high-power-results.json er også direkte.
+EVIDENCE/split-represented-damage-oracle.json afgrænser clock/damage-rounding.
+
+AFGRÆNSNING / NÆSTE GATE
+Det gamle B1 minimum og alle43 gamle counterexamples er faktisk rettet i R2.
+B2 ligger i den samme ændrede farmfunktion, og den permanente826-ledger plus
+workerens576 inputs til2^50 fanger ikke denne større quotient.
+Ret robust quotient inden for det erklærede scope og tilføj dette konkrete
+motorregression-input. Et smallere understøttet interval kræver særskilt dokumentation
+og proof af motorens reelle grænse; det må ikke stiltiende sættes lig med testmatrixen.
+Ingen større EPS, deaktiveret Motes-boundary, batchslutbetaling eller løsnet oracle.
+QA har ikke implementeret en rettelse. Ny frozen-kandidat og begge reviews kræves.

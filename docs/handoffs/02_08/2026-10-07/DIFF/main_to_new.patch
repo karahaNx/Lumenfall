@@ -1,0 +1,1380 @@
+diff --git a/docs/tasks/LAB_MOTES_001.md b/docs/tasks/LAB_MOTES_001.md
+new file mode 100644
+index 0000000..899ade1
+--- /dev/null
++++ b/docs/tasks/LAB_MOTES_001.md
+@@ -0,0 +1,48 @@
++# LAB-MOTES-001 — repeat paid Study speed
++
++02_07 Gameplay implementation for scoped Core and independent QA review.
++The current [product mandate](LAB_MOTES_001_MANDATE.txt) supplements the older
++writer status in PROJECT_STATE and the prototype-only boundary in the
++[original requirements](LAB_MOTES_001_REQUIREMENTS.txt).
++Read both and the [original user request](LAB_MOTES_001_USER_REQUEST.txt) in full.
++All three TXT originals are retained byte for byte.
++
++Fixed base: `1ddc246eb62782a61ec5c486cd5f51ea170bb338` (PR45).
++Branch: `02/lab-motes-repeat-v1`. One Draft PR; review precedes integration.
++
++Each known Study has independent saved `studyUseMotes` and `studySpeedTargets`.
++Defaults are OFF and 1.5x; old saves may remember an active paid speed as their
++OFF target. Only explicit true plus a valid numeric target can retain ON.
++Normalization never buys and does not mutate input work snapshots. Save schema,
++keys, recovery guards and Ascension/reset policies retain their existing roles.
++
++Study Queue starts the next paid level at 1x. Use Motes buys exactly the chosen
++existing tier at its full existing price, again per level. It waits at the
++current speed when short; OFF or a lower target retains speed already paid.
++Successful manual speed purchases remember the target without enabling ON.
++Repeat purchases follow LONG_STUDIES declaration order after due completion,
++closure and new paid starts at each authoritative timestamp.
++
++Farm economy boundaries count actual Luminous rewards using the current enemy,
++pity accumulator, chance and reward, including partial HP. Purchases do not use
++an expected reward rate or wait until batch end. Existing live/offline reward
++policies and the study-only tail remain in force. UI/render never buys repeat
++speed. Native Lab controls expose intent separately from actual running speed.
++
++Tests are in `tests/behavioral/lab-motes.js` and `lab-motes.cjs`, registered in
++the default behavioral suite. Coverage includes prices, repeated full debits,
++independent toggles, malformed/old saves, recovery/backup/reset/Ascend, caps,
++actual reward/work timelines and shared-budget order. Scoped causal mutants
++exercise cheaper fallback, free next-level carry and delayed batch-end buys.
++Native touch/keyboard, focus, ARIA and 44px targets run at 320/390/430px with
++normal and reduced motion. Pre-merge source/runtime gates and existing tests
++remain required; workflows are unchanged. The existing native Rift driver
++observes bounded kinetic-scroll settling before tapping after a swipe; it
++never corrects scroll or relaxes the immediate first-frame Rift assertions.
++These multi-profile Rift driver processes have a 120s bound to accommodate
++observing native scroll settling; generic process/timeout controls are unchanged.
++
++The delivery packet records the exact final head/tree, patch, raw logs and
++exit codes, automatic PR CI and explicit writer release. Physical Android and
++TalkBack remain untested. Green CI does not replace Core/QA/Lead acceptance.
++No merge, ready, Android build, workflow dispatch/rerun or release is authorized.
+diff --git a/docs/tasks/LAB_MOTES_001_MANDATE.txt b/docs/tasks/LAB_MOTES_001_MANDATE.txt
+new file mode 100644
+index 0000000..5ba1b80
+--- /dev/null
++++ b/docs/tasks/LAB_MOTES_001_MANDATE.txt
+@@ -0,0 +1,119 @@
++LAB-MOTES-001 — aktiv produktionsopgave fra 00_12
++2026-10-06. Projekt: Lumenfall. Repository: karahaNx/Lumenfall.
++Målrolle: 02_07 Gameplay / Progression. Lead: 00_12.
++Model: GPT-6.1 Sol. Effort: High. Altid dansk; omdøb ingen chats.
++
++AKTIVT WRITER-MANDAT FRA 00_12
++PR45 er closed/merged. Same-head CI 37364461673 attempt4 success.
++Main: 1ddc246eb62782a61ec5c486cd5f51ea170bb338
++Tree: bfb3970b29485b3e8ece1c72bb60186eb2ba755e
++Observeret: 2026-10-05T22:05:41.800Z
++02_07 er eneste repo-writer til denne LAB-MOTES-001-implementering.
++Branch 02/lab-motes-repeat-v1 oprettes fra frisk verificeret main.
++Brugeren har stående godkendelse og bad om at afslutte de sidste forbedringer.
++Alle øvrige roller er read-only; ingen subagenter/beskedværktøjer.
++Lead 00_12 ved udstedelse; 00_13 overtager når brugeren starter næste Lead-chat.
++Live afvigelse vurderes før handling; intet reset/force-push.
++Denne writer slutter ved freeze og udtrykkelig frigivelse. Ingen anden
++produktændring er inkluderet. CONTENT-DESIGN-001 er kun efterfølgende læsende arbejde.
++
++LÆSEPLAN
++Læs live AGENTS.md, kun egen rolle i docs/CHAT_OWNERSHIP.md og
++docs/agents/02_GAMEPLAY.md samt docs/PROJECT_STATE.md. Læs det aktive
++Lead-mandat og ORIGINALS/USER_REQUEST.txt + REQUIREMENTS.txt fuldt.
++ORIGINALS/baseline.json og HASH_CONVENTIONS.txt identificerer prototypen.
++Sources er read-only. Brug Source_Index.txt til målrettede ekstra opslag.
++Læs ikke hele kildepakken/historikken ved opstart. Live produktkode beviser
++aktuel adfærd; prototypen er en reference, ikke accepteret produktkode.
++
++TILTÆNKT SCOPE
++Per-Long-Study gemt Use Motes ON/OFF og valgt repeat-speed. Implementér
++økonomi, autoritative simulationsevents, persistence og nødvendige mobile
++Lab-kontroller som ét samlet scope. 02_07 har eksklusivt skriveejerskab i dette scope.
++Forventede produktfiler: index.html og relevante tests/behavioral/-filer.
++Tilføj scoped opgavekort og byteidentiske user-/adfærdsoriginaler under
++docs/tasks/LAB_MOTES_001*. Lead ajourfører PROJECT_STATE/integration senere.
++Ingen ændring i combat balance, priser, Study slots, unlocks/caps, Measured
++Inquiry-kontrakt, NAV-001-navigation, native Android, signing eller workflows.
++Hvis en afhængighed kræver bredere scope, dokumentér konkret behov til Lead.
++
++ADFÆRDSKONTRAKT — ORIGINALERNE STYRER
++Study Queue starter næste level; Use Motes køber hastighed for aktivt level,
++også hvis det blev startet manuelt. Toggle-parrene er uafhængige.
++Bevar LAB_SPEED_TIERS [1.5,2,3,4,5,6,7,8] og speedTierCost. Et 3x-mål
++købes direkte for 60 Motes, aldrig via billigere trin. Fuld pris pr. level;
++nyt level starter 1x, indtil det nye køb er betalt. Allerede betalt samme/højere
++speed medfører ikke nyt køb. Lavere nyt mål nedgraderer ikke aktiv speed.
++Ved mangel: bevar intent og aktiv speed, køb ved første autoritative tidspunkt
++med nok Motes. OFF stopper fremtidige køb og beholder aktiv betalt speed.
++Manuelt gennemført hastighedskøb husker det købte trin. Separat målvalg skal
++kunne huskes også uden råd. Use Motes er OFF indtil brugerens aktive valg.
++Køb kun for kendt, aktiv, ikke-maxed/ikke-closed Study. Ingen negativ balance.
++Fælles Motes-budget prioriteres i LONG_STUDIES-deklarationsrækkefølge;
++bevar separat eksisterende Study-startprioritering. UI-sortering er kun visuel.
++Action og pris bevares ved mangel; ingen Need/Cannot afford-knaptekster.
++
++PERSISTENCE OG HÆNDELSESORDEN
++Gem nye valg pr. kendt Study. Gamle saves får OFF; et gyldigt betalt aktivt
++trin kan bruges som defaultmål. Kun kendte IDs, strikte booleans og tilladte
++hastighedstrin accepteres. Ukendte/malformed værdier må ikke aktivere køb.
++Normalisering er sideeffektfri og bruger ikke Motes. Reload, backup/recovery
++og Ascend bevarer valg og aktive betalte work-snapshots; Reset nulstiller dem.
++Autoritativt Motes-køb behandles efter due completions/closures og nye betalte
++Study-starts på samme timestamp. Ingen speedbetaling for et netop lukket level,
++intet arbejde optjent bagud og intet gratis instant level.
++Farm-batches deles ved den Luminous-belønning, der faktisk muliggør købet;
++ikke ved forventet reward eller batchslut. Tag højde for aktuel enemyIsLuminous,
++luminousAccum, chance, per-kill reward, allerede skadet enemy og flere budgetter.
++Ingen nul-tidsloop ved lille positiv deficit. Samme kontrakt i live, offline,
++study-only resttid og timestamp-kollisioner; eksisterende policy/rate/cap gælder.
++UI/render må ikke skabe en anden økonomivej end den autoritative motor.
++
++MÅLRETTET KODEKORT (d32c0043-checkpoint; GENFIND LIVE)
++LONG_STUDIES/LAB_SPEED_TIERS/speedTierCost; defaultState, migrate/normalize-
++save, save/backup/reset/ascend; commitStudyStart/applySpeedTier/finishStudyRecord;
++simulationCompleteDueStudies/simulationStartQueuedStudies;
++simulationKillsUntilEconomyMutation/simulationFarmEconomyBoundarySeconds;
++simulationDefeatEnemy/simulationBatchFarmKills/simulationResolveTimestamp;
++advanceAuthoritativeTime/advanceStudyOnlyTime/tick;
++renderLongStudies/updateStudyProgress og de eksisterende Lab/navigationsgates.
++Bevar canonical save keys. Prototypeprefixer, testhooks, nav-testmarkup og
++testværkstedets storage-isolation må aldrig følge med i produktet.
++
++ACCEPTKONTROLLER PÅ DEN FAKTISKE KANDIDAT
++1. Eksakt 3x/60-køb uden 1.5x/2x, igen pr. level; alle eksisterende trin/priser.
++2. Under pris: ingen køb, uændret intent/speed. Ved præcis pris: ét korrekt køb.
++3. ON/OFF x Study Queue ON/OFF, manuel start, manuel speed, ændret mål,
++   samme/højere betalt speed og OFF efter betaling; ingen utilsigtet start.
++4. Flere samtidige Studies med knapt budget; vend aktiv/UI-rækkefølge uden
++   at ændre deklarationsprioritet. Balance og actual work/time kontrolleres.
++5. Gammelt/malformed save, aktive snapshots, missing maps, ukendte IDs,
++   string-booleans og ugyldige tiers; normalisering køber ikke og er idempotent.
++6. Save/reload, valid backup recovery, Ascend og Reset; aktiv speed bevares
++   hvor kontrakten kræver det. Ingen ændring i canonical recovery-guards.
++7. Maxed/capped/overcap/closed Studies og ukendt ID: intet Motes-forbrug,
++   ingen ekstra earned level; Measured Inquiry-selfdiscount og legacy8 uændret.
++8. Farm/push og live/offline opdelt kontra samlet tid, før/præcis/efter den
++   Luminous-affordability-boundary; vis tidslinje, køb, balance og remaining work.
++9. Kollision mellem Luminous reward, Study completion/start, cap/closure,
++   buff-expiry og Ascend. Study-only resttid efter eksisterende offline-policy.
++10. Mobile 320/390/430 px, fokus/keyboard/aria-pressed, mindst 44 px trykmål,
++    ingen overflow og bevaret NAV-001. UI må afspejle faktisk speed og intent.
++11. Hele den eksisterende behavioral suite, obligatoriske negative controls
++    og kilde-/runtime-gates fra pre-merge-workflowet. Supplér med meningsfulde
++    LAB-controls der fanger gratis carry, billigere fallback eller batchslutkøb.
++Antal beståede checks er ikke alene accept. Gem rå outputs og exit codes.
++Prototypens tidligere 52 checks/7 uaccepterede manuelle punkter tæller ikke som
++produkttest. Fysisk Android/TalkBack vurderes særskilt; uden kørsel er det ukendt.
++A40/crDroid er udgået og skal ikke genindføres som acceptkrav.
++
++FREEZE OG AFLEVERING
++Ét scoped Draft PR på fast base, med titel/tekst om endelig implementering og
++validering. Ingen merge, ready, Android-build, dispatch/rerun, release eller
++cleanup i implementeringsmandatet; almindelig PR-CI følger workflowet.
++Aflever exact base/head/tree, ændrede filer/diff, originale krav byteidentisk,
++testkommandoer/logs, begrænsninger, source-index/manifest og Lead-statusdelta.
++Lever separat lille TXT og samlet ZIP til 00_12 uden manuel samling.
++Ved freeze: frigiv repo-writer udtrykkeligt; intet ekstra commit efter levering.
++Lead tildeler derefter scoped Core save/chronology-review til 01_06 og
++uafhængigt QA til 04_05. Grøn CI er nødvendig, men erstatter ikke deres accept.
+diff --git a/docs/tasks/LAB_MOTES_001_REQUIREMENTS.txt b/docs/tasks/LAB_MOTES_001_REQUIREMENTS.txt
+new file mode 100644
+index 0000000..0091162
+--- /dev/null
++++ b/docs/tasks/LAB_MOTES_001_REQUIREMENTS.txt
+@@ -0,0 +1,47 @@
++LAB-MOTES-001 — lokale krav fra 00_10 Lead
++2026-10-05. Model og effort: GPT-6.1-sol · high.
++
++AUTORITET
++Læs USER_REQUEST.txt som brugerkrav. Nedenstående er Lead-valg til lokal
++implementering og review; prototype er ikke accepteret produktkode.
++Basen er frossen NAV-001 revision 4, source SHA-256
++31e71143bf969ee0c68498d933517cbdfaf308cfd93fcb4e51dfe4d034391736.
++
++ADFÆRD
++Pr. kendt Long Study: selvstændig Use Motes ON/OFF og et valgt hastighedstrin.
++Study Queue styrer start af næste level. Use Motes styrer betaling af hastighed
++for et aktivt level, også ved manuel start. De to toggles må ikke sammenblandes.
++Alle eksisterende 1.5x–8x-trin og speedTierCost-priser bevares. Et mål på 3x
++købes direkte for 60 Motes; 1.5x/2x købes ikke på vejen. Prisen betales igen
++på hvert level. Ingen dobbeltbetaling for et aktivt level, der allerede har
++valgt eller højere hastighed. Lavere nyt mål sænker ikke allerede betalt speed.
++Ved valutamangel fortsætter arbejdet ved sin nuværende betalte hastighed
++(1x på et nyt level), med uændret mål; køb sker ved første autoritative tidspunkt
++med tilstrækkelig Motes. Ingen Need/Cannot afford-varsler i købsknapper.
++Manuelt hastighedskøb husker trin. Queue er OFF indtil spilleren aktiverer den.
++OFF stopper nye køb og fjerner ikke betalt hastighed. Maxed/closed/ukendt
++Study kan ikke bruge Motes. Visuel sortering ændrer ikke prioritering: kendt
++Study-deklarationsrækkefølge ved fælles budget. Balancen må aldrig blive negativ.
++
++SAVE OG SIMULATION
++Nye valg gemmes pr. Study, overlever save/reload/backup/recovery og Ascend.
++Gamle saves har OFF. Et aktivt betalt trin kan være default for det huskede mål.
++Kun kendte IDs, strikte booleans og eksisterende hastighedstrin accepteres.
++Reset nulstiller alle nye indstillinger. Normalisering må ikke aktivere spending.
++Betaling hører til den autoritative simulation, med nye betalte starts og
++eksisterende pending targets behandlet efter Study completion/start ved samme
++timestamp. Intet forudbetalt arbejde eller instant earned level. Farm-batches
++skal deles ved den konkrete Luminous-reward, som muliggør købet; køb må ikke
++forsinkes til slutningen af en stor offline-batch. Study-only restperioder
++behandler samme valg. Bevar alle eksisterende timing- og økonomikontrakter.
++
++GRÆNSE OG REVIEW
++Ingen remote writer er tildelt LAB-MOTES-001 gennem denne lokale prototype.
++Der er ingen PR, merge, APK-build, signing eller release. NAV-001 til 03_05
++er stadig en separat opgave; LAB må ikke give to samtidige repo-writers.
++Ved produktion: genverificér live main/branches/PRs/runs/ejerskab og fastlæg
++rækkefølge med NAV. Scoped Gameplay-writer plus Core save- og uafhængigt
++QA-review kræves før Lead-accept. Gamle SHA'er er checkpoints.
++Fulde eksisterende regressioner, offline/live-parity, persistence/recovery,
++mobile og fysisk Android skal vurderes på præcis frossen kandidat.
++Prototype-storageprefixer og testhooks må aldrig komme i produktion.
+diff --git a/docs/tasks/LAB_MOTES_001_USER_REQUEST.txt b/docs/tasks/LAB_MOTES_001_USER_REQUEST.txt
+new file mode 100644
+index 0000000..3670eee
+--- /dev/null
++++ b/docs/tasks/LAB_MOTES_001_USER_REQUEST.txt
+@@ -0,0 +1,11 @@
++Jeg vil gerne have muligheden for at man skal vælge speed up med motes på labs skal være en der kommer med til næste lvl også. Altså at man også kan lave en queue mode på use motes.
++
++SVAR PÅ AFKLARING (original)
++Spørgsmål: Hvis du vælger fx 3× hastighed og slår “Use Motes”-queue til, skal næste level købe 3× igen. Hvad skal ske, hvis du mangler Motes?
++Brugerens svar: Fortsæt med det man har valgt, så 3x feks. Ikke noget den skal købe det billigste først også hvis der råd til 3x så gør den det.
++Spilleren skal selv regne ud på, har jeg råd til at købe mens jeg farmer eller ikke.
++
++LEAD-FORTOLKNING, kommunikeret i chatten
++Queue husker præcis den valgte hastighed og betaler direkte for dette trin,
++når der er nok Motes. Ingen køb af billigere mellemtrin. Hvert nyt level kræver
++en ny betaling; indtil da fortsætter normal 1x uden gratis speed carry.
+diff --git a/docs/tasks/LAB_MOTES_B1_001.md b/docs/tasks/LAB_MOTES_B1_001.md
+new file mode 100644
+index 0000000..26b4f7f
+--- /dev/null
++++ b/docs/tasks/LAB_MOTES_B1_001.md
+@@ -0,0 +1,35 @@
++# LAB-MOTES-B1-001 — farm kill conservation
++
++Subsequent R2 review found B2 in quotient recovery at large safe counts. The
++local correction and exact represented-input proof are documented in
++`LAB_MOTES_B2_001.md`; this B1 record is historical evidence, not R2 acceptance.
++
++R1 PR46 is blocked: a Motes boundary exposed a pre-existing double rounding
++in simulationApplyFarmPassive. The kill quotient could round up and its modulo
++remainder could count that same kill again. Fixed scope: this arithmetic and
++permanent behavioral conservation regression; all prices, rewards, boundaries,
++SIM_EPS, persistence, navigation and workflows remain unchanged.
++
++Decompose total represented damage into full-HP units and modulo remainder BEFORE
++subtracting the current partially damaged enemy's HP. Recover the integer quotient
++from that same decomposition. Snap the remainder at its boundary once, then compare
++it to current HP to account for the partial enemy. This prevents both double carry
++and cancellation of small current HP from huge damage. Existing 1e-12 quotient
++and 1e-9 HP tolerances are retained. Supported inputs are positive finite HP/damage
++and safely representable kill counts; double precision cannot represent arbitrary
++sub-ULP damage or exact unbounded totals. Independent exact-rational BigInt checks
++cover 576 fixtures across HP scales through1e250 and counts through2^50; those are
++arithmetic checks with batch side effects stubbed, not full-engine balance proof.
++
++The default lab-motes-conservation scenario covers QA's 826 fixtures using an
++independent per-enemy damage/spawn/reward ledger, ON/OFF comparison, explicit
++split and live/offline before/exact/after checks. The documented minimum yields
++90 kills, 3 Luminous, ON Motes2/work297.3346 and OFF Motes62/work299.1.
++The exact R1 farm function is installed only in private test instrumentation:
++the oracle must fail, then undo must pass. No production test hooks are added.
++
++R2 requires fresh full local workflow validation and ordinary same-head PR CI,
++followed by new Core chronology/economy and independent QA review. R1 acceptance
++is not transferred. PR46 remains Draft; no merge, ready, build, rerun or release.
++Physical Android/TalkBack are untested. Lead00_13 issued the scoped writer mandate;
++complete original mandate and raw evidence remain in the delivery packet.
+diff --git a/docs/tasks/LAB_MOTES_B2_001.md b/docs/tasks/LAB_MOTES_B2_001.md
+new file mode 100644
+index 0000000..21eeb05
+--- /dev/null
++++ b/docs/tasks/LAB_MOTES_B2_001.md
+@@ -0,0 +1,72 @@
++# LAB-MOTES-B2-001 — exact quotient on the existing runtime
++
++R2 (`3cdebc236e9ee5081a4bca4e323b11f43aa0d46d`) is blocked by Core C-B2
++and QA B2: subtraction of the modulo remainder can round back to damage,
++then rounding the recovered quotient creates an extra safe-integer kill.
++The previous local tree `4c07cd5d66cb5928eb99623ff86efaa81e268829` fixes the
++arithmetic on modern engines but is blocked by C-RT-B2 / QA-B2-RUNTIME-01.
++Its mandatory BigInt syntax/API fails on the existing WebView baseline.
++Lead 00_16 authorizes this isolated phase-A replacement, preserving WebView 60.
++
++## Exact represented-Number rule
++
++`simulationWholeHpUnits` decodes each positive finite binary64 into an integer
++significand M and exponent E: value = M * 2^E. The two 32-bit words reconstruct
++M with integer multiplication/addition, exactly within 2^53-1. Normal values
++have 2^52 <= M < 2^53. At most 52 exact left shifts normalize each subnormal,
++decrementing its exponent to preserve the value. D < H returns zero directly.
++
++For normalized D >= H, s = E_D - E_H is nonnegative. A safe quotient requires
++s <= 53: for s >= 54, M_D/M_H > 1/2 implies D/H > 2^53. For s <= 53, binary
++long division processes s+1 bits (at most 54), computing
++floor((M_D/M_H) * 2^s). Initially M_D < 2*M_H. At each step, compare the exact
++remainder to M_H and subtract M_H once if necessary. The resulting remainder
++is an integer below M_H <= 2^53-1 and is exactly representable. Its doubling
++is an even integer below 2^54 and is also exact. The next successful subtraction
++again yields an exactly representable integer below M_H (also a Sterbenz
++subtraction). Each quotient prefix is an integer no larger than the final
++safe quotient, so q*2 plus the next bit is exact. This proves the floor without
++an ambiguous rounded division or a loop per kill. Integer and fractional HP
++follow the same rule. The algorithm uses existing Number/DataView APIs;
++production contains no native BigInt syntax/API, polyfill or new dependency.
++
++The shift>53 fallback preserves the existing out-of-contract Number result;
++it imposes no gameplay cap and does not certify unsafe counts or overflow.
++Supported certification remains finite positive damage and physical maximum/
++current HP, with safely representable final kill counts. Physical max HP starts
++at 11. Nonphysical tiny-HP worlds, nonfinite values, unsafe final counts and
++arbitrary sub-ULP accumulated work remain outside certification.
++
++Modulo, partial-HP carry, SIM_EPS=1e-9 and relative 1e-12 boundary rules remain
++unchanged. Near-threshold promotions are classified explicitly; exact quotient
++is not a claim that these historical tolerances implement strict real damage.
++Exact kills also do not make huge rewards exact reals: actual represented
++multiplication, summation, spawn policy and offline 0.7 scale still apply.
++Whole/split represented damage may differ; only equal damage justifies equal HP.
++Prices, tiers, rewards, Motes boundaries, Study/Queue intent, chronology, save/
++recovery, NAV, combat balance, native files and workflows are unchanged.
++
++## Permanent controls and delivery
++
++`lab-motes-numerical` retains both original minima on the real scheduler and
++natural Titan1635/Mythic DPS, including old-R2 FAIL / undo PASS. The original
++B1 826-fixture ledger, 43 counterexamples and old-R1 / three LAB mutants remain.
++`lab-motes-runtime` runs startup, Push, B1, both minima and fractional HP across
++ON/OFF, whole/split and live/offline, with native BigInt and DataView BigInt
++APIs unavailable in the app. Its independent damage-threshold oracle executes
++in the external modern Node driver, so the app never needs that API. Fractional
++HP uses a private fixture override; it is not a new game HP policy.
++
++The full scripts additionally require ES2017 grammar, actual older V8 syntax/
++helper execution and API checks. Grammar and modern Chrome with APIs removed
++are scoped evidence, not physical WebView 60 emulation. Exact source/tree,
++independent Fraction matrices, motor/reward traces, bounded-cost measurements,
++seven workflow gates and raw outputs are recorded in the phase-A handoff.
++All original diagnostics and the prior intermittent mobile clipping FAIL are
++preserved. No UI fix is claimed; clipping root cause remains unknown.
++
++No remote R3, writer takeover, integration or release is authorized by this
++file. Remote phase B is held by 00_16 until candidate review and documented
++02_07 writer handover. Known own processes must finish before delivery.
++Physical Android/WebView/TalkBack remain untested. Changed bytes require new
++scoped Core and QA review; historical positive reviews are evidence only.
+diff --git a/index.html b/index.html
+index ea44431..20fe683 100644
+--- a/index.html
++++ b/index.html
+@@ -293,6 +293,11 @@
+   .study-bar-fill{height:100%;width:0%;background:linear-gradient(90deg, var(--mote), color-mix(in srgb, var(--mote) 70%, var(--comet)));transition:width .3s linear;}
+   .study-time{font-size:.7rem;color:var(--ink-dim);margin-top:5px;}
+   .speed-row{display:flex;flex-wrap:wrap;gap:6px;}
++  .study-motes-controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px;}
++  .study-motes-controls label{flex:1;min-width:140px;font-size:.74rem;color:var(--ink-dim);}
++  .study-motes-controls select{display:block;width:100%;min-height:44px;margin-top:4px;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--bg-elev);color:var(--ink);font:inherit;}
++  .study-motes-controls button{min-height:44px;}
++  .study-motes-controls select:focus-visible{outline:2px solid var(--mote);outline-offset:2px;}
+   .speed-btn{
+     flex:1;min-width:54px;padding:6px 4px;border-radius:8px;
+     border:1px solid var(--line);background:var(--bg-elev);color:var(--ink);
+@@ -3104,12 +3109,12 @@ var COMET_QUEST_REFRESH_BASE_COST = 25;
+ // State
+ // ---------------------------------------------------------------
+ function freshState(){
+-  var spirits = {}, nodes = {}, research = {}, researchQueue = {}, heroRarity = {}, heroResource = {}, wispModules = {}, wispUltimate = {}, empowerQueue = {}, achieved = {}, owned = {}, longStudyLevels = {}, studyQueue = {};
++  var spirits = {}, nodes = {}, research = {}, researchQueue = {}, heroRarity = {}, heroResource = {}, wispModules = {}, wispUltimate = {}, empowerQueue = {}, achieved = {}, owned = {}, longStudyLevels = {}, studyQueue = {}, studyUseMotes = {}, studySpeedTargets = {};
+   SPIRITS.forEach(function(sp){ spirits[sp.id] = 0; heroRarity[sp.id] = 0; heroResource[sp.id] = 0; wispModules[sp.id] = 0; wispUltimate[sp.id] = false; empowerQueue[sp.id] = true; });
+   spirits['ember'] = 1;
+   NODES.forEach(function(n){ nodes[n.id] = 0; });
+   RESEARCH.forEach(function(r){ research[r.id] = 0; researchQueue[r.id] = false; });
+-  LONG_STUDIES.forEach(function(l){ longStudyLevels[l.id] = 0; studyQueue[l.id] = false; });
++  LONG_STUDIES.forEach(function(l){ longStudyLevels[l.id] = 0; studyQueue[l.id] = false; studyUseMotes[l.id] = false; studySpeedTargets[l.id] = 1.5; });
+   return {
+     schemaVersion:SAVE_SCHEMA_VERSION,
+     lumen:0, shards:0, prisms:0, comets:0, motes:0, sigils:0,
+@@ -3120,7 +3125,7 @@ function freshState(){
+     formationPresets:{push:['ember'],farm:['ember'],boss:['ember']}, activeFormationPreset:'push',
+     formationRebuild:null,
+     nodes:nodes, research:research, researchQueue:researchQueue,
+-    longStudyLevels:longStudyLevels, activeStudies:[], studyQueue:studyQueue,
++    longStudyLevels:longStudyLevels, activeStudies:[], studyQueue:studyQueue, studyUseMotes:studyUseMotes, studySpeedTargets:studySpeedTargets,
+     achieved:achieved, owned:owned, riftTheme:'default',
+     buffUntil:0, buffMult:1, supportBuffs:null,
+     ascendCount:0, ascendRewardedDepth:0, sigilResonanceUses:0, totalTaps:0, totalKills:0, totalOfflineSeconds:0, luminousAccum:0,
+@@ -3494,13 +3499,21 @@ function normalizeCurrentSave(input){
+     var speed = Number(active.speedMult);
+     var validSpeed = speed===1 || LAB_SPEED_TIERS.indexOf(speed)!==-1;
+     if(!Number.isFinite(remaining) || !Number.isFinite(total) || total<=0 || !validSpeed) return false;
+-    active.remainingSec = Math.max(0,Math.min(total,remaining));
+-    active.totalDurationSec = total;
+-    active.speedMult = speed;
+     seenStudies[active.id] = true;
+     return true;
+   }).slice(0,5).map(function(active){
+-    return {id:active.id,remainingSec:active.remainingSec,totalDurationSec:active.totalDurationSec,speedMult:active.speedMult};
++    var total=Number(active.totalDurationSec);
++    return {id:active.id,remainingSec:Math.max(0,Math.min(total,Number(active.remainingSec))),totalDurationSec:total,speedMult:Number(active.speedMult)};
++  });
++
++  var useMotes = isPlainObject(source.studyUseMotes) ? source.studyUseMotes : {};
++  var speedTargets = isPlainObject(source.studySpeedTargets) ? source.studySpeedTargets : {};
++  LONG_STUDIES.forEach(function(node){
++    var validTarget=LAB_SPEED_TIERS.indexOf(speedTargets[node.id])!==-1;
++    var paid=out.activeStudies.find(function(active){return active.id===node.id;});
++    out.studySpeedTargets[node.id]=validTarget ? speedTargets[node.id] : paid && paid.speedMult>1 ? paid.speedMult : fresh.studySpeedTargets[node.id];
++    // Malformed or missing targets cannot turn an ON value into spending intent.
++    out.studyUseMotes[node.id]=validTarget && useMotes[node.id]===true;
+   });
+ 
+   var achieved = isPlainObject(source.achieved) ? source.achieved : {};
+@@ -4994,17 +5007,24 @@ function startStudy(node){
+ }
+ function applySpeedTier(studyId, mult){
+   var active = findActiveStudy(studyId);
+-  if(!active) return;
+   var node=LONG_STUDIES.find(function(n){return n.id===studyId;});
+-  if(node && node.levelCap!==undefined && longStudyLevel(studyId)>=node.levelCap) return;
+-  if(mult<=active.speedMult) return;
++  if(!node || !active || active.remainingSec<=SIM_EPS || state.maxDepthEver<(node.unlockDepth||1) || LAB_SPEED_TIERS.indexOf(mult)===-1) return false;
++  if(node.levelCap!==undefined && longStudyLevel(studyId)>=node.levelCap) return false;
++  if(mult<=active.speedMult) return false;
+   var cost = speedTierCost(mult);
+-  if(state.motes<cost) return;
++  if(state.motes<cost) return false;
+   state.motes -= cost;
+   active.speedMult = mult;
++  state.studySpeedTargets[studyId] = mult;
+   saveState();
+   renderLongStudies();
+   renderHud();
++  return true;
++}
++function studyMotesPlan(node){
++  var active=findActiveStudy(node.id),target=state.studySpeedTargets[node.id];
++  if(state.studyUseMotes[node.id]!==true || LAB_SPEED_TIERS.indexOf(target)===-1 || !active || active.remainingSec<=SIM_EPS || state.maxDepthEver<(node.unlockDepth||1) || (node.levelCap!==undefined && longStudyLevel(node.id)>=node.levelCap) || active.speedMult>=target) return null;
++  return {active:active,target:target,cost:speedTierCost(target)};
+ }
+ // Closing paid overcap work is progress, but is never an earned completion.
+ function finishStudyRecord(index){
+@@ -5209,7 +5229,7 @@ function controlText(node){
+ }
+ // Shared presentation states read existing eligibility; they never grant or deny purchases.
+ function presentControlStates(root){
+-  var toggles = ['empower-queue','queue','study-queue','autoascend-toggle'];
++  var toggles = ['empower-queue','queue','study-queue','study-use-motes','autoascend-toggle'];
+   root.querySelectorAll('button').forEach(function(btn){
+     btn.querySelectorAll('.control-state').forEach(function(label){label.remove();});
+     var reason='', kind=btn.disabled?'unavailable':'available', subject='';
+@@ -5223,10 +5243,10 @@ function presentControlStates(root){
+     var queueAttr=toggles.find(function(attr){return btn.hasAttribute('data-'+attr);});
+     if(queueAttr){
+       var id=btn.getAttribute('data-'+queueAttr);
+-      var on=queueAttr==='empower-queue' ? state.empowerQueue[id]!==false : queueAttr==='queue' ? !!state.researchQueue[id] : queueAttr==='study-queue' ? !!state.studyQueue[id] : !!state.autoAscendEnabled;
++      var on=queueAttr==='empower-queue' ? state.empowerQueue[id]!==false : queueAttr==='queue' ? !!state.researchQueue[id] : queueAttr==='study-queue' ? !!state.studyQueue[id] : queueAttr==='study-use-motes' ? state.studyUseMotes[id]===true : !!state.autoAscendEnabled;
+       btn.setAttribute('aria-pressed',String(on));
+       if(queueAttr==='queue') subject=RESEARCH.find(function(n){return n.id===id;}).name;
+-      if(queueAttr==='study-queue') subject=LONG_STUDIES.find(function(n){return n.id===id;}).name;
++      if(queueAttr==='study-queue' || queueAttr==='study-use-motes') subject=LONG_STUDIES.find(function(n){return n.id===id;}).name;
+       if(queueAttr==='autoascend-toggle') subject='Auto-Ascend';
+     }
+     if(btn.hasAttribute('data-mult')){btn.setAttribute('aria-pressed',String(btn.classList.contains('active')));subject='Forge multiplier';}
+@@ -6028,6 +6048,13 @@ function renderResearch(){
+   });
+ }
+ 
++function studyMotesMarkup(node){
++  var on=state.studyUseMotes[node.id]===true,target=state.studySpeedTargets[node.id];
++  return '<div class="study-motes-controls"><button class="node-queue-toggle '+(on?'active':'')+'" data-study-use-motes="'+node.id+'">Use Motes '+(on?'ON':'OFF')+'</button>'+
++    '<label>Repeat speed<select data-study-speed-target="'+node.id+'" aria-label="'+node.name+' — Repeat speed">'+LAB_SPEED_TIERS.map(function(mult){
++      return '<option value="'+mult+'" '+(mult===target?'selected':'')+'>'+mult+'x · '+speedTierCost(mult)+' Motes per level</option>';
++    }).join('')+'</select></label></div>';
++}
+ function renderLongStudies(){
+   var openInspections=Array.from(els['study-list'].querySelectorAll('details[open]')).map(function(el){return el.dataset.studyInspection;});
+   var focusedInspection=document.activeElement && document.activeElement.dataset.studyDetails;
+@@ -6054,6 +6081,7 @@ function renderLongStudies(){
+           'In progress: level '+(longStudyLevel(active.id)+1)+' · bonus earned only on completion.'+(active.id==='measuredinquiry'?' Next: '+earnedPercent(0.02*studyEffectiveLevel(node,longStudyLevel(active.id)+1))+'% less work.':''))+'</div>' +
+         '<div class="study-time" data-study-text="'+active.id+'">'+studyRemainingText(active)+'</div>' +
+         '<div class="study-bar-track"><div class="study-bar-fill" data-study-bar="'+active.id+'" style="width:'+pct+'%;"></div></div>' +
++        (node ? studyMotesMarkup(node) : '') +
+         '<details class="study-inspection" data-study-inspection="'+active.id+'" '+(openInspections.indexOf(active.id)!==-1?'open':'')+'><summary data-study-details="'+active.id+'">'+(node?node.name:'Study')+' · Details &amp; speed</summary>' +
+         (node ? '<div class="desc">'+node.desc+'</div>' : '') +
+         '<div class="section-sub" style="margin:8px 0;">Spend Motes to speed this Study up:</div>' +
+@@ -6095,10 +6123,11 @@ function renderLongStudies(){
+         'Next: level '+(level+1)+' · bonus earned only on completion.'+(lnode.id==='measuredinquiry'?' Next: '+earnedPercent(0.02*studyEffectiveLevel(lnode,level+1))+'% less work.':''))+'</div>' +
+       (plan.maxed?'':'<div class="study-meta" id="study-price-'+lnode.id+'">Takes '+fmtStudyDuration(dur)+' &middot; '+costIcon('lumen')+formatNum(cost.lumen)+' '+costIcon('shard')+formatNum(cost.shard)+'</div>') +
+       '<button class="mini-btn" data-study="'+lnode.id+'" '+(plan.maxed?'':'aria-describedby="study-price-'+lnode.id+'" ')+(plan.affordable?'':'disabled')+' style="margin-top:10px;width:100%;">'+(plan.maxed?'Maxed':plan.reason==='unavailable'?'Unavailable':openSlots>0?'Begin Study':'No open slots')+'</button>' +
++      studyMotesMarkup(lnode) +
+     '</div>';
+   });
+ 
+-  html += '<div class="section-sub">Unlocking more Studies by pushing deeper raises the slot cap. Studies progress while you’re away. A Study’s Lab Queue begins its next level when a slot and currency are free.</div>';
++  html += '<div class="section-sub">Unlocking more Studies by pushing deeper raises the slot cap. Studies progress while you’re away. Study Queue begins the next paid level. Use Motes buys the selected repeat speed for each active level, including manual starts, as soon as its full price is available. OFF keeps speed already paid for.</div>';
+   replaceControlMarkup(els['study-list'],html);
+   if(focusedInspection){
+     var restoredInspection=els['study-list'].querySelector('[data-study-details="'+focusedInspection+'"]');
+@@ -6129,6 +6158,21 @@ function renderLongStudies(){
+       renderLongStudies();
+     });
+   });
++  els['study-list'].querySelectorAll('[data-study-use-motes]').forEach(function(btn){
++    btn.addEventListener('click',function(){
++      var id=btn.getAttribute('data-study-use-motes');
++      state.studyUseMotes[id]=!state.studyUseMotes[id];
++      saveState();renderLongStudies();
++    });
++  });
++  els['study-list'].querySelectorAll('[data-study-speed-target]').forEach(function(select){
++    select.addEventListener('change',function(){
++      var target=Number(select.value);
++      if(LAB_SPEED_TIERS.indexOf(target)===-1) return;
++      state.studySpeedTargets[select.getAttribute('data-study-speed-target')]=target;
++      saveState();renderLongStudies();
++    });
++  });
+ }
+ 
+ function renderAscendSummary(){
+@@ -6649,7 +6693,7 @@ function autoEmpowerTick(){
+  *   5. Auto-Tap;
+  *   6. Auto-Empower;
+  *   7. queued Research purchases;
+- *   8. Long Study completion, then queued Study starts;
++ *   8. Long Study completion, then queued paid starts and repeat-speed buys;
+  *   9. Boss retry, then Boss retreat if the current Boss is still unwinnable.
+  *
+  * Window/chunk boundaries are not a separate gameplay priority. The same
+@@ -6684,7 +6728,7 @@ function simulationSummary(elapsedSec){
+     elapsedSec:elapsedSec,
+     lumenGained:0, shardGained:0, sigilsGained:0, motesGained:0,
+     kills:0, bossKills:0, luminousKills:0, ascends:0, autoTaps:0,
+-    empowers:0, researchBought:0, studiesStarted:0, completedStudies:[], closedStudies:[],
++    empowers:0, researchBought:0, studiesStarted:0, studySpeedPurchases:0, studyMotesSpent:0, completedStudies:[], closedStudies:[],
+     achievements:[], retreated:false, retreats:0, retries:0,
+     fastForwardedKills:0, iterations:0, ascendGains:[]
+   };
+@@ -6874,11 +6918,51 @@ function simulationCurrencyKillsNeeded(cost,lumenPerKill,shardPerKill){
+   var shardKills = shardDeficit<=0 ? 0 : (shardPerKill>0 ? Math.max(1,Math.ceil(shardDeficit/shardPerKill-1e-12)) : Infinity);
+   return Math.max(lumenKills,shardKills);
+ }
++function simulationBuyStudySpeeds(summary,elapsedSec){
++  var bought=0;
++  // Shared Motes follow catalogue order, independent of active/UI ordering.
++  LONG_STUDIES.forEach(function(node){
++    var plan=studyMotesPlan(node);
++    if(!plan || state.motes<plan.cost) return;
++    state.motes-=plan.cost;
++    plan.active.speedMult=plan.target;
++    summary.studySpeedPurchases++;
++    summary.studyMotesSpent+=plan.cost;
++    simulationTimelinePush(summary,elapsedSec,'studySpeed',{id:node.id,speed:plan.target,cost:plan.cost});
++    bought++;
++  });
++  return bought;
++}
++function simulationKillsUntilStudyMotes(){
++  var depth=state.farmDepth||state.depth;
++  var reward=Math.max(1,Math.round(motesDropFor(depth)*(1+supportMoteBonus())));
++  var chance=eliteChance(depth);
++  var accum=Math.max(0,Math.min(0.999999999999,state.luminousAccum||0));
++  var first=state.enemyIsLuminous ? 1 : 0,best=Infinity;
++  LONG_STUDIES.forEach(function(node){
++    var plan=studyMotesPlan(node);
++    if(!plan) return;
++    var deficit=plan.cost-state.motes;
++    if(deficit<=0){best=0;return;}
++    // Any positive deficit needs a real Luminous reward, however small it is.
++    var luminousNeeded=Math.max(1,Math.ceil(deficit/reward));
++    if(luminousNeeded<=first){best=Math.min(best,1);return;}
++    if(chance<=0) return;
++    var crossings=luminousNeeded-first;
++    var kills=Math.max(2,Math.ceil((crossings-accum-1e-12)/chance)+1);
++    if(!Number.isSafeInteger(kills)) return;
++    // Match the actual batch/spawn crossing arithmetic, including its epsilon.
++    if(Math.floor(accum+(kills-1)*chance+1e-12)<crossings) kills++;
++    if(kills>2 && Math.floor(accum+(kills-2)*chance+1e-12)>=crossings) kills--;
++    best=Math.min(best,kills);
++  });
++  return best;
++}
+ function simulationKillsUntilEconomyMutation(rewardScale){
+   var depth = state.farmDepth||state.depth;
+   var lumenPerKill = enemyRewardFor(depth)*rewardScale;
+   var shardPerKill = shardRewardFor(depth)*rewardScale;
+-  var best = Infinity;
++  var best = simulationKillsUntilStudyMotes();
+ 
+   RESEARCH.forEach(function(node){
+     if(!state.researchQueue[node.id]) return;
+@@ -7019,22 +7103,63 @@ function simulationApplyFarmPassive(elapsedSec,dps,policy,summary){
+   }
+ 
+   var maxHp = state.enemyMaxHp>0 ? state.enemyMaxHp : enemyHpFor(state.depth);
+-  var remainingDamage = Math.max(0,damage-state.enemyHp);
+-  var additionalKills = Math.floor(remainingDamage/maxHp+1e-12);
+-  // Avoid catastrophic cancellation from subtracting a huge kills*maxHp
+-  // product from a similarly huge damage value. Modulo preserves the
+-  // represented damage remainder directly and is compositional across the
+-  // fixed Farm batching boundaries.
+-  var leftover = remainingDamage%maxHp;
+-  if(leftover<SIM_EPS) leftover=0;
+-  if(leftover>=maxHp-SIM_EPS){
+-    additionalKills++;
+-    leftover=0;
++  // Decompose damage before subtracting the partially damaged enemy. This
++  // avoids both a rounded quotient/modulo counting the same boundary twice
++  // and cancellation of a small current HP from a huge damage value.
++  var remainder = damage%maxHp;
++  var kills = simulationWholeHpUnits(damage,maxHp);
++  // Retain the existing 1e-12 quotient and SIM_EPS HP boundary tolerances,
++  // applying a carry once to this shared decomposition, never twice.
++  if(remainder>=maxHp-SIM_EPS || remainder/maxHp+1e-12>=1){
++    kills++;
++    remainder=0;
++  }
++  var difference = remainder-state.enemyHp;
++  var leftover;
++  if(difference>=-SIM_EPS || difference/maxHp>=-1e-12){
++    kills++;
++    leftover=Math.max(0,difference);
++  } else {
++    leftover=maxHp+ difference;
+   }
++  if(leftover<SIM_EPS) leftover=0;
+ 
+-  simulationBatchFarmKills(1+additionalKills,policy,summary);
++  simulationBatchFarmKills(kills,policy,summary);
+   if(leftover>0) state.enemyHp = Math.max(SIM_EPS,state.enemyMaxHp-leftover);
+ }
++function simulationWholeHpUnits(damage,maxHp){
++  // Binary long division of the represented Numbers, using only WebView 60
++  // APIs. A rounded D/H or (D-D%H)/H cannot decide an integer boundary.
++  if(!(damage>=0) || !(maxHp>0) || !Number.isFinite(damage) || !Number.isFinite(maxHp)) return Math.floor(damage/maxHp);
++  if(damage<maxHp) return 0;
++  var view = new DataView(new ArrayBuffer(16));
++  view.setFloat64(0,damage);
++  view.setFloat64(8,maxHp);
++  var dhi=view.getUint32(0),hhi=view.getUint32(8);
++  var de=(dhi>>>20)&2047,he=(hhi>>>20)&2047;
++  var dn=((dhi&1048575)+(de?1048576:0))*4294967296+view.getUint32(4);
++  var hn=((hhi&1048575)+(he?1048576:0))*4294967296+view.getUint32(12);
++  de=de?de-1075:-1074;
++  he=he?he-1075:-1074;
++  // At most 52 shifts per subnormal; ordinary physical HP needs none.
++  while(dn<4503599627370496){dn*=2;de--;}
++  while(hn<4503599627370496){hn*=2;he--;}
++  var shift=de-he;
++  // A shift above 53 implies an unsafe quotient. Preserve the existing
++  // out-of-contract Number result; this adds no cap on supported gameplay.
++  if(shift>53) return Math.floor(damage/maxHp);
++  var quotient=0;
++  // At most 54 bits for a safe quotient, never one iteration per kill.
++  // After subtraction dn<hn<=2^53-1. Doubling is exact (an even integer
++  // below 2^54); the next subtraction has an exactly representable result
++  // below hn. Every quotient prefix is exact when the final count is safe.
++  for(var bit=shift;bit>=0;bit--){
++    quotient*=2;
++    if(dn>=hn){dn-=hn;quotient++;}
++    if(bit>0) dn*=2;
++  }
++  return quotient;
++}
+ function simulationPassiveKillSeconds(dps){
+   if(state.riftMode==='farm') return Infinity;
+   if(isBoss(state.depth)){
+@@ -7252,6 +7377,7 @@ function simulationResolveTimestamp(nowMs,elapsedSec,policy,summary,clock){
+     actions += studiesStarted;
+   }
+ 
++  actions += simulationBuyStudySpeeds(summary,elapsedSec);
+   actions += simulationRecordAchievements(summary);
+ 
+   if(simulationMaybeRetryBoss(policy,summary)){
+@@ -7606,6 +7732,7 @@ function advanceStudyOnlyTime(elapsedSec,clockStartMs,summary){
+   var nowMs = Number.isFinite(clockStartMs) ? clockStartMs : Date.now();
+   simulationCompleteDueStudies(summary);
+   simulationStartQueuedStudies(summary);
++  simulationBuyStudySpeeds(summary,0);
+   while(remaining>SIM_EPS){
+     var next = Math.min(remaining,simulationNextStudySeconds());
+     if(!Number.isFinite(next)) break;
+@@ -7615,6 +7742,7 @@ function advanceStudyOnlyTime(elapsedSec,clockStartMs,summary){
+       nowMs += next*1000;
+     }
+     var actions = simulationCompleteDueStudies(summary)+simulationStartQueuedStudies(summary);
++    actions += simulationBuyStudySpeeds(summary,Math.max(0,Number(elapsedSec)||0)-remaining);
+     if(next<=SIM_EPS && actions===0) break;
+   }
+   return nowMs;
+@@ -7677,7 +7805,8 @@ function tick(){
+   }
+   if(sim.empowers>0) renderSpirits();
+   if(sim.researchBought>0) renderResearch();
+-  if(sim.completedStudies.length || sim.closedStudies.length || sim.studiesStarted>0) renderLongStudies();
++  if(sim.studySpeedPurchases>0) saveState();
++  if(sim.completedStudies.length || sim.closedStudies.length || sim.studiesStarted>0 || sim.studySpeedPurchases>0) renderLongStudies();
+   else updateStudyProgress();
+ 
+   if(sim.kills>0 || sim.ascends>0){
+@@ -7876,6 +8005,8 @@ function applyOfflineProgress(){
+     shardEarned:sim.shardGained,
+     sigilsEarned:sim.sigilsGained,
+     motesEarned:sim.motesGained,
++    studySpeedPurchases:sim.studySpeedPurchases,
++    studyMotesSpent:sim.studyMotesSpent,
+     ascends:sim.ascends,
+     completedStudies:sim.completedStudies,
+     closedStudies:sim.closedStudies,
+diff --git a/tests/behavioral/farm-conservation.js b/tests/behavioral/farm-conservation.js
+new file mode 100644
+index 0000000..cebd1a3
+--- /dev/null
++++ b/tests/behavioral/farm-conservation.js
+@@ -0,0 +1,67 @@
++/* B1: independent per-enemy damage/spawn ledger; no batching formula oracle. */
++window.runFarmConservationQa=function(b,ctx,assert){
++  var t=b.labMotes,checks=0,clock=2000000000000,rows=[];
++  function ok(v,m){checks++;assert(v,'B1 conservation oracle: '+m);}
++  function near(a,c,m){ok(Math.abs(a-c)<1e-7,m+' ('+a+' vs '+c+')');}
++  function fixture(depth,frac,flag,accum,needed){
++    var s=b.freshStateSnapshot(),tracking=depth>60?10:0,moteLevels=depth>60?7:0,support=depth>60?5:0;
++    s.riftMode='farm';s.depth=s.enemyDepth=s.farmDepth=depth;s.farmReturnDepth=depth+1;s.maxDepthEver=130;
++    s.enemyMaxHp=b.enemyHpFor(depth);s.enemyHp=s.enemyMaxHp*frac;s.enemyIsLuminous=flag;s.luminousAccum=accum;
++    s.lumen=s.shards=1e9;s.questDay=ctx.currentDay();s.research.luminoustracking=tracking;s.longStudyLevels.motestudy=moteLevels;
++    if(support){s.activeParty=['ember','tide'];s.spirits.tide=1;s.wispModules.tide=support;}
++    var reward=Math.max(1,Math.round(Math.max(1,Math.round((1+depth/8)*(1+moteLevels*.1)))*(1+support*.05)));
++    var target=needed*reward>60?4:3,cost=target===4?110:60;
++    s.activeStudies=[{id:'guardmastery',remainingSec:300,totalDurationSec:600,speedMult:1}];
++    s.studyUseMotes.guardmastery=true;s.studySpeedTargets.guardmastery=target;s.motes=cost-needed*reward;
++    return {s:s,frac:frac,flag:flag,accum:accum,needed:needed,reward:reward,cost:cost,target:target,
++      chance:Math.min(.35,Math.min(.30,.03+Math.floor(depth/10)*.02)+tracking*.005),dps:s.enemyMaxHp*100};
++  }
++  function ledger(f,seconds){
++    // Consume one enemy at a time in HP units, tracking each actual spawn/reward.
++    var damage=100*seconds,hp=f.frac,acc=f.accum,flag=f.flag,kills=0,luminous=0,payment=null,spentDamage=0;
++    while(damage>=hp-1e-12){
++      damage-=hp;spentDamage+=hp;kills++;if(flag)luminous++;
++      if(payment===null&&luminous>=f.needed)payment=spentDamage/100;
++      acc+=f.chance;flag=acc+1e-12>=1;if(flag)acc-=1;hp=1;
++    }
++    return {kills:kills,luminous:luminous,hp:hp-damage,accum:acc,payment:payment};
++  }
++  function run(f,seconds,use,kind,split){
++    var s=JSON.parse(JSON.stringify(f.s));s.studyUseMotes.guardmastery=use;b.setState(s);
++    return t.withDps(f.dps,function(){
++      if(!split)return t.direct(seconds,kind||'live',clock);
++      var a=t.direct(split,kind||'live',clock),c=t.direct(seconds-split,kind||'live',clock+split*1000);
++      ['kills','luminousKills','motesGained','studySpeedPurchases','studyMotesSpent','lumenGained','shardGained'].forEach(function(k){c.summary[k]+=a.summary[k];});
++      c.summary.timeline=a.summary.timeline.concat(c.summary.timeline.map(function(e){var copy=Object.assign({},e);copy.elapsedSec+=split;return copy;}));return c;
++    });
++  }
++  function verify(f,seconds,r,use,kind){
++    var o=ledger(f,seconds),scale=kind==='offline'?.7:1;
++    ok(r.summary.kills===o.kills,'one reward per actually defeated enemy');ok(r.summary.luminousKills===o.luminous,'spawn-by-spawn luminous kills');
++    near(r.state.enemyHp/r.state.enemyMaxHp,o.hp,'remaining HP fraction');near(r.state.luminousAccum,o.accum,'spawn accumulator');
++    near(r.summary.lumenGained,Math.round(5*Math.pow(1.11,f.s.depth))*o.kills*scale,'Lumen ledger');
++    near(r.summary.shardGained,Math.round(Math.pow(1.09,f.s.depth))*o.kills*scale,'Shard ledger');
++    var buys=use&&o.payment!==null?1:0;
++    ok(r.summary.studySpeedPurchases===buys&&r.summary.studyMotesSpent===buys*f.cost,'exact full-price purchases');
++    near(r.state.motes,f.s.motes+o.luminous*f.reward-buys*f.cost,'Motes ledger');
++    near(r.state.activeStudies[0].remainingSec,300-seconds-(buys?(seconds-o.payment)*(f.target-1):0),'only post-payment work');
++    if(buys)near(r.summary.timeline.find(function(e){return e.type==='studySpeed';}).elapsedSec,o.payment,'actual reward payment time');
++    return o;
++  }
++  var main=fixture(1,.73,false,.975,1);
++  function mainContract(){var r=run(main,.9,true);verify(main,.9,r,true);ok(r.summary.kills===90&&r.state.lumen===1000000540&&r.state.shards===1000000090,'documented B1 economy');near(r.state.activeStudies[0].remainingSec,297.3346,'documented B1 work');return r;}
++  var positive=mainContract(),undo=t.mutate('double-round'),caught=false;
++  try{mainContract();}catch(e){caught=/B1 conservation oracle/.test(e.message);}finally{undo();}
++  ok(caught,'exact old double-round implementation must fail oracle');mainContract();
++  [.01729999,.0173,.01730001,.9].forEach(function(seconds){[false,true].forEach(function(use){['live','offline'].forEach(function(kind){var r=run(main,seconds,use,kind);verify(main,seconds,r,use,kind);rows.push({seconds:seconds,use:use,kind:kind,kills:r.summary.kills,motes:r.state.motes,work:r.state.activeStudies[0].remainingSec});});});});
++  [false,true].forEach(function(use){['live','offline'].forEach(function(kind){verify(main,.9,run(main,.9,use,kind,.0173),use,kind);});});
++  var tested=0;
++  [1,11,19,61,121].forEach(function(depth){[.13,.29,.37,.5,.61,.73,.89].forEach(function(frac){[false,true].forEach(function(flag){[.04,.13,.63,.975].forEach(function(accum){[1,2,3].forEach(function(needed){
++    var f=fixture(depth,frac,flag,accum,needed),o=ledger(f,.9);if(o.payment===null)return;tested++;
++    var on=run(f,.9,true),off=run(f,.9,false);verify(f,.9,on,true);verify(f,.9,off,false);
++    ok(on.state.lumen===off.state.lumen&&on.state.shards===off.state.shards,'ON/OFF reward conservation');
++  });});});});});
++  ok(tested===826,'all 826 QA conservation fixtures remain covered');
++  return {checks:checks,fixtures:tested,causalControl:'old-double-round rejected; undo passes',boundaryRows:rows,
++    minimum:{kills:positive.summary.kills,luminous:positive.summary.luminousKills,motes:positive.state.motes,work:positive.state.activeStudies[0].remainingSec}};
++};
+diff --git a/tests/behavioral/farm-numerical.js b/tests/behavioral/farm-numerical.js
+new file mode 100644
+index 0000000..0cb0398
+--- /dev/null
++++ b/tests/behavioral/farm-numerical.js
+@@ -0,0 +1,71 @@
++/* B2: consume exact represented damage/current HP, independent of production quotient. */
++window.runFarmNumericalQa=function(b,ctx,assert){
++  var t=b.labMotes,checks=0,rows=[],clock=2000000000000;
++  function ok(v,m){checks++;assert(v,'B2 exact damage oracle: '+m);}
++  function near(a,c,m){ok(Math.abs(a-c)<1e-7,m+' ('+a+' vs '+c+')');}
++  function units(x){
++    var v=new DataView(new ArrayBuffer(8));v.setFloat64(0,x);
++    var bits=v.getBigUint64(0),e=Number((bits>>52n)&2047n);
++    var mantissa=(bits&((1n<<52n)-1n))+(e?1n<<52n:0n);
++    return mantissa<<BigInt(e?e-1:0);
++  }
++  function seed(natural,use){
++    var s=b.freshStateSnapshot();Object.assign(s,{riftMode:'farm',depth:1,enemyDepth:1,farmDepth:1,farmReturnDepth:2,maxDepthEver:130,enemyMaxHp:11,enemyHp:natural?8.03:11,enemyIsLuminous:false,luminousAccum:.975,motes:natural?59:0,lumen:0,shards:0,questDay:ctx.currentDay()});
++    s.activeStudies=[{id:'guardmastery',remainingSec:300,totalDurationSec:600,speedMult:1}];s.studyUseMotes.guardmastery=use;s.studySpeedTargets.guardmastery=3;
++    if(natural){s.activeParty=['titan'];s.spirits.titan=1635;s.heroRarity.titan=5;s.heroRarity.ember=1;s.heroResource.titan=0;s.research.formation=500;s.longStudyLevels.formationstudy=500;s.longStudyLevels.wispascend=500;s.nodes.momentum=500;s.ascendCount=5;s.achieved.asc5=true;}
++    return s;
++  }
++  function verifySegments(trace,kind){
++    var total=0,luminous=0,lumen=0,shards=0,motes=0,damage=0n;
++    trace.rows.forEach(function(r){
++      var D=units(r.damage),h=units(r.before.enemyHp),H=units(r.before.enemyMaxHp);
++      var expected=D<h?0:Number(1n+(D-h)/H);
++      var threshold=h+BigInt(expected)*H,deficit=threshold-D;
++      // Existing boundary tolerances may promote a represented near-threshold
++      // input. This is a separate, explicit classification, never an extra
++      // tolerance for the two quotient counterexamples.
++      var tolerant=r.kills===expected+1 && deficit>0n && (deficit<=units(1e-9)||deficit<=units(r.before.enemyMaxHp*1e-12));
++      ok(r.kills===expected||tolerant,'one reward per defeated HP threshold');
++      var rem=expected===0?h-D:H-(D-h)%H;
++      var expectedHp=tolerant?11:Number(rem>>1022n)/Math.pow(2,52);
++      near(r.after.enemyHp,expectedHp,'partial HP carry for actual represented segment');
++      var count=r.kills,acc=r.before.luminousAccum,chance=.03;
++      // Retain the existing represented batch-spawn policy, including its
++      // epsilon and summation order. Large spawn totals are not exact reals.
++      var lk=(r.before.enemyIsLuminous?1:0)+(count>1?Math.floor(acc+(count-1)*chance+1e-12):0);
++      var after=acc+count*chance,crossings=Math.floor(after+1e-12),final=after-crossings;
++      ok(r.luminous===lk,'represented luminous spawn policy');
++      near(r.after.luminousAccum,Math.max(0,Math.min(.999999999999,final)),'spawn accumulator');
++      ok(r.after.enemyIsLuminous===(Math.floor(after+1e-12)>Math.floor(acc+Math.max(0,count-1)*chance+1e-12)),'next luminous enemy');
++      var scale=kind==='offline'?.7:1;
++      total+=count;luminous+=lk;lumen+=6*scale*count;shards+=scale*count;motes+=lk;damage+=D;
++    });
++    return {kills:total,luminous:luminous,lumen:lumen,shards:shards,motes:motes,damageUnits:String(damage)};
++  }
++  function run(natural,use,kind,split){
++    var s=seed(natural,use),normalized=b.setState(s),dps=natural?t.naturalDps():2**55+16,seconds=natural?.9:1;
++    if(natural){ok(dps===40052722017724424,'actual natural product DPS');var costs=t.numericCosts();Object.values(costs).forEach(function(c){if(typeof c==='object')Object.values(c).forEach(function(v){ok(Number.isFinite(v)&&v>=0,'finite normalized next price');});else ok(Number.isFinite(c)&&c>0,'finite normalized next price');});ok(normalized.spirits.titan===1635&&normalized.research.formation===500,'normalization preserves stress investments');}
++    var trace=t.traceFarm(function(){
++      function execute(){var a=t.direct(split||seconds,kind,clock);if(!split)return a;var z=t.direct(seconds-split,kind,clock+split*1000);['kills','luminousKills','lumenGained','shardGained','motesGained','studySpeedPurchases','studyMotesSpent'].forEach(function(k){z.summary[k]+=a.summary[k];});z.summary.timeline=a.summary.timeline.concat(z.summary.timeline.map(function(e){return Object.assign({},e,{elapsedSec:e.elapsedSec+split});}));return z;}
++      return natural?execute():t.withDps(dps,execute);
++    });
++    var r=trace.result,o=verifySegments(trace,kind),expected=natural?3277040892359271:3275345183542180;
++    ok(r.summary.kills===expected&&r.state.totalKills===expected,'documented safe kill count');
++    ok(r.summary.kills===o.kills&&r.summary.luminousKills===o.luminous,'segment kill and spawn ledger');
++    ok(r.summary.lumenGained===o.lumen&&r.state.lumen===o.lumen,'represented Lumen policy and sum');
++    ok(r.summary.shardGained===o.shards&&r.state.shards===o.shards,'represented Shard policy and sum');
++    var buys=natural&&use?1:0;
++    ok(r.summary.studySpeedPurchases===buys&&r.summary.studyMotesSpent===buys*60,'one full-price actual Motes purchase');
++    ok(r.state.motes===s.motes+o.motes-buys*60,'Motes ledger');
++    var payment=buys?r.summary.timeline.find(function(e){return e.type==='studySpeed';}).elapsedSec:null;
++    if(buys)near(payment,(8.03+11)/dps,'first enabling Luminous reward time');
++    near(r.state.activeStudies[0].remainingSec,300-seconds-(buys?(seconds-payment)*2:0),'only post-payment Study work');
++    ok(!r.summary.abilityCasts&&!r.summary.ascends&&!r.summary.completedStudies.length,'no unrelated economy event');
++    var out={natural:natural,use:use,kind:kind,split:split,expected:expected,kills:r.summary.kills,hp:r.state.enemyHp,motes:r.state.motes,work:r.state.activeStudies[0].remainingSec,representedDamageExact:(dps*seconds).toFixed(0),ledger:o,segments:trace.rows.length};rows.push(out);return out;
++  }
++  [false,true].forEach(function(natural){(natural?[false,true]:[false]).forEach(function(use){['live','offline'].forEach(function(kind){[0,natural?.01:.5].forEach(function(split){run(natural,use,kind,split);});});});});
++  // The actual old R2 function is embedded byte-for-byte in the private bridge.
++  // Reject each minimum separately; restoration must pass both again.
++  [false,true].forEach(function(natural){var undo=t.mutate('rounded-quotient'),caught=false;try{run(natural,false,'live',0);}catch(e){caught=/B2 exact damage oracle/.test(e.message);}finally{undo();}ok(caught,'exact old R2 must fail '+(natural?'natural':'Core')+' oracle');run(natural,false,'live',0);});
++  return {checks:checks,rows:rows,causalControl:'both exact old-R2 minima rejected; undo passes',limit:'represented damage per segment; original spawn/reward rounding; split HP differs when represented damage differs'};
++};
+diff --git a/tests/behavioral/farm-runtime.cjs b/tests/behavioral/farm-runtime.cjs
+new file mode 100644
+index 0000000..ac19cfe
+--- /dev/null
++++ b/tests/behavioral/farm-runtime.cjs
+@@ -0,0 +1,99 @@
++/* Native CDP touch/keyboard at mobile widths; production page remains unmodified. */
++const {spawn}=require('node:child_process'),fs=require('node:fs'),os=require('node:os'),path=require('node:path');
++const [chrome,url,scenario]=process.argv.slice(2),profile=fs.mkdtempSync(path.join(os.tmpdir(),'lumenfall-farm-runtime-'));
++const browser=spawn(process.env.LUMENFALL_QA_CDP_CHROME||chrome,['--headless=new','--no-sandbox','--disable-gpu','--disable-dev-shm-usage','--remote-debugging-pipe','--user-data-dir='+profile,'about:blank'],{stdio:['ignore','ignore','pipe','pipe','pipe']});
++let seq=0,buffer='',stderr='',session,closed=false;const pending=new Map(),records=[];
++function rejectPending(message){for(const p of pending.values()){clearTimeout(p.timer);p.reject(Error(message+' '+p.method));}pending.clear();}
++const completion=new Promise(resolve=>{browser.once('error',e=>{rejectPending(e.message);resolve({error:e.message});});browser.once('close',(code,signal)=>{closed=true;rejectPending('browser closed');resolve({code,signal});});});
++browser.stderr.on('data',b=>{stderr=(stderr+b).slice(-4000);});
++for(const stream of [browser.stdio[3],browser.stdio[4]])stream.on('error',e=>rejectPending(e.message));
++browser.stdio[4].on('data',b=>{buffer+=b;let end;while((end=buffer.indexOf('\0'))!==-1){const raw=buffer.slice(0,end);buffer=buffer.slice(end+1);if(!raw)continue;const m=JSON.parse(raw);if(m.id&&pending.has(m.id)){const p=pending.get(m.id);pending.delete(m.id);clearTimeout(p.timer);m.error?p.reject(Error(JSON.stringify(m.error))):p.resolve(m.result);}}});
++function send(method,params={},sid=session){return new Promise((resolve,reject)=>{const id=++seq,timer=setTimeout(()=>{pending.delete(id);reject(Error('CDP timeout '+method+' '+stderr));},15000);pending.set(id,{resolve,reject,timer,method});browser.stdio[3].write(JSON.stringify({id,method,params,...(sid?{sessionId:sid}:{})})+'\0');});}
++async function evaluate(expression){const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(r.exceptionDetails.exception?.description||r.exceptionDetails.text);return r.result.value;}
++function assert(v,m){if(!v)throw Error(m);}
++// Oracle runs in this Node process. No BigInt API is exposed to the app.
++let checks=0;
++function ok(value,message){checks++;assert(value,message);}
++function near(a,b,message){ok(Math.abs(a-b)<1e-7,message+' '+a+' vs '+b);}
++function units(x){const v=new DataView(new ArrayBuffer(8));v.setFloat64(0,x);const n=v.getBigUint64(0),e=Number(n>>52n&2047n);return ((n&((1n<<52n)-1n))+(e?1n<<52n:0n))<<BigInt(e?e-1:0);}
++function represented(u){const shift=Math.max(0,u.toString(2).length-53);return Number(u>>BigInt(shift))*2**(shift-1074);}
++function audit(r,strictMinimum=true){
++ const {type,use,kind,H,input,dps,seconds,parts,trace}=r;
++ let kills=0,luminous=0,lumen=0,shards=0,motes=0,payment=null,elapsed=0,damage=0n;
++ for(const row of trace){
++  const before=row.before,after=row.after,D=units(row.damage),h=units(before.enemyHp),max=units(before.enemyMaxHp);
++  const expected=D<h?0:Number(1n+(D-h)/max),deficit=h+BigInt(expected)*max-D;
++  const promotion=row.kills===expected+1&&deficit>0n&&(deficit<=units(1e-9)||deficit<=units(before.enemyMaxHp*1e-12));
++  ok(row.kills===expected||promotion,'represented threshold count '+type);
++  const remaining=expected===0?h-D:max-(D-h)%max;
++  near(after.enemyHp,promotion?H:represented(remaining),'partial HP carry');
++  const k=row.kills,acc=before.luminousAccum,chance=.03;
++  const lk=k?(before.enemyIsLuminous?1:0)+(k>1?Math.floor(acc+(k-1)*chance+1e-12):0):0;
++  ok(row.luminous===lk,'actual spawn count');
++  if(k){const sum=acc+k*chance;near(after.luminousAccum,Math.max(0,Math.min(.999999999999,sum-Math.floor(sum+1e-12))),'spawn accumulator');ok(after.enemyIsLuminous===(Math.floor(sum+1e-12)>Math.floor(acc+Math.max(0,k-1)*chance+1e-12)),'next luminous flag');}
++  const scale=kind==='offline'?.7:1;
++  ok(after.lumen===before.lumen+6*scale*k,'represented Lumen policy');
++  ok(after.shards===before.shards+scale*k,'represented Shards policy');
++  kills+=k;luminous+=lk;lumen+=6*scale*k;shards+=scale*k;motes+=lk;damage+=D;elapsed+=row.seconds;
++ }
++ const state=parts.at(-1).state,summary={};
++ for(const key of ['kills','luminousKills','lumenGained','shardGained','motesGained','studyMotesSpent','studySpeedPurchases'])summary[key]=parts.reduce((sum,p)=>sum+p.summary[key],0);
++ const buys=use?1:0;
++ ok(summary.kills===kills&&state.totalKills===kills,'aggregate exact kills');
++ ok(summary.luminousKills===luminous&&summary.motesGained===motes,'aggregate spawn and Motes');
++ const scale=kind==='offline'?.7:1;
++ const groupedLumen=r.groups.map(g=>g.reduce((sum,row)=>sum+6*scale*row.kills,0)).reduce((a,b)=>a+b,0);
++ const groupedShards=r.groups.map(g=>g.reduce((sum,row)=>sum+scale*row.kills,0)).reduce((a,b)=>a+b,0);
++ ok(summary.lumenGained===groupedLumen&&summary.shardGained===groupedShards,'aggregate represented rewards in actual part order');
++ ok(summary.studySpeedPurchases===buys&&summary.studyMotesSpent===60*buys,'one full price payment');
++ ok(state.motes===input.motes+motes-60*buys,'Motes ledger');
++ if(use){let t=0;for(let i=0;i<parts.length;i++){const event=parts[i].summary.timeline.find(e=>e.type==='studySpeed');if(event)payment=t+event.elapsedSec;t+=i===0&&r.split?r.split:seconds;}
++  ok(payment!==null,'payment at an authoritative boundary');
++  const boundary=(input.enemyHp+H)/dps;
++  let time=0,count=0,enabler=null;
++  for(const row of trace){time+=row.seconds;count+=row.kills;if(row.before.motes<60&&row.after.motes>=60){enabler={time,count,row};break;}}
++  ok(payment>0&&enabler&&Math.abs(enabler.time-boundary)<=boundary*1e-12,'positive enabling reward boundary');
++  ok(enabler.count===2&&enabler.row.luminous===1&&enabler.row.after.motes===60,'actual reward enables purchase');
++  near(payment,boundary,'recorded payment time');
++ }
++ near(state.activeStudies[0].remainingSec,300-seconds-(use?(seconds-payment)*2:0),'only post-payment work');
++ ok(parts.every(p=>!p.summary.abilityCasts&&!p.summary.ascends&&!p.summary.completedStudies.length),'no other economy event');
++ if(type==='natural'){ok(dps===40052722017724424,'actual product natural DPS');ok(r.normalized.spirits.titan===1635&&r.normalized.research.formation===500,'finite normalization preserves investments');ok(Object.values(r.costs).flatMap(v=>typeof v==='object'?Object.values(v):[v]).every(Number.isFinite),'finite next prices');}
++ const minimum=type==='core'?3275345183542180:type==='natural'?3277040892359271:type==='b1'?90:null;
++ if(strictMinimum&&minimum!==null)ok(kills===minimum,'documented '+type+' minimum');
++ if(type==='b1'){ok(luminous===3&&state.motes===(use?2:62),'B1 Motes and luminous');near(state.activeStudies[0].remainingSec,use?297.3346:299.1,'B1 work');if(use)near(payment,.0173,'B1 .0173 payment');}
++ return {summary,damageUnits:String(damage),payment,unchangedBoundaryPromotions:trace.filter(row=>{const D=units(row.damage),h=units(row.before.enemyHp),max=units(row.before.enemyMaxHp);return row.kills!==(D<h?0:Number(1n+(D-h)/max));}).length};
++}
++async function execute(type,use,kind,split,mutant=false){
++ return evaluate(`(function(){
++  var b=window.__lumenfallQaBridge,t=b.labMotes,type=${JSON.stringify(type)},use=${use},kind=${JSON.stringify(kind)},split=${split},H=type==='fractional'?11.5:type==='fractional-high'?4*Math.PI:11;
++  return t.withHp(H,function(){
++   var s=b.freshStateSnapshot(),natural=type==='natural';
++   Object.assign(s,{riftMode:'farm',depth:1,enemyDepth:1,farmDepth:1,farmReturnDepth:2,maxDepthEver:130,enemyMaxHp:H,enemyHp:type==='core'?H:8.03,enemyIsLuminous:false,luminousAccum:.975,motes:type==='core'&&!use?0:59,lumen:0,shards:0,questDay:window.__lumenfallQaContext.currentDay()});
++   s.activeStudies=[{id:'guardmastery',remainingSec:300,totalDurationSec:600,speedMult:1}];s.studyUseMotes.guardmastery=use;s.studySpeedTargets.guardmastery=3;
++   if(natural){s.activeParty=['titan'];s.spirits.titan=1635;s.heroRarity.titan=5;s.heroRarity.ember=1;s.heroResource.titan=0;s.research.formation=500;s.longStudyLevels.formationstudy=500;s.longStudyLevels.wispascend=500;s.nodes.momentum=500;s.ascendCount=5;s.achieved.asc5=true;}
++   var normalized=b.setState(s),dps=natural?t.naturalDps():type==='core'||type==='fractional-high'?Math.pow(2,55)+16:1100,seconds=type==='core'?1:.9,costs=natural?t.numericCosts():null,undo=${mutant}?t.mutate('rounded-quotient'):function(){};
++   try{var groups=[];function call(dt,start){var traced=t.traceFarm(function(){return t.direct(dt,kind,start);});groups.push(traced.rows);return traced.result;}function go(){var a=call(split||seconds,2000000000000);return split?[a,call(seconds-split,2000000000000+split*1000)]:[a];}var parts=natural?go():t.withDps(dps,go);return {type:type,use:use,kind:kind,split:split,H:H,input:s,normalized:normalized,dps:dps,seconds:seconds,costs:costs,parts:parts,groups:groups,trace:[].concat.apply([],groups)};}finally{undo();}
++  });
++ })()`);
++}
++async function run(){
++ const tab=await send('Target.createTarget',{url:'about:blank'},null);session=(await send('Target.attachToTarget',{targetId:tab.targetId,flatten:true},null)).sessionId;
++ await send('Page.enable');await send('Page.addScriptToEvaluateOnNewDocument',{source:'window.BigInt=undefined;DataView.prototype.getBigInt64=undefined;DataView.prototype.getBigUint64=undefined;'});await send('Page.navigate',{url});
++ for(let i=0;i<150&&!await evaluate('!!window.__farmRuntimeReady');i++)await new Promise(r=>setTimeout(r,20));
++ ok(await evaluate('!!window.__farmRuntimeReady'),'startup without BigInt');
++ await evaluate('window.__qaForgeStartup.promise');
++ const availability=await evaluate('({BigInt:typeof BigInt,getBigUint64:typeof DataView.prototype.getBigUint64,errors:window.__lumenfallQaContext.errors})');
++ ok(availability.BigInt==='undefined'&&availability.getBigUint64==='undefined'&&!availability.errors.length,'app BigInt APIs unavailable and startup clean');
++ const push=await evaluate('(function(){var b=window.__lumenfallQaBridge;b.setState(b.freshStateSnapshot());return b.labMotes.withDps(1100,function(){return b.labMotes.direct(.9,"live",2000000000000);});})()');
++ ok(push.state.riftMode==='push'&&push.summary.kills>0&&Number.isFinite(push.state.enemyHp),'ordinary Push motor without BigInt');
++ for(const type of ['b1','core','natural','fractional','fractional-high'])for(const use of [false,true])for(const kind of ['live','offline'])for(const split of [0,type==='core'?.5:.01]){const r=await execute(type,use,kind,split);records.push(r);r.oracle=audit(r);}
++ const controls=[];
++ for(const type of ['core','natural']){const r=await execute(type,false,'live',0,true);let rejected=false;try{audit(r);}catch(e){rejected=/threshold count|minimum/.test(e.message);}ok(rejected,'exact old R2 fails '+type);const restored=await execute(type,false,'live',0);restored.oracle=audit(restored);controls.push({type,mutant:r,oracleRejected:rejected,restored});}
++ const errors=await evaluate('window.__lumenfallQaContext.errors');ok(!errors.length,'no app runtime errors');
++ return {status:'pass',scenario,checks,availability,push,records,controls,limits:'Chrome with BigInt APIs removed; external Node BigInt oracle; not a physical WebView 60 test'};
++}
++(async()=>{let result;try{result=await run();}catch(error){result={status:'fail',scenario,checks,message:error.message,records};}
++ try{assert(pending.size===0,'all CDP operations settled');if(!closed)await send('Browser.close',{},null).catch(()=>{});let timer;const done=await Promise.race([completion,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('browser close timeout')),5000);})]).finally(()=>clearTimeout(timer));assert(closed&&done.code===0&&!done.error,'graceful browser termination');await fs.promises.rm(profile,{recursive:true,force:true,maxRetries:3,retryDelay:100});result.teardown={browser:done,pending:pending.size,profileRemoved:!fs.existsSync(profile)};}catch(error){browser.kill('SIGKILL');result.status='fail';result.teardown={message:error.message,stderr};}
++ process.stdout.write(JSON.stringify(result)+'\n');process.exitCode=result.status==='pass'?0:1;
++})();
+diff --git a/tests/behavioral/lab-motes.cjs b/tests/behavioral/lab-motes.cjs
+new file mode 100644
+index 0000000..1342adf
+--- /dev/null
++++ b/tests/behavioral/lab-motes.cjs
+@@ -0,0 +1,44 @@
++/* Native CDP touch/keyboard at mobile widths; production page remains unmodified. */
++const {spawn}=require('node:child_process'),fs=require('node:fs'),os=require('node:os'),path=require('node:path');
++const [chrome,url,scenario]=process.argv.slice(2),profile=fs.mkdtempSync(path.join(os.tmpdir(),'lumenfall-lab-motes-'));
++const browser=spawn(process.env.LUMENFALL_QA_CDP_CHROME||chrome,['--headless=new','--no-sandbox','--disable-gpu','--disable-dev-shm-usage','--remote-debugging-pipe','--user-data-dir='+profile,'about:blank'],{stdio:['ignore','ignore','pipe','pipe','pipe']});
++let seq=0,buffer='',stderr='',session,closed=false;const pending=new Map(),records=[];
++function rejectPending(message){for(const p of pending.values()){clearTimeout(p.timer);p.reject(Error(message+' '+p.method));}pending.clear();}
++const completion=new Promise(resolve=>{browser.once('error',e=>{rejectPending(e.message);resolve({error:e.message});});browser.once('close',(code,signal)=>{closed=true;rejectPending('browser closed');resolve({code,signal});});});
++browser.stderr.on('data',b=>{stderr=(stderr+b).slice(-4000);});
++for(const stream of [browser.stdio[3],browser.stdio[4]])stream.on('error',e=>rejectPending(e.message));
++browser.stdio[4].on('data',b=>{buffer+=b;let end;while((end=buffer.indexOf('\0'))!==-1){const raw=buffer.slice(0,end);buffer=buffer.slice(end+1);if(!raw)continue;const m=JSON.parse(raw);if(m.id&&pending.has(m.id)){const p=pending.get(m.id);pending.delete(m.id);clearTimeout(p.timer);m.error?p.reject(Error(JSON.stringify(m.error))):p.resolve(m.result);}}});
++function send(method,params={},sid=session){return new Promise((resolve,reject)=>{const id=++seq,timer=setTimeout(()=>{pending.delete(id);reject(Error('CDP timeout '+method+' '+stderr));},15000);pending.set(id,{resolve,reject,timer,method});browser.stdio[3].write(JSON.stringify({id,method,params,...(sid?{sessionId:sid}:{})})+'\0');});}
++async function evaluate(expression){const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(r.exceptionDetails.exception?.description||r.exceptionDetails.text);return r.result.value;}
++function assert(v,m){if(!v)throw Error(m);}
++async function key(key){const spec=key==='Space'?{key:' ',code:'Space',windowsVirtualKeyCode:32}:{key,code:key,windowsVirtualKeyCode:{ArrowDown:40,ArrowUp:38,Tab:9,Enter:13,Escape:27}[key]};await send('Input.dispatchKeyEvent',{type:'rawKeyDown',...spec});await send('Input.dispatchKeyEvent',{type:'keyUp',...spec});}
++async function snapshot(){return evaluate(`(()=>{const b=window.__lumenfallQaBridge,s=document.querySelector('[data-study-speed-target="guardmastery"]'),u=document.querySelector('[data-study-use-motes="guardmastery"]'),a=b.getState(),r=s.getBoundingClientRect();return {state:a,primary:b.rawSave(),recovery:b.rawRecovery(),events:b.lifecycleTrace(),value:s.value,focused:Object.assign({},document.activeElement?.dataset),pressed:u.getAttribute('aria-pressed'),speed:a.activeStudies.find(e=>e.id==='guardmastery').speedMult,rect:{x:r.x,y:r.y,width:r.width,height:r.height},scroll:document.querySelector('main').scrollTop,fit:document.documentElement.scrollWidth<=innerWidth&&document.querySelector('#study-list').scrollWidth<=document.querySelector('#study-list').clientWidth+1,errors:window.__lumenfallQaContext.errors};})()`);}
++async function run(){
++ const motion=scenario.includes('reduced')?'reduce':'no-preference';
++ for(const width of [320,390,430]){
++  const context=await send('Target.createBrowserContext',{},null),tab=await send('Target.createTarget',{url:'about:blank',browserContextId:context.browserContextId},null);session=(await send('Target.attachToTarget',{targetId:tab.targetId,flatten:true},null)).sessionId;
++  await send('Emulation.setDeviceMetricsOverride',{width,height:844,deviceScaleFactor:1,mobile:true});await send('Emulation.setTouchEmulationEnabled',{enabled:true});await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:motion}]});await send('Page.enable');await send('Page.navigate',{url});
++  for(let i=0;i<150&&!await evaluate('!!window.__labMotesNativeReady');i++)await new Promise(r=>setTimeout(r,20));
++  assert(await evaluate('!!window.__labMotesNativeReady'),'native Lab page ready');await evaluate('window.__qaForgeStartup.promise');await evaluate('document.fonts.ready.then(()=>true)');
++  await evaluate(`(()=>{const b=window.__lumenfallQaBridge;b.uiMeasurementPause(true);b.resetFeedback();const s=labMotesSeed(b,window.__lumenfallQaContext);s.motes=0;s.studySpeedTargets.guardmastery=2;s.activeStudies=[{id:'guardmastery',remainingSec:150,totalDurationSec:150,speedMult:1}];s.enemyHp=s.enemyMaxHp=1e9;b.setState(s);b.save();b.renderLayout();document.querySelector('[data-tab="research"]').click();document.querySelector('[data-study-speed-target="guardmastery"]').scrollIntoView({block:'center'});})()`);
++  await new Promise(r=>setTimeout(r,350));let before=await snapshot();assert(before.fit&&before.rect.height>=44,'mobile select fits '+width+' '+JSON.stringify(before.rect));
++  await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:before.rect.x+before.rect.width/2,y:before.rect.y+before.rect.height/2}]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await key('Escape');
++  let touched=await snapshot();const hit=await evaluate(`(()=>{const r=document.querySelector('[data-study-speed-target=guardmastery]').getBoundingClientRect(),e=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return {tag:e?.tagName,html:e?.outerHTML.slice(0,300),intro:document.querySelector('#startup-intro').className};})()`);assert(touched.focused.studySpeedTarget==='guardmastery'&&touched.value==='2','native touch focus without changing choice '+JSON.stringify({rect:before.rect,focused:touched.focused,value:touched.value,hit}));
++  await key('ArrowDown');let selected=await snapshot();assert(selected.value==='3'&&selected.state.studySpeedTargets.guardmastery===3&&selected.focused.studySpeedTarget==='guardmastery','real keyboard selects3x without money');assert(selected.events.length===touched.events.length+1&&selected.state.motes===0&&selected.speed===1&&!selected.state.studyUseMotes.guardmastery,'one save, no payment or activation');
++  await evaluate('document.querySelector("[data-study-use-motes=guardmastery]").focus({preventScroll:true})');before=await snapshot();await key('Space');let on=await snapshot();assert(on.pressed==='true'&&on.state.studyUseMotes.guardmastery&&!on.state.studyQueue.guardmastery&&on.speed===1,'native Space ON retains pending target, queue independent');assert(on.focused.studyUseMotes==='guardmastery'&&on.events.length===before.events.length+1,'ON focus and one handler/save');
++  before=await snapshot();await evaluate('window.__lumenfallQaBridge.renderLayout();window.__lumenfallQaBridge.refreshAffordability()');let rendered=await snapshot();assert(JSON.stringify([rendered.state,rendered.primary,rendered.recovery,rendered.events])===JSON.stringify([before.state,before.primary,before.recovery,before.events]),'render/affordability purity');assert(rendered.focused.studyUseMotes==='guardmastery','render focus retained');
++  await evaluate('window.__lumenfallQaBridge.uiMeasurementPause(false)');await new Promise(r=>setTimeout(r,350));await evaluate('window.__lumenfallQaBridge.uiMeasurementPause(true)');let waiting=await snapshot();assert(waiting.state.activeStudies[0].remainingSec<rendered.state.activeStudies[0].remainingSec&&waiting.speed===1&&waiting.state.motes===0&&waiting.state.studySpeedTargets.guardmastery===3,'real ticks wait1x at zero budget');
++  await evaluate(`(()=>{const b=window.__lumenfallQaBridge,s=b.getState();s.motes=60;b.setState(s);b.renderLayout();document.querySelector('[data-study-speed-target="guardmastery"]').focus({preventScroll:true});b.uiMeasurementPause(false);})()`);await new Promise(r=>setTimeout(r,350));await evaluate('window.__lumenfallQaBridge.uiMeasurementPause(true)');let bought=await snapshot();assert(bought.speed===3&&bought.state.motes===0&&bought.focused.studySpeedTarget==='guardmastery'&&bought.value==='3','authoritative live purchase reflects paid3x, exact60, focus/intent retained');assert(JSON.parse(bought.primary).activeStudies[0].speedMult===3&&bought.primary===bought.recovery,'automatic purchase persisted through normal save/recovery');
++  await evaluate('document.querySelector("[data-study-use-motes=guardmastery]").focus({preventScroll:true})');await key('Space');let off=await snapshot();assert(off.pressed==='false'&&!off.state.studyUseMotes.guardmastery&&off.speed===3&&off.focused.studyUseMotes==='guardmastery','native OFF preserves paid speed and focus');
++  await evaluate('document.querySelector("[data-study-speed-target=guardmastery]").focus({preventScroll:true})');await key('ArrowUp');let lower=await snapshot();assert(lower.value==='2'&&lower.state.studySpeedTargets.guardmastery===2&&lower.speed===3,'lower native target never downgrades paid speed');
++  const controls=await evaluate(`Array.from(document.querySelectorAll('[data-study-use-motes],[data-study-speed-target]')).map(e=>{const r=e.getBoundingClientRect();return {w:r.width,h:r.height,label:e.getAttribute('aria-label')};})`);assert(controls.every(r=>r.w>=44&&r.h>=44&&r.label),'all new controls44px and named');assert(lower.fit&&!lower.errors.length,'no overflow/runtime errors');
++  await evaluate('document.querySelector("[data-study-speed-target=guardmastery]").scrollIntoView({block:"center"});document.activeElement.blur()');
++  if(process.env.LUMENFALL_QA_EVIDENCE_DIR){const shot=await send('Page.captureScreenshot',{format:'png'});fs.mkdirSync(process.env.LUMENFALL_QA_EVIDENCE_DIR,{recursive:true});fs.writeFileSync(path.join(process.env.LUMENFALL_QA_EVIDENCE_DIR,'lab-motes-'+width+'-'+motion+'.png'),Buffer.from(shot.data,'base64'));}
++  records.push({width,motion,selected,on,waiting,bought,off,lower,controls});await send('Target.disposeBrowserContext',{browserContextId:context.browserContextId},null);
++ }
++ return {status:'pass',scenario,records};
++}
++(async()=>{let result;try{result=await run();}catch(error){result={status:'fail',scenario,message:error.message,records};}
++ try{assert(pending.size===0,'all CDP operations settled');if(!closed)await send('Browser.close',{},null).catch(()=>{});let timer;const done=await Promise.race([completion,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('browser close timeout')),5000);})]).finally(()=>clearTimeout(timer));assert(closed&&done.code===0&&!done.error,'graceful browser termination');await fs.promises.rm(profile,{recursive:true,force:true,maxRetries:3,retryDelay:100});result.teardown={browser:done,pending:pending.size,profileRemoved:!fs.existsSync(profile)};}catch(error){browser.kill('SIGKILL');result.status='fail';result.teardown={message:error.message,stderr};}
++ process.stdout.write(JSON.stringify(result)+'\n');process.exitCode=result.status==='pass'?0:1;
++})();
+diff --git a/tests/behavioral/lab-motes.js b/tests/behavioral/lab-motes.js
+new file mode 100644
+index 0000000..429c96e
+--- /dev/null
++++ b/tests/behavioral/lab-motes.js
+@@ -0,0 +1,81 @@
++/* LAB-MOTES-001: independent prices/work/reward chronology on production code. */
++window.labMotesSeed=function(b,ctx){return window.inquirySeed(b,ctx);};
++window.runLabMotesQa=function(b,ctx,assert,protectedParity,summaryParity){
++  var checks=0,t=b.labMotes,clock=2000000000000,records=[];
++  function ok(v,m){checks++;assert(v,'LAB oracle: '+m);}
++  function same(a,c,m){ok(JSON.stringify(a)===JSON.stringify(c),m);}
++  function near(a,c,m){ok(Math.abs(a-c)<1e-7,m+' ('+a+' vs '+c+')');}
++  function seed(){return window.labMotesSeed(b,ctx);}
++  function install(s){b.setState(s);b.renderLayout();}
++  function active(id){return b.getState().activeStudies.find(function(a){return a.id===id;});}
++  function paid(s,id,remaining,speed){s.activeStudies.push({id:id,remainingSec:remaining,totalDurationSec:Math.max(remaining,180),speedMult:speed||1});s.studyUseMotes[id]=true;s.studySpeedTargets[id]=3;return s;}
++  function negative(kind,fn){var undo=t.mutate(kind),caught=false;try{fn();}catch(e){caught=/LAB oracle/.test(e.message);}finally{undo();}ok(caught,'causal mutant caught '+kind);fn();}
++  b.resetFeedback();
++  if(ctx.scenario==='lab-motes-contracts'){
++    var tiers=[1.5,2,3,4,5,6,7,8],prices=[14,26,60,110,176,258,357,473];
++    tiers.forEach(function(speed,i){
++      var s=paid(seed(),'guardmastery',150);s.studySpeedTargets.guardmastery=speed;s.motes=prices[i];install(s);
++      var r=t.direct(1);ok(r.summary.studySpeedPurchases===1&&r.summary.studyMotesSpent===prices[i]&&r.state.motes===0,'full existing tier price '+speed);
++      near(active('guardmastery').remainingSec,150-speed,'no retroactive work '+speed);ok(active('guardmastery').speedMult===speed,'exact target '+speed);
++    });
++    function waiting(){var s=paid(seed(),'guardmastery',150);s.motes=59;install(s);var r=t.direct(1);ok(r.state.motes===59&&active('guardmastery').speedMult===1&&r.summary.studySpeedPurchases===0,'59 waits for exact3x without cheaper fallback');near(active('guardmastery').remainingSec,149,'waiting1x work');ok(r.state.studyUseMotes.guardmastery&&r.state.studySpeedTargets.guardmastery===3,'waiting intent retained');}
++    waiting();negative('fallback',waiting);
++    [false,true].forEach(function(queue){[false,true].forEach(function(use){var s=seed();s.motes=60;s.studyQueue.guardmastery=queue;s.studyUseMotes.guardmastery=use;s.studySpeedTargets.guardmastery=3;install(s);var r=t.direct(0);ok(!!active('guardmastery')===queue,'Queue alone starts '+queue+'/'+use);ok(r.summary.studySpeedPurchases===(queue&&use?1:0),'independent use '+queue+'/'+use);if(!queue){ok(b.inquiry.start('guardmastery'),'manual start allowed');r=t.direct(0);ok(active('guardmastery').speedMult===(use?3:1),'manual start respects independent use');}});});
++    function repeat(){var s=seed();s.motes=120;s.studyQueue.guardmastery=true;s.studyUseMotes.guardmastery=true;s.studySpeedTargets.guardmastery=3;install(s);var r=b.inquiry.tail(50);ok(r.state.longStudyLevels.guardmastery===1&&active('guardmastery').speedMult===3&&r.state.motes===0,'new level pays60 again, never free carry');ok(r.summary.studyMotesSpent===120&&r.summary.studySpeedPurchases===2,'two full debits');near(active('guardmastery').remainingSec,240,'new level has no prepaid work');}
++    repeat();negative('free-carry',repeat);
++    var s=seed();s.motes=60;s.studyQueue.guardmastery=true;s.studyUseMotes.guardmastery=true;s.studySpeedTargets.guardmastery=3;install(s);var r=b.inquiry.tail(51);ok(active('guardmastery').speedMult===1&&r.state.motes===0,'new level waits1x when second price absent');near(active('guardmastery').remainingSec,239,'new level only actual1x elapsed');
++    s=paid(seed(),'guardmastery',150,4);s.motes=60;install(s);r=t.direct(1);ok(active('guardmastery').speedMult===4&&r.state.motes===60,'higher paid speed skips debit and downgrade');
++    s=paid(seed(),'guardmastery',150,3);s.studyUseMotes.guardmastery=false;install(s);r=t.direct(1);ok(active('guardmastery').speedMult===3&&r.summary.studySpeedPurchases===0,'OFF keeps paid speed');
++    s=paid(seed(),'guardmastery',150);s.studyUseMotes.guardmastery=false;s.motes=60;install(s);ok(t.manual('guardmastery',3),'successful manual buy');ok(b.getState().studySpeedTargets.guardmastery===3&&!b.getState().studyUseMotes.guardmastery,'manual remembers target without enabling');ok(!t.manual('guardmastery',3)&&b.getState().motes===0,'manual no double buy');
++    [0,1.25,9,'3',NaN].forEach(function(speed){ok(!t.manual('guardmastery',speed),'invalid manual tier rejected');});ok(!t.manual('unknown',8),'unknown manual ID');
++    s=paid(seed(),'guardmastery',150,3);s.motes=109;s.studySpeedTargets.guardmastery=4;install(s);r=t.direct(0);ok(active('guardmastery').speedMult===3&&r.state.motes===109,'higher target waits at current paid3x');s=b.getState();s.motes=110;install(s);r=t.direct(0);ok(active('guardmastery').speedMult===4&&r.state.motes===0&&r.summary.studyMotesSpent===110,'higher target pays full price, no delta discount');near(active('guardmastery').remainingSec,150,'time-zero upgrade never creates work');
++    s=paid(seed(),'guardmastery',150);s.studyUseMotes.guardmastery=false;s.motes=60;install(s);r=t.direct(0);ok(r.state.motes===60&&active('guardmastery').speedMult===1,'OFF stops affordable pending purchase');
++    s=paid(seed(),'guardmastery',150);s.motes=60;var canonical=b.forge.canonical(s);ok(canonical.motes===60&&canonical.activeStudies[0].speedMult===1&&canonical.studyUseMotes.guardmastery,'valid ON normalization retains intent without spending');
++    [false,true].forEach(function(reverse){s=paid(paid(seed(),'guardmastery',10),'wispascend',100);s.motes=60;if(reverse)s.activeStudies.reverse();install(s);r=t.direct(0);ok(active('wispascend').speedMult===3&&active('guardmastery').speedMult===1&&r.state.motes===0,'catalogue priority despite soonest/UI/active order '+reverse);});
++    s=seed();delete s.studyUseMotes;delete s.studySpeedTargets;s.activeStudies=[{id:'guardmastery',remainingSec:70,totalDurationSec:150,speedMult:4}];var before=JSON.stringify(s),n=b.forge.canonical(s);ok(n.studySpeedTargets.guardmastery===4&&!n.studyUseMotes.guardmastery,'old save paid default4x/OFF');same(s,JSON.parse(before),'normalization input purity');same(b.forge.canonical(n),n,'normalization idempotent');ok(n.motes===s.motes,'normalization never buys');
++    s=seed();s.studyUseMotes={unknown:true,guardmastery:'true',wispascend:true,riftattune:true};s.studySpeedTargets={unknown:8,guardmastery:3,wispascend:'3',riftattune:9};n=b.forge.canonical(s);ok(!n.studyUseMotes.guardmastery&&!n.studyUseMotes.wispascend&&!n.studyUseMotes.riftattune,'strict booleans and malformed targets cannot enable');same(Object.keys(n.studyUseMotes),b.inquiry.nodes().map(function(x){return x.id;}),'known saved IDs only');
++    [10,13].forEach(function(level){s=paid(seed(),'measuredinquiry',1);s.longStudyLevels.measuredinquiry=level;s.studyQueue.measuredinquiry=true;s.motes=60;install(s);r=b.inquiry.tail(2);ok(r.state.motes===60&&r.summary.studySpeedPurchases===0&&r.state.longStudyLevels.measuredinquiry===level&&!r.state.activeStudies.length,'capped/overcap closure never spends '+level);});
++    s=paid(seed(),'guardmastery',0);s.motes=60;install(s);r=t.direct(0);ok(r.state.motes===60&&r.summary.studySpeedPurchases===0&&!active('guardmastery'),'due closed record never spends');
++    s=paid(seed(),'motestudy',100);s.maxDepthEver=59;s.depth=s.enemyDepth=59;s.enemyHp=s.enemyMaxHp=b.enemyHpFor(59);install(s);r=t.direct(0);ok(r.summary.studySpeedPurchases===0,'locked active cannot spend');
++    return {checks:checks,negativeControls:['fallback','free-carry'],tiers:tiers,prices:prices,normalizationPure:true};
++  }
++  if(ctx.scenario==='lab-motes-chronology'){
++    function farm(options){var s=seed();s.depth=s.enemyDepth=s.farmDepth=11;s.farmReturnDepth=12;s.riftMode='farm';s.enemyMaxHp=b.enemyHpFor(11);s.enemyHp=s.enemyMaxHp*.5;s.luminousAccum=.95;s.enemyIsLuminous=false;s.motes=58;delete s.achieved.autotap;paid(s,'guardmastery',150);Object.assign(s,options||{});return s;}
++    function run(s,seconds,kind,chunk){install(s);return t.withDps(s.enemyMaxHp*100,function(){return chunk?b.simulate(seconds,kind,chunk,clock):t.direct(seconds,kind,clock);});}
++    function boundary(){var s=farm(),r=run(s,.1,'offline'),events=r.summary.timeline.filter(function(e){return e.type==='studySpeed';});ok(events.length===1&&events[0].detail.cost===60&&events[0].detail.speed===3,'one direct60 purchase at luminous boundary');near(events[0].elapsedSec,.015,'actual second kill, including partial HP');near(active('guardmastery').remainingSec,150-.015-(.1-.015)*3,'elapsed work changes only after reward');ok(r.state.motes===0&&r.summary.luminousKills===1&&r.summary.kills===10,'actual deterministic reward/balance, not expected chance');records.push({case:'second-kill',summary:r.summary,active:r.state.activeStudies,motes:r.state.motes});}
++    boundary();negative('batch-end',boundary);
++    [.014999,.015,.015001].forEach(function(seconds){var r=run(farm(),seconds,'live');ok(active('guardmastery').speedMult===(seconds<.015?1:3),'before/exact/after actual reward '+seconds);ok(r.summary.studySpeedPurchases===(seconds<.015?0:1),'exact purchase count '+seconds);});
++    [false,true].forEach(function(first){[.01,.37,.95].forEach(function(accum){[1,2,5].forEach(function(rewards){var s=farm({enemyIsLuminous:first,luminousAccum:accum,motes:60-2*rewards}),kills=0,luminous=0,a=accum,flag=first;while(luminous<rewards){kills++;if(flag)luminous++;a+=.05;flag=a>=1-1e-12;if(flag)a-=1;}var time=(kills-.5)/100,r=run(s,time+.001,'offline');var event=r.summary.timeline.find(function(e){return e.type==='studySpeed';});ok(!!event,'pending target eventually paid');near(event.elapsedSec,time,'independent spawn-by-spawn oracle '+first+'/'+accum+'/'+rewards);near(active('guardmastery').remainingSec,150-time-.003,'work oracle after nth luminous');records.push({case:[first,accum,rewards],kill:kills,time:time,purchase:event,motes:r.state.motes});});});});
++    [0,10].forEach(function(tracking){var s=farm({luminousAccum:.37,motes:56});s.research.luminoustracking=tracking;s.longStudyLevels.motestudy=5;var chance=.05+.005*tracking,a=.37,flag=false,kills=0;while(!flag){kills++;a+=chance;if(a>=1-1e-12){flag=true;a-=1;}}kills++;var time=(kills-.5)/100,r=run(s,time+.001,'offline'),event=r.summary.timeline.find(function(e){return e.type==='studySpeed';});near(event.elapsedSec,time,'actual changed chance '+chance+' and rounded4-Mote reward');ok(r.summary.motesGained===4&&r.state.motes===0,'Long Study Mote reward remains unscaled');records.push({case:'tracking-reward',tracking:tracking,time:time,summary:r.summary});});
++    var supported=farm({motes:55});supported.longStudyLevels.motestudy=5;supported.activeParty=['ember','tide'];supported.spirits.tide=1;supported.wispModules.tide=4;var boosted=run(supported,.02,'offline');ok(boosted.summary.motesGained===5&&boosted.state.motes===0,'actual rounded support-module reward5, no expected rate');near(boosted.summary.timeline.find(function(e){return e.type==='studySpeed';}).elapsedSec,.015,'support reward boundary');
++    var base=farm(),one=run(base,.75,'live'),split=run(base,.75,'live',.025),offline=run(base,.75,'offline');protectedParity(split.state,one.state,'Motes split/live');summaryParity(split.summary,one.summary,'Motes split/live');same(split.state.studySpeedTargets,one.state.studySpeedTargets,'target parity');same(split.state.studyUseMotes,one.state.studyUseMotes,'intent parity');same([offline.state.motes,offline.state.activeStudies],[one.state.motes,one.state.activeStudies],'Motes work/live/offline parity');var offSplit=run(base,.75,'offline',.025);protectedParity(offSplit.state,offline.state,'Motes offline split');summaryParity(offSplit.summary,offline.summary,'Motes offline split');['motesGained','luminousKills','studySpeedPurchases','studyMotesSpent'].forEach(function(k){ok(offline.summary[k]===one.summary[k],'unscaled Motes policy '+k);});near(offline.summary.lumenGained,one.summary.lumenGained*.7,'existing offline Lumen rate');near(offline.summary.shardGained,one.summary.shardGained*.7,'existing offline Shard rate');
++    var small=run(farm({motes:60-1e-12,enemyIsLuminous:true}),.005,'offline');ok(small.summary.studySpeedPurchases===1&&small.summary.kills===1,'tiny positive deficit waits real reward without zero-time loop');
++    var multi=farm({motes:118,enemyIsLuminous:true});paid(multi,'wispascend',100);var r=run(multi,.1,'live'),events=r.summary.timeline.filter(function(e){return e.type==='studySpeed';});same(events.map(function(e){return e.detail.id;}),['wispascend','guardmastery'],'shared budget declaration order');near(events[0].elapsedSec,0,'first target already affordable at entry');near(events[1].elapsedSec,.005,'second shared budget purchase');ok(r.state.motes===2,'multiple prices only actual rewards');
++    var collision=farm();collision.activeStudies[0].remainingSec=.015;collision.studyQueue.guardmastery=true;collision.longStudyLevels.measuredinquiry=9;paid(collision,'measuredinquiry',.015);collision.buffUntil=clock+15;collision.buffMult=2;
++    r=run(collision,.02,'offline');ok(r.state.longStudyLevels.measuredinquiry===10&&r.summary.studyMotesSpent===60&&r.summary.studySpeedPurchases===1,'reward/completion/start/cap/buff collision buys only eligible new level');ok(active('guardmastery').speedMult===3&&!active('measuredinquiry'),'cap closes before purchase');near(active('guardmastery').remainingSec,192-.005*3,'Inquiry10 discount on new snapshot without retroactive work');var types=r.summary.timeline.filter(function(e){return Math.abs(e.elapsedSec-.015)<1e-8;}).map(function(e){return e.type;});ok(types.indexOf('buffExpire')<types.indexOf('studyComplete')&&types.indexOf('studyComplete')<types.indexOf('studyStart')&&types.indexOf('studyStart')<types.indexOf('studySpeed'),'timestamp order buff/completion/start/speed');records.push({case:'collision',summary:r.summary,state:r.state});
++    var push=paid(seed(),'guardmastery',150);push.motes=58;push.enemyHp=push.enemyMaxHp*.5;push.enemyIsLuminous=true;install(push);r=t.withDps(push.enemyMaxHp*100,function(){return t.direct(.01,'live');});near(r.summary.timeline.find(function(e){return e.type==='studySpeed';}).elapsedSec,.005,'push actual reward boundary');
++    var ascend=paid(seed(),'guardmastery',150);ascend.depth=ascend.enemyDepth=17;ascend.enemyMaxHp=b.enemyHpFor(17);ascend.enemyHp=ascend.enemyMaxHp;ascend.owned.autoascend=true;ascend.autoAscendEnabled=true;ascend.autoAscendTargetDepth=16;ascend.motes=60;install(ascend);r=t.direct(0);ok(r.summary.ascends===1&&r.summary.studySpeedPurchases===1&&r.state.studyUseMotes.guardmastery&&active('guardmastery').speedMult===3,'time-zero Ascend retains intent then eligible speed');
++    var killed=paid(seed(),'guardmastery',.005);killed.depth=killed.enemyDepth=16;killed.enemyMaxHp=b.enemyHpFor(16);killed.enemyHp=killed.enemyMaxHp*.5;killed.enemyIsLuminous=true;killed.motes=58;killed.studyQueue.guardmastery=true;killed.owned.autoascend=true;killed.autoAscendEnabled=true;killed.autoAscendTargetDepth=17;install(killed);r=t.withDps(killed.enemyMaxHp*100,function(){return t.direct(.005,'live');});ok(r.summary.ascends===1&&r.summary.completedStudies.length===1&&r.summary.studySpeedPurchases===0&&!r.state.activeStudies.length,'same kill reward/Ascend/completion respects reset start budget and closed record');ok(r.state.motes===61&&r.state.studyUseMotes.guardmastery&&r.state.studySpeedTargets.guardmastery===3,'collision retains unspent actual3-Mote reward and intent');records.push({case:'kill-ascend-complete',summary:r.summary,motes:r.state.motes});
++    var tail=seed();tail.motes=60;tail.lumen=tail.shards=0;paid(tail,'guardmastery',129603);install(tail);b.setLastSeen(b.clockNow()-43203*1000);r=b.applyOfflineNow();ok(r.effectiveSec===43200&&r.studySpeedPurchases===1&&b.getState().longStudyLevels.guardmastery===1,'actual capped offline policy pays speed and completes');
++    tail=seed();tail.motes=60;tail.lumen=tail.shards=0;paid(tail,'guardmastery',9);install(tail);r=b.inquiry.tail(3);ok(r.summary.studySpeedPurchases===1&&r.state.longStudyLevels.guardmastery===1&&r.state.motes===0,'study-only tail same exact paid work');
++    return {checks:checks,negativeControls:['batch-end'],timelineEvidence:records,liveOfflineSplit:true};
++  }
++  var q=function(s){return document.querySelector(s);},s=paid(seed(),'guardmastery',150);s.motes=0;s.studyUseMotes.guardmastery=false;install(s);q('[data-tab="research"]').click();
++  var before=b.getState();b.renderLayout();same(b.getState(),before,'render cannot pay');
++  var select=q('[data-study-speed-target="guardmastery"]');select.focus();select.value='3';select.dispatchEvent(new Event('change',{bubbles:true}));ok(document.activeElement.dataset.studySpeedTarget==='guardmastery','select focus survives target change');ok(b.getState().studySpeedTargets.guardmastery===3&&b.getState().motes===0,'target selectable without money');
++  var button=q('[data-study-use-motes="guardmastery"]');button.focus();button.click();ok(document.activeElement.dataset.studyUseMotes==='guardmastery','toggle focus survives');ok(q('[data-study-use-motes="guardmastery"]').getAttribute('aria-pressed')==='true'&&!b.getState().studyQueue.guardmastery,'Use Motes aria ON independent of queue');
++  var snapshot=b.getState(),save=b.rawSave(),recovery=b.rawRecovery(),events=b.lifecycleTrace();b.renderLayout();same(b.getState(),snapshot,'render state purity');same([b.rawSave(),b.rawRecovery(),b.lifecycleTrace()],[save,recovery,events],'render save/observer purity');
++  q('[data-study-details="guardmastery"]').click();var buy=q('[data-speed-study="guardmastery"][data-speed="3"]');ok(buy.disabled&&buy.textContent.includes('60')&&!/Need|Cannot afford/.test(buy.textContent+' '+buy.getAttribute('aria-label')),'poor purchase keeps action/price quietly');
++  var controls=Array.from(q('#study-list').querySelectorAll('[data-study-use-motes],[data-study-speed-target]'));controls.forEach(function(e){var rect=e.getBoundingClientRect();ok(e.offsetHeight>=44&&e.offsetWidth>=44,'44px native controls');ok(!!e.getAttribute('aria-label'),'accessible study subject/action');});
++  ok(document.documentElement.scrollWidth<=innerWidth+1&&q('#study-list').scrollWidth<=q('#study-list').clientWidth+1,'no horizontal overflow');same(Array.from(document.querySelectorAll('nav.tabbar .tab-btn')).map(function(e){return e.dataset.tab;}),['spirits','workshop','battle','ascend','deeds'],'NAV ordered five destinations');q('[data-tab="battle"]').click();ok(q('main').scrollHeight<=q('main').clientHeight+1,'Rift remains scroll-free');
++  return {checks:checks,viewport:[innerWidth,innerHeight],focus:true,ariaPressed:true,quietScarcity:true,nativeControls:true};
++};
++window.runLabMotesPersistence=function(b,ctx,assert,phase,nextPhase,backupCode,finish){
++  var keys=['schemaVersion','studyQueue','studyUseMotes','studySpeedTargets','activeStudies','motes'];
++  if(phase()===0){var s=window.labMotesSeed(b,ctx);s.studyUseMotes.guardmastery=true;s.studySpeedTargets.guardmastery=3;s.studySpeedTargets.wispascend=8;s.studyQueue.wispascend=true;s.motes=0;s.activeStudies=[{id:'guardmastery',remainingSec:77,totalDurationSec:150,speedMult:4}];b.setState(s);b.feedbackSave();var expected=b.getState();localStorage.setItem('lab-motes-expected',JSON.stringify(expected));nextPhase(1);if(ctx.scenario==='lab-motes-reset'){b.reset();return;}if(ctx.scenario==='lab-motes-backup-restore'){b.setState(b.freshStateSnapshot());b.restoreBackup(backupCode(expected));return;}if(ctx.scenario==='lab-motes-recovery')b.formationTest.corruptPrimary();b.suppressUnloadSave();location.reload();return;}
++  var s=b.getState(),expected=JSON.parse(localStorage.getItem('lab-motes-expected'));
++  if(ctx.scenario==='lab-motes-reset'){assert(s.schemaVersion===1&&!s.activeStudies.length&&Object.values(s.studyUseMotes).every(function(v){return v===false;})&&Object.values(s.studySpeedTargets).every(function(v){return v===1.5;}),'actual Reset clears intent, targets and work');finish('pass',{reset:true});return;}
++  keys.forEach(function(key){assert(JSON.stringify(s[key])===JSON.stringify(expected[key]),ctx.scenario+' preserves '+key);});
++  ['studyUseMotes','studySpeedTargets','activeStudies'].forEach(function(key){assert(JSON.stringify(JSON.parse(b.rawRecovery())[key])===JSON.stringify(expected[key]),'recovery retains '+key);});
++  s.depth=s.enemyDepth=16;s.enemyMaxHp=s.enemyHp=b.enemyHpFor(16);b.setState(s);b.ascendManual();s=b.getState();['studyUseMotes','studySpeedTargets','activeStudies','studyQueue'].forEach(function(key){assert(JSON.stringify(s[key])===JSON.stringify(expected[key]),'Ascend preserves '+key);});finish('pass',{keys:keys,ascend:true,activeSpeed:4,independentTarget:3});
++};
+diff --git a/tests/behavioral/rift-status.cjs b/tests/behavioral/rift-status.cjs
+index c4460a0..e811258 100644
+--- a/tests/behavioral/rift-status.cjs
++++ b/tests/behavioral/rift-status.cjs
+@@ -57,6 +57,13 @@ async function swipe(loc,width){
+  for(let i=1;i<=6;i++){await send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:y+dy*i/6}]});await new Promise(r=>setTimeout(r,16));}
+  await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await new Promise(r=>setTimeout(r,70));
+ }
++async function settleScroll(){
++ // Observe natural kinetic scrolling before measuring/tapping a visible control.
++ // No scroll correction: the first Rift frame is still checked immediately.
++ let last=await evaluate('document.querySelector("main").scrollTop'),stable=0;
++ for(let i=0;i<60;i++){await new Promise(r=>setTimeout(r,50));const current=await evaluate('document.querySelector("main").scrollTop');stable=Math.abs(current-last)<.1?stable+1:0;last=current;if(stable>=3)return;}
++ throw Error('native touch scrolling did not settle');
++}
+ async function run(){
+  const negative=scenario.startsWith('self-test-rift-status-line');
+  for(const [width,height,inset] of [[360,640,0],[360,640,24],[390,844,24]]){
+@@ -97,10 +104,10 @@ async function run(){
+     if(view==='forge'||view==='research')await touch('[data-tab="workshop"]');
+     await touch(`[data-tab="${view}"]`);
+     // Real touch scroll: no scrollIntoView/focus assistance to reach last control.
+-    for(let i=0;i<35;i++){const loc=await evaluate(`riftStatusMobile.locate(${JSON.stringify(view)})`);if(loc.visible)break;await swipe(loc,width);}
++    for(let i=0;i<35;i++){let loc=await evaluate(`riftStatusMobile.locate(${JSON.stringify(view)})`);if(loc.visible){await settleScroll();loc=await evaluate(`riftStatusMobile.locate(${JSON.stringify(view)})`);if(loc.visible)break;}await swipe(loc,width);}
+     scroll.push(await evaluate(`riftStatusMobile.last(${JSON.stringify(view)})`));
+     const target=scroll[scroll.length-1];await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:target.x,y:target.y}]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await advance();
+-    for(let i=0;i<35;i++){const loc=await evaluate(`riftStatusMobile.locate(${JSON.stringify(view)})`);if(loc.visible)break;await swipe(loc,width);}
++    for(let i=0;i<35;i++){let loc=await evaluate(`riftStatusMobile.locate(${JSON.stringify(view)})`);if(loc.visible){await settleScroll();loc=await evaluate(`riftStatusMobile.locate(${JSON.stringify(view)})`);if(loc.visible)break;}await swipe(loc,width);}
+     await evaluate(`riftStatusMobile.last(${JSON.stringify(view)})`);
+     trace({profile:name,kind,view,phase:'end',duration:(Date.now()-viewStart)/1000,swipes:swipeCount-swipesBefore});
+    }
+diff --git a/tests/behavioral/run.py b/tests/behavioral/run.py
+index fe00404..a006136 100644
+--- a/tests/behavioral/run.py
++++ b/tests/behavioral/run.py
+@@ -23,6 +23,18 @@ FIXTURES_PATH = ROOT / "fixtures.json"
+ RAW_ARTIFACT_ROOT = None
+ 
+ SCENARIOS = {
++    "lab-motes-numerical": "fresh",
++    "lab-motes-runtime": "fresh",
++    "lab-motes-conservation": "fresh",
++    "lab-motes-contracts": "fresh",
++    "lab-motes-chronology": "fresh",
++    "lab-motes-ui": "fresh",
++    "lab-motes-native": "fresh",
++    "lab-motes-reduced-motion": "fresh",
++    "lab-motes-save-reload": "fresh",
++    "lab-motes-backup-restore": "fresh",
++    "lab-motes-recovery": "fresh",
++    "lab-motes-reset": "fresh",
+     "nav-workshop-contract": "fresh",
+     "inquiry-contracts": "fresh",
+     "inquiry-chronology": "fresh",
+@@ -215,7 +227,7 @@ def build_prelude(fixtures):
+   // Native UI tests hold interval callbacks only across immediate measurements.
+   // Keep real input/save handlers, animation frames and the production flags intact.
+   var uiMeasurementPaused=false;
+-  if(scenario==='auto-ascend-target-mobile' || scenario==='auto-ascend-target-reduced-motion' || scenario.startsWith('forge-ui-') || scenario.startsWith('self-test-forge-ui-') || scenario.startsWith('rift-status-stacking') || scenario.startsWith('rift-status-mobile') || scenario.startsWith('rift-status-reduced') || scenario.startsWith('self-test-rift-status-line')){{
++  if(scenario==='lab-motes-native' || scenario==='lab-motes-reduced-motion' || scenario==='auto-ascend-target-mobile' || scenario==='auto-ascend-target-reduced-motion' || scenario.startsWith('forge-ui-') || scenario.startsWith('self-test-forge-ui-') || scenario.startsWith('rift-status-stacking') || scenario.startsWith('rift-status-mobile') || scenario.startsWith('rift-status-reduced') || scenario.startsWith('self-test-rift-status-line')){{
+     // Observe actual registered Queue callbacks, without changing event dispatch.
+     var realAddEventListener=EventTarget.prototype.addEventListener;
+     EventTarget.prototype.addEventListener=function(type,callback,options){{
+@@ -391,7 +403,7 @@ function qaLifecycleRecord(type,detail){
+ }
+ // Resolve only after the real startup completion callback (including its save).
+ // This is installed before DOMContentLoaded/init in the throwaway instrumented app.
+-if(window.__lumenfallQaContext.scenario==='auto-ascend-target-mobile' || window.__lumenfallQaContext.scenario==='auto-ascend-target-reduced-motion' || window.__lumenfallQaContext.scenario.startsWith('forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('self-test-forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('rift-status-') || window.__lumenfallQaContext.scenario.startsWith('self-test-rift-status-')){
++if(window.__lumenfallQaContext.scenario==='lab-motes-runtime' || window.__lumenfallQaContext.scenario==='lab-motes-native' || window.__lumenfallQaContext.scenario==='lab-motes-reduced-motion' || window.__lumenfallQaContext.scenario==='auto-ascend-target-mobile' || window.__lumenfallQaContext.scenario==='auto-ascend-target-reduced-motion' || window.__lumenfallQaContext.scenario.startsWith('forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('self-test-forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('rift-status-') || window.__lumenfallQaContext.scenario.startsWith('self-test-rift-status-')){
+   var qaStartupResolve;
+   window.__qaForgeStartup={completed:false,callbacks:0,promise:new Promise(function(resolve){qaStartupResolve=resolve;})};
+   var qaOriginalPlayStartupIntro=playStartupIntro;
+@@ -457,6 +469,88 @@ applyOfflineProgress = function(){
+ };
+ 
+ window.__lumenfallQaBridge = {
++  labMotes: {
++    withHp: function(hp,fn){var original=enemyHpFor;enemyHpFor=function(){return hp;};try{return fn();}finally{enemyHpFor=original;}},
++    naturalDps: function(){return simulationPassiveDps(2000000000000);},
++    numericCosts: function(){return {titan:spiritCost(SPIRITS.find(function(s){return s.id==='titan';})),formation:researchCostForLevels(RESEARCH.find(function(s){return s.id==='formation';}),state.research.formation,1),momentum:nodeCost(NODES.find(function(s){return s.id==='momentum';})),formationStudy:studyCost(LONG_STUDIES.find(function(s){return s.id==='formationstudy';}),state.longStudyLevels.formationstudy),wispAscend:studyCost(LONG_STUDIES.find(function(s){return s.id==='wispascend';}),state.longStudyLevels.wispascend)};},
++    traceFarm: function(fn){
++      var original=simulationApplyFarmPassive,rows=[];
++      simulationApplyFarmPassive=function(seconds,dps,policy,summary){
++        var before=JSON.parse(JSON.stringify(state)),kills=summary.kills,luminous=summary.luminousKills;
++        original(seconds,dps,policy,summary);
++        rows.push({seconds:seconds,damage:dps*seconds,before:before,after:JSON.parse(JSON.stringify(state)),kills:summary.kills-kills,luminous:summary.luminousKills-luminous});
++      };
++      try{return {result:fn(),rows:rows};}finally{simulationApplyFarmPassive=original;}
++    },
++    manual: function(id,speed){return applySpeedTier(id,speed);},
++    direct: function(seconds,kind,start){var result=advanceAuthoritativeTime(seconds,{kind:kind||'live',visual:false,clockStartMs:start||2000000000000,offlineWindowStartMs:start||2000000000000,captureTimeline:true});return {state:JSON.parse(JSON.stringify(state)),summary:result};},
++    withDps: function(dps,fn){var original=simulationPassiveDps;simulationPassiveDps=function(){return dps;};try{return fn();}finally{simulationPassiveDps=original;}},
++    mutate: function(kind){
++      var start=commitStudyStart,plan=studyMotesPlan,boundary=simulationKillsUntilStudyMotes,farm=simulationApplyFarmPassive;
++      if(kind==='double-round')simulationApplyFarmPassive=function simulationApplyFarmPassive(elapsedSec,dps,policy,summary){
++  if(elapsedSec<=0 || dps<=0) return;
++  var damage = dps*elapsedSec;
++  if(damage+SIM_EPS < state.enemyHp){
++    state.enemyHp -= damage;
++    return;
++  }
++
++  var maxHp = state.enemyMaxHp>0 ? state.enemyMaxHp : enemyHpFor(state.depth);
++  var remainingDamage = Math.max(0,damage-state.enemyHp);
++  var additionalKills = Math.floor(remainingDamage/maxHp+1e-12);
++  // Avoid catastrophic cancellation from subtracting a huge kills*maxHp
++  // product from a similarly huge damage value. Modulo preserves the
++  // represented damage remainder directly and is compositional across the
++  // fixed Farm batching boundaries.
++  var leftover = remainingDamage%maxHp;
++  if(leftover<SIM_EPS) leftover=0;
++  if(leftover>=maxHp-SIM_EPS){
++    additionalKills++;
++    leftover=0;
++  }
++
++  simulationBatchFarmKills(1+additionalKills,policy,summary);
++  if(leftover>0) state.enemyHp = Math.max(SIM_EPS,state.enemyMaxHp-leftover);
++};
++      if(kind==='rounded-quotient')simulationApplyFarmPassive=function simulationApplyFarmPassive(elapsedSec,dps,policy,summary){
++  if(elapsedSec<=0 || dps<=0) return;
++  var damage = dps*elapsedSec;
++  if(damage+SIM_EPS < state.enemyHp){
++    state.enemyHp -= damage;
++    return;
++  }
++
++  var maxHp = state.enemyMaxHp>0 ? state.enemyMaxHp : enemyHpFor(state.depth);
++  // Decompose damage before subtracting the partially damaged enemy. This
++  // avoids both a rounded quotient/modulo counting the same boundary twice
++  // and cancellation of a small current HP from a huge damage value.
++  var remainder = damage%maxHp;
++  var kills = Math.round((damage-remainder)/maxHp);
++  // Retain the existing 1e-12 quotient and SIM_EPS HP boundary tolerances,
++  // applying a carry once to this shared decomposition, never twice.
++  if(remainder>=maxHp-SIM_EPS || remainder/maxHp+1e-12>=1){
++    kills++;
++    remainder=0;
++  }
++  var difference = remainder-state.enemyHp;
++  var leftover;
++  if(difference>=-SIM_EPS || difference/maxHp>=-1e-12){
++    kills++;
++    leftover=Math.max(0,difference);
++  } else {
++    leftover=maxHp+ difference;
++  }
++  if(leftover<SIM_EPS) leftover=0;
++
++  simulationBatchFarmKills(kills,policy,summary);
++  if(leftover>0) state.enemyHp = Math.max(SIM_EPS,state.enemyMaxHp-leftover);
++};
++      if(kind==='free-carry')commitStudyStart=function(node){var result=start(node);if(result&&state.studyUseMotes[node.id])findActiveStudy(node.id).speedMult=state.studySpeedTargets[node.id];return result;};
++      if(kind==='fallback')studyMotesPlan=function(node){var result=plan(node);if(result&&state.motes<result.cost){result.target=1.5;result.cost=speedTierCost(1.5);}return result;};
++      if(kind==='batch-end')simulationKillsUntilStudyMotes=function(){return Infinity;};
++      return function(){commitStudyStart=start;studyMotesPlan=plan;simulationKillsUntilStudyMotes=boundary;simulationApplyFarmPassive=farm;};
++    }
++  },
+   inquiry: {
+     nodes: function(){return JSON.parse(JSON.stringify(LONG_STUDIES));},
+     originals: function(){return LEGACY_STUDY_IDS.slice();},
+@@ -978,7 +1072,7 @@ window.__lumenfallQaBridge = {
+     var aggregate = {
+       lumenGained:0,shardGained:0,sigilsGained:0,motesGained:0,
+       kills:0,bossKills:0,luminousKills:0,ascends:0,autoTaps:0,
+-      empowers:0,researchBought:0,studiesStarted:0,retreats:0,retries:0,
++      empowers:0,researchBought:0,studiesStarted:0,studySpeedPurchases:0,studyMotesSpent:0,retreats:0,retries:0,
+       fastForwardedKills:0,iterations:0,retreated:false,
+       completedStudies:[],closedStudies:[],achievements:[],ascendGains:[]
+     };
+@@ -986,7 +1080,7 @@ window.__lumenfallQaBridge = {
+       [
+         'lumenGained','shardGained','sigilsGained','motesGained',
+         'kills','bossKills','luminousKills','ascends','autoTaps','empowers',
+-        'researchBought','studiesStarted','retreats','retries',
++        'researchBought','studiesStarted','studySpeedPurchases','studyMotesSpent','retreats','retries',
+         'fastForwardedKills','iterations'
+       ].forEach(function(key){ aggregate[key] += part[key]||0; });
+       aggregate.retreated = aggregate.retreated || !!part.retreated;
+@@ -1292,7 +1386,7 @@ def build_runner():
+   function assertSummaryParity(actual,expected,label){
+     [
+       'kills','bossKills','luminousKills','sigilsGained','motesGained','ascends',
+-      'autoTaps','empowers','researchBought','studiesStarted','retreats','retries'
++      'autoTaps','empowers','researchBought','studiesStarted','studySpeedPurchases','studyMotesSpent','retreats','retries'
+     ].forEach(function(key){
+       assert((actual[key]||0)===(expected[key]||0),label+' summary '+key+' must match exactly');
+     });
+@@ -1725,6 +1819,17 @@ def build_runner():
+       if(ctx.scenario.startsWith('forge-ui-') || ctx.scenario.startsWith('self-test-forge-ui-') || ctx.scenario.startsWith('rift-status-stacking') || ctx.scenario==='rift-status-mobile' || ctx.scenario==='rift-status-reduced-motion' || ctx.scenario.startsWith('self-test-rift-status-line')){
+         window.__forgeUiReady=true;return; // Native CDP input driver owns this scenario.
+       }
++      if(ctx.scenario.startsWith('lab-motes-')){
++        if(ctx.scenario==='lab-motes-runtime'){bridge.freeze();window.__farmRuntimeReady=true;return;}
++        if(ctx.scenario==='lab-motes-native'||ctx.scenario==='lab-motes-reduced-motion'){window.__labMotesNativeReady=true;return;}
++        bridge.freeze();
++        if(ctx.scenario==='lab-motes-conservation'){finish('pass',window.runFarmConservationQa(bridge,ctx,assert));return;}
++        if(ctx.scenario==='lab-motes-numerical'){finish('pass',window.runFarmNumericalQa(bridge,ctx,assert));return;}
++        if(['lab-motes-save-reload','lab-motes-backup-restore','lab-motes-recovery','lab-motes-reset'].includes(ctx.scenario)){
++          window.runLabMotesPersistence(bridge,ctx,assert,phase,nextPhase,backupCode,finish);return;
++        }
++        finish('pass',window.runLabMotesQa(bridge,ctx,assert,assertProtectedParity,assertSummaryParity));return;
++      }
+       if(ctx.scenario.startsWith('inquiry-')){
+         bridge.freeze();
+         if(['inquiry-save-reload','inquiry-backup-restore','inquiry-recovery','inquiry-reset'].includes(ctx.scenario)){
+@@ -3793,6 +3898,9 @@ def instrument_html(source, fixtures):
+         "<script>" + (ROOT / "auto-ascend-target.js").read_text(encoding="utf-8") + "</script>" +
+         "<script>" + (ROOT / "buff-timing.js").read_text(encoding="utf-8") + "</script>" +
+         "<script>" + (ROOT / "measured-inquiry.js").read_text(encoding="utf-8") + "</script>" +
++        "<script>" + (ROOT / "lab-motes.js").read_text(encoding="utf-8") + "</script>" +
++        "<script>" + (ROOT / "farm-conservation.js").read_text(encoding="utf-8") + "</script>" +
++        "<script>" + (ROOT / "farm-numerical.js").read_text(encoding="utf-8") + "</script>" +
+         build_runner() + "\n</body>",
+         1,
+     )
+@@ -3955,6 +4063,12 @@ def browser_identity(chrome):
+ 
+ 
+ def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
++    if scenario == "lab-motes-runtime":
++        url = base_url + "/index.html?" + urlencode({"qaScenario": scenario, "qaFixture": fixture})
++        return run_native_process(["node", str(ROOT / "farm-runtime.cjs"), chrome, url, scenario], scenario)
++    if scenario in ("lab-motes-native", "lab-motes-reduced-motion"):
++        url = base_url + "/index.html?" + urlencode({"qaScenario": scenario, "qaFixture": fixture})
++        return run_native_process(["node", str(ROOT / "lab-motes.cjs"), chrome, url, scenario], scenario)
+     if scenario == "raw-process-contract":
+         from process_contract import run_contract
+         return run_contract(run_scenario)
+@@ -3962,7 +4076,7 @@ def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
+         return native_process_contract()
+     if scenario in ("rift-status-mobile", "rift-status-reduced-motion") or scenario.startswith(("rift-status-stacking", "self-test-rift-status-line")):
+         url = base_url + "/index.html?" + urlencode({"qaScenario": scenario, "qaFixture": fixture})
+-        return run_native_process(["node", str(ROOT / "rift-status.cjs"), chrome, url, scenario], scenario)
++        return run_native_process(["node", str(ROOT / "rift-status.cjs"), chrome, url, scenario], scenario, timeout=120)
+     if scenario in ("auto-ascend-target-mobile", "auto-ascend-target-reduced-motion"):
+         url = base_url + "/index.html?" + urlencode({"qaScenario": scenario, "qaFixture": fixture})
+         return run_native_process(["node", str(ROOT / "auto-ascend-target.cjs"), chrome, url, scenario], scenario)
+@@ -4010,7 +4124,7 @@ def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
+ 
+     if passed:
+         print(f"PASS {scenario}" + (f" {viewport}" if viewport else ""))
+-        if viewport or scenario in ("upgrade-effects-and-deeds", "parity-long-high-power", "parity-medium-farm") or scenario.startswith(("auto-ascend-target-", "chronology-", "p1-05-", "p2-07a-", "forge-", "buff-", "support-", "inquiry-")):
++        if viewport or scenario in ("upgrade-effects-and-deeds", "parity-long-high-power", "parity-medium-farm") or scenario.startswith(("auto-ascend-target-", "chronology-", "p1-05-", "p2-07a-", "forge-", "buff-", "support-", "inquiry-", "lab-motes-")):
+             print("  detail: " + json.dumps(payload.get("detail"), sort_keys=True))
+         return True
+ 
+@@ -4104,7 +4218,7 @@ def main():
+         failures = []
+         try:
+             for scenario, fixture in selected.items():
+-                viewports = LAYOUT_VIEWPORTS if scenario.startswith('layout-') or scenario=='self-test-layout-collapse' else [None]
++                viewports = [(320,844,0,0),(390,844,0,0),(430,844,0,0)] if scenario=='lab-motes-ui' else LAYOUT_VIEWPORTS if scenario.startswith('layout-') or scenario=='self-test-layout-collapse' else [None]
+                 for viewport in viewports:
+                     if not run_scenario(chrome, base_url, scenario, fixture, viewport):
+                         failures.append(f"{scenario} {viewport}")

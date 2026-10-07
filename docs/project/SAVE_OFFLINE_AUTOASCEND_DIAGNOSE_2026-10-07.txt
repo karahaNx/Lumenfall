@@ -1,0 +1,128 @@
+LUMENFALL — SAVE / OFFLINE / AUTO-ASCEND
+Til Lead. Dato: 7. oktober 2026. Model: GPT-6.1 Sol. Effort: High.
+Læs denne TXT først. ZIP indeholder backup, rå resultater og reproduktionsdriver.
+Brug Source_Index.txt; læs kun relevante kilder.
+
+KONKLUSION
+Den komplette backup kan parses og accepteres af produktets save-normalisering
+uden ændring af nogen felter. Den peger på en reproducerbar runtimefejl i den
+aktuelle main-kode: 8 timers offline simulation med Auto-Ascend ON rammer
+SIM_EVENT_LIMIT og kaster en exception ved iteration 250001.
+Dette er ikke dokumentation for en korrupt backup. Save-normalisering er ikke
+bevis for, hvordan hver tidligere ressource blev optjent.
+
+BASELINE OG EVIDENSSTATUS
+- Repository: https://github.com/karahaNx/Lumenfall
+- Main verificeret ved start og slut: 1ddc246eb62782a61ec5c486cd5f51ea170bb338.
+- Git tree: bfb3970b29485b3e8ece1c72bb60186eb2ba755e.
+- index.html Git blob: ea44431c163569548973d9e489f75345749a07ee.
+- Den lokale kildes Git blob-hash matcher den hentede GitHub-fil præcist.
+- PROJECT_STATE angiver accepteret APK 0.1.133. Enhedens APK-version er ukendt.
+- Bruger rapporterer fejl ved offline farming med et lavt Auto-Ascend-mål.
+- Egen evidens: Node.js v24.19.0 VM med produktets JavaScript, normaliseret
+  enhedssave, deterministisk starttid og visual:false. Ingen fysisk Android-
+  eller browser-/WebView-reproduktion. UI, storage og lifecycle er ikke kørt.
+- 9 fokuserede kørsler. Den lange fejl er også reproduceret gennem produktets
+  faktiske applyOfflineProgress()-indgang med Date.now = lastSeen + 8 timer.
+- Driveren tilføjer kun læsende testadgang og en observationsvariabel for
+  elapsedSec/iterationer. Kampformler, state mutation og grænse er uændrede.
+- Intet remote write, PR, merge, workflow-run eller produktfix er udført.
+  Resultatet er et afgrænset QA-fund; andre kandidater/PR46 er ikke accepteret.
+
+BACKUPENS RELEVANTE VÆRDIER
+Original vedhæftning: lumenfall, 5332 bytes.
+SHA256: 7e7aadefe4a50f13bb99578516de6707c1fb093ef964d6c2126119aa0ef51080
+lastSeen: 2026-10-07 08:26:04.477 UTC / 10:26:04.477 dansk tid.
+schemaVersion=1; depth=1; maxDepthEver=220; riftMode=push; lumen=0.
+autoAscendEnabled=true; owned.autoascend=true; autoAscendTargetDepth=22.
+Schema-v1 gemmer encounter-grænsen N. Koden oversætter til clear N-1.
+Den konkrete backup betyder derfor efter CLEAR RIFT 21, ikke Rift 20 eller 22.
+Et separat scenarie ændrer kun target til21 for at teste CLEAR RIFT20.
+activeParty=[ember]; Ember level1, øvrige Wisps level0.
+formationRebuild=Boss [aurora,titan,void,ember,stone].
+empowerQueue: KUN Titan=true. Ember/Aurora/Void/Stone og øvrige=false.
+AscendCount=15142; ascendRewardedDepth=219; prisms=63376.
+Offline-rate=2.4; offline-cap=72 timer. Echo over sin effektgrænse og de høje
+legacy-levels accepteres af den nuværende kode; de er ikke i sig selv korruption.
+
+REPRODUKTION — RESULTATER
+Alle cases starter separat fra original backup, ikke fra foregående output.
+Scenario                           Kills    Ascends  Empower  Iterationer  Status
+ON, target22, 60 sek                 630         30       0          630  PASS
+ON, target22, 300 sek               3150        150       0         3150  PASS
+ON, target22, 1 time              37800       1800       0        37801  PASS
+OFF, samme save, 1 time             190          0     106        10441  PASS
+ON, target22, 8 timer            249999*     11904*      0*      250001  EXCEPTION
+OFF, samme save, 8 timer            773          0     144       106128  PASS
+ON, target21/Clear20, 1 time      36499       1824       0        36501  PASS
+ON, alle Empower ON, 1 time      47662       2269    2269        47664  PASS
+applyOfflineProgress, 8 timer    249999*     11904*      0*      250001  EXCEPTION
+* Delvis in-memory state ved exception, ikke et afsluttet eller gemt resultat.
+
+1 time med originalt ON-target: prisms63376 ->74176, dvs. +10800 Prisms.
+Simulatorens samlede optjente Lumen=161256960.00001866, men saldoen ender0,
+fordi hver Ascension nulstiller Lumen. Optjent Lumen er ikke nettosaldo.
+8 timer med OFF ender med Lumen31540008506715.566, Titan level144, Rift199
+Farm med bevaret Push200. Resultatet er kun målt for denne konkrete test.
+Alle Empower ON hjælper ikke på den lave Ascension-grænse: flere hurtige
+Ascensions, og den ønskede Boss-formation bliver stadig ikke færdigbygget.
+
+FUND A — REEL OFFLINE-RUNTIMEFEJL
+Fejltekst: Authoritative simulation event limit exceeded after 250001 iterations
+Afbrudt efter 23808.744627645367 simulerede sekunder = 6t36m48.745s.
+Det sker langt inden den gemte offline-cap på72 timer og inden de ønskede8 timer.
+SIM_EVENT_LIMIT=250000, og Push-enemies bliver simuleret enkeltvis. Det lave
+Ascension-mål giver gentagne korte runs og mange events i én synkron kaldstak.
+Koden kaster exception i stedet for at afslutte hele det tilladte offlinevindue.
+applyOfflineProgress() giver samme exception. Normal efterfølgende save og
+return-flow nås ikke gennem den kaldsvej. State er allerede delvis avanceret.
+Ved cold init nås de efterfølgende timers heller ikke gennem den normale init.
+Ved resume kan resumeFlowBusy blive true, fordi cleanup kun sker senere i
+startup-intro-callbacken. Det er kodeafledte følger, ikke målte Androidsymptomer.
+Exceptionens effekt på native recovery/persistence og brugerens konkrete
+skærm skal reproduceres på den installerede APK. Ingen garanteret datatab
+eller garanteret crash/hang kan konkluderes fra VM-testen alene.
+
+FUND B — INDSTILLINGERNE FORKLARER 0 LUMEN OG MANGLENDE FORMATION
+applyAscendMutation() nulstiller Lumen og Wisp-levels; Ember starter pålevel1.
+Auto-Empower respekterer empowerQueue. Kun Titan må købes i den konkrete save.
+Titans level0-pris med Bonds19 er946000 Lumen. De korte runs når ikke at købe
+Titan før næste reset. Derfor bliver de øvrige fem formationspladser ikke
+genopbygget. Aurora/Void/Stone er desuden eksplicit sat til Auto-Empower OFF.
+Det er en forklaring af den nuværende regels adfærd, ikke bevis for fejl i
+savefilen. Lav Auto-Ascend kan være Prism-farming uden netto-Lumen-vækst.
+
+FUND C — PRISM-BONUSSER ANVENDES, MEN REPEAT-REGEL OG AFRUNDING DÆMPER DEM
+Backup: swift18 giver1.72; prismstudy19 giver1.95; samlet Prism-multiplier3.354.
+Clear20: floor(2*sqrt(20)*3.354)=29 full; repeat floor(29*0.20)=5 Prisms.
+Clear21: full30; repeat6 Prisms. Historisk rewardedDepth219 betyder ingen ny
+progressBonus ved disse lave mål. 5 Prisms er derfor den aktuelle kodes
+forventede repeat-reward med disse bonusser, ikke en overset bonus i denne save.
+Om repeat-regel/tooltip skal ændres, er et separat designkrav til Lead.
+
+NÆSTE HANDLING TIL LEAD
+1. Registrér separat bug for tilladt offlinevindue, der overskrider eventbudgettet.
+2. Få APK-versionen og det præcise symptom (0 Lumen, frosset retur, manglende
+   returpanel eller stoppet progression). Match installeret produktcommit.
+3. Genskab det dokumenterede 8-timers case i produktets lifecycle og persistence;
+   include cold launch og background/resume. Verificér, at offline ikke delvist
+   forbruges eller dobbelttildeles, og at resumeFlowBusy frigives ved failure.
+4. Design bounded/fortsat offline catch-up med korrekt chronology, sidste
+   checkpoint og save/recovery. En større SIM_EVENT_LIMIT alene er ikke en
+   robust rettelse: den tilladte cap er72t, og WebView kan stadig blokere længe.
+5. Bevar earned/spent accounting, Studies, formationsintention, målrepræsentation
+   og offline-parity. Test ON Clear20/21, OFF, lang fravær, cap og fejlveje.
+6. Få relevant writer-scope fra Lead før et produktfix; denne pakke er evidens.
+
+MIDLERTIDIG BRUGERHANDLING
+Auto-Ascend OFF gennemførte8 timer i den målte case og lod Titan blive købt.
+Slå Auto-Ascend fra før et længere offlineophold, hvis målet er Lumen/Wisp-
+progression. Det er en konkret afbødning, ikke en rettelse eller en garanti for
+alle saves/fraværsperioder. Lad original backup være uændret.
+
+KILDER / REPRODUKTION
+Læs Source_Index.txt i ZIP. Source fra fast commit skal hentes fra GitHub,
+ikke fra flydende main. ZIP indeholder ikke en kopi af repositoryet.
+Rå testdata: short_results.json, long_results.json, offline_entry_results.json.
+reproduce.cjs kan køres med Node24 uden tredjepartsafhængigheder, når den
+identiske index.html fra baseline er placeret ved siden af driveren.

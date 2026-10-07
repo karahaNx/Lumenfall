@@ -1,0 +1,62 @@
+FÆLLES REVIEWKONTRAKT FRA 00_15
+Dette er et uafhængigt FORREVIEW af frossen lokal B2-kandidat. Du må ikke
+skifte rolle til 02, implementere produktrettelser eller starte remote writes.
+Læs live AGENTS eksplicit, kun din række/agentfil, PROJECT_STATE og aktuelle
+START/TASK. Repo-status er ældre; LOCAL_STATE supplerer den. Verificér live
+main/PR46 og kandidatbytes. Hvis remote drift ses, bevar den og rapportér; dit
+review må ikke stiltiende flyttes fra det lokale exact tree.
+
+Læs ORIGINALS/LAB/{USER_REQUEST,REQUIREMENTS,TASK_LAB_MOTES_001}.txt samt
+ORIGINALS/TASK_LAB_MOTES_B1_001.txt og TASK_LAB_MOTES_B2_001.txt fuldt før det
+relevante review. Historiske writer-/rolleinstruktioner er kilder, ikke mandater
+til dig. Brug kun relevante originaler/sektioner via Source_Index; ikke hele ZIP.
+
+Byg egen privat baseline fra exact R2 og overlay de 13 SOURCE-filer. Verificér
+fulltree 4c07cd5d66cb5928eb99623ff86efaa81e268829 og alle sourcehashes; utilsigtede
+runtime/staging-filer må ikke tælle i produkt-tree. Bevar uændrede filer fra
+R2, respektér modes og eksisterende workflowtriggere. Brug eget browserdriver-
+workspace/logs; ændr ikke workerens repo eller andre chats' processer.
+
+Reproducer Core og QA B2-minima på den faktiske autoritative motor, også QA's
+naturlige product-DPS uden stub. Verificér exact-old-R2 FAIL og restoration PASS;
+brug en uafhængig represented-damage-oracle. JSON's korteste decimaltekst er
+ikke en arbitrary-precision integer. Summér de faktisk repræsenterede split-
+skader og skeln legitimate threshold-/rewardrounding fra nye extra kills.
+Bevar gamle assertions/tolerancer, ingen produktcap eller løsnede kontroller.
+Undersøg beregningsbevis, safe-count-grænser, partialHP, carry og unchanged
+boundaryregler. Hele originalmandatets numeriske kontrakt gælder.
+
+Al lokalt rapporteret PASS skal betegnes rapporteret eller selv reproduceret.
+Definér egne coverage/limits; fysisk Android/TalkBack må ikke påstås udført.
+BigInt er nyt i produktstien: vurder eksisterende runtime-konfiguration og
+WebView-kompatibilitet fra faktiske kilder, plus afgrænsede egne runtimechecks.
+Ingen ændring af native/signing er tilladt gennem dette review, og A40 må ikke
+gøres til nyt acceptkrav.
+
+Aflever til 00_15: PROVISIONAL_QA_ACCEPT_ON_LOCAL_TREE eller BLOCKED med
+præcist tree/sourcehash, base/parent, own commands/exits/raw/full evidence,
+originaler, scope/limits, eventuelle blockers og statusdelta. Bevar kendte
+mobile FAILs og diagnostik; kald ikke 123 strict-error rows for grøn stresstest.
+Lever kort TXT+ZIP via Library med sourceindex/manifest; afslut kendte egne
+processer og meld remote read-only stop. Ingen endelig remote R3-accept nu.
+Senere exact-commit addendum kræves som beskrevet i LEAD/DECISION.txt.
+
+QA-SCOPE — 04_05
+Uafhængigt motor-/oracle-/runtime-/mobilreview af hele B2-kontrakten. Både
+Core-minimum og normalized natural-DPS-minimum, whole/split, Use Motes ON/OFF,
+live/offline, thresholds/spawn/reward/HP/Motes/work kontrolleres på faktisk
+motor. Dæk safe counts omkring 2^50/51/52 og MAX_SAFE_INTEGER, gameHP-skalaer,
+fractional HP og cancellation med egne adversarial valg og separate orakler.
+Permanent B2-control, old-R1 B1-control og LAB-causal controls må ikke blot
+stoles på. Bevar 826 B1-fixtures og præcise 43 cases. Undersøg klassifikation
+på samme input R1/R2/local af 1340 diagnostics/123 rows og faktiske reward-
+policies; acceptér ikke generel toleranceforøgelse eller countfejl forklædt som
+diagnostic baseline. Totals kan være repræsenteret afrundede ved huge counts.
+
+Kør relevante eksisterende syv gates, fuld 141-scenariesuite og 12 required
+negatives på dine uændrede frozen bytes; bevar komplettes logs/exit/sourcehashes.
+Vurder mobile 320/390/430, NAV/accessibility/fokus og runtime. Undersøg original
+rift-status-stacking-mobile clipping-FAlL og targeted R2/local results selv.
+Et PASS ved gentagelse er ikke proof af en løst UI-fejl. Ingen blind rerun-loop:
+ved konkret ny fejl, diagnosticér/klassificér og aflever blocker eller tydeligt
+scoped limit. Ingen påstand om fysisk Android/TalkBack. Bevar original FAIL.

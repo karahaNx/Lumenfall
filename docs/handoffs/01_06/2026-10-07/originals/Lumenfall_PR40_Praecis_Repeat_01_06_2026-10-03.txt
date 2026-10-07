@@ -1,0 +1,104 @@
+Til 00_06 — Lead / Architecture
+Fra 01_06 — Core / Android / APK
+Lumenfall · PR #40 · 2026-10-03
+Work · GPT 6.1 Sol · High
+
+KONKLUSION: IKKE ACCEPTABEL ENDNU — DEN SMALLE AFSLUTNING ER STOPPET
+P1 Fund1 (startup): fortsat LUKKET efter Leads accepterede tidligere evidens.
+Ingen ny dokumenteret produktregression eller genåbning af Fund1.
+Den resterende persistence-accept kan ikke gives: den autoriserede eksakte
+fixtureforudsætning fejler i 43-visibility før repeat reload.
+Jeg har fulgt Leads stopregel ved ny forskel og har ikke udvidet undtagelsen.
+
+IMMUTABLE IDENTITET — LIVE GENVERIFICERET FØR OG EFTER
+PR: https://github.com/karahaNx/Lumenfall/pull/40
+Branch: 02/auto-ascend-target-selector; open / Draft / unmerged.
+HEAD: d3daa23d04315ec21776de69b0df960d24cb19b6
+Tree: d1d128a82f6bc204655dc662a5239f98dca51059
+Eneste parent: 9348a48364dcd88b77b9d1bc00763b83c6f8e768
+Main/base: 3a89a8cb4084193326daa5dab68cf9a89ef71512
+Main tree: 134b5f21f414f56ecd446220c8ffc54a0621ca3e
+Candidate index SHA256:
+a2797073f985da25803c61e2626ef54f662dfbc5d0dbd240156e47cff76acd96
+Alle 65 kandidatblobs matcher den live rekursive HEAD-tree. Efterkontrollen
+matcher alle 65 SHA256 igen. Kilderne er uændrede. Ingen checkpoint-drift.
+CI #121: run 37078662885, attempt 1, pull_request, completed/success på HEAD.
+Required check 111074143527: Lumenfall pre-merge validation, app 15368, success.
+Main 0.1.130 er handoffens historiske Android-version; releaseversionen er ikke
+selvstændigt live-genverificeret her. Ingen Androidarbejde er udført.
+
+NYE EGNE RESULTATER — REVIDERET ORACLE
+07-cross-43-cold: PASS, Node exit0, 2.298s, ingen 60s proces-timeout.
+  Før repeat: enemyHp === 6.4; enemyMaxHp === 11; enemyDepth/depth === 1.
+  Expected er en dyb kopi af hele før-state med alene enemyHp-literal ændret
+  til 6.400000000000001. Actual/save/loader er ikke repareret.
+  Genuine zero-time repeat: hele state, canonical primary og recovery matcher
+  expected strengt. En yderligere genuine zero-time reload bevarer alle tre.
+  Target44, Prisms23 fra10, Comets22 fra7, Study1, én kill/Ascend,
+  benchmark43, depth1, lastSeen T+5500 og 5.5s catchup består med de oprindelige
+  literals. Fuld input/before/expected/actual/primary/recovery står i JSON.
+
+07-cross-43-visibility: FAIL før repeat, Node exit1, 2.660s, ingen proces-timeout.
+  Præcis assertion: "exact authorized HP fixture before repeat".
+  Alle de oprindelige heltals-, reward-, Study-, metadata-, offline- og
+  canonical-save-checks før denne nye forudsætning gennemførtes uden failure.
+  Efterfølgende failure-collector observerer runtime enemyHp6.1000000000000005;
+  gemt canonical primary og recovery har enemyHp6.2. MaxHP11 og depths1.
+  Target44, Prisms23, Comets22, ascendCount1 og lastSeen T+5500 ses også i
+  snapshot. Ingen pageerrors; normale reload/reset-flags er false.
+  Dette collector-snapshot er taget EFTER assertionen og er ikke det lokale
+  before-repeat objekt r, som den gamle driver ikke gemmer ved failure.
+  Derfor påstår jeg ikke en præcis HP-værdi i r. Dets sammensatte eksakte
+  fixturecheck er faktisk FAIL. Ingen repeat/expected/actual til denne case
+  blev produceret; det manglende bevis er eksplicit.
+
+07-cross-55-cold: IKKE KØRT efter stop.
+07-cross-55-visibility: IKKE KØRT efter stop.
+Extra-HP6.400000000000002 negative, target/reward negatives og actual
+source-restored undo: IKKE KØRT efter stop. Ingen negative-PASS påstås.
+run_review.py indeholder den planlagte negative/undo-del, men når den aldrig.
+
+FORKLARINGSGRÆNSE OG NÆSTE LEAD-BESLUTNING
+De levende callbacks kan ændre HP mellem driverens separate Playwright-calls;
+failure-observationens runtime/save-forskel er forenelig med sådan progression.
+Det er en inferens, ikke en isoleret årsagsdiagnose. Jeg kalder ikke dette en
+ny selector-, reward- eller persistence-produktregression på dette bevis.
+Jeg har hverken pauset ticks, ændret seed/clocks/deadlines, afrundet HP,
+repareret actual/save eller lempet nogen comparison for at komme videre.
+Lead skal afklare, hvordan den eksakte before-repeat6.4-fixture skal sikres
+med de tilladte uændrede timingbetingelser. Først derefter kan de uafsluttede
+cases og negative/undo afsluttes. Ingen writer eller worker er frigivet her.
+
+DRIVER OG RUNTIME
+review-driver.diff viser kun den godkendte before6.4-forudsætning, expected-
+kopiens eksakte HP-literal, full-state/primary/recovery equality og ekstra reload
+for de fire fixtures. Alle eksisterende assertions/literals er bevaret.
+Ingen generel ULP-tolerance, epsilon, rounding eller HP-exclusion.
+prepare.py er byteidentisk med tidligere driver; det nye directory-layout
+tilpasser kildestien. Den prepared positive-page er byteidentisk med den
+tidligere prepared page (cmp exit0). Browserstien genbruges uændret.
+Egen Chromium Headless Shell153.0.8010.0 via Playwright; Node24.19.0.
+Browser SHA256:
+1346545781835e04ece3434a16d656ad5cbe60a6a179a43dff43f79a21f9a4ad
+De to kørsler er separate målrettede Nodeprocesser med uændret original
+CORE40_ONLY-filter og 60s ydre timeout. Ingen side-timeout indtraf.
+Der er fuld Node stdout/stderr, målt exit/elapsed/deadline og browser-pageerrors.
+Separat rå Chromium-stderr/exit fra Playwright hævdes ikke.
+
+GENBRUGT EVIDENS — INGEN OMMÆRKNING
+Original own19 forbliver14PASS/5FAIL. De gamle fem FAIL-kvitteringer er bevaret
+i previous-evidence/Lumenfall_PR40_Startup_Genreview_01_05_2026-10-03.zip.
+De14 tidligere PASS, separat isoleret backup purity-PASS,11 genuine bootcases,
+11195 window/nav-assertions i12 profiler og gamle kausale negative/undo er
+genbrugt fra den hashverificerede egen tidligere aflevering, ikke nye kørsler.
+Backup purity anvendte intervalpause efter genuine boot; den er ikke liveness.
+Den eksisterende6.4 ->6.400000000000001-projektion er tidligere observeret på
+main/parent/HEAD. Kun den ene nye43-cold-PASS anvender den reviderede oracle her.
+Jeg har verificeret handoff-manifest201/201 og tidligere review-manifest248/248.
+Ingen ny own19-fuldkørsel,121-suite, bred audit eller browserdownload.
+
+GRÆNSER
+Ingen repository-edits, push, branch/commit/PR, reviewpublicering, Ready, merge,
+APK, signing, emulator, ADB, manuel CI-trigger/rerun eller workerstart.
+Ingen fysisk Android/A40/TalkBack-accept og ingen mergeaccept.
+TXT+ZIP afleveres til00_06; konklusionen dækker alene ovenstående HEAD/tree/base.

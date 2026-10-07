@@ -1,0 +1,24 @@
+Own sources are under REPRODUCE in this deliverable. own_motor.js and
+extra_cases.js are04_05's prior independent QA fixtures, copied from the input
+package and executed fresh against exact R1/R2/local stages. Their per-enemy
+small-count ledgers, tolerances and assertions are unchanged. New b2-own.js,
+engine-safe-counts.js and Python Fraction adversarial expectations are authored
+for this review; worker numerical scripts are not used as acceptance oracles.
+
+The browser exposes private production bindings only through throwaway stage
+instrumentation, with runtime pause/fixed clock. The candidate run.py prelude
+supplies save/clock/browser machinery, not the own numeric expectations. Source
+and instrumentation hashes are recorded in stage/hashes.json. Actual natural
+DPS producer remains untouched. DPS stubs are explicit in fixed-damage tests.
+
+The main product source remains frozen. Own oldR1 function and three LAB
+mutants replace private bindings and restore them; the oldR2 control uses exact
+git-show R2 function bytes. Own browser traces record actual segment damage and
+before-state; independent oracles decode represented inputs rather than using
+the new helper. Permanent candidate controls are also run in the frozen full
+suite, whose actual raw payloads are retained.
+
+Reward-policy expected operation order (rate*scale*count, then additions) and
+batched spawn float policy are deliberately checked as existing behavior, not
+arbitrary-precision physical quantities. Small-count independent per-enemy
+chronology continues to verify payment/buff/completion causality separately.

@@ -1,0 +1,49 @@
+{
+  "rows": [
+    {
+      "input": {
+        "D": "415ac01abfffffff",
+        "H": "405ac00000000000",
+        "hp": "3ddac00000000000",
+        "q": 65536,
+        "kills": 65537,
+        "hpExpected": 1.0286385077051818e-09,
+        "deficit": 1.0286385077051818e-09,
+        "scope": "new-physical-adversarial"
+      },
+      "actual": {
+        "q": 65536,
+        "kills": 65538,
+        "hpAfter": 107
+      },
+      "exactModulo": 106.99999999906868,
+      "firstRemainderSnap": true,
+      "partialHpEpsAfterSnap": true,
+      "sameBlockedModernOutcome": true,
+      "status": "original strict count mismatch retained; unchanged composed EPS rules"
+    },
+    {
+      "input": {
+        "D": "422daa0628631466",
+        "H": "4158e0c7bb8e026f",
+        "hp": "3e7ad7f29abcaf48",
+        "q": 9767,
+        "kills": 9768,
+        "hpExpected": 6.6192580223083495e-06,
+        "deficit": 6.6192580223083495e-06,
+        "scope": "new-deterministic"
+      },
+      "actual": {
+        "q": 9767,
+        "kills": 9769,
+        "hpAfter": 6521630.930542572
+      },
+      "exactModulo": 6521630.930536053,
+      "firstRemainderSnap": true,
+      "partialHpEpsAfterSnap": true,
+      "sameBlockedModernOutcome": true,
+      "status": "original strict count mismatch retained; unchanged composed EPS rules"
+    }
+  ],
+  "scope": "No production tolerance or count rule changed. These are explicit diagnostics, not strict-green count results."
+}

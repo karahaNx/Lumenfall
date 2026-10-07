@@ -1,0 +1,93 @@
+[
+  {
+    "gate": "gate-01",
+    "name": "APK identity verifier self-test",
+    "started": "2026-10-07T06:35:30.487346+00:00",
+    "command": [
+      "bash",
+      "/workspace/scratch/d55491df75da/runtime_fix/gates/gate-01/command.sh"
+    ],
+    "cwd": "/workspace/scratch/d55491df75da/runtime_fix/repo",
+    "exitcode": 0,
+    "seconds": 0.04326018400001885,
+    "frozenUnchanged": true
+  },
+  {
+    "gate": "gate-02",
+    "name": "Validate game source",
+    "started": "2026-10-07T06:35:30.533027+00:00",
+    "command": [
+      "bash",
+      "/workspace/scratch/d55491df75da/runtime_fix/gates/gate-02/command.sh"
+    ],
+    "cwd": "/workspace/scratch/d55491df75da/runtime_fix/repo",
+    "exitcode": 0,
+    "seconds": 0.15803997199986952,
+    "frozenUnchanged": true
+  },
+  {
+    "gate": "gate-03",
+    "name": "Stage web assets",
+    "started": "2026-10-07T06:35:30.693391+00:00",
+    "command": [
+      "bash",
+      "/workspace/scratch/d55491df75da/runtime_fix/gates/gate-03/command.sh"
+    ],
+    "cwd": "/workspace/scratch/d55491df75da/runtime_fix/repo",
+    "exitcode": 0,
+    "seconds": 0.012056264999955602,
+    "frozenUnchanged": true
+  },
+  {
+    "gate": "gate-04",
+    "name": "Stateful behavioral regression suite",
+    "started": "2026-10-07T06:35:30.707825+00:00",
+    "command": [
+      "bash",
+      "/workspace/scratch/d55491df75da/runtime_fix/gates/gate-04/command.sh"
+    ],
+    "cwd": "/workspace/scratch/d55491df75da/runtime_fix/repo",
+    "exitcode": 0,
+    "seconds": 500.925038049,
+    "frozenUnchanged": true
+  },
+  {
+    "gate": "gate-05",
+    "name": "Behavioral harness negative self-test",
+    "started": "2026-10-07T06:43:51.635346+00:00",
+    "command": [
+      "bash",
+      "/workspace/scratch/d55491df75da/runtime_fix/gates/gate-05/command.sh"
+    ],
+    "cwd": "/workspace/scratch/d55491df75da/runtime_fix/repo",
+    "exitcode": 0,
+    "seconds": 11.224174566999864,
+    "frozenUnchanged": true
+  },
+  {
+    "gate": "gate-06",
+    "name": "Install runtime error guard in staged copy",
+    "started": "2026-10-07T06:44:02.862172+00:00",
+    "command": [
+      "bash",
+      "/workspace/scratch/d55491df75da/runtime_fix/gates/gate-06/command.sh"
+    ],
+    "cwd": "/workspace/scratch/d55491df75da/runtime_fix/repo",
+    "exitcode": 0,
+    "seconds": 0.03154217900009826,
+    "frozenUnchanged": true
+  },
+  {
+    "gate": "gate-07",
+    "name": "Browser runtime smoke test",
+    "started": "2026-10-07T06:44:02.896751+00:00",
+    "command": [
+      "bash",
+      "/workspace/scratch/d55491df75da/runtime_fix/gates/gate-07/command.sh"
+    ],
+    "cwd": "/workspace/scratch/d55491df75da/runtime_fix/repo",
+    "exitcode": 0,
+    "seconds": 0.6655010250001396,
+    "frozenUnchanged": true
+  }
+]

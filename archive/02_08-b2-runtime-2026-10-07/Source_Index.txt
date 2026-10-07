@@ -1,0 +1,39 @@
+02_08 → 00_16 — målrettet navigation
+START_HER.txt → RESULT.txt → SUMMARY/identity.json → relevante egne beviser.
+Aktuel rolle bestemmes af modtagers liveAGENTS/egenrolle og00_16s mandat.
+CURRENT_MANDATE/ indeholder fulde modtagne originals; gamle rollelabels er
+historiske. Ingen ordre om at overtage Gameplay-writer gennem reviewpakken.
+
+SOURCE/14filer: overlay på exactR2, bevar modes i identity.json; fulltree skal
+blive758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef. Resten kommer fraR2, ikke main.
+DIFF/R2_to_new.patch, blocked_to_new.patch, main_to_new.patch.
+ORIGINALS/: fulde LAB user/requirements/mandat, B1/B2 og runtime-mandat.
+RULES/: læste egenGameplay-regler og PROJECT_STATE (gammelt snapshot).
+RUNTIME_BASELINE/: låst6.2.1 Java/config/package-lock, ingen ændrede produktbytes.
+REFERENCE/: exactR1/R2 og gammel blokeretindex til controls.
+
+SUMMARY/: præcis identitet/96frozenhashes, input/rawkontrol, runtimegrammar/
+actualoldV8/API-fravær, minimumsledger, 43-fresh,1340comparison,622rewards,
+EPSdiagnostik,426splits, performance/gates og proceslukning.
+OWN_RAW.tar.xz + RAW_MANIFEST.json: alle egne rawoutputs/commands/exits/scripts,
+gates/scenarios/control/screens og developmentfailures. Udpak ved roden:
+logical evidence/ og gates/; sourcebytes må aldrig ændres under review.
+Vigtige rawpaths efter udpakning:
+ evidence/runtime/verification.json: alle app-scripts/oldV8/missingBigInt.
+ gates/verified-raw-results.json:162 browser/nativepayloads+12negatives.
+ gates/gate-04/processes/*: lab-motes-runtime1029checks/40rows og native-teardown.
+ evidence/r2-{core,natural}-raw.json: nye exactR2 fuldmotor FAILs.
+ evidence/numeric-inputs.json og *numeric-results/verification:20606rows.
+ evidence/own-represented-diagnostic-traces.json, {r1,r2,new}-extras/diag-trace.
+ evidence/{r1,r2,new}-motor.json:100motorgrupper +826 grid/full43-keycontrol.
+ evidence/performance-comparison.json + *performance*final/isolation + failedraw.
+ evidence/development/: initiale private driverfejl, aldrig skjult eller grønnet.
+
+HISTORICAL/CORE_REPORT.txt og QA_REPORT.txt: komplette tidligere BLOCKED-
+reviews; ikke accept af nye bytes. WORKER_RAW_CURRENT.tar.xz/manifest indeholder
+1322originalworkerrawfiler, herunder evidence/initial-gate04 clippingFAIL og
+original1340strictdiagnostik. Udpak i separat historisk mappe, ikke over nye raw.
+CORE_OWN_RAW/manifest:132originalCorebeviser. QA781raw er integritetsverificeret
+men ikke dubleret i denne overdragelse;00_16s modtagne originalpakke har dem.
+REPRODUCE/: private scripts og læseplan, ingen produkt-/remoteautorisering.
+MANIFEST.json dækker alle payloads undtagen sig selv; ZIPCRC og rå hashes består.

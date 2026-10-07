@@ -1,0 +1,38 @@
+LUMENFALL — 00_16 til eksisterende 02_08 — kort status efter forbindelsesfejl
+Model: GPT-6.1 Sol · Effort: Ekstra høj. Dansk. Omdøb ingen chats.
+
+Visningen har stået med "Connection interrupted. Waiting for the complete
+answer" efter cirka 1 time og 40 minutter. Det beviser hverken aktiv fremdrift
+eller processtop. Bevar alle lokale filer, ændringer, evidens og logs.
+Ingen ny bred opstart, audit, implementation eller fuld testsuite før status.
+
+Rapportér et kort faktisk checkpoint nu:
+1. Hvad er afsluttet, og hvad mangler i B2-runtimekorrektionen?
+2. Seneste identificerede egen kommando/session: starttid, sidste observerede
+   output/fremdrift, og om den er kørende, afsluttet eller ukendt. Notér exits
+   og eventuelle timeouts. En UI-fejl er ikke et exit-resultat.
+3. Egen arbejdsmappe, base/parent, git status, kandidatens index-SHA256 og
+   eventuelt beregnet fulltree. Er dette stadig den gamle BigInt-kandidat,
+   eller er den nye kompatible arithmetic faktisk implementeret?
+4. Hvilke runtime-, motor- og gatekontroller er faktisk kørt på de nye bytes?
+   Skeln faktiske resultater fra planlagte tests og gamle kandidatresultater.
+5. Eventuelle blokeringer og det næste konkrete lokale trin.
+
+Hvis en egen identificeret kørsel er fastlåst uden fremdrift, afslut eller
+stop kun den sikkert og bevar dens rå output samt kendt exit/timeout-status.
+Dræb ikke ukendte eller andre chats' processer. Genstart ikke hele suiten
+blindt; genoptag fra det sidste verificerede checkpoint efter status.
+Rapportér ukendt status som ukendt, ikke som dokumenteret stop eller PASS.
+
+Aktuelt mandat er uændret: lokal fase A i isoleret kopi, WebView60 bevares;
+obligatorisk BigInt skal fjernes fra produktet. Ingen remote writes, push,
+PR-metadata/kommentar/ready/merge/build/dispatch/rerun/release eller cleanup.
+02_07s faktiske senere B2-stop/frigivelse er stadig ikke modtaget af00_16.
+Gamle positive tests accepterer ikke den nye kandidat. Brug ikke subagenter
+eller beskedværktøjer. Ingen reset, sletning eller overskrivning af evidens.
+
+Giv først den korte status i chatten; gem også en lille status-TXT, hvis det
+kan ske uden at blokere svaret. Brugeren overfører status til Lead00_16.
+Dette er en checkpointinstruks, ikke et nyt handoff eller annullering af
+B2-runtimeopgaven. Fortsæt efter status kun inden for det eksisterende mandat
+og uden at skabe samtidige egne test-/skrivekørsler.

@@ -1,0 +1,38 @@
+QA-B2-RUNTIME-01 — BLOCKER on exact local tree
+4c07cd5d66cb5928eb99623ff86efaa81e268829
+index SHA2563de412b53421f173d3826ddf6336f066abf43cc09d88cbbc0e23bf6984212ed9
+
+The new helper introduces BigInt(...) and literal32n/52n/1n in the main inline
+script. Lack of native BigInt syntax causes a parse error before startup even
+if the fractional-HP branch is never called. This affects ordinary saves and
+Push as well as the Farm path, unlike the narrowly scoped arithmetic fix.
+
+mobile/capacitor.config.json does not set android.minWebViewVersion or
+server.errorPath. package-lock pins @capacitor/android6.2.1. Own fetched frozen
+npm6.2.1 archive matches that lock's SHA512 integrity. Its Bridge.java defines
+DEFAULT_ANDROID_WEBVIEW_VERSION=60; CapConfig.java reads the absent config key
+using that default. Bridge's version check admits60–66. Merely specifying an
+Android API/minSdk level would not prove a WebView engine version.
+
+Primary official docs state Capacitor v6 requires Chrome/WebView60+, while
+V8 documents BigInt support from Chrome67. This establishes a compatibility
+gap for the declared default. A higher Lumenfall-specific floor was not found
+in the current mandate/config/source. It is not justified by current Chrome153
+PASS or by the rarity of the numeric stress-save.
+https://capacitorjs.com/docs/v6/android
+https://capacitorjs.com/docs/v6/config
+https://v8.dev/features/bigint
+https://registry.npmjs.org/@capacitor/android/-/android-6.2.1.tgz
+
+Own bounded checks: both R2 scripts parse with Acorn8.15.0 ECMAScript2017/18/19;
+local script1 fails at literal32n in all three and parses at2020. A modern VM
+with BigInt deliberately unavailable gives oldR2 ordinary90kill PASS and local
+TypeError at BigInt. These are grammar/availability controls, not execution on
+an actual old Chromium or Android device. Current Chrome153 own actual-engine
+tests establish support there. Physical Android/WebView/TalkBack is unknown.
+
+Disposition: BLOCKED pending a product correction preserving the existing
+runtime baseline, or Lead's explicit separate runtime-support decision with
+appropriate enforcement/validation. A conditional typeof check around the
+unchanged BigInt literal cannot repair an old-engine parse error. No product,
+native, dependency, workflow or runtime-support change was made by04_05.

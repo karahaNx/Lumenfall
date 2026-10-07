@@ -1,0 +1,36 @@
+{
+  "verifiedAt": "2026-10-06T17:43:19.469618+00:00",
+  "lead": "00_15",
+  "uploadedQAArchive": {
+    "filename": "Lumenfall_B2_QA_04_05_Til_00_15_2026-10-06.zip",
+    "sha256": "41db8f535af35977e6f1ff222c53568c0ab81e8979f3d59cbf07a2e3cf9f118b",
+    "crc": "PASS"
+  },
+  "exactCopy": {
+    "payloadCount": 142,
+    "sha256AndSize": "PASS",
+    "rawFiles": 781,
+    "rawSha256AndSize": "PASS",
+    "candidateSources": 13,
+    "candidateSourceHashes": "PASS"
+  },
+  "candidate": {
+    "tree": "4c07cd5d66cb5928eb99623ff86efaa81e268829",
+    "indexSha256": "3de412b53421f173d3826ddf6336f066abf43cc09d88cbbc0e23bf6984212ed9"
+  },
+  "ownRuntimeReproduction": {
+    "file": "LEAD/runtime_reproduce.json",
+    "exit": 0,
+    "blockerConfirmed": true,
+    "method": "Acorn grammar + modern Node VM with BigInt undefined; stubbed batch side effects"
+  },
+  "notReexecutedByLead": [
+    "full motor",
+    "natural DPS producer",
+    "all seven gates",
+    "physical Chrome60/Android/TalkBack"
+  ],
+  "qaMotorEvidence": "Reported QA own execution; original full logs retained",
+  "remoteWrites": 0,
+  "writerRelease": "02_07 B2 UNKNOWN"
+}

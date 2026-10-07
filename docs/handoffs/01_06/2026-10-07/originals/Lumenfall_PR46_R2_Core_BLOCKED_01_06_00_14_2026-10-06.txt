@@ -1,0 +1,91 @@
+Lumenfall — PR46 R2 — Core til 00_14
+01_06 · 2026-10-06 · Dansk · GPT-6.1 Sol / High (mandat)
+SCOPED CORE: BLOCKED — én numerisk conservation-restfejl, C-B2.
+
+R2 retter den oprindelige B1 ved .0173s og består de målrettede Core-checks.
+Men den nye quotient-beregning tæller ét ekstra kill ved et stort, endeligt
+skadetal, selv om både korrekt og observeret kill-antal er sikre JS-heltal.
+Whole/split giver forskellig økonomi. Derfor kan den angivne finite/safe-count-
+grænse i NUMERICAL_RULE/taskkortet ikke accepteres på denne kandidat.
+Ingen kode-/repoændring. Lead disponerer afklaring/rettelse; QA-gaten er separat.
+
+EXACT KANDIDAT
+PR46 open/Draft · 02/lab-motes-repeat-v1
+Main/base: 1ddc246eb62782a61ec5c486cd5f51ea170bb338
+Base tree: bfb3970b29485b3e8ece1c72bb60186eb2ba755e
+R1/eneste R2-parent: d1e988816ed10b8f851521938a117a4d84d29e1b
+R2 head: 3cdebc236e9ee5081a4bca4e323b11f43aa0d46d
+R2 tree: 70073a55d7f5fe428ae82223627603498cc372b6
+index SHA256: 8de74bbb7ab31be18405c40e20114d8421c34fe78eeb134dd12016153311fa17
+Alle93 head-blobs og91 R1-blobs kontrolleret mod frisk Git-tree.
+Alle11 SOURCE-filer matcher; kun4 filer ændres R1→R2. Af351 function-segmenter
+ændres kun simulationApplyFarmPassive; de øvrige350 er byteidentiske.
+
+C-B2 — MINIMUM I FAKTISK MOTOR
+Farm Rift1, maxHP/currentHP11, Luminous=false, accumulator .975.
+DPS-fixture: 2 ** 55 + 16; elapsed1s. Ingen bonus, automation eller nye køb.
+Guardian work300/total600/1x, Use MotesOFF. Lumen/Shards/Motes/totalKills0.
+Det repræsenterede IEEE-double-skadetal er EKSAKT heltallet36028797018963984.
+Uafhængig BigInt-oracle: floor(D/11)=3275345183542180 kills; restdamage4,
+så næste enemyHP7. Intet arbitrary sub-ULP tillæg bruges i forventningen.
+
+Observeret R2, live og offline:
+  Whole1s: 3275345183542181 kills — ét for meget.
+  Split .5+.5s: 3275345183542180 kills — korrekt.
+  Live Shards: samme respektive heltal; work299 og enemyHP7 i begge.
+Korrekt og observeret kill-antal består Number.isSafeInteger.
+Offline beholder eksisterende .7 rewardpolicy, men samme kill-afvigelse.
+Motor-kaldvej: advanceAuthoritativeTime → simulationApplyFarmPassive →
+simulationBatchFarmKills. Reward/spawn/HP/motor er virkelige produktfunktioner;
+kun passiv DPS fastsættes som eksplicit numerisk fixture og gendannes bagefter.
+
+Årsag: index.html:7110 Math.round((damage-remainder)/maxHp).
+D%11=4, men D-4 kan ikke repræsenteres ved denne skala og runder tilbage til D.
+Divisionen runder til q+.5, hvorefter Math.round giver q+1. Remainder4 er korrekt,
+men quotient er for højt. SIM_EPS/pristolerance forklarer ikke det ekstra kill.
+FullHP11 er faktisk spil-HP. Testen beviser den erklærede numeriske grænse og
+scheduler-paritet; den beviser ikke en normal spillers gennemspillede DPS.
+Workerens576 arithmeticfixtures stopper ved2^50; dette kill-antal er større
+end2^51, mindre end2^52 og stadig sikkert repræsenterbart. Antal test-PASS kan
+ikke udvide grænsen. En snævrere grænse kræver Lead-beslutning og konkret
+håndtering af inddata udenfor; Core indfører ingen gameplay-cap eller rettelse.
+
+Repro: reproduce/run_residual.py giver exit1 med forventet/observeret data.
+Raw: evidence/residual_blocker.{json,log} + *_command.json.
+Supplerende isoleret minimum_arithmetic.cjs giver også exit1; dens batch-
+sideeffekter er stubbet og tæller alene som arithmetic, ikke motoraccept.
+Læs C_B2_DETAIL.txt og REPRODUCER.txt i ZIP for den præcise reproduktion.
+
+EGNE POSITIVE R2-RESULTATER
+44/44 eksisterende målrettede scenarier exit0,63.791s, inklusive permanent
+lab-motes-conservation:826 fixtures, old-double-round fanges, undo består.
+12 egne Core-grupper /1195 assertions PASS på R2, med reelle reload/backup/
+recovery/future-guard/Ascend/Reset, strict/pure normalization, alle tiers/priser,
+uafhængige toggles, repeat, delt budget, reward-boundaries og actual offline tail.
+Ny per-enemy B1-driver:180 R2-rækker /1988 assertions PASS. R1's20 kontrolrækker
+har12 forventede oracle-fails. Minimum:90 kills,3 Luminous, ON Motes2/
+work297.3346, OFF Motes62/work299.1; betaling ved .0173. Før/exact/efter,
+whole/split/live/offline og ekstra actual-HP/partial/current-Luminous-fixtures.
+Kildegate exit0. Alle12 eksisterende negative scenarier giver forventet exit1
+og komplet FAIL-observation. De3 LAB-controls er kørt i regressionerne.
+Egen wrapper brugte først forkert output-label; alle originale negatives var
+korrekte. Klassificering er rettet fra rå logs, ingen produktændring/rerun.
+
+SUPPLERENDE WORKER/CI — IKKE EGEN FULD QA
+CI37447570925 #128 attempt1 completed/success; job112215974343, alle trin success.
+CI checkout6f0f6337579301426fbfd4ad380c094a44ae18b9 har base+R2-parents og exact
+R2-tree. Ingen workflow startet af Core.
+Workerens aggregate gate04-log stopper efter32 PASS-linjer; årsag ukendt.
+Egen hashkontrol af alle778 rawarkivfiler PASS; egen rå parsing bekræfter160
+positive resultater/138 scenarier og12 negative controls, uden tabte resultater.
+De2 yderligere processkontrakter har bevarede tilsigtede timeout/exit7-beviser.
+Alle570 final gate04/05 rawfiler er i ZIP som WORKER_RAW_FINAL.tar.xz. Dette er egen inspektion af workerens
+rå data, ikke eget replay af hele140-scenario default-suite; QA ejer fuld genkørsel.
+
+STOP OG GRÆNSER
+Live før/efter: main/head,44 branches,én åben DraftPR og CI uændrede;0 aktive
+runs i fem statusqueries. 02_07's writerfrigivelse er rapporteret i mandatet.
+Ingen Core-writer, remote write/post, merge/build/signing/release eller cleanup.
+Alle kendte egne browsers/HTTP/gate/fixture-processer afsluttet.
+Fysisk Android/install/TalkBack: UKENDT / IKKE KØRT. Ingen ny APK-accept.
+Send ZIP til00_14. R1-accept er historik; denne scoped R2-Core-gate er BLOCKED.

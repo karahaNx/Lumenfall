@@ -1,0 +1,438 @@
+diff --git a/docs/tasks/LAB_MOTES_B1_001.md b/docs/tasks/LAB_MOTES_B1_001.md
+index cb9bfad..26b4f7f 100644
+--- a/docs/tasks/LAB_MOTES_B1_001.md
++++ b/docs/tasks/LAB_MOTES_B1_001.md
+@@ -1,5 +1,9 @@
+ # LAB-MOTES-B1-001 — farm kill conservation
+ 
++Subsequent R2 review found B2 in quotient recovery at large safe counts. The
++local correction and exact represented-input proof are documented in
++`LAB_MOTES_B2_001.md`; this B1 record is historical evidence, not R2 acceptance.
++
+ R1 PR46 is blocked: a Motes boundary exposed a pre-existing double rounding
+ in simulationApplyFarmPassive. The kill quotient could round up and its modulo
+ remainder could count that same kill again. Fixed scope: this arithmetic and
+diff --git a/docs/tasks/LAB_MOTES_B2_001.md b/docs/tasks/LAB_MOTES_B2_001.md
+new file mode 100644
+index 0000000..21eeb05
+--- /dev/null
++++ b/docs/tasks/LAB_MOTES_B2_001.md
+@@ -0,0 +1,72 @@
++# LAB-MOTES-B2-001 — exact quotient on the existing runtime
++
++R2 (`3cdebc236e9ee5081a4bca4e323b11f43aa0d46d`) is blocked by Core C-B2
++and QA B2: subtraction of the modulo remainder can round back to damage,
++then rounding the recovered quotient creates an extra safe-integer kill.
++The previous local tree `4c07cd5d66cb5928eb99623ff86efaa81e268829` fixes the
++arithmetic on modern engines but is blocked by C-RT-B2 / QA-B2-RUNTIME-01.
++Its mandatory BigInt syntax/API fails on the existing WebView baseline.
++Lead 00_16 authorizes this isolated phase-A replacement, preserving WebView 60.
++
++## Exact represented-Number rule
++
++`simulationWholeHpUnits` decodes each positive finite binary64 into an integer
++significand M and exponent E: value = M * 2^E. The two 32-bit words reconstruct
++M with integer multiplication/addition, exactly within 2^53-1. Normal values
++have 2^52 <= M < 2^53. At most 52 exact left shifts normalize each subnormal,
++decrementing its exponent to preserve the value. D < H returns zero directly.
++
++For normalized D >= H, s = E_D - E_H is nonnegative. A safe quotient requires
++s <= 53: for s >= 54, M_D/M_H > 1/2 implies D/H > 2^53. For s <= 53, binary
++long division processes s+1 bits (at most 54), computing
++floor((M_D/M_H) * 2^s). Initially M_D < 2*M_H. At each step, compare the exact
++remainder to M_H and subtract M_H once if necessary. The resulting remainder
++is an integer below M_H <= 2^53-1 and is exactly representable. Its doubling
++is an even integer below 2^54 and is also exact. The next successful subtraction
++again yields an exactly representable integer below M_H (also a Sterbenz
++subtraction). Each quotient prefix is an integer no larger than the final
++safe quotient, so q*2 plus the next bit is exact. This proves the floor without
++an ambiguous rounded division or a loop per kill. Integer and fractional HP
++follow the same rule. The algorithm uses existing Number/DataView APIs;
++production contains no native BigInt syntax/API, polyfill or new dependency.
++
++The shift>53 fallback preserves the existing out-of-contract Number result;
++it imposes no gameplay cap and does not certify unsafe counts or overflow.
++Supported certification remains finite positive damage and physical maximum/
++current HP, with safely representable final kill counts. Physical max HP starts
++at 11. Nonphysical tiny-HP worlds, nonfinite values, unsafe final counts and
++arbitrary sub-ULP accumulated work remain outside certification.
++
++Modulo, partial-HP carry, SIM_EPS=1e-9 and relative 1e-12 boundary rules remain
++unchanged. Near-threshold promotions are classified explicitly; exact quotient
++is not a claim that these historical tolerances implement strict real damage.
++Exact kills also do not make huge rewards exact reals: actual represented
++multiplication, summation, spawn policy and offline 0.7 scale still apply.
++Whole/split represented damage may differ; only equal damage justifies equal HP.
++Prices, tiers, rewards, Motes boundaries, Study/Queue intent, chronology, save/
++recovery, NAV, combat balance, native files and workflows are unchanged.
++
++## Permanent controls and delivery
++
++`lab-motes-numerical` retains both original minima on the real scheduler and
++natural Titan1635/Mythic DPS, including old-R2 FAIL / undo PASS. The original
++B1 826-fixture ledger, 43 counterexamples and old-R1 / three LAB mutants remain.
++`lab-motes-runtime` runs startup, Push, B1, both minima and fractional HP across
++ON/OFF, whole/split and live/offline, with native BigInt and DataView BigInt
++APIs unavailable in the app. Its independent damage-threshold oracle executes
++in the external modern Node driver, so the app never needs that API. Fractional
++HP uses a private fixture override; it is not a new game HP policy.
++
++The full scripts additionally require ES2017 grammar, actual older V8 syntax/
++helper execution and API checks. Grammar and modern Chrome with APIs removed
++are scoped evidence, not physical WebView 60 emulation. Exact source/tree,
++independent Fraction matrices, motor/reward traces, bounded-cost measurements,
++seven workflow gates and raw outputs are recorded in the phase-A handoff.
++All original diagnostics and the prior intermittent mobile clipping FAIL are
++preserved. No UI fix is claimed; clipping root cause remains unknown.
++
++No remote R3, writer takeover, integration or release is authorized by this
++file. Remote phase B is held by 00_16 until candidate review and documented
++02_07 writer handover. Known own processes must finish before delivery.
++Physical Android/WebView/TalkBack remain untested. Changed bytes require new
++scoped Core and QA review; historical positive reviews are evidence only.
+diff --git a/index.html b/index.html
+index 734ceaf..20fe683 100644
+--- a/index.html
++++ b/index.html
+@@ -7107,7 +7107,7 @@ function simulationApplyFarmPassive(elapsedSec,dps,policy,summary){
+   // avoids both a rounded quotient/modulo counting the same boundary twice
+   // and cancellation of a small current HP from a huge damage value.
+   var remainder = damage%maxHp;
+-  var kills = Math.round((damage-remainder)/maxHp);
++  var kills = simulationWholeHpUnits(damage,maxHp);
+   // Retain the existing 1e-12 quotient and SIM_EPS HP boundary tolerances,
+   // applying a carry once to this shared decomposition, never twice.
+   if(remainder>=maxHp-SIM_EPS || remainder/maxHp+1e-12>=1){
+@@ -7127,6 +7127,39 @@ function simulationApplyFarmPassive(elapsedSec,dps,policy,summary){
+   simulationBatchFarmKills(kills,policy,summary);
+   if(leftover>0) state.enemyHp = Math.max(SIM_EPS,state.enemyMaxHp-leftover);
+ }
++function simulationWholeHpUnits(damage,maxHp){
++  // Binary long division of the represented Numbers, using only WebView 60
++  // APIs. A rounded D/H or (D-D%H)/H cannot decide an integer boundary.
++  if(!(damage>=0) || !(maxHp>0) || !Number.isFinite(damage) || !Number.isFinite(maxHp)) return Math.floor(damage/maxHp);
++  if(damage<maxHp) return 0;
++  var view = new DataView(new ArrayBuffer(16));
++  view.setFloat64(0,damage);
++  view.setFloat64(8,maxHp);
++  var dhi=view.getUint32(0),hhi=view.getUint32(8);
++  var de=(dhi>>>20)&2047,he=(hhi>>>20)&2047;
++  var dn=((dhi&1048575)+(de?1048576:0))*4294967296+view.getUint32(4);
++  var hn=((hhi&1048575)+(he?1048576:0))*4294967296+view.getUint32(12);
++  de=de?de-1075:-1074;
++  he=he?he-1075:-1074;
++  // At most 52 shifts per subnormal; ordinary physical HP needs none.
++  while(dn<4503599627370496){dn*=2;de--;}
++  while(hn<4503599627370496){hn*=2;he--;}
++  var shift=de-he;
++  // A shift above 53 implies an unsafe quotient. Preserve the existing
++  // out-of-contract Number result; this adds no cap on supported gameplay.
++  if(shift>53) return Math.floor(damage/maxHp);
++  var quotient=0;
++  // At most 54 bits for a safe quotient, never one iteration per kill.
++  // After subtraction dn<hn<=2^53-1. Doubling is exact (an even integer
++  // below 2^54); the next subtraction has an exactly representable result
++  // below hn. Every quotient prefix is exact when the final count is safe.
++  for(var bit=shift;bit>=0;bit--){
++    quotient*=2;
++    if(dn>=hn){dn-=hn;quotient++;}
++    if(bit>0) dn*=2;
++  }
++  return quotient;
++}
+ function simulationPassiveKillSeconds(dps){
+   if(state.riftMode==='farm') return Infinity;
+   if(isBoss(state.depth)){
+diff --git a/tests/behavioral/farm-numerical.js b/tests/behavioral/farm-numerical.js
+new file mode 100644
+index 0000000..0cb0398
+--- /dev/null
++++ b/tests/behavioral/farm-numerical.js
+@@ -0,0 +1,71 @@
++/* B2: consume exact represented damage/current HP, independent of production quotient. */
++window.runFarmNumericalQa=function(b,ctx,assert){
++  var t=b.labMotes,checks=0,rows=[],clock=2000000000000;
++  function ok(v,m){checks++;assert(v,'B2 exact damage oracle: '+m);}
++  function near(a,c,m){ok(Math.abs(a-c)<1e-7,m+' ('+a+' vs '+c+')');}
++  function units(x){
++    var v=new DataView(new ArrayBuffer(8));v.setFloat64(0,x);
++    var bits=v.getBigUint64(0),e=Number((bits>>52n)&2047n);
++    var mantissa=(bits&((1n<<52n)-1n))+(e?1n<<52n:0n);
++    return mantissa<<BigInt(e?e-1:0);
++  }
++  function seed(natural,use){
++    var s=b.freshStateSnapshot();Object.assign(s,{riftMode:'farm',depth:1,enemyDepth:1,farmDepth:1,farmReturnDepth:2,maxDepthEver:130,enemyMaxHp:11,enemyHp:natural?8.03:11,enemyIsLuminous:false,luminousAccum:.975,motes:natural?59:0,lumen:0,shards:0,questDay:ctx.currentDay()});
++    s.activeStudies=[{id:'guardmastery',remainingSec:300,totalDurationSec:600,speedMult:1}];s.studyUseMotes.guardmastery=use;s.studySpeedTargets.guardmastery=3;
++    if(natural){s.activeParty=['titan'];s.spirits.titan=1635;s.heroRarity.titan=5;s.heroRarity.ember=1;s.heroResource.titan=0;s.research.formation=500;s.longStudyLevels.formationstudy=500;s.longStudyLevels.wispascend=500;s.nodes.momentum=500;s.ascendCount=5;s.achieved.asc5=true;}
++    return s;
++  }
++  function verifySegments(trace,kind){
++    var total=0,luminous=0,lumen=0,shards=0,motes=0,damage=0n;
++    trace.rows.forEach(function(r){
++      var D=units(r.damage),h=units(r.before.enemyHp),H=units(r.before.enemyMaxHp);
++      var expected=D<h?0:Number(1n+(D-h)/H);
++      var threshold=h+BigInt(expected)*H,deficit=threshold-D;
++      // Existing boundary tolerances may promote a represented near-threshold
++      // input. This is a separate, explicit classification, never an extra
++      // tolerance for the two quotient counterexamples.
++      var tolerant=r.kills===expected+1 && deficit>0n && (deficit<=units(1e-9)||deficit<=units(r.before.enemyMaxHp*1e-12));
++      ok(r.kills===expected||tolerant,'one reward per defeated HP threshold');
++      var rem=expected===0?h-D:H-(D-h)%H;
++      var expectedHp=tolerant?11:Number(rem>>1022n)/Math.pow(2,52);
++      near(r.after.enemyHp,expectedHp,'partial HP carry for actual represented segment');
++      var count=r.kills,acc=r.before.luminousAccum,chance=.03;
++      // Retain the existing represented batch-spawn policy, including its
++      // epsilon and summation order. Large spawn totals are not exact reals.
++      var lk=(r.before.enemyIsLuminous?1:0)+(count>1?Math.floor(acc+(count-1)*chance+1e-12):0);
++      var after=acc+count*chance,crossings=Math.floor(after+1e-12),final=after-crossings;
++      ok(r.luminous===lk,'represented luminous spawn policy');
++      near(r.after.luminousAccum,Math.max(0,Math.min(.999999999999,final)),'spawn accumulator');
++      ok(r.after.enemyIsLuminous===(Math.floor(after+1e-12)>Math.floor(acc+Math.max(0,count-1)*chance+1e-12)),'next luminous enemy');
++      var scale=kind==='offline'?.7:1;
++      total+=count;luminous+=lk;lumen+=6*scale*count;shards+=scale*count;motes+=lk;damage+=D;
++    });
++    return {kills:total,luminous:luminous,lumen:lumen,shards:shards,motes:motes,damageUnits:String(damage)};
++  }
++  function run(natural,use,kind,split){
++    var s=seed(natural,use),normalized=b.setState(s),dps=natural?t.naturalDps():2**55+16,seconds=natural?.9:1;
++    if(natural){ok(dps===40052722017724424,'actual natural product DPS');var costs=t.numericCosts();Object.values(costs).forEach(function(c){if(typeof c==='object')Object.values(c).forEach(function(v){ok(Number.isFinite(v)&&v>=0,'finite normalized next price');});else ok(Number.isFinite(c)&&c>0,'finite normalized next price');});ok(normalized.spirits.titan===1635&&normalized.research.formation===500,'normalization preserves stress investments');}
++    var trace=t.traceFarm(function(){
++      function execute(){var a=t.direct(split||seconds,kind,clock);if(!split)return a;var z=t.direct(seconds-split,kind,clock+split*1000);['kills','luminousKills','lumenGained','shardGained','motesGained','studySpeedPurchases','studyMotesSpent'].forEach(function(k){z.summary[k]+=a.summary[k];});z.summary.timeline=a.summary.timeline.concat(z.summary.timeline.map(function(e){return Object.assign({},e,{elapsedSec:e.elapsedSec+split});}));return z;}
++      return natural?execute():t.withDps(dps,execute);
++    });
++    var r=trace.result,o=verifySegments(trace,kind),expected=natural?3277040892359271:3275345183542180;
++    ok(r.summary.kills===expected&&r.state.totalKills===expected,'documented safe kill count');
++    ok(r.summary.kills===o.kills&&r.summary.luminousKills===o.luminous,'segment kill and spawn ledger');
++    ok(r.summary.lumenGained===o.lumen&&r.state.lumen===o.lumen,'represented Lumen policy and sum');
++    ok(r.summary.shardGained===o.shards&&r.state.shards===o.shards,'represented Shard policy and sum');
++    var buys=natural&&use?1:0;
++    ok(r.summary.studySpeedPurchases===buys&&r.summary.studyMotesSpent===buys*60,'one full-price actual Motes purchase');
++    ok(r.state.motes===s.motes+o.motes-buys*60,'Motes ledger');
++    var payment=buys?r.summary.timeline.find(function(e){return e.type==='studySpeed';}).elapsedSec:null;
++    if(buys)near(payment,(8.03+11)/dps,'first enabling Luminous reward time');
++    near(r.state.activeStudies[0].remainingSec,300-seconds-(buys?(seconds-payment)*2:0),'only post-payment Study work');
++    ok(!r.summary.abilityCasts&&!r.summary.ascends&&!r.summary.completedStudies.length,'no unrelated economy event');
++    var out={natural:natural,use:use,kind:kind,split:split,expected:expected,kills:r.summary.kills,hp:r.state.enemyHp,motes:r.state.motes,work:r.state.activeStudies[0].remainingSec,representedDamageExact:(dps*seconds).toFixed(0),ledger:o,segments:trace.rows.length};rows.push(out);return out;
++  }
++  [false,true].forEach(function(natural){(natural?[false,true]:[false]).forEach(function(use){['live','offline'].forEach(function(kind){[0,natural?.01:.5].forEach(function(split){run(natural,use,kind,split);});});});});
++  // The actual old R2 function is embedded byte-for-byte in the private bridge.
++  // Reject each minimum separately; restoration must pass both again.
++  [false,true].forEach(function(natural){var undo=t.mutate('rounded-quotient'),caught=false;try{run(natural,false,'live',0);}catch(e){caught=/B2 exact damage oracle/.test(e.message);}finally{undo();}ok(caught,'exact old R2 must fail '+(natural?'natural':'Core')+' oracle');run(natural,false,'live',0);});
++  return {checks:checks,rows:rows,causalControl:'both exact old-R2 minima rejected; undo passes',limit:'represented damage per segment; original spawn/reward rounding; split HP differs when represented damage differs'};
++};
+diff --git a/tests/behavioral/farm-runtime.cjs b/tests/behavioral/farm-runtime.cjs
+new file mode 100644
+index 0000000..ac19cfe
+--- /dev/null
++++ b/tests/behavioral/farm-runtime.cjs
+@@ -0,0 +1,99 @@
++/* Native CDP touch/keyboard at mobile widths; production page remains unmodified. */
++const {spawn}=require('node:child_process'),fs=require('node:fs'),os=require('node:os'),path=require('node:path');
++const [chrome,url,scenario]=process.argv.slice(2),profile=fs.mkdtempSync(path.join(os.tmpdir(),'lumenfall-farm-runtime-'));
++const browser=spawn(process.env.LUMENFALL_QA_CDP_CHROME||chrome,['--headless=new','--no-sandbox','--disable-gpu','--disable-dev-shm-usage','--remote-debugging-pipe','--user-data-dir='+profile,'about:blank'],{stdio:['ignore','ignore','pipe','pipe','pipe']});
++let seq=0,buffer='',stderr='',session,closed=false;const pending=new Map(),records=[];
++function rejectPending(message){for(const p of pending.values()){clearTimeout(p.timer);p.reject(Error(message+' '+p.method));}pending.clear();}
++const completion=new Promise(resolve=>{browser.once('error',e=>{rejectPending(e.message);resolve({error:e.message});});browser.once('close',(code,signal)=>{closed=true;rejectPending('browser closed');resolve({code,signal});});});
++browser.stderr.on('data',b=>{stderr=(stderr+b).slice(-4000);});
++for(const stream of [browser.stdio[3],browser.stdio[4]])stream.on('error',e=>rejectPending(e.message));
++browser.stdio[4].on('data',b=>{buffer+=b;let end;while((end=buffer.indexOf('\0'))!==-1){const raw=buffer.slice(0,end);buffer=buffer.slice(end+1);if(!raw)continue;const m=JSON.parse(raw);if(m.id&&pending.has(m.id)){const p=pending.get(m.id);pending.delete(m.id);clearTimeout(p.timer);m.error?p.reject(Error(JSON.stringify(m.error))):p.resolve(m.result);}}});
++function send(method,params={},sid=session){return new Promise((resolve,reject)=>{const id=++seq,timer=setTimeout(()=>{pending.delete(id);reject(Error('CDP timeout '+method+' '+stderr));},15000);pending.set(id,{resolve,reject,timer,method});browser.stdio[3].write(JSON.stringify({id,method,params,...(sid?{sessionId:sid}:{})})+'\0');});}
++async function evaluate(expression){const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(r.exceptionDetails.exception?.description||r.exceptionDetails.text);return r.result.value;}
++function assert(v,m){if(!v)throw Error(m);}
++// Oracle runs in this Node process. No BigInt API is exposed to the app.
++let checks=0;
++function ok(value,message){checks++;assert(value,message);}
++function near(a,b,message){ok(Math.abs(a-b)<1e-7,message+' '+a+' vs '+b);}
++function units(x){const v=new DataView(new ArrayBuffer(8));v.setFloat64(0,x);const n=v.getBigUint64(0),e=Number(n>>52n&2047n);return ((n&((1n<<52n)-1n))+(e?1n<<52n:0n))<<BigInt(e?e-1:0);}
++function represented(u){const shift=Math.max(0,u.toString(2).length-53);return Number(u>>BigInt(shift))*2**(shift-1074);}
++function audit(r,strictMinimum=true){
++ const {type,use,kind,H,input,dps,seconds,parts,trace}=r;
++ let kills=0,luminous=0,lumen=0,shards=0,motes=0,payment=null,elapsed=0,damage=0n;
++ for(const row of trace){
++  const before=row.before,after=row.after,D=units(row.damage),h=units(before.enemyHp),max=units(before.enemyMaxHp);
++  const expected=D<h?0:Number(1n+(D-h)/max),deficit=h+BigInt(expected)*max-D;
++  const promotion=row.kills===expected+1&&deficit>0n&&(deficit<=units(1e-9)||deficit<=units(before.enemyMaxHp*1e-12));
++  ok(row.kills===expected||promotion,'represented threshold count '+type);
++  const remaining=expected===0?h-D:max-(D-h)%max;
++  near(after.enemyHp,promotion?H:represented(remaining),'partial HP carry');
++  const k=row.kills,acc=before.luminousAccum,chance=.03;
++  const lk=k?(before.enemyIsLuminous?1:0)+(k>1?Math.floor(acc+(k-1)*chance+1e-12):0):0;
++  ok(row.luminous===lk,'actual spawn count');
++  if(k){const sum=acc+k*chance;near(after.luminousAccum,Math.max(0,Math.min(.999999999999,sum-Math.floor(sum+1e-12))),'spawn accumulator');ok(after.enemyIsLuminous===(Math.floor(sum+1e-12)>Math.floor(acc+Math.max(0,k-1)*chance+1e-12)),'next luminous flag');}
++  const scale=kind==='offline'?.7:1;
++  ok(after.lumen===before.lumen+6*scale*k,'represented Lumen policy');
++  ok(after.shards===before.shards+scale*k,'represented Shards policy');
++  kills+=k;luminous+=lk;lumen+=6*scale*k;shards+=scale*k;motes+=lk;damage+=D;elapsed+=row.seconds;
++ }
++ const state=parts.at(-1).state,summary={};
++ for(const key of ['kills','luminousKills','lumenGained','shardGained','motesGained','studyMotesSpent','studySpeedPurchases'])summary[key]=parts.reduce((sum,p)=>sum+p.summary[key],0);
++ const buys=use?1:0;
++ ok(summary.kills===kills&&state.totalKills===kills,'aggregate exact kills');
++ ok(summary.luminousKills===luminous&&summary.motesGained===motes,'aggregate spawn and Motes');
++ const scale=kind==='offline'?.7:1;
++ const groupedLumen=r.groups.map(g=>g.reduce((sum,row)=>sum+6*scale*row.kills,0)).reduce((a,b)=>a+b,0);
++ const groupedShards=r.groups.map(g=>g.reduce((sum,row)=>sum+scale*row.kills,0)).reduce((a,b)=>a+b,0);
++ ok(summary.lumenGained===groupedLumen&&summary.shardGained===groupedShards,'aggregate represented rewards in actual part order');
++ ok(summary.studySpeedPurchases===buys&&summary.studyMotesSpent===60*buys,'one full price payment');
++ ok(state.motes===input.motes+motes-60*buys,'Motes ledger');
++ if(use){let t=0;for(let i=0;i<parts.length;i++){const event=parts[i].summary.timeline.find(e=>e.type==='studySpeed');if(event)payment=t+event.elapsedSec;t+=i===0&&r.split?r.split:seconds;}
++  ok(payment!==null,'payment at an authoritative boundary');
++  const boundary=(input.enemyHp+H)/dps;
++  let time=0,count=0,enabler=null;
++  for(const row of trace){time+=row.seconds;count+=row.kills;if(row.before.motes<60&&row.after.motes>=60){enabler={time,count,row};break;}}
++  ok(payment>0&&enabler&&Math.abs(enabler.time-boundary)<=boundary*1e-12,'positive enabling reward boundary');
++  ok(enabler.count===2&&enabler.row.luminous===1&&enabler.row.after.motes===60,'actual reward enables purchase');
++  near(payment,boundary,'recorded payment time');
++ }
++ near(state.activeStudies[0].remainingSec,300-seconds-(use?(seconds-payment)*2:0),'only post-payment work');
++ ok(parts.every(p=>!p.summary.abilityCasts&&!p.summary.ascends&&!p.summary.completedStudies.length),'no other economy event');
++ if(type==='natural'){ok(dps===40052722017724424,'actual product natural DPS');ok(r.normalized.spirits.titan===1635&&r.normalized.research.formation===500,'finite normalization preserves investments');ok(Object.values(r.costs).flatMap(v=>typeof v==='object'?Object.values(v):[v]).every(Number.isFinite),'finite next prices');}
++ const minimum=type==='core'?3275345183542180:type==='natural'?3277040892359271:type==='b1'?90:null;
++ if(strictMinimum&&minimum!==null)ok(kills===minimum,'documented '+type+' minimum');
++ if(type==='b1'){ok(luminous===3&&state.motes===(use?2:62),'B1 Motes and luminous');near(state.activeStudies[0].remainingSec,use?297.3346:299.1,'B1 work');if(use)near(payment,.0173,'B1 .0173 payment');}
++ return {summary,damageUnits:String(damage),payment,unchangedBoundaryPromotions:trace.filter(row=>{const D=units(row.damage),h=units(row.before.enemyHp),max=units(row.before.enemyMaxHp);return row.kills!==(D<h?0:Number(1n+(D-h)/max));}).length};
++}
++async function execute(type,use,kind,split,mutant=false){
++ return evaluate(`(function(){
++  var b=window.__lumenfallQaBridge,t=b.labMotes,type=${JSON.stringify(type)},use=${use},kind=${JSON.stringify(kind)},split=${split},H=type==='fractional'?11.5:type==='fractional-high'?4*Math.PI:11;
++  return t.withHp(H,function(){
++   var s=b.freshStateSnapshot(),natural=type==='natural';
++   Object.assign(s,{riftMode:'farm',depth:1,enemyDepth:1,farmDepth:1,farmReturnDepth:2,maxDepthEver:130,enemyMaxHp:H,enemyHp:type==='core'?H:8.03,enemyIsLuminous:false,luminousAccum:.975,motes:type==='core'&&!use?0:59,lumen:0,shards:0,questDay:window.__lumenfallQaContext.currentDay()});
++   s.activeStudies=[{id:'guardmastery',remainingSec:300,totalDurationSec:600,speedMult:1}];s.studyUseMotes.guardmastery=use;s.studySpeedTargets.guardmastery=3;
++   if(natural){s.activeParty=['titan'];s.spirits.titan=1635;s.heroRarity.titan=5;s.heroRarity.ember=1;s.heroResource.titan=0;s.research.formation=500;s.longStudyLevels.formationstudy=500;s.longStudyLevels.wispascend=500;s.nodes.momentum=500;s.ascendCount=5;s.achieved.asc5=true;}
++   var normalized=b.setState(s),dps=natural?t.naturalDps():type==='core'||type==='fractional-high'?Math.pow(2,55)+16:1100,seconds=type==='core'?1:.9,costs=natural?t.numericCosts():null,undo=${mutant}?t.mutate('rounded-quotient'):function(){};
++   try{var groups=[];function call(dt,start){var traced=t.traceFarm(function(){return t.direct(dt,kind,start);});groups.push(traced.rows);return traced.result;}function go(){var a=call(split||seconds,2000000000000);return split?[a,call(seconds-split,2000000000000+split*1000)]:[a];}var parts=natural?go():t.withDps(dps,go);return {type:type,use:use,kind:kind,split:split,H:H,input:s,normalized:normalized,dps:dps,seconds:seconds,costs:costs,parts:parts,groups:groups,trace:[].concat.apply([],groups)};}finally{undo();}
++  });
++ })()`);
++}
++async function run(){
++ const tab=await send('Target.createTarget',{url:'about:blank'},null);session=(await send('Target.attachToTarget',{targetId:tab.targetId,flatten:true},null)).sessionId;
++ await send('Page.enable');await send('Page.addScriptToEvaluateOnNewDocument',{source:'window.BigInt=undefined;DataView.prototype.getBigInt64=undefined;DataView.prototype.getBigUint64=undefined;'});await send('Page.navigate',{url});
++ for(let i=0;i<150&&!await evaluate('!!window.__farmRuntimeReady');i++)await new Promise(r=>setTimeout(r,20));
++ ok(await evaluate('!!window.__farmRuntimeReady'),'startup without BigInt');
++ await evaluate('window.__qaForgeStartup.promise');
++ const availability=await evaluate('({BigInt:typeof BigInt,getBigUint64:typeof DataView.prototype.getBigUint64,errors:window.__lumenfallQaContext.errors})');
++ ok(availability.BigInt==='undefined'&&availability.getBigUint64==='undefined'&&!availability.errors.length,'app BigInt APIs unavailable and startup clean');
++ const push=await evaluate('(function(){var b=window.__lumenfallQaBridge;b.setState(b.freshStateSnapshot());return b.labMotes.withDps(1100,function(){return b.labMotes.direct(.9,"live",2000000000000);});})()');
++ ok(push.state.riftMode==='push'&&push.summary.kills>0&&Number.isFinite(push.state.enemyHp),'ordinary Push motor without BigInt');
++ for(const type of ['b1','core','natural','fractional','fractional-high'])for(const use of [false,true])for(const kind of ['live','offline'])for(const split of [0,type==='core'?.5:.01]){const r=await execute(type,use,kind,split);records.push(r);r.oracle=audit(r);}
++ const controls=[];
++ for(const type of ['core','natural']){const r=await execute(type,false,'live',0,true);let rejected=false;try{audit(r);}catch(e){rejected=/threshold count|minimum/.test(e.message);}ok(rejected,'exact old R2 fails '+type);const restored=await execute(type,false,'live',0);restored.oracle=audit(restored);controls.push({type,mutant:r,oracleRejected:rejected,restored});}
++ const errors=await evaluate('window.__lumenfallQaContext.errors');ok(!errors.length,'no app runtime errors');
++ return {status:'pass',scenario,checks,availability,push,records,controls,limits:'Chrome with BigInt APIs removed; external Node BigInt oracle; not a physical WebView 60 test'};
++}
++(async()=>{let result;try{result=await run();}catch(error){result={status:'fail',scenario,checks,message:error.message,records};}
++ try{assert(pending.size===0,'all CDP operations settled');if(!closed)await send('Browser.close',{},null).catch(()=>{});let timer;const done=await Promise.race([completion,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('browser close timeout')),5000);})]).finally(()=>clearTimeout(timer));assert(closed&&done.code===0&&!done.error,'graceful browser termination');await fs.promises.rm(profile,{recursive:true,force:true,maxRetries:3,retryDelay:100});result.teardown={browser:done,pending:pending.size,profileRemoved:!fs.existsSync(profile)};}catch(error){browser.kill('SIGKILL');result.status='fail';result.teardown={message:error.message,stderr};}
++ process.stdout.write(JSON.stringify(result)+'\n');process.exitCode=result.status==='pass'?0:1;
++})();
+diff --git a/tests/behavioral/run.py b/tests/behavioral/run.py
+index 313a96d..a006136 100644
+--- a/tests/behavioral/run.py
++++ b/tests/behavioral/run.py
+@@ -23,6 +23,8 @@ FIXTURES_PATH = ROOT / "fixtures.json"
+ RAW_ARTIFACT_ROOT = None
+ 
+ SCENARIOS = {
++    "lab-motes-numerical": "fresh",
++    "lab-motes-runtime": "fresh",
+     "lab-motes-conservation": "fresh",
+     "lab-motes-contracts": "fresh",
+     "lab-motes-chronology": "fresh",
+@@ -401,7 +403,7 @@ function qaLifecycleRecord(type,detail){
+ }
+ // Resolve only after the real startup completion callback (including its save).
+ // This is installed before DOMContentLoaded/init in the throwaway instrumented app.
+-if(window.__lumenfallQaContext.scenario==='lab-motes-native' || window.__lumenfallQaContext.scenario==='lab-motes-reduced-motion' || window.__lumenfallQaContext.scenario==='auto-ascend-target-mobile' || window.__lumenfallQaContext.scenario==='auto-ascend-target-reduced-motion' || window.__lumenfallQaContext.scenario.startsWith('forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('self-test-forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('rift-status-') || window.__lumenfallQaContext.scenario.startsWith('self-test-rift-status-')){
++if(window.__lumenfallQaContext.scenario==='lab-motes-runtime' || window.__lumenfallQaContext.scenario==='lab-motes-native' || window.__lumenfallQaContext.scenario==='lab-motes-reduced-motion' || window.__lumenfallQaContext.scenario==='auto-ascend-target-mobile' || window.__lumenfallQaContext.scenario==='auto-ascend-target-reduced-motion' || window.__lumenfallQaContext.scenario.startsWith('forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('self-test-forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('rift-status-') || window.__lumenfallQaContext.scenario.startsWith('self-test-rift-status-')){
+   var qaStartupResolve;
+   window.__qaForgeStartup={completed:false,callbacks:0,promise:new Promise(function(resolve){qaStartupResolve=resolve;})};
+   var qaOriginalPlayStartupIntro=playStartupIntro;
+@@ -468,6 +470,18 @@ applyOfflineProgress = function(){
+ 
+ window.__lumenfallQaBridge = {
+   labMotes: {
++    withHp: function(hp,fn){var original=enemyHpFor;enemyHpFor=function(){return hp;};try{return fn();}finally{enemyHpFor=original;}},
++    naturalDps: function(){return simulationPassiveDps(2000000000000);},
++    numericCosts: function(){return {titan:spiritCost(SPIRITS.find(function(s){return s.id==='titan';})),formation:researchCostForLevels(RESEARCH.find(function(s){return s.id==='formation';}),state.research.formation,1),momentum:nodeCost(NODES.find(function(s){return s.id==='momentum';})),formationStudy:studyCost(LONG_STUDIES.find(function(s){return s.id==='formationstudy';}),state.longStudyLevels.formationstudy),wispAscend:studyCost(LONG_STUDIES.find(function(s){return s.id==='wispascend';}),state.longStudyLevels.wispascend)};},
++    traceFarm: function(fn){
++      var original=simulationApplyFarmPassive,rows=[];
++      simulationApplyFarmPassive=function(seconds,dps,policy,summary){
++        var before=JSON.parse(JSON.stringify(state)),kills=summary.kills,luminous=summary.luminousKills;
++        original(seconds,dps,policy,summary);
++        rows.push({seconds:seconds,damage:dps*seconds,before:before,after:JSON.parse(JSON.stringify(state)),kills:summary.kills-kills,luminous:summary.luminousKills-luminous});
++      };
++      try{return {result:fn(),rows:rows};}finally{simulationApplyFarmPassive=original;}
++    },
+     manual: function(id,speed){return applySpeedTier(id,speed);},
+     direct: function(seconds,kind,start){var result=advanceAuthoritativeTime(seconds,{kind:kind||'live',visual:false,clockStartMs:start||2000000000000,offlineWindowStartMs:start||2000000000000,captureTimeline:true});return {state:JSON.parse(JSON.stringify(state)),summary:result};},
+     withDps: function(dps,fn){var original=simulationPassiveDps;simulationPassiveDps=function(){return dps;};try{return fn();}finally{simulationPassiveDps=original;}},
+@@ -497,6 +511,39 @@ window.__lumenfallQaBridge = {
+ 
+   simulationBatchFarmKills(1+additionalKills,policy,summary);
+   if(leftover>0) state.enemyHp = Math.max(SIM_EPS,state.enemyMaxHp-leftover);
++};
++      if(kind==='rounded-quotient')simulationApplyFarmPassive=function simulationApplyFarmPassive(elapsedSec,dps,policy,summary){
++  if(elapsedSec<=0 || dps<=0) return;
++  var damage = dps*elapsedSec;
++  if(damage+SIM_EPS < state.enemyHp){
++    state.enemyHp -= damage;
++    return;
++  }
++
++  var maxHp = state.enemyMaxHp>0 ? state.enemyMaxHp : enemyHpFor(state.depth);
++  // Decompose damage before subtracting the partially damaged enemy. This
++  // avoids both a rounded quotient/modulo counting the same boundary twice
++  // and cancellation of a small current HP from a huge damage value.
++  var remainder = damage%maxHp;
++  var kills = Math.round((damage-remainder)/maxHp);
++  // Retain the existing 1e-12 quotient and SIM_EPS HP boundary tolerances,
++  // applying a carry once to this shared decomposition, never twice.
++  if(remainder>=maxHp-SIM_EPS || remainder/maxHp+1e-12>=1){
++    kills++;
++    remainder=0;
++  }
++  var difference = remainder-state.enemyHp;
++  var leftover;
++  if(difference>=-SIM_EPS || difference/maxHp>=-1e-12){
++    kills++;
++    leftover=Math.max(0,difference);
++  } else {
++    leftover=maxHp+ difference;
++  }
++  if(leftover<SIM_EPS) leftover=0;
++
++  simulationBatchFarmKills(kills,policy,summary);
++  if(leftover>0) state.enemyHp = Math.max(SIM_EPS,state.enemyMaxHp-leftover);
+ };
+       if(kind==='free-carry')commitStudyStart=function(node){var result=start(node);if(result&&state.studyUseMotes[node.id])findActiveStudy(node.id).speedMult=state.studySpeedTargets[node.id];return result;};
+       if(kind==='fallback')studyMotesPlan=function(node){var result=plan(node);if(result&&state.motes<result.cost){result.target=1.5;result.cost=speedTierCost(1.5);}return result;};
+@@ -1773,9 +1820,11 @@ def build_runner():
+         window.__forgeUiReady=true;return; // Native CDP input driver owns this scenario.
+       }
+       if(ctx.scenario.startsWith('lab-motes-')){
++        if(ctx.scenario==='lab-motes-runtime'){bridge.freeze();window.__farmRuntimeReady=true;return;}
+         if(ctx.scenario==='lab-motes-native'||ctx.scenario==='lab-motes-reduced-motion'){window.__labMotesNativeReady=true;return;}
+         bridge.freeze();
+         if(ctx.scenario==='lab-motes-conservation'){finish('pass',window.runFarmConservationQa(bridge,ctx,assert));return;}
++        if(ctx.scenario==='lab-motes-numerical'){finish('pass',window.runFarmNumericalQa(bridge,ctx,assert));return;}
+         if(['lab-motes-save-reload','lab-motes-backup-restore','lab-motes-recovery','lab-motes-reset'].includes(ctx.scenario)){
+           window.runLabMotesPersistence(bridge,ctx,assert,phase,nextPhase,backupCode,finish);return;
+         }
+@@ -3851,6 +3900,7 @@ def instrument_html(source, fixtures):
+         "<script>" + (ROOT / "measured-inquiry.js").read_text(encoding="utf-8") + "</script>" +
+         "<script>" + (ROOT / "lab-motes.js").read_text(encoding="utf-8") + "</script>" +
+         "<script>" + (ROOT / "farm-conservation.js").read_text(encoding="utf-8") + "</script>" +
++        "<script>" + (ROOT / "farm-numerical.js").read_text(encoding="utf-8") + "</script>" +
+         build_runner() + "\n</body>",
+         1,
+     )
+@@ -4013,6 +4063,9 @@ def browser_identity(chrome):
+ 
+ 
+ def run_scenario(chrome, base_url, scenario, fixture, viewport=None):
++    if scenario == "lab-motes-runtime":
++        url = base_url + "/index.html?" + urlencode({"qaScenario": scenario, "qaFixture": fixture})
++        return run_native_process(["node", str(ROOT / "farm-runtime.cjs"), chrome, url, scenario], scenario)
+     if scenario in ("lab-motes-native", "lab-motes-reduced-motion"):
+         url = base_url + "/index.html?" + urlencode({"qaScenario": scenario, "qaFixture": fixture})
+         return run_native_process(["node", str(ROOT / "lab-motes.cjs"), chrome, url, scenario], scenario)

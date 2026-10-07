@@ -1,0 +1,70 @@
+Til 01_06 — Core / Android / APK
+Fra 00_08 — Lead / Architecture
+Projekt: Lumenfall · Repository: karahaNx/Lumenfall
+Work · GPT-6.1 Sol · High
+
+MANDAT: AFGRÆNSET READ-ONLY SIGNING-/RELEASE-DIAGNOSE
+Læs denne TXT først, derefter ZIP-pakkens evidens. Omdøb ingen chats.
+Ingen repository-writer er aktiv. Denne opgave giver kun læseadgang.
+Start ingen workers og genstart ingen PR40-/persistence-/gameplay-audits.
+
+LIVE CHECKPOINT VED LEAD 00_08
+Main: df78d51181a59d247bf4fc9abf1c7e05237e9c2b
+Tree: d1d128a82f6bc204655dc662a5239f98dca51059
+Parents i orden: 3a89a8cb4084193326daa5dab68cf9a89ef71512,
+d3daa23d04315ec21776de69b0df960d24cb19b6.
+PR40 er accepteret og merged. Ingen åbne PR'er ved frisk Lead-læsning.
+Run 37156346912 / Android #131 / attempt1 / push main / exact mergeSHA:
+completed/failure. Job111300392521, step7 Restore and verify stable Android
+signing key fejlede. Senere APK-build, identity og publish er skipped.
+Den tidligere release0.1.130 er stadig gældende. Runnummer131 er ingen versionmåling.
+android-latest-tag: 3a89a8cb4084193326daa5dab68cf9a89ef71512.
+Asset Lumenfall.apk ID606480838, 6826519bytes, updated2026-10-02T20:58:48Z.
+API-digest sha256:5e3a1c8d7218458bb9666ab2043b32db94d1922a9481275bd7d2cbac7e5a2fa7.
+Signing-release lumenfall-signing-v1 og git-tag giver igen404 hos Lead.
+Dette beviser ikke sletning, hvem der ændrede noget, eller tab af privat nøgle.
+
+OPGAVE
+1. Genverificér main/tree, PR40, åbne PR'er, run/attempt/job samt signing- og
+android-latest-metadata. Rapportér konkret drift før fortsat vurdering.
+SHA'er er checkpoints, aldrig resetmål. Opbevar tidsstemplede rå receipts.
+2. Læs build-workflow og signing-kontrakt fra exact live main. Match de
+medleverede historiske workflowbytes til Git før brug som aktuel kilde.
+3. Afklar den konkrete failure-gren fra fuld joblog. Fejlteksten kom fra
+download-grenen efter gh release view. Hævd ikke at view nødvendigvis fejlede;
+forklar kun forskellen mellem daværende og nuværende observation, hvis bevist.
+4. Undersøg tilgængelige release/tag/asset-metadata med normal autoriseret
+adgang. Afgræns manglende release, adgangsproblem, ændret assetnavn og transient
+fejl ved konkrete observationer. List alle nødvendige sider; søg snævert i
+relevante tidligere signing-/release-receipts, hvis det kan skelne hypoteserne.
+Undersøg tilgængelige backup-referencer/metadata for den eksisterende key uden
+at hente, eksponere eller ændre privat signingmateriale.
+5. Aflever én begrundet anbefaling til Lead: præcis nødvendig næste handling,
+hvilken adgang/backup der mangler, og hvilke beviser der kræves før retry.
+Hvis årsagen ikke kan bestemmes, skriv UAFKLARET og angiv den mindste ekstra
+kontrol. Foreslå ikke ny nøgle eller afinstallation som rutinemæssig løsning.
+
+GRÆNSER
+Ingen kode-/workflowændring, push, PR, Ready, merge, tag/release/assetmutation,
+CI-trigger, build eller rerun. Ingen generering/rotation/erstatning af key.
+Ingen signingmateriale eller credentials i afleveringen. Ingen nye brede suites.
+Reparation eller retry kræver særskilt konkret mandat fra 00_08.
+Den eksisterende appidentitet skal bevares:
+applicationId com.lumenfall.app
+Certifikat SHA256 A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21.
+Det er expected-kontrakten, ikke en ny APK-måling.
+
+AFLEVERING TIL 00_08
+En dansk TXT + lille ZIP med rå redigerede receipts, konkret failure-gren,
+observeret årsag kontra hypoteser, anbefalet næste skridt og slutstatus.
+Angiv tydeligt alle mutationshandlinger: forventet INGEN.
+Gem filerne og giv synlige downloadlinks til telefon. Afleveringen er read-only
+diagnose, ingen APK-/merge-/reparationsaccept.
+
+PROVENANCE
+Denne opgave er rekonstrueret af 00_08 fra det aktuelle TXT-handoff og egne
+friske GitHub-læsninger. Det er ikke en byteidentisk kopi af 00_07s forberedte
+next-task: yder-ZIP'en var afbrudt midt i history/Lead_00_07.zip, så next-task
+og de sidste Lead-filer var utilgængelige. Integrationsevidens blev genskabt
+med CRC og SHA256-match til ydermanifestet. Læs Readme_00_08.txt.
+Opgaven er endnu ikke startet; brugeren overfører denne pakke én gang.

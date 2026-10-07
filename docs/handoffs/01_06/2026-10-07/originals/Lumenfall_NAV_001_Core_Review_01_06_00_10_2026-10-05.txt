@@ -1,0 +1,150 @@
+LUMENFALL NAV-001 — CORE-REVIEW AF PR44
+01_06 til 00_10 · 2026-10-05
+Mandatets model/effort: GPT-6.1 Sol · High
+
+KONKLUSION: SCOPED ACCEPT
+Ingen reproduceret Core-blocker på den præcise kandidat.
+36 relevante eksisterende/tilføjede scenarios: egen PASS, alle exit0.
+8 supplerende egne cases: PASS, 162 assertions, ingen pageErrors.
+Ingen remote skrivning eller videre integration udført.
+
+IDENTITET
+Repository: karahaNx/Lumenfall
+Draft PR44: https://github.com/karahaNx/Lumenfall/pull/44
+Branch: 03/nav-001-workshop
+Head: 5be2c0319b9ce11fd8a29f0bb795d7de606858ae
+Tree: 8c07e411458cad5e39b27e8b577910ce20aa0d0e
+Eneste parent / base / main:
+9c883dcc8ae83014735c7ba6dfb37892801280a9
+Base tree: 705a4470b406d64730274a7de001fa3b86bb0257
+Head index.html raw SHA256:
+f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4
+Ti ændrede filer: index.html og ni behavioral-filer; ingen workflow/mobile/
+branding/font/dataændring. Exact patch og kildeidentiteter findes i ZIP.
+
+LIVE OG INPUT
+Før-read: 2026-10-05T13:57:35.831Z UTC.
+Final reads: 2026-10-05T14:08:13.927Z–14:08:14.399Z UTC.
+Main/head/tree/parent matcher mandatet. PR44 er fortsat eneste åbne PR, Draft.
+Alle 42 branches er uændrede fra egen førreceipt. Alle fem aktive runqueries: 0.
+03_05s writer-frigivelse er rapporteret i handoff; ingen lokal procesmåling
+i den anden chat påstås. Det immutable review ændrer ingen writerlease.
+
+Egen integritet: outer ZIP CRC/6 payloads PASS; worker-ZIP CRC/135 payloads
+PASS; v4s 32 payloads plus originalmanifest PASS; alle 545 rå TAR-payloads
+matcher størrelse/hash. Dette beviser integritet, ikke replay af workerens suite.
+Komplet kandidat: 82/82 Git-blobs matcher frisk immutable Git tree. Base:
+81/81 blobs matcher base tree. Alle kandidatbytes uændrede efter test.
+Outer ZIP SHA256:
+06f3062fb6b003488248ead03f7ff2f9fa7c380ccbb0642afa304f04689c26e7
+
+CORE-KONTRAKTER
+
+1. SAVE / STARTUP / NORMALISERING — EGEN PASS
+Alle fem produkt-storagekeys er bytebevarede; schema1 og LUMENFALL1:-backup
+er uændret. Ingen prototype-prefix eller canonical Workshop/nav-field tilføjet.
+Faktiske reload/restore/recovery/reset, malformed/future rejection, recovery-
+offline-once, save-warning og lifecycle resume/cold restart består.
+Råt Inquiry13, queue og betalte records bevares ved rigtig save/reload.
+Kilde: index.html3106,3383,3651,3698,3759,5163; static_scope.json.
+
+2. NAVIGATION / SESSION / GENVEJE — EGEN PASS
+Fem hovedvalg; Workshop åbner den sidst valgte Forge/Lab-fane i samme session.
+Direkte forge/research overrides hukommelsen og markerer Workshop korrekt.
+Rigtig reload bevarer hele canonical state og vælger Forge ved næste Workshop-
+åbning. Ingen expected-state reinjektion efter reload.
+Rift-objective-handlerens faktiske routing er afprøvet med begge target-tabs.
+Keyboardgruppen for fem hovedvalg og gruppen for to underfaner er adskilt.
+Navigation med saveguard ÅBEN ændrer hverken hele state, primary/recovery-
+bytes, storagekey-sæt eller lifecycle-eventliste. Ugyldigt tabnavn er også neutralt.
+Kilde: index.html6542–6605,8044–8047; independent.json cases1–2.
+
+3. SKJULT LABEL / BADGE / FOKUS — EGEN PASS
+Aktiv hovedlabel er visuelt hidden; browserens faktiske accessibility tree
+bevarer navnene Wisps, Workshop, Rift, Ascend og Deeds. Nodes er ikke ignored.
+Begge Lab badges er kontrolleret ved 5,4 og0 ledige slots. Ved0 skjules badges,
+men Workshop-navnet forklarer fortsat Lab-kapaciteten. Refresh stjæler ikke
+underfanefokus og ændrer ingen state/saves/events.
+Kilde: index.html2491–2506,4952–4964,6566–6605; independent.json cases3–4.
+
+4. LAB ACTION / PRIS / ARIA / DISABLED — EGEN PASS
+Alle ni disabled Study-starts er kontrolleret i det faktiske accessibility tree.
+Action og study-identitet står i navnet; duration og præcis formatteret Lumen-
+og Shards-pris står i beskrivelsen via aria-describedby. Native disabled=true.
+Eksempel: “Guardian's Mastery — Begin Study”; beskrivelse
+“Takes 2m 30s · Lumen 600 Shards 40”.
+Ingen Need/Cannot afford/Insufficient resources i navnet eller beskrivelsen.
+Klik på disabled knapper ændrer ikke state, saves eller events.
+Guardian med L600/S39 blokeres. Med L600/S40 debiteres præcis600/40;
+Inquiry5 giver135 worksekunder og speed1 i aktiv record og faktisk save.
+8x-speed viser Motes473 i accessibility name. Ved Motes0 er den native disabled;
+ved473 sker én faktisk debit473, speed8 og uændret120/120 work-snapshot.
+Raw Inquiry13 viser Maxed uden ny pris/aria-describedby eller falsk level14.
+Full-slot årsagen No open slots og den tilgængelige pris bevares.
+Kilde: index.html5211–5306,6031–6101; independent.json cases5–8.
+
+5. GAMEPLAY / QUEUES / CHRONOLOGY / ASCEND / OFFLINE — EGEN PASS
+347 top-level function-segmenter sammenlignet. 340 er byteidentiske.
+De syv ændrede segmenter er updateResearchCard, renderLabCapacityBadge,
+presentControlStates, renderLongStudies, syncMainScrollMode, activateTab og
+setupTabs. syncMainScrollMode-kroppen er identisk; kun den tilstødende
+sessionsvariabel workshopSection tilføjes. Seks eksisterende kroppe ændres.
+Pris-/affordability-/debitberegninger, canonical behandling, queues,
+Measured Inquiry, completion før start, offline og Ascension er bytebevarede.
+Egne inquiry/forge/chronology/lifecycle checks består på head, herunder
+overcap-tail, due-entry, live/offline og gentagne resume/reload-paths.
+LAB-MOTES-prototypens nye paid-repeat-intent er ikke del af denne kandidat.
+Kilde: index.html4931,4980,5010,5106,7604,7853; static_scope.json og logs.
+
+6. TESTÆNDRINGER — EGEN PASS
+Alle ni ændrede behavioral-filer og hele produktdiffen er reviewet.
+Seks hoveddestinationer ændres legitimt til fem hovedvalg plus to underfaner;
+Home/End/wrap og panelrelationer tilpasses den konkrete gruppering.
+Old shortage-ARIA-orakler ændres efter brugerens v4-krav til action/pris,
+native disabled, data-state og fravær af shortage-tekst. Unlock/Maxed/
+Recruit first/run-limits samt øvrige state-/pris-/touchbounds bevares.
+Skjulte Lab-underfaner åbnes før native touch/fokusmåling. Det eksisterende
+44x44-krav for Lab beholdes og suppleres med Workshop-access check.
+Ingen svækkelse af Core/persistence/debit/chronology-orakler fundet.
+
+IKKE-BLOKERENDE TESTDÆKNINGSOBSERVATION
+Den nye nav-workshop.js badge-loop bruger active-count0/1/2 ved maxDepth101,
+så den loop alene dækker ikke0 ledige slots. Egne active-count5-check og det
+eksisterende rift-status.js capacity-loop dækker denne grænse. Ingen produktfejl
+reproduceret. DOM-attributter alene er også svagere end faktisk AX-evidens;
+derfor er Lab-priser og skjulte navne kontrolleret i browserens AX-tree her.
+
+EGEN TESTKØRSEL
+36 scenarios / alle exit0 / samlet42.000s:
+NAV contract; R3 destinations/reload; accessibility contract/controls/reduced;
+research duration/reduced; Inquiry contracts/chronology/reload/backup/recovery/
+reset/UI; fresh/legacy/active studies; reset/restore/malformed/future/recovery-
+once/save-warning; Forge contracts/chronology; chronology studies/simultaneous;
+lifecycle study/queue/background/repeated/cold; P2-02A QOL.
+Præcise scenario-navne, kommandoer, UTC-start, varighed og logs ligger i ZIP.
+8 egne cases,162 assertions, exit0, ingen pageErrors; konkrete stateværdier,
+AX-navne/beskrivelser og priser ligger i independent.json.
+Python3.12.14 · Nodev24.19.0 · Chromium141.0.7390.37 headless shell.
+Browser binary SHA256:
+6c82af1bb96955970f0ff50884bcbd75f200222414dc136076ada667bf4628d1
+Original harness/aserts/guards er bevaret; egne scripts ændrer kun en lokal
+instrumenteret webkopi. Reproducerbare helpers er inkluderet.
+
+OBSERVERET CI / RAPPORTERET WORKER
+Frisk CI: run37314769593 / attempt1 / job-check111778611558 / success.
+Alle jobsteps success. Run-head er kandidaten; CI checkout er PR merge-ref
+ce505968ae707fc45efec1b08aeb5cd3205d44ea. Frisk Git-commit-read bekræfter
+parents main+head og tree8c07e411... identisk med reviewkandidaten.
+Grøn CI er sekundær evidens; ingen manuel dispatch/rerun er udført.
+Workerens130 scenarier/148 resultater,367 native checks og12 negative controls
+er rapporteret, ikke genkørt i fuldt omfang af dette Core-review.
+
+BEGRÆNSNINGER OG DISPOSITION
+Scoped ACCEPT gælder Core-semantik og ovenstående SHA; ingen generel UI-accept.
+QA/Lead ejer samlet matrice, native touch/animation/safe-area og integration.
+Browser AX-kontrol er ikke fysisk Android/TalkBack-test.
+Ingen APK/build/signing/release, PR-review/-kommentar, repoændring, cleanup,
+beskedværktøj eller subagent er udført. A40/crDroid genåbnes ikke.
+NAV-writerens frigivelse er rapporteret; lokal processtatus er ikke målt.
+Ingen remedieringscommit anbefales som Core-krav på den foreliggende evidens.
+Brugeren overfører ZIP til00_10; 01_06 stopper efter aflevering.

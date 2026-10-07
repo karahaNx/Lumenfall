@@ -1,0 +1,44 @@
+{
+  "cases": [
+    {
+      "case": "live-ordinary-off",
+      "R2ms": 0.020099999997764826,
+      "blockedMs": 0.019300000000279396,
+      "newMs": 0.024199999995995314,
+      "newVsR2": 1.2039800994371352,
+      "iterationsNew": 1,
+      "iterationsR2": 1
+    },
+    {
+      "case": "live-ordinary-on",
+      "R2ms": 0.02349999999906868,
+      "blockedMs": 0.02419999999878928,
+      "newMs": 0.03210000000335276,
+      "newVsR2": 1.365957447005315,
+      "iterationsNew": 2,
+      "iterationsR2": 2
+    },
+    {
+      "case": "offline-hour-on",
+      "R2ms": 20.728000000054017,
+      "blockedMs": 20.82799999998417,
+      "newMs": 22.362000000001863,
+      "newVsR2": 1.0788305673457925,
+      "iterationsNew": 4202,
+      "iterationsR2": 4202
+    },
+    {
+      "case": "live-safe-huge",
+      "R2ms": 0.019999999996740372,
+      "blockedMs": 0.021100000000558793,
+      "newMs": 0.020100000001024455,
+      "newVsR2": 1.005000000215019,
+      "iterationsNew": 1,
+      "iterationsR2": 1
+    }
+  ],
+  "noOwnConcurrentBrowserDuringSelectedSamples": true,
+  "firstNewPerformanceRun": "Original final measurement overlapped a later R2 causal browser check near its end; raw retained. New candidate replayed once in isolation and only isolated results are used here. R2/blocked samples were already sequential and completed.",
+  "initialBenchmarkFail": "R2 verbose diagnostic timeline guard at one hour; normal captureTimeline:false benchmark used without modifying product guards.",
+  "limits": "Browser wall-clock and serialized state snapshot; hardware/mobile runtime not measured. No guarantee about arbitrary unbounded gameplay or other system load."
+}

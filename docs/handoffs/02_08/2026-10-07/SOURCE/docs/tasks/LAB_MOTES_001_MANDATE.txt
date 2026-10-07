@@ -1,0 +1,119 @@
+LAB-MOTES-001 — aktiv produktionsopgave fra 00_12
+2026-10-06. Projekt: Lumenfall. Repository: karahaNx/Lumenfall.
+Målrolle: 02_07 Gameplay / Progression. Lead: 00_12.
+Model: GPT-6.1 Sol. Effort: High. Altid dansk; omdøb ingen chats.
+
+AKTIVT WRITER-MANDAT FRA 00_12
+PR45 er closed/merged. Same-head CI 37364461673 attempt4 success.
+Main: 1ddc246eb62782a61ec5c486cd5f51ea170bb338
+Tree: bfb3970b29485b3e8ece1c72bb60186eb2ba755e
+Observeret: 2026-10-05T22:05:41.800Z
+02_07 er eneste repo-writer til denne LAB-MOTES-001-implementering.
+Branch 02/lab-motes-repeat-v1 oprettes fra frisk verificeret main.
+Brugeren har stående godkendelse og bad om at afslutte de sidste forbedringer.
+Alle øvrige roller er read-only; ingen subagenter/beskedværktøjer.
+Lead 00_12 ved udstedelse; 00_13 overtager når brugeren starter næste Lead-chat.
+Live afvigelse vurderes før handling; intet reset/force-push.
+Denne writer slutter ved freeze og udtrykkelig frigivelse. Ingen anden
+produktændring er inkluderet. CONTENT-DESIGN-001 er kun efterfølgende læsende arbejde.
+
+LÆSEPLAN
+Læs live AGENTS.md, kun egen rolle i docs/CHAT_OWNERSHIP.md og
+docs/agents/02_GAMEPLAY.md samt docs/PROJECT_STATE.md. Læs det aktive
+Lead-mandat og ORIGINALS/USER_REQUEST.txt + REQUIREMENTS.txt fuldt.
+ORIGINALS/baseline.json og HASH_CONVENTIONS.txt identificerer prototypen.
+Sources er read-only. Brug Source_Index.txt til målrettede ekstra opslag.
+Læs ikke hele kildepakken/historikken ved opstart. Live produktkode beviser
+aktuel adfærd; prototypen er en reference, ikke accepteret produktkode.
+
+TILTÆNKT SCOPE
+Per-Long-Study gemt Use Motes ON/OFF og valgt repeat-speed. Implementér
+økonomi, autoritative simulationsevents, persistence og nødvendige mobile
+Lab-kontroller som ét samlet scope. 02_07 har eksklusivt skriveejerskab i dette scope.
+Forventede produktfiler: index.html og relevante tests/behavioral/-filer.
+Tilføj scoped opgavekort og byteidentiske user-/adfærdsoriginaler under
+docs/tasks/LAB_MOTES_001*. Lead ajourfører PROJECT_STATE/integration senere.
+Ingen ændring i combat balance, priser, Study slots, unlocks/caps, Measured
+Inquiry-kontrakt, NAV-001-navigation, native Android, signing eller workflows.
+Hvis en afhængighed kræver bredere scope, dokumentér konkret behov til Lead.
+
+ADFÆRDSKONTRAKT — ORIGINALERNE STYRER
+Study Queue starter næste level; Use Motes køber hastighed for aktivt level,
+også hvis det blev startet manuelt. Toggle-parrene er uafhængige.
+Bevar LAB_SPEED_TIERS [1.5,2,3,4,5,6,7,8] og speedTierCost. Et 3x-mål
+købes direkte for 60 Motes, aldrig via billigere trin. Fuld pris pr. level;
+nyt level starter 1x, indtil det nye køb er betalt. Allerede betalt samme/højere
+speed medfører ikke nyt køb. Lavere nyt mål nedgraderer ikke aktiv speed.
+Ved mangel: bevar intent og aktiv speed, køb ved første autoritative tidspunkt
+med nok Motes. OFF stopper fremtidige køb og beholder aktiv betalt speed.
+Manuelt gennemført hastighedskøb husker det købte trin. Separat målvalg skal
+kunne huskes også uden råd. Use Motes er OFF indtil brugerens aktive valg.
+Køb kun for kendt, aktiv, ikke-maxed/ikke-closed Study. Ingen negativ balance.
+Fælles Motes-budget prioriteres i LONG_STUDIES-deklarationsrækkefølge;
+bevar separat eksisterende Study-startprioritering. UI-sortering er kun visuel.
+Action og pris bevares ved mangel; ingen Need/Cannot afford-knaptekster.
+
+PERSISTENCE OG HÆNDELSESORDEN
+Gem nye valg pr. kendt Study. Gamle saves får OFF; et gyldigt betalt aktivt
+trin kan bruges som defaultmål. Kun kendte IDs, strikte booleans og tilladte
+hastighedstrin accepteres. Ukendte/malformed værdier må ikke aktivere køb.
+Normalisering er sideeffektfri og bruger ikke Motes. Reload, backup/recovery
+og Ascend bevarer valg og aktive betalte work-snapshots; Reset nulstiller dem.
+Autoritativt Motes-køb behandles efter due completions/closures og nye betalte
+Study-starts på samme timestamp. Ingen speedbetaling for et netop lukket level,
+intet arbejde optjent bagud og intet gratis instant level.
+Farm-batches deles ved den Luminous-belønning, der faktisk muliggør købet;
+ikke ved forventet reward eller batchslut. Tag højde for aktuel enemyIsLuminous,
+luminousAccum, chance, per-kill reward, allerede skadet enemy og flere budgetter.
+Ingen nul-tidsloop ved lille positiv deficit. Samme kontrakt i live, offline,
+study-only resttid og timestamp-kollisioner; eksisterende policy/rate/cap gælder.
+UI/render må ikke skabe en anden økonomivej end den autoritative motor.
+
+MÅLRETTET KODEKORT (d32c0043-checkpoint; GENFIND LIVE)
+LONG_STUDIES/LAB_SPEED_TIERS/speedTierCost; defaultState, migrate/normalize-
+save, save/backup/reset/ascend; commitStudyStart/applySpeedTier/finishStudyRecord;
+simulationCompleteDueStudies/simulationStartQueuedStudies;
+simulationKillsUntilEconomyMutation/simulationFarmEconomyBoundarySeconds;
+simulationDefeatEnemy/simulationBatchFarmKills/simulationResolveTimestamp;
+advanceAuthoritativeTime/advanceStudyOnlyTime/tick;
+renderLongStudies/updateStudyProgress og de eksisterende Lab/navigationsgates.
+Bevar canonical save keys. Prototypeprefixer, testhooks, nav-testmarkup og
+testværkstedets storage-isolation må aldrig følge med i produktet.
+
+ACCEPTKONTROLLER PÅ DEN FAKTISKE KANDIDAT
+1. Eksakt 3x/60-køb uden 1.5x/2x, igen pr. level; alle eksisterende trin/priser.
+2. Under pris: ingen køb, uændret intent/speed. Ved præcis pris: ét korrekt køb.
+3. ON/OFF x Study Queue ON/OFF, manuel start, manuel speed, ændret mål,
+   samme/højere betalt speed og OFF efter betaling; ingen utilsigtet start.
+4. Flere samtidige Studies med knapt budget; vend aktiv/UI-rækkefølge uden
+   at ændre deklarationsprioritet. Balance og actual work/time kontrolleres.
+5. Gammelt/malformed save, aktive snapshots, missing maps, ukendte IDs,
+   string-booleans og ugyldige tiers; normalisering køber ikke og er idempotent.
+6. Save/reload, valid backup recovery, Ascend og Reset; aktiv speed bevares
+   hvor kontrakten kræver det. Ingen ændring i canonical recovery-guards.
+7. Maxed/capped/overcap/closed Studies og ukendt ID: intet Motes-forbrug,
+   ingen ekstra earned level; Measured Inquiry-selfdiscount og legacy8 uændret.
+8. Farm/push og live/offline opdelt kontra samlet tid, før/præcis/efter den
+   Luminous-affordability-boundary; vis tidslinje, køb, balance og remaining work.
+9. Kollision mellem Luminous reward, Study completion/start, cap/closure,
+   buff-expiry og Ascend. Study-only resttid efter eksisterende offline-policy.
+10. Mobile 320/390/430 px, fokus/keyboard/aria-pressed, mindst 44 px trykmål,
+    ingen overflow og bevaret NAV-001. UI må afspejle faktisk speed og intent.
+11. Hele den eksisterende behavioral suite, obligatoriske negative controls
+    og kilde-/runtime-gates fra pre-merge-workflowet. Supplér med meningsfulde
+    LAB-controls der fanger gratis carry, billigere fallback eller batchslutkøb.
+Antal beståede checks er ikke alene accept. Gem rå outputs og exit codes.
+Prototypens tidligere 52 checks/7 uaccepterede manuelle punkter tæller ikke som
+produkttest. Fysisk Android/TalkBack vurderes særskilt; uden kørsel er det ukendt.
+A40/crDroid er udgået og skal ikke genindføres som acceptkrav.
+
+FREEZE OG AFLEVERING
+Ét scoped Draft PR på fast base, med titel/tekst om endelig implementering og
+validering. Ingen merge, ready, Android-build, dispatch/rerun, release eller
+cleanup i implementeringsmandatet; almindelig PR-CI følger workflowet.
+Aflever exact base/head/tree, ændrede filer/diff, originale krav byteidentisk,
+testkommandoer/logs, begrænsninger, source-index/manifest og Lead-statusdelta.
+Lever separat lille TXT og samlet ZIP til 00_12 uden manuel samling.
+Ved freeze: frigiv repo-writer udtrykkeligt; intet ekstra commit efter levering.
+Lead tildeler derefter scoped Core save/chronology-review til 01_06 og
+uafhængigt QA til 04_05. Grøn CI er nødvendig, men erstatter ikke deres accept.

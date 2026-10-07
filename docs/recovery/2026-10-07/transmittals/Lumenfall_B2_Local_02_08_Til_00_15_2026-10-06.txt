@@ -1,0 +1,93 @@
+LUMENFALL — 02_08 til 00_15 — LOKAL B2-KANDIDAT
+6. oktober 2026. Model GPT-6.1 Sol · Effort Ekstra høj.
+
+RESULTAT
+B2/C-B2 er rettet i en isoleret lokal kopi. Begge originale R2-minima er
+reproduceret som FAIL på faktisk motor, inklusive QA's natural-DPS uden stub.
+Den lokale kandidat giver korrekte safe kill-counts og bevarer HP, spawn/
+reward-policy, Motes-betaling og post-payment work. Ingen gameplay-cap,
+EPS-/pris-/reward-/save-/NAV-/workflow-/native-/signingændring.
+
+KANDIDAT OG EJERSKAB
+Main/base: 1ddc246eb62782a61ec5c486cd5f51ea170bb338
+Remote PR46 R2: 3cdebc236e9ee5081a4bca4e323b11f43aa0d46d
+R2 tree: 70073a55d7f5fe428ae82223627603498cc372b6
+Proposed parent: R2. Lokal tree: 4c07cd5d66cb5928eb99623ff86efaa81e268829
+Lokal index SHA256:
+3de412b53421f173d3826ddf6336f066abf43cc09d88cbbc0e23bf6984212ed9
+Ingen R3-commit eller remote ref findes fra 02_08. HEAD er stadig R2.
+Fem scoped filer er ændret/tilføjet lokalt; 13 filer i samlet main→lokal scope.
+Frisk GitHub observation: 2026-10-06T13:28Z, samme main/head, PR46 open/Draft.
+Se live-final for præcist observationstidspunkt. Ingen egne remote writes.
+
+02_07's B2-start, lokale ændringer/processer og nye writerfrigivelse er ukendt.
+02_08 har kun brugt det autoriserede fase A-mandat. Ingen writer overtages.
+Den gamle R2-frigivelse fra 10:20Z og uændret HEAD er ikke stopbevis for B2.
+Alle kendte egne test-/arbejdsprocesser er afsluttet ved denne aflevering;
+første og anden gate-run samt alle registrerede private browserdrivers er slut.
+02_08 har ikke et aktivt remote writer-mandat at frigive. Kandidaten er frosset;
+ingen videre kodeændring eller remote handling udføres i denne aflevering.
+
+RETTELSE
+Den fejlende Math.round((damage-remainder)/maxHp) er erstattet af exact
+division af repræsenterede værdier. Integral game-HP bruger BigInt integer-
+division; fractional HP bruger IEEE-significands/exponenter. Arbejdet er
+afgrænset af double-formatets exponent-range, aldrig en per-kill produktloop.
+Modulo, partial-HP og de oprindelige boundarytolerancer er bevaret.
+Exact count garanterer ikke eksakte store rewardtotals: den eksisterende
+repræsenterede multiplikation/summation og offline 0.7-policy gælder fortsat.
+
+VALIDERING PÅ UÆNDREDE SLUTBYTES
+Alle syv workflow-gates exit 0. Gate01..03 genbruges fra første kørsel på
+samme frosne bytes; final gate04..07 er afsluttet på uændret kandidat.
+Komplet final aggregate: Behavioral QA passed: 141 deterministic scenario(s).
+Selvstændigt replay: 161 komplette real browser/native PASS-invocations,
+139 real scenarier + to processkontrakter = 141. Alle 12 required negatives
+rapporterer forventet FAIL og fanges korrekt af harness; ydre gate05 exit 0.
+Native profiler/TalkBack er browserkørsel, ikke fysisk Android-accept.
+
+Permanent B2-motortest: 340 checks; begge exact-old-R2 minima FAIL, undo PASS.
+Alle 826 B1-fixtures + alle præcise 43 originale counterexample-keys:
+R1 FAIL, R2/lokal PASS. Minimum 90 kills, .0173/60-køb og kendt Motes/work
+bevares. Reviewer's motorpakke: 100 grupper / 16193 checks, lokal PASS,
+inklusive chronology, knappere budgets, normalization og tre LAB-causal controls.
+De eksisterende persistence/mobile/Inquiry/Farm/Push-kontrakter består i suiten.
+
+7945 deterministic arithmeticinputs: zero quotient/count failures uden for
+uændret boundaryregel; 167 eksisterende tolerancepromotions klassificeret.
+R2 har 370 rå countfejl i samme matrix. 426 exact-halves whole/split checks
+består; seks near-boundary cases er særskilt afgrænset, ikke omdøbt til exact PASS.
+Reviewer's 560 arithmeticinputs består. 3200-proben har de samme tre legitime
+EPS-near-boundary forskelle, som rapporteres åbent. BigInt-orakler dekoder
+repræsenterede IEEE værdier. Matrixens DExact-felt er toFixed(0)-visning, aldrig
+den arbitrære heltalsoracle; damage-number dekodes til IEEE i selve oraklen.
+
+Alle QA's 1340 additional motorinputs er genkørt identisk på R1/R2/lokal.
+R2 og lokal har nul økonomiforskelle og samme 379 strict diagnosticerrors i
+123 rows; original aggregate FAIL bevares. R1→R2-countforskelle identificeres
+eksplicit (otte af de 123 rows), ikke ignoreres. Separate exact represented-
+segment-orakler finder nul nye count/carry-fejl i R2/lokal inden for de
+oprindelige tolerancer; R1 har 23 carry-afvigelser. 622 rational/IEEE reward-
+operationer følger actual policy uden mismatches. Intet gammelt assertion-
+krav er løsnet, og diagnostikrækkerne kaldes ikke en grøn stresstest.
+
+KENDT MOBILTEST / BEGRÆNSNING
+Første fulde gate04 exit 1: rift-status-stacking-mobile, enemy-stage content
+clipped, safe24 boss-conditional. Det konkrete scenarie bruger Push, og hele
+produktkoden uden for scoped Farm-aritmetik er byteidentisk med R2.
+Målrettet lokal og exact R2 består uden ændring. Én begrundet fuld gentagelse
+uden samtidige egne browserundersøgelser består. Alle oprindelige fejl/raw logs
+bevares; årsagen til den intermittent clippingmåling er stadig uafklaret.
+Der er ingen UI-rettelse, toleranceændring eller deaktiveret assertion.
+Fysisk Android/TalkBack og BigInt på fysisk WebView er utestet.
+Ingen ny CI er trigget; dette er lokal validering, ikke same-head R3-CI-accept.
+
+NÆSTE HANDLING
+Brugeren sender den separate stop-TXT til 02_07 og overfører den konkrete
+stop-/writerstatus til 02_08/00_15. Bevar eventuelle nyere ændringer/evidens.
+Når stop/frigivelse og egne skriveprocessers afslutning er dokumenteret, følg
+recovery/B2-mandatets friske baseline-/branches-/PR-/runs-/workflowkontrol.
+Kun hvis den gate er opfyldt: én scoped commit/normal push, Draft, ordinary PR
+CI og ny freeze/frigivelse. Ingen ekstra godkendelse kræves til samme B2-scope.
+Core 01_06 og QA 04_05 skal genreviewe den præcise senere R3. Ingen merge,
+Android-build, dispatch/rerun eller release er udført eller inkluderet her.

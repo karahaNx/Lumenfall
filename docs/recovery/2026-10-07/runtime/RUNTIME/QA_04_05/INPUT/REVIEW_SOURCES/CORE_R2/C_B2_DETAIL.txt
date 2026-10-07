@@ -1,0 +1,45 @@
+C-B2 — exact finite-double / safe-count conservation
+
+Denne blocker vedrører den numeriske understøttelse, som R2 selv angiver:
+positive finite HP/damage og safely representable kill counts. Den ændrede
+farmfunktion kan give forkert quotient, selv om både korrekt og observeret
+antal er sikre heltal. Der loves ikke spillerhistorik eller realistisk pacing
+fra en numerisk DPS-fixture; det er en direkte motor-/grænsekontrol.
+
+D = 2 ** 55 + 16, faktisk repræsenteret integer36028797018963984.
+H=currentHP=11. Exact BigInt division: D//11=3275345183542180, D%11=4.
+D-4 mathematical integer36028797018963980 ligger midt mellem to doubles;
+subtraction runder op til D. Floatdivision runder q+4/11 til q+.5 og Math.round
+runder videre til q+1. Der findes ingen ny EPS eller oracle-lempelse i repro.
+
+Whole1s og split .5+.5 producerer samme total damage: D/2 er præcist, og to
+halvdele summerer præcist til D. De to halvintervaller går gennem virkelige
+farm/reward/spawn/HP/scheduler-funktioner. Der er ingen Luminous-affordability-
+boundary, når alle Use Motes erOFF. Derved er fejlen i shared farm-funktionen
+isoleret fra selve repeat-økonomien. Live Shards=1 pr.kill og totalKills er
+stadig sikre heltal, så den ekstra belønning kan observeres nøjagtigt.
+
+residual_blocker.json indeholder4 motor-rækker: whole/split × live/offline.
+Whole-rækkerne fejler den aktive assert; split-rækkerne består. Driverexit1 er
+blockerbevis. Minimum_arithmetic.log har også aktiv exact assert/exit1 men med
+batch-sideeffekter stubbet. Begge outputtyper er tydeligt adskilt.
+
+JSON-number-feltet dps kan blive skrevet som36028797018963980, fordi JavaScript
+vælger korteste decimaltekst, der roundtripper til samme double. Brug expression
+2 ** 55 + 16 eller representedDamageExact-string ved repro og oracle; læs ikke
+JSON-number som et arbitrært præcist Python-integer. Oraklen bruger BigInt(D)
+INDE i Node før serialization, aldrig en rekonstrueret decimalantagelse.
+
+Supplerende arithmetic_probe undersøger3200 varianter. Dens139 rå afvigelser
+omfatter3 near-boundary-forventninger, hvor eksisterende EPS legitimt gælder;
+de er ikke ekstra blockers. Resten ligger ved større safe-counts. primary C-B2
+har ingen sådan toleranceambiguitet og viser ny whole/split-regression.
+Et tidligt find_large-scan fandt ingen afvigelse i den valgte snævre count-række;
+det er en begrænset negativ søgning. En ekstra naturlig Tide-power-søgning i
+residual-driveren fandt ingen kandidat i sine200 høje niveauer; ingen påstand
+om naturligt frembragt eller normal gennemspillet spillerfejl følger af den.
+
+Den oprindelige B1 er korrigeret og dokumenteret særskilt. R2-BLOCKED her
+betyder ingen Core-accept af hele den erklærede finite/safe-count-kontrakt.
+Lead ejer konkret numerisk rettelse eller en præcis afgrænsningsbeslutning.
+Core retargeter ikke, implementerer ikke og indfører ingen produktcap.

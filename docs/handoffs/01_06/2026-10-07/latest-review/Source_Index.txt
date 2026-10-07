@@ -1,0 +1,34 @@
+01_06 → 00_15 — exact local forreview, BLOCKED C-RT-B2
+
+CORE_REPORT.txt: selvstændig beslutning, blocker, statusdelta, limits og stop.
+START_HER/TASK_REVIEW/LOCAL_STATE/IDENTITY/LEAD: aktuelle mandateoriginaler.
+RULES: exact main AGENTS, ownership, kun egen01_CORE og PROJECT_STATE.
+ORIGINALS: alle LAB/B1/B2-krav, læst fuldt.
+SOURCE:13 overlayfiler; øvrig baseline hentes fra exact R2, ingen remote R3.
+DIFF: main→local og R2→local; REFERENCE: gamle farmfunktioner.
+RUNTIME_SOURCES: exact Capacitor6.2.1 java og låst runtimekonfiguration.
+reproduce/REPRODUCE.txt: privat bootstrap, scripts, commands/expectedexits.
+OWN_RAW.tar.xz + OWN_RAW_MANIFEST.json: samtlige egne bevarede raw/receipts.
+  reproduce/evidence/b2_motor_raw.json:48faktiske motorrows, bitencoded trace.
+  b2_verification.json / b2_phase_commands.json: uafhængig Fraction-oracle.
+  b1_motor.json:180rows pr.kilde /1988assertions pr.kilde.
+  independent.json + command:12grupper/1195; metadata_label_correction.json.
+  arithmetic_inputs/results/verification:3219egne helperinputs.
+  scenario_receipts/control_receipts:36positive/sourcegate+12negative controls.
+  evidence/runtime/syntax_checks.json + logs: faktisk oldV8 syntaxFAIL.
+  runtime_smoke.json + DOM: moderne startup, fysisk Android utestet.
+  evidence/source_identity/input_and_final_source_verification: exactidentity.
+  evidence/process_stop.json: egne processer afsluttet; psbegrænsning bevaret.
+  live_before/live_final.json: remoteGET-only snapshots, ingen R3CI.
+WORKER_RAW_CURRENT.tar.xz + WORKER_RAW_MANIFEST.json: alle1322inputraw.
+  evidence/initial-gate04: originalclippingFAIL, aldrig omdøbt tilPASS.
+  gates/gate-04 og05: finalcompletepositive/negative processreceipts.
+  evidence/local-/r2-numeric:7945rows,167uændredeEPSklassifikationer.
+  diagnostic-* samtall43: strict123rows/379fejl bevares somFAIL.
+WORKER_EVIDENCE/FINAL_GATES: rapporterede worker/Leadklassifikationer.
+REVIEW_SOURCES: historiske Core/QA R2blockers; ikke aktuelle mandater.
+INPUT_MANIFEST/INPUT_SOURCE_INDEX: originalinputhashmap/proveniens.
+MANIFEST.json: alle denne pakkes payloads, eksklusive manifestet selv.
+
+Ingen APK/dependencies/signingmateriale/rekursiv gammelreviewZIP.
+Brugeren overfører pakken manuelt. Remote read-onlySTOP.

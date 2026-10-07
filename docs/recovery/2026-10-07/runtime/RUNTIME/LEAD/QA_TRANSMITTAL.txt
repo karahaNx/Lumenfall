@@ -1,0 +1,53 @@
+QA 04_05 → Lead 00_15 · 2026-10-06
+DOM: BLOCKED — QA-B2-RUNTIME-01
+Mandat: GPT-6.1 Sol · Ekstra høj; ingen runtime-modelattestation.
+
+Exact lokal kandidat:
+Tree: 4c07cd5d66cb5928eb99623ff86efaa81e268829
+index SHA256: 3de412b53421f173d3826ddf6336f066abf43cc09d88cbbc0e23bf6984212ed9
+Base/main: 1ddc246eb62782a61ec5c486cd5f51ea170bb338
+Parent/remote R2: 3cdebc236e9ee5081a4bca4e323b11f43aa0d46d
+Eget fulltree og alle 13 sourcehashes matcher. Ingen lokal R3-commit/push/CI.
+
+BLOCKER: Ny BigInt-syntaks i hovedscriptet kræver Chrome/WebView 67. Uændret
+Capacitor-konfiguration og låst 6.2.1 anvender minimum 60. Version 60–66 kan
+derfor få parsefejl før spilstart, også uden Farm/stress-save. Egen grammar-
+kontrol og BigInt-fraværskontrol bekræfter afhængigheden; låst npm-integritet
+og officielle V8/Capacitor-kilder er dokumenteret. Chrome 153-PASS dækker ikke
+den eksisterende 60-baseline. Se OWN/RUNTIME_BLOCKER.txt. Lead må afklare en
+korrektion inden for baseline eller en særskilt runtime-supportafhængighed.
+04_05 har ikke ændret produkt/native/dependencies/workflows.
+
+POSITIVT, SELV GENPRØVET:
+• Begge B2-minima er rettet på Chrome 153. Core OFF, 0 Motes: 3275345183542180 kills,
+  HP 7 whole/split live/offline. Naturlig DPS 40052722017724424: 3277040892359271
+  kills; ON/OFF, whole/split, live/offline. 16 rækker/494 checks inkl. positive
+  betalingstid,fuld 60-debit,work,spawn/rewards/HP. Exact-oldR2 giver begge
+  ekstra-kill-fejl; restoration passerer. Split repræsenteret skade bogføres.
+• B1: 100 egne grupper/16193 checks, alle 826 fixtures og præcise 43 gamle fejl
+  består. R1 genskaber 43; tre egne LAB-mutants FAIL/undo PASS består.
+• 384 fuldmotor-stresscases omkring 2^50/51/52/MAX_SAFE: 768 segmentchecks består.
+  6516 Fraction-inputs: 0 quotientfejl. Gamle strict EPS/HP-residualer bevares.
+• 7/7 frosne workflowgates exit 0; 141 scenarier, 163 PASS-invocations, 161 reelle
+  browser/native-outputchecks og 12 korrekt afviste negatives. Alle 13 bytes og
+  workflow uændret før/efter. Komplette egne rålogs/commands/exits i ZIP.
+• Mobil 320/390/430 normal/reduced: 6 egne kontekster/78 checks består, inkl.
+  NAV, fokus, ARIA, 44px, renderpurity og betaling. Targeted Rift R2/local exit 0.
+
+BEVARET DIAGNOSTIK/LIMITS:
+1340 cases giver 1217 clean/123 strict-error-rækker/379 gamle assertions på
+både R2 og lokal; ingen generel toleranceforøgelse. 123 egne traces × R1/R2/local
+forklarer tællinger via faktisk repræsenterede segmenter og gamle guards;
+reward-operationer matcher policy. Dette er ikke en samlet grøn stresstest.
+Oprindelig mobile clipping-FAIL er bevaret. Root cause er ukendt; et nyt PASS
+beviser ikke en UI-rettelse. Fysisk Android/WebView/TalkBack er utestet.
+Huge rewards er repræsenteret afrundede; ingen unbounded/sub-ULP garanti.
+A40/Opening Focus/content/design/farmindikator er uden for scope.
+
+Live 16:21:40Z: main/PR46-head/base uændret; 44 branches; kun PR46 open/Draft;
+0 aktive runs. R2-CI 37447570925 success gælder R2. Ingen remote R3-accept.
+Efter en eventuel push kræves exact-commit/base/parent/tree/source/CI-addendum;
+samme tree kræver ikke fuld genkørsel alene pga. commit. Ændret tree/baseline
+kræver nyt afgrænset review. Runtime-blocker skal først håndteres.
+Read-only stop: egne browser/server/testprocesser afsluttet; 0 remote writes,
+0 beskeder/subagenter. Writer 02_07 stop/release fortsat ukendt.

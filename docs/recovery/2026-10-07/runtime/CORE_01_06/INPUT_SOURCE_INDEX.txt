@@ -1,0 +1,31 @@
+MÅLRETTET REVIEW-KILDEINDEKS
+Start kun START_HER.txt → live egne regler → LOCAL_STATE.txt → TASK_REVIEW.txt.
+LEAD/DECISION.txt: beslutning, observationsgrænser og nødvendig post-R3-binding.
+RESULT.txt + IDENTITY.json: workerens frosne lokale aflevering, ingen remote R3.
+SOURCE/: 13 main→local sourcefiler; exactrefs angivet i LOCAL_STATE.
+DIFF/R2_to_local.patch: fem scoped B2filer. DIFF/main_to_local.patch: samlet PR46scope.
+SOURCE/docs/tasks/LAB_MOTES_B2_001.md: quotientbevis/grænser; index.html med kaldere.
+SOURCE/tests/behavioral/farm-numerical.js + run.py: permanent motororacle/controls.
+ORIGINALS/LAB/* og ORIGINALS/TASK_LAB_MOTES_B1_001.txt/B2_001.txt: fulde originals.
+REVIEW_SOURCES/CORE_R2/C_B2_DETAIL.txt + REPRODUCER.txt: original active-assert minimum.
+REVIEW_SOURCES/QA_R2/BLOCKER_B2.txt + QA_REPORT.txt: natural motorstate og limites.
+REPRODUCE/: workerprivate reproductions/reviewerfixtures, adapt private paths kun.
+REFERENCE/R1_farm_function.js og R2_farm_function.js: exact gamle controlfunctions.
+EVIDENCE/final-gate-verification.json + FINAL_GATES/: rapporterede gates/results.
+EVIDENCE/mobile-diagnostic-decision.json: første mobileFAIL og begrundet repeat.
+EVIDENCE/all43-comparison.json: præcise keys. diagnostic-all1340-comparison.json,
+  diagnostic-count-classification.json og diagnostic-reward-policy.json: scope/class.
+RAW_CURRENT.tar.xz + RAW_MANIFEST.json: 1322 råfiler, hashverificeret af Lead;
+  målrettet tarfile r:xz; extractall kun privat/filter=data. Ingen startindlæsning.
+  evidence/initial-gate04: original mobileFAIL, gates/gate-04..07: final, tidligere
+  gate01..03 på samme bytes. Se worker Source_Index i WORKER_SOURCE_INDEX.txt.
+LEAD/VERIFICATION.json: egen Lead tree/raw-replay-kontrol, ikke nyt fullengine-run.
+LEAD/OWN_ARITHMETIC.json/.cjs: egen isoleret funktion/helper, stubbed batch effects.
+LEAD/LIVE_RECEIPT.json + R2_TREE.json: live main/PR og full R2tree ved denne aflevering.
+MANDATE/: originale phase A/B instructions; ingen reviewerwriter fra disse.
+PACKAGE_PROVENANCE.json og MANIFEST.json: sourceID/hash/payload hashes.
+
+Hvis ekstra originale reviewkilder er nødvendige: CoreR2 original ZIP
+libfile_50f5b03feab481919ee128dc16981b2a; QA R2 original ZIP
+libfile_97224c167bb881919886a7d28dd93bbb. Følg Library-skillen kun efter behov;
+frisk relevante exactsource læses fra GitHub. Ingen historisk release/taskgenstart.

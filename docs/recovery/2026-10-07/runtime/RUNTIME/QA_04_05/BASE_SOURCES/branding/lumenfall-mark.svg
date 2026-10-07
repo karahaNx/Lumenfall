@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">Lumenfall Rift Crystal</title>
+  <desc id="desc">A faceted luminous crystal wrapped by a golden rift orbit inside an open arc frame.</desc>
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff0a8"/><stop offset=".22" stop-color="#ffc75b"/><stop offset=".55" stop-color="#d87b26"/><stop offset=".78" stop-color="#ffcf66"/><stop offset="1" stop-color="#fff2b8"/>
+    </linearGradient>
+    <linearGradient id="crystal" x1=".18" y1=".08" x2=".82" y2=".96">
+      <stop offset="0" stop-color="#fff7d0"/><stop offset=".18" stop-color="#d9c8ff"/><stop offset=".46" stop-color="#8c78ff"/><stop offset=".72" stop-color="#6758d5"/><stop offset="1" stop-color="#e89b4b"/>
+    </linearGradient>
+    <linearGradient id="crystalShade" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4e48a4"/><stop offset="1" stop-color="#1b1f57"/></linearGradient>
+    <radialGradient id="core" cx="50%" cy="52%" r="44%"><stop offset="0" stop-color="#fffbdc"/><stop offset=".18" stop-color="#ffc75b" stop-opacity=".95"/><stop offset=".5" stop-color="#9b72ff" stop-opacity=".42"/><stop offset="1" stop-color="#6d5cff" stop-opacity="0"/></radialGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="18" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="goldGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <circle cx="512" cy="520" r="278" fill="url(#core)" opacity=".72"/>
+  <path d="M512 100C390 118 256 206 196 332C150 428 148 575 204 688C263 808 376 884 512 924" fill="none" stroke="url(#gold)" stroke-width="34" stroke-linecap="round" filter="url(#goldGlow)"/>
+  <path d="M512 100C634 118 768 206 828 332C874 428 876 575 820 688C761 808 648 884 512 924" fill="none" stroke="url(#gold)" stroke-width="34" stroke-linecap="round" filter="url(#goldGlow)"/>
+  <path d="M512 126C402 150 300 229 248 340" fill="none" stroke="#fff0bd" stroke-opacity=".62" stroke-width="7" stroke-linecap="round"/>
+  <path d="M512 126C622 150 724 229 776 340" fill="none" stroke="#fff0bd" stroke-opacity=".62" stroke-width="7" stroke-linecap="round"/>
+  <g fill="url(#gold)" filter="url(#goldGlow)"><path d="M196 512l24-41 24 41-24 41z"/><path d="M828 512l-24-41-24 41 24 41z"/></g>
+  <g fill="#a78cff" opacity=".9"><path d="M275 630l18-34 13 39-22 26z"/><path d="M749 630l-18-34-13 39 22 26z"/></g>
+  <g filter="url(#glow)">
+    <path d="M512 214L690 472 610 760 512 858 414 760 334 472Z" fill="url(#crystal)" stroke="#f8e6ff" stroke-width="7"/>
+    <path d="M512 214L512 858 414 760 334 472Z" fill="#7364df" opacity=".34"/>
+    <path d="M512 214L690 472 512 516Z" fill="#efe7ff" opacity=".48"/>
+    <path d="M334 472L512 516 414 760Z" fill="#aa93ff" opacity=".38"/>
+    <path d="M690 472L610 760 512 516Z" fill="url(#crystalShade)" opacity=".55"/>
+    <path d="M414 760L512 858 512 516Z" fill="#ffbd56" opacity=".28"/>
+    <path d="M512 214L414 760M512 214L610 760M334 472L690 472M414 760L690 472M610 760L334 472" fill="none" stroke="#fff" stroke-opacity=".25" stroke-width="5"/>
+  </g>
+  <path d="M287 660C390 760 604 720 701 579C789 451 701 338 600 318" fill="none" stroke="#261b50" stroke-opacity=".74" stroke-width="35" stroke-linecap="round"/>
+  <path d="M287 640C390 740 604 700 701 559C789 431 701 318 600 298" fill="none" stroke="url(#gold)" stroke-width="18" stroke-linecap="round" filter="url(#goldGlow)"/>
+  <path d="M299 632C398 715 592 684 681 552" fill="none" stroke="#fff7cf" stroke-opacity=".52" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="512" cy="540" r="22" fill="#fff9db" filter="url(#goldGlow)"/>
+</svg>
