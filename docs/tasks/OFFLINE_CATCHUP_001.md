@@ -1,5 +1,21 @@
 # OFFLINE-CATCHUP-001 — long offline Auto-Ascend
 
+Latest: signed136 on Android8.1/API27/WebView61 completes the original native8h
+window (+302400 kills/+14400 ascends), one primary commit/matching recovery,
+1708 frames/no errors; Continue/repeated return/live play and600s background
+interruption/retry pass. Native screenshot/computed style shows transparent
+dialog paint: this runtime lacks color-mix and eight-digit hex support.
+The focused legacy-paint branch converts only one modal color to equivalent
+rgba(57,49,75,136/255); product JavaScript/modern paint are unchanged. Registered
+legacy CSS emulation fails released bytes without timeout and passes corrected
+paint/geometry/input plus all existing return cases. Evidence:
+[legacy dialog paint](../qa/offline-catchup-001/legacy-paint/README.md).
+Next: full exact-head CI, integration, new signed APK and short native UI/storage
+verification.136 native full-window evidence remains numerical/runtime proof for
+identical game JavaScript; do not mislabel the final APK's native window length.
+The adapter's pidof startup race is corrected; [committed adapter/pass receipt](../qa/offline-catchup-001/legacy-paint/native-136-numeric-storage.json) establishes actual force-stop retry, primary failure/retry, recovery, UI backup/restore and advancing processing-clock checks. Readability remains separately failed in136.
+Physical WebView60/TalkBack acceptance remains open. Earlier paragraphs follow.
+
 Current continuation: PR54 integrated at458dbbc25f14c06149b4379ba6475ed16ad58a57;
 signed APK0.1.135 published. Actual Android8.1/API27/WebView61 completes the
 original8h window (+302400 kills/+14400 ascends), one primary commit/recovery,
