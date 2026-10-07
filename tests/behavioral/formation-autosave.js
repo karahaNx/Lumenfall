@@ -1,4 +1,4 @@
-/* F14 contracts use the real save, action and Ascend handlers in run.py's app. */
+/* F14 contracts use the real save, action and Ascend handlers in the Node QA app. */
 window.formationAutosaveSeed = function(b){
   var s=b.freshStateSnapshot();
   s.maxDepthEver=s.depth=s.enemyDepth=101;s.enemyHp=s.enemyMaxHp=b.enemyHpFor(101);

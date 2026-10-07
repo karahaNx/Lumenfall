@@ -1,5 +1,4 @@
-/* JavaScript orchestration of the repository's existing pre-merge gates.
- * Existing Python tools/inline workflow checks remain the verification sources.
+/* JavaScript orchestration of the repository's current Node pre-merge gates.
  * No workflow, test tolerance, APK build or remote action is changed here.
  */
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),http=require('node:http');
@@ -8,7 +7,7 @@ const root=path.resolve(__dirname,'../..'),args=process.argv.slice(2);
 const arg=name=>{const i=args.indexOf(name);return i<0?null:args[i+1];};
 const evidence=path.resolve(arg('--evidence')||fs.mkdtempSync(path.join(os.tmpdir(),'formation-autosave-checks-')));
 fs.mkdirSync(evidence,{recursive:true});
-const summary={started:new Date().toISOString(),base:spawnSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).stdout.trim(),sourceSha256:createHash('sha256').update(fs.readFileSync(path.join(root,'index.html'))).digest('hex'),checks:[]};
+const summary={nativeBrowser:process.env.LUMENFALL_QA_CDP_CHROME||null,started:new Date().toISOString(),base:spawnSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).stdout.trim(),sourceSha256:createHash('sha256').update(fs.readFileSync(path.join(root,'index.html'))).digest('hex'),checks:[]};
 const env={...process.env,LUMENFALL_QA_EVIDENCE_DIR:path.join(evidence,'screenshots')};
 function saveSummary(){fs.writeFileSync(path.join(evidence,'results.json'),JSON.stringify(summary,null,2)+'\n');}
 async function run(name,command,argv,input){
@@ -23,27 +22,21 @@ async function run(name,command,argv,input){
  fs.closeSync(log);summary.checks.push({name,command,argv,...result,seconds:(Date.now()-start)/1000});saveSummary();
  console.log((result.exit===0?'PASS ':'FAIL ')+name+' exit='+result.exit);return result.exit===0;
 }
-function workflowPython(step){
- const workflow=fs.readFileSync(path.join(root,'.github/workflows/pre-merge-validation.yml'),'utf8');
- const start=workflow.indexOf('      - name: '+step+'\n');if(start<0)throw Error('Missing workflow gate '+step);
- const end=workflow.indexOf('\n      - name:',start+1),block=workflow.slice(start,end<0?undefined:end);
- const m=block.match(/python3 - <<'PY'\n([\s\S]*?)\n          PY/);if(!m)throw Error('Missing existing Python block '+step);
- return m[1].split('\n').map(line=>line.startsWith('          ')?line.slice(10):line).join('\n')+'\n';
-}
 async function main(){
- await run('context','python3',['scripts/codex/check_context.py']);
- await run('apk-identity-self-test','python3',['scripts/verify_apk_identity.py','--self-test']);
- await run('source','python3',['-'],workflowPython('Validate game source'));
+ await run('context',process.execPath,['scripts/codex/check_context.cjs']);
+ await run('tooling',process.execPath,['tests/tooling/run.cjs']);
+ await run('apk-identity-self-test',process.execPath,['scripts/verify_apk_identity.cjs','--self-test']);
+ await run('source',process.execPath,['scripts/ci/validate_source.cjs']);
  const stage=path.join(root,'mobile/www');fs.mkdirSync(stage,{recursive:true});
  fs.copyFileSync(path.join(root,'index.html'),path.join(stage,'index.html'));
  for(const asset of ['fonts','branding'])fs.cpSync(path.join(root,asset),path.join(stage,asset),{recursive:true});
- if(args.includes('--full'))await run('behavioral-suite','python3',['tests/behavioral/run.py','--web-root',stage,'--raw-artifacts',path.join(evidence,'suite-raw')]);
- else for(const scenario of ['formation-autosave-contract','formation-autosave-save-reload','formation-autosave-backup-restore','formation-autosave-recovery','formation-autosave-native','formation-autosave-reduced-motion','p2-07a-formation-reconstruction','p2-07a-persistence-review','p2-07a-chronology','p2-02a-core-qol'])await run(scenario,'python3',['tests/behavioral/run.py','--web-root',stage,'--scenario',scenario,'--raw-artifacts',path.join(evidence,scenario+'-raw')]);
+ if(args.includes('--full'))await run('behavioral-suite',process.execPath,['tests/behavioral/run.cjs','--web-root',stage,'--raw-artifacts',path.join(evidence,'suite-raw')]);
+ else for(const scenario of ['formation-autosave-contract','formation-autosave-save-reload','formation-autosave-backup-restore','formation-autosave-recovery','formation-autosave-native','formation-autosave-reduced-motion','p2-07a-formation-reconstruction','p2-07a-persistence-review','p2-07a-chronology','p2-02a-core-qol'])await run(scenario,process.execPath,['tests/behavioral/run.cjs','--web-root',stage,'--scenario',scenario,'--raw-artifacts',path.join(evidence,scenario+'-raw')]);
  if(args.includes('--full'))for(const scenario of ['self-test-bad-assertion','self-test-uncaught-error','self-test-unhandled-rejection','self-test-parity-regression','self-test-chronology-regression','self-test-wisp-formula-regression','self-test-wisp-pacing-regression','self-test-endgame-currency-regression','self-test-wisp-role-regression','self-test-p1-05-selected','self-test-p1-05-focus-return','self-test-lifecycle-duplicate']){
-  await run(scenario,'python3',['tests/behavioral/run.py','--web-root',stage,'--scenario',scenario,'--raw-artifacts',path.join(evidence,'negative-raw')]);
+  await run(scenario,process.execPath,['tests/behavioral/run.cjs','--web-root',stage,'--scenario',scenario,'--raw-artifacts',path.join(evidence,'negative-raw')]);
   const result=summary.checks.at(-1);result.expectedExit=1;result.expectedFailure=result.exit===1&&!result.expired;saveSummary();
  }
- await run('runtime-guard','python3',['-'],workflowPython('Install runtime error guard in staged copy'));
+ await run('runtime-guard',process.execPath,['scripts/ci/smoke.cjs','--install-guard',path.join(stage,'index.html')]);
  const server=http.createServer((req,res)=>{
   const file=path.resolve(stage,'.'+new URL(req.url,'http://localhost').pathname);
   if(!file.startsWith(stage+path.sep)){res.writeHead(403);res.end();return;}
