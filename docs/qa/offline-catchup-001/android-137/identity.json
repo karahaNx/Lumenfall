@@ -1,0 +1,57 @@
+{
+  "feature": "OFFLINE-CATCHUP-001",
+  "status": "integrated-published-available-checks-pass-physical-acceptance-open",
+  "implementationPRs": [
+    51,
+    54,
+    55,
+    56
+  ],
+  "validatedHead": "187e09f1a44e7baf3e5af83d2f7c480d2a265628",
+  "integratedCommit": "1ffdc5e3af37754bf0541207caab3a6bb4537e51",
+  "tree": "9635b53032c53ac9f3cf91599bcc8f642df58d0e",
+  "productSha256": "6fae43e9c558f1752d580d7289e49f2a7c875f673874ff426a4b0247304ba8f2",
+  "ciRun": 37663184859,
+  "ciJob": 112936048840,
+  "node": "20.20.2",
+  "chrome": "154.0.8037.57",
+  "androidRun": 37665516076,
+  "androidJob": 112943591426,
+  "assetId": 619437240,
+  "versionCode": 137,
+  "versionName": "0.1.137",
+  "apkSha256": "44f0bc792ad3510f006019fba6182b5551f17c8e18d9e2fc8f6816da474148f5",
+  "apkBytes": 6834604,
+  "certificateSha256": "A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21",
+  "matchedAssets": 15,
+  "native": {
+    "android": "8.1.0",
+    "api": 27,
+    "webView": "61.0.3163.98",
+    "nativeWindowSeconds": 600,
+    "prior136NativeFullWindowSeconds": 28800,
+    "exactGameScriptUnchanged": true,
+    "scriptSha256": "36c9911d8913534e484f3cefeb5fc712cc48ee662144d40f1d4baf898572f81f",
+    "upgrade": "actual signed136 to137; storage byte-identical",
+    "suite": "pass",
+    "prerequisite": {
+      "file": "native-integration-second.json",
+      "sha256": "4d6fb42294510d0176717a8076e63544d5a5dd1f6462547aa9fb8489b9855d6f",
+      "completedCaseNames": [
+        "native signed137 cold Clear21 600s",
+        "native137 compatible opaque dialog gradient",
+        "unmodified native137 return geometry",
+        "native Claim/repeated return/live play",
+        "native 600s interruption/retry",
+        "native 600s force-stop/relaunch/retry",
+        "native 600s primary failure/retry",
+        "native primary failure observation",
+        "native corrupt-primary recovery"
+      ],
+      "note": "nine completed cases from interrupted exact-identity137 run; original QA scope error preserved; final remaining driver runs new fixture, distinct-state Restore and processing cases"
+    },
+    "receiptScope": "actual signed APK137 composite native600s lifecycle/UI/failure/recovery/backup integration",
+    "physicalWebView60": "pending",
+    "talkBack": "pending"
+  }
+}

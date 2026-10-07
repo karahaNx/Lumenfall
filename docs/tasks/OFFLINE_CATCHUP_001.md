@@ -1,63 +1,105 @@
 # OFFLINE-CATCHUP-001 — long offline Auto-Ascend
 
-Latest: signed136 on Android8.1/API27/WebView61 completes the original native8h
-window (+302400 kills/+14400 ascends), one primary commit/matching recovery,
-1708 frames/no errors; Continue/repeated return/live play and600s background
-interruption/retry pass. Native screenshot/computed style shows transparent
-dialog paint: this runtime lacks color-mix and eight-digit hex support.
-The focused legacy-paint branch converts only one modal color to equivalent
-rgba(57,49,75,136/255); product JavaScript/modern paint are unchanged. Registered
-legacy CSS emulation fails released bytes without timeout and passes corrected
-paint/geometry/input plus all existing return cases. Evidence:
-[legacy dialog paint](../qa/offline-catchup-001/legacy-paint/README.md).
-Next: full exact-head CI, integration, new signed APK and short native UI/storage
-verification.136 native full-window evidence remains numerical/runtime proof for
-identical game JavaScript; do not mislabel the final APK's native window length.
-The adapter's pidof startup race is corrected; [committed adapter/pass receipt](../qa/offline-catchup-001/legacy-paint/native-136-numeric-storage.json) establishes actual force-stop retry, primary failure/retry, recovery, UI backup/restore and advancing processing-clock checks. Readability remains separately failed in136.
-Physical WebView60/TalkBack acceptance remains open. Earlier paragraphs follow.
+Owner: this feature chat. Status: code integrated/published as signed0.1.137;
+available source/engine/emulator checks PASS. Required physical WebView60/TalkBack
+acceptance remains OPEN. Keep the feature and chat open; no next feature/archive.
 
-Current continuation: PR54 integrated at458dbbc25f14c06149b4379ba6475ed16ad58a57;
-signed APK0.1.135 published. Actual Android8.1/API27/WebView61 completes the
-original8h window (+302400 kills/+14400 ascends), one primary commit/recovery,
-3262 frames/no errors, but Continue is off-screen because CSS inset is unsupported.
-The focused feature/offline-catchup-legacy-layout branch replaces only functional
-overlay/intro positioning with legacy longhands; product JavaScript is unchanged.
-Its registered missing-inset/missing-replaceChildren test fails released bytes
-without timeout and passes corrected geometry, hit-testing and real Continue input,
-cold/resume/interruption/failure/retry/daily flows. Evidence:
-[legacy positioning](../qa/offline-catchup-001/legacy-layout/README.md).
-Next: full exact-head CI, integration, new signed APK, unmodified native UI/storage
-verification, then reconcile PR52 documentation. Physical WebView60/TalkBack
-acceptance remains open; do not archive. Earlier paragraphs below are historical.
+## Requirements and authorization
 
-Owner: this feature chat. Communication: English. Codex is based on GPT-6; exact variant/effort controls are not exposed.
+[Original request](OFFLINE_CATCHUP_001_REQUEST.txt), preserved unchanged. Original
+save/diagnostics: ../qa/offline-autoascend-2026-10-07/. User follow-ups authorize
+JavaScript instead of Python, GitHub publication and "then finish the job";
+latest asks "Cant we test it directly inside here?". We now test actual signed
+APKs here in an isolated Android emulator. Original point7 requires finishing
+available work and requesting remaining physical checks when physical access
+is absent; the user has not waived those checks.
 
-Status: initial implementation/Node migration integrated via PR51 and published as APK0.1.134. Acceptance is OPEN. The user asked whether testing could run here; an isolated Android8.1/API27/WebView61 emulator now runs locally. It reproduced an unsupported replaceChildren call in the advanced-save Auto-Ascend selector before catch-up. Both PR51 P2 findings were reproduced and fixed in focused [PR54](https://github.com/karahaNx/Lumenfall/pull/54). Its automated review found clock-jump and second-midnight edges; the revision uses monotonic processing time and queued daily presentations. No new gameplay rule or other feature.
+Standing authorization/current feature-chat workflow covers fixes, review,
+integration and established Android publication. Historical02_07 release remains
+unknown and is not a global writer gate. PR46/B2 is untouched at saved Draft
+3cdebc236e9ee5081a4bca4e323b11f43aa0d46d. No subagents/messages/new or renamed chats.
+Communication English. Codex is based on GPT-6; exact variant/effort unavailable.
 
-Original request: [unaltered request](OFFLINE_CATCHUP_001_REQUEST.txt). Original diagnostics/save: ../qa/offline-autoascend-2026-10-07/. Preserve originals. User follow-ups authorize JavaScript in place of Python, GitHub publication and "then finish the job"; the latest user asks: "Cant we test it directly inside here?". Standing authorization covers necessary fixes, tests, integration and established Android publication. Current [feature workflow](../project/FEATURE_WORKFLOW.md) supersedes historical role/writer ceremonies; do not invent an old handover.
+## Goal and implementation
 
-## Goal and preservation
+Complete the permitted offline Auto-Ascend window without event exhaustion,
+blocked return, lost/duplicate progress or broken save/recovery. Preserve
+chronology/parity, gameplay/balance/caps/rewards/accounting, formation intent,
+Study beyond combat cap, accessibility/WebView60 and package/signing/save schema.
 
-Finish the permitted window with Auto-Ascend without total-event exhaustion, blocked normal return, lost/duplicate progress or broken save/recovery. Preserve chronology, online/offline parity, balance/caps/rewards/accounting, formation intent, Study beyond combat cap, mobile accessibility, WebView60, package com.lumenfall.app and established signing. No schema or native identity change. No PR46/B2 work, subagents, messages, new/renamed chats or next feature.
+Original main67c3e99/product blob ea44431c163569548973d9e489f75345749a07ee fails
+Clear21/stored22 ON8h after250001 events/23808.744627645367s; OFF8h passes.
+Normalization changes no fields. Raw baseline and original-oracle failures are
+in [QA index](../qa/offline-catchup-001/README.md).
 
-## Baselines and durable evidence
+PR51 uses bounded generator batches (256 events;8ms target checked every32),
+atomic complete timestamps, detached state and primary-before-recovery endpoint
+commit. Cancellation/failure retains retryable base; Study-only tail cooperates,
+busy flags clear and stale intro callbacks are invalidated. Active orchestration,
+CI/source/APK/recovery helpers use Node20+; archived originals remain byte-identical.
 
-Original product blob ea44431c163569548973d9e489f75345749a07ee/main67c3e99c24587f6c13fc65cfd27f8dcb8e289602 fails ON Clear21/stored22 at8h after250001 events/23808.744627645367s, with unchanged normalization; OFF8h passes. Archived originals and raw reruns: [QA index](../qa/offline-catchup-001/README.md).
+Actual134 legacy startup failed on select.replaceChildren. PR54 uses compatible
+removeChild/appendChild preserving select/focus/handlers; processing time follows
+the existing live scheduler at100ms granularity using monotonic elapsed time,
+separate from wall-clock endpoint/offline cap/accounting. Queued daily prompts
+survive failure and another midnight, consumed only when shown/reset. Both PR51
+P2 findings and PR54 clock-jump/second-midnight findings are reproduced/fixed.
 
-PR51 exact head bd71a8608d133f99971a74a79e300e1f5db254df passed CI37625068008 (132 scenarios/12 required negatives) and merged at0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd. Android build37626819252 produced0.1.134, versionCode134,6833971bytes, SHA25609e53527d8a968801f6457297558efcb4ffcf5b260af47f202447e57455b6f6c. Official aapt/apksigner, certificate/v1/v2, CRC, all15 product/font/branding assets and extracted V8 6.0 probe pass. Those engine/modern-browser results did not establish legacy DOM/device acceptance. PR52 retains the release checkpoint and raw logs; it must be reconciled with current main and the corrected release before integration.
+135 native8h completes but Continue is off-screen: PR55 replaces functional
+overlay/intro inset with equivalent longhands.136 native8h completes/Continue
+works but modal paint is transparent: PR56 changes one alpha-hex color to equal
+rgba. Product JavaScript is unchanged across135/136/137. Registered legacy
+DOM/CSS regression fails released bytes without timeout, passes supported
+startup, paint, viewport/hit/input and all return/failure/daily flows. No balance,
+cap/schema/native identity/signing change in these follow-ups.
 
-Follow-up baseline: main e0775c5 (focused-chat docs/context-tooling update); product still SHA2564a9fac11b413071f9b722e2c50e0e46839d9de26e3214b52f619c279fc5d5607. Isolated branch feature/offline-catchup-legacy-webview, worktree /workspace/lumenfall-legacy. Existing current-main rules and other task status must be preserved. [Follow-up evidence](../qa/offline-catchup-001/legacy-webview/README.md) records native startup failure and before/after regressions.
+## Integration and verified release
 
-## Implementation and checks
+PR51 integrated0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd, CI37625068008 (132/12).
+PR54 integrated458dbbc25f14c06149b4379ba6475ed16ad58a57, CI37642617607 (133/12).
+PR55 integrated891f4a4484197702848a3cd7b1cb51b1ff645c96, CI37654060758 (133/12).
+Final [PR56](https://github.com/karahaNx/Lumenfall/pull/56) validated head
+187e09f1a44e7baf3e5af83d2f7c480d2a265628, CI37663184859/job112936048840:133 scenarios/12 required
+negatives/guarded startup on Node20.20.2/Chrome154.0.8037.57. Integrated
+1ffdc5e3af37754bf0541207caab3a6bb4537e51; entire tree equals validated head. Product SHA256
+6fae43e9c558f1752d580d7289e49f2a7c875f673874ff426a4b0247304ba8f2. No independent human review claimed. PR56 evidence finding
+addressed by187e09f corrected adapter/pass receipts. Later historical driver
+findings are disposed through prepared hash-pinned136 reproduction (not rerun),
+and final137 hash-verified composite evidence with actual runtime assertions and distinct-state
+Restore. Older136 backup proves export/UI reload only; raw evidence is intact.
 
-Original fix keeps the scheduler clock/grid across bounded generator batches (256 events;8ms target checked every32 events), resolves whole timestamps atomically, uses detached working state, commits a complete endpoint via primary before recovery, and preserves base/retry on cancellation/error. Study-only tail is cooperative; busy flags clear and stale intro callbacks are invalidated. Active scripts/CI/recovery now use Node20+, with byte-identical historical originals.
+Signed0.1.137: build37665516076/job112943591426, packagecom.lumenfall.app,
+versionCode137,6834604bytes, APK SHA25644f0bc792ad3510f006019fba6182b5551f17c8e18d9e2fc8f6816da474148f5. Official aapt/apksigner verifies
+established certificate/v1/v2; CRC/all15 assets equal integrated source. Actual
+signed136→137 update preserves private WebView save storage byte-for-byte before
+first launch with no uninstall/reset. [Current release/receipts/checklist](../qa/offline-catchup-001/android-137/README.md).
 
-Follow-up replaces only selector child replacement with removeChild/appendChild, keeping the select/focus/handlers. It simulates suspended foreground processing through the existing live scheduler before the atomic commit, at existing100ms live-tick granularity, without expanding offline cap/accounting. Pending daily presentation survives failed/cancelled retries and is consumed only when shown (or fresh welcome gift presented).
+Actual extracted137 V8 6.0 matrix: Clear21/Clear20/OFF8h,72h cap and96h Study
+PASS. Actual signed137 Android8.1/API27/WebView61 native600s cases pass cold
+return6300kills/300ascends, opaque/readable dialog/Continue, repeated return/live
+play, background/force-stop retry, primary failure/retry, corrupt-primary
+recovery, real UI backup/restore and advancing processing time. No runtime errors.
+Native136 separately supplies full8h302400/14400, one commit/recovery,1708 frames;
+its readability is failed historically. Do not call137 native600s an8h rerun.
+Evidence is composite: nine completed cases from strictly hash-pinned interrupted
+137 run plus new restore/processing checks; exact case set/runtime/source/APK
+identity are verified before reuse. Raw failed adapters stay preserved.
+Parity controls freeze clocks/intervals; advancing-clock check is separate.
+TCG/no KVM timing is not a phone benchmark; WebView61 is not exact WebView60.
 
-Acceptance: original Clear21/Clear20/OFF8h,72h cap/96h Study, Motes/automation/accounting and whole/split numerical policy; cold/resume/repeated return, interruption/restart/failure/recovery and primary/recovery/backup; full suite/12 negatives, selector focus behavior and missing replaceChildren DOM regression; actual new APK package/version/certificate/assets and native lifecycle/storage cases. Modern desktop/native WebView61 is not exact WebView60/TalkBack/physical-device acceptance. Keep any required untested acceptance open.
+PR52 reconciles release evidence/current docs, preserving the merged feature-chat
+rules and other task rows. Its final exact-head CI/integration is recorded in
+its GitHub PR body/checks. This documentation changes no product/test/tooling/
+mobile/workflow bytes and does not trigger another Android build. Originals/
+archives pass1509 integrity checks. Shared-file work for this owner stops after
+that documentation integration; no other writer is declared released.
 
-Changed files: root index.html; targeted behavioral runner/prelude/registrations, offline core/UI regressions; this task and focused evidence. No balance/cap/schema/assets/mobile/signing/workflow changes in the follow-up. Self-review and automated findings must be recorded honestly; independent human review is not claimed.
+## Remaining acceptance and next action
 
-## Next action
-
-Finish focused before/after checks, required exact-head CI/review, publish/integrate the corrected source and verify its new signed APK. Run the installed-app native cases here, record results/limits and dispose of both PR51 findings. Reconcile PR52 with current main, preserving other docs changes and recording the latest release/native evidence. Do not archive or mark complete until required acceptance is recorded; no next feature.
+Source/engine cap/parity/Motes/automation/formation/accounting checks and real
+emulator flows above pass. Required physical affected-phone Android save/update,
+long-window responsiveness and exact WebView60/TalkBack matrix are untested.
+Request the concrete [device checklist](../qa/offline-catchup-001/android-137/DEVICE_ACCEPTANCE.txt),
+then record app/phone/Android/WebView versions and each outcome in GitHub.
+Recheck current main/moving release before recording later results. Do not weaken
+acceptance, claim whole-game proof, archive this chat or start the next feature.

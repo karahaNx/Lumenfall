@@ -3,7 +3,9 @@
 The actual signed APK0.1.135 completes the original native Clear21 eight-hour
 window: +302400 kills/+14400 ascends, one full primary save, matching recovery,
 3262 native frames and no runtime errors. Android8.1/API27/WebView61.0.3163.98
-software emulation took about25 minutes with controlled clocks/intervals.
+completion was observed within25 minutes with controlled clocks/intervals.
+The adapter interruption means actual commit time was not recorded; this is
+an upper bound, not a timing benchmark.
 Its Continue input then fails: the modal uses the unsupported CSS inset
 shorthand, leaving the button off-screen (y1047 in an820px viewport).
 This is a failed overall UI check, not device acceptance.

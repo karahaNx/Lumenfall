@@ -1,24 +1,33 @@
 # Lumenfall — current project status
 
-Updated 7 October 2026 for [FEATURE-CHAT-WORKFLOW-001](tasks/FEATURE_CHAT_WORKFLOW_001.md).
+Updated 7 October 2026 for [OFFLINE-CATCHUP-001](tasks/OFFLINE_CATCHUP_001.md),
+preserving the integrated [feature-chat workflow](tasks/FEATURE_CHAT_WORKFLOW_001.md).
 Repository: `karahaNx/Lumenfall`. Verify relevant live state before acting;
 commits below are observed checkpoints, not a promise that main never advances.
 
 ## Product and release evidence
 
-Observed main at this task's start: `0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd`,
-verified via remote Git refs. [PR51](https://github.com/karahaNx/Lumenfall/pull/51)
-is merged at this commit: offline catch-up and active Node.js tooling are integrated.
-Its earlier task/publication records describe the pre-merge checkpoint. PR51's
-body records exact-head CI success in run `37625068008`; required physical
-Android/WebView60/TalkBack acceptance remains pending in that receipt. This
-cleanup does not establish a new release or device acceptance.
+[OFFLINE-CATCHUP-001](tasks/OFFLINE_CATCHUP_001.md) implementation and active Node
+tooling are integrated via PR51/54/55/56. Final correction PR56 is merged at
+1ffdc5e3af37754bf0541207caab3a6bb4537e51; entire tree equals validated head187e09f1a44e7baf3e5af83d2f7c480d2a265628.
+CI37663184859 passes133 scenarios/12 required negatives/guarded startup.
 
-[PR52](https://github.com/karahaNx/Lumenfall/pull/52), observed open during this
-cleanup, reports release **0.1.134**, build `37626819252`, established signing
-and APK hash `09e53527d8a968801f6457297558efcb4ffcf5b260af47f202447e57455b6f6c`.
-Its release/device evidence is being saved separately; this docs task has not
-repeated APK verification. Preserve that checkpoint when reconciling integration.
+Current verified signed APK **0.1.137**, build37665516076, packagecom.lumenfall.app,
+established certificate/v1/v2; APK SHA256
+`44f0bc792ad3510f006019fba6182b5551f17c8e18d9e2fc8f6816da474148f5`.
+CRC/all15 assets match source. Actual extracted V8 6.0 Clear21/Clear20/OFF8h,
+72h cap/96h Study PASS. Actual signed136→137 emulator update preserves WebView
+save storage byte-for-byte. Signed137 native600s return/paint/Continue, repeated
+return/live play, background/force-stop retry, primary failure/recovery/backup and
+advancing processing time PASS on Android8.1/API27/WebView61. Signed136 separately
+supplies full native8h302400/14400;137 game JavaScript is identical. Historical
+134 DOM startup,135 positioning and136 paint failures remain preserved.
+
+Required physical affected-phone/exact WebView60/TalkBack acceptance is still
+OPEN under original point7. Available work is published; the feature/chat stays
+open. Current release, immutable APK and precise controls/limits:
+[137 receipt](qa/offline-catchup-001/android-137/README.md). PR52 saves current
+status/evidence; its final CI/integration receipt belongs in its PR body.
 
 Previously saved accepted APK: **0.1.133**, package `com.lumenfall.app`,
 run `37363152517`, with receipt in
@@ -32,7 +41,7 @@ were recorded as integrated.
 | Work | Evidence/status | Next action within its own task |
 | --- | --- | --- |
 | FEATURE-CHAT-WORKFLOW-001 | Current docs/context-tooling cleanup; see task for publication/integration receipt. | Verify document/tooling checks and GitHub integration; no game build. |
-| OFFLINE-CATCHUP-001 | Integrated via PR51; PR52 reports release 0.1.134. Device acceptance remains pending in the saved receipt; two automated P2 review findings are reported in `project/KNOWN_ISSUES.md`, not reproduced by this docs task. | Preserve PR52 release evidence, verify device acceptance and investigate/dispose of review findings; do not assume the entire feature is complete. |
+| OFFLINE-CATCHUP-001 | PR51/54/55/56 integrated; signed137 verified, available source/engine/emulator checks PASS. Required physical acceptance OPEN. | Run remaining affected-phone/exact WebView60/TalkBack checklist and save results in GitHub. Keep feature/chat open. |
 | PR46 / LAB-MOTES | Last saved checkpoint: Draft R2 `3cdebc236e9ee5081a4bca4e323b11f43aa0d46d`. Its CI does not accept newer candidate bytes. | Recheck live PR only when assigned this task. |
 | New B2 runtime candidate | Archived tree `758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef`, codecommit `013f526`; reported Number/DataView fix, 7 gates, 142 scenarios, 12 caught negatives. Required review of these bytes remains pending in the saved checkpoint. | Restore separately and verify relevant persistence/runtime/regression contracts. |
 | FEEDBACK-REVISION-001 | 29 original points and four images preserved; not collectively implemented. | Follow dependencies in a separately assigned task. Saved next priorities after PR46: F20/F21 Echoing Rest cap 6 / Cheaper Bonds cap 20, purchase gates and old-save policy. |

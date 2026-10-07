@@ -1,0 +1,53 @@
+{
+  "feature": "OFFLINE-CATCHUP-001",
+  "status": "historical-numeric-storage-pass-legacy-paint-fail",
+  "implementationPRs": [
+    51,
+    54,
+    55
+  ],
+  "validatedHead": "a12459c0c62ec459fc102fc50ebc95a2a574a92b",
+  "integratedCommit": "891f4a4484197702848a3cd7b1cb51b1ff645c96",
+  "tree": "032a21cd6de86ff7b9f575f0435c4d6ac5909ec7",
+  "productSha256": "64699bd6ba907f145523bb9633a36a2661b28ef3391c69b4e4216e06e378ecb8",
+  "ci": {
+    "run": 37654060758,
+    "job": 112904558428,
+    "scenarios": 133,
+    "requiredNegatives": 12,
+    "node": "20.20.2",
+    "chrome": "154.0.8037.97",
+    "conclusion": "success"
+  },
+  "android": {
+    "run": 37655590959,
+    "job": 112910707643,
+    "sourceCommit": "891f4a4484197702848a3cd7b1cb51b1ff645c96",
+    "versionCode": 136,
+    "versionName": "0.1.136",
+    "package": "com.lumenfall.app",
+    "bytes": 6834584,
+    "assetId": 619268839,
+    "apkSha256": "2c175583c546f64a7a0ae651803b94ed2c134fe86573bdb8e96edbf2eadbdab0",
+    "certificateSha256": "A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21",
+    "signatures": [
+      "v1",
+      "v2"
+    ],
+    "matchedAssets": 15,
+    "conclusion": "success"
+  },
+  "native": {
+    "android": "8.1.0",
+    "api": 27,
+    "webView": "61.0.3163.98",
+    "acceleration": "TCG,no KVM",
+    "upgrade": "actual signed135 to136 in-place; WebView save storage byte-identical before first launch",
+    "suite": "numeric/storage/lifecycle subset pass; legacy modal paint fail",
+    "physicalWebView60": "pending",
+    "talkBack": "pending",
+    "nativeFullWindowSeconds": 28800,
+    "nativeShortWindowSeconds": 600,
+    "records": "native-numeric-storage.json"
+  }
+}
