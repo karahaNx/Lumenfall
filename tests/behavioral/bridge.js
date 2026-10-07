@@ -1,5 +1,10 @@
 
 var qaLifecycleEvents = [];
+// Fixed-clock UI parity cases measure progression separately from real CPU time.
+// Keep the real simulation budget clock and animation frames unchanged.
+if(window.__lumenfallQaContext.scenario.startsWith('offline-catchup-') && typeof offlineProcessingClock==='function'){
+  offlineProcessingClock = function(){return 0;};
+}
 function qaLifecycleRecord(type,detail){
   qaLifecycleEvents.push({
     type:type,
