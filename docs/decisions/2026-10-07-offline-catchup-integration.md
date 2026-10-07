@@ -53,3 +53,25 @@ releases this owner's repository writer scope while device acceptance remains
 pending. No other writer is declared released. Recheck live state before any
 later acceptance-recording write. No next feature or chat archive is authorized
 by a partial acceptance result.
+
+Continuation at the user's request to test here: an isolated Android8.1/API27
+WebView61 emulator is now available. The absence above describes the earlier
+checkpoint. APK134 advanced-save startup failed on unsupported replaceChildren;
+PR54 fixes that DOM path and both reproduced PR51 P2 findings. Its revised
+bc33707 uses monotonic processing time and queues prompts across another midnight,
+with failing first-candidate and passing revised regression evidence. The current
+feature-chat workflow supersedes the older writer-release ceremony. Historical
+02_07 uncertainty is preserved, not used as a global gate. Corrected release and
+native results follow verified PR54 integration; acceptance remains open.
+
+PR55 fixes a second native finding:135 completes the original8h transaction,
+but CSS inset leaves Continue off-screen on WebView61. Its exact head
+a12459c0c62ec459fc102fc50ebc95a2a574a92b passes CI37654060758/job112904558428
+(all133 scenarios/12 required negatives/guarded startup). Connector merge/update
+returned internal errors; the CLI API was unavailable. A normal non-forced Git
+merge/push integrated the validated head at891f4a4484197702848a3cd7b1cb51b1ff645c96.
+GitHub confirms PR55 merged and the whole tree equals the validated head. No
+gate/protection changes were made. The normal push queues Android run37655590959,
+number136. Functional overlay/intro positioning uses legacy longhands; product
+JavaScript is byte-identical to actual135. New signed-release/native verification
+and the documentation checkpoint remain necessary before delivery.

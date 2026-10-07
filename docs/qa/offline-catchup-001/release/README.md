@@ -1,6 +1,9 @@
 # OFFLINE-CATCHUP-001 integrated Android release
 
-Status: **implemented, integrated and published; required device acceptance pending**.
+Historical release receipt for **0.1.134**. Native advanced-save startup failed
+on Android8.1/WebView61 because `select.replaceChildren` is unavailable. The
+focused correction is [PR54](https://github.com/karahaNx/Lumenfall/pull/54).
+Do not use this historical build as corrected native acceptance.
 
 | Identity | Verified value |
 | --- | --- |
@@ -13,15 +16,16 @@ Status: **implemented, integrated and published; required device acceptance pend
 | Android build | [37626819252](https://github.com/karahaNx/Lumenfall/actions/runs/37626819252), success, run number134 |
 | Package | `com.lumenfall.app` |
 | versionCode / versionName | `134` / `0.1.134` |
-| Published APK | [Lumenfall.apk](https://github.com/karahaNx/Lumenfall/releases/download/android-latest/Lumenfall.apk) |
+| Preserved historical APK | [Lumenfall-0.1.134.apk](../../../../archive/android/offline-catchup-001/Lumenfall-0.1.134.apk) |
 | Asset ID / size | `618745109` / `6833971` bytes |
 | APK SHA256 | `09e53527d8a968801f6457297558efcb4ffcf5b260af47f202447e57455b6f6c` |
 | Certificate SHA256 | `A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21` |
 
 The `android-latest` tag was observed pointing to the integrated commit.
 It is a moving release: check version and SHA256 before later acceptance.
-`identity.json` preserves the immutable build/asset identities; the APK can
-also be retrieved from that build's artifact if the latest release changes.
+`identity.json` preserves the immutable build/asset identities. The build's
+artifact API returned no downloadable workflow artifacts; the actual public APK
+is therefore preserved byte-for-byte under `archive/android/offline-catchup-001/`.
 
 `ci-pr51.txt` and `android-build-134.txt` preserve the full decoded GitHub job
 logs, including their BOM, line endings and diagnostic spacing. The earlier
@@ -46,9 +50,12 @@ context17805 bytes,1509 immutable archive checks. Source validation finds
 two scripts and16 required IDs. The complete integrated tree equals the
 exact-head validated PR tree, so integration required no repeated full suite.
 
-There is no connected Android phone/emulator here. Actual signing-compatible
-installation, Android lifecycle/storage, supported WebView60 DOM and TalkBack
-checks remain **pending**, not inferred from desktop Chrome or V8 results.
+An isolated Android8.1/API27/WebView61 emulator now runs here at the user's
+request. APK134 installed and fresh-save UI rendered; advanced-save startup
+failed before catch-up. The native exception and focused before/after regressions
+are preserved with PR54. Corrected APK lifecycle/storage checks follow its
+verified integration. Physical supported WebView60 and TalkBack acceptance
+remain **pending**, not inferred from desktop Chrome, V8 or WebView61 results.
 Use [`DEVICE_ACCEPTANCE.txt`](DEVICE_ACCEPTANCE.txt) for the concrete remaining
 checks and report format. Keep the feature and owner chat open until the
 required acceptance is saved in GitHub. The documentation checkpoint's PR

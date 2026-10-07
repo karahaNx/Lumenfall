@@ -1,6 +1,6 @@
 # OFFLINE-CATCHUP-001 evidence
 
-Current status: merged PR51/main0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd and verified signed APK0.1.134. Required physical-device acceptance remains pending. See [release evidence and device checklist](release/README.md). The sections below retain the earlier local/publication checkpoints.
+Current status: PR51/PR54 integrated. APK134 fails legacy DOM startup; actual signed135 completes the original native8h transaction but Continue is off-screen on WebView61. PR55 fixes functional positioning with unchanged game JavaScript. [135 release/native evidence](native-release/README.md) and [positioning regression](legacy-layout/README.md) preserve those findings. Required physical WebView60/TalkBack acceptance remains open. The sections below retain earlier checkpoints.
 
 Candidate: product index SHA256 `4a9fac11b413071f9b722e2c50e0e46839d9de26e3214b52f619c279fc5d5607`, Git blob `90e4678cb28fa833fdacbc01d1744d9465f6a356`. Base: verified live main 67c3e99c24587f6c13fc65cfd27f8dcb8e289602. This identifies the original local checkpoint; the current integrated release is recorded above.
 

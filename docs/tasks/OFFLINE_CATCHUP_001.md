@@ -1,19 +1,4 @@
 # OFFLINE-CATCHUP-001 — long offline Auto-Ascend
-
-Current continuation: PR54 integrated at458dbbc25f14c06149b4379ba6475ed16ad58a57;
-signed APK0.1.135 published. Actual Android8.1/API27/WebView61 completes the
-original8h window (+302400 kills/+14400 ascends), one primary commit/recovery,
-3262 frames/no errors, but Continue is off-screen because CSS inset is unsupported.
-The focused feature/offline-catchup-legacy-layout branch replaces only functional
-overlay/intro positioning with legacy longhands; product JavaScript is unchanged.
-Its registered missing-inset/missing-replaceChildren test fails released bytes
-without timeout and passes corrected geometry, hit-testing and real Continue input,
-cold/resume/interruption/failure/retry/daily flows. Evidence:
-[legacy positioning](../qa/offline-catchup-001/legacy-layout/README.md).
-Next: full exact-head CI, integration, new signed APK, unmodified native UI/storage
-verification, then reconcile PR52 documentation. Physical WebView60/TalkBack
-acceptance remains open; do not archive. Earlier paragraphs below are historical.
-
 Owner: this feature chat. Communication: English. Codex is based on GPT-6; exact variant/effort controls are not exposed.
 
 Status: initial implementation/Node migration integrated via PR51 and published as APK0.1.134. Acceptance is OPEN. The user asked whether testing could run here; an isolated Android8.1/API27/WebView61 emulator now runs locally. It reproduced an unsupported replaceChildren call in the advanced-save Auto-Ascend selector before catch-up. Both PR51 P2 findings were reproduced and fixed in focused [PR54](https://github.com/karahaNx/Lumenfall/pull/54). Its automated review found clock-jump and second-midnight edges; the revision uses monotonic processing time and queued daily presentations. No new gameplay rule or other feature.
@@ -44,4 +29,8 @@ Changed files: root index.html; targeted behavioral runner/prelude/registrations
 
 ## Next action
 
-Finish focused before/after checks, required exact-head CI/review, publish/integrate the corrected source and verify its new signed APK. Run the installed-app native cases here, record results/limits and dispose of both PR51 findings. Reconcile PR52 with current main, preserving other docs changes and recording the latest release/native evidence. Do not archive or mark complete until required acceptance is recorded; no next feature.
+PR54 revised headbc3370777f6ecdf05b3fa55f1397872d6071790d passes CI37642617607:133 scenarios/12 negatives on Node20.20.2/Chrome154.0.8037.57. Merged at458dbbc25f14c06149b4379ba6475ed16ad58a57; full tree equals validated head. Both review rounds are reproduced/fixed; no independent human approval is claimed.
+
+Corrected signed APK0.1.135, build37645420468, SHA2569c0ef841d215176db60e2bb1b41ff69f98a78421dcd2188c00346acd9c469a8e, passes official package/version/certificate/v1/v2, CRC/15 asset matches and actual extracted V8 6.0. Actual in-place134→135 Android emulator install preserves WebView save storage byte-for-byte. [Current release/native receipt](../qa/offline-catchup-001/native-release/README.md).
+
+Actual135 native8h transaction completes (+302400 kills/+14400 ascends), one primary commit/matching recovery,3262 frames/no errors. Completion is observed within25 minutes; actual commit time was not recorded after adapter interruption. Continue fails off-screen on WebView61 because CSS inset is unsupported. PR55 (head a12459c0c62ec459fc102fc50ebc95a2a574a92b) replaces only functional overlay/intro positioning with longhands; product JS is unchanged. Its missing-inset/missing-replaceChildren regression fails released bytes without timeout and passes geometry/hit-testing/real Continue plus lifecycle/failure/daily flows. Exact-head CI37654060758 passes all133 scenarios/12 required negatives and guarded startup (Node20.20.2/Chrome154.0.8037.97). PR55 is integrated at891f4a4484197702848a3cd7b1cb51b1ff645c96; whole tree equals heada12459c. Connector write errors/CLI API unavailability were resolved through a normal non-forced Git merge/push; GitHub confirms the PR merged. Android136/run37655590959 is queued. Next: verify corrected signed APK/native UI/storage, then integrate reconciled PR52 evidence. Preserve the current feature-chat workflow. Required physical WebView60/TalkBack acceptance remains open; do not archive or mark complete before required acceptance is recorded. No next feature.
