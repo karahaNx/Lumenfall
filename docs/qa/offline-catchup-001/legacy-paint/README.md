@@ -30,5 +30,15 @@ The136 driver stops later at a pidof process-start race, not a recorded game
 runtime exception; its first completed cases remain separate evidence. The
 corrected adapter retries only expected empty exit1 during native startup; other
 ADB/protocol errors still fail. Actual force-stop/relaunch/retry now passes, with
-remaining136 numeric/storage integration in progress. Required physical exact
+remaining136 numeric/storage integration now passes. The corrected adapter, complete
+receipt and console output are preserved as native-136-numeric-storage.{cjs,json,txt}.
+It imports the first four completed cases from native-136-initial.json; this does
+not relabel the original adapter failure as a full passing run. Primary failure
+retains the base until retry; corrupt-primary recovery, actual UI backup/restore
+and advancing Date/performance processing-clock cases pass without runtime errors.
+For reproduction, use an isolated checkout of main891f4a4, installed signed136,
+LUMENFALL_QA_REPO pointing to that checkout and LUMENFALL_QA_APK to its preserved
+APK; copy native-136-initial.json to /tmp/lumenfall-native-136-integration.json
+before running the corrected remaining-case adapter. This changes only emulator
+QA data. The136 modal paint failure remains open until the corrected signed APK. Required physical exact
 WebView60/TalkBack acceptance remains open; no human independent PASS is claimed.

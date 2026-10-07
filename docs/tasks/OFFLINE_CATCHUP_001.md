@@ -13,7 +13,7 @@ paint/geometry/input plus all existing return cases. Evidence:
 Next: full exact-head CI, integration, new signed APK and short native UI/storage
 verification.136 native full-window evidence remains numerical/runtime proof for
 identical game JavaScript; do not mislabel the final APK's native window length.
-The adapter's pidof startup race is corrected; actual force-stop retry passes.
+The adapter's pidof startup race is corrected; [committed adapter/pass receipt](../qa/offline-catchup-001/legacy-paint/native-136-numeric-storage.json) establishes actual force-stop retry, primary failure/retry, recovery, UI backup/restore and advancing processing-clock checks. Readability remains separately failed in136.
 Physical WebView60/TalkBack acceptance remains open. Earlier paragraphs follow.
 
 Current continuation: PR54 integrated at458dbbc25f14c06149b4379ba6475ed16ad58a57;
