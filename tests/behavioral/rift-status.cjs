@@ -129,13 +129,15 @@ async function run(){
    await evaluate(`riftStatusMobile.setup(${inset},'fresh')`);await advance();
    assert(await evaluate('!document.querySelector("#rift-objective-row").hidden&&document.querySelector("#rift-guidance-toggle").getAttribute("aria-pressed")==="true"'),'native guidance begins shown');
    const beforeHide=await evaluate('JSON.stringify(__lumenfallQaBridge.getState())');
-   await evaluate('document.querySelector("#rift-objective-dismiss").focus({preventScroll:true})');await touch('#rift-objective-dismiss');
+   const visibleMeasurement=await evaluate('riftStatusMobile.measure()');
+   await evaluate('document.querySelector("#rift-hints-toggle").focus({preventScroll:true})');await touch('#rift-hints-toggle');
    assert(await evaluate('document.querySelector("#rift-objective-row").hidden&&document.querySelector("#rift-guidance-toggle").getAttribute("aria-pressed")==="false"&&localStorage.getItem("lumenfall_rift_guidance_hidden_v1")==="1"'),'native dismiss hides and persists Rift guidance');
-   assert(await evaluate('document.activeElement.id')==='enemy-stage','native dismissal returns focus to the enemy');
+   assert(await evaluate('document.activeElement.id')==='rift-hints-toggle','native hide keeps focus on the hints toggle');
    assert(await evaluate('JSON.stringify(__lumenfallQaBridge.getState())')===beforeHide,'native guidance dismissal leaves game state unchanged');
-   await evaluate('riftStatusMobile.measure()');
+   const afterHide=await evaluate('riftStatusMobile.measure()');
+   assert(JSON.stringify(visibleMeasurement.boxes)===JSON.stringify(afterHide.boxes),'guidance hide preserves the measured combat boxes');
    await key('Tab');if(await evaluate('document.activeElement===document.body'))await key('Tab');
-   assert(await evaluate('document.activeElement.id')==='settings-btn','native Tab skips dismissed guidance controls');
+   assert(await evaluate('!document.querySelector("#rift-objective-row").contains(document.activeElement)&&document.activeElement!==document.body'),'native Tab skips hidden hints and reaches a visible control');
    await evaluate('window.__qaGuidanceReloadToken=true');await send('Page.reload',{ignoreCache:true});
    let reloaded=false;
    for(let i=0;i<150&&!reloaded;i++){

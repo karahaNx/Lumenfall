@@ -93,6 +93,10 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
   if (scenario === 'lab-motes-offline-integration') return runNativeProcess([process.execPath, path.join(ROOT, 'lab-motes-offline.cjs')], scenario, 90000, options);
   if (scenario === 'offline-catchup-core') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-catchup.cjs')], scenario, 300000, options);
   if (scenario === 'offline-catchup-ui' || scenario === 'offline-catchup-legacy-dom') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-catchup-ui.cjs'), chrome, urlFor('/index.html'), scenario], scenario, 210000, options);
+  if (scenario === 'rift-guidance-mobile') {
+    const evidence = path.join(options.rawArtifactRoot || temporary('lumenfall-guidance-raw-'), scenario);
+    return runNativeProcess([process.execPath, path.join(ROOT, 'rift-guidance.cjs'), chrome, options.webRoot || 'mobile/www', evidence], scenario, 300000, options);
+  }
   if (scenario === 'raw-process-contract') return require('./process_contract.cjs').runContract(runScenario, log);
   if (scenario === 'forge-ui-process-contract') return nativeProcessContract(log);
   let driver = null;
@@ -195,7 +199,7 @@ async function main(argv = process.argv.slice(2)) {
     const baseUrl = 'http://127.0.0.1:' + server.address().port;
     for (const [scenario, fixture] of Object.entries(selected)) {
       const viewports = scenario === 'lab-motes-ui' ? [[320,844,0,0],[390,844,0,0],[430,844,0,0]] : scenario.startsWith('layout-') || scenario === 'self-test-layout-collapse' ? LAYOUT_VIEWPORTS : [null];
-      for (const viewport of viewports) if (!await runScenario(chrome, baseUrl, scenario, fixture, viewport, { rawArtifactRoot })) failures.push(scenario + ' ' + JSON.stringify(viewport));
+      for (const viewport of viewports) if (!await runScenario(chrome, baseUrl, scenario, fixture, viewport, { rawArtifactRoot, webRoot })) failures.push(scenario + ' ' + JSON.stringify(viewport));
     }
   } finally {
     if (server) { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
