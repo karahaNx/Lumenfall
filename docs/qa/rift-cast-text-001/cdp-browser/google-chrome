@@ -1,0 +1,31 @@
+#!/usr/bin/env node
+// Local transport adapter for the unchanged Python harness. Real Chromium,
+// same served test document/assertions; wait for its result over CDP rather
+// than Chromium's dump-dom/virtual-time command. Never used by the product.
+const {spawn}=require('node:child_process');
+const args=process.argv.slice(2),real='/usr/bin/chromium';
+if(!args.includes('--dump-dom')){
+ const p=spawn(real,args,{stdio:'inherit'});p.on('error',e=>{console.error(e);process.exitCode=1;});p.on('exit',(c)=>{process.exitCode=c??1;});
+}else{
+ const url=args[args.length-1],flags=args.slice(0,-1).filter(x=>x!=='--dump-dom'&&!x.startsWith('--virtual-time-budget='));
+ const browser=spawn(real,[...flags,'--remote-debugging-pipe','about:blank'],{stdio:['ignore','ignore','pipe','pipe','pipe']});
+ let buffer='',seq=0,session,closed=false;const pending=new Map();
+ browser.stderr.pipe(process.stderr);
+ browser.on('error',e=>{console.error(e);process.exitCode=1;});
+ browser.on('close',()=>{closed=true;for(const p of pending.values()){clearTimeout(p.timer);p.reject(Error('browser closed'));}pending.clear();});
+ browser.stdio[4].on('data',chunk=>{buffer+=chunk;let end;while((end=buffer.indexOf('\0'))!==-1){const raw=buffer.slice(0,end);buffer=buffer.slice(end+1);if(!raw)continue;const m=JSON.parse(raw),p=pending.get(m.id);if(p){pending.delete(m.id);clearTimeout(p.timer);m.error?p.reject(Error(JSON.stringify(m.error))):p.resolve(m.result);}}});
+ function send(method,params={},sid=session){return new Promise((resolve,reject)=>{const id=++seq,timer=setTimeout(()=>{pending.delete(id);reject(Error('CDP timeout '+method));},5000);pending.set(id,{resolve,reject,timer});browser.stdio[3].write(JSON.stringify({id,method,params,...(sid?{sessionId:sid}:{})})+'\0');});}
+ async function value(expression){const r=await send('Runtime.evaluate',{expression,returnByValue:true});if(r.exceptionDetails)throw Error(r.exceptionDetails.text);return r.result.value;}
+ (async()=>{
+  try{
+   const page=await send('Target.createTarget',{url:'about:blank'},null);
+   session=(await send('Target.attachToTarget',{targetId:page.targetId,flatten:true},null)).sessionId;
+   await send('Page.enable');await send('Page.navigate',{url});
+   const deadline=Date.now()+20000;let done=false;
+   while(Date.now()<deadline){try{done=await value('!!document.querySelector("#qa-result[data-status]")');}catch(_){}if(done)break;await new Promise(r=>setTimeout(r,25));}
+   if(!done)throw Error('No completed QA result within CDP adapter deadline');
+   process.stdout.write(await value('document.documentElement.outerHTML'));
+  }catch(error){console.error(error);process.exitCode=1;}
+  finally{await send('Browser.close',{},null).catch(()=>{});for(let i=0;i<100&&!closed;i++)await new Promise(r=>setTimeout(r,10));if(!closed){browser.kill('SIGKILL');process.exitCode=1;}}
+ })();
+}
