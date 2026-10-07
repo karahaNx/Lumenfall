@@ -1,137 +1,180 @@
 # FORMATION_AUTOSAVE_001 — Formation autosave (F14)
 
-Status: **lokal kandidat under verifikation; ikke integreret eller accepteret**.
-Ejerchat: denne bestilling, “LUMENFALL — ÉN FEATURECHAT: Formation autosave”.
-Rolle: Gameplay / Progression. Ingen subagenter, beskedværktøjer eller chatomdøbning.
-Anbefaling: GPT-6.1 Sol · Ekstra høj. Konkret kørt modelvariant/effort er ikke
-eksponeret som verificerbar runtime-metadata; anbefalingen er ikke kørselsbevis.
+Status: **verified local candidate; GitHub checkpoint, integration and required acceptance remain open**.
+Owner: this feature chat, “LUMENFALL — ÉN FEATURECHAT: Formation autosave”.
+Role: Gameplay / Progression. No subagents, messaging tools or chat renaming.
+Runtime: Codex based on GPT-6; exact variant and effort control are not exposed.
+GPT-6.1 Sol / Extra high is the user's recommendation, not execution evidence.
 
-## Ét mål og originaler
+## Single goal and originals
 
-Gem relevante Field/Bench/rosterændringer straks i det valgte Push/Farm/Boss-
-preset og fjern Save-knappen. Bevar preset-isolation, tomme gemte presets og
-ønskede late-game-medlemmer ved Ascend/recovery. Pending giver ingen DPS/Bonds.
+Immediately save Field/Bench and relevant recruitment changes to the selected
+Push/Farm/Boss preset, and remove Save. Preserve preset isolation, stored empty
+presets and the complete desired late-game lineup across Ascend and recovery.
+Pending members contribute no DPS or Bonds.
 
-Autoritativ original:
-`../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt`:
+Authoritative original:
+[USER_REQUIREMENTS_2026-10-07.txt](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt):
 
 > Current formation skal laves at der ikke behøver stå save, feks når man vælger push så vælger man de wisp man vil have, så skal den auto save det uden at trykke på knappen, at det er de aktuelle wisp der gemmer til den formation.
 
-Brugerens præcisering i denne ejerchat den 7. oktober 2026 (ordret):
+User clarification in this owner chat on 7 October 2026, verbatim:
 
 > Altså det jeg mente med det her autosave er, når man vælger den aktive formation, så skal den huske de wisps man har, selvfølgelig er der ikke en formation der starter med 0 wisps
 
-Supplerende kilder: F14, dependencies og save-afsnit i
-`TASK_FEEDBACK_REVISION_001.txt`; `DECISIONS/FEEDBACK_REGISTERED_001.txt`;
-`FEEDBACK/EVIDENCE/FINDINGS.txt` og `FEEDBACK/Source_Index.txt`, alle under
-`docs/recovery/2026-10-07/lead_context/`. Ingen af de fire screenshots er en
-Formation-reference; deres APK/saveversion er ukendt. Originalen går forud for forslag.
+The complete order/clarification are in [FORMATION_AUTOSAVE_001_REQUEST.txt](FORMATION_AUTOSAVE_001_REQUEST.txt).
+Supporting sources: F14, dependencies and save sections of
+`FEEDBACK/TASK_FEEDBACK_REVISION_001.txt`, concrete Lead decisions in
+`DECISIONS/FEEDBACK_REGISTERED_001.txt`, `FEEDBACK/EVIDENCE/FINDINGS.txt` and
+`FEEDBACK/Source_Index.txt`, under `docs/recovery/2026-10-07/lead_context/`.
+The four supplied screenshots concern other feedback, with unknown APK/save
+versions; they are not Formation acceptance evidence. The original takes precedence.
 
-## Baseline og ejerskab
+## Baseline and writer
 
-Observeret live via GitHub og git fetch den 7. oktober 2026:
+Observed through live GitHub and Git transport on 7 October 2026:
 
-- Main: `b2a1f440e8ad9fed34b37551e468224310d2a6f6`, tree
-  `60bb2fce00d0c230a4dd3fd9b61fd7992fb94d60`.
-- Main-produktbytes i index/tests/mobile/workflows matcher den accepterede
-  produktbaseline `1ddc246eb62782a61ec5c486cd5f51ea170bb338` / APK 0.1.133.
-- Privat worktree: `/workspace/Lumenfall-formation-autosave`; branch
-  `feature/formation-autosave-001`. Det oprindelige checkout blev ikke redigeret.
-- PR46: open/Draft, R2 `3cdebc236e9ee5081a4bca4e323b11f43aa0d46d`.
-- B2: arkiveret tree `758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef`;
-  gendannet og hashkontrolleret separat. Ny scoped Core-/QA-accept mangler.
-- 02_07s senere B2-writerrelease er ukendt. Ingen remote repo-writer er tildelt
-  denne ejerchat. Lokal forberedelse er autoriseret af brugerens aktuelle ordre.
+- Initial main: `b2a1f440e8ad9fed34b37551e468224310d2a6f6`, tree
+  `60bb2fce00d0c230a4dd3fd9b61fd7992fb94d60`. Its product matched the previously
+  accepted `1ddc246eb62782a61ec5c486cd5f51ea170bb338` / APK 0.1.133.
+- Main advanced during preparation. The candidate was rebased onto
+  `0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd`, tree
+  `6e18e8485111a7a5bfa2d5854ed6b9c4735282c2`, reconfirmed at 14:19 UTC.
+  This includes offline catch-up and Node tooling. They were retained and
+  relevant checks rerun. Older task/status text about PR51 awaiting merge does
+  not override the observed main commit.
+- Private worktree: `/workspace/Lumenfall-formation-autosave`; branch
+  `feature/formation-autosave-001`. The original checkout's source was not edited.
+- PR46 remains open/Draft on R2 `3cdebc236e9ee5081a4bca4e323b11f43aa0d46d`.
+- Archived B2 tree: `758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef`, restored and
+  hash-verified separately. New scoped Core/QA acceptance remains missing.
+- 02_07's later writer release is unknown. No remote repo-writer has been
+  assigned to this owner chat. The user's order authorizes isolated preparation.
 
-Lead-registreringen kræver PR46/B2-review og handover før nye produktændringer.
-F14-kontrakten skal være stabil før F15 Formation Bonds integreres. F20/F21
-er tidligere planlagte scopes, som Lead koordinerer; de implementeres ikke her.
-Stående godkendelse gælder bestilt scope; ingen ny generel godkendelse kræves.
+PR46/B2 review and writer handover precede remote product changes under this
+mandate. F14 must stabilize before new F15 Formation Bonds integrate. Lead
+coordinates F20/F21 and other features; they are not implemented here.
+Standing approval applies; no new general approval is requested.
 
-## Lokal kandidat og beslutninger
+## Candidate decisions and scope
 
-- Det valgte preset er autosave-destinationen. Field/Bench redigerer hele det
-  ønskede hold, også under et delvist rebuild, og gemmer canonical/recovery straks.
-- Rekruttering uden rebuild tilføjes som før til et ledigt Field-slot og gemmes
-  straks i det valgte preset. Empower alene ændrer ikke medlemslisten. Betalte
-  rebuild-køb bevarer ønsket hold; de gemmer ikke den midlertidige projektion.
-- Presetskift vælger destinationen før den nye projektion. De øvrige presets
-  overskrives ikke; pending presets er stadig valgbare.
-- Fem ønskede pladser inkluderer pending. Ukendte IDs, fuldt hold, manglende
-  rekruttering og sidste Bench afvises uden state-/saveændring.
-- Brugerens præcisering bevarer mindst én aktiv Wisp. Nye presets starter fortsat
-  med Ember. Et eksisterende tomt gemt preset bevares som `[]`; ved valg bruges
-  midlertidig Ember indtil en eksplicit Field/rekruttering redigerer intent.
-- `formationRebuild` kan repræsentere dette tomme, valgte preset. Tilknytningen
-  er kun gyldig ved et eksakt match med det gemte preset. Ugyldig tom intent
-  accepteres ikke. Der oprettes ingen ny save-key eller schema-version.
-- Ascend gemmer det fulde ønskede hold før reset; gentaget Ascend, canonical
-  save, recovery og backup beholder valg/order/pending og tomme gemte presets.
-- Pending kan benches uden at slette andre ønskede medlemmer. Combat/Bonds
-  anvender fortsat kun faktisk powered Field; automation har eksisterende
-  unlock-, pris-, billigst-først- og cadencegrænser.
-- Save-knapper/handler fjernes. Valgt preset viser Autosave/Selected og pending
-  vises særskilt. Native knapper og eksisterende fokusbevarelse anvendes.
+- The selected preset remains the autosave destination. Field/Bench edits the
+  complete desired roster, including pending members during a partial rebuild,
+  and immediately writes canonical primary and recovery saves.
+- Recruitment outside a nonempty rebuild adds to an available chosen slot as
+  before and saves the selected preset. Empower changes levels, not membership.
+  Paid rebuild purchases retain the complete desired roster and never save
+  the temporary powered projection over it.
+- Switching selects the destination before projecting its saved lineup. It
+  overwrites no other preset. Pending presets remain selectable.
+- Five desired slots include pending. Invalid IDs, an unavailable Field member,
+  a sixth member and removing the last chosen member are rejected without
+  state/save mutation.
+- The clarification preserves at least one actual active Wisp. Fresh presets
+  still start with Ember. An existing stored `[]` remains empty; selecting it
+  uses temporary Ember until explicit Field/recruitment edits its saved intent.
+  This does not create an initially empty active formation.
+- Empty rebuild intent is valid only when associated with an exactly matching
+  selected stored preset. No new save key or schema version is added.
+- Ascend captures the complete desired order before reset. Repeated Ascend,
+  canonical normalization, reload, recovery and backup preserve destination,
+  pending members and stored empty presets.
+- Pending Bench removes only that intended member. Combat, abilities, support
+  and Bonds use powered Field members. Existing unlock, price, cheapest-first
+  and cadence restrictions remain in force.
+- Save controls/handler are removed. Native buttons show Selected/Autosave and
+  pending counts. Field/Bench targets are at least 48px so their actual animated
+  bounds remain above 44px.
 
-Ingen nye gameplaytal eller balanceformler. Ingen ny projektregel.
-F15/F16/F17/F18/F19/F25/F26, køb/caps/refunds, offline-policy, signing, package,
-workflow-triggere og B2-aritmetik ændres ikke. Betalt ownership og currencies
-bevares; normalisering har ingen køb/refund og testes for idempotens.
+No new balance values or formulas. Package `com.lumenfall.app`, signing,
+WebView 60 baseline, deterministic purchases and documented Luminous Motes
+rewards remain unchanged. Paid ownership/currencies are preserved; normalization
+buys/refunds nothing and is idempotent. No new Bonds, caps, refunds, offline
+policy or B2 arithmetic are implemented.
 
-Alle nye scripts/tests er JavaScript. Det eksisterende Python-harness får
-kun registrering af JavaScript-scenarier/drivere samt opdatering af indlejrede
-JavaScript-assertions for den nye kontrakt. Det eksisterende harness og workflow-
-checks genbruges via en JavaScript-runner; en total harnessmigrering er et andet mål.
+All new tooling/tests use JavaScript. The final candidate uses the current
+Node harness (`bridge.js`, `prelude.js`, `runner.js`, `run.cjs`, `scenarios.json`).
+The offline regression's old scheduler oracle compares summaries and every
+state field exactly, except that expected partial-rebuild selection now retains
+the matching preset as required by F14. Historical oracle bytes are intact.
 
-## Acceptkriterier
+## Acceptance criteria
 
-1. Push/Farm/Boss isoleres gennem valg → Field/Bench/rekruttering → skift → retur.
-   Primary og recovery indeholder redigeringen straks, uden manuel Save.
-2. Ét til fem faktiske Field-medlemmer; fem ønskede pladser også med pending.
-   Tomme gemte presets kan vælges/redigeres uden automatisk Ember-overskrivning.
-3. Delvist og gentaget Ascend bevarer hele ønskede hold/order og destination.
-   Pending giver ingen combat-, ability-, support- eller Bond-fordel.
-4. Canonical/reload/backup/recovery bevarer presets, valg og pending; malformed/
-   legacy behandles deterministisk. Gentagen normalisering er idempotent, og
-   eksisterende betalt værdi bevares.
-5. Eksisterende kronologi, Luminous/Motes, live/offline, queue og economy-ledgers
-   består relevante regressionschecks. Tre scoped autosave-mutants fanges.
-6. UI består 320/390/430px, 200% relevant tekst, native touch/tastatur, ≥44px,
-   synligt fokus, kontrast, reduceret bevægelse og render uden save-sideeffekter.
-7. Koordineret writer-checkpoint gemmer opgave/kode/beviser i GitHub. Efter
-   integration verificeres den konkrete integrationsversion; nødvendig APK,
-   package/signing, fysisk Android/WebView60/TalkBack-accept og writerrelease
-   registreres. Først derefter arkiveres kun denne ejerchat.
+1. Push/Farm/Boss stay isolated through select → Field/Bench/recruit → switch
+   → return. Primary and recovery contain the edit immediately, without Save.
+2. At least one actual Field member; five desired slots including pending.
+   Stored empty presets remain selectable/editable without automatic overwrite.
+3. Partial/repeated Ascend preserve complete desired order and selected
+   destination. Pending grants no combat/ability/support/Bond benefit.
+4. Canonical/reload/backup/recovery retain presets, selection and pending.
+   Malformed/legacy handling is deterministic and idempotent, preserving paid value.
+5. Relevant chronology, rewards, live/offline, queue and economy checks pass.
+   Three causal autosave mutations must be detected.
+6. UI passes 320/390/430px, 200% relevant text, native touch/keyboard, actual
+   targets ≥44px, focus, contrast, reduced motion and rendering without saves.
+7. At a coordinated writer checkpoint, save the task, implementation and evidence
+   to GitHub. Verify integrated bytes and required APK/package/signing,
+   Android/WebView60/TalkBack checks. Release writer before archiving only this
+   chat. A local candidate/open PR does not meet this criterion.
 
-## Verifikation og begrænsninger
+## Verification and limits
 
-Foreløbigt observeret lokalt: 128 autosave-assertions, alle tre causal mutants
-fanget, native touch/tastatur ved seks normale og seks reduced-motion-profiler
-(320/390/430 × normal/200% tekst), immediate primary/recovery, fokus/renderpurity.
-Mindste målt tekstkontrast i presetdetaljer 6.57:1; kontroller ≥44px.
-Begge produkt-inline-scripts parser ECMAScript 2017 med Acorn 8.15.0.
-Produktpatchens `git apply --check` består på det separat gendannede B2-tree.
+Final source SHA256:
+`2eda7ffd83e95d2a114403706f488d8c58723726d81314c873fb1393e793bc1b`.
+Evidence and exact exits: [local QA receipt](../qa/formation-autosave-2026-10-07/README.md).
 
-Fuld eksisterende pre-merge-suite, persistence og chronology er under kørsel.
-Rå kilderesultater og endelige exits indsættes ved lokalt freeze. Kørsel:
+Code checkpoint: `0e6185e825424a0d212179c3dbb24c11dd49c0b7`, tree
+`5cea4fac44e9103ce86b68be40f598069b03e02d`. Final receipts/documentation are a
+subsequent local commit; the delivery packet identifies that final head/tree.
+The runner started at local HEAD `977a11c` with the final working-tree changes;
+its recorded product hash and the unchanged SOURCE_MANIFEST bind the checked
+bytes to the code checkpoint. No code/test bytes changed after test startup.
+
+Observed final clean run, 14:09:20–14:21:58 UTC, Node 24.19.0:
+
+- All 138 default scenarios / 158 expanded results pass; behavioral exit 0.
+- All 12 workflow negatives produce valid intentional QA failures and harness
+  exit 1, without timeout. Complete outputs and independent replay are preserved.
+- Context, Node tooling, APK-verifier self-test, source and guarded runtime
+  smoke pass. The existing smoke verifier also passes on the saved DOM.
+- 133 autosave assertions per contract invocation; all three causal mutations
+  detected. Immediate primary/recovery, real reload, backup and recovery pass.
+- All twelve 320/390/430px × normal/200% relevant-text × normal/reduced-motion
+  profiles pass native touch/keyboard, actual ≥44px bounds, focus, contrast,
+  unobstructed hit-testing, render purity and resumed production combat.
+  Preset detail contrast ≥6.57:1; focus contrast ≥5.77:1; twelve screenshots saved.
+- Both inline scripts parse as ECMAScript 2017 using Acorn 8.15.0. Product patch
+  dry application to restored B2 passes, without functional B2 acceptance.
+
+The first rebased full run's obsolete offline-selection assertion failed and
+was corrected while preserving exact comparisons for all other state and reward
+summaries. Both that failure and corrective rerun remain in the history folder.
+Only the subsequent clean run is final local acceptance.
+
+System Chromium 151 CLI `--dump-dom` hung even on about:blank; early interrupted
+runs are diagnostic, not acceptance. Native CDP works with Chromium 151. CLI
+gates use isolated Google Chrome 155. Browser identity/source hashes/raw complete
+outputs are retained. Modern browser/grammar checks do not replace physical
+Android, WebView60 or TalkBack acceptance.
+
+Reproduce from the repository root with Node 20+ and compatible Chrome:
 
 ```bash
 node scripts/qa/check-formation-autosave.cjs --full --evidence /tmp/formation-checks
 ```
 
-Miljøets Chromium 151 `--dump-dom` hænger også på about:blank; de indledende
-afbrudte forsøg er ikke produktfejl eller PASS. Native CDP virkede med denne
-browser. En isoleret Google Chrome 155-installation blev derefter anvendt til
-de eksisterende CLI-gates. Browseridentitet/sourcehash/exit og rå logs bevares.
-Moderne browser- og grammar-PASS er ikke fysisk Android eller WebView60-accept.
+## Next action and completion gate
 
-## Næste handling, stop og færdigstatus
+The local task, patch, source/commit bundle, evidence and TXT/ZIP are frozen for
+user-transferred Lead review; archive CRC and every manifest payload are checked.
+Lead must resolve PR46/B2 acceptance and documented writer handover, assign
+the checkpoint, recheck main/branches/PRs/runs and save this feature to GitHub.
+Review any integration delta and rerun relevant checks on integrated bytes.
+Use existing Android workflow triggers; verify immutable APK identity and
+required device acceptance. Save receipts/status and release this scope's
+writer before archiving this owner chat.
 
-Afslut lokale checks og freeze kandidat/patch/TXT/ZIP til brugeroverført Lead-review.
-Derefter skal Lead gennemføre PR46/B2-accept og dokumenteret writerhandover,
-tildele konkret checkpoint, kontrollere live main/branches/PRs/runs og gemme
-denne feature i GitHub. Genbasér på accepteret main og gentag relevante checks.
-Ingen push, PR, integration, build, rerun, release eller remote docs-skrivning
-er udført i denne ejerchat. Ingen produkt-writer er erhvervet eller frigivet.
-Main-status ændres først ved koordineret integration. APK/deviceaccept mangler;
-featuren og ejerchatten forbliver åbne.
+No push, feature PR, integration, APK build/release, workflow dispatch/rerun or
+remote document write was performed here. No product writer was acquired or
+released. GitHub persistence, integration and APK/device acceptance remain open;
+this chat remains unarchived. The delivery packet records the exact local commit/tree.
