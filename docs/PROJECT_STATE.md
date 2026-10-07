@@ -51,6 +51,7 @@ Næste B2-handling: kontrollér live baseline, læs ny leverings START/identity,
 genskab det præcise tree separat, og udsted nye scoped Core-/QA-reviews.
 Gem reviewdelta i denne status. Integrér efter kandidataccept og handover.
 OFFLINE-CATCHUP-001 now has its own user mandate and isolated local branch `feature/offline-catchup-001`. It is not folded into PR46. The prior writer must explicitly release before repository publication; this feature has acquired no remote writer. English is the current user preference.
+The user also requested JavaScript in place of Python. Active tools/CI helpers now use Node.js; historical originals remain hash-preserved. This follow-up changes no game bytes and is still local.
 
 Historisk status: `project/PROJECT_STATE_2026-10-05_HISTORICAL.md`.
 Ældre recovery-status bevares byteidentisk; denne fil er den aktuelle indgang.

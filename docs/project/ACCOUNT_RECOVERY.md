@@ -18,7 +18,7 @@ kan ikke genskabe chatbeskeder eller filer, der aldrig blev gemt der.
    kontrollér live branches, PR'er og relevante releases i stedet for at antage,
    at gamle checkpoints stadig er aktuelle.
 4. Opsæt miljøet efter [CODEX_START.md](CODEX_START.md), og kør
-   `python3 scripts/codex/check_context.py` fra repository-roden.
+   `node scripts/codex/check_context.cjs` fra repository-roden.
 5. Vælg én feature og start dens ejerchat. Fortsæt fra opgavedokumentets
    næste handling og eksisterende acceptbeviser. Gentag ikke allerede
    implementeret arbejde, og promover ikke arkiverede kandidater til produktet.
@@ -29,7 +29,8 @@ kan ikke genskabe chatbeskeder eller filer, der aldrig blev gemt der.
 Fortsæt Lumenfall fra GitHub-repositoryet karahaNx/Lumenfall, branch main.
 Læs AGENTS.md og PROJECT_BOOTSTRAP.txt, kun egen række i docs/CHAT_OWNERSHIP.md,
 egen rollefil og docs/PROJECT_STATE.md. Uden anden rolletildeling: Lead.
-Følg docs/project/CODEX_START.md; kør scripts/codex/check_context.py.
+Use JavaScript/Node.js for active tools; keep archived originals unchanged.
+Følg docs/project/CODEX_START.md; kør node scripts/codex/check_context.cjs.
 Kontrollér live main, åbne PR'er, relevante releases og skriveejerskab.
 Læs docs/project/FEATURE_WORKFLOW.md. Én feature pr. ejerchat; arkivér efter
 verificeret integration, gemt status og writer-frigivelse. Fortæl mig, når

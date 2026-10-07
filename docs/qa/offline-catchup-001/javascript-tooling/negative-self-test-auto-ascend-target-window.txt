@@ -1,0 +1,61 @@
+Browser identity: { "selected_path": "/tmp/lumenfall-browser-bin/google-chrome", "resolved_path": "/tmp/lumenfall-browser-bin/google-chrome", "sha256": "ab08e9070de7575567e67f543e56f8fc9512f5e6c479bbfdb87ca7c0c9c2de49", "version": "Google Chrome 155.0.8059.39", "version_exitcode": 0, "version_stderr": "[1007/123642.808416:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /tmp/lumenfall-browser-download/extracted/opt/google/chrome/CHROME_VERSION_EXTRA\n" }
+Staged source: { "source_sha256": "57401a0c4b4161ca90847745fd192b7b805e4c8aa70960b7f0a79d02c3dda61b", "instrumented_sha256": "20a84d56c0957b67bfef32449340cc68d74af8147f6394664c9e66112b9f4031" }
+FAIL self-test-auto-ascend-target-window
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 1.11184025, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-auto-ascend-target-window", "json_status": "fail", "json_scenario": "self-test-auto-ascend-target-window", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /tmp/lumenfall-js-negative-raw/self-test-auto-ascend-target-window-uMNvfg
+  Chromium stderr tail:
+71:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[60334:60334:1007/123643.150307:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60334:60345:1007/123643.150346:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[60334:60334:1007/123643.150517:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60334:60334:1007/123643.152420:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60334:60345:1007/123643.152487:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[60334:60355:1007/123643.156352:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 60423: Read-only file system (30)
+[60334:60355:1007/123643.157325:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 60424: Read-only file system (30)
+[60334:60334:1007/123643.172571:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60334:60334:1007/123643.172793:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60334:60345:1007/123643.173116:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[60334:60345:1007/123643.173147:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[60334:60345:1007/123643.173157:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[60334:60334:1007/123643.182033:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60334:60334:1007/123643.196123:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[60334:60334:1007/123643.196162:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60334:60345:1007/123643.196687:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[60334:60334:1007/123643.208691:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60334:60345:1007/123643.208819:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[60334:60334:1007/123643.220501:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60334:60355:1007/123643.239575:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 60448: Read-only file system (30)
+[60334:60355:1007/123643.252515:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 60456: Read-only file system (30)
+
+  stdout tail:
+    finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+</script>
+
+
+<div class="ascend-flash leaving"><span>AUTO ASCEND</span><strong>+14 PRISMS</strong><small>The Rift begins again. You do not.</small></div><pre id="qa-result" data-status="fail" data-scenario="self-test-auto-ascend-target-window">{
+  "scenario": "self-test-auto-ascend-target-window",
+  "status": "fail",
+  "detail": {
+    "message": "window budget &lt;=200 consecutive options plus at most one saved target",
+    "stack": "Error: window budget &lt;=200 consecutive options plus at most one saved target\n    at assert (http://127.0.0.1:37895/index.html?qaScenario=self-test-auto-ascend-target-window&amp;qaFixture=fresh:11916:61)\n    at ok (http://127.0.0.1:37895/index.html?qaScenario=self-test-auto-ascend-target-window&amp;qaFixture=fresh:11435:29)\n    at budget (http://127.0.0.1:37895/index.html?qaScenario=self-test-auto-ascend-target-window&amp;qaFixture=fresh:11442:5)\n    at http://127.0.0.1:37895/index.html?qaScenario=self-test-auto-ascend-target-window&amp;qaFixture=fresh:11454:58\n    at Array.forEach (&lt;anonymous&gt;)\n    at window.runAutoTargetWindows (http://127.0.0.1:37895/index.html?qaScenario=self-test-auto-ascend-target-window&amp;qaFixture=fresh:11448:60)\n    at window.runAutoTargetContract (http://127.0.0.1:37895/index.html?qaScenario=self-test-auto-ascend-target-window&amp;qaFixture=fresh:11572:15)\n    at HTMLDocument.run (http://127.0.0.1:37895/index.html?qaScenario=self-test-auto-ascend-target-window&amp;qaFixture=fresh:12398:46)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+
+
+Behavioral QA failed: self-test-auto-ascend-target-window null

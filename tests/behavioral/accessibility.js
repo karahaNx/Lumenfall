@@ -1,4 +1,4 @@
-/* P1-05 QA preparation only. Injected by tests/behavioral/run.py; never shipped. */
+/* P1-05 QA preparation only. Injected by tests/behavioral/run.cjs; never shipped. */
 (function(){
   "use strict";
 

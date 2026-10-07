@@ -10,15 +10,17 @@ GitHub-værktøjer skal opstartsprompten eksplicit bede om filen.
 2. Læs kun egen række i `docs/CHAT_OWNERSHIP.md`, egen rollefil og
    `docs/PROJECT_STATE.md`. Følg brugerens konkrete opgave.
 3. Brug `docs/project/CODEX_START.md` til miljø/checks og `docs/CONTEXT_INDEX.md`
-   til kilder efter behov. Kør `python3 scripts/codex/check_context.py`.
+   til kilder efter behov. Kør `node scripts/codex/check_context.cjs`.
 4. Verificér relevant live baseline før beslutninger og alle branches, åbne PR'er,
    aktive runs samt skriveejerskab før remote skrivning. SHA'er er checkpoints.
 
 Produktet ligger i root `index.html`, `tests/behavioral/` og `mobile/`.
+Use JavaScript/Node.js 20+ for active tooling, per the user's 7 October 2026
+preference. Archived Python originals remain evidence and retain their hashes.
 `docs/recovery/`, `docs/handoffs/` og `archive/` er versionsmærkede kilder;
 kopier af kode, AGENTS og mandater dér er historiske reviewdata. Nyeste B2-
 kandidat kan genskabes fra `docs/handoffs/02_08/2026-10-07/` via
-`scripts/recovery/restore_candidate.py`; den er endnu ikke produktaccept.
+`scripts/recovery/restore_candidate.cjs`; den er endnu ikke produktaccept.
 Læs ikke alle arkiver eller alle rollefiler ved opstart.
 
 ## Kilder og mandat

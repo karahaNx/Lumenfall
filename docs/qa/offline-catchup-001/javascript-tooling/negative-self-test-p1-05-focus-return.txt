@@ -1,0 +1,74 @@
+Browser identity: { "selected_path": "/tmp/lumenfall-browser-bin/google-chrome", "resolved_path": "/tmp/lumenfall-browser-bin/google-chrome", "sha256": "ab08e9070de7575567e67f543e56f8fc9512f5e6c479bbfdb87ca7c0c9c2de49", "version": "Google Chrome 155.0.8059.39", "version_exitcode": 0, "version_stderr": "[1007/123640.518491:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /tmp/lumenfall-browser-download/extracted/opt/google/chrome/CHROME_VERSION_EXTRA\n" }
+Staged source: { "source_sha256": "4a9fac11b413071f9b722e2c50e0e46839d9de26e3214b52f619c279fc5d5607", "instrumented_sha256": "94f64d880098c9211e9dc29c5135761aed85568d45d799412b68ed8c08f319e1" }
+FAIL self-test-p1-05-focus-return
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 0.996271944, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-p1-05-focus-return", "json_status": "fail", "json_scenario": "self-test-p1-05-focus-return", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /tmp/lumenfall-js-negative-raw/self-test-p1-05-focus-return-O1NJPJ
+  Chromium stderr tail:
+79:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[60029:60029:1007/123640.892025:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60029:60040:1007/123640.892062:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[60029:60029:1007/123640.892193:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60029:60029:1007/123640.893988:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60029:60040:1007/123640.894574:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[60029:60050:1007/123640.899068:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 60119: Read-only file system (30)
+[60029:60050:1007/123640.902265:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 60120: Read-only file system (30)
+[60029:60040:1007/123640.910024:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[60029:60040:1007/123640.910051:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[60029:60029:1007/123640.910066:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60029:60029:1007/123640.910216:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60029:60040:1007/123640.910270:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[60029:60029:1007/123640.914093:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60029:60029:1007/123640.924660:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[60029:60029:1007/123640.925035:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60029:60040:1007/123640.927390:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[60029:60029:1007/123640.938831:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60029:60040:1007/123640.939122:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[60029:60029:1007/123640.950756:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60029:60050:1007/123640.977147:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 60143: Read-only file system (30)
+[60029:60050:1007/123640.978763:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 60144: Read-only file system (30)
+
+  stdout tail:
+omy.sigilResonanceRunLimit>100 || unsafeEconomy.questRefreshCost<unsafeEconomy.maxQuestCometReward,
+            'intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+</script>
+
+
+<button>Trigger</button><button>Wrong target</button><pre id="qa-result" data-status="fail" data-scenario="self-test-p1-05-focus-return">{
+  "scenario": "self-test-p1-05-focus-return",
+  "status": "fail",
+  "detail": {
+    "message": "intentional overlay focus-return regression",
+    "stack": "Error: intentional overlay focus-return regression\n    at assert (http://127.0.0.1:40691/index.html?qaScenario=self-test-p1-05-focus-return&amp;qaFixture=accessibility-mixed-states:11916:61)\n    at Object.negativeFocusReturn (http://127.0.0.1:40691/index.html?qaScenario=self-test-p1-05-focus-return&amp;qaFixture=accessibility-mixed-states:10185:5)\n    at HTMLDocument.run (http://127.0.0.1:40691/index.html?qaScenario=self-test-p1-05-focus-return&amp;qaFixture=accessibility-mixed-states:13615:38)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+
+
+Behavioral QA failed: self-test-p1-05-focus-return null

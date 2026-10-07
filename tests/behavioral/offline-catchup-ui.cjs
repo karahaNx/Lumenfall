@@ -1,5 +1,5 @@
 /* Native input regression driver using Chrome's pipe protocol and Node built-ins.
- * No browser library/test dependency; run.py registers this in the default suite.
+ * No browser library/test dependency; run.cjs registers this in the default suite.
  */
 const {spawn}=require('node:child_process'),fs=require('node:fs'),os=require('node:os'),path=require('node:path');
 const [chrome,url,scenario]=process.argv.slice(2),profile=fs.mkdtempSync(path.join(os.tmpdir(),'lumenfall-auto-target-'));

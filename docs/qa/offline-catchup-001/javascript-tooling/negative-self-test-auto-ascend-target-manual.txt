@@ -1,0 +1,67 @@
+Browser identity: { "selected_path": "/tmp/lumenfall-browser-bin/google-chrome", "resolved_path": "/tmp/lumenfall-browser-bin/google-chrome", "sha256": "ab08e9070de7575567e67f543e56f8fc9512f5e6c479bbfdb87ca7c0c9c2de49", "version": "Google Chrome 155.0.8059.39", "version_exitcode": 0, "version_stderr": "[1007/123644.034423:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /tmp/lumenfall-browser-download/extracted/opt/google/chrome/CHROME_VERSION_EXTRA\n" }
+Staged source: { "source_sha256": "8fda3c5387176ac31ca88870a2a523241d0720db35cf14c24735f477c0246644", "instrumented_sha256": "698eb0aa63ec129bcd513c235073d7486c0fa8513d7c9a35c254e5d84f3fbabf" }
+FAIL self-test-auto-ascend-target-manual
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 1.0652913329999998, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-auto-ascend-target-manual", "json_status": "fail", "json_scenario": "self-test-auto-ascend-target-manual", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /tmp/lumenfall-js-negative-raw/self-test-auto-ascend-target-manual-d3z8TD
+  Chromium stderr tail:
+50:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[60488:60499:1007/123644.395269:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[60488:60488:1007/123644.395301:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60488:60519:1007/123644.395486:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 60571: Read-only file system (30)
+[60488:60488:1007/123644.397578:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60488:60499:1007/123644.397691:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[60488:60519:1007/123644.404918:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 60584: Read-only file system (30)
+[60488:60519:1007/123644.406312:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 60585: Read-only file system (30)
+[60488:60499:1007/123644.411954:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[60488:60488:1007/123644.411969:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60488:60499:1007/123644.411978:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[60488:60488:1007/123644.412452:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60488:60499:1007/123644.412995:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[60488:60488:1007/123644.417883:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60488:60488:1007/123644.430249:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[60488:60488:1007/123644.430466:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60488:60499:1007/123644.430555:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[60488:60488:1007/123644.440433:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60488:60499:1007/123644.440728:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[60488:60488:1007/123644.450371:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[60488:60519:1007/123644.463729:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 60609: Read-only file system (30)
+[60488:60519:1007/123644.480282:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 60619: Read-only file system (30)
+
+  stdout tail:
+      case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+</script>
+
+
+<div class="ascend-flash leaving"><span>ASCENDED</span><strong>+20 PRISMS</strong><small>The Rift begins again. You do not.</small></div><pre id="qa-result" data-status="fail" data-scenario="self-test-auto-ascend-target-manual">{
+  "scenario": "self-test-auto-ascend-target-manual",
+  "status": "fail",
+  "detail": {
+    "message": "manual keeps target 43 at higher clear Rift 100",
+    "stack": "Error: manual keeps target 43 at higher clear Rift 100\n    at assert (http://127.0.0.1:45987/index.html?qaScenario=self-test-auto-ascend-target-manual&amp;qaFixture=fresh:11917:61)\n    at ok (http://127.0.0.1:45987/index.html?qaScenario=self-test-auto-ascend-target-manual&amp;qaFixture=fresh:11498:29)\n    at http://127.0.0.1:45987/index.html?qaScenario=self-test-auto-ascend-target-manual&amp;qaFixture=fresh:11533:5\n    at Array.forEach (&lt;anonymous&gt;)\n    at window.runAutoTargetContract (http://127.0.0.1:45987/index.html?qaScenario=self-test-auto-ascend-target-manual&amp;qaFixture=fresh:11530:16)\n    at HTMLDocument.run (http://127.0.0.1:45987/index.html?qaScenario=self-test-auto-ascend-target-manual&amp;qaFixture=fresh:12399:46)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+
+
+Behavioral QA failed: self-test-auto-ascend-target-manual null

@@ -13,13 +13,13 @@ Filer i samme række er kandidater; indlæs kun det, som den konkrete opgave kr�
 | Brugerens workflowkrav fra 7. oktober | `tasks/WORKFLOW_CONTINUITY_001.md` | Regler og dokumentationsaccept |
 | Codex-miljø, commands og næste B2-handling | `project/CODEX_START.md`, `../PROJECT_BOOTSTRAP.txt` | Ny repo-session |
 | Nyeste B2-runtimekandidat, fulde originals og beviser | `handoffs/02_08/2026-10-07/START_HER.txt` → `Source_Index.txt`, `SUMMARY/identity.json` | Nyt scoped kandidat-review; ikke produkt-main |
-| Alle 96 kandidatfiler og præcis gendannelse | `handoffs/02_08/2026-10-07/SOURCE_SNAPSHOT_MANIFEST.json`, `../scripts/recovery/restore_candidate.py` | Review uden netadgang/ekstern ZIP |
+| Alle 96 kandidatfiler og præcis gendannelse | `handoffs/02_08/2026-10-07/SOURCE_SNAPSHOT_MANIFEST.json`, `../scripts/recovery/restore_candidate.cjs` | Review uden netadgang/ekstern ZIP |
 | Core-review og 45 originale TXT/ZIP-filer | `handoffs/01_06/2026-10-07/SOURCE_INDEX.md` | Core-proveniens; tidligere BLOCKED gælder gamle bytes |
 | Lead-recovery, original feedback og fire billeder | `recovery/2026-10-07/SOURCE_INDEX.txt`, `recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/` | Originalkrav og dependencies |
 | Åbne problemer og ny offline-diagnose | `project/KNOWN_ISSUES.md`, `project/SAVE_OFFLINE_AUTOASCEND_DIAGNOSE_2026-10-07.txt` | Særskilt offline-scope |
 | Current offline fix and acceptance | `tasks/OFFLINE_CATCHUP_001.md` → `qa/offline-catchup-001/README.md` | Local candidate and precise next action; not yet a release |
 | Offline-originalsave, driver og rå VM-resultater | `qa/offline-autoascend-2026-10-07/Source_Index.txt`, `qa/offline-autoascend-2026-10-07/README_REPRO.txt` | Reproduktion på fast produktbaseline; bevaret via PR47 |
-| Integritet og historiske manifeststier | `../scripts/codex/check_context.py --archives`, `decisions/2026-10-07-codex-project-ready.md` | Genfinding og docs-integration |
+| Integritet og historiske manifeststier | `../scripts/codex/check_context.cjs --archives`, `decisions/2026-10-07-codex-project-ready.md` | Genfinding og docs-integration |
 | Measured Inquiry | `tasks/MEASURED_INQUIRY_001.md`, `tasks/MEASURED_INQUIRY_001_REQUIREMENTS.txt` | Originalkrav før implementering/review |
 | Forge/Lab-beslutning og begrundelser | `decisions/2026-10-04-forge-lab.txt` | Ved scope-/designspørgsmål |
 | PR41 Core/QA/Lead-accept | `decisions/2026-10-05-pr41-review.txt` | Ved integration eller vurdering af reviewgrænser |
@@ -30,8 +30,8 @@ Filer i samme række er kandidater; indlæs kun det, som den konkrete opgave kr�
 | Overdragelse/checkpoint | `HANDOFF_TEMPLATE.md` | Ved milepæl/handoff |
 | Produktkode | `../index.html` på relevant commit | Målrettede afsnit; udvid ved afhængigheder |
 | Adfærd, parity og negative controls | `../tests/behavioral/` | Relevante scenarier og harness før QA/ændring |
-| CI-checks | `../.github/workflows/pre-merge-validation.yml` | Før PR-validering; run.py viser aktuelle controls |
-| Android/signing/publish | `../.github/workflows/build-android.yml`, `../scripts/verify_apk_identity.py`, `../mobile/` | Kun Core/release-opgave og triggerkontrol |
+| CI-checks | `../.github/workflows/pre-merge-validation.yml` | Før PR-validering; run.cjs viser aktuelle controls |
+| Android/signing/publish | `../.github/workflows/build-android.yml`, `../scripts/verify_apk_identity.cjs`, `../mobile/` | Kun Core/release-opgave og triggerkontrol |
 | Branding og mobilreferencer | `../branding/README.md`, `brand-reference/README.md` | Relevant UI/branding-opgave |
 | Historisk program og audits | `ROADMAP.md`, `audits/` | Baggrund til en konkret beslutning; ikke automatisk backlog |
 

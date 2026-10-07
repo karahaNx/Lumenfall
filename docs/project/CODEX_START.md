@@ -10,10 +10,10 @@ startprompt. Hver ny feature får én ejerchat efter
 
 ## Miljø
 
-Webkode/adfærdstests kræver **Node.js 20+**, **Python 3.10+**, **Git** og en
+Webkode/adfærdstests kræver **Node.js 20+**, **Git** og en
 Chromium-browser på PATH: `google-chrome`, `google-chrome-stable`, `chromium`
 eller `chromium-browser`. Der er ingen root package.json/npm-testkommando.
-Brug det eksisterende Python-harness.
+Brug Node.js-harnesset; aktive tools kræver ingen Python eller ekstra npm-pakker.
 
 Hvis miljøet understøtter et setup-script, kan det sættes til:
 
@@ -39,9 +39,10 @@ eksterne Codex-miljøindstillinger.
 ## Checks fra repository-roden
 
 ```bash
-python3 scripts/codex/check_context.py
-python3 scripts/codex/check_context.py --archives
-python3 scripts/verify_apk_identity.py --self-test
+node scripts/codex/check_context.cjs
+node scripts/codex/check_context.cjs --archives
+node scripts/verify_apk_identity.cjs --self-test
+node tests/tooling/run.cjs
 ```
 
 Ved produktændringer følges relevante eksisterende gates i
@@ -52,7 +53,7 @@ mkdir -p mobile/www/fonts mobile/www/branding
 cp index.html mobile/www/index.html
 cp -r fonts/. mobile/www/fonts/
 cp -r branding/. mobile/www/branding/
-python3 tests/behavioral/run.py --web-root mobile/www
+node tests/behavioral/run.cjs --web-root mobile/www
 ```
 
 Læg ingen arkivkode i mobile/www. Harnesset starter selv sin lokale server/
@@ -68,7 +69,7 @@ gemt som SOURCE/AGENTS.txt; .gitattributes ligger som GITATTRIBUTES.txt.
 Begge gendannes med originale navne af restore-scriptet.
 
 ```bash
-python3 scripts/recovery/restore_candidate.py /tmp/lumenfall-b2-review --evidence /tmp/lumenfall-b2-evidence
+node scripts/recovery/restore_candidate.cjs /tmp/lumenfall-b2-review --evidence /tmp/lumenfall-b2-evidence
 ```
 
 Destinationen skal være ny eller tom. Scriptet kontrollerer alle sourcehashes
@@ -89,8 +90,11 @@ Dokumentér 02_07s handover før produkt-/PR46-skrivning.
 Lead: `docs/recovery/2026-10-07/`. Core-originaler/reproduktion:
 `docs/handoffs/01_06/2026-10-07/`. Nyeste Gameplay: `docs/handoffs/02_08/2026-10-07/`.
 Original Gameplay-ZIP ligger også i hashkontrollerede dele i `archive/`.
-`scripts/recovery/restore_package.py` gendanner tidligere logiske Lead-pakker.
+`scripts/recovery/restore_package.cjs` gendanner tidligere logiske Lead-pakker.
 Originale bytes, receipts og historiske mandater er uændrede.
+Historical Python commands apply only to their frozen snapshots; current tools
+use Node.js. The original hash-recorded `restore_package.py` remains under
+`docs/recovery/2026-10-07/publication_originals/scripts/recovery/`.
 
 Tilgængeligt materiale fra de tre arkivgrene kan nu læses fra main. Det er
 ikke et løfte om alle tidligere chatbeskeder eller eksterne filer. Den nye
