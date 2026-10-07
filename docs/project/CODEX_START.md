@@ -13,7 +13,11 @@ startprompt. Hver ny feature får én ejerchat efter
 Webkode/adfærdstests kræver **Node.js 20+**, **Python 3.10+**, **Git** og en
 Chromium-browser på PATH: `google-chrome`, `google-chrome-stable`, `chromium`
 eller `chromium-browser`. Der er ingen root package.json/npm-testkommando.
-Brug det eksisterende Python-harness.
+Brugerens [sprogregel](../decisions/2026-10-07-javascript-first.md) gør
+JavaScript/Node.js til standard for nye tests, testkørsel, CI-logik og
+hjælpescripts. Det eksisterende Python-harness og de nedenstående commands
+er endnu ikke omlagt; brug dem til de eksisterende gates, indtil en tilsvarende
+JavaScript-udgave er verificeret i det relevante scope. HTML er fortsat tilladt.
 
 Hvis miljøet understøtter et setup-script, kan det sættes til:
 

@@ -45,6 +45,15 @@ Detaljer findes via `docs/CONTEXT_INDEX.md`; kandidater og historiske mandater
 må ikke præsenteres som implementerede spilregler.
 
 ## Nye eller ændrede regler
+Brugerens sprogregel fra 7. oktober 2026: brug JavaScript til kode, tests,
+testkørsel, CI-logik og hjælpescripts, hvor det er teknisk muligt. HTML er
+fortsat tilladt. Nye scripts bruger JavaScript/Node.js frem for Python eller
+andre sprog. Nødvendige deklarative filer og native Android-værktøjer beholder
+deres formater. Eksisterende aktive værktøjer omlægges i det relevante scope
+med bevaret testdækning og verificeret adfærd, før de erstattes. Historiske
+originaler og hashkontrollerede kandidater bevares byteidentisk. Beslutning og
+overgang: `docs/decisions/2026-10-07-javascript-first.md`.
+
 Fortæl brugeren, når en ny regel er nødvendig, før den anvendes som bindende
 regel: angiv den konkrete tekst, hvorfor den behøves, og hvilken adfærd eller
 arbejdsgang den påvirker. Gem brugerens beslutning og begrundelsen i GitHub,
