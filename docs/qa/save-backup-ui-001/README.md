@@ -24,7 +24,7 @@ Stage `index.html`, `fonts/` and `branding/` as described in CODEX_START.
 The last two commands must exit 1 with a completed failing result. The twelve
 existing workflow negative controls must likewise fail as expected.
 The current workflow's guarded browser smoke was run on a throwaway staged
-copy; its result is in `smoke.log`.
+copy; its result is in `smoke.log.gz`.
 
 Standalone UI command (also registered as `save-backup-ui` in the default suite):
 
@@ -39,7 +39,7 @@ negative controls caught. The final native UI rerun passes all 12 profiles.
 Source, tooling, archive/context, APK-verifier self-test, guarded smoke and
 ES2017 syntax pass. Full logs retain earlier failed browser attempts separately.
 
-- `source.log`, `context.log`, `apk-identity.log`, `tooling.log`, `smoke.log`:
+- `source.log.gz`, `context.log.gz`, `apk-identity.log.gz`, `tooling.log.gz`, `smoke.log.gz`:
   existing source/archive/tooling/APK-verifier/smoke gates.
 - `full-suite.log.gz`, `full-suite-summary.txt` and `validation.json`:
   final-suite status and source identity. Gzip was verified against the original
@@ -47,7 +47,7 @@ ES2017 syntax pass. Full logs retain earlier failed browser attempts separately.
 - `current-raw/save-backup-ui/ui-result.json` and its PNGs: 12 native input
   profiles: 320×568, 390×844, 430×932 × 100%/200% root text × normal/reduced
   motion. Current final browser: Google Chrome 155.0.8059.39.
-- `final-ui.log`, `final-ui/save-backup-ui/ui-result.json` and its PNGs:
+- `final-ui.log.gz`, `final-ui/save-backup-ui/ui-result.json` and its PNGs:
   rerun after adding the explicit Close-cancellation case to the test. The
   product bytes did not change; this is the final UI-test version.
 - UI covers placement, 44px, text fit, keyboard focus/order/trapping, full
@@ -55,7 +55,7 @@ ES2017 syntax pass. Full logs retain earlier failed browser attempts separately.
   Escape/Close, failed-write rollback, confirmed reload, old-backup offline guard,
   and independently confirmed Reset. Static gradient endpoints are verified;
   actual text/action colors give a conservative minimum 6.32:1 contrast.
-- `webview-syntax.log`: all two inline scripts parse as ES2017 with Acorn
+- `webview-syntax.log.gz`: all two inline scripts parse as ES2017 with Acorn
   8.16.0. This is syntax evidence and does not claim physical WebView60 acceptance.
 - Test-only clock/interval control isolates UI actions from gameplay ticks;
   clipboard/storage failure stubs exercise failure branches. Gameplay and
@@ -64,13 +64,13 @@ ES2017 syntax pass. Full logs retain earlier failed browser attempts separately.
   failures plus two new UI causal controls. The new controls move Backup out
   of Save or bypass replacement confirmation, and are caught at the changed
   behavior. None modifies repository product bytes.
-- Large raw logs/HTML are losslessly compressed to `.gz`; `compressed-logs.json`
+- Raw logs, the product patch and large HTML are losslessly compressed to `.gz`; `compressed-logs.json`
   maps the names. The full-suite log is separately preserved as `full-suite.log.gz`.
-- `product.patch`, `b2-patch-check.log`: the UI-only patch applies cleanly to
+- `product.patch.gz`, `b2-patch-check.log.gz`: the UI-only patch applies cleanly to
   the independently reconstructed frozen B2 tree. No B2 bytes were changed
   and no B2 runtime/review/device acceptance is claimed.
 
-Earlier `ui/`, `ui.log`, `negative-*` and `raw/` entries are diagnostic evidence
+Earlier `ui/`, `ui.log.gz`, `negative-*` and `raw/` entries are diagnostic evidence
 from the initial b2a1f440 base. The installed Chromium 151.0.7922.173 passed
 the native UI driver but hung on minimal CLI `dump-dom` and existing harness
 checks, including fresh-load. These timeouts are retained as environment
