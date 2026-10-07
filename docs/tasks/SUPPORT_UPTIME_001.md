@@ -3,6 +3,53 @@
 Status: **uafsluttet; numerisk brugerbeslutning og privat profile-patch til review**.
 Ingen produktændring, remote skrivning, PR, integration, APK eller featureaccept.
 
+## Latest baseline and review checkpoint
+
+Live main changed during preparation. At 15:51 Copenhagen on 7 October 2026,
+Git fetch and live GitHub confirmed PR51 merged as
+`0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd`, tree
+`6e18e8485111a7a5bfa2d5854ed6b9c4735282c2`.
+This chat's private branch was rebased onto that commit; the earlier
+`b2a1f440…` evidence below is retained as the **startup baseline**.
+No changes to shared product code or another checkout were made by this chat.
+The live PROJECT_STATE file still describes PR51 as Draft; live merge metadata
+and fetched commit establish the newer implementation status.
+
+Current main index: 492625 bytes, blob
+`90e4678cb28fa833fdacbc01d1744d9465f6a356`, SHA256
+`4a9fac11b413071f9b722e2c50e0e46839d9de26e3214b52f619c279fc5d5607`.
+Latest AGENTS uses English and active Node.js tooling. Subsequent checks use
+`node scripts/codex/check_context.cjs` and `tests/behavioral/run.cjs`.
+Original Danish user requests and earlier evidence remain unchanged.
+
+Current-main motor probe: 49 combinations / 2121 assertions and all 98
+fractional-start cases PASS (`current-main-probe-results.json`). PR51's
+`remaining>0` stall guard resolves the previously recorded endpoint failures.
+They remain historical failures on startup main and B2, not current blockers.
+
+The private profile patch was regenerated against current main: 492629 bytes,
+blob `272bc64eb13804212d324a26570078ab7d1b7b34`, SHA256
+`85cdf917904ffc52cd933925b89c3331d8436b128a3212ad047256abca3468cd`.
+Proposal probe PASS: 49 combinations / 2121 assertions, 98 fractional cases
+and all 50 phase cases. All ten late phases have gaps; optimum staggering
+measures 27 active / 3 inactive seconds over nine cycles (90/10%).
+The separate Swift cap is an explicit test catalogue stub, not this feature's
+implementation of purchase caps, overlevel compensation or save migration.
+
+All 15 focused existing browser checks PASS on this baseline with Chrome155
+and the current Node.js harness, recorded in `check-results.json`;
+startup results are retained in `startup-baseline-check-results.json` and
+`startup-baseline/`. Context, syntax and `git apply --check` pass.
+Raw browser stderr whitespace is preserved; source/docs/JSON/patch whitespace
+checks exclude only the unchanged raw Chromium151 diagnostic logs.
+
+Local preparation is frozen after these checks. No known own test/server
+process remains; no other writer is released by this chat.
+Feature remains incomplete: coordinated remote writer/checkpoint, full
+Swift integration and old-purchase policy, scoped Core/QA review, integrated
+checks and required APK/device acceptance are still outstanding. The user's
+old-Ultimate-value question remains pending; no answer or approval is inferred.
+
 ## Ét mål og originalkrav
 
 F18: gør permanent Tide/Aurora-boost sværere med konkrete early/mid/late-mål,
@@ -41,7 +88,7 @@ Privat checkout: `/workspace/Lumenfall-SUPPORT_UPTIME_001`.
 Privat branch: `feature/support-uptime-001`, separat Git-repository; ingen
 ændring af `/workspace/Lumenfall` eller en anden chats checkout.
 
-Live main hentet 7. oktober 2026, observation senest kl. 15:23 København:
+Startup-main hentet 7. oktober 2026, observation senest kl. 15:23 København:
 
 - Commit `b2a1f440e8ad9fed34b37551e468224310d2a6f6`.
 - Tree `60bb2fce00d0c230a4dd3fd9b61fd7992fb94d60`.
@@ -230,16 +277,17 @@ Normale numeric probes bruger 1e-6; 100ms HP-subtraction på stor HP bruger
 1e-4 absolut, mens uptime-deadlinechecks bevarer 1e-6/0.001ms opløsning.
 Dette er diagnostik, ikke valgt produkt-/balance-accepttolerance.
 
-Den private profile-patch har SHA256
+Den historiske startup-profile-patch (`startup-baseline/PROFILE_ONLY.patch`) har SHA256
 `51ca81b243b840abebe03631cb07c6e869a3d71502be089c5d991e78a19e06bb`
 og index-blob `95c4dd4a4ddc52cf33c612144cbbe393035cdb79` (488048 bytes).
-Proposal-proben: 49 kombinationer/2121 numeric assertions består. 48 af 50
+Startup-proposal-proben (`startup-baseline/proposal-results.json`): 49 kombinationer/2121 numeric assertions består. 48 af 50
 fasecases består; alle 10 sene fasecases viser pauser, højeste union90 % ved
 50 % resource-forskydning (27 aktive/3 inaktive sekunder over 9 cyklusser).
 **8 fractional-start FAIL og 2 fase-FAIL** bevares, samlet exit1.
 Fase-minima: charge0, Tide-resource100, Aurora10 eller30, begge Ultimates,
 Rift121, start2000000000000, første6s; samme stalled slutgrænsefejl også uden
-observer-wrappers. F18 er ikke timingaccepteret. Swift-stubben tester cyklus,
+observer-wrappers. Fejlene er løst på den nyere main, som beskrevet ovenfor.
+Dette ældre forslag var ikke timingaccepteret. Swift-stubben tester cyklus,
 men er ikke cap-handler-/queue-/migrationsaccept fra Swift-ejeren.
 
 Eksisterende context check: PASS, 21 entrypoints og 24 lokale Markdown-links
@@ -253,6 +301,7 @@ og simultaneous chronology. Chrome155 var udpakket lokalt fra Googles officielle
 DEB; eksisterende harness og assertions er uændrede. 15 relevante eksisterende
 scenarier består samlet på baseline (13 på Chrome155, 2 native CDP på Chromium151).
 Første timeouts og rå fejl er bevaret særskilt; de omskrives ikke til PASS.
+Dette afsnit beskriver startup-baseline; det nye baselineafsnit ovenfor har forrang.
 Den private profile-patch har ingen integreret UI-, cap-, migration- eller
 Androidaccept. 320/430px og stor tekst ud over de eksisterende scopes afventer
 den konkrete fulde kandidat.

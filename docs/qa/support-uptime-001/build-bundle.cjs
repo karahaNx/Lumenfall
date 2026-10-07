@@ -10,6 +10,8 @@ copy('docs/tasks/SUPPORT_UPTIME_001.md','TASK/SUPPORT_UPTIME_001.md');
 fs.cpSync(__dirname,path.join(bundle,'EVIDENCE'),{recursive:true});
 copy('docs/qa/support-uptime-001/START_HER.txt','START_HER.txt');
 copy('index.html','SOURCE/main-index.html');
+const startupSource=spawnSync('git',['show','b2a1f440e8ad9fed34b37551e468224310d2a6f6:index.html'],{cwd:root});
+assert.equal(startupSource.status,0);fs.writeFileSync(path.join(bundle,'SOURCE/startup-main-index.html'),startupSource.stdout);
 copy('docs/handoffs/02_08/2026-10-07/SOURCE/index.html','SOURCE/b2-index.html');
 copy('docs/recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt','ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt');
 copy('docs/recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt','REFERENCES/TASK_FEEDBACK_REVISION_001.txt');
@@ -20,7 +22,7 @@ function walk(dir,relative=''){for(const name of fs.readdirSync(dir).sort()){con
 walk(bundle);
 const original=fs.readFileSync(path.join(root,'docs/recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt'));
 assert.ok(original.equals(fs.readFileSync(path.join(bundle,'ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt'))),'original bytes unchanged');
-fs.writeFileSync(path.join(bundle,'MANIFEST.json'),JSON.stringify({baseline:'b2a1f440e8ad9fed34b37551e468224310d2a6f6',status:'local-profile-proposal-incomplete',payloads},null,2)+'\n');
+fs.writeFileSync(path.join(bundle,'MANIFEST.json'),JSON.stringify({baseline:'0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd',startupBaseline:'b2a1f440e8ad9fed34b37551e468224310d2a6f6',status:'local-profile-proposal-incomplete',payloads},null,2)+'\n');
 const zipPath=path.join(destination,'SUPPORT_UPTIME_001.zip');
 if(fs.existsSync(zipPath))fs.unlinkSync(zipPath);
 let r=spawnSync('zip',['-q','-r',zipPath,'.'],{cwd:bundle,encoding:'utf8'});assert.equal(r.status,0,r.stderr);

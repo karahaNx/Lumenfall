@@ -1,51 +1,54 @@
-LUMENFALL — SUPPORT_UPTIME_001 — lokal forberedelse til Lead/Swift-ejer
-7. oktober 2026. Én ejerchat, rolle02 Gameplay. Ingen remote writer erhvervet.
-Anbefalet GPT-6.1 Sol · Ekstra høj; faktisk model/effort er ikke eksponeret.
+LUMENFALL — SUPPORT_UPTIME_001 — private checkpoint for Lead/Swift owner
+7 October 2026. One owner chat, role02 Gameplay. No remote writer acquired.
+Recommended GPT-6.1 Sol / Extra high; actual model/effort is not exposed.
 
-UAFSLUTTET
-Main b2a1f440e8ad9fed34b37551e468224310d2a6f6; produktindex uændret fra1ddc.
-Privat branch feature/support-uptime-001, checkout Lumenfall-SUPPORT_UPTIME_001.
-PR46 stadig Draft R2 3cdebc…; nye B2 scoped reviews og writer-handover mangler.
-Ingen produktændring, PR, build, release eller arkivering. Privat profile-patch/evidens
-er klar; GitHub-checkpoint afventer Lead-koordineret docs-writer og frisk preflight.
+INCOMPLETE
+Current base: 0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd (PR51 integration).
+Private branch: feature/support-uptime-001, checkout Lumenfall-SUPPORT_UPTIME_001.
+Root product, mobile, signing and workflows are unchanged by this feature.
+No remote write, PR, APK/release or chat archival. GitHub checkpoint still
+requires coordinated writer assignment and fresh preflight. PR46 stays Draft
+R2 3cdebc…; new B2 reviews and historical writer handover remain unresolved.
 
-BRUGERENS NYE BESLUTNING
-“Nej, der skal altid være pauser, også med begge supports”. Måling skal derfor
-omfatte mindst én aktiv buff, også ved to Ultimates og optimal faseforskydning.
-Brugeren har efterfølgende valgt de konkrete numeriske tal nedenfor til review.
-Se originale svar i EVIDENCE/USER_DECISIONS.txt og fuld bestilling USER_REQUEST.txt.
+USER DECISIONS
+There must be gaps even with two maxed supports and optimum staggered casts.
+The user selected normal1s, Ultimate1.5s, Swift-cap10/mincycle10/3s for
+Lead/Swift-review. At charge0/5/10: Ultimate25/35/45% per source; at most
+50/70/90% any-buff uptime with both. Keep additive +25/+50.
+Exact original Danish replies are in EVIDENCE/USER_DECISIONS.txt.
+Old Ultimate purchase-value policy is still awaiting the user's answer;
+Lead/Core compensation versus retained purchases without Sigil refund.
 
-BRUGERVALGT NUMERISK KONTRAKT TIL LEAD/SWIFT-REVIEW
-Normal1s, Ultimate1.5s; koordineret Swift-cap10/mincycle10/3s. Ved charge0/5/10:
-Ultimate25/35/45% pr. kilde og højst50/70/90% union med begge Ultimates.
-Bevar additive +25/+50. Afventer fælles progression-fixtures og gammel
-Ultimate-købsværdi-politik. Swift-ejeren ejer charge-cap/købsgates/overlevels;
-ingen skjult F18-cap. PROFILE_ONLY.patch ændrer kun varighed/beskrivelsestekst.
-Proposal-proben bruger en eksplicit cap10-katalogstub; ingen cap/saveaccept.
+PRIVATE PATCH AND TESTS
+PROFILE_ONLY.patch changes duration and its two descriptions. Swift cap10
+is an explicit catalogue stub only in the motor probe; cap handlers, queues,
+overlevel value/migration and Core/QA approval are still separate gates.
+Current-main probe PASS:49 combinations/2121 assertions and98 fractional cases.
+Current-base proposal PASS:49/2121,98 fractional cases,50 phase cases. All
+late phases have gaps; optimum staggering measures27s active/3s inactive
+across9 cycles (90/10%). Modern Node/Chrome results are not device acceptance.
+Focused stacking/timing/persistence/Forge/chronology/mobile/reduced-motion
+results: EVIDENCE/check-results.json and original per-scenario TXT.
 
-EGNE TESTBEVISER
-15 relevante eksisterende checks PASS på uændret produktbaseline: stacking,
-timing, reload/recovery/backup/visibility/reset, Forge og chronology, samt
-native Rift-stacking mobile/reduced-motion. 13 på Chrome155;2 på Chromium151.
-De tidligere Chromium151 dump-DOM-timeouts er bevaret, ikke acceptance.
+HISTORICAL RESULTS ARE PRESERVED
+Startup base b2a1f44… / index f896… and B2 index7c25… have6 fractional FAIL.
+The startup profile proposal has8 fractional FAIL and2 phase FAIL. Observer-
+disabled controls reproduce those failures. PR51's remaining>0 guard fixes
+the endpoint issue on current main; no scheduler fix was added by this chat.
+Earlier Chromium151 dump-DOM timeouts and old browser receipts remain evidence.
 
-Motorprobe:49 kombinationer/2121 assertions består på heltals-epoch.
-98 fractional-start-runs har6 FAIL, både main og nye B2-index; samlet exit1.
-Fejl ved Ultimate/charge0/72s/start2000000000000.375: scheduler når slutpunktet,
-men kaster stalled exception for en5.329e-15s rest. Samme fejl uden observer-
-wrappers. Profileforslaget har desuden8 fractional FAIL og2 fase-FAIL;48/50
-fasecases gennemfører med pauser, alle10 sene cases består union90%-loftet.
-Raw events/hashes er inkluderet. VM-resultater er ikke Androidaccept.
+NEXT ACTION
+Read TASK/SUPPORT_UPTIME_001.md, original replies and relevant results only.
+Lead/Swift record the selected numeric contract and align full fixtures/cap
+candidate. Resolve purchase value, B2 reviews and writer handover. Save this
+task/decisions/evidence in GitHub at the coordinated checkpoint. Implement and
+review the complete candidate, then verify integration and required APK/device
+acceptance before writer release and archival of this owner chat.
 
-NÆSTE HANDLING
-Læs kun TASK/SUPPORT_UPTIME_001.md, brugerens svar og relevante JSON/logs.
-Lead/Swift registrerer valgte cap/mincycle/varighed/stages/gap. Lead/Core fastlægger
-købsværdi og placering af slutgrænsefundet. Gem task/originals/evidens ved
-koordineret writer-checkpoint. Implementér først efter gældende handover/gates;
-verificér integration og nødvendige APK/devicechecks før writerrelease/arkivering.
-
-Repro fra pakken: node EVIDENCE/probe.cjs SOURCE/main-index.html output.json
-For B2: node EVIDENCE/probe.cjs SOURCE/b2-index.html b2-output.json
-Exit1 forventes for den dokumenterede baselinefejl. Eksisterende browserchecks
-kræver repoets tests/behavioral; brug EVIDENCE/run-checks.cjs fra privat checkout.
-MANIFEST.json hasher alle inkluderede payloads. Læs ikke hele pakken ved opstart.
+Repro current main: node EVIDENCE/probe.cjs SOURCE/main-index.html output.json
+Historical repro: use SOURCE/startup-main-index.html or SOURCE/b2-index.html;
+exit1 is expected for those archived failures. Rebuild the private profile in
+a separate current-base index using EVIDENCE/PROFILE_ONLY.patch, then pass
+EVIDENCE/proposal-contract.json as the fourth probe argument.
+MANIFEST.json verifies payloads. LOCAL_CHECKPOINT.json records private Git
+identity; GitHub publication is not claimed. Do not read the whole ZIP at startup.

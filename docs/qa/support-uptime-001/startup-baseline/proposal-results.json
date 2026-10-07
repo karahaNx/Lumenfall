@@ -1,9 +1,9 @@
 {
-  "status": "pass",
+  "status": "profile-proposal-has-failure",
   "source": {
-    "sha256": "85cdf917904ffc52cd933925b89c3331d8436b128a3212ad047256abca3468cd",
-    "gitBlob": "272bc64eb13804212d324a26570078ab7d1b7b34",
-    "bytes": 492629
+    "sha256": "51ca81b243b840abebe03631cb07c6e869a3d71502be089c5d991e78a19e06bb",
+    "gitBlob": "95c4dd4a4ddc52cf33c612144cbbe393035cdb79",
+    "bytes": 488048
   },
   "contract": {
     "normalSec": 1,
@@ -31,9 +31,103 @@
       "phase": 10,
       "cycle": 6,
       "seconds": 54,
-      "status": "pass",
-      "anyActiveSeconds": 18.900000000000002,
-      "pauseSeconds": 35.099999999999994
+      "status": "fail",
+      "error": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":6,\"elapsedWholeSec\":6,\"elapsedFractionSec\":0,\"elapsedSec\":6,\"remaining\":0,\"stepSec\":1.1102230246251565e-16,\"farmGridRemainingSec\":1,\"farmGridCrossings\":6,\"riftMode\":\"push\",\"candidates\":{\"ability\":5.3999999999999995,\"autoTap\":null,\"autoEmpower\":null,\"study\":null,\"bossRetreatGrace\":null,\"farmGrid\":null,\"economy\":null},\"kinds\":[\"windowEnd\"]}",
+      "log": {
+        "casts": [
+          {
+            "id": "tide",
+            "now": 2000000000000,
+            "clock": {
+              "wholeSec": 2000000000,
+              "remainingSec": 1
+            },
+            "record": {
+              "until": 2000000001500,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000005400,
+            "clock": {
+              "wholeSec": 2000000005,
+              "remainingSec": 0.6000000000000001
+            },
+            "record": {
+              "until": 2000000006900,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000006000,
+            "clock": {
+              "wholeSec": 2000000005,
+              "remainingSec": 1.1102230246251565e-16
+            },
+            "record": {
+              "until": 2000000007500,
+              "mult": 1.5
+            }
+          }
+        ],
+        "expiries": [
+          {
+            "now": 2000000001500,
+            "clock": {
+              "wholeSec": 2000000001,
+              "remainingSec": 0.5
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000001500,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          }
+        ],
+        "intervals": [
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 3.9,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 0.6,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 1.1102230246251565e-16,
+            "factor": 2,
+            "active": [
+              "aurora",
+              "tide"
+            ]
+          }
+        ]
+      },
+      "control": {
+        "observerWrappers": false,
+        "error": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":6,\"elapsedWholeSec\":6,\"elapsedFractionSec\":0,\"elapsedSec\":6,\"remaining\":0,\"stepSec\":1.1102230246251565e-16,\"farmGridRemainingSec\":1,\"farmGridCrossings\":6,\"riftMode\":\"push\",\"candidates\":{\"ability\":5.3999999999999995,\"autoTap\":null,\"autoEmpower\":null,\"study\":null,\"bossRetreatGrace\":null,\"farmGrid\":null,\"economy\":null},\"kinds\":[\"windowEnd\"]}"
+      }
     },
     {
       "charge": 0,
@@ -49,9 +143,127 @@
       "phase": 30,
       "cycle": 6,
       "seconds": 54,
-      "status": "pass",
-      "anyActiveSeconds": 27.00000000000005,
-      "pauseSeconds": 26.99999999999995
+      "status": "fail",
+      "error": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":6,\"elapsedWholeSec\":6,\"elapsedFractionSec\":0,\"elapsedSec\":6,\"remaining\":0,\"stepSec\":5.551115123125783e-17,\"farmGridRemainingSec\":1,\"farmGridCrossings\":6,\"riftMode\":\"push\",\"candidates\":{\"ability\":4.199999999999999,\"autoTap\":null,\"autoEmpower\":null,\"study\":null,\"bossRetreatGrace\":null,\"farmGrid\":null,\"economy\":null},\"kinds\":[\"windowEnd\"]}",
+      "log": {
+        "casts": [
+          {
+            "id": "tide",
+            "now": 2000000000000,
+            "clock": {
+              "wholeSec": 2000000000,
+              "remainingSec": 1
+            },
+            "record": {
+              "until": 2000000001500,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000004200,
+            "clock": {
+              "wholeSec": 2000000004,
+              "remainingSec": 0.8000000000000003
+            },
+            "record": {
+              "until": 2000000005700,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000006000,
+            "clock": {
+              "wholeSec": 2000000005,
+              "remainingSec": 5.551115123125783e-17
+            },
+            "record": {
+              "until": 2000000007500,
+              "mult": 1.5
+            }
+          }
+        ],
+        "expiries": [
+          {
+            "now": 2000000001500,
+            "clock": {
+              "wholeSec": 2000000001,
+              "remainingSec": 0.5
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000001500,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000005700,
+            "clock": {
+              "wholeSec": 2000000005,
+              "remainingSec": 0.30000000000000004
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000005700,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          }
+        ],
+        "intervals": [
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 2.6999999999999997,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5000000000000002,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.3,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 5.551115123125783e-17,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          }
+        ]
+      },
+      "control": {
+        "observerWrappers": false,
+        "error": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":6,\"elapsedWholeSec\":6,\"elapsedFractionSec\":0,\"elapsedSec\":6,\"remaining\":0,\"stepSec\":5.551115123125783e-17,\"farmGridRemainingSec\":1,\"farmGridCrossings\":6,\"riftMode\":\"push\",\"candidates\":{\"ability\":4.199999999999999,\"autoTap\":null,\"autoEmpower\":null,\"study\":null,\"bossRetreatGrace\":null,\"farmGrid\":null,\"economy\":null},\"kinds\":[\"windowEnd\"]}"
+      }
     },
     {
       "charge": 0,
@@ -3062,181 +3274,523 @@
       "clockStartMs": 2000000000000.375,
       "seconds": 72,
       "kind": "live",
-      "status": "pass",
-      "summary": {
-        "elapsedSec": 72,
-        "lumenGained": 0,
-        "shardGained": 0,
-        "sigilsGained": 0,
-        "motesGained": 0,
-        "kills": 0,
-        "bossKills": 0,
-        "luminousKills": 0,
-        "ascends": 0,
-        "autoTaps": 0,
-        "empowers": 0,
-        "researchBought": 0,
-        "studiesStarted": 0,
-        "completedStudies": [],
-        "closedStudies": [],
-        "achievements": [
-          "d10",
-          "d25",
-          "d50",
-          "d100",
-          "mythic",
-          "firstultimate"
-        ],
-        "retreated": false,
-        "retreats": 0,
-        "retries": 0,
-        "fastForwardedKills": 0,
-        "iterations": 24,
-        "ascendGains": [],
-        "timeline": [
+      "status": "fail",
+      "error": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":72,\"elapsedWholeSec\":72,\"elapsedFractionSec\":0,\"elapsedSec\":72,\"remaining\":0,\"stepSec\":5.329070518200751e-15,\"farmGridRemainingSec\":0.9996249999999947,\"farmGridCrossings\":72,\"riftMode\":\"push\",\"candidates\":{\"ability\":6,\"autoTap\":null,\"autoEmpower\":null,\"study\":null,\"bossRetreatGrace\":null,\"farmGrid\":null,\"economy\":null},\"kinds\":[\"windowEnd\"]}",
+      "log": {
+        "casts": [
           {
-            "elapsedSec": 6,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000006000.375,
+            "clock": {
+              "wholeSec": 2000000006,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000007500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 7.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 12,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000012000.375,
+            "clock": {
+              "wholeSec": 2000000012,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000013500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 13.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 18,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000018000.375,
+            "clock": {
+              "wholeSec": 2000000018,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000019500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 19.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 24,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000024000.375,
+            "clock": {
+              "wholeSec": 2000000024,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000025500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 25.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 30,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000030000.375,
+            "clock": {
+              "wholeSec": 2000000030,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000031500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 31.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 36,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000036000.375,
+            "clock": {
+              "wholeSec": 2000000036,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000037500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 37.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 42,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000042000.375,
+            "clock": {
+              "wholeSec": 2000000042,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000043500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 43.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 48,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000048000.375,
+            "clock": {
+              "wholeSec": 2000000048,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000049500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 49.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 54,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000054000.375,
+            "clock": {
+              "wholeSec": 2000000054,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000055500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 55.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 60,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000060000.375,
+            "clock": {
+              "wholeSec": 2000000060,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000061500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 61.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 66,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000066000.375,
+            "clock": {
+              "wholeSec": 2000000066,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000067500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 67.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 72,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000072000.375,
+            "clock": {
+              "wholeSec": 2000000072,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000073500.375,
+              "mult": 1.5
             }
           }
         ],
-        "endDepth": 121,
-        "pushDepth": 121,
-        "clockEndMs": 2000000072000.375
+        "expiries": [
+          {
+            "now": 2000000007500.375,
+            "clock": {
+              "wholeSec": 2000000007,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000007500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000013500.375,
+            "clock": {
+              "wholeSec": 2000000013,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000013500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000019500.375,
+            "clock": {
+              "wholeSec": 2000000019,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000019500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000025500.375,
+            "clock": {
+              "wholeSec": 2000000025,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000025500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000031500.375,
+            "clock": {
+              "wholeSec": 2000000031,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000031500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000037500.375,
+            "clock": {
+              "wholeSec": 2000000037,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000037500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000043500.375,
+            "clock": {
+              "wholeSec": 2000000043,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000043500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000049500.375,
+            "clock": {
+              "wholeSec": 2000000049,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000049500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000055500.375,
+            "clock": {
+              "wholeSec": 2000000055,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000055500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000061500.375,
+            "clock": {
+              "wholeSec": 2000000061,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000061500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000067500.375,
+            "clock": {
+              "wholeSec": 2000000067,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000067500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          }
+        ],
+        "intervals": [
+          {
+            "dt": 6,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 5.329070518200751e-15,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          }
+        ]
       }
     },
     {
@@ -3250,181 +3804,523 @@
       "clockStartMs": 2000000000000.375,
       "seconds": 72,
       "kind": "offline",
-      "status": "pass",
-      "summary": {
-        "elapsedSec": 72,
-        "lumenGained": 0,
-        "shardGained": 0,
-        "sigilsGained": 0,
-        "motesGained": 0,
-        "kills": 0,
-        "bossKills": 0,
-        "luminousKills": 0,
-        "ascends": 0,
-        "autoTaps": 0,
-        "empowers": 0,
-        "researchBought": 0,
-        "studiesStarted": 0,
-        "completedStudies": [],
-        "closedStudies": [],
-        "achievements": [
-          "d10",
-          "d25",
-          "d50",
-          "d100",
-          "mythic",
-          "firstultimate"
-        ],
-        "retreated": false,
-        "retreats": 0,
-        "retries": 0,
-        "fastForwardedKills": 0,
-        "iterations": 24,
-        "ascendGains": [],
-        "timeline": [
+      "status": "fail",
+      "error": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":72,\"elapsedWholeSec\":72,\"elapsedFractionSec\":0,\"elapsedSec\":72,\"remaining\":0,\"stepSec\":5.329070518200751e-15,\"farmGridRemainingSec\":0.9996249999999947,\"farmGridCrossings\":72,\"riftMode\":\"push\",\"candidates\":{\"ability\":6,\"autoTap\":null,\"autoEmpower\":null,\"study\":null,\"bossRetreatGrace\":null,\"farmGrid\":null,\"economy\":null},\"kinds\":[\"windowEnd\"]}",
+      "log": {
+        "casts": [
           {
-            "elapsedSec": 6,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000006000.375,
+            "clock": {
+              "wholeSec": 2000000006,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000007500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 7.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 12,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000012000.375,
+            "clock": {
+              "wholeSec": 2000000012,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000013500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 13.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 18,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000018000.375,
+            "clock": {
+              "wholeSec": 2000000018,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000019500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 19.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 24,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000024000.375,
+            "clock": {
+              "wholeSec": 2000000024,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000025500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 25.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 30,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000030000.375,
+            "clock": {
+              "wholeSec": 2000000030,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000031500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 31.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 36,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000036000.375,
+            "clock": {
+              "wholeSec": 2000000036,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000037500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 37.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 42,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000042000.375,
+            "clock": {
+              "wholeSec": 2000000042,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000043500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 43.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 48,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000048000.375,
+            "clock": {
+              "wholeSec": 2000000048,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000049500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 49.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 54,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000054000.375,
+            "clock": {
+              "wholeSec": 2000000054,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000055500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 55.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 60,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000060000.375,
+            "clock": {
+              "wholeSec": 2000000060,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000061500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 61.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 66,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000066000.375,
+            "clock": {
+              "wholeSec": 2000000066,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000067500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 67.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 72,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "tide",
+            "now": 2000000072000.375,
+            "clock": {
+              "wholeSec": 2000000072,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000073500.375,
+              "mult": 1.5
             }
           }
         ],
-        "endDepth": 121,
-        "pushDepth": 121,
-        "clockEndMs": 2000000072000.375
+        "expiries": [
+          {
+            "now": 2000000007500.375,
+            "clock": {
+              "wholeSec": 2000000007,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000007500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000013500.375,
+            "clock": {
+              "wholeSec": 2000000013,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000013500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000019500.375,
+            "clock": {
+              "wholeSec": 2000000019,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000019500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000025500.375,
+            "clock": {
+              "wholeSec": 2000000025,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000025500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000031500.375,
+            "clock": {
+              "wholeSec": 2000000031,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000031500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000037500.375,
+            "clock": {
+              "wholeSec": 2000000037,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000037500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000043500.375,
+            "clock": {
+              "wholeSec": 2000000043,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000043500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000049500.375,
+            "clock": {
+              "wholeSec": 2000000049,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000049500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000055500.375,
+            "clock": {
+              "wholeSec": 2000000055,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000055500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000061500.375,
+            "clock": {
+              "wholeSec": 2000000061,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000061500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000067500.375,
+            "clock": {
+              "wholeSec": 2000000067,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000067500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          }
+        ],
+        "intervals": [
+          {
+            "dt": 6,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 5.329070518200751e-15,
+            "factor": 1.5,
+            "active": [
+              "tide"
+            ]
+          }
+        ]
       }
     },
     {
@@ -8282,181 +9178,523 @@
       "clockStartMs": 2000000000000.375,
       "seconds": 72,
       "kind": "live",
-      "status": "pass",
-      "summary": {
-        "elapsedSec": 72,
-        "lumenGained": 0,
-        "shardGained": 0,
-        "sigilsGained": 0,
-        "motesGained": 0,
-        "kills": 0,
-        "bossKills": 0,
-        "luminousKills": 0,
-        "ascends": 0,
-        "autoTaps": 0,
-        "empowers": 0,
-        "researchBought": 0,
-        "studiesStarted": 0,
-        "completedStudies": [],
-        "closedStudies": [],
-        "achievements": [
-          "d10",
-          "d25",
-          "d50",
-          "d100",
-          "mythic",
-          "firstultimate"
-        ],
-        "retreated": false,
-        "retreats": 0,
-        "retries": 0,
-        "fastForwardedKills": 0,
-        "iterations": 24,
-        "ascendGains": [],
-        "timeline": [
+      "status": "fail",
+      "error": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":72,\"elapsedWholeSec\":72,\"elapsedFractionSec\":0,\"elapsedSec\":72,\"remaining\":0,\"stepSec\":5.329070518200751e-15,\"farmGridRemainingSec\":0.9996249999999947,\"farmGridCrossings\":72,\"riftMode\":\"push\",\"candidates\":{\"ability\":6,\"autoTap\":null,\"autoEmpower\":null,\"study\":null,\"bossRetreatGrace\":null,\"farmGrid\":null,\"economy\":null},\"kinds\":[\"windowEnd\"]}",
+      "log": {
+        "casts": [
           {
-            "elapsedSec": 6,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000006000.375,
+            "clock": {
+              "wholeSec": 2000000006,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000007500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 7.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 12,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000012000.375,
+            "clock": {
+              "wholeSec": 2000000012,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000013500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 13.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 18,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000018000.375,
+            "clock": {
+              "wholeSec": 2000000018,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000019500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 19.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 24,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000024000.375,
+            "clock": {
+              "wholeSec": 2000000024,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000025500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 25.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 30,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000030000.375,
+            "clock": {
+              "wholeSec": 2000000030,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000031500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 31.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 36,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000036000.375,
+            "clock": {
+              "wholeSec": 2000000036,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000037500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 37.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 42,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000042000.375,
+            "clock": {
+              "wholeSec": 2000000042,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000043500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 43.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 48,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000048000.375,
+            "clock": {
+              "wholeSec": 2000000048,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000049500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 49.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 54,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000054000.375,
+            "clock": {
+              "wholeSec": 2000000054,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000055500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 55.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 60,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000060000.375,
+            "clock": {
+              "wholeSec": 2000000060,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000061500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 61.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 66,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000066000.375,
+            "clock": {
+              "wholeSec": 2000000066,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000067500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 67.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 72,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000072000.375,
+            "clock": {
+              "wholeSec": 2000000072,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000073500.375,
+              "mult": 1.5
             }
           }
         ],
-        "endDepth": 121,
-        "pushDepth": 121,
-        "clockEndMs": 2000000072000.375
+        "expiries": [
+          {
+            "now": 2000000007500.375,
+            "clock": {
+              "wholeSec": 2000000007,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000007500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000013500.375,
+            "clock": {
+              "wholeSec": 2000000013,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000013500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000019500.375,
+            "clock": {
+              "wholeSec": 2000000019,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000019500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000025500.375,
+            "clock": {
+              "wholeSec": 2000000025,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000025500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000031500.375,
+            "clock": {
+              "wholeSec": 2000000031,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000031500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000037500.375,
+            "clock": {
+              "wholeSec": 2000000037,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000037500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000043500.375,
+            "clock": {
+              "wholeSec": 2000000043,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000043500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000049500.375,
+            "clock": {
+              "wholeSec": 2000000049,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000049500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000055500.375,
+            "clock": {
+              "wholeSec": 2000000055,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000055500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000061500.375,
+            "clock": {
+              "wholeSec": 2000000061,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000061500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000067500.375,
+            "clock": {
+              "wholeSec": 2000000067,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000067500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          }
+        ],
+        "intervals": [
+          {
+            "dt": 6,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 5.329070518200751e-15,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          }
+        ]
       }
     },
     {
@@ -8470,181 +9708,523 @@
       "clockStartMs": 2000000000000.375,
       "seconds": 72,
       "kind": "offline",
-      "status": "pass",
-      "summary": {
-        "elapsedSec": 72,
-        "lumenGained": 0,
-        "shardGained": 0,
-        "sigilsGained": 0,
-        "motesGained": 0,
-        "kills": 0,
-        "bossKills": 0,
-        "luminousKills": 0,
-        "ascends": 0,
-        "autoTaps": 0,
-        "empowers": 0,
-        "researchBought": 0,
-        "studiesStarted": 0,
-        "completedStudies": [],
-        "closedStudies": [],
-        "achievements": [
-          "d10",
-          "d25",
-          "d50",
-          "d100",
-          "mythic",
-          "firstultimate"
-        ],
-        "retreated": false,
-        "retreats": 0,
-        "retries": 0,
-        "fastForwardedKills": 0,
-        "iterations": 24,
-        "ascendGains": [],
-        "timeline": [
+      "status": "fail",
+      "error": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":72,\"elapsedWholeSec\":72,\"elapsedFractionSec\":0,\"elapsedSec\":72,\"remaining\":0,\"stepSec\":5.329070518200751e-15,\"farmGridRemainingSec\":0.9996249999999947,\"farmGridCrossings\":72,\"riftMode\":\"push\",\"candidates\":{\"ability\":6,\"autoTap\":null,\"autoEmpower\":null,\"study\":null,\"bossRetreatGrace\":null,\"farmGrid\":null,\"economy\":null},\"kinds\":[\"windowEnd\"]}",
+      "log": {
+        "casts": [
           {
-            "elapsedSec": 6,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000006000.375,
+            "clock": {
+              "wholeSec": 2000000006,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000007500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 7.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 12,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000012000.375,
+            "clock": {
+              "wholeSec": 2000000012,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000013500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 13.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 18,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000018000.375,
+            "clock": {
+              "wholeSec": 2000000018,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000019500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 19.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 24,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000024000.375,
+            "clock": {
+              "wholeSec": 2000000024,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000025500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 25.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 30,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000030000.375,
+            "clock": {
+              "wholeSec": 2000000030,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000031500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 31.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 36,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000036000.375,
+            "clock": {
+              "wholeSec": 2000000036,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000037500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 37.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 42,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000042000.375,
+            "clock": {
+              "wholeSec": 2000000042,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000043500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 43.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 48,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000048000.375,
+            "clock": {
+              "wholeSec": 2000000048,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000049500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 49.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 54,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000054000.375,
+            "clock": {
+              "wholeSec": 2000000054,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000055500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 55.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 60,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000060000.375,
+            "clock": {
+              "wholeSec": 2000000060,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000061500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 61.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 66,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000066000.375,
+            "clock": {
+              "wholeSec": 2000000066,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000067500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 67.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 72,
-            "type": "ability",
-            "detail": {
-              "count": 1
+            "id": "aurora",
+            "now": 2000000072000.375,
+            "clock": {
+              "wholeSec": 2000000072,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000073500.375,
+              "mult": 1.5
             }
           }
         ],
-        "endDepth": 121,
-        "pushDepth": 121,
-        "clockEndMs": 2000000072000.375
+        "expiries": [
+          {
+            "now": 2000000007500.375,
+            "clock": {
+              "wholeSec": 2000000007,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000007500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000013500.375,
+            "clock": {
+              "wholeSec": 2000000013,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000013500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000019500.375,
+            "clock": {
+              "wholeSec": 2000000019,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000019500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000025500.375,
+            "clock": {
+              "wholeSec": 2000000025,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000025500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000031500.375,
+            "clock": {
+              "wholeSec": 2000000031,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000031500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000037500.375,
+            "clock": {
+              "wholeSec": 2000000037,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000037500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000043500.375,
+            "clock": {
+              "wholeSec": 2000000043,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000043500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000049500.375,
+            "clock": {
+              "wholeSec": 2000000049,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000049500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000055500.375,
+            "clock": {
+              "wholeSec": 2000000055,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000055500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000061500.375,
+            "clock": {
+              "wholeSec": 2000000061,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000061500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000067500.375,
+            "clock": {
+              "wholeSec": 2000000067,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000067500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          }
+        ],
+        "intervals": [
+          {
+            "dt": 6,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 5.329070518200751e-15,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          }
+        ]
       }
     },
     {
@@ -13518,181 +15098,723 @@
       "clockStartMs": 2000000000000.375,
       "seconds": 72,
       "kind": "live",
-      "status": "pass",
-      "summary": {
-        "elapsedSec": 72,
-        "lumenGained": 0,
-        "shardGained": 0,
-        "sigilsGained": 0,
-        "motesGained": 0,
-        "kills": 0,
-        "bossKills": 0,
-        "luminousKills": 0,
-        "ascends": 0,
-        "autoTaps": 0,
-        "empowers": 0,
-        "researchBought": 0,
-        "studiesStarted": 0,
-        "completedStudies": [],
-        "closedStudies": [],
-        "achievements": [
-          "d10",
-          "d25",
-          "d50",
-          "d100",
-          "mythic",
-          "firstultimate"
-        ],
-        "retreated": false,
-        "retreats": 0,
-        "retries": 0,
-        "fastForwardedKills": 0,
-        "iterations": 24,
-        "ascendGains": [],
-        "timeline": [
+      "status": "fail",
+      "error": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":72,\"elapsedWholeSec\":72,\"elapsedFractionSec\":0,\"elapsedSec\":72,\"remaining\":0,\"stepSec\":5.329070518200751e-15,\"farmGridRemainingSec\":0.9996249999999947,\"farmGridCrossings\":72,\"riftMode\":\"push\",\"candidates\":{\"ability\":6,\"autoTap\":null,\"autoEmpower\":null,\"study\":null,\"bossRetreatGrace\":null,\"farmGrid\":null,\"economy\":null},\"kinds\":[\"windowEnd\"]}",
+      "log": {
+        "casts": [
           {
-            "elapsedSec": 6,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000006000.375,
+            "clock": {
+              "wholeSec": 2000000006,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000007500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 7.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 12,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000006000.375,
+            "clock": {
+              "wholeSec": 2000000006,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000007500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 13.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 18,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000012000.375,
+            "clock": {
+              "wholeSec": 2000000012,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000013500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 19.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 24,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000012000.375,
+            "clock": {
+              "wholeSec": 2000000012,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000013500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 25.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 30,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000018000.375,
+            "clock": {
+              "wholeSec": 2000000018,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000019500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 31.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 36,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000018000.375,
+            "clock": {
+              "wholeSec": 2000000018,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000019500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 37.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 42,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000024000.375,
+            "clock": {
+              "wholeSec": 2000000024,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000025500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 43.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 48,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000024000.375,
+            "clock": {
+              "wholeSec": 2000000024,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000025500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 49.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 54,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000030000.375,
+            "clock": {
+              "wholeSec": 2000000030,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000031500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 55.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 60,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000030000.375,
+            "clock": {
+              "wholeSec": 2000000030,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000031500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 61.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 66,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000036000.375,
+            "clock": {
+              "wholeSec": 2000000036,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000037500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 67.5,
-            "type": "buffExpire",
-            "detail": null
+            "id": "aurora",
+            "now": 2000000036000.375,
+            "clock": {
+              "wholeSec": 2000000036,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000037500.375,
+              "mult": 1.5
+            }
           },
           {
-            "elapsedSec": 72,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000042000.375,
+            "clock": {
+              "wholeSec": 2000000042,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000043500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000042000.375,
+            "clock": {
+              "wholeSec": 2000000042,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000043500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000048000.375,
+            "clock": {
+              "wholeSec": 2000000048,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000049500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000048000.375,
+            "clock": {
+              "wholeSec": 2000000048,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000049500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000054000.375,
+            "clock": {
+              "wholeSec": 2000000054,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000055500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000054000.375,
+            "clock": {
+              "wholeSec": 2000000054,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000055500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000060000.375,
+            "clock": {
+              "wholeSec": 2000000060,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000061500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000060000.375,
+            "clock": {
+              "wholeSec": 2000000060,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000061500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000066000.375,
+            "clock": {
+              "wholeSec": 2000000066,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000067500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000066000.375,
+            "clock": {
+              "wholeSec": 2000000066,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000067500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000072000.375,
+            "clock": {
+              "wholeSec": 2000000072,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000073500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000072000.375,
+            "clock": {
+              "wholeSec": 2000000072,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000073500.375,
+              "mult": 1.5
             }
           }
         ],
-        "endDepth": 121,
-        "pushDepth": 121,
-        "clockEndMs": 2000000072000.375
+        "expiries": [
+          {
+            "now": 2000000007500.375,
+            "clock": {
+              "wholeSec": 2000000007,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000007500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000007500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000013500.375,
+            "clock": {
+              "wholeSec": 2000000013,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000013500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000013500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000019500.375,
+            "clock": {
+              "wholeSec": 2000000019,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000019500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000019500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000025500.375,
+            "clock": {
+              "wholeSec": 2000000025,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000025500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000025500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000031500.375,
+            "clock": {
+              "wholeSec": 2000000031,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000031500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000031500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000037500.375,
+            "clock": {
+              "wholeSec": 2000000037,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000037500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000037500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000043500.375,
+            "clock": {
+              "wholeSec": 2000000043,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000043500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000043500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000049500.375,
+            "clock": {
+              "wholeSec": 2000000049,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000049500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000049500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000055500.375,
+            "clock": {
+              "wholeSec": 2000000055,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000055500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000055500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000061500.375,
+            "clock": {
+              "wholeSec": 2000000061,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000061500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000061500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000067500.375,
+            "clock": {
+              "wholeSec": 2000000067,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000067500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000067500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          }
+        ],
+        "intervals": [
+          {
+            "dt": 6,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 5.329070518200751e-15,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          }
+        ]
       }
     },
     {
@@ -13708,181 +15830,723 @@
       "clockStartMs": 2000000000000.375,
       "seconds": 72,
       "kind": "offline",
-      "status": "pass",
-      "summary": {
-        "elapsedSec": 72,
-        "lumenGained": 0,
-        "shardGained": 0,
-        "sigilsGained": 0,
-        "motesGained": 0,
-        "kills": 0,
-        "bossKills": 0,
-        "luminousKills": 0,
-        "ascends": 0,
-        "autoTaps": 0,
-        "empowers": 0,
-        "researchBought": 0,
-        "studiesStarted": 0,
-        "completedStudies": [],
-        "closedStudies": [],
-        "achievements": [
-          "d10",
-          "d25",
-          "d50",
-          "d100",
-          "mythic",
-          "firstultimate"
-        ],
-        "retreated": false,
-        "retreats": 0,
-        "retries": 0,
-        "fastForwardedKills": 0,
-        "iterations": 24,
-        "ascendGains": [],
-        "timeline": [
+      "status": "fail",
+      "error": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":72,\"elapsedWholeSec\":72,\"elapsedFractionSec\":0,\"elapsedSec\":72,\"remaining\":0,\"stepSec\":5.329070518200751e-15,\"farmGridRemainingSec\":0.9996249999999947,\"farmGridCrossings\":72,\"riftMode\":\"push\",\"candidates\":{\"ability\":6,\"autoTap\":null,\"autoEmpower\":null,\"study\":null,\"bossRetreatGrace\":null,\"farmGrid\":null,\"economy\":null},\"kinds\":[\"windowEnd\"]}",
+      "log": {
+        "casts": [
           {
-            "elapsedSec": 6,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000006000.375,
+            "clock": {
+              "wholeSec": 2000000006,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000007500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 7.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 12,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000006000.375,
+            "clock": {
+              "wholeSec": 2000000006,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000007500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 13.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 18,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000012000.375,
+            "clock": {
+              "wholeSec": 2000000012,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000013500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 19.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 24,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000012000.375,
+            "clock": {
+              "wholeSec": 2000000012,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000013500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 25.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 30,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000018000.375,
+            "clock": {
+              "wholeSec": 2000000018,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000019500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 31.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 36,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000018000.375,
+            "clock": {
+              "wholeSec": 2000000018,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000019500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 37.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 42,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000024000.375,
+            "clock": {
+              "wholeSec": 2000000024,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000025500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 43.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 48,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000024000.375,
+            "clock": {
+              "wholeSec": 2000000024,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000025500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 49.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 54,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000030000.375,
+            "clock": {
+              "wholeSec": 2000000030,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000031500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 55.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 60,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000030000.375,
+            "clock": {
+              "wholeSec": 2000000030,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000031500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 61.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 66,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000036000.375,
+            "clock": {
+              "wholeSec": 2000000036,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000037500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 67.5,
-            "type": "buffExpire",
-            "detail": null
+            "id": "aurora",
+            "now": 2000000036000.375,
+            "clock": {
+              "wholeSec": 2000000036,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000037500.375,
+              "mult": 1.5
+            }
           },
           {
-            "elapsedSec": 72,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000042000.375,
+            "clock": {
+              "wholeSec": 2000000042,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000043500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000042000.375,
+            "clock": {
+              "wholeSec": 2000000042,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000043500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000048000.375,
+            "clock": {
+              "wholeSec": 2000000048,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000049500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000048000.375,
+            "clock": {
+              "wholeSec": 2000000048,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000049500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000054000.375,
+            "clock": {
+              "wholeSec": 2000000054,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000055500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000054000.375,
+            "clock": {
+              "wholeSec": 2000000054,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000055500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000060000.375,
+            "clock": {
+              "wholeSec": 2000000060,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000061500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000060000.375,
+            "clock": {
+              "wholeSec": 2000000060,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000061500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000066000.375,
+            "clock": {
+              "wholeSec": 2000000066,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000067500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000066000.375,
+            "clock": {
+              "wholeSec": 2000000066,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000067500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000072000.375,
+            "clock": {
+              "wholeSec": 2000000072,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000073500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000072000.375,
+            "clock": {
+              "wholeSec": 2000000072,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000073500.375,
+              "mult": 1.5
             }
           }
         ],
-        "endDepth": 121,
-        "pushDepth": 121,
-        "clockEndMs": 2000000072000.375
+        "expiries": [
+          {
+            "now": 2000000007500.375,
+            "clock": {
+              "wholeSec": 2000000007,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000007500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000007500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000013500.375,
+            "clock": {
+              "wholeSec": 2000000013,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000013500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000013500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000019500.375,
+            "clock": {
+              "wholeSec": 2000000019,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000019500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000019500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000025500.375,
+            "clock": {
+              "wholeSec": 2000000025,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000025500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000025500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000031500.375,
+            "clock": {
+              "wholeSec": 2000000031,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000031500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000031500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000037500.375,
+            "clock": {
+              "wholeSec": 2000000037,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000037500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000037500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000043500.375,
+            "clock": {
+              "wholeSec": 2000000043,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000043500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000043500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000049500.375,
+            "clock": {
+              "wholeSec": 2000000049,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000049500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000049500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000055500.375,
+            "clock": {
+              "wholeSec": 2000000055,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000055500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000055500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000061500.375,
+            "clock": {
+              "wholeSec": 2000000061,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000061500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000061500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000067500.375,
+            "clock": {
+              "wholeSec": 2000000067,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000067500.375,
+                  "mult": 1.5
+                },
+                "aurora": {
+                  "until": 2000000067500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          }
+        ],
+        "intervals": [
+          {
+            "dt": 6,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1.5,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 5.329070518200751e-15,
+            "factor": 2,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          }
+        ]
       }
     },
     {
@@ -16183,236 +18847,1075 @@
       "clockStartMs": 2000000000000.375,
       "seconds": 72,
       "kind": "live",
-      "status": "pass",
-      "summary": {
-        "elapsedSec": 72,
-        "lumenGained": 0,
-        "shardGained": 0,
-        "sigilsGained": 0,
-        "motesGained": 0,
-        "kills": 0,
-        "bossKills": 0,
-        "luminousKills": 0,
-        "ascends": 0,
-        "autoTaps": 0,
-        "empowers": 0,
-        "researchBought": 0,
-        "studiesStarted": 0,
-        "completedStudies": [],
-        "closedStudies": [],
-        "achievements": [
-          "d10",
-          "d25",
-          "d50",
-          "d100",
-          "mythic",
-          "firstultimate"
-        ],
-        "retreated": false,
-        "retreats": 0,
-        "retries": 0,
-        "fastForwardedKills": 0,
-        "iterations": 35,
-        "ascendGains": [],
-        "timeline": [
+      "status": "fail",
+      "error": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":72,\"elapsedWholeSec\":72,\"elapsedFractionSec\":0,\"elapsedSec\":72,\"remaining\":0,\"stepSec\":5.329070518200751e-15,\"farmGridRemainingSec\":0.9996249999999947,\"farmGridCrossings\":72,\"riftMode\":\"push\",\"candidates\":{\"ability\":6,\"autoTap\":null,\"autoEmpower\":null,\"study\":null,\"bossRetreatGrace\":null,\"farmGrid\":null,\"economy\":null},\"kinds\":[\"windowEnd\"]}",
+      "log": {
+        "casts": [
           {
-            "elapsedSec": 6,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000006000.375,
+            "clock": {
+              "wholeSec": 2000000006,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000007000.375,
+              "mult": 1.25
             }
           },
           {
-            "elapsedSec": 7,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 7.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 12,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000006000.375,
+            "clock": {
+              "wholeSec": 2000000006,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000007500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 13,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 13.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 18,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000012000.375,
+            "clock": {
+              "wholeSec": 2000000012,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000013000.375,
+              "mult": 1.25
             }
           },
           {
-            "elapsedSec": 19,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 19.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 24,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000012000.375,
+            "clock": {
+              "wholeSec": 2000000012,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000013500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 25,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 25.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 30,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000018000.375,
+            "clock": {
+              "wholeSec": 2000000018,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000019000.375,
+              "mult": 1.25
             }
           },
           {
-            "elapsedSec": 31,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 31.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 36,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000018000.375,
+            "clock": {
+              "wholeSec": 2000000018,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000019500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 37,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 37.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 42,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000024000.375,
+            "clock": {
+              "wholeSec": 2000000024,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000025000.375,
+              "mult": 1.25
             }
           },
           {
-            "elapsedSec": 43,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 43.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 48,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000024000.375,
+            "clock": {
+              "wholeSec": 2000000024,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000025500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 49,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 49.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 54,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000030000.375,
+            "clock": {
+              "wholeSec": 2000000030,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000031000.375,
+              "mult": 1.25
             }
           },
           {
-            "elapsedSec": 55,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 55.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 60,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000030000.375,
+            "clock": {
+              "wholeSec": 2000000030,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000031500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 61,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 61.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 66,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000036000.375,
+            "clock": {
+              "wholeSec": 2000000036,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000037000.375,
+              "mult": 1.25
             }
           },
           {
-            "elapsedSec": 67,
-            "type": "buffExpire",
-            "detail": null
+            "id": "aurora",
+            "now": 2000000036000.375,
+            "clock": {
+              "wholeSec": 2000000036,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000037500.375,
+              "mult": 1.5
+            }
           },
           {
-            "elapsedSec": 67.5,
-            "type": "buffExpire",
-            "detail": null
+            "id": "tide",
+            "now": 2000000042000.375,
+            "clock": {
+              "wholeSec": 2000000042,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000043000.375,
+              "mult": 1.25
+            }
           },
           {
-            "elapsedSec": 72,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000042000.375,
+            "clock": {
+              "wholeSec": 2000000042,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000043500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000048000.375,
+            "clock": {
+              "wholeSec": 2000000048,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000049000.375,
+              "mult": 1.25
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000048000.375,
+            "clock": {
+              "wholeSec": 2000000048,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000049500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000054000.375,
+            "clock": {
+              "wholeSec": 2000000054,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000055000.375,
+              "mult": 1.25
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000054000.375,
+            "clock": {
+              "wholeSec": 2000000054,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000055500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000060000.375,
+            "clock": {
+              "wholeSec": 2000000060,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000061000.375,
+              "mult": 1.25
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000060000.375,
+            "clock": {
+              "wholeSec": 2000000060,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000061500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000066000.375,
+            "clock": {
+              "wholeSec": 2000000066,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000067000.375,
+              "mult": 1.25
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000066000.375,
+            "clock": {
+              "wholeSec": 2000000066,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000067500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000072000.375,
+            "clock": {
+              "wholeSec": 2000000072,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000073000.375,
+              "mult": 1.25
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000072000.375,
+            "clock": {
+              "wholeSec": 2000000072,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000073500.375,
+              "mult": 1.5
             }
           }
         ],
-        "endDepth": 121,
-        "pushDepth": 121,
-        "clockEndMs": 2000000072000.375
+        "expiries": [
+          {
+            "now": 2000000007000.375,
+            "clock": {
+              "wholeSec": 2000000007,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000007000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000007500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000007500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000007500.375,
+            "clock": {
+              "wholeSec": 2000000007,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000007500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000013000.375,
+            "clock": {
+              "wholeSec": 2000000013,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000013000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000013500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000013500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000013500.375,
+            "clock": {
+              "wholeSec": 2000000013,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000013500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000019000.375,
+            "clock": {
+              "wholeSec": 2000000019,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000019000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000019500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000019500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000019500.375,
+            "clock": {
+              "wholeSec": 2000000019,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000019500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000025000.375,
+            "clock": {
+              "wholeSec": 2000000025,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000025000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000025500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000025500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000025500.375,
+            "clock": {
+              "wholeSec": 2000000025,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000025500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000031000.375,
+            "clock": {
+              "wholeSec": 2000000031,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000031000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000031500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000031500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000031500.375,
+            "clock": {
+              "wholeSec": 2000000031,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000031500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000037000.375,
+            "clock": {
+              "wholeSec": 2000000037,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000037000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000037500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000037500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000037500.375,
+            "clock": {
+              "wholeSec": 2000000037,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000037500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000043000.375,
+            "clock": {
+              "wholeSec": 2000000043,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000043000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000043500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000043500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000043500.375,
+            "clock": {
+              "wholeSec": 2000000043,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000043500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000049000.375,
+            "clock": {
+              "wholeSec": 2000000049,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000049000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000049500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000049500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000049500.375,
+            "clock": {
+              "wholeSec": 2000000049,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000049500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000055000.375,
+            "clock": {
+              "wholeSec": 2000000055,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000055000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000055500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000055500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000055500.375,
+            "clock": {
+              "wholeSec": 2000000055,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000055500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000061000.375,
+            "clock": {
+              "wholeSec": 2000000061,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000061000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000061500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000061500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000061500.375,
+            "clock": {
+              "wholeSec": 2000000061,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000061500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000067000.375,
+            "clock": {
+              "wholeSec": 2000000067,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000067000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000067500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000067500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000067500.375,
+            "clock": {
+              "wholeSec": 2000000067,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000067500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          }
+        ],
+        "intervals": [
+          {
+            "dt": 6,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 5.329070518200751e-15,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          }
+        ]
       }
     },
     {
@@ -16427,236 +19930,1075 @@
       "clockStartMs": 2000000000000.375,
       "seconds": 72,
       "kind": "offline",
-      "status": "pass",
-      "summary": {
-        "elapsedSec": 72,
-        "lumenGained": 0,
-        "shardGained": 0,
-        "sigilsGained": 0,
-        "motesGained": 0,
-        "kills": 0,
-        "bossKills": 0,
-        "luminousKills": 0,
-        "ascends": 0,
-        "autoTaps": 0,
-        "empowers": 0,
-        "researchBought": 0,
-        "studiesStarted": 0,
-        "completedStudies": [],
-        "closedStudies": [],
-        "achievements": [
-          "d10",
-          "d25",
-          "d50",
-          "d100",
-          "mythic",
-          "firstultimate"
-        ],
-        "retreated": false,
-        "retreats": 0,
-        "retries": 0,
-        "fastForwardedKills": 0,
-        "iterations": 35,
-        "ascendGains": [],
-        "timeline": [
+      "status": "fail",
+      "error": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":72,\"elapsedWholeSec\":72,\"elapsedFractionSec\":0,\"elapsedSec\":72,\"remaining\":0,\"stepSec\":5.329070518200751e-15,\"farmGridRemainingSec\":0.9996249999999947,\"farmGridCrossings\":72,\"riftMode\":\"push\",\"candidates\":{\"ability\":6,\"autoTap\":null,\"autoEmpower\":null,\"study\":null,\"bossRetreatGrace\":null,\"farmGrid\":null,\"economy\":null},\"kinds\":[\"windowEnd\"]}",
+      "log": {
+        "casts": [
           {
-            "elapsedSec": 6,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000006000.375,
+            "clock": {
+              "wholeSec": 2000000006,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000007000.375,
+              "mult": 1.25
             }
           },
           {
-            "elapsedSec": 7,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 7.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 12,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000006000.375,
+            "clock": {
+              "wholeSec": 2000000006,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000007500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 13,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 13.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 18,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000012000.375,
+            "clock": {
+              "wholeSec": 2000000012,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000013000.375,
+              "mult": 1.25
             }
           },
           {
-            "elapsedSec": 19,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 19.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 24,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000012000.375,
+            "clock": {
+              "wholeSec": 2000000012,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000013500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 25,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 25.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 30,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000018000.375,
+            "clock": {
+              "wholeSec": 2000000018,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000019000.375,
+              "mult": 1.25
             }
           },
           {
-            "elapsedSec": 31,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 31.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 36,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000018000.375,
+            "clock": {
+              "wholeSec": 2000000018,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000019500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 37,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 37.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 42,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000024000.375,
+            "clock": {
+              "wholeSec": 2000000024,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000025000.375,
+              "mult": 1.25
             }
           },
           {
-            "elapsedSec": 43,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 43.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 48,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000024000.375,
+            "clock": {
+              "wholeSec": 2000000024,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000025500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 49,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 49.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 54,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000030000.375,
+            "clock": {
+              "wholeSec": 2000000030,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000031000.375,
+              "mult": 1.25
             }
           },
           {
-            "elapsedSec": 55,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 55.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 60,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000030000.375,
+            "clock": {
+              "wholeSec": 2000000030,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000031500.375,
+              "mult": 1.5
             }
           },
           {
-            "elapsedSec": 61,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 61.5,
-            "type": "buffExpire",
-            "detail": null
-          },
-          {
-            "elapsedSec": 66,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "tide",
+            "now": 2000000036000.375,
+            "clock": {
+              "wholeSec": 2000000036,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000037000.375,
+              "mult": 1.25
             }
           },
           {
-            "elapsedSec": 67,
-            "type": "buffExpire",
-            "detail": null
+            "id": "aurora",
+            "now": 2000000036000.375,
+            "clock": {
+              "wholeSec": 2000000036,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000037500.375,
+              "mult": 1.5
+            }
           },
           {
-            "elapsedSec": 67.5,
-            "type": "buffExpire",
-            "detail": null
+            "id": "tide",
+            "now": 2000000042000.375,
+            "clock": {
+              "wholeSec": 2000000042,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000043000.375,
+              "mult": 1.25
+            }
           },
           {
-            "elapsedSec": 72,
-            "type": "ability",
-            "detail": {
-              "count": 2
+            "id": "aurora",
+            "now": 2000000042000.375,
+            "clock": {
+              "wholeSec": 2000000042,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000043500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000048000.375,
+            "clock": {
+              "wholeSec": 2000000048,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000049000.375,
+              "mult": 1.25
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000048000.375,
+            "clock": {
+              "wholeSec": 2000000048,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000049500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000054000.375,
+            "clock": {
+              "wholeSec": 2000000054,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000055000.375,
+              "mult": 1.25
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000054000.375,
+            "clock": {
+              "wholeSec": 2000000054,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000055500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000060000.375,
+            "clock": {
+              "wholeSec": 2000000060,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000061000.375,
+              "mult": 1.25
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000060000.375,
+            "clock": {
+              "wholeSec": 2000000060,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000061500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000066000.375,
+            "clock": {
+              "wholeSec": 2000000066,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000067000.375,
+              "mult": 1.25
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000066000.375,
+            "clock": {
+              "wholeSec": 2000000066,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000067500.375,
+              "mult": 1.5
+            }
+          },
+          {
+            "id": "tide",
+            "now": 2000000072000.375,
+            "clock": {
+              "wholeSec": 2000000072,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000073000.375,
+              "mult": 1.25
+            }
+          },
+          {
+            "id": "aurora",
+            "now": 2000000072000.375,
+            "clock": {
+              "wholeSec": 2000000072,
+              "remainingSec": 0.999625
+            },
+            "record": {
+              "until": 2000000073500.375,
+              "mult": 1.5
             }
           }
         ],
-        "endDepth": 121,
-        "pushDepth": 121,
-        "clockEndMs": 2000000072000.375
+        "expiries": [
+          {
+            "now": 2000000007000.375,
+            "clock": {
+              "wholeSec": 2000000007,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000007000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000007500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000007500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000007500.375,
+            "clock": {
+              "wholeSec": 2000000007,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000007500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000013000.375,
+            "clock": {
+              "wholeSec": 2000000013,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000013000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000013500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000013500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000013500.375,
+            "clock": {
+              "wholeSec": 2000000013,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000013500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000019000.375,
+            "clock": {
+              "wholeSec": 2000000019,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000019000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000019500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000019500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000019500.375,
+            "clock": {
+              "wholeSec": 2000000019,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000019500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000025000.375,
+            "clock": {
+              "wholeSec": 2000000025,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000025000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000025500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000025500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000025500.375,
+            "clock": {
+              "wholeSec": 2000000025,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000025500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000031000.375,
+            "clock": {
+              "wholeSec": 2000000031,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000031000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000031500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000031500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000031500.375,
+            "clock": {
+              "wholeSec": 2000000031,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000031500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000037000.375,
+            "clock": {
+              "wholeSec": 2000000037,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000037000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000037500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000037500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000037500.375,
+            "clock": {
+              "wholeSec": 2000000037,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000037500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000043000.375,
+            "clock": {
+              "wholeSec": 2000000043,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000043000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000043500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000043500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000043500.375,
+            "clock": {
+              "wholeSec": 2000000043,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000043500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000049000.375,
+            "clock": {
+              "wholeSec": 2000000049,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000049000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000049500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000049500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000049500.375,
+            "clock": {
+              "wholeSec": 2000000049,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000049500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000055000.375,
+            "clock": {
+              "wholeSec": 2000000055,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000055000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000055500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000055500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000055500.375,
+            "clock": {
+              "wholeSec": 2000000055,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000055500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000061000.375,
+            "clock": {
+              "wholeSec": 2000000061,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000061000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000061500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000061500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000061500.375,
+            "clock": {
+              "wholeSec": 2000000061,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000061500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          },
+          {
+            "now": 2000000067000.375,
+            "clock": {
+              "wholeSec": 2000000067,
+              "remainingSec": 0.999625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "tide": {
+                  "until": 2000000067000.375,
+                  "mult": 1.25
+                },
+                "aurora": {
+                  "until": 2000000067500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000067500.375,
+                  "mult": 1.5
+                }
+              }
+            }
+          },
+          {
+            "now": 2000000067500.375,
+            "clock": {
+              "wholeSec": 2000000067,
+              "remainingSec": 0.499625
+            },
+            "before": {
+              "version": 1,
+              "sources": {
+                "aurora": {
+                  "until": 2000000067500.375,
+                  "mult": 1.5
+                }
+              }
+            },
+            "after": {
+              "version": 1,
+              "sources": {}
+            }
+          }
+        ],
+        "intervals": [
+          {
+            "dt": 6,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 1,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          },
+          {
+            "dt": 0.5,
+            "factor": 1.5,
+            "active": [
+              "aurora"
+            ]
+          },
+          {
+            "dt": 4.5,
+            "factor": 1,
+            "active": []
+          },
+          {
+            "dt": 5.329070518200751e-15,
+            "factor": 1.75,
+            "active": [
+              "tide",
+              "aurora"
+            ]
+          }
+        ]
       }
     },
     {
@@ -19594,7 +23936,110 @@
       }
     }
   ],
-  "fractionalFailureControls": [],
+  "fractionalFailureControls": [
+    {
+      "ids": [
+        "tide"
+      ],
+      "ultimates": [
+        "tide"
+      ],
+      "charge": 0,
+      "kind": "live",
+      "observerWrappers": false,
+      "error": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":72,\"elapsedWholeSec\":72,\"elapsedFractionSec\":0,\"elapsedSec\":72,\"remaining\":0,\"stepSec\":5.329070518200751e-15,\"farmGridRemainingSec\":0.9996249999999947,\"farmGridCrossings\":72,\"riftMode\":\"push\",\"candidates\":{\"ability\":6,\"autoTap\":null,\"autoEmpower\":null,\"study\":null,\"bossRetreatGrace\":null,\"farmGrid\":null,\"economy\":null},\"kinds\":[\"windowEnd\"]}"
+    },
+    {
+      "ids": [
+        "tide"
+      ],
+      "ultimates": [
+        "tide"
+      ],
+      "charge": 0,
+      "kind": "offline",
+      "observerWrappers": false,
+      "error": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":72,\"elapsedWholeSec\":72,\"elapsedFractionSec\":0,\"elapsedSec\":72,\"remaining\":0,\"stepSec\":5.329070518200751e-15,\"farmGridRemainingSec\":0.9996249999999947,\"farmGridCrossings\":72,\"riftMode\":\"push\",\"candidates\":{\"ability\":6,\"autoTap\":null,\"autoEmpower\":null,\"study\":null,\"bossRetreatGrace\":null,\"farmGrid\":null,\"economy\":null},\"kinds\":[\"windowEnd\"]}"
+    },
+    {
+      "ids": [
+        "aurora"
+      ],
+      "ultimates": [
+        "aurora"
+      ],
+      "charge": 0,
+      "kind": "live",
+      "observerWrappers": false,
+      "error": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":72,\"elapsedWholeSec\":72,\"elapsedFractionSec\":0,\"elapsedSec\":72,\"remaining\":0,\"stepSec\":5.329070518200751e-15,\"farmGridRemainingSec\":0.9996249999999947,\"farmGridCrossings\":72,\"riftMode\":\"push\",\"candidates\":{\"ability\":6,\"autoTap\":null,\"autoEmpower\":null,\"study\":null,\"bossRetreatGrace\":null,\"farmGrid\":null,\"economy\":null},\"kinds\":[\"windowEnd\"]}"
+    },
+    {
+      "ids": [
+        "aurora"
+      ],
+      "ultimates": [
+        "aurora"
+      ],
+      "charge": 0,
+      "kind": "offline",
+      "observerWrappers": false,
+      "error": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":72,\"elapsedWholeSec\":72,\"elapsedFractionSec\":0,\"elapsedSec\":72,\"remaining\":0,\"stepSec\":5.329070518200751e-15,\"farmGridRemainingSec\":0.9996249999999947,\"farmGridCrossings\":72,\"riftMode\":\"push\",\"candidates\":{\"ability\":6,\"autoTap\":null,\"autoEmpower\":null,\"study\":null,\"bossRetreatGrace\":null,\"farmGrid\":null,\"economy\":null},\"kinds\":[\"windowEnd\"]}"
+    },
+    {
+      "ids": [
+        "tide",
+        "aurora"
+      ],
+      "ultimates": [
+        "tide",
+        "aurora"
+      ],
+      "charge": 0,
+      "kind": "live",
+      "observerWrappers": false,
+      "error": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":72,\"elapsedWholeSec\":72,\"elapsedFractionSec\":0,\"elapsedSec\":72,\"remaining\":0,\"stepSec\":5.329070518200751e-15,\"farmGridRemainingSec\":0.9996249999999947,\"farmGridCrossings\":72,\"riftMode\":\"push\",\"candidates\":{\"ability\":6,\"autoTap\":null,\"autoEmpower\":null,\"study\":null,\"bossRetreatGrace\":null,\"farmGrid\":null,\"economy\":null},\"kinds\":[\"windowEnd\"]}"
+    },
+    {
+      "ids": [
+        "tide",
+        "aurora"
+      ],
+      "ultimates": [
+        "tide",
+        "aurora"
+      ],
+      "charge": 0,
+      "kind": "offline",
+      "observerWrappers": false,
+      "error": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":72,\"elapsedWholeSec\":72,\"elapsedFractionSec\":0,\"elapsedSec\":72,\"remaining\":0,\"stepSec\":5.329070518200751e-15,\"farmGridRemainingSec\":0.9996249999999947,\"farmGridCrossings\":72,\"riftMode\":\"push\",\"candidates\":{\"ability\":6,\"autoTap\":null,\"autoEmpower\":null,\"study\":null,\"bossRetreatGrace\":null,\"farmGrid\":null,\"economy\":null},\"kinds\":[\"windowEnd\"]}"
+    },
+    {
+      "ids": [
+        "tide",
+        "aurora"
+      ],
+      "ultimates": [
+        "aurora"
+      ],
+      "charge": 0,
+      "kind": "live",
+      "observerWrappers": false,
+      "error": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":72,\"elapsedWholeSec\":72,\"elapsedFractionSec\":0,\"elapsedSec\":72,\"remaining\":0,\"stepSec\":5.329070518200751e-15,\"farmGridRemainingSec\":0.9996249999999947,\"farmGridCrossings\":72,\"riftMode\":\"push\",\"candidates\":{\"ability\":6,\"autoTap\":null,\"autoEmpower\":null,\"study\":null,\"bossRetreatGrace\":null,\"farmGrid\":null,\"economy\":null},\"kinds\":[\"windowEnd\"]}"
+    },
+    {
+      "ids": [
+        "tide",
+        "aurora"
+      ],
+      "ultimates": [
+        "aurora"
+      ],
+      "charge": 0,
+      "kind": "offline",
+      "observerWrappers": false,
+      "error": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":72,\"elapsedWholeSec\":72,\"elapsedFractionSec\":0,\"elapsedSec\":72,\"remaining\":0,\"stepSec\":5.329070518200751e-15,\"farmGridRemainingSec\":0.9996249999999947,\"farmGridCrossings\":72,\"riftMode\":\"push\",\"candidates\":{\"ability\":6,\"autoTap\":null,\"autoEmpower\":null,\"study\":null,\"bossRetreatGrace\":null,\"farmGrid\":null,\"economy\":null},\"kinds\":[\"windowEnd\"]}"
+    }
+  ],
   "rows": [
     {
       "ids": [

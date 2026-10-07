@@ -11,11 +11,11 @@ try {
   fs.copyFileSync(path.join(root,'index.html'),path.join(stage,'index.html'));
   for(const dir of ['fonts','branding'])fs.cpSync(path.join(root,dir),path.join(stage,dir),{recursive:true});
   for(const scenario of scenarios) {
-    const args=['tests/behavioral/run.py','--web-root',stage,'--scenario',scenario,'--raw-artifacts',path.join(__dirname,'raw-failures')];
-    const before=Date.now(),r=spawnSync('python3',args,{cwd:root,encoding:'utf8',timeout:180000,maxBuffer:32*1024*1024});
+    const args=['tests/behavioral/run.cjs','--web-root',stage,'--scenario',scenario,'--raw-artifacts',path.join(__dirname,'raw-failures')];
+    const before=Date.now(),r=spawnSync(process.execPath,args,{cwd:root,encoding:'utf8',timeout:180000,maxBuffer:32*1024*1024});
     const log=(r.stdout||'')+(r.stderr||'');
     fs.writeFileSync(path.join(__dirname,scenario+'.txt'),log);
-    const record={scenario,command:['python3',...args],indexSha256:hash,exit:r.status,signal:r.signal,error:r.error?.message||null,seconds:(Date.now()-before)/1000,status:r.status===0&&!r.error?'pass':'fail',log:scenario+'.txt'};
+    const record={scenario,command:[process.execPath,...args],indexSha256:hash,exit:r.status,signal:r.signal,error:r.error?.message||null,seconds:(Date.now()-before)/1000,status:r.status===0&&!r.error?'pass':'fail',log:scenario+'.txt'};
     const old=records.findIndex(x=>x.scenario===scenario);if(old>=0)records[old]=record;else records.push(record);
     failed ||= record.status==='fail';
     fs.writeFileSync(previousPath,JSON.stringify({sourceIndexSha256:hash,records},null,2)+'\n');
