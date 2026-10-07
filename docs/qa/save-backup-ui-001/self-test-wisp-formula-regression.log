@@ -1,0 +1,76 @@
+Browser identity: { "selected_path": "/tmp/lumenfall-save-ui-chrome/opt/google/chrome/google-chrome", "resolved_path": "/tmp/lumenfall-save-ui-chrome/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 155.0.8059.39", "version_exitcode": 0, "version_stderr": "mkdir: cannot create directory ‘/home/agent/.local/share/applications’: Read-only file system\ntouch: cannot touch '/home/agent/.local/share/applications/mimeapps.list': No such file or directory\n" }
+Staged source: { "source_sha256": "b247680333f2a732c952221dd83a80237d9ffe6b320021c533e636f19eb8947c", "instrumented_sha256": "33226db986ab0d42c7c26f9deea4ba4584b871636a9ecbd2a3d5ff49253c8480" }
+FAIL self-test-wisp-formula-regression
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 0.911066607, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-wisp-formula-regression", "json_status": "fail", "json_scenario": "self-test-wisp-formula-regression", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /workspace/lumenfall-save-backup-ui-001/docs/qa/save-backup-ui-001/current-raw/self-test-wisp-formula-regression-hlA4nK
+  Chromium stderr tail:
+known error type: 
+[5190:5190:1007/133140.266445:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[5190:5207:1007/133140.266452:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[5190:5207:1007/133140.266795:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[5190:5190:1007/133140.267329:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[5190:5190:1007/133140.268255:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[5190:5207:1007/133140.268526:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[5190:5217:1007/133140.274757:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 5284: Read-only file system (30)
+[5190:5217:1007/133140.281357:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 5292: Read-only file system (30)
+[5190:5190:1007/133140.291585:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[5190:5190:1007/133140.291761:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[5190:5207:1007/133140.291913:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[5190:5207:1007/133140.291936:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[5190:5207:1007/133140.291941:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[5190:5190:1007/133140.294550:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[5190:5190:1007/133140.313055:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[5190:5190:1007/133140.313079:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[5190:5207:1007/133140.313155:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[5190:5190:1007/133140.328338:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[5190:5207:1007/133140.328688:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[5190:5190:1007/133140.341928:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[5190:5217:1007/133140.359138:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 5311: Read-only file system (30)
+[5190:5217:1007/133140.379063:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 5318: Read-only file system (30)
+
+  stdout tail:
+    var unsafeEconomy=bridge.endgameEconomyContract();
+          assert(
+            unsafeEconomy.sigilResonanceRunLimit>100 || unsafeEconomy.questRefreshCost<unsafeEconomy.maxQuestCometReward,
+            'intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+</script>
+
+
+<pre id="qa-result" data-status="fail" data-scenario="self-test-wisp-formula-regression">{
+  "scenario": "self-test-wisp-formula-regression",
+  "status": "fail",
+  "detail": {
+    "message": "intentional Wisp formula regression: passive-only Formation Training incorrectly expected to scale ability damage",
+    "stack": "Error: intentional Wisp formula regression: passive-only Formation Training incorrectly expected to scale ability damage\n    at assert (http://127.0.0.1:44979/index.html?qaScenario=self-test-wisp-formula-regression&amp;qaFixture=fresh:11958:61)\n    at HTMLDocument.run (http://127.0.0.1:44979/index.html?qaScenario=self-test-wisp-formula-regression&amp;qaFixture=fresh:14448:11)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+
+Behavioral QA failed: self-test-wisp-formula-regression null

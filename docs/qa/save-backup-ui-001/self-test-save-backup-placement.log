@@ -1,0 +1,6 @@
+Browser identity: { "selected_path": "/tmp/lumenfall-save-ui-chrome/opt/google/chrome/google-chrome", "resolved_path": "/tmp/lumenfall-save-ui-chrome/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 155.0.8059.39", "version_exitcode": 0, "version_stderr": "mkdir: cannot create directory ‘/home/agent/.local/share/applications’: Read-only file system\ntouch: cannot touch '/home/agent/.local/share/applications/mimeapps.list': No such file or directory\n" }
+Staged source: { "source_sha256": "b247680333f2a732c952221dd83a80237d9ffe6b320021c533e636f19eb8947c", "instrumented_sha256": "33226db986ab0d42c7c26f9deea4ba4584b871636a9ecbd2a3d5ff49253c8480" }
+FAIL self-test-save-backup-placement
+  process: { "exitcode": 1, "timed_out": false, "stderr": "" }
+  detail: { "status": "fail", "profiles": 0, "mutant": "misplaced-backup", "message": "Backup is under Save immediately before separate Reset" }
+Behavioral QA failed: self-test-save-backup-placement null
