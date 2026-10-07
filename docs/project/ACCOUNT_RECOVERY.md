@@ -18,7 +18,8 @@ kan ikke genskabe chatbeskeder eller filer, der aldrig blev gemt der.
    kontrollér relevant live main, featurebranch/PR og releases i stedet for at antage,
    at gamle checkpoints stadig er aktuelle.
 4. Opsæt miljøet efter [CODEX_START.md](CODEX_START.md), og kør
-   `node scripts/codex/check_context.cjs` fra repository-roden.
+   `node scripts/codex/check_context.cjs --task docs/tasks/<FEATURE_ID>.md`
+   fra repository-roden med den konkrete opgaves sti.
 5. Vælg én feature og start dens ejerchat. Fortsæt fra opgavedokumentets
    næste handling og eksisterende acceptbeviser. Gentag ikke allerede
    implementeret arbejde, og promover ikke arkiverede kandidater til produktet.
@@ -30,7 +31,8 @@ Continue Lumenfall from karahaNx/Lumenfall, current main or the feature branch.
 Read AGENTS.md, PROJECT_BOOTSTRAP.txt, docs/PROJECT_STATE.md and the current
 docs/tasks/<FEATURE_ID>.md. You own this feature across implementation, fixes,
 tests, documentation and delivery; there is no default Lead or writer ceremony.
-Use docs/project/CODEX_START.md; run node scripts/codex/check_context.cjs.
+Use docs/project/CODEX_START.md; run node scripts/codex/check_context.cjs
+--task docs/tasks/<FEATURE_ID>.md to validate this actual task and startup budget.
 Check the relevant baseline/PR and actual overlapping work. Use an isolated
 branch/worktree for concurrent features. Read technical guides only as needed.
 Follow docs/project/FEATURE_WORKFLOW.md. Make small changes and preserve existing

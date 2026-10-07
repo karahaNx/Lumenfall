@@ -12,7 +12,8 @@ for every new task. With GitHub-tool-only access, explicitly fetch this file.
 3. Use `docs/project/CODEX_START.md` for environment/checks and
    `docs/CONTEXT_INDEX.md` for targeted sources. Technical guides are optional
    references, not separate chats or approval stages. Run
-   `node scripts/codex/check_context.cjs`.
+   `node scripts/codex/check_context.cjs --task docs/tasks/<FEATURE_ID>.md`
+   so the actual task, its links and the startup text budget are checked.
 4. Check the checkout, relevant baseline/PR and overlapping active work before
    changing shared files or integrating. Check relevant workflow triggers before
    remote actions; do not audit every branch/run for an unrelated small task.

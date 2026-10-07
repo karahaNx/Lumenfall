@@ -9,7 +9,8 @@ fixes, testing, documentation and delivery across all affected areas.
 Use docs/project/FEATURE_WORKFLOW.md for checkpoints and completion,
 docs/project/CODEX_START.md for setup/checks and docs/CONTEXT_INDEX.md for
 targeted sources. Optional technical guides do not assign roles or permissions.
-Run node scripts/codex/check_context.cjs and verify the relevant baseline/PR.
+Run node scripts/codex/check_context.cjs --task docs/tasks/<FEATURE_ID>.md
+to validate this feature's checkpoint/links/startup budget. Verify its baseline/PR.
 Do not start unrelated B2/PR46 work merely because an older prompt mentions it.
 
 Make small changes and preserve existing game features, saves and test gates.

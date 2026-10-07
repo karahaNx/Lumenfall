@@ -12,7 +12,9 @@ in [the decision](../decisions/2026-10-07-feature-chat-workflow.md).
 - Align AGENTS, bootstrap, project instructions, README, optional technical
   guides, feature workflow, context index, account recovery and handoff template.
 - Update the context checker to measure shared feature startup without requiring
-  a default Lead role and validate links in the current workflow/guidance.
+  a default Lead role and validate links in the current workflow/guidance. Accept
+  `--task` and validate the actual feature document's location/existence, links
+  and combined startup budget, with regression controls in the tooling suite.
 - Keep existing game contracts and completion/device acceptance requirements.
   Product code, assets, save schema, behavior tests, CI/release workflows and
   historical originals must remain unchanged.
@@ -24,11 +26,14 @@ in [the decision](../decisions/2026-10-07-feature-chat-workflow.md).
 
 ## Status and continuation
 
-Status: local candidate verified; GitHub CI/review and integration pending.
+Status: published candidate in [PR53](https://github.com/karahaNx/Lumenfall/pull/53).
+The final completion, CI/integration and archive status is recorded in that PR's
+receipt. This file preserves candidate validation; consult the live receipt before
+continuing work or treating the task as complete.
 Changed areas: active project/workflow/guidance documents and
-`scripts/codex/check_context.cjs`; no product edits.
+`scripts/codex/check_context.cjs` and its tooling regression controls; no product edits.
 Baseline context check: PASS, 21 entrypoints, 24 links, old Lead startup 17,805 bytes.
-Candidate validation (Node.js 24.19.0; exact published head recorded in PR receipt):
+Initial candidate validation (Node.js 24.19.0; final head recorded in PR receipt):
 - `node scripts/codex/check_context.cjs --archives`: PASS, 30 entrypoints, 35
   local links; shared startup is measured separately from the current task. All 1,509
   archive/coverage checks and the exact 96-source B2 tree/modes remain intact.
@@ -47,8 +52,18 @@ Known limitations: PR51 is merged at the baseline. Concurrent PR52 saves its
 release/device checkpoint and overlaps PROJECT_STATE/KNOWN_ISSUES; preserve that
 evidence when reconciling main before integration. Current status distinguishes
 integration/reported release from pending device acceptance and review findings.
-Next action: publish a PR, verify required CI/review, integrate and verify this
-exact documentation/tooling scope.
+Review follow-up: PR53 identified that the checker must validate each feature's
+actual task instead of hardcoding this cleanup task. `--task` now includes its
+location/existence, links and combined startup budget; no-task output explicitly
+states that the feature task was not checked. Tooling tests exercise valid,
+missing, misplaced, traversal/symlink, broken-link and oversized checkpoints.
+Follow-up validation: `node scripts/codex/check_context.cjs --task
+docs/tasks/FEATURE_CHAT_WORKFLOW_001.md --archives`, both checker/tooling-test
+syntax checks, `node tests/tooling/run.cjs`, `git diff --check` and the preserved
+game/behavior-test/workflow/archive diff all pass. The no-task command explicitly
+reports that the actual feature checkpoint was not checked.
+Next action: verify/publish the follow-up, check final-head CI/review, integrate
+and verify this exact documentation/tooling scope.
 Archive status: pending verified completion; do not archive unrelated chats.
 
 The PR description will hold final CI/integration/checkpoint/archive receipts,

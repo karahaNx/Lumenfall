@@ -44,4 +44,9 @@ be guessed. Game contracts, JavaScript preference, notice of new rules, GitHub
 continuity and verified integration/app acceptance before archiving are retained.
 No new general permission checkpoint is introduced.
 
+The context checker accepts `--task docs/tasks/<FEATURE_ID>.md` and validates
+that actual feature's existence, location, local links and shared-plus-task
+32 KiB startup budget. Without `--task`, it reports that only shared documents
+were checked. Missing/broken/oversized task controls are covered by tooling tests.
+
 Implementation and validation: [FEATURE-CHAT-WORKFLOW-001](../tasks/FEATURE_CHAT_WORKFLOW_001.md).

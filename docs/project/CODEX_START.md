@@ -48,9 +48,14 @@ eksterne Codex-miljøindstillinger.
 ```bash
 node scripts/codex/check_context.cjs
 node scripts/codex/check_context.cjs --archives
+node scripts/codex/check_context.cjs --task docs/tasks/FEATURE_CHAT_WORKFLOW_001.md
 node scripts/verify_apk_identity.cjs --self-test
 node tests/tooling/run.cjs
 ```
+
+Use your actual feature task path with `--task` to check its existence, local
+links and the 32 KiB shared-plus-task startup budget. The plain command checks
+shared documents only and explicitly reports that the feature task was not checked.
 
 Ved produktændringer følges relevante eksisterende gates i
 `.github/workflows/pre-merge-validation.yml`. Staging og adfærdssuite:

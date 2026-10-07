@@ -19,6 +19,8 @@ focused workflow.
 2. Create or update `docs/tasks/<FEATURE_ID>.md` with original requirements,
    one goal, scope, owner, baseline and acceptance criteria. Include existing
    behavior/features that the change must preserve and relevant save migrations.
+   Run `node scripts/codex/check_context.cjs --task docs/tasks/<FEATURE_ID>.md`
+   against this actual task; its existence, local links and startup budget must pass.
 3. Read affected code and original requirements. Record relevant baseline checks
    and known failures before behavior changes; add focused regression coverage.
    Avoid unrelated refactors, broad rewrites and tooling migrations.

@@ -14,8 +14,7 @@ const ARCHIVE = path.join(ROOT, 'archive/02_08-b2-runtime-2026-10-07');
 const STARTUP = ['AGENTS.md', 'PROJECT_BOOTSTRAP.txt', 'docs/PROJECT_STATE.md'];
 const GUIDANCE = ['docs/CHAT_OWNERSHIP.md', 'docs/agents/00_LEAD.md', 'docs/agents/01_CORE.md',
   'docs/agents/02_GAMEPLAY.md', 'docs/agents/03_VISUALS.md', 'docs/agents/04_QA.md'];
-const WORKFLOW = ['docs/project/FEATURE_WORKFLOW.md', 'docs/project/ACCOUNT_RECOVERY.md', 'docs/HANDOFF_TEMPLATE.md',
-  'docs/tasks/FEATURE_CHAT_WORKFLOW_001.md', 'docs/decisions/2026-10-07-feature-chat-workflow.md'];
+const WORKFLOW = ['docs/project/FEATURE_WORKFLOW.md', 'docs/project/ACCOUNT_RECOVERY.md', 'docs/HANDOFF_TEMPLATE.md'];
 const REQUIRED = [...STARTUP, ...GUIDANCE, ...WORKFLOW, 'PROJECT_INSTRUCTIONS.txt', 'docs/CONTEXT_INDEX.md', 'docs/project/CODEX_START.md',
   'docs/project/KNOWN_ISSUES.md', 'docs/decisions/2026-10-07-codex-project-ready.md',
   'docs/project/SAVE_OFFLINE_AUTOASCEND_DIAGNOSE_2026-10-07.txt', 'scripts/codex/setup.sh', 'scripts/recovery/restore_candidate.cjs',
@@ -23,10 +22,19 @@ const REQUIRED = [...STARTUP, ...GUIDANCE, ...WORKFLOW, 'PROJECT_INSTRUCTIONS.tx
   'docs/handoffs/02_08/2026-10-07/START_HER.txt', 'docs/handoffs/02_08/2026-10-07/Source_Index.txt',
   'docs/handoffs/02_08/2026-10-07/SUMMARY/identity.json', 'docs/handoffs/02_08/2026-10-07/SOURCE_SNAPSHOT_MANIFEST.json',
   'docs/qa/offline-autoascend-2026-10-07/Source_Index.txt', 'docs/qa/offline-autoascend-2026-10-07/reproduce.cjs'];
-function checkStartup() {
-  for (const name of REQUIRED) if (!fs.existsSync(path.join(ROOT, name)) || !fs.statSync(path.join(ROOT, name)).isFile()) throw Error('Missing entrypoint: ' + name);
+function checkStartup(task) {
+  const tasks = [];
+  if (task !== undefined) {
+    const file = inside(ROOT, task);
+    if (!file.startsWith(path.join(ROOT, 'docs/tasks') + path.sep) || !file.endsWith('.md')) {
+      throw Error('Feature task must be a Markdown file under docs/tasks: ' + task);
+    }
+    tasks.push(path.relative(ROOT, file));
+  }
+  const required = [...REQUIRED, ...tasks];
+  for (const name of required) if (!fs.existsSync(path.join(ROOT, name)) || !fs.statSync(path.join(ROOT, name)).isFile()) throw Error('Missing entrypoint: ' + name);
   let links = 0;
-  for (const name of [...STARTUP, ...GUIDANCE, ...WORKFLOW, 'README.md', 'docs/CONTEXT_INDEX.md', 'docs/project/CODEX_START.md', 'docs/project/KNOWN_ISSUES.md']) {
+  for (const name of [...STARTUP, ...tasks, ...GUIDANCE, ...WORKFLOW, 'README.md', 'docs/CONTEXT_INDEX.md', 'docs/project/CODEX_START.md', 'docs/project/KNOWN_ISSUES.md']) {
     const file = path.join(ROOT, name), text = fs.readFileSync(file, 'utf8');
     for (const match of text.matchAll(/\]\(([^)]+)\)/g)) {
       if (/^(?:https?:|mailto:|#)/.test(match[1])) continue;
@@ -35,9 +43,11 @@ function checkStartup() {
       links++;
     }
   }
-  const size = STARTUP.reduce((sum, name) => sum + fs.statSync(path.join(ROOT, name)).size, 0);
+  const sharedSize = STARTUP.reduce((sum, name) => sum + fs.statSync(path.join(ROOT, name)).size, 0);
+  const size = sharedSize + tasks.reduce((sum, name) => sum + fs.statSync(path.join(ROOT, name)).size, 0);
   if (size > 32768) throw Error('Mandatory startup exceeds 32 KiB');
-  console.log(`PASS: ${REQUIRED.length} entrypoints, ${links} local Markdown links, shared startup ${size} bytes (+ current feature task)`);
+  const taskStatus = tasks.length ? `; startup with ${tasks[0]} ${size} bytes` : '; feature task not checked (use --task)';
+  console.log(`PASS: ${required.length} entrypoints, ${links} local Markdown links, shared startup ${sharedSize} bytes${taskStatus}`);
 }
 function checkArchives() {
   let count = 0;
@@ -79,7 +89,7 @@ function checkArchives() {
 }
 module.exports = { checkStartup, checkArchives };
 if (require.main === module) main(() => {
-  const args = parseArgs(process.argv.slice(2), [], ['--archives']);
+  const args = parseArgs(process.argv.slice(2), ['--task'], ['--archives']);
   if (args.positional.length) throw Error('Unexpected positional argument');
-  checkStartup(); if (args.archives) checkArchives();
+  checkStartup(args.task); if (args.archives) checkArchives();
 });
