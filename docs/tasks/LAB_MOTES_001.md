@@ -1,5 +1,12 @@
 # LAB-MOTES-001 — repeat paid Study speed
 
+Current integration (7 October 2026): user-authorized PR57/46 are merged;
+full 146 CI and signed APK 0.1.138 asset/signing checks pass. Required device
+acceptance and independent review remain open. See
+[the integration receipt](FEATURE_BRANCH_INTEGRATION_001.md).
+The checkpoint below is historical; its writer/release holds do not describe
+the current authorized task. Archived originals remain unchanged.
+
 02_07 Gameplay implementation for scoped Core and independent QA review.
 The current [product mandate](LAB_MOTES_001_MANDATE.txt) supplements the older
 writer status in PROJECT_STATE and the prototype-only boundary in the

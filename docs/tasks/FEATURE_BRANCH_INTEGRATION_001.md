@@ -45,27 +45,50 @@ Retired diagnostic/release experiments are not gameplay features.
 
 ## Current checkpoint
 
-Status: integrated candidate, full validation in progress. No main merge or new
-APK is claimed yet. All 57 observed remote heads were fetched; 50 have merged PR
-receipts. Squash/rebase integrations explain why ancestry alone undercounts them.
-No set of 27 unmerged gameplay implementations exists in this observed inventory.
+Status: integrated into main; signed APK 0.1.138 published and verified, device acceptance OPEN.
+[PR57](https://github.com/karahaNx/Lumenfall/pull/57) merged at
+`20aaae62a4b6e46f8d75775085918eaba4e8de29`. Its full tree equals validated
+candidate `b62476dc461f00d2a7ea756f700f755bd763326e` exactly:
+`e177ba6955f5673460d6201b52701563cf480467`. PR46 is now recorded merged too.
 
-The PR46 conflicts are resolved while preserving the resumable offline flow and
-all historical bytes. The exact B1/B2 product functions match the restored B2
-candidate. All 12 inherited Lab scenarios and the new offline-transaction
-integration scenario pass. The new regression covers work budgets, payment at
-the actual reward, private yielded state, primary/simulation failure and retry,
-recovery-write failure, legacy OFF, processing time and the post-cap Study tail.
-Source/tooling/APK-verifier checks, guarded browser startup and all 12 required
-negative controls pass. All original baseline comparisons are retained: two
-new zero summary counters and exact legacy OFF/remembered-tier maps are asserted
-separately before the unchanged old state/summary comparison.
+All 57 original remote heads were fetched; 50 have merged PR receipts.
+Squash/rebase integrations explain why ancestry alone undercounts them.
+The follow-up inventory has 58 branches, adding only this integration branch;
+there is no observed set of 27 new unmerged gameplay implementations.
 
-Environment evidence: Debian Chromium151 --dump-dom timed out on a static page
-and unchanged main; its CDP checks passed. A separate official Chrome155 passes
-the same DOM checks without changing gates. Interrupted/failing diagnostic runs
-are not acceptance; final logs and exits must be saved after completion.
+The PR46 conflicts preserve current resumable offline/retry/processing-time,
+daily/legacy fixes and all historical bytes. The two exact B1/B2 farm functions
+match the separately restored Number/DataView candidate. All 13 Lab scenarios
+pass, including offline private yielded state, full payment at actual reward,
+storage/simulation failure and retry, recovery failure, processing time and tail.
 
-Next: finish the full 146-scenario suite and corrected baseline comparison,
-publish the candidate, obtain fresh GitHub CI, then merge and check the normal
-Android build. Physical device/TalkBack and independent review are not claimed.
+Fresh [CI37692669340](https://github.com/karahaNx/Lumenfall/actions/runs/37692669340)
+PASS on the final candidate: full 146 default scenarios, all 12 required negative
+controls, source/tooling/APK identity self-tests and guarded browser startup.
+The initial local aggregate failed only the old offline baseline comparison of
+new additive fields. Its corrected complete driver passes separately, explicitly
+asserting zero counters/legacy defaults before retaining the full old oracle.
+That failing original log and corrected output are both preserved; the first
+aggregate is not labelled green. See [validation receipt](../qa/feature-branch-integration/validation.json)
+and [CI acceptance lines](../qa/feature-branch-integration/ci-acceptance.txt).
+
+Debian Chromium151 DOM export hangs on static HTML and unchanged main; a separate
+official Chrome155 passes without gate changes. These diagnostics do not accept
+the product. Physical affected-phone/exact WebView60/TalkBack and independent
+review have not been performed. Code integration is verified; device acceptance
+remains OPEN and this owner chat must remain open.
+
+Build Android APK37694671685 PASS at the integration commit; signed APK 0.1.138
+is published with package com.lumenfall.app and the established certificate.
+Downloaded APK SHA256 `81b9be7edea971335a06f06d1894d91e75a92736738cc935fc2a920a26a02e1e`
+matches GitHub's release digest. All 526 ZIP entries pass CRC verification and
+all 15 bundled game/font/branding assets equal validated main byte-for-byte.
+Raw CI/build and local test logs are preserved as gzip files in the receipt folder.
+The [release and continuation receipt](../qa/feature-branch-integration/README.md)
+records immutable commit/asset IDs, tools and acceptance limits.
+
+Next: affected-phone/exact WebView60/TalkBack acceptance for these new bytes,
+and any required independent review. Preserve the task/chat as open. If further
+feature implementations are later pushed to GitHub, inventory and integrate them
+within their actual requirements; no remaining implementation is invented from
+the user's count of 27. Documentation-only receipt changes do not require a new APK.
