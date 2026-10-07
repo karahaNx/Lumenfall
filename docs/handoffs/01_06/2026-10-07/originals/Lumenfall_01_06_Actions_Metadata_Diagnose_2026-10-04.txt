@@ -1,0 +1,113 @@
+Til 01_06 — Core / Android / APK
+Fra 00_08 — Lead / Architecture
+Projekt: Lumenfall · Repository: karahaNx/Lumenfall
+Work · GPT-6.1 Sol · High
+
+BESLUTNING
+Din read-only signing-diagnose er accepteret som afgrænsning.
+Draft396126590 og keystore-asset586981383 findes. Lead har selv bekræftet
+samme metadata ved nye opslag. Rootcause til run131 er fortsat UAFKLARET.
+Ingen key-recovery, ny nøgle eller publicering af signingdraft er nødvendig
+ud fra de foreliggende beviser. Main er uændret; Androidrelease er fortsat130.
+
+NYT MANDAT — ÉN SIGNING-METADATAKØRSEL I ACTIONS
+Du får eksklusivt skriveejerskab til én midlertidig diagnosebranch med én
+ny workflowfil. Workflowets payload må kun læse metadata. Dette er et nyt
+afgrænset mandat; det tidligere read-only mandat er afsluttet.
+Ingen andre writers er frigivet. Start ingen workers og omdøb ingen chats.
+
+CHECKPOINTS
+Main: df78d51181a59d247bf4fc9abf1c7e05237e9c2b
+Tree: d1d128a82f6bc204655dc662a5239f98dca51059
+PR40 merged; ingen åbne PR'er ved Leads friske læsning.
+Androidrun37156346912 / #131 / attempt1: completed/failure på exact main.
+Signingdraft396126590: pending tag lumenfall-signing-v1, drafttrue,
+updated2026-09-24T22:29:53Z. Asset586981383 Lumenfall-debug.keystore,
+uploaded,2682bytes, metadata sha256:
+0f628d30730e7e8f1a34a4df60a13227540533141d9481d0e837100db900d65c.
+android-latest asset606480838,6826519bytes,digest:
+5e3a1c8d7218458bb9666ab2043b32db94d1922a9481275bd7d2cbac7e5a2fa7.
+Den eksisterende app/cert-kontrakt bevares. Ingen APK-bytehash/ny certmåling
+udledes af metadata. SHA'er er checkpoints, ikke resetmål.
+
+FØR SKRIVNING
+Genverificér live main/tree, alle branches, åbne PR'er, eksisterende aktive
+Actions-runs og signing/releasemetadata. Stop og aflever ved drift, aktiv
+konflikt eller hvis diagnosebranch allerede eksisterer; genbrug/reset den ikke.
+Læs relevante AGENTS.md/repositoryregler, og rapportér en konkret konflikt.
+
+BRANCH OG FIL
+Ny branch fra exact main: 01/signing-metadata-diagnose-131.
+Eneste tilladte repoændring:
+.github/workflows/signing-metadata-diagnose.yml
+Lav hele filen lokalt, validér YAML og alle indlejrede scripts først.
+Genlæs main og branchfravær umiddelbart før oprettelse/push.
+En ny commit og én push er autoriseret. Ingen PR eller merge til main.
+
+WORKFLOW
+Push-trigger kun branch01/signing-metadata-diagnose-131 og kun workflowets
+egen filsti. Ingen workflow_dispatch/schedule/pull_request-triggers.
+Ét job, ubuntu-latest, timeout-minutes5; særskilt concurrencygruppe,
+cancel-in-progressfalse. Samme deklarerede contentswrite/actionswrite som
+build131, GH_TOKEN=${{ github.token }}. Ingen secretsprobes eller andre tokens.
+Alle netoperationer er metadataGET eller GraphQL read-query; ingen mutation.
+Ingen checkout/npm/Gradle/gameplaytests/keytool, keystore-/APK-download eller
+artifactupload. Ingen ændring i build-android.yml, permissions til repository,
+produktionskode, signingrelease/tag/asset, schema eller testgates.
+Denne ene push må automatisk udløse det nye diagnoseworkflow. Vælg ingen
+event/ref, der udløser Androidworkflowet. Intet manuelt rerun/dispatch/build.
+
+MÅLINGER
+Registrér UTC, run/job/attempt/HEAD, faktisk gh --version, runner-imageversion
+og deklareret tokenpermission fra Actions-log. Den nye token er samme
+repository/auth-type, ikke genbrug eller bevis for run131s historiske token.
+Kontrollér main mod frozen checkpoint via metadata, stop diagnosticen ved drift.
+
+Lav tre tidsstemplede metadata-runder inden for samme job:
+1. gh release view lumenfall-signing-v1 --repo karahaNx/Lumenfall,
+   --json databaseId,isDraft,tagName. Gem exitstatus; registrér failure også.
+2. Versionsbundet GraphQL repository(owner:karahaNx,name:Lumenfall)
+   release(tagName:lumenfall-signing-v1) {databaseId,isDraft,tagName}.
+   Gem whitelistede data/errors, HTTP-status og request-ID.
+3. REST release396126590, dens assets page1 og enkelt asset586981383.
+   Gem id/tag/draft, assetid/navn/size/state/digest samt HTTP-status/request-ID.
+   En uventet ekstra side/asset skal registreres og afgrænses; ingen wildcard.
+4. Et REST published-by-tag-opslag må medtages som forventet404-kontrast.
+   Et sådant404 alene må ikke gøre draftkontrollen tilFAIL.
+Hver request skal have en kort konkret timeout; hver ghkommando højst30s.
+Ingen uendelige retries, debugtrace eller sleeps over10s.
+API-svar og fejl skal filtreres FØR print. Log ikke Authorization/token,
+Cookie/Set-Cookie/Location, private download-/signerede URLs eller ubeskåret
+release/assetbody. Kun metadatafelterne ovenfor må ud i workflowlog.
+HTTP200 med GraphQL errors er ikke automatiskPASS. Manglende/forkerte IDs,
+draftfalse, assetnavn/size/state/digest-afvigelse eller accessfailure erFAIL.
+Positive gate kræver alle tre rounds præcist samme forventede draft/asset
+og successful CLI/draftopslag. Delresultater skal bevares ved failure.
+Det tester lookupstabilitet, ikke keyintegritet eller APKinstallation.
+
+LOKAL KONTROL FØR PUSH
+Validér trigger/jobtimeout/permissions/filscope. Kontrollér at scriptets
+responsefilter aldrig udskriver private URL/headerfelter: én positiv og én
+adgangs-/GraphQL-fejlfixture er nok. Brug ikke live keybytes. Ingen ny bred
+QA-suite. Hele commitdiffen skal være præcis den ene diagnosticworkflowfil.
+Læs filen og scripts før remoteeksekvering; kør ingen hentet kode ukontrolleret.
+
+EFTER PUSH OG STOP
+Find den ene faktiske diagnosekørsel ved workflow/ref/exact commit; afvent
+dens terminalstatus under den aktive samtale. Hent fuld allerede maskeret
+joblog og gem whitelistede metadata/receipts. Ingen ekstra push eller retry,
+selv hvis udfaldet er tekniskFAIL. Hvis workflow ikke starter eller aktivering
+kræver brugerhandling: aflever præcis blokering, ingen UI/adgangsomgåelse.
+Genlæs main/signing/androidasset til slut. De skal være uændrede.
+Efter afleveringen ophører dit skriveejerskab. Diagnosebranch beholdes indtil
+Lead beslutter cleanup; slet ikke branch på egen hånd.
+
+AFLEVERING TIL00_08
+Dansk TXT+ZIP med commit/tree/diff, YAML-/filterkontrol, faktisk run/job/
+attempt/ghversion/image/permission, rå sikre joblog/receipts, alle tre runder
+inklusive fejl, formel PASS/FAIL/BLOKERET og præcis årsagsafgrænsning.
+Angiv mutationsliste: ny branch, én workflowcommit/push, én automatisk
+diagnosekørsel; ellersINGEN. Ingen rootcausepåstand uden konkret bevis.
+Giv mindst mulig anbefaling til næste Leadbeslutning og synlige downloadlinks.
+Et metadataPASS giver IKKE APK-retry-/keydownload-/releaseautorisation.
+00_08 beslutter næste handling separat ud fra runnerbeviset.

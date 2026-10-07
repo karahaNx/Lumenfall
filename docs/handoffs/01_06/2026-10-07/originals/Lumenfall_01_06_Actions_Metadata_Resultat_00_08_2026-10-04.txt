@@ -1,0 +1,185 @@
+Lumenfall — Actions metadata-diagnose
+Fra 01_06 — Core / Android / APK
+Til 00_08 — Lead / Architecture
+2026-10-04 Europe/Copenhagen
+Repository: karahaNx/Lumenfall
+Mandat: Lumenfall_01_06_Actions_Metadata_Diagnose_2026-10-04.txt
+
+FORMEL STATUS: PASS — 3/3 METADATA-RUNDER
+Den nye Actions-kørsel fandt den forventede private signingdraft og det
+præcise keystore-asset i alle tre runder. CLI, GraphQL og REST lykkedes.
+Main, signingrelease/asset og android-latest er uændrede.
+Run131s historiske rootcause er fortsat UAFKLARET.
+PASS gælder lookup-metadata i denne ene kørsel. Ingen nøgleintegritets-,
+certifikat-, APK- eller installationsmåling er udført.
+Ingen APK-retry-/keydownload-/releaseautorisation udledes af PASS.
+
+1. FØR ARBEJDET
+Input-ZIP CRC PASS og 5/5 manifestpayloads SHA256 PASS.
+Før-læsninger fra2026-10-03T23:43:01Z UTC:
+main df78d51181a59d247bf4fc9abf1c7e05237e9c2b
+tree d1d128a82f6bc204655dc662a5239f98dca51059
+parents i orden:
+3a89a8cb4084193326daa5dab68cf9a89ef71512
+d3daa23d04315ec21776de69b0df960d24cb19b6
+PR40 merged; ingen åbne PR'er. Run131 completed/failure, attempt1.
+Alle37 branches læst (page1 per_page100); diagnosebranch fandtes ikke.
+Aktive Actions-runs kontrolleret via queued/in_progress/waiting/pending/
+requested:0 i hver status. Ingen konflikt eller checkpointdrift.
+
+Repositoryets komplette, ikke-trunkerede tree har ingen AGENTS.md.
+README.md, docs/CHAT_OWNERSHIP.md, docs/PROJECT_STATE.md og begge eksisterende
+workflows er læst på exact main. Ingen konkret regelkonflikt.
+Ældre planstatus ændrer ikke det eksplicitte mandat fra00_08.
+Androidworkflowet kræver push tilmain og egne produktionsstier;
+pre-merge kræver PR/manual dispatch. Denne diagnosebranch udløser ingen af dem.
+
+Main og branchfravær genlæst 23:52:09Z.
+Ny branch oprettet 23:52:10Z fra exact main.
+Main og branchbase genlæst 23:52:26Z umiddelbart før commit/refopdatering.
+
+2. DEN ENE REPOÆNDRING
+Branch:01/signing-metadata-diagnose-131
+Commit:9b249227e45b93463e2f04d422300ae28b91dc6f
+Tree:f99630bb9dfefeebf90026e44e3953205b7de8d8
+Eneste parent:df78d51181a59d247bf4fc9abf1c7e05237e9c2b
+Eneste ændrede fil:
+.github/workflows/signing-metadata-diagnose.yml
+Diff:added,308linjer,0deletions; ahead_by1.
+Workflow Git-blob:7bb15347978bdab344df5b4dca20c2bd80a487a6
+Workflow SHA256:
+6dd4e5d9500c9fd4de23a71b3136a2700c974b4d2b19112945a732d71da16c08
+
+Branchoprettelse og én Contents-API commit/refopdatering er udført.
+Refopdateringen gav den ene automatiske push-kørsel.
+Ingen PR, merge, ekstra commit/push, dispatch, rerun eller branchsletning.
+Remote workflowbytes matcher den lokale, validerede fil præcist.
+Komplet commitdiff og receipts ligger i pakken.
+
+3. LOKAL KONTROL FØR REMOTE EKSEKVERING
+YAML parse:PASS. Bash syntax:PASS. Indlejret Python compile:PASS.
+Udtrukket script matcher den læste lokale payload byte-for-byte.
+Push-trigger:kun exact diagnosebranch og workflowets egen filsti.
+Ét job ubuntu-latest, timeout5min; separat concurrencygruppe,
+cancel-in-progressfalse. contentswrite/actionswrite.
+GH_TOKEN bruger kun github.token; ingen andre tokens eller secretsprobes.
+Hver gh release view højst20s; gh --version højst5s.
+HTTP-requesttimeout6s; afgrænset JSON-body; ingen sleeps/retries i scriptet.
+Den summerede operationstimeoutbudget er185s; jobtimeout er den ydre grænse.
+En sockettimeout er ikke en garanteret samlet HTTP-wallclockmåling.
+
+Én positiv fixture og én adgangs-/GraphQL-fejlfixture:PASS.
+Fixtures injicerer private URL/header/body-markører; ingen slipper ud.
+HTTP200 med GraphQL errors bliverFAIL. Forkert metadata, ekstra asset/
+next-page og redirect gør kontrollenFAIL. Redirects følges ikke.
+Assetendpoints anmodes kun som JSON-metadata, aldrig octet-stream.
+Rå fejltekster og ubeskårne API-svar printes ikke; GraphQL-fejl logges
+som type/code og fast kategori, ikke frit serverindhold.
+Ingen checkout/npm/Gradle/keytool/key-/APK-download/artifactupload.
+
+4. DEN FAKTISKE ACTIONS-KØRSEL
+Run37163145503 / Signing metadata diagnose131 / attempt1
+Event:push; exact HEAD9b249227e45b93463e2f04d422300ae28b91dc6f
+Workflow:.github/workflows/signing-metadata-diagnose.yml
+Job111320576611 / signing-metadata
+Start2026-10-03T23:52:33Z; slut23:52:41Z UTC.
+Run/job/metadata-step:completed/success.
+Kun én kørsel på exact commit;0Actions-artifacts.
+
+Faktisk gh --version:
+gh version 2.101.0 (2026-09-15)
+Runner-image:ubuntu-24.04 / ubuntu24
+ImageVersion:20260927.320.1
+Actions-loggens tokenpermission:
+Actions:write; Contents:write; Metadata:read.
+De deklarerede rettigheder matcher run131.
+Dette er en ny jobtoken af samme repository/auth-type,
+ikke genbrug eller bevis for run131s historiske token.
+
+REST-versionheader:2022-11-28.
+Fast GraphQL read-query:LumenfallSigningMetadataV1.
+Queryens SHA256:
+137053fdd1fec6db14c1b332bd7cf6e2a3080619c7211be03879c3c985a960e4
+Payloaden er bundet til den ovenstående commit; GraphQL har ikke en
+separat frosset schemaserverversion. Faktisk gh-version er målt i dette job.
+
+5. ALLE TRE RUNDER
+Alle tider nedenfor er2026-10-03 UTC.
+Runde1:23:52:34.926902–23:52:36.741137 — PASS
+Runde2:23:52:36.741160–23:52:38.555102 — PASS
+Runde3:23:52:38.555123–23:52:40.081741 — PASS
+
+I hver runde:
+- gh release view:exit0; id396126590,drafttrue,taglumenfall-signing-v1.
+- GraphQL:HTTP200,0errors; samme draft/id/tag.
+- REST release-by-ID:HTTP200; samme draft/id/tag.
+- REST assets page1:HTTP200,exact1asset,ingen next-page.
+- REST asset-by-ID:HTTP200; exact id/navn/size/state/digest.
+- Main-guard:HTTP200; frozen main matcher.
+- Published-by-tag:HTTP404; forventet kontrast, ikke draftFAIL.
+Alle request-ID'er og tidsstemplede metadata er bevaret i metadata-records.json
+og verification.json. Ingen fejlresultater er udeladt; alle31 runtime-records
+er bevaret, samt fuld allerede maskeret joblog.
+
+Assetkontrakt i hver runde:
+ID586981383; Lumenfall-debug.keystore; uploaded;2682bytes.
+API-digest:
+sha256:0f628d30730e7e8f1a34a4df60a13227540533141d9481d0e837100db900d65c
+Dette er serverrapporteret metadata, ikke hash af hentede keybytes.
+
+6. PRÆCIS ÅRSAGSAFGRÆNSNING
+Bevist:denne nye Actions-token har fungerende CLI-/GraphQL-/REST-adgang
+til den forventede private draft og dens præcise asset.
+Published-by-tag404 kan samtidig forekomme ved fungerende draftadgang.
+En permanent, generel manglende draft-/assetadgang er ikke reproduceret
+under den nye kørsel og dens deklarerede rettigheder.
+
+Ikke bevist:årsagen til “release not found” i run131.
+Der foreligger stadig ingen individuelle HTTP/GraphQL-receipts fra
+run131s fejlede downloadopslag. Den gamle token er ikke testet.
+Den faktiske gh-version er målt nu, ikke retrospektivt i run131.
+
+De tre runder er sammenhængende målinger i ét job over ca5,155sekunder.
+De dokumenterer det vindue; de garanterer ikke stabilitet mellem jobs
+eller et kommende keydownload/APK-build.
+Transient lookup/synlighed er fortsat en mulig hypotese, ikke rootcausebevis.
+Vi har ikke kørt gh release download eller prøvet binary-transporten.
+
+7. SLUTKONTROL — INGEN PRODUKTIONSDRIFT
+Slut-læsninger fra2026-10-03T23:54:11Z UTC:
+Main/frozen tree/parents er uændrede.
+Signingdraft396126590 og asset586981383:fuld metadata uændret,
+også updated_at/digest/download_count89.
+Alle tidligere37 branches er uændrede; eneste tilføjelse er diagnosebranch.
+Ingen åbne PR'er. Run131 er stadigattempt1/failure.
+android-latest-tag peger fortsat på:
+3a89a8cb4084193326daa5dab68cf9a89ef71512
+APK ID606480838;6826519bytes;updated2026-10-02T20:58:48Z
+API-digest:
+sha256:5e3a1c8d7218458bb9666ab2043b32db94d1922a9481275bd7d2cbac7e5a2fa7
+Fuld releasemetadata er uændret; historisk release0.1.130 består.
+Ingen APK eller ny certifikatmåling er lavet.
+com.lumenfall.app og det etablerede expected certifikat er bevaret:
+A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21
+
+8. MINIMUMSANBEFALING TIL00_08
+Accepter denne metadataPASS som runnerbevis for det målte lookupvindue.
+Næste afgrænsede beslutning er et særskilt mandat til signing-only kontrol
+af den eksisterende key i et beskyttet tempområde:assetdigest og expected
+certifikat, uden APK-build/publish og uden private bytes i log/aflevering.
+Der er endnu ikke konkret evidens, der begrunder en bestemt workflowreparation.
+Et APK-retry skal besluttes særskilt; dette job giver ikke den autorisation.
+Behold diagnosebranch indtil Lead beslutter cleanup.
+
+MUTATIONSLISTE
+1. Ny branch01/signing-metadata-diagnose-131 fraexact main.
+2. Én ny workflowcommit/refopdatering (én push-event).
+3. Én automatisk metadata-diagnosekørsel,attempt1.
+Ellers INGEN repo-/signing-/release-/CI-mutation.
+Ingen workers, brede audits eller PR40-/gameplay-/persistence-tests startet.
+Skriveejerskabet ophører ved denne aflevering.
+
+SLUTSTATUS
+METADATA:PASS3/3.
+RUN131 ROOTCAUSE:UAFKLARET.
+APK-RELEASEBLOK:ikke ophævet af denne diagnose.

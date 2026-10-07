@@ -1,0 +1,164 @@
+LUMENFALL — 01_06 CORE-REVIEW AF PR41
+Til 00_09 · 2026-10-05 · read-only
+
+KONKLUSION: SCOPED ACCEPT
+Ingen Core-/persistence-blocker fundet på den præcise kandidat.
+30 udvalgte uændrede harness-scenarios: PASS, exit0.
+13 supplerende egne checks: PASS, exit0; ingen pageErrors.
+Accept gælder dette Core-scope og denne SHA. Lead disponerer videre arbejde.
+Writerens tekniske stop/freeze er stadig IKKE VERIFICERET.
+
+IDENTITET
+Repository: karahaNx/Lumenfall
+PR41: open / Draft, 02/lab-measured-inquiry-v1
+Head: 10f2ff5facef78a7c1d8293b6a8d07be888f7350
+Head tree: d1910132973d117c75c3d4ace4867e86f372110e
+Eneste parent / base / main:
+df78d51181a59d247bf4fc9abf1c7e05237e9c2b
+Base tree: d1d128a82f6bc204655dc662a5239f98dca51059
+Base parents i rækkefølge:
+3a89a8cb4084193326daa5dab68cf9a89ef71512
+d3daa23d04315ec21776de69b0df960d24cb19b6
+Candidate index.html SHA256:
+2f858652d71e515cc1482ad5d8a182053b8d3b3c70be2f8fc09fc35a1548ecbe
+Base index.html SHA256:
+a2797073f985da25803c61e2626ef54f662dfbc5d0dbd240156e47cff76acd96
+
+EVIDENS OG MANDAT
+Lead-handoffens ZIP CRC og fulde manifest: PASS, 23/23 payloads.
+Input ZIP SHA256:
+577669bdba87ba0500c514c446eb1fa965e6d545dd876e6a2bb1f6547d42627c
+Komplet immutable checkout hentet; alle 67 blobs matcher frisk Git tree.
+Alle 67 kildeblobs uændrede efter lokale tests. ZIP-kildepakken blev ikke
+behandlet som et komplet runnable checkout.
+Egne før-reads fra 2026-10-05T08:15:32.515Z UTC.
+Final main/head/branch/CI/status genlæst 2026-10-05T08:26:22Z UTC.
+Main og PR-head matcher mandat. Alle 39 branches matcher både egen førreceipt
+og Leads checkpoint. Kun PR41 åben. Alle fem aktive run-statusqueries: 0.
+Ingen drift; ingen remote write, commit/push/PR, merge, dispatch/rerun,
+Android-build, signing/release eller besked/subagent-handling udført.
+
+DE OTTE CORE-KONTRAKTER
+
+1. Schema, keys og guards — EGEN PASS
+Schema1, primary lumenfall_save_v2, recovery lumenfall_save_recovery_v1,
+LUMENFALL1:-backup-prefix og resetmarkør bevaret. Fresh/current/v0 har
+Inquiry raw0/queueOFF; v0 autostudy giver præcis frozen8 ON. Begge canonical
+maps har alle9 IDs. Normalize, accept/parse/load/save, backup restore og reset
+er byteidentiske med base; runtime regressions bekræfter faktisk adfærd.
+Malformede saves/backups, future schema, recovery-once og save-warning PASS.
+Egen indsprøjtet primary-write-fejl under restore bevarer primary, ruller
+recovery tilbage og bevarer raw13 og aktivt betalt work. Ingen reload aktiveret.
+Kilde: index.html3056–3082,3214–3269,3333–3754,5110–5132.
+
+2. Råt ejerskab og cap — EGEN PASS
+Raw13 bevares gennem canonical save, to faktiske reloads, backup restore,
+corrupt-primary recovery og Ascension. Effekt højst20%; køb maxed ved10.
+Legacy raw2000 bevares, selv om start afvises for nonfinite pris/work.
+Ingen load-clamp, refund eller gratis Inquiry-start observeret.
+Kilde: index.html3430–3461,4873–4887,4915–4937,4957–4965.
+
+3. Betalte aktive snapshots — EGEN PASS
+Faktiske records bevaret: Inquiry531/600/8x og Guardian77/120/2x.
+Queue-toggle foretager rigtig save til både primary og recovery; to reloads
+uden fixture-reinjektion bevarer snapshots. Render af due Inquiry optjener
+ingen bonus. Completion4->5 ændrer ikke allerede aktiv Guardian77/120/2x.
+Backup/recovery og rigtig Ascension-save + efterfølgende reload PASS.
+Kilde: index.html3436–3461,3648–3672,4930–4965,5053–5108,6074–6083.
+
+4. Completion og neutral overcap-lukning — EGEN PASS
+Raw9->10 én gang; queueON beholdes; ingen næste køb eller dobbelt reward
+efter save og to reloads. Begge completionhelpers følger capkontrakten.
+Raw13 med remaining1/total600/speed8 bevares før due, også efter reload.
+Efter0.125s lukkes record: raw13, earned[], closed['Measured Inquiry'],
+ingen currency/refund og ingen study1/study25/allstudies-credit.
+Gentaget save/reload giver ingen ny optjening. UI49-check viser neutral
+maxed-record-tekst, ingen level14 eller aktiv acceleration.
+Kilde: index.html4957–4976,5992–6025,6748–6761,7598–7605,7809–7816.
+
+5. Schedulerfremskridt og completion før start — EGEN PASS
+Overcap-disposal returnerer handled1, earned0. Guardian med7s work fuldføres
+senere i samme10s study-only-tail. Split1s/save/reload/9s matcher direct10s
+for levels, aktivt work og valuta. Faktisk applyOfflineProgress fortsætter
+studies efter12h combatcap; overcap afsluttes neutralt, Guardian optjener1.
+Due Inquiry ved entry behandles før køen: raw4->5, ny Guardian135s total,
+134s remaining efter1s; eksisterende Wisp180total/2x har48remaining.
+Egen captureTimeline: studyComplete ved0s, derefter studyStart ved0s.
+Simultaneous array-order, live/offline, study-only og tidsopdeling PASS.
+Kilde: index.html6748–6779,7158–7189,7533–7550,7782–7817.
+
+6. Discount og fælles startplan — EGEN PASS
+Kun nye betalte frozen8-starts bruger round(round(nominal)*(1-0.02*e)).
+239 contractchecks inkluderer alle8 ved Inquiry0/5/10 og raw13-effektcap;
+Inquiry selv forkortes ikke. Priser/work for raw0/5/9/10 matcher kravene.
+Manual, autoFill og simulation queued afviser locked, capped, duplicate,
+fulde slots, manglende Lumen/Shards og nonfinite overflow uden state-/
+currency-/record- eller economy-boundary-mutation. Ukendt/null-ID afvises
+af manual/shared plan; unknown queue-ID indgår ikke i katalogiteration.
+Nonfinite-gates indfører ingen nye legacycaps. Economycaller bruger eligible
+før affordability, så fremtidig finansiering stadig kan planlægges.
+Kilde: index.html4873–4890,4915–4937,4978–4994,6762–6779,6820–6828.
+
+7. Motes, Reset, Ascension, frozen8 og mapdækning — EGEN PASS
+Faktisk8x debit473 Motes; snapshot120s giver15s countdown. Næste queued
+Guardian-start har192s work/speed1. Slotmatrix1/39/40/59/60/89/90 er
+2/2/3/3/4/4/5. Inquiry tæller ikke i eksisterende1/25/all8-Deeds;
+rewardpool683 og frozen5 Forge20/60 er bevaret. Canonical maps omfatter9.
+Full Reset nulstiller nye fields/work; Ascension bevarer studies/queues/work,
+resetter Lumen som før og bevarer Shards. Faktisk Ascension-save/reload PASS.
+Kilde: index.html2811–2814,2837–2899,2913–2937,3056–3085,
+4894–4903,4939–4955,5053–5132.
+
+8. Accepteret schema1-downgradebegrænsning — EGEN PASS
+Dokumentationen lover ikke sikker downgrade-roundtrip. Egen faktisk gammel
+base-app load/save stripper Inquiry raw13/queue/active record. Ved retur til
+kandidaten bliver Inquiry raw0/OFF; Guardian77/120/2x bevares. Dette er den
+udtrykkeligt accepterede begrænsning, ikke en ny blocker eller migrationsplan.
+En urørt ny-app backup kræver kompatibel ny app for at gendanne Inquiry.
+Kilde: docs/MEASURED_INQUIRY.md31–37; base/candidate canonical maps.
+
+TESTEVIDENS
+Python3.12.14, Nodev24.19.0, Chromium141.0.7390.37 headless shell.
+Browser binary SHA256:
+6c82af1bb96955970f0ff50884bcbd75f200222414dc136076ada667bf4628d1
+30 CLI-scenarios tog samlet32.886s; hver exit0. Kommandoer, UTC-start,
+varighed og udvalgte rå outputs ligger i scenario_receipts.json og *.log.
+inquiry-contracts:239checks +1 causal negative control.
+inquiry-chronology:37checks +2 causal negative controls.
+inquiry-ui:49checks på390x844,8x473 og observer-purity.
+p2-07a-persistence-review:162checks, full-state idempotence.
+13 egne cases med konkrete stateværdier ligger i independent_core.json.
+Browsermiljøets indledende fejl er dokumenteret; egen lokal browser løste
+blokeringen. Asserts, timeout-/exitcode-kontrakter og source blev bevaret.
+
+REVIEW AF TESTORAKLER
+Tre katalogantagelser er legitimt justeret: exact9 destinations, allstudies
+fixture bruger original8, og v0 kræver original8 ON plus Inquiry OFF.
+Eksisterende persistence-/chronology-stateforventninger blev ikke svækket.
+Kandidatens Inquiry Ascension-assert kører under freeze og beviser derfor
+primært in-memory bevaring; egen actual-save/reload-check udfylder dette hul.
+Kandidatens chronology-resultat har timelineEvents0, fordi bridge.simulate
+ikke aktiverer captureTimeline. Egen målrettet optagelse verificerer rækkefølgen.
+Dette er testdækningsobservationer, ikke reproducerede produktfejl.
+
+OBSERVERET CI — SEKUNDÆR EVIDENS
+Run37209757818 / attempt1 / exact head / success.
+Job og check111458355816: success; alle steps success.
+Jobstart2026-10-04T14:34:29Z; completion14:42:38Z.
+Dette inkluderer source validation, fuld behavioral suite, negative self-tests
+og browser smoke i den eksisterende workflow. Ingen CI blev startet/genkørt.
+
+IKKE VERIFICERET / AFGRÆNSNING
+Samlet fuld suite er observeret grøn i CI; her er kun Core-subsettet og egne
+13 checks reproduceret. QA ejer den samlede uafhængige suite og øvrig UI.
+Fysisk Android/A40, APK-installation, TalkBack og ny APK/release er ikke testet.
+Alle mobile viewports/reduced motion/support/Forge er ikke gen-auditeret her.
+02_07's lokale arbejde, tekniske stop og frigivelse af writerlease er ukendt.
+Positivt immutable review og grøn CI giver ingen merge-/buildtilladelse.
+
+AFLEVERING
+TXT kan læses alene. ZIP indeholder egen evidens, reproduktionsscripts,
+exact diff, originalt read-only mandat, nødvendig basekilde og fuldt SHA256-
+payloadmanifest. Ingen APK, private signingkeys/tokens, dependency-mapper
+eller gamle historik-ZIP'er. Brugeren overfører ZIP til00_09.
+01_06 stopper efter denne aflevering.

@@ -1,0 +1,198 @@
+Lumenfall — PR40 Android-genkørsel
+Fra 01_06 — Core / Android / APK
+Til 00_08 — Lead / Architecture
+2026-10-04 Europe/Copenhagen
+Repository: karahaNx/Lumenfall
+
+AFLEVERINGSSTATUS: SUCCESS
+Den ene autoriserede genkørsel er afsluttet: run 37156346912, attempt 2,
+job 111370730708. Signing, produktvalidering, browser smoke, APK-build,
+endelig APK-identity og publish er alle success.
+Den offentlige APK er også hentet og kontrolleret lokalt med originalverifieren.
+Faktisk version: 0.1.131 / versionCode 131 / com.lumenfall.app.
+Bytehash og certifikat matcher kravene. 00_08 tager den formelle APK-accept.
+Historisk rootcause til attempt 1 er fortsat UAFKLARET.
+
+1. INPUT OG BASELINE
+Input-ZIP CRC PASS; alle 6 manifestpayloads har SHA256-match.
+Den accepterede metadata-ZIP: CRC og alle 49 manifestpayloads PASS.
+Mandat og Lead-disposition er læst; ingen ekstra signing-only kørsel krævet.
+
+Før-læsninger fra 2026-10-04T05:27:41Z UTC:
+Main df78d51181a59d247bf4fc9abf1c7e05237e9c2b
+Tree d1d128a82f6bc204655dc662a5239f98dca51059
+Parents i orden:
+3a89a8cb4084193326daa5dab68cf9a89ef71512
+d3daa23d04315ec21776de69b0df960d24cb19b6
+PR40 merged; accepteret HEAD d3daa23d04315ec21776de69b0df960d24cb19b6.
+Ingen åbne PR'er. Alle 38 branches matcher den accepterede metadatareceipt.
+Diagnosebranch står uændret på 9b249227e45b93463e2f04d422300ae28b91dc6f.
+Aktive Actions-runs: 0 ved separate opslag af queued/in_progress/waiting/
+pending/requested. Ingen drift eller aktiv buildkonflikt.
+
+Original run 37156346912 / Android #131 / push main:
+attempt 1, completed/failure på exact main.
+Det eneste job var build-apk 111300392521, failure.
+Signingdraft 396126590 og asset 586981383 matchede baseline.
+Tidligere APKasset 606480838 / 6826519bytes / release 0.1.130.
+android-latest pegede før retry på 3a89a8cb4084193326daa5dab68cf9a89ef71512.
+Checkpoints er ikke brugt som resetmål.
+
+2. UÆNDRET WORKFLOW OG GATES
+Workflow læst fra exact main:
+.github/workflows/build-android.yml
+Git-blob 3df23df110659529b5c19ab1da8d4d0c710c6dcc
+Original byte-SHA256:
+20876cbb61c70ef997ceffb2da8ed6076bc969fcc73390fbd155b155049a86d5
+Begge hashes er beregnet på friske originale bytes og matcher mandatet.
+
+Verifier fra samme main:
+scripts/verify_apk_identity.py
+Git-blob ffa468b20da7eefa519632f4633d158a18fb8953
+SHA256 f78de05e92a29e78577c0443e74bac5bd9cde41f2be1586f501b5a215b243c11
+
+Signinggate kræver eksisterende draft/asset, læsbar key og præcist expected
+certifikat før APK-trinene. Ingen automatisk keygenerering.
+Final identitygate bruger aapt og apksigner, kræver appID/version/certifikat
+og kører før publish. Ingen gate eller permissions er ændret.
+Verifieren kræver ikke en separat byte-sammenligning af indlejret webkilde.
+En sådan ekstra måling påstås ikke; sourceprovenance er exact checkout/head,
+uændret pipeline, release-tag og den verificerede offentlige APK-bytehash.
+
+3. PRÆCIS ÉN RERUN-REQUEST
+Main/run genlæst umiddelbart før mutation: 2026-10-04T05:30:28Z UTC.
+Main var uændret; run stadig attempt 1/completed/failure.
+Én job-rerun-request rettet mod job 111300392521 blev sendt 05:30:28.853Z.
+Kvittering: success=true. Toolkvitteringen angiver ikke HTTP-status.
+Efterfølgende faktisk observation bekræfter attempt 2 på samme run/head.
+Der er ikke sendt en anden rerun-request, dispatch eller nyt build-run.
+
+Actual attempt 2:
+Run 37156346912 / run_number 131 / push main
+HEAD df78d51181a59d247bf4fc9abf1c7e05237e9c2b
+Job 111370730708 / build-apk / completed/success
+Jobstart 2026-10-04T05:30:33Z; slut 05:32:45Z UTC
+(steps sidste cleanup slutter 05:32:43Z; se rå jobreceipt for jobtimestamp).
+Runner ubuntu-24.04 / image 20260927.320.1.
+Loggens tokenpermissions: Actions write, Contents write, Metadata read.
+
+Alle required trin er completed/success:
+step 7 Restore and verify stable Android signing key
+step 9 Validate game source
+step 11 Browser runtime smoke test
+step 17 Build APK
+step 19 Verify final APK identity
+step 22 Publish latest APK release
+Cleanup er ikke brugt som erstatning for disse gates.
+Check-run build-apk 111370730708 er completed/success.
+Samlet jobs-history viser præcis attempt 1 failure og attempt 2 success.
+
+4. FAKTISKE RUNTIME-RECEIPTS
+2026-10-04T05:30:45.3946711Z:
+Verified established Android signing certificate SHA256:
+A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21
+
+05:30:47.8334073Z:
+QA passed: 2 scripts syntax-checked, 16 unique IDs verified,
+cache/state lifecycle guards present.
+05:30:58.1684980Z:
+Browser smoke test passed: game initialized and rendered at 390x844.
+05:30:58.8496903Z:
+Android versionCode=131, versionName=0.1.131
+05:32:24.5132678Z:
+BUILD SUCCESSFUL in 1m 21s
+
+Final APK-identity 05:32:25.6662079Z–05:32:25.6663354Z:
+packageId com.lumenfall.app
+versionCode 131 (expected 131)
+versionName 0.1.131 (expected 0.1.131)
+certificate SHA-256:
+A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21
+Det er faktisk output, ikke echoet scripttekst eller antagelse fra runnummer.
+
+Publish-trin 05:32:26Z–05:32:29Z:
+android-latest blev opdateret fra 3a89a8c… til exact main df78d51….
+APKasset blev erstattet i den eksisterende latest-release.
+Den fulde allerede maskeret joblog er bevaret; generiske passwordværdier
+fra workflowets echoede kommandolinjer er yderligere redigeret i kopien.
+Ingen privat key eller token er afleveret.
+
+5. OFFENTLIG APK OG EGEN LOKAL KONTROL
+Release ID 396102072 — Lumenfall Android — Latest
+Nyt asset ID 609203044 — Lumenfall.apk
+Size 6828796bytes
+Created/updated 2026-10-04T05:32:28Z
+API-digest:
+sha256:0cb6cbe35e4371db7a7a30c4c73573e4cdd88439c32057f60c5128aacfebab96
+android-latest-tag peger på:
+df78d51181a59d247bf4fc9abf1c7e05237e9c2b
+
+Det offentlige APK blev hentet fra den eksisterende release med HTTP200:
+https://github.com/karahaNx/Lumenfall/releases/download/android-latest/Lumenfall.apk
+Egen byte-SHA256:
+0cb6cbe35e4371db7a7a30c4c73573e4cdd88439c32057f60c5128aacfebab96
+Egen størrelse 6828796bytes. APK ZIP CRC PASS / 526entries.
+Hash matcher API-digest; samme APK er vedlagt i ZIP-pakken.
+
+Lokalt målt med aapt og kryptografisk apksigner verify:
+packageId com.lumenfall.app
+versionCode 131
+versionName 0.1.131
+certificate SHA-256:
+A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21
+
+Original repository-verifier er kørt uændret: exit 0.
+Lokale tools: aapt v0.2-debian; apksigner 0.9, Ubuntu-pakke 31.0.2-1ubuntu1.
+14 tool/dependency-pakker er hashverificeret mod officielle Ubuntu APT-indexer
+og udtrukket lokalt; ingen maintainer scripts kørt.
+Java/classpath er eksplicit bundet til de verificerede lokale JAR-filer.
+apksigner verify exit 0; én signer; v1 og v2 verificerer.
+De faktiske v1 META-INF-advarsler er bevaret i rå toolreceipt.
+V2-verifikationen er true, og der er ingen gatebypass.
+Rå aapt-/apksigner-output, verifieroutput, kommandoer, tider og pakkehashes
+ligger under local-apk/.
+
+Ingen fysisk Android-, A40-, TalkBack- eller installationstest er udført.
+Denne aflevering ændrer ikke deres uafklarede teststatus.
+
+6. SLUTKONTROL EFTER LOKAL APKVERIFIKATION
+Fra 2026-10-04T05:40:06Z UTC:
+Main/tree/parents og alle 38 branches er uændrede.
+Diagnosebranch er urørt. Ingen åbne PR'er eller aktive Actions-runs.
+Samme run er attempt 2/success; der findes kun de to autoriserede jobforsøg.
+Signingdraft 396126590 er fortsat private draft med samme pending tag.
+Signingasset 586981383 er samme id/navn/size/state/digest og tidsstempler:
+Lumenfall-debug.keystore / 2682bytes / uploaded
+sha256:0f628d30730e7e8f1a34a4df60a13227540533141d9481d0e837100db900d65c
+Download_count blev observeret som 89 både før/efter; denne tæller bruges
+ikke som bevis for eller imod pipeline-download.
+Nyt APKasset, latest-release og exact-main-tag matcher slutkontrollen.
+Det offentliggjorte asset forblev konsistent efter mine egne målinger.
+
+7. MUTATIONSLISTE OG ÅRSAGSAFGRÆNSNING
+Min eneste repo/CI-mutationshandling:
+Én autoriseret job-rerun-request for original job 111300392521.
+
+Den uændrede pipeline udførte separat:
+- download/genbrug af den eksisterende private signingkey i runnerområdet;
+- signing-/produkt-/browser-/build-/APK-identitykontroller;
+- normal cleanup af legacy Actions artifacts og EXE/AAB-assets;
+- force-opdatering af android-latest, APKasset-replacement og releaseedit.
+Cleanup-trinene var success; der hævdes ikke bestemte slettede objekter
+uden individuelle receipts.
+Ingen manuel source-, branch-, commit-, PR-, merge-, release- eller keymutation.
+Ingen egen privat keydownload, rotation, signingdraft-publicering eller gatebypass.
+Ingen workers, brede suites eller nyt PR40-review.
+
+Attempt 2 demonstrerer en fungerende pipeline med den etablerede identitet.
+Det identificerer ikke den underliggende årsag til attempt 1s
+“release not found”. Historisk rootcause forbliver UAFKLARET.
+Der er ingen implementeret workflowreparation og ingen ekstra retryloop.
+
+8. NÆSTE LEADBESLUTNING
+00_08 kan tage formel APK-accept af denne exact releaseevidens og disponere
+releaseblokken. Eventuel diagnosebranch-cleanup og næste Forge/Lab-scope
+kræver separate beslutninger.
+Min eksekveringslease ophører med denne aflevering.
+
+SLUTSTATUS: SUCCESS — 0.1.131 udgivet og lokalt identity-/bytehash-verificeret.
