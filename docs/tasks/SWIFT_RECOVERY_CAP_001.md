@@ -24,7 +24,7 @@ PR46/B2 is merged via PR57 `20aaae62a4b6e46f8d75775085918eaba4e8de29`.
 Current AGENTS/FEATURE_WORKFLOW replace historical Lead/writer permission gates;
 this feature owns implementation and delivery. Current open PR67 overlaps Swift
 and saves; its 27-feature bundle is not main and is not imported as a product.
-Main merged locally: `261b1b7f863f73c324f4ac04acb5bfc95101644d`.
+Main merged: `e2f745cd0ce0dc9e41b06efd842062fd08d7fab4`; retained F14/F13 UI.
 PR70 overlaps two necessary Farm clock fixes; no Wisp roles imported. PR66 is Tree.
 Historical local preparation is preserved in
 [the frozen checkpoint](../qa/swift-recovery-cap-001/preparation-task-2026-10-07.md)
@@ -32,13 +32,13 @@ and its existing evidence directories; those passes are not current acceptance.
 
 ## Concrete decisions and dependencies
 
-The user-approved contract recorded in PR67 is preserved
+Approved PR67 contract preserved
 [byte-for-byte](../qa/swift-recovery-cap-001/implementation/approved-balance-contract.md).
 Source: `52fa48db51ed6ce58704ec17c593ee68710394e0`,
 `docs/requirements/all-27-feedback-001/balance-contract.md`,
 [PR67](https://github.com/karahaNx/Lumenfall/pull/67).
 That record establishes cap10, support duration1s/1.5s and original-currency refunds.
-It supplies the missing F18/F19 design dependency; no guessed balance numbers.
+This resolves the F18/F19 design dependency.
 
 - Purchase cap10; effective level `min(raw,10)`. Keep +8% fill per effective level.
 - Cycle `max(10/3, 6/(1+0.08*effectiveLevel))` seconds. Both motor fill and UI
@@ -59,7 +59,7 @@ It supplies the missing F18/F19 design dependency; no guessed balance numbers.
 - Credit and receipt normalize/save together. Full backup restore replaces the
   complete money/progression snapshot; replaying an old backup cannot accumulate
   refunds on top of later money. Ascend retains Shards/receipt; Reset clears all.
-  All existing Shard spending paths consume the same available value.
+  All Shard spending shares this value.
 - PR67 integration must preserve this migration/credit contract and reconcile its
   overlapping compensation implementation, avoiding a second refund. The capped cadence required two Farm clock fixes (also in PR70): retain endpoint
   fractions and detect progress on the authoritative grid. No tolerance is widened.
@@ -84,13 +84,11 @@ other four uncapped legacy upgrades and all other Forge mechanics remain require
 
 ## Checks and next action
 
-Core:13 groups/110 purchase cases pass; four causal mutants catch cap, floor,
-refund and clock regressions. Independent one-second8h/72h offline replay passes.
-Clock-only archived reference retains exact unaffected state comparisons. V8 6.0
-refund/debit oracle and modern mobile12 profiles are checked. Full suite/required
-negatives are running; old failed diagnostics stay preserved. See
+Core13 groups/110 purchases, four causal mutants, one-second8h/72h reference,
+V8 6.0 integer oracle, mobile12 profiles and14 negatives pass. Local full162 scenarios pass. CI37741028367 failed only Resonate CDP startup;
+runner now passes its selected browser. Fresh CI required. Diagnostics retained. See
 [implementation evidence](../qa/swift-recovery-cap-001/implementation/README.md).
-No independent review or physical/TalkBack result is claimed.
+Signed143 cold/storage preparation passes. No independent/physical/TalkBack claim.
 
 Next: complete current-head CI, integrate PR88, verify signed APK/native save
 update and integrated behavior, persist receipts and status. Archive only this
