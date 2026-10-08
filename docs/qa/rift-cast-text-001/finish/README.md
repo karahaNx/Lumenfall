@@ -6,7 +6,7 @@ longer repeat CAST/Ready. The existing bar retains ability names and accessible
 state/charge/timing; Lv 0 and existing visuals remain.
 
 [Machine receipt](delivery.json) · [Task](../../../tasks/RIFT_CAST_TEXT_001.md) ·
-[Immutable signed APK 0.1.142](../../../../archive/android/rift-cast-text-001/README.md).
+[Immutable signed APK0.1.142](../../../../archive/android/rift-cast-text-001/README.md).
 
 | Evidence | Result |
 | --- | --- |
@@ -15,7 +15,7 @@ state/charge/timing; Lv 0 and existing visuals remain.
 | [Legacy renderer](integrated/integrated-v8-f13.json), [self-review](combined/self-review.json) | V8 6.0.286.52: two inline scripts parse,32 renderer fixtures PASS. Self-review only. |
 | [Current baseline matrix](combined/baseline-matrix.json), [geometry comparison](combined/large-text-comparison.json), [negative controls](combined/negative-controls.json) | Same measured200% name overflow; both causal failures caught. |
 | [Build/release](build-release-receipt.json), [raw build log](build-37714666181.log.gz), [local identity](native/apk-142-identity.txt), [CRC/assets](native/apk-142-assets.json) | Package com.lumenfall.app, version142, established certificate, release digest, every ZIP CRC and all 15 assets PASS. |
-| [Actual native acceptance](native/native-acceptance.json), [continuation log](native/native-resume.log), [signed 138 baseline](native/baseline-native.json) | Signed138→142 save storage/first-launch ownership,320/390/430px,120 observations/24 real casts, 44px controls, native AX, font scale 2 and Android Tab/focus PASS; no runtime errors. |
+| [Actual native acceptance](native-review-bound/native-acceptance.json), [fresh bound run](native-review-bound/native-acceptance.log), [signed 138 baseline](native-review-bound/baseline-native.json) | Signed138→142 save storage/first-launch ownership,320/390/430px,120 observations/24 real casts, 44px controls, native AX, font scale 2 and Android Tab/focus PASS; no runtime errors. |
 
 Product SHA256: 835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3.
 APK SHA256: ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0.
@@ -27,8 +27,8 @@ modern-browser tests retain its existing behavior. Large-text overflow is an
 unchanged limitation, not full layout acceptance.
 
 The first native attempt's startup-socket race and second attempt's rejected
-clamped sub-200px physical display are retained in native/native-attempt-1-transport-race.log
-and native/native-attempt-2-width-failure.json. Final tests correct only the harness. Successful native update/320/390px results are preserved in native/native-attempt-3-width430-failure.json; the same unchanged signed 142 continues at 430px and completes AX/font/keyboard acceptance.
+sub-200px physical display are retained in native/native-attempt-1-transport-race.log
+and native/native-attempt-2-width-failure.json. Final tests correct only the harness. Earlier unbound segmented native evidence is historical. The current native-review-bound run passes the signed update,120 states/24 casts, AX and font. Its final Tab was intercepted by Android SystemUI's ANR dialog. The saved bound keyboard follow-up reconfirms actual installed APK bytes and exact source, verifies native app input focus and passes real Tab with a visible outline after dismissing the isolated system dialog.
 The default local Chromium151 dump-DOM timeout is in logs/default-local-timeout.txt;
 scoped local checks use the documented CDP adapter, while required CI is unmodified.
 Earlier CI146/147 logs and initial214d454/0e9b54c evidence remain historical.
@@ -52,6 +52,6 @@ verification. APK assets are not instrumented. Do not use these fixtures on a
 user's device/save. [ADB transport](direct-adb.cjs), [native driver](native-f13.cjs),
 [asset verifier](verify-assets.cjs), [legacy probe](v8-f13.cjs) are saved for replay.
 
-Following PR69/d95205f, the F13 renderer is byte-identical. [Current-main overlap](cosmetics-overlap/receipt.json) records 24 default/equipped-cosmetic profiles (768 observations), all 12 scoped checks and legacy parser/renderer PASS. The earlier stale-stage harness failures are preserved in cosmetics-overlap/stale-stage-diagnostic and superseded by the current-root run. Native acceptance is for the immutable142 APK.
+The first delivery checkpoint's [CI151 receipt](ci-37718210381-receipt.json), [acceptance lines](ci-37718210381-acceptance.txt) and [full raw log](ci-37718210381.log.gz) pass151 defaults,12 negatives and guarded startup. Application/tests match current main. The final required-head gate and merge receipt are saved in [PR74](https://github.com/karahaNx/Lumenfall/pull/74), avoiding a self-referential CI receipt commit.
 
-For APK142 source/asset replay use integration ab46c0c; current main contains later Cosmetics code. The successful native receipt combines the signed update and 320/390px checkpoint with the same-APK 430px/AX/font/keyboard continuation. Each phase retains its raw evidence. The emulator silently clamps forced physical dimensions to 200px minimum and twice its initial size; density 128 keeps all three requested CSS widths within those limits.
+Review disposition: installed APK and source hashes are recorded and compared before native continuation. [Fresh bound native receipt](native-review-bound/native-acceptance.json), [keyboard follow-up](native-review-bound/keyboard-followup.json) and [identity negative controls](native-review-bound/binding-negative-controls.json) supersede earlier unbound segmented evidence. Both native phases verify the same APK bytes and exact product script. Only the final keyboard check was repeated after dismissing an Android SystemUI ANR dialog; no product change or weaker oracle.

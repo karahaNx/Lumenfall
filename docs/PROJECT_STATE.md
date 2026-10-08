@@ -10,11 +10,12 @@ commits below are observed checkpoints, not a promise that main never advances.
 ## Product and release evidence
 
 F13 delivery added 8 October 2026: [RIFT_CAST_TEXT_001](tasks/RIFT_CAST_TEXT_001.md)
-is complete via PR63/ab46c0c. Full CI 148 scenarios/12 required negatives, integrated
-checks and signed APK 0.1.142 native acceptance PASS. Package/signing and all 15 assets
-verified; actual 138→142 save storage/ownership preserved. [Receipt/limits](qa/rift-cast-text-001/finish/README.md),
+is complete via PR63/ab46c0c. Full CI148 scenarios/12 required negatives, integrated
+checks and signed APK0.1.142 native acceptance PASS. Package/signing and all 15 assets
+verified; actual138→142 save storage/ownership preserved. [Receipt/limits](qa/rift-cast-text-001/finish/README.md),
 [immutable APK](../archive/android/rift-cast-text-001/README.md). Native evidence is
 API27/WebView61 emulation plus a separate V8 6.0 probe; no physical/TalkBack claim.
+
 
 [BOND_TEXT_001 / F16](tasks/BOND_TEXT_001.md) is integrated via
 [PR61](https://github.com/karahaNx/Lumenfall/pull/61) at210005d0ae093d21e846bae41a9bddf25af2800d:
@@ -109,7 +110,7 @@ were recorded as integrated.
 
 | Work | Evidence/status | Next action within its own task |
 | --- | --- | --- |
-| RIFT_CAST_TEXT_001 / F13 | **Complete.** PR63 integrated; CI 148/12 negatives, integrated UI/save/parity/chronology checks and signed 0.1.142 native acceptance PASS. [Task/evidence](tasks/RIFT_CAST_TEXT_001.md). Existing 200% name overflow is recorded separately. | Verify this receipt in GitHub, stop F13 shared-file work and archive only its owner chat using the app tool. |
+| RIFT_CAST_TEXT_001 / F13 | **Complete.** PR63 integrated; CI148/12 negatives, integrated UI/save/parity/chronology checks and signed 0.1.142 native acceptance PASS. [Task/evidence](tasks/RIFT_CAST_TEXT_001.md). Existing200% name overflow is recorded separately. | Final checkpoint verified, shared-file work stopped; archive only the owner chat using the app tool. |
 | [BOND_TEXT_001 / F16](tasks/BOND_TEXT_001.md) | PR61 integrated; CI148/12 and fresh integrated checks PASS. Signed0.1.141 identity/assets, V8 6.0 helper, native WebView69 presentation and signed update/save-value checks PASS. | Complete [physical affected-phone/WebView60/TalkBack acceptance](qa/BOND_TEXT_001/android/DEVICE_ACCEPTANCE.txt) and save observations in GitHub. Keep owner chat open. |
 | [LAB_EXCLUSIVE_001](tasks/LAB_EXCLUSIVE_001.md) / F29 | [PR62 proposal checkpoint](https://github.com/karahaNx/Lumenfall/pull/62): 9 Labs inventoried, 7 duplicate rows in 6 effect families; exclusive study-work/reservation effects and value-preserving transition proposed. Actual CI/merge/integrated checks are saved in the PR body. No game behavior changed. | Obtain the agreed UPGRADE_IDENTITY_001 Lab effects/currencies/prices/work/unlocks/caps and migration policy. Full feature and chat remain open; proposed values/mechanics are not approved rules. |
 | WISP_UPGRADE_DISPLAY_001 / F04 | [Integrated PR59 and signed140](tasks/WISP_UPGRADE_DISPLAY_001.md); required CI147 scenarios/12 negatives and integrated12 mobile profiles/12,912 assertions PASS. Signed138→140 native save preservation PASS. | Complete and save affected-phone/exact WebView60/TalkBack acceptance. Available implementation/delivery is published; feature/chat remains open. |

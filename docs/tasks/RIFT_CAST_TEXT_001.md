@@ -28,7 +28,7 @@ show other screens; none directly establishes F13 behavior or an APK/save identi
 
 ## Baseline, scope and decisions
 
-Private checkout: /workspace/lumenfall-rift-cast-text-001. Product branch feature/rift-cast-text-001; final delivery branch docs/rift-cast-text-001-delivery. Protected main requires the final documentation PR and its existing pre-merge gate.
+Private checkout: /workspace/lumenfall-rift-cast-text-001, feature/rift-cast-text-001; delivery branch docs/rift-cast-text-001-delivery.
 The original /workspace/Lumenfall checkout was untouched. Preparation history is
 preserved in [earlier evidence](../qa/rift-cast-text-001/README.md).
 Continuation began on main 214d45411ce2fb420f0e4b372063811a967679b1.
@@ -94,11 +94,15 @@ Self-review and automated checks were performed; no independent review is claime
 The default local Chromium151 dump-DOM timeout and two native harness failures
 (startup-socket race and Android's minimum physical display size) are retained as
 diagnostics. Corrected transport/display setup preserves all acceptance assertions;
-the native acceptance combines the successful update/320/390px checkpoint and a same-APK continuation for 430px/AX/font/keyboard. All120 observations and 24 real casts pass. Earlier 146/147 CI receipts are historical.
-
-The additional current-main harness attempt initially used old staged835e HTML with the new PR69 bridge, yielding queueCometTrial reference errors. It is preserved as a diagnostic; the corrected current-root run passes all 12 scoped checks.
+the fresh bound native run passes the update, all120 observations/24 real casts, AX and font. Android SystemUI's ANR dialog intercepted the final Tab; after dismissing that isolated system dialog, a follow-up reconfirmed actual installed APK bytes and exact product script, then passed real Tab/focus. Earlier unbound segmented evidence is historical. Earlier 146/147 CI receipts are historical.
 
 No required F13 acceptance remains open. Verify the final GitHub checkpoint, stop
 this task's shared-file work, then archive only the calling owner chat via the app
 tool. Other tasks retain their own recorded acceptance. Archive success requires
 an actual tool response; no archive outcome is invented in this document.
+
+## Delivery checkpoint and automated review
+
+PR74 saves the final receipts. Its first gate CI37718210381 on75d7782 passes151 defaults,12 required negatives and guarded startup; full logs/metadata are saved. A new final-head green gate remains mandatory before merge/archive, with its immutable receipt saved in PR74's description.
+
+Automated review PRRT_kwDOUF0Vls6qK_0e correctly identified missing resume identity binding. The helper now hashes actual installed APK bytes, compares the artifact, persists source/installed identity, and rejects missing or mismatched identities before importing records. The fresh bound138→142 update/state/AX/font run and separately bound actual Android keyboard follow-up replace earlier unbound evidence. The isolated Android SystemUI ANR/input-focus diagnostic is retained; acceptance assertions are unchanged. Three causal identity negative controls pass. No independent review is claimed.
