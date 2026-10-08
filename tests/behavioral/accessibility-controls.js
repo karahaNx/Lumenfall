@@ -20,7 +20,7 @@ window.runP105ControlQa = function(bridge,ctx,assert){
   press('[data-study-queue="'+studyId+'"]',function(){return !!bridge.getState().studyQueue[studyId];});
   q('[data-tab="forge"]').click();
   press('[data-mult="5"]',function(){return true;});
-  q('[data-tab="deeds"]').click();
+  q('[data-tab="ascend"]').click();
   press('[data-autoascend-toggle]',function(){return !!bridge.getState().autoAscendEnabled;});
 
   var poor=bridge.getState();poor.lumen=0;poor.shards=0;bridge.setState(poor);bridge.renderLayout();

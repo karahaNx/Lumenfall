@@ -1783,6 +1783,8 @@
   .rift-wisp.bond-end{border-radius:11px;}
   .rift-wisp.bond-end:not(:last-child){margin-right:4px;}
   .rift-bond-mark{color:var(--bond-color);font-size:9px;line-height:12px;margin-right:2px;}
+  .rift-wisp-bonds{position:absolute;top:1px;left:2px;display:flex;pointer-events:none;}
+  .rift-wisp-bonds .rift-bond-mark{font-size:8px;line-height:10px;margin-right:1px;}
   .rift-wisp[data-bond] .rift-charge>span{background:var(--bond-color);box-shadow:0 0 8px var(--bond-color);}
   .rift-wisp[data-bond].is-casting{box-shadow:inset 0 2px var(--bond-color),0 0 14px #ffffff70;}
   #rift-bond-effects{position:relative;z-index:2;display:flex;gap:4px;flex:none;min-height:0;}
@@ -2078,18 +2080,40 @@
   @media(prefers-reduced-motion:reduce){nav.tabbar button,nav.tabbar .nav-icon{transition:none;}nav.tabbar .nav-feedback .nav-icon::after,nav.tabbar .nav-feedback .nav-art{animation:none;}}
 
   /* Feedback: the hint slot never changes combat geometry. */
-  #rift-objective-row{height:72px;min-height:72px;max-height:72px;flex:none;margin:4px 10px;align-items:stretch;}
+  #rift-objective-row{height:48px;min-height:48px;max-height:48px;flex:none;margin:4px 10px;align-items:stretch;}
   #rift-objective-row[hidden]{display:flex;}
-  #rift-objective{min-width:0;flex:1;height:70px;min-height:70px;padding:6px 9px;overflow:auto;align-items:start;border:0;background:transparent;}
+  #rift-objective{min-width:0;flex:1;height:46px;min-height:46px;padding:6px 9px;overflow:auto;align-items:start;border:0;background:transparent;}
   #rift-objective[hidden]{display:none;}
   #rift-objective .objective-copy{min-width:0;overflow-wrap:anywhere;white-space:normal;}
   #rift-objective .objective-copy strong,#rift-objective .objective-copy small{white-space:normal;overflow:visible;text-overflow:clip;}
-  #rift-objective-dismiss{width:88px;min-width:88px;height:70px;min-height:44px;margin-left:auto;font-size:12px;line-height:1.4;padding:8px;}
+  #rift-objective .objective-copy strong{font-size:12px;line-height:16px;}
+  #rift-objective .objective-copy small{font-size:11px;line-height:15px;}
+  .wisp-contribution{font-size:12px;line-height:1.5;margin:10px 0;color:var(--ink-dim);overflow-wrap:anywhere;}
+  #rift-objective-dismiss{width:88px;min-width:88px;height:46px;min-height:44px;margin-left:auto;font-size:12px;line-height:1.4;padding:8px;}
+  .rift-bond-copy{overflow-wrap:anywhere;}
+  @media(max-height:680px){.boss-net-value{display:none;}}
   .wisp-progression-open{margin-top:10px;padding-top:10px;border-top:1px solid var(--soft-line);}
   .wisp-upgrade-title{font-size:12px;font-weight:700;margin-bottom:8px;}
   .resonance-help{font-size:12px;line-height:1.5;margin:8px 0;color:var(--ink-dim);overflow-wrap:anywhere;}
   .rift-wisp-state{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;}
-  .rift-wisp-ability{font-size:9px;line-height:1.2;overflow-wrap:anywhere;text-align:center;}
+  #rift-party,.rift-wisp{height:74px;}
+  .rift-wisp{grid-template-rows:24px 3px 11px 20px 12px;}
+  .rift-wisp .wisp-portrait{width:24px;height:24px;}
+  .rift-wisp-name{line-height:11px;}
+  .rift-wisp-power{grid-row:5;line-height:12px;}
+  .rift-wisp-ability{grid-column:1;grid-row:4;font-size:9px;line-height:10px;overflow-wrap:anywhere;text-align:center;}
+  @media(max-height:680px){
+    .shell:has(#tab-battle.active) .hud{gap:0;padding:var(--safe-top) 10px 0;}
+    #rift-objective-row{height:44px;min-height:44px;max-height:44px;margin:2px 10px;}
+    #rift-objective{height:42px;min-height:42px;padding:4px 9px;}
+    #rift-objective-dismiss{height:44px;}
+    #rift-bond-effects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
+    .rift-bond-effect{padding:1px 5px;}
+    #rift-party,.rift-wisp{height:72px;}
+    .rift-wisp{grid-template-rows:24px 3px 11px 18px 12px;}
+    .rift-wisp-name{font-size:9px;}
+    .rift-wisp-ability{font-size:8px;line-height:9px;}
+  }
   .study-bar-track{position:relative;min-height:44px;height:auto;border:1px solid #42746b;border-radius:10px;overflow:hidden;background:#0b1724;}
   .study-bar-fill{position:absolute;top:0;bottom:0;left:0;height:auto;background:#254a43;}
   .study-bar-track .study-time{position:relative;display:flex;align-items:center;justify-content:center;min-height:44px;margin:0;padding:8px;color:#fff;line-height:1.4;text-align:center;font-size:13px;font-weight:700;overflow-wrap:anywhere;}
@@ -2878,14 +2902,14 @@ var ABILITY_DESC = {
 };
 
 var FORMATION_BONDS = [
-  {id:'starcaller', name:'Starcaller Bond', ids:['ember','void'], req:'Ember + Void', effect:'+18% passive & ability damage', tag:'Push'},
-  {id:'dawnpriest', name:'Dawnpriest Bond', ids:['tide','aurora'], req:'Tide + Aurora', effect:'+25% Lumen, Shards & Motes', tag:'Farm'},
-  {id:'duskguard', name:'Duskguard Bond', ids:['stone','titan'], req:'Stone + Titan', effect:'+35% passive & ability damage vs Bosses', tag:'Boss'},
-  {id:'pathfinder', name:'Pathfinder Bond', ids:['gale','thorn'], req:'Gale + Thorn', effect:'+20% passive & ability damage vs non-Bosses', tag:'Push / Farm'},
-  {id:'kindling', name:'Kindling Bond', ids:['ember','tide'], req:'Ember + Tide', effect:'+25% Guardian Tap damage', tag:'Push'},
-  {id:'vanguard', name:'Vanguard Bond', ids:['ember','stone'], req:'Ember + Stone', effect:'20% less Boss regeneration', tag:'Boss'},
-  {id:'quarry', name:'Quarry Bond', ids:['stone','gale'], req:'Stone + Gale', effect:'+20% Shards from Gale abilities', tag:'Farm'},
-  {id:'harvest', name:'Harvest Bond', ids:['thorn','aurora'], req:'Thorn + Aurora', effect:'+20% Lumen from Thorn abilities', tag:'Farm'}
+  {id:'starcaller', name:'Starcaller Bond', ids:['ember','void'], req:'Ember + Void', effect:'+18% passive & ability damage', riftEffect:'Passive/ability +18%', tag:'Push'},
+  {id:'dawnpriest', name:'Dawnpriest Bond', ids:['tide','aurora'], req:'Tide + Aurora', effect:'+25% Lumen, Shards & Motes', riftEffect:'Lumen/Shards/Motes +25%', tag:'Farm'},
+  {id:'duskguard', name:'Duskguard Bond', ids:['stone','titan'], req:'Stone + Titan', effect:'+35% passive & ability damage vs Bosses', riftEffect:'Boss Wisps +35%', tag:'Boss'},
+  {id:'pathfinder', name:'Pathfinder Bond', ids:['gale','thorn'], req:'Gale + Thorn', effect:'+20% passive & ability damage vs non-Bosses', riftEffect:'Non-Boss Wisps +20%', tag:'Push / Farm'},
+  {id:'kindling', name:'Kindling Bond', ids:['ember','tide'], req:'Ember + Tide', effect:'+25% Guardian Tap damage', riftEffect:'Tap +25%', tag:'Push'},
+  {id:'vanguard', name:'Vanguard Bond', ids:['ember','stone'], req:'Ember + Stone', effect:'20% less Boss regeneration', riftEffect:'Boss regen −20%', tag:'Boss'},
+  {id:'quarry', name:'Quarry Bond', ids:['stone','gale'], req:'Stone + Gale', effect:'+20% Shards from Gale abilities', riftEffect:'Gale Shards +20%', tag:'Farm'},
+  {id:'harvest', name:'Harvest Bond', ids:['thorn','aurora'], req:'Thorn + Aurora', effect:'+20% Lumen from Thorn abilities', riftEffect:'Thorn Lumen +20%', tag:'Farm'}
 ];
 // Presentation identities stay stable across formations; shapes supplement color.
 var BOND_VISUALS = {
@@ -3432,7 +3456,7 @@ function reconcileFormationRebuild(snapshot){
   // Ember is startup support only. Remove it once an intended member can fight.
   // This projection never recruits or raises a level, including on save loading.
   if(powered.length) snapshot.activeParty = powered;
-  else if((snapshot.spirits.ember||0)>0) snapshot.activeParty = ['ember'];
+  else if((snapshot.spirits.ember||0)>0 && !(snapshot.formationAutosaveVersion===1 && snapshot.activeParty.length===0)) snapshot.activeParty = ['ember'];
   else snapshot.activeParty = [];
   snapshot.activeFormationPreset = snapshot.formationAutosaveVersion===1 ? intent.preset : '';
   if(powered.length===intent.members.length){
@@ -4862,7 +4886,7 @@ function toggleActive(id){
     if(state.activeParty.length>=5){ showToast('Bench a Wisp first — max 5 Active.'); return; }
     state.activeParty.push(id);
   }
-  autosaveCurrentFormation();
+  autosaveCurrentFormation(id);
   saveState();
   renderSpirits();
   updateBattleFast();
@@ -4880,12 +4904,12 @@ function formationPresetUnavailable(name){
 function formationPresetIsActive(name){
   return state.activeFormationPreset===name;
 }
-function autosaveCurrentFormation(){
+function autosaveCurrentFormation(explicitMember){
   var intent=state.formationRebuild;
   var name=state.activeFormationPreset || (intent && intent.preset) || 'push';
   var pending=intent ? intent.members.filter(function(id){return (state.spirits[id]||0)<=0;}) : [];
   var members=state.activeParty.filter(function(id){
-    return !(intent && pending.length && id==='ember' && intent.members.indexOf(id)===-1);
+    return !(intent && pending.length && id==='ember' && id!==explicitMember && intent.members.indexOf(id)===-1);
   });
   pending.forEach(function(id){if(members.indexOf(id)===-1) members.push(id);});
   state.formationPresets[name]=members.slice(0,5);
@@ -5826,7 +5850,7 @@ function updateBattleFast(){
     bossStatus.setAttribute('data-regen',String(regenPerSec));
     bossStatus.setAttribute('data-dps',String(yourDps));
     bossStatus.setAttribute('data-net',String(netDps));
-    var bossText='<strong>Regen +'+formatRiftNumber(regenPerSec)+' HP/s</strong><span class="boss-net '+(enough?'positive':'negative')+'">Auto DPS ≈ '+formatRiftNumber(yourDps)+' · Net '+(netDps>0?'+':netDps<0?'−':'')+formatRiftNumber(Math.abs(netDps))+'/s</span>';
+    var bossText='<strong>Regen +'+formatRiftNumber(regenPerSec)+' HP/s</strong><span class="boss-net '+(enough?'positive':'negative')+'">Auto DPS ≈ '+formatRiftNumber(yourDps)+'<span class="boss-net-value"> · Net '+(netDps>0?'+':netDps<0?'−':'')+formatRiftNumber(Math.abs(netDps))+'/s</span></span>';
     if(bossStatus.innerHTML!==bossText)bossStatus.innerHTML=bossText;
     bossStatus.setAttribute('aria-label','Boss regeneration '+regenPerSec+' HP per second. Estimated sustained damage '+yourDps+' per second, including abilities and Auto-Tap, excluding manual taps. Net '+netDps+' HP per second. Burst timing can change the result.');
     els['enemy-stage'].classList.add(enough ? 'boss-ready' : 'boss-wall');
@@ -5923,7 +5947,7 @@ function renderBondSummary(){
   var effects=els['rift-bond-effects'];
   var html=active.map(function(b){
     var visual=BOND_VISUALS[b.id];
-    return '<div class="rift-bond-effect" data-bond-effect="'+b.id+'" style="--bond-color:'+visual.color+'" aria-label="'+b.name+': '+b.effect+'"><span class="rift-bond-mark" aria-hidden="true">'+visual.mark+'</span><span class="rift-bond-copy">'+b.effect+'</span></div>';
+    return '<div class="rift-bond-effect" data-bond-effect="'+b.id+'" style="--bond-color:'+visual.color+'" aria-label="'+b.name+': '+b.effect+'"><span class="rift-bond-mark" aria-hidden="true">'+visual.mark+'</span><span class="rift-bond-copy">'+(b.riftEffect||b.effect)+'</span></div>';
   }).join('');
   if(effects.innerHTML!==html) effects.innerHTML=html;
   effects.hidden=!active.length;
@@ -5932,10 +5956,12 @@ function renderBondSummary(){
 // The DOM is retained between ticks; these observers never mutate save state.
 function renderRiftParty(){
   var root=els['rift-party'];
-  var bonds=activeFormationBonds(),byId={},ordered=[];
-  // Group each powered Bond visually without changing simulation/save order.
+  var bonds=activeFormationBonds(),byId={},memberships={},ordered=[];
+  // Disjoint primary pairs can sit together. Overlapping Bonds retain their
+  // own marks on both partners without duplicating a Wisp's combat card.
   bonds.forEach(function(bond){
-    state.activeParty.filter(function(id){return bond.ids.indexOf(id)!==-1;}).forEach(function(id){if(!byId[id]){byId[id]=bond;ordered.push(id);}});
+    bond.ids.forEach(function(id){if(!memberships[id])memberships[id]=[];memberships[id].push(bond);});
+    if(bond.ids.every(function(id){return !byId[id];})) bond.ids.forEach(function(id){byId[id]=bond;ordered.push(id);});
   });
   state.activeParty.forEach(function(id){if(!byId[id])ordered.push(id);});
   var key=state.activeParty.join(',')+'|'+bonds.map(function(b){return b.id;}).join(',');
@@ -5944,9 +5970,10 @@ function renderRiftParty(){
     root.innerHTML=ordered.map(function(id,index){
       var sp=SPIRITS.find(function(x){return x.id===id;}),bond=byId[id],visual=bond&&BOND_VISUALS[bond.id];
       var position=bond ? (byId[ordered[index+1]]===bond?' bond-start':' bond-end') : '';
-      var marker=visual ? '<span class="rift-bond-mark" aria-hidden="true">'+visual.mark+'</span>' : '';
-      return '<div class="rift-wisp'+position+'" data-rift-wisp="'+id+'"'+(bond?' data-bond="'+bond.id+'"':'')+' role="group" aria-label="'+sp.name+(bond?' — '+bond.name:'')+'" style="--wisp-color:'+sp.color+(visual?';--bond-color:'+visual.color:'')+'">'+wispPortrait(sp)+
-        '<span class="rift-wisp-name">'+marker+sp.shortName+'</span><span class="rift-wisp-ability">'+sp.abilityName+'</span><span class="rift-wisp-state"></span><span class="rift-wisp-power" title="Passive Wisp power"></span>'+
+      var all=memberships[id]||[];
+      var marker=all.length ? '<span class="rift-wisp-bonds">'+all.map(function(item){var v=BOND_VISUALS[item.id];return '<span class="rift-bond-mark" data-wisp-bond="'+item.id+'" style="--bond-color:'+v.color+'" aria-hidden="true">'+v.mark+'</span>';}).join('')+'</span>' : '';
+      return '<div class="rift-wisp'+position+'" data-rift-wisp="'+id+'"'+(bond?' data-bond="'+bond.id+'"':'')+' role="group" aria-label="'+sp.name+(all.length?' — '+all.map(function(item){return item.name;}).join(', '):'')+'" style="--wisp-color:'+sp.color+(visual?';--bond-color:'+visual.color:'')+'">'+wispPortrait(sp)+marker+
+        '<span class="rift-wisp-name">'+sp.shortName+'</span><span class="rift-wisp-ability">'+sp.abilityName+'</span><span class="rift-wisp-state"></span><span class="rift-wisp-power" title="Passive Wisp power"></span>'+
         '<div class="rift-charge" role="progressbar" aria-label="'+sp.name+' — '+sp.abilityName+'" aria-valuemin="0" aria-valuemax="100"><span></span></div></div>';
     }).join('');
   }
@@ -6306,11 +6333,11 @@ function renderLongStudies(){
       var queueOnActive = !!state.studyQueue[active.id];
       html += '<div class="card study-card study-running" data-running-study="'+active.id+'">' +
         '<div class="study-running-label">'+(maxed?'Finishing paid Study':index===0?'Next completion':'Running')+'</div>' +
-        '<div class="name"><span>'+(node?node.name:'')+' <span style="color:var(--mote);">Lv.'+(longStudyLevel(active.id)+(maxed?0:1))+(maxed?' · Maxed':'')+'</span></span>' +
+        '<div class="name"><span>'+(node?node.name:'')+' <span style="color:var(--mote);">Lv.'+longStudyLevel(active.id)+(maxed?' · Maxed':'')+'</span></span>' +
           ' <button class="node-queue-toggle '+(queueOnActive?'active':'')+'" data-study-queue="'+active.id+'">Queue '+(queueOnActive?'ON':'OFF')+'</button>' +
         '</div>' +
         (node ? projectEarnedMarkup(active.id) : '') +
-        '<div class="effect-note">'+(maxed?'Paid work finishes without another level or bonus.':'Bonus earned on completion.')+'</div>' +
+        '<div class="effect-note">'+(maxed?'Paid work finishes without another level or bonus.':active.id==='measuredinquiry'?'Next: '+earnedPercent(0.02*studyEffectiveLevel(node,longStudyLevel(active.id)+1))+'% less work, earned on completion.':'Bonus earned on completion.')+'</div>' +
         '<div class="study-bar-track" role="progressbar" aria-label="'+(node?node.name:'Study')+' progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.round(pct)+'" aria-valuetext="'+studyRemainingText(active)+'"><div class="study-bar-fill" data-study-bar="'+active.id+'" style="width:'+pct+'%;"></div><span class="study-time" data-study-text="'+active.id+'">'+studyRemainingText(active)+'</span></div>' +
         '<details class="study-inspection" data-study-inspection="'+active.id+'" '+(openInspections.indexOf(active.id)!==-1?'open':'')+'><summary data-study-details="'+active.id+'" aria-label="'+(node?node.name:'Study')+' — Speed up">Speed up</summary>' +
         (node ? '<div class="desc">'+node.desc+'</div>' : '') +
@@ -7818,7 +7845,11 @@ function advanceAuthoritativeTime(elapsedSec,options){
     next = Math.min(next,buffStep);
     next = Math.min(next,bossRetreatStep);
 
-    var farmGridStep = Infinity;
+    // Use the same absolute second boundaries in Push and Farm. Otherwise a
+    // caller replaying one second at a time partitions ability fill and damage
+    // differently from one long run, amplifying roundoff at mature Wisp power.
+    var farmGridStep = farmGridRemainingSec;
+    next = Math.min(next,farmGridStep);
     var economyStep = Infinity;
     if(state.riftMode==='farm'){
       farmGridStep = farmGridRemainingSec;
@@ -7831,7 +7862,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
 
     if(!Number.isFinite(next)) next = remaining;
     next = Math.max(0,Math.min(remaining,next));
-    var hitsFarmGrid = state.riftMode==='farm' && next===farmGridStep;
+    var hitsFarmGrid = next===farmGridStep;
     var hitsWindowEnd = next===remaining;
     var diagnosticEventKinds = [];
     if(next===abilityStep) diagnosticEventKinds.push('ability');

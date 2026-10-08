@@ -13,7 +13,7 @@ window.runP207FormationQa = function(b,ctx,assert,parity){
   var checks=0;
   function ok(v,msg){checks++;assert(v,msg);}
   function same(a,c,msg){ok(JSON.stringify(a)===JSON.stringify(c),msg+' '+JSON.stringify(a));}
-  function valid(s){ok(s.activeParty.length>0 && s.activeParty.length<=5,'one to five combat slots');ok(new Set(s.activeParty).size===s.activeParty.length,'unique active slots');s.activeParty.forEach(function(id){ok(s.spirits[id]>0,'only powered members active: '+id);});}
+  function valid(s){ok(s.activeParty.length<=5,'zero to five combat slots');ok(new Set(s.activeParty).size===s.activeParty.length,'unique active slots');s.activeParty.forEach(function(id){ok(s.spirits[id]>0,'only powered members active: '+id);});}
   function seed(ids,preset){return window.p207Seed(b,ids,preset);}
   function ascend(ids,preset){b.setState(seed(ids,preset));b.ascendManual();b.feedbackSave();return get();}
   function fund(n){var s=get();s.lumen=n;b.setState(s);}
@@ -25,7 +25,7 @@ window.runP207FormationQa = function(b,ctx,assert,parity){
     same(after.activeParty,['ember'],'temporary powered Ember only');
     Object.keys(after.spirits).forEach(function(id){ok(after.spirits[id]===(id==='ember'?1:0),'normal level reset '+id);ok(after.heroResource[id]===0,'resource reset '+id);});
     ok(after.lumen===0,'Lumen reset');valid(after);same(after.formationPresets,presets,'presets never overwritten');
-    if(ids.length>1){same(after.formationRebuild.members,ids,'capture ordered intent before mutation');ok(after.activeFormationPreset==='','pending preset not advertised active');}
+    if(ids.length>1){same(after.formationRebuild.members,ids,'capture ordered intent before mutation');ok(after.activeFormationPreset===preset,'selected preset retains pending autosave association');}
     ids.slice().reverse().forEach(function(id){if(id==='ember')return;fund(t.cost(id));buy(id);var s=get();same(s.activeParty,ids.filter(function(x){return s.spirits[x]>0;}),'progressive target order');});
     after=get();same(after.activeParty,ids,'exact final membership/order');ok(after.formationRebuild===null,'completed intent cleared');ok(after.activeFormationPreset===preset,'restore only original matching preset');
   });
@@ -43,12 +43,16 @@ window.runP207FormationQa = function(b,ctx,assert,parity){
   s=ascend(['tide']);s.empowerQueue.ember=false;s.lumen=59;b.setState(s);before=get();ok(!t.tick(),'unaffordable purchase rejected');same(get().spirits,before.spirits,'no unaffordable level');ok(get().lumen===59,'no reservation');fund(60);buy('tide');
   // Repeated Ascension during a partial rebuild retains the original target.
   s=ascend(['void','tide','stone'],'boss');fund(60);buy('tide');s=get();s.depth=101;s.enemyDepth=101;b.setState(s);b.ascendManual();same(get().formationRebuild.members,['void','tide','stone'],'repeat preserves original intent');same(get().activeParty,['ember'],'repeat resets levels/startup');
-  // Invalid player actions must not cancel; successful actions must cancel.
-  ok(!b.applyFormationPreset('boss'),'unpowered preset apply fails');ok(!!get().formationRebuild,'failed apply retains intent');t.toggle('ember');ok(!!get().formationRebuild,'cannot bench last active; retain intent');
-  fund(60);buy('tide');t.toggle('ember');ok(get().formationRebuild===null,'successful Field cancels intent');
+  // Pending preset selection keeps intent without granting combat membership.
+  ok(b.applyFormationPreset('boss'),'pending preset applies its powered projection');same(get().activeParty,[],'unrecruited preset has no free combat slots');
+  same(get().formationRebuild.members,['void','tide','stone'],'pending ordered intent retained');
+  var otherPresets=copy(get().formationPresets);fund(60);buy('tide');t.toggle('ember');
+  same(get().formationPresets.boss,['tide','ember','void','stone'],'explicit Field includes Ember and pending intent in autosave');
+  same(get().formationPresets.push,otherPresets.push,'Boss autosave preserves Push');same(get().formationPresets.farm,otherPresets.farm,'Boss autosave preserves Farm');
+  ok(!!get().formationRebuild,'Field retains unpurchased pending members');
   s=ascend(['void','stone'],'boss');ok(b.applyFormationPreset('push'),'explicit Ember preset succeeds');ok(get().formationRebuild===null,'preset supersedes intent');
   s=ascend(['void','stone'],'boss');ok(b.saveFormationPreset('farm'),'explicit save succeeds');ok(get().formationRebuild===null,'saving current formation accepts current membership');
-  s=ascend(['tide','stone'],'boss');s.formationPresets.boss=['ember'];b.setState(s);fund(60);buy('tide');fund(360);buy('stone');ok(get().activeFormationPreset==='','edited preset association not restored');
+  s=ascend(['tide','stone'],'boss');s.formationPresets.boss=['ember'];b.setState(s);fund(60);buy('tide');fund(360);buy('stone');ok(get().activeFormationPreset==='','contradictory externally edited preset cannot regain an incorrect association');
   // No unpowered combat, ability, support or Bond contribution, even with queued resources.
   s=ascend(['tide','stone','gale','thorn','void']);s.achieved.labmaster=false;
   ['tide','stone','gale','thorn','void'].forEach(function(id){s.heroResource[id]=100;});
@@ -189,7 +193,7 @@ window.runP207PersistenceReview = function(b,ctx,assert){
     s.formationPresets.boss=c.members.slice();s.formationRebuild={members:c.members,preset:'boss'};
     var n=t.canonical(s);same(n.activeParty,c.party,c.name+' first-pass active order');
     same(n.formationRebuild,c.done?null:s.formationRebuild,c.name+' intent/completion');
-    ok(n.activeFormationPreset===(c.done?'boss':''),c.name+' preset association');
+    ok(n.activeFormationPreset==='boss',c.name+' selected pending/completed autosave preset association');
     var expectedLevels=Object.assign({},s.spirits);
     if(!c.members.some(function(id){return s.spirits[id]>0;}) && !s.spirits.ember) expectedLevels.ember=1;
     same(n.spirits,expectedLevels,c.name+' only established Ember fallback grant');
@@ -204,8 +208,9 @@ window.runP207PersistenceReview = function(b,ctx,assert){
   });
   b.setState(input);var s=b.getState();s.achieved.labmaster=true;s.empowerQueue.ember=false;s.empowerQueue.tide=false;s.empowerQueue.stone=false;
   b.setState(s);ok(!t.tick(),'unrelated Gale cannot be auto-purchased after canonicalization');same(b.getState().spirits,s.spirits,'reserve progression intact');
-  t.toggle('gale');s=b.getState();ok(s.formationRebuild===null,'explicit powered selection cancels intent');
-  same(t.canonical(s).formationRebuild,null,'cancelled intent cannot resurrect');
+  t.toggle('gale');s=b.getState();same(s.formationPresets.push,['gale','tide','stone'],'Field without an earlier selected preset autosaves Push with pending recruitment');
+  same(s.activeParty,['gale'],'only paid selected Wisp contributes');same(s.formationRebuild.members,['gale','tide','stone'],'pending selection retains ordered intent');
+  same(t.canonical(s),s,'autosaved pending selection is canonical and idempotent');
   var detected=false,audit=t.audit(assert,'persist');
   try{var broken=t.canonical(input);assert(broken.activeParty.join(',')==='ember','PERSIST-01 negative retained Gale');}
   catch(e){detected=e.message.indexOf('PERSIST-01 negative retained Gale')!==-1;}

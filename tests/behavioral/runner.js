@@ -653,7 +653,7 @@
           assert(s.wispModules.ember===20 && s.wispModules.void===20 && s.wispModules.titan===9,'existing Module progression must not be reduced by future costs');
           assert(s.research.focus===24 && s.longStudyLevels.wispascend===9,'mature Lab progression must load intact');
           assert(s.owned.autoascend===true && s.autoAscendEnabled===true,'mature automation flags must load intact');
-          assert(s.comets===850 && s.sigils===210,'existing mature Comet/Sigil balances must load intact');
+          assert(s.comets===1200 && s.sigils===210,'mature balances preserve original value and refund retired350 Comets once');
           assert(s.owned.autoascend && s.owned.offline24 && s.owned.offline48 && s.owned.rememberbulk,'all existing Rest Stop purchases must remain owned');
           assert(s.sigilResonanceUses===0 && s.dailyQuestRefreshes===0,'older schema-v1 saves must safely default new utility counters to zero');
           assert(s.ascendRewardedDepth===0,'existing schema-v1 saves without a benchmark must safely default to 0');
@@ -1562,18 +1562,18 @@
           supportBaseState.wispModules.tide = 20;
           bridge.setState(supportBaseState);
           var tideSupport = bridge.wispFormulaSnapshot('tide',100,1);
-          assert(tideSupport.supportProfile.strength===1.25 && tideSupport.supportProfile.durationMs===4000,'Support strength/duration must ignore Wisp Power, Rarity and Module');
+          assert(tideSupport.supportProfile.strength===1.25 && tideSupport.supportProfile.durationMs===1000,'Support strength/duration must ignore Wisp Power, Rarity and Module');
           var supportTrigger = bridge.triggerAbilityFor('tide','live',PARITY_CLOCK_MS);
           assert(bridge.getState().supportBuffs.sources.tide.mult===1.25 && supportTrigger.after.buffMult===1,'Support ability must apply +25% passive/Tap buff');
-          assert(bridge.getState().supportBuffs.sources.tide.until===PARITY_CLOCK_MS+4000 && supportTrigger.after.buffUntil===0,'Support ability must last 4 seconds without Ultimate');
+          assert(bridge.getState().supportBuffs.sources.tide.until===PARITY_CLOCK_MS+1000 && supportTrigger.after.buffUntil===0,'Support ability must last 1 second without Ultimate');
 
           var supportUltState = cloneJson(supportBaseState);
           supportUltState.wispUltimate.tide = true;
           bridge.setState(supportUltState);
           var tideUltimate = bridge.wispFormulaSnapshot('tide',100,1);
-          assert(tideUltimate.supportProfile.strength===1.5 && tideUltimate.supportProfile.durationMs===8000,'Support Ultimate must become +50% for 8 seconds');
+          assert(tideUltimate.supportProfile.strength===1.5 && tideUltimate.supportProfile.durationMs===1500,'Support Ultimate must become +50% for 1.5 seconds');
           var supportUltTrigger = bridge.triggerAbilityFor('tide','live',PARITY_CLOCK_MS);
-          assert(bridge.getState().supportBuffs.sources.tide.mult===1.5 && bridge.getState().supportBuffs.sources.tide.until===PARITY_CLOCK_MS+8000 && supportUltTrigger.after.buffUntil===0 && supportUltTrigger.after.buffMult===1,'Support Ultimate runtime effect');
+          assert(bridge.getState().supportBuffs.sources.tide.mult===1.5 && bridge.getState().supportBuffs.sources.tide.until===PARITY_CLOCK_MS+1500 && supportUltTrigger.after.buffUntil===0 && supportUltTrigger.after.buffMult===1,'Support Ultimate runtime effect');
 
           var rewardState = cleanFormulaState(['gale','thorn','tide','aurora']);
           rewardState.wispModules.gale = 10;
@@ -1598,8 +1598,8 @@
           );
           parityApprox(
             thornReward.abilityReward.lumen,
-            Math.round(thornReward.wispPower*0.10*1.5*1.25),
-            'Thorn Module/Dawnpriest Lumen ability reward'
+            Math.round(thornReward.wispPower*0.10*1.5*1.25*1.20),
+            'Thorn Module/Dawnpriest/Harvest Lumen ability reward'
           );
 
           var rewardUltState = cloneJson(rewardState);
@@ -1618,7 +1618,7 @@
           );
           parityApprox(
             rewardUltThorn.abilityReward.lumen,
-            Math.round(rewardUltThorn.wispPower*0.10*1.5*2*1.25),
+            Math.round(rewardUltThorn.wispPower*0.10*1.5*2*1.25*1.20),
             'Thorn Ultimate must double Lumen ability output'
           );
 
@@ -1766,12 +1766,12 @@
           amplifierBase.spirits.tide=10;
           amplifierBase.wispUltimate.tide=false;
           var tideBaseFormula=formulaSnapshotFor(amplifierBase,'tide',19,1);
-          assert(tideBaseFormula.supportProfile.strength===1.25 && tideBaseFormula.supportProfile.durationMs===4000,'Amplifier base buff must remain +25% for 4s');
+          assert(tideBaseFormula.supportProfile.strength===1.25 && tideBaseFormula.supportProfile.durationMs===1000,'Amplifier base buff is +25% for the approved1s');
           var amplifierUltimate=cloneJson(amplifierBase);
           amplifierUltimate.heroRarity.tide=5;
           amplifierUltimate.wispUltimate.tide=true;
           var tideUltFormula=formulaSnapshotFor(amplifierUltimate,'tide',19,1);
-          assert(tideUltFormula.supportProfile.strength===1.5 && tideUltFormula.supportProfile.durationMs===8000,'Amplifier Ultimate must remain +50% for 8s');
+          assert(tideUltFormula.supportProfile.strength===1.5 && tideUltFormula.supportProfile.durationMs===1500,'Amplifier Ultimate is +50% for the approved1.5s');
 
           var breakerBase=cleanFormulaState(['stone']);
           breakerBase.spirits.stone=10;
@@ -1824,18 +1824,18 @@
           var pushState=cleanFormulaState(presetState.formationPresets.push);
           var pushSnapshot=formulaSnapshotFor(pushState,'ember',19,1);
           parityApprox(pushSnapshot.formationDamageMult,1.18*1.20,'Push Formation must retain Starcaller + Pathfinder damage');
-          assert(bridge.activeBondIds().sort().join(',')==='pathfinder,starcaller','Push Formation Bonds must remain unchanged');
+          assert(bridge.activeBondIds().sort().join(',')==='kindling,pathfinder,starcaller','Push Formation retains its damage Bonds and adds Kindling');
 
           var farmState=cleanFormulaState(presetState.formationPresets.farm);
           var farmSnapshot=formulaSnapshotFor(farmState,'gale',19,1);
           parityApprox(farmSnapshot.formationDamageMult,1.20,'Farm Formation must retain Pathfinder non-Boss damage');
           parityApprox(farmSnapshot.formationRewardMult,1.25,'Farm Formation must retain Dawnpriest reward bonus');
-          assert(bridge.activeBondIds().sort().join(',')==='dawnpriest,pathfinder','Farm Formation Bonds must remain unchanged');
+          assert(bridge.activeBondIds().sort().join(',')==='dawnpriest,harvest,kindling,pathfinder','Farm Formation retains its reward/damage Bonds and adds Harvest/Kindling');
 
           var bossState=cleanFormulaState(presetState.formationPresets.boss);
           var bossSnapshot=formulaSnapshotFor(bossState,'stone',20,1);
           parityApprox(bossSnapshot.formationDamageMult,1.18*1.35,'Boss Formation must retain Starcaller + Duskguard damage');
-          assert(bridge.activeBondIds().sort().join(',')==='duskguard,starcaller','Boss Formation Bonds must remain unchanged');
+          assert(bridge.activeBondIds().sort().join(',')==='duskguard,kindling,starcaller,vanguard','Boss Formation retains its damage Bonds and adds Kindling/Vanguard');
 
           var liveBreaker=cloneJson(breakerBase);
           liveBreaker.depth=19;liveBreaker.enemyDepth=19;liveBreaker.enemyMaxHp=1e9;liveBreaker.enemyHp=1e9;
@@ -2006,18 +2006,23 @@
           farmPreset.click();
           var afterFarm=state();
           assert(afterFarm.activeParty.join(',')===qol.formationPresets.farm.join(','),'Farm preset must apply the exact saved Wisp Formation');
-          assert(bridge.activeBondIds().sort().join(',')==='dawnpriest,pathfinder','Farm preset must recalculate the intended Formation Bonds');
+          assert(bridge.activeBondIds().sort().join(',')==='dawnpriest,harvest,kindling,pathfinder','Farm preset must recalculate all intended Formation Bonds');
           assert(document.querySelector('[data-formation-preset="farm"]').getAttribute('aria-pressed')==='true','active Formation preset must be visibly and semantically selected');
           assert(document.activeElement===document.querySelector('[data-formation-preset="farm"]'),'Formation quick-switch must preserve keyboard focus after rendering');
 
           var custom=cloneJson(state());
           custom.activeParty=['ember','tide','stone'];
-          custom.activeFormationPreset='';
+          custom.formationPresets.boss=custom.activeParty.slice();
+          custom.activeFormationPreset='boss';
           bridge.setState(custom);
           bridge.renderLayout();
-          document.querySelector('[data-save-formation="boss"]').click();
-          assert(state().formationPresets.boss.join(',')==='ember,tide,stone','Save Boss must store the player-selected current Formation');
-          assert(state().activeFormationPreset==='boss','saving a preset must make that exact Formation active');
+          document.querySelector('[data-toggle="stone"]').click();
+          assert(state().formationPresets.boss.join(',')==='ember,tide','Bench autosaves the selected Boss Formation');
+          document.querySelector('[data-toggle="stone"]').click();
+          assert(state().formationPresets.boss.join(',')==='ember,tide,stone','Field autosaves the selected Boss Formation');
+          assert(state().activeFormationPreset==='boss','autosave retains selected identity');
+          assert(!document.querySelector('[data-save-formation]'),'Formation requires no manual Save control');
+          assert(state().formationPresets.farm.join(',')===qol.formationPresets.farm.join(','),'Boss autosave leaves Farm untouched');
           bridge.save();
           var persisted=JSON.parse(bridge.rawSave());
           var roundTrip=bridge.setState(persisted);
@@ -2030,9 +2035,9 @@
           invalid.formationPresets.push=['deleted-wisp','ember','ember','aurora'];
           var normalized=bridge.setState(invalid);
           assert(normalized.formationPresets.push.join(',')==='ember,aurora','unknown and duplicate preset references must normalize safely while a known unavailable Wisp remains saved');
-          var beforeInvalidParty=normalized.activeParty.join(',');
-          assert(bridge.applyFormationPreset('push')===false,'a preset containing an unavailable Wisp must fail safely');
-          assert(state().activeParty.join(',')===beforeInvalidParty,'failed preset activation must not partially mutate the current Formation');
+          assert(bridge.applyFormationPreset('push')===true,'a known preset can retain unavailable recruitment intent');
+          assert(state().activeParty.join(',')==='ember' && state().spirits.aurora===0,'only its already purchased member enters combat');
+          assert(state().formationRebuild.members.join(',')==='ember,aurora' && state().activeFormationPreset==='push','pending intent and selected preset persist');
 
           bridge.setState(qol);
           bridge.renderLayout();

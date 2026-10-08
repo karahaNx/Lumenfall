@@ -13,6 +13,7 @@ window.runInquiryQa=function(b,ctx,assert,assertProtectedParity,assertSummaryPar
   var checks=0,t=b.inquiry,q=function(s){return document.querySelector(s);};
   function ok(v,m){checks++;assert(v,m);}
   function same(a,c,m){ok(JSON.stringify(a)===JSON.stringify(c),m);}
+  function near(a,c,m){ok(Math.abs(a-c)<1e-7,m+' ('+a+' vs '+c+')');}
   function seed(){return window.inquirySeed(b,ctx);}
   function install(s){
     if(s.maxDepthEver<s.depth){s.depth=s.maxDepthEver;s.enemyDepth=s.depth;s.enemyMaxHp=b.enemyHpFor(s.depth);s.enemyHp=s.enemyMaxHp;}
@@ -123,8 +124,8 @@ window.runInquiryQa=function(b,ctx,assert,assertProtectedParity,assertSummaryPar
     var events=offline.timeline||offline.summary.timeline||[];
     var full=seed();full.longStudyLevels.measuredinquiry=13;
     full.activeStudies=[{id:'measuredinquiry',remainingSec:43201,totalDurationSec:43201,speedMult:1},{id:'guardmastery',remainingSec:43202,totalDurationSec:43202,speedMult:1}];install(full);b.setLastSeen(b.clockNow()-43203*1000);
-    var actual=b.applyOfflineNow();ok(actual.effectiveSec===43200 && b.getState().longStudyLevels.guardmastery===1&&b.getState().longStudyLevels.measuredinquiry===13,'actual applyOfflineProgress continues studies past12h cap');
-    same(actual.completedStudies,["Guardian's Mastery"],'actual offline report earned only');same(actual.closedStudies,['Measured Inquiry'],'actual offline neutral disposal');
+    var actual=b.applyOfflineProductiveOnly();ok(actual.effectiveSec===43200 && b.getState().longStudyLevels.guardmastery===0&&b.getState().longStudyLevels.measuredinquiry===13&&b.getState().activeStudies.length===2,'all paid Studies stop at shared12h productive cap');near(b.getState().activeStudies[0].remainingSec,1,'Inquiry remaining paid work');near(b.getState().activeStudies[1].remainingSec,2,'Guardian remaining paid work');
+    same(actual.completedStudies,[],'beyond-cap paid Study never earns completion');same(actual.closedStudies,[],'beyond-cap record remains available for future productive work');
     return {checks:checks,negativeControls:2,capCompletion:true,overcapTail:true,dueEntry:true,arrayOrder:true,liveOfflineChunkParity:true,actual12hTail:true,timelineEvents:events.length};
   }
   // Actual current Lab controls and observer purity, including small viewports.

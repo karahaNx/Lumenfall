@@ -40,7 +40,7 @@ window.runBuffTimingQa=function(b,ctx,assert,parity){
   ok(types.indexOf('buffExpire')<types.indexOf('ability') && types.indexOf('ability')<types.indexOf('autoTap'),'expiry -> support refresh -> tap event order');
   ok(coincident.state.buffUntil===0 && coincident.state.buffMult===1 && coincident.state.supportBuffs.sources.tide.until===clock+1000+profile.durationMs && coincident.state.supportBuffs.sources.tide.mult===profile.strength,'expired strength not retained across new cast');
   s=seed();s.spirits.tide=1;s.activeParty=['ember','tide'];s.buffUntil=clock+10000;s.buffMult=1.8;b.setState(s);
-  b.triggerAbilityFor('tide','live',clock+500);ok(b.getState().buffUntil===clock+10000 && b.getState().buffMult===1.8 && b.getState().supportBuffs.sources.tide.until===clock+4500,'new shorter cast preserves independent legacy entitlement');
+  b.triggerAbilityFor('tide','live',clock+500);ok(b.getState().buffUntil===clock+10000 && b.getState().buffMult===1.8 && b.getState().supportBuffs.sources.tide.until===clock+1500,'new shorter cast preserves independent legacy entitlement');
   b.triggerAbilityFor('tide','live',clock+9000);ok(b.getState().buffUntil===clock+10000 && b.getState().buffMult===1.8 && b.getState().supportBuffs.sources.tide.until===clock+9000+profile.durationMs,'source refresh extends only its own deadline, never legacy');
   var updated=b.getState();b.simulate(.25,'live',.25,clock+9000);ok(b.getState().buffUntil===updated.buffUntil,'next call derives refreshed deadline from current canonical field');
   // The original pre-purchase divergence is obligatory, including a scoped
@@ -50,9 +50,16 @@ window.runBuffTimingQa=function(b,ctx,assert,parity){
     b.setState(s);var direct=b.simulate(60,'offline',60,clock);b.setState(s);var ref=b.simulate(60,'offline',1,clock);
     close(direct.state.enemyHp,ref.state.enemyHp,'pre-purchase buff timing');return {directHp:direct.state.enemyHp,referenceHp:ref.state.enemyHp};
   }
-  var pre=prePurchase(),undo=b.buffTiming.restoreOldCalculation(),caught='';
-  try{prePurchase();}catch(e){caught=e.message;}finally{undo();}
-  ok(caught.indexOf('pre-purchase buff timing')===0,'old deadline mutation must fail the damage assertion, not crash');
+  function deadlineOracle(){
+    var s=seed();s.spirits.ember=60;s.buffUntil=2000000002234.375;s.buffMult=1.25;
+    s.activeStudies=[{id:'guardmastery',remainingSec:2.123456,totalDurationSec:150,speedMult:1}];
+    b.setState(s);s=b.getState();var rate=b.wispFormulaSnapshot('ember').passiveDps;
+    var r=b.simulate(3,'live',3,2000000000000.375);
+    close(s.enemyHp-r.state.enemyHp,rate*(3+.25*2.234),'fractional-event deadline integral');
+  }
+  var pre=prePurchase();deadlineOracle();var undo=b.buffTiming.restoreOldCalculation(),caught='';
+  try{deadlineOracle();}catch(e){caught=e.message;}finally{undo();}
+  ok(caught.indexOf('fractional-event deadline integral')===0,'old deadline mutation must fail the independent integral assertion, not crash');
   return {checks:checks,isolatedIntegrals:records,pre60Gameplay:pre,negativeOldEpochSubtraction:caught};
 };
 window.runBuffSaveQa=function(b,ctx,assert,parity,phase,nextPhase,finish){

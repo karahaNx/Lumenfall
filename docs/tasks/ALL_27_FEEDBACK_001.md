@@ -99,3 +99,77 @@ value while reshaping Lab/Tree duplicates vs remove/refund; and the concrete
 until the answer arrives. Continue meaningful regression/native/formation/
 balance work meanwhile. Register the new native/core tests in required CI;
 finish all remaining regressions and matrix/pacing before integration/release.
+
+### Current continuation checkpoint
+
+Draft [PR67](https://github.com/karahaNx/Lumenfall/pull/67) is attached to this
+chat. Published checkpoint65385aac68dc878bffecfdf54de1e4cf2687c5bc preserves the
+UI/approved-mechanics work. Follow-up code/test changes are on the same branch.
+The requirement inventory now records22 implemented/existing features and five
+pending design/pacing rows; **zero are declared integrated/released complete**.
+The [exclusive matrix and Comet proposal](../requirements/all-27-feedback-001/exclusive-matrix-proposal.md)
+make the two unanswered design choices reviewable. Original-currency refunds
+are already approved; do not request that general permission again.
+
+The real medium-Farm parity divergence is fixed by sharing absolute second
+boundaries between Push/Farm. Its long-run and one-second reference now have
+identical HP. The old-deadline negative control now uses an independent
+fractional-event damage integral, which detects the actual lossy epoch mutation
+at the unchanged1e-6 tolerance. Existing4s/8s, separate Formation Save, Study-only
+tail and native-select assertions were updated for the intentionally changed
+requirements; all other conservation/projection oracles remain intact.
+
+Formation fixes preserve explicitly empty pending presets and an explicit Field
+of Ember during rebuilding. Actual Field/Bench changes merge still-unrecruited
+intent into the selected preset and preserve the other presets. Supplemental
+Formation reconstruction326 checks, canonical persistence, chronology and core
+QoL pass. Paid Study cap checks use a scoped zero processing clock to isolate
+exactly12h of absence from the separately tested actual live CPU replay; remaining
+work retains the established1e-7 numerical check rather than requiring binary
+floating-point equality after thousands of segments.
+
+Native Auto-Ascend touch/keyboard now passes normal/reduced motion at320/360/430px;
+Lab passes both motion modes at320/390/430px. Rift mobile tests exposed real
+clipping/overlap at360x640 with Boss status/four Bonds/safe insets. Work in progress:
+fixed44/48px hint slot, complete ability names in dedicated card rows, compact
+Bond effects with full accessible explanations, all overlapping Bond marks and
+disjoint primary visual pairs, and compact low-height layout. Reverify every
+required Rift profile after these corrections; do not treat preliminary native
+UI evidence as final layout acceptance.
+
+New core/mobile/balance process tests are registered in the default required
+suite149 scenarios. Equal-budget measurements include actual Rarity/Module/
+Ultimate purchases and unused currency; the same marginal gate rejects the old
+Titan curve. Full eight-system progression still depends on the final matrix.
+Node tooling, source validation and context checks pass when run with the cloud
+tool's additional network access. Default sandbox child-process capture produced
+a false empty-aapt-output failure; the unchanged tooling suite passes with access.
+Local Chromium dump-DOM remains blocked by the recorded timeout; native CDP and
+supplemental Playwright are working. Required remote CI must pass on the exact
+published head before integration, and again on the integrated version before APK.
+
+Next: complete Rift/full regression/negative checks, publish this checkpoint and
+exact-head CI evidence, then implement the pending approved matrix/Comet choice,
+measure full pacing, integrate and publish the signed APK with the27-item phone
+checklist. Keep the task open while those decisions or required acceptance remain
+pending. No partial APK is the requested all27 delivery.
+
+Latest local milestone: all four required native Rift normal/reduced/stacking
+profiles pass after the layout correction. The supplementary existing suite
+passes129 scenarios and all12 required negative controls are detected. New
+native/core/balance checks and native Forge/Lab/Auto-Ascend also pass. These are
+local transport-specific results; required remote CI remains pending.
+
+Long-offline assertions are being updated for intentional Swift10/refund/12h
+changes. A separate one-second partition matches the complete current state
+after8h ON,8h OFF and the12h cap. Preserve the byte-verified frozen baseline for
+fixtures outside the changed mechanics, including every currency/state field
+and unchanged numerical tolerance. Preserve cancellation, storage failure,
+processing-time replay and daily-rollover acceptance. Native return/restart
+verification and the full offline runner are still running at this checkpoint.
+
+Fresh main20efc396a5307560bafa4b2e7d4c9f11bf2b35b4 includes Wisp display and
+centralized Bond partner improvements plus Lab/Forge proposal documentation.
+Merge and preserve those product improvements before publishing exact-head CI.
+The [phone checklist](../qa/all-27-feedback-001/phone-checklist.md) has all27
+original acceptance items; version/hash and five pending design rows remain open.

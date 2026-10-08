@@ -2,6 +2,7 @@
  * No browser library/test dependency; run.cjs registers this in the default suite.
  */
 const {spawn}=require('node:child_process'),fs=require('node:fs'),os=require('node:os'),path=require('node:path');
+const {oneSecondReference}=require('./offline-catchup.cjs');
 const [chrome,url,scenario]=process.argv.slice(2),profile=fs.mkdtempSync(path.join(os.tmpdir(),'lumenfall-auto-target-'));
 const browser=spawn(process.env.LUMENFALL_QA_CDP_CHROME||chrome,['--headless=new','--no-sandbox','--disable-gpu','--disable-dev-shm-usage','--remote-debugging-pipe','--user-data-dir='+profile,'about:blank'],{stdio:['ignore','ignore','pipe','pipe','pipe']});
 let seq=0,buffer='',stderr='',session,records=[];const pending=new Map(),listeners=[],shutdownEvents=[];
@@ -41,6 +42,7 @@ async function until(expression,label,timeout=60000){
  const start=Date.now();while(Date.now()-start<timeout){try{const errors=await evaluate('window.__lumenfallQaContext ? window.__lumenfallQaContext.errors : []');assert(errors.length===0,'runtime error during '+label+': '+JSON.stringify(errors));if(await evaluate(expression))return;}catch(e){if(!/Inspected target navigated or closed|Execution context was destroyed|Cannot find context with specified id/.test(e.message))throw e;}await delay(20);}throw Error(label+' timed out');
 }
 async function stateSummary(){return evaluate(`(()=>{const b=window.__lumenfallQaBridge,s=b.getState(),p=JSON.parse(b.rawSave());return {flags:b.getFlags(),kills:s.totalKills,ascends:s.ascendCount,lastSeen:s.lastSeen,offline:s.totalOfflineSeconds,primaryKills:p.totalKills,primaryLastSeen:p.lastSeen,recoveryMatches:b.rawSave()===b.rawRecovery(),heartbeat:window.offlineHeartbeat,errors:window.__lumenfallQaContext.errors.length};})()`);}
+async function nextWindowReference(){return oneSecondReference(await evaluate('window.__lumenfallQaBridge.getState()'),28800).totals;}
 async function click(id){const r=await evaluate(`(()=>{const e=document.getElementById(${JSON.stringify(id)});const r=e.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`);await send('Input.dispatchMouseEvent',{type:'mousePressed',button:'left',clickCount:1,...r});await send('Input.dispatchMouseEvent',{type:'mouseReleased',button:'left',clickCount:1,...r});}
 async function run(){
  const ctx=await send('Target.createBrowserContext',{},null),tab=await send('Target.createTarget',{url:'about:blank',browserContextId:ctx.browserContextId},null);session=(await send('Target.attachToTarget',{targetId:tab.targetId,flatten:true},null)).sessionId;
@@ -50,15 +52,16 @@ async function run(){
  await until('!!window.__offlineCatchupReady','cold startup ready');
  let before=await stateSummary();records.push({case:'initial cold observation',before});assert(before.errors===0,'cold startup has no runtime errors');assert(before.flags.offlineBusy,'cold8h uses cooperative batches');
  assert(before.kills===before.primaryKills,'working progress detached at cold-start yield');
+ const coldReference=await nextWindowReference();
  await click('enemy-stage');
  assert(await evaluate('window.__lumenfallQaBridge.save()===false'),'save cannot consume incomplete cold window');
  await until('!window.__lumenfallQaBridge.getFlags().offlineBusy','cold8h catch-up');
  const cold=await stateSummary();assert(!cold.flags.offlinePending&&!cold.flags.resumeFlowBusy,'cold flags cleared');
- assert(cold.kills-before.kills===302400&&cold.ascends-before.ascends===14400,'cold full8h rewards');
+ assert(cold.kills-before.kills===coldReference.kills&&cold.ascends-before.ascends===coldReference.ascends,'cold full8h rewards match independent one-second replay');
  assert(cold.primaryKills===cold.kills&&cold.recoveryMatches,'cold canonical primary/recovery');
  assert(cold.heartbeat.frames>5,'animation/event loop progresses during long catch-up');
  assert(cold.errors===0,'cold no runtime errors');
- assert(await evaluate('document.getElementById("welcome-text").textContent.includes("14400 times")'),'normal return message shown');
+ assert(await evaluate('document.getElementById("welcome-text").textContent.includes('+JSON.stringify(String(coldReference.ascends)+' times')+')'),'normal return message shows exact Ascend count');
  const returnGeometry=await evaluate(`(()=>{const overlay=document.getElementById('welcome-overlay'),button=document.getElementById('welcome-claim'),r=overlay.getBoundingClientRect(),b=button.getBoundingClientRect();return {overlay:{x:r.x,y:r.y,width:r.width,height:r.height},button:{x:b.x,y:b.y,width:b.width,height:b.height},viewport:{width:innerWidth,height:innerHeight},hit:document.elementFromPoint(b.x+b.width/2,b.y+b.height/2)===button};})()`);
  assert(returnGeometry.overlay.x===0 && returnGeometry.overlay.y===0 && returnGeometry.overlay.width===returnGeometry.viewport.width && returnGeometry.overlay.height===returnGeometry.viewport.height,'return overlay covers viewport without CSS inset: '+JSON.stringify(returnGeometry));
  assert(returnGeometry.button.y>=0 && returnGeometry.button.y+returnGeometry.button.height<=returnGeometry.viewport.height && returnGeometry.hit,'return Continue is visible and receives real input: '+JSON.stringify(returnGeometry));
@@ -71,14 +74,16 @@ async function run(){
  await click('welcome-claim');assert(await evaluate('document.getElementById("welcome-overlay").style.display==="none"'),'real click completes return flow');
  records.push({case:'cold8h',before,cold});
  // Actual production visibility handler, with controlled visibility and clock.
+ const resumeReference=await nextWindowReference();
  await evaluate('(()=>{const b=window.__lumenfallQaBridge;b.dispatchVisibility(true);b.advanceTime(28800000);b.dispatchVisibility(false);})()');
  assert((await stateSummary()).flags.offlineBusy,'resume8h yields');
  await evaluate('window.__lumenfallQaBridge.dispatchVisibility(false)');
  await until('!window.__lumenfallQaBridge.getFlags().offlineBusy','resume8h');
- const resumed=await stateSummary();assert(resumed.kills-cold.kills===302400&&resumed.ascends-cold.ascends===14400,'resume full8h exactly once');
+ const resumed=await stateSummary();assert(resumed.kills-cold.kills===resumeReference.kills&&resumed.ascends-cold.ascends===resumeReference.ascends,'resume full8h exactly once');
  await evaluate('window.__lumenfallQaBridge.dispatchVisibility(false)');const repeated=await stateSummary();assert(repeated.kills===resumed.kills&&repeated.lastSeen===resumed.lastSeen,'repeated visible notification has no additional award');
  records.push({case:'resume/repeated',resumed});
  // Abort between batches by backgrounding. Disk/runtime retain prior endpoint.
+ const restartReference=await nextWindowReference();
  await evaluate('(()=>{const b=window.__lumenfallQaBridge;b.dispatchVisibility(true);b.advanceTime(28800000);b.dispatchVisibility(false);})()');
  assert((await stateSummary()).flags.offlineBusy,'cancellation begins real catch-up');
  await evaluate('window.__lumenfallQaBridge.dispatchVisibility(true)');
@@ -87,13 +92,14 @@ async function run(){
  // Real page reload after interruption, no unload write may erase the debt.
  await evaluate('localStorage.setItem(window.__lumenfallQaContext.phaseKey,"1")');
  await send('Page.reload');await until('!!window.__lumenfallQaBridge && window.__lumenfallQaBridge.getFlags().offlineBusy','restart catch-up starts');await until('!window.__lumenfallQaBridge.getFlags().offlineBusy','restart catch-up');
- const restarted=await stateSummary();assert(restarted.kills-resumed.kills===302400&&restarted.primaryKills===restarted.kills,'restart awards interrupted window once');
+ const restarted=await stateSummary();assert(restarted.kills-resumed.kills===restartReference.kills&&restarted.ascends-resumed.ascends===restartReference.ascends&&restarted.primaryKills===restarted.kills,'restart awards interrupted window once');
  records.push({case:'interruption/restart',interrupted,restarted});
  // Runtime failure clears all busy flags; the next real return retries fully.
+ const recoveryReference=await nextWindowReference();
  await evaluate('(()=>{const b=window.__lumenfallQaBridge;b.dispatchVisibility(true);b.advanceTime(28800000);b.offlineTest.failNext();b.dispatchVisibility(false);})()');
  const failed=await stateSummary();assert(!failed.flags.offlineBusy&&!failed.flags.resumeFlowBusy&&failed.flags.offlinePending,'failed resume clears busy flags');assert(failed.kills===restarted.kills&&failed.primaryLastSeen===restarted.lastSeen,'failed resume preserves endpoint');
  await evaluate('(()=>{const b=window.__lumenfallQaBridge;b.dispatchVisibility(true);b.dispatchVisibility(false);})()');
- await until('!window.__lumenfallQaBridge.getFlags().offlineBusy','failure retry');const recovered=await stateSummary();assert(recovered.kills-restarted.kills===302400&&!recovered.flags.offlinePending,'failure retry finishes entire window once');assert(recovered.errors===0,'failure handled without uncaught errors');
+ await until('!window.__lumenfallQaBridge.getFlags().offlineBusy','failure retry');const recovered=await stateSummary();assert(recovered.kills-restarted.kills===recoveryReference.kills&&recovered.ascends-restarted.ascends===recoveryReference.ascends&&!recovered.flags.offlinePending,'failure retry finishes entire window once');assert(recovered.errors===0,'failure handled without uncaught errors');
  records.push({case:'failure/retry',failed,recovered});
  // A cancelled/failed first return must still present its daily-rollover reward
  // after retry, even though ensureDaily has already updated the in-memory day.
