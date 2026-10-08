@@ -55,3 +55,8 @@ PR77 merged cleanly into this branch at e6cfa70. The F21 bridge now opens the re
 Settings/Save Backup view and requires visible confirmation before restoring.
 `confirmation-hidden-qa.json` preserves the first bridge attempt, whose failure
 was hidden UI rather than product behavior; opening the complete view fixes it.
+
+The full baseline comparison initially rejected only the two new F21 save fields.
+The frozen below-cap19 fixture now asserts both exact empty migration/credit
+defaults separately, then still compares every original gameplay field. No
+original numerical oracle, history fixture or failure tolerance is changed.

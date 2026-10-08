@@ -78,8 +78,8 @@ The first new migration oracle caught erased original value at extreme raw2000;
 preserved. The final local candidate passes499 assertions/12 mobile profiles,
 6 causal controls, V8 6.0 cap/refund/credit, dense layout and941 clarity checks.
 [Current versions/results](../qa/cheaper-bonds-cap-001/finish/README.md) distinguish
-them from required full CI, integration and APK acceptance. Required CI gains the standalone F21
-checks and four causal mutations; existing gates/assertions are unchanged.
+them from required full CI, integration and APK acceptance. Required CI gains focused checks/four causal mutations. Frozen offline state now
+asserts exact below-cap migration defaults; original gameplay comparisons remain.
 
 ## Next concrete action and completion
 

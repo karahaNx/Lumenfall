@@ -60,7 +60,12 @@ function baselineState(actual,expected,seed,label){
  const oldOwnership={...expected.owned},legacy={};
  for(const id of ['rememberbulk','offline24','offline48']){if(oldOwnership[id]===true)legacy[id]=true;delete oldOwnership[id];}
  assert.deepEqual(actual.legacyCometPurchases,legacy,label+' full legacy ownership archived');
- const {studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,...existing}=actual;
+ // This frozen player's Bonds level is below the new purchase cap. Assert the
+ // exact additive F21 defaults before comparing every original gameplay field.
+ assert.equal(seed.nodes.bonds,19,label+' immutable below-cap refund fixture');
+ assert.deepEqual(actual.feedbackMigration,{version:1,applied:true,receipts:{},history:{bonds:{levels:19}}},label+' below-cap migration has no refund');
+ assert.deepEqual(actual.refundCredits,{prisms:[]},label+' no unsolicited Prism credits');
+ const {studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,feedbackMigration,refundCredits,...existing}=actual;
  assert.deepEqual(existing,{...expected,owned:oldOwnership},label);
 }
 function runAsync(seed,seconds,batch=256){
