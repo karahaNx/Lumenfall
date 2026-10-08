@@ -1,0 +1,25 @@
+FORMATION_AUTOSAVE_001 — proposed status for coordinated Lead checkpoint
+
+Owner: this Formation autosave feature chat; Gameplay / Progression.
+Private branch: feature/formation-autosave-001. Baseline main:
+0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd. No remote writer assigned or used.
+Selected Push/Farm/Boss immediately saves Field/Bench/recruitment changes.
+Save controls removed; actual Field always has at least one Wisp. Preserve
+stored empty presets and complete late-game intent across Ascend/recovery;
+pending grants no power/Bonds. Full original and clarification are preserved
+in docs/tasks/FORMATION_AUTOSAVE_001_REQUEST.txt.
+
+Exact local candidate and check receipts are in the delivery packet and
+docs/qa/formation-autosave-2026-10-07/. This is not integrated acceptance.
+PR46 remains Draft/open at 3cdebc236e9ee5081a4bca4e323b11f43aa0d46d;
+B2 tree 758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef needs scoped Core/QA
+acceptance. Prior 02_07 writer release remains unknown. A dry product-patch
+application to B2 passes; it proves no functional B2 acceptance.
+
+Next: resolve the PR46/B2 and writer gates; assign Formation checkpoint;
+recheck live refs/PRs/runs, review and persist the candidate and receipts to
+GitHub. Verify integrated bytes, build/publish through existing Android
+triggers, verify package/signing/APK identity and required Android/WebView60/
+TalkBack behavior. Record writer release and archive only this owner chat
+after all acceptance. GitHub persistence, integration and device acceptance
+remain pending. No new rule, balance value or APK is introduced here.
