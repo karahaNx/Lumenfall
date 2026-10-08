@@ -118,8 +118,14 @@ assert.equal(long.result.kills,cap.result.kills,'beyond-cap time earns no extra 
 // Counterfactual legacy Bond operands retain the complete archived oracle for
 // unchanged mechanics. Actual eight-Bond chronology/rewards have separate real
 // source coverage in formation-bonds.cjs and the one-second long-window checks.
-const legacyBondSource=source.replace('function bondActive(bondId){',
+let legacyBondSource=source.replace('function bondActive(bondId){',
  "function bondActive(bondId){\n  if(['kindling','vanguard','quarry','harvest'].indexOf(bondId)!==-1) return false;");
+// F15 also intentionally corrects the Farm clock. Retain the old exact oracle
+// as a counterfactual, alongside current-source long/split chronology checks.
+legacyBondSource=legacyBondSource
+ .replace('var targetGridPhaseSec = startPhaseSec+targetFractionSec;\n  var targetGridCarry = Math.floor(targetGridPhaseSec);\n  var targetFarmGridCrossings = targetWholeSec+targetGridCarry;\n  targetGridPhaseSec -= targetGridCarry;', 'var targetGridPositionSec = startPhaseSec+elapsedSec;\n  var targetFarmGridCrossings = Math.floor(targetGridPositionSec);\n  var targetGridPhaseSec = targetGridPositionSec-targetFarmGridCrossings;')
+ .replace('var gridCrossingsBefore = farmGridCrossings;\n    var gridRemainingBefore = farmGridRemainingSec;', 'var elapsedWholeBefore = elapsedWholeSec;\n    var elapsedFractionBefore = elapsedFractionSec;')
+ .replace('farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore', 'elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore');
 assert.notEqual(legacyBondSource,source,'exact legacy Bond control anchor');
 for(const seed of [original,clear20,off]){
  for(const seconds of [60,300,3600]){
