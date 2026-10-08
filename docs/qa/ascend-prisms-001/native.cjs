@@ -4,7 +4,7 @@ const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypt
 const Adb=require('../rift-cast-text-001/finish/direct-adb.cjs');
 const zip=require('../../../scripts/lib/zip.cjs');
 const [baselineApk,targetApk,out,baselineSha,targetSha,mode]=process.argv.slice(2);
-assert(!mode||mode==='prepare','optional mode: prepare (baseline calibration only)');
+assert(!mode||['prepare','accept-prepared'].includes(mode),'optional mode: prepare or accept-prepared (requires a bound baseline receipt)');
 assert(baselineApk&&targetApk&&out&&baselineSha&&targetSha,'baseline APK, target APK, output and both expected APK SHA256 digests required');
 const sha=b=>crypto.createHash('sha256').update(b).digest('hex'),delay=ms=>new Promise(r=>setTimeout(r,ms));
 fs.mkdirSync(out,{recursive:true});
@@ -89,12 +89,22 @@ async function check(c,b,t,l){
 }
 (async()=>{adb=await new Adb().connect();assert.equal((await adb.shell('getprop ro.kernel.qemu')).trim(),'1','disposable emulator only');
  try{
+  let cold,pre,before;
+  if(mode==='accept-prepared'){
+   const prepared=JSON.parse(fs.readFileSync(path.join(out,'baseline-receipt.json')));
+   assert.equal(prepared.status,'prepared');assert.equal(prepared.baseline.apkSha256,baseline.apkSha256);assert.equal(prepared.baseline.sourceSha256,baseline.sourceSha256);
+   assert.deepEqual(prepared.runtimeErrors,[]);pre=await installed(baseline);before=await snapshot();
+   assert.equal(sha(before),prepared.storageSha256,'actual stopped baseline storage equals prepared cold-save receipt');assert.equal(before.length,prepared.storageBytes);
+   cold={nodes:{swift:prepared.cold.tree},longStudyLevels:{prismstudy:prepared.cold.completedLab},ascendRewardedDepth:prepared.cold.benchmark,prisms:prepared.cold.prisms};
+   console.log('PASS actual prepared baseline APK/storage identity before signed update');
+  }else{
   await install(baseline.file);await launch();await connect(baseline);await fixture(20,219,17,18);assert(await evaluate('__f05Native.save()'));
-  await adb.shell('am force-stop com.lumenfall.app');await launch();await connect(baseline);console.log('native baseline cold launch');const cold=await evaluate('__f05Native.get()');assert.equal(cold.nodes.swift,17);assert.equal(cold.longStudyLevels.prismstudy,18);assert.equal(cold.ascendRewardedDepth,219);assert.equal(cold.prisms,100);
-  await adb.shell('am force-stop com.lumenfall.app');await disconnect();const pre=await installed(baseline),before=await snapshot();
+  await adb.shell('am force-stop com.lumenfall.app');await launch();await connect(baseline);console.log('native baseline cold launch');cold=await evaluate('__f05Native.get()');assert.equal(cold.nodes.swift,17);assert.equal(cold.longStudyLevels.prismstudy,18);assert.equal(cold.ascendRewardedDepth,219);assert.equal(cold.prisms,100);
+  await adb.shell('am force-stop com.lumenfall.app');await disconnect();pre=await installed(baseline);before=await snapshot();
   if(mode==='prepare'){fs.writeFileSync(path.join(out,'baseline-receipt.json'),JSON.stringify({status:'prepared',scope:'actual signed baseline cold save and transport calibration only; not F05 acceptance',baseline:{apkSha256:baseline.apkSha256,sourceSha256:baseline.sourceSha256},installed:pre,cold:{prisms:cold.prisms,benchmark:cold.ascendRewardedDepth,tree:cold.nodes.swift,completedLab:cold.longStudyLevels.prismstudy},storageBytes:before.length,storageSha256:sha(before),runtimeErrors},null,2)+'\n');console.log('PASS native baseline cold Prism save and transport; F05 acceptance pending');return;}
+  }
   await install(target.file);const after=await snapshot();assert(before.equals(after),'actual private WebView storage byte-identical across signed update');records.push({case:'cold baseline and signed update preserve Prism save',cold:{prisms:cold.prisms,benchmark:cold.ascendRewardedDepth,tree:cold.nodes.swift,completedLab:cold.longStudyLevels.prismstudy},preUpdateIdentity:pre,storageBytes:before.length,beforeSha256:sha(before),afterSha256:sha(after)});
-  await launch();await connect(target);const restored=await evaluate('__f05Native.get()');for(const k of ['nodes','longStudyLevels','ascendRewardedDepth','prisms'])assert.deepEqual(restored[k],cold[k],'first target launch preserves '+k);
+  await launch();await connect(target);const restored=await evaluate('__f05Native.get()');assert.equal(restored.nodes.swift,cold.nodes.swift,'first target launch preserves Swift');assert.equal(restored.longStudyLevels.prismstudy,cold.longStudyLevels.prismstudy,'first target launch preserves completed Clarity');for(const k of ['ascendRewardedDepth','prisms'])assert.equal(restored[k],cold[k],'first target launch preserves '+k);
   const identity={android:(await adb.shell('getprop ro.build.version.release')).trim(),api:(await adb.shell('getprop ro.build.version.sdk')).trim(),ua:await evaluate('navigator.userAgent'),installed:await installed(target),package:(await adb.shell('dumpsys package com.lumenfall.app')).split('\n').filter(x=>/versionCode=|versionName=/.test(x)).map(x=>x.trim())};
   for(const width of [320,390,430]){await adb.shell('wm density 160');await adb.shell('wm size '+width+'x844');await until('innerWidth==='+width,'native viewport '+width);const rows=[];for(const b of [0,19,219])for(const v of [[0,0],[1,0],[0,1],[17,18]])rows.push(await check(20,b,v[0],v[1]));rows.push(await check(16,15,0,0),await check(16,15,1,0));await fixture(20,219,17,18);await evaluate('document.querySelector(".tab-btn[data-tab=ascend]").click()');const layout=await evaluate('(function(){var d=document.getElementById("prism-calculation"),b=document.getElementById("ascend-btn"),r=b.getBoundingClientRect();return {viewport:innerWidth,documentWidth:document.documentElement.scrollWidth,calculationWidth:d.scrollWidth,calculationClient:d.clientWidth,button:{width:r.width,height:r.height},description:b.getAttribute("aria-describedby")};})()');assert(layout.documentWidth<=width+1&&layout.calculationWidth<=layout.calculationClient+1,'native Prism layout has no horizontal overflow');assert(layout.button.height>=44&&layout.button.width>=44);assert(layout.description.includes('prism-calculation'));records.push({case:'native '+width+'px',rows,layout});await screenshot('native-'+width);console.log('PASS native '+width+'px, '+rows.length+' reward states');}
   await send('DOM.enable');const dom=await send('DOM.getDocument'),node=await send('DOM.querySelector',{nodeId:dom.root.nodeId,selector:'#ascend-btn'}),ax=await send('Accessibility.getPartialAXTree',{nodeId:node.nodeId});const button=ax.nodes.find(n=>n.role?.value==='button');assert(button&&button.name.value==='Ascend');assert(button.description?.value.includes('Tree and completed Lab bonuses'));records.push({case:'native accessible Ascend explanation',node:button});

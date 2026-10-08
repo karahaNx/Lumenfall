@@ -10,18 +10,14 @@ Goal: understandable Ascend rewards and identical preview/payout rules.
 Standing scope approval covers delivery. User requested finish/push and notice
 when complete so they can archive; keep this chat open meanwhile, no auto-archive.
 
-Sources:docs/recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/
-USER_REQUIREMENTS_2026-10-07.txt; FEEDBACK/TASK_FEEDBACK_REVISION_001.txt(F05,
-dependencies/save/review); EVIDENCE/FINDINGS.txt,formula_probe.cjs/results.json;
-DECISIONS/FEEDBACK_REGISTERED_001.txt. Exact source paths are in requirements.
-Archives stay immutable. F01–F03, offline budget/caps/rebalance are separate.
+Linked requirements preserve original sources/F05/dependencies/save/review.
+Archives are immutable; other feature scopes remain separate.
 
 Baseline APK133 index blob ea44431c163569548973d9e489f75345749a07ee matches
 feedback. PR46/B2 merged; current feature workflow replaces historical writer
-gates. Latest combined main14d5f3a (PR81/92). Isolated worktree:
+gates. Latest combined mainac0d28e (PR66). Isolated worktree:
 /workspace/Lumenfall-f05-implementation,branch feature/ascend-prisms-001-live.
-Preserve all integrated Forge/Lab/Wisp/Formation/Backup/Resonate/Auto-Ascend/Rift/
-offline changes and every CI gate. F05 changes42/5 index lines, one behavioral
+Preserve all integrated features, saves and every CI gate. F05 changes42/5 index lines, one behavioral
 module/registration/five causal controls and scoped docs/QA; no F05 save migration.
 
 Confirmed bug:cleared16/benchmark15/Lab0 paid2 at Swift0 but1 at Swift1.
@@ -37,18 +33,18 @@ Forge has no Prism operand. Swift4% and completed Clarity5% apply. Synthetic
 cleared20/benchmark219/Tree17/Lab18 gives first28/repeat5; it is not the user
 save. Rounding can hide a small increase. The exact old+50 report remains open.
 
-Required:equal-depth none/Tree/Lab/both;first/repeat/new-depth/thresholds;
-preview/manual/live/offline;farm/boss/pending/completed Lab/timestamp order;
-reload/backup/recovery;phone/font/motion;current full CI;integrated checks;
-signed APK digest/package/version/certificate/all15assets/native/legacy.
+Required:four bonus configurations;first/repeat/new-depth/thresholds;canonical
+preview/manual/live/offline;farm/boss/Lab order;all persistence routes;phone/
+font/motion;full CI/integration;signed APK identity/all assets/native/legacy.
 Self-review is not independent review. No physical WebView60/TalkBack attestation.
 
-At91decbc:673motorcases/11,822assertions,695layout,4permanent scenarios,
-22negatives/smoke,V8 6.0(168/2,215)PASS. Latest14d5f3a motor/layout PASS.
+CI286/head785bf32 on14d5f3a PASS:177scenarios/203instances/22negatives
+plus source/tooling/smoke. Motor673/11,822,layout695,V8 6.0(168/2,215)PASS.
+Main then added Tree purchase gates; resolve both test registrations and
+reassess actual Swift purchases/motor/layout on combinedac0d28e.
 Signed142 cold restart preserves100Prisms/benchmark219/Tree17/Lab18.
-Historical receipts stay separate. Earlier full-wrapper900s failure reproduces
-on unchanged main; no full local-suite pass claimed. Opaque redundant DOMs
-omitted after automatic review rejection; hashes/readable receipts retained.
+QA retains historical/failed baseline receipts and limits; opaque redundant
+DOMs omitted after automatic review rejection, hashes/results retained.
 
 Next:PR94 final-head required CI;merge/integrated verification;signed APK/native
 142→target update and payout/layout/AX;save final receipts/task/state in GitHub.
