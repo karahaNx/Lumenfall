@@ -52,7 +52,8 @@ The baseline dump-DOM process timed out; the CDP baseline formula check passed.
 Initial candidate failures showed obsolete four-Bond/manual-Save expectations,
 a Farm grid remainder false stall, and a long effect word at200% text size.
 Corrections retain full effect accessibility, unique marks for all eight pairs,
-the exact archived legacy-mechanics counterfactual (four Bonds and old Farm clock), and a strict independent fractional
+the four-Bond counterfactual against the byte-preserved archive with the
+upstream three-anchor Farm clock correction, and a strict independent fractional
 support-deadline integral that detects the original lossy epoch subtraction.
 Actual-source long-window checks and one-second/split references remain separate
 from that archived counterfactual. `ci-220-failed.log.gz` preserves the prior CI
@@ -70,3 +71,18 @@ two25% Supports add to1.50, then Kindling gives ×1.875 for that hit. Vanguard
 multiplies only regen by0.80. Quarry/Harvest and Dawnpriest multiply resource
 channels before the existing single payout rounding. No overlapping marginals
 are summed. PR90 owns all upgrade/legacy dispositions; F15 adds no migration.
+
+Design provenance: PR67 52fa48db51ed6ce58704ec17c593ee68710394e0 supplied only
+the F14/F15 design; PR70 7284cf716250355e1bf68d00590f81ab96f49a3d supplied
+the independently prepared clock correction now upstream via PR90. Neither
+candidate branch was merged. The original baseline and product hash remain in
+the task and complete request; earlier untouched proposal is
+acab2002c62aa679fa757b720327431da342dd99.
+
+CI273 / run37745573343 PASS170 defaults/17 mandatory negatives/all gates on
+21964991df49b92047b9b5018af1ad442007705e; raw log ci-273-pass.log.gz.
+Main then advanced to14d5f3a3a78fe8b63cfa5544efc54f41217b65a5, integrating
+PR78 automatic Forge memory, PR85 shared12h productive cap/idempotent exact
+refunds and PR81 stable Rift guidance. Preserve all their product/checks.
+Combined product SHA25674b03446ee543ac90f9bcc51636d17dc1855c4234b871dbc3f43d47d18175f1d
+requires a fresh175-default CI run. F15 introduces no additional migration.

@@ -1,11 +1,11 @@
 {
-  "productSha256": "4d131993079d7932c696314be761321b350af42d0f2ead294b357d28e826c5e9",
-  "includedMain": "31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6",
+  "productSha256": "74b03446ee543ac90f9bcc51636d17dc1855c4234b871dbc3f43d47d18175f1d",
+  "includedMain": "14d5f3a3a78fe8b63cfa5544efc54f41217b65a5",
   "node": "v24.19.0",
   "browser": "Chromium 151.0.7922.173",
   "core": {
     "status": "pass",
-    "sourceSha256": "4d131993079d7932c696314be761321b350af42d0f2ead294b357d28e826c5e9",
+    "sourceSha256": "74b03446ee543ac90f9bcc51636d17dc1855c4234b871dbc3f43d47d18175f1d",
     "records": [
       "eight named pairs, paid Field activation and no pending/Bench bonus",
       "Kindling shared manual/Auto-Tap exact 25%, no passive or ability increase",
@@ -46,8 +46,9 @@
   "offline": {
     "status": "pass",
     "groups": 16,
-    "sourceAtStart": "308c49a02973a5cdeabceb888d0507bd1c6ba6bf10ecd4c23e1a88a32bafdf41",
-    "note": "Historical pre-PR76 source; current full CI must revalidate"
+    "sourceAtStart": "74b03446ee543ac90f9bcc51636d17dc1855c4234b871dbc3f43d47d18175f1d",
+    "note": "Combined shared12h cap/paid refunds; all upstream fixtures retained",
+    "wallMs": 117967.911351
   },
   "mobileProfiles": 12,
   "focused": [
@@ -100,7 +101,7 @@
     "node": "v8.3.0",
     "v8": "6.0.286.52",
     "limitation": "JS engine probe only; native WebView60/device acceptance remains required",
-    "sourceSha256": "4d131993079d7932c696314be761321b350af42d0f2ead294b357d28e826c5e9",
+    "sourceSha256": "74b03446ee543ac90f9bcc51636d17dc1855c4234b871dbc3f43d47d18175f1d",
     "records": [
       "eight named pairs, paid Field activation and no pending/Bench bonus",
       "Kindling shared manual/Auto-Tap exact 25%, no passive or ability increase",
@@ -138,5 +139,19 @@
       }
     ]
   },
-  "upgradeMatrix": "PR90 preserves all 24 raw paid operands; no F15 matrix changes"
+  "upgradeMatrix": "PR90 preserves all 24 raw paid operands; no F15 matrix changes",
+  "ci273": {
+    "status": "pass",
+    "run": 37745573343,
+    "head": "21964991df49b92047b9b5018af1ad442007705e",
+    "defaults": 170,
+    "mandatoryNegatives": 17,
+    "note": "Prior source; newer F25/F26/F07 integration requires fresh CI"
+  },
+  "mobileNote": "PASS12 on combined74b034 source; native Chromium CDP inputs",
+  "focusedNote": "Historical matrix-only source; full combined CI pending",
+  "offline12h": {
+    "status": "pass",
+    "source": "74b03446ee543ac90f9bcc51636d17dc1855c4234b871dbc3f43d47d18175f1d"
+  }
 }
