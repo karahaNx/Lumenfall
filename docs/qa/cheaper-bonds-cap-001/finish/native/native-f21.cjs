@@ -10,6 +10,7 @@ function send(method,params={}){return new Promise((resolve,reject)=>{const id=+
 async function evaluate(expression){const r=await send('Runtime.evaluate',{expression,returnByValue:true});if(r.exceptionDetails)throw Error(r.exceptionDetails.exception?.description||r.exceptionDetails.text);return r.result.value;}
 async function until(expression,label,ms=60000){const start=Date.now();while(Date.now()-start<ms){if(await evaluate(expression))return;await delay(200);}throw Error(label+' timed out');}
 async function connect(){
+ scripts.length=0;
  let pid,target;const start=Date.now();while(Date.now()-start<120000){pid=(await adb.shell('pidof com.lumenfall.app')).trim();if(pid)break;await delay(500);}assert(pid,'native app PID');
  server=await adb.forward(9223,'localabstract:webview_devtools_remote_'+pid);
  while(Date.now()-start<120000){try{target=(await(await fetch('http://127.0.0.1:9223/json/list')).json()).find(x=>x.type==='page');}catch(_){}if(target)break;await delay(500);}assert(target,'native WebView page');nativeBounds=JSON.parse(target.description);
@@ -83,6 +84,11 @@ async function accept(){
  }
  await evaluate("(function(){var b=__cheaperRecruitment;b.set(cheaperRecruitmentSeed(19));b.render();document.querySelector('[data-node=echo]').focus();})()");await adb.shell('input keyevent KEYCODE_TAB');await until("document.activeElement.dataset.node==='bonds'",'actual Android Tab Recruitment');const outline=await evaluate('getComputedStyle(document.activeElement).outlineStyle');assert.notEqual(outline,'none');await adb.shell('input keyevent KEYCODE_ENTER');await until('JSON.parse(localStorage.getItem("lumenfall_save_v2")).nodes.bonds===20','actual Android Enter purchase');await rebindState();records.push({kind:'native-keyboard',tabToBonds:true,outline,enterFinalPurchase:true});
 
+
+ // A very large new refund remains usable; a spent-credit mature wallet cannot
+ // purchase by rounding away its debit. Oracle runs outside the legacy WebView.
+ await rebindState();var refund95=await evaluate("(function(){var b=__cheaperRecruitment,s=b.fresh();s.nodes.bonds=95;s.prisms=0;b.set(s);b.render();var before=b.get();document.querySelector('[data-node=swift]').click();return {before:before,after:JSON.parse(localStorage.getItem('lumenfall_save_v2'))};})()");function exactBalance(s){return BigInt(s.prisms)+s.refundCredits.prisms.reduce((n,e)=>n+BigInt(e.amount),0n);}assert(refund95.before.prisms<=Number.MAX_SAFE_INTEGER&&refund95.before.refundCredits.prisms.length>0);assert.equal(exactBalance(refund95.after),exactBalance(refund95.before)-3n);assert.equal(refund95.after.nodes.swift,1);records.push({kind:'native-large-refund-usable',raw:95,price:3,exactConservation:true});
+ await rebindState();var mature=await evaluate("(function(){var b=__cheaperRecruitment,s=b.fresh();s.nodes.bonds=21;s.prisms=1e30;b.set(s);b.get().refundCredits.prisms=[];b.render();var before=JSON.stringify(b.get()),disk=JSON.stringify(b.disk());if(b.payment(1)!==null)throw Error('native mature wallet unrepresentable debit');b.buy({id:'swift'});if(JSON.stringify(b.get())!==before||JSON.stringify(b.disk())!==disk)throw Error('native mature wallet free purchase');return {prisms:b.get().prisms,noDebit:true};})()");records.push({kind:'native-mature-wallet-rejection',...mature});console.log('PASS native large-refund spending and no rounded wallet debits');
  // Exercise actual confirmed old-backup restoration twice on the signed app.
  for(var restoreAttempt=0;restoreAttempt<2;restoreAttempt++){
   const prior=await evaluate('localStorage.getItem("lumenfall_save_v2")');

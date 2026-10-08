@@ -41,7 +41,8 @@ Current rules supersede old role-approval stages.
 
 ## PR89 review corrections
 
-P1: actual raw95 restitution can create a wallet above integer precision. All
+P1: actual raw95 restitution could create a wallet above integer precision. New refunds above the safe
+integer range now stay as spendable credits; existing wallets are retained. All
 Tree payments now check exact wallet subtraction as well as both credit
 subtractions; representable payments still use the unchanged price. Regression
 covers refusal/no save for1 Prism and a real exact2-Prism debit.

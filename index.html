@@ -3719,7 +3719,9 @@ function normalizeCheaperRecruitmentRefund(out,source){
   if(out.feedbackMigration.version!==1) throw persistenceError('invalid-bonds-refund','Recruitment refund version needs recovery');
   amounts.forEach(function(amount){
     var sum=exactPrismArithmetic(out.prisms,amount);
-    if(sum!==null) out.prisms=sum;
+    // Keep new restitution spendable at whole-Prism prices. Existing mature
+    // wallets are preserved; excess refunds remain exact original credits.
+    if(sum!==null && sum<=Number.MAX_SAFE_INTEGER) out.prisms=sum;
     else credits.push({id:id,amount:amount});
   });
   out.feedbackMigration.receipts[id]={from:20,to:raw,unpricedFrom:unpricedFrom,amounts:{prisms:amounts}};

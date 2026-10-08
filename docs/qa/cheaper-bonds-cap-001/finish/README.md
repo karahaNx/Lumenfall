@@ -1,15 +1,15 @@
 # F21 current implementation and verification
 
 Current candidate source SHA256:
-`270c750bed922ed8ef472758b27af0351b38301fe866762dff4a0d6ca7f2ae81`.
+`17c2982c5e34b54714a08f8a0e1660fa5baa9bfa1a8cd4820cd271def3529642`.
 Baseline main: `4ff0ae3025a6e57ba3332280f3db6f65bf5ddf4b`.
 [Task](../../../tasks/CHEAPER_BONDS_CAP_001.md) · [Save/value review](DESIGN.md) ·
 [Preflight](preflight.json). Self-review only; no independent-review claim.
 
 | Check | Result/evidence |
 | --- | --- |
-| Real cap/price/effect/chronology | [candidate.json](candidate.json):383 assertions PASS |
-| One-time old-save restitution | Same report:126 assertions, independent BigInt conservation oracle PASS |
+| Real cap/price/effect/chronology | [candidate.json](candidate.json):384 assertions PASS |
+| One-time old-save restitution | Same report:127 assertions, independent BigInt conservation oracle PASS |
 | Mobile |12 width/text/motion profiles at320/390/430px and100%/200%;44px controls, real touch/Tab/Enter/focus, wrapping and all note text contrast >=9.09:1 PASS |
 | Actual persistence | Old21/40/2000 first launch/reload/recovery, two old-backup restores through actual Settings → Save Backup → confirmation, paid Labs, Ascend, primary restore rollback and recovery-write failure PASS |
 | Causal controls | [negative-feature.json](negative-feature.json):8 real source mutations caught with intended assertion,exit1/valid FAIL/clean browser teardown |
@@ -72,3 +72,10 @@ new wallet/receipt causal controls. The cross-engine schedule evidence is in
 receipt-engine-prices.json; complete arrays are the test fixture. The prior
 a7ce553 CI is superseded by these necessary corrections. Native baseline143
 remains prepared; final APK/native acceptance is still pending.
+
+Current main31eccfb includes upgrade ownership and Auto-Ascend controls. Its
+retirement guard is preserved. The20 real credit debits use freshly staged
+Swift level0 (original3-Prism price); they still assert every paid level and exact
+monetary delta. Echo supplies the real2-Prism representable wallet payment.
+Receipt damage now also selects the intact actual recovery slot. New restitution
+above safe integer precision stays in credits; existing wallets are not clamped.
