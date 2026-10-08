@@ -3,12 +3,12 @@
 Current main14d5f3a candidate source SHA256: 319e69db68f96f30e4d5b1a56ae15101c9fba21552d09c79ac2e8d3601ff6916.
 PR88: https://github.com/karahaNx/Lumenfall/pull/88. Integration blocked on the
 progression choice in deed-continuity-proposal.md; no Swift APK released.
-Earlier main31 core-study-clock.json passes14 groups/110 purchase cases; all five causal
-mutants fail with assertions (mutants-study-clock.json). v8-study-clock.json and
-its independent Node24 integer oracle pass on actual V8 6.0. Latest full/offline
-and17 required negative checks passed. Full-study-clock.* was stopped (130) after
-main merged the shared12h contract; partial receipts are not a full pass. Older results below identify their
-own source and are not acceptance for the current source.
+Current focused results are in checkpoint-main14d5f3a.json. No current full-suite
+pass is claimed. Earlier main31 core14/110, five causal mutants, V8 6.0/integer
+oracle, offline reference and17 required negatives passed on their recorded
+source. Full-study-clock.* was stopped (130) after main merged the shared12h
+contract; its partial receipts are not a full pass. Other older results below
+identify their own source and are not acceptance for the current source.
 
 Earlier-source receipts: core-current.json (13 groups/110 purchase cases),
 mutants-current.json (four causal mutations), offline-clock-oracle.stdout.txt
