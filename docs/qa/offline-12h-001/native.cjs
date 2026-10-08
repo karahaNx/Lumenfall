@@ -54,11 +54,12 @@ async function run(){
   }
   console.error('native: installing APK');
   await adb.upload(apk,'/data/local/tmp/offline12h.apk');assert((await adb.shell('pm install -r /data/local/tmp/offline12h.apk')).includes('Success'),'signed app install/update');
+  await adb.shell('input keyevent KEYCODE_WAKEUP');await adb.shell('wm dismiss-keyguard');
   await adb.shell('wm size 390x844');await adb.shell('wm density 160');await adb.shell('am force-stop com.lumenfall.app');await adb.shell('am start -n com.lumenfall.app/.MainActivity');
   console.error('native: connect WebView');await connect();console.error('native: bind game');await bridge();console.error('native: attest installed bytes');const identity=await attest();identity.ua=await evaluate('navigator.userAgent');identity.android=(await adb.shell('getprop ro.build.version.release')).trim();
   if(mode==='prepare'){
     console.error('native: prepare baseline save');
-    const seed=await evaluate(`(function(){var b=__offlineNative,s=b.fresh();s.schemaVersion=1;s.questDay=b.get().questDay;s.loginStreak=1;s.legacyCometPurchases={offline24:true,offline48:true,rememberbulk:true};s.nodes.reserves=3;s.comets=100;s.prisms=100;s.maxDepthEver=101;Array.from(document.querySelectorAll('[data-deed-requirement]')).forEach(function(e){s.achieved[e.dataset.deedRequirement]=true;});s.activeStudies=[{id:'guardmastery',remainingSec:46800,totalDurationSec:46800,speedMult:1}];s.lastSeen=Date.now();b.set(s);if(b.save()!==true)throw Error('native baseline save failed');if(localStorage.getItem('lumenfall_save_v2')!==localStorage.getItem('lumenfall_save_recovery_v1'))throw Error('native baseline slots differ');return b.get();})()`);
+    const seed=await evaluate(`(function(){var b=__offlineNative,s=b.fresh();s.schemaVersion=1;s.questDay=b.get().questDay;s.loginStreak=1;s.legacyCometPurchases={offline24:true,offline48:true,rememberbulk:true};s.nodes.reserves=3;s.comets=100;s.prisms=100;s.maxDepthEver=101;Array.from(document.querySelectorAll('[data-deed-requirement]')).forEach(function(e){s.achieved[e.dataset.deedRequirement]=true;});s.activeStudies=[{id:'guardmastery',remainingSec:46800,totalDurationSec:46800,speedMult:1}];s.lastSeen=Date.now();b.set(s);if(b.save()!==true)throw Error('native baseline save failed');if(localStorage.getItem('lumenfall_save_v2')!==localStorage.getItem('lumenfall_save_recovery_v1'))throw Error('native baseline slots differ');var stored=JSON.parse(localStorage.getItem('lumenfall_save_v2'));if(JSON.stringify(stored)!==JSON.stringify(b.get()))throw Error('native observation must equal actual committed save');return stored;})()`);
     assert.equal(seed.schemaVersion,1,'baseline save');assert.equal(seed.prisms,100);assert.equal(seed.comets,100);fs.writeFileSync(path.join(out,'baseline.json'),JSON.stringify({identity,seed},null,2));return;
   }
   const baseline=JSON.parse(fs.readFileSync(path.join(out,'baseline.json'))),first=await evaluate('__offlineNative.get()');
@@ -77,6 +78,11 @@ async function run(){
     assert.equal(ui.cap,12);assert(ui.retiredAbsent);assert(ui.overflow<=1);assert(ui.controls.every(x=>x.w>=44&&x.h>=44));assert(ui.text.includes('Refund credited once.'));records.push({case:'native 200% text',...ui});
     await adb.exec('screencap -p').then(b=>fs.writeFileSync(path.join(out,'native-'+width+'.png'),b));
   }
+  const nativeWindow=(await adb.shell('dumpsys window windows')).split('\n').filter(x=>/mCurrentFocus|mFocusedApp/.test(x));
+  assert(nativeWindow.some(x=>x.includes('com.lumenfall.app')),'native app owns the foreground window');
+  await evaluate("document.querySelector('[data-shop=comettrials]').focus()");await adb.shell('input keyevent KEYCODE_TAB');await delay(500);
+  const focus=await evaluate("({id:document.activeElement.dataset.shop,outline:getComputedStyle(document.activeElement).outlineStyle})");
+  assert(focus.id&&focus.id!=='comettrials');assert.notEqual(focus.outline,'none');records.push({case:'actual Android Tab focus',nativeWindow,focus});
   assert.equal(errors.length,0,'native runtime errors');fs.writeFileSync(path.join(out,'acceptance.json'),JSON.stringify({status:'pass',identity,records,errors,physicalDevice:false,exactWebView60:false},null,2));
 }
 (async()=>{let error;try{await run();}catch(e){error=e;}try{if(ws)ws.close();if(server){for(const s of server.sockets)s.destroy();await new Promise(r=>server.close(r));}if(adb)adb.close();}catch(e){error=error||e;}console.log(JSON.stringify({status:error?'fail':'pass',mode,message:error?.stack,records:records.length}));if(error)process.exitCode=1;})();

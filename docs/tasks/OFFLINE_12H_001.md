@@ -74,7 +74,11 @@ checks pass. Both directions of V8 6.0/modern receipt transfer preserve exact pr
 WebView61 signed144 baseline preparation passes, with installed APK SHA-256
 `6e2006cb90ebe27104bd1ae38ba8c8afa700f4ede90e6fe8046bf7b2f505ca5d`.
 Price-ledger checkpoint `1a2a040fc498bef9d1b07ba13b42740933ff5308`, [PR85](https://github.com/karahaNx/Lumenfall/pull/85);
-required CI is rerun after the final deposit regression. Old full-suite runs retain failures from
+Current validation head `5759eaad48197d316cff4d35d92601790a39b230`, CI run37740953545.
+Main advances through `e2f745cd0ce0dc9e41b06efd842062fd08d7fab4` were incorporated,
+preserving Formation autosave and Resonate. Shared test conflicts are resolved;
+the Resonate harness now waits for initialized DOM bindings. Their focused checks
+and the combined F26/offline regressions pass. CI is in progress. Old full-suite runs retain failures from
 obsolete tail expectations; focused corrections pass, final full run is pending.
 Remaining checks and receipts will be added at delivery checkpoint.
 
