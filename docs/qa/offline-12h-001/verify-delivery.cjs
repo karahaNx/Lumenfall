@@ -5,7 +5,11 @@ const [apk,reference,out]=process.argv.slice(2),bytes=fs.readFileSync(apk);
 const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
 const entries=verifyZip(bytes),assets=[];
 function walk(dir){return fs.readdirSync(path.join(reference,dir),{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(dir+'/'+e.name):[dir+'/'+e.name]);}
-for(const name of ['index.html',...walk('fonts'),...walk('branding')]){
+const sourceAssets=['index.html',...walk('fonts'),...walk('branding')];
+const apkAssets=entries.filter(e=>/^assets\/public\/(index\.html$|fonts\/|branding\/)/.test(e.name)&&!e.name.endsWith('/')).map(e=>e.name.slice('assets/public/'.length));
+assert.equal(sourceAssets.length,15,'complete F26 integration asset set');
+assert.deepEqual(apkAssets.sort(),sourceAssets.slice().sort(),'APK/source asset sets match exactly');
+for(const name of sourceAssets){
   const entry=entries.find(x=>x.name==='assets/public/'+name);assert(entry,'APK asset '+name);
   const at=entry.offset+30+bytes.readUInt16LE(entry.offset+26)+bytes.readUInt16LE(entry.offset+28);
   const packed=bytes.subarray(at,at+entry.compressed),data=entry.method===0?packed:zlib.inflateRawSync(packed);

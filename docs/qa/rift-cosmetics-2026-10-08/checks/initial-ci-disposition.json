@@ -1,0 +1,26 @@
+{
+  "run": 37735266911,
+  "head": "f0ae15b04ad41ea6eb34eebdccbc4a8cf8ef4133",
+  "conclusion": "failure",
+  "failedProfiles": 15,
+  "failures": [
+    "2026-10-08T06:19:10.2074394Z FAIL layout-dense",
+    "2026-10-08T06:19:11.5227149Z FAIL layout-dense",
+    "2026-10-08T06:19:12.8044944Z FAIL layout-dense",
+    "2026-10-08T06:19:14.1189335Z FAIL layout-dense",
+    "2026-10-08T06:19:15.4130722Z FAIL layout-dense",
+    "2026-10-08T06:19:16.7248980Z FAIL layout-boss",
+    "2026-10-08T06:19:18.0435699Z FAIL layout-boss",
+    "2026-10-08T06:19:19.3864219Z FAIL layout-boss",
+    "2026-10-08T06:19:20.7348702Z FAIL layout-boss",
+    "2026-10-08T06:19:22.0154587Z FAIL layout-boss",
+    "2026-10-08T06:19:23.3205553Z FAIL layout-accessibility-states",
+    "2026-10-08T06:19:24.6455739Z FAIL layout-accessibility-states",
+    "2026-10-08T06:19:25.9854023Z FAIL layout-accessibility-states",
+    "2026-10-08T06:19:27.4175680Z FAIL layout-accessibility-states",
+    "2026-10-08T06:19:28.7368718Z FAIL layout-accessibility-states"
+  ],
+  "diagnosis": "Fixed cosmetic --land-far overrides collapsed six region backgrounds. Remove overrides; retain aura geometry and region variables. Original layout assertions unchanged. New six-region contract passes.",
+  "correctedHead": "df4be28d80a7520ca9db22426802fb7d0752038d",
+  "correctedSourceSHA256": "2e834f65c0ac224ca8f51d45b5ccec663fd317848eef851fc7ea6dcfca2d2838"
+}
