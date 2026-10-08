@@ -6273,7 +6273,8 @@ function renderResearch(){
     btn.addEventListener('click', function(){
       var v = btn.getAttribute('data-mult');
       labMultiplier = v==='max' ? 'max' : parseInt(v,10);
-      if(state.legacyCometPurchases.rememberbulk){ state.savedLabMultiplier = labMultiplier; }
+      state.savedLabMultiplier = labMultiplier;
+      saveState();
       renderResearch();
     });
   });
@@ -8586,7 +8587,7 @@ function init(){
   cacheEls();
   try{ riftGuidanceHidden=localStorage.getItem(RIFT_GUIDANCE_HIDDEN_KEY)==='1'; }catch(e){ riftGuidanceHidden=false; }
   state = loadState();
-  if(state.legacyCometPurchases.rememberbulk && state.savedLabMultiplier!==undefined){ labMultiplier = state.savedLabMultiplier; }
+  labMultiplier = state.savedLabMultiplier;
   var dailyRolled = ensureDaily();
   restoreEnemyOrSpawn();
   setupTabs();
