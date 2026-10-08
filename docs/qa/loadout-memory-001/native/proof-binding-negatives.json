@@ -1,0 +1,24 @@
+{
+  "status": "pass",
+  "records": [
+    {
+      "kind": "wrong-apk",
+      "status": "expected failure caught",
+      "exit": 1,
+      "stderr": "node:assert:152\n  throw new AssertionError(obj);\n  ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ '0000000000000000000000000000000000000000000000000000000000000000'\n- '8ad8aeab6df7224e629c8a93805386a5c16851ffeb53e2f7338f42c76b0d79bc'\n\n    at Object.<anonymous> (/workspace/Lumenfall-LOADOUT_MEMORY_001-live/docs/qa/loadout-memory-001/combine-native.cjs:10:50)\n    at Module._compile (node:internal/modules/cjs/loader:1872:14)\n    at Object..js (node:internal/modules/cjs/loader:2003:10)\n    at Module.load (node:internal/modules/cjs/loader:1594:32)\n    at Module._load (node:internal/modules/cjs/loader:1396:12)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n    at node:internal/main/run_main_module:33:47 {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: '0000000000000000000000000000000000000000000000000000000000000000',\n  expected: '8ad8aeab6df7224e629c8a93805386a5c16851ffeb53e2f7338f42c76b0d79bc',\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.19.0\n"
+    },
+    {
+      "kind": "wrong-source",
+      "status": "expected failure caught",
+      "exit": 1,
+      "stderr": "node:assert:152\n  throw new AssertionError(obj);\n  ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ '0000000000000000000000000000000000000000000000000000000000000000'\n- '84ca8f6a50d0df5046c86ddb4a354850aca6273e4581e11b94acc95b10ae885f'\n\n    at Object.<anonymous> (/workspace/Lumenfall-LOADOUT_MEMORY_001-live/docs/qa/loadout-memory-001/combine-native.cjs:10:86)\n    at Module._compile (node:internal/modules/cjs/loader:1872:14)\n    at Object..js (node:internal/modules/cjs/loader:2003:10)\n    at Module.load (node:internal/modules/cjs/loader:1594:32)\n    at Module._load (node:internal/modules/cjs/loader:1396:12)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n    at node:internal/main/run_main_module:33:47 {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: '0000000000000000000000000000000000000000000000000000000000000000',\n  expected: '84ca8f6a50d0df5046c86ddb4a354850aca6273e4581e11b94acc95b10ae885f',\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.19.0\n"
+    },
+    {
+      "kind": "original-error-capture",
+      "status": "expected failure caught",
+      "exit": 1,
+      "stderr": "node:internal/assert/utils:77\n    throw err;\n    ^\n\nAssertionError [ERR_ASSERTION]: complete binary tar blocks, not shell error text\n    at inspect (/workspace/Lumenfall-LOADOUT_MEMORY_001-live/docs/qa/loadout-memory-001/storage-tar.cjs:5:2)\n    at Object.<anonymous> (/workspace/Lumenfall-LOADOUT_MEMORY_001-live/docs/qa/loadout-memory-001/combine-native.cjs:12:84)\n    at Module._compile (node:internal/modules/cjs/loader:1872:14)\n    at Object..js (node:internal/modules/cjs/loader:2003:10)\n    at Module.load (node:internal/modules/cjs/loader:1594:32)\n    at Module._load (node:internal/modules/cjs/loader:1396:12)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n    at node:internal/main/run_main_module:33:47 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: false,\n  expected: true,\n  operator: '==',\n  diff: 'simple'\n}\n\nNode.js v24.19.0\n"
+    }
+  ],
+  "node": "v24.19.0"
+}

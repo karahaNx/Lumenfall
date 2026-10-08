@@ -14,6 +14,6 @@ assert.equal(before.sha256,baseline.storageSHA256);assert.equal(before.sha256,st
 assert.equal(behavior.records[0].case,'signed143 update preserves database/legacy ownership/wallet/preference; separate F26 credit once');
 assert.equal(update.records.length,1);assert.equal(update.repeated.primary.comets,425);assert.equal(update.repeated.primary.savedLabMultiplier,25);assert(update.repeated.primary.legacyCometPurchases.rememberbulk);
 const result={status:'pass',artifact:update.artifact,baseline:baseline.artifact,sourceSHA256:source,identity:behavior.identity,
- provenance:{inputs,excluded:'native-behavior.json first record: invalid old database hash; superseded by corrected update-native.json and validated raw archives'},
+ provenance:{inputs,excluded:'native-behavior.json first update record omitted; separate validated update-native.json and raw archives are authoritative. Historical invalid capture is documented in README.'},
  storage:{before,after},records:[...update.records,...behavior.records.slice(1)],runtimeErrors:[],limitations:behavior.limitations};
 fs.writeFileSync(path.join(dir,'native.json'),JSON.stringify(result,null,2));console.log('PASS same exact signed APK/source; corrected real database upgrade plus native UI/restart/input/AX');
