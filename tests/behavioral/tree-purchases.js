@@ -51,7 +51,9 @@ window.runTreePurchaseQa=function(b,ctx,assert){
   [undefined,null,'unknown',{id:'starlight',baseCost:0,growth:1}].forEach(function(id){rejected(id,'invalid or forged node');});
   seed('starlight',1000000,1000);ok(button('starlight').disabled&&button('starlight').textContent==='Unavailable','nonfinite price disabled');
   rejected('starlight','nonfinite price cannot debit');
-  seed('starlight',0,Number.MAX_VALUE);rejected('starlight','unrepresentable payment cannot grant a free level');
+  seed('starlight',0,Number.MAX_VALUE);
+  ok(button('starlight').disabled&&button('starlight').querySelector('.cost-icon')&&button('starlight').querySelector('.cost').textContent.trim()==='1','unrepresentable payment preserves the finite visible price and currency icon');
+  rejected('starlight','unrepresentable payment cannot grant a free level');
   return {checks:checks,caps:{echo:6,bonds:20},legacyRawValuesPreserved:true,backupIdempotence:true};
 };
 

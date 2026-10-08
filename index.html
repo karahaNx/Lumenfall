@@ -4807,7 +4807,7 @@ function getNodeBuyPlan(node){
   if(node.requiresAchievement && !state.achieved[node.requiresAchievement]) return {affordable:false,reason:'locked',level:level};
   if(node.levelCap!==undefined && level>=node.levelCap) return {affordable:false,reason:'cap',level:level};
   var cost=nodeCost(node);
-  if(!Number.isFinite(cost) || cost<1 || level+1===level || !Number.isFinite(state.prisms) || (state.prisms>=cost && state.prisms-cost===state.prisms)) return {affordable:false,reason:'unavailable',level:level};
+  if(!Number.isFinite(cost) || cost<1 || level+1===level || !Number.isFinite(state.prisms) || (state.prisms>=cost && state.prisms-cost===state.prisms)) return {affordable:false,reason:'unavailable',level:level,cost:cost};
   return {affordable:state.prisms>=cost,reason:state.prisms>=cost?'available':'unaffordable',level:level,cost:cost};
 }
 
@@ -6249,6 +6249,7 @@ function renderNodes(){
     var level = plan.level;
     var capped = plan.reason==='cap';
     var unavailable = plan.reason==='unavailable';
+    var priced = Number.isFinite(plan.cost);
     html += '<div class="card node-card">' +
       '<span class="shape shape-diamond" style="width:30px;height:30px;background:var(--prism);"></span>' +
       '<div class="node-info" style="flex:1;">' +
@@ -6259,7 +6260,7 @@ function renderNodes(){
         '<div class="effect-note">From this node only; other upgrades contribute separately.</div>' +
       '</div>' +
       '<button class="buy-btn" data-node="'+node.id+'" '+(plan.affordable?'':'disabled')+' aria-label="'+(capped?node.name+' maximum level reached':unavailable?node.name+' price unavailable':'Buy '+node.name+' level '+(level+1)+' for '+formatNum(plan.cost)+' Prisms')+'" style="min-width:78px;">' +
-        (capped?'<span class="label">Maxed</span>':unavailable?'<span class="label">Unavailable</span>':'<span class="cost mono">'+costIcon('prism')+formatNum(plan.cost)+'</span><span class="label">Prisms</span>') +
+        (capped?'<span class="label">Maxed</span>':unavailable&&!priced?'<span class="label">Unavailable</span>':'<span class="cost mono">'+costIcon('prism')+formatNum(plan.cost)+'</span><span class="label">'+(unavailable?'Unavailable':'Prisms')+'</span>') +
       '</button>' +
     '</div>';
   });

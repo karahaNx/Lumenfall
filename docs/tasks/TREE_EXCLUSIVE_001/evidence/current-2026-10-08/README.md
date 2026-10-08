@@ -29,9 +29,17 @@ Final source/hash and evidence integrity are recorded in identity.json.
   and Node tooling checks.
 - negative-gates.txt: all 12 required negatives completed with in-page QA
   failures; timeout/nonzero alone was insufficient to count as caught.
-- behavioral.txt: broad suite started with the purchase-gate source before the
+- layout-dense.txt and layout-boss.txt: both unchanged existing icon/layout
+  scenarios pass all five viewport profiles after preserving finite prices on
+  unavailable buttons. tree-purchase.txt has 78 assertions including this case.
+- behavioral-pre-wrap.txt.gz: exact compressed broad-suite console capture with
+  the purchase-gate source before the
   wrapping fix (SHA256 2940ea8a6f1096d4cff59a8432e99374ff6b43fe90857f7f72b2e8f52cb43839).
-  It is separate evidence and does not attest the final source. Final-source
+  The 147-scenario run failed only layout-dense/layout-boss (10 profiles): a
+  candidate regression hid finite price icons when payment was unrepresentable.
+  That display has been fixed without weakening those tests or the handler.
+  behavioral-pre-wrap.json records compressed/raw integrity and results.
+  This separate evidence does not attest the final source. Final-source
   pre-merge CI and integrated-version acceptance remain required.
 
 The initial mobile probe froze the panel entry animation at scale .995. Static
