@@ -1,99 +1,120 @@
 # BOND_TEXT_001 — Bond partners in Formation Bonds
 
 Updated 8 October 2026. Owner: this BOND_TEXT_001 feature chat.
-One goal: show Bond partner names in Formation Bonds and remove partner references
-from Wisp ability explanations while preserving each ability's explanation.
-Status: pushed as PR61; updated for current main; integration/Android acceptance pending.
+Goal: show Bond partners in Formation Bonds, remove them from Wisp ability text,
+and preserve correct ability explanations.
+**Status: integrated and signed APK published; required physical acceptance open.**
 
-## Requirements and sources
+## Requirement and authorization
 
 Original F16:
 
 > Der behøver ikke stå i wisp ability at der laves bond med hvilken anden der bliver lavet formation bond, det skal kun stå i formation bond, hvilke wisp der giver bonussen.
 
-[Full original](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt)
-has precedence over suggestions. Read F16, F14/F15/F17, relevant dependencies,
-save/acceptance sections in the
-[revision](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt),
+[Original](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt)
+prevails over proposals. Read F16/F14/F15/F17, dependencies, save and acceptance
+sections of the [revision](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt),
 [decisions](../recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt),
 [findings](../recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/FINDINGS.txt) and
 [source index](../recovery/2026-10-07/lead_context/FEEDBACK/Source_Index.txt).
-Screenshot 04-17362.jpg was inspected; its APK/save identity is unknown.
-User correction on 8 October: “Færdiggør featuren / Push til github / Implement
- til spillet.” This authorizes implementation, push, integration and app delivery.
-Model/effort recommendation in the order is not evidence of the model run.
+Screenshot04-17362.jpg was inspected; its APK/save identity is unknown.
+User continuation8 October: “Færdiggør featuren / Push til github / Implement til
+spillet.” Implementation, push, merge, signed build/publication are authorized.
+Model/effort recommendation is not evidence of the actual model run.
 
-## Baseline, scope and dependencies
+## Baseline and dependencies
 
-- Isolated clone `/workspace/BOND_TEXT_001`, branch `feature/bond-text-001`.
-  Shared `/workspace/Lumenfall` is untouched.
-- Initial candidate e5b6cafd9bc816e3cef040cc5a3fd1a8b24d741d on historical base
-  67c3e99c24587f6c13fc65cfd27f8dcb8e289602. Its
-  [7 October evidence](../qa/BOND_TEXT_001/README.txt) remains unchanged and
-  applies only to its recorded bytes.
-- Current main baseline 214d45411ce2fb420f0e4b372063811a967679b1 was verified
-  and merged cleanly at 26c5f745c61650f380c290c85077916db45a5b44. Current
-  AGENTS/bootstrap/workflow, ownership/visual guidance, state, context index and
-  CI/build triggers were read. No open PR/overlapping implementation at startup.
-- PR46/B2 is integrated via PR57 (20aaae62a4b6e46f8d75775085918eaba4e8de29).
-  Preserve Number/DataView arithmetic, paid Lab speeds and current offline fix.
-  Current feature-owner rules supersede the historical writer gate; no separate
-  writer ceremony or new general approval is required. Serialize main integration.
-- F15/new Bonds is separate. Partner names derive from the same Bond IDs used by
-  simulation, so Formation definitions share one authoritative model.
+Isolated clone `/workspace/BOND_TEXT_001`; product branch `feature/bond-text-001`;
+receipt branch `docs/bond-text-001-delivery`. Shared `/workspace/Lumenfall` is untouched.
+Initial candidate e5b6cafd9bc816e3cef040cc5a3fd1a8b24d741d on67c3e99; its
+[7 October evidence](../qa/BOND_TEXT_001/README.txt) remains historical.
+Current startup main214d45411ce2fb420f0e4b372063811a967679b1 was verified and
+merged. Current AGENTS/bootstrap/workflow, ownership/visual guidance, state,
+context index and CI/build triggers were read. PR46/B2 is integrated via PR57;
+Number/DataView arithmetic, paid Lab speeds and offline correction are preserved.
+Current feature-owner rules supersede historical writer ceremonies.
+
+PR59 Wisp upgrades and PR60 Forge text advanced main to0e9b54c8d62a873bd48625f4a20ee18078e8a8f1.
+Candidate merge9e6ec1f preserved their product changes; the test-registration
+conflict retains both Wisp-upgrade and Bond bridges/modules. Later Forge/Lab
+proposal and F12 receipt merges add documentation; no related product change.
+F15/new Bonds remains separate. An open broader PR67 also changes Bonds;
+partner names resolve from the same `FORMATION_BONDS.ids` used by simulation.
+Receipt branch also incorporates main ab46c0c7f30667c24325b6271f811b46b159d0d1
+(PR63 Rift Cast/Ready text). Its six product-line changes preserve the Bond
+definitions/helper/descriptions; receipt CI and affected checks assess the combined
+version. APK141 evidence remains bound to its earlier recorded integration.
+
+## Implementation and preservation
 
 `index.html`: remove Stone/Titan partnership from Breaker ability and general
-Wisp Roles copy; retain heavy damage, Module and Ultimate explanations. Resolve
-full names from `SPIRITS` via `FORMATION_BONDS.ids` in both Formation Bonds views.
-Remove duplicated `req` strings. Other abilities, Bond IDs/bonuses/tags and
-activation rules are unchanged. No new gameplay numbers or balance decisions.
+Wisp Roles copy. Keep heavy damage, Module and Ultimate explanations. Both
+Formation Bonds views resolve full names from `SPIRITS`; duplicated `req` strings
+are removed. Other abilities, IDs, bonuses, tags and activation rules are unchanged.
+`tests/behavioral/`: update Rift-status partner assertions and add default
+`bond-text-contract` plus two deliberate regression controls.
 
-`tests/behavioral/`: update Rift-status partner assertions; register focused
-`bond-text.js` in the default suite. Cover every Bond active/benched/Lv.0 in both
-views, eight ability explanations and render purity. Two negative controls
-restore the ability partner leak or abbreviated Bond names.
+No gameplay numbers, save schema/migration, purchase/bulk/queue handlers,
+chronology, rewards, native config, workflow or signing changes. Old purchases
+retain value; no migration is required for presentation-only definitions.
+WebView60, `com.lumenfall.app`, established signing, deterministic purchases and
+fixed Luminous Motes rewards are preserved.
 
-No save schema/migration, purchases, bulk/queue handlers, chronology, rewards,
-native configuration, workflow or signing changes. Old purchases and canonical,
-backup/recovery data retain value. Preserve WebView60, `com.lumenfall.app`,
-signing identity, deterministic purchases and documented Luminous Motes rewards.
+Acceptance criteria: both Bond views name each pair from the simulation's IDs
+in active, benched and Lv.0/pending states; all eight ability explanations retain
+their effects without partner instructions; other gameplay/save/purchase behavior
+is preserved. Mobile/text/focus/contrast/motion checks and required CI must pass
+on integrated code. Signed artifact identity, update preservation and necessary
+physical affected-phone/WebView60/TalkBack acceptance must be recorded before
+full completion. Available checks pass; the physical criterion remains open.
 
-## Acceptance and verification
+## Integration and acceptance evidence
 
-- Full partner names in both Formation Bonds sections, active/inactive/pending;
-  labels agree with simulation. Both ability views omit partner pairs and retain
-  damage/resource/buff/progression explanations.
-- Gameplay/persistence unchanged; relevant formation, chronology, parity and
-  save/recovery checks pass on current bytes.
-- Mobile widths 320/390/430, 100%/200% text, reduced motion, 44px disclosure,
-  keyboard focus, readable contrast and reachable rows pass.
-- Required CI passes before merge. Reverify integrated behavior, publish signed
-  APK and verify bundled assets/package/version/certificate. Required physical
-  Android/WebView60/TalkBack acceptance must be recorded honestly.
+[PR61](https://github.com/karahaNx/Lumenfall/pull/61) merged at
+**210005d0ae093d21e846bae41a9bddf25af2800d**. Final validated head
+a4f61869d837fc467ce83a26c065cad7968958a3. CI37710741132 PASS148 default scenarios,
+12 required negative controls, source/tooling and guarded startup. Earlier
+CI37708765963 PASS147 belongs to the earlier base and is preserved separately.
+Product/test/tool/native/assets at integration equal the validated head.
+Product SHA256: `1e0d51370b5b62f313dad6953f9b26bb7d7a1a886785dbccc6dfaac379779981`.
 
-Initial current-source SHA256: feb273d2ff1fb0d514517227d73b3ccb650a850b57f0a8ba5d12bbc77af85ac3.
-`bond-text-contract`, source validation, APK verifier self-test and Node tooling
-PASS on Node24.19.0/Chromium151. 14 focused positive scenarios and three negative controls PASS. Fresh probes
-PASS all 12 Bond states and 12 mobile/text/motion profiles; normalized source
-equality proves only presentation edits and browser mechanics match baseline.
-Minimum conservative partner contrast 7.19:1. Fresh evidence is saved under
-`docs/qa/BOND_TEXT_001/2026-10-08/`. Local Chromium uses the saved CDP wrapper
-because dump-dom hangs here; CI uses its actual browser. An initial sandboxed
-tooling check could not execute its mocked aapt subprocess; unchanged checks
-PASS with subprocess access. This is an environment limitation, not game failure.
+- Fresh [integrated checks](../qa/BOND_TEXT_001/integrated/README.md):14 positives
+  and3 negatives PASS; Formation, role/formula/pacing, chronology, parity,
+  save/reload/backup/recovery and native browser touch/keyboard/scroll.
+- [Updated-main UI/source](../qa/BOND_TEXT_001/current-main/README.md):12 Bond
+  states and12 width/text/motion profiles PASS (320/390/430,100%/200%,reduced
+  motion),44px disclosure, focus, scroll reachability and contrast>=7.19:1.
+  Normalized source equality and actual-browser mechanics match the baseline.
+- [Android141 receipt](../qa/BOND_TEXT_001/android/README.md): package/version,
+  certificate/v1/v2,526 ZIP CRC entries/all15 assets PASS. Actual extracted
+  scripts parse and the partner helper executes on V8 6.0. Signed138→141 preserves
+  47,104-byte WebView save-storage snapshot exactly; purchased Rarity/Module
+  tiers survive first launch. Installed Android8.1/API27/WebView69 DOM checks
+  PASS12 active/benched/pending states, both Bond views, eight ability descriptions
+  and native100%/200% text profiles. QA fixtures/interval guard are not shipped.
 
-## Delivery checkpoint
+Build37712548224 published **0.1.141**, versionCode141. APK SHA256
+`0b278ffce3819a40b98c44b738b79123ec2d7fb273a3820bc13ed71940214d44`.
+[Immutable APK/receipt](../../archive/android/bond-text-001/README.md).
+Local runtime Node24.19.0/Chromium151; CI Node20/real browser; legacy engine
+Node8.4.0/V8 6.0.286.52. Local dump-dom uses the documented wrapper; native pipe
+checks use actual Chromium. Initial wrapper, debugger/reader/launch and imported
+rebuild-fixture failures remain saved and distinguished from corrected PASS.
+The initial native screenshot captured a System UI ANR in software emulation;
+raw capture and subsequent observation are preserved. This does not certify
+native performance or physical-device interaction. Self-review/automated checks
+are recorded; no independent review is claimed.
 
-[PR61](https://github.com/karahaNx/Lumenfall/pull/61) pushed at ca00a7a4368dd0ad8fdd81fb623ca0ba99ddb5d0.
-Full CI37708765963 PASS147 scenarios,12 required negatives and guarded smoke.
-Main advanced to 0e9b54c8d62a873bd48625f4a20ee18078e8a8f1 (PR60 Forge text
-and PR59 Wisp upgrades). Merged at 9e6ec1f; resolved only test-module registration
-by retaining both Wisp-upgrade and Bond bridges/modules. Product delta against
-this main is still the same presentation-only change. Updated Bond contract and
-source/context validation PASS; fresh focused/mobile checks and CI follow.
-Updated product SHA256: 1e0d51370b5b62f313dad6953f9b26bb7d7a1a886785dbccc6dfaac379779981.
-No integration/APK for this feature yet. Required physical device
-acceptance is unperformed. No independent review is claimed. Next: pass updated CI and merge serially; verify integrated behavior and
-signed APK; save task/project status and evidence in GitHub. Keep this owner chat
-open if required acceptance remains unavailable. Archive only after completion
-under [FEATURE_WORKFLOW](../project/FEATURE_WORKFLOW.md).
+## Remaining acceptance and continuation
+
+Required physical affected-phone/exact WebView60/TalkBack acceptance is unperformed.
+Record device/WebView/version and confirm readable partner names, own ability
+explanations, text scaling, focus and screen-reader navigation on the signed APK;
+preserve player progress and normal backup/recovery. See the Android receipt.
+Do not label the feature fully accepted while this is missing.
+
+The delivery receipt is on `docs/bond-text-001-delivery`; its PR body records
+the required CI/integration receipt and latest-main verification. Shared-file product
+work for this task is finished; no other chat's writer is claimed or released.
+Only this owner chat can be archived after verified acceptance and saved status
+under [FEATURE_WORKFLOW](../project/FEATURE_WORKFLOW.md); it remains open now.

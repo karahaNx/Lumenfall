@@ -1,0 +1,14 @@
+adb: device 'emulator-5554' not found
+Error: Command failed: /workspace/bond-android-tools/sdk/platform-tools/adb -s emulator-5554 shell getprop ro.kernel.qemu
+adb: device 'emulator-5554' not found
+
+    at genericNodeError (node:internal/errors:985:15)
+    at wrappedFn (node:internal/errors:539:14)
+    at checkExecSyncError (node:child_process:942:11)
+    at Object.execFileSync (node:child_process:978:15)
+    at android (/workspace/BOND_TEXT_001/docs/qa/BOND_TEXT_001/android/native-bond.cjs:9:37)
+    at main (/workspace/BOND_TEXT_001/docs/qa/BOND_TEXT_001/android/native-bond.cjs:62:16)
+    at Object.<anonymous> (/workspace/BOND_TEXT_001/docs/qa/BOND_TEXT_001/android/native-bond.cjs:86:1)
+    at Module._compile (node:internal/modules/cjs/loader:1872:14)
+    at Object..js (node:internal/modules/cjs/loader:2003:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
