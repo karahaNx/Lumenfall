@@ -1,0 +1,43 @@
+FORMATION_AUTOSAVE_001 / F14 — remaining affected-device acceptance
+
+Status: OPEN. Use the immutable APK and exact package/version/digest recorded
+in DELIVERY.md after publication. Do not identify an APK only by the mutable
+android-latest URL. Record device, Android/WebView version, text scale, TalkBack
+version, APK identity, observed results and screenshots in this task's evidence.
+
+Available browser/V8/emulator evidence must remain labelled by its actual
+runtime. V8 6.0 checks JavaScript compatibility; API27/WebView61 is emulation.
+Neither is physical affected-phone, exact WebView60 or TalkBack acceptance.
+
+1. Preserve the existing player's Save Backup and identify the old APK/signing.
+   Install the new signed APK as an update. Verify existing Wisps, selected
+   preset, stored formations, purchases and currencies retain their value;
+   allow only normal documented gameplay rewards/costs.
+2. Select Push, edit Field/Bench, then Farm and Boss. Return to each preset:
+   verify only the selected destination changes, edits persist immediately
+   without Save, and ordinary gameplay continues. Keep at least one Wisp.
+3. Choose a formation containing late-game Wisps. Ascend; verify complete
+   ordered intent survives while only powered Wisps fight. Pending members
+   show no power/Bonds. Bench one pending member and Field a powered member:
+   all other pending choices and the selected destination must survive.
+4. Make partial paid/queued reconstruction purchases using displayed existing
+   prices. Verify each existing cost is paid once and the temporary powered
+   projection never replaces the complete saved formation. Repeat Ascend.
+5. Background, resume and cold launch; verify edited presets and pending
+   intent retain order and destination. Exercise backup restore via the current
+   explicit confirmation UI on a dedicated QA save. Retain recovery results.
+6. On a dedicated QA fixture with an existing empty stored preset, selecting it
+   retains [] and uses temporary Ember. A deliberate Field/recruit edit saves
+   its chosen roster; fresh game presets still start with Ember.
+7. Check relevant narrow/wide mobile layouts, 200% text, >=44px touch targets,
+   keyboard focus/activation, contrast and reduced motion. Record any overlap
+   or inherited issue with exact controls/version; do not silently waive it.
+8. With TalkBack, verify named Push/Farm/Boss buttons announce selection,
+   Field/Bench announce their action/state, pending no-power/Bonds is readable,
+   navigation/focus survives rerender and there is no obsolete Save control.
+9. On exact WebView60, verify launch, real input, save/recovery and Ascend
+   behavior without runtime errors. Retain versions and concrete observations.
+
+Mark individual results PASS/FAIL/OPEN. Required missing acceptance keeps the
+feature and owner chat open. Save supported status/evidence in GitHub before
+completion or owner-chat archiving; do not claim independent review without it.
