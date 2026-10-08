@@ -9,7 +9,7 @@ Status: [PR86](https://github.com/karahaNx/Lumenfall/pull/86) candidate; final c
 [Full request](FORMATION_BONDS_001_REQUEST.txt), latest: “Finish the feature task push to github implement to game”. Live [AGENTS](../../AGENTS.md)/[workflow](../project/FEATURE_WORKFLOW.md) supersede historical PR46/B2/writer gates. No subagents/messages/other-chat changes.
 
 Baseline b0537cb46635555ba2c2e5f3f95bc8fc276aeda5; product SHA256 5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c. Branch feature/formation-bonds-001-implementation, /workspace/Lumenfall-bonds-implementation; original checkout/proposal acab2002 untouched.
-Combined mainac0d28e preserves PR76/77/80/84/90/78/85/81/66: autosave, backup, Resonate, Auto-Ascend, matrix, Forge memory,12h/refunds, guidance and Tree. Change index/scoped tests/task/evidence; no native changes.
+Combined main06b28d5 preserves PR76/77/80/84/90/78/85/81/66/79: autosave, backup, Resonate, Auto-Ascend, matrix, Forge memory,12h/refunds, guidance, Tree and cosmetics. Change index/scoped tests/task/evidence; no native changes.
 
 ## Design and preservation
 
