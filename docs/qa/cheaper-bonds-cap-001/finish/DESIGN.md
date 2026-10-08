@@ -73,3 +73,10 @@ schema2 save. Legacy fixtures explicitly start at schema1; v0, both old-currency
 refunds, both receipts and the pre-existing F21 receipt through schema2 transition
 are checked. Five added checks pass; existing full offline catch-up16 records
 pass with both exact additive F21 defaults and all upstream F26 assertions.
+
+PR89 P2 credit-record correction: every Prism credit requires a plain record,
+nonempty string ID and finite positive integer amount. Own credits also require
+the valid own receipt. Null/malformed/fractional entries reject for recovery;
+valid foreign integer credits remain. Nine malformed cases, actual null/0.5
+primary recovery and the V8 6.0 probe pass; a credit-record defect control detects
+removal of validation. No legitimate price, credit or currency is rounded.

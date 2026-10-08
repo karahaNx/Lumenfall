@@ -16,7 +16,8 @@ if(mutation==='free-credit')source=source.replace('left=exactPrismArithmetic(ent
 if(mutation==='wallet')source=source.replace('var wallet=exactPrismArithmetic(state.prisms,-remaining);','var wallet=state.prisms-remaining;');
 if(mutation==='receipt')source=source.replace(' || !cheaperRecruitmentReceiptPriceMatches(n,20+index)','');
 if(mutation==='cache')source=source.replace('var entry=cheaperRecruitmentRefundPrices[level-20];','var value=2*Math.pow(1.45,level),allowance=value*level*Number.EPSILON/(1-level*Number.EPSILON); var entry={min:Math.ceil(value-allowance),max:Math.ceil(value+allowance)};');
-if(!['none','handler','ui','raw','refund','credit','free-credit','wallet','receipt','cache'].includes(mutation))throw Error('unknown mutation');
+if(mutation==='credit-record')source=source.replace("if(!isPlainObject(entry) || typeof entry.id!=='string' || !entry.id || !Number.isFinite(entry.amount) || entry.amount<=0 || Math.floor(entry.amount)!==entry.amount || (entry.id===id && !hasReceipt)){",'if(entry && entry.id===id && !hasReceipt){');
+if(!['none','handler','ui','raw','refund','credit','free-credit','wallet','receipt','cache','credit-record'].includes(mutation))throw Error('unknown mutation');
 const bridge=`
 window.__cheaperRecruitment={
  fresh:function(){return freshState();},today:todayStr,
@@ -137,6 +138,12 @@ async function run(){
  await navigate(url);let repaired=await evaluate('__cheaperRecruitment.get()');
  assert(repaired.nodes.bonds===21&&repaired.prisms===3393&&repaired.feedbackMigration.receipts['node.bonds'].amounts.prisms[0]===3376,'wrong positive receipt amount selects intact actual recovery');
  records.push({kind:'receipt-recovery',primaryAmount:1,recoveredAmount:3376,wallet:3393});
+ for(const damagedEntry of [null,{id:'node.bonds',amount:0.5}]){
+  await evaluate(`(()=>{var b=__cheaperRecruitment;b.set(b.canonical(cheaperLegacySeed(21,17)));b.save();var bad=b.get();bad.refundCredits.prisms=[${JSON.stringify(damagedEntry)}];b.corruptPrimary();localStorage.setItem('lumenfall_save_v2',JSON.stringify(bad));})()`);
+  await navigate(url);repaired=await evaluate('__cheaperRecruitment.get()');
+  assert(repaired.nodes.bonds===21&&repaired.prisms===3393&&repaired.refundCredits.prisms.length===0,'malformed credit selects intact actual recovery');
+  records.push({kind:'credit-recovery',damagedEntry,wallet:3393});
+ }
  const oldBackup=await evaluate('__cheaperRecruitment.encode(cheaperLegacySeed(21,0))');
  await evaluate('(()=>{var b=__cheaperRecruitment;b.set(cheaperRecruitmentSeed(0));b.save();})()');
  const beforeRollback=await evaluate('__cheaperRecruitment.disk()');

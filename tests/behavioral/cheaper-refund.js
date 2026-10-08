@@ -93,5 +93,12 @@ window.runCheaperRefundContracts=function(){
   var damagedCached=JSON.parse(JSON.stringify(compatible));damagedCached.feedbackMigration.receipts['node.bonds'].amounts.prisms[0]=1;var cachedRejected=false;
   try{b.canonical(damagedCached);}catch(e){cachedRejected=e.code==='invalid-bonds-refund';}
   ok(cachedRejected,'cached schedule still rejects a changed completed receipt');
+  [null,{},[],0,'credit',{id:'node.bonds',amount:0.5},{id:'node.bonds',amount:0},{id:'node.echo',amount:0.5},{id:'',amount:1}].forEach(function(entry){
+    var damaged=b.canonical(cheaperLegacySeed(95,0));damaged.refundCredits.prisms=[entry];var rejected=false;
+    try{b.canonical(damaged);}catch(e){rejected=e.code==='invalid-bonds-refund';}
+    ok(rejected,'malformed persisted Prism credit rejects for recovery');
+  });
+  var foreign=b.canonical(cheaperLegacySeed(21,0));foreign.refundCredits.prisms.push({id:'node.echo',amount:16});
+  same(b.canonical(foreign).refundCredits.prisms,foreign.refundCredits.prisms,'valid foreign integer Prism credit retained');
   return {checks,records,receipt:'feedbackMigration.receipts[node.bonds]',rawHistoryRetained:true,exactCreditDebit:true};
 };

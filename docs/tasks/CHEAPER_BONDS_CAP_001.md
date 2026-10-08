@@ -58,9 +58,9 @@ identity/assets plus actual relevant Android update/save behavior before closing
 
 ## Checks, evidence and next action
 
-Current source SHA256:c54856a01166e6e039f1c7b9384d2ff098c8c8e4247c481b0b86d12a54a61404.
-Local:523 assertions (388 cap/gameplay +135 exact refund),12 mobile profiles,
-9 causal controls,926 current clarity assertions,16 offline catch-up records and V8 6.0 PASS.
+Current source SHA256:f210c893ddf16eaaee8032d51d1bfa446e5c4c797f528141c43e3789bc8e8be5.
+Local:533 assertions (388 cap/gameplay +145 exact refund),12 mobile profiles,
+10 causal controls,926 current clarity assertions,16 offline catch-up records and V8 6.0 PASS.
 [Evidence/commands](../qa/cheaper-bonds-cap-001/finish/README.md) separates historical
 passes/diagnostics from final acceptance. PR89 review findings about wallet loss,
 receipt amounts, repeated schedule calculation and rounding wording are fixed.

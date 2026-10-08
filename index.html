@@ -3802,7 +3802,7 @@ function normalizeCheaperRecruitmentRefund(out,source){
     throw persistenceError('invalid-bonds-refund','Recruitment refund receipt needs recovery');
   }
   credits.forEach(function(entry){
-    if(entry && entry.id===id && (!hasReceipt || !Number.isFinite(entry.amount) || entry.amount<=0)){
+    if(!isPlainObject(entry) || typeof entry.id!=='string' || !entry.id || !Number.isFinite(entry.amount) || entry.amount<=0 || Math.floor(entry.amount)!==entry.amount || (entry.id===id && !hasReceipt)){
       throw persistenceError('invalid-bonds-refund','Recruitment refund credits need recovery');
     }
   });

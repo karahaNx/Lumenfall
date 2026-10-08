@@ -1,14 +1,14 @@
 {
   "status": "PASS",
   "sourcePath": "/workspace/CHEAPER_BONDS_CAP_001/index.html",
-  "sourceSha256": "c54856a01166e6e039f1c7b9384d2ff098c8c8e4247c481b0b86d12a54a61404",
+  "sourceSha256": "f210c893ddf16eaaee8032d51d1bfa446e5c4c797f528141c43e3789bc8e8be5",
   "mutation": "none",
-  "observedAt": "2026-10-08T07:59:49.033Z",
+  "observedAt": "2026-10-08T08:04:33.672Z",
   "records": [
     {
       "kind": "refund-contracts",
       "result": {
-        "checks": 135,
+        "checks": 145,
         "records": [
           {
             "raw": 19,
@@ -64,7 +64,7 @@
             "raw": 2000,
             "boundaries": 100,
             "priceCalculations": 0,
-            "elapsedMs": 201.70000000298023
+            "elapsedMs": 146.19999998807907
           }
         ],
         "receipt": "feedbackMigration.receipts[node.bonds]",
@@ -326,6 +326,19 @@
       "kind": "receipt-recovery",
       "primaryAmount": 1,
       "recoveredAmount": 3376,
+      "wallet": 3393
+    },
+    {
+      "kind": "credit-recovery",
+      "damagedEntry": null,
+      "wallet": 3393
+    },
+    {
+      "kind": "credit-recovery",
+      "damagedEntry": {
+        "id": "node.bonds",
+        "amount": 0.5
+      },
       "wallet": 3393
     },
     {

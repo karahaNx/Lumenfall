@@ -1,69 +1,76 @@
 {
   "status": "PASS",
-  "observedAt": "2026-10-08T07:59:54.996Z",
+  "observedAt": "2026-10-08T08:04:40.438Z",
   "results": [
+    {
+      "mutation": "credit-record",
+      "expected": "malformed persisted Prism credit rejects for recovery",
+      "status": "CAUGHT",
+      "exit": 1,
+      "sourceSha256": "f210c893ddf16eaaee8032d51d1bfa446e5c4c797f528141c43e3789bc8e8be5"
+    },
     {
       "mutation": "cache",
       "expected": "completed large refund avoids repeated price calculation at Ascend boundaries",
       "status": "CAUGHT",
       "exit": 1,
-      "sourceSha256": "c54856a01166e6e039f1c7b9384d2ff098c8c8e4247c481b0b86d12a54a61404"
+      "sourceSha256": "f210c893ddf16eaaee8032d51d1bfa446e5c4c797f528141c43e3789bc8e8be5"
     },
     {
       "mutation": "handler",
       "expected": "cap prevents direct/repeated debit",
       "status": "CAUGHT",
       "exit": 1,
-      "sourceSha256": "c54856a01166e6e039f1c7b9384d2ff098c8c8e4247c481b0b86d12a54a61404"
+      "sourceSha256": "f210c893ddf16eaaee8032d51d1bfa446e5c4c797f528141c43e3789bc8e8be5"
     },
     {
       "mutation": "refund",
       "expected": "refund receipt prevents a second credit",
       "status": "CAUGHT",
       "exit": 1,
-      "sourceSha256": "c54856a01166e6e039f1c7b9384d2ff098c8c8e4247c481b0b86d12a54a61404"
+      "sourceSha256": "f210c893ddf16eaaee8032d51d1bfa446e5c4c797f528141c43e3789bc8e8be5"
     },
     {
       "mutation": "credit",
       "expected": "fractional original wallet retains exact refund value",
       "status": "CAUGHT",
       "exit": 1,
-      "sourceSha256": "c54856a01166e6e039f1c7b9384d2ff098c8c8e4247c481b0b86d12a54a61404"
+      "sourceSha256": "f210c893ddf16eaaee8032d51d1bfa446e5c4c797f528141c43e3789bc8e8be5"
     },
     {
       "mutation": "free-credit",
       "expected": "unrepresentable credit subtraction cannot buy a free level",
       "status": "CAUGHT",
       "exit": 1,
-      "sourceSha256": "c54856a01166e6e039f1c7b9384d2ff098c8c8e4247c481b0b86d12a54a61404"
+      "sourceSha256": "f210c893ddf16eaaee8032d51d1bfa446e5c4c797f528141c43e3789bc8e8be5"
     },
     {
       "mutation": "wallet",
       "expected": "unrepresentable wallet debit cannot buy a free level",
       "status": "CAUGHT",
       "exit": 1,
-      "sourceSha256": "c54856a01166e6e039f1c7b9384d2ff098c8c8e4247c481b0b86d12a54a61404"
+      "sourceSha256": "f210c893ddf16eaaee8032d51d1bfa446e5c4c797f528141c43e3789bc8e8be5"
     },
     {
       "mutation": "receipt",
       "expected": "wrong receipt amount rejects for recovery",
       "status": "CAUGHT",
       "exit": 1,
-      "sourceSha256": "c54856a01166e6e039f1c7b9384d2ff098c8c8e4247c481b0b86d12a54a61404"
+      "sourceSha256": "f210c893ddf16eaaee8032d51d1bfa446e5c4c797f528141c43e3789bc8e8be5"
     },
     {
       "mutation": "ui",
       "expected": "UI maxed even with affordable wallet",
       "status": "CAUGHT",
       "exit": 1,
-      "sourceSha256": "c54856a01166e6e039f1c7b9384d2ff098c8c8e4247c481b0b86d12a54a61404"
+      "sourceSha256": "f210c893ddf16eaaee8032d51d1bfa446e5c4c797f528141c43e3789bc8e8be5"
     },
     {
       "mutation": "raw",
       "expected": "all finite original purchase value retained",
       "status": "CAUGHT",
       "exit": 1,
-      "sourceSha256": "c54856a01166e6e039f1c7b9384d2ff098c8c8e4247c481b0b86d12a54a61404"
+      "sourceSha256": "f210c893ddf16eaaee8032d51d1bfa446e5c4c797f528141c43e3789bc8e8be5"
     }
   ]
 }
