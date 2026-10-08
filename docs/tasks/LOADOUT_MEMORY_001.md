@@ -95,6 +95,14 @@ Previous local candidate20b8b2e/baselineb2a1f44 and its1133 checks are historica
 its refund proposal was dropped and none of those receipts accept current bytes.
 Current F27 normalization/catalog supersede that candidate's local save/shop edits.
 
-Next: finish current checks, publish coherent branch/PR, wait for required CI,
+Resumption: PR78 is published. Initial CI37735117429 passed153 defaults/12
+negatives. PR77 advanced main to261b1b7 during that run; combination2d12370
+passed1127 local checks/22 scoped cases/ES2017/V8 6.0. CI37737114019 then
+failed the new mobile driver before UI assertions (Target.createBrowserContext
+timeout). It launched hard-coded chromium rather than the selected browser.
+The harness now forwards its exact browser and staged source; driver startup
+stderr is retained on failures. No acceptance assertion/gate is removed.
+
+Next: verify the launcher fix, wait for renewed same-head CI,
 merge only this small delta, verify integrated source and signed APK, save the
 remaining required device checklist. Feature/chat remains open until acceptance.

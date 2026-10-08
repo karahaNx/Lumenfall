@@ -77,7 +77,7 @@ const browserBridge=`window.__f25={
     return new Promise(function(resolve){setTimeout(function(){document.querySelectorAll('.overlay').forEach(closeOverlay);resolve();},pending?460:0);});},
   finish:function(){reloadInProgress=true;}
 };\n`;
-let browser,server,profile,session,seq=0,buffer='',browserClosed=false;
+let browser,server,profile,session,seq=0,buffer='',browserClosed=false,browserStderr='';
 const pendingRequests=new Map();let browserDone;
 function send(method,params={},sid=session){return new Promise((resolve,reject)=>{
   const id=++seq,timer=setTimeout(()=>{pendingRequests.delete(id);reject(Error('CDP timeout '+method));},15000);
@@ -114,7 +114,7 @@ async function browserContracts(){
   });await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});
   profile=fs.mkdtempSync(path.join(os.tmpdir(),'lumenfall-f25-'));
   browser=spawn(option('--chrome','chromium'),['--headless=new','--no-sandbox','--disable-gpu','--disable-dev-shm-usage','--remote-debugging-pipe','--user-data-dir='+profile,'about:blank'],{stdio:['ignore','ignore','pipe','pipe','pipe']});
-  browser.stderr.resume();browserDone=new Promise(resolve=>{browser.once('error',e=>resolve({error:e.message}));browser.once('close',(code,signal)=>{browserClosed=true;for(const p of pendingRequests.values()){clearTimeout(p.timer);p.reject(Error('browser closed'));}pendingRequests.clear();resolve({code,signal});});});
+  browser.stderr.on('data',chunk=>{browserStderr=(browserStderr+chunk).slice(-6000);});browserDone=new Promise(resolve=>{browser.once('error',e=>resolve({error:e.message}));browser.once('close',(code,signal)=>{browserClosed=true;for(const p of pendingRequests.values()){clearTimeout(p.timer);p.reject(Error('browser closed'));}pendingRequests.clear();resolve({code,signal});});});
   browser.stdio[4].on('data',chunk=>{buffer+=chunk;let end;while((end=buffer.indexOf('\0'))!==-1){const raw=buffer.slice(0,end);buffer=buffer.slice(end+1);if(!raw)continue;const m=JSON.parse(raw),p=pendingRequests.get(m.id);if(p){pendingRequests.delete(m.id);clearTimeout(p.timer);m.error?p.reject(Error(JSON.stringify(m.error))):p.resolve(m.result);}}});
   for(const [width,large,motion] of [[320,false,'no-preference'],[390,false,'no-preference'],[430,false,'no-preference'],[320,true,'reduce'],[390,true,'reduce'],[430,true,'reduce']]){
     const context=await send('Target.createBrowserContext',{},null),target=await send('Target.createTarget',{url:'about:blank',browserContextId:context.browserContextId},null);
@@ -177,6 +177,6 @@ async function cleanup(){
 }
 (async()=>{let result;try{contracts();if(!args.includes('--vm-only'))await browserContracts();result={status:'pass',checks,records};}catch(e){result={status:'fail',checks,message:e.message,records};}
   try{await cleanup();}catch(e){result.status='fail';result.cleanupError=e.message;}
-  result.sourceSHA256=crypto.createHash('sha256').update(original).digest('hex');result.negative=negative||null;result.controlledSimulationIntervals=true;
+  result.sourceSHA256=crypto.createHash('sha256').update(original).digest('hex');result.negative=negative||null;result.controlledSimulationIntervals=true;result.browserCommand=option('--chrome','chromium');if(result.status==='fail')result.browserStderr=browserStderr;
   console.log(JSON.stringify(result));if(result.status!=='pass')process.exitCode=1;
 })();
