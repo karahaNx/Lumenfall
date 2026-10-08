@@ -1,0 +1,237 @@
+{
+  "status": "pass",
+  "identity": {
+    "installedApkPath": "/data/app/com.lumenfall.app-7DoUMKJfP4WL-jgD7XgqXA==/base.apk",
+    "installedApkSha256": "a40cd30dec0227c97bd54f5d637a424234683da6a13734f830470d08d9fd5725",
+    "sourceSha256": "d4b0d7227b2c46ef7c2bde406ea07f2a5a2f34fc395e51fbafcf061e2562ed3e",
+    "package": [
+      "versionCode=145 minSdk=22 targetSdk=34",
+      "versionName=0.1.145"
+    ],
+    "android": "8.1.0",
+    "api": "27",
+    "ua": "Mozilla/5.0 (Linux; Android 8.1.0; Android SDK built for x86 Build/OSM1.180201.023; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.98 Mobile Safari/537.36"
+  },
+  "records": [
+    {
+      "case": "signed143 update preserves native storage",
+      "beforeSha256": "a741ebf03d8281f274eff1395af214aafb99061e0fbe482008e374c1366d9eb7",
+      "afterSha256": "a741ebf03d8281f274eff1395af214aafb99061e0fbe482008e374c1366d9eb7",
+      "bytes": 91648,
+      "install": "Success\n",
+      "baselineIdentity": {
+        "installedApkPath": "/data/app/com.lumenfall.app-O-HAcCEJ_3PE1GKlpCBfBA==/base.apk",
+        "installedApkSha256": "45d1032ae6e77362d3540db740c6cfbdc4d275f2e3f6b98f4cecb1229e3205e7",
+        "sourceSha256": "5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c",
+        "package": [
+          "versionCode=143 minSdk=22 targetSdk=34",
+          "versionName=0.1.143"
+        ],
+        "android": "8.1.0",
+        "api": "27"
+      }
+    },
+    {
+      "case": "first updated launch preserves roster/preset/paid value",
+      "currencies": {
+        "lumen": {
+          "before": 1000001874450.1998,
+          "after": 1000001874450.1998
+        },
+        "comets": {
+          "before": 909,
+          "after": 909
+        },
+        "shards": {
+          "before": 56165.1,
+          "after": 56165.1
+        },
+        "motes": {
+          "before": 91,
+          "after": 91
+        },
+        "sigils": {
+          "before": 88,
+          "after": 88
+        }
+      }
+    },
+    {
+      "case": "actual WebView input origin",
+      "inputOrigin": {
+        "x": 0,
+        "y": 24
+      }
+    },
+    {
+      "case": "actual Android preset and Bench touch push",
+      "control": {
+        "x": 305.3515625,
+        "y": 411,
+        "dpr": 1,
+        "w": 53.296875,
+        "h": 48
+      },
+      "focus": "tide"
+    },
+    {
+      "case": "actual Android preset and Bench touch farm",
+      "control": {
+        "x": 305.3515625,
+        "y": 411,
+        "dpr": 1,
+        "w": 53.296875,
+        "h": 48
+      },
+      "focus": "gale"
+    },
+    {
+      "case": "actual Android preset and Bench touch boss",
+      "control": {
+        "x": 305.3515625,
+        "y": 411,
+        "dpr": 1,
+        "w": 53.296875,
+        "h": 48
+      },
+      "focus": "titan"
+    },
+    {
+      "case": "actual Android Space retains last chosen Wisp",
+      "focus": "void"
+    },
+    {
+      "case": "actual Android Field tide",
+      "control": {
+        "x": 308,
+        "y": 411,
+        "dpr": 1,
+        "w": 48,
+        "h": 48
+      }
+    },
+    {
+      "case": "actual Android Field stone",
+      "control": {
+        "x": 308,
+        "y": 411,
+        "dpr": 1,
+        "w": 48,
+        "h": 48
+      }
+    },
+    {
+      "case": "actual Android Field gale",
+      "control": {
+        "x": 308,
+        "y": 411,
+        "dpr": 1,
+        "w": 48,
+        "h": 48
+      }
+    },
+    {
+      "case": "actual Android Field titan",
+      "control": {
+        "x": 308,
+        "y": 411,
+        "dpr": 1,
+        "w": 48,
+        "h": 48
+      }
+    },
+    {
+      "case": "actual Ascend saves all five pending Boss members"
+    },
+    {
+      "case": "actual pending Bench/Field preserves all other desired members"
+    },
+    {
+      "case": "installed APK width 320",
+      "visual": {
+        "width": 320,
+        "fits": true,
+        "noSave": true,
+        "controls": [
+          {
+            "w": 92.671875,
+            "h": 63,
+            "name": "Push\n1/5 Wisps\n"
+          },
+          {
+            "w": 92.671875,
+            "h": 63,
+            "name": "Farm\n1 pending\n"
+          },
+          {
+            "w": 92.671875,
+            "h": 63,
+            "name": "Boss\nSelected · 4 pending\n"
+          }
+        ],
+        "pendingText": "Voidling\nSTARCALLER · BURST\nBench\nChosen Formation · Pending · No power or Bonds\nLv. 0\n0 Wisp Power\nCommon\n\nRecruit\n70.00K\nVoid · Ability, Rarity, Module & Ultimate\nABILITY\nVoid Nova\nFocused burst ability damage. Its Module boosts the hit; its Ultimate doubles it.\nOvercharge Core Lv.0/20\n+0% ability burst damage\nUpgrade Module\n280.00K\n28.00K\nRecruit first\nLv.8 req\nRecruit first\nUnlock Ultimate\n41\nMythic required\n"
+      }
+    },
+    {
+      "case": "installed APK width 390",
+      "visual": {
+        "width": 390,
+        "fits": true,
+        "noSave": true,
+        "controls": [
+          {
+            "w": 122,
+            "h": 52,
+            "name": "Push\n1/5 Wisps\n"
+          },
+          {
+            "w": 122,
+            "h": 52,
+            "name": "Farm\n1 pending\n"
+          },
+          {
+            "w": 122,
+            "h": 52,
+            "name": "Boss\nSelected · 4 pending\n"
+          }
+        ],
+        "pendingText": "Voidling\nSTARCALLER · BURST\nBench\nChosen Formation · Pending · No power or Bonds\nLv. 0\n0 Wisp Power\nCommon\n\nRecruit\n70.00K\nVoid · Ability, Rarity, Module & Ultimate\nABILITY\nVoid Nova\nFocused burst ability damage. Its Module boosts the hit; its Ultimate doubles it.\nOvercharge Core Lv.0/20\n+0% ability burst damage\nUpgrade Module\n280.00K\n28.00K\nRecruit first\nLv.8 req\nRecruit first\nUnlock Ultimate\n41\nMythic required\n"
+      }
+    },
+    {
+      "case": "installed APK width 430",
+      "visual": {
+        "width": 430,
+        "fits": true,
+        "noSave": true,
+        "controls": [
+          {
+            "w": 135.328125,
+            "h": 52,
+            "name": "Push\n1/5 Wisps\n"
+          },
+          {
+            "w": 135.328125,
+            "h": 52,
+            "name": "Farm\n1 pending\n"
+          },
+          {
+            "w": 135.328125,
+            "h": 52,
+            "name": "Boss\nSelected · 4 pending\n"
+          }
+        ],
+        "pendingText": "Voidling\nSTARCALLER · BURST\nBench\nChosen Formation · Pending · No power or Bonds\nLv. 0\n0 Wisp Power\nCommon\n\nRecruit\n70.00K\nVoid · Ability, Rarity, Module & Ultimate\nABILITY\nVoid Nova\nFocused burst ability damage. Its Module boosts the hit; its Ultimate doubles it.\nOvercharge Core Lv.0/20\n+0% ability burst damage\nUpgrade Module\n280.00K\n28.00K\nRecruit first\nLv.8 req\nRecruit first\nUnlock Ultimate\n41\nMythic required\n"
+      }
+    },
+    {
+      "case": "actual cold launch retains pending formation"
+    }
+  ],
+  "runtimeErrors": [],
+  "limitations": [
+    "Software API27 emulator; no physical/TalkBack claim.",
+    "Actual WebView version identified by recorded UA; exact WebView60 remains separate.",
+    "Modern browser evidence supplies 200% text/focus/contrast/reduced-motion matrix."
+  ]
+}

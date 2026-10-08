@@ -9,6 +9,15 @@ commits below are observed checkpoints, not a promise that main never advances.
 
 ## Product and release evidence
 
+F14 [FORMATION_AUTOSAVE_001](tasks/FORMATION_AUTOSAVE_001.md) integrated via
+[PR76](https://github.com/karahaNx/Lumenfall/pull/76)/c5fa497. Selected-preset
+Field/Bench/recruitment saves immediately; Save removed; complete late-game
+intent and stored empty presets survive Ascend/recovery without pending power
+or Bonds. CI158/14, fresh integrated/mobile checks and signed APK0.1.145
+identity/assets/engine/native update/input/Ascend/cold launch PASS. Actual
+Android8.1/API27/WebView61 emulation; required physical/exact WebView60/TalkBack
+acceptance OPEN. [Receipt and immutable APK](qa/formation-autosave-2026-10-08/DELIVERY.md).
+
 F13 delivery added 8 October 2026: [RIFT_CAST_TEXT_001](tasks/RIFT_CAST_TEXT_001.md)
 is complete via PR63/ab46c0c. Full CI151 scenarios/12 required negatives, integrated
 checks and signed APK0.1.142 native acceptance PASS. Package/signing and all 15 assets
@@ -143,6 +152,7 @@ were recorded as integrated.
 
 | Work | Evidence/status | Next action within its own task |
 | --- | --- | --- |
+| [FORMATION_AUTOSAVE_001 / F14](tasks/FORMATION_AUTOSAVE_001.md) | PR76/main integrated; CI158/14 and signed145 update/native Formation checks PASS. Later Resonate/main changes preserved. Required device acceptance OPEN. | Complete [physical/exact WebView60/TalkBack checklist](qa/formation-autosave-2026-10-08/DEVICE_ACCEPTANCE.txt); save observed results in GitHub and keep owner chat open. |
 | [SAVE_BACKUP_UI_001 / F22](tasks/SAVE_BACKUP_UI_001.md) | PR77 integrated; CI152 scenarios/14 negatives, integrated12 UI profiles and signed144 identity/assets/extracted-UI/V8 checks PASS. Backup is beside independent Reset; Restore requires confirmation. | Complete [physical Android/WebView60/TalkBack acceptance](qa/save-backup-ui-001/2026-10-08/DEVICE_ACCEPTANCE.txt). Required acceptance OPEN; keep owner chat open. |
 | RIFT_CAST_TEXT_001 / F13 | **Complete.** PR63 integrated; CI151/12 negatives, integrated UI/save/parity/chronology checks and signed 0.1.142 native acceptance PASS. [Task/evidence](tasks/RIFT_CAST_TEXT_001.md). Existing200% name overflow is recorded separately. | Final checkpoint verified, shared-file work stopped; archive only the owner chat using the app tool. |
 | [COMET_UNLOCKS_001](tasks/COMET_UNLOCKS_001.md) / F27 | PR69/main integrated; full151 pre-merge CI and signed143 package/signing/assets/extracted-engine checks PASS. New catalogue140/50/160; legacy value/effects retained. [PR73](https://github.com/karahaNx/Lumenfall/pull/73) records final integrated-source CI. Required native acceptance OPEN. | Complete exact signed143 native update/interaction, physical WebView60 and TalkBack checklist. Keep feature/chat open; F25/F26 retirement/refunds stay separate. |
