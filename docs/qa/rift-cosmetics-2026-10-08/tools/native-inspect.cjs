@@ -1,0 +1,11 @@
+'use strict';
+const fs=require('node:fs'),assert=require('node:assert/strict');
+const Adb=require('../../rift-cast-text-001/finish/direct-adb.cjs');
+(async()=>{const adb=await new Adb().connect();assert.equal((await adb.shell('getprop ro.kernel.qemu')).trim(),'1');
+const pid=(await adb.shell('pidof com.lumenfall.app')).trim(),server=await adb.forward(9224,'localabstract:webview_devtools_remote_'+pid);
+const page=(await(await fetch('http://127.0.0.1:9224/json/list')).json()).find(x=>x.type==='page'),ws=new WebSocket(page.webSocketDebuggerUrl);await new Promise((r,j)=>{ws.onopen=r;ws.onerror=j;});
+let seq=0;const pending=new Map();ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.id){const p=pending.get(m.id);if(p){pending.delete(m.id);clearTimeout(p.timer);m.error?p.reject(Error(JSON.stringify(m.error))):p.resolve(m.result);}}};
+function send(method,params={}){return new Promise((resolve,reject)=>{const id=++seq,timer=setTimeout(()=>reject(Error(method+' timeout')),60000);pending.set(id,{resolve,reject,timer});ws.send(JSON.stringify({id,method,params}));});}
+try{const r=await send('Runtime.evaluate',{expression:`(function(){var e=document.getElementById('enemy-stage'),r=e.getBoundingClientRect(),x=r.x+r.width/2,y=r.y+r.height/2,hit=document.elementFromPoint(x,y),s=JSON.parse(localStorage.getItem('lumenfall_save_v2'));return {ua:navigator.userAgent,viewport:[innerWidth,innerHeight,devicePixelRatio],rect:[r.x,r.y,r.width,r.height],center:[x,y],hit:hit&&hit.outerHTML.slice(0,250),hp:document.getElementById('hp-text').textContent,hidden:document.hidden,shellInert:document.querySelector('.shell').inert,bodyClass:document.body.className,mode:s.riftMode,depth:s.depth,enemyHp:s.enemyHp,totalTaps:s.totalTaps,overlays:Array.from(document.querySelectorAll('.overlay,#startup-intro')).filter(function(e){return e.getClientRects().length;}).map(function(e){return e.id;})};})()`,returnByValue:true});assert(!r.exceptionDetails);console.log(JSON.stringify(r.result.value,null,2));fs.writeFileSync(process.argv[2],await adb.exec('screencap -p'));console.log((await adb.shell('dumpsys window windows')).split('\n').find(x=>x.includes('mCurrentFocus=')));}
+finally{ws.close();for(const s of server.sockets)s.destroy();await new Promise(r=>server.close(r));adb.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});

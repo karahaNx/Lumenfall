@@ -32,13 +32,22 @@ Evidence native60/accept-first-fixture-failure.json/.txt retains successful upgr
 and failed fixture. Fixed fixture to Push/farmDepth0, assertions unchanged.
 tools/native-rift-cosmetics.cjs resume verifies same installed APK and durable
 successful upgrade records, cold starts to clear hooks, then reruns entire54 UI
-matrix and real Android tap/Enter/font_scale2. Currently running session54925,
-log /tmp/rift-cosmetics-native153-resume.txt. Each CDP reconnect re-registers QA
+matrix and real Android tap/Enter/font_scale2. First resume passed54 dimension/
+pattern/state checks and actual font_scale2 (root32px, caption22px), then tap
+failed. Diagnostic proved Chrome60 DOMRect.x/y are undefined, input locationNaN.
+Trace: native60/resume-domrect-failure.json/.txt and tap-diagnostic.txt/screenshot.
+Use left/top throughout, assert finite coordinates/physical bounds, trusted click
+and frozen clock. Entire54 rerun session79496,
+/tmp/rift-cosmetics-native153-resume-left-top.txt. No product change or weakened
+assertion. Each CDP reconnect re-registers QA
 clock, each real Restore/reload asserts clock sentinel. Actual upgrade/cold checks
 precede measurement hooks. No userdata reset/downgrade; final acceptance pending.
 
-Task/README/APK README still explicitly pending. Delivery edits uncommitted;
-publish coherent checkpoint on own delivery branch, then continue actual checks.
+Task/README/APK README still explicitly pending. Checkpointd457a13 was pushed on
+own delivery branch; latest native diagnostics/helpers are uncommitted.
+After native-acceptance.json PASS, run tools/native-cold.cjs APK EVIDENCE_DIR:
+force-stop/start, saved Ember/Trail/Crest before any interaction, no QA clock,
+same exact APK/UA and unchanged migration receipt.
 Next: handle resume result without weakening assertions; final receipts/status,
 delivery PR with full integrated CI, merge evidence, archive only own chat.
 Physical/TalkBack not claimed; static reduced-motion tested on modern matrix.
