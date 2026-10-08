@@ -1,0 +1,80 @@
+{
+  "checkedAt": "2026-10-08 01:19:19 UTC",
+  "feature": "WISP_UPGRADE_DISPLAY_001",
+  "status": "implemented, integrated and signed APK published; required physical acceptance open",
+  "pullRequest": {
+    "url": "https://github.com/karahaNx/Lumenfall/pull/59",
+    "head": "3c1c99bf96c9f6e0602a996ce2798d5ba972e0ce",
+    "merged": true,
+    "mergeCommit": "0e9b54c8d62a873bd48625f4a20ee18078e8a8f1",
+    "mergedAt": "2026-10-08T00:54:23Z"
+  },
+  "integration": {
+    "tree": "aafad1b738a188f429405eae856e750c468d2a89",
+    "sourceSha256": "a64747dcec3c26c0b5dea3f2e5c1bac521de557e38547b1195b5a3660234b0df",
+    "postIntegrationDocsMain": "b4d36675d916fd6e76d48526791de5201425937b"
+  },
+  "requiredCI": {
+    "url": "https://github.com/karahaNx/Lumenfall/actions/runs/37708308439",
+    "id": 37708308439,
+    "head": "3c1c99bf96c9f6e0602a996ce2798d5ba972e0ce",
+    "status": "completed",
+    "conclusion": "success",
+    "defaultScenarios": 147,
+    "requiredNegativeControls": 12,
+    "log": "ci-37708308439.txt.gz",
+    "uncompressedBytes": 3319098,
+    "uncompressedSha256": "93dd3191fc85a6c625ea583539db8e36f4a6013ec94f2496fffac30316457852"
+  },
+  "androidBuild": {
+    "url": "https://github.com/karahaNx/Lumenfall/actions/runs/37710185974",
+    "id": 37710185974,
+    "head": "0e9b54c8d62a873bd48625f4a20ee18078e8a8f1",
+    "status": "completed",
+    "conclusion": "success",
+    "versionName": "0.1.140",
+    "versionCode": 140,
+    "package": "com.lumenfall.app",
+    "certificateSha256": "A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21",
+    "log": "android-build-140.txt.gz",
+    "uncompressedBytes": 103759,
+    "uncompressedSha256": "a0831dad795e392e331bfca1fff3b459821fa86283f6b6c4db728f49c188224b"
+  },
+  "release": {
+    "id": 396102072,
+    "tag": "android-latest",
+    "mutable": true,
+    "asset": {
+      "id": 620269725,
+      "name": "Lumenfall.apk",
+      "bytes": 6837509,
+      "digest": "sha256:c0c81462151c485b16f85dc2c0e53d258ba45c60f92a32539e9e2d6a7153696d",
+      "url": "https://github.com/karahaNx/Lumenfall/releases/download/android-latest/Lumenfall.apk"
+    },
+    "immutableRepositoryCopy": "archive/android/wisp-upgrade-display-001/Lumenfall-0.1.140.apk"
+  },
+  "limitations": [
+    "Physical affected phone, exact native WebView60 and TalkBack acceptance unperformed.",
+    "Self-review and automated checks; no independent review claimed.",
+    "Full147 CI belongs to feature head; integrated source checks reassess affected Forge text delta."
+  ],
+  "nativeUpdate": "native-update.json",
+  "nativeWispUI": "native-ui-140.json",
+  "deviceAcceptance": "DEVICE_ACCEPTANCE.md",
+  "currentMainRecheck": {
+    "mainCommit": "210005d0ae093d21e846bae41a9bddf25af2800d",
+    "reason": "PR61 Bond presentation merged during final receipt publication; retained without overwriting",
+    "sourceSha256": "1e0d51370b5b62f313dad6953f9b26bb7d7a1a886785dbccc6dfaac379779981",
+    "normalF04": "current-main-normal.txt",
+    "scoped": "current-main-scoped/wisp-upgrades-result.json",
+    "scope": "Signed140/native receipts remain tied to0e9b54c. Current-main checks are a separate post-integration recheck.",
+    "normalStatus": "pass",
+    "profiles": 12,
+    "checks": 12912
+  },
+  "finalPublicationBase": {
+    "commit": "20efc396a5307560bafa4b2e7d4c9f11bf2b35b4",
+    "sourceSha256": "1e0d51370b5b62f313dad6953f9b26bb7d7a1a886785dbccc6dfaac379779981",
+    "note": "PR62 documentation-only integration retained; PROJECT_STATE resolves both Lab row and updated Wisp row."
+  }
+}
