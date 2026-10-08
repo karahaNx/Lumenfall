@@ -80,7 +80,7 @@
   function assertSummaryParity(actual,expected,label){
     [
       'kills','bossKills','luminousKills','sigilsGained','motesGained','ascends',
-      'autoTaps','empowers','researchBought','studiesStarted','retreats','retries'
+      'autoTaps','empowers','researchBought','studiesStarted','studySpeedPurchases','studyMotesSpent','retreats','retries'
     ].forEach(function(key){
       assert((actual[key]||0)===(expected[key]||0),label+' summary '+key+' must match exactly');
     });
@@ -482,7 +482,7 @@
     var bridge = window.__lumenfallQaBridge;
     if(!bridge || !bridge.getState){ finish('fail','test bridge unavailable'); return; }
     try{
-      if(ctx.scenario==='offline-catchup-ui'){window.__offlineCatchupReady=true;return;}
+      if(ctx.scenario==='offline-catchup-ui' || ctx.scenario==='offline-catchup-legacy-dom'){window.__offlineCatchupReady=true;return;}
       await waitForCatchup();
       var s = state();
       if(ctx.scenario==='layout-p2-07a-reconstruction'){
@@ -494,6 +494,9 @@
         bridge.freeze();
         window.runRiftLayoutQa(bridge,ctx,assert).then(function(detail){ finish('pass',detail); },function(error){ finish('fail',error.message); });
         return;
+      }
+      if(ctx.scenario==='comet-unlocks-mobile' || ctx.scenario==='comet-unlocks-reduced-motion'){
+        window.__cometNativeReady=true;return; // Native driver owns these scenarios.
       }
       if(ctx.scenario==='auto-ascend-target-mobile' || ctx.scenario==='auto-ascend-target-reduced-motion'){
         window.__autoAscendTargetReady=true;return;
@@ -519,6 +522,17 @@
       if(ctx.scenario.startsWith('forge-ui-') || ctx.scenario.startsWith('self-test-forge-ui-') || ctx.scenario.startsWith('rift-status-stacking') || ctx.scenario==='rift-status-mobile' || ctx.scenario==='rift-status-reduced-motion' || ctx.scenario.startsWith('self-test-rift-status-line')){
         window.__forgeUiReady=true;return; // Native CDP input driver owns this scenario.
       }
+      if(ctx.scenario.startsWith('lab-motes-')){
+        if(ctx.scenario==='lab-motes-runtime'){bridge.freeze();window.__farmRuntimeReady=true;return;}
+        if(ctx.scenario==='lab-motes-native'||ctx.scenario==='lab-motes-reduced-motion'){window.__labMotesNativeReady=true;return;}
+        bridge.freeze();
+        if(ctx.scenario==='lab-motes-conservation'){finish('pass',window.runFarmConservationQa(bridge,ctx,assert));return;}
+        if(ctx.scenario==='lab-motes-numerical'){finish('pass',window.runFarmNumericalQa(bridge,ctx,assert));return;}
+        if(['lab-motes-save-reload','lab-motes-backup-restore','lab-motes-recovery','lab-motes-reset'].includes(ctx.scenario)){
+          window.runLabMotesPersistence(bridge,ctx,assert,phase,nextPhase,backupCode,finish);return;
+        }
+        finish('pass',window.runLabMotesQa(bridge,ctx,assert,assertProtectedParity,assertSummaryParity));return;
+      }
       if(ctx.scenario.startsWith('inquiry-')){
         bridge.freeze();
         if(['inquiry-save-reload','inquiry-backup-restore','inquiry-recovery','inquiry-reset'].includes(ctx.scenario)){
@@ -534,6 +548,8 @@
         finish('pass',window.runForgeQa(bridge,ctx,assert,assertProtectedParity,assertSummaryParity,parityApprox));return;
       }
       switch(ctx.scenario){
+        case 'wisp-upgrade-display':
+          finish('pass',window.runWispUpgradeQa());return;
         case 'p2-07a-persistence-review':
           bridge.freeze();
           finish('pass',window.runP207PersistenceReview(bridge,ctx,assert));
@@ -643,7 +659,7 @@
           assert(s.research.focus===24 && s.longStudyLevels.wispascend===9,'mature Lab progression must load intact');
           assert(s.owned.autoascend===true && s.autoAscendEnabled===true,'mature automation flags must load intact');
           assert(s.comets===850 && s.sigils===210,'existing mature Comet/Sigil balances must load intact');
-          assert(s.owned.autoascend && s.owned.offline24 && s.owned.offline48 && s.owned.rememberbulk,'all existing Rest Stop purchases must remain owned');
+          assert(s.owned.autoascend && s.legacyCometPurchases.offline24 && s.legacyCometPurchases.offline48 && s.legacyCometPurchases.rememberbulk,'existing Auto-Ascend and archived Rest Stop entitlements must remain owned');
           assert(s.sigilResonanceUses===0 && s.dailyQuestRefreshes===0,'older schema-v1 saves must safely default new utility counters to zero');
           assert(s.ascendRewardedDepth===0,'existing schema-v1 saves without a benchmark must safely default to 0');
           assert(s.activeFormationPreset==='push' && s.formationPresets.push.join(',')===s.activeParty.join(','),'older schema-v1 saves must seed presets from their current Formation');
@@ -1480,6 +1496,11 @@
           return;
         }
 
+        case 'bond-text-contract':
+        case 'self-test-bond-text-ability':
+        case 'self-test-bond-text-partners':
+          bridge.freeze();finish('pass',window.runBondTextQa(bridge,assert));return;
+
         case 'wisp-formula-contract': {
           var formulaBase = cleanFormulaState(['ember']);
           var emberBase = formulaSnapshotFor(formulaBase,'ember',10,1);
@@ -1950,13 +1971,14 @@
           assert(help.open,'refresh must retain Formation guidance disclosure state');
           help.open=false;
           var progression=document.querySelector('.wisp-progression');
-          assert(progression && !progression.open,'secondary Wisp progression starts collapsed');
-          var summary=progression.querySelector('summary');
-          var inspectId=summary.dataset.wispDetails;
-          summary.focus();summary.click();bridge.renderLayout();
+          var inspectId=progression.dataset.wispProgression;
+          var complete=state().heroRarity[inspectId]>=5 && state().wispModules[inspectId]>=20 && state().wispUltimate[inspectId];
+          assert((progression.tagName==='DETAILS')===!!complete,'only completed Wisp progression has native disclosure');
+          var title=progression.querySelector('[data-wisp-details]');
+          title.focus();if(complete) progression.open=true;bridge.renderLayout();
           progression=document.querySelector('[data-wisp-progression="'+inspectId+'"]');
-          assert(progression.open,'Wisp disclosure remains open through refresh');
-          assert(document.activeElement===progression.querySelector('summary'),'refresh preserves disclosure keyboard focus');
+          assert(complete ? progression.open : !progression.querySelector('summary'),'progression stays open through refresh');
+          assert(document.activeElement===progression.querySelector('[data-wisp-details]'),'refresh preserves progression keyboard focus');
           assert(progression.querySelector('[data-rarity]') && progression.querySelector('.hero-ability'),'secondary upgrade information remains reachable');
           assert(JSON.stringify(state())===beforeHierarchy,'hierarchy/navigation/inspection must not mutate gameplay state');
           finish('pass',{activeFirst:true,empowerFirst:true,stateUnchanged:true});return;
@@ -2421,7 +2443,7 @@
           assert(refresh1.state.comets===refreshBase.comets-economy.questRefreshCost,'Quest Refresh must spend exactly its Comet cost');
           assert(refresh1.state.questIds.length===3 && refresh1.state.questIds[0]!=='q_tap_small','Quest Refresh must replace one quest without adding extra quest slots');
           assert(refresh1.state.dailyQuestRefreshes===1,'Quest Refresh count must persist deterministically');
-          assert(refresh1.state.owned.autoascend && refresh1.state.owned.offline24 && refresh1.state.owned.offline48 && refresh1.state.owned.rememberbulk,'refreshing a quest must not invalidate any finite Rest Stop purchase');
+          assert(refresh1.state.owned.autoascend && refresh1.state.legacyCometPurchases.offline24 && refresh1.state.legacyCometPurchases.offline48 && refresh1.state.legacyCometPurchases.rememberbulk,'refreshing a quest must preserve Auto-Ascend and archived legacy purchase ownership');
 
           bridge.setState(refreshBase);
           var refresh2=bridge.refreshQuest('q_tap_small');

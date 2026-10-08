@@ -1,0 +1,65 @@
+{
+  "status": "pass",
+  "identity": {
+    "android": "8.1.0",
+    "api": "27",
+    "package": [
+      "versionCode=142 minSdk=22 targetSdk=34",
+      "versionName=0.1.142"
+    ],
+    "ua": "Mozilla/5.0 (Linux; Android 8.1.0; Android SDK built for x86_64 Build/OSM1.180201.023; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.98 Mobile Safari/537.36",
+    "page": "https://localhost/",
+    "viewport": {
+      "width": 400,
+      "height": 773,
+      "dpr": 0.800000011920929
+    }
+  },
+  "artifactIdentity": {
+    "installedApkPath": "/data/app/com.lumenfall.app-NvAw-17JhD2wrWfVTe7rlg==/base.apk",
+    "installedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+    "providedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+    "sourceSha256": "835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3"
+  },
+  "baselineArtifactIdentity": {
+    "installedApkPath": "/data/app/com.lumenfall.app-vGAEcH_po_ZbEfhvywTKYw==/base.apk",
+    "installedApkSha256": "81b9be7edea971335a06f06d1894d91e75a92736738cc935fc2a920a26a02e1e",
+    "providedApkSha256": "81b9be7edea971335a06f06d1894d91e75a92736738cc935fc2a920a26a02e1e",
+    "sourceSha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca"
+  },
+  "records": [
+    {
+      "case": "signed update preserves actual native save storage",
+      "preUpdateIdentity": {
+        "installedApkPath": "/data/app/com.lumenfall.app-vGAEcH_po_ZbEfhvywTKYw==/base.apk",
+        "installedApkSha256": "81b9be7edea971335a06f06d1894d91e75a92736738cc935fc2a920a26a02e1e",
+        "preparedSourceSha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca"
+      },
+      "install": "Success\n",
+      "bytes": 101888,
+      "beforeSha256": "40589473d4b897a6a0f4d18655981fe59d92d10fb7ffa0a6ca4eb6a7cab91cf7",
+      "afterSha256": "40589473d4b897a6a0f4d18655981fe59d92d10fb7ffa0a6ca4eb6a7cab91cf7"
+    },
+    {
+      "case": "first updated launch preserves Wisp ownership",
+      "activeParty": [
+        "ember",
+        "tide",
+        "stone",
+        "void",
+        "aurora"
+      ],
+      "spirits": {
+        "ember": 1,
+        "tide": 1,
+        "stone": 1,
+        "gale": 0,
+        "thorn": 0,
+        "void": 1,
+        "aurora": 1,
+        "titan": 0
+      }
+    }
+  ],
+  "runtimeErrors": []
+}

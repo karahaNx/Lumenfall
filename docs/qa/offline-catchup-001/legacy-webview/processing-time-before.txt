@@ -1,0 +1,28 @@
+node:assert:152
+  throw new AssertionError(obj);
+  ^
+
+AssertionError [ERR_ASSERTION]: processing time reaches completed save endpoint
++ actual - expected
+
++ 1791390364477
+- 1791390424477
+         ^
+
+    at Object.<anonymous> (/workspace/lumenfall-legacy/tests/behavioral/offline-catchup.cjs:136:9)
+    at Module._compile (node:internal/modules/cjs/loader:1872:14)
+    at Object..js (node:internal/modules/cjs/loader:2003:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1791390364477,
+  expected: 1791390424477,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

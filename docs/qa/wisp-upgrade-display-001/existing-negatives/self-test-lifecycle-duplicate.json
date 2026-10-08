@@ -1,0 +1,12 @@
+{
+  "tag": "fail",
+  "payload": {
+    "scenario": "self-test-lifecycle-duplicate",
+    "status": "fail",
+    "detail": {
+      "message": "intentional duplicate lifecycle regression must consume exactly one offline window, got 2",
+      "stack": "Error: intentional duplicate lifecycle regression must consume exactly one offline window, got 2\n    at assert (http://127.0.0.1:36507/index.html?qaScenario=self-test-lifecycle-duplicate&qaFixture=lifecycle-basic&width=390&height=844&safeTop=0&safeBottom=0:11936:61)\n    at assertOfflineExactlyOnce (http://127.0.0.1:36507/index.html?qaScenario=self-test-lifecycle-duplicate&qaFixture=lifecycle-basic&width=390&height=844&safeTop=0&safeBottom=0:12253:5)\n    at HTMLDocument.run (http://127.0.0.1:36507/index.html?qaScenario=self-test-lifecycle-duplicate&qaFixture=lifecycle-basic&width=390&height=844&safeTop=0&safeBottom=0:14412:11)"
+    },
+    "runtimeErrors": []
+  }
+}

@@ -13,7 +13,7 @@ assert.equal(require('node:crypto').createHash('sha1').update('blob '+Buffer.byt
 const original=JSON.parse(fs.readFileSync(path.join(root,'docs/qa/offline-autoascend-2026-10-07/device_backup.json'),'utf8'));
 const copy=x=>JSON.parse(JSON.stringify(x)),records=[];
 function app(seed,html=source,seconds=0){
- let now=seed.lastSeen+seconds*1000,seq=0,fault=null,primaryFail=false,recoveryFail=false;
+ let now=seed.lastSeen+seconds*1000,monotonic=0,seq=0,fault=null,primaryFail=false,recoveryFail=false;
  const queue=[],writes=[],storage=new Map([['lumenfall_save_v2',JSON.stringify(seed)],['lumenfall_save_recovery_v1',JSON.stringify(seed)]]);
  const date=class extends Date {static now(){return now;}};
  const document={readyState:'loading',addEventListener(){}};
@@ -24,9 +24,9 @@ function app(seed,html=source,seconds=0){
  },removeItem:k=>storage.delete(k)};
  const bridge=`window.qa={set:s=>state=acceptPersistedState(s),get:()=>state,apply:applyOfflineProgress,advance:advanceAuthoritativeTime,study:advanceStudyOnlyTime,summary:simulationSummary,load:loadState,backup:currentSaveBackup,decode:decodeSaveBackup,save:saveState,cancel:typeof cancelOfflineCatchup==='function'?cancelOfflineCatchup:()=>{},flags:()=>({busy:typeof offlineCatchup!=='undefined'&&!!offlineCatchup,pending:typeof offlinePending!=='undefined'&&offlinePending,resume:typeof resumeFlowBusy!=='undefined'&&resumeFlowBusy}),batch:n=>{if(typeof SIM_BATCH_EVENTS!=='undefined')SIM_BATCH_EVENTS=n;},fault:()=>{simulationResolveTimestamp=function(){throw Error('injected simulation failure');};}};`;
  const script=html.match(/<script>\s*([\s\S]*?)<\/script>/)[1].replace("if(document.readyState==='loading'){",bridge+"if(document.readyState==='loading'){");
- new Function('window','document','localStorage','Date','setTimeout','clearTimeout',script)(window,document,localStorage,date,(fn)=>{queue.push({id:++seq,fn});return seq;},id=>{const i=queue.findIndex(x=>x.id===id);if(i>=0)queue.splice(i,1);});
+ new Function('window','document','localStorage','Date','setTimeout','clearTimeout','performance',script)(window,document,localStorage,date,(fn)=>{queue.push({id:++seq,fn});return seq;},id=>{const i=queue.findIndex(x=>x.id===id);if(i>=0)queue.splice(i,1);},{now:()=>monotonic});
  const b=window.qa;b.set(copy(seed));
- return {b,storage,writes,queue,clock:v=>now=v,failPrimary:v=>primaryFail=v,failRecovery:v=>recoveryFail=v,
+ return {b,storage,writes,queue,clock:v=>now=v,monotonic:v=>monotonic=v,failPrimary:v=>primaryFail=v,failRecovery:v=>recoveryFail=v,
   drain(){let batches=0;while(queue.length){queue.shift().fn();batches++;assert(batches<100000,'bounded number of work batches');}return batches;}};
 }
 function approx(a,b,label){const tolerance=Math.max(1e-6,Math.max(Math.abs(a),Math.abs(b))*1e-12);assert(Number.isFinite(a)&&Number.isFinite(b)&&Math.abs(a-b)<=tolerance,`${label}: ${a} vs ${b}, tolerance ${tolerance}`);}
@@ -37,6 +37,31 @@ function compare(a,b,label='state'){
   Object.keys(a).forEach(k=>compare(a[k],b[k],label+'.'+k));return;
  }
  assert.equal(a,b,label);
+}
+// The frozen product has no repeat-speed fields. Assert their exact legacy OFF
+// defaults separately, then retain the complete original state/summary oracle.
+function baselineSummary(actual,expected,label){
+ assert.equal(actual.studySpeedPurchases,0,label+' no legacy repeat purchases');
+ assert.equal(actual.studyMotesSpent,0,label+' no legacy repeat spending');
+ const {studySpeedPurchases,studyMotesSpent,...existing}=actual;
+ assert.deepEqual(existing,expected,label);
+}
+function baselineState(actual,expected,seed,label){
+ const ids=Object.keys(expected.longStudyLevels);
+ assert.deepEqual(actual.studyUseMotes,Object.fromEntries(ids.map(id=>[id,false])),label+' legacy OFF intent');
+ assert.deepEqual(actual.studySpeedTargets,Object.fromEntries(ids.map(id=>{
+  const paid=(seed.activeStudies||[]).find(study=>study.id===id);
+  return [id,paid&&paid.speedMult>1?paid.speedMult:1.5];
+ })),label+' remembered legacy paid tier');
+ assert.equal(actual.cometTrial,null,label+' no unsolicited Trial');
+ assert.equal(actual.cometTrialResult,null,label+' no unsolicited result');
+ assert.deepEqual(actual.cometTrialMarks,{},label+' no unsolicited marks');
+ assert.deepEqual(actual.cometCosmetics,{trail:false,crest:false},label+' new cosmetics default OFF');
+ const oldOwnership={...expected.owned},legacy={};
+ for(const id of ['rememberbulk','offline24','offline48']){if(oldOwnership[id]===true)legacy[id]=true;delete oldOwnership[id];}
+ assert.deepEqual(actual.legacyCometPurchases,legacy,label+' full legacy ownership archived');
+ const {studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,...existing}=actual;
+ assert.deepEqual(existing,{...expected,owned:oldOwnership},label);
 }
 function runAsync(seed,seconds,batch=256){
  const x=app(seed,source,seconds),before=copy(x.b.get());x.b.batch(batch);
@@ -91,7 +116,7 @@ for(const seed of [original,clear20,off]){
   const old=app(seed,baseline,seconds),next=app(seed,source,seconds);
   const a=old.b.advance(seconds,{kind:'offline',visual:false,clockStartMs:seed.lastSeen});
   const b=next.b.advance(seconds,{kind:'offline',visual:false,clockStartMs:seed.lastSeen});
-  assert.deepEqual(b,a,'unchanged baseline summary '+seconds);assert.deepEqual(next.b.get(),old.b.get(),'unchanged baseline state '+seconds);
+  baselineSummary(b,a,'unchanged baseline summary '+seconds);baselineState(next.b.get(),old.b.get(),seed,'unchanged baseline state '+seconds);
  }
 }
 const all=copy(original);all.research.focus=0;Object.keys(all.empowerQueue).forEach(k=>all.empowerQueue[k]=true);
@@ -99,7 +124,7 @@ all.researchQueue.focus=true;all.studyQueue.riftattune=true;
 for(const kind of ['live','offline']){
  const whole=app(all),split=app(all),old=app(all,baseline),options={kind,visual:false,clockStartMs:all.lastSeen};
  const sum=whole.b.advance(3600,options);const oldSum=old.b.advance(3600,options);
- assert.deepEqual(sum,oldSum,'economy/order baseline '+kind);assert.deepEqual(whole.b.get(),old.b.get(),'baseline chronology '+kind);
+ baselineSummary(sum,oldSum,'economy/order baseline '+kind);baselineState(whole.b.get(),old.b.get(),all,'baseline chronology '+kind);
  for(let i=0;i<4;i++)split.b.advance(900,{...options,clockStartMs:all.lastSeen+i*900000,offlineWindowStartMs:all.lastSeen});
  compare(split.b.get(),whole.b.get(),'whole/split '+kind);
  assert(sum.motesGained>0&&sum.empowers>0&&sum.researchBought>0,'Motes, Research and Empower chronology exercised');
@@ -127,4 +152,26 @@ for(const failure of ['cancel','simulation','primary','recovery']){
 const recovery=app(on.committed,source,0);recovery.storage.set('lumenfall_save_v2','broken');
 recovery.b.set(recovery.b.load());assert.equal(recovery.b.apply(),null);assert.deepEqual(recovery.b.get(),on.committed);
 const backup=on.x.b.backup();assert.deepEqual(on.x.b.decode(backup),on.committed,'backup/reload compatible schema');
+// Real cooperative work can outlast the captured return clock. It must not
+// disappear when the next autosave records the current time, even after the cap.
+for(const seconds of [28800,72*3600]){
+ const slow=app(original,source,seconds);let error,result;
+ slow.b.apply((r,e)=>{result=r;error=e;});
+ slow.clock(original.lastSeen+(seconds+60)*1000);slow.monotonic(60000);slow.drain();assert.ifError(error);
+ assert.equal(slow.b.get().lastSeen,original.lastSeen+(seconds+60)*1000,'processing time reaches completed save endpoint');
+ const reference=app(original,source,seconds);reference.b.apply();
+ reference.b.advance(60,{kind:'live',visual:false,clockStartMs:original.lastSeen+seconds*1000});
+ reference.b.get().lastSeen=original.lastSeen+(seconds+60)*1000;
+ compare(slow.b.get(),reference.b.get(),'processing time live parity '+seconds);
+ approx(slow.b.get().totalOfflineSeconds-original.totalOfflineSeconds,seconds,'processing time does not expand offline cap/accounting');
+ records.push({case:'processing time '+seconds,kills:result.kills,lastSeen:slow.b.get().lastSeen});
+}
+for(const jump of [-7*86400000,7*86400000]){
+ const shifted=app(original,source,28800);let error;shifted.b.apply((r,e)=>{error=e;});
+ shifted.clock(original.lastSeen+28800000+60000+jump);shifted.monotonic(60000);shifted.drain();assert.ifError(error);
+ const reference=app(original,source,28800);reference.b.apply();reference.b.advance(60,{kind:'live',visual:false,clockStartMs:original.lastSeen+28800000});
+ reference.b.get().lastSeen=original.lastSeen+28800000+60000+jump;
+ compare(shifted.b.get(),reference.b.get(),'monotonic processing with wall-clock jump '+jump);
+ records.push({case:'wall-clock jump '+jump,kills:shifted.b.get().totalKills-original.totalKills,lastSeen:shifted.b.get().lastSeen});
+}
 console.log(JSON.stringify({status:'pass',scenario:'offline-catchup-core',wallMs:performance.now()-start,records},null,2));

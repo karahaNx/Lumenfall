@@ -1,0 +1,18 @@
+{
+  "status": "pass",
+  "case": "signed in-place APK update preserves actual WebView save storage",
+  "beforeVersion": [
+    "versionCode=135 minSdk=22 targetSdk=34",
+    "versionName=0.1.135"
+  ],
+  "afterVersion": [
+    "versionCode=136 minSdk=22 targetSdk=34",
+    "versionName=0.1.136"
+  ],
+  "install": "Performing Streamed Install\nSuccess\n",
+  "apkSha256": "2c175583c546f64a7a0ae651803b94ed2c134fe86573bdb8e96edbf2eadbdab0",
+  "storageBytes": 128000,
+  "beforeStorageSha256": "c2547bcf6f387435c83a03a97eccbbfc2991f6c9fc04bc9279a509e3c6e8c908",
+  "afterStorageSha256": "c2547bcf6f387435c83a03a97eccbbfc2991f6c9fc04bc9279a509e3c6e8c908",
+  "note": "isolated emulator QA save; no uninstall or data reset; compared before opening updated app"
+}

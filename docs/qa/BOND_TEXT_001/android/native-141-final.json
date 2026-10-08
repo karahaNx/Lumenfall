@@ -1,0 +1,2241 @@
+{
+  "status": "PASS",
+  "identity": {
+    "android": "8.1.0",
+    "api": "27",
+    "webview": "Current WebView Update Service state\n  Fallback logic enabled: true\n  Multiprocess enabled: true\n  Current WebView package (name, version): (com.android.chrome, 69.0.3497.100)\n  Minimum WebView version code: 349710017\n  Number of relros started: 1\n  Number of relros finished: 1\n  WebView package dirty: false\n  Any WebView package installed: true\n  Preferred WebView package (name, version): (com.android.chrome, 69.0.3497.100)\n  WebView packages:\n    Valid package com.android.chrome (versionName: 69.0.3497.100, versionCode: 349710017, targetSdkVersion: 28) is  installed/enabled for all users\n    Valid package com.google.android.webview (versionName: 69.0.3497.100, versionCode: 349710065, targetSdkVersion: 28) is NOT installed/enabled for all users\n",
+    "userAgent": "Mozilla/5.0 (Linux; Android 8.1.0; Android SDK built for x86 Build/OSM1.180201.037; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/69.0.3497.100 Mobile Safari/537.36",
+    "package": [
+      "versionCode=141 minSdk=22 targetSdk=34",
+      "versionName=0.1.141"
+    ],
+    "loadedGameScriptSha256": "1b596d921b0acc46c9c0ccc59b85c0f9364313dd80e14e3f5809d951431a8e5a"
+  },
+  "records": [
+    {
+      "case": "first launch after update preserves purchased tiers",
+      "rarity": {
+        "ember": 3,
+        "tide": 3,
+        "stone": 3,
+        "gale": 3,
+        "thorn": 3,
+        "void": 3,
+        "aurora": 3,
+        "titan": 3
+      },
+      "modules": {
+        "ember": 7,
+        "tide": 7,
+        "stone": 7,
+        "gale": 7,
+        "thorn": 7,
+        "void": 7,
+        "aurora": 7,
+        "titan": 7
+      }
+    },
+    {
+      "bond": "starcaller",
+      "mode": "active",
+      "actual": {
+        "rows": [
+          {
+            "name": "Starcaller Bond · Push · Best now",
+            "partners": "Ember Wisp + Voidling",
+            "active": true,
+            "effect": "+18% passive & ability damage"
+          },
+          {
+            "name": "Dawnpriest Bond · Farm",
+            "partners": "Tide Sprite + Aurora Seer",
+            "active": false,
+            "effect": "+25% Lumen, Shards & Motes"
+          },
+          {
+            "name": "Duskguard Bond · Boss",
+            "partners": "Stoneheart Golem + Starforged Titan",
+            "active": false,
+            "effect": "+35% passive & ability damage vs Bosses"
+          },
+          {
+            "name": "Pathfinder Bond · Push / Farm · Best now",
+            "partners": "Gale Dancer + Thornback",
+            "active": false,
+            "effect": "+20% passive & ability damage vs non-Bosses"
+          }
+        ],
+        "encyclopedia": [
+          {
+            "name": "Ember Wisp",
+            "meta": "Starcaller · Burst · Unlock Rift 1"
+          },
+          {
+            "name": "Tide Sprite",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 3"
+          },
+          {
+            "name": "Stoneheart Golem",
+            "meta": "Duskguard · Breaker · Unlock Rift 6"
+          },
+          {
+            "name": "Gale Dancer",
+            "meta": "Windrunner · Shard Utility · Unlock Rift 9"
+          },
+          {
+            "name": "Thornback",
+            "meta": "Thornshaper · Lumen Utility · Unlock Rift 12"
+          },
+          {
+            "name": "Voidling",
+            "meta": "Starcaller · Burst · Unlock Rift 18"
+          },
+          {
+            "name": "Aurora Seer",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 24"
+          },
+          {
+            "name": "Starforged Titan",
+            "meta": "Duskguard · Breaker · Unlock Rift 32"
+          },
+          {
+            "name": "Starcaller Bond",
+            "meta": "Ember Wisp + Voidling · Push"
+          },
+          {
+            "name": "Dawnpriest Bond",
+            "meta": "Tide Sprite + Aurora Seer · Farm"
+          },
+          {
+            "name": "Duskguard Bond",
+            "meta": "Stoneheart Golem + Starforged Titan · Boss"
+          },
+          {
+            "name": "Pathfinder Bond",
+            "meta": "Gale Dancer + Thornback · Push / Farm"
+          },
+          {
+            "name": "Push",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Rift Regions",
+            "meta": "World progression"
+          },
+          {
+            "name": "Farm",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Wisp Power",
+            "meta": "Combat stat"
+          },
+          {
+            "name": "Passive Wisp Damage",
+            "meta": "Combat rule"
+          },
+          {
+            "name": "Ability Output",
+            "meta": "Combat / economy rule"
+          },
+          {
+            "name": "Tap damage (Guardian Tap)",
+            "meta": "Damage from tapping the enemy"
+          },
+          {
+            "name": "Rarity",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Modules & Ultimates",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Endgame Currency Utility",
+            "meta": "Economy rule"
+          },
+          {
+            "name": "Wisp Roles",
+            "meta": "Build label"
+          },
+          {
+            "name": "Ascend",
+            "meta": "Permanent progression"
+          },
+          {
+            "name": "Luminous Enemies",
+            "meta": "Rare encounter"
+          },
+          {
+            "name": "Boss Traits",
+            "meta": "Boss mechanic"
+          },
+          {
+            "name": "Offline Progress",
+            "meta": "Idle system"
+          }
+        ],
+        "abilities": [
+          {
+            "id": "ember",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "void",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "tide",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "stone",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "gale",
+            "text": "Ability damage + Shards. Module boosts the Shards; Ultimate doubles both."
+          },
+          {
+            "id": "thorn",
+            "text": "Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both."
+          },
+          {
+            "id": "aurora",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "titan",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "bond": "starcaller",
+      "mode": "benched",
+      "actual": {
+        "rows": [
+          {
+            "name": "Starcaller Bond · Push · Best now",
+            "partners": "Ember Wisp + Voidling",
+            "active": false,
+            "effect": "+18% passive & ability damage"
+          },
+          {
+            "name": "Dawnpriest Bond · Farm",
+            "partners": "Tide Sprite + Aurora Seer",
+            "active": false,
+            "effect": "+25% Lumen, Shards & Motes"
+          },
+          {
+            "name": "Duskguard Bond · Boss",
+            "partners": "Stoneheart Golem + Starforged Titan",
+            "active": false,
+            "effect": "+35% passive & ability damage vs Bosses"
+          },
+          {
+            "name": "Pathfinder Bond · Push / Farm · Best now",
+            "partners": "Gale Dancer + Thornback",
+            "active": false,
+            "effect": "+20% passive & ability damage vs non-Bosses"
+          }
+        ],
+        "encyclopedia": [
+          {
+            "name": "Ember Wisp",
+            "meta": "Starcaller · Burst · Unlock Rift 1"
+          },
+          {
+            "name": "Tide Sprite",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 3"
+          },
+          {
+            "name": "Stoneheart Golem",
+            "meta": "Duskguard · Breaker · Unlock Rift 6"
+          },
+          {
+            "name": "Gale Dancer",
+            "meta": "Windrunner · Shard Utility · Unlock Rift 9"
+          },
+          {
+            "name": "Thornback",
+            "meta": "Thornshaper · Lumen Utility · Unlock Rift 12"
+          },
+          {
+            "name": "Voidling",
+            "meta": "Starcaller · Burst · Unlock Rift 18"
+          },
+          {
+            "name": "Aurora Seer",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 24"
+          },
+          {
+            "name": "Starforged Titan",
+            "meta": "Duskguard · Breaker · Unlock Rift 32"
+          },
+          {
+            "name": "Starcaller Bond",
+            "meta": "Ember Wisp + Voidling · Push"
+          },
+          {
+            "name": "Dawnpriest Bond",
+            "meta": "Tide Sprite + Aurora Seer · Farm"
+          },
+          {
+            "name": "Duskguard Bond",
+            "meta": "Stoneheart Golem + Starforged Titan · Boss"
+          },
+          {
+            "name": "Pathfinder Bond",
+            "meta": "Gale Dancer + Thornback · Push / Farm"
+          },
+          {
+            "name": "Push",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Rift Regions",
+            "meta": "World progression"
+          },
+          {
+            "name": "Farm",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Wisp Power",
+            "meta": "Combat stat"
+          },
+          {
+            "name": "Passive Wisp Damage",
+            "meta": "Combat rule"
+          },
+          {
+            "name": "Ability Output",
+            "meta": "Combat / economy rule"
+          },
+          {
+            "name": "Tap damage (Guardian Tap)",
+            "meta": "Damage from tapping the enemy"
+          },
+          {
+            "name": "Rarity",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Modules & Ultimates",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Endgame Currency Utility",
+            "meta": "Economy rule"
+          },
+          {
+            "name": "Wisp Roles",
+            "meta": "Build label"
+          },
+          {
+            "name": "Ascend",
+            "meta": "Permanent progression"
+          },
+          {
+            "name": "Luminous Enemies",
+            "meta": "Rare encounter"
+          },
+          {
+            "name": "Boss Traits",
+            "meta": "Boss mechanic"
+          },
+          {
+            "name": "Offline Progress",
+            "meta": "Idle system"
+          }
+        ],
+        "abilities": [
+          {
+            "id": "ember",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "tide",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "stone",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "gale",
+            "text": "Ability damage + Shards. Module boosts the Shards; Ultimate doubles both."
+          },
+          {
+            "id": "thorn",
+            "text": "Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both."
+          },
+          {
+            "id": "void",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "aurora",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "titan",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "bond": "starcaller",
+      "mode": "zero",
+      "actual": {
+        "rows": [
+          {
+            "name": "Starcaller Bond · Push · Best now",
+            "partners": "Ember Wisp + Voidling",
+            "active": false,
+            "effect": "+18% passive & ability damage"
+          },
+          {
+            "name": "Dawnpriest Bond · Farm",
+            "partners": "Tide Sprite + Aurora Seer",
+            "active": false,
+            "effect": "+25% Lumen, Shards & Motes"
+          },
+          {
+            "name": "Duskguard Bond · Boss",
+            "partners": "Stoneheart Golem + Starforged Titan",
+            "active": false,
+            "effect": "+35% passive & ability damage vs Bosses"
+          },
+          {
+            "name": "Pathfinder Bond · Push / Farm · Best now",
+            "partners": "Gale Dancer + Thornback",
+            "active": false,
+            "effect": "+20% passive & ability damage vs non-Bosses"
+          }
+        ],
+        "encyclopedia": [
+          {
+            "name": "Ember Wisp",
+            "meta": "Starcaller · Burst · Unlock Rift 1"
+          },
+          {
+            "name": "Tide Sprite",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 3"
+          },
+          {
+            "name": "Stoneheart Golem",
+            "meta": "Duskguard · Breaker · Unlock Rift 6"
+          },
+          {
+            "name": "Gale Dancer",
+            "meta": "Windrunner · Shard Utility · Unlock Rift 9"
+          },
+          {
+            "name": "Thornback",
+            "meta": "Thornshaper · Lumen Utility · Unlock Rift 12"
+          },
+          {
+            "name": "Voidling",
+            "meta": "Starcaller · Burst · Unlock Rift 18"
+          },
+          {
+            "name": "Aurora Seer",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 24"
+          },
+          {
+            "name": "Starforged Titan",
+            "meta": "Duskguard · Breaker · Unlock Rift 32"
+          },
+          {
+            "name": "Starcaller Bond",
+            "meta": "Ember Wisp + Voidling · Push"
+          },
+          {
+            "name": "Dawnpriest Bond",
+            "meta": "Tide Sprite + Aurora Seer · Farm"
+          },
+          {
+            "name": "Duskguard Bond",
+            "meta": "Stoneheart Golem + Starforged Titan · Boss"
+          },
+          {
+            "name": "Pathfinder Bond",
+            "meta": "Gale Dancer + Thornback · Push / Farm"
+          },
+          {
+            "name": "Push",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Rift Regions",
+            "meta": "World progression"
+          },
+          {
+            "name": "Farm",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Wisp Power",
+            "meta": "Combat stat"
+          },
+          {
+            "name": "Passive Wisp Damage",
+            "meta": "Combat rule"
+          },
+          {
+            "name": "Ability Output",
+            "meta": "Combat / economy rule"
+          },
+          {
+            "name": "Tap damage (Guardian Tap)",
+            "meta": "Damage from tapping the enemy"
+          },
+          {
+            "name": "Rarity",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Modules & Ultimates",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Endgame Currency Utility",
+            "meta": "Economy rule"
+          },
+          {
+            "name": "Wisp Roles",
+            "meta": "Build label"
+          },
+          {
+            "name": "Ascend",
+            "meta": "Permanent progression"
+          },
+          {
+            "name": "Luminous Enemies",
+            "meta": "Rare encounter"
+          },
+          {
+            "name": "Boss Traits",
+            "meta": "Boss mechanic"
+          },
+          {
+            "name": "Offline Progress",
+            "meta": "Idle system"
+          }
+        ],
+        "abilities": [
+          {
+            "id": "ember",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "tide",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "stone",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "gale",
+            "text": "Ability damage + Shards. Module boosts the Shards; Ultimate doubles both."
+          },
+          {
+            "id": "thorn",
+            "text": "Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both."
+          },
+          {
+            "id": "void",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "aurora",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "titan",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "bond": "dawnpriest",
+      "mode": "active",
+      "actual": {
+        "rows": [
+          {
+            "name": "Starcaller Bond · Push · Best now",
+            "partners": "Ember Wisp + Voidling",
+            "active": false,
+            "effect": "+18% passive & ability damage"
+          },
+          {
+            "name": "Dawnpriest Bond · Farm",
+            "partners": "Tide Sprite + Aurora Seer",
+            "active": true,
+            "effect": "+25% Lumen, Shards & Motes"
+          },
+          {
+            "name": "Duskguard Bond · Boss",
+            "partners": "Stoneheart Golem + Starforged Titan",
+            "active": false,
+            "effect": "+35% passive & ability damage vs Bosses"
+          },
+          {
+            "name": "Pathfinder Bond · Push / Farm · Best now",
+            "partners": "Gale Dancer + Thornback",
+            "active": false,
+            "effect": "+20% passive & ability damage vs non-Bosses"
+          }
+        ],
+        "encyclopedia": [
+          {
+            "name": "Ember Wisp",
+            "meta": "Starcaller · Burst · Unlock Rift 1"
+          },
+          {
+            "name": "Tide Sprite",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 3"
+          },
+          {
+            "name": "Stoneheart Golem",
+            "meta": "Duskguard · Breaker · Unlock Rift 6"
+          },
+          {
+            "name": "Gale Dancer",
+            "meta": "Windrunner · Shard Utility · Unlock Rift 9"
+          },
+          {
+            "name": "Thornback",
+            "meta": "Thornshaper · Lumen Utility · Unlock Rift 12"
+          },
+          {
+            "name": "Voidling",
+            "meta": "Starcaller · Burst · Unlock Rift 18"
+          },
+          {
+            "name": "Aurora Seer",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 24"
+          },
+          {
+            "name": "Starforged Titan",
+            "meta": "Duskguard · Breaker · Unlock Rift 32"
+          },
+          {
+            "name": "Starcaller Bond",
+            "meta": "Ember Wisp + Voidling · Push"
+          },
+          {
+            "name": "Dawnpriest Bond",
+            "meta": "Tide Sprite + Aurora Seer · Farm"
+          },
+          {
+            "name": "Duskguard Bond",
+            "meta": "Stoneheart Golem + Starforged Titan · Boss"
+          },
+          {
+            "name": "Pathfinder Bond",
+            "meta": "Gale Dancer + Thornback · Push / Farm"
+          },
+          {
+            "name": "Push",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Rift Regions",
+            "meta": "World progression"
+          },
+          {
+            "name": "Farm",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Wisp Power",
+            "meta": "Combat stat"
+          },
+          {
+            "name": "Passive Wisp Damage",
+            "meta": "Combat rule"
+          },
+          {
+            "name": "Ability Output",
+            "meta": "Combat / economy rule"
+          },
+          {
+            "name": "Tap damage (Guardian Tap)",
+            "meta": "Damage from tapping the enemy"
+          },
+          {
+            "name": "Rarity",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Modules & Ultimates",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Endgame Currency Utility",
+            "meta": "Economy rule"
+          },
+          {
+            "name": "Wisp Roles",
+            "meta": "Build label"
+          },
+          {
+            "name": "Ascend",
+            "meta": "Permanent progression"
+          },
+          {
+            "name": "Luminous Enemies",
+            "meta": "Rare encounter"
+          },
+          {
+            "name": "Boss Traits",
+            "meta": "Boss mechanic"
+          },
+          {
+            "name": "Offline Progress",
+            "meta": "Idle system"
+          }
+        ],
+        "abilities": [
+          {
+            "id": "tide",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "aurora",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "ember",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "stone",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "gale",
+            "text": "Ability damage + Shards. Module boosts the Shards; Ultimate doubles both."
+          },
+          {
+            "id": "thorn",
+            "text": "Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both."
+          },
+          {
+            "id": "void",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "titan",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "bond": "dawnpriest",
+      "mode": "benched",
+      "actual": {
+        "rows": [
+          {
+            "name": "Starcaller Bond · Push · Best now",
+            "partners": "Ember Wisp + Voidling",
+            "active": false,
+            "effect": "+18% passive & ability damage"
+          },
+          {
+            "name": "Dawnpriest Bond · Farm",
+            "partners": "Tide Sprite + Aurora Seer",
+            "active": false,
+            "effect": "+25% Lumen, Shards & Motes"
+          },
+          {
+            "name": "Duskguard Bond · Boss",
+            "partners": "Stoneheart Golem + Starforged Titan",
+            "active": false,
+            "effect": "+35% passive & ability damage vs Bosses"
+          },
+          {
+            "name": "Pathfinder Bond · Push / Farm · Best now",
+            "partners": "Gale Dancer + Thornback",
+            "active": false,
+            "effect": "+20% passive & ability damage vs non-Bosses"
+          }
+        ],
+        "encyclopedia": [
+          {
+            "name": "Ember Wisp",
+            "meta": "Starcaller · Burst · Unlock Rift 1"
+          },
+          {
+            "name": "Tide Sprite",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 3"
+          },
+          {
+            "name": "Stoneheart Golem",
+            "meta": "Duskguard · Breaker · Unlock Rift 6"
+          },
+          {
+            "name": "Gale Dancer",
+            "meta": "Windrunner · Shard Utility · Unlock Rift 9"
+          },
+          {
+            "name": "Thornback",
+            "meta": "Thornshaper · Lumen Utility · Unlock Rift 12"
+          },
+          {
+            "name": "Voidling",
+            "meta": "Starcaller · Burst · Unlock Rift 18"
+          },
+          {
+            "name": "Aurora Seer",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 24"
+          },
+          {
+            "name": "Starforged Titan",
+            "meta": "Duskguard · Breaker · Unlock Rift 32"
+          },
+          {
+            "name": "Starcaller Bond",
+            "meta": "Ember Wisp + Voidling · Push"
+          },
+          {
+            "name": "Dawnpriest Bond",
+            "meta": "Tide Sprite + Aurora Seer · Farm"
+          },
+          {
+            "name": "Duskguard Bond",
+            "meta": "Stoneheart Golem + Starforged Titan · Boss"
+          },
+          {
+            "name": "Pathfinder Bond",
+            "meta": "Gale Dancer + Thornback · Push / Farm"
+          },
+          {
+            "name": "Push",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Rift Regions",
+            "meta": "World progression"
+          },
+          {
+            "name": "Farm",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Wisp Power",
+            "meta": "Combat stat"
+          },
+          {
+            "name": "Passive Wisp Damage",
+            "meta": "Combat rule"
+          },
+          {
+            "name": "Ability Output",
+            "meta": "Combat / economy rule"
+          },
+          {
+            "name": "Tap damage (Guardian Tap)",
+            "meta": "Damage from tapping the enemy"
+          },
+          {
+            "name": "Rarity",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Modules & Ultimates",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Endgame Currency Utility",
+            "meta": "Economy rule"
+          },
+          {
+            "name": "Wisp Roles",
+            "meta": "Build label"
+          },
+          {
+            "name": "Ascend",
+            "meta": "Permanent progression"
+          },
+          {
+            "name": "Luminous Enemies",
+            "meta": "Rare encounter"
+          },
+          {
+            "name": "Boss Traits",
+            "meta": "Boss mechanic"
+          },
+          {
+            "name": "Offline Progress",
+            "meta": "Idle system"
+          }
+        ],
+        "abilities": [
+          {
+            "id": "tide",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "ember",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "stone",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "gale",
+            "text": "Ability damage + Shards. Module boosts the Shards; Ultimate doubles both."
+          },
+          {
+            "id": "thorn",
+            "text": "Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both."
+          },
+          {
+            "id": "void",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "aurora",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "titan",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "bond": "dawnpriest",
+      "mode": "zero",
+      "actual": {
+        "rows": [
+          {
+            "name": "Starcaller Bond · Push · Best now",
+            "partners": "Ember Wisp + Voidling",
+            "active": false,
+            "effect": "+18% passive & ability damage"
+          },
+          {
+            "name": "Dawnpriest Bond · Farm",
+            "partners": "Tide Sprite + Aurora Seer",
+            "active": false,
+            "effect": "+25% Lumen, Shards & Motes"
+          },
+          {
+            "name": "Duskguard Bond · Boss",
+            "partners": "Stoneheart Golem + Starforged Titan",
+            "active": false,
+            "effect": "+35% passive & ability damage vs Bosses"
+          },
+          {
+            "name": "Pathfinder Bond · Push / Farm · Best now",
+            "partners": "Gale Dancer + Thornback",
+            "active": false,
+            "effect": "+20% passive & ability damage vs non-Bosses"
+          }
+        ],
+        "encyclopedia": [
+          {
+            "name": "Ember Wisp",
+            "meta": "Starcaller · Burst · Unlock Rift 1"
+          },
+          {
+            "name": "Tide Sprite",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 3"
+          },
+          {
+            "name": "Stoneheart Golem",
+            "meta": "Duskguard · Breaker · Unlock Rift 6"
+          },
+          {
+            "name": "Gale Dancer",
+            "meta": "Windrunner · Shard Utility · Unlock Rift 9"
+          },
+          {
+            "name": "Thornback",
+            "meta": "Thornshaper · Lumen Utility · Unlock Rift 12"
+          },
+          {
+            "name": "Voidling",
+            "meta": "Starcaller · Burst · Unlock Rift 18"
+          },
+          {
+            "name": "Aurora Seer",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 24"
+          },
+          {
+            "name": "Starforged Titan",
+            "meta": "Duskguard · Breaker · Unlock Rift 32"
+          },
+          {
+            "name": "Starcaller Bond",
+            "meta": "Ember Wisp + Voidling · Push"
+          },
+          {
+            "name": "Dawnpriest Bond",
+            "meta": "Tide Sprite + Aurora Seer · Farm"
+          },
+          {
+            "name": "Duskguard Bond",
+            "meta": "Stoneheart Golem + Starforged Titan · Boss"
+          },
+          {
+            "name": "Pathfinder Bond",
+            "meta": "Gale Dancer + Thornback · Push / Farm"
+          },
+          {
+            "name": "Push",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Rift Regions",
+            "meta": "World progression"
+          },
+          {
+            "name": "Farm",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Wisp Power",
+            "meta": "Combat stat"
+          },
+          {
+            "name": "Passive Wisp Damage",
+            "meta": "Combat rule"
+          },
+          {
+            "name": "Ability Output",
+            "meta": "Combat / economy rule"
+          },
+          {
+            "name": "Tap damage (Guardian Tap)",
+            "meta": "Damage from tapping the enemy"
+          },
+          {
+            "name": "Rarity",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Modules & Ultimates",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Endgame Currency Utility",
+            "meta": "Economy rule"
+          },
+          {
+            "name": "Wisp Roles",
+            "meta": "Build label"
+          },
+          {
+            "name": "Ascend",
+            "meta": "Permanent progression"
+          },
+          {
+            "name": "Luminous Enemies",
+            "meta": "Rare encounter"
+          },
+          {
+            "name": "Boss Traits",
+            "meta": "Boss mechanic"
+          },
+          {
+            "name": "Offline Progress",
+            "meta": "Idle system"
+          }
+        ],
+        "abilities": [
+          {
+            "id": "tide",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "ember",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "stone",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "gale",
+            "text": "Ability damage + Shards. Module boosts the Shards; Ultimate doubles both."
+          },
+          {
+            "id": "thorn",
+            "text": "Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both."
+          },
+          {
+            "id": "void",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "aurora",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "titan",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "bond": "duskguard",
+      "mode": "active",
+      "actual": {
+        "rows": [
+          {
+            "name": "Starcaller Bond · Push · Best now",
+            "partners": "Ember Wisp + Voidling",
+            "active": false,
+            "effect": "+18% passive & ability damage"
+          },
+          {
+            "name": "Dawnpriest Bond · Farm",
+            "partners": "Tide Sprite + Aurora Seer",
+            "active": false,
+            "effect": "+25% Lumen, Shards & Motes"
+          },
+          {
+            "name": "Duskguard Bond · Boss",
+            "partners": "Stoneheart Golem + Starforged Titan",
+            "active": true,
+            "effect": "+35% passive & ability damage vs Bosses"
+          },
+          {
+            "name": "Pathfinder Bond · Push / Farm · Best now",
+            "partners": "Gale Dancer + Thornback",
+            "active": false,
+            "effect": "+20% passive & ability damage vs non-Bosses"
+          }
+        ],
+        "encyclopedia": [
+          {
+            "name": "Ember Wisp",
+            "meta": "Starcaller · Burst · Unlock Rift 1"
+          },
+          {
+            "name": "Tide Sprite",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 3"
+          },
+          {
+            "name": "Stoneheart Golem",
+            "meta": "Duskguard · Breaker · Unlock Rift 6"
+          },
+          {
+            "name": "Gale Dancer",
+            "meta": "Windrunner · Shard Utility · Unlock Rift 9"
+          },
+          {
+            "name": "Thornback",
+            "meta": "Thornshaper · Lumen Utility · Unlock Rift 12"
+          },
+          {
+            "name": "Voidling",
+            "meta": "Starcaller · Burst · Unlock Rift 18"
+          },
+          {
+            "name": "Aurora Seer",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 24"
+          },
+          {
+            "name": "Starforged Titan",
+            "meta": "Duskguard · Breaker · Unlock Rift 32"
+          },
+          {
+            "name": "Starcaller Bond",
+            "meta": "Ember Wisp + Voidling · Push"
+          },
+          {
+            "name": "Dawnpriest Bond",
+            "meta": "Tide Sprite + Aurora Seer · Farm"
+          },
+          {
+            "name": "Duskguard Bond",
+            "meta": "Stoneheart Golem + Starforged Titan · Boss"
+          },
+          {
+            "name": "Pathfinder Bond",
+            "meta": "Gale Dancer + Thornback · Push / Farm"
+          },
+          {
+            "name": "Push",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Rift Regions",
+            "meta": "World progression"
+          },
+          {
+            "name": "Farm",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Wisp Power",
+            "meta": "Combat stat"
+          },
+          {
+            "name": "Passive Wisp Damage",
+            "meta": "Combat rule"
+          },
+          {
+            "name": "Ability Output",
+            "meta": "Combat / economy rule"
+          },
+          {
+            "name": "Tap damage (Guardian Tap)",
+            "meta": "Damage from tapping the enemy"
+          },
+          {
+            "name": "Rarity",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Modules & Ultimates",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Endgame Currency Utility",
+            "meta": "Economy rule"
+          },
+          {
+            "name": "Wisp Roles",
+            "meta": "Build label"
+          },
+          {
+            "name": "Ascend",
+            "meta": "Permanent progression"
+          },
+          {
+            "name": "Luminous Enemies",
+            "meta": "Rare encounter"
+          },
+          {
+            "name": "Boss Traits",
+            "meta": "Boss mechanic"
+          },
+          {
+            "name": "Offline Progress",
+            "meta": "Idle system"
+          }
+        ],
+        "abilities": [
+          {
+            "id": "stone",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "titan",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "ember",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "tide",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "gale",
+            "text": "Ability damage + Shards. Module boosts the Shards; Ultimate doubles both."
+          },
+          {
+            "id": "thorn",
+            "text": "Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both."
+          },
+          {
+            "id": "void",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "aurora",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "bond": "duskguard",
+      "mode": "benched",
+      "actual": {
+        "rows": [
+          {
+            "name": "Starcaller Bond · Push · Best now",
+            "partners": "Ember Wisp + Voidling",
+            "active": false,
+            "effect": "+18% passive & ability damage"
+          },
+          {
+            "name": "Dawnpriest Bond · Farm",
+            "partners": "Tide Sprite + Aurora Seer",
+            "active": false,
+            "effect": "+25% Lumen, Shards & Motes"
+          },
+          {
+            "name": "Duskguard Bond · Boss",
+            "partners": "Stoneheart Golem + Starforged Titan",
+            "active": false,
+            "effect": "+35% passive & ability damage vs Bosses"
+          },
+          {
+            "name": "Pathfinder Bond · Push / Farm · Best now",
+            "partners": "Gale Dancer + Thornback",
+            "active": false,
+            "effect": "+20% passive & ability damage vs non-Bosses"
+          }
+        ],
+        "encyclopedia": [
+          {
+            "name": "Ember Wisp",
+            "meta": "Starcaller · Burst · Unlock Rift 1"
+          },
+          {
+            "name": "Tide Sprite",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 3"
+          },
+          {
+            "name": "Stoneheart Golem",
+            "meta": "Duskguard · Breaker · Unlock Rift 6"
+          },
+          {
+            "name": "Gale Dancer",
+            "meta": "Windrunner · Shard Utility · Unlock Rift 9"
+          },
+          {
+            "name": "Thornback",
+            "meta": "Thornshaper · Lumen Utility · Unlock Rift 12"
+          },
+          {
+            "name": "Voidling",
+            "meta": "Starcaller · Burst · Unlock Rift 18"
+          },
+          {
+            "name": "Aurora Seer",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 24"
+          },
+          {
+            "name": "Starforged Titan",
+            "meta": "Duskguard · Breaker · Unlock Rift 32"
+          },
+          {
+            "name": "Starcaller Bond",
+            "meta": "Ember Wisp + Voidling · Push"
+          },
+          {
+            "name": "Dawnpriest Bond",
+            "meta": "Tide Sprite + Aurora Seer · Farm"
+          },
+          {
+            "name": "Duskguard Bond",
+            "meta": "Stoneheart Golem + Starforged Titan · Boss"
+          },
+          {
+            "name": "Pathfinder Bond",
+            "meta": "Gale Dancer + Thornback · Push / Farm"
+          },
+          {
+            "name": "Push",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Rift Regions",
+            "meta": "World progression"
+          },
+          {
+            "name": "Farm",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Wisp Power",
+            "meta": "Combat stat"
+          },
+          {
+            "name": "Passive Wisp Damage",
+            "meta": "Combat rule"
+          },
+          {
+            "name": "Ability Output",
+            "meta": "Combat / economy rule"
+          },
+          {
+            "name": "Tap damage (Guardian Tap)",
+            "meta": "Damage from tapping the enemy"
+          },
+          {
+            "name": "Rarity",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Modules & Ultimates",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Endgame Currency Utility",
+            "meta": "Economy rule"
+          },
+          {
+            "name": "Wisp Roles",
+            "meta": "Build label"
+          },
+          {
+            "name": "Ascend",
+            "meta": "Permanent progression"
+          },
+          {
+            "name": "Luminous Enemies",
+            "meta": "Rare encounter"
+          },
+          {
+            "name": "Boss Traits",
+            "meta": "Boss mechanic"
+          },
+          {
+            "name": "Offline Progress",
+            "meta": "Idle system"
+          }
+        ],
+        "abilities": [
+          {
+            "id": "stone",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "ember",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "tide",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "gale",
+            "text": "Ability damage + Shards. Module boosts the Shards; Ultimate doubles both."
+          },
+          {
+            "id": "thorn",
+            "text": "Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both."
+          },
+          {
+            "id": "void",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "aurora",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "titan",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "bond": "duskguard",
+      "mode": "zero",
+      "actual": {
+        "rows": [
+          {
+            "name": "Starcaller Bond · Push · Best now",
+            "partners": "Ember Wisp + Voidling",
+            "active": false,
+            "effect": "+18% passive & ability damage"
+          },
+          {
+            "name": "Dawnpriest Bond · Farm",
+            "partners": "Tide Sprite + Aurora Seer",
+            "active": false,
+            "effect": "+25% Lumen, Shards & Motes"
+          },
+          {
+            "name": "Duskguard Bond · Boss",
+            "partners": "Stoneheart Golem + Starforged Titan",
+            "active": false,
+            "effect": "+35% passive & ability damage vs Bosses"
+          },
+          {
+            "name": "Pathfinder Bond · Push / Farm · Best now",
+            "partners": "Gale Dancer + Thornback",
+            "active": false,
+            "effect": "+20% passive & ability damage vs non-Bosses"
+          }
+        ],
+        "encyclopedia": [
+          {
+            "name": "Ember Wisp",
+            "meta": "Starcaller · Burst · Unlock Rift 1"
+          },
+          {
+            "name": "Tide Sprite",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 3"
+          },
+          {
+            "name": "Stoneheart Golem",
+            "meta": "Duskguard · Breaker · Unlock Rift 6"
+          },
+          {
+            "name": "Gale Dancer",
+            "meta": "Windrunner · Shard Utility · Unlock Rift 9"
+          },
+          {
+            "name": "Thornback",
+            "meta": "Thornshaper · Lumen Utility · Unlock Rift 12"
+          },
+          {
+            "name": "Voidling",
+            "meta": "Starcaller · Burst · Unlock Rift 18"
+          },
+          {
+            "name": "Aurora Seer",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 24"
+          },
+          {
+            "name": "Starforged Titan",
+            "meta": "Duskguard · Breaker · Unlock Rift 32"
+          },
+          {
+            "name": "Starcaller Bond",
+            "meta": "Ember Wisp + Voidling · Push"
+          },
+          {
+            "name": "Dawnpriest Bond",
+            "meta": "Tide Sprite + Aurora Seer · Farm"
+          },
+          {
+            "name": "Duskguard Bond",
+            "meta": "Stoneheart Golem + Starforged Titan · Boss"
+          },
+          {
+            "name": "Pathfinder Bond",
+            "meta": "Gale Dancer + Thornback · Push / Farm"
+          },
+          {
+            "name": "Push",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Rift Regions",
+            "meta": "World progression"
+          },
+          {
+            "name": "Farm",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Wisp Power",
+            "meta": "Combat stat"
+          },
+          {
+            "name": "Passive Wisp Damage",
+            "meta": "Combat rule"
+          },
+          {
+            "name": "Ability Output",
+            "meta": "Combat / economy rule"
+          },
+          {
+            "name": "Tap damage (Guardian Tap)",
+            "meta": "Damage from tapping the enemy"
+          },
+          {
+            "name": "Rarity",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Modules & Ultimates",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Endgame Currency Utility",
+            "meta": "Economy rule"
+          },
+          {
+            "name": "Wisp Roles",
+            "meta": "Build label"
+          },
+          {
+            "name": "Ascend",
+            "meta": "Permanent progression"
+          },
+          {
+            "name": "Luminous Enemies",
+            "meta": "Rare encounter"
+          },
+          {
+            "name": "Boss Traits",
+            "meta": "Boss mechanic"
+          },
+          {
+            "name": "Offline Progress",
+            "meta": "Idle system"
+          }
+        ],
+        "abilities": [
+          {
+            "id": "stone",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "ember",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "tide",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "gale",
+            "text": "Ability damage + Shards. Module boosts the Shards; Ultimate doubles both."
+          },
+          {
+            "id": "thorn",
+            "text": "Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both."
+          },
+          {
+            "id": "void",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "aurora",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "titan",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "bond": "pathfinder",
+      "mode": "active",
+      "actual": {
+        "rows": [
+          {
+            "name": "Starcaller Bond · Push · Best now",
+            "partners": "Ember Wisp + Voidling",
+            "active": false,
+            "effect": "+18% passive & ability damage"
+          },
+          {
+            "name": "Dawnpriest Bond · Farm",
+            "partners": "Tide Sprite + Aurora Seer",
+            "active": false,
+            "effect": "+25% Lumen, Shards & Motes"
+          },
+          {
+            "name": "Duskguard Bond · Boss",
+            "partners": "Stoneheart Golem + Starforged Titan",
+            "active": false,
+            "effect": "+35% passive & ability damage vs Bosses"
+          },
+          {
+            "name": "Pathfinder Bond · Push / Farm · Best now",
+            "partners": "Gale Dancer + Thornback",
+            "active": true,
+            "effect": "+20% passive & ability damage vs non-Bosses"
+          }
+        ],
+        "encyclopedia": [
+          {
+            "name": "Ember Wisp",
+            "meta": "Starcaller · Burst · Unlock Rift 1"
+          },
+          {
+            "name": "Tide Sprite",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 3"
+          },
+          {
+            "name": "Stoneheart Golem",
+            "meta": "Duskguard · Breaker · Unlock Rift 6"
+          },
+          {
+            "name": "Gale Dancer",
+            "meta": "Windrunner · Shard Utility · Unlock Rift 9"
+          },
+          {
+            "name": "Thornback",
+            "meta": "Thornshaper · Lumen Utility · Unlock Rift 12"
+          },
+          {
+            "name": "Voidling",
+            "meta": "Starcaller · Burst · Unlock Rift 18"
+          },
+          {
+            "name": "Aurora Seer",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 24"
+          },
+          {
+            "name": "Starforged Titan",
+            "meta": "Duskguard · Breaker · Unlock Rift 32"
+          },
+          {
+            "name": "Starcaller Bond",
+            "meta": "Ember Wisp + Voidling · Push"
+          },
+          {
+            "name": "Dawnpriest Bond",
+            "meta": "Tide Sprite + Aurora Seer · Farm"
+          },
+          {
+            "name": "Duskguard Bond",
+            "meta": "Stoneheart Golem + Starforged Titan · Boss"
+          },
+          {
+            "name": "Pathfinder Bond",
+            "meta": "Gale Dancer + Thornback · Push / Farm"
+          },
+          {
+            "name": "Push",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Rift Regions",
+            "meta": "World progression"
+          },
+          {
+            "name": "Farm",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Wisp Power",
+            "meta": "Combat stat"
+          },
+          {
+            "name": "Passive Wisp Damage",
+            "meta": "Combat rule"
+          },
+          {
+            "name": "Ability Output",
+            "meta": "Combat / economy rule"
+          },
+          {
+            "name": "Tap damage (Guardian Tap)",
+            "meta": "Damage from tapping the enemy"
+          },
+          {
+            "name": "Rarity",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Modules & Ultimates",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Endgame Currency Utility",
+            "meta": "Economy rule"
+          },
+          {
+            "name": "Wisp Roles",
+            "meta": "Build label"
+          },
+          {
+            "name": "Ascend",
+            "meta": "Permanent progression"
+          },
+          {
+            "name": "Luminous Enemies",
+            "meta": "Rare encounter"
+          },
+          {
+            "name": "Boss Traits",
+            "meta": "Boss mechanic"
+          },
+          {
+            "name": "Offline Progress",
+            "meta": "Idle system"
+          }
+        ],
+        "abilities": [
+          {
+            "id": "gale",
+            "text": "Ability damage + Shards. Module boosts the Shards; Ultimate doubles both."
+          },
+          {
+            "id": "thorn",
+            "text": "Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both."
+          },
+          {
+            "id": "ember",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "tide",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "stone",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "void",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "aurora",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "titan",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "bond": "pathfinder",
+      "mode": "benched",
+      "actual": {
+        "rows": [
+          {
+            "name": "Starcaller Bond · Push · Best now",
+            "partners": "Ember Wisp + Voidling",
+            "active": false,
+            "effect": "+18% passive & ability damage"
+          },
+          {
+            "name": "Dawnpriest Bond · Farm",
+            "partners": "Tide Sprite + Aurora Seer",
+            "active": false,
+            "effect": "+25% Lumen, Shards & Motes"
+          },
+          {
+            "name": "Duskguard Bond · Boss",
+            "partners": "Stoneheart Golem + Starforged Titan",
+            "active": false,
+            "effect": "+35% passive & ability damage vs Bosses"
+          },
+          {
+            "name": "Pathfinder Bond · Push / Farm · Best now",
+            "partners": "Gale Dancer + Thornback",
+            "active": false,
+            "effect": "+20% passive & ability damage vs non-Bosses"
+          }
+        ],
+        "encyclopedia": [
+          {
+            "name": "Ember Wisp",
+            "meta": "Starcaller · Burst · Unlock Rift 1"
+          },
+          {
+            "name": "Tide Sprite",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 3"
+          },
+          {
+            "name": "Stoneheart Golem",
+            "meta": "Duskguard · Breaker · Unlock Rift 6"
+          },
+          {
+            "name": "Gale Dancer",
+            "meta": "Windrunner · Shard Utility · Unlock Rift 9"
+          },
+          {
+            "name": "Thornback",
+            "meta": "Thornshaper · Lumen Utility · Unlock Rift 12"
+          },
+          {
+            "name": "Voidling",
+            "meta": "Starcaller · Burst · Unlock Rift 18"
+          },
+          {
+            "name": "Aurora Seer",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 24"
+          },
+          {
+            "name": "Starforged Titan",
+            "meta": "Duskguard · Breaker · Unlock Rift 32"
+          },
+          {
+            "name": "Starcaller Bond",
+            "meta": "Ember Wisp + Voidling · Push"
+          },
+          {
+            "name": "Dawnpriest Bond",
+            "meta": "Tide Sprite + Aurora Seer · Farm"
+          },
+          {
+            "name": "Duskguard Bond",
+            "meta": "Stoneheart Golem + Starforged Titan · Boss"
+          },
+          {
+            "name": "Pathfinder Bond",
+            "meta": "Gale Dancer + Thornback · Push / Farm"
+          },
+          {
+            "name": "Push",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Rift Regions",
+            "meta": "World progression"
+          },
+          {
+            "name": "Farm",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Wisp Power",
+            "meta": "Combat stat"
+          },
+          {
+            "name": "Passive Wisp Damage",
+            "meta": "Combat rule"
+          },
+          {
+            "name": "Ability Output",
+            "meta": "Combat / economy rule"
+          },
+          {
+            "name": "Tap damage (Guardian Tap)",
+            "meta": "Damage from tapping the enemy"
+          },
+          {
+            "name": "Rarity",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Modules & Ultimates",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Endgame Currency Utility",
+            "meta": "Economy rule"
+          },
+          {
+            "name": "Wisp Roles",
+            "meta": "Build label"
+          },
+          {
+            "name": "Ascend",
+            "meta": "Permanent progression"
+          },
+          {
+            "name": "Luminous Enemies",
+            "meta": "Rare encounter"
+          },
+          {
+            "name": "Boss Traits",
+            "meta": "Boss mechanic"
+          },
+          {
+            "name": "Offline Progress",
+            "meta": "Idle system"
+          }
+        ],
+        "abilities": [
+          {
+            "id": "gale",
+            "text": "Ability damage + Shards. Module boosts the Shards; Ultimate doubles both."
+          },
+          {
+            "id": "ember",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "tide",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "stone",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "thorn",
+            "text": "Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both."
+          },
+          {
+            "id": "void",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "aurora",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "titan",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "bond": "pathfinder",
+      "mode": "zero",
+      "actual": {
+        "rows": [
+          {
+            "name": "Starcaller Bond · Push · Best now",
+            "partners": "Ember Wisp + Voidling",
+            "active": false,
+            "effect": "+18% passive & ability damage"
+          },
+          {
+            "name": "Dawnpriest Bond · Farm",
+            "partners": "Tide Sprite + Aurora Seer",
+            "active": false,
+            "effect": "+25% Lumen, Shards & Motes"
+          },
+          {
+            "name": "Duskguard Bond · Boss",
+            "partners": "Stoneheart Golem + Starforged Titan",
+            "active": false,
+            "effect": "+35% passive & ability damage vs Bosses"
+          },
+          {
+            "name": "Pathfinder Bond · Push / Farm · Best now",
+            "partners": "Gale Dancer + Thornback",
+            "active": false,
+            "effect": "+20% passive & ability damage vs non-Bosses"
+          }
+        ],
+        "encyclopedia": [
+          {
+            "name": "Ember Wisp",
+            "meta": "Starcaller · Burst · Unlock Rift 1"
+          },
+          {
+            "name": "Tide Sprite",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 3"
+          },
+          {
+            "name": "Stoneheart Golem",
+            "meta": "Duskguard · Breaker · Unlock Rift 6"
+          },
+          {
+            "name": "Gale Dancer",
+            "meta": "Windrunner · Shard Utility · Unlock Rift 9"
+          },
+          {
+            "name": "Thornback",
+            "meta": "Thornshaper · Lumen Utility · Unlock Rift 12"
+          },
+          {
+            "name": "Voidling",
+            "meta": "Starcaller · Burst · Unlock Rift 18"
+          },
+          {
+            "name": "Aurora Seer",
+            "meta": "Dawnpriest · Amplifier · Unlock Rift 24"
+          },
+          {
+            "name": "Starforged Titan",
+            "meta": "Duskguard · Breaker · Unlock Rift 32"
+          },
+          {
+            "name": "Starcaller Bond",
+            "meta": "Ember Wisp + Voidling · Push"
+          },
+          {
+            "name": "Dawnpriest Bond",
+            "meta": "Tide Sprite + Aurora Seer · Farm"
+          },
+          {
+            "name": "Duskguard Bond",
+            "meta": "Stoneheart Golem + Starforged Titan · Boss"
+          },
+          {
+            "name": "Pathfinder Bond",
+            "meta": "Gale Dancer + Thornback · Push / Farm"
+          },
+          {
+            "name": "Push",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Rift Regions",
+            "meta": "World progression"
+          },
+          {
+            "name": "Farm",
+            "meta": "Rift mode"
+          },
+          {
+            "name": "Wisp Power",
+            "meta": "Combat stat"
+          },
+          {
+            "name": "Passive Wisp Damage",
+            "meta": "Combat rule"
+          },
+          {
+            "name": "Ability Output",
+            "meta": "Combat / economy rule"
+          },
+          {
+            "name": "Tap damage (Guardian Tap)",
+            "meta": "Damage from tapping the enemy"
+          },
+          {
+            "name": "Rarity",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Modules & Ultimates",
+            "meta": "Wisp progression"
+          },
+          {
+            "name": "Endgame Currency Utility",
+            "meta": "Economy rule"
+          },
+          {
+            "name": "Wisp Roles",
+            "meta": "Build label"
+          },
+          {
+            "name": "Ascend",
+            "meta": "Permanent progression"
+          },
+          {
+            "name": "Luminous Enemies",
+            "meta": "Rare encounter"
+          },
+          {
+            "name": "Boss Traits",
+            "meta": "Boss mechanic"
+          },
+          {
+            "name": "Offline Progress",
+            "meta": "Idle system"
+          }
+        ],
+        "abilities": [
+          {
+            "id": "gale",
+            "text": "Ability damage + Shards. Module boosts the Shards; Ultimate doubles both."
+          },
+          {
+            "id": "ember",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "tide",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "stone",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "thorn",
+            "text": "Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both."
+          },
+          {
+            "id": "void",
+            "text": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          },
+          {
+            "id": "aurora",
+            "text": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+          },
+          {
+            "id": "titan",
+            "text": "Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "case": "native text scale",
+      "result": {
+        "scale": 1,
+        "viewport": [
+          390,
+          820
+        ],
+        "controlHeight": 44,
+        "rows": [
+          {
+            "partner": "Ember Wisp + Voidling",
+            "left": 43,
+            "right": 220.609375,
+            "visible": true
+          },
+          {
+            "partner": "Tide Sprite + Aurora Seer",
+            "left": 43,
+            "right": 220.609375,
+            "visible": true
+          },
+          {
+            "partner": "Stoneheart Golem + Starforged Titan",
+            "left": 43,
+            "right": 220.609375,
+            "visible": true
+          },
+          {
+            "partner": "Gale Dancer + Thornback",
+            "left": 43,
+            "right": 220.609375,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "case": "native text scale",
+      "result": {
+        "scale": 2,
+        "viewport": [
+          390,
+          820
+        ],
+        "controlHeight": 44,
+        "rows": [
+          {
+            "partner": "Ember Wisp + Voidling",
+            "left": 43,
+            "right": 220.609375,
+            "visible": true
+          },
+          {
+            "partner": "Tide Sprite + Aurora Seer",
+            "left": 43,
+            "right": 220.609375,
+            "visible": true
+          },
+          {
+            "partner": "Stoneheart Golem + Starforged Titan",
+            "left": 43,
+            "right": 220.609375,
+            "visible": true
+          },
+          {
+            "partner": "Gale Dancer + Thornback",
+            "left": 43,
+            "right": 220.609375,
+            "visible": true
+          }
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "isolated emulator; physical Android/WebView60/TalkBack remain separate",
+    "legacy save QA fixtures and interval guard; no native gameplay/timing claim"
+  ]
+}

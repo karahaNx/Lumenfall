@@ -1,0 +1,165 @@
+{
+  "status": "fail",
+  "identity": {
+    "android": "8.1.0",
+    "api": 27,
+    "ua": "Mozilla/5.0 (Linux; Android 8.1.0; Android SDK built for x86_64 Build/OSM1.180201.023; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.98 Mobile Safari/537.36",
+    "page": "https://localhost/",
+    "package": [
+      "    versionCode=136 minSdk=22 targetSdk=34",
+      "    versionName=0.1.136"
+    ],
+    "sourceSha256": "64699bd6ba907f145523bb9633a36a2661b28ef3391c69b4e4216e06e378ecb8",
+    "scriptSha256": "36c9911d8913534e484f3cefeb5fc712cc48ee662144d40f1d4baf898572f81f",
+    "stylesheetSha256": "f89055830d1dba9beb084240d257d3503aca529b1656ef97981d7322d2ad1e0f",
+    "apkSha256": "2c175583c546f64a7a0ae651803b94ed2c134fe86573bdb8e96edbf2eadbdab0",
+    "viewport": {
+      "width": 400,
+      "height": 820,
+      "dpr": 0.5
+    }
+  },
+  "error": "Error: Command failed: /workspace/.lumenfall-android/sdk/platform-tools/adb -s emulator-5554 shell pidof com.lumenfall.app\n    at genericNodeError (node:internal/errors:985:15)\n    at wrappedFn (node:internal/errors:539:14)\n    at checkExecSyncError (node:child_process:942:11)\n    at Object.execFileSync (node:child_process:978:15)\n    at android (/workspace/lumenfall-offline/docs/qa/offline-catchup-001/android-136/native-integration.cjs:13:37)\n    at connect (/workspace/lumenfall-offline/docs/qa/offline-catchup-001/android-136/native-integration.cjs:18:100)\n    at main (/workspace/lumenfall-offline/docs/qa/offline-catchup-001/android-136/native-integration.cjs:50:191)",
+  "records": [
+    {
+      "case": "native signed136 cold Clear21 8h",
+      "seconds": 28800,
+      "before": {
+        "hidden": false,
+        "kills": 385146,
+        "ascends": 15142,
+        "lastSeen": 1791364144454,
+        "offline": 897320.3319999998,
+        "recoveryMatches": true,
+        "frames": 10,
+        "errors": [],
+        "primaryWrites": [],
+        "returnVisible": false,
+        "message": ""
+      },
+      "after": {
+        "hidden": false,
+        "kills": 687546,
+        "ascends": 29542,
+        "lastSeen": 1791392944454,
+        "offline": 926120.3319999998,
+        "recoveryMatches": true,
+        "frames": 1708,
+        "errors": [],
+        "primaryWrites": [
+          {
+            "kills": 687546,
+            "ascends": 29542,
+            "lastSeen": 1791392944454,
+            "observedElapsedMs": 991838.395
+          }
+        ],
+        "returnVisible": true,
+        "message": "You were away for 8h 0m. Your Wisps kept the Rift lit and gathered 1.29B Lumen and 52.25M Shards and 43.20K Sigils and 122.98K Motes while you were gone. They ascended 14400 times on their own! Your Long Study \"Guardian's Mastery\" finished while you were away!"
+      },
+      "wallMs": 982087
+    },
+    {
+      "case": "unmodified native136 return geometry",
+      "geometry": {
+        "button": {
+          "x": 47,
+          "y": 477,
+          "width": 306,
+          "height": 44
+        },
+        "overlay": {
+          "x": 0,
+          "y": 0,
+          "width": 400,
+          "height": 820
+        },
+        "viewport": {
+          "width": 400,
+          "height": 820
+        },
+        "hit": true
+      }
+    },
+    {
+      "case": "native Claim/repeated return/live play",
+      "after": {
+        "hidden": false,
+        "kills": 687561,
+        "ascends": 29542,
+        "lastSeen": 1791392944454,
+        "offline": 926120.3319999998,
+        "recoveryMatches": true,
+        "frames": 1771,
+        "errors": [],
+        "primaryWrites": [
+          {
+            "kills": 687546,
+            "ascends": 29542,
+            "lastSeen": 1791392944454,
+            "observedElapsedMs": 991838.395
+          },
+          {
+            "kills": 687546,
+            "ascends": 29542,
+            "lastSeen": 1791392944454,
+            "observedElapsedMs": 1017326.77
+          },
+          {
+            "kills": 687557,
+            "ascends": 29542,
+            "lastSeen": 1791392944454,
+            "observedElapsedMs": 1026178.8200000002
+          },
+          {
+            "kills": 687561,
+            "ascends": 29542,
+            "lastSeen": 1791392944454,
+            "observedElapsedMs": 1031495.385
+          }
+        ],
+        "returnVisible": false,
+        "message": "You were away for 8h 0m. Your Wisps kept the Rift lit and gathered 1.29B Lumen and 52.25M Shards and 43.20K Sigils and 122.98K Motes while you were gone. They ascended 14400 times on their own! Your Long Study \"Guardian's Mastery\" finished while you were away!"
+      }
+    },
+    {
+      "case": "native 600s interruption/retry",
+      "seconds": 600,
+      "before": {
+        "hidden": false,
+        "kills": 385146,
+        "ascends": 15142,
+        "lastSeen": 1791393395352,
+        "offline": 897320.3319999998,
+        "recoveryMatches": true,
+        "frames": 11,
+        "errors": [],
+        "primaryWrites": [],
+        "returnVisible": false,
+        "message": ""
+      },
+      "after": {
+        "hidden": false,
+        "kills": 391446,
+        "ascends": 15442,
+        "lastSeen": 1791393995352,
+        "offline": 897920.3319999998,
+        "recoveryMatches": true,
+        "frames": 61,
+        "errors": [],
+        "primaryWrites": [
+          {
+            "kills": 391446,
+            "ascends": 15442,
+            "lastSeen": 1791393995352,
+            "observedElapsedMs": 49581.69500000001
+          }
+        ],
+        "returnVisible": true,
+        "message": "You were away for 10m. Your Wisps kept the Rift lit and gathered 26.88M Lumen and 1.09M Shards and 900 Sigils and 2.56K Motes while you were gone. They ascended 300 times on their own!"
+      },
+      "wallMs": 40483
+    }
+  ],
+  "protocolRuntimeErrors": []
+}

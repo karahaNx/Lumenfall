@@ -1,5 +1,12 @@
 # LAB-MOTES-B2-001 — exact quotient on the existing runtime
 
+Current integration (7 October 2026): user-authorized PR57/46 are merged;
+full 146 CI and signed APK 0.1.138 asset/signing checks pass. Required device
+acceptance and independent review remain open. See
+[the integration receipt](FEATURE_BRANCH_INTEGRATION_001.md).
+The checkpoint below is historical; its writer/release holds do not describe
+the current authorized task. Archived originals remain unchanged.
+
 R2 (`3cdebc236e9ee5081a4bca4e323b11f43aa0d46d`) is blocked by Core C-B2
 and QA B2: subtraction of the modulo remainder can round back to damage,
 then rounding the recovered quotient creates an extra safe-integer kill.

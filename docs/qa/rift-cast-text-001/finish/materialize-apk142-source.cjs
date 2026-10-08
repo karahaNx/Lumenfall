@@ -1,0 +1,5 @@
+'use strict';
+// Materialize only the immutable release's web assets for byte-exact verifier replay.
+const fs=require('node:fs'),path=require('node:path'),cp=require('node:child_process'),assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'../../../..'),dest=process.argv[2],commit='ab46c0c7f30667c24325b6271f811b46b159d0d1';assert(dest,'empty destination directory required');const out=path.resolve(dest);fs.mkdirSync(out,{recursive:true});assert.equal(fs.readdirSync(out).length,0,'destination empty');
+const names=cp.execFileSync('git',['-C',root,'ls-tree','-r','--name-only',commit,'--','index.html','fonts','branding'],{encoding:'utf8'}).trim().split('\n');for(const file of names){assert(file==='index.html'||/^(fonts|branding)\/[A-Za-z0-9_./-]+$/.test(file));assert(!file.split('/').includes('..'));const target=path.join(out,file);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,cp.execFileSync('git',['-C',root,'show',commit+':'+file]));}console.log('Materialized '+names.length+' release assets from '+commit+' to '+out);

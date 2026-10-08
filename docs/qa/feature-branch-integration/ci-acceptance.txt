@@ -1,0 +1,255 @@
+2026-10-07T21:55:02.1417504Z ##[group]Run node scripts/verify_apk_identity.cjs --self-test
+2026-10-07T21:55:02.1417955Z [36;1mnode scripts/verify_apk_identity.cjs --self-test[0m
+2026-10-07T21:55:02.2263997Z APK identity verifier self-test passed: missing/invalid APK and all identity mismatch cases were rejected.
+2026-10-07T21:55:02.2348327Z ##[group]Run node tests/tooling/run.cjs
+2026-10-07T21:55:02.2835888Z PASS archive integrity: stored/deflated ZIP CRC, truncation, hash and symlink escape controls
+2026-10-07T21:55:02.3430378Z PASS candidate recovery: 96 exact files/modes, tree 758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef, overwrite and overlap rejection
+2026-10-07T21:55:02.3839152Z PASS package recovery: 66 byte-identical logical payloads
+2026-10-07T21:55:02.5722709Z PASS APK identity: real subprocess arguments, complete identity, wrong signer and tool failure rejection
+2026-10-07T21:55:02.5788940Z PASS Android version support: expected fields and invalid build-number rejection
+2026-10-07T21:55:02.6234170Z Browser smoke test passed: game initialized without uncaught runtime errors at a 390x844 mobile viewport.
+2026-10-07T21:55:02.6436793Z PASS source/smoke gates: missing/duplicate IDs, syntax failure and runtime error rejection
+2026-10-07T21:55:02.6611524Z PASS feature checkpoints: real task links/budget and missing, misplaced, traversal/symlink, broken-link and oversized task rejection
+2026-10-07T21:55:02.6986265Z PASS local server: real requests and traversal/symlink rejection
+2026-10-07T21:55:02.8224668Z ##[group]Run node scripts/ci/validate_source.cjs
+2026-10-07T21:55:03.2988236Z ##[group]Run node tests/behavioral/run.cjs --web-root mobile/www
+2026-10-07T21:55:03.7451671Z Browser identity: { "selected_path": "/usr/bin/google-chrome", "resolved_path": "/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 154.0.8037.97", "version_exitcode": 0, "version_stderr": "" }
+2026-10-07T21:55:03.9727132Z Staged source: { "source_sha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca", "instrumented_sha256": "2bbdb20acbb938e93a4c6f55e4e8e8d16aaeba822196695a520caaae51c562b1" }
+2026-10-07T21:55:04.3718833Z PASS lab-motes-offline-integration
+2026-10-07T21:55:08.7557474Z PASS lab-motes-numerical
+2026-10-07T21:55:13.9306088Z PASS lab-motes-runtime
+2026-10-07T21:55:15.5010420Z PASS lab-motes-conservation
+2026-10-07T21:55:17.2455715Z PASS lab-motes-contracts
+2026-10-07T21:55:18.8737331Z PASS lab-motes-chronology
+2026-10-07T21:55:20.0828669Z PASS lab-motes-ui [320,844,0,0]
+2026-10-07T21:55:20.9717800Z PASS lab-motes-ui [390,844,0,0]
+2026-10-07T21:55:21.8208014Z PASS lab-motes-ui [430,844,0,0]
+2026-10-07T21:55:38.3064628Z PASS lab-motes-native
+2026-10-07T21:55:47.9728657Z PASS lab-motes-reduced-motion
+﻿2026-10-07T21:55:49.1742414Z PASS lab-motes-save-reload
+2026-10-07T21:55:50.3280969Z PASS lab-motes-backup-restore
+2026-10-07T21:55:51.4124267Z PASS lab-motes-recovery
+2026-10-07T21:55:52.4505309Z PASS lab-motes-reset
+2026-10-07T21:59:00.1663369Z PASS offline-catchup-core
+2026-10-07T22:00:27.4571743Z PASS offline-catchup-ui
+2026-10-07T22:01:53.9817109Z PASS offline-catchup-legacy-dom
+2026-10-07T22:01:56.2141127Z PASS nav-workshop-contract
+2026-10-07T22:01:57.8717003Z PASS inquiry-contracts
+2026-10-07T22:01:59.1989249Z PASS inquiry-chronology
+2026-10-07T22:02:00.4646638Z PASS inquiry-ui
+2026-10-07T22:02:02.2729748Z PASS inquiry-ui-reduced-motion
+2026-10-07T22:02:03.3623552Z PASS inquiry-save-reload
+2026-10-07T22:02:04.5026913Z PASS inquiry-backup-restore
+2026-10-07T22:02:06.2922925Z PASS inquiry-recovery
+2026-10-07T22:02:07.5581032Z PASS inquiry-reset
+2026-10-07T22:02:07.8213277Z   raw gate control real-bounded-partial-pass: expected FAIL (0.25s child budget; gate requests 25s)
+2026-10-07T22:02:07.8254876Z   causal negative ignored-timeout: restored partial-PASS acceptance detected; undo rejects it
+2026-10-07T22:02:07.8255888Z PASS raw-process-contract: 31 result controls, real timeout, artifact bounds, two causal negatives/undo
+2026-10-07T22:02:09.0004399Z PASS support-stacking
+2026-10-07T22:02:10.7397212Z PASS auto-ascend-target-contract
+2026-10-07T22:02:12.7483829Z PASS auto-ascend-target-legacy16
+2026-10-07T22:02:14.9873000Z PASS auto-ascend-target-legacy44
+2026-10-07T22:02:16.2600799Z PASS auto-ascend-target-legacy56
+2026-10-07T22:02:17.7550770Z PASS auto-ascend-target-legacy130
+2026-10-07T22:02:19.0665020Z PASS auto-ascend-target-recovery
+2026-10-07T22:02:20.7326268Z PASS auto-ascend-target-resume
+2026-10-07T22:02:22.1193345Z PASS auto-ascend-target-reset
+2026-10-07T22:02:23.4601347Z PASS auto-ascend-target-manual-reload
+2026-10-07T22:02:24.9963209Z PASS auto-ascend-target-cold-resume
+2026-10-07T22:02:31.6694430Z PASS auto-ascend-target-mobile
+2026-10-07T22:02:36.2554858Z PASS auto-ascend-target-reduced-motion
+2026-10-07T22:04:05.8788240Z PASS rift-status-stacking-mobile
+2026-10-07T22:05:13.2486654Z PASS rift-status-stacking-reduced-motion
+2026-10-07T22:05:14.2432392Z PASS support-save-reload
+2026-10-07T22:05:15.3427895Z PASS support-backup-restore
+2026-10-07T22:05:16.3787633Z PASS support-recovery
+2026-10-07T22:05:17.6564392Z PASS support-resume
+2026-10-07T22:05:18.9422404Z PASS support-recovery-resume
+2026-10-07T22:05:19.9906548Z PASS support-visibility-resume
+2026-10-07T22:05:21.0333917Z PASS support-reset
+2026-10-07T22:05:22.1430551Z PASS upgrade-effects-and-deeds
+2026-10-07T22:05:24.6983935Z PASS rift-status-contract
+2026-10-07T22:06:55.0790885Z PASS rift-status-mobile
+2026-10-07T22:08:02.7549560Z PASS rift-status-reduced-motion
+2026-10-07T22:08:02.7824616Z     PASS valid-pass
+2026-10-07T22:08:02.8059327Z     FAIL pass-nonzero
+2026-10-07T22:08:02.8294066Z     FAIL invalid-json
+2026-10-07T22:08:03.3329835Z     FAIL timeout
+2026-10-07T22:08:03.3331013Z PASS forge-ui-process-contract
+2026-10-07T22:08:30.6885914Z PASS forge-ui-mobile
+2026-10-07T22:08:58.2500872Z PASS forge-ui-reduced-motion
+2026-10-07T22:08:59.2334669Z PASS buff-timing
+2026-10-07T22:09:00.5520417Z PASS buff-save-reload
+2026-10-07T22:09:02.3921775Z PASS forge-contracts
+2026-10-07T22:09:03.3093628Z PASS forge-effects
+2026-10-07T22:09:04.4124295Z PASS forge-chronology
+2026-10-07T22:09:05.4235878Z PASS forge-save-reload
+2026-10-07T22:09:06.6285059Z PASS forge-backup-restore
+2026-10-07T22:09:07.9174119Z PASS forge-recovery
+2026-10-07T22:09:08.8267983Z PASS forge-baseline
+2026-10-07T22:09:10.9930511Z PASS forge-balance
+2026-10-07T22:09:12.6988613Z PASS r3-destinations
+2026-10-07T22:09:13.9229712Z PASS r3-save-reload
+2026-10-07T22:09:14.9543522Z PASS research-duration
+2026-10-07T22:09:15.9695362Z PASS research-duration-reduced-motion
+2026-10-07T22:09:16.9478498Z PASS p2-07a-persistence-review
+2026-10-07T22:09:18.0362643Z PASS p2-07a-persist-save-reload
+2026-10-07T22:09:19.1494515Z PASS p2-07a-persist-backup-restore
+2026-10-07T22:09:20.3223456Z PASS p2-07a-persist-recovery
+2026-10-07T22:09:21.4043399Z PASS p2-07a-persist-reset
+2026-10-07T22:09:22.5760263Z PASS p2-07a-formation-reconstruction
+2026-10-07T22:09:23.6765376Z PASS p2-07a-save-reload
+2026-10-07T22:09:24.7677799Z PASS p2-07a-backup-restore
+2026-10-07T22:09:26.0904691Z PASS p2-07a-recovery
+2026-10-07T22:09:27.2598377Z PASS p2-07a-chronology
+2026-10-07T22:09:28.2046123Z PASS layout-p2-07a-reconstruction [360,800,0,0]
+2026-10-07T22:09:29.6093662Z PASS layout-p2-07a-reconstruction [360,780,0,0]
+2026-10-07T22:09:31.0916471Z PASS layout-p2-07a-reconstruction [390,844,0,0]
+2026-10-07T22:09:32.2715902Z PASS layout-p2-07a-reconstruction [412,915,0,0]
+2026-10-07T22:09:33.2106933Z PASS layout-p2-07a-reconstruction [360,640,24,24]
+2026-10-07T22:09:34.4218099Z PASS p2-06b-live-feedback
+2026-10-07T22:09:35.6156055Z PASS p2-06b-reduced-motion
+2026-10-07T22:09:36.6053260Z PASS layout-fresh [360,800,0,0]
+2026-10-07T22:09:37.6445654Z PASS layout-fresh [360,780,0,0]
+2026-10-07T22:09:38.9088749Z PASS layout-fresh [390,844,0,0]
+2026-10-07T22:09:40.0058649Z PASS layout-fresh [412,915,0,0]
+2026-10-07T22:09:41.1733879Z PASS layout-fresh [360,640,24,24]
+2026-10-07T22:09:42.4768370Z PASS layout-dense [360,800,0,0]
+2026-10-07T22:09:43.5282289Z PASS layout-dense [360,780,0,0]
+2026-10-07T22:09:44.6285957Z PASS layout-dense [390,844,0,0]
+2026-10-07T22:09:45.8355558Z PASS layout-dense [412,915,0,0]
+2026-10-07T22:09:47.1432057Z PASS layout-dense [360,640,24,24]
+2026-10-07T22:09:48.2488488Z PASS layout-boss [360,800,0,0]
+2026-10-07T22:09:49.3128701Z PASS layout-boss [360,780,0,0]
+2026-10-07T22:09:50.4931573Z PASS layout-boss [390,844,0,0]
+2026-10-07T22:09:51.7374693Z PASS layout-boss [412,915,0,0]
+2026-10-07T22:09:52.7990177Z PASS layout-boss [360,640,24,24]
+2026-10-07T22:09:53.8529626Z PASS layout-accessibility-states [360,800,0,0]
+2026-10-07T22:09:54.9400964Z PASS layout-accessibility-states [360,780,0,0]
+2026-10-07T22:09:57.7287785Z PASS layout-accessibility-states [390,844,0,0]
+2026-10-07T22:09:58.8593507Z PASS layout-accessibility-states [412,915,0,0]
+2026-10-07T22:10:00.0424270Z PASS layout-accessibility-states [360,640,24,24]
+2026-10-07T22:10:01.0284706Z PASS p1-05-accessibility-baseline
+2026-10-07T22:10:01.9649876Z PASS p1-05-accessibility-contract
+2026-10-07T22:10:03.3553822Z PASS p1-05-control-regressions
+2026-10-07T22:10:04.3236909Z PASS p1-05-reduced-motion
+2026-10-07T22:10:05.1701804Z PASS fresh-load
+2026-10-07T22:10:06.0767593Z PASS midgame-load
+2026-10-07T22:10:07.0715068Z PASS mature-load
+2026-10-07T22:10:07.9906306Z PASS legacy-load
+2026-10-07T22:10:08.8884826Z PASS corrupted-load
+2026-10-07T22:10:09.7456406Z PASS malformed-daily-load
+2026-10-07T22:10:10.6406635Z PASS farm-load
+2026-10-07T22:10:11.7520868Z PASS farm-roundtrip
+2026-10-07T22:10:13.0479121Z PASS enemy-normal-reload
+2026-10-07T22:10:14.0718360Z PASS enemy-boss-reload
+2026-10-07T22:10:14.9312935Z PASS active-studies-load
+2026-10-07T22:10:15.7924541Z PASS auto-ascend-load
+2026-10-07T22:10:16.8693041Z PASS reset-roundtrip
+2026-10-07T22:10:17.8556364Z PASS restore-roundtrip
+2026-10-07T22:10:18.6934026Z PASS malformed-backup-rejection
+2026-10-07T22:10:19.6878319Z PASS recovery-from-corrupt-primary
+2026-10-07T22:10:20.6642680Z PASS unsupported-future-load
+2026-10-07T22:10:22.0601852Z PASS legacy-backup-restore
+2026-10-07T22:10:22.9623017Z PASS future-backup-rejection
+2026-10-07T22:10:23.9702662Z PASS recovery-offline-once
+2026-10-07T22:10:24.8476903Z PASS save-failure-warning
+2026-10-07T22:10:25.8446822Z PASS parity-short
+2026-10-07T22:10:27.7696456Z PASS parity-medium-farm
+2026-10-07T22:10:30.1098633Z PASS p2-07a-farm-retention
+2026-10-07T22:10:30.9989159Z PASS p2-07a-timer-boundary
+2026-10-07T22:10:33.8788668Z PASS parity-long-high-power
+2026-10-07T22:10:34.7783501Z PASS parity-boss-short
+2026-10-07T22:10:35.9151214Z PASS parity-boss-retry
+2026-10-07T22:10:36.8586282Z PASS parity-auto-ascend
+2026-10-07T22:10:37.8253269Z PASS chronology-research-mid-window
+2026-10-07T22:10:38.7055786Z PASS chronology-study-mid-window
+2026-10-07T22:10:39.5836471Z PASS chronology-auto-empower-mid-window
+2026-10-07T22:10:40.4317291Z PASS chronology-auto-ascend-mid-window
+2026-10-07T22:10:41.3239331Z PASS chronology-boss-retry
+2026-10-07T22:10:42.1712000Z PASS chronology-simultaneous-order
+2026-10-07T22:10:43.0327347Z PASS lifecycle-background-resume
+2026-10-07T22:10:44.1556974Z PASS lifecycle-repeated-resume
+2026-10-07T22:10:45.5235187Z PASS lifecycle-cold-restart
+2026-10-07T22:10:46.5674290Z PASS lifecycle-partial-enemy
+2026-10-07T22:10:47.5392994Z PASS lifecycle-boss-background-short
+2026-10-07T22:10:48.8061254Z PASS lifecycle-boss-retry
+2026-10-07T22:10:49.9850913Z PASS lifecycle-auto-ascend
+2026-10-07T22:10:51.4023650Z PASS p2-ascend-integrity
+2026-10-07T22:10:52.5482900Z PASS p2-03b-auto-ascend-integrity
+2026-10-07T22:10:53.7505708Z PASS p2-wisp-progression-pacing
+2026-10-07T22:10:54.8888290Z PASS p2-endgame-currency-utility
+2026-10-07T22:10:55.7983246Z PASS p2-03a-wisp-role-integrity
+2026-10-07T22:10:56.8206023Z PASS p2-03a-wisp-role-integrity-mature
+2026-10-07T22:10:57.7480547Z PASS p2-03a-wisp-role-integrity-endgame
+2026-10-07T22:10:58.9893757Z PASS p2-02a-core-qol
+2026-10-07T22:11:00.3621569Z PASS p2-02b-wisp-hierarchy
+2026-10-07T22:11:01.3568826Z PASS p2-02b-lab-hierarchy
+2026-10-07T22:11:02.3921517Z PASS lifecycle-long-study
+2026-10-07T22:11:03.7114337Z PASS lifecycle-lab-queue
+2026-10-07T22:11:04.9935608Z PASS lifecycle-daily-rollover
+2026-10-07T22:11:05.9331019Z PASS wisp-formula-contract
+2026-10-07T22:11:05.9354381Z Behavioral QA passed: 146 deterministic scenario(s).
+2026-10-07T22:11:05.9534558Z [36;1m  echo "Behavioral harness correctly caught expected failure: $scenario"[0m
+2026-10-07T22:11:06.0242060Z Browser identity: { "selected_path": "/usr/bin/google-chrome", "resolved_path": "/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 154.0.8037.97", "version_exitcode": 0, "version_stderr": "" }
+2026-10-07T22:11:06.0401877Z Staged source: { "source_sha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca", "instrumented_sha256": "2bbdb20acbb938e93a4c6f55e4e8e8d16aaeba822196695a520caaae51c562b1" }
+2026-10-07T22:11:07.0110499Z FAIL self-test-bad-assertion
+2026-10-07T22:11:07.0167141Z Behavioral QA failed: self-test-bad-assertion null
+2026-10-07T22:11:07.0218477Z Behavioral harness correctly caught expected failure: self-test-bad-assertion
+2026-10-07T22:11:07.0822430Z Browser identity: { "selected_path": "/usr/bin/google-chrome", "resolved_path": "/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 154.0.8037.97", "version_exitcode": 0, "version_stderr": "" }
+2026-10-07T22:11:07.1015447Z Staged source: { "source_sha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca", "instrumented_sha256": "2bbdb20acbb938e93a4c6f55e4e8e8d16aaeba822196695a520caaae51c562b1" }
+2026-10-07T22:11:08.1955626Z FAIL self-test-uncaught-error
+2026-10-07T22:11:08.2027883Z Behavioral QA failed: self-test-uncaught-error null
+2026-10-07T22:11:08.2067560Z Behavioral harness correctly caught expected failure: self-test-uncaught-error
+2026-10-07T22:11:08.2699020Z Browser identity: { "selected_path": "/usr/bin/google-chrome", "resolved_path": "/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 154.0.8037.97", "version_exitcode": 0, "version_stderr": "" }
+2026-10-07T22:11:08.2894653Z Staged source: { "source_sha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca", "instrumented_sha256": "2bbdb20acbb938e93a4c6f55e4e8e8d16aaeba822196695a520caaae51c562b1" }
+2026-10-07T22:11:09.2316869Z FAIL self-test-unhandled-rejection
+2026-10-07T22:11:09.2382614Z Behavioral QA failed: self-test-unhandled-rejection null
+2026-10-07T22:11:09.2407896Z Behavioral harness correctly caught expected failure: self-test-unhandled-rejection
+2026-10-07T22:11:09.3010352Z Browser identity: { "selected_path": "/usr/bin/google-chrome", "resolved_path": "/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 154.0.8037.97", "version_exitcode": 0, "version_stderr": "" }
+2026-10-07T22:11:09.3178524Z Staged source: { "source_sha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca", "instrumented_sha256": "2bbdb20acbb938e93a4c6f55e4e8e8d16aaeba822196695a520caaae51c562b1" }
+2026-10-07T22:11:10.2124348Z FAIL self-test-parity-regression
+2026-10-07T22:11:10.2180943Z Behavioral QA failed: self-test-parity-regression null
+2026-10-07T22:11:10.2224789Z Behavioral harness correctly caught expected failure: self-test-parity-regression
+2026-10-07T22:11:10.2820341Z Browser identity: { "selected_path": "/usr/bin/google-chrome", "resolved_path": "/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 154.0.8037.97", "version_exitcode": 0, "version_stderr": "" }
+2026-10-07T22:11:10.2992804Z Staged source: { "source_sha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca", "instrumented_sha256": "2bbdb20acbb938e93a4c6f55e4e8e8d16aaeba822196695a520caaae51c562b1" }
+2026-10-07T22:11:11.1697583Z FAIL self-test-chronology-regression
+2026-10-07T22:11:11.1767551Z Behavioral QA failed: self-test-chronology-regression null
+2026-10-07T22:11:11.1808423Z Behavioral harness correctly caught expected failure: self-test-chronology-regression
+2026-10-07T22:11:11.2408751Z Browser identity: { "selected_path": "/usr/bin/google-chrome", "resolved_path": "/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 154.0.8037.97", "version_exitcode": 0, "version_stderr": "" }
+2026-10-07T22:11:11.2601695Z Staged source: { "source_sha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca", "instrumented_sha256": "2bbdb20acbb938e93a4c6f55e4e8e8d16aaeba822196695a520caaae51c562b1" }
+2026-10-07T22:11:12.1892384Z FAIL self-test-wisp-formula-regression
+2026-10-07T22:11:12.1955144Z Behavioral QA failed: self-test-wisp-formula-regression null
+2026-10-07T22:11:12.2004072Z Behavioral harness correctly caught expected failure: self-test-wisp-formula-regression
+2026-10-07T22:11:12.2587584Z Browser identity: { "selected_path": "/usr/bin/google-chrome", "resolved_path": "/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 154.0.8037.97", "version_exitcode": 0, "version_stderr": "" }
+2026-10-07T22:11:12.2995094Z Staged source: { "source_sha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca", "instrumented_sha256": "2bbdb20acbb938e93a4c6f55e4e8e8d16aaeba822196695a520caaae51c562b1" }
+2026-10-07T22:11:13.1766100Z FAIL self-test-wisp-pacing-regression
+2026-10-07T22:11:13.1829895Z Behavioral QA failed: self-test-wisp-pacing-regression null
+2026-10-07T22:11:13.1873974Z Behavioral harness correctly caught expected failure: self-test-wisp-pacing-regression
+2026-10-07T22:11:13.2447218Z Browser identity: { "selected_path": "/usr/bin/google-chrome", "resolved_path": "/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 154.0.8037.97", "version_exitcode": 0, "version_stderr": "" }
+2026-10-07T22:11:13.2620757Z Staged source: { "source_sha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca", "instrumented_sha256": "2bbdb20acbb938e93a4c6f55e4e8e8d16aaeba822196695a520caaae51c562b1" }
+2026-10-07T22:11:14.1694691Z FAIL self-test-endgame-currency-regression
+2026-10-07T22:11:14.1748207Z Behavioral QA failed: self-test-endgame-currency-regression null
+2026-10-07T22:11:14.1790479Z Behavioral harness correctly caught expected failure: self-test-endgame-currency-regression
+2026-10-07T22:11:14.2383121Z Browser identity: { "selected_path": "/usr/bin/google-chrome", "resolved_path": "/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 154.0.8037.97", "version_exitcode": 0, "version_stderr": "" }
+2026-10-07T22:11:14.2552107Z Staged source: { "source_sha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca", "instrumented_sha256": "2bbdb20acbb938e93a4c6f55e4e8e8d16aaeba822196695a520caaae51c562b1" }
+2026-10-07T22:11:15.1831584Z FAIL self-test-wisp-role-regression
+2026-10-07T22:11:15.1891485Z Behavioral QA failed: self-test-wisp-role-regression null
+2026-10-07T22:11:15.1937502Z Behavioral harness correctly caught expected failure: self-test-wisp-role-regression
+2026-10-07T22:11:15.2549278Z Browser identity: { "selected_path": "/usr/bin/google-chrome", "resolved_path": "/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 154.0.8037.97", "version_exitcode": 0, "version_stderr": "" }
+2026-10-07T22:11:15.2715623Z Staged source: { "source_sha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca", "instrumented_sha256": "2bbdb20acbb938e93a4c6f55e4e8e8d16aaeba822196695a520caaae51c562b1" }
+2026-10-07T22:11:16.2140763Z FAIL self-test-p1-05-selected
+2026-10-07T22:11:16.2211188Z Behavioral QA failed: self-test-p1-05-selected null
+2026-10-07T22:11:16.2245562Z Behavioral harness correctly caught expected failure: self-test-p1-05-selected
+2026-10-07T22:11:16.2831691Z Browser identity: { "selected_path": "/usr/bin/google-chrome", "resolved_path": "/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 154.0.8037.97", "version_exitcode": 0, "version_stderr": "" }
+2026-10-07T22:11:16.3010158Z Staged source: { "source_sha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca", "instrumented_sha256": "2bbdb20acbb938e93a4c6f55e4e8e8d16aaeba822196695a520caaae51c562b1" }
+2026-10-07T22:11:17.3257693Z FAIL self-test-p1-05-focus-return
+2026-10-07T22:11:17.3313645Z Behavioral QA failed: self-test-p1-05-focus-return null
+2026-10-07T22:11:17.3355546Z Behavioral harness correctly caught expected failure: self-test-p1-05-focus-return
+2026-10-07T22:11:17.3937424Z Browser identity: { "selected_path": "/usr/bin/google-chrome", "resolved_path": "/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 154.0.8037.97", "version_exitcode": 0, "version_stderr": "" }
+2026-10-07T22:11:17.4107734Z Staged source: { "source_sha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca", "instrumented_sha256": "2bbdb20acbb938e93a4c6f55e4e8e8d16aaeba822196695a520caaae51c562b1" }
+2026-10-07T22:11:18.3878612Z FAIL self-test-lifecycle-duplicate
+2026-10-07T22:11:18.3943562Z Behavioral QA failed: self-test-lifecycle-duplicate null
+2026-10-07T22:11:18.3972668Z Behavioral harness correctly caught expected failure: self-test-lifecycle-duplicate
+2026-10-07T22:11:18.4004040Z ##[group]Run node scripts/ci/smoke.cjs --install-guard mobile/www/index.html
+2026-10-07T22:11:19.8971319Z Browser smoke test passed: game initialized without uncaught runtime errors at a 390x844 mobile viewport.

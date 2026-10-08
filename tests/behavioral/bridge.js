@@ -1,5 +1,10 @@
 
 var qaLifecycleEvents = [];
+// Fixed-clock UI parity cases measure progression separately from real CPU time.
+// Keep the real simulation budget clock and animation frames unchanged.
+if(window.__lumenfallQaContext.scenario.startsWith('offline-catchup-') && typeof offlineProcessingClock==='function'){
+  offlineProcessingClock = function(){return 0;};
+}
 function qaLifecycleRecord(type,detail){
   qaLifecycleEvents.push({
     type:type,
@@ -9,7 +14,7 @@ function qaLifecycleRecord(type,detail){
 }
 // Resolve only after the real startup completion callback (including its save).
 // This is installed before DOMContentLoaded/init in the throwaway instrumented app.
-if(window.__lumenfallQaContext.scenario==='auto-ascend-target-mobile' || window.__lumenfallQaContext.scenario==='auto-ascend-target-reduced-motion' || window.__lumenfallQaContext.scenario.startsWith('forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('self-test-forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('rift-status-') || window.__lumenfallQaContext.scenario.startsWith('self-test-rift-status-')){
+if(window.__lumenfallQaContext.scenario.startsWith('comet-unlocks-') || window.__lumenfallQaContext.scenario==='lab-motes-runtime' || window.__lumenfallQaContext.scenario==='lab-motes-native' || window.__lumenfallQaContext.scenario==='lab-motes-reduced-motion' || window.__lumenfallQaContext.scenario==='auto-ascend-target-mobile' || window.__lumenfallQaContext.scenario==='auto-ascend-target-reduced-motion' || window.__lumenfallQaContext.scenario.startsWith('forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('self-test-forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('rift-status-') || window.__lumenfallQaContext.scenario.startsWith('self-test-rift-status-')){
   var qaStartupResolve;
   window.__qaForgeStartup={completed:false,callbacks:0,promise:new Promise(function(resolve){qaStartupResolve=resolve;})};
   var qaOriginalPlayStartupIntro=playStartupIntro;
@@ -64,9 +69,92 @@ offlineProgressSteps = function*(){
 };
 
 window.__lumenfallQaBridge = {
+  comet: {render:renderAll,shop:renderShop,cosmetics:renderCosmetics,tab:activateTab,ascend:function(){doAscend(false);},queue:queueCometTrial,cancel:cancelCometTrial},
   offlineTest: {
     seed:function(){return JSON.parse(JSON.stringify(window.__lumenfallQaContext.fixtures['offline-catchup-device'].save));},
     failNext:function(){var original=simulationResolveTimestamp;simulationResolveTimestamp=function(){simulationResolveTimestamp=original;throw new Error('injected offline failure');};}
+  },
+  labMotes: {
+    withHp: function(hp,fn){var original=enemyHpFor;enemyHpFor=function(){return hp;};try{return fn();}finally{enemyHpFor=original;}},
+    naturalDps: function(){return simulationPassiveDps(2000000000000);},
+    numericCosts: function(){return {titan:spiritCost(SPIRITS.find(function(s){return s.id==='titan';})),formation:researchCostForLevels(RESEARCH.find(function(s){return s.id==='formation';}),state.research.formation,1),momentum:nodeCost(NODES.find(function(s){return s.id==='momentum';})),formationStudy:studyCost(LONG_STUDIES.find(function(s){return s.id==='formationstudy';}),state.longStudyLevels.formationstudy),wispAscend:studyCost(LONG_STUDIES.find(function(s){return s.id==='wispascend';}),state.longStudyLevels.wispascend)};},
+    traceFarm: function(fn){
+      var original=simulationApplyFarmPassive,rows=[];
+      simulationApplyFarmPassive=function(seconds,dps,policy,summary){
+        var before=JSON.parse(JSON.stringify(state)),kills=summary.kills,luminous=summary.luminousKills;
+        original(seconds,dps,policy,summary);
+        rows.push({seconds:seconds,damage:dps*seconds,before:before,after:JSON.parse(JSON.stringify(state)),kills:summary.kills-kills,luminous:summary.luminousKills-luminous});
+      };
+      try{return {result:fn(),rows:rows};}finally{simulationApplyFarmPassive=original;}
+    },
+    manual: function(id,speed){return applySpeedTier(id,speed);},
+    direct: function(seconds,kind,start){var result=advanceAuthoritativeTime(seconds,{kind:kind||'live',visual:false,clockStartMs:start||2000000000000,offlineWindowStartMs:start||2000000000000,captureTimeline:true});return {state:JSON.parse(JSON.stringify(state)),summary:result};},
+    withDps: function(dps,fn){var original=simulationPassiveDps;simulationPassiveDps=function(){return dps;};try{return fn();}finally{simulationPassiveDps=original;}},
+    mutate: function(kind){
+      var start=commitStudyStart,plan=studyMotesPlan,boundary=simulationKillsUntilStudyMotes,farm=simulationApplyFarmPassive;
+      if(kind==='double-round')simulationApplyFarmPassive=function simulationApplyFarmPassive(elapsedSec,dps,policy,summary){
+  if(elapsedSec<=0 || dps<=0) return;
+  var damage = dps*elapsedSec;
+  if(damage+SIM_EPS < state.enemyHp){
+    state.enemyHp -= damage;
+    return;
+  }
+
+  var maxHp = state.enemyMaxHp>0 ? state.enemyMaxHp : enemyHpFor(state.depth);
+  var remainingDamage = Math.max(0,damage-state.enemyHp);
+  var additionalKills = Math.floor(remainingDamage/maxHp+1e-12);
+  // Avoid catastrophic cancellation from subtracting a huge kills*maxHp
+  // product from a similarly huge damage value. Modulo preserves the
+  // represented damage remainder directly and is compositional across the
+  // fixed Farm batching boundaries.
+  var leftover = remainingDamage%maxHp;
+  if(leftover<SIM_EPS) leftover=0;
+  if(leftover>=maxHp-SIM_EPS){
+    additionalKills++;
+    leftover=0;
+  }
+
+  simulationBatchFarmKills(1+additionalKills,policy,summary);
+  if(leftover>0) state.enemyHp = Math.max(SIM_EPS,state.enemyMaxHp-leftover);
+};
+      if(kind==='rounded-quotient')simulationApplyFarmPassive=function simulationApplyFarmPassive(elapsedSec,dps,policy,summary){
+  if(elapsedSec<=0 || dps<=0) return;
+  var damage = dps*elapsedSec;
+  if(damage+SIM_EPS < state.enemyHp){
+    state.enemyHp -= damage;
+    return;
+  }
+
+  var maxHp = state.enemyMaxHp>0 ? state.enemyMaxHp : enemyHpFor(state.depth);
+  // Decompose damage before subtracting the partially damaged enemy. This
+  // avoids both a rounded quotient/modulo counting the same boundary twice
+  // and cancellation of a small current HP from a huge damage value.
+  var remainder = damage%maxHp;
+  var kills = Math.round((damage-remainder)/maxHp);
+  // Retain the existing 1e-12 quotient and SIM_EPS HP boundary tolerances,
+  // applying a carry once to this shared decomposition, never twice.
+  if(remainder>=maxHp-SIM_EPS || remainder/maxHp+1e-12>=1){
+    kills++;
+    remainder=0;
+  }
+  var difference = remainder-state.enemyHp;
+  var leftover;
+  if(difference>=-SIM_EPS || difference/maxHp>=-1e-12){
+    kills++;
+    leftover=Math.max(0,difference);
+  } else {
+    leftover=maxHp+ difference;
+  }
+  if(leftover<SIM_EPS) leftover=0;
+
+  simulationBatchFarmKills(kills,policy,summary);
+  if(leftover>0) state.enemyHp = Math.max(SIM_EPS,state.enemyMaxHp-leftover);
+};
+      if(kind==='free-carry')commitStudyStart=function(node){var result=start(node);if(result&&state.studyUseMotes[node.id])findActiveStudy(node.id).speedMult=state.studySpeedTargets[node.id];return result;};
+      if(kind==='fallback')studyMotesPlan=function(node){var result=plan(node);if(result&&state.motes<result.cost){result.target=1.5;result.cost=speedTierCost(1.5);}return result;};
+      if(kind==='batch-end')simulationKillsUntilStudyMotes=function(){return Infinity;};
+      return function(){commitStudyStart=start;studyMotesPlan=plan;simulationKillsUntilStudyMotes=boundary;simulationApplyFarmPassive=farm;};
+    }
   },
   inquiry: {
     nodes: function(){return JSON.parse(JSON.stringify(LONG_STUDIES));},
@@ -589,7 +677,7 @@ window.__lumenfallQaBridge = {
     var aggregate = {
       lumenGained:0,shardGained:0,sigilsGained:0,motesGained:0,
       kills:0,bossKills:0,luminousKills:0,ascends:0,autoTaps:0,
-      empowers:0,researchBought:0,studiesStarted:0,retreats:0,retries:0,
+      empowers:0,researchBought:0,studiesStarted:0,studySpeedPurchases:0,studyMotesSpent:0,retreats:0,retries:0,
       fastForwardedKills:0,iterations:0,retreated:false,
       completedStudies:[],closedStudies:[],achievements:[],ascendGains:[]
     };
@@ -597,7 +685,7 @@ window.__lumenfallQaBridge = {
       [
         'lumenGained','shardGained','sigilsGained','motesGained',
         'kills','bossKills','luminousKills','ascends','autoTaps','empowers',
-        'researchBought','studiesStarted','retreats','retries',
+        'researchBought','studiesStarted','studySpeedPurchases','studyMotesSpent','retreats','retries',
         'fastForwardedKills','iterations'
       ].forEach(function(key){ aggregate[key] += part[key]||0; });
       aggregate.retreated = aggregate.retreated || !!part.retreated;

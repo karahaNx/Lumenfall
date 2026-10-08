@@ -3,10 +3,24 @@
   var fixtures = __QA_FIXTURES_JSON__;
   var params = new URLSearchParams(location.search);
   var scenario = params.get('qaScenario') || '';
+  if(scenario==='offline-catchup-legacy-dom'){
+    // WebView60/61 has no ParentNode.replaceChildren. Exercise real startup,
+    // catch-up and selector rendering without the newer browser convenience API.
+    delete Element.prototype.replaceChildren;
+    // Legacy WebView ignores inset, color-mix and eight-digit hex colors.
+    // Preserve authored fallbacks; test actual return geometry, paint and input.
+    document.addEventListener('DOMContentLoaded',function(){
+      document.querySelectorAll('style').forEach(function(style){
+        style.textContent=style.textContent.replace(/\binset\s*:[^;}]*;?/g,'')
+          .replace(/\bcolor-mix\(/g,'unsupported-color-mix(')
+          .replace(/#[0-9a-f]{8}\b/gi,'unsupported-alpha-hex');
+      });
+    });
+  }
   // Native UI tests hold interval callbacks only across immediate measurements.
   // Keep real input/save handlers, animation frames and the production flags intact.
   var uiMeasurementPaused=scenario.startsWith('offline-catchup-');
-  if(scenario.startsWith('offline-catchup-') || scenario.startsWith('support-') || scenario==='rift-status-contract' || scenario==='auto-ascend-target-mobile' || scenario==='auto-ascend-target-reduced-motion' || scenario.startsWith('forge-ui-') || scenario.startsWith('self-test-forge-ui-') || scenario.startsWith('rift-status-stacking') || scenario.startsWith('rift-status-mobile') || scenario.startsWith('rift-status-reduced') || scenario.startsWith('self-test-rift-status-line')){
+  if(scenario.startsWith('comet-unlocks-') || scenario==='lab-motes-native' || scenario==='lab-motes-reduced-motion' || scenario.startsWith('offline-catchup-') || scenario.startsWith('support-') || scenario==='rift-status-contract' || scenario==='auto-ascend-target-mobile' || scenario==='auto-ascend-target-reduced-motion' || scenario.startsWith('forge-ui-') || scenario.startsWith('self-test-forge-ui-') || scenario.startsWith('rift-status-stacking') || scenario.startsWith('rift-status-mobile') || scenario.startsWith('rift-status-reduced') || scenario.startsWith('self-test-rift-status-line')){
     // Observe actual registered Queue callbacks, without changing event dispatch.
     var realAddEventListener=EventTarget.prototype.addEventListener;
     EventTarget.prototype.addEventListener=function(type,callback,options){

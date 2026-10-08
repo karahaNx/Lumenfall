@@ -1,0 +1,24 @@
+node:internal/assert/utils:77
+    throw err;
+    ^
+
+AssertionError [ERR_ASSERTION]: wall clock jump does not create foreground rewards.shards: 72513842556.39514 vs 72511120956.39514, tolerance 0.07251384255639513
+    at approx (eval at <anonymous> ([stdin]:1:743), <anonymous>:34:99)
+    at compare (eval at <anonymous> ([stdin]:1:743), <anonymous>:36:47)
+    at eval (eval at <anonymous> ([stdin]:1:743), <anonymous>:39:29)
+    at Array.forEach (<anonymous>)
+    at compare (eval at <anonymous> ([stdin]:1:743), <anonymous>:39:18)
+    at eval (eval at <anonymous> ([stdin]:1:743), <anonymous>:64:409)
+    at [stdin]:1:783
+    at runScriptInThisContext (node:internal/vm:219:10)
+    at node:internal/process/execution:451:12
+    at [stdin]-wrapper:6:24 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.19.0
