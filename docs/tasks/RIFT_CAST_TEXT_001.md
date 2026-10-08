@@ -1,108 +1,88 @@
 # RIFT_CAST_TEXT_001 — remove repeated Rift ability status
 
-Status: **complete — integrated, signed APK and required F13 acceptance verified**.
-Owner: this user-created feature chat. One goal: remove repeated visible Cast/Ready
-status from compact Rift Wisp cards, preserving ability names and programmatic status.
-
-## Original requirements and continuation
-
-Original F13:
+Status: **product integrated; required acceptance passed; final delivery PR74 gate/merge pending**.
+Owner: this user-created feature chat. Original F13:
 
 > På rift skærmen skal cast teksten for wisp ability fjernes, der findes progress bar som allerede viser dette.
 
-The [original feature order](RIFT_CAST_TEXT_001_REQUEST.txt) is preserved verbatim.
-On 8 October 2026 the user instructed: **“Finish the task”**. Current
-[feature workflow](../project/FEATURE_WORKFLOW.md) and the
-[accepted workflow replacement](../decisions/2026-10-07-feature-chat-workflow.md)
-authorize this owner to complete implementation, checks, GitHub integration and
-release within this scope. Historical Lead/writer handover gates are superseded;
-no new general approval or separate role chat is required.
+The [original order](RIFT_CAST_TEXT_001_REQUEST.txt) is preserved verbatim; the user
+instructed “Finish the task” on 8 October 2026. Current live-main AGENTS and
+[feature workflow](../project/FEATURE_WORKFLOW.md) supersede historical Lead/writer
+gates. Standing authorization covers implementation, checks, integration and release.
+No subagents, message tools or chat renaming were used.
 
-Authoritative sources read: [full original](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt),
-[F13/dependencies/save requirements](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt),
-[registered decisions](../recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt),
-[findings](../recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/FINDINGS.txt) and
-[image/source index](../recovery/2026-10-07/lead_context/FEEDBACK/Source_Index.txt).
-Original requirements take precedence over suggestions. The supplied screenshots
-show other screens; none directly establishes F13 behavior or an APK/save identity.
+## Sources, baseline and scope
 
-## Baseline, scope and decisions
+Required startup/ownership/Visuals/context documents, original requirements,
+F13/dependency/save revision, Lead decisions, findings and image/source index were
+read. Exact source links and preparation are in [earlier evidence](../qa/rift-cast-text-001/README.md).
+Original requirements take precedence; supplied screenshots do not directly prove F13.
 
-Private checkout: /workspace/lumenfall-rift-cast-text-001, feature/rift-cast-text-001; delivery branch docs/rift-cast-text-001-delivery.
-The original /workspace/Lumenfall checkout was untouched. Preparation history is
-preserved in [earlier evidence](../qa/rift-cast-text-001/README.md).
-Continuation began on main 214d45411ce2fb420f0e4b372063811a967679b1.
-Final application baseline 210005d0ae093d21e846bae41a9bddf25af2800d includes
-PR59 Wisp upgrades, PR60 Forge text and PR61 Bond text. All are preserved.
-PR65 later exports the existing findChrome helper; execution/assertions are unchanged.
-PR46/B2 was checked at startup: integrated via PR57 at 20aaae62a4b6e46f8d75775085918eaba4e8de29.
-No subagents, message tools or chat renaming were used. Current live-main rules
-supersede the historical Lead/writer handover gates; standing approval covers delivery.
+Private checkout /workspace/lumenfall-rift-cast-text-001; product branch
+feature/rift-cast-text-001, delivery branch docs/rift-cast-text-001-delivery.
+/workspace/Lumenfall was untouched. Continuation baseline214d45411ce2fb420f0e4b372063811a967679b1;
+final product baseline210005d0ae093d21e846bae41a9bddf25af2800d preserves PR59/60/61.
+PR46/B2 startup check: integrated via PR57/20aaae62a4b6e46f8d75775085918eaba4e8de29.
+[PR63](https://github.com/karahaNx/Lumenfall/pull/63) integrated F13 at
+ab46c0c7f30667c24325b6271f811b46b159d0d1. PR69/d95205f6d8059933fac74e8699854f67cb950a7e
+Cosmetics preserves byte-identical F13 renderer. Delivery incorporates main
+06f13b820f69e8d93861b562565f7a2a6380b441 Forge/Comet documentation; application,
+tests, rules and workflows are unchanged from tested Cosmetics main.
 
-Only six product lines in renderRiftParty() change: powered cards omit CAST/Ready;
-unpowered Lv 0 stays visible. The existing progressbar retains Wisp/ability name,
-range, true charge and timing. aria-valuetext exposes Ready/Casting without a live
-region and follows the existing cast expiry. Formation ability names, portraits,
-passive power, Bond grouping, fill, VFX/classes and reduced motion remain intact.
-The compact cards previously had no separate visible ability name.
+Only six product lines in renderRiftParty change: omit powered CAST/Ready text,
+retain unpowered Lv0, progressbar ability name/range/charge/timing and expose
+Ready/Casting through aria-valuetext without a live region. Existing expiry,
+Formation names, classes, portraits, passive power, Bond grouping, fill, VFX and
+reduced motion remain. Guidance/Cosmetics selectors are preserved.
 
-Existing Rift assertions and the focused Node driver cover this behavior. A 0.00001
-percentage-point CSS serialization tolerance is limited to displayed width; numeric
-simulation expectations remain unchanged. QA instrumentation is confined to served
-copies or private runtime handles on the isolated emulator; the signed APK is unchanged.
-No gameplay values, deterministic purchases, Luminous Motes rewards, bulk/queue
-handlers, chronology, live/offline policy, save schema/migration, CSS/assets,
-Android package/signing or workflows change. Existing values need no migration.
-Guidance/Cosmetics rendering selectors and classes are preserved; no new design
-choice or unfinished dependent proposal is required for F13.
+No gameplay values, purchases, Luminous Motes rewards, bulk/queue handlers,
+chronology, live/offline, save/migration, CSS/assets, package/signing or workflow
+changes. Existing values need no migration; no missing F13 design decision.
+QA fixtures use served copies/private emulator handles; signed APK unchanged.
+The CSS width tolerance0.00001 percentage points addresses serialization only;
+all numeric simulation assertions remain unchanged.
 
-## Acceptance and delivery evidence
+## Acceptance and evidence
 
-[PR63](https://github.com/karahaNx/Lumenfall/pull/63) merged at
-ab46c0c7f30667c24325b6271f811b46b159d0d1. Integrated application SHA256:
-835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3.
-[Final receipt and raw evidence](../qa/rift-cast-text-001/finish/README.md)
-preserve exact identities, commands, logs and supported limits.
+[Final receipt/raw evidence](../qa/rift-cast-text-001/finish/README.md) records identities,
+commands, diagnostics, limits and review disposition.
 
-| Required criterion | Verified result |
+| Criterion | Verified result |
 | --- | --- |
-| No visible powered uncharged/charging/ready/casting duplicates; Lv 0 retained | Integrated 12-profile/384-observation matrix PASS; baseline-visible and missing-ARIA negative controls caught. |
-| Ability names, true resource/timing, programmatic states, expiry and real casts | Existing Rift checks, V8 6.0 renderer 32 states and native 120 observations including 24 actual casts PASS. Rendering/cosmetic updates remain observer-only. |
-| Mobile widths, large text, 44px controls, focus, contrast and reduced motion | Browser320/390/430px × motion × text profiles and existing accessibility checks PASS. Native three widths, 44px controls, real system font scale 2 (20px), AX progressbar and Android Tab/focus PASS. |
-| Relevant save/recovery, live/offline, chronology and required CI | All12 scoped checks rerun on integration PASS. CI37713097586 on 4452f7ad3b84becda0ec3b028a603566b51cc45d passes 148 defaults,12 required negatives and guarded startup. Integrated application bytes equal the tested head; tooling/source/context also pass. |
-| Signed integrated APK and update acceptance | Build37714666181 publishes 0.1.142; package/version/established cert, release digest, all ZIP CRCs and15 bundled assets PASS. Actual signed 138→142 update preserves storage byte-for-byte and ownership on first launch; native acceptance PASS. |
-| Durable status and owner completion | This task, PROJECT_STATE, immutable APK and raw receipts are saved together in the final GitHub checkpoint. Only this owner chat is eligible for archive after remote verification. |
+| No repeated visible state, names/ARIA/expiry retained | Integrated12 profiles/384 observations; baseline-visible/missing-ARIA causal controls caught. V8 6.0 renderer32 states and existing Rift checks PASS. |
+| Mobile/accessibility/real gameplay | Browser320/390/430 × normal/200% text × motion PASS; 44px controls, focus/contrast checks. Native120 states/24 real casts across three widths, observer-only renders, AX progressbar, font scale2 and real Android Tab/visible outline PASS. |
+| Save/recovery/live/offline/chronology | All12 scoped integrated regressions PASS. Actual signed138→142 update preserves WebView storage byte-for-byte and first-launch Wisp ownership. |
+| Required CI | Original integration CI37713097586:148 defaults/12 negatives/guarded startup PASS. First delivery CI37718210381/head75d7782:151 defaults/12 negatives/guarded startup PASS; full logs saved. Final-head gate required before merge. |
+| Later integration overlap | Cosmetics24 default/equipped profiles/768 observations,12 scoped checks and V8 parser/renderer PASS; later main changes docs only. |
+| Signed APK | Build37714666181:0.1.142, com.lumenfall.app, established signing cert, release digest, ZIP CRCs/all15 assets PASS. [Immutable APK](../../archive/android/rift-cast-text-001/README.md). |
 
-APK SHA256: ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0. Package com.lumenfall.app and the established
-A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21
-certificate are verified. [Immutable APK](../../archive/android/rift-cast-text-001/README.md).
+APK SHA256 ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0;
+its integrated HTML SHA256835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3.
+Current main HTML SHA2565c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c.
+Native acceptance belongs to immutable142; no native143 claim.
 
-## Following Cosmetics integration
+## Review, limits and next action
 
-PR69/d95205f6d8059933fac74e8699854f67cb950a7e merged during verification. F13’s renderer is byte-identical. Current-main24 default/equipped-cosmetic profiles (768 observations), all 12 scoped checks and V8 6.0 parser/renderer checks PASS. [Overlap receipt](../qa/rift-cast-text-001/finish/cosmetics-overlap/receipt.json). Native acceptance belongs to the immutable142 APK; no native143 claim is made.
+Automated review PRRT_kwDOUF0Vls6qK_0e correctly found missing resume binding.
+The helper now hashes actual installed APK bytes, compares the supplied artifact,
+persists source/installed identity and rejects missing/mismatched prior identities
+before importing records. Three causal identity controls PASS. Fresh bound
+138→142 update/120 states/24 casts/AX/font and a separately bound keyboard follow-up
+replace earlier unbound evidence. Android SystemUI's ANR dialog intercepted Tab;
+after dismissing that isolated dialog, APK/source and native input focus were
+reconfirmed and actual Tab/visible outline passed. No oracle weakened.
 
-## Limits and final action
+Unchanged compact five-Wisp name overflow at200% has identical baseline/candidate
+geometry; broader layout acceptance is not claimed. Native checks use isolated
+Android8.1/API27/WebView61.0.3163.98 software emulation; physical WebView60/TalkBack
+are not claimed. V8 6.0 verifies Chrome60 engine generation separately. Native61
+lacks reduced-motion; modern-browser checks cover it. No independent review claim.
+Earlier local browser timeout/native transport/display/segmented runs remain
+historical diagnostics. Other tasks retain their own open acceptance gates.
 
-The unchanged 200% compact five-Wisp name overflow has identical measured geometry
-on latest baseline and candidate; broader layout acceptance is not claimed.
-Native evidence uses isolated Android8.1/API27/WebView61.0.3163.98 software emulation.
-V8 6.0.286.52 parses/executes the product renderer for Chrome60's engine generation;
-exact physical WebView60/TalkBack testing is not claimed. WebView61 does not support
-prefers-reduced-motion; modern-browser checks verify the existing motion contract.
-Self-review and automated checks were performed; no independent review is claimed.
-
-The default local Chromium151 dump-DOM timeout and two native harness failures
-(startup-socket race and Android's minimum physical display size) are retained as
-diagnostics. Corrected transport/display setup preserves all acceptance assertions;
-the fresh bound native run passes the update, all120 observations/24 real casts, AX and font. Android SystemUI's ANR dialog intercepted the final Tab; after dismissing that isolated system dialog, a follow-up reconfirmed actual installed APK bytes and exact product script, then passed real Tab/focus. Earlier unbound segmented evidence is historical. Earlier 146/147 CI receipts are historical.
-
-No required F13 acceptance remains open. Verify the final GitHub checkpoint, stop
-this task's shared-file work, then archive only the calling owner chat via the app
-tool. Other tasks retain their own recorded acceptance. Archive success requires
-an actual tool response; no archive outcome is invented in this document.
-
-## Delivery checkpoint and automated review
-
-PR74 saves the final receipts. Its first gate CI37718210381 on75d7782 passes151 defaults,12 required negatives and guarded startup; full logs/metadata are saved. A new final-head green gate remains mandatory before merge/archive, with its immutable receipt saved in PR74's description.
-
-Automated review PRRT_kwDOUF0Vls6qK_0e correctly identified missing resume identity binding. The helper now hashes actual installed APK bytes, compares the artifact, persists source/installed identity, and rejects missing or mismatched identities before importing records. The fresh bound138→142 update/state/AX/font run and separately bound actual Android keyboard follow-up replace earlier unbound evidence. The isolated Android SystemUI ANR/input-focus diagnostic is retained; acceptance assertions are unchanged. Three causal identity negative controls pass. No independent review is claimed.
+[PR74](https://github.com/karahaNx/Lumenfall/pull/74) saves status, immutable APK and
+raw receipts. Next: pass final-head required CI, resolve the addressed review,
+merge and verify remote main/evidence/source, stop this task's shared-file work,
+then archive only this owner chat. Final immutable CI/merge receipt is saved in
+PR74's description to avoid a self-referential CI commit. Archive success requires
+an actual app-tool response. An open PR is not completed delivery.

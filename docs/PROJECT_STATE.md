@@ -17,6 +17,27 @@ verified; actual138→142 save storage/ownership preserved. [Receipt/limits](qa/
 API27/WebView61 emulation plus a separate V8 6.0 probe; no physical/TalkBack claim.
 
 
+[COMET_UNLOCKS_001 / F27](tasks/COMET_UNLOCKS_001.md) catalog is integrated
+through [PR69](https://github.com/karahaNx/Lumenfall/pull/69),
+merge d95205f6d8059933fac74e8699854f67cb950a7e. Comet Trials140, Rift Trail50
+and Starfall Crest160 replace the purchasable convenience/timecap rows;
+Auto-Ascend100 and old ownership/effects/currencies retain value. Full151
+pre-merge CI37713904342 passed; the latest Rift text combination was reassessed.
+[Post-integration CI37716370065](qa/comet-unlocks-001/post-integration-ci.json)
+passed151 defaults/12 required negatives and all required gates on unchanged
+integrated game/test bytes. [Delivery PR73](https://github.com/karahaNx/Lumenfall/pull/73)
+records final document validation/integration. No independent review claimed.
+
+F27 signed APK **0.1.143**, build37715794487, package com.lumenfall.app,
+established signing identity, is published and downloaded/verified. SHA256
+`45d1032ae6e77362d3540db740c6cfbdc4d275f2e3f6b98f4cecb1229e3205e7`;
+all526 CRC entries and all15 assets match integrated source. Actual extracted
+APK11 Comet cases PASS on V8 6.0.286.52. Exact native WebView60/physical/TalkBack
+acceptance remains OPEN: unrestricted ADB starts, but the isolated API27 emulator
+fails in kernel/init before app installation. F25/F26
+built-in memory/fixed12h retirement/refunds are separate dependencies.
+[143 receipt, immutable APK and remaining checks](qa/comet-unlocks-001/DELIVERY.md).
+
 [BOND_TEXT_001 / F16](tasks/BOND_TEXT_001.md) is integrated via
 [PR61](https://github.com/karahaNx/Lumenfall/pull/61) at210005d0ae093d21e846bae41a9bddf25af2800d:
 full partner names appear in both Formation Bonds views; ability text retains
@@ -54,6 +75,39 @@ Native signed140 final Module purchase/open/focus/Enter/touch folding and save
 purity checks PASS on Android8.1/WebView61. Required physical
 affected-phone/exact WebView60/TalkBack acceptance remains OPEN; this feature/chat
 stays open. [140 receipt, immutable APK and evidence](qa/wisp-upgrade-display-001/delivery-2026-10-08/README.md).
+
+[FORGE_TEXT_001/F23](tasks/FORGE_TEXT_001.md) is integrated via
+[PR60](https://github.com/karahaNx/Lumenfall/pull/60) at
+`e189a3a8aba0c7cc377bad8980c62d75d1279189`: Forge removes the unwanted
+standard text and preserves model-derived levels, prices, effects and caps.
+The integrated tree equals validated head `5c77129`. CI37708469018 PASS 146 default
+scenarios, all 12 required negatives, source/tooling and guarded startup.
+
+Published signed APK **0.1.139**, build37709745605, package `com.lumenfall.app`,
+established signing certificate. Downloaded APK SHA256
+`827d364f7071ab6c32e39ebd6efe3a758fa1741568fc26ca21589aaaace27551` matches
+the release digest. All 526 ZIP entries PASS internal CRC validation; all 15
+bundled game/font/branding assets are byte-identical to integrated source. [Forge source/CI/APK receipts](qa/forge-text-001/2026-10-08/README.md).
+Required physical affected-phone/exact WebView60/TalkBack acceptance remains OPEN;
+FORGE_TEXT_001 and its owner chat stay open. No new gameplay/save migration or
+Swift Recovery cap decision is included.
+
+After parallel PR59 merged, verified signed **0.1.140** (build37710185974) also
+PASS independent identity/digest and internal CRC for all 526 ZIP entries;
+all 15 staged assets are byte-identical to combined main0e9b54c. Forge functions are unchanged and its fresh normal contract PASS.
+[Combined receipt](qa/forge-text-001/2026-10-08/combined-acceptance.json).
+
+After PR61/62/65, main641697e also retains the Forge functions. Fresh normal
+Forge contracts and signed141 identity, internal CRC526 and source-assets15 PASS.
+[Subsequent receipt](qa/forge-text-001/2026-10-08/post-bond-acceptance.json).
+Required physical acceptance stays OPEN.
+
+After PR63/69, main e0fd100 preserves F23. Preview/plan/card-update functions are
+unchanged; the Forge renderer retains the accepted upstream legacy Remember Bulk
+lookup. Fresh exact-source Forge contracts and signed **0.1.143** package/version/
+signer, internal CRC526 and source-assets15 PASS. [Current integrated receipt](qa/forge-text-001/2026-10-08/current-acceptance.json)
+and [archived APK143](qa/forge-text-001/2026-10-08/APK/Lumenfall-0.1.143.apk).
+Required affected-phone/exact WebView60/TalkBack acceptance remains OPEN.
 
 [FEATURE-BRANCH-INTEGRATION-001](tasks/FEATURE_BRANCH_INTEGRATION_001.md) integrates
 repeat paid Lab Study speeds and the exact Number/DataView B2 farm correction
@@ -111,9 +165,11 @@ were recorded as integrated.
 | Work | Evidence/status | Next action within its own task |
 | --- | --- | --- |
 | RIFT_CAST_TEXT_001 / F13 | **Complete.** PR63 integrated; CI148/12 negatives, integrated UI/save/parity/chronology checks and signed 0.1.142 native acceptance PASS. [Task/evidence](tasks/RIFT_CAST_TEXT_001.md). Existing200% name overflow is recorded separately. | Final checkpoint verified, shared-file work stopped; archive only the owner chat using the app tool. |
+| [COMET_UNLOCKS_001](tasks/COMET_UNLOCKS_001.md) / F27 | PR69/main integrated; full151 pre-merge CI and signed143 package/signing/assets/extracted-engine checks PASS. New catalogue140/50/160; legacy value/effects retained. [PR73](https://github.com/karahaNx/Lumenfall/pull/73) records final integrated-source CI. Required native acceptance OPEN. | Complete exact signed143 native update/interaction, physical WebView60 and TalkBack checklist. Keep feature/chat open; F25/F26 retirement/refunds stay separate. |
 | [BOND_TEXT_001 / F16](tasks/BOND_TEXT_001.md) | PR61 integrated; CI148/12 and fresh integrated checks PASS. Signed0.1.141 identity/assets, V8 6.0 helper, native WebView69 presentation and signed update/save-value checks PASS. | Complete [physical affected-phone/WebView60/TalkBack acceptance](qa/BOND_TEXT_001/android/DEVICE_ACCEPTANCE.txt) and save observations in GitHub. Keep owner chat open. |
 | [LAB_EXCLUSIVE_001](tasks/LAB_EXCLUSIVE_001.md) / F29 | [PR62 proposal checkpoint](https://github.com/karahaNx/Lumenfall/pull/62): 9 Labs inventoried, 7 duplicate rows in 6 effect families; exclusive study-work/reservation effects and value-preserving transition proposed. Actual CI/merge/integrated checks are saved in the PR body. No game behavior changed. | Obtain the agreed UPGRADE_IDENTITY_001 Lab effects/currencies/prices/work/unlocks/caps and migration policy. Full feature and chat remain open; proposed values/mechanics are not approved rules. |
 | WISP_UPGRADE_DISPLAY_001 / F04 | [Integrated PR59 and signed140](tasks/WISP_UPGRADE_DISPLAY_001.md); required CI147 scenarios/12 negatives and integrated12 mobile profiles/12,912 assertions PASS. Signed138→140 native save preservation PASS. | Complete and save affected-phone/exact WebView60/TalkBack acceptance. Available implementation/delivery is published; feature/chat remains open. |
+| FORGE_TEXT_001 / F23 | PR60 integrated; verified [APK143 and current-source receipt](qa/forge-text-001/2026-10-08/current-acceptance.json), with [archived signed binary](qa/forge-text-001/2026-10-08/APK/Lumenfall-0.1.143.apk). Earlier139/140/141 remain historical. Full feature146 CI and current Forge contracts PASS. | Run affected-phone/exact WebView60/TalkBack checks on archived APK143; save versions/results and keep this owner chat open pending acceptance. |
 | FEATURE-CHAT-WORKFLOW-001 | Current docs/context-tooling cleanup; see task for publication/integration receipt. | Verify document/tooling checks and GitHub integration; no game build. |
 | OFFLINE-CATCHUP-001 | PR51/54/55/56 integrated; signed137 verified, available source/engine/emulator checks PASS. Required physical acceptance OPEN. | Run remaining affected-phone/exact WebView60/TalkBack checklist and save results in GitHub. Keep feature/chat open. |
 | FEATURE-BRANCH-INTEGRATION-001 / LAB-MOTES | PR57/46 merged; full 146 CI and signed 0.1.138 asset/signing verification PASS. Required device acceptance OPEN. | Complete affected-phone/exact WebView60/TalkBack acceptance and any required independent review. Keep task/chat open. |

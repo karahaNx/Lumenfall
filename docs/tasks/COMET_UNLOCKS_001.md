@@ -1,7 +1,7 @@
 # COMET_UNLOCKS_001 — exclusive Comet unlocks
 
-Status: **catalog candidate passed full CI; combined-main CI, integration and
-required device acceptance pending**.
+Status: **catalog integrated in main and signed APK143 published/verified;
+required native/device acceptance remains OPEN**.
 Owner: this COMET_UNLOCKS_001 featurechat. No subagents or message tools.
 
 ## One goal and authorization
@@ -101,22 +101,32 @@ Full pre-merge CI [run37711556550](https://github.com/karahaNx/Lumenfall/actions
 passed on `efb5bc97ff1cb58d63342dfc42319579510c1ebb`: all150 default scenarios,
 required negative controls, tooling, identity self-test and browser smoke.
 Product source SHA256 `7771f36a0b111c5dd229a686783c125a404c2992fd081064ac2f1a106303c4d6`.
-This precedes the latest Bond combination; rerun all gates on the combined head.
+Combined151-scenario CI37713904342 passed on a7a5bc3. Then mainfe52747 added
+Rift Cast/Ready text changes; the local combination passed core/V8 and six
+supplementary mobile profiles. Its full tree equals actual PR69 integration.
 The [implementation evidence](../qa/comet-unlocks-001/IMPLEMENTATION.md) records
 12 supplementary mobile/text/motion profiles and their strict limitations.
 
 Changes: `index.html`, focused core/native UI checks and their registration,
 explicit additive-save assertions in the existing offline/endgame checks,
 task/request/design and evidence. GitHub: [PR69](https://github.com/karahaNx/Lumenfall/pull/69),
-attached to this chat. No main integration, APK/device completion or independent
-review claimed. Current overlapping drafts include Ascension caps (PR66), a
+attached to this chat. PR69 merged at d95205f6d8059933fac74e8699854f67cb950a7e.
+Signed143 run37715794487 and downloaded package/version/signing/526CRC/15asset
+checks passed; extracted APK11 Comet cases pass on V8 6.0.286.52.
+See the [delivery receipt](../qa/comet-unlocks-001/DELIVERY.md), exact signed APK
+and remaining native checklist. Android build checks source/smoke/identity;
+[post-integration CI37716370065](../qa/comet-unlocks-001/post-integration-ci.json)
+passed151 defaults/12 required negatives and all required gates on unchanged
+integrated game/test bytes. [Delivery PR73](https://github.com/karahaNx/Lumenfall/pull/73)
+records the final documentation validation head/run/result in its body. No independent review
+or native device completion claimed. Current overlapping drafts include Ascension caps (PR66), a
 broad feedback candidate (PR67) and Wisp roles (PR70). Do not absorb their scope;
 recheck main and serialize integration. Full offline retirement/refunds remain
 outside the current catalog integration until the dependency decision arrives.
 
 ## Next action
 
-Push the combined candidate and run required CI. Review the full diff, integrate
-serially, verify integrated checks and the signed published APK, then save a
-delivery receipt in this task and PROJECT_STATE. Keep the chat open while
-required device acceptance or the wider F25/F26 transition remains incomplete.
+Publish/integrate this delivery checkpoint after its final required CI;
+preserve all other owners' status. Complete the exact signed143 native/device
+checklist when device access is available. Keep this owner chat open while
+required acceptance is incomplete; F25/F26 remain separate dependencies.

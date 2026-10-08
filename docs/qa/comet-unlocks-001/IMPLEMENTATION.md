@@ -3,7 +3,9 @@
 Candidate code is in PR69; original baseline main214d454, rebased onto
 main0e9b54c (PR59/60). Product code checkpoint f329600; subsequent commits
 update test expectations and measurement timing only. Required CI must pass
-on the final candidate, and integrated app acceptance remains outstanding.
+on the final candidate. Catalog is now integrated via PR69 and signed143
+published/verified; required native/device acceptance remains outstanding.
+Current [delivery receipt](DELIVERY.md) supersedes candidate-only status below.
 
 Pre-merge [run37711556550](https://github.com/karahaNx/Lumenfall/actions/runs/37711556550)
 completed successfully on efb5bc97ff1cb58d63342dfc42319579510c1ebb:
