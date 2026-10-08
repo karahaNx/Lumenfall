@@ -1,8 +1,8 @@
 # LAB_UI_001 validation
 
 Current candidate includes main14d5f3a3a78fe8b63cfa5544efc54f41217b65a5.
-`latest/` binds renewed results to product SHA256
-792f148fb190241127f0b16f50edf94660ae86ecb72b52abaa74b6bf9cd6ac13.
+`complete-controls/` binds renewed results to product SHA256
+0e1c36dceab95feffd1378b8ef179cb564d4a1aa0ab84f4734af49a1b820821b.
 All 12 browser/text/motion profiles, 19 existing regressions, actual V8 6.0,
 tooling and ES2017/unchanged-authority checks pass on these bytes. Non-presentation
 game statements and the native bridge match this current main exactly.
@@ -26,6 +26,13 @@ then `node docs/qa/LAB_UI_001/source-check.cjs /tmp/lab-base.html`.
 offline/refund migration, Forge bulk memory and stable Rift guidance. Preserve
 them; the only product merge conflict kept the12h footer and compact queue copy.
 Authority/native bridge match latest main; no new migration/gameplay logic here.
+`latest/` retains its792f148 checkpoint. Completion restoration now covers the
+whole disappearing Study card: opener, tier, queue switch, select and Close.
+Each fixture verifies its target is visible and actually focused before real
+authoritative completion; preserved-card focus survives another render. All12
+profiles/19 regressions/V8/public source proof pass. Old-source queue focus failure
+is retained with verified fixture preconditions. The native APK driver includes
+these same five authoritative completion positions for post-integration checks.
 
 [RESULTS.json](RESULTS.json) is historical candidate evidence for source SHA256
 efd89f017cf118c0febb90b4d6952b8993d3d43ce558f6312ddb682844c3c935.

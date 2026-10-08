@@ -62,7 +62,7 @@ native update. Record physical/WebView60/TalkBack observations/limits honestly.
 
 [QA checkpoint](../qa/LAB_UI_001/README.md) binds every source/stage. Renewed12
 profiles/19 regressions/V8 6.0/authority/ES2017 pass. Automated ARIA/hash/Begin/
-retired-focus/parser findings fixed; old-source failures retained. Real Enter,
+all-control-focus/parser findings fixed; old-source failures kept. Real Enter,
 retired completion/rerender focus pass. Visible Rift selectors retain real-touch
 viewport/hit assertions. No independent review claimed. All173/17 CI gates kept.
 Android27/WebView61 emulator has attested signed143 save prepared: level2/paid3x,

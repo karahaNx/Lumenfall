@@ -87,12 +87,16 @@ window.runLabUiQa = function(b,ctx,assert){
   q('[data-speed-study="guardmastery"][data-speed="2"]').focus();b.inquiry.tail(.1);b.renderLayout();
   ok(!b.getState().activeStudies.length&&document.activeElement.dataset.studyDetails==='guardmastery','completion leaves focus on the same Study opener');
   ok(!q('[data-study-inspection="guardmastery"] [data-speed-study]'),'completed record cannot be bought again');
-  close();var legacy=seed();legacy.longStudyLevels.riftattune=2;legacy.activeStudies=[{id:'riftattune',remainingSec:.1,totalDurationSec:150,speedMult:2}];install(legacy);
-  q('[data-study-details="riftattune"]').click();q('[data-speed-study="riftattune"][data-speed="3"]').focus();
-  b.inquiry.tail(.1);b.renderLayout();
-  ok(b.getState().longStudyLevels.riftattune===3&&!b.getState().activeStudies.length,'retired paid work earns its last level');
-  ok(document.activeElement.dataset.legacyUpgrade==='riftattune'&&document.activeElement.getClientRects().length,'retired completion focuses the visible preserved card');
-  b.renderLayout();ok(document.activeElement.dataset.legacyUpgrade==='riftattune','preserved card focus survives rendering');
+  ['[data-study-use-motes="riftattune"]','[data-study-details="riftattune"]','[data-speed-study="riftattune"][data-speed="3"]','[data-study-speed-target="riftattune"]','[data-study-speed-close="riftattune"]'].forEach(function(control){
+    close();var legacy=seed();legacy.longStudyLevels.riftattune=2;legacy.studyUseMotes.riftattune=false;legacy.activeStudies=[{id:'riftattune',remainingSec:.1,totalDurationSec:150,speedMult:2}];install(legacy);
+    if(q('[data-study-inspection="riftattune"]').hidden)q('[data-study-details="riftattune"]').click();
+    var target=q(control);ok(target.getClientRects().length,'retired focus fixture visible '+control);target.focus();
+    ok(document.activeElement===target,'retired focus fixture actually focused '+control);
+    b.inquiry.tail(.1);b.renderLayout();
+    ok(b.getState().longStudyLevels.riftattune===3&&!b.getState().activeStudies.length,'retired paid work earns its last level');
+    ok(document.activeElement.dataset.legacyUpgrade==='riftattune'&&document.activeElement.getClientRects().length,'retired completion focuses preserved card from '+control);
+    b.renderLayout();ok(document.activeElement.dataset.legacyUpgrade==='riftattune','preserved card focus survives rendering');
+  });
   close();install(seed());fit();
   return {checks:checks,progress:records};
 };

@@ -6457,6 +6457,8 @@ function closeStudySpeed(id){
   if(opener) opener.focus();
 }
 function renderLongStudies(){
+  var focusedCard=document.activeElement && document.activeElement.closest('[data-running-study],[data-study-card]');
+  var focusedStudy=focusedCard && (focusedCard.getAttribute('data-running-study') || focusedCard.getAttribute('data-study-card'));
   var focusedLegacy=document.activeElement && document.activeElement.getAttribute('data-legacy-upgrade');
   var focusedBegin=document.activeElement && document.activeElement.getAttribute('data-study');
   var focusedSpeed=document.activeElement && document.activeElement.getAttribute('data-speed-study');
@@ -6530,13 +6532,15 @@ function renderLongStudies(){
     var beganOpener=els['study-list'].querySelector('[data-study-details="'+focusedBegin+'"]');
     if(beganOpener) beganOpener.focus();
   }
-  // Keep an available tier focused through updates. When buying/completing removes
-  // that action, return to this Study's visible opener with its panel still open.
-  if(focusedSpeed){
+  // Keep available panel controls focused. If completion removes the panel or a
+  // purchase disables its tier, restore a visible target for the same Study.
+  if(focusedSpeed || focusedStudy){
     var sameTier=els['study-list'].querySelector('[data-speed-study="'+focusedSpeed+'"][data-speed="'+focusedTier+'"]');
-    if(!sameTier || sameTier.disabled){
-      var speedFocus=els['study-list'].querySelector('[data-study-details="'+focusedSpeed+'"]') ||
-        els['study-list'].querySelector('[data-legacy-upgrade="'+focusedSpeed+'"]') || document.getElementById('study-choices');
+    var cardRemoved=focusedStudy && !els['study-list'].querySelector('[data-running-study="'+focusedStudy+'"],[data-study-card="'+focusedStudy+'"]');
+    if(cardRemoved || (focusedSpeed && (!sameTier || sameTier.disabled))){
+      var restoreStudy=focusedStudy || focusedSpeed;
+      var speedFocus=els['study-list'].querySelector('[data-study-details="'+restoreStudy+'"]') ||
+        els['study-list'].querySelector('[data-legacy-upgrade="'+restoreStudy+'"]') || document.getElementById('study-choices');
       if(speedFocus){speedFocus.tabIndex=speedFocus.tagName==='BUTTON'?0:-1;speedFocus.focus();}
     }
   }
