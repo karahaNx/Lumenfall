@@ -1,8 +1,8 @@
 # F21 implementation and verification
 
 Current source SHA256:
-`385945532d38ca4d3696c906203267ded7281a8e87a3ec69f66f7c901f908a58`.
-Baseline main:06b28d5e80269dc5c8a609540bc75e27c842da4b.
+`175f70131bd38a0b3633471851b5c0f7e5b2aead0e685c75a5f06b03a4d5419f`.
+Baseline main:3f1b6faf9f253e6dfe8a3bf408e7f7a9891ca52d.
 [Task](../../../tasks/CHEAPER_BONDS_CAP_001.md) · [Design/review](DESIGN.md).
 Self-review and automated PR review are distinguished; no independent Core/QA claim.
 
@@ -73,3 +73,10 @@ Final required CI must run again on the combined PR66/main source. The shared
 getNodeBuyPlan retains all upstream guards and adds the exact Prism payment plan.
 QA clicks resolve real catalog nodes; a forged catalog object is separately
 rejected. Native QA resolves the same nodes without modifying APK product bytes.
+
+CI37756169423 passed all176 scenarios,553 F21 assertions,10 F21 controls,
+17 harness negatives and runtime/source/tooling gates on38594553 source.
+Before integration, main moved to3f1b6fa (Lab UI/upgrade identity/loadout delivery).
+It merges cleanly;553 focused assertions pass on175f7013 combined source.
+New full CI is required before integration. Earlier individual Tree/clarity/
+chronology/negative reports identify their own hashes; final CI covers new bytes.

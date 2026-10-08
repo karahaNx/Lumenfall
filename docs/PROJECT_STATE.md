@@ -9,6 +9,14 @@ commits below are observed checkpoints, not a promise that main never advances.
 
 ## Product and release evidence
 
+[LOADOUT_MEMORY_001 / F25](tasks/LOADOUT_MEMORY_001.md) integrated through
+[PR78](https://github.com/karahaNx/Lumenfall/pull/78)/9c19664: automatic Forge
+preference, no named shop, legacy value retained. CI173/17 and APK150 signed
+identity/15 assets/extracted V8/1139 checks/native input/restart/upgrade PASS.
+Corrected app-private database capture supersedes invalid shell-error hashes.
+F26 refunds remain separate; PR97 final combined CI/integration pending.
+Owner chat stays open until final acceptance/evidence are saved.
+
 [RIFT_GUIDANCE_001 / F07](tasks/RIFT_GUIDANCE_001.md): stable guidance below
 currencies with Show hints/Hide hints is being published on its isolated branch.
 Rebased onto main b0537cb with integrated F13/F27 preserved. Fresh local160
@@ -16,6 +24,13 @@ measurements/0px shift, focus/AX/reload/save purity and Rift/navigation/F13 chec
 PASS; required PR CI, main integration and signed APK/native acceptance pending.
 [8 October evidence](qa/rift-guidance-001/2026-10-08/README.md). This owner chat
 remains open until required acceptance is saved.
+
+[UPGRADE_IDENTITY_001/F29](tasks/UPGRADE_IDENTITY_001.md) is integrated via PR90/31eccfb:
+14 buying tracks at integration, unchanged currencies and all24 historical levels.
+Subsequent F26/PR85 retires/refunds Deep Reserves: current tracks Lab6/Forge4/Tree3.
+PR90 CI167/17 and combined19 scoped scenarios/23 runs PASS. Signed APK148/151
+identity/CRC526/all15 assets and actual V8 value/offline probes PASS. [Evidence/immutable APKs](qa/upgrade-identity-001/2026-10-08/README.md).
+Required affected-phone/exact WebView60/TalkBack acceptance is OPEN; chat stays open.
 
 F13 delivery added 8 October 2026: [RIFT_CAST_TEXT_001](tasks/RIFT_CAST_TEXT_001.md)
 is complete via PR63/ab46c0c. Full CI151 scenarios/12 required negatives, integrated
@@ -160,7 +175,7 @@ were recorded as integrated.
 
 | Work | Evidence/status | Next action within its own task |
 | --- | --- | --- |
-| [CHEAPER_BONDS_CAP_001 / F21](tasks/CHEAPER_BONDS_CAP_001.md) | Candidate:40% price factor/60% discount before rounding; cap20; exact original-Prism refund/raw history. Local553 assertions/12 mobile profiles,11 causal controls,155 combined Tree checks and V8 PASS. [Evidence](qa/cheaper-bonds-cap-001/finish/README.md). | Final CI, integration and signed APK/native acceptance pending. PR66 contract retained; PR67 separate. |
+| [CHEAPER_BONDS_CAP_001 / F21](tasks/CHEAPER_BONDS_CAP_001.md) | Candidate:cap20,40% factor/max60% discount before rounding; original Prisms/raw history retained.553 focused checks/V8 PASS. [Evidence](qa/cheaper-bonds-cap-001/finish/README.md). | Prior full CI passed; latest main combined, new CI/integration/APK/native pending. |
 | [OFFLINE_12H_001 / F26](tasks/OFFLINE_12H_001.md) | PR85 integrated; common12h and original-currency refund ledger. Signed150 identity/15 assets PASS; native144→150 migration/save slots PASS. [Evidence](qa/offline-12h-001/README.md). | Finish native cap/UI/focus checks and combined integrated CI; save final status. Owner chat OPEN. |
 | [RESONATE_CLARITY_001 / F06](tasks/RESONATE_CLARITY_001.md) | PR80/main e2f745c implemented; signed APK146 package/signing/15 assets/extracted-browser/V8 checks PASS. Full159 scenarios/14 negatives PASS on exact APK146 source; fresh integrated UI/economy/save/recovery PASS. | Complete [physical WebView60/native large-text/TalkBack acceptance](qa/resonate-clarity-001/integration-2026-10-08/DEVICE_ACCEPTANCE.txt). Game update delivered; feature/chat OPEN. |
 | [AUTO_ASCEND_UI_001 / F01–F03](tasks/AUTO_ASCEND_UI_001.md) | Deeds unlock retained; one Rift dropdown and separate ON/OFF moved to Ascend. Candidate checks PASS:23 scoped positives/five negatives,20 mobile/text/motion profiles and54 V8 6.0 handler assertions. [Evidence](qa/auto-ascend-ui-001/README.md). | Publish/pass required CI/integrate; verify signed APK and required native/device acceptance. Feature/chat OPEN. |

@@ -29,7 +29,7 @@ window.runResearchDurationQa = function(b,ctx,assert){
   [1,1.5,2,3,4,5,6,7,8].forEach(function(speed){
     ok(t.remaining({remainingSec:285129*speed,speedMult:speed})==='3d 07h 12m 09s remaining · '+speed+'x','authoritative remaining / speed '+speed);
   });
-  ok(t.remaining({remainingSec:0,speedMult:1})==='Finishing…','pending zero never claims completion');
+  ok(t.remaining({remainingSec:0,speedMult:1})==='Finishing… · 1x','pending zero never claims completion and retains speed');
   ok(t.remaining({remainingSec:0.001,speedMult:8})==='1s remaining · 8x','positive fraction rounds up');
   ok(t.remaining({remainingSec:Number.MIN_VALUE,speedMult:8})==='1s remaining · 8x','underflow never claims zero');
   [NaN,Infinity,-Infinity,-1,undefined,null,'729',{}].forEach(function(v){
@@ -75,7 +75,7 @@ window.runResearchDurationQa = function(b,ctx,assert){
   // Pending versus complete is decided by the real simulation, never UI time.
   seed.activeStudies[0].remainingSec=0;b.setState(seed);b.renderLayout();
   before=b.getState();t.update();same(b.getState(),before,'zero-pending render does not complete state');
-  ok(document.querySelector('[data-study-text="guardmastery"]').textContent==='Finishing…','active zero is still pending in the rendered card');
+  ok(document.querySelector('[data-study-text="guardmastery"]').textContent==='Finishing… · 1x','active zero is still pending in the rendered card');
   b.feedbackTick(true);
   ok(!b.getState().activeStudies.length && b.getState().longStudyLevels.guardmastery===1,'authoritative tick commits completion');
   ok(!document.querySelector('[data-study-text="guardmastery"]'),'committed completed study leaves running UI');

@@ -127,3 +127,10 @@ records resolved browser/protocol identity and stderr, waits for the browser
 version handshake and allows30s protocol startup. Assertions are unchanged;
 this scoped delivery fix diagnoses/handles cold browser startup without skipping
 the new required gate. Native input/product bytes remain unchanged.
+
+Main3f1b6fa integrates Lab UI, upgrade descriptions and loadout acceptance.
+Their product changes merge without conflicts; all553 F21 assertions pass on
+175f7013 combined source. CI37756169423 passed all gates on the preceding
+source; required CI is rerun for this final main combination. No assertion or
+upstream gate is removed. The growing shared startup requires a shorter F21
+task index; the complete decisions, requirements and raw evidence stay linked.

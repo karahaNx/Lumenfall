@@ -1,90 +1,56 @@
-# UPGRADE_IDENTITY_001 — exclusive upgrade ownership (F29)
+# UPGRADE_IDENTITY_001 — exclusive upgrades (F29)
 
-Owner: this feature chat. Status: implementation in progress; not complete.
-
-Original [request](UPGRADE_IDENTITY_001/USER_REQUEST.txt) delegates the common
-matrix, duplicate decisions, stacking and purchased-level value policy.
+Owner: this feature chat. Integrated; required native/device acceptance OPEN.
 [Original feedback](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt)
-has precedence over proposals. The [correction](UPGRADE_IDENTITY_001/USER_CORRECTION.txt)
-requires unchanged Workshop currencies. On 2026-10-08 the user instructed:
-“Finish the feature task push to github implement to game”.
+and [user request](UPGRADE_IDENTITY_001/USER_REQUEST.txt): common Lab/Forge/Tree
+effect/currency matrix, duplicate decisions, stacking and bought-level value.
+[Correction](UPGRADE_IDENTITY_001/USER_CORRECTION.txt): Workshop currencies stay.
+8 October: “Finish the feature task push to github implement to game”.
 
 ## Baseline and scope
 
-Private checkout /workspace/Lumenfall-upgrade-identity-001, branch
-feature/upgrade-identity-001, product baseline main
-b0537cb46635555ba2c2e5f3f95bc8fc276aeda5. Rebased through261b1b7 (PR77 Backup UI) onto main
-4ff0ae3025a6e57ba3332280f3db6f65bf5ddf4b (Formation Autosave/Backup receipt).
-Both test registrations and all17 required negatives are retained. Earlier proposal was rebased;
-[historical proposal](UPGRADE_IDENTITY_001/PROPOSAL_2026-10-07.txt) and old checks
-remain historical. PR46/B2 is integrated via PR57, not a current gate. Live rules
-assign implementation/delivery to this chat. No subagents/message tools used.
+Private `/workspace/Lumenfall-upgrade-identity-001`, branch `feature/upgrade-identity-001`.
+[PR90](https://github.com/karahaNx/Lumenfall/pull/90)
+merged31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6 including late PR84 Auto-Ascend.
+Delivery PR93: docs/artifacts only, rebased onto ac0d28e589bd1caef4b9c70f2383a8b3ee384acd,
+preserves F07/F25/F26/F14/Tree66; PR46/B2 merged via57. No subagents/messages.
+[Original baseline/proposal](UPGRADE_IDENTITY_001/PROPOSAL_2026-10-07.txt).
+Scope: ownership/purchase eligibility/legacy UI/Deeds/clock fixes.
+Preserve prices/work/rounding, deterministic purchases/Motes,
+save/recovery, WebView60, com.lumenfall.app and signing.
 
-Overlapping open drafts: PR66 Tree caps, PR67 feedback bundle, PR70 Wisp roles.
-Do not overwrite/merge their work. Recheck main before integration. Lab PR62 and
-Forge PR64 are proposals, not agreed product numbers.
+## Decisions and dependencies
 
-Change the common contract, purchase/queue eligibility, legacy presentation and
-necessary Deed continuity, with focused tests/evidence. Retain existing currency
-recipes, prices, work, unlocks, effects and rounding on retained tracks. No new
-numerical tuning, speculative mechanics or F18/F19/F26 balance changes. Deep
-Reserves stays until its separate offline-cap transition.
+[Matrix](UPGRADE_IDENTITY_001/MATRIX.md): fuse ten duplicate buying tracks into
+verified existing effects; fourteen remained at PR90. Lab owns damage/kill
+research/Motes/work; Forge ability charge/damage/cast resources/encounter chance;
+Tree Ascend/offline/recruitment. All24 raw IDs/operands/order stay. Old bonuses
+are read-only; no F29 refund/conversion/ledger/schema bump.
+Closed starts cannot spend; old ON queues stay inert. Paid closed Studies finish
+once with original work/speed/Mote intent; backup/recovery remain idempotent.
 
-The final [24-row contract](UPGRADE_IDENTITY_001/MATRIX.md) records all effects,
-recipes, dispositions, stacking, paid-work/Inquiry/Deed value and dependencies.
+Deed credit/683-Comet pool stay; Every Path targets five retained original Studies.
+Slots2/3/4/5 at Rift1/40/60/90; Inquiry reduction/rounding/paid snapshots
+stay. Forge20/60 remain reachable through charge. Two PR70/7284cf7 clock fixes
+resolve the2s Farm stall.
 
-## Decisions and acceptance
+F26/85 retires/refunds Reserves in original currencies, idempotent schema2:
+Lab6/Forge4/Tree3 remain. Shared12h replaces the Study-only tail; old Lab rate stays.
+F25/78 remembers bulk without purchase ownership.
+PR66 caps Echo6/Bonds20 and enforces exact Prism debits, preserving old raw levels.
+PR89 refunds/naming, PR88 charge cap and Lab62/Forge64 proposals stay separate.
 
-Fuse ten duplicate purchase tracks into existing owners: Lab owns passive/tap
-damage and kill Lumen/Shards; Tree owns Prisms/offline rate. Forge retains charge,
-damaging abilities, Gale/Thorn cast resources and future Luminous chance. Lab
-retains Mote yield/Inquiry. Tree retains recruitment discount/Deep Reserves.
-Yield, chance and cast rewards are distinct events.
+## Acceptance and next action
 
-Keep all 24 raw IDs and exact existing formula operands/order. Closed rows become
-visible legacy contributions: no refund, conversion, invented destination levels
-or repeated bonus. Direct/bulk/queued starts reject without spending. Paid
-Studies finish and earn once, keeping work/paid speed. No schema bump needed;
-normalization/backup/recovery remain idempotent.
+Check purchases/queues/old values/paid completion, Deeds/slots/Inquiry,
+chronology/live/offline/save/recovery/Ascend;
+UI320/390/430px,200% text,44px controls, focus/contrast/reduced motion.
+[Receipts](../qa/upgrade-identity-001/2026-10-08/README.md): CI37740566328 PASS167
+scenarios/17 negatives/all gates; integrated19/23 and Auto-Ascend mobile PASS.
+Signed148/151 identity/digest/CRC526/all15 assets, extracted19/23 and V8129+8h
+PASS. Version-bound evidence stays historical. Self-review only.
+PR93 body records current full CI/head/outcome and final integrated checks.
 
-Original earned Deeds/reward pool and original totals stay. Every Path Studied
-targets the five remaining original buyable Studies; Inquiry excluded. Old rows
-keep First Discovery/Devoted Scholar credit. Preserve slots at Rift 1/40/60/90
-independently of visible choices. Inquiry keeps purchased reduction/rounding on
-all retained targets; existing work snapshots unchanged. Forge 20/60 original
-level thresholds remain reachable via uncapped Swift Recovery; old credit stays.
-
-Acceptance: authoritative direct/queue/bulk rejection; exact old factors and
-currencies; paid completion once; fresh Deed reachability; unchanged slots,
-Inquiry/speed semantics; live/offline chronology; save/reload/backup/recovery and
-Ascend; UI 320/390/430px, large text, >=44px controls, focus/contrast/reduced motion.
-Required CI/integrated checks, signed APK/package com.lumenfall.app/established
-signing, WebView60 and native/device acceptance. Required missing device checks
-keep this open.
-
-## Checks and continuation
-
-Historical baseline: nine Forge/Inquiry/save/UI scenarios passed on earlier main;
-one animated 43.9969px mobile run failed, retry passed. These do not validate
-implementation. See historical proposal/evidence.
-
-Candidate implemented in index.html; common contract in MATRIX.md; eight new
-behavior scenarios and three causal negatives added. Existing UI/chronology tests
-now exercise retained charge (closed paths have dedicated rejection coverage).
-Focused contract, paid chronology, three real persistence paths and mobile
-320/390/430px normal/200% text/motion pass. All four numeric profile probes match
-main exactly. V8 6.0.287.53 syntax/full offline entry passes302400 kills/14400
-Ascends. Source/context/tooling/APK-verifier self-test pass. Full suite running;
-initial probe found obsolete closed-row expectations/mobile issues, corrected.
-Queue closure also exposed a Farm clock stall. Only the two clock corrections
-from PR70 head7284cf716250355e1bf68d00590f81ab96f49a3d are included; no Wisp
-role/UI/catalog changes copied. A dedicated saved-queue zero/fractional-clock case
-and causal old-guard negative protect this dependency. Offline baseline comparisons
-keep exact full equality against the immutable engine plus only those clock fixes.
-[PR90](https://github.com/karahaNx/Lumenfall/pull/90) is pushed as a draft;
-all17 causal negatives now detect their intended failures.
-[Candidate evidence](../qa/upgrade-identity-001/2026-10-08/README.md);
-full final-source CI/integration/APK acceptance are not yet claimed.
-Next: implement, verify fresh baseline/focused regressions, publish/integrate
-following required CI, build/verify APK. Keep owner chat open until required
-acceptance and GitHub status evidence are saved.
+Next: [required native checks](../qa/upgrade-identity-001/2026-10-08/DEVICE_ACCEPTANCE.txt),
+saving exact APK/device/results in GitHub. No phone/USB/ADB/emulator supplied;
+affected-phone/exact WebView60/TalkBack OPEN. Keep task/chat open.

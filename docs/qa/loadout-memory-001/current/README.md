@@ -1,41 +1,41 @@
 # F25 evidence by source revision
 
-Baseline b0537cb has SHA2565c4b3dac. Initial candidate3c962a50 is historical.
-Combined PR77 receipts use34e044cc; Formation combination usesd757fabd.
-Previous reviewed game SHA256:
-fe11176fd6b9d2d3406ed0d49bd056d712f9b975ef1cce6ab31084f3548ac5f3.
+Baseline b0537cb / gameSHA5c4b3dac: baseline.json catches unowned25x restoring1x.
+The retired shop is absent after F27; F25 removes only two ownership gates and
+saves each choice immediately. No memory refund or new save field is added.
 
-- baseline.json: expected failure restoring unowned25x on untouched main.
-- Initial contract.json/screenshots:1127 checks, six profiles; real handlers/reloads/restore,
-  controlled simulation intervals. Minimum45x44px; conservative text contrast7.49:1.
-- negative-controls.json: four expected failures, correct causal assertions.
-- source.txt, es2017.json, tooling.txt, apk-identity-self-test.txt, context.txt:
-  source/tooling/identity-self-test/context PASS; ES2017 is not device acceptance.
-- forge-contracts-stock.txt: local Chromium151 stock dump-DOM timeout, recorded FAIL.
+PR78 candidatee1115f6 / gameSHA6c6ba30e37ea19edd547ad5a904fb063495cece477b93d193f7b1a8bd5b33e1c:
+final-ci.json + final-ci.log.gz retain complete CI37743551318:170 default cases,
+17 required expected failures, source/tooling/APK verifier and guarded runtime PASS.
+integration.json records merged9c19664 product/tests/tooling/workflow equality.
+integrated-contract.json/screenshots: fresh1139 checks/six mobile profiles PASS.
+Self-review and automated review only; no independent human review claimed.
 
-Self-review only. Current F27 catalog/archive retained; no wallet compensation.
-final-contract.json/final-screenshots:1133 checks/six profiles on current game,
-including six new selected-artifact asset assertions. Every font/branding response
-is hashed; assets come from the HTML's own web root with correct CSS MIME type.
-final-negative-controls.json: all four causal mutants caught. missing-artifact-fonts.json
-rejects a same-HTML artifact without its fonts at the asset assertion (exit1).
-staged-artifact-old-gate.txt: normal run.cjs --web-root invocation rejects the
-staged old startup gate, rather than reading the passing checkout (exit1).
-final-scoped/results.json:20 positive/two negative existing cases PASS. Raw negative
-DOM/process records and gzipped full per-case logs are retained. final-v8-6.0.json:
-437 production VM assertions PASS on Node8.3/V8 6.0.286.52; final-es2017.json PASS.
+identity-combination.json/screenshots:1139 checks at320/390/430px, normal and160%
+text/reduced motion; minimum45x44px, contrast7.49:1. identity-scoped covers22
+existing handler/bulk/queue/chronology/live-offline/save/recovery cases.
+identity-v8-6.0.json:437 production assertions on Node8.3/V8 6.0.286.52.
+identity-es2017.json/source PASS. final-negative-controls.json catches four causal
+mutants; missing-artifact-fonts.json rejects absent assets; staged-artifact-old-gate.txt
+rejects the actual staged old gate through normal run.cjs --web-root.
+Asset hashes bind every requested font/branding file to the selected source root.
 
-Initial CI37735117429 passed153/12/all gates; full log and metadata retained.
-These historical receipts do not accept later combined source. Renewed full CI,
-integrated checks, signed APK/native acceptance remain pending. Review findings
-about selected browser/source/assets and source-bound receipts are addressed;
-no self-review is represented as independent review.
+APK150 is signed/published from91decbc (F25 plus separately accepted F26 policy),
+SHA8ad8aeab6df7224e629c8a93805386a5c16851ffeb53e2f7338f42c76b0d79bc.
+apk150-combination.json/screenshots:1139 PASS on its actual extracted source.
+../native/apk-150-identity.txt, apk-150-assets.json and apk150-v8-6.0.json:
+identity/all15 assets/437 actual extracted V8 assertions PASS.
+Native UI and corrected real database/update/cold-restart proof PASS.
+See ../native/README.md: earlier storage hashes captured shell errors and are invalid.
+The valid app-private archive must pass storage-tar.cjs before any comparison.
 
-Latest main31eccfb combination (Auto-Ascend UI/Upgrade Identity), SHA256
-6c6ba30e37ea19edd547ad5a904fb063495cece477b93d193f7b1a8bd5b33e1c:
-identity-combination.json/screenshots1139 checks/six profiles PASS;
-identity-scoped22 cases, identity-v8-6.0/identity-es2017/source PASS.
-identity-resonate.txt and identity-registered-core.txt check normal registration.
-Resonate's upstream separate-browser startup timeout is retained; the necessary
-fix forwards the harness browser, preserving all its assertions. Native143
-baseline/cold restart/database proof is now in ../native; new APK still pending.
+14d5f3a combined F07/F14 sourceSHA852f32974f52d757406ac8a54b668969a2e0667e7acdd85192d63dbdc31ad262:
+delivery-main-contract.json/screenshots:1139 checks PASS. Delivery CI37750060223
+passed173 default cases/17 required negatives/all gates. PR97 includes the storage
+fix and latest main Tree/Rift changes;
+its final required CI and integrated reassessment remain pending.
+
+Historical initial contract1127/final-contract1133/CI37735117429(153/12) do not
+accept later source. forge-contracts-stock.txt records local Chromium151 dump-DOM
+transport timeout as FAIL; scoped CDP runs retain unchanged assertions. Previous
+setup/transport failures remain diagnostics, never accepted product passes.
