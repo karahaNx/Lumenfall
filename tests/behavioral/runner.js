@@ -611,6 +611,13 @@
             nextPhase(1);bridge.suppressUnloadSave();location.reload();return;
           }
           finish('pass',window.checkR3Reload(bridge,ctx,assert,JSON.parse(localStorage.getItem('r3-expected'))));return;
+        case 'tree-purchase-ui':
+        case 'tree-purchase-ui-reduced-motion':
+          bridge.uiMeasurementPause(true);
+          finish('pass',await window.runTreePurchaseUiQa(bridge,ctx,assert));return;
+        case 'tree-purchase-contract':
+          bridge.freeze();
+          finish('pass',window.runTreePurchaseQa(bridge,ctx,assert));return;
         case 'upgrade-effects-and-deeds':
           bridge.freeze();
           finish('pass',window.runUpgradeClarityQa(bridge,ctx,assert));return;

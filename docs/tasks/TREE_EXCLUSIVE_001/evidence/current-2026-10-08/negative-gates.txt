@@ -1,0 +1,994 @@
+Browser identity: { "selected_path": "/tmp/tree-browser-bin/google-chrome", "resolved_path": "/tmp/tree-chrome/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 155.0.8059.39", "version_exitcode": 0, "version_stderr": "mkdir: cannot create directory ‘/home/agent/.local/share/applications’: Read-only file system\ntouch: cannot touch '/home/agent/.local/share/applications/mimeapps.list': No such file or directory\n" }
+Staged source: { "source_sha256": "2940ea8a6f1096d4cff59a8432e99374ff6b43fe90857f7f72b2e8f52cb43839", "instrumented_sha256": "10a54f5255f8bd74fa5383286d3b60d1e673480c9e215ce735c4c4ae49691d9e" }
+FAIL self-test-bad-assertion
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 1.098013548, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-bad-assertion", "json_status": "fail", "json_scenario": "self-test-bad-assertion", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /workspace/tree-cap-negatives/self-test-bad-assertion-iqNlNC
+  Chromium stderr tail:
+known error type: 
+[7995:8012:1008/003321.053713:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[7995:7995:1008/003321.053900:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[7995:8012:1008/003321.053932:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[7995:7995:1008/003321.054107:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[7995:7995:1008/003321.056944:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[7995:8012:1008/003321.057086:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[7995:8023:1008/003321.142187:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8087: Read-only file system (30)
+[7995:8023:1008/003321.146748:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8088: Read-only file system (30)
+[7995:7995:1008/003321.154676:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[7995:7995:1008/003321.154919:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[7995:8012:1008/003321.155905:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[7995:8012:1008/003321.156065:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[7995:8012:1008/003321.156188:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[7995:7995:1008/003321.168961:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[7995:7995:1008/003321.180032:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[7995:7995:1008/003321.180059:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[7995:8012:1008/003321.180143:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[7995:7995:1008/003321.189118:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[7995:8012:1008/003321.189220:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[7995:7995:1008/003321.211367:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[7995:8023:1008/003321.235421:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8114: Read-only file system (30)
+[7995:8023:1008/003321.250108:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8120: Read-only file system (30)
+
+  stdout tail:
+'
+          );
+          finish('pass',{unexpected:'Wisp pacing regression was not detected'});
+          return;
+        }
+
+        case 'self-test-endgame-currency-regression': {
+          var unsafeEconomy=bridge.endgameEconomyContract();
+          assert(
+            unsafeEconomy.sigilResonanceRunLimit>100 || unsafeEconomy.questRefreshCost<unsafeEconomy.maxQuestCometReward,
+            'intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+
+</script>
+
+
+<pre id="qa-result" data-status="fail" data-scenario="self-test-bad-assertion">{
+  "scenario": "self-test-bad-assertion",
+  "status": "fail",
+  "detail": {
+    "message": "intentional harness self-test assertion",
+    "stack": "Error: intentional harness self-test assertion\n    at assert (http://127.0.0.1:41595/index.html?qaScenario=self-test-bad-assertion&amp;qaFixture=fresh:12528:61)\n    at HTMLDocument.run (http://127.0.0.1:41595/index.html?qaScenario=self-test-bad-assertion&amp;qaFixture=fresh:14977:11)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+
+
+Behavioral QA failed: self-test-bad-assertion null
+
+EXPECTED FAILURE CONFIRMED self-test-bad-assertion
+Browser identity: { "selected_path": "/tmp/tree-browser-bin/google-chrome", "resolved_path": "/tmp/tree-chrome/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 155.0.8059.39", "version_exitcode": 0, "version_stderr": "mkdir: cannot create directory ‘/home/agent/.local/share/applications’: Read-only file system\ntouch: cannot touch '/home/agent/.local/share/applications/mimeapps.list': No such file or directory\n" }
+Staged source: { "source_sha256": "2940ea8a6f1096d4cff59a8432e99374ff6b43fe90857f7f72b2e8f52cb43839", "instrumented_sha256": "10a54f5255f8bd74fa5383286d3b60d1e673480c9e215ce735c4c4ae49691d9e" }
+FAIL self-test-uncaught-error
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 0.985401244, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-uncaught-error", "json_status": "fail", "json_scenario": "self-test-uncaught-error", "runtime_markers": [ "uncaught-error" ], "runtime_error_count": 1, "json_error": null, "valid": true }
+  raw artifacts: /workspace/tree-cap-negatives/self-test-uncaught-error-y7bVSk
+  Chromium stderr tail:
+pes are "tcp" and on UNIX "unix")
+[8155:8155:1008/003322.229724:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8155:8172:1008/003322.229779:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8155:8155:1008/003322.229862:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8155:8155:1008/003322.231275:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8155:8172:1008/003322.231715:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8155:8186:1008/003322.232253:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8236: Read-only file system (30)
+[8155:8186:1008/003322.239942:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8245: Read-only file system (30)
+[8155:8186:1008/003322.246743:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8252: Read-only file system (30)
+[8155:8155:1008/003322.248802:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8155:8155:1008/003322.249121:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8155:8172:1008/003322.249775:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[8155:8172:1008/003322.249798:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[8155:8172:1008/003322.249806:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8155:8155:1008/003322.255477:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8155:8155:1008/003322.267669:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[8155:8155:1008/003322.267691:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8155:8172:1008/003322.267775:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8155:8155:1008/003322.280140:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8155:8172:1008/003322.280362:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8155:8155:1008/003322.293786:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8155:8186:1008/003322.312290:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8274: Read-only file system (30)
+[8155:8186:1008/003322.318705:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8280: Read-only file system (30)
+
+  stdout tail:
+ bridge.wispPacingContract('ember');
+          assert(
+            compressed.rarity[4].shard<100000,
+            'intentional Wisp pacing regression: Mythic cost compression was not detected'
+          );
+          finish('pass',{unexpected:'Wisp pacing regression was not detected'});
+          return;
+        }
+
+        case 'self-test-endgame-currency-regression': {
+          var unsafeEconomy=bridge.endgameEconomyContract();
+          assert(
+            unsafeEconomy.sigilResonanceRunLimit>100 || unsafeEconomy.questRefreshCost<unsafeEconomy.maxQuestCometReward,
+            'intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+
+</script>
+
+
+</body><pre id="qa-result" data-status="fail" data-scenario="self-test-uncaught-error">{
+  "scenario": "self-test-uncaught-error",
+  "status": "fail",
+  "detail": {
+    "unexpected": "uncaught error was not detected"
+  },
+  "runtimeErrors": [
+    {
+      "kind": "uncaught-error",
+      "detail": "Uncaught Error: intentional uncaught QA self-test"
+    }
+  ]
+}</pre></html>
+
+
+Behavioral QA failed: self-test-uncaught-error null
+
+EXPECTED FAILURE CONFIRMED self-test-uncaught-error
+Browser identity: { "selected_path": "/tmp/tree-browser-bin/google-chrome", "resolved_path": "/tmp/tree-chrome/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 155.0.8059.39", "version_exitcode": 0, "version_stderr": "mkdir: cannot create directory ‘/home/agent/.local/share/applications’: Read-only file system\ntouch: cannot touch '/home/agent/.local/share/applications/mimeapps.list': No such file or directory\n" }
+Staged source: { "source_sha256": "2940ea8a6f1096d4cff59a8432e99374ff6b43fe90857f7f72b2e8f52cb43839", "instrumented_sha256": "10a54f5255f8bd74fa5383286d3b60d1e673480c9e215ce735c4c4ae49691d9e" }
+FAIL self-test-unhandled-rejection
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 0.970717437, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-unhandled-rejection", "json_status": "fail", "json_scenario": "self-test-unhandled-rejection", "runtime_markers": [ "unhandled-rejection" ], "runtime_error_count": 1, "json_error": null, "valid": true }
+  raw artifacts: /workspace/tree-cap-negatives/self-test-unhandled-rejection-c9ka3C
+  Chromium stderr tail:
+known error type: 
+[8318:8335:1008/003323.330020:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8318:8318:1008/003323.330117:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8318:8335:1008/003323.330153:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8318:8318:1008/003323.330353:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8318:8318:1008/003323.331744:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8318:8335:1008/003323.332595:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8318:8346:1008/003323.335779:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8408: Read-only file system (30)
+[8318:8346:1008/003323.340870:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8414: Read-only file system (30)
+[8318:8318:1008/003323.349521:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8318:8335:1008/003323.350593:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[8318:8335:1008/003323.350800:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[8318:8318:1008/003323.351176:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8318:8335:1008/003323.355193:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8318:8318:1008/003323.357499:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8318:8318:1008/003323.368188:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[8318:8318:1008/003323.368255:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8318:8335:1008/003323.368304:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8318:8318:1008/003323.375505:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8318:8335:1008/003323.375561:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8318:8318:1008/003323.390046:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8318:8346:1008/003323.412079:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8437: Read-only file system (30)
+[8318:8346:1008/003323.421236:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8443: Read-only file system (30)
+
+  stdout tail:
+thic cost compression was not detected'
+          );
+          finish('pass',{unexpected:'Wisp pacing regression was not detected'});
+          return;
+        }
+
+        case 'self-test-endgame-currency-regression': {
+          var unsafeEconomy=bridge.endgameEconomyContract();
+          assert(
+            unsafeEconomy.sigilResonanceRunLimit>100 || unsafeEconomy.questRefreshCost<unsafeEconomy.maxQuestCometReward,
+            'intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+
+</script>
+
+
+</body><pre id="qa-result" data-status="fail" data-scenario="self-test-unhandled-rejection">{
+  "scenario": "self-test-unhandled-rejection",
+  "status": "fail",
+  "detail": {
+    "unexpected": "unhandled rejection was not detected"
+  },
+  "runtimeErrors": [
+    {
+      "kind": "unhandled-rejection",
+      "detail": "Error: intentional unhandled rejection QA self-test\n    at HTMLDocument.run (http://127.0.0.1:40155/index.html?qaScenario=self-test-unhandled-rejection&amp;qaFixture=fresh:14987:26)"
+    }
+  ]
+}</pre></html>
+
+
+Behavioral QA failed: self-test-unhandled-rejection null
+
+EXPECTED FAILURE CONFIRMED self-test-unhandled-rejection
+Browser identity: { "selected_path": "/tmp/tree-browser-bin/google-chrome", "resolved_path": "/tmp/tree-chrome/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 155.0.8059.39", "version_exitcode": 0, "version_stderr": "mkdir: cannot create directory ‘/home/agent/.local/share/applications’: Read-only file system\ntouch: cannot touch '/home/agent/.local/share/applications/mimeapps.list': No such file or directory\n" }
+Staged source: { "source_sha256": "2940ea8a6f1096d4cff59a8432e99374ff6b43fe90857f7f72b2e8f52cb43839", "instrumented_sha256": "10a54f5255f8bd74fa5383286d3b60d1e673480c9e215ce735c4c4ae49691d9e" }
+FAIL self-test-parity-regression
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 0.933403206, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-parity-regression", "json_status": "fail", "json_scenario": "self-test-parity-regression", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /workspace/tree-cap-negatives/self-test-parity-regression-xaxtqj
+  Chromium stderr tail:
+nknown error type: 
+[8479:8496:1008/003324.412855:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8479:8496:1008/003324.412868:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8479:8479:1008/003324.412971:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8479:8479:1008/003324.414205:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8479:8507:1008/003324.414466:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8565: Read-only file system (30)
+[8479:8496:1008/003324.417415:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8479:8507:1008/003324.424582:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8567: Read-only file system (30)
+[8479:8496:1008/003324.424970:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[8479:8479:1008/003324.424985:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8479:8496:1008/003324.425007:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[8479:8479:1008/003324.425113:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8479:8496:1008/003324.425162:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8479:8507:1008/003324.427639:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8574: Read-only file system (30)
+[8479:8479:1008/003324.430731:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8479:8479:1008/003324.448795:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[8479:8479:1008/003324.449421:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8479:8496:1008/003324.450727:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8479:8479:1008/003324.463742:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8479:8496:1008/003324.463841:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8479:8479:1008/003324.484429:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8479:8507:1008/003324.511941:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8603: Read-only file system (30)
+[8479:8507:1008/003324.515472:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8604: Read-only file system (30)
+
+  stdout tail:
+ded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+
+</script>
+
+
+<pre id="qa-result" data-status="fail" data-scenario="self-test-parity-regression">{
+  "scenario": "self-test-parity-regression",
+  "status": "fail",
+  "detail": {
+    "message": "intentional parity regression totalKills must match exactly (expected 42, got 43)",
+    "stack": "Error: intentional parity regression totalKills must match exactly (expected 42, got 43)\n    at assert (http://127.0.0.1:45767/index.html?qaScenario=self-test-parity-regression&amp;qaFixture=parity-early-simple:12528:61)\n    at http://127.0.0.1:45767/index.html?qaScenario=self-test-parity-regression&amp;qaFixture=parity-early-simple:12561:7\n    at Array.forEach (&lt;anonymous&gt;)\n    at assertProtectedParity (http://127.0.0.1:45767/index.html?qaScenario=self-test-parity-regression&amp;qaFixture=parity-early-simple:12560:7)\n    at HTMLDocument.run (http://127.0.0.1:45767/index.html?qaScenario=self-test-parity-regression&amp;qaFixture=parity-early-simple:14997:11)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+
+
+Behavioral QA failed: self-test-parity-regression null
+
+EXPECTED FAILURE CONFIRMED self-test-parity-regression
+Browser identity: { "selected_path": "/tmp/tree-browser-bin/google-chrome", "resolved_path": "/tmp/tree-chrome/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 155.0.8059.39", "version_exitcode": 0, "version_stderr": "mkdir: cannot create directory ‘/home/agent/.local/share/applications’: Read-only file system\ntouch: cannot touch '/home/agent/.local/share/applications/mimeapps.list': No such file or directory\n" }
+Staged source: { "source_sha256": "2940ea8a6f1096d4cff59a8432e99374ff6b43fe90857f7f72b2e8f52cb43839", "instrumented_sha256": "10a54f5255f8bd74fa5383286d3b60d1e673480c9e215ce735c4c4ae49691d9e" }
+FAIL self-test-chronology-regression
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 0.980491937, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-chronology-regression", "json_status": "fail", "json_scenario": "self-test-chronology-regression", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /workspace/tree-cap-negatives/self-test-chronology-regression-RSRhV7
+  Chromium stderr tail:
+pes are "tcp" and on UNIX "unix")
+[8645:8645:1008/003325.469602:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8645:8662:1008/003325.469638:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8645:8645:1008/003325.469706:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8645:8672:1008/003325.470672:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8724: Read-only file system (30)
+[8645:8645:1008/003325.472220:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8645:8662:1008/003325.472666:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8645:8672:1008/003325.480975:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8740: Read-only file system (30)
+[8645:8672:1008/003325.483687:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8743: Read-only file system (30)
+[8645:8662:1008/003325.488739:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[8645:8662:1008/003325.488762:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[8645:8645:1008/003325.488144:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8645:8645:1008/003325.490479:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8645:8662:1008/003325.490643:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8645:8645:1008/003325.496227:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8645:8645:1008/003325.509005:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[8645:8645:1008/003325.509965:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8645:8662:1008/003325.510037:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8645:8645:1008/003325.520309:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8645:8662:1008/003325.520588:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8645:8645:1008/003325.538300:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8645:8672:1008/003325.553450:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8764: Read-only file system (30)
+[8645:8672:1008/003325.564505:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8771: Read-only file system (30)
+
+  stdout tail:
+-currency-regression': {
+          var unsafeEconomy=bridge.endgameEconomyContract();
+          assert(
+            unsafeEconomy.sigilResonanceRunLimit>100 || unsafeEconomy.questRefreshCost<unsafeEconomy.maxQuestCometReward,
+            'intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+
+</script>
+
+
+<pre id="qa-result" data-status="fail" data-scenario="self-test-chronology-regression">{
+  "scenario": "self-test-chronology-regression",
+  "status": "fail",
+  "detail": {
+    "message": "intentional chronology regression: Study incorrectly expected before Research",
+    "stack": "Error: intentional chronology regression: Study incorrectly expected before Research\n    at assert (http://127.0.0.1:43049/index.html?qaScenario=self-test-chronology-regression&amp;qaFixture=chronology-simultaneous-order:12528:61)\n    at HTMLDocument.run (http://127.0.0.1:43049/index.html?qaScenario=self-test-chronology-regression&amp;qaFixture=chronology-simultaneous-order:15007:11)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+
+
+Behavioral QA failed: self-test-chronology-regression null
+
+EXPECTED FAILURE CONFIRMED self-test-chronology-regression
+Browser identity: { "selected_path": "/tmp/tree-browser-bin/google-chrome", "resolved_path": "/tmp/tree-chrome/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 155.0.8059.39", "version_exitcode": 0, "version_stderr": "mkdir: cannot create directory ‘/home/agent/.local/share/applications’: Read-only file system\ntouch: cannot touch '/home/agent/.local/share/applications/mimeapps.list': No such file or directory\n" }
+Staged source: { "source_sha256": "2940ea8a6f1096d4cff59a8432e99374ff6b43fe90857f7f72b2e8f52cb43839", "instrumented_sha256": "10a54f5255f8bd74fa5383286d3b60d1e673480c9e215ce735c4c4ae49691d9e" }
+FAIL self-test-wisp-formula-regression
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 0.9786252300000001, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-wisp-formula-regression", "json_status": "fail", "json_scenario": "self-test-wisp-formula-regression", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /workspace/tree-cap-negatives/self-test-wisp-formula-regression-wvDfLS
+  Chromium stderr tail:
+pes are "tcp" and on UNIX "unix")
+[8808:8808:1008/003326.562879:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8808:8825:1008/003326.562926:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8808:8808:1008/003326.563023:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8808:8808:1008/003326.564361:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8808:8825:1008/003326.566774:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8808:8835:1008/003326.566989:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8889: Read-only file system (30)
+[8808:8835:1008/003326.569179:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8892: Read-only file system (30)
+[8808:8835:1008/003326.576357:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8903: Read-only file system (30)
+[8808:8808:1008/003326.584663:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8808:8808:1008/003326.586231:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8808:8825:1008/003326.586972:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[8808:8825:1008/003326.587007:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[8808:8825:1008/003326.587015:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8808:8808:1008/003326.594058:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8808:8808:1008/003326.603289:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[8808:8808:1008/003326.603307:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8808:8825:1008/003326.603370:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8808:8808:1008/003326.614022:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8808:8825:1008/003326.614102:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8808:8808:1008/003326.622452:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8808:8835:1008/003326.647184:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8927: Read-only file system (30)
+[8808:8835:1008/003326.653041:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 8929: Read-only file system (30)
+
+  stdout tail:
+   var unsafeEconomy=bridge.endgameEconomyContract();
+          assert(
+            unsafeEconomy.sigilResonanceRunLimit>100 || unsafeEconomy.questRefreshCost<unsafeEconomy.maxQuestCometReward,
+            'intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+
+</script>
+
+
+<pre id="qa-result" data-status="fail" data-scenario="self-test-wisp-formula-regression">{
+  "scenario": "self-test-wisp-formula-regression",
+  "status": "fail",
+  "detail": {
+    "message": "intentional Wisp formula regression: passive-only Formation Training incorrectly expected to scale ability damage",
+    "stack": "Error: intentional Wisp formula regression: passive-only Formation Training incorrectly expected to scale ability damage\n    at assert (http://127.0.0.1:44729/index.html?qaScenario=self-test-wisp-formula-regression&amp;qaFixture=fresh:12528:61)\n    at HTMLDocument.run (http://127.0.0.1:44729/index.html?qaScenario=self-test-wisp-formula-regression&amp;qaFixture=fresh:15036:11)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+
+
+Behavioral QA failed: self-test-wisp-formula-regression null
+
+EXPECTED FAILURE CONFIRMED self-test-wisp-formula-regression
+Browser identity: { "selected_path": "/tmp/tree-browser-bin/google-chrome", "resolved_path": "/tmp/tree-chrome/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 155.0.8059.39", "version_exitcode": 0, "version_stderr": "mkdir: cannot create directory ‘/home/agent/.local/share/applications’: Read-only file system\ntouch: cannot touch '/home/agent/.local/share/applications/mimeapps.list': No such file or directory\n" }
+Staged source: { "source_sha256": "2940ea8a6f1096d4cff59a8432e99374ff6b43fe90857f7f72b2e8f52cb43839", "instrumented_sha256": "10a54f5255f8bd74fa5383286d3b60d1e673480c9e215ce735c4c4ae49691d9e" }
+FAIL self-test-wisp-pacing-regression
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 0.95130709, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-wisp-pacing-regression", "json_status": "fail", "json_scenario": "self-test-wisp-pacing-regression", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /workspace/tree-cap-negatives/self-test-wisp-pacing-regression-UMwWCQ
+  Chromium stderr tail:
+pes are "tcp" and on UNIX "unix")
+[8969:8969:1008/003327.640712:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8969:8987:1008/003327.640743:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8969:8969:1008/003327.640870:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8969:8969:1008/003327.642213:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8969:8987:1008/003327.642279:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8969:8996:1008/003327.643583:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9051: Read-only file system (30)
+[8969:8996:1008/003327.648596:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9058: Read-only file system (30)
+[8969:8996:1008/003327.651219:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9060: Read-only file system (30)
+[8969:8969:1008/003327.661023:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8969:8969:1008/003327.661249:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8969:8987:1008/003327.661963:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[8969:8987:1008/003327.661995:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[8969:8987:1008/003327.662003:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8969:8969:1008/003327.668016:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8969:8969:1008/003327.686064:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[8969:8969:1008/003327.686087:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8969:8987:1008/003327.686338:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8969:8969:1008/003327.697232:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8969:8987:1008/003327.697346:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[8969:8969:1008/003327.712913:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[8969:8996:1008/003327.730536:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9089: Read-only file system (30)
+[8969:8996:1008/003327.732060:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9090: Read-only file system (30)
+
+  stdout tail:
+rn;
+        }
+
+        case 'self-test-endgame-currency-regression': {
+          var unsafeEconomy=bridge.endgameEconomyContract();
+          assert(
+            unsafeEconomy.sigilResonanceRunLimit>100 || unsafeEconomy.questRefreshCost<unsafeEconomy.maxQuestCometReward,
+            'intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+
+</script>
+
+
+<pre id="qa-result" data-status="fail" data-scenario="self-test-wisp-pacing-regression">{
+  "scenario": "self-test-wisp-pacing-regression",
+  "status": "fail",
+  "detail": {
+    "message": "intentional Wisp pacing regression: Mythic cost compression was not detected",
+    "stack": "Error: intentional Wisp pacing regression: Mythic cost compression was not detected\n    at assert (http://127.0.0.1:41641/index.html?qaScenario=self-test-wisp-pacing-regression&amp;qaFixture=fresh:12528:61)\n    at HTMLDocument.run (http://127.0.0.1:41641/index.html?qaScenario=self-test-wisp-pacing-regression&amp;qaFixture=fresh:15046:11)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+
+
+Behavioral QA failed: self-test-wisp-pacing-regression null
+
+EXPECTED FAILURE CONFIRMED self-test-wisp-pacing-regression
+Browser identity: { "selected_path": "/tmp/tree-browser-bin/google-chrome", "resolved_path": "/tmp/tree-chrome/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 155.0.8059.39", "version_exitcode": 0, "version_stderr": "mkdir: cannot create directory ‘/home/agent/.local/share/applications’: Read-only file system\ntouch: cannot touch '/home/agent/.local/share/applications/mimeapps.list': No such file or directory\n" }
+Staged source: { "source_sha256": "2940ea8a6f1096d4cff59a8432e99374ff6b43fe90857f7f72b2e8f52cb43839", "instrumented_sha256": "10a54f5255f8bd74fa5383286d3b60d1e673480c9e215ce735c4c4ae49691d9e" }
+FAIL self-test-endgame-currency-regression
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 0.9686728010000002, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-endgame-currency-regression", "json_status": "fail", "json_scenario": "self-test-endgame-currency-regression", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /workspace/tree-cap-negatives/self-test-endgame-currency-regression-mJcga9
+  Chromium stderr tail:
+nknown error type: 
+[9131:9148:1008/003328.717291:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9131:9131:1008/003328.717307:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9131:9148:1008/003328.717317:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9131:9159:1008/003328.718184:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9211: Read-only file system (30)
+[9131:9131:1008/003328.719394:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9131:9148:1008/003328.719801:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9131:9159:1008/003328.725265:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9218: Read-only file system (30)
+[9131:9159:1008/003328.731326:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9223: Read-only file system (30)
+[9131:9131:1008/003328.741014:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9131:9148:1008/003328.741047:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[9131:9148:1008/003328.741068:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[9131:9131:1008/003328.741182:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9131:9148:1008/003328.741251:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9131:9131:1008/003328.749567:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9131:9131:1008/003328.765854:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[9131:9131:1008/003328.766298:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9131:9148:1008/003328.766371:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9131:9131:1008/003328.782074:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9131:9148:1008/003328.782148:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9131:9131:1008/003328.797371:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9131:9159:1008/003328.818619:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9250: Read-only file system (30)
+[9131:9159:1008/003328.824038:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9253: Read-only file system (30)
+
+  stdout tail:
+     var unsafeEconomy=bridge.endgameEconomyContract();
+          assert(
+            unsafeEconomy.sigilResonanceRunLimit>100 || unsafeEconomy.questRefreshCost<unsafeEconomy.maxQuestCometReward,
+            'intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+
+</script>
+
+
+<pre id="qa-result" data-status="fail" data-scenario="self-test-endgame-currency-regression">{
+  "scenario": "self-test-endgame-currency-regression",
+  "status": "fail",
+  "detail": {
+    "message": "intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected",
+    "stack": "Error: intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected\n    at assert (http://127.0.0.1:36151/index.html?qaScenario=self-test-endgame-currency-regression&amp;qaFixture=fresh:12528:61)\n    at HTMLDocument.run (http://127.0.0.1:36151/index.html?qaScenario=self-test-endgame-currency-regression&amp;qaFixture=fresh:15056:11)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+
+
+Behavioral QA failed: self-test-endgame-currency-regression null
+
+EXPECTED FAILURE CONFIRMED self-test-endgame-currency-regression
+Browser identity: { "selected_path": "/tmp/tree-browser-bin/google-chrome", "resolved_path": "/tmp/tree-chrome/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 155.0.8059.39", "version_exitcode": 0, "version_stderr": "mkdir: cannot create directory ‘/home/agent/.local/share/applications’: Read-only file system\ntouch: cannot touch '/home/agent/.local/share/applications/mimeapps.list': No such file or directory\n" }
+Staged source: { "source_sha256": "2940ea8a6f1096d4cff59a8432e99374ff6b43fe90857f7f72b2e8f52cb43839", "instrumented_sha256": "10a54f5255f8bd74fa5383286d3b60d1e673480c9e215ce735c4c4ae49691d9e" }
+FAIL self-test-wisp-role-regression
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 1.0369490600000002, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-wisp-role-regression", "json_status": "fail", "json_scenario": "self-test-wisp-role-regression", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /workspace/tree-cap-negatives/self-test-wisp-role-regression-fG9PRC
+  Chromium stderr tail:
+nknown error type: 
+[9292:9292:1008/003329.842635:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9292:9309:1008/003329.843128:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9292:9292:1008/003329.844007:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9292:9309:1008/003329.844150:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9292:9309:1008/003329.844169:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9292:9321:1008/003329.846492:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9377: Read-only file system (30)
+[9292:9321:1008/003329.850635:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9378: Read-only file system (30)
+[9292:9321:1008/003329.853426:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9385: Read-only file system (30)
+[9292:9309:1008/003329.869459:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[9292:9309:1008/003329.869533:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[9292:9292:1008/003329.877508:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9292:9292:1008/003329.880602:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9292:9292:1008/003329.880649:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9292:9309:1008/003329.880670:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9292:9292:1008/003329.903205:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[9292:9292:1008/003329.908915:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9292:9309:1008/003329.909065:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9292:9292:1008/003329.922444:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9292:9309:1008/003329.922503:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9292:9292:1008/003329.938097:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9292:9321:1008/003329.955096:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9415: Read-only file system (30)
+[9292:9321:1008/003329.962459:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9417: Read-only file system (30)
+
+  stdout tail:
+;
+          return;
+        }
+
+        case 'self-test-endgame-currency-regression': {
+          var unsafeEconomy=bridge.endgameEconomyContract();
+          assert(
+            unsafeEconomy.sigilResonanceRunLimit>100 || unsafeEconomy.questRefreshCost<unsafeEconomy.maxQuestCometReward,
+            'intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+
+</script>
+
+
+<pre id="qa-result" data-status="fail" data-scenario="self-test-wisp-role-regression">{
+  "scenario": "self-test-wisp-role-regression",
+  "status": "fail",
+  "detail": {
+    "message": "intentional Wisp role regression: stale Tank semantics were not detected",
+    "stack": "Error: intentional Wisp role regression: stale Tank semantics were not detected\n    at assert (http://127.0.0.1:35353/index.html?qaScenario=self-test-wisp-role-regression&amp;qaFixture=fresh:12528:61)\n    at HTMLDocument.run (http://127.0.0.1:35353/index.html?qaScenario=self-test-wisp-role-regression&amp;qaFixture=fresh:15066:11)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+
+
+Behavioral QA failed: self-test-wisp-role-regression null
+
+EXPECTED FAILURE CONFIRMED self-test-wisp-role-regression
+Browser identity: { "selected_path": "/tmp/tree-browser-bin/google-chrome", "resolved_path": "/tmp/tree-chrome/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 155.0.8059.39", "version_exitcode": 0, "version_stderr": "mkdir: cannot create directory ‘/home/agent/.local/share/applications’: Read-only file system\ntouch: cannot touch '/home/agent/.local/share/applications/mimeapps.list': No such file or directory\n" }
+Staged source: { "source_sha256": "2940ea8a6f1096d4cff59a8432e99374ff6b43fe90857f7f72b2e8f52cb43839", "instrumented_sha256": "10a54f5255f8bd74fa5383286d3b60d1e673480c9e215ce735c4c4ae49691d9e" }
+FAIL self-test-p1-05-selected
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 0.9653376050000001, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-p1-05-selected", "json_status": "fail", "json_scenario": "self-test-p1-05-selected", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /workspace/tree-cap-negatives/self-test-p1-05-selected-x4C4Oo
+  Chromium stderr tail:
+desktop/DBus: unknown error type: 
+[9474:9493:1008/003330.989218:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9474:9474:1008/003330.989303:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9474:9507:1008/003330.989744:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9557: Read-only file system (30)
+[9474:9474:1008/003330.991020:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9474:9493:1008/003330.991213:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9474:9507:1008/003330.991723:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9559: Read-only file system (30)
+[9474:9507:1008/003331.000360:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9566: Read-only file system (30)
+[9474:9507:1008/003331.003673:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9569: Read-only file system (30)
+[9474:9474:1008/003331.012172:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9474:9474:1008/003331.012339:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9474:9493:1008/003331.012608:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[9474:9493:1008/003331.012642:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[9474:9493:1008/003331.012651:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9474:9474:1008/003331.017217:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9474:9474:1008/003331.028933:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[9474:9474:1008/003331.028946:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9474:9493:1008/003331.029013:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9474:9474:1008/003331.037086:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9474:9493:1008/003331.037222:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9474:9474:1008/003331.044436:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9474:9507:1008/003331.074064:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9594: Read-only file system (30)
+[9474:9507:1008/003331.080716:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9597: Read-only file system (30)
+
+  stdout tail:
+eshCost<unsafeEconomy.maxQuestCometReward,
+            'intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+
+</script>
+
+
+<div><div role="tablist"><button role="tab" class="active">One</button><button role="tab" aria-selected="false">Two</button></div></div><pre id="qa-result" data-status="fail" data-scenario="self-test-p1-05-selected">{
+  "scenario": "self-test-p1-05-selected",
+  "status": "fail",
+  "detail": {
+    "message": "intentional selected semantics regression",
+    "stack": "Error: intentional selected semantics regression\n    at assert (http://127.0.0.1:36061/index.html?qaScenario=self-test-p1-05-selected&amp;qaFixture=accessibility-mixed-states:12528:61)\n    at Object.negativeSelected (http://127.0.0.1:36061/index.html?qaScenario=self-test-p1-05-selected&amp;qaFixture=accessibility-mixed-states:10469:5)\n    at HTMLDocument.run (http://127.0.0.1:36061/index.html?qaScenario=self-test-p1-05-selected&amp;qaFixture=accessibility-mixed-states:14240:38)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+
+
+Behavioral QA failed: self-test-p1-05-selected null
+
+EXPECTED FAILURE CONFIRMED self-test-p1-05-selected
+Browser identity: { "selected_path": "/tmp/tree-browser-bin/google-chrome", "resolved_path": "/tmp/tree-chrome/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 155.0.8059.39", "version_exitcode": 0, "version_stderr": "mkdir: cannot create directory ‘/home/agent/.local/share/applications’: Read-only file system\ntouch: cannot touch '/home/agent/.local/share/applications/mimeapps.list': No such file or directory\n" }
+Staged source: { "source_sha256": "2940ea8a6f1096d4cff59a8432e99374ff6b43fe90857f7f72b2e8f52cb43839", "instrumented_sha256": "10a54f5255f8bd74fa5383286d3b60d1e673480c9e215ce735c4c4ae49691d9e" }
+FAIL self-test-p1-05-focus-return
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 0.957168696, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-p1-05-focus-return", "json_status": "fail", "json_scenario": "self-test-p1-05-focus-return", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /workspace/tree-cap-negatives/self-test-p1-05-focus-return-WWg97T
+  Chromium stderr tail:
+desktop/DBus: unknown error type: 
+[9638:9655:1008/003332.085442:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9638:9638:1008/003332.085614:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9638:9666:1008/003332.086345:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9720: Read-only file system (30)
+[9638:9638:1008/003332.086808:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9638:9655:1008/003332.086890:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9638:9666:1008/003332.091171:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9722: Read-only file system (30)
+[9638:9666:1008/003332.094863:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9729: Read-only file system (30)
+[9638:9666:1008/003332.098461:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9734: Read-only file system (30)
+[9638:9638:1008/003332.104890:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9638:9638:1008/003332.105119:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9638:9655:1008/003332.105299:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[9638:9655:1008/003332.105321:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[9638:9655:1008/003332.105339:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9638:9638:1008/003332.114171:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9638:9638:1008/003332.132138:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[9638:9638:1008/003332.132169:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9638:9655:1008/003332.132215:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9638:9638:1008/003332.144208:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9638:9655:1008/003332.144258:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9638:9638:1008/003332.155484:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9638:9666:1008/003332.167172:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9759: Read-only file system (30)
+[9638:9666:1008/003332.178121:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9766: Read-only file system (30)
+
+  stdout tail:
+my.sigilResonanceRunLimit>100 || unsafeEconomy.questRefreshCost<unsafeEconomy.maxQuestCometReward,
+            'intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+
+</script>
+
+
+<button>Trigger</button><button>Wrong target</button><pre id="qa-result" data-status="fail" data-scenario="self-test-p1-05-focus-return">{
+  "scenario": "self-test-p1-05-focus-return",
+  "status": "fail",
+  "detail": {
+    "message": "intentional overlay focus-return regression",
+    "stack": "Error: intentional overlay focus-return regression\n    at assert (http://127.0.0.1:36103/index.html?qaScenario=self-test-p1-05-focus-return&amp;qaFixture=accessibility-mixed-states:12528:61)\n    at Object.negativeFocusReturn (http://127.0.0.1:36103/index.html?qaScenario=self-test-p1-05-focus-return&amp;qaFixture=accessibility-mixed-states:10478:5)\n    at HTMLDocument.run (http://127.0.0.1:36103/index.html?qaScenario=self-test-p1-05-focus-return&amp;qaFixture=accessibility-mixed-states:14245:38)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+
+
+Behavioral QA failed: self-test-p1-05-focus-return null
+
+EXPECTED FAILURE CONFIRMED self-test-p1-05-focus-return
+Browser identity: { "selected_path": "/tmp/tree-browser-bin/google-chrome", "resolved_path": "/tmp/tree-chrome/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 155.0.8059.39", "version_exitcode": 0, "version_stderr": "mkdir: cannot create directory ‘/home/agent/.local/share/applications’: Read-only file system\ntouch: cannot touch '/home/agent/.local/share/applications/mimeapps.list': No such file or directory\n" }
+Staged source: { "source_sha256": "2940ea8a6f1096d4cff59a8432e99374ff6b43fe90857f7f72b2e8f52cb43839", "instrumented_sha256": "10a54f5255f8bd74fa5383286d3b60d1e673480c9e215ce735c4c4ae49691d9e" }
+FAIL self-test-lifecycle-duplicate
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 0.9510161670000001, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-lifecycle-duplicate", "json_status": "fail", "json_scenario": "self-test-lifecycle-duplicate", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /workspace/tree-cap-negatives/self-test-lifecycle-duplicate-36jOeb
+  Chromium stderr tail:
+pes are "tcp" and on UNIX "unix")
+[9801:9801:1008/003333.135497:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9801:9818:1008/003333.135536:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9801:9801:1008/003333.135731:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9801:9801:1008/003333.136908:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9801:9830:1008/003333.136946:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9883: Read-only file system (30)
+[9801:9818:1008/003333.136981:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9801:9830:1008/003333.143101:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9886: Read-only file system (30)
+[9801:9830:1008/003333.147961:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9889: Read-only file system (30)
+[9801:9801:1008/003333.149881:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9801:9818:1008/003333.150113:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[9801:9818:1008/003333.150170:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[9801:9801:1008/003333.150256:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9801:9818:1008/003333.150294:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9801:9801:1008/003333.154068:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9801:9801:1008/003333.162719:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[9801:9801:1008/003333.162783:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9801:9818:1008/003333.164220:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9801:9801:1008/003333.169476:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9801:9818:1008/003333.172003:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[9801:9801:1008/003333.179914:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[9801:9830:1008/003333.196147:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9921: Read-only file system (30)
+[9801:9830:1008/003333.230666:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 9930: Read-only file system (30)
+
+  stdout tail:
+esonanceRunLimit>100 || unsafeEconomy.questRefreshCost<unsafeEconomy.maxQuestCometReward,
+            'intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+
+</script>
+
+
+<pre id="qa-result" data-status="fail" data-scenario="self-test-lifecycle-duplicate">{
+  "scenario": "self-test-lifecycle-duplicate",
+  "status": "fail",
+  "detail": {
+    "message": "intentional duplicate lifecycle regression must consume exactly one offline window, got 2",
+    "stack": "Error: intentional duplicate lifecycle regression must consume exactly one offline window, got 2\n    at assert (http://127.0.0.1:42437/index.html?qaScenario=self-test-lifecycle-duplicate&amp;qaFixture=lifecycle-basic:12528:61)\n    at assertOfflineExactlyOnce (http://127.0.0.1:42437/index.html?qaScenario=self-test-lifecycle-duplicate&amp;qaFixture=lifecycle-basic:12845:5)\n    at HTMLDocument.run (http://127.0.0.1:42437/index.html?qaScenario=self-test-lifecycle-duplicate&amp;qaFixture=lifecycle-basic:15021:11)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+
+
+Behavioral QA failed: self-test-lifecycle-duplicate null
+
+EXPECTED FAILURE CONFIRMED self-test-lifecycle-duplicate
+PASS: all 12 required negative gates produced completed failures
