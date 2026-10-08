@@ -89,6 +89,8 @@ async function browserIdentity(chrome) {
 async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, options = {}) {
   const log = options.log || console.log;
   const urlFor = page => baseUrl + page + '?' + new URLSearchParams({ qaScenario: scenario, qaFixture: fixture });
+  if (scenario === 'offline-12h-ui') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-12h-ui.cjs'), chrome], scenario, 180000, options);
+  if (scenario === 'offline-12h-core') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-12h.cjs')], scenario, 300000, options);
   if (scenario === 'comet-unlocks-core') return runNativeProcess([process.execPath, path.join(ROOT, 'comet-unlocks-core.cjs')], scenario, 90000, options);
   if (scenario === 'lab-motes-offline-integration') return runNativeProcess([process.execPath, path.join(ROOT, 'lab-motes-offline.cjs')], scenario, 90000, options);
   if (scenario === 'offline-catchup-core') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-catchup.cjs')], scenario, 300000, options);
@@ -113,7 +115,9 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
   if (['p1-05-reduced-motion', 'p2-06b-reduced-motion', 'research-duration-reduced-motion', 'inquiry-ui-reduced-motion'].includes(scenario)) command.splice(-1, 0, '--force-prefers-reduced-motion');
   const started = performance.now();
   let result;
-  try { result = await (options.execute || runProcess)(command, { timeout: 25000 }); }
+  const domCommand = process.env.LUMENFALL_QA_DOM_TRANSPORT === 'pipe'
+    ? [process.execPath, path.join(ROOT, 'browser-dom.cjs'), chrome, url, profile, command.includes('--force-prefers-reduced-motion')?'reduce':'no-preference'] : command;
+  try { result = await (options.execute || runProcess)(domCommand, { timeout: 25000 }); }
   finally { fs.rmSync(profile, { recursive: true, force: true }); }
   const dom = result.stdout || '', stderr = result.stderr || '', exitcode = result.exitcode, timedOut = result.timed_out;
   const elapsed = (performance.now() - started) / 1000;
@@ -136,7 +140,7 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
     const directory = fs.mkdtempSync(path.join(options.rawArtifactRoot, scenario + '-'));
     fs.writeFileSync(path.join(directory, 'stdout.html'), dom);
     fs.writeFileSync(path.join(directory, 'stderr.log'), stderr);
-    fs.writeFileSync(path.join(directory, 'process.json'), JSON.stringify({ command, fixture, viewport, process: processResult, qa: observation }, null, 2));
+    fs.writeFileSync(path.join(directory, 'process.json'), JSON.stringify({ command:domCommand, fixture, viewport, process: processResult, qa: observation }, null, 2));
     log('  raw artifacts: ' + directory);
   }
   if (stderr.trim()) { log('  Chromium stderr tail:'); log(stderr.slice(-4000)); }
