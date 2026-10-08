@@ -93,8 +93,8 @@ real touch/Ascend/pending edit/cold launch and320/390/430px checks PASS.
 engine/emulator evidence is separate from physical/exact60/TalkBack acceptance.
 Self-review/automation only; no independent review claim.
 
-Next: publish/integrate this scoped delivery checkpoint after required CI, then
-complete the [affected-device checklist](../qa/formation-autosave-2026-10-08/DEVICE_ACCEPTANCE.txt)
+The delivery PR body records final checkpoint CI/integration.
+Next: complete the [affected-device checklist](../qa/formation-autosave-2026-10-08/DEVICE_ACCEPTANCE.txt)
 on a physical phone, exact WebView60 and TalkBack and save observed results in
 GitHub. Missing required device acceptance keeps this feature/chat open;
 do not archive. Shared-file work stops after the checkpoint.
