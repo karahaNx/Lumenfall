@@ -66,7 +66,12 @@ function baselineState(actual,expected,seed,label){
  for(const id of ['rememberbulk','offline24','offline48']){if(oldOwnership[id]===true)legacy[id]=true;delete oldOwnership[id];}
  assert.deepEqual(actual.legacyCometPurchases,legacy,label+' full legacy ownership archived');
  const {studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,...existing}=actual;
- assert.deepEqual(existing,{...expected,owned:oldOwnership},label);
+ // F14 changes only the selected destination during a matching partial rebuild.
+ const intent=expected.formationRebuild;
+ const selected=intent&&intent.preset&&expected.formationPresets[intent.preset]&&
+   expected.formationPresets[intent.preset].join(',')===intent.members.join(',')
+   ? intent.preset : expected.activeFormationPreset;
+ assert.deepEqual(existing,{...expected,owned:oldOwnership,activeFormationPreset:selected},label);
 }
 function runAsync(seed,seconds,batch=256){
  const x=app(seed,source,seconds),before=copy(x.b.get());x.b.batch(batch);
