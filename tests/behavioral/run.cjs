@@ -41,7 +41,7 @@ function instrumentHtml(source, fixtures) {
   const marker = '\n})();\n</script>\n<script>\nif(window.Capacitor';
   replaceOnce(marker, '\n' + read('bridge.js') + '\n' + read('wisp-upgrades-bridge.js') + marker, 'main game IIFE marker changed; test bridge could not be installed');
   const modules = ['rift-status', 'bond-text', 'layout', 'accessibility', 'accessibility-controls', 'nav-workshop', 'r3-destinations',
-    'research-duration', 'upgrade-clarity', 'upgrade-identity', 'tree-purchases', 'feedback', 'formation', 'formation-autosave', 'forge', 'support-stacking', 'auto-ascend-target', 'buff-timing', 'measured-inquiry', 'lab-motes', 'farm-conservation', 'farm-numerical', 'wisp-upgrades'];
+    'research-duration', 'upgrade-clarity', 'upgrade-identity', 'tree-purchases', 'feedback', 'formation', 'formation-autosave', 'forge', 'support-stacking', 'auto-ascend-target', 'buff-timing', 'measured-inquiry', 'lab-motes', 'lab-ui', 'farm-conservation', 'farm-numerical', 'wisp-upgrades'];
   replaceOnce('</body>', modules.map(name => '<script>' + read(name + '.js') + '</script>').join('') +
     '<script id="qa-behavior-runner">\n' + read('runner.js') + '\n</script>\n</body>', 'expected exactly one </body> marker');
   return source;
@@ -117,6 +117,7 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
   if (['auto-ascend-target-mobile', 'auto-ascend-target-reduced-motion'].includes(scenario)) driver = 'auto-ascend-target.cjs';
   if (scenario.startsWith('forge-ui-') || scenario.startsWith('self-test-forge-ui-')) driver = 'forge-ui.cjs';
   if (scenario === 'lab-motes-runtime') driver = 'farm-runtime.cjs';
+  if (scenario === 'lab-ui-regression') driver = 'lab-ui-regression.cjs';
   if (['lab-motes-native', 'lab-motes-reduced-motion'].includes(scenario)) driver = 'lab-motes.cjs';
   if (driver) return runNativeProcess([process.execPath, path.join(ROOT, driver), chrome, urlFor('/index.html'), scenario], scenario, driver === 'rift-status.cjs' ? 120000 : 90000, options);
   if (scenario === 'offline-12h-ui') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-12h-ui.cjs'), chrome], scenario, 180000, options);

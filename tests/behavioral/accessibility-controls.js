@@ -79,8 +79,13 @@ window.runP105ControlQa = function(bridge,ctx,assert){
   var contrastResults={};
   [['forge','.mult-btn.active'],['research','.speed-btn.active']].forEach(function(entry){
     q('[data-tab="'+entry[0]+'"]').click();
+    if(entry[0]==='research'){
+      var selected=q('.speed-btn.active');assert(selected,'selected speed fixture exists');
+      var panel=selected.closest('[data-study-inspection]');
+      if(panel.hidden)q('[data-study-details="'+panel.dataset.studyInspection+'"]').click();
+    }
     var selector=entry[1];
-    var el=q(selector);assert(el,selector+' fixture exists');var style=getComputedStyle(el);
+    var el=q(selector);assert(el&&el.getClientRects().length,selector+' visible fixture exists');var style=getComputedStyle(el);
     var a=luminance(rgb(style.color)),b=luminance(rgb(style.backgroundColor));
     var ratio=(Math.max(a,b)+.05)/(Math.min(a,b)+.05);contrastResults[selector]=ratio;
     assert(ratio>=4.5,selector+' selected text contrast at least 4.5:1');
