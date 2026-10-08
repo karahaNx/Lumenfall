@@ -1,0 +1,824 @@
+{
+  "scope": "Observed isolated baseline formula/catalogue inventory; no full engine, migration, balance, Android or candidate acceptance.",
+  "baseline": {
+    "commit": "214d45411ce2fb420f0e4b372063811a967679b1",
+    "tree": "1048bc22972a2b650eba73186db35bc0402ded04",
+    "indexSha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca"
+  },
+  "counts": {
+    "lab": 9,
+    "forge": 8,
+    "tree": 7
+  },
+  "labs": [
+    {
+      "id": "wispascend",
+      "name": "Wisp Ascendancy",
+      "desc": "+15% passive Wisp damage permanently; also raises the Wisp-powered part of your tap damage.",
+      "unlockDepth": 1,
+      "baseDurationSec": 180,
+      "durationGrowth": 1.6,
+      "lumenBase": 800,
+      "lumenGrowth": 1.8,
+      "shardBase": 80,
+      "shardGrowth": 1.8,
+      "family": "passive damage",
+      "sourceLine": 2894,
+      "checkpoints": [
+        {
+          "completedLevel": 0,
+          "startNextLevel": 1,
+          "cost": {
+            "lumen": 800,
+            "shard": 80
+          },
+          "nominalWorkSeconds": 180,
+          "workWithCompletedInquiry10": 144,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 1,
+          "startNextLevel": 2,
+          "cost": {
+            "lumen": 1440,
+            "shard": 144
+          },
+          "nominalWorkSeconds": 288,
+          "workWithCompletedInquiry10": 230,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 5,
+          "startNextLevel": 6,
+          "cost": {
+            "lumen": 15117,
+            "shard": 1512
+          },
+          "nominalWorkSeconds": 1887,
+          "workWithCompletedInquiry10": 1510,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 10,
+          "startNextLevel": 11,
+          "cost": {
+            "lumen": 285637,
+            "shard": 28564
+          },
+          "nominalWorkSeconds": 19791,
+          "workWithCompletedInquiry10": 15833,
+          "purchaseAllowedAtThisLevel": true
+        }
+      ]
+    },
+    {
+      "id": "guardmastery",
+      "name": "Guardian's Mastery",
+      "desc": "+20% tap damage, permanently.",
+      "unlockDepth": 1,
+      "baseDurationSec": 150,
+      "durationGrowth": 1.6,
+      "lumenBase": 600,
+      "lumenGrowth": 1.8,
+      "shardBase": 40,
+      "shardGrowth": 1.8,
+      "family": "tap damage",
+      "sourceLine": 2895,
+      "checkpoints": [
+        {
+          "completedLevel": 0,
+          "startNextLevel": 1,
+          "cost": {
+            "lumen": 600,
+            "shard": 40
+          },
+          "nominalWorkSeconds": 150,
+          "workWithCompletedInquiry10": 120,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 1,
+          "startNextLevel": 2,
+          "cost": {
+            "lumen": 1080,
+            "shard": 72
+          },
+          "nominalWorkSeconds": 240,
+          "workWithCompletedInquiry10": 192,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 5,
+          "startNextLevel": 6,
+          "cost": {
+            "lumen": 11337,
+            "shard": 756
+          },
+          "nominalWorkSeconds": 1573,
+          "workWithCompletedInquiry10": 1258,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 10,
+          "startNextLevel": 11,
+          "cost": {
+            "lumen": 214228,
+            "shard": 14282
+          },
+          "nominalWorkSeconds": 16493,
+          "workWithCompletedInquiry10": 13194,
+          "purchaseAllowedAtThisLevel": true
+        }
+      ]
+    },
+    {
+      "id": "riftattune",
+      "name": "Rift Attunement",
+      "desc": "+10% offline earning rate, permanently (stacks past 100%).",
+      "unlockDepth": 1,
+      "baseDurationSec": 240,
+      "durationGrowth": 1.6,
+      "lumenBase": 500,
+      "lumenGrowth": 1.8,
+      "shardBase": 100,
+      "shardGrowth": 1.8,
+      "family": "offline rate",
+      "sourceLine": 2896,
+      "checkpoints": [
+        {
+          "completedLevel": 0,
+          "startNextLevel": 1,
+          "cost": {
+            "lumen": 500,
+            "shard": 100
+          },
+          "nominalWorkSeconds": 240,
+          "workWithCompletedInquiry10": 192,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 1,
+          "startNextLevel": 2,
+          "cost": {
+            "lumen": 900,
+            "shard": 180
+          },
+          "nominalWorkSeconds": 384,
+          "workWithCompletedInquiry10": 307,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 5,
+          "startNextLevel": 6,
+          "cost": {
+            "lumen": 9448,
+            "shard": 1890
+          },
+          "nominalWorkSeconds": 2517,
+          "workWithCompletedInquiry10": 2014,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 10,
+          "startNextLevel": 11,
+          "cost": {
+            "lumen": 178523,
+            "shard": 35705
+          },
+          "nominalWorkSeconds": 26388,
+          "workWithCompletedInquiry10": 21110,
+          "purchaseAllowedAtThisLevel": true
+        }
+      ]
+    },
+    {
+      "id": "shardstudy",
+      "name": "Shard Attunement",
+      "desc": "+8% Shards earned per kill, permanently.",
+      "unlockDepth": 15,
+      "baseDurationSec": 200,
+      "durationGrowth": 1.6,
+      "lumenBase": 400,
+      "lumenGrowth": 1.8,
+      "shardBase": 150,
+      "shardGrowth": 1.8,
+      "family": "Shards per kill",
+      "sourceLine": 2897,
+      "checkpoints": [
+        {
+          "completedLevel": 0,
+          "startNextLevel": 1,
+          "cost": {
+            "lumen": 400,
+            "shard": 150
+          },
+          "nominalWorkSeconds": 200,
+          "workWithCompletedInquiry10": 160,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 1,
+          "startNextLevel": 2,
+          "cost": {
+            "lumen": 720,
+            "shard": 270
+          },
+          "nominalWorkSeconds": 320,
+          "workWithCompletedInquiry10": 256,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 5,
+          "startNextLevel": 6,
+          "cost": {
+            "lumen": 7558,
+            "shard": 2834
+          },
+          "nominalWorkSeconds": 2097,
+          "workWithCompletedInquiry10": 1678,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 10,
+          "startNextLevel": 11,
+          "cost": {
+            "lumen": 142819,
+            "shard": 53557
+          },
+          "nominalWorkSeconds": 21990,
+          "workWithCompletedInquiry10": 17592,
+          "purchaseAllowedAtThisLevel": true
+        }
+      ]
+    },
+    {
+      "id": "lumenstudy",
+      "name": "Lumen Wellspring",
+      "desc": "+8% Lumen earned per kill, permanently.",
+      "unlockDepth": 25,
+      "baseDurationSec": 260,
+      "durationGrowth": 1.6,
+      "lumenBase": 1400,
+      "lumenGrowth": 1.8,
+      "shardBase": 120,
+      "shardGrowth": 1.8,
+      "family": "Lumen per kill",
+      "sourceLine": 2898,
+      "checkpoints": [
+        {
+          "completedLevel": 0,
+          "startNextLevel": 1,
+          "cost": {
+            "lumen": 1400,
+            "shard": 120
+          },
+          "nominalWorkSeconds": 260,
+          "workWithCompletedInquiry10": 208,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 1,
+          "startNextLevel": 2,
+          "cost": {
+            "lumen": 2520,
+            "shard": 216
+          },
+          "nominalWorkSeconds": 416,
+          "workWithCompletedInquiry10": 333,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 5,
+          "startNextLevel": 6,
+          "cost": {
+            "lumen": 26454,
+            "shard": 2267
+          },
+          "nominalWorkSeconds": 2726,
+          "workWithCompletedInquiry10": 2181,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 10,
+          "startNextLevel": 11,
+          "cost": {
+            "lumen": 499865,
+            "shard": 42846
+          },
+          "nominalWorkSeconds": 28587,
+          "workWithCompletedInquiry10": 22870,
+          "purchaseAllowedAtThisLevel": true
+        }
+      ]
+    },
+    {
+      "id": "formationstudy",
+      "name": "Formation Insight",
+      "desc": "+5% passive Wisp damage permanently; also raises the Wisp-powered part of your tap damage.",
+      "unlockDepth": 40,
+      "baseDurationSec": 320,
+      "durationGrowth": 1.6,
+      "lumenBase": 2200,
+      "lumenGrowth": 1.8,
+      "shardBase": 220,
+      "shardGrowth": 1.8,
+      "family": "passive damage",
+      "sourceLine": 2899,
+      "checkpoints": [
+        {
+          "completedLevel": 0,
+          "startNextLevel": 1,
+          "cost": {
+            "lumen": 2200,
+            "shard": 220
+          },
+          "nominalWorkSeconds": 320,
+          "workWithCompletedInquiry10": 256,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 1,
+          "startNextLevel": 2,
+          "cost": {
+            "lumen": 3960,
+            "shard": 396
+          },
+          "nominalWorkSeconds": 512,
+          "workWithCompletedInquiry10": 410,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 5,
+          "startNextLevel": 6,
+          "cost": {
+            "lumen": 41570,
+            "shard": 4157
+          },
+          "nominalWorkSeconds": 3355,
+          "workWithCompletedInquiry10": 2684,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 10,
+          "startNextLevel": 11,
+          "cost": {
+            "lumen": 785503,
+            "shard": 78550
+          },
+          "nominalWorkSeconds": 35184,
+          "workWithCompletedInquiry10": 28147,
+          "purchaseAllowedAtThisLevel": true
+        }
+      ]
+    },
+    {
+      "id": "motestudy",
+      "name": "Luminous Sense",
+      "desc": "+10% Motes gained from Luminous enemies, permanently.",
+      "unlockDepth": 60,
+      "baseDurationSec": 380,
+      "durationGrowth": 1.6,
+      "lumenBase": 3200,
+      "lumenGrowth": 1.8,
+      "shardBase": 320,
+      "shardGrowth": 1.8,
+      "family": "Motes per Luminous kill",
+      "sourceLine": 2900,
+      "checkpoints": [
+        {
+          "completedLevel": 0,
+          "startNextLevel": 1,
+          "cost": {
+            "lumen": 3200,
+            "shard": 320
+          },
+          "nominalWorkSeconds": 380,
+          "workWithCompletedInquiry10": 304,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 1,
+          "startNextLevel": 2,
+          "cost": {
+            "lumen": 5760,
+            "shard": 576
+          },
+          "nominalWorkSeconds": 608,
+          "workWithCompletedInquiry10": 486,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 5,
+          "startNextLevel": 6,
+          "cost": {
+            "lumen": 60466,
+            "shard": 6047
+          },
+          "nominalWorkSeconds": 3985,
+          "workWithCompletedInquiry10": 3188,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 10,
+          "startNextLevel": 11,
+          "cost": {
+            "lumen": 1142550,
+            "shard": 114255
+          },
+          "nominalWorkSeconds": 41781,
+          "workWithCompletedInquiry10": 33425,
+          "purchaseAllowedAtThisLevel": true
+        }
+      ]
+    },
+    {
+      "id": "prismstudy",
+      "name": "Ascendant Clarity",
+      "desc": "+5% Prisms earned per Ascend, permanently.",
+      "unlockDepth": 90,
+      "baseDurationSec": 450,
+      "durationGrowth": 1.6,
+      "lumenBase": 4800,
+      "lumenGrowth": 1.8,
+      "shardBase": 480,
+      "shardGrowth": 1.8,
+      "family": "Prisms per Ascend",
+      "sourceLine": 2901,
+      "checkpoints": [
+        {
+          "completedLevel": 0,
+          "startNextLevel": 1,
+          "cost": {
+            "lumen": 4800,
+            "shard": 480
+          },
+          "nominalWorkSeconds": 450,
+          "workWithCompletedInquiry10": 360,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 1,
+          "startNextLevel": 2,
+          "cost": {
+            "lumen": 8640,
+            "shard": 864
+          },
+          "nominalWorkSeconds": 720,
+          "workWithCompletedInquiry10": 576,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 5,
+          "startNextLevel": 6,
+          "cost": {
+            "lumen": 90699,
+            "shard": 9070
+          },
+          "nominalWorkSeconds": 4719,
+          "workWithCompletedInquiry10": 3775,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 10,
+          "startNextLevel": 11,
+          "cost": {
+            "lumen": 1713824,
+            "shard": 171382
+          },
+          "nominalWorkSeconds": 49478,
+          "workWithCompletedInquiry10": 39582,
+          "purchaseAllowedAtThisLevel": true
+        }
+      ]
+    },
+    {
+      "id": "measuredinquiry",
+      "name": "Measured Inquiry",
+      "desc": "2% less work per completed level, up to 20%, for future starts of Wisp Ascendancy, Guardian’s Mastery, Rift Attunement, Shard Attunement, Lumen Wellspring, Formation Insight, Luminous Sense and Ascendant Clarity. Running Studies and Measured Inquiry itself are unchanged.",
+      "unlockDepth": 60,
+      "levelCap": 10,
+      "baseDurationSec": 600,
+      "durationGrowth": 1.6,
+      "lumenBase": 30000,
+      "lumenGrowth": 1.8,
+      "shardBase": 1200,
+      "shardGrowth": 1.8,
+      "family": "future paid study work",
+      "sourceLine": 2902,
+      "checkpoints": [
+        {
+          "completedLevel": 0,
+          "startNextLevel": 1,
+          "cost": {
+            "lumen": 30000,
+            "shard": 1200
+          },
+          "nominalWorkSeconds": 600,
+          "workWithCompletedInquiry10": 600,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 1,
+          "startNextLevel": 2,
+          "cost": {
+            "lumen": 54000,
+            "shard": 2160
+          },
+          "nominalWorkSeconds": 960,
+          "workWithCompletedInquiry10": 960,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 5,
+          "startNextLevel": 6,
+          "cost": {
+            "lumen": 566870,
+            "shard": 22675
+          },
+          "nominalWorkSeconds": 6291,
+          "workWithCompletedInquiry10": 6291,
+          "purchaseAllowedAtThisLevel": true
+        },
+        {
+          "completedLevel": 10,
+          "startNextLevel": 11,
+          "cost": {
+            "lumen": 10711402,
+            "shard": 428456
+          },
+          "nominalWorkSeconds": 65971,
+          "workWithCompletedInquiry10": 65971,
+          "purchaseAllowedAtThisLevel": false
+        }
+      ]
+    }
+  ],
+  "forge": [
+    {
+      "id": "focus",
+      "effectPerLevel": 0.08,
+      "name": "Battle Focus",
+      "desc": "+8% Lumen from every kill, per level.",
+      "lumenBase": 200,
+      "lumenGrowth": 1.5,
+      "shardBase": 0,
+      "shardGrowth": 1
+    },
+    {
+      "id": "sense",
+      "effectPerLevel": 0.08,
+      "name": "Shard Sense",
+      "desc": "+8% Shards from every kill, per level.",
+      "lumenBase": 150,
+      "lumenGrowth": 1.5,
+      "shardBase": 20,
+      "shardGrowth": 1.5
+    },
+    {
+      "id": "formation",
+      "effectPerLevel": 0.05,
+      "name": "Formation Training",
+      "desc": "+5% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.",
+      "lumenBase": 0,
+      "lumenGrowth": 1,
+      "shardBase": 40,
+      "shardGrowth": 1.6
+    },
+    {
+      "id": "resolve",
+      "effectPerLevel": 0.1,
+      "name": "Guardian's Resolve",
+      "desc": "+10% tap damage, per level.",
+      "lumenBase": 150,
+      "lumenGrowth": 1.45,
+      "shardBase": 0,
+      "shardGrowth": 1
+    },
+    {
+      "id": "charge",
+      "effectPerLevel": 0.08,
+      "name": "Swift Recovery",
+      "desc": "+8% faster Wisp ability charge, per level.",
+      "lumenBase": 0,
+      "lumenGrowth": 1,
+      "shardBase": 30,
+      "shardGrowth": 1.55
+    },
+    {
+      "id": "arcanecal",
+      "name": "Arcane Calibration",
+      "desc": "+3 percentage points to the damaging Wisp ability factor per level. Burst, Breaker, Gale and Thorn only; no passive or Tap bonus.",
+      "unlockDepth": 12,
+      "levelCap": 10,
+      "effectPerLevel": 0.03,
+      "lumenBase": 15000,
+      "lumenGrowth": 1.6,
+      "shardBase": 120,
+      "shardGrowth": 1.6
+    },
+    {
+      "id": "conduction",
+      "name": "Resource Conduction",
+      "desc": "+4 percentage points to the ability resource factor per level. Gale Shards and Thorn Lumen only; rounded per cast, not kill rewards.",
+      "unlockDepth": 18,
+      "levelCap": 10,
+      "effectPerLevel": 0.04,
+      "lumenBase": 90000,
+      "lumenGrowth": 1.6,
+      "shardBase": 280,
+      "shardGrowth": 1.6
+    },
+    {
+      "id": "luminoustracking",
+      "name": "Luminous Tracking",
+      "desc": "+0.5 percentage points Luminous chance per level for future eligible encounters; total chance at most 35%. No extra Motes per kill.",
+      "unlockDepth": 32,
+      "levelCap": 10,
+      "effectPerLevel": 0.005,
+      "lumenBase": 2500000,
+      "lumenGrowth": 1.6,
+      "shardBase": 1500,
+      "shardGrowth": 1.6
+    }
+  ],
+  "tree": [
+    {
+      "id": "starlight",
+      "name": "Starlight Affinity",
+      "desc": "+10% Lumen from every kill, per level.",
+      "baseCost": 1,
+      "growth": 1.35
+    },
+    {
+      "id": "steady",
+      "name": "Steady Hands",
+      "desc": "+8% tap damage, per level.",
+      "baseCost": 1,
+      "growth": 1.3
+    },
+    {
+      "id": "echo",
+      "name": "Echoing Rest",
+      "desc": "+5% offline earning rate, per level (caps at 100%).",
+      "baseCost": 2,
+      "growth": 1.4
+    },
+    {
+      "id": "bonds",
+      "name": "Cheaper Bonds",
+      "desc": "−3% Wisp recruiting cost, per level (floor 40%).",
+      "baseCost": 2,
+      "growth": 1.45
+    },
+    {
+      "id": "swift",
+      "name": "Swift Ascension",
+      "desc": "+4% Prisms earned per Ascend, per level.",
+      "baseCost": 3,
+      "growth": 1.5
+    },
+    {
+      "id": "momentum",
+      "name": "Eternal Momentum",
+      "desc": "+6% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.",
+      "baseCost": 5,
+      "growth": 1.55,
+      "requiresAchievement": "asc5"
+    },
+    {
+      "id": "reserves",
+      "name": "Deep Reserves",
+      "desc": "+2 hours to your offline cap, per level.",
+      "baseCost": 6,
+      "growth": 1.6,
+      "requiresAchievement": "d100"
+    }
+  ],
+  "slots": [
+    {
+      "maxDepthEver": 1,
+      "slots": 2
+    },
+    {
+      "maxDepthEver": 14,
+      "slots": 2
+    },
+    {
+      "maxDepthEver": 15,
+      "slots": 2
+    },
+    {
+      "maxDepthEver": 24,
+      "slots": 2
+    },
+    {
+      "maxDepthEver": 25,
+      "slots": 2
+    },
+    {
+      "maxDepthEver": 39,
+      "slots": 2
+    },
+    {
+      "maxDepthEver": 40,
+      "slots": 3
+    },
+    {
+      "maxDepthEver": 59,
+      "slots": 3
+    },
+    {
+      "maxDepthEver": 60,
+      "slots": 4
+    },
+    {
+      "maxDepthEver": 89,
+      "slots": 4
+    },
+    {
+      "maxDepthEver": 90,
+      "slots": 5
+    }
+  ],
+  "speedTiers": [
+    {
+      "tier": 1.5,
+      "motes": 14
+    },
+    {
+      "tier": 2,
+      "motes": 26
+    },
+    {
+      "tier": 3,
+      "motes": 60
+    },
+    {
+      "tier": 4,
+      "motes": 110
+    },
+    {
+      "tier": 5,
+      "motes": 176
+    },
+    {
+      "tier": 6,
+      "motes": 258
+    },
+    {
+      "tier": 7,
+      "motes": 357
+    },
+    {
+      "tier": 8,
+      "motes": 473
+    }
+  ],
+  "mixedStacking": {
+    "state": {
+      "nodes": {
+        "starlight": 2,
+        "steady": 3,
+        "echo": 6,
+        "swift": 4,
+        "momentum": 5
+      },
+      "research": {
+        "focus": 4,
+        "sense": 5,
+        "formation": 6,
+        "resolve": 2
+      },
+      "longStudyLevels": {
+        "wispascend": 3,
+        "guardmastery": 4,
+        "riftattune": 2,
+        "shardstudy": 6,
+        "lumenstudy": 5,
+        "formationstudy": 7,
+        "motestudy": 2,
+        "prismstudy": 3,
+        "measuredinquiry": 10
+      }
+    },
+    "actual": {
+      "lumen": 2.2176,
+      "shards": 2.072,
+      "tapSpecific": 2.6784,
+      "passivePermanentBeforeRaritySynergy": 3.3081750000000003,
+      "offlineRate": 1.2,
+      "prisms": 1.3339999999999999,
+      "motesLabFactor": 1.2
+    },
+    "independentExpected": {
+      "lumen": 2.2176,
+      "shards": 2.072,
+      "tapSpecific": 2.6784,
+      "passivePermanentBeforeRaritySynergy": 3.3081750000000003,
+      "offlineRate": 1.2,
+      "prisms": 1.3339999999999999,
+      "motesLabFactor": 1.2
+    }
+  },
+  "historicalSpend": "Unknown. Current nominal prices are not purchase receipts."
+}

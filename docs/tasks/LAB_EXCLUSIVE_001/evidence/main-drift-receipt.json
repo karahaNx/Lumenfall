@@ -1,0 +1,535 @@
+{
+  "source": "GitHub compare API; read-only, no remote mutation",
+  "before": "b2a1f440e8ad9fed34b37551e468224310d2a6f6",
+  "after": "0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd",
+  "commits": [
+    {
+      "sha": "c04b479d30a1337470298853dcfbced2bb28f4db",
+      "message": "Fix long offline Auto-Ascend with cooperative transactional catch-up"
+    },
+    {
+      "sha": "b4873fd89734c53d0bce43f1d9e409b153c2a59b",
+      "message": "Replace active Python tooling and CI helpers with Node.js"
+    },
+    {
+      "sha": "82ed0518c3efac43c7662cf97dc5e747fb0e6a82",
+      "message": "Incorporate current main and record authorized GitHub publication"
+    },
+    {
+      "sha": "bd71a8608d133f99971a74a79e300e1f5db254df",
+      "message": "Record GitHub PR51 publication and continuation receipt"
+    },
+    {
+      "sha": "0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd",
+      "message": "Merge verified offline catch-up and Node.js tooling\n\nFix long offline Auto-Ascend and migrate active tooling to Node.js"
+    }
+  ],
+  "changedPaths": [
+    {
+      "path": ".gitattributes",
+      "status": "modified",
+      "blob": "587d7310c33cb34ced9975d9b8a11194a67ed3fb"
+    },
+    {
+      "path": ".github/workflows/build-android.yml",
+      "status": "modified",
+      "blob": "054f02751551b68a6959c9ed24cca55ec97bd15b"
+    },
+    {
+      "path": ".github/workflows/pre-merge-validation.yml",
+      "status": "modified",
+      "blob": "fff293e8f09298211df590f195b1930b81ee0bb2"
+    },
+    {
+      "path": "AGENTS.md",
+      "status": "modified",
+      "blob": "58ae40e2c3583df835e4f345df6ec93395072bd5"
+    },
+    {
+      "path": "PROJECT_BOOTSTRAP.txt",
+      "status": "modified",
+      "blob": "e7bce416c57493c8f2d51ac663a716f83db87b1d"
+    },
+    {
+      "path": "PROJECT_INSTRUCTIONS.txt",
+      "status": "modified",
+      "blob": "c41e9e7a97c222e901ec693a6ebdfd6cef0a3fd4"
+    },
+    {
+      "path": "docs/CONTEXT_INDEX.md",
+      "status": "modified",
+      "blob": "fe1a056d08a363aec8d775e0c9f78fb725252036"
+    },
+    {
+      "path": "docs/PROJECT_STATE.md",
+      "status": "modified",
+      "blob": "60223df98c4924f88589cd413f88d625b1289360"
+    },
+    {
+      "path": "docs/decisions/2026-10-07-offline-catchup-publication.md",
+      "status": "added",
+      "blob": "5f9cdfe223b4d4228776947d2ef1418215388c0c"
+    },
+    {
+      "path": "docs/project/ACCOUNT_RECOVERY.md",
+      "status": "modified",
+      "blob": "31ec8273d5ab7bcbfc7a89de1e8019e289fb3868"
+    },
+    {
+      "path": "docs/project/CODEX_START.md",
+      "status": "modified",
+      "blob": "2f7abd3c7f62aa503cc46ff591f5d5cb1fabdb07"
+    },
+    {
+      "path": "docs/project/KNOWN_ISSUES.md",
+      "status": "modified",
+      "blob": "ceb80ec6908b52149111d5abd8f0e339f4f87e00"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/README.md",
+      "status": "added",
+      "blob": "1fcd4971023113a3d06e46bad288fe4f7d3f8d92"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/baseline/console.jsonl",
+      "status": "added",
+      "blob": "b4cfd9ce7ae865204276a91d9ce2c2e64e4cd067"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/baseline/results.json",
+      "status": "added",
+      "blob": "89f7e8d99850aec7eb83cfdd8ca0a7d0e301a139"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/before-fix-regression.txt",
+      "status": "added",
+      "blob": "6e8281a2689e0637efc9a59d4136d17031e8bcd8"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/browser-return-flow.txt",
+      "status": "added",
+      "blob": "6e179109c1c819b7648a4055b7c044e8cf546b20"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/browser-smoke.txt",
+      "status": "added",
+      "blob": "930c0218f04fff1860e3020b800f7c54fab0b0fb"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/core.json",
+      "status": "added",
+      "blob": "0e254fa4f1fd6873110ad4023244742b1ba31f51"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/fixed-driver/console.jsonl",
+      "status": "added",
+      "blob": "57ac657287a5e9153b6b61098f4815db1afef4d4"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/fixed-driver/results.json",
+      "status": "added",
+      "blob": "55416434a32f8b086ec43a578f8b8afa7f913490"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/full-suite.txt",
+      "status": "added",
+      "blob": "c2a6049419a4fc208e84ed5860c041b664d79da5"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/apk-self-test.txt",
+      "status": "added",
+      "blob": "632e0367c45a5fe923d2450d0df08193347053d5"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/archives.txt",
+      "status": "added",
+      "blob": "b1a7ee94ac97caf3ecfaea68dc3579173d122878"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/browser-smoke.txt",
+      "status": "added",
+      "blob": "930c0218f04fff1860e3020b800f7c54fab0b0fb"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/extraction.json",
+      "status": "added",
+      "blob": "da4532108fd30cd35e10d439e1db378f4df40046"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/full-suite.txt",
+      "status": "added",
+      "blob": "72edf0af2c5afa7c989881e99c010241279ff44e"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/negative-controls.json",
+      "status": "added",
+      "blob": "1cac29871c76df61cd3751030061f592b525161e"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/negative-controls.txt",
+      "status": "added",
+      "blob": "33b811e530e592fcfd18e442a23b0961747017d9"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/negative-self-test-auto-ascend-target-manual.txt",
+      "status": "added",
+      "blob": "0a2cb41b65de3d0f91d23d8e5d1cf8b0552c71c7"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/negative-self-test-auto-ascend-target-window.txt",
+      "status": "added",
+      "blob": "1169dc2c0e8666cb885f5ee695ffc7706b20136e"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/negative-self-test-bad-assertion.txt",
+      "status": "added",
+      "blob": "2e3b11feac09c8790050f4c7bc7eb4f116cf2351"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/negative-self-test-chronology-regression.txt",
+      "status": "added",
+      "blob": "3ef94a23dccfd97d001b02286b54d5ed74037d9b"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/negative-self-test-endgame-currency-regression.txt",
+      "status": "added",
+      "blob": "6bbf7a8587b5eba30674163476180e7d542fccff"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/negative-self-test-forge-ui-bulk.txt",
+      "status": "added",
+      "blob": "e5f4b1996404108e799cdbfb693472367cbd90af"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/negative-self-test-forge-ui-render.txt",
+      "status": "added",
+      "blob": "85fe5aa0e0d22c900f1afc810489671a3d9a2363"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/negative-self-test-forge-ui-save.txt",
+      "status": "added",
+      "blob": "8a71031ed5d824c79cd8c2e13f0146299098d9e2"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/negative-self-test-lifecycle-duplicate.txt",
+      "status": "added",
+      "blob": "69c06a4704b06221d36d67c58d482f40e62511e7"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/negative-self-test-p1-05-focus-return.txt",
+      "status": "added",
+      "blob": "aa41b56cba6db46479ec7ab7aec8565f8320c53e"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/negative-self-test-p1-05-selected.txt",
+      "status": "added",
+      "blob": "1992bcd005fbada211126847f397cdbccd5cf623"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/negative-self-test-parity-regression.txt",
+      "status": "added",
+      "blob": "c45ed6d404278e58f32eac491c60401105c83fae"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/negative-self-test-uncaught-error.txt",
+      "status": "added",
+      "blob": "82279666af888c4b8a6cbf25976cf9fb67dcb7d2"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/negative-self-test-unhandled-rejection.txt",
+      "status": "added",
+      "blob": "697338ae09b72e7d20689452ab79a13a9bac913f"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/negative-self-test-wisp-formula-regression.txt",
+      "status": "added",
+      "blob": "a37cbcfd26d17e594510d39af1ae04db61f088bf"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/negative-self-test-wisp-pacing-regression.txt",
+      "status": "added",
+      "blob": "0d99fc711bfc0f357ab6345465c387755bcacf0d"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/negative-self-test-wisp-role-regression.txt",
+      "status": "added",
+      "blob": "ee5b9b61667f9860563ceec97dd566eada6a1713"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/node20-browser.txt",
+      "status": "added",
+      "blob": "fcc398bbf91bbc333de3742a0cb65ab2f8c7c1fa"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/node20-process-contract.txt",
+      "status": "added",
+      "blob": "5d3bd8d284e0279f06c20b87ae1973b10333006a"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/node20-syntax.json",
+      "status": "added",
+      "blob": "c1ed31d31f3e53b432723e8b38c6778546bba159"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/node20-tooling.txt",
+      "status": "added",
+      "blob": "eb34fce35d91093edcf362b882c6be2c51a421fd"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/setup.txt",
+      "status": "added",
+      "blob": "0a3a097827a72a50d75007bfeb63795a9578c7ea"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/source.txt",
+      "status": "added",
+      "blob": "3f6a8c6e44ab082b95a69710e663f87082b43cc8"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/tooling-node24.txt",
+      "status": "added",
+      "blob": "ee33f3d05f70989f2097f8397a083378a9c8b796"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/validation.json",
+      "status": "added",
+      "blob": "6a52e1a1c240f903387b7399d060c483830e573f"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/javascript-tooling/workflow-review.json",
+      "status": "added",
+      "blob": "fcdbb6164fb3b29b026392e182053fc6505a7a97"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/negative-controls.json",
+      "status": "added",
+      "blob": "7d3cfa4801c957e13ff932639fab3c994e7ac574"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/negative-results.json",
+      "status": "added",
+      "blob": "0bbfc1b9f77fb482ddd47444d43a71900b77e4e3"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/v8-6.0.json",
+      "status": "added",
+      "blob": "e12c05afe4d5c1c36b33f734ccad8c2ada586d77"
+    },
+    {
+      "path": "docs/qa/offline-catchup-001/validation.json",
+      "status": "added",
+      "blob": "d43f1b74de0230d8e62137d23a53417f2fbd9b49"
+    },
+    {
+      "path": "docs/recovery/2026-10-07/publication_originals/scripts/recovery/restore_package.py",
+      "status": "renamed",
+      "blob": "4d8e96c52b9428248598dac0b6e01564a00898ab"
+    },
+    {
+      "path": "docs/tasks/OFFLINE_CATCHUP_001.md",
+      "status": "added",
+      "blob": "c06835554731ec9c3956e1b4098256afa9a29cdf"
+    },
+    {
+      "path": "docs/tasks/OFFLINE_CATCHUP_001_REQUEST.txt",
+      "status": "added",
+      "blob": "6f643123d1cb84e72314e7784e507c3bf612c74f"
+    },
+    {
+      "path": "index.html",
+      "status": "modified",
+      "blob": "90e4678cb28fa833fdacbc01d1744d9465f6a356"
+    },
+    {
+      "path": "scripts/ci/set_android_version.cjs",
+      "status": "added",
+      "blob": "8da8c7f43b5ecd44c51809defd9b9abcea814b7a"
+    },
+    {
+      "path": "scripts/ci/smoke.cjs",
+      "status": "added",
+      "blob": "9b3410a646df8b338b42e7d14bffee5bdc704c1a"
+    },
+    {
+      "path": "scripts/ci/source-contract.json",
+      "status": "added",
+      "blob": "ab08620c2530f8e33d7f062f266bbc638426ad66"
+    },
+    {
+      "path": "scripts/ci/validate_source.cjs",
+      "status": "added",
+      "blob": "aef64427bf3464ccb4e02d8c6106e83b1e9c2b53"
+    },
+    {
+      "path": "scripts/codex/check_context.cjs",
+      "status": "added",
+      "blob": "ae7006704b0ecfc27e384b3505c18813b11a1b7d"
+    },
+    {
+      "path": "scripts/codex/check_context.py",
+      "status": "removed",
+      "blob": "a6a34559d95e11d018bf42bfcc95ab6cbf4b3d56"
+    },
+    {
+      "path": "scripts/codex/setup.sh",
+      "status": "modified",
+      "blob": "6c5a8f28429666a431f1cbf0275d73aacaed73c8"
+    },
+    {
+      "path": "scripts/lib/cli.cjs",
+      "status": "added",
+      "blob": "743762819d833f59fcd2905e5092d402ced90e54"
+    },
+    {
+      "path": "scripts/lib/process.cjs",
+      "status": "added",
+      "blob": "773add55b0a124980ee117e4e97ea434eb15deeb"
+    },
+    {
+      "path": "scripts/lib/static-server.cjs",
+      "status": "added",
+      "blob": "66dfa122844559bf172df7d736aa9b91b85bb087"
+    },
+    {
+      "path": "scripts/lib/zip.cjs",
+      "status": "added",
+      "blob": "2993f7389b26fb91ff2ddc62069764154733c67b"
+    },
+    {
+      "path": "scripts/recovery/restore_candidate.cjs",
+      "status": "added",
+      "blob": "cd28e02f907ac45a5141feec64cc07d63a4022ff"
+    },
+    {
+      "path": "scripts/recovery/restore_candidate.py",
+      "status": "removed",
+      "blob": "d19db92d4c7d2eed47f8b1b6ebaacfde7fae7b98"
+    },
+    {
+      "path": "scripts/recovery/restore_package.cjs",
+      "status": "added",
+      "blob": "64bb2db104d09041b7195e4bc3462929ee45c777"
+    },
+    {
+      "path": "scripts/serve.cjs",
+      "status": "added",
+      "blob": "503224cac23448b42e7dcf95df3549e09334ff1d"
+    },
+    {
+      "path": "scripts/verify_apk_identity.cjs",
+      "status": "added",
+      "blob": "8307b9de1bed20e25c264e9081cad5343611471c"
+    },
+    {
+      "path": "scripts/verify_apk_identity.py",
+      "status": "removed",
+      "blob": "ffa468b20da7eefa519632f4633d158a18fb8953"
+    },
+    {
+      "path": "tests/behavioral/accessibility.js",
+      "status": "modified",
+      "blob": "52b8796b9e9917e5d96cd79d14b3ed154c7c7a2c"
+    },
+    {
+      "path": "tests/behavioral/auto-ascend-target.cjs",
+      "status": "modified",
+      "blob": "e040275e9043ad1487c875f08fd5862b4d1962bd"
+    },
+    {
+      "path": "tests/behavioral/bridge.js",
+      "status": "added",
+      "blob": "1bc48c924dec0ee9ffa844dd411f575e2616b945"
+    },
+    {
+      "path": "tests/behavioral/forge-ui.cjs",
+      "status": "modified",
+      "blob": "0734ecd66575dec5c232f25d04037c0f8fbb2d14"
+    },
+    {
+      "path": "tests/behavioral/formation.js",
+      "status": "modified",
+      "blob": "8457dbd42733545b957a55b6ee53c6a3d17043a1"
+    },
+    {
+      "path": "tests/behavioral/layout-host.html",
+      "status": "added",
+      "blob": "d19040982519f3c0902ce9773ef2ae60df79f614"
+    },
+    {
+      "path": "tests/behavioral/offline-catchup-ui.cjs",
+      "status": "added",
+      "blob": "3d5b626d5fa354cafa289a4ede30ee97cf25403e"
+    },
+    {
+      "path": "tests/behavioral/offline-catchup-v8.cjs",
+      "status": "added",
+      "blob": "83e3238703d0799ae5cb3823649430d9e62e4f6a"
+    },
+    {
+      "path": "tests/behavioral/offline-catchup.cjs",
+      "status": "added",
+      "blob": "23f0f2f1325009b8f3ac9fd125b5cc62cdff5a60"
+    },
+    {
+      "path": "tests/behavioral/prelude.js",
+      "status": "added",
+      "blob": "17ecb0131f2f917dc1b501e1953eebdb915b6a51"
+    },
+    {
+      "path": "tests/behavioral/process_contract.cjs",
+      "status": "added",
+      "blob": "1e2a83082060b02c8b7aedca39faaa1ac8ef7bfe"
+    },
+    {
+      "path": "tests/behavioral/process_contract.py",
+      "status": "removed",
+      "blob": "df00c7b37f220ff408730195f9bfed923cd48c9a"
+    },
+    {
+      "path": "tests/behavioral/raw-result.cjs",
+      "status": "added",
+      "blob": "24e6d72b9e5ff621d5e71053e36462ade547553c"
+    },
+    {
+      "path": "tests/behavioral/rift-status.cjs",
+      "status": "modified",
+      "blob": "cc2e2895d842dcdafdda329a7514e7ed9c9607de"
+    },
+    {
+      "path": "tests/behavioral/rift-status.js",
+      "status": "modified",
+      "blob": "1b8c70280bee6c12b6d118c33a1e9643d688e621"
+    },
+    {
+      "path": "tests/behavioral/run.cjs",
+      "status": "added",
+      "blob": "35926c24ceedabbf7e2b9741183bacd378e75522"
+    },
+    {
+      "path": "tests/behavioral/runner.js",
+      "status": "renamed",
+      "blob": "89276b44c9d17a3c5baf8c97027fc437a60eb3ed"
+    },
+    {
+      "path": "tests/behavioral/scenarios.json",
+      "status": "added",
+      "blob": "d119c50e9645d2ae7170245c9a62f0fd360e398a"
+    },
+    {
+      "path": "tests/behavioral/support-stacking.js",
+      "status": "modified",
+      "blob": "9788660584348130015435ffcc647e397f0fd589"
+    },
+    {
+      "path": "tests/tooling/run.cjs",
+      "status": "added",
+      "blob": "7a3b301fb54a1ea4a0588315c2eed0e558efdcc8"
+    }
+  ],
+  "latestRules": {
+    "language": "English",
+    "activeTooling": "Node.js 20+",
+    "writer": "no LAB_EXCLUSIVE_001 writer granted"
+  },
+  "statusCaveat": "PROJECT_STATE still describes PR51 as Draft/not integrated; live main commit delta proves code integration. No APK/device acceptance or B2 review inferred."
+}

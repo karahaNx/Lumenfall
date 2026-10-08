@@ -81,6 +81,17 @@ retains exact source/commands/results. The stricter fixed oracle and evidence
 commits require fresh CI; the product bytes are unchanged by that checkpoint.
 Mainb4d3667/PR64 documentation is incorporated without product changes.
 
+Subsequent main641697e incorporates PR61 Bond partner text and the PR62/65
+Lab checkpoints. The two merge conflicts keep both the Bond/Wisp-role module
+registrations and all other chats' status rows. [Core](wisp-core-main641.log.gz),
+[V8 6.0](wisp-v8-main641.json), [normal mobile](wisp-ui-main641.log.gz),
+[reduced motion](wisp-ui-reduced-main641.log.gz) and [Bond contract](wisp-bond-main641.log.gz)
+PASS again on product SHA256
+`2abf03c62c7d311520ffd42ee1e15dee85dd3bedce99bd79af9b5a395a8a9551`.
+Default suite count is now151; the older CI150 pass cannot establish final-head
+acceptance. The main delta changes Bond presentation, not the damage/clock or
+purchase formulas. Existing golden fixtures remain unchanged.
+
 [All12 required negative controls](wisp-required-negatives.json) reject their
 intended assertions/runtime faults on the exact candidate, with completed valid
 browser QA payloads and no process timeouts. [Raw output](wisp-required-negatives.log.gz)

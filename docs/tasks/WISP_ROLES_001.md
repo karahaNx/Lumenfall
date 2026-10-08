@@ -71,11 +71,13 @@ Auto-Ascend22, MaxDepth220, full permanent Wisp tracks. Its presets support
 controlled comparisons but do not prove the reported active late-game share.
 Actual powered mid/late-game backups remain unavailable.
 
-Overlap: PR59 Wisp folding and PR60 Forge wording are incorporated, including
-PR59's tests. Mainb4d36675d916fd6e76d48526791de5201425937b adds PR64's Forge
-proposal documents and is also incorporated; it adds no product behavior.
-PR61 Bond wording/PR63 Cast text remain separate. Recheck live main and preserve
-concurrent changes before serial integration.
+Overlap: PR59 Wisp folding, PR60 Forge wording, PR61 Bond partner text and their
+tests are incorporated. Latest main641697e4208ac41a6116b903ab136e54571818bd
+also contains the PR62/64 exclusivity proposals and PR65 F12/device checkpoint.
+Only the shared module-list/status-row conflicts required manual resolution;
+both sides' modules and all other chats' status/evidence are retained. Core3,249,
+V8 6.0, mobile/text/motion and Bond-text checks pass again. PR63 Cast text remains
+separate. Recheck live main and preserve concurrent changes before integration.
 
 ## Acceptance and checks
 
@@ -116,6 +118,11 @@ New stricter oracle/evidence commits require fresh CI. The earlier local149-scen
 finished with174 passing executions and one old-oracle failure; it is not a
 passing final full suite. The updated standalone long-offline check passes.
 No merge or APK release for this task.
+
+Latest candidate product SHA256 after PR61 incorporation:
+`2abf03c62c7d311520ffd42ee1e15dee85dd3bedce99bd79af9b5a395a8a9551`.
+The final required suite now has151 default scenarios. The older150-scenario
+CI pass remains version-specific; final-head CI is required.
 
 The phase correction intentionally changes tiny clock/HP/charge values and
 two short cases' final segment count. The new fixed clock-only fixture verifies

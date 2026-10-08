@@ -1,0 +1,6 @@
+Browser identity: { "selected_path": "/usr/bin/chromium", "resolved_path": "/usr/bin/chromium", "sha256": "2c8d32d29dc6781c35ae196ea83299d507ac88fc339301abe74672feda299779", "version": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)", "version_exitcode": 0, "version_stderr": "" }
+Staged source: { "source_sha256": "e89495cd979d75eed9938e65e061415c2731eb83d51418d24f77224fae7a953f", "instrumented_sha256": "748698adee8017318bc8b5c6eed30a3a731170930cd7f9b8e4d93dbffdfa450a" }
+FAIL rift-status-mobile
+  process: { "exitcode": 1, "timed_out": false, "stderr": "" }
+  detail: { "status": "fail", "scenario": "rift-status-mobile", "message": "TypeError: Cannot read properties of undefined (reading 'uiMeasurementPause')\n    at <anonymous>:1:28", "records": [], "teardown": { "pendingBeforeClose": 0, "events": [ { "event": "browser-close", "code": 0, "signal": null, "pending": 0 }, { "event": "profile-removed", "browserClosed": true } ], "browser": { "code": 0, "signal": null }, "pendingAfterClose": 0, "profileRemoved": true } }
+Behavioral QA failed: rift-status-mobile null
