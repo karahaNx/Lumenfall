@@ -1,0 +1,289 @@
+{
+  "nativeBrowser": "/usr/bin/chromium",
+  "started": "2026-10-08T08:02:46.500Z",
+  "base": "14d5f3a3a78fe8b63cfa5544efc54f41217b65a5",
+  "sourceSha256": "852f32974f52d757406ac8a54b668969a2e0667e7acdd85192d63dbdc31ad262",
+  "checks": [
+    {
+      "name": "context",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "scripts/codex/check_context.cjs",
+        "--task",
+        "docs/tasks/FORMATION_AUTOSAVE_001.md"
+      ],
+      "exit": 1,
+      "signal": null,
+      "expired": false,
+      "seconds": 0.048
+    },
+    {
+      "name": "tooling",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/tooling/run.cjs"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 0.712
+    },
+    {
+      "name": "apk-identity-self-test",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "scripts/verify_apk_identity.cjs",
+        "--self-test"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 0.045
+    },
+    {
+      "name": "source",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "scripts/ci/validate_source.cjs"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 0.114
+    },
+    {
+      "name": "formation-autosave-contract",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "formation-autosave-contract",
+        "--raw-artifacts",
+        "/tmp/formation-final-integrated-focused/formation-autosave-contract-raw"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.828
+    },
+    {
+      "name": "formation-autosave-save-reload",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "formation-autosave-save-reload",
+        "--raw-artifacts",
+        "/tmp/formation-final-integrated-focused/formation-autosave-save-reload-raw"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.816
+    },
+    {
+      "name": "formation-autosave-backup-restore",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "formation-autosave-backup-restore",
+        "--raw-artifacts",
+        "/tmp/formation-final-integrated-focused/formation-autosave-backup-restore-raw"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.638
+    },
+    {
+      "name": "formation-autosave-recovery",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "formation-autosave-recovery",
+        "--raw-artifacts",
+        "/tmp/formation-final-integrated-focused/formation-autosave-recovery-raw"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.62
+    },
+    {
+      "name": "formation-autosave-native",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "formation-autosave-native",
+        "--raw-artifacts",
+        "/tmp/formation-final-integrated-focused/formation-autosave-native-raw"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 43.31
+    },
+    {
+      "name": "formation-autosave-reduced-motion",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "formation-autosave-reduced-motion",
+        "--raw-artifacts",
+        "/tmp/formation-final-integrated-focused/formation-autosave-reduced-motion-raw"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 29.066
+    },
+    {
+      "name": "p2-07a-formation-reconstruction",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "p2-07a-formation-reconstruction",
+        "--raw-artifacts",
+        "/tmp/formation-final-integrated-focused/p2-07a-formation-reconstruction-raw"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.755
+    },
+    {
+      "name": "p2-07a-persistence-review",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "p2-07a-persistence-review",
+        "--raw-artifacts",
+        "/tmp/formation-final-integrated-focused/p2-07a-persistence-review-raw"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.411
+    },
+    {
+      "name": "p2-07a-chronology",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "p2-07a-chronology",
+        "--raw-artifacts",
+        "/tmp/formation-final-integrated-focused/p2-07a-chronology-raw"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.516
+    },
+    {
+      "name": "p2-02a-core-qol",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "p2-02a-core-qol",
+        "--raw-artifacts",
+        "/tmp/formation-final-integrated-focused/p2-02a-core-qol-raw"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.76
+    },
+    {
+      "name": "save-backup-ui",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "save-backup-ui",
+        "--raw-artifacts",
+        "/tmp/formation-final-integrated-focused/save-backup-ui-raw"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 59.961
+    },
+    {
+      "name": "runtime-guard",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "scripts/ci/smoke.cjs",
+        "--install-guard",
+        "/workspace/Lumenfall-formation-autosave/mobile/www/index.html"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 0.037
+    },
+    {
+      "name": "runtime-smoke",
+      "command": "google-chrome",
+      "argv": [
+        "--headless=new",
+        "--no-sandbox",
+        "--disable-gpu",
+        "--disable-dev-shm-usage",
+        "--user-data-dir=/tmp/formation-final-integrated-focused/smoke-profile",
+        "--window-size=390,844",
+        "--virtual-time-budget=1800",
+        "--dump-dom",
+        "http://127.0.0.1:35893/index.html"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 0.971
+    },
+    {
+      "name": "runtime-smoke-assertions",
+      "exit": 0,
+      "checks": {
+        "guard": true,
+        "noUncaught": true,
+        "noRejection": true,
+        "zone": true,
+        "riftLock": true,
+        "enemy": true,
+        "hud": true
+      }
+    }
+  ],
+  "finished": "2026-10-08T08:05:14.133Z",
+  "passed": false
+}
