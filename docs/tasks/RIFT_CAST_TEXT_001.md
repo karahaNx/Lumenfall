@@ -1,6 +1,6 @@
 # RIFT_CAST_TEXT_001 — remove repeated Rift ability status
 
-Status: **product integrated; required acceptance passed; final delivery PR74 gate/merge pending**.
+Status: **product integrated and required acceptance verified**. Final delivery gate/merge receipt: PR74.
 Owner: this user-created feature chat. Original F13:
 
 > På rift skærmen skal cast teksten for wisp ability fjernes, der findes progress bar som allerede viser dette.
@@ -13,10 +13,7 @@ No subagents, message tools or chat renaming were used.
 
 ## Sources, baseline and scope
 
-Required startup/ownership/Visuals/context documents, original requirements,
-F13/dependency/save revision, Lead decisions, findings and image/source index were
-read. Exact source links and preparation are in [earlier evidence](../qa/rift-cast-text-001/README.md).
-Original requirements take precedence; supplied screenshots do not directly prove F13.
+Required startup and original F13/decision/dependency/save/evidence sources were read; exact links are in [earlier evidence](../qa/rift-cast-text-001/README.md). Original requirements prevail.
 
 Private checkout /workspace/lumenfall-rift-cast-text-001; product branch
 feature/rift-cast-text-001, delivery branch docs/rift-cast-text-001-delivery.
@@ -35,12 +32,7 @@ Ready/Casting through aria-valuetext without a live region. Existing expiry,
 Formation names, classes, portraits, passive power, Bond grouping, fill, VFX and
 reduced motion remain. Guidance/Cosmetics selectors are preserved.
 
-No gameplay values, purchases, Luminous Motes rewards, bulk/queue handlers,
-chronology, live/offline, save/migration, CSS/assets, package/signing or workflow
-changes. Existing values need no migration; no missing F13 design decision.
-QA fixtures use served copies/private emulator handles; signed APK unchanged.
-The CSS width tolerance0.00001 percentage points addresses serialization only;
-all numeric simulation assertions remain unchanged.
+Gameplay/purchases/rewards, chronology/parity/save and Android package/signing are unchanged; no migration or missing design decision. QA fixtures never alter the APK. CSS width tolerance0.00001 percentage points covers serialization only.
 
 ## Acceptance and evidence
 
@@ -80,9 +72,4 @@ lacks reduced-motion; modern-browser checks cover it. No independent review clai
 Earlier local browser timeout/native transport/display/segmented runs remain
 historical diagnostics. Other tasks retain their own open acceptance gates.
 
-[PR74](https://github.com/karahaNx/Lumenfall/pull/74) saves status, immutable APK and
-raw receipts. Next: pass final-head required CI, resolve the addressed review,
-merge and verify remote main/evidence/source, stop this task's shared-file work,
-then archive only this owner chat. Final immutable CI/merge receipt is saved in
-PR74's description to avoid a self-referential CI commit. Archive success requires
-an actual app-tool response. An open PR is not completed delivery.
+[PR74](https://github.com/karahaNx/Lumenfall/pull/74) saves status, APK and raw receipts. Its final immutable CI/merge receipt is recorded in the PR description. Completion requires a green final-head gate, remote integration/evidence verification, stopped shared-file work and an actual app-tool archive response for only this owner. Other chats are untouched.
