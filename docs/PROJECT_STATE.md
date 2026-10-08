@@ -24,6 +24,15 @@ verified; actual138→142 save storage/ownership preserved. [Receipt/limits](qa/
 [immutable APK](../archive/android/rift-cast-text-001/README.md). Native evidence is
 API27/WebView61 emulation plus a separate V8 6.0 probe; no physical/TalkBack claim.
 
+F14 [FORMATION_AUTOSAVE_001](tasks/FORMATION_AUTOSAVE_001.md) integrated via
+[PR76](https://github.com/karahaNx/Lumenfall/pull/76)/c5fa497. Selected-preset
+Field/Bench/recruitment saves immediately; Save removed; complete late-game
+intent and stored empty presets survive Ascend/recovery without pending power
+or Bonds. CI158/14, fresh integrated/mobile checks and signed APK0.1.145
+identity/assets/engine/native update/input/Ascend/cold launch PASS. Actual
+Android8.1/API27/WebView61 emulation; required physical/exact WebView60/TalkBack
+acceptance OPEN. [Receipt and immutable APK](qa/formation-autosave-2026-10-08/DELIVERY.md).
+
 
 [COMET_UNLOCKS_001 / F27](tasks/COMET_UNLOCKS_001.md) catalog is integrated
 through [PR69](https://github.com/karahaNx/Lumenfall/pull/69),
@@ -155,6 +164,7 @@ were recorded as integrated.
 | [AUTO_ASCEND_UI_001 / F01–F03](tasks/AUTO_ASCEND_UI_001.md) | Deeds unlock retained; one Rift dropdown and separate ON/OFF moved to Ascend. Candidate checks PASS:23 scoped positives/five negatives,20 mobile/text/motion profiles and54 V8 6.0 handler assertions. [Evidence](qa/auto-ascend-ui-001/README.md). | Publish/pass required CI/integrate; verify signed APK and required native/device acceptance. Feature/chat OPEN. |
 | [SAVE_BACKUP_UI_001 / F22](tasks/SAVE_BACKUP_UI_001.md) | PR77 integrated; CI152 scenarios/14 negatives, integrated12 UI profiles and signed144 identity/assets/extracted-UI/V8 checks PASS. Backup is beside independent Reset; Restore requires confirmation. | Complete [physical Android/WebView60/TalkBack acceptance](qa/save-backup-ui-001/2026-10-08/DEVICE_ACCEPTANCE.txt). Required acceptance OPEN; keep owner chat open. |
 | RIFT_CAST_TEXT_001 / F13 | **Complete.** PR63 integrated; CI151/12 negatives, integrated UI/save/parity/chronology checks and signed 0.1.142 native acceptance PASS. [Task/evidence](tasks/RIFT_CAST_TEXT_001.md). Existing200% name overflow is recorded separately. | Final checkpoint verified, shared-file work stopped; archive only the owner chat using the app tool. |
+| [FORMATION_AUTOSAVE_001 / F14](tasks/FORMATION_AUTOSAVE_001.md) | PR76/main integrated; CI158/14 and signed145 update/native Formation checks PASS. Later Resonate/main changes preserved. Required device acceptance OPEN. | Complete [physical/exact WebView60/TalkBack checklist](qa/formation-autosave-2026-10-08/DEVICE_ACCEPTANCE.txt); save observed results in GitHub and keep owner chat open. |
 | [COMET_UNLOCKS_001](tasks/COMET_UNLOCKS_001.md) / F27 | PR69/main integrated; full151 pre-merge CI and signed143 package/signing/assets/extracted-engine checks PASS. New catalogue140/50/160; legacy value/effects retained. [PR73](https://github.com/karahaNx/Lumenfall/pull/73) records final integrated-source CI. Required native acceptance OPEN. | Complete exact signed143 native update/interaction, physical WebView60 and TalkBack checklist. Keep feature/chat open; F25/F26 retirement/refunds stay separate. |
 | [BOND_TEXT_001 / F16](tasks/BOND_TEXT_001.md) | PR61 integrated; CI148/12 and fresh integrated checks PASS. Signed0.1.141 identity/assets, V8 6.0 helper, native WebView69 presentation and signed update/save-value checks PASS. | Complete [physical affected-phone/WebView60/TalkBack acceptance](qa/BOND_TEXT_001/android/DEVICE_ACCEPTANCE.txt) and save observations in GitHub. Keep owner chat open. |
 | [LAB_EXCLUSIVE_001](tasks/LAB_EXCLUSIVE_001.md) / F29 | [PR62 proposal checkpoint](https://github.com/karahaNx/Lumenfall/pull/62): 9 Labs inventoried, 7 duplicate rows in 6 effect families; exclusive study-work/reservation effects and value-preserving transition proposed. Actual CI/merge/integrated checks are saved in the PR body. No game behavior changed. | Obtain the agreed UPGRADE_IDENTITY_001 Lab effects/currencies/prices/work/unlocks/caps and migration policy. Full feature and chat remain open; proposed values/mechanics are not approved rules. |
