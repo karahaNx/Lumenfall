@@ -14,7 +14,7 @@ window.runP105ControlQa = function(bridge,ctx,assert){
   q('[data-tab="spirits"]').click();
   press('[data-empower-queue="ember"]',function(){return bridge.getState().empowerQueue.ember!==false;});
   q('[data-tab="forge"]').click();
-  press('[data-queue="charge"]',function(){return !!bridge.getState().researchQueue.focus;});
+  press('[data-queue="charge"]',function(){return !!bridge.getState().researchQueue.charge;});
   q('[data-tab="research"]').click();
   var study=q('[data-study-queue]'), studyId=study.getAttribute('data-study-queue');
   press('[data-study-queue="'+studyId+'"]',function(){return !!bridge.getState().studyQueue[studyId];});
@@ -23,7 +23,7 @@ window.runP105ControlQa = function(bridge,ctx,assert){
   q('[data-tab="ascend"]').click();
   press('[data-autoascend-toggle]',function(){return !!bridge.getState().autoAscendEnabled;});
 
-  var poor=bridge.getState();poor.lumen=0;poor.shards=0;bridge.setState(poor);bridge.renderLayout();
+  var poor=bridge.getState();poor.research.charge=9;poor.lumen=0;poor.shards=0;poor.exactRefundCredits.shards='0';bridge.setState(poor);bridge.renderLayout();
   var purchase=q('[data-research="charge"]');
   assert(purchase.disabled && purchase.dataset.state==='unaffordable' && purchase.querySelector('.label').textContent==='Upgrade' && !/Need|Cannot afford/i.test(purchase.textContent+' '+purchase.getAttribute('aria-label')),'silent resource shortage retains native disabled and Upgrade label');
   var rich=bridge.getState();rich.lumen=1e100;rich.shards=1e100;bridge.setState(rich);bridge.refreshAffordability();

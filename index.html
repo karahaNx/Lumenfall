@@ -2956,7 +2956,7 @@ var ABILITY_DESC = {
   dps: 'Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it.',
   ranged: 'Ability damage + Shards. Module boosts the Shards; Ultimate doubles both.',
   druid: 'Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both.',
-  support: 'Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s.'
+  support: 'Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 1s. Ultimate: +50% for 1.5s.'
 };
 
 var FORMATION_BONDS = [
@@ -3007,7 +3007,7 @@ var RESEARCH = [
   {id:'sense', effectPerLevel:0.08,     name:'Shard Sense',        desc:'+8% Shards from every kill, per level.',                 lumenBase:150, lumenGrowth:1.5,  shardBase:20, shardGrowth:1.5},
   {id:'formation', effectPerLevel:0.05, name:'Formation Training', desc:'+5% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.', lumenBase:0, lumenGrowth:1, shardBase:40, shardGrowth:1.6},
   {id:'resolve', effectPerLevel:0.1,   name:"Guardian's Resolve", desc:'+10% tap damage, per level.',                   lumenBase:150, lumenGrowth:1.45, shardBase:0,  shardGrowth:1},
-  {id:'charge', effectPerLevel:0.08,    name:'Swift Recovery',     desc:'+8% faster Wisp ability charge, per level.',              lumenBase:0,   lumenGrowth:1,    shardBase:30, shardGrowth:1.55},
+  {id:'charge', effectPerLevel:0.08, levelCap:10, name:'Swift Recovery', desc:'+8% faster Wisp ability charge per level, up to level 10. Minimum ability cycle: 3.33s.', lumenBase:0, lumenGrowth:1, shardBase:30, shardGrowth:1.55},
   {id:'arcanecal', name:'Arcane Calibration', desc:'+3 percentage points to the damaging Wisp ability factor per level. Burst, Breaker, Gale and Thorn only; no passive or Tap bonus.', unlockDepth:12, levelCap:10, effectPerLevel:0.03, lumenBase:15000, lumenGrowth:1.60, shardBase:120, shardGrowth:1.60},
   {id:'conduction', name:'Resource Conduction', desc:'+4 percentage points to the ability resource factor per level. Gale Shards and Thorn Lumen only; rounded per cast, not kill rewards.', unlockDepth:18, levelCap:10, effectPerLevel:0.04, lumenBase:90000, lumenGrowth:1.60, shardBase:280, shardGrowth:1.60},
   {id:'luminoustracking', name:'Luminous Tracking', desc:'+0.5 percentage points Luminous chance per level for future eligible encounters; total chance at most 35%. No extra Motes per kill.', unlockDepth:32, levelCap:10, effectPerLevel:0.005, lumenBase:2500000, lumenGrowth:1.60, shardBase:1500, shardGrowth:1.60}
@@ -3277,6 +3277,7 @@ function freshState(){
   LONG_STUDIES.forEach(function(l){ longStudyLevels[l.id] = 0; studyQueue[l.id] = false; studyUseMotes[l.id] = false; studySpeedTargets[l.id] = 1.5; });
   return {
     schemaVersion:SAVE_SCHEMA_VERSION, offline12hRefund:null,
+    feedbackMigration:{version:1,receipts:{},history:{}}, exactRefundCredits:{shards:'0'},
     lumen:0, shards:0, prisms:0, comets:0, motes:0, sigils:0,
     depth:1, maxDepthEver:1,
     riftMode:'push', farmDepth:0, farmReturnDepth:0,
@@ -3860,8 +3861,88 @@ function normalizeCurrentSave(input){
   out.lastSeen = finiteNonNegative(source.lastSeen,Date.now());
   if(out.lastSeen<=0) out.lastSeen = Date.now();
   normalizeCometTrials(source,out);
+  normalizeSwiftRefund(out,source);
   return out;
 }
+// Original rounded Swift prices are compensated once, without erasing history.
+// Decimal integer credits retain refunds that cannot fit beside a Number wallet.
+// The forge.charge receipt is shared with the pending all-27 migration contract.
+function refundInteger(raw){
+  return typeof raw==='string' && /^[0-9]{1,312}$/.test(raw) ? raw.replace(/^0+(?=\d)/,'') : '0';
+}
+function refundCompare(a,b){return a.length===b.length ? (a===b ? 0 : a>b ? 1 : -1) : a.length>b.length ? 1 : -1;}
+function refundAdd(a,b){
+  var result='',carry=0,i=a.length-1,j=b.length-1;
+  while(i>=0 || j>=0 || carry){var digit=(i>=0?Number(a[i--]):0)+(j>=0?Number(b[j--]):0)+carry;result=(digit%10)+result;carry=Math.floor(digit/10);}
+  return result||'0';
+}
+function refundSubtract(a,b){
+  var result='',borrow=0,j=b.length-1;
+  for(var i=a.length-1;i>=0;i--){var digit=Number(a[i])-(j>=0?Number(b[j--]):0)-borrow;borrow=digit<0?1:0;result=(digit+borrow*10)+result;}
+  return result.replace(/^0+(?=\d)/,'');
+}
+function refundNumberInteger(value){
+  // Hexadecimal is exact for finite integral binary Numbers, including >1e21.
+  var hex=Math.floor(value).toString(16),limbs=[0],base=10000000;
+  for(var i=0;i<hex.length;i++){
+    var carry=parseInt(hex[i],16);
+    for(var j=0;j<limbs.length;j++){var part=limbs[j]*16+carry;limbs[j]=part%base;carry=Math.floor(part/base);}
+    if(carry) limbs.push(carry);
+  }
+  var result=String(limbs.pop());
+  while(limbs.length) result+=('0000000'+limbs.pop()).slice(-7);
+  return result;
+}
+function normalizeSwiftRefund(out,source){
+  var saved=isPlainObject(source.feedbackMigration)?source.feedbackMigration:{};
+  var receipts=isPlainObject(saved.receipts)?saved.receipts:{};
+  // Preserve other receipts for forward-compatible coordination; award only Swift.
+  out.feedbackMigration={version:1,receipts:clonePersistedValue(receipts),history:isPlainObject(saved.history)?clonePersistedValue(saved.history):{}};
+  out.feedbackMigration.history.charge={levels:out.research.charge};
+  out.exactRefundCredits={shards:refundInteger(source.exactRefundCredits && source.exactRefundCredits.shards)};
+  if(out.research.charge<=10 || isPlainObject(receipts['forge.charge'])) return;
+  var receipt={from:10,to:out.research.charge,unpricedFrom:0,amounts:{shards:[]}};
+  for(var level=10;level<out.research.charge;level++){
+    var amount=Math.ceil(30*Math.pow(1.55,level));
+    if(!Number.isFinite(amount)){receipt.unpricedFrom=level+1;break;}
+    receipt.amounts.shards.push(amount);
+    var sum=out.shards+amount;
+    if(Number.isFinite(sum) && sum-out.shards===amount && sum-amount===out.shards) out.shards=sum;
+    else out.exactRefundCredits.shards=refundAdd(out.exactRefundCredits.shards,refundNumberInteger(amount));
+  }
+  out.feedbackMigration.receipts['forge.charge']=receipt;
+}
+function shardCredit(){return state.exactRefundCredits ? state.exactRefundCredits.shards : '0';}
+function shardAvailable(){return Math.min(Number.MAX_VALUE,state.shards+Number(shardCredit()));}
+function canSpendShards(cost,wallet){
+  wallet=wallet===undefined ? state.shards : wallet;
+  if(!Number.isFinite(cost) || cost<0) return false;
+  if(wallet>=cost) return true;
+  if(shardCredit()==='0') return false;
+  // Purchase prices are whole Shards; retain a fractional earned wallet remainder.
+  var needed=refundSubtract(refundNumberInteger(cost),refundNumberInteger(Math.floor(wallet)));
+  return refundCompare(shardCredit(),needed)>=0;
+}
+function shardShortfall(cost){
+  if(!Number.isFinite(cost)) return Infinity;
+  if(canSpendShards(cost)) return 0;
+  if(shardCredit()==='0') return Math.max(0,cost-state.shards);
+  var wallet=Math.floor(state.shards),needed=refundSubtract(refundNumberInteger(cost),refundNumberInteger(wallet));
+  return Number(refundSubtract(needed,shardCredit()))-(state.shards-wallet);
+}
+function spendShards(cost){
+  if(!canSpendShards(cost)) return false;
+  var credit=shardCredit();
+  if(credit==='0'){state.shards-=cost;return true;}
+  var price=refundNumberInteger(cost);
+  if(credit!=='0' && refundCompare(credit,price)>=0){state.exactRefundCredits.shards=refundSubtract(credit,price);return true;}
+  if(state.shards>=cost){state.shards-=cost;return true;}
+  var wallet=Math.floor(state.shards),needed=refundSubtract(price,refundNumberInteger(wallet));
+  state.exactRefundCredits.shards=refundSubtract(credit,needed);
+  state.shards-=wallet;
+  return true;
+}
+
 function acceptPersistedState(input,sourceName){
   assertPersistedRootShape(input);
   var migrated = migratePersistedState(input);
@@ -4370,7 +4451,7 @@ function formationRecommendationText(){
  * × Ultimate × Dawnpriest reward multiplier. Kill-only Lumen/Shard multipliers
  * do not modify ability-generated resources.
  *
- * Support Buff = fixed by the Support ability: +25% for 4s, or +50% for 8s
+ * Support Buff = fixed by the Support ability: +25% for 1s, or +50% for 1.5s
  * with its Ultimate. Wisp Power, Rarity and Modules do not change this buff.
  *
  * Guardian Tap = (5 + 2% of general Active-party passive power) × Tap-specific
@@ -4466,7 +4547,7 @@ function supportAbilityProfile(sp){
   var ultimate = !!(sp && ultimateUnlocked(sp.id));
   return {
     strength:ultimate ? 1.5 : 1.25,
-    durationMs:ultimate ? 8000 : 4000
+    durationMs:ultimate ? 1500 : 1000
   };
 }
 function averageSupportBuffMult(){
@@ -4517,7 +4598,7 @@ function abilityRewardPerCast(sp,level,conductionLevel){
 }
 function ultimateEffectText(sp){
   if(!sp) return 'Ultimate unlocked';
-  if(sp.abilityType==='support') return 'Support buff becomes +50% for 8s';
+  if(sp.abilityType==='support') return 'Support buff becomes +50% for 1.5s';
   if(sp.abilityType==='ranged') return 'Ability damage and Shards ×2';
   if(sp.abilityType==='druid') return 'Ability damage and Lumen ×2';
   return 'Ability damage ×2';
@@ -5031,8 +5112,8 @@ function buyRarity(sp){
   var level = state.spirits[sp.id];
   if(level < rarityReq(tier)) return;
   var cost = rarityCost(sp, tier);
-  if(state.shards<cost.shard || state.lumen<cost.lumen) return;
-  state.shards -= cost.shard;
+  if(!canSpendShards(cost.shard) || state.lumen<cost.lumen) return;
+  spendShards(cost.shard);
   state.lumen -= cost.lumen;
   state.heroRarity[sp.id] = tier+1;
   checkAchievements();
@@ -5121,9 +5202,9 @@ function buyModule(sp){
   var level = moduleLevel(sp.id);
   if(level>=MODULE_MAX_LEVEL) return;
   var cost = moduleCost(sp, level);
-  if(state.lumen<cost.lumen || state.shards<cost.shard) return;
+  if(state.lumen<cost.lumen || !canSpendShards(cost.shard)) return;
   state.lumen -= cost.lumen;
-  state.shards -= cost.shard;
+  spendShards(cost.shard);
   state.wispModules[sp.id] = level+1;
   saveState();
   renderSpirits();
@@ -5220,7 +5301,7 @@ function maxAffordableLevels(node, level, lumenBudget, shardBudget){
   var hi = 1;
   while(true){
     var c = researchCostForLevels(node, level, hi);
-    if(c.lumen>lumenBudget || c.shard>shardBudget || hi>1000000) break;
+    if(c.lumen>lumenBudget || !canSpendShards(c.shard,shardBudget) || hi>1000000) break;
     hi *= 2;
   }
   var lo = Math.floor(hi/2);
@@ -5228,7 +5309,7 @@ function maxAffordableLevels(node, level, lumenBudget, shardBudget){
   while(lo<hi){
     var mid = Math.ceil((lo+hi+1)/2);
     var cm = researchCostForLevels(node, level, mid);
-    if(cm.lumen<=lumenBudget && cm.shard<=shardBudget){ lo = mid; } else { hi = mid-1; }
+    if(cm.lumen<=lumenBudget && canSpendShards(cm.shard,shardBudget)){ lo = mid; } else { hi = mid-1; }
   }
   return lo;
 }
@@ -5252,13 +5333,13 @@ function getResearchBuyPlan(node,requested){
       // geometric sum, never a sum of individually rounded level prices.
       while(count<limit){
         var next = researchCostForLevels(node,e.level,count+1);
-        if(!Number.isFinite(next.lumen) || !Number.isFinite(next.shard) || next.lumen>state.lumen || next.shard>state.shards) break;
+        if(!Number.isFinite(next.lumen) || !Number.isFinite(next.shard) || next.lumen>state.lumen || !canSpendShards(next.shard)) break;
         count++;cost=next;
       }
     } else {
       var n = requested==='max' ? maxAffordableLevels(node,e.level,state.lumen,state.shards) : requested;
       var candidate = researchCostForLevels(node,e.level,n);
-      if(n>0 && Number.isFinite(candidate.lumen) && Number.isFinite(candidate.shard) && candidate.lumen<=state.lumen && candidate.shard<=state.shards){count=n;cost=candidate;}
+      if(n>0 && Number.isFinite(candidate.lumen) && Number.isFinite(candidate.shard) && candidate.lumen<=state.lumen && canSpendShards(candidate.shard)){count=n;cost=candidate;}
     }
     if(!count) reason='unaffordable';
   }
@@ -5318,7 +5399,7 @@ function buyResearch(node){
   var plan = getResearchBuyPlan(node);
   if(!plan.affordable || plan.buyCount<1) return;
   state.lumen -= plan.cost.lumen;
-  state.shards -= plan.cost.shard;
+  spendShards(plan.cost.shard);
   state.research[node.id] += plan.buyCount;
   trackDaily('research', plan.buyCount);
   saveState();
@@ -5337,13 +5418,13 @@ function autoLabQueueTick(){
       if(!plan.affordable) return;
       var cost = plan.cost;
       var total = cost.lumen + cost.shard;
-      if(state.lumen>=cost.lumen && state.shards>=cost.shard && total<cheapestTotal){
+      if(state.lumen>=cost.lumen && canSpendShards(cost.shard) && total<cheapestTotal){
         cheapestTotal = total; cheapest = node; cheapestCost = cost;
       }
     });
     if(!cheapest) break;
     state.lumen -= cheapestCost.lumen;
-    state.shards -= cheapestCost.shard;
+    spendShards(cheapestCost.shard);
     state.research[cheapest.id] += 1;
     trackDaily('research');
     boughtAny = true;
@@ -5405,14 +5486,14 @@ function getStudyStartPlan(node){
   var valid=Number.isFinite(cost.lumen) && cost.lumen>=0 && Number.isFinite(cost.shard) && cost.shard>=0 && Number.isFinite(duration) && duration>0;
   var reason=node.retiredTo ? 'retired' : !unlocked ? 'locked' : maxed ? 'maxed' : findActiveStudy(node.id) ? 'active' : state.activeStudies.length>=studySlotCount() ? 'slots' : !valid ? 'unavailable' : '';
   var eligible=!reason;
-  if(eligible && (state.lumen<cost.lumen || state.shards<cost.shard)) reason='unaffordable';
+  if(eligible && (state.lumen<cost.lumen || !canSpendShards(cost.shard))) reason='unaffordable';
   return {node:node,level:level,cost:cost,duration:duration,unlocked:unlocked,maxed:maxed,eligible:eligible,affordable:!reason,reason:reason};
 }
 function commitStudyStart(node){
   var plan=getStudyStartPlan(node);
   if(!plan.affordable) return false;
   state.lumen-=plan.cost.lumen;
-  state.shards-=plan.cost.shard;
+  spendShards(plan.cost.shard);
   state.activeStudies.push({id:plan.node.id,remainingSec:plan.duration,totalDurationSec:plan.duration,speedMult:1});
   return true;
 }
@@ -5869,7 +5950,8 @@ function formatRiftNumber(value){
 }
 function renderHud(){
   els['hud-lumen'].textContent = formatRiftNumber(state.lumen);
-  els['hud-shard'].textContent = formatRiftNumber(state.shards);
+  els['hud-shard'].textContent = formatRiftNumber(shardAvailable());
+  els['hud-shard'].title = shardCredit()==='0' ? 'Shards' : 'Shards include '+shardCredit()+' spendable refund credits';
   els['hud-mote'].textContent = formatRiftNumber(state.motes);
   els['hud-prism'].textContent = formatRiftNumber(state.prisms);
   els['hud-comet'].textContent = formatRiftNumber(state.comets);
@@ -6326,7 +6408,7 @@ function renderSpirits(){
     var active = state.activeParty.indexOf(sp.id)!==-1;
     var req = rarityReq(tier);
     var rc = rarityCost(sp, tier);
-    var canRarity = recruited && tier<5 && level>=req && state.shards>=rc.shard && state.lumen>=rc.lumen;
+    var canRarity = recruited && tier<5 && level>=req && canSpendShards(rc.shard) && state.lumen>=rc.lumen;
     var rarityLabel = tier>=5 ? 'Maxed' : (level<req ? ('Lv.'+req+' req') :
       ('<span style="font-size:.6875rem;">Rarity Up</span>' +
        '<span style="font-size:.6875rem;">'+costIcon('lumen')+formatNum(rc.lumen)+'</span>' +
@@ -6335,7 +6417,7 @@ function renderSpirits(){
     var modLvl = moduleLevel(sp.id);
     var modMaxed = modLvl>=MODULE_MAX_LEVEL;
     var modCost = moduleCost(sp, modLvl);
-    var canModule = recruited && !modMaxed && state.lumen>=modCost.lumen && state.shards>=modCost.shard;
+    var canModule = recruited && !modMaxed && state.lumen>=modCost.lumen && canSpendShards(modCost.shard);
     var moduleHtml =
       '<div class="module-row">' +
         '<div class="module-name">'+modInfo.name+' <span style="color:var(--shard);">Lv.'+modLvl+'/'+MODULE_MAX_LEVEL+(modMaxed?' · Maxed':'')+'</span></div>' +
@@ -7004,7 +7086,7 @@ var ENCYCLOPEDIA_MECHANICS = [
   {name:'Ability Output', meta:'Combat / economy rule', desc:'Damaging abilities use Wisp Power, their relevant Module, Ultimate, damage Bonds and Boss ability modifiers. Gale/Thorn resource output uses Wisp Power, its Module, Ultimate and Dawnpriest; passive-only party upgrades and Support buffs do not increase ability output.'},
   {name:'Tap damage (Guardian Tap)', meta:'Damage from tapping the enemy', desc:'This is your damage per tap on the enemy. Tap starts at 5 damage plus 2% of your general Active-Wisp passive power, then Tap upgrades apply. Support buffs and Guardian’s Mark also multiply it. Auto-Tap uses the same hit once per second.'},
   {name:'Rarity', meta:'Wisp progression', desc:'Rarity multiplies that Wisp’s Power, so it affects passive damage plus damaging/resource abilities. Every Rarity tier owned across the roster also adds +2% general passive-party power. Rarity does not strengthen Support buffs.'},
-  {name:'Modules & Ultimates', meta:'Wisp progression', desc:'Modules are role-specific: Burst/Breaker Modules boost ability damage, Shard/Lumen Utility Modules boost their ability-generated resource, and Amplifier Modules boost Motes while Active. Ultimates double damage/resource ability output; Amplifier Ultimates change the buff from +25% for 4s to +50% for 8s.'},
+  {name:'Modules & Ultimates', meta:'Wisp progression', desc:'Modules are role-specific: Burst/Breaker Modules boost ability damage, Shard/Lumen Utility Modules boost their ability-generated resource, and Amplifier Modules boost Motes while Active. Ultimates double damage/resource ability output; Amplifier Ultimates change the buff from +25% for 1s to +50% for 1.5s.'},
   {name:'Endgame Currency Utility', meta:'Economy rule', desc:'After all eight Ultimates are owned, Sigils can ready one Active Wisp ability for 25 Sigils, at most 3 times per Ascension run. Auto-Ascend plus Comet Trials unlock Quest Refresh; previous complete Rest Stop owners retain access. A refresh costs at least the richest quest reward, so refreshing cannot generate extra Comets.'},
   {name:'Wisp Roles', meta:'Build label', desc:'Roles describe authoritative ability output: Burst delivers the highest raw ability coefficient; Breaker delivers heavy ability hits; Amplifier buffs passive Wisp damage and your tap damage; Shard Utility and Lumen Utility add their named resource to ability casts. These are output and utility roles, not defensive combat roles.'},
   {name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the run for Prisms. Your first reward sets a cleared-Rift benchmark; repeats at or below it earn a 20% reserve reward, while pushing beyond it adds a new-depth bonus. Permanent systems stay.'},
@@ -7512,10 +7594,29 @@ function simulationNextStudySeconds(){
   });
   return next;
 }
-function simulationAdvanceStudyProgress(elapsedSec){
+// Ephemeral anchors keep paid work exact across clock cuts. Keys are the live
+// Study objects; no cache fields enter saves, and changed work/speed/clock resets it.
+var studyWorkClocks = new WeakMap();
+function simulationAdvanceStudyProgress(elapsedSec,clockStart,clockEnd){
   if(elapsedSec<=0) return;
   state.activeStudies.forEach(function(active){
-    active.remainingSec -= elapsedSec * active.speedMult;
+    if(!clockStart || !clockEnd){
+      studyWorkClocks.delete(active);
+      active.remainingSec -= elapsedSec * active.speedMult;
+      return;
+    }
+    var anchor=studyWorkClocks.get(active);
+    if(!anchor || anchor.lastRemaining!==active.remainingSec || anchor.speed!==active.speedMult ||
+        anchor.end.wholeSec!==clockStart.wholeSec || anchor.end.remainingSec!==clockStart.remainingSec){
+      anchor={remaining:active.remainingSec,speed:active.speedMult,start:clockStart};
+      studyWorkClocks.set(active,anchor);
+    }
+    // Subtract whole work before fractional work so a large original snapshot
+    // cannot accumulate hundreds of thousands of rounded 100ms decrements.
+    active.remainingSec = (anchor.remaining-(clockEnd.wholeSec-anchor.start.wholeSec)*anchor.speed) -
+      (anchor.start.remainingSec-clockEnd.remainingSec)*anchor.speed;
+    anchor.lastRemaining=active.remainingSec;
+    anchor.end=clockEnd;
   });
 }
 function simulationCompleteDueStudies(summary){
@@ -7568,7 +7669,7 @@ function simulationDrainResearchQueue(summary){
 }
 function simulationCurrencyKillsNeeded(cost,lumenPerKill,shardPerKill){
   var lumenDeficit = Math.max(0,cost.lumen-state.lumen);
-  var shardDeficit = Math.max(0,cost.shard-state.shards);
+  var shardDeficit = shardShortfall(cost.shard);
   // Affordability itself is strict (budget >= cost), so any positive deficit
   // needs at least one real reward event. Never round a tiny deficit down to a
   // zero-time economy boundary.
@@ -8051,6 +8152,10 @@ function simulationResolveTimestamp(nowMs,elapsedSec,policy,summary,clock){
 
   return actions;
 }
+// Share the existing 100ms live cadence with longer windows. The countdown
+// coordinates retain fractional events; this cuts intervals without rounding
+// away time, changing rewards or introducing a per-kill loop.
+var SIM_TICK_REMAINING = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9].map(function(phase){return 1-phase;});
 function advanceAuthoritativeTime(elapsedSec,options){
   // A cursor retains this scheduler's exact clock/phase across yields. Calling
   // the synchronous facade still uses the identical event ordering.
@@ -8103,10 +8208,10 @@ function advanceAuthoritativeTime(elapsedSec,options){
   var farmGridRemainingSec = firstFarmGridSec;
   var farmGridCrossings = 0;
   // Keep endpoint fractions separate from whole seconds (PR70 clock fix).
-  var targetGridPhaseSec = startPhaseSec+targetFractionSec;
-  var targetGridCarry = Math.floor(targetGridPhaseSec);
+  var targetGridPhaseMs = (((clockStartMs%1000)+1000)%1000)+targetFractionSec*1000;
+  var targetGridCarry = Math.floor(targetGridPhaseMs/1000);
   var targetFarmGridCrossings = targetWholeSec+targetGridCarry;
-  targetGridPhaseSec -= targetGridCarry;
+  var targetGridPhaseSec = (targetGridPhaseMs-targetGridCarry*1000)/1000;
   var targetFarmGridRemainingSec = targetGridPhaseSec===0 ? 1 : 1-targetGridPhaseSec;
 
   function advanceFarmGridClock(stepSec){
@@ -8204,6 +8309,10 @@ function advanceAuthoritativeTime(elapsedSec,options){
   }
   simulationResolveTimestamp(initialNowMs,0,policy,summary,simulationClockPosition());
 
+  // Use the same coordinate difference for the first interval as every later
+  // one. Literal 0.1 can otherwise clip a slightly longer grid interval, while
+  // the endpoint still advances the clock to the full requested boundary.
+  remaining = simulationRemainingSec();
   var batchEvents = 0;
   var batchStarted = simulationWorkNow();
   while(remaining>0){
@@ -8253,12 +8362,21 @@ function advanceAuthoritativeTime(elapsedSec,options){
     next = Math.min(next,buffStep);
     next = Math.min(next,bossRetreatStep);
 
-    var farmGridStep = Infinity;
+    var farmGridStep = farmGridRemainingSec;
     var economyStep = Infinity;
+    for(var tickGridIndex=0;tickGridIndex<SIM_TICK_REMAINING.length;tickGridIndex++){
+      var tickTarget=SIM_TICK_REMAINING[tickGridIndex];
+      if(tickTarget<farmGridRemainingSec){farmGridStep=farmGridRemainingSec-tickTarget;break;}
+    }
+    // A timer accumulated across clock cuts can round a few ulps before a
+    // coincident support deadline. Resolve both at the deadline, preserving
+    // the complete passive interval and the established expiry-first order.
+    if(Number.isFinite(buffStep) && buffStep>=next &&
+        buffStep-next<=32*Number.EPSILON*Math.max(1,buffStep) &&
+        (next===abilityStep || next===autoTapStep || next===autoEmpowerStep)) next=buffStep;
+    next = Math.min(next,farmGridStep);
     if(state.riftMode==='farm'){
-      farmGridStep = farmGridRemainingSec;
       economyStep = simulationFarmEconomyBoundarySeconds(dps,rewardScale);
-      next = Math.min(next,farmGridStep);
       next = Math.min(next,economyStep);
     } else {
       next = Math.min(next,simulationPassiveKillSeconds(dps));
@@ -8266,7 +8384,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
 
     if(!Number.isFinite(next)) next = remaining;
     next = Math.max(0,Math.min(remaining,next));
-    var hitsFarmGrid = state.riftMode==='farm' && next===farmGridStep;
+    var hitsFarmGrid = next===farmGridRemainingSec;
     var hitsWindowEnd = next===remaining;
     var diagnosticEventKinds = [];
     if(next===abilityStep) diagnosticEventKinds.push('ability');
@@ -8308,7 +8426,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
         simulationAdvanceAbilityResources(next);
         simulationAdvanceAutomationTimers(next);
       }
-      simulationAdvanceStudyProgress(next);
+      var studyClockStart = simulationClockPosition();
       var crossedFarmGrids = advanceFarmGridClock(next);
       if(hitsFarmGrid && crossedFarmGrids!==1){
         throw new Error('Authoritative Farm grid clock crossed an unexpected boundary count');
@@ -8327,6 +8445,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
         farmGridCrossings = targetFarmGridCrossings;
         farmGridRemainingSec = targetFarmGridRemainingSec;
       }
+      simulationAdvanceStudyProgress(next,studyClockStart,simulationClockPosition());
       elapsedInRun = currentElapsedSec();
       remaining = hitsWindowEnd ? 0 : simulationRemainingSec();
     }
@@ -8570,7 +8689,7 @@ function checkAffordability(){
     var level = state.spirits[id];
     var req = rarityReq(tier);
     var cost = rarityCost(sp, tier);
-    btn.disabled = !(level>=req && state.shards>=cost.shard && state.lumen>=cost.lumen);
+    btn.disabled = !(level>=req && canSpendShards(cost.shard) && state.lumen>=cost.lumen);
   });
   els['spirit-list'].querySelectorAll('[data-module]').forEach(function(btn){
     var sp = SPIRITS.find(function(s){ return s.id===btn.getAttribute('data-module'); });
@@ -8578,7 +8697,7 @@ function checkAffordability(){
     var level = moduleLevel(sp.id);
     if(level>=MODULE_MAX_LEVEL) return;
     var cost = moduleCost(sp, level);
-    btn.disabled = (state.spirits[sp.id]||0)<=0 || state.lumen<cost.lumen || state.shards<cost.shard;
+    btn.disabled = (state.spirits[sp.id]||0)<=0 || state.lumen<cost.lumen || !canSpendShards(cost.shard);
   });
   els['spirit-list'].querySelectorAll('[data-ultimate]').forEach(function(btn){
     var sp = SPIRITS.find(function(s){ return s.id===btn.getAttribute('data-ultimate'); });

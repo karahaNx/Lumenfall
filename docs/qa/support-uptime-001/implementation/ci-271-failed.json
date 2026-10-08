@@ -1,0 +1,24 @@
+{
+  "status": "failed",
+  "runId": 37745257881,
+  "runNumber": 271,
+  "head": "e3e2df5a927a6dd4bb9918f98ad7df4f26dfd77c",
+  "url": "https://github.com/karahaNx/Lumenfall/actions/runs/37745257881",
+  "defaultScenarios": 172,
+  "failed": [
+    "r3-destinations",
+    "p1-05-control-regressions",
+    "parity-medium-farm",
+    "p2-07a-farm-retention",
+    "p2-02a-core-qol"
+  ],
+  "negativeAndSmokeGates": "skipped; not a pass",
+  "dispositions": {
+    "r3-destinations": "Keep actual bulk selections/handler/debit assertions; literal count limited by approved cap10.",
+    "p1-05-control-regressions": "Test actual charge queue state and a buyable level9 with zero wallet/credits for shortage state.",
+    "parity-medium-farm": "Exercise final level9-to10 Swift queue; unchanged strict full state/summary/split chronology and causal audits. Arcane fixture alternative exposed HP drift, retained raw failure.",
+    "p2-07a-farm-retention": "Same funded final Swift queue fixture and unchanged Farm-retention/live-offline assertions.",
+    "p2-02a-core-qol": "Fund a buyable level9 rather than historical charge above the cap; actual purchase must advance without changing Studies."
+  },
+  "next": "Required full CI must pass on final combined-main head."
+}

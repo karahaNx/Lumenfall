@@ -1,0 +1,25 @@
+PASS support economy 1s
+node:internal/assert/utils:77
+    throw err;
+    ^
+
+AssertionError [ERR_ASSERTION]: 100ms state.enemyHp: 3216635.9008925296 vs 3216635.883424927; tolerance 0.0000032166359008925297
+    at compare (/workspace/Lumenfall-SUPPORT_UPTIME_001/tests/behavioral/support-economy-parity.cjs:9:152)
+    at compare (/workspace/Lumenfall-SUPPORT_UPTIME_001/tests/behavioral/support-economy-parity.cjs:9:395)
+    at Object.<anonymous> (/workspace/Lumenfall-SUPPORT_UPTIME_001/tests/behavioral/support-economy-parity.cjs:12:273)
+    at Module._compile (node:internal/modules/cjs/loader:1872:14)
+    at Object..js (node:internal/modules/cjs/loader:2003:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

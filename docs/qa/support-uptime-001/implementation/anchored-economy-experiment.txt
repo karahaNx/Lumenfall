@@ -1,0 +1,18 @@
+PASS support economy 1s
+evalmachine.<anonymous>:5417
+      throw new Error('Authoritative simulation stalled without elapsed-time or state progress | '+JSON.stringify({
+      ^
+
+Error: Authoritative simulation stalled without elapsed-time or state progress | {"elapsedInRun":0.031783154351247345,"elapsedWholeSec":0,"elapsedFractionSec":0.031783154351247345,"elapsedSec":0.1,"remaining":0.06821684564875263,"stepSec":0,"farmGridRemainingSec":0.5682168456487526,"farmGridCrossings":0,"riftMode":"push","candidates":{"ability":0.40155017898208545,"autoTap":0.5682168456487526,"autoEmpower":0.5682168456487526,"study":75.56821684564945,"bossRetreatGrace":null,"farmGrid":0.5682168456487526,"economy":null},"kinds":[]}
+    at run (evalmachine.<anonymous>:5417:13)
+    at run.next (<anonymous>)
+    at Object.advanceAuthoritativeTime [as advance] (evalmachine.<anonymous>:5441:21)
+    at run (/workspace/Lumenfall-SUPPORT_UPTIME_001/tests/behavioral/support-economy-parity.cjs:10:195)
+    at Object.<anonymous> (/workspace/Lumenfall-SUPPORT_UPTIME_001/tests/behavioral/support-economy-parity.cjs:12:254)
+    at Module._compile (node:internal/modules/cjs/loader:1872:14)
+    at Object..js (node:internal/modules/cjs/loader:2003:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+
+Node.js v24.19.0

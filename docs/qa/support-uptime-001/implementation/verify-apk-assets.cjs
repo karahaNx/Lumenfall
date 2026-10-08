@@ -1,0 +1,8 @@
+'use strict';
+// Complete product/font/branding replay against an explicit integrated source.
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto'),zlib=require('node:zlib');
+const root=path.resolve(__dirname,'../../../..'),zip=require(root+'/scripts/lib/zip.cjs');
+const [apk,output,extracted,sourceRoot,sourceCommit]=process.argv.slice(2);assert(apk&&output&&extracted&&sourceRoot&&sourceCommit,'APK, receipt, extracted index, source root and commit required');const source=path.resolve(sourceRoot),data=fs.readFileSync(apk),entries=zip.verifyZip(data),sha=b=>crypto.createHash('sha256').update(b).digest('hex'),rows=[];
+const files=['index.html',...['fonts','branding'].flatMap(d=>fs.readdirSync(path.join(source,d),{recursive:true}).filter(f=>fs.statSync(path.join(source,d,f)).isFile()).map(f=>d+'/'+f))];
+for(const file of files){const entry=entries.find(e=>e.name==='assets/public/'+file);assert(entry,'packaged asset exists: '+file);const at=entry.offset+30+data.readUInt16LE(entry.offset+26)+data.readUInt16LE(entry.offset+28),compressed=data.subarray(at,at+entry.compressed),actual=entry.method===0?compressed:zlib.inflateRawSync(compressed);assert(actual.equals(fs.readFileSync(path.join(source,file))),'byte-identical integrated asset: '+file);rows.push({file,bytes:actual.length,sha256:sha(actual)});if(file==='index.html')fs.writeFileSync(extracted,actual);}
+fs.writeFileSync(output,JSON.stringify({status:'pass',sourceCommit,sourceRoot:source,apkSha256:sha(data),apkBytes:data.length,crcEntries:entries.length,matchedAssets:rows.length,files:rows},null,2)+'\n');console.log('PASS APK ZIP CRC and '+rows.length+' byte-identical integrated assets');

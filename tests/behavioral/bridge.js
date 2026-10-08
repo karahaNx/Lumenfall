@@ -1,3 +1,14 @@
+// Private causal controls restore the original Farm-only 1s clock cuts.
+// Finer cuts otherwise mask the two archived quotient/epoch counterexamples.
+function qaRestoreLegacyCadence(){
+  var original=advanceAuthoritativeTime,source=original.toString();
+  var pattern=/    var farmGridStep = farmGridRemainingSec;[\s\S]*?    if\(state.riftMode==='farm'\)\{/;
+  if(!pattern.test(source)) throw new Error('legacy cadence causal marker missing');
+  source=source.replace(pattern,"    var farmGridStep = Infinity;\n    var economyStep = Infinity;\n    if(state.riftMode==='farm'){\n      farmGridStep = farmGridRemainingSec;\n      next = Math.min(next,farmGridStep);");
+  source=source.replace('var hitsFarmGrid = next===farmGridRemainingSec;','var hitsFarmGrid = state.riftMode===\'farm\' && next===farmGridStep;');
+  advanceAuthoritativeTime=eval('('+source+')');
+  return function(){advanceAuthoritativeTime=original;};
+}
 
 var qaLifecycleEvents = [];
 // Fixed-clock UI parity cases measure progression separately from real CPU time.
@@ -75,6 +86,7 @@ window.__lumenfallQaBridge = {
     failNext:function(){var original=simulationResolveTimestamp;simulationResolveTimestamp=function(){simulationResolveTimestamp=original;throw new Error('injected offline failure');};}
   },
   labMotes: {
+    fixedOfflineWindow: function(){var original=offlineProcessingClock;offlineProcessingClock=function(){return 0;};try{return applyOfflineProgress();}finally{offlineProcessingClock=original;}},
     withHp: function(hp,fn){var original=enemyHpFor;enemyHpFor=function(){return hp;};try{return fn();}finally{enemyHpFor=original;}},
     naturalDps: function(){return simulationPassiveDps(2000000000000);},
     numericCosts: function(){return {titan:spiritCost(SPIRITS.find(function(s){return s.id==='titan';})),formation:researchCostForLevels(RESEARCH.find(function(s){return s.id==='formation';}),state.research.formation,1),momentum:nodeCost(NODES.find(function(s){return s.id==='momentum';})),formationStudy:studyCost(LONG_STUDIES.find(function(s){return s.id==='formationstudy';}),state.longStudyLevels.formationstudy),wispAscend:studyCost(LONG_STUDIES.find(function(s){return s.id==='wispascend';}),state.longStudyLevels.wispascend)};},
@@ -92,6 +104,7 @@ window.__lumenfallQaBridge = {
     withDps: function(dps,fn){var original=simulationPassiveDps;simulationPassiveDps=function(){return dps;};try{return fn();}finally{simulationPassiveDps=original;}},
     mutate: function(kind){
       var start=commitStudyStart,plan=studyMotesPlan,boundary=simulationKillsUntilStudyMotes,farm=simulationApplyFarmPassive;
+      var restoreCadence=kind==='rounded-quotient'?qaRestoreLegacyCadence():function(){};
       if(kind==='double-round')simulationApplyFarmPassive=function simulationApplyFarmPassive(elapsedSec,dps,policy,summary){
   if(elapsedSec<=0 || dps<=0) return;
   var damage = dps*elapsedSec;
@@ -153,7 +166,7 @@ window.__lumenfallQaBridge = {
       if(kind==='free-carry')commitStudyStart=function(node){var result=start(node);if(result&&state.studyUseMotes[node.id])findActiveStudy(node.id).speedMult=state.studySpeedTargets[node.id];return result;};
       if(kind==='fallback')studyMotesPlan=function(node){var result=plan(node);if(result&&state.motes<result.cost){result.target=1.5;result.cost=speedTierCost(1.5);}return result;};
       if(kind==='batch-end')simulationKillsUntilStudyMotes=function(){return Infinity;};
-      return function(){commitStudyStart=start;studyMotesPlan=plan;simulationKillsUntilStudyMotes=boundary;simulationApplyFarmPassive=farm;};
+      return function(){restoreCadence();commitStudyStart=start;studyMotesPlan=plan;simulationKillsUntilStudyMotes=boundary;simulationApplyFarmPassive=farm;};
     }
   },
   upgradeIdentity: {
@@ -211,6 +224,7 @@ window.__lumenfallQaBridge = {
   },
   uiMeasurementPause: function(paused){ window.__qaUiMeasurementPause(paused); },
   supportTest: {
+    resonate: function(id){return useSigilResonance(SPIRITS.find(function(sp){return sp.id===id;}));},
     factor: function(now){return simulationBuffMult(now===undefined?Date.now():now);},
     next: function(now){return simulationNextBuffSeconds(now);},
     average: function(){return averageSupportBuffMult();},
@@ -238,9 +252,11 @@ window.__lumenfallQaBridge = {
   },
   buffTiming: {
     restoreOldCalculation: function(){
-      var original=supportDeadlineSecondsRemaining;
+      var original=supportDeadlineSecondsRemaining,restoreCadence=qaRestoreLegacyCadence();
+      // Restore the original 1s cadence as well: 100ms cuts mask this old
+      // epoch-subtraction counterexample. The strict gameplay oracle stays.
       supportDeadlineSecondsRemaining=function(until,nowMs){return until?(until-nowMs)/1000:0;};
-      return function(){supportDeadlineSecondsRemaining=original;};
+      return function(){supportDeadlineSecondsRemaining=original;restoreCadence();};
     }
   },
   forge: {

@@ -8,24 +8,17 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const root=path.resolve(__dirname,'../..');
 const sourceArg=process.argv.indexOf('--source');
 const source=fs.readFileSync(sourceArg<0?path.join(root,'index.html'):process.argv[sourceArg+1],'utf8');
-const baseline=fs.readFileSync(path.join(root,'docs/recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/main-index.html'),'utf8');
-assert.equal(require('node:crypto').createHash('sha1').update('blob '+Buffer.byteLength(baseline)+'\0'+baseline).digest('hex'),'ea44431c163569548973d9e489f75345749a07ee','original product oracle blob');
-// PR70's independently prepared clock correction is a necessary dependency:
-// closing old queues exposes a canonical-grid stall. Keep the immutable old
-// engine as the reference, applying ONLY its two clock corrections. The complete
-// state and summary comparisons below remain exact, including economy/ownership.
-function clockReference(original){
- const replacements=[
-  ['  var targetGridPositionSec = startPhaseSec+elapsedSec;\n  var targetFarmGridCrossings = Math.floor(targetGridPositionSec);\n  var targetGridPhaseSec = targetGridPositionSec-targetFarmGridCrossings;',
-   '  var targetGridPhaseSec = startPhaseSec+targetFractionSec;\n  var targetGridCarry = Math.floor(targetGridPhaseSec);\n  var targetFarmGridCrossings = targetWholeSec+targetGridCarry;\n  targetGridPhaseSec -= targetGridCarry;'],
-  ['    var elapsedWholeBefore = elapsedWholeSec;\n    var elapsedFractionBefore = elapsedFractionSec;',
-   '    var gridCrossingsBefore = farmGridCrossings;\n    var gridRemainingBefore = farmGridRemainingSec;'],
-  ['if(elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && actions===0){',
-   'if(farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore && actions===0){']
- ];
- for(const [before,after] of replacements){assert.equal(original.split(before).length,2,'unique frozen clock marker');original=original.replace(before,after);}
- return original;
-}
+const frozen=fs.readFileSync(path.join(root,'docs/recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/main-index.html'),'utf8');
+assert.equal(require('node:crypto').createHash('sha1').update('blob '+Buffer.byteLength(frozen)+'\0'+frozen).digest('hex'),'ea44431c163569548973d9e489f75345749a07ee','original product oracle blob');
+// Preserve the independent frozen scheduler/economy. Apply only the two approved
+// timing constants in memory; never edit the original product or device save.
+// The device save owns charge60, whose effective level is now10 for every Wisp.
+function contractOnce(text,before,after){assert.equal(text.split(before).length,2,'unique frozen contract marker');return text.replace(before,after);}
+const baseline=contractOnce(contractOnce(frozen,"{id:'charge', effectPerLevel:0.08,","{id:'charge', effectPerLevel:0.08, levelCap:10,"),'durationMs:ultimate ? 8000 : 4000','durationMs:ultimate ? 1500 : 1000');
+// Keep the independent frozen engine's prices/economy and event order. Adapt
+// its clock to the integrated grid guard and this feature's canonical100ms
+// intervals. The full state/summary and reward comparisons remain strict.
+const {clockReference}=require('./support-clock-reference.cjs');
 const correctedClockBaseline=clockReference(baseline);
 const original=JSON.parse(fs.readFileSync(path.join(root,'docs/qa/offline-autoascend-2026-10-07/device_backup.json'),'utf8'));
 const copy=x=>JSON.parse(JSON.stringify(x)),records=[];
@@ -42,7 +35,14 @@ function app(seed,html=source,seconds=0){
  const bridge=`window.qa={set:s=>state=acceptPersistedState(s),get:()=>state,apply:applyOfflineProgress,advance:advanceAuthoritativeTime,study:advanceStudyOnlyTime,summary:simulationSummary,load:loadState,backup:currentSaveBackup,decode:decodeSaveBackup,save:saveState,cancel:typeof cancelOfflineCatchup==='function'?cancelOfflineCatchup:()=>{},flags:()=>({busy:typeof offlineCatchup!=='undefined'&&!!offlineCatchup,pending:typeof offlinePending!=='undefined'&&offlinePending,resume:typeof resumeFlowBusy!=='undefined'&&resumeFlowBusy}),batch:n=>{if(typeof SIM_BATCH_EVENTS!=='undefined')SIM_BATCH_EVENTS=n;},fault:()=>{simulationResolveTimestamp=function(){throw Error('injected simulation failure');};}};`;
  const script=html.match(/<script>\s*([\s\S]*?)<\/script>/)[1].replace("if(document.readyState==='loading'){",bridge+"if(document.readyState==='loading'){");
  new Function('window','document','localStorage','Date','setTimeout','clearTimeout','performance',script)(window,document,localStorage,date,(fn)=>{queue.push({id:++seq,fn});return seq;},id=>{const i=queue.findIndex(x=>x.id===id);if(i>=0)queue.splice(i,1);},{now:()=>monotonic});
- const b=window.qa;b.set(copy(seed));
+ const b=window.qa,initial=copy(seed);
+ // Independent transition oracle: this device history has finite safe-integer
+ // prices. Preserve frozen scheduling and apply the approved refund to its input.
+ if(html===correctedClockBaseline && !(seed.feedbackMigration && seed.feedbackMigration.receipts['forge.charge'])){
+   let refund=0n;for(let k=10;k<seed.research.charge;k++)refund+=BigInt(Math.ceil(30*1.55**k));
+   assert(refund<BigInt(Number.MAX_SAFE_INTEGER),'device refund exact safe integer');initial.shards+=Number(refund);
+ }
+ b.set(initial);
  return {b,storage,writes,queue,clock:v=>now=v,monotonic:v=>monotonic=v,failPrimary:v=>primaryFail=v,failRecovery:v=>recoveryFail=v,
   drain(){let batches=0;while(queue.length){queue.shift().fn();batches++;assert(batches<100000,'bounded number of work batches');}return batches;}};
 }
@@ -77,15 +77,23 @@ function baselineState(actual,expected,seed,label){
  const oldOwnership={...expected.owned},legacy={};
  for(const id of ['rememberbulk','offline24','offline48']){if(oldOwnership[id]===true)legacy[id]=true;delete oldOwnership[id];}
  assert.deepEqual(actual.legacyCometPurchases,legacy,label+' full legacy ownership archived');
- const {studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,offline12hRefund,...existing}=actual;
- // Preserve F14's selected destination during a matching partial rebuild.
+ const amounts=[];for(let k=10;k<seed.research.charge;k++)amounts.push(Math.ceil(30*1.55**k));
+ if(seed.research.charge>10)assert.deepEqual(actual.feedbackMigration.receipts['forge.charge'],{from:10,to:seed.research.charge,unpricedFrom:0,amounts:{shards:amounts}},label+' exact one-time refund receipt');
+ else assert.equal(actual.feedbackMigration.receipts['forge.charge'],undefined,label+' no unowned refund');
+ assert(/^[0-9]+$/.test(actual.exactRefundCredits.shards),label+' exact credit persisted');
+ // Frozen scheduler uses one Number wallet. Compare total spendable value while
+ // the independent BigInt migration gate proves every compensated integer.
+ approx(actual.shards+Number(actual.exactRefundCredits.shards),expected.shards,label+' spendable Shards');
+ const {shards,feedbackMigration,exactRefundCredits,studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,offline12hRefund,...existing}=actual;
+ // F14 changes only the selected destination during a matching partial rebuild.
  const intent=expected.formationRebuild;
  const selected=intent&&intent.preset&&expected.formationPresets[intent.preset]&&
    expected.formationPresets[intent.preset].join(',')===intent.members.join(',')
    ? intent.preset : expected.activeFormationPreset;
+ const {shards:oldShards,...oldState}=expected;
  let refund=0;for(let i=0;i<(seed.nodes?.reserves||0);i++)refund+=Math.ceil(6*Math.pow(1.6,i));
  assert.equal(actual.schemaVersion,2,label+' migrated schema');
- assert.deepEqual(existing,{...expected,schemaVersion:2,owned:oldOwnership,activeFormationPreset:selected,
+ assert.deepEqual(existing,{...oldState,schemaVersion:2,owned:oldOwnership,activeFormationPreset:selected,
   prisms:expected.prisms+refund,comets:expected.comets+(legacy.offline24?140:0)+(legacy.offline48?160:0)},label);
 }
 function runAsync(seed,seconds,batch=256){
@@ -112,9 +120,12 @@ function runAsync(seed,seconds,batch=256){
 const start=performance.now();
 // Fails on the unchanged product through the reported production entry.
 const on=runAsync(original,28800);
-assert.equal(on.result.kills,302400);assert.equal(on.result.ascends,14400);
-assert.equal(on.committed.prisms-original.prisms,86400+2810);
-assert.equal(on.committed.lumen,0,'Ascension reset preserves earned vs balance distinction');
+// Literal totals independently reproduced with the frozen scheduler in900s
+// windows, including the same original60-level save and unchanged price/rewards.
+assert.equal(on.result.kills,277629);assert.equal(on.result.ascends,13220);
+assert.equal(on.committed.prisms-original.prisms,79320+2810);
+approx(on.committed.lumen,9000,'partial final run keeps only its remaining Lumen');
+assert(on.result.earned>on.committed.lumen,'Ascension reset preserves earned vs balance distinction');
 assert.deepEqual(on.committed.formationRebuild,original.formationRebuild,'unaffordable Boss reconstruction intent persists');
 assert.deepEqual(on.committed.empowerQueue,original.empowerQueue,'purchase intent preserved');
 assert.deepEqual(on.committed.activeParty,['ember']);
@@ -127,15 +138,15 @@ assert.deepEqual(narrow.result,on.result,'changing work budget changes no reward
 const clear20=copy(original);clear20.autoAscendTargetDepth=21;
 const c20=runAsync(clear20,28800);
 const off=copy(original);off.autoAscendEnabled=false;
-const disabled=runAsync(off,28800);assert.equal(disabled.result.kills,773);assert.equal(disabled.result.ascends,0);
+const disabled=runAsync(off,28800);assert.equal(disabled.result.kills,756);assert.equal(disabled.result.ascends,0);
 assert.equal(disabled.committed.spirits.titan,144);
-const cap=runAsync(original,72*3600);assert.equal(cap.result.kills,453600);assert.equal(cap.result.ascends,21600);
+const cap=runAsync(original,72*3600);assert.equal(cap.result.kills,416439);assert.equal(cap.result.ascends,19830);
 const beyond=copy(original);beyond.activeStudies=[{id:'guardmastery',remainingSec:80*3600,totalDurationSec:80*3600,speedMult:1}];beyond.studyQueue={};
 const long=runAsync(beyond,96*3600);assert.equal(long.result.effectiveSec,12*3600);
 assert(!long.result.completedStudies.includes("Guardian's Mastery"),'Study cannot complete beyond the common cap');assert(Math.abs(long.committed.activeStudies[0].remainingSec-68*3600)<1e-5,'12h paid work within existing scheduler epsilon');
-assert.equal(long.result.kills,cap.result.kills,'beyond-cap time earns no extra combat');
-// Preserve old numerical policy against the unchanged scheduler for short windows
-// and chronological research/Motes/automation boundaries.
+const sameStudiesAtCap=runAsync(beyond,12*3600);
+assert.equal(long.result.kills,sameStudiesAtCap.result.kills,'beyond-cap time earns no extra combat');
+assert.equal(long.result.ascends,sameStudiesAtCap.result.ascends,'beyond-cap time earns no extra Ascends');
 // Compare unchanged chronology with closed purchase intent disabled on both
 // sides. UPGRADE_IDENTITY tests separately exercise old ON intent and paid work.
 for(const rawSeed of [original,clear20,off]){
@@ -146,7 +157,7 @@ for(const rawSeed of [original,clear20,off]){
   const old=app(seed,correctedClockBaseline,seconds),next=app(seed,source,seconds);
   const a=old.b.advance(seconds,{kind:'offline',visual:false,clockStartMs:seed.lastSeen});
   const b=next.b.advance(seconds,{kind:'offline',visual:false,clockStartMs:seed.lastSeen});
-  baselineSummary(b,a,'unchanged baseline summary '+seconds);baselineState(next.b.get(),old.b.get(),seed,'unchanged baseline state '+seconds);
+  baselineSummary(b,a,'approved timing baseline summary '+seconds);baselineState(next.b.get(),old.b.get(),seed,'approved timing baseline state '+seconds);
  }
 }
 const all=copy(original);all.research.charge=0;
