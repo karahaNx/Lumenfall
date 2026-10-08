@@ -62,6 +62,7 @@ were recorded as integrated.
 
 | Work | Evidence/status | Next action within its own task |
 | --- | --- | --- |
+| WISP_UPGRADE_DISPLAY_001 / F04 | [Feature candidate](tasks/WISP_UPGRADE_DISPLAY_001.md) verified against main214d454: unfinished upgrades stay open; folding requires Mythic, authoritative Module cap and owned Ultimate. 12 mobile profiles/12,912 assertions and the normal focused harness PASS. | Publish/pass required CI, integrate, verify integrated bytes and signed APK/device acceptance. Feature remains open. |
 | FEATURE-CHAT-WORKFLOW-001 | Current docs/context-tooling cleanup; see task for publication/integration receipt. | Verify document/tooling checks and GitHub integration; no game build. |
 | OFFLINE-CATCHUP-001 | PR51/54/55/56 integrated; signed137 verified, available source/engine/emulator checks PASS. Required physical acceptance OPEN. | Run remaining affected-phone/exact WebView60/TalkBack checklist and save results in GitHub. Keep feature/chat open. |
 | FEATURE-BRANCH-INTEGRATION-001 / LAB-MOTES | PR57/46 merged; full 146 CI and signed 0.1.138 asset/signing verification PASS. Required device acceptance OPEN. | Complete affected-phone/exact WebView60/TalkBack acceptance and any required independent review. Keep task/chat open. |
