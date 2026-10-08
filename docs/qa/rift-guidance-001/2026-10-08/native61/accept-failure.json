@@ -1,0 +1,45 @@
+{
+  "status": "fail",
+  "artifactIdentity": {
+    "installed": {
+      "path": "/data/app/com.lumenfall.app-pHROdqEH8GZqUD7lXHD08Q==/base.apk",
+      "sha256": "cc4c6d45720659ff81fe11c6eb858407b09f46a9abeea593714d3840c018c238"
+    },
+    "apkSha256": "cc4c6d45720659ff81fe11c6eb858407b09f46a9abeea593714d3840c018c238",
+    "sourceSha256": "852f32974f52d757406ac8a54b668969a2e0667e7acdd85192d63dbdc31ad262"
+  },
+  "error": "Error: TypeError: Cannot read property 'inert' of null\n    at <anonymous>:1:34\n    at evaluate (/workspace/Lumenfall-rift-guidance-001/docs/qa/rift-guidance-001/2026-10-08/native-guidance.cjs:11:136)\n    at async dismiss (/workspace/Lumenfall-rift-guidance-001/docs/qa/rift-guidance-001/2026-10-08/native-guidance.cjs:25:244)\n    at async pauseForMeasurement (/workspace/Lumenfall-rift-guidance-001/docs/qa/rift-guidance-001/2026-10-08/native-guidance.cjs:54:479)\n    at async accept (/workspace/Lumenfall-rift-guidance-001/docs/qa/rift-guidance-001/2026-10-08/native-guidance.cjs:71:2)\n    at async /workspace/Lumenfall-rift-guidance-001/docs/qa/rift-guidance-001/2026-10-08/native-guidance.cjs:84:276",
+  "records": [
+    {
+      "case": "signed update storage preservation",
+      "prior": {
+        "path": "/data/app/com.lumenfall.app-kic3FINGFnFhpYbR2rQ2Ug==/base.apk",
+        "sha256": "45d1032ae6e77362d3540db740c6cfbdc4d275f2e3f6b98f4cecb1229e3205e7"
+      },
+      "bytes": 125952,
+      "beforeSha256": "64b3c5936bec6a6f5113540bac5491c69a1be3bc26895ce301e79436002aac74",
+      "afterSha256": "64b3c5936bec6a6f5113540bac5491c69a1be3bc26895ce301e79436002aac74"
+    },
+    {
+      "case": "first observed updated launch ownership and old preference",
+      "owned": {
+        "autoascend": true,
+        "comettrials": true,
+        "rifttrail": true,
+        "starfallcrest": true
+      },
+      "spirits": {
+        "ember": 3,
+        "tide": 2,
+        "stone": 0,
+        "gale": 0,
+        "thorn": 0,
+        "void": 0,
+        "aurora": 0,
+        "titan": 0
+      },
+      "hiddenPreferenceVerified": true
+    }
+  ],
+  "runtimeErrors": []
+}

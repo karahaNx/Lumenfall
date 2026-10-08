@@ -1,0 +1,312 @@
+
+WINDOW MANAGER LAST ANR (dumpsys window lastanr)
+  <no ANR has occurred since boot>
+
+WINDOW MANAGER POLICY STATE (dumpsys window policy)
+    mSafeMode=false mSystemReady=true mSystemBooted=true
+    mLidState=-1 mLidOpenRotation=-1 mCameraLensCoverState=-1 mHdmiPlugged=false
+    mLastSystemUiFlags=0x2608 mResettingSystemUiFlags=0x0 mForceClearedSystemUiFlags=0x0
+    mWakeGestureEnabledSetting=true
+    mSupportAutoRotation=true
+    mUiMode=1 mDockMode=0 mEnableCarDockHomeCapture=true mCarDockRotation=-1 mDeskDockRotation=-1
+    mUserRotationMode=0 mUserRotation=0 mAllowAllRotations=0
+    mCurrentAppOrientation=-1
+    mCarDockEnablesAccelerometer=true mDeskDockEnablesAccelerometer=true
+    mLidKeyboardAccessibility=0 mLidNavigationAccessibility=0 mLidControlsScreenLock=false
+ mLidControlsSleep=false
+     mLongPressOnBackBehavior=0
+    mShortPressOnPowerBehavior=1 mLongPressOnPowerBehavior=1
+    mDoublePressOnPowerBehavior=0 mTriplePressOnPowerBehavior=0
+    mHasSoftInput=true
+    mAwake=true
+    mScreenOnEarly=true mScreenOnFully=true
+    mKeyguardDrawComplete=true mWindowManagerDrawComplete=true
+    mOrientationSensorEnabled=true
+    mOverscanScreen=(0,0) 320x916
+    mRestrictedOverscanScreen=(0,0) 320x916
+    mUnrestrictedScreen=(0,0) 320x916
+    mRestrictedScreen=(0,0) 320x916
+    mStableFullscreen=(0,0)-(320,916)
+    mStable=(0,24)-(320,916)
+    mSystem=(0,0)-(320,916)
+    mCur=(0,24)-(320,916)
+    mContent=(0,24)-(320,916)
+    mVoiceContent=(0,24)-(320,916)
+    mDock=(0,24)-(320,916)
+    mDockLayer=268435456 mStatusBarLayer=181000
+    mShowingDream=false mDreamingLockscreen=false mDreamingSleepToken=null
+    mDismissImeOnBackKeyPressed=false
+    mStatusBar=Window{1953c38 u0 StatusBar} isStatusBarKeyguard=false
+    mFocusedWindow=Window{af945b8 u0 com.lumenfall.app/com.lumenfall.app.MainActivity}
+    mFocusedApp=Token{5f555c5 ActivityRecord{d5b543c u0 com.lumenfall.app/.MainActivity t8}}
+    mTopFullscreenOpaqueWindowState=Window{af945b8 u0 com.lumenfall.app/com.lumenfall.app.MainActivity}
+    mTopFullscreenOpaqueOrDimmingWindowState=Window{af945b8 u0 com.lumenfall.app/com.lumenfall.app.MainActivity}
+    mTopIsFullscreen=false mKeyguardOccluded=false
+ mKeyguardOccludedChanged=false
+ mPendingKeyguardOccluded=false
+    mForceStatusBar=false mForceStatusBarFromKeyguard=false
+    mHomePressed=false
+    mAllowLockscreenWhenOn=false mLockScreenTimeout=2147483647 mLockScreenTimerActive=false
+    mEndcallBehavior=2 mIncallPowerBehavior=1 mIncallBackBehavior=0 mLongPressOnHomeBehavior=0
+    mLandscapeRotation=1 mSeascapeRotation=3
+    mPortraitRotation=0 mUpsideDownRotation=2
+    mDemoHdmiRotation=1 mDemoHdmiRotationLock=false
+    mUndockedHdmiRotation=-1
+    mKeyMapping.size=0
+    BarController.StatusBar
+      mState=WINDOW_STATE_SHOWING
+      mTransientBar=TRANSIENT_BAR_NONE
+    PolicyControl.sImmersiveStatusFilter=null
+    PolicyControl.sImmersiveNavigationFilter=null
+    PolicyControl.sImmersivePreconfirmationsFilter=null
+    WakeGestureListener
+      mTriggerRequested=false
+      mSensor=null
+    WindowOrientationListener
+      mEnabled=true
+      mCurrentRotation=0
+      mSensorType=null
+      mSensor={Sensor name="Goldfish 3-axis Accelerometer", vendor="The Android Open Source Project", version=1, type=1, maxRange=2.8, resolution=2.480159E-4, power=3.0, minDelay=10000}
+      mRate=2
+      AccelSensorJudge
+        mProposedRotation=0
+        mPredictedRotation=0
+        mLastFilteredX=0.0
+        mLastFilteredY=9.77631
+        mLastFilteredZ=0.812349
+        mLastFilteredTimestampNanos=3585162152714 (73.22115ms ago)
+        mTiltHistory={last: 5.0}
+        mFlat=false
+        mSwinging=false
+        mAccelerating=false
+        mOverhead=false
+        mTouched=false
+        mTiltToleranceConfig=[[-25, 70], [-25, 65], [-25, 60], [-25, 65]]
+    KeyguardServiceDelegate
+      showing=false
+      showingAndNotOccluded=true
+      inputRestricted=false
+      occluded=false
+      secure=true
+      dreaming=false
+      systemIsReady=true
+      deviceHasKeyguard=true
+      enabled=true
+      offReason=0
+      currentUser=-10000
+      bootCompleted=true
+      screenState=2
+      interactiveState=1
+      KeyguardStateMonitor
+        mIsShowing=false
+        mSimSecure=false
+        mInputRestricted=false
+        mTrusted=false
+        mCurrentUserId=0
+
+WINDOW MANAGER ANIMATOR STATE (dumpsys window animator)
+    DisplayContentsAnimator #0:
+      Window #0: WindowStateAnimator{6fb1100 com.android.systemui.ImageWallpaper}
+      Window #1: WindowStateAnimator{89883ca com.android.launcher3/com.android.launcher3.Launcher}
+      Window #2: WindowStateAnimator{f205b83 com.lumenfall.app/com.lumenfall.app.MainActivity}
+      Window #3: WindowStateAnimator{a3495c DockedStackDivider}
+      Window #4: WindowStateAnimator{a3a8f94 AssistPreviewPanel}
+      Window #5: WindowStateAnimator{fd671a6 StatusBar}
+
+
+    mBulkUpdateParams=0x8 ORIENTATION_CHANGE_COMPLETE
+
+WINDOW MANAGER SESSIONS (dumpsys window sessions)
+  Session Session{e4cb9d 2263:u0a10016}:
+    mNumWindow=1 mCanAddInternalSystemWindow=false mAppOverlaySurfaces=[] mAlertWindowSurfaces=[] mClientDead=false mSurfaceSession=android.view.SurfaceSession@52e853a
+    mPackageName=com.android.launcher3
+  Session Session{1459fd9 1625:1000}:
+    mNumWindow=0 mCanAddInternalSystemWindow=true mAppOverlaySurfaces=[] mAlertWindowSurfaces=[] mClientDead=false mSurfaceSession=android.view.SurfaceSession@64295eb
+    mPackageName=com.lumenfall.app
+  Session Session{1ab95ea 3489:u0a10024}:
+    mNumWindow=4 mCanAddInternalSystemWindow=true mAppOverlaySurfaces=[] mAlertWindowSurfaces=[] mClientDead=false mSurfaceSession=android.view.SurfaceSession@2c99f48
+    mPackageName=com.android.systemui
+  Session Session{38af715 3604:u0a10059}:
+    mNumWindow=1 mCanAddInternalSystemWindow=false mAppOverlaySurfaces=[] mAlertWindowSurfaces=[] mClientDead=false mSurfaceSession=android.view.SurfaceSession@810f1e1
+    mPackageName=com.lumenfall.app
+
+
+WINDOW MANAGER DISPLAY CONTENTS (dumpsys window displays)
+  Display: mDisplayId=0
+    init=390x916 160dpi base=320x916 160dpi cur=320x916 app=320x916 rng=320x296-916x892
+    deferred=false mLayoutNeeded=false mTouchExcludeRegion=SkRegion((0,0,320,916))
+
+  Application tokens in top down Z order:
+    mStackId=1
+    mDeferRemoval=false
+    mFillsParent=true
+    mBounds=[0,0][320,916]
+      taskId=8
+        mFillsParent=true
+        mBounds=[0,0][320,916]
+        mdr=false
+        appTokens=[AppWindowToken{93a446c token=Token{5f555c5 ActivityRecord{d5b543c u0 com.lumenfall.app/.MainActivity t8}}}]
+        mTempInsetBounds=[0,0][0,0]
+          Activity #0 AppWindowToken{93a446c token=Token{5f555c5 ActivityRecord{d5b543c u0 com.lumenfall.app/.MainActivity t8}}}
+          windows=[Window{af945b8 u0 com.lumenfall.app/com.lumenfall.app.MainActivity}]
+          windowType=2 hidden=false hasVisible=true
+          app=true mVoiceInteraction=false
+          task={taskId=8 appTokens=[AppWindowToken{93a446c token=Token{5f555c5 ActivityRecord{d5b543c u0 com.lumenfall.app/.MainActivity t8}}}] mdr=false}
+           mFillsParent=true mOrientation=-1
+          hiddenRequested=false mClientHidden=false reportedDrawn=true reportedVisible=true
+          mNumInterestingWindows=1 mNumDrawnWindows=1 inPendingTransaction=false allDrawn=true (animator=true)
+          startingData=null removed=false firstWindowDrawn=true mIsExiting=false
+          controller=AppWindowContainerController{ token=Token{5f555c5 ActivityRecord{d5b543c u0 com.lumenfall.app/.MainActivity t8}} mContainer=AppWindowToken{93a446c token=Token{5f555c5 ActivityRecord{d5b543c u0 com.lumenfall.app/.MainActivity t8}}} mListener=ActivityRecord{d5b543c u0 com.lumenfall.app/.MainActivity t8}}
+    mStackId=0
+    mDeferRemoval=false
+    mFillsParent=true
+    mBounds=[0,0][320,916]
+      taskId=4
+        mFillsParent=true
+        mBounds=[0,0][320,916]
+        mdr=false
+        appTokens=[AppWindowToken{4da128d token=Token{36d6724 ActivityRecord{55363b7 u0 com.android.launcher3/.Launcher t4}}}]
+        mTempInsetBounds=[0,0][0,0]
+          Activity #0 AppWindowToken{4da128d token=Token{36d6724 ActivityRecord{55363b7 u0 com.android.launcher3/.Launcher t4}}}
+          windows=[Window{3c7833f u0 com.android.launcher3/com.android.launcher3.Launcher}]
+          windowType=2 hidden=true hasVisible=true
+          app=true mVoiceInteraction=false
+          task={taskId=4 appTokens=[AppWindowToken{4da128d token=Token{36d6724 ActivityRecord{55363b7 u0 com.android.launcher3/.Launcher t4}}}] mdr=false}
+           mFillsParent=true mOrientation=5
+          hiddenRequested=true mClientHidden=true reportedDrawn=false reportedVisible=false
+          mAppStopped=true
+          mNumInterestingWindows=1 mNumDrawnWindows=1 inPendingTransaction=false allDrawn=true (animator=true)
+          startingData=null removed=false firstWindowDrawn=true mIsExiting=false
+          controller=AppWindowContainerController{ token=Token{36d6724 ActivityRecord{55363b7 u0 com.android.launcher3/.Launcher t4}} mContainer=AppWindowToken{4da128d token=Token{36d6724 ActivityRecord{55363b7 u0 com.android.launcher3/.Launcher t4}}} mListener=ActivityRecord{55363b7 u0 com.android.launcher3/.Launcher t4}}
+
+
+  DimLayerController
+    Task=4
+      dimLayer=shared, animator=null, continueDimming=false
+      mDimSurface=Surface(name=DimLayerController/Stack=0) mLayer=110999 mAlpha=0.0
+      mLastBounds=[-97,-229][488,1145] mBounds=[-80,-229][400,1145]
+      Last animation:  mDuration=200 mStartTime=3386486 curTime=3585310
+       mStartAlpha=0.6 mTargetAlpha=0.0
+    Stack=0
+      dimLayer=shared, animator=null, continueDimming=false
+      mDimSurface=Surface(name=DimLayerController/Stack=0) mLayer=110999 mAlpha=0.0
+      mLastBounds=[-97,-229][488,1145] mBounds=[-80,-229][400,1145]
+      Last animation:  mDuration=200 mStartTime=3386486 curTime=3585310
+       mStartAlpha=0.6 mTargetAlpha=0.0
+    Task=8
+      dimLayer=shared, animator=null, continueDimming=false
+      mDimSurface=Surface(name=DimLayerController/Stack=0) mLayer=110999 mAlpha=0.0
+      mLastBounds=[-97,-229][488,1145] mBounds=[-80,-229][400,1145]
+      Last animation:  mDuration=200 mStartTime=3386486 curTime=3585310
+       mStartAlpha=0.6 mTargetAlpha=0.0
+    Stack=1
+      dimLayer=shared, animator=null, continueDimming=false
+      mDimSurface=Surface(name=DimLayerController/Stack=0) mLayer=110999 mAlpha=0.0
+      mLastBounds=[-97,-229][488,1145] mBounds=[-80,-229][400,1145]
+      Last animation:  mDuration=200 mStartTime=3386486 curTime=3585310
+       mStartAlpha=0.6 mTargetAlpha=0.0
+
+  DockedStackDividerController
+    mLastVisibility=false
+    mMinimizedDock=false
+    mAdjustedForIme=false
+    mAdjustedForDivider=false
+
+  PinnedStackController
+    defaultBounds=[112,792][304,900]
+    movementBounds=[16,40][304,900]
+    mIsImeShowing=false
+    mIsMinimized=false
+    mActions=[]
+
+WINDOW MANAGER TOKENS (dumpsys window tokens)
+  All tokens:
+  Display #0
+  AppWindowToken{93a446c token=Token{5f555c5 ActivityRecord{d5b543c u0 com.lumenfall.app/.MainActivity t8}}}
+  WallpaperWindowToken{953d93b token=android.os.Binder@16dea09}
+  WindowToken{defbb06 android.os.Binder@89555bd}
+  AppWindowToken{4da128d token=Token{36d6724 ActivityRecord{55363b7 u0 com.android.launcher3/.Launcher t4}}}
+  WindowToken{b5bdf01 android.os.BinderProxy@f17d09b}
+  WindowToken{cb70bcf android.os.BinderProxy@f1f2b73}
+  WindowToken{15327e7 android.os.BinderProxy@a64c3f9}
+
+WINDOW MANAGER WINDOWS (dumpsys window windows)
+  Window #0 Window{1953c38 u0 StatusBar}:
+    mDisplayId=0 stackId=0 mSession=Session{1ab95ea 3489:u0a10024} mClient=android.os.BinderProxy@75e3caa
+    mOwnerUid=10024 mShowToOwnerOnly=false package=com.android.systemui appop=NONE
+    mAttrs=WM.LayoutParams{(0,0)(fillx24) gr=#30 sim=#10 ty=2000 fl=#81840048 fmt=-3 vsysui=0x600 colorMode=0}
+    Requested w=320 h=24 mLayoutSeq=228
+    mHasSurface=true mShownPosition=[0,0] isReadyForDisplay()=true hasSavedSurface()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{fd671a6 StatusBar}:
+      mAnimating=false mLocalAnimating=false mAnimationIsEntrance=true mAnimation=null mStackClip=1
+      Surface: shown=true layer=181000 alpha=1.0 rect=(0.0,0.0) 320.0 x 24.0 transform=(1.0, 0.0, 1.0, 0.0)
+    mLastFreezeDuration=+2s966ms
+    isOnScreen=true
+    isVisible=true
+  Window #1 Window{c337f3e u0 AssistPreviewPanel}:
+    mDisplayId=0 stackId=0 mSession=Session{1ab95ea 3489:u0a10024} mClient=android.os.BinderProxy@30f8ac0
+    mOwnerUid=10024 mShowToOwnerOnly=true package=com.android.systemui appop=NONE
+    mAttrs=WM.LayoutParams{(0,0)(fillx250) gr=#800053 sim=#31 ty=2033 fl=#1000118 fmt=-3 vsysui=0x700 colorMode=0}
+    Requested w=0 h=0 mLayoutSeq=182
+    mHasSurface=false mShownPosition=[0,0] isReadyForDisplay()=false hasSavedSurface()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{a3a8f94 AssistPreviewPanel}:
+      mShownAlpha=0.0 mAlpha=1.0 mLastAlpha=0.0
+    isOnScreen=false
+    isVisible=false
+  Window #2 Window{d74ba30 u0 DockedStackDivider}:
+    mDisplayId=0 stackId=0 mSession=Session{1ab95ea 3489:u0a10024} mClient=android.os.BinderProxy@c15be2
+    mOwnerUid=10024 mShowToOwnerOnly=false package=com.android.systemui appop=NONE
+    mAttrs=WM.LayoutParams{(0,0)(fillx48) sim=#20 ty=2034 fl=#21840028 pfl=0x40 fmt=-3 vsysui=0x700 colorMode=0}
+    Requested w=320 h=48 mLayoutSeq=228
+    mPolicyVisibility=false mPolicyVisibilityAfterAnim=false mAppOpVisibility=true parentHidden=false mPermanentlyHidden=false mForceHideNonSystemOverlayWindow=false
+    mHasSurface=false mShownPosition=[0,0] isReadyForDisplay()=false hasSavedSurface()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{a3495c DockedStackDivider}:
+      mShownAlpha=0.0 mAlpha=1.0 mLastAlpha=0.0
+    isOnScreen=false
+    isVisible=false
+  Window #3 Window{af945b8 u0 com.lumenfall.app/com.lumenfall.app.MainActivity}:
+    mDisplayId=0 stackId=1 mSession=Session{38af715 3604:u0a10059} mClient=android.os.BinderProxy@5c8101b
+    mOwnerUid=10059 mShowToOwnerOnly=true package=com.lumenfall.app appop=NONE
+    mAttrs=WM.LayoutParams{(0,0)(fillxfill) sim=#10 ty=1 fl=#81810100 pfl=0x20000 wanim=0x10302f6 vsysui=0x2600 needsMenuKey=2 colorMode=0}
+    Requested w=320 h=916 mLayoutSeq=228
+    mHasSurface=true mShownPosition=[0,0] isReadyForDisplay()=true hasSavedSurface()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{f205b83 com.lumenfall.app/com.lumenfall.app.MainActivity}:
+      Surface: shown=true layer=21005 alpha=1.0 rect=(0.0,0.0) 320.0 x 916.0 transform=(1.0, 0.0, 1.0, 0.0)
+    mLastFreezeDuration=+2s966ms
+    isOnScreen=true
+    isVisible=true
+  Window #4 Window{3c7833f u0 com.android.launcher3/com.android.launcher3.Launcher}:
+    mDisplayId=0 stackId=0 mSession=Session{e4cb9d 2263:u0a10016} mClient=android.os.BinderProxy@a30435e
+    mOwnerUid=10016 mShowToOwnerOnly=true package=com.android.launcher3 appop=NONE
+    mAttrs=WM.LayoutParams{(0,0)(fillxfill) sim=#120 ty=1 fl=#81910100 fmt=-2 wanim=0x10302f6 vsysui=0x700 needsMenuKey=2 colorMode=0}
+    Requested w=390 h=916 mLayoutSeq=200
+    mHasSurface=false mShownPosition=[0,0] isReadyForDisplay()=false hasSavedSurface()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{89883ca com.android.launcher3/com.android.launcher3.Launcher}:
+    mWallpaperX=0.0 mWallpaperY=0.5
+    isOnScreen=false
+    isVisible=false
+  Window #5 Window{7f489d1 u0 com.android.systemui.ImageWallpaper}:
+    mDisplayId=0 stackId=0 mSession=Session{1ab95ea 3489:u0a10024} mClient=android.os.BinderProxy@7de0f8
+    mOwnerUid=10024 mShowToOwnerOnly=true package=com.android.systemui appop=NONE
+    mAttrs=WM.LayoutParams{(0,0)(1243x1024) gr=#800033 ty=2013 fl=#10318 fmt=2 wanim=0x1030306 colorMode=0}
+    Requested w=1243 h=1024 mLayoutSeq=202
+    mIsImWindow=false mIsWallpaper=true mIsFloatingLayer=true mWallpaperVisible=false
+    Offsets x=0 y=-54
+    mHasSurface=true mShownPosition=[0,-54] isReadyForDisplay()=false hasSavedSurface()=false mWindowRemovalAllowed=false
+    WindowStateAnimator{6fb1100 com.android.systemui.ImageWallpaper}:
+      mAnimating=false mLocalAnimating=false mAnimationIsEntrance=true mAnimation=null mStackClip=1
+      Surface: shown=false layer=11000 alpha=1.0 rect=(0.0,-54.0) 1243.0 x 1024.0 transform=(1.0, 0.0, 1.0, 0.0)
+    mWallpaperX=0.0 mWallpaperY=0.5
+    isOnScreen=true
+    isVisible=false
+
+  mGlobalConfiguration={1.0 310mcc260mnc [en_US] ldltr sw320dp w320dp h892dp 160dpi nrml long port finger qwerty/v/v tball/v appBounds=Rect(0, 0 - 320, 916) s.7}
+  mHasPermanentDpad=false
+  mCurrentFocus=Window{af945b8 u0 com.lumenfall.app/com.lumenfall.app.MainActivity}
+  mFocusedApp=AppWindowToken{93a446c token=Token{5f555c5 ActivityRecord{d5b543c u0 com.lumenfall.app/.MainActivity t8}}}
+  mInTouchMode=true mLayoutSeq=228
+  mLastDisplayFreezeDuration=+3s97ms due to Window{1953c38 u0 StatusBar}
+  mLastWakeLockHoldingWindow=null mLastWakeLockObscuringWindow=Window{af945b8 u0 com.lumenfall.app/com.lumenfall.app.MainActivity}
+  InputConsumers:
+    name=pip_input_consumer
+  SnapshotCache
