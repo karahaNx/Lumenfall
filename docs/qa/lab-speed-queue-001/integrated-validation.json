@@ -1,0 +1,194 @@
+{
+  "feature": "LAB_SPEED_QUEUE_001",
+  "status": "product integrated; available scoped checks pass; required physical acceptance open",
+  "baseline": "214d45411ce2fb420f0e4b372063811a967679b1",
+  "productCommit": "20aaae62a4b6e46f8d75775085918eaba4e8de29",
+  "sourceSha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca",
+  "changedProductFiles": 0,
+  "newRules": 0,
+  "cdp": {
+    "status": "pass",
+    "node": "v24.19.0",
+    "browser": "Chromium 151; modern browser only",
+    "teardown": {
+      "code": 0,
+      "signal": null
+    },
+    "records": [
+      {
+        "kind": "unchanged-existing-assertions",
+        "width": 390,
+        "scenario": "lab-motes-contracts",
+        "checks": 82,
+        "negativeControls": [
+          "fallback",
+          "free-carry"
+        ]
+      },
+      {
+        "kind": "unchanged-existing-assertions",
+        "width": 390,
+        "scenario": "lab-motes-chronology",
+        "checks": 101,
+        "negativeControls": [
+          "batch-end"
+        ]
+      },
+      {
+        "kind": "unchanged-existing-assertions",
+        "width": 390,
+        "scenario": "lab-motes-conservation",
+        "checks": 16735
+      },
+      {
+        "kind": "unchanged-existing-assertions",
+        "width": 390,
+        "scenario": "lab-motes-numerical",
+        "checks": 340
+      },
+      {
+        "kind": "unchanged-existing-assertions",
+        "width": 390,
+        "scenario": "lab-motes-save-reload"
+      },
+      {
+        "kind": "unchanged-existing-assertions",
+        "width": 390,
+        "scenario": "lab-motes-backup-restore"
+      },
+      {
+        "kind": "unchanged-existing-assertions",
+        "width": 390,
+        "scenario": "lab-motes-recovery"
+      },
+      {
+        "kind": "unchanged-existing-assertions",
+        "width": 390,
+        "scenario": "lab-motes-reset"
+      },
+      {
+        "kind": "unchanged-existing-assertions",
+        "width": 320,
+        "scenario": "lab-motes-ui",
+        "checks": 47
+      },
+      {
+        "kind": "unchanged-existing-assertions",
+        "width": 390,
+        "scenario": "lab-motes-ui",
+        "checks": 47
+      },
+      {
+        "kind": "unchanged-existing-assertions",
+        "width": 430,
+        "scenario": "lab-motes-ui",
+        "checks": 47
+      },
+      {
+        "kind": "additional-large-text",
+        "width": 320
+      },
+      {
+        "kind": "additional-large-text",
+        "width": 390
+      },
+      {
+        "kind": "additional-large-text",
+        "width": 430
+      }
+    ],
+    "minimumControlContrast": 8.001272198252899
+  },
+  "existingDrivers": {
+    "node": "v24.19.0",
+    "browser": "Chromium 151; modern browser only",
+    "records": [
+      {
+        "scenario": "lab-motes-offline-integration",
+        "passed": true
+      },
+      {
+        "scenario": "lab-motes-runtime",
+        "passed": true
+      },
+      {
+        "scenario": "lab-motes-native",
+        "passed": true
+      },
+      {
+        "scenario": "lab-motes-reduced-motion",
+        "passed": true
+      }
+    ]
+  },
+  "apk": {
+    "identity": "raw/integrated-apk-identity.txt",
+    "assets": "raw/integrated-apk-assets.json",
+    "sha256": "81b9be7edea971335a06f06d1894d91e75a92736738cc935fc2a920a26a02e1e",
+    "bytes": 6837151,
+    "crcEntries": 526,
+    "matchedAssets": 15,
+    "releaseAssetId": 619954273
+  },
+  "legacyEngine": {
+    "lab": "raw/integrated-apk-v8-lab.json",
+    "matrix": "raw/integrated-apk-v8-matrix.json",
+    "node": "v8.3.0",
+    "v8": "6.0.286.52",
+    "matrixCases": [
+      {
+        "case": "ON Clear21",
+        "seconds": 28800,
+        "kills": 302400,
+        "ascends": 14400,
+        "batches": 1181
+      },
+      {
+        "case": "ON Clear20",
+        "seconds": 28800,
+        "kills": 291959,
+        "ascends": 14597,
+        "batches": 1140
+      },
+      {
+        "case": "OFF",
+        "seconds": 28800,
+        "kills": 773,
+        "ascends": 0,
+        "batches": 414
+      },
+      {
+        "case": "ON Clear21",
+        "seconds": 259200,
+        "kills": 2721600,
+        "ascends": 129600,
+        "batches": 10631
+      },
+      {
+        "case": "96h Study beyond cap",
+        "seconds": 345600,
+        "kills": 2721600,
+        "ascends": 129600,
+        "batches": 10631
+      }
+    ]
+  },
+  "integratedCI": {
+    "run": 37692669340,
+    "defaults": 146,
+    "negatives": 12,
+    "receipt": "../feature-branch-integration/README.md"
+  },
+  "context": "PASS: 29 entrypoints, 47 local Markdown links, shared startup 16359 bytes; startup with docs/tasks/LAB_SPEED_QUEUE_001.md 25095 bytes",
+  "review": "Owner self-review and existing automated checks; no independent review claimed",
+  "limitations": [
+    "No physical device or exact native WebView60/TalkBack results supplied for APK138",
+    "200% Lab select label suffix may shorten at320px; exact tier/price remain visible",
+    "Historical B2 stress/other-feature acceptance not replaced"
+  ],
+  "remaining": [
+    "Documentation delivery PR required CI and integration receipt",
+    "Required affected-phone/exact WebView60/TalkBack F12 checklist; save exact version/results",
+    "Archive only this owner chat after necessary acceptance passes"
+  ]
+}

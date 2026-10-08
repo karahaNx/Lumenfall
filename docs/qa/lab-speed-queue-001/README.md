@@ -1,53 +1,94 @@
-# F12 local dependency review
+# F12 integrated verification
 
-Read the [task](../../tasks/LAB_SPEED_QUEUE_001.md) first. This is owner evidence
-on the frozen B2 candidate, not independent B2 acceptance or an integrated
-feature. The local product delta is zero. Publication awaits a coordinated
-Lead writer checkpoint.
+The [task](../../tasks/LAB_SPEED_QUEUE_001.md) records original requirements,
+baseline, scope and remaining acceptance. PR46/B2 is integrated through PR57 at
+20aaae62a4b6e46f8d75775085918eaba4e8de29; continuation baseline is
+214d45411ce2fb420f0e4b372063811a967679b1. Fresh verification uses product SHA256
+6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca.
+No additional F12 product patch is needed.
 
-`review.cjs` runs the unchanged B2 browser assertions through CDP, plus measured
-200% text checks. Reproduce with Node 20+, Python for the original historical
-B2 instrumentation, and Chromium at `/usr/bin/chromium`:
+## Reproduce fresh integrated checks
+
+Use Node20+ and Chromium at /usr/bin/chromium, with loopback/browser access:
 
 ```sh
-node scripts/recovery/restore_candidate.cjs /tmp/lumenfall-f12-b2
-node docs/qa/lab-speed-queue-001/review.cjs /tmp/lumenfall-f12-b2 /tmp/lumenfall-f12-results
+node docs/qa/lab-speed-queue-001/integrated-review.cjs . /tmp/f12-integrated-cdp
+node docs/qa/lab-speed-queue-001/integrated-drivers.cjs . /tmp/f12-integrated-drivers
+node scripts/codex/check_context.cjs --task docs/tasks/LAB_SPEED_QUEUE_001.md
 ```
 
-Use a new restore destination; the source hash must be exactly
-`7c25b0b57722bda4ad6842b173bf9a390f2fa39942ad91206675a20e779d4d9b`.
-The driver needs loopback-server/browser process access. It copies the original
-instrumentation into a temporary stage and deletes only its own stage/profile.
-It does not modify product sources. Browser shutdown and complete QA JSON
-are required. Intentional reloads may discard an evaluation context; only
-that transient protocol loss is retried.
+The first driver uses the current Node harness's unchanged instrumentation and
+assertions via CDP: contracts82, chronology101, conservation16735, numerical340,
+four persistence paths, UI47 at each of320/390/430px, and additional measured
+200% Lab text/focus/contrast/reduced-motion checks. Minimum control text contrast
+is8.00127:1. All14 records pass with clean browser teardown.
+[Complete report](raw/integrated-cdp/review.json) and individual JSON/screenshots
+are retained. Intentional reloads retry only lost execution contexts; completed
+QA JSON, scenario identity and a clean runtime-error list remain mandatory.
 
-Final evidence is in `raw/cdp/`, `raw/native.log`, `raw/reduced-motion.log`,
-`raw/reduced-motion-screens/` and `raw/context-current.log`. Both native drivers
-returned exit 0 with clean Chromium teardown. Contract assertions include
-three causal mutants and restored controls, not just passive code comparisons.
+The second driver invokes existing process-aware Lab offline/runtime/touch/
+keyboard/reduced-motion drivers unchanged. All four pass. “Native” in these
+scenario names means browser input, not physical Android. Runtime covers1029
+assertions with BigInt/getBigUint64 unavailable. Its large raw log is losslessly
+gzip-compressed; other logs/results/screenshots are in raw/integrated-drivers/.
+Offline covers detached work, failure/retry, once-only payment, legacy saves,
+recovery failure, processing time and the existing cap/tail.
+[Driver result](raw/integrated-drivers/results.json).
 
-`raw/cdp-attempt-1/` preserves the new driver's initial reload race.
-`raw/cdp-attempt-2/` preserves an earlier report whose `color(srgb ...)`
-contrast parser used the wrong units; it is superseded by `raw/cdp/`.
-`raw/contracts*.log` and related process artifacts preserve sandbox and
-`--dump-dom` failures. `raw/main-inquiry*` demonstrates the same dump timeout
-on current main. A timeout without QA JSON never counts as PASS.
-Original Chromium logs retain their trailing whitespace; documentation/code
-whitespace checks exclude the raw evidence directory rather than edit it.
+## Released APK and legacy engine
 
-Native reduced-motion screenshots and the final 200% text screenshots cover
-320/390/430px. At 320px the native select can shorten the option suffix with
-200% text. Tier/price remain visible and the full option label is retained.
-These measurements concern F12 controls; F11's future panel and F08–F10's
-layout are separate. Physical Android/WebView60/TalkBack remain unverified.
+The actual release APK was freshly downloaded and checked with existing tools:
+aapt/apksigner identity gate and the unchanged Node ZIP/asset verifier.
+[Identity](raw/integrated-apk-identity.txt):
+0.1.138/versionCode138, com.lumenfall.app, established certificate
+A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21.
+[Assets](raw/integrated-apk-assets.json): 526 CRC entries/all15 assets match main;
+APK SHA25681b9be7edea971335a06f06d1894d91e75a92736738cc935fc2a920a26a02e1e
+matches GitHub asset619954273, size6837151.
 
-`remote-snapshot.json` records observations and their endpoints/times.
-`validation.json` records exits, hashes and scoped findings.
-`PROJECT_STATE_DELTA.txt` is for Lead at the coordinated checkpoint; this chat
-does not edit shared PROJECT_STATE. `manifest.json` covers this directory's
-payloads except itself. The handoff ZIP has its own complete manifest.
+```sh
+node docs/qa/offline-catchup-001/native-release/verify-assets.cjs APK_PATH /tmp/f12-assets.json /tmp/f12-apk-index.html
+node docs/qa/lab-speed-queue-001/legacy-engine.cjs NODE_8_3_PATH /tmp/f12-apk-index.html /tmp/f12-v8
+NODE_8_3_PATH docs/qa/offline-catchup-001/native-release/v8-release-matrix.cjs /tmp/f12-apk-index.html . > /tmp/f12-v8-matrix.json
+```
 
-No app scripts, Android files, signing, costs/rewards or workflows change.
-Current main's PR51 scheduler postdates frozen B2. The future integration must
-reconcile that scheduler and renew relevant interrupted/retried offline tests.
+The modern legacy-engine orchestrator executes the existing Lab integration
+assertions on actual V8 6.0.286.52/Node8.3.0 using the extracted released HTML.
+Only builtin import names, equivalent strict assert aliases, and source path
+are adapted. All assertion statements and product bytes are unchanged.
+[Lab result](raw/integrated-apk-v8-lab.json) records original/adapted hashes.
+The existing release matrix checks Clear21/Clear20/OFF8h,72h cap and96h Study
+tail; final raw JSON/text record its actual outcome. These are engine checks,
+not native DOM/lifecycle/TalkBack acceptance.
+Initial adapter failures (old Node cannot classify modern socket stdout or
+import assert/strict) were host tooling failures. Regular-file output and strict
+assert aliases fix the adapters; retained attempt2 is not called PASS.
+
+Integrated full CI146 defaults/12 negatives/guarded startup and signed build
+evidence are already durable in
+[the integration receipt](../feature-branch-integration/README.md).
+This documentation checkpoint also runs required pre-merge CI. Build workflow
+paths do not include these docs; no replacement APK is published.
+
+## Historical candidate evidence and remaining work
+
+validation.json, remote-snapshot.json, review.cjs and raw/cdp/ describe the
+7 October frozen B2 proposal, not current status. review.cjs deliberately retains
+the original B2 Python instrumentation, source hash and assertions; it is a
+historical replay, not current product tooling. Earlier sandbox/dump-dom,
+reload-context and incorrect-color-parser attempts remain unchanged in raw/.
+Debian Chromium151 DOM export also hangs on static/unchanged main; CDP is used
+locally without weakening assertion gates. Full required CI uses its normal
+configured browser and harness.
+
+At 320px/200% text the select can shorten the option suffix; tier/price remain
+visible and the full option label is retained. Whole-app large-text, F11 dialog,
+other layout features and historical B2 stress acceptance are not claimed.
+Self-review is not independent review. Required affected-phone/exact WebView60/
+TalkBack acceptance remains OPEN; use [the checklist](DEVICE_ACCEPTANCE.txt).
+Do not archive this feature chat until the remaining acceptance passes.
+
+Source_Index.txt and START_HERE.txt describe the current continuation.
+PROJECT_STATE_DELTA.txt is the superseded local proposal retained for history,
+not current policy. manifest.json inventories payloads except itself.
+No costs, rewards, schema, Android files, signing or workflows change.

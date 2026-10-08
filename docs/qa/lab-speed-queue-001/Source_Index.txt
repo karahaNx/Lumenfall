@@ -1,29 +1,35 @@
-LAB_SPEED_QUEUE_001 — scoped sources
+LAB_SPEED_QUEUE_001 — current and historical evidence
 START_HERE.txt -> ../../tasks/LAB_SPEED_QUEUE_001.md -> README.md.
-../../tasks/LAB_SPEED_QUEUE_001_REQUEST.txt — full current user order.
-remote-snapshot.json — final observed main/PR46/all branches/active run status.
-validation.json — exact candidate, source/mode integrity, scoped exits/results.
-review.cjs — JavaScript CDP runner, original B2 assertions and large-text checks.
-raw/cdp/review.json — final complete 12-result browser report with teardown.
-raw/cdp/lab-motes-chronology-390.json — exact payment timestamps/work/rewards.
-raw/cdp/lab-motes-contracts-390.json — exact prices, gates, migration and controls.
-raw/cdp/lab-motes-{save-reload,backup-restore,recovery,reset}-390.json — persistence.
-raw/native.log, raw/reduced-motion.log — original real-touch/keyboard driver reports.
-raw/reduced-motion-screens/ — 320/390/430 px screenshots.
-raw/cdp/large-text-{320,390,430}.json/.png — 200% text, controls and colors.
-raw/cdp-attempt-{1,2}/ — preserved earlier driver/context/color parsing failures.
-raw/contracts*.log, raw/*-raw/ — failed sandbox/dump-dom attempts and raw process exits.
-raw/context-current.log — current Node context/archive checks.
-PROJECT_STATE_DELTA.txt — proposed Lead update, not a shared status mutation.
-manifest.json — all local evidence payloads except itself.
+../../tasks/LAB_SPEED_QUEUE_001_REQUEST.txt — unchanged original feature order.
+integrated-validation.json — current integrated baseline, commands and results.
+integrated-review.cjs — current Node instrumentation/unchanged assertions via CDP.
+integrated-drivers.cjs — existing process-aware Lab drivers.
+legacy-engine.cjs — modern orchestrator for actual V8 6.0/extracted APK checks.
+raw/integrated-cdp/review.json — complete14-record result and teardown.
+raw/integrated-cdp/ — individual contract/chronology/conservation/numerical/
+persistence/UI/200%text JSON plus320/390/430px screenshots.
+raw/integrated-drivers/results.json — four unchanged drivers pass.
+raw/integrated-drivers/lab-motes-runtime.log.gz — lossless large runtime ledger.
+raw/integrated-drivers/ — process logs and native/reduced-motion screenshots.
+raw/integrated-offline.json — separate integrated transaction run.
+raw/integrated-apk-identity.txt — fresh aapt/apksigner identity.
+raw/integrated-apk-assets.json — digest/CRC/15byte-identical released assets.
+raw/integrated-apk-v8-lab.json — V8 6.0 Lab payment/retry assertions.
+raw/integrated-apk-v8-matrix.json/.txt — actual released legacy-engine matrix.
+DEVICE_ACCEPTANCE.txt — remaining physical/WebView60/TalkBack checks.
+../feature-branch-integration/README.md — PR57/fullCI/build138 receipt/rawlogs.
+manifest.json — complete payload inventory except itself.
 
-Required immutable B2 sources already in GitHub main:
-docs/handoffs/02_08/2026-10-07/START_HER.txt, SUMMARY/identity.json,
-SOURCE_SNAPSHOT_MANIFEST.json and SOURCE/ (restore exact 96-file tree).
-Original payment contract: restored docs/tasks/LAB_MOTES_001_REQUIREMENTS.txt
-and LAB_MOTES_001_MANDATE.txt. Original F12/Lead/save sections:
-docs/recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt,
-DECISIONS/FEEDBACK_REGISTERED_001.txt, FEEDBACK/EVIDENCE/FINDINGS.txt.
-Relevant player image: FEEDBACK/ORIGINAL/IMAGES/03-17363.jpg (viewed).
-The handoff ZIP also includes these small original sources under ORIGINAL/;
-it does not nest old ZIPs or copy the complete B2 archive.
+Historical7October candidate evidence (preserved, not current status):
+remote-snapshot.json, validation.json, review.cjs, PROJECT_STATE_DELTA.txt.
+raw/cdp/ — final frozen B2 report12records.
+raw/native.log, raw/reduced-motion.log/screens — historical B2 browser input.
+raw/cdp-attempt-{1,2}/ — original context/parser failures, superseded.
+raw/contracts*.log, raw/*-raw/, raw/main-inquiry* — sandbox/dump-dom failures.
+raw/context-current.log — older archive/context check.
+Immutable B2 sources remain docs/handoffs/02_08/2026-10-07/SOURCE/,
+SOURCE_SNAPSHOT_MANIFEST.json and SUMMARY/identity.json.
+Original requirements/decisions/image:
+docs/recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt,
+FEEDBACK/TASK_FEEDBACK_REVISION_001.txt, DECISIONS/FEEDBACK_REGISTERED_001.txt,
+FEEDBACK/EVIDENCE/FINDINGS.txt, FEEDBACK/ORIGINAL/IMAGES/03-17363.jpg.
