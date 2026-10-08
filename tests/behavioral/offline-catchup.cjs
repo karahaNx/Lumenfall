@@ -77,13 +77,16 @@ function baselineState(actual,expected,seed,label){
  const oldOwnership={...expected.owned},legacy={};
  for(const id of ['rememberbulk','offline24','offline48']){if(oldOwnership[id]===true)legacy[id]=true;delete oldOwnership[id];}
  assert.deepEqual(actual.legacyCometPurchases,legacy,label+' full legacy ownership archived');
- const {studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,...existing}=actual;
- // F14 changes only the selected destination during a matching partial rebuild.
+ const {studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,offline12hRefund,...existing}=actual;
+ // Preserve F14's selected destination during a matching partial rebuild.
  const intent=expected.formationRebuild;
  const selected=intent&&intent.preset&&expected.formationPresets[intent.preset]&&
    expected.formationPresets[intent.preset].join(',')===intent.members.join(',')
    ? intent.preset : expected.activeFormationPreset;
- assert.deepEqual(existing,{...expected,owned:oldOwnership,activeFormationPreset:selected},label);
+ let refund=0;for(let i=0;i<(seed.nodes?.reserves||0);i++)refund+=Math.ceil(6*Math.pow(1.6,i));
+ assert.equal(actual.schemaVersion,2,label+' migrated schema');
+ assert.deepEqual(existing,{...expected,schemaVersion:2,owned:oldOwnership,activeFormationPreset:selected,
+  prisms:expected.prisms+refund,comets:expected.comets+(legacy.offline24?140:0)+(legacy.offline48?160:0)},label);
 }
 function runAsync(seed,seconds,batch=256){
  const x=app(seed,source,seconds),before=copy(x.b.get());x.b.batch(batch);
@@ -97,7 +100,7 @@ function runAsync(seed,seconds,batch=256){
  const batches=x.drain();assert.ifError(error);assert.equal(callbacks,1,'complete once');
  assert(!x.b.flags().busy&&!x.b.flags().pending&&!x.b.flags().resume,'flags clear after completion');
  assert.equal(x.b.get().lastSeen,seed.lastSeen+seconds*1000,'consumed endpoint');
- assert.equal(x.b.get().totalOfflineSeconds,seed.totalOfflineSeconds+Math.min(seconds,72*3600),'combat accounting/cap');
+ assert.equal(x.b.get().totalOfflineSeconds,seed.totalOfflineSeconds+Math.min(seconds,12*3600),'combat accounting/cap');
  const committed=copy(x.b.get());let duplicate;
  x.b.apply(r=>duplicate=r);assert.equal(duplicate,null,'repeated return awards nothing');
  assert.deepEqual(x.b.get(),committed,'repeated return preserves state');
@@ -110,7 +113,7 @@ const start=performance.now();
 // Fails on the unchanged product through the reported production entry.
 const on=runAsync(original,28800);
 assert.equal(on.result.kills,302400);assert.equal(on.result.ascends,14400);
-assert.equal(on.committed.prisms-original.prisms,86400);
+assert.equal(on.committed.prisms-original.prisms,86400+2810);
 assert.equal(on.committed.lumen,0,'Ascension reset preserves earned vs balance distinction');
 assert.deepEqual(on.committed.formationRebuild,original.formationRebuild,'unaffordable Boss reconstruction intent persists');
 assert.deepEqual(on.committed.empowerQueue,original.empowerQueue,'purchase intent preserved');
@@ -126,10 +129,10 @@ const c20=runAsync(clear20,28800);
 const off=copy(original);off.autoAscendEnabled=false;
 const disabled=runAsync(off,28800);assert.equal(disabled.result.kills,773);assert.equal(disabled.result.ascends,0);
 assert.equal(disabled.committed.spirits.titan,144);
-const cap=runAsync(original,72*3600);assert.equal(cap.result.kills,2721600);assert.equal(cap.result.ascends,129600);
+const cap=runAsync(original,72*3600);assert.equal(cap.result.kills,453600);assert.equal(cap.result.ascends,21600);
 const beyond=copy(original);beyond.activeStudies=[{id:'guardmastery',remainingSec:80*3600,totalDurationSec:80*3600,speedMult:1}];beyond.studyQueue={};
-const long=runAsync(beyond,96*3600);assert.equal(long.result.effectiveSec,72*3600);
-assert(long.result.completedStudies.includes("Guardian's Mastery"),'study completes beyond combat cap');
+const long=runAsync(beyond,96*3600);assert.equal(long.result.effectiveSec,12*3600);
+assert(!long.result.completedStudies.includes("Guardian's Mastery"),'Study cannot complete beyond the common cap');assert(Math.abs(long.committed.activeStudies[0].remainingSec-68*3600)<1e-5,'12h paid work within existing scheduler epsilon');
 assert.equal(long.result.kills,cap.result.kills,'beyond-cap time earns no extra combat');
 // Preserve old numerical policy against the unchanged scheduler for short windows
 // and chronological research/Motes/automation boundaries.
@@ -192,7 +195,7 @@ for(const seconds of [28800,72*3600]){
  reference.b.advance(60,{kind:'live',visual:false,clockStartMs:original.lastSeen+seconds*1000});
  reference.b.get().lastSeen=original.lastSeen+(seconds+60)*1000;
  compare(slow.b.get(),reference.b.get(),'processing time live parity '+seconds);
- approx(slow.b.get().totalOfflineSeconds-original.totalOfflineSeconds,seconds,'processing time does not expand offline cap/accounting');
+ approx(slow.b.get().totalOfflineSeconds-original.totalOfflineSeconds,Math.min(seconds,43200),'processing time does not expand offline cap/accounting');
  records.push({case:'processing time '+seconds,kills:result.kills,lastSeen:slow.b.get().lastSeen});
 }
 for(const jump of [-7*86400000,7*86400000]){
