@@ -72,3 +72,5 @@ node docs/qa/rift-cast-text-001/finish/verify-assets.cjs archive/android/rift-ca
 The source destination must be empty. Native replay uses the newly extracted142 index, the original signed138 baseline/index and isolated emulator; current-main index is a different historical artifact.
 
 The exact signed138 APK and its extracted index are now [immutable replay inputs](../../../../archive/android/rift-cast-text-001/README.md). Prepare uses archive/android/rift-cast-text-001/Lumenfall-0.1.138-baseline.apk and archive/android/rift-cast-text-001/baseline-138-index.html; accept/update uses archived142 and the index extracted by the historical asset verifier. All baseline ZIP CRCs and both recorded hashes pass.
+
+Asset-completeness review PRRT_kwDOUF0Vls6qMoxA addressed: verifier binds the APK to the committed142 manifest and requires exactly its15 historical source files, hashes and sizes. Full replay PASS; correct index plus empty font/branding directories is rejected before a receipt is written. [Causal control](asset-completeness-control.json).
