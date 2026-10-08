@@ -1,71 +1,92 @@
-# BOND_TEXT_001 — Bond-partnere ét sted
+# BOND_TEXT_001 — Bond partners in Formation Bonds
 
-Status: lokal kandidat verificeret og frosset til Lead-checkpoint; remote checkpoint og integration blokeret af koordinationsgaten. Featuren er uafsluttet.
+Updated 8 October 2026. Owner: this BOND_TEXT_001 feature chat.
+One goal: show Bond partner names in Formation Bonds and remove partner references
+from Wisp ability explanations while preserving each ability's explanation.
+Status: current local candidate; integration and Android acceptance pending.
 
-## Ét mål og originalkrav
+## Requirements and sources
 
-Vis Bond-partnernavne i Formation Bonds, og fjern partnerpar fra Wisp ability-tekster. Evnerne skal fortsat forklare deres egne effekter korrekt.
-
-Brugerens original, F16:
+Original F16:
 
 > Der behøver ikke stå i wisp ability at der laves bond med hvilken anden der bliver lavet formation bond, det skal kun stå i formation bond, hvilke wisp der giver bonussen.
 
-Kilder læst: `docs/recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt` (fuld original); `FEEDBACK/TASK_FEEDBACK_REVISION_001.txt` F16, F14/F15/F17, rækkefølge og save-/acceptafsnit; `DECISIONS/FEEDBACK_REGISTERED_001.txt`; `FEEDBACK/EVIDENCE/FINDINGS.txt`; `FEEDBACK/Source_Index.txt`. Alle sidstnævnte stier er relative til samme `lead_context/`. Billede 04-17362.jpg er inspiceret; dets APK/save-identitet er ukendt. Originalen har forrang for forslag.
+[Full original](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt)
+has precedence over suggestions. Read F16, F14/F15/F17, relevant dependencies,
+save/acceptance sections in the
+[revision](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt),
+[decisions](../recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt),
+[findings](../recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/FINDINGS.txt) and
+[source index](../recovery/2026-10-07/lead_context/FEEDBACK/Source_Index.txt).
+Screenshot 04-17362.jpg was inspected; its APK/save identity is unknown.
+User correction on 8 October: “Færdiggør featuren / Push til github / Implement
+ til spillet.” This authorizes implementation, push, integration and app delivery.
+Model/effort recommendation in the order is not evidence of the model run.
 
-## Ejer, baseline og mandat
+## Baseline, scope and dependencies
 
-- Ejerchat: denne featurechat **BOND_TEXT_001**, rolle 03 UI / Visuals / Branding. Ingen historisk chats identitet genbruges.
-- Anbefaling fra bestillingen: GPT-6.1 Sol · High. Faktisk kørt model/effort kan ikke verificeres gennem miljøværktøjerne og attesteres ikke.
-- Privat checkout: `/workspace/BOND_TEXT_001`; branch `feature/bond-text-001`. Oprettet som selvstændig lokal clone uden hardlinks. `/workspace/Lumenfall` ændres ikke.
-- Præcis lokal Git-baseline: `67c3e99c24587f6c13fc65cfd27f8dcb8e289602`.
-- Live main observeret gennem GitHub-connectoren 7. oktober 2026 ca. 15:10 CEST: `b2a1f440e8ad9fed34b37551e468224310d2a6f6`. Nyere docs indeholder JavaScript-reglen; de aktuelle regler er læst fra live main og har forrang for den lokale snapshotkopi.
-- Produktets `index.html` er verificeret identisk mellem lokal baseline og dette live main: Git-blob `ea44431c163569548973d9e489f75345749a07ee`, SHA256 `f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4`. Git transport fejler mod miljøets proxy; GitHub-connectorens læsninger lykkes. Dette er ikke et checkout af det nyere docs-commit.
-- Writer: kun privat lokal forberedelse er bestilt. Ingen tildelt fælles repo-writer eller remote checkpoint; stående godkendelse kræver ikke ny generel tilladelse.
-- Stop: fryset lokal aflevering; ingen remote push/PR/merge/build/release før Lead har koordineret checkpoint og dependencies.
+- Isolated clone `/workspace/BOND_TEXT_001`, branch `feature/bond-text-001`.
+  Shared `/workspace/Lumenfall` is untouched.
+- Initial candidate e5b6cafd9bc816e3cef040cc5a3fd1a8b24d741d on historical base
+  67c3e99c24587f6c13fc65cfd27f8dcb8e289602. Its
+  [7 October evidence](../qa/BOND_TEXT_001/README.txt) remains unchanged and
+  applies only to its recorded bytes.
+- Current main baseline 214d45411ce2fb420f0e4b372063811a967679b1 was verified
+  and merged cleanly at 26c5f745c61650f380c290c85077916db45a5b44. Current
+  AGENTS/bootstrap/workflow, ownership/visual guidance, state, context index and
+  CI/build triggers were read. No open PR/overlapping implementation at startup.
+- PR46/B2 is integrated via PR57 (20aaae62a4b6e46f8d75775085918eaba4e8de29).
+  Preserve Number/DataView arithmetic, paid Lab speeds and current offline fix.
+  Current feature-owner rules supersede the historical writer gate; no separate
+  writer ceremony or new general approval is required. Serialize main integration.
+- F15/new Bonds is separate. Partner names derive from the same Bond IDs used by
+  simulation, so Formation definitions share one authoritative model.
 
-## Scope og beslutninger
+`index.html`: remove Stone/Titan partnership from Breaker ability and general
+Wisp Roles copy; retain heavy damage, Module and Ultimate explanations. Resolve
+full names from `SPIRITS` via `FORMATION_BONDS.ids` in both Formation Bonds views.
+Remove duplicated `req` strings. Other abilities, Bond IDs/bonuses/tags and
+activation rules are unchanged. No new gameplay numbers or balance decisions.
 
-`ABILITY_DESC.breaker` mister Stone/Titan-parret, men bevarer heavy ability damage, Module og Ultimate. Øvrige ability-effekter bevares. Begge ability-visninger (Wisps og Encyclopedia) bruger denne fælles tekst. Den generelle Wisp Roles-tekst mister også det ekstra partnerpar, så par-opslag samles under Formation Bonds.
+`tests/behavioral/`: update Rift-status partner assertions; register focused
+`bond-text.js` in the default suite. Cover every Bond active/benched/Lv.0 in both
+views, eight ability explanations and render purity. Two negative controls
+restore the ability partner leak or abbreviated Bond names.
 
-Formation Bonds viser fulde navne fra `SPIRITS` gennem `FORMATION_BONDS.ids`, både på Wisps og i Encyclopedias Formation Bonds-afsnit. De fire manuelle `req`-tekstkopier fjernes; id'er, bonusser, tags, simulation og aktive/pending-regler bevares. Den eksisterende Rift-statusassertion læser forventede navne fra Wisp-id'erne.
+No save schema/migration, purchases, bulk/queue handlers, chronology, rewards,
+native configuration, workflow or signing changes. Old purchases and canonical,
+backup/recovery data retain value. Preserve WebView60, `com.lumenfall.app`,
+signing identity, deterministic purchases and documented Luminous Motes rewards.
 
-Ingen nye Bonds, bonusser, priser, caps eller gameplaytal besluttes. F15 tilhører sin egen featurechat. Ingen save-schema-/migrationændring er nødvendig: Bond-definitionernes displayfelter er ikke købte eller gemte levels. Canonical/recovery/backup og gammel købsværdi bevares. WebView 60, package `com.lumenfall.app`, signing, deterministiske køb og Luminous Motes-regler ændres ikke.
+## Acceptance and verification
 
-## Acceptkriterier
+- Full partner names in both Formation Bonds sections, active/inactive/pending;
+  labels agree with simulation. Both ability views omit partner pairs and retain
+  damage/resource/buff/progression explanations.
+- Gameplay/persistence unchanged; relevant formation, chronology, parity and
+  save/recovery checks pass on current bytes.
+- Mobile widths 320/390/430, 100%/200% text, reduced motion, 44px disclosure,
+  keyboard focus, readable contrast and reachable rows pass.
+- Required CI passes before merge. Reverify integrated behavior, publish signed
+  APK and verify bundled assets/package/version/certificate. Required physical
+  Android/WebView60/TalkBack acceptance must be recorded honestly.
 
-1. Alle Bonds viser netop de Wisp-navne, som deres autoritative `ids` kræver, ved aktive, inaktive, låste og pending medlemmer.
-2. Wisp abilities på Wisps og Encyclopedia har ingen Bond-partnerpar, men beskriver egne damage/resource/support-, Module- og Ultimate-effekter korrekt.
-3. Samme Bond-model og multipliers bruges fortsat i live/offline/average-simulation. Køb, bulk, queues, chronology, save/reload og recovery ændres ikke.
-4. Relevante mobilbredder 320/390/430px, 200% tekst, mindst 44px eksisterende disclosurekontrol, fokus, kontrast og reduced motion verificeres. Alle fulde partnernavne og effekter skal kunne læses uden vandret overflow eller clipping.
-5. Koordineret GitHub-checkpoint, integration og kontrol på integreret version samt nødvendig APK/signing/deviceaccept dokumenteres før afslutning og arkivering.
+Fresh source SHA256: feb273d2ff1fb0d514517227d73b3ccb650a850b57f0a8ba5d12bbc77af85ac3.
+`bond-text-contract`, source validation, APK verifier self-test and Node tooling
+PASS on Node24.19.0/Chromium151. 14 focused positive scenarios and three negative controls PASS. Fresh probes
+PASS all 12 Bond states and 12 mobile/text/motion profiles; normalized source
+equality proves only presentation edits and browser mechanics match baseline.
+Minimum conservative partner contrast 7.19:1. Fresh evidence is saved under
+`docs/qa/BOND_TEXT_001/2026-10-08/`. Local Chromium uses the saved CDP wrapper
+because dump-dom hangs here; CI uses its actual browser. An initial sandboxed
+tooling check could not execute its mocked aapt subprocess; unchanged checks
+PASS with subprocess access. This is an environment limitation, not game failure.
 
-## Dependencies
+## Delivery checkpoint
 
-PR46 kontrolleret live: open/Draft, R2 `3cdebc236e9ee5081a4bca4e323b11f43aa0d46d`, branch `02/lab-motes-repeat-v1`. Ny B2-kandidat er rapporteret på tree `758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef`; `START_HER.txt` og `SUMMARY/identity.json` er læst. Nye scoped Core-/QA-reviews og 02_07 writer-handover mangler ifølge aktuel status. PR46s tidligere grønne CI er ikke accept af B2 eller denne feature.
-
-Lead-rækkefølgen holder B2-review/handover før nye produktændringer og F20/F21 før MOBILE-CLARITY. Privat F16-analyse/kandidat er autoriseret nu. Før integration skal Lead kontrollere eventuelle F15-definitioner og nye Bonds: partnernavne skal fortsat komme fra de samme `ids`; nyt design må ikke udledes fra tekst. Ingen anden chats checkout eller mål ændres.
-
-Afgrænset lokal kompatibilitetskontrol: produktpatchens `git apply --check` består mod en separat kopi af det hashverificerede nye B2-index (`7c25b0…f4d9b`), og de fire Bond-definitioner/Wisp-navne er identiske. Dette er patch-/modelkompatibilitet, ikke review eller accept af B2. Bevis: `../qa/BOND_TEXT_001/b2-compatibility.json`.
-
-## Kontrol og begrænsninger
-
-Opstart: eksisterende `python3 scripts/codex/check_context.py` PASS (21 entrypoints, 22 links); `git diff --check` PASS. APK identity-verifierens eksisterende self-test PASS. Eksisterende Python-gates bruges som dokumenteret overgang, nye scripts skrives i JavaScript.
-
-Kandidatens produkt-SHA256: `e89495cd979d75eed9938e65e061415c2731eb83d51418d24f77224fae7a953f`. Beviser og reproduktion: [README.txt](../qa/BOND_TEXT_001/README.txt), [regressions.json](../qa/BOND_TEXT_001/regressions.json), [source-check.json](../qa/BOND_TEXT_001/source-check.json), [UI-resultat](../qa/BOND_TEXT_001/ui/probe-result.json) og [live-observation.json](../qa/BOND_TEXT_001/live-observation.json).
-
-- PASS: 12 eksisterende positive scenarier: Wisp-formler/roller/pacing, Rift/Bond-status, Formation-rebuild, chronology, save/reload, backup/restore, recovery, live/offline-parity (kort og Farm) og support-stacking. `self-test-wisp-formula-regression` fanges som forventet (exit 1). Rå logs og exitkoder bevares.
-- PASS: repoets native `rift-status-mobile` i Chromium 151 på 360x640 og 390x844 med safe-insets, rigtig touch/keyboardnavigation, aktive/inaktive Bonds og processlukning.
-- PASS: egen produktbrowserprobe for fire Bonds × aktiv/benched/pending (12 tilstande). Alle partner-id'er matcher fulde navne i begge Formation Bonds-visninger; render ændrer ikke gameplaystate. Alle otte abilities på Wisps og Encyclopedia er uden partnerpar; Stone/Titan bevarer egen Module/Ultimate-forklaring.
-- PASS: 320/390/430 × 100/200% tekst × normal/reduced-motion (12 profiler). Rem-baseret partnertekst og abilityforklaringer forstørres; intet vandret overflow/clipping på de ændrede tekster. Hver komplet Bond-række kan scrolles frem. Native Enter åbner disclosure med bevaret fokus, 44px højde og synlig 2px outline. Screenshots ved 390px ligger i `ui/`.
-- PASS: baseline og kandidat har identiske Bond-aktiveringer, damage/reward-multipliers og average ability-output i de 12 browsertilstande. Automatisk fuldkildesammenligning efter præcis displaynormalisering viser ingen øvrige gameplay/save/pris/reward/lifecycleændringer. To inline scripts syntaxkontrolleret.
-- PASS: målt partnertekstfarve mod konservativ mørk baggrundsgrænse giver mindst 7,19:1 kontrast; grænsens antagelse og rå farver står i `source-check.json`. Aktive/inaktive tilstande bruger eksisterende markup.
-
-Miljø-/probegrænser: første browserforsøg blev blokeret af sandboxens lokale socket-begrænsning. Chromium 151s CLI `--dump-dom` timed out uden et QA-resultat; efterfølgende uændrede harnessassertions blev kørt med en lokal JavaScript/CDP-wrapper, der returnerer den virkelige DOM efter et fuldført QA-resultat. En manglende QA-markør accepteres ikke. Native pipe-driveren kører uden denne fallback. De to første egne UI-prober brugte utilstrækkelige rawKeyDown-events; det blev rettet til native Enter keyDown med char-tekst, og alle profiler består. Fejlforsøg bevares i telefon-ZIP'en som diagnostik, ikke PASS.
-
-Moderne Chromium er ikke fysisk Android/WebView60/TalkBack-accept. Den nye formatter bruger allerede understøttede `var`, `map` og `find`; faktisk legacy-runtime er ikke kørt. Ingen fuld CI-/B2-accept eller ny release påstås. Ingen migration udføres; køb/bulk/queues er byteidentiske, og eksisterende chronology/rebuildtests kontrollerer legitim auto-purchase/debit.
-
-## Integration, frigivelse og næste handling
-
-PR/integrationscommit/APK: ingen for denne feature. Ingen nødvendig fysisk Android/WebView60/TalkBack-accept udført. Ingen fælles writer er taget eller frigivet. Chatten forbliver åben.
-
-Lokalt arbejde er STOP/frozen efter kandidat/checks og telefonvenlig TXT/ZIP. Kandidatens præcise lokale commit/tree står i ZIP'ens `IDENTITY.json` og `START_HER.txt`. Brugeren overfører afleveringen til Lead, som koordinerer B2-accept, rækkefølge og konkret writer-checkpoint. Før remote skrivning genkontrolleres main, alle branches, åbne PR'er, aktive runs og writer; rebasing/checks sker på den koordinerede baseline. Efter integration verificeres adfærd igen, nødvendig APK/deviceaccept gemmes, status og writerfrigivelse dokumenteres, og kun denne ejerchat arkiveres efter `FEATURE_WORKFLOW.md`. Ingen ny generel godkendelse behøves.
+No remote PR/integration/APK for this feature yet. Required physical device
+acceptance is unperformed. No independent review is claimed. Next: collect fresh
+checks and checkpoint/push; pass CI and merge; verify integrated behavior and
+signed APK; save task/project status and evidence in GitHub. Keep this owner chat
+open if required acceptance remains unavailable. Archive only after completion
+under [FEATURE_WORKFLOW](../project/FEATURE_WORKFLOW.md).

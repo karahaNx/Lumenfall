@@ -1491,6 +1491,11 @@
           return;
         }
 
+        case 'bond-text-contract':
+        case 'self-test-bond-text-ability':
+        case 'self-test-bond-text-partners':
+          bridge.freeze();finish('pass',window.runBondTextQa(bridge,assert));return;
+
         case 'wisp-formula-contract': {
           var formulaBase = cleanFormulaState(['ember']);
           var emberBase = formulaSnapshotFor(formulaBase,'ember',10,1);
