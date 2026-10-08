@@ -1,0 +1,192 @@
+{
+  "integration": "06b28d5e80269dc5c8a609540bc75e27c842da4b",
+  "candidate": "ac0d28e589bd1caef4b9c70f2383a8b3ee384acd",
+  "unchangedProductTestsAndGates": false,
+  "scope": "Tree retention after unrelated upstream Rift cosmetics; fresh focused checks only",
+  "sourceSha256": "c1e23bb552666ecc0067a755c0ad30e13aee1827bf6371919d96003a88919a4b",
+  "node": "v24.19.0",
+  "results": [
+    {
+      "name": "source",
+      "args": [
+        "node",
+        "scripts/ci/validate_source.cjs"
+      ],
+      "status": 0,
+      "error": null,
+      "pass": true,
+      "logSha256": "554c0938eec03dd8c8db111b0fcc9c537dd5b879531a874c492090a357d941e6"
+    },
+    {
+      "name": "tooling",
+      "args": [
+        "node",
+        "tests/tooling/run.cjs"
+      ],
+      "status": 0,
+      "error": null,
+      "pass": true,
+      "logSha256": "3f338188c39d4202c14648a53664f178636e53cbc623f87f3d7f67ff7c30a591"
+    },
+    {
+      "name": "apk-identity-self-test",
+      "args": [
+        "node",
+        "scripts/verify_apk_identity.cjs",
+        "--self-test"
+      ],
+      "status": 0,
+      "error": null,
+      "pass": true,
+      "logSha256": "8c67c44d8a17280bf18a0284c7b39b7ab6cf05925c738022c1c41abd2a1ef83f"
+    },
+    {
+      "name": "context",
+      "args": [
+        "node",
+        "scripts/codex/check_context.cjs",
+        "--task",
+        "docs/tasks/TREE_EXCLUSIVE_001.md"
+      ],
+      "status": 0,
+      "error": null,
+      "pass": true,
+      "logSha256": "d1dea2447a7adc1f789326315d2c349ddc64784bbac3f76cf33e54c96bb17658"
+    },
+    {
+      "name": "tree-purchase-contract",
+      "args": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "mobile/www",
+        "--scenario",
+        "tree-purchase-contract"
+      ],
+      "status": 0,
+      "error": null,
+      "pass": true,
+      "logSha256": "e7b6c180eb5fc3cd363499e763167737fe473f1149c1be344e450c7c9e0eaab2"
+    },
+    {
+      "name": "tree-purchase-ui",
+      "args": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "mobile/www",
+        "--scenario",
+        "tree-purchase-ui"
+      ],
+      "status": 0,
+      "error": null,
+      "pass": true,
+      "logSha256": "9d4d7f3d163c9c0f034b565d436092d8320a7dd2652986d9236ceeab5c975c5f"
+    },
+    {
+      "name": "tree-purchase-ui-reduced-motion",
+      "args": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "mobile/www",
+        "--scenario",
+        "tree-purchase-ui-reduced-motion"
+      ],
+      "status": 0,
+      "error": null,
+      "pass": true,
+      "logSha256": "d75a4776f83c219191a3be3d042aabc3766134c1fe4e35d0afb69dc7f2c8a414"
+    },
+    {
+      "name": "upgrade-identity-contracts",
+      "args": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "mobile/www",
+        "--scenario",
+        "upgrade-identity-contracts"
+      ],
+      "status": 0,
+      "error": null,
+      "pass": true,
+      "logSha256": "c9987547388b393de8ee59bc05ebbba12fe9d419faa4e4497614305f7ea97ad6"
+    },
+    {
+      "name": "upgrade-identity-chronology",
+      "args": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "mobile/www",
+        "--scenario",
+        "upgrade-identity-chronology"
+      ],
+      "status": 0,
+      "error": null,
+      "pass": true,
+      "logSha256": "2753400fb7f746367dc7cee49dbe39c4f5674abb9a7452753ecd2d4e9ea67abc"
+    },
+    {
+      "name": "upgrade-identity-save-reload",
+      "args": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "mobile/www",
+        "--scenario",
+        "upgrade-identity-save-reload"
+      ],
+      "status": 0,
+      "error": null,
+      "pass": true,
+      "logSha256": "6fb7e6c1573a5d1c719b575ad480f072b8f68dc0db949bf726baa3bfcb11c93d"
+    },
+    {
+      "name": "upgrade-identity-recovery",
+      "args": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "mobile/www",
+        "--scenario",
+        "upgrade-identity-recovery"
+      ],
+      "status": 0,
+      "error": null,
+      "pass": true,
+      "logSha256": "ce087406fe02bddbd6370d3adcf6792e0d5ad93e418a746984d1f2ddd0a96242"
+    },
+    {
+      "name": "upgrade-identity-backup-restore",
+      "args": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "mobile/www",
+        "--scenario",
+        "upgrade-identity-backup-restore"
+      ],
+      "status": 0,
+      "error": null,
+      "pass": true,
+      "logSha256": "22501341647edcacedf98f386a7cd66b80a32f838e4079d77f66333578320687"
+    },
+    {
+      "name": "offline-12h-core",
+      "args": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "mobile/www",
+        "--scenario",
+        "offline-12h-core"
+      ],
+      "status": 0,
+      "error": null,
+      "pass": true,
+      "logSha256": "1b27d6f74cb228177b14e4c110cba34ecc59c146476e94fa26ea52167b9956a9"
+    }
+  ]
+}

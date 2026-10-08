@@ -1,0 +1,462 @@
+diff --git a/.github/workflows/pre-merge-validation.yml b/.github/workflows/pre-merge-validation.yml
+index 7613418..3059988 100644
+--- a/.github/workflows/pre-merge-validation.yml
++++ b/.github/workflows/pre-merge-validation.yml
+@@ -46,6 +46,9 @@ jobs:
+           cp -r fonts/. mobile/www/fonts/
+           cp -r branding/. mobile/www/branding/
+ 
++      - name: Rift cosmetics selection, persistence and mobile acceptance
++        run: node tests/behavioral/rift-cosmetics.cjs --source mobile/www/index.html --negative
++
+       - name: Stateful behavioral regression suite
+         shell: bash
+         run: node tests/behavioral/run.cjs --web-root mobile/www
+diff --git a/index.html b/index.html
+index 03ee127..991ff7b 100644
+--- a/index.html
++++ b/index.html
+@@ -2114,6 +2114,25 @@
+ #tab-forge.active,#tab-research.active,#tab-ascend.active { animation-name: upgradePanelIn; }
+ #tab-forge .mult-btn { flex-basis: 3.5em; }
+ @keyframes upgradePanelIn { from { opacity:0;transform:translateY(7px); } to { opacity:1;transform:none; } }
++  /* RIFT_COSMETICS_001: SVG/rgba fallbacks also render on WebView 60. */
++  .rift-cosmetic-aura{position:absolute;top:0;right:0;bottom:0;left:0;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;}
++  .rift-cosmetic-aura .cosmetic-pattern{display:none;}
++  [data-rift-theme="ember"] .cosmetic-ember,[data-rift-theme="void"] .cosmetic-void,
++  [data-rift-theme="aurora"] .cosmetic-aurora,[data-rift-theme="solar"] .cosmetic-solar,
++  [data-rift-theme="radiant"] .cosmetic-radiant{display:inline;}
++  #tab-battle .enemy-stage[data-rift-theme]:not([data-rift-theme="default"])::before,
++  #tab-battle .enemy-stage[data-rift-theme]:not([data-rift-theme="default"])::after{display:none;}
++  #tab-battle .enemy-stage .enemy-glyph{position:relative;z-index:2;}
++  .rift-cosmetic-name{position:absolute;left:8px;bottom:4px;z-index:3;max-width:calc(100% - 16px);padding:3px 7px;border:1px solid #61718d;border-radius:6px;background:#10182b;color:#f1edff;font:600 .6875rem/1.4 'Manrope',sans-serif;pointer-events:none;}
++  .cosmetic-aurora{animation:riftCosmeticPulse 5s ease-in-out infinite;}
++  .cosmetic-radiant{transform-origin:160px 160px;animation:riftCosmeticOrbit 24s linear infinite;}
++  @keyframes riftCosmeticPulse{0%,100%{opacity:.65;}50%{opacity:1;}}
++  @keyframes riftCosmeticOrbit{to{transform:rotate(360deg);}}
++  .theme-card[data-theme-select]{min-height:44px;flex-wrap:wrap;}
++  .theme-card .theme-info{flex-basis:120px;}
++  .theme-info .name,.theme-info .desc,.theme-active-tag{word-wrap:break-word;overflow-wrap:break-word;}
++  .theme-active-tag{flex:none;max-width:100%;white-space:normal;line-height:1.4;}
++  @media(prefers-reduced-motion:reduce){.cosmetic-aurora,.cosmetic-radiant{animation:none;opacity:1;}}
+ </style>
+ </head>
+ <body>
+@@ -2632,6 +2651,45 @@
+ 
+           <div class="enemy-stage-wrap">
+             <button type="button" class="enemy-stage" id="enemy-stage" aria-label="Tap enemy to attack"><span class="comet-trail" aria-hidden="true"></span><span class="comet-crest" aria-hidden="true">✦</span><span class="enemy-name" id="enemy-name">Hollow Wisp</span><span class="guardian-label">Tap enemy to attack</span>
++              <svg class="rift-cosmetic-aura" viewBox="0 0 320 320" aria-hidden="true" focusable="false">
++                <defs>
++                  <radialGradient id="cosmetic-ember-glow"><stop stop-color="#ff9d53" stop-opacity=".32"/><stop offset="1" stop-color="#ff9d53" stop-opacity="0"/></radialGradient>
++                  <radialGradient id="cosmetic-void-glow"><stop stop-color="#ad79f2" stop-opacity=".32"/><stop offset="1" stop-color="#ad79f2" stop-opacity="0"/></radialGradient>
++                  <radialGradient id="cosmetic-solar-glow"><stop stop-color="#ffe195" stop-opacity=".28"/><stop offset="1" stop-color="#ffe195" stop-opacity="0"/></radialGradient>
++                </defs>
++                <g class="cosmetic-pattern cosmetic-ember" fill="none" stroke="#ffb878">
++                  <circle cx="160" cy="160" r="148" fill="url(#cosmetic-ember-glow)" stroke="none"/>
++                  <circle cx="160" cy="160" r="119" stroke-width="3" stroke-dasharray="26 10 4 10"/>
++                  <circle cx="160" cy="160" r="129" stroke-width="1" opacity=".5"/>
++                </g>
++                <g class="cosmetic-pattern cosmetic-void" fill="none" stroke="#c49bff">
++                  <circle cx="160" cy="160" r="150" fill="url(#cosmetic-void-glow)" stroke="none"/>
++                  <path d="M160 24 278 92 278 228 160 296 42 228 42 92Z" stroke-width="2"/>
++                  <path d="M160 41 263 101 263 219 160 279 57 219 57 101Z" stroke-width="1" opacity=".5"/>
++                  <path d="M160 14 166 24 160 34 154 24ZM160 286 166 296 160 306 154 296Z" fill="#c49bff"/>
++                </g>
++                <g class="cosmetic-pattern cosmetic-aurora" fill="none" stroke-width="4">
++                  <path d="M35 181C0 74 97 14 184 39S318 143 282 225" stroke="#8cf0dc"/>
++                  <path d="M285 139C320 246 223 306 136 281S2 177 38 95" stroke="#f1a1d2"/>
++                  <circle cx="160" cy="160" r="113" stroke="#b8dbe8" stroke-width="1" opacity=".55"/>
++                </g>
++                <g class="cosmetic-pattern cosmetic-solar" fill="none" stroke="#ffe39a">
++                  <circle cx="160" cy="160" r="150" fill="url(#cosmetic-solar-glow)" stroke="none"/>
++                  <circle cx="160" cy="160" r="115" stroke-width="3"/>
++                  <circle cx="160" cy="160" r="133" stroke-width="14" stroke-dasharray="2 33"/>
++                  <path d="M132 35 138 16 160 31 182 16 188 35" stroke-width="3"/>
++                </g>
++                <g class="cosmetic-pattern cosmetic-radiant" fill="none" stroke-width="5">
++                  <path d="M160 35A125 125 0 0 1 268 97" stroke="#f0d77b"/>
++                  <path d="M273 108A125 125 0 0 1 273 212" stroke="#c9b8f0"/>
++                  <path d="M268 223A125 125 0 0 1 166 285" stroke="#eaa9dc"/>
++                  <path d="M154 285A125 125 0 0 1 52 223" stroke="#8cbce8"/>
++                  <path d="M47 212A125 125 0 0 1 47 108" stroke="#5ee6d0"/>
++                  <path d="M52 97A125 125 0 0 1 148 35" stroke="#ffa17b"/>
++                  <circle cx="160" cy="160" r="138" stroke="#ded7fb" stroke-width="1" opacity=".55"/>
++                </g>
++              </svg>
++              <span class="rift-cosmetic-name" id="rift-cosmetic-name" aria-hidden="true">Starlight</span>
+               <div class="enemy-glyph" id="enemy-glyph"><svg class="creature-art" viewBox="0 0 160 160" aria-hidden="true"><use href="#creature-prowler"/></svg><svg class="boss-regalia" viewBox="0 0 160 160" aria-hidden="true" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5">
+                 <g class="boss-crest boss-crest-regrowth"><path d="M18 116Q3 90 11 61 M142 116Q157 90 149 61"/><path d="M10 78Q1 70 8 60Q17 69 10 78Z M11 99Q4 90 17 84Q20 94 11 99Z M150 78Q159 70 152 60Q143 69 150 78Z M149 99Q156 90 143 84Q140 94 149 99Z" fill="var(--creature-rim)" stroke="var(--creature-eye)"/></g>
+                 <g class="boss-crest boss-crest-fractured"><path d="M11 52 17 62 11 72 5 62Z M8 83 14 93 8 103 2 93Z M149 52 155 62 149 72 143 62Z M152 83 158 93 152 103 146 93Z" fill="var(--creature-color)"/><path d="M11 58V66 M8 89V97 M149 58V66 M152 89V97" stroke="var(--creature-eye)"/></g>
+@@ -3103,11 +3161,11 @@ function projectEarnedMarkup(id){
+ 
+ var RIFT_THEMES = [
+   {id:'default', name:'Starlight',    desc:'The Rift as it always looked.', unlockAchievement:null,     accent:null},
+-  {id:'ember',   name:'Ember Veil',   desc:'A warm ember aura around the Rift.', unlockAchievement:'d50',    accent:'#e08a2e'},
+-  {id:'void',    name:'Void Bloom',   desc:'A deep violet aura around the Rift.', unlockAchievement:'asc5',   accent:'#8a5fd6'},
+-  {id:'aurora',  name:'Aurora Pulse', desc:'A rose-teal aura around the Rift.', unlockAchievement:'mythic', accent:'#d16fa8'},
+-  {id:'solar',   name:'Solar Crown',  desc:'A golden aura around the Rift.', unlockAchievement:'d250',   accent:'#d1a72e'},
+-  {id:'radiant', name:'Radiant',      desc:'A prismatic aura cycling through every currency color.', unlockAchievement:'modulemax', accent:null}
++  {id:'ember',   name:'Ember Veil',   desc:'An ember ring and warm light across the Rift.', unlockAchievement:'d50',    accent:'#e08a2e'},
++  {id:'void',    name:'Void Bloom',   desc:'Violet facets and a deep violet Rift glow.', unlockAchievement:'asc5',   accent:'#8a5fd6'},
++  {id:'aurora',  name:'Aurora Pulse', desc:'Rose-teal waves that gently pulse. Still with reduced motion.', unlockAchievement:'mythic', accent:'#d16fa8'},
++  {id:'solar',   name:'Solar Crown',  desc:'A golden crown of rays around the Rift.', unlockAchievement:'d250',   accent:'#d1a72e'},
++  {id:'radiant', name:'Radiant',      desc:'An orbit of every currency color. Still with reduced motion.', unlockAchievement:'modulemax', accent:null}
+ ];
+ 
+ var SHOP = [
+@@ -5067,17 +5125,28 @@ function buyUltimate(sp){
+ }
+ 
+ function themeUnlocked(theme){ return !theme.unlockAchievement || !!state.achieved[theme.unlockAchievement]; }
++function activeRiftTheme(){
++  var theme = RIFT_THEMES.find(function(t){ return t.id===state.riftTheme; });
++  // A stale/locked preference never grants an unlock. Keep its saved value intact.
++  return theme && themeUnlocked(theme) ? theme : RIFT_THEMES[0];
++}
+ function selectRiftTheme(themeId){
+   var theme = RIFT_THEMES.find(function(t){ return t.id===themeId; });
+   if(!theme || !themeUnlocked(theme)) return;
+   state.riftTheme = themeId;
++  saveState();
+   applyRiftTheme();
+   renderCosmetics();
+ }
+ function applyRiftTheme(){
+   var stageEl = document.getElementById('enemy-stage');
+   if(!stageEl) return;
+-  var theme = RIFT_THEMES.find(function(t){ return t.id===state.riftTheme; }) || RIFT_THEMES[0];
++  var theme = activeRiftTheme();
++  stageEl.setAttribute('data-rift-theme',theme.id);
++  var battleStage = document.querySelector('#tab-battle .stage');
++  if(battleStage) battleStage.setAttribute('data-rift-theme',theme.id);
++  var caption = document.getElementById('rift-cosmetic-name');
++  if(caption) caption.textContent = theme.name;
+   stageEl.classList.toggle('theme-radiant', theme.id==='radiant');
+   stageEl.classList.toggle('comet-trail-equipped',!!state.cometCosmetics.trail);
+   stageEl.classList.toggle('comet-crest-equipped',!!state.cometCosmetics.crest);
+@@ -6746,10 +6815,12 @@ function renderAchievements(){
+ function renderShop(){ renderAchievements(); }
+ 
+ function renderCosmetics(){
++  applyRiftTheme();
+   var html = '';
++  var selected = activeRiftTheme();
+   RIFT_THEMES.forEach(function(theme){
+     var unlocked = themeUnlocked(theme);
+-    var active = state.riftTheme===theme.id;
++    var active = selected.id===theme.id;
+     if(!unlocked){
+       var reqAch = ACHIEVEMENTS.find(function(a){ return a.id===theme.unlockAchievement; });
+       html += '<div class="card theme-card locked-node" data-state="locked" aria-disabled="true">' +
+@@ -6758,11 +6829,11 @@ function renderCosmetics(){
+       '</div>';
+       return;
+     }
+-    var swatch = theme.accent ? theme.accent : 'conic-gradient(from 0deg, var(--lumen), var(--shard), var(--mote), var(--prism), var(--comet), var(--sigil), var(--lumen))';
++    var swatch = theme.accent ? theme.accent : theme.id==='radiant' ? 'linear-gradient(120deg,#f0d77b,#c9b8f0,#eaa9dc,#5ee6d0,#ffa17b)' : '#9ca7ee';
+     html += '<button type="button" class="card theme-card '+(active?'active':'')+'" aria-pressed="'+active+'" data-theme-select="'+theme.id+'">' +
+       '<div class="theme-swatch" style="background:'+swatch+';"></div>' +
+       '<div class="theme-info"><div class="name">'+theme.name+'</div><div class="desc">'+theme.desc+'</div></div>' +
+-      '<span class="theme-active-tag">'+(active?'✓ Equipped':'Equip')+'</span>' +
++      '<span class="theme-active-tag">'+(active?'✓ Selected':'Unlocked · Select')+'</span>' +
+     '</button>';
+   });
+   [{slot:'trail',id:'rifttrail'},{slot:'crest',id:'starfallcrest'}].forEach(function(item){
+diff --git a/tests/behavioral/resonate-clarity.cjs b/tests/behavioral/resonate-clarity.cjs
+index f87bc50..d481939 100644
+--- a/tests/behavioral/resonate-clarity.cjs
++++ b/tests/behavioral/resonate-clarity.cjs
+@@ -10,7 +10,7 @@ function option(name,fallback){const i=args.indexOf(name);return i<0?fallback:ar
+ const sourcePath=path.resolve(option('--source',path.join(root,'index.html')));
+ const evidence=option('--evidence',null),source=fs.readFileSync(sourcePath,'utf8');
+ const sourceSha256=require('node:crypto').createHash('sha256').update(source).digest('hex');
+-const chrome=option('--chrome',process.env.LUMENFALL_QA_CDP_CHROME||['chromium','google-chrome','google-chrome-stable','chromium-browser'].find(x=>spawnSync('which',[x]).status===0));
++const chrome=option('--chrome',process.env.LUMENFALL_QA_CDP_CHROME||['google-chrome','google-chrome-stable','chromium','chromium-browser'].find(x=>spawnSync('which',[x]).status===0));
+ function assert(value,message){if(!value)throw Error(message);}
+ const bridge=String.raw`
+ window.resonateQa={
+diff --git a/tests/behavioral/rift-cosmetics.cjs b/tests/behavioral/rift-cosmetics.cjs
+new file mode 100644
+index 0000000..771d981
+--- /dev/null
++++ b/tests/behavioral/rift-cosmetics.cjs
+@@ -0,0 +1,278 @@
++/* Isolated F24 browser checks. Node built-ins only; no product test hooks.
++ * node tests/behavioral/rift-cosmetics.cjs --out /tmp/rift-cosmetics-evidence
++ * --source /path/to/baseline/index.html --baseline captures the same fixtures.
++ */
++const fs = require('node:fs');
++const path = require('node:path');
++const os = require('node:os');
++const http = require('node:http');
++const {spawn, spawnSync} = require('node:child_process');
++const crypto = require('node:crypto');
++const args = process.argv.slice(2);
++function option(name, fallback) { const i = args.indexOf(name); return i < 0 ? fallback : args[i + 1]; }
++const root = path.resolve(__dirname, '../..');
++const source = path.resolve(option('--source', path.join(root, 'index.html')));
++const out = path.resolve(option('--out', '/tmp/lumenfall-rift-cosmetics'));
++const baseline = args.includes('--baseline');
++const negative = args.includes('--negative');
++const chrome = option('--chrome', ['google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser'].find(name => spawnSync('which', [name]).status === 0));
++if (!chrome) throw Error('Chromium is required');
++fs.mkdirSync(out, {recursive: true});
++const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'lumenfall-cosmetics-'));
++const sourceBytes = fs.readFileSync(source);
++const records = [], runtimeErrors = [], pending = new Map();
++let browser, session, seq = 0, buffer = '', stderr = '', exitInfo, failure;
++function assert(ok, message) { if (!ok) throw Error(message); }
++const server = http.createServer((req, res) => {
++  const file = req.url.split('?')[0] === '/index.html' ? source : path.resolve(path.dirname(source), '.' + req.url.split('?')[0]);
++  if (file !== source && !file.startsWith(path.dirname(source) + path.sep)) { res.writeHead(403); res.end(); return; }
++  fs.readFile(file, (error, data) => {
++    if (error) { res.writeHead(404); res.end(); return; }
++    res.setHeader('Content-Type', file.endsWith('.html') ? 'text/html' : file.endsWith('.svg') ? 'image/svg+xml' : 'application/octet-stream');
++    if(file===source){
++      const marker='\n})();\n</script>\n<script>\nif(window.Capacitor';
++      const html=data.toString('utf8');
++      if(html.split(marker).length!==2){res.writeHead(500);res.end('Test bridge marker missing');return;}
++      res.end(html.replace(marker,'\n'+setup+'\nwindow.cosmeticQa.evaluate=function(code){return eval(code);};'+marker));
++    } else res.end(data);
++  });
++});
++function send(method, params = {}, sid = session) {
++  return new Promise((resolve, reject) => {
++    const id = ++seq;
++    const timer = setTimeout(() => { pending.delete(id); reject(Error('CDP timeout: ' + method)); }, 10000);
++    pending.set(id, {resolve, reject, timer});
++    browser.stdio[3].write(JSON.stringify({id, method, params, ...(sid ? {sessionId: sid} : {})}) + '\0');
++  });
++}
++async function evaluate(expression) {
++  const wrapped='window.cosmeticQa && cosmeticQa.evaluate ? cosmeticQa.evaluate('+JSON.stringify(expression)+') : eval('+JSON.stringify(expression)+')';
++  const result = await send('Runtime.evaluate', {expression:wrapped, returnByValue: true, awaitPromise: true});
++  if (result.exceptionDetails) throw Error(result.exceptionDetails.exception?.description || result.exceptionDetails.text);
++  return result.result.value;
++}
++async function screenshot(name) {
++  const shot = await send('Page.captureScreenshot', {format: 'png'});
++  fs.writeFileSync(path.join(out, name + '.png'), Buffer.from(shot.data, 'base64'));
++}
++async function key(key) {
++  await send('Input.dispatchKeyEvent', {type: 'keyDown', key, code: key, text: key === 'Enter' ? '\r' : '', windowsVirtualKeyCode: key === 'Enter' ? 13 : 9});
++  await send('Input.dispatchKeyEvent', {type: 'keyUp', key, code: key, windowsVirtualKeyCode: key === 'Enter' ? 13 : 9});
++}
++async function pauseForUi(){
++  await evaluate(`document.fonts.ready.then(function(){
++    if(startupIntroFinish) startupIntroFinish();
++    return new Promise(function(resolve){setTimeout(resolve,500);});
++  }).then(function(){
++    qaIntervals.forEach(clearInterval);if(overlayFocus) closeOverlay(overlayFocus.el);
++    document.querySelectorAll('.overlay,#startup-intro').forEach(function(el){el.style.display='none';});
++    document.querySelectorAll('.rift-milestone').forEach(function(el){el.remove();});
++    document.getElementById('toast').classList.remove('show');
++    document.querySelector('#tab-battle .stage').classList.remove('impact-victory','impact-milestone','impact-boss');
++    document.querySelector('.shell').inert=false;
++  })`);
++}
++async function waitForReload(previous){
++  for(let i=0;i<100;i++){
++    try{
++      if(await evaluate('window.qaLoadToken!=='+JSON.stringify(previous)+' && typeof state!=="undefined" && !!state && !!els["theme-list"]')){await pauseForUi();return;}
++    }catch(error){if(!/context|Cannot find|state is not defined/.test(error.message))throw error;}
++    await new Promise(resolve=>setTimeout(resolve,30));
++  }
++  throw Error('actual page reload did not complete');
++}
++const setup = `window.cosmeticQa = {
++  assert: function(ok, message){ if(!ok) throw Error(message); },
++  fixture: function(kind, unlocked){
++    state=freshState();
++    // Preserve the integrated F27 purchases and show both independent layers.
++    state.owned.rifttrail=true;state.owned.starfallcrest=true;
++    state.cometCosmetics={trail:true,crest:true};
++    if(unlocked) RIFT_THEMES.forEach(function(t){if(t.unlockAchievement) state.achieved[t.unlockAchievement]=true;});
++    state.depth=kind==='boss'?30:kind==='luminous'?31:1;
++    state.maxDepthEver=state.depth;spawnEnemy(false);
++    if(kind==='luminous') state.enemyIsLuminous=true;
++    renderAll();document.querySelector('[data-tab="battle"]').click();
++  },
++  geometry: function(){
++    var result={};['enemy-stage','hp-text','enemy-name'].forEach(function(id){
++      var r=document.getElementById(id).getBoundingClientRect();result[id]=[r.x,r.y,r.width,r.height];
++    });var track=document.querySelector('.hp-bar-track').getBoundingClientRect();result['hp-track']=[track.x,track.y,track.width,track.height];return result;
++  },
++  measure: function(id, reduced){
++    var a=this.assert, stage=document.getElementById('enemy-stage'), halo=stage.querySelector('.rift-cosmetic-aura'), caption=document.getElementById('rift-cosmetic-name');
++    a(stage.dataset.riftTheme===id,'selected effect applied to tap area');
++    a(document.querySelector('#tab-battle .stage').dataset.riftTheme===id,'selected effect applied to landscape');
++    a(caption.textContent===RIFT_THEMES.find(function(t){return t.id===id;}).name,'visible theme name');
++    a(getComputedStyle(caption).color==='rgb(241, 237, 255)' && getComputedStyle(caption).backgroundColor==='rgb(16, 24, 43)','opaque readable caption');
++    a(halo.getAttribute('aria-hidden')==='true' && getComputedStyle(halo).pointerEvents==='none','decorations cannot capture taps or screen reader focus');
++    ['trail','crest'].forEach(function(slot){
++      var decoration=stage.querySelector('.comet-'+slot),style=getComputedStyle(decoration);
++      a(state.cometCosmetics[slot] && style.display!=='none','Comet '+slot+' remains equipped and visible with '+id);
++      a(style.pointerEvents==='none','Comet '+slot+' remains pointer inert');
++      if(reduced) a(style.animationName==='none','Comet '+slot+' reduced motion remains static');
++    });
++    var visible=Array.from(halo.querySelectorAll('.cosmetic-pattern')).filter(function(g){return getComputedStyle(g).display!=='none';});
++    a(visible.length===(id==='default'?0:1),'one visible pattern for selected theme');
++    if(visible.length){
++      a(visible[0].classList.contains('cosmetic-'+id),'correct pattern');
++      a(visible[0].getBoundingClientRect().width>60,'aura has rendered geometry');
++      if(reduced) a(getComputedStyle(visible[0]).animationName==='none','static reduced-motion alternative');
++    }
++    var r=stage.getBoundingClientRect(), hp=document.getElementById('hp-text').getBoundingClientRect(), c=caption.getBoundingClientRect();
++    a(r.width>=44 && r.height>=44,'tap target at least 44px');
++    a(c.bottom<=r.bottom && hp.top>=r.bottom-1,'cosmetic does not cover HP');
++    a(c.right<=r.right && c.top>=r.top,'caption stays within tap area');
++    a(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2).closest('#enemy-stage')===stage,'center remains tappable');
++    return {id,geometry:this.geometry(),visiblePatterns:visible.map(function(g){return g.getAttribute('class');}),animation:visible.map(function(g){return getComputedStyle(g).animationName;}),landLight:getComputedStyle(document.querySelector('#tab-battle .stage')).getPropertyValue('--land-light')};
++  }
++};`;
++async function run() {
++  await new Promise((resolve,reject) => {server.once('error',reject);server.listen(0, '127.0.0.1', resolve);});
++  const url = 'http://127.0.0.1:' + server.address().port + '/index.html';
++  browser = spawn(chrome, ['--headless=new', '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage', '--remote-debugging-pipe', '--user-data-dir=' + profile, 'about:blank'], {stdio: ['ignore', 'ignore', 'pipe', 'pipe', 'pipe']});
++  const completion = new Promise(resolve => {
++    browser.once('error', error => { exitInfo = {error: error.message}; resolve(); });
++    browser.once('close', (code, signal) => {
++      exitInfo = {code, signal};
++      for (const p of pending.values()) { clearTimeout(p.timer); p.reject(Error('browser closed')); }
++      pending.clear(); resolve();
++    });
++  });
++  browser.stderr.on('data', data => { stderr = (stderr + data).slice(-4000); });
++  browser.stdio[4].on('data', data => {
++    buffer += data; let end;
++    while ((end = buffer.indexOf('\0')) >= 0) {
++      const raw = buffer.slice(0, end); buffer = buffer.slice(end + 1); if (!raw) continue;
++      const message = JSON.parse(raw), p = pending.get(message.id);
++      if (p) { clearTimeout(p.timer); pending.delete(message.id); message.error ? p.reject(Error(JSON.stringify(message.error))) : p.resolve(message.result); }
++      if (message.method === 'Runtime.exceptionThrown') runtimeErrors.push(message.params.exceptionDetails);
++    }
++  });
++  try {
++    const target = await send('Target.createTarget', {url: 'about:blank'}, null);
++    session = (await send('Target.attachToTarget', {targetId: target.targetId, flatten: true}, null)).sessionId;
++    await send('Page.bringToFront');
++    await send('Page.enable'); await send('Runtime.enable');
++    // Preserve production startup, then pause its intervals solely for UI measurements.
++    await send('Page.addScriptToEvaluateOnNewDocument', {source: `window.qaLoadToken=Math.random().toString();window.qaIntervals=[];var qaSetInterval=window.setInterval;window.setInterval=function(){var id=qaSetInterval.apply(window,arguments);qaIntervals.push(id);return id;};`});
++    await send('Emulation.setDeviceMetricsOverride', {width: 390, height: 844, deviceScaleFactor: 1, mobile: true});
++    await send('Page.navigate', {url});
++    let ready = false;
++    for (let i = 0; i < 100; i++) { if (await evaluate('typeof state!=="undefined" && !!state && !!els["theme-list"]')) { ready = true; break; } await new Promise(r => setTimeout(r, 30)); }
++    assert(ready, 'production startup ready');
++    await pauseForUi();
++    if (!baseline) {
++      records.push(await evaluate(`(function(){
++        var q=cosmeticQa,a=q.assert;q.fixture('normal',false);
++        var original=JSON.stringify(state);selectRiftTheme('ember');selectRiftTheme('unknown');
++        a(JSON.stringify(state)===original,'locked and unknown selection have no effect');
++        a(document.querySelectorAll('.theme-card[data-state="locked"]').length===5,'five locked themes');
++        state.maxDepthEver=50;checkAchievements();renderCosmetics();
++        a(themeUnlocked(RIFT_THEMES.find(function(t){return t.id==='ember';})) && state.riftTheme==='default' && activeRiftTheme().id==='default','earning a Deed unlocks without selecting its cosmetic');
++        state.riftTheme='radiant';renderCosmetics();a(state.riftTheme==='radiant' && activeRiftTheme().id==='default','stale locked preference preserved but not granted');
++        a(document.querySelectorAll('[data-theme-select][aria-pressed="true"]').length===1,'exactly one effective selection');
++        q.fixture('normal',true);state=acceptPersistedState(state,'runtime');
++        var before=JSON.stringify(state);renderCosmetics();a(JSON.stringify(state)===before,'render has no save mutation');
++        var results=[];
++        RIFT_THEMES.forEach(function(t){
++          var economic=JSON.parse(JSON.stringify(state));delete economic.riftTheme;delete economic.lastSeen;
++          selectRiftTheme(t.id);
++          var after=JSON.parse(JSON.stringify(state));delete after.riftTheme;delete after.lastSeen;
++          a(JSON.stringify(after)===JSON.stringify(economic),'selection preserves gameplay and ownership: '+t.id);
++          var primary=JSON.parse(localStorage.getItem(SAVE_KEY)),recovery=JSON.parse(localStorage.getItem(RECOVERY_SAVE_KEY));
++          a(primary.riftTheme===t.id && recovery.riftTheme===t.id,'immediate primary and recovery persistence: '+t.id);
++          var backup=decodeSaveBackup(encodeSaveBackup(state));
++          a(backup.riftTheme===t.id,'backup roundtrip selection: '+t.id);
++          a(acceptPersistedState(backup,'backup').riftTheme===t.id,'canonical restored selection: '+t.id);
++          var saved=JSON.stringify(state);state=loadState();renderAll();
++          a(state.riftTheme===t.id && activeRiftTheme().id===t.id,'load re-applies selected theme: '+t.id);
++          a(JSON.stringify(acceptPersistedState(JSON.parse(saved),'runtime'))===JSON.stringify(state),'load retains canonical data: '+t.id);
++          results.push(t.id);
++        });
++        var old=freshState();delete old.riftTheme;a(acceptPersistedState(old,'backup').riftTheme==='default','old save uses default without currency migration');
++        return {contract:'unlock-selection-persistence',themes:results};
++      })()`));
++      records.push(await evaluate(`(function(){
++        var q=cosmeticQa,a=q.assert;q.fixture('normal',true);
++        var themes=[];RIFT_THEMES.forEach(function(t){
++          selectRiftTheme(t.id);var backgrounds=[];
++          [1,26,51,76,101,126].forEach(function(depth){state.depth=depth;spawnEnemy(false);renderAll();backgrounds.push(getComputedStyle(document.querySelector('#tab-battle .stage')).backgroundImage);});
++          a(new Set(backgrounds).size===6,'all six region palettes remain distinct with '+t.id);themes.push(t.id);
++        });return {contract:'region-palettes-preserved',themes:themes};
++      })()`));
++    }
++    for (const [width, height, scale, motion] of [[320,640,1,'no-preference'], [390,844,1,'no-preference'], [430,915,1,'no-preference'], [320,640,1.3,'reduce'], [390,844,1.3,'reduce'], [430,915,1,'reduce'], [320,640,2,'reduce'], [390,844,2,'reduce'], [430,915,2,'reduce']]) {
++      await send('Emulation.setDeviceMetricsOverride', {width, height, deviceScaleFactor: 1, mobile: true});
++      await send('Emulation.setEmulatedMedia', {features: [{name: 'prefers-reduced-motion', value: motion}]});
++      await evaluate(`document.documentElement.style.fontSize=${JSON.stringify(16 * scale + 'px')}`);
++      for (const kind of ['normal','boss','luminous']) {
++        await evaluate(`cosmeticQa.fixture(${JSON.stringify(kind)},true)`);
++        const before = await evaluate('cosmeticQa.geometry()');
++        for (const id of ['default','ember','void','aurora','solar','radiant']) {
++          await evaluate(`selectRiftTheme(${JSON.stringify(id)})`);
++          const measurement = baseline ? {id, geometry: await evaluate('cosmeticQa.geometry()')} : await evaluate(`cosmeticQa.measure(${JSON.stringify(id)},${motion === 'reduce'})`);
++          assert(JSON.stringify(before) === JSON.stringify(measurement.geometry), 'HP/tap geometry unchanged by ' + id);
++          records.push({width, height, scale, motion, kind, ...measurement});
++          if ((width === 390 && scale === 1 && kind === 'normal') || (width === 320 && scale > 1 && kind === 'boss' && ['aurora','radiant'].includes(id))) await screenshot(`${width}-${motion}-${kind}-${id}`);
++        }
++      }
++    }
++    if (!baseline) {
++      await send('Emulation.setDeviceMetricsOverride', {width:320,height:640,deviceScaleFactor:1,mobile:true});
++      await evaluate(`cosmeticQa.fixture('normal',true);document.querySelector('[data-tab="deeds"]').click();document.querySelector('[data-theme-select="ember"]').focus();`);
++      await key('Enter');
++      records.push(await evaluate(`(function(){var a=cosmeticQa.assert,button=document.querySelector('[data-theme-select="ember"]');
++        a(state.riftTheme==='ember' && button.getAttribute('aria-pressed')==='true','native Enter selects theme: '+JSON.stringify({theme:state.riftTheme,active:document.activeElement.outerHTML.slice(0,200),inert:document.querySelector('.shell').inert,focus:document.hasFocus()}));
++        a(document.activeElement===button,'focus retained after selection rerender');renderAll();
++        a(document.activeElement===document.querySelector('[data-theme-select="ember"]'),'focus retained after live render');
++        document.querySelectorAll('[data-theme-select]').forEach(function(b){a(b.getBoundingClientRect().height>=44,'theme control 44px');a(b.scrollWidth<=b.clientWidth+1,'theme text fits at large font: '+JSON.stringify({theme:b.getAttribute('data-theme-select'),scroll:b.scrollWidth,client:b.clientWidth,nameFont:getComputedStyle(b.querySelector('.name')).fontSize,tagFont:getComputedStyle(b.querySelector('.theme-active-tag')).fontSize}));});
++        a(button.textContent.indexOf('Selected')>=0 && document.querySelector('[data-theme-select="void"]').textContent.indexOf('Unlocked')>=0,'unlocked and selected use different words');
++        return {contract:'keyboard-focus-controls'};
++      })()`));
++      await screenshot('320-large-text-deeds');
++      // Native touch reaches the existing Guardian Tap handler through the decoration.
++      await evaluate(`document.querySelector('[data-tab="battle"]').click();state.enemyHp=state.enemyMaxHp=1000000;updateBattleFast();`);
++      const tap = await evaluate(`(function(){var r=document.getElementById('enemy-stage').getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2,hp:state.enemyHp};})()`);
++      await send('Emulation.setTouchEmulationEnabled',{enabled:true});
++      await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:tap.x,y:tap.y}]});
++      await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
++      assert(await evaluate('state.enemyHp') < tap.hp, 'native tap damages enemy through aura');
++      records.push({contract:'native-tap',before:tap.hp,after:await evaluate('state.enemyHp')});
++      // Exercise actual init/recovery/restore paths, not just serialization helpers.
++      await evaluate('saveState()');
++      let token=await evaluate('window.qaLoadToken');
++      await send('Page.reload');await waitForReload(token);
++      assert(await evaluate('state.riftTheme==="ember" && activeRiftTheme().id==="ember"'),'actual reload retains selected aura');
++      token=await evaluate('window.qaLoadToken');
++      await evaluate(`reloadInProgress=true;localStorage.setItem(SAVE_KEY,'broken JSON');`);
++      await send('Page.reload');await waitForReload(token);
++      assert(await evaluate('recoveredFromRecovery && state.riftTheme==="ember" && activeRiftTheme().id==="ember"'),'actual corrupt-primary recovery retains selected aura');
++      token=await evaluate('window.qaLoadToken');
++      await evaluate(`var qaBackup=encodeSaveBackup(state);selectRiftTheme('solar');document.getElementById('save-backup-code').value=qaBackup;restoreSaveBackup();`);
++      await waitForReload(token);
++      assert(await evaluate('state.riftTheme==="ember" && activeRiftTheme().id==="ember"'),'actual backup restore and reload retains selected aura');
++      records.push({contract:'actual-reload-recovery-backup',selected:'ember'});
++      if (negative) {
++        const reason = await evaluate(`(function(){cosmeticQa.fixture('normal',true);selectRiftTheme('radiant');document.querySelector('.cosmetic-radiant').style.display='none';try{cosmeticQa.measure('radiant',true);return null;}catch(error){return error.message;}})()`);
++        assert(reason === 'one visible pattern for selected theme','negative catches missing visible aura');
++        records.push({contract:'negative-hidden-aura',caught:reason});
++      }
++    }
++    assert(runtimeErrors.length === 0, 'no browser runtime errors');
++  } catch (error) { failure = error.stack; }
++  finally {
++    if (!exitInfo) await send('Browser.close', {}, null).catch(() => {});
++    let timer;
++    await Promise.race([completion,new Promise(resolve=>{timer=setTimeout(()=>{browser.kill('SIGKILL');resolve();},5000);})]);clearTimeout(timer);
++    if (!exitInfo || exitInfo.code !== 0) failure ||= 'browser did not exit cleanly';
++    await fs.promises.rm(profile,{recursive:true,force:true,maxRetries:3,retryDelay:100});
++    await new Promise(resolve=>server.close(resolve));
++  }
++}
++run().catch(error=>{failure=error.stack;}).finally(()=>{
++  const result={status:failure?'fail':'pass',baseline,negative,source,sourceSHA256:crypto.createHash('sha256').update(sourceBytes).digest('hex'),browser:spawnSync(chrome,['--version'],{encoding:'utf8'}).stdout.trim(),chromeExecutable:chrome,node:process.version,records,runtimeErrors,exitInfo,failure,stderr};
++  fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(result,null,2)+'\n');
++  console.log(JSON.stringify({status:result.status,samples:records.length,out,failure}));
++  if(failure)process.exitCode=1;
++});

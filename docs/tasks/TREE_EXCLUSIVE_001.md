@@ -1,47 +1,41 @@
 # TREE_EXCLUSIVE_001 — exclusive Ascension Tree (F29)
 
-Status: **candidate prepared; integration/app acceptance pending**. Owner: this chat.
-Private /workspace/Lumenfall-TREE_EXCLUSIVE_001, feature/tree-exclusive-001;
-[PR66](https://github.com/karahaNx/Lumenfall/pull/66). Shared checkout/other chats untouched.
-No subagents/messages; precise runtime model/effort unknown.
+Status: **integrated; signed game update delivered; required device acceptance OPEN**.
+Owner: this chat, /workspace/Lumenfall-TREE_EXCLUSIVE_001, feature/tree-exclusive-001.
+[PR66](https://github.com/karahaNx/Lumenfall/pull/66) merged at ac0d28e589bd1caef4b9c70f2383a8b3ee384acd.
+Other checkouts/chats untouched; no subagents/messages. Exact runtime model/effort unknown.
 
-Goal: exclusive Tree effects, visible prices/stacking and idempotent purchased-value preservation.
-[Mandate](TREE_EXCLUSIVE_001/USER_REQUEST.txt),
-[original feedback](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt)
-and [inventory/proposal](TREE_EXCLUSIVE_001/proposal-2026-10-07.md) preserved; original wins.
-User8October: “then finish this feature task, push to github, implement to my game”.
-Live AGENTS/workflow and standing scope authorize implementation/integration/delivery.
-Protect actual overlap/serialize integration. Historical writer gates do not apply.
+Goal: exclusive Tree buying, visible prices/stacking and idempotent purchased-value preservation.
+[Mandate](TREE_EXCLUSIVE_001/USER_REQUEST.txt), [original](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt)
+and [inventory/proposals/baselines](TREE_EXCLUSIVE_001/proposal-2026-10-07.md) preserved; original wins.
+User8Oct authorizes finish/push/game implementation. Live AGENTS/workflow and standing scope
+cover delivery; protect overlap/serialize main integration. Historical writer gates superseded.
 
-PR90/main31eccfb resolves the missing [matrix](UPGRADE_IDENTITY_001/MATRIX.md).
-Tree owns future Prism/offline-rate/recruitment+Empower purchases. Starlight/Steady/Momentum
-close; every raw level and original stacking operand remains as a read-only bonus.
-No speculative First Light/Anchor, conversion or destination bonus. Complete restore replaces
-snapshots; M(M(S))=M(S). Echo stops charging at6; Bonds20. Existing ceil(P2×1.40^k),
-ceil(P2×1.45^k) and Swift ceil(P3×1.50^k) stay. No Tree bulk/Max/queue added.
+PR90/main31eccfb accepted [matrix](UPGRADE_IDENTITY_001/MATRIX.md): Tree owns Prism/offline-rate/
+recruitment+Empower. Starlight/Steady/Momentum close; raw levels/original stacking stay read-only.
+Echo6/Bonds20 stop further charges; old higher levels retained. Original ceil P2x1.40^k,
+P2x1.45^k, Swift P3x1.50^k prices stay. Shared UI/handler plan rejects forged/retired/locked/
+capped/unaffordable/nonfinite/inexact debits without mutation/save. No Tree bulk/queue added.
+No speculative First Light/Anchor conversion. Full restore replaces snapshots; M(M(S))=M(S).
+PR85 fixed12h/schema2/Reserves original-price refund preserved; no own new migration/balance.
+Keep paid Lab, Prism factors/floors, fixed Motes, chronology/live/offline/save/recovery,
+WebView60, com.lumenfall.app and established signing. PR46/B2 already integrated.
+PR89 Bonds naming/refunds and PR88 Forge cap remain separate. Changed index.html, focused
+Tree test/bridge/runner registrations and own task/status/evidence; preserve every gate.
 
-Current main14d5f3a incorporates F25, PR85 fixed12h/schema2/Reserves refund, Rift guidance
-and delivery receipts. Merged privately; keep every test/gate and unrelated feature.
-Shared plan rejects invalid/forged, both retirement flags, locked, capped, unaffordable,
-nonfinite or inexact debits. UI shares plan, retains finite prices/icons, describes Empower,
-and wraps at320px with a WebView60 fallback. PR85 retires Reserves; preserve its raw history
-and exact once-only original-price receipt. PR89 Bonds refunds/naming and PR88 Forge cap
-remain unintegrated/separate. PR46/B2 already integrated; no new B2 work.
+Candidate11cb736 on main14d5 passed CI37748062741:176 scenarios/17 required negatives.
+Integration ac0d28e has identical game/assets/tests/scripts/gates; fresh13 checks PASS.
+[Evidence](../qa/tree-exclusive-001/finish/integrated/README.md):154 Tree assertions, matrix
+chronology/reload/recovery/backup, F26, browser320/390/430 normal/reduced/200%/44px/focus/
+contrast>=5.504 PASS. Automated review findings fixed; no independent human review claim.
+Signed152/build37751572716 package/cert/526 CRCs/15 exact assets and extracted V8 Tree119/F26 PASS.
+Native API27/WebView61 signed148→152 exact storage/old raw bonuses/caps/actual touch payment,
+six width/text profiles and cold-start/recovery/two confirmed backup restores PASS.
+[Immutable APKs](../../archive/android/tree-exclusive-001/README.md) and exact raw evidence retained.
+Later main06b28d5 adds separate Rift cosmetics; verify Tree retention separately. Its source
+is not identical to APK152/full CI. Pinned native60 setup now being prepared on own API25 AVD.
 
-Changed index.html; tree-purchases.js and bridge/runner/prelude/run/scenario registrations;
-own task/status/evidence. Preserve Prism `(1+.04swift)×(1+.05prismstudy)`/floors/benchmarks,
-paid Lab, fixed Motes, formation/Ascend, chronology/live/offline and save/recovery.
-
-[Versioned evidence](../qa/tree-exclusive-001/finish/README.md): old1a476ba CI37709730712
-PASS149/12; preceding151 assertions/partial-debit causal negative and V8119 PASS.
-Combined14d5:154 handler/value assertions, F26 cap/refund regressions, matrix chronology,
-real reload/recovery/backup and320/390/430px normal/reduced,200% text/44px/focus/contrast>=5.50
-PASS. Automated review fixes exact partial Prism rounding and runnable frozen inventory.
-Native signed148/API27/WebView61 old save/actual over-cap buys/storage captured for update.
-No human-independent review or physical/exactWebView60/TalkBack pass claimed.
-
-Remaining: current full CI/source/tooling/context; serial PR66 integration/fresh checks;
-signed APK com.lumenfall.app/established signer/assets; native update/mobile acceptance;
-required physical/WebView60/TalkBack evidence and durable GitHub receipt. Missing required
-acceptance keeps feature/chat OPEN. Archive only owner after verified completion.
-Next: publish combined candidate, pass gates, integrate and deliver verified APK.
+Next: finish current-main scoped checks/native60 probe, publish receipts; complete remaining
+[physical/WebView60/TalkBack acceptance](../qa/tree-exclusive-001/finish/integrated/DEVICE_ACCEPTANCE.md).
+Missing required acceptance keeps feature/chat OPEN. Product integration is done; archive
+only this owner after verified completion and GitHub evidence. No new general approval needed.

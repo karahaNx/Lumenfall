@@ -1,0 +1,19 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{connect}=require('./native-connect.cjs'),root=process.argv[2]||__dirname;
+const pause=ms=>new Promise(r=>setTimeout(r,ms));
+(async()=>{const records=[],c=await connect();try{for(const width of [320,390,430]){
+ await c.adb.shell('wm size '+width+'x844');await pause(1500);
+ const readyStart=Date.now();while(!(await c.evaluate('(function(){var s=JSON.parse(localStorage.getItem("lumenfall_save_v2"));return s.schemaVersion===2&&Date.now()-s.lastSeen<8000;})()'))){assert(Date.now()-readyStart<180000,'actual native return/save completes');await pause(1000);}
+ for(let i=0;i<12;i++){const visible=await c.evaluate('(function(){["startup-skip","welcome-claim","daily-claim"].forEach(function(id){var e=document.getElementById(id);if(e&&e.offsetParent&&!e.disabled)e.click();});return Array.from(document.querySelectorAll(".overlay,.startup-intro")).filter(function(e){return getComputedStyle(e).display!=="none";}).map(function(e){return e.id;});})()');if(!visible.length)break;assert(i<11,'normal native return overlays close: '+visible.join(','));await pause(250);}
+ await c.evaluate('document.querySelector("[data-tab=ascend]").click()');await pause(600);
+ const before=await c.evaluate('JSON.parse(localStorage.getItem("lumenfall_save_v2")).nodes');
+ for(const scale of [1,2]){
+ const metrics=await c.evaluate('(function(){var old=document.getElementById("tree-qa-text");if(old)old.remove();var root=document.getElementById("node-list"),scale='+scale+';if(scale===2){var style=document.createElement("style");style.id="tree-qa-text";style.textContent=[".name",".desc",".lvl",".earned-effect",".effect-note",".buy-btn .cost",".buy-btn .label"].map(function(sel){var e=root.querySelector(sel);return e?"#node-list "+sel+"{font-size:"+parseFloat(getComputedStyle(e).fontSize)*2+"px!important;}":"";}).join("");document.head.appendChild(style);}var button=root.querySelector("[data-node=swift]");button.scrollIntoView({block:"center"});button.focus();var r=button.getBoundingClientRect();return {width:innerWidth,height:innerHeight,scale:scale,rootFits:root.scrollWidth<=root.clientWidth+1,cardsFit:Array.from(root.querySelectorAll(".node-card,.legacy-upgrade")).every(function(e){return e.scrollWidth<=e.clientWidth+1;}),controls:Array.from(root.querySelectorAll("[data-node]")).map(function(e){var r=e.getBoundingClientRect();return {id:e.dataset.node,width:r.width,height:r.height,aria:e.getAttribute("aria-label"),disabled:e.disabled};}),focus:document.activeElement===button,outline:parseFloat(getComputedStyle(button).outlineWidth),font:parseFloat(getComputedStyle(root.querySelector(".name")).fontSize),nodes:JSON.parse(localStorage.getItem("lumenfall_save_v2")).nodes};})()');
+ fs.writeFileSync(path.join(root,'native-'+width+'-text'+scale+'-metrics.json'),JSON.stringify(metrics,null,2)+'\n');
+ assert.equal(metrics.width,width);assert(metrics.rootFits&&metrics.cardsFit,'native horizontal fit '+width+'/'+scale);for(const n of metrics.controls)assert(n.width>=44&&n.height>=44&&n.aria,'native44px/label '+n.id);assert(metrics.focus&&metrics.outline>=2,'native focus');assert.deepEqual(metrics.nodes,before,'native UI keeps ownership');records.push(metrics);
+ fs.writeFileSync(path.join(root,'native-'+width+'-text'+scale+'.png'),await c.adb.exec('screencap -p'));
+ }
+ await c.evaluate('document.getElementById("tree-qa-text").remove()');
+ }fs.writeFileSync(path.join(root,'native-mobile.json'),JSON.stringify({status:'pass',records,limits:'API27/WebView61.200% test doubles actual CSS text. Reduced-motion policy separately verified in modern browser; physical/exactWebView60/TalkBack not claimed.'},null,2)+'\n');console.log('PASS: actual native320/390/430px and doubled text/44px/focus/ownership');
+ }finally{await c.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});
