@@ -1,13 +1,20 @@
 # Swift implementation evidence
 
-Merged-main candidate source SHA256: 6caf17feb92ad1feef3d10de1ebb253ceac188d7f262d12846fa7e8111b3d83e.
-PR88: https://github.com/karahaNx/Lumenfall/pull/88. Integration/APK pending.
+Current main31eccfb candidate source SHA256: 4fee51e342873f819170b2f9298eee7b50666c277ec7ae94194ea5c797399bba.
+PR88: https://github.com/karahaNx/Lumenfall/pull/88. Integration blocked on the
+progression choice in deed-continuity-proposal.md; no Swift APK released.
+Current core-study-clock.json passes14 groups/110 purchase cases; all five causal
+mutants fail with assertions (mutants-study-clock.json). v8-study-clock.json and
+its independent Node24 integer oracle pass on actual V8 6.0. Latest full/offline
+and17 required negative checks are running; older results below identify their
+own source and are not acceptance for the current source.
 
-Current receipts: core-current.json (13 groups/110 purchase cases),
+Earlier-source receipts: core-current.json (13 groups/110 purchase cases),
 mutants-current.json (four causal mutations), offline-clock-oracle.stdout.txt
 (one-second8h/72h replay, same-paid-work cap check and exact legacy state oracle),
 v8-current.json and v8-current-oracle.json (actual V8 6.0/Node8.3 unchanged
-product, independent Node24 integer accounting). full-final.* is in progress.
+product, independent Node24 integer accounting). full-final.* failed on the old
+300s exhaustive-oracle process timeout; full-integrated.* later passed162 cases.
 
 The two necessary Farm fixes retain the endpoint fraction without subtracting
 large whole seconds and use the actual grid for stall detection. Their overlap
@@ -82,3 +89,25 @@ real purchase; previous native preparation remains historical evidence.
 Cap10 plus the newly retired tracks makes Forge20/60 fresh progression impossible.
 The explicit proposed continuation and pending user question are recorded in
 deed-continuity-proposal.md. No progression rule is implemented pending choice.
+
+Main31eccfb offline diagnostic (offline-main31eccfb.stderr.txt) exposed Study
+event-subtraction drift over72h: remaining work1156097.9742849853 versus
+1156097.9742877628 in one-second replay, exceeding the existing1.156e-6 tolerance.
+Current paid-work countdown derives from canonical grid origins, retained across
+Ascend state copies and re-anchored for new work or speed changes. No duration,
+speed, price, completion rule or numeric tolerance changes. A real-combat/Ascend
+fixture with1e12 paid work must consume exactly480 representable units in60s,
+including six caller windows; the old subtraction mutant fails this assertion.
+The frozen engine's in-memory reference gets only a separate paid-clock adapter
+in addition to the two necessary Farm corrections; full exact state/summary
+assertions remain. offline-study-clock.* preserves the diagnostic where the old
+unadapted exact baseline still required its former countdown rounding.
+
+Native preparation native-prepared-no-autoempower/baseline-native.json passes:
+signed143 installed bytes match, rawSwift12 and Ember40 survive actual cold
+launch,1e30 Shards and1e12 Lumen retained, all Auto-Empower intent explicitly OFF.
+Storage SHA256109824ab36a6dc2f1a703af1e0831629ff0794a729c064e00f6e7090b230495c.
+Earlier main31eccfb attempts are retained: first no app PID, then an ON
+Auto-Empower fixture bought150 Ember levels before capture. Those are preparation
+diagnostics; the production APK was never modified. Use the new prepared save
+for signed update acceptance, with real Arcane Calibration120-Shard input.

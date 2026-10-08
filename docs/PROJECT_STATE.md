@@ -186,4 +186,4 @@ JavaScript is the active-tooling standard; see
 and A40 remain recorded as deferred/retired. Earlier status:
 `project/PROJECT_STATE_2026-10-05_HISTORICAL.md`.
 
-Swift Recovery candidate: PR88;13 core groups,110 purchase cases and one-second8h/72h replay pass. Full CI/integration/signed APK/native acceptance pending.
+Swift Recovery: [PR88](https://github.com/karahaNx/Lumenfall/pull/88), cap10/minimum10/3s and exact legacy Shard value implemented in candidate;14 core groups/110 purchases and V8 6.0 pass. PR90 retirement makes fresh Forge20/60 Deeds unreachable at cap10; user progression choice pending. Full current CI/integration/signed APK/native update acceptance OPEN.

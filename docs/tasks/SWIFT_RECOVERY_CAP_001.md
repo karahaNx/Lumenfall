@@ -1,6 +1,6 @@
 # SWIFT_RECOVERY_CAP_001 — bounded ability recovery
 
-Status: [PR88](https://github.com/karahaNx/Lumenfall/pull/88), progression choice pending.
+Status: [PR88](https://github.com/karahaNx/Lumenfall/pull/88), blocked on progression choice; not integrated.
 Owner: this Swift Recovery feature chat. Branch `feature/swift-recovery-cap-001`,
 private checkout `/workspace/Lumenfall-swift-recovery`. No subagents/messages.
 
@@ -12,7 +12,7 @@ with explicit preservation of old purchase value.
 
 [Original feature request and corrections](SWIFT_RECOVERY_CAP_001_REQUEST.txt).
 Original F19: “Jeg tænker swift recovery Skal have et cap, ellers kan vi nå et
-punkt, hvor abilities bliver instant.” Source:
+punkt, hvor abilities bliver instant.”
 [original feedback](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt),
 [F18/F19 and save/dependencies](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt),
 [registered decisions](../recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt).
@@ -21,17 +21,14 @@ explicitly requested finishing implementation and pushing to GitHub.
 
 Implementation baseline: main `b0537cb46635555ba2c2e5f3f95bc8fc276aeda5`.
 PR46/B2 is merged via PR57 `20aaae62a4b6e46f8d75775085918eaba4e8de29`.
-Current AGENTS/FEATURE_WORKFLOW replace historical Lead/writer permission gates;
-this feature owns implementation and delivery. Current open PR67 overlaps Swift
-and saves; its 27-feature bundle is not main and is not imported as a product.
+Current rules replace historical Lead/writer gates. PR67 overlaps Swift/saves;
+its 27-feature product bundle is not imported.
 Main31eccfb now closes the other four Forge purchase tracks. Merge preparation
 preserves PR84/90 changes; cap10 would make fresh Forge20/60 Deeds unreachable.
 [Concrete continuation proposal](../qa/swift-recovery-cap-001/implementation/deed-continuity-proposal.md)
 is awaiting user choice; do not integrate the broken progression route.
-PR70 overlaps two necessary Farm clock fixes; no Wisp roles imported. PR66 is Tree.
-Historical local preparation is preserved in
-[the frozen checkpoint](../qa/swift-recovery-cap-001/preparation-task-2026-10-07.md)
-and its existing evidence directories; those passes are not current acceptance.
+PR70 Farm fixes are now main; no Wisp roles imported. Earlier preparation:
+[the frozen checkpoint](../qa/swift-recovery-cap-001/preparation-task-2026-10-07.md).
 
 ## Concrete decisions and dependencies
 
@@ -64,8 +61,9 @@ This resolves the F18/F19 design dependency.
   refunds on top of later money. Ascend retains Shards/receipt; Reset clears all.
   All Shard spending shares this value.
 - PR67 integration must preserve this migration/credit contract and reconcile its
-  overlapping compensation implementation, avoiding a second refund. The capped cadence required two Farm clock fixes (also in PR70): retain endpoint
-  fractions and detect progress on the authoritative grid. No tolerance is widened.
+  overlapping compensation implementation, avoiding a second refund. Capped cadence
+  needs the Farm clock fixes now in main. Study work now derives from that grid,
+  avoiding long-window event-subtraction drift. No numeric tolerance is widened.
 
 ## Acceptance and preservation
 
@@ -81,17 +79,19 @@ Preserve package `com.lumenfall.app`, established signing, WebView60 syntax/runt
 chronological simulation, existing bulk price rounding, deterministic purchases,
 fixed Luminous Motes rewards and all unrelated systems. No archive originals change.
 
-Changed product/check files: root index.html; targeted behavioral harness/Forge
-expectations; new Swift core and UI regression coverage. Existing assertions for
-other four uncapped legacy upgrades and all other Forge mechanics remain required.
+Changed files: index.html, targeted behavioral harness/Forge expectations and
+Swift core/UI coverage. Preserve PR90 retirement, old effects and raw history.
 
 ## Checks and next action
 
-Core13 groups/110 purchases, four causal mutants, one-second8h/72h reference,
-V8 6.0 integer oracle, mobile12 profiles and14 negatives pass. Local full162 scenarios pass. CI37741028367 failed only Resonate CDP startup;
+Current source4fee51e: core14 groups/110 purchases, five causal mutants and
+V8 6.0, one-second8h/72h oracle and17 required negatives pass.
+Full run was superseded by main’s newly integrated12h contract; refresh pending.
+Prior-source full162/mobile12 pass. CI37741028367 failed only Resonate CDP startup;
 runner now passes its selected browser. Fresh CI required. Diagnostics retained. See
 [implementation evidence](../qa/swift-recovery-cap-001/implementation/README.md).
-Signed143 cold/storage preparation passes. No independent/physical/TalkBack claim.
+Signed143 cold/storage preparation passes with Auto-Empower OFF; APK update pending.
+No independent/physical/TalkBack claim.
 
 Next: record the user’s Deed-continuity choice; finish merged-main checks/CI,
 integrate and verify the signed APK/native update. Preserve all receipts. Keep

@@ -7887,6 +7887,33 @@ function advanceAuthoritativeTime(elapsedSec,options){
     }
   }
 
+  // Derive paid work from the canonical clock instead of subtracting from a
+  // large countdown at every combat event. Keep anchors across Ascend's
+  // canonical state copy; re-anchor only new work or an actual speed change.
+  var studyProgressAnchors = {};
+  function captureStudyProgressAnchors(){
+    state.activeStudies.forEach(function(active){
+      var anchor = studyProgressAnchors[active.id];
+      if(!anchor || anchor.lastRemaining!==active.remainingSec ||
+          anchor.speed!==active.speedMult || anchor.total!==active.totalDurationSec){
+        studyProgressAnchors[active.id] = {
+          remaining:active.remainingSec,lastRemaining:active.remainingSec,
+          speed:active.speedMult,total:active.totalDurationSec,
+          crossings:farmGridCrossings,gridRemaining:farmGridRemainingSec
+        };
+      }
+    });
+  }
+  function advanceStudyProgressToClock(){
+    state.activeStudies.forEach(function(active){
+      var anchor = studyProgressAnchors[active.id];
+      var workSeconds = (farmGridCrossings-anchor.crossings)+
+        (anchor.gridRemaining-farmGridRemainingSec);
+      active.remainingSec = anchor.remaining-workSeconds*anchor.speed;
+      anchor.lastRemaining = active.remainingSec;
+    });
+  }
+
   var traceEverySec = Math.max(0,Number(options.traceEverySec)||0);
   var nextTraceElapsedSec = traceEverySec>0 ? traceEverySec : Infinity;
   if(traceEverySec>0) summary.trace = [];
@@ -8043,6 +8070,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
     // subtraction literally cannot advance the remaining clock and no state
     // event fires.
     if(next>0){
+      captureStudyProgressAnchors();
       if(policy.visual && policy.kind==='live' && dps>0)presentPassiveWispAttack();
       var ascendsBeforePassive = state.ascendCount;
       if(state.riftMode==='farm') simulationApplyFarmPassive(next,dps,policy,summary);
@@ -8053,7 +8081,6 @@ function advanceAuthoritativeTime(elapsedSec,options){
         simulationAdvanceAbilityResources(next);
         simulationAdvanceAutomationTimers(next);
       }
-      simulationAdvanceStudyProgress(next);
       var crossedFarmGrids = advanceFarmGridClock(next);
       if(hitsFarmGrid && crossedFarmGrids!==1){
         throw new Error('Authoritative Farm grid clock crossed an unexpected boundary count');
@@ -8072,6 +8099,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
         farmGridCrossings = targetFarmGridCrossings;
         farmGridRemainingSec = targetFarmGridRemainingSec;
       }
+      advanceStudyProgressToClock();
       elapsedInRun = currentElapsedSec();
       remaining = hitsWindowEnd ? 0 : simulationRemainingSec();
     }

@@ -10,6 +10,7 @@ if(mutant==='cap')html=html.replace("effectPerLevel:0.08, levelCap:10","effectPe
 if(mutant==='floor')html=html.replace('Math.max(ABILITY_MIN_CYCLE_SEC,ABILITY_BASE_CYCLE_SEC / researchFactor(\'charge\',level))','ABILITY_BASE_CYCLE_SEC / (1+0.08*(level===undefined?researchLevel(\'charge\'):level))');
 if(mutant==='refund')html=html.replace('  normalizeSwiftRecoveryRefund(source,out);','');
 if(mutant==='clock')html=html.replace('var gridCrossingsBefore = farmGridCrossings;','var elapsedWholeBefore = elapsedWholeSec;').replace('var gridRemainingBefore = farmGridRemainingSec;','var elapsedFractionBefore = elapsedFractionSec;').replace('farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore','elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore');
+if(mutant==='study-clock')html=html.replace('      advanceStudyProgressToClock();','      simulationAdvanceStudyProgress(next);');
 function app(){
   let now=2000000000000,failPrimary=false,failRecovery=false;const storage=new Map(),writes=[];
   const document={readyState:'loading',hidden:false,addEventListener(){},getElementById:()=>null};
@@ -148,6 +149,18 @@ test('capped Farm cadence crosses tiny clock boundaries and retains whole/split 
     try{b.advance(60,{kind:'offline',clockStartMs:clock,offlineWindowStartMs:clock});}catch(e){error=e;}
     assert.equal(error,null,'capped Farm grid advances without discarding tiny elapsed steps');const whole=copy(b.get());b.set(copy(s));b.restore();
     for(let i=0;i<6;i++)b.advance(10,{kind:'offline',clockStartMs:clock+i*10000,offlineWindowStartMs:clock});parity(b.get(),whole,'capped whole/split '+fixture);
+  }
+});
+test('paid Study work follows the canonical clock across combat events and Ascend copies',()=>{
+  const b=app().b,s=JSON.parse(fs.readFileSync(path.resolve(__dirname,'../../docs/qa/offline-autoascend-2026-10-07/device_backup.json'),'utf8'));
+  s.activeStudies=[{id:'wispascend',remainingSec:1e12,totalDurationSec:1e12,speedMult:8}];
+  Object.keys(s.studyQueue).forEach(id=>s.studyQueue[id]=false);
+  for(const kind of ['live','offline']){
+    b.set(copy(s));const sum=b.advance(60,{kind,clockStartMs:s.lastSeen,offlineWindowStartMs:s.lastSeen});
+    assert(sum.kills>0&&sum.ascends>0,'real combat and canonical Ascend copies exercised');
+    assert.equal(b.get().activeStudies[0].remainingSec,1e12-480,'exact representable paid work, no event-subtraction drift');
+    b.set(copy(s));for(let i=0;i<6;i++)b.advance(10,{kind,clockStartMs:s.lastSeen+i*10000,offlineWindowStartMs:s.lastSeen});
+    assert.equal(b.get().activeStudies[0].remainingSec,1e12-480,'same work across caller boundaries');
   }
 });
 }

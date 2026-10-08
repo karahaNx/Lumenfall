@@ -13,16 +13,41 @@ let baseline=baselineOriginal;
 assert.equal(require('node:crypto').createHash('sha1').update('blob '+Buffer.byteLength(baseline)+'\0'+baseline).digest('hex'),'ea44431c163569548973d9e489f75345749a07ee','original product oracle blob');
 // PR70's independently prepared clock correction is a necessary dependency:
 // closing old queues exposes a canonical-grid stall. Keep the immutable old
-// engine as the reference, applying ONLY its two clock corrections. The complete
+// engine as the reference, applying ONLY necessary clock corrections. The complete
 // state and summary comparisons below remain exact, including economy/ownership.
 function clockReference(original){
+ // A separate paid-work clock adapter avoids preserving the old timer's
+ // rounding drift as a required behavior. Only the countdown arithmetic changes;
+ // all original event ordering, work, prices, completions and rewards stay intact.
+ const paidClock=`  var paidWorkOrigins = {};
+  function pinPaidWork(){
+    state.activeStudies.forEach(function(a){
+      var x=paidWorkOrigins[a.id];
+      if(x && x.result===a.remainingSec && x.rate===a.speedMult && x.duration===a.totalDurationSec) return;
+      paidWorkOrigins[a.id]={value:a.remainingSec,result:a.remainingSec,rate:a.speedMult,
+        duration:a.totalDurationSec,second:farmGridCrossings,countdown:farmGridRemainingSec};
+    });
+  }
+  function applyPaidWorkClock(){
+    state.activeStudies.forEach(function(a){
+      var x=paidWorkOrigins[a.id];
+      var dt=(farmGridCrossings-x.second)+(x.countdown-farmGridRemainingSec);
+      x.result=a.remainingSec=x.value-dt*x.rate;
+    });
+  }
+`;
  const replacements=[
   ['  var targetGridPositionSec = startPhaseSec+elapsedSec;\n  var targetFarmGridCrossings = Math.floor(targetGridPositionSec);\n  var targetGridPhaseSec = targetGridPositionSec-targetFarmGridCrossings;',
    '  var targetGridPhaseSec = startPhaseSec+targetFractionSec;\n  var targetGridCarry = Math.floor(targetGridPhaseSec);\n  var targetFarmGridCrossings = targetWholeSec+targetGridCarry;\n  targetGridPhaseSec -= targetGridCarry;'],
   ['    var elapsedWholeBefore = elapsedWholeSec;\n    var elapsedFractionBefore = elapsedFractionSec;',
    '    var gridCrossingsBefore = farmGridCrossings;\n    var gridRemainingBefore = farmGridRemainingSec;'],
   ['if(elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && actions===0){',
-   'if(farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore && actions===0){']
+   'if(farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore && actions===0){'],
+  ['  var traceEverySec = Math.max(0,Number(options.traceEverySec)||0);',
+   paidClock+'  var traceEverySec = Math.max(0,Number(options.traceEverySec)||0);'],
+  ['    if(next>0){\n      if(policy.visual', '    if(next>0){\n      pinPaidWork();\n      if(policy.visual'],
+  ['      simulationAdvanceStudyProgress(next);\n      var crossedFarmGrids', '      var crossedFarmGrids'],
+  ['      elapsedInRun = currentElapsedSec();', '      applyPaidWorkClock();\n      elapsedInRun = currentElapsedSec();']
  ];
  for(const [before,after] of replacements){assert.equal(original.split(before).length,2,'unique frozen clock marker');original=original.replace(before,after);}
  return original;
