@@ -10,6 +10,23 @@ const sourceArg=process.argv.indexOf('--source');
 const source=fs.readFileSync(sourceArg<0?path.join(root,'index.html'):process.argv[sourceArg+1],'utf8');
 const baseline=fs.readFileSync(path.join(root,'docs/recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/main-index.html'),'utf8');
 assert.equal(require('node:crypto').createHash('sha1').update('blob '+Buffer.byteLength(baseline)+'\0'+baseline).digest('hex'),'ea44431c163569548973d9e489f75345749a07ee','original product oracle blob');
+// PR70's independently prepared clock correction is a necessary dependency:
+// closing old queues exposes a canonical-grid stall. Keep the immutable old
+// engine as the reference, applying ONLY its two clock corrections. The complete
+// state and summary comparisons below remain exact, including economy/ownership.
+function clockReference(original){
+ const replacements=[
+  ['  var targetGridPositionSec = startPhaseSec+elapsedSec;\n  var targetFarmGridCrossings = Math.floor(targetGridPositionSec);\n  var targetGridPhaseSec = targetGridPositionSec-targetFarmGridCrossings;',
+   '  var targetGridPhaseSec = startPhaseSec+targetFractionSec;\n  var targetGridCarry = Math.floor(targetGridPhaseSec);\n  var targetFarmGridCrossings = targetWholeSec+targetGridCarry;\n  targetGridPhaseSec -= targetGridCarry;'],
+  ['    var elapsedWholeBefore = elapsedWholeSec;\n    var elapsedFractionBefore = elapsedFractionSec;',
+   '    var gridCrossingsBefore = farmGridCrossings;\n    var gridRemainingBefore = farmGridRemainingSec;'],
+  ['if(elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && actions===0){',
+   'if(farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore && actions===0){']
+ ];
+ for(const [before,after] of replacements){assert.equal(original.split(before).length,2,'unique frozen clock marker');original=original.replace(before,after);}
+ return original;
+}
+const correctedClockBaseline=clockReference(baseline);
 const original=JSON.parse(fs.readFileSync(path.join(root,'docs/qa/offline-autoascend-2026-10-07/device_backup.json'),'utf8'));
 const copy=x=>JSON.parse(JSON.stringify(x)),records=[];
 function app(seed,html=source,seconds=0){
@@ -119,18 +136,25 @@ assert(!long.result.completedStudies.includes("Guardian's Mastery"),'Study canno
 assert.equal(long.result.kills,cap.result.kills,'beyond-cap time earns no extra combat');
 // Preserve old numerical policy against the unchanged scheduler for short windows
 // and chronological research/Motes/automation boundaries.
-for(const seed of [original,clear20,off]){
+// Compare unchanged chronology with closed purchase intent disabled on both
+// sides. UPGRADE_IDENTITY tests separately exercise old ON intent and paid work.
+for(const rawSeed of [original,clear20,off]){
+ const seed=copy(rawSeed);
+ for(const id of ['focus','sense','formation','resolve'])seed.researchQueue[id]=false;
+ for(const id of ['riftattune','formationstudy','prismstudy'])seed.studyQueue[id]=false;
  for(const seconds of [60,300,3600]){
-  const old=app(seed,baseline,seconds),next=app(seed,source,seconds);
+  const old=app(seed,correctedClockBaseline,seconds),next=app(seed,source,seconds);
   const a=old.b.advance(seconds,{kind:'offline',visual:false,clockStartMs:seed.lastSeen});
   const b=next.b.advance(seconds,{kind:'offline',visual:false,clockStartMs:seed.lastSeen});
   baselineSummary(b,a,'unchanged baseline summary '+seconds);baselineState(next.b.get(),old.b.get(),seed,'unchanged baseline state '+seconds);
  }
 }
-const all=copy(original);all.research.focus=0;Object.keys(all.empowerQueue).forEach(k=>all.empowerQueue[k]=true);
-all.researchQueue.focus=true;all.studyQueue.riftattune=true;
+const all=copy(original);all.research.charge=0;
+for(const id of ['focus','sense','formation','resolve'])all.researchQueue[id]=false;
+for(const id of ['riftattune','formationstudy','prismstudy'])all.studyQueue[id]=false;Object.keys(all.empowerQueue).forEach(k=>all.empowerQueue[k]=true);
+all.researchQueue.charge=true;all.studyQueue.guardmastery=true;
 for(const kind of ['live','offline']){
- const whole=app(all),split=app(all),old=app(all,baseline),options={kind,visual:false,clockStartMs:all.lastSeen};
+ const whole=app(all),split=app(all),old=app(all,correctedClockBaseline),options={kind,visual:false,clockStartMs:all.lastSeen};
  const sum=whole.b.advance(3600,options);const oldSum=old.b.advance(3600,options);
  baselineSummary(sum,oldSum,'economy/order baseline '+kind);baselineState(whole.b.get(),old.b.get(),all,'baseline chronology '+kind);
  for(let i=0;i<4;i++)split.b.advance(900,{...options,clockStartMs:all.lastSeen+i*900000,offlineWindowStartMs:all.lastSeen});

@@ -1,0 +1,456 @@
+{
+  "verifiedAtUtc": "2026-10-07T13:33:35.386Z",
+  "baselineCommit": "b2a1f440e8ad9fed34b37551e468224310d2a6f6",
+  "productSha256": "f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4",
+  "scope": "Unchanged product baseline plus local documentation; no new game/migration or balance acceptance",
+  "scenarios": [
+    {
+      "scenario": "upgrade-effects-and-deeds",
+      "outcome": "PASS",
+      "exitCode": 0,
+      "command": "PATH=/workspace/.cache/lumenfall/bin:$PATH python3 tests/behavioral/run.py --web-root /tmp/upgrade-identity-001/web --scenario upgrade-effects-and-deeds --raw-artifacts /tmp/upgrade-identity-001/qa/raw",
+      "evidence": "evidence/upgrade-effects-and-deeds-chrome.log",
+      "staged": {
+        "instrumented_sha256": "6a7bdf5fc95047c3c3b4fea4327573d560fbc30ecca1a050a54c7778eec60c72",
+        "source_sha256": "f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4"
+      },
+      "detail": {
+        "checks": 941,
+        "deeds": 23,
+        "exactObserverPurity": true,
+        "nodeLevels": 9,
+        "projectLevels": 4
+      },
+      "browser": {
+        "resolved_path": "/workspace/.cache/lumenfall/bin/google-chrome",
+        "selected_path": "/workspace/.cache/lumenfall/bin/google-chrome",
+        "sha256": "b7906de9413718c88e07644efbf4a2674f59a7521834507efd342f69f7c47406",
+        "version": "Google Chrome 155.0.8059.39",
+        "version_exitcode": 0,
+        "version_stderr": "[1007/131743.138883:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /workspace/.cache/lumenfall/chrome/opt/google/chrome/CHROME_VERSION_EXTRA\n"
+      }
+    },
+    {
+      "scenario": "forge-contracts",
+      "outcome": "PASS",
+      "exitCode": 0,
+      "command": "PATH=/workspace/.cache/lumenfall/bin:$PATH python3 tests/behavioral/run.py --web-root /tmp/upgrade-identity-001/web --scenario forge-contracts --raw-artifacts /tmp/upgrade-identity-001/qa/raw",
+      "evidence": "evidence/forge-contracts.log",
+      "staged": {
+        "instrumented_sha256": "6a7bdf5fc95047c3c3b4fea4327573d560fbc30ecca1a050a54c7778eec60c72",
+        "source_sha256": "f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4"
+      },
+      "detail": {
+        "checks": 3508,
+        "negativeControls": [
+          "cap",
+          "migration",
+          "deed",
+          "effect"
+        ],
+        "purchaseCases": 336
+      },
+      "browser": {
+        "resolved_path": "/workspace/.cache/lumenfall/bin/google-chrome",
+        "selected_path": "/workspace/.cache/lumenfall/bin/google-chrome",
+        "sha256": "b7906de9413718c88e07644efbf4a2674f59a7521834507efd342f69f7c47406",
+        "version": "Google Chrome 155.0.8059.39",
+        "version_exitcode": 0,
+        "version_stderr": "[1007/131929.436799:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /workspace/.cache/lumenfall/chrome/opt/google/chrome/CHROME_VERSION_EXTRA\n"
+      }
+    },
+    {
+      "scenario": "forge-chronology",
+      "outcome": "PASS",
+      "exitCode": 0,
+      "command": "PATH=/workspace/.cache/lumenfall/bin:$PATH python3 tests/behavioral/run.py --web-root /tmp/upgrade-identity-001/web --scenario forge-chronology --raw-artifacts /tmp/upgrade-identity-001/qa/raw",
+      "evidence": "evidence/forge-chronology.log",
+      "staged": {
+        "instrumented_sha256": "6a7bdf5fc95047c3c3b4fea4327573d560fbc30ecca1a050a54c7778eec60c72",
+        "source_sha256": "f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4"
+      },
+      "detail": {
+        "checks": 13,
+        "midWindowPurchaseSec": 0.6,
+        "mixed": {
+          "research": {
+            "arcanecal": 8,
+            "charge": 0,
+            "conduction": 4,
+            "focus": 0,
+            "formation": 15,
+            "luminoustracking": 0,
+            "resolve": 0,
+            "sense": 0
+          },
+          "spent": {
+            "lumen": 1883015,
+            "shards": 87828
+          },
+          "summary": {
+            "achievements": [
+              "d10",
+              "d25",
+              "d50",
+              "d100",
+              "asc1",
+              "asc5",
+              "asc10",
+              "study1"
+            ],
+            "ascendGains": [],
+            "ascends": 0,
+            "autoTaps": 7,
+            "bossKills": 0,
+            "clockEndMs": 2000000007000,
+            "closedStudies": [],
+            "completedStudies": [
+              "Wisp Ascendancy"
+            ],
+            "empowers": 7,
+            "endDepth": 89,
+            "fastForwardedKills": 0,
+            "iterations": 9,
+            "kills": 0,
+            "lumenGained": 0,
+            "luminousKills": 0,
+            "motesGained": 0,
+            "pushDepth": 90,
+            "researchBought": 27,
+            "retreated": false,
+            "retreats": 0,
+            "retries": 0,
+            "shardGained": 5.6,
+            "sigilsGained": 0,
+            "studiesStarted": 1
+          }
+        }
+      },
+      "browser": {
+        "resolved_path": "/workspace/.cache/lumenfall/bin/google-chrome",
+        "selected_path": "/workspace/.cache/lumenfall/bin/google-chrome",
+        "sha256": "b7906de9413718c88e07644efbf4a2674f59a7521834507efd342f69f7c47406",
+        "version": "Google Chrome 155.0.8059.39",
+        "version_exitcode": 0,
+        "version_stderr": "[1007/131930.507750:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /workspace/.cache/lumenfall/chrome/opt/google/chrome/CHROME_VERSION_EXTRA\n"
+      }
+    },
+    {
+      "scenario": "inquiry-contracts",
+      "outcome": "PASS",
+      "exitCode": 0,
+      "command": "PATH=/workspace/.cache/lumenfall/bin:$PATH python3 tests/behavioral/run.py --web-root /tmp/upgrade-identity-001/web --scenario inquiry-contracts --raw-artifacts /tmp/upgrade-identity-001/qa/raw",
+      "evidence": "evidence/inquiry-contracts.log",
+      "staged": {
+        "instrumented_sha256": "6a7bdf5fc95047c3c3b4fea4327573d560fbc30ecca1a050a54c7778eec60c72",
+        "source_sha256": "f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4"
+      },
+      "detail": {
+        "cap": 10,
+        "catalogue": 9,
+        "checks": 239,
+        "finiteGuards": true,
+        "negativeControls": 1,
+        "originals": 8
+      },
+      "browser": {
+        "resolved_path": "/workspace/.cache/lumenfall/bin/google-chrome",
+        "selected_path": "/workspace/.cache/lumenfall/bin/google-chrome",
+        "sha256": "b7906de9413718c88e07644efbf4a2674f59a7521834507efd342f69f7c47406",
+        "version": "Google Chrome 155.0.8059.39",
+        "version_exitcode": 0,
+        "version_stderr": "[1007/131937.573257:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /workspace/.cache/lumenfall/chrome/opt/google/chrome/CHROME_VERSION_EXTRA\n"
+      }
+    },
+    {
+      "scenario": "inquiry-chronology",
+      "outcome": "PASS",
+      "exitCode": 0,
+      "command": "PATH=/workspace/.cache/lumenfall/bin:$PATH python3 tests/behavioral/run.py --web-root /tmp/upgrade-identity-001/web --scenario inquiry-chronology --raw-artifacts /tmp/upgrade-identity-001/qa/raw",
+      "evidence": "evidence/inquiry-chronology.log",
+      "staged": {
+        "instrumented_sha256": "6a7bdf5fc95047c3c3b4fea4327573d560fbc30ecca1a050a54c7778eec60c72",
+        "source_sha256": "f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4"
+      },
+      "detail": {
+        "actual12hTail": true,
+        "arrayOrder": true,
+        "capCompletion": true,
+        "checks": 37,
+        "dueEntry": true,
+        "liveOfflineChunkParity": true,
+        "negativeControls": 2,
+        "overcapTail": true,
+        "timelineEvents": 0
+      },
+      "browser": {
+        "resolved_path": "/workspace/.cache/lumenfall/bin/google-chrome",
+        "selected_path": "/workspace/.cache/lumenfall/bin/google-chrome",
+        "sha256": "b7906de9413718c88e07644efbf4a2674f59a7521834507efd342f69f7c47406",
+        "version": "Google Chrome 155.0.8059.39",
+        "version_exitcode": 0,
+        "version_stderr": "[1007/131932.097208:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /workspace/.cache/lumenfall/chrome/opt/google/chrome/CHROME_VERSION_EXTRA\n"
+      }
+    },
+    {
+      "scenario": "forge-backup-restore",
+      "outcome": "PASS",
+      "exitCode": 0,
+      "command": "PATH=/workspace/.cache/lumenfall/bin:$PATH python3 tests/behavioral/run.py --web-root /tmp/upgrade-identity-001/web --scenario forge-backup-restore --raw-artifacts /tmp/upgrade-identity-001/qa/raw",
+      "evidence": "evidence/forge-backup-restore.log",
+      "staged": {
+        "instrumented_sha256": "6a7bdf5fc95047c3c3b4fea4327573d560fbc30ecca1a050a54c7778eec60c72",
+        "source_sha256": "f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4"
+      },
+      "detail": {
+        "activeStudy": {
+          "id": "guardmastery",
+          "remainingSec": 123,
+          "speedMult": 2,
+          "totalDurationSec": 150
+        },
+        "enemyRetained": true,
+        "explicitQueues": {
+          "arcanecal": true,
+          "charge": false,
+          "conduction": false,
+          "focus": false,
+          "formation": false,
+          "luminoustracking": true,
+          "resolve": false,
+          "sense": false
+        },
+        "formation": {
+          "members": [
+            "tide",
+            "stone"
+          ],
+          "preset": ""
+        },
+        "storedOverCap": 13
+      },
+      "browser": {
+        "resolved_path": "/workspace/.cache/lumenfall/bin/google-chrome",
+        "selected_path": "/workspace/.cache/lumenfall/bin/google-chrome",
+        "sha256": "b7906de9413718c88e07644efbf4a2674f59a7521834507efd342f69f7c47406",
+        "version": "Google Chrome 155.0.8059.39",
+        "version_exitcode": 0,
+        "version_stderr": "[1007/131929.816881:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /workspace/.cache/lumenfall/chrome/opt/google/chrome/CHROME_VERSION_EXTRA\n"
+      }
+    },
+    {
+      "scenario": "forge-recovery",
+      "outcome": "PASS",
+      "exitCode": 0,
+      "command": "PATH=/workspace/.cache/lumenfall/bin:$PATH python3 tests/behavioral/run.py --web-root /tmp/upgrade-identity-001/web --scenario forge-recovery --raw-artifacts /tmp/upgrade-identity-001/qa/raw",
+      "evidence": "evidence/forge-recovery.log",
+      "staged": {
+        "instrumented_sha256": "6a7bdf5fc95047c3c3b4fea4327573d560fbc30ecca1a050a54c7778eec60c72",
+        "source_sha256": "f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4"
+      },
+      "detail": {
+        "activeStudy": {
+          "id": "guardmastery",
+          "remainingSec": 123,
+          "speedMult": 2,
+          "totalDurationSec": 150
+        },
+        "enemyRetained": true,
+        "explicitQueues": {
+          "arcanecal": true,
+          "charge": false,
+          "conduction": false,
+          "focus": false,
+          "formation": false,
+          "luminoustracking": true,
+          "resolve": false,
+          "sense": false
+        },
+        "formation": {
+          "members": [
+            "tide",
+            "stone"
+          ],
+          "preset": ""
+        },
+        "storedOverCap": 13
+      },
+      "browser": {
+        "resolved_path": "/workspace/.cache/lumenfall/bin/google-chrome",
+        "selected_path": "/workspace/.cache/lumenfall/bin/google-chrome",
+        "sha256": "b7906de9413718c88e07644efbf4a2674f59a7521834507efd342f69f7c47406",
+        "version": "Google Chrome 155.0.8059.39",
+        "version_exitcode": 0,
+        "version_stderr": "[1007/131929.873388:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /workspace/.cache/lumenfall/chrome/opt/google/chrome/CHROME_VERSION_EXTRA\n"
+      }
+    },
+    {
+      "scenario": "forge-ui-mobile",
+      "outcome": "PASS",
+      "exitCode": 0,
+      "command": "PATH=/workspace/.cache/lumenfall/bin:$PATH python3 tests/behavioral/run.py --web-root /tmp/upgrade-identity-001/web --scenario forge-ui-mobile --raw-artifacts /tmp/upgrade-identity-001/qa/raw",
+      "evidence": "evidence/forge-ui-mobile.log",
+      "staged": {
+        "instrumented_sha256": "6a7bdf5fc95047c3c3b4fea4327573d560fbc30ecca1a050a54c7778eec60c72",
+        "source_sha256": "f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4"
+      },
+      "detail": {
+        "status": "pass",
+        "scenario": "forge-ui-mobile",
+        "profiles": [
+          "360x640-safe0-no-preference",
+          "360x640-safe24-no-preference",
+          "390x844-safe24-no-preference"
+        ],
+        "teardown": {
+          "browser": {
+            "code": 0,
+            "signal": null
+          },
+          "events": [
+            {
+              "code": 0,
+              "event": "browser-close",
+              "pending": 0,
+              "signal": null
+            },
+            {
+              "browserClosed": true,
+              "event": "profile-removed"
+            }
+          ],
+          "pendingAfterClose": 0,
+          "pendingBeforeClose": 0,
+          "profileRemoved": true
+        },
+        "fullEvidence": "evidence/forge-ui-mobile.log"
+      },
+      "browser": {
+        "resolved_path": "/workspace/.cache/lumenfall/bin/google-chrome",
+        "selected_path": "/workspace/.cache/lumenfall/bin/google-chrome",
+        "sha256": "b7906de9413718c88e07644efbf4a2674f59a7521834507efd342f69f7c47406",
+        "version": "Google Chrome 155.0.8059.39",
+        "version_exitcode": 0,
+        "version_stderr": "[1007/132823.901716:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /workspace/.cache/lumenfall/chrome/opt/google/chrome/CHROME_VERSION_EXTRA\n"
+      }
+    },
+    {
+      "scenario": "forge-ui-reduced-motion",
+      "outcome": "PASS",
+      "exitCode": 0,
+      "command": "PATH=/workspace/.cache/lumenfall/bin:$PATH python3 tests/behavioral/run.py --web-root /tmp/upgrade-identity-001/web --scenario forge-ui-reduced-motion --raw-artifacts /tmp/upgrade-identity-001/qa/raw",
+      "evidence": "evidence/forge-ui-reduced-motion.log",
+      "staged": {
+        "instrumented_sha256": "6a7bdf5fc95047c3c3b4fea4327573d560fbc30ecca1a050a54c7778eec60c72",
+        "source_sha256": "f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4"
+      },
+      "detail": {
+        "status": "pass",
+        "scenario": "forge-ui-reduced-motion",
+        "profiles": [
+          "360x640-safe0-reduce",
+          "360x640-safe24-reduce",
+          "390x844-safe24-reduce"
+        ],
+        "teardown": {
+          "browser": {
+            "code": 0,
+            "signal": null
+          },
+          "events": [
+            {
+              "code": 0,
+              "event": "browser-close",
+              "pending": 0,
+              "signal": null
+            },
+            {
+              "browserClosed": true,
+              "event": "profile-removed"
+            }
+          ],
+          "pendingAfterClose": 0,
+          "pendingBeforeClose": 0,
+          "profileRemoved": true
+        },
+        "fullEvidence": "evidence/forge-ui-reduced-motion.log"
+      },
+      "browser": {
+        "resolved_path": "/workspace/.cache/lumenfall/bin/google-chrome",
+        "selected_path": "/workspace/.cache/lumenfall/bin/google-chrome",
+        "sha256": "b7906de9413718c88e07644efbf4a2674f59a7521834507efd342f69f7c47406",
+        "version": "Google Chrome 155.0.8059.39",
+        "version_exitcode": 0,
+        "version_stderr": "[1007/132833.439379:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /workspace/.cache/lumenfall/chrome/opt/google/chrome/CHROME_VERSION_EXTRA\n"
+      }
+    }
+  ],
+  "formulaProbe": {
+    "outcome": "PASS",
+    "byteIdenticalToOriginal": true,
+    "command": "node docs/recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/formula_probe.cjs index.html",
+    "evidence": "evidence/formula_probe_results.json"
+  },
+  "inventory": {
+    "outcome": "PASS",
+    "command": "node docs/tasks/UPGRADE_IDENTITY_001/inventory.cjs index.html",
+    "evidence": "evidence/inventory.json",
+    "count": 24,
+    "duplicateFamilies": 6
+  },
+  "contextArchives": {
+    "outcome": "PASS",
+    "command": "python3 scripts/codex/check_context.py --archives",
+    "evidence": "evidence/context-archives.log",
+    "archiveChecks": 1509,
+    "frozenB2Sources": 96
+  },
+  "initialBrowserAttempts": [
+    {
+      "outcome": "BLOCKED",
+      "reason": "Default sandbox denied loopback server socket",
+      "evidence": "Recorded tool output; no raw log retained for this first attempt"
+    },
+    {
+      "outcome": "FAIL / timeout",
+      "browser": "System Chromium151",
+      "evidence": "evidence/upgrade-effects-and-deeds.log.gz and evidence/initial-chromium-timeout",
+      "retry": "Existing environment Chrome155 wrapper passed"
+    }
+  ],
+  "documentation": {
+    "outcome": "PASS",
+    "scope": "Local docs only; no integration acceptance",
+    "checkedAtUtc": "2026-10-07T13:36:32.820Z",
+    "utf8": true,
+    "closedFences": true,
+    "links": 13,
+    "matrixIds": 24,
+    "validatedSourceLines": 24,
+    "userCurrencyCorrectionPreserved": true,
+    "docSha256": "923c69b863f21fa7879699601059f7d788d12c509002f91d0074883975290840",
+    "command": "node /tmp/upgrade-identity-001/check-docs.cjs"
+  },
+  "limitations": [
+    "No integrated candidate",
+    "No new migration executed",
+    "No full rebalance/PR46 or B2 acceptance",
+    "No Android/WebView60/TalkBack evidence",
+    "UI tests cover 360/390px; 320/430px, large text and separate contrast check not run",
+    "No APK is required for design docs; later app features require their own acceptance"
+  ],
+  "rawCompressedEvidence": [
+    {
+      "path": "evidence/initial-chromium-timeout/stderr.log.gz",
+      "encoding": "gzip",
+      "uncompressedBytes": 7274,
+      "uncompressedSha256": "8b61657a508b6f6e7fe0142d440f8168b6746a044b66535205820e4373c57632"
+    },
+    {
+      "path": "evidence/upgrade-effects-and-deeds.log.gz",
+      "encoding": "gzip",
+      "uncompressedBytes": 5022,
+      "uncompressedSha256": "38be4c504f4aca99f34b55d69d8e70483bb49b564d66ed77cb1470168cf90dfd"
+    }
+  ]
+}

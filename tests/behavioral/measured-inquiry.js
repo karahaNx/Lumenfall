@@ -57,6 +57,7 @@ window.runInquiryQa=function(b,ctx,assert,assertProtectedParity,assertSummaryPar
       window.inquiryOriginals.forEach(function(id){
         var s=seed();s.longStudyLevels.measuredinquiry=inquiry;s.longStudyLevels[id]=5;install(s);
         var n=nodes.find(function(n){return n.id===id;}),D=Math.round(Math.round(n.baseDurationSec*Math.pow(1.6,5))*(1-.02*inquiry));
+        if(n.retiredTo){var before=b.getState();ok(t.start(id)===false&&t.plan(id).reason==='retired','closed start '+id);same(b.getState(),before,'closed Study has no debit '+id);return;}
         ok(t.start(id)===true,'real start allowed '+id);var a=active(id);
         same(a,{id:id,remainingSec:D,totalDurationSec:D,speedMult:1},'actual discounted snapshot '+id);
         var now=b.getState();ok(now.lumen===s.lumen-Math.round(n.lumenBase*Math.pow(1.8,5)) && now.shards===s.shards-Math.round(n.shardBase*Math.pow(1.8,5)),'actual debit '+id);
@@ -79,7 +80,7 @@ window.runInquiryQa=function(b,ctx,assert,assertProtectedParity,assertSummaryPar
     deeds.longStudyLevels.guardmastery=24;install(deeds);ok(!b.forge.deeds().items.find(function(d){return d.id==='study25';}).eligible,'Inquiry13 cannot supply level25');
     deeds.longStudyLevels.guardmastery=25;install(deeds);ok(b.forge.deeds().items.find(function(d){return d.id==='study25';}).eligible,'original level25 still earns');
     deeds.longStudyLevels.guardmastery=0;window.inquiryOriginals.forEach(function(id){deeds.longStudyLevels[id]=1;});install(deeds);
-    var every=b.forge.deeds().items.find(function(d){return d.id==='allstudies';});ok(every.eligible&&every.progress.target===8&&every.progress.current===8,'all eight requires no Inquiry');
+    var every=b.forge.deeds().items.find(function(d){return d.id==='allstudies';});ok(every.eligible&&every.progress.target===5&&every.progress.current===5,'five retained targets require no Inquiry; old total credit retained');
     b.forge.achievements();var once=b.getState();b.forge.achievements();same(b.getState(),once,'sticky one-time grants');ok(b.forge.deeds().total===683,'unchanged683 pool');
     function ownDuration(){var s=seed();s.longStudyLevels.measuredinquiry=5;install(s);ok(t.duration('measuredinquiry',5)===6291,'Inquiry oracle: self-discount forbidden');}
     ownDuration();mutationCaught('self',ownDuration);
