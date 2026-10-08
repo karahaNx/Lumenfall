@@ -355,7 +355,7 @@
     });
     parityApprox(actual.totalOfflineSeconds,expected.totalOfflineSeconds,label+' totalOfflineSeconds');
     parityApprox(actual.lastSeen,expected.lastSeen,label+' lastSeen');
-    assert(actual.schemaVersion===1,label+' must preserve save schema v1');
+    assert(actual.schemaVersion===2,label+' must preserve save schema v2');
   }
   function expectedLifecycleState(baseline,seconds,startMs){
     var preview = window.__lumenfallQaBridge.previewOffline(baseline,seconds,startMs);
@@ -475,7 +475,7 @@
     assert(s.activeParty.length===1 && s.activeParty[0]==='ember','fresh party must contain only Ember');
     assert(s.spirits.ember===1,'fresh Ember level must be 1');
     assert(s.enemyDepth===1,'fresh enemy must belong to Rift 1');
-    assert(s.schemaVersion===1,'fresh state must use current save schema');
+    assert(s.schemaVersion===2,'fresh state must use current save schema');
     assert(s.activeFormationPreset==='push' && s.formationPresets.push.join(',')==='ember','fresh formation preset defaults must preserve Ember without a schema bump');
   }
   async function run(){
@@ -615,7 +615,7 @@
           }
           var expected=JSON.parse(localStorage.getItem('p207-expected'));
           ['formationRebuild','activeParty','activeFormationPreset','formationPresets','spirits','empowerQueue','lumen','shards','prisms','comets','motes','sigils','heroResource'].forEach(function(key){assertJsonEqual(state()[key],expected[key],ctx.scenario+' '+key);});
-          assert(state().schemaVersion===1,'partial reconstruction remains schema-v1');
+          assert(state().schemaVersion===2,'partial reconstruction remains schema-v2');
           assertJsonEqual(JSON.parse(bridge.rawRecovery()).formationRebuild,expected.formationRebuild,'recovery intent');
           finish('pass',{intent:state().formationRebuild,active:state().activeParty});return;
         }
@@ -659,12 +659,12 @@
           assert(s.depth===17 && s.maxDepthEver===17,'mid-game depth must load intact');
           assert(s.lumen===12500 && s.shards===420,'mid-game currencies must load intact');
           assert(s.activeParty.join(',')==='ember,tide,stone','mid-game active party must load intact');
-          assert(s.schemaVersion===1,'current-version fixture must remain schema 1');
+          assert(s.schemaVersion===2,'schema-v1 fixture must migrate to schema 2');
           assert(typeof s.research.focus==='number','missing research entries must be normalized');
           assert(s.enemyDepth===17 && s.enemyHp>0,'mid-game enemy must be restored/spawned at the saved depth');
           bridge.save();
-          assert(JSON.parse(bridge.rawSave()).schemaVersion===1,'current save must serialize schema version');
-          assert(JSON.parse(bridge.rawRecovery()).schemaVersion===1,'successful save must refresh bounded recovery');
+          assert(JSON.parse(bridge.rawSave()).schemaVersion===2,'current save must serialize schema version');
+          assert(JSON.parse(bridge.rawRecovery()).schemaVersion===2,'successful save must refresh bounded recovery');
           finish('pass',{depth:s.depth,party:s.activeParty});
           return;
 
@@ -676,7 +676,7 @@
           assert(s.wispModules.ember===20 && s.wispModules.void===20 && s.wispModules.titan===9,'existing Module progression must not be reduced by future costs');
           assert(s.research.focus===24 && s.longStudyLevels.wispascend===9,'mature Lab progression must load intact');
           assert(s.owned.autoascend===true && s.autoAscendEnabled===true,'mature automation flags must load intact');
-          assert(s.comets===850 && s.sigils===210,'existing mature Comet/Sigil balances must load intact');
+          assert(s.comets===1150 && s.sigils===210,'mature Comets include the one-time 300 refund; Sigils stay intact');
           assert(s.owned.autoascend && s.legacyCometPurchases.offline24 && s.legacyCometPurchases.offline48 && s.legacyCometPurchases.rememberbulk,'existing Auto-Ascend and archived Rest Stop entitlements must remain owned');
           assert(s.sigilResonanceUses===0 && s.dailyQuestRefreshes===0,'older schema-v1 saves must safely default new utility counters to zero');
           assert(s.ascendRewardedDepth===0,'existing schema-v1 saves without a benchmark must safely default to 0');
@@ -695,8 +695,8 @@
           assert(s.studyQueue.measuredinquiry===false,'legacy autostudy must not activate Measured Inquiry');
           assert(s.autoAscendEnabled===true && s.autoAscendTargetDepth>=22,'legacy auto-ascend ownership must migrate to enabled target');
           assert(!Object.prototype.hasOwnProperty.call(s.owned,'autostudy'),'legacy owned.autostudy must be removed');
-          assert(s.schemaVersion===1,'legacy save must migrate to current schema');
-          assert(JSON.parse(bridge.rawSave()).schemaVersion===1,'migrated legacy save must round-trip as current schema');
+          assert(s.schemaVersion===2,'legacy save must migrate to current schema');
+          assert(JSON.parse(bridge.rawSave()).schemaVersion===2,'migrated legacy save must round-trip as current schema');
           finish('pass',{activeStudies:s.activeStudies.length,autoAscendTargetDepth:s.autoAscendTargetDepth,schemaVersion:s.schemaVersion});
           return;
 
@@ -823,7 +823,7 @@
           assert(s.depth===33 && s.maxDepthEver===44,'restored progression must be authoritative after reload');
           assert(s.lumen===777777 && s.prisms===31,'restored currencies must replace original state');
           assert(s.activeParty.join(',')==='ember,void','restored party must replace original party');
-          assert(s.schemaVersion===1,'current backup restore must remain on current schema');
+          assert(s.schemaVersion===2,'current backup restore must remain on current schema');
           assert(JSON.parse(bridge.rawRecovery()).depth===33,'successful Restore must establish restored state in recovery slot');
           finish('pass',{depth:s.depth,lumen:s.lumen,schemaVersion:s.schemaVersion});
           return;
@@ -844,8 +844,8 @@
           assert(bridge.persistenceStatus().recovered===true,'recovery path must be observable');
           var repairedPrimary = JSON.parse(bridge.rawSave());
           var goodRecovery = JSON.parse(bridge.rawRecovery());
-          assert(repairedPrimary.schemaVersion===1 && repairedPrimary.depth===17,'malformed primary must be repaired from validated recovery');
-          assert(goodRecovery.schemaVersion===1 && goodRecovery.depth===17,'good recovery must never be overwritten by malformed primary');
+          assert(repairedPrimary.schemaVersion===2 && repairedPrimary.depth===17,'malformed primary must be repaired from validated recovery');
+          assert(goodRecovery.schemaVersion===2 && goodRecovery.depth===17,'good recovery must never be overwritten by malformed primary');
           finish('pass',{recovered:true,depth:s.depth});
           return;
         }
@@ -866,9 +866,9 @@
             var legacyTarget = ctx.fixtures['legacy'].save;
             nextPhase(1); bridge.restoreBackup(backupCode(legacyTarget)); return;
           }
-          assert(s.schemaVersion===1,'legacy backup must migrate to current schema before acceptance');
+          assert(s.schemaVersion===2,'legacy backup must migrate to current schema before acceptance');
           assert(s.depth===22 && s.activeStudies.length===1,'legacy backup progression and migrated study must restore');
-          assert(JSON.parse(bridge.rawRecovery()).schemaVersion===1,'legacy restore must establish current-schema recovery');
+          assert(JSON.parse(bridge.rawRecovery()).schemaVersion===2,'legacy restore must establish current-schema recovery');
           finish('pass',{schemaVersion:s.schemaVersion,depth:s.depth});
           return;
 
@@ -1268,8 +1268,8 @@
           bridge.dispatchVisibility(false);
           assertLifecycleState(state(),beforeColdVisible,'cold restart stray visible signal');
           assertOfflineExactlyOnce(bridge.lifecycleTrace(),45,'cold restart stray visible signal');
-          assert(JSON.parse(bridge.rawSave()).schemaVersion===1,'cold restart must preserve canonical primary schema');
-          assert(JSON.parse(bridge.rawRecovery()).schemaVersion===1,'cold restart must preserve bounded recovery schema');
+          assert(JSON.parse(bridge.rawSave()).schemaVersion===2,'cold restart must preserve canonical primary schema');
+          assert(JSON.parse(bridge.rawRecovery()).schemaVersion===2,'cold restart must preserve bounded recovery schema');
           finish('pass',{
             elapsedSec:45,
             offlineApplications:consumedOfflineEvents(bridge.lifecycleTrace()).length,

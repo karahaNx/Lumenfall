@@ -1,0 +1,232 @@
+{
+  "status": "pass",
+  "commit": "e2f745cd0ce0dc9e41b06efd842062fd08d7fab4",
+  "sourceSha256": "ed7e9dc56ee3d068073c9fade277a2b357561d754d13de593420c1da0b27d96d",
+  "rows": [
+    {
+      "name": "source",
+      "command": [
+        "node",
+        "scripts/ci/validate_source.cjs"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "signal": null,
+      "ok": true,
+      "adapter": false
+    },
+    {
+      "name": "context",
+      "command": [
+        "node",
+        "scripts/codex/check_context.cjs",
+        "--task",
+        "docs/tasks/RESONATE_CLARITY_001.md"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "signal": null,
+      "ok": true,
+      "adapter": false
+    },
+    {
+      "name": "apk-self-test",
+      "command": [
+        "node",
+        "scripts/verify_apk_identity.cjs",
+        "--self-test"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "signal": null,
+      "ok": true,
+      "adapter": false
+    },
+    {
+      "name": "tooling",
+      "command": [
+        "node",
+        "tests/tooling/run.cjs"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "signal": null,
+      "ok": true,
+      "adapter": false
+    },
+    {
+      "name": "resonate-clarity",
+      "command": [
+        "node",
+        "tests/behavioral/resonate-clarity.cjs",
+        "--evidence",
+        "/workspace/Lumenfall-resonate/docs/qa/resonate-clarity-001/integration-2026-10-08/browser"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "signal": null,
+      "ok": true,
+      "adapter": false
+    },
+    {
+      "name": "p2-endgame-currency-utility",
+      "command": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "p2-endgame-currency-utility"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "signal": null,
+      "ok": true,
+      "adapter": true
+    },
+    {
+      "name": "chronology-simultaneous-order",
+      "command": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "chronology-simultaneous-order"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "signal": null,
+      "ok": true,
+      "adapter": true
+    },
+    {
+      "name": "parity-short",
+      "command": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "parity-short"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "signal": null,
+      "ok": true,
+      "adapter": true
+    },
+    {
+      "name": "parity-auto-ascend",
+      "command": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "parity-auto-ascend"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "signal": null,
+      "ok": true,
+      "adapter": true
+    },
+    {
+      "name": "restore-roundtrip",
+      "command": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "restore-roundtrip"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "signal": null,
+      "ok": true,
+      "adapter": true
+    },
+    {
+      "name": "recovery-offline-once",
+      "command": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "recovery-offline-once"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "signal": null,
+      "ok": true,
+      "adapter": true
+    },
+    {
+      "name": "p2-03b-auto-ascend-integrity",
+      "command": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "p2-03b-auto-ascend-integrity"
+      ],
+      "expectedExit": 0,
+      "exit": 0,
+      "signal": null,
+      "ok": true,
+      "adapter": true
+    },
+    {
+      "name": "self-test-endgame-currency-regression",
+      "command": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "self-test-endgame-currency-regression"
+      ],
+      "expectedExit": 1,
+      "exit": 1,
+      "signal": null,
+      "ok": true,
+      "adapter": true
+    },
+    {
+      "name": "self-test-parity-regression",
+      "command": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "self-test-parity-regression"
+      ],
+      "expectedExit": 1,
+      "exit": 1,
+      "signal": null,
+      "ok": true,
+      "adapter": true
+    },
+    {
+      "name": "self-test-chronology-regression",
+      "command": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "self-test-chronology-regression"
+      ],
+      "expectedExit": 1,
+      "exit": 1,
+      "signal": null,
+      "ok": true,
+      "adapter": true
+    }
+  ]
+}
