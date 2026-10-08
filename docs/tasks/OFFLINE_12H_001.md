@@ -1,90 +1,75 @@
 # OFFLINE_12H_001 — common productive offline limit
 
-Owner: this feature chat. Original point F26. Status: implementation/checks in
-progress; delivery and native acceptance remain open. User requested finishing,
-pushing to GitHub and implementing in the game on 2026-10-08.
+Owner: this F26 feature chat. Integrated through
+[PR85](https://github.com/karahaNx/Lumenfall/pull/85), commit
+91decbc8e26744b21c26a21b20742be6ebca1d8e. Signed APK0.1.150 is published.
+Native update and combined integrated CI acceptance remain OPEN; do not archive.
+The user explicitly requested finishing, pushing to GitHub and implementing in game.
 
-## Requirements and decisions
+## Requirement and refund decision
 
-Original: “Lav cap til 12 timer og ikke mulighed for andet” in
-[original requirements](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt).
-[F26 revision](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt)
-and [accepted decisions](../recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt)
-require one productive interval of at most 12h across earnings, combat/rewards,
-Lab and automation, without a productive Study-only tail. Offline earning rate
-remains separate. Preserve already paid/pending Lab snapshots and avoid replaying
-old periods. Retire Extended Rest, Deep Rest and Deep Reserves hours.
+“Lav cap til 12 timer og ikke mulighed for andet”:
+[original F26](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt),
+[revision/dependencies](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt),
+[Lead decisions](../recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt).
+One productive interval of at most12h covers earnings, combat/rewards, Lab and
+automation. Remove productive Study-only tail and retired hours extensions.
+Keep offline earning rate separate, paid/pending Lab work and endpoint consumption.
 
-User refund decision: “Engangsrefund i de oprindelige valutaer efter dokumenteret
-prisregel; bevar rå ownership og levels som historik.” Original prices are
-140/160 Comets and each Deep Reserves purchase ceil(6 × 1.6^level) Prisms.
-The earlier local proposal blocked large balances; it was never published.
-Current implementation preserves unrepresentable original-currency deposits in
-an exact decimal ledger with a paid bit per original price. Canonical saves retry
-unpaid deposits after spending. The receipt stores the original calculated prices,
-so different Math.pow rounding in old/new V8 cannot reprice a saved refund. This implements exact value preservation without
-inventing compensation prices or blocking legitimate large saves. Product uses
-no BigInt. Migration, currency credit and receipt use existing atomic primary-save
-commit and recovery behavior. Restore replaces the entire save rather than adding
-refunds to the current balance.
+User decision: “Engangsrefund i de oprindelige valutaer efter dokumenteret
+prisregel; bevar rå ownership og levels som historik.”
+Extended Rest140/Deep Rest160 Comets; each Reserves purchase ceil(6 × 1.6^level)
+Prisms. Schema1→2 retains archived ownership/raw levels and refunds each purchase
+once. Deposits must preserve both balance and price exactly; otherwise retain
+original-currency value in an exact decimal ledger. Canonical saves retry after
+spending. Store calculated prices so V8 cannot reprice existing receipts. Schema1
+has no transaction-price ledger; use the documented rule on the accepting runtime.
+No BigInt in product. Currency and receipt commit through atomic primary save;
+restore replaces the whole save instead of adding refunds to the current balance.
 
-## Baseline and dependencies
+## Baseline, scope and preservation
 
-Isolated checkout `/workspace/offline-12h-preparation`, branch
-`feature/offline-12h-001-current`; live main baseline
-`b0537cb46635555ba2c2e5f3f95bc8fc276aeda5`.
-Earlier private proposal `a70cfb133efb953aaa9201e836ac0e6811c044ab` is historical.
-PR46/B2 accepted through PR57 merge `20aaae62a4b6e46f8d75775085918eaba4e8de29`.
-Current offline catchup and foreground processing replay are integrated.
-PR77 Backup UI was incorporated from main `261b1b7f863f73c324f4ac04acb5bfc95101644d`,
-retaining its placement and confirmed restore.
-F27 Comet unlocks are integrated; preserve its archived legacy ownership and
-Rest Stop eligibility. Current workflow supersedes historical writer-handover
-gates; serialize actual main integration and refresh main before merging.
-Overlapping open work includes Lab UI, backup UI and Loadout Memory. Do not
-incorporate their independent goals or replace their checkout files.
+Own checkout /workspace/offline-12h-preparation; original live-main baseline
+b0537cb46635555ba2c2e5f3f95bc8fc276aeda5. Implementation branch
+feature/offline-12h-001-current, validation head46cb51b; delivery branch
+docs/offline-12h-001-delivery. Private proposal a70cfb1 was not shipped.
+PR46/B2 accepted through PR57/20aaae62a4b6e46f8d75775085918eaba4e8de29.
+Retain F27 archive/Rest Stop entitlement, PR77 confirmed restore, Formation autosave,
+Resonate, Auto-Ascend UI, exclusive upgrade owners and PR78 Forge bulk memory,
+which landed just before F26 integration. Current workflow supersedes historical
+writer handover; only this checkout/task is modified.
 
-## Scope and acceptance
+index.html changes: fixed43200s policy, retired Reserves handlers/UI, refund
+migration/ledger and relevant Deeds/Lab/encyclopedia/return copy. Focused tests and
+affected schema/tail/refund expectations are in tests/behavioral.
+[Evidence/replay](../qa/offline-12h-001/README.md).
+Preserve chronology, queues/bulk, foreground processing-time live replay,
+com.lumenfall.app, established signing and deterministic Luminous Motes.
 
-- Fixed 43200 productive seconds; 12/24/72h returns yield identical productive
-  state apart from consumed wall-clock endpoint. Foreground processing replay
-  continues under the existing live policy.
-- No retired purchase controls, hours bonus or stale-handler purchase; retain
-  historical archive/levels and F27 catalog/entitlements.
-- Schema 1→2 refunds original per-level rounded prices once. Old ownership and
-  F27 archives both migrate. Preserve exact value at large balances, partial
-  credit, future credit after spending, backup, restore, recovery and failures.
-- Existing chronology, bulk/queue, B2 Motes, dense/boss paths and save checks pass;
-  retain all mandatory CI checks and causal negative controls.
-- Mobile 320/390/430px, enlarged text through 200%, 44px controls, keyboard focus,
-  contrast and reduced motion; WebView60-generation runtime without BigInt.
-- Preserve package `com.lumenfall.app`, established signing, deterministic prices,
-  fixed Luminous Motes and all unrelated live features.
-- GitHub integration, checks on merged bytes, signed APK identity/assets and
-  necessary native acceptance/evidence. Keep incomplete acceptance explicit.
+## Acceptance and next action
 
-## Checks and next action
+- Full F26 regression PASS on integrated bytes:32 refund combinations,12/24/72h
+  boundaries, paid Lab/queues/Motes, saved Auto-Ascend ON/OFF, endpoint/duplicate,
+  failures/recovery/restore, huge balances and partial/deferred credit. Three F26
+  causal mutants caught.
+- Current ownership/926 effect observations, chronology/save/recovery/UI PASS.
+  PR78 combined test PASS1139 checks. Nine320/390/430px profiles through200% text:
+  44px/focus/contrast/reduced-motion/render purity PASS. All35 available negatives
+  caught before the final PR78 merge.
+- Integrated V8 6.0.286.52 without BigInt PASS; paid13h Study retains3600s after24h.
+  Old/new receipts transfer at levels80/200/1000 unchanged.
+- [CI37744077662](https://github.com/karahaNx/Lumenfall/actions/runs/37744077662)
+  PASS170 scenarios/17 required negatives/smoke before PR78. Combined integrated
+  full CI acceptance remains pending.
+- [Android37746590452](https://github.com/karahaNx/Lumenfall/actions/runs/37746590452)
+  PASS. APK150 package/version/signing,526 ZIP CRCs/all15 integrated assets PASS.
+  Source SHA84ca8f6a50d0df5046c86ddb4a354850aca6273e4581e11b94acc95b10ae885f;
+  APK SHA8ad8aeab6df7224e629c8a93805386a5c16851ffeb53e2f7338f42c76b0d79bc.
+- Native signed144→150 update PASS: paid snapshot,300 Comets/32 Prisms credited
+  once and matching primary/recovery. Dense cap replay exceeded the recorder's60s
+  observation window; remaining native checks are OPEN. Physical WebView60,
+  TalkBack and independent review are not claimed.
 
-Focused full-product F26 regression passes locally on Node24.19.0: 32 original
-refund combinations, cap/paid snapshots/queues, production device save with
-Auto-Ascend ON/OFF, storage rollback/recovery, duplicate return, large balances,
-partial credit, deposits that dominate existing balances and three causal mutants. Comet unlock and B2 offline integration
-checks pass. Both directions of V8 6.0/modern receipt transfer preserve exact prices at levels
-80/200/1000. All 14 mandatory negative controls pass locally. Native Android8.1 /
-WebView61 signed144 baseline preparation passes, with installed APK SHA-256
-`6e2006cb90ebe27104bd1ae38ba8c8afa700f4ede90e6fe8046bf7b2f505ca5d`.
-Price-ledger checkpoint `1a2a040fc498bef9d1b07ba13b42740933ff5308`, [PR85](https://github.com/karahaNx/Lumenfall/pull/85);
-Head `5759eaad48197d316cff4d35d92601790a39b230` passed full GitHub CI
-[run37740953545](https://github.com/karahaNx/Lumenfall/actions/runs/37740953545):
-161 scenarios, 14 expected negative controls and runtime smoke. Main then advanced
-to `31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6`. Combined candidate `9c10ab2`
-preserves Formation autosave, Resonate, Auto-Ascend UI and exclusive upgrade owners.
-Conflicts retain both retirement guards and legacy Lab explanations with the F26
-cap. New upgrade-owner expectations exclude the deliberately retired Reserves
-track. Full F26 regression passes on combined bytes; refreshed CI is pending.
-The suspected CI stall completed normally; the proposed unrelated process helper
-fix remains private, outside this feature. Remaining receipts follow at delivery.
-
-Next: complete current regression/UI/compatibility checks, self-review diff, push
-feature PR, pass required CI, serialize integration, verify signed build and native
-behavior, then save final status. This local candidate is not a completed feature.
+Next: finish native update/12h-vs24h/duplicate/UI/focus acceptance; pass combined
+integrated CI; save immutable APKs/receipts and final PROJECT_STATE/task status in
+GitHub. Stop shared-file work and archive only this chat after verified completion.
