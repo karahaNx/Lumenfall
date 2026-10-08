@@ -3857,6 +3857,7 @@ function normalizeCheaperRecruitmentRefund(out,source){
   var saved=isPlainObject(source.feedbackMigration) ? source.feedbackMigration : {};
   out.feedbackMigration=clonePersistedValue(saved);
   out.feedbackMigration.version=saved.version===undefined ? 1 : saved.version;
+  if(out.feedbackMigration.version!==1) throw persistenceError('invalid-bonds-refund','Recruitment refund version needs recovery');
   out.feedbackMigration.applied=true;
   var receipts=isPlainObject(saved.receipts) ? saved.receipts : {};
   out.feedbackMigration.history=isPlainObject(saved.history) ? out.feedbackMigration.history : {};
@@ -3880,7 +3881,6 @@ function normalizeCheaperRecruitmentRefund(out,source){
     }
   });
   if(hasReceipt || raw<=20) return;
-  if(out.feedbackMigration.version!==1) throw persistenceError('invalid-bonds-refund','Recruitment refund version needs recovery');
   var amounts=cheaperRecruitmentRefundPrices.slice(0,schedule.count).map(function(entry){return entry.price;});
   amounts.forEach(function(amount){
     var sum=exactPrismArithmetic(out.prisms,amount);

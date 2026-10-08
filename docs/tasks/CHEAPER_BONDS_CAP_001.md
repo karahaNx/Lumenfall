@@ -32,13 +32,13 @@ old restores/rollback, paid Labs and Ascend/live-offline parity. UI:320/390/430p
 integrated bytes and signed APK identity/assets/actual Android update-save checks
 must pass. Missing acceptance stays open.
 
-[Evidence/commands](../qa/cheaper-bonds-cap-001/finish/README.md):current538 assertions,
-12 mobile profiles,11 defect controls and V8 6.0 PASS; Tree155/693 passed before
+[Evidence/commands](../qa/cheaper-bonds-cap-001/finish/README.md):current553 assertions,
+12 mobile profiles,12 defect controls and V8 6.0 PASS; Tree155/693 passed before
 the internal performance fix.14400 real auto-Ascends preserve records/parity.
 CI37748215097 passed173 scenarios then failed browser startup before F21; browser
 priority corrected, new full CI required on combined source. [Native baseline](../qa/cheaper-bonds-cap-001/finish/native/baseline-native.json):
 signed143,21 paid purchases19→40, wallet7342133/cold save retained. Update must keep
-raw40/refund12655538 once. Final hash/versions live in evidence.
+raw40/refund12655553 once. Final hash/versions live in evidence.
 [PR89](https://github.com/karahaNx/Lumenfall/pull/89). Next:finish combined checks/CI,
 recheck main, integrate, signed APK/native acceptance; save status/evidence in
 GitHub, stop shared work, archive only this owner after verified completion.

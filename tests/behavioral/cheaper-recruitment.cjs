@@ -18,7 +18,8 @@ if(mutation==='receipt')source=source.replace(' || !cheaperRecruitmentReceiptPri
 if(mutation==='cache')source=source.replace('var entry=cheaperRecruitmentRefundPrices[level-20];','var value=2*Math.pow(1.45,level),allowance=value*level*Number.EPSILON/(1-level*Number.EPSILON); var entry={min:Math.ceil(value-allowance),max:Math.ceil(value+allowance)};');
 if(mutation==='credit-record')source=source.replace("if(!isPlainObject(entry) || typeof entry.id!=='string' || !entry.id || !Number.isFinite(entry.amount) || entry.amount<=0 || Math.floor(entry.amount)!==entry.amount || (entry.id===id && !hasReceipt)){",'if(entry && entry.id===id && !hasReceipt){');
 if(mutation==='ascend-copy')source=source.replace('state = normalizeCurrentSave(state,true);',"state = acceptPersistedState(state,'simulation-ascend');");
-if(!['none','handler','ui','raw','refund','credit','free-credit','wallet','receipt','cache','credit-record','ascend-copy'].includes(mutation))throw Error('unknown mutation');
+if(mutation==='version-check')source=source.replace("if(out.feedbackMigration.version!==1) throw persistenceError('invalid-bonds-refund','Recruitment refund version needs recovery');",'');
+if(!['none','handler','ui','raw','refund','credit','free-credit','wallet','receipt','cache','credit-record','ascend-copy','version-check'].includes(mutation))throw Error('unknown mutation');
 const bridge=`
 window.__cheaperRecruitment={
  fresh:function(){return freshState();},today:todayStr,
@@ -149,6 +150,10 @@ async function run(){
   assert(repaired.nodes.bonds===21&&repaired.prisms===3393&&repaired.refundCredits.prisms.length===0,'malformed credit selects intact actual recovery');
   records.push({kind:'credit-recovery',damagedEntry,wallet:3393});
  }
+ await evaluate(`(()=>{var b=__cheaperRecruitment;b.set(cheaperRecruitmentSeed(20));b.save();var bad=b.get();bad.prisms=17;bad.feedbackMigration.version=2;b.corruptPrimary();localStorage.setItem('lumenfall_save_v2',JSON.stringify(bad));})()`);
+ await navigate(url);repaired=await evaluate('__cheaperRecruitment.get()');
+ assert(repaired.nodes.bonds===20&&repaired.prisms===1000000&&repaired.feedbackMigration.version===1,'unsupported below-cap marker selects intact actual recovery');
+ records.push({kind:'version-recovery',primaryVersion:2,recoveredVersion:1,raw:20,wallet:1000000});
  const oldBackup=await evaluate('__cheaperRecruitment.encode(cheaperLegacySeed(21,0))');
  await evaluate('(()=>{var b=__cheaperRecruitment;b.set(cheaperRecruitmentSeed(0));b.save();})()');
  const beforeRollback=await evaluate('__cheaperRecruitment.disk()');

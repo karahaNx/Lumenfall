@@ -112,3 +112,10 @@ Main06b28d5 Rift cosmetic implementation merges cleanly, preserving its source
 and required gate. Focused538 checks including14400 actual Ascends pass on
 combined2e691820 source. Earlier individual controls/chronology/offline results
 record0e93a8e9; final required CI checks the combined bytes and all gates.
+
+PR89 automated P2 (reviewef51ba8) identified unsupported migration versions
+accepted below the cap. Version validation now precedes every early return,
+without rewriting future history.15 direct checks cover raw0/20/21 and malformed
+versions, missing legacy markers remain compatible, V8 6.0 rejects them, and an
+actual unsupported-version primary falls back to the intact recovery slot. A
+version-check mutation is caught.553 focused assertions/26 result groups pass.

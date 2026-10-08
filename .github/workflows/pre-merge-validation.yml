@@ -60,7 +60,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for mutation in handler refund credit free-credit wallet receipt cache credit-record ascend-copy; do
+          for mutation in handler refund credit free-credit wallet receipt cache credit-record ascend-copy version-check; do
             if node tests/behavioral/cheaper-recruitment.cjs --source mobile/www/index.html --mutation "$mutation" --output "/tmp/cheaper-recruitment-$mutation.json"; then
               echo "::error::Cheaper Recruitment mutation '$mutation' unexpectedly passed."
               exit 1
@@ -68,7 +68,7 @@ jobs:
             node - "$mutation" "/tmp/cheaper-recruitment-$mutation.json" <<'JS'
           const fs = require('node:fs'), assert = require('node:assert/strict');
           const result = JSON.parse(fs.readFileSync(process.argv[3], 'utf8'));
-          const expected = {handler:'cap prevents direct/repeated debit',refund:'refund receipt prevents a second credit',credit:'fractional original wallet retains exact refund value', 'free-credit':'unrepresentable credit subtraction cannot buy a free level',wallet:'unrepresentable wallet debit cannot buy a free level',receipt:'wrong receipt amount rejects for recovery',cache:'completed large refund avoids repeated price calculation at Ascend boundaries','credit-record':'malformed persisted Prism credit rejects for recovery','ascend-copy':'actual auto-Ascends avoid repeated refund cloning and validation'};
+          const expected = {handler:'cap prevents direct/repeated debit',refund:'refund receipt prevents a second credit',credit:'fractional original wallet retains exact refund value', 'free-credit':'unrepresentable credit subtraction cannot buy a free level',wallet:'unrepresentable wallet debit cannot buy a free level',receipt:'wrong receipt amount rejects for recovery',cache:'completed large refund avoids repeated price calculation at Ascend boundaries','credit-record':'malformed persisted Prism credit rejects for recovery','ascend-copy':'actual auto-Ascends avoid repeated refund cloning and validation','version-check':'unsupported migration version rejects before any early return'};
           assert.equal(result.status, 'FAIL');
           assert(result.failure.includes(expected[process.argv[2]]), 'Expected causal assertion missing');
           assert.equal(result.teardown.browser.code, 0);

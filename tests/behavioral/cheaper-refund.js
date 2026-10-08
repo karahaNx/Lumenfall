@@ -106,5 +106,9 @@ window.runCheaperRefundContracts=function(){
   });
   var foreign=b.canonical(cheaperLegacySeed(21,0));foreign.refundCredits.prisms.push({id:'node.echo',amount:16});
   same(b.canonical(foreign).refundCredits.prisms,foreign.refundCredits.prisms,'valid foreign integer Prism credit retained');
+  [0,20,21].forEach(function(raw){
+    [0,2,'1',null].forEach(function(version){var damaged=b.canonical(cheaperLegacySeed(raw,0));damaged.feedbackMigration.version=version;var rejected=false;try{b.canonical(damaged);}catch(e){rejected=e.code==='invalid-bonds-refund';}ok(rejected,'unsupported migration version rejects before any early return');});
+    var old=cheaperLegacySeed(raw,0);ok(b.canonical(old).feedbackMigration.version===1,'missing legacy marker defaults to supported version');
+  });
   return {checks,records,receipt:'feedbackMigration.receipts[node.bonds]',rawHistoryRetained:true,exactCreditDebit:true};
 };

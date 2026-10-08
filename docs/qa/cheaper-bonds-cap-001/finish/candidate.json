@@ -1,19 +1,19 @@
 {
   "status": "PASS",
   "sourcePath": "/workspace/CHEAPER_BONDS_CAP_001/index.html",
-  "sourceSha256": "2e691820c76cc264e0bfa0d8430c177cf4edddd61fc310e4049df539c769b21c",
+  "sourceSha256": "385945532d38ca4d3696c906203267ded7281a8e87a3ec69f66f7c901f908a58",
   "browserIdentity": {
     "selected": "/usr/bin/chromium",
     "resolved": "/usr/bin/chromium",
     "version": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)"
   },
   "mutation": "none",
-  "observedAt": "2026-10-08T09:13:13.941Z",
+  "observedAt": "2026-10-08T09:16:08.917Z",
   "records": [
     {
       "kind": "refund-contracts",
       "result": {
-        "checks": 149,
+        "checks": 164,
         "records": [
           {
             "raw": 19,
@@ -69,7 +69,7 @@
             "raw": 2000,
             "boundaries": 100,
             "priceCalculations": 0,
-            "elapsedMs": 177.8999999910593
+            "elapsedMs": 177.09999999403954
           },
           {
             "kind": "actual-auto-ascend-boundaries",
@@ -80,7 +80,7 @@
               "recordsRetained": true,
               "canonicalParity": true
             },
-            "elapsedMs": 278.69999998807907
+            "elapsedMs": 277.5
           }
         ],
         "receipt": "feedbackMigration.receipts[node.bonds]",
@@ -356,6 +356,13 @@
         "amount": 0.5
       },
       "wallet": 3393
+    },
+    {
+      "kind": "version-recovery",
+      "primaryVersion": 2,
+      "recoveredVersion": 1,
+      "raw": 20,
+      "wallet": 1000000
     },
     {
       "kind": "migration-write-failure",
