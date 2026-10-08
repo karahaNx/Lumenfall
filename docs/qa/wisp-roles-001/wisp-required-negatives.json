@@ -1,0 +1,123 @@
+{
+  "status": "pass",
+  "scope": "all 12 required workflow negative controls on exact candidate",
+  "sourceSha256": "0f306575fed5a2332379feedafe47a5a9286f98d2088ac72071782f82c63d3d7",
+  "records": [
+    {
+      "scenario": "self-test-bad-assertion",
+      "status": "expected rejection",
+      "detail": {
+        "message": "intentional harness self-test assertion",
+        "stack": "Error: intentional harness self-test assertion\n    at assert (http://127.0.0.1:33653/index.html?qaScenario=self-test-bad-assertion&qaFixture=fresh:12710:61)\n    at HTMLDocument.run (http://127.0.0.1:33653/index.html?qaScenario=self-test-bad-assertion&qaFixture=fresh:15158:11)"
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "self-test-uncaught-error",
+      "status": "expected rejection",
+      "detail": {
+        "unexpected": "uncaught error was not detected"
+      },
+      "runtimeErrors": [
+        {
+          "kind": "uncaught-error",
+          "detail": "Uncaught Error: intentional uncaught QA self-test"
+        }
+      ]
+    },
+    {
+      "scenario": "self-test-unhandled-rejection",
+      "status": "expected rejection",
+      "detail": {
+        "unexpected": "unhandled rejection was not detected"
+      },
+      "runtimeErrors": [
+        {
+          "kind": "unhandled-rejection",
+          "detail": "Error: intentional unhandled rejection QA self-test\n    at HTMLDocument.run (http://127.0.0.1:41859/index.html?qaScenario=self-test-unhandled-rejection&qaFixture=fresh:15168:26)"
+        }
+      ]
+    },
+    {
+      "scenario": "self-test-parity-regression",
+      "status": "expected rejection",
+      "detail": {
+        "message": "intentional parity regression totalKills must match exactly (expected 42, got 43)",
+        "stack": "Error: intentional parity regression totalKills must match exactly (expected 42, got 43)\n    at assert (http://127.0.0.1:45221/index.html?qaScenario=self-test-parity-regression&qaFixture=parity-early-simple:12710:61)\n    at http://127.0.0.1:45221/index.html?qaScenario=self-test-parity-regression&qaFixture=parity-early-simple:12743:7\n    at Array.forEach (<anonymous>)\n    at assertProtectedParity (http://127.0.0.1:45221/index.html?qaScenario=self-test-parity-regression&qaFixture=parity-early-simple:12742:7)\n    at HTMLDocument.run (http://127.0.0.1:45221/index.html?qaScenario=self-test-parity-regression&qaFixture=parity-early-simple:15178:11)"
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "self-test-chronology-regression",
+      "status": "expected rejection",
+      "detail": {
+        "message": "intentional chronology regression: Study incorrectly expected before Research",
+        "stack": "Error: intentional chronology regression: Study incorrectly expected before Research\n    at assert (http://127.0.0.1:35857/index.html?qaScenario=self-test-chronology-regression&qaFixture=chronology-simultaneous-order:12710:61)\n    at HTMLDocument.run (http://127.0.0.1:35857/index.html?qaScenario=self-test-chronology-regression&qaFixture=chronology-simultaneous-order:15188:11)"
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "self-test-wisp-formula-regression",
+      "status": "expected rejection",
+      "detail": {
+        "message": "intentional Wisp formula regression: passive-only Formation Training incorrectly expected to scale ability damage",
+        "stack": "Error: intentional Wisp formula regression: passive-only Formation Training incorrectly expected to scale ability damage\n    at assert (http://127.0.0.1:35357/index.html?qaScenario=self-test-wisp-formula-regression&qaFixture=fresh:12710:61)\n    at HTMLDocument.run (http://127.0.0.1:35357/index.html?qaScenario=self-test-wisp-formula-regression&qaFixture=fresh:15217:11)"
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "self-test-wisp-pacing-regression",
+      "status": "expected rejection",
+      "detail": {
+        "message": "intentional Wisp pacing regression: Mythic cost compression was not detected",
+        "stack": "Error: intentional Wisp pacing regression: Mythic cost compression was not detected\n    at assert (http://127.0.0.1:40223/index.html?qaScenario=self-test-wisp-pacing-regression&qaFixture=fresh:12710:61)\n    at HTMLDocument.run (http://127.0.0.1:40223/index.html?qaScenario=self-test-wisp-pacing-regression&qaFixture=fresh:15227:11)"
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "self-test-endgame-currency-regression",
+      "status": "expected rejection",
+      "detail": {
+        "message": "intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected",
+        "stack": "Error: intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected\n    at assert (http://127.0.0.1:35485/index.html?qaScenario=self-test-endgame-currency-regression&qaFixture=fresh:12710:61)\n    at HTMLDocument.run (http://127.0.0.1:35485/index.html?qaScenario=self-test-endgame-currency-regression&qaFixture=fresh:15237:11)"
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "self-test-wisp-role-regression",
+      "status": "expected rejection",
+      "detail": {
+        "message": "intentional Wisp role regression: stale Tank semantics were not detected",
+        "stack": "Error: intentional Wisp role regression: stale Tank semantics were not detected\n    at assert (http://127.0.0.1:34727/index.html?qaScenario=self-test-wisp-role-regression&qaFixture=fresh:12710:61)\n    at HTMLDocument.run (http://127.0.0.1:34727/index.html?qaScenario=self-test-wisp-role-regression&qaFixture=fresh:15247:11)"
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "self-test-p1-05-selected",
+      "status": "expected rejection",
+      "detail": {
+        "message": "intentional selected semantics regression",
+        "stack": "Error: intentional selected semantics regression\n    at assert (http://127.0.0.1:46013/index.html?qaScenario=self-test-p1-05-selected&qaFixture=accessibility-mixed-states:12710:61)\n    at Object.negativeSelected (http://127.0.0.1:46013/index.html?qaScenario=self-test-p1-05-selected&qaFixture=accessibility-mixed-states:10609:5)\n    at HTMLDocument.run (http://127.0.0.1:46013/index.html?qaScenario=self-test-p1-05-selected&qaFixture=accessibility-mixed-states:14420:38)"
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "self-test-p1-05-focus-return",
+      "status": "expected rejection",
+      "detail": {
+        "message": "intentional overlay focus-return regression",
+        "stack": "Error: intentional overlay focus-return regression\n    at assert (http://127.0.0.1:38339/index.html?qaScenario=self-test-p1-05-focus-return&qaFixture=accessibility-mixed-states:12710:61)\n    at Object.negativeFocusReturn (http://127.0.0.1:38339/index.html?qaScenario=self-test-p1-05-focus-return&qaFixture=accessibility-mixed-states:10618:5)\n    at HTMLDocument.run (http://127.0.0.1:38339/index.html?qaScenario=self-test-p1-05-focus-return&qaFixture=accessibility-mixed-states:14425:38)"
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "self-test-lifecycle-duplicate",
+      "status": "expected rejection",
+      "detail": {
+        "message": "intentional duplicate lifecycle regression must consume exactly one offline window, got 2",
+        "stack": "Error: intentional duplicate lifecycle regression must consume exactly one offline window, got 2\n    at assert (http://127.0.0.1:41405/index.html?qaScenario=self-test-lifecycle-duplicate&qaFixture=lifecycle-basic:12710:61)\n    at assertOfflineExactlyOnce (http://127.0.0.1:41405/index.html?qaScenario=self-test-lifecycle-duplicate&qaFixture=lifecycle-basic:13027:5)\n    at HTMLDocument.run (http://127.0.0.1:41405/index.html?qaScenario=self-test-lifecycle-duplicate&qaFixture=lifecycle-basic:15202:11)"
+      },
+      "runtimeErrors": []
+    }
+  ]
+}

@@ -71,10 +71,11 @@ Auto-Ascend22, MaxDepth220, full permanent Wisp tracks. Its presets support
 controlled comparisons but do not prove the reported active late-game share.
 Actual powered mid/late-game backups remain unavailable.
 
-Overlap observed: PR59 Wisp folding and PR60 Forge wording are now integrated
-into main0e9b54c; the branch already includes PR60 and must incorporate PR59
-before integration. PR61 Bond wording/PR63 Cast text remain separate. Recheck
-live main and preserve concurrent changes before serial integration.
+Overlap: PR59 Wisp folding and PR60 Forge wording are incorporated, including
+PR59's tests. Mainb4d36675d916fd6e76d48526791de5201425937b adds PR64's Forge
+proposal documents and is also incorporated; it adds no product behavior.
+PR61 Bond wording/PR63 Cast text remain separate. Recheck live main and preserve
+concurrent changes before serial integration.
 
 ## Acceptance and checks
 
@@ -99,23 +100,32 @@ failure (`aapt output did not contain a package line`) in this sandbox.
 These initial environment failures are superseded by Chrome155 and permitted
 tooling execution: support252 checks PASS, mobile320/390/430 at100/200% text
 PASS, focus/45px controls (>=44px during panel scaling)/12.78:1 contrast/
-reduced-motion PASS, required tooling PASS. Long-offline checks PASS before the
-target-phase correction; their new run and full CI/native/device remain pending.
+reduced-motion PASS, required tooling PASS. Long-offline checks PASS after the
+phase correction with an explicit revised golden oracle and exact complete
+states/summaries. Unmodified product JavaScript also passes all3,249 core
+assertions on V8 6.0.286.52/Node8.3.0; this does not test Android DOM/device.
 See [implementation evidence](../qa/wisp-roles-001/IMPLEMENTATION.md).
 No independent review or device acceptance is claimed.
 
 Publication: [draft PR70](https://github.com/karahaNx/Lumenfall/pull/70), first
 published head a2f1dd440e005d29fc79c1f1096d30da3115fe21, based on e189a3a.
-No CI run/check was observed for that head as of publication recheck; the
-local full149-scenario suite is running. No merge or APK release for this task.
-The existing offline test's archived exact-state oracle observes ~3e-12 clock/
-HP/charge differences and one extra final segment after the intentional phase
-correction. Its updated checks retain exact economy/counters/ownership/paid
-metadata, standard tolerance only for continuous fields, and at most one
-additional endpoint segment. Full replay of that updated oracle is pending;
-negative before/after HP evidence remains strict. No gate is removed/skipped.
+CI run37711347792 on head48f9c15 PASS150 default scenarios, all12 required
+negative controls, tooling/source and guarded startup. The product SHA256 is
+`0f306575fed5a2332379feedafe47a5a9286f98d2088ac72071782f82c63d3d7`.
+New stricter oracle/evidence commits require fresh CI. The earlier local149-scenario diagnostic
+finished with174 passing executions and one old-oracle failure; it is not a
+passing final full suite. The updated standalone long-offline check passes.
+No merge or APK release for this task.
+
+The phase correction intentionally changes tiny clock/HP/charge values and
+two short cases' final segment count. The new fixed clock-only fixture verifies
+each original value, limits the permitted correction paths, and compares the
+complete candidate state and summary exactly. It supersedes the intermediate
+tolerance-based oracle. Economy, counters, ownership and paid metadata retain
+their original exact expectations. Reverting the phase fix fails strict HP
+parity. Full CI/native/device acceptance remains pending; no gate is skipped.
 
 Next: obtain the concrete balance decision; finish/test that mechanic; validate
-UI and all CI, publish the feature PR, serialize integration, verify the signed
+UI and all CI on the final head, complete draft PR70, serialize integration, verify the signed
 APK and save release/device evidence. An open PR/local candidate is unfinished.
 Keep this owner chat open while required acceptance is missing.

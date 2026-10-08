@@ -49,11 +49,43 @@ Clock evidence:
 The archived exact offline-state oracle [initial correction failure](wisp-offline-clock-final.log.gz)
 detects ~3e-12 changed continuous values. The [next diagnostic](wisp-offline-standard-oracle.log.gz)
 detects one extra endpoint iteration with identical gameplay summary. The
-updated oracle checks only clocks/HP/charge/remaining work at the established
-continuous tolerance; economy, levels, purchases, snapshots and counters stay
-exact, with iteration difference bounded to one endpoint segment. This is an
-intentional arithmetic correction, not a balance or payout change. Its full
-passing replay and all required gates remain pending until recorded.
+intermediate [passing tolerance oracle](wisp-offline-oracle-final.json.gz) is
+superseded by [the exact revised golden oracle](wisp-offline-exact-oracle.json.gz).
+The [fixed fixture](../../../tests/behavioral/wisp-clock-oracle.json) records only
+HP/charge/clock changes and the two exact final-segment count corrections. Every
+original value is checked before applying its expected correction, then complete
+state/summary equality is enforced. All economy, levels, ownership, paid work
+and metadata retain exact original expectations. No general tolerance or
+iteration allowance replaces this gate. The complete long-offline run PASS
+includes8h/72h, Study tail, storage faults, cancel/restart, backup/recovery,
+processing time and wall-clock jumps. Reverting the phase correction is
+[rejected by strict HP parity](wisp-phase-negative-exact.log.gz).
+The [same old-phase mutation](wisp-offline-exact-negative.log.gz) also fails the
+complete-state golden oracle at Clear20/60s, confirming the gate distinguishes
+the deliberate correction instead of admitting either numerical result.
+
+[V8 6.0 engine check](wisp-v8-engine.json) PASS all3,249 existing role assertions
+and12 clock replay controls on unmodified product SHA256
+`0f306575fed5a2332379feedafe47a5a9286f98d2088ac72071782f82c63d3d7`.
+The launcher adapts only the modern Node test driver, with no VM/product
+polyfills. This is JavaScript engine evidence, not WebView60 DOM/native/device.
+
+[Rebased core](wisp-core-rebased.log.gz) and [mobile](wisp-ui-rebased.log.gz)
+preserve PR59's upgrade-folding implementation and tests. The [older full local
+diagnostic](wisp-full-diagnostic.log.gz) completed174 passing executions and
+one superseded offline-oracle failure, using the pre-PR59 staged149-scenario
+product. It cannot establish final full-suite acceptance. [CI37711347792](ci-37711347792.json)
+on48f9c15 PASS150 default scenarios, all12 required negative controls,
+tooling/source and guarded startup. [Full raw job log](ci-37711347792.log.gz)
+retains exact source/commands/results. The stricter fixed oracle and evidence
+commits require fresh CI; the product bytes are unchanged by that checkpoint.
+Mainb4d3667/PR64 documentation is incorporated without product changes.
+
+[All12 required negative controls](wisp-required-negatives.json) reject their
+intended assertions/runtime faults on the exact candidate, with completed valid
+browser QA payloads and no process timeouts. [Raw output](wisp-required-negatives.log.gz)
+retains process/result/source identity. The earlier old-staging diagnostic is
+not used as final acceptance evidence.
 
 Reproduce from root:
 
@@ -63,6 +95,7 @@ node docs/qa/wisp-roles-001/hp-parity-probe.cjs [path/to/baseline/index.html]
 node tests/behavioral/run.cjs --web-root . --scenario wisp-roles-ui
 node tests/behavioral/run.cjs --web-root . --scenario wisp-roles-ui-reduced-motion
 node docs/qa/wisp-roles-001/measure.cjs
+node docs/qa/wisp-roles-001/check-v8-engine.cjs /path/to/node-v8.3.0
 ```
 
 `measure.cjs` has an explicit analysis-only `WISP_CALIBRATION` JSON input
