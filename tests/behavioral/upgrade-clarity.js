@@ -36,12 +36,12 @@ window.runUpgradeClarityQa=function(b,ctx,assert){
     s.activeStudies=[{id:'guardmastery',remainingSec:0,totalDurationSec:150,speedMult:1}];pureRender(s);
     Object.keys(projectRates).forEach(function(id){
       var text=q('[data-project-effect="'+id+'"]').textContent;
-      ok(text.includes('Completed level '+l),'completed level on '+id);
+      ok(text.startsWith('Earned: ')&&!text.includes('Completed level'),'earned effect without a second level on '+id);
       ok(text.includes('+'+(l*projectRates[id])+(id==='riftattune'?' percentage points':'%')),'actual earned '+id+' rate at '+l);
-      ok(text.includes('No earned bonus')===(l===0),'zero completion is no earned bonus '+id);
+      ok(text.includes('+0')===(l===0),'zero completion is no earned bonus '+id);
     });
-    ok(q('[data-running-study="guardmastery"]').textContent.includes('In progress: level '+(l+1)),'pending preview labelled');
-    ok(q('[data-study-text="guardmastery"]').textContent==='Finishing…','zero pending does not complete');
+    ok(q('[data-running-study="guardmastery"]').textContent.includes('On completion: +'+((l+1)*20)+'%'),'pending effect labelled');
+    ok(q('[data-study-text="guardmastery"]').textContent==='Finishing… · 1x','zero pending does not complete');
   });
   var locked=b.freshStateSnapshot();pureRender(locked);
   ok(!q('[data-project-effect="prismstudy"]'),'locked Projects reveal no earned effect');

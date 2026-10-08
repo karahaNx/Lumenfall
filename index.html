@@ -2097,6 +2097,24 @@
   @keyframes cometTrailOrbit{to{transform:rotate(360deg);}}
   @media(max-width:430px){.shop-card{flex-wrap:wrap;}.shop-card>.info{flex-basis:100%;}.shop-card>button{min-height:44px;}}
   @media(prefers-reduced-motion:reduce){.comet-trail-equipped .comet-trail{animation:none!important;transform:rotate(-25deg);}}
+  /* LAB_UI_001: text remains legible at every fill and at enlarged text sizes. */
+  #study-list .study-bar-track{position:relative;display:grid;place-items:center;height:auto;min-height:36px;padding:6px 8px;border-radius:10px;background:#0a1625;border-color:#4c6574;}
+  #study-list .study-bar-fill{position:absolute;top:0;left:0;height:100%;}
+  #study-list .study-bar-track .study-time{position:relative;margin:0;padding:2px 6px;border-radius:4px;background:#0a1625;color:#f2f7ff;font-size:.82rem;line-height:1.5;text-align:center;overflow-wrap:anywhere;}
+  #study-list .study-card .name{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;font-size:.88rem;overflow-wrap:anywhere;}
+  #study-list .study-card .earned-effect,#study-list .study-card .effect-note{font-size:.8rem;overflow-wrap:anywhere;}
+  #study-list .study-card button,#study-list .study-card select{min-width:44px;min-height:44px;font-size:.8rem;white-space:normal;}
+  #study-list .study-speed-open{margin-top:10px;}
+  #study-list .study-speed-panel{border-top:1px solid #40576a;margin-top:10px;padding-top:8px;}
+  #study-list .study-speed-panel[hidden]{display:none;}
+  #study-list .study-speed-panel .speed-row{margin-top:8px;}
+  #study-list .study-speed-panel .speed-btn{flex:1 0 calc(33.333% - 6px);min-width:5em;overflow-wrap:anywhere;}
+  #study-list .study-speed-panel .speed-cost{font-size:.74rem;}
+  #study-list .study-motes-controls label{min-width:0;flex-basis:100%;font-size:.8rem;}
+  #study-list .study-motes-controls select{min-width:0;color-scheme:dark;}
+  #study-list [data-study-speed-close]{margin-top:8px;}
+  #study-list .study-card button:focus,#study-list .study-card select:focus{outline:2px solid var(--lumen);outline-offset:2px;}
+  @media (prefers-reduced-motion:reduce){#study-list .study-bar-fill{transition:none!important;}}
 </style>
 </head>
 <body>
@@ -3034,17 +3052,18 @@ function nodeEarnedEffect(id){
   var discount=costReduction();
   return earnedPercent(discount)+'% Wisp recruiting discount · '+earnedPercent(1-discount)+'% cost'+(discount>=0.6?' (cost floor reached)':'');
 }
-function projectEarnedEffect(id){
-  if(id==='measuredinquiry') return earnedPercent(measuredInquiryReduction())+'% less work for future starts of the 8 listed Studies';
+function projectEarnedEffect(id,level){
+  if(level===undefined) level=longStudyLevel(id);
+  if(id==='measuredinquiry') return earnedPercent(0.02*studyEffectiveLevel(LONG_STUDIES.find(function(n){return n.id===id;}),level))+'% less work for future starts of the 8 other Studies; running work and Measured Inquiry are unchanged';
   var rows={
-    wispascend:[longStudyPowerMult()-1,'passive Wisp damage and Wisp-powered tap base'],
-    guardmastery:[longStudyTapMult()-1,'tap damage'],
-    riftattune:[longStudyOfflineBonus(),'percentage points offline rate'],
-    shardstudy:[longStudyShardMult()-1,'Shards per kill'],
-    lumenstudy:[longStudyLumenMult()-1,'Lumen per kill'],
-    formationstudy:[longStudyFormationMult()-1,'passive Wisp damage and Wisp-powered tap base'],
-    motestudy:[longStudyMoteMult()-1,'Motes from Luminous enemies'],
-    prismstudy:[longStudyPrismMult()-1,'Prisms per Ascend']
+    wispascend:[level*0.15,'passive Wisp damage and Wisp-powered tap base'],
+    guardmastery:[level*0.20,'tap damage'],
+    riftattune:[level*0.10,'percentage points offline rate'],
+    shardstudy:[level*0.08,'Shards per kill'],
+    lumenstudy:[level*0.08,'Lumen per kill'],
+    formationstudy:[level*0.05,'passive Wisp damage and Wisp-powered tap base'],
+    motestudy:[level*0.10,'Motes from Luminous enemies'],
+    prismstudy:[level*0.05,'Prisms per Ascend']
   };
   var row=rows[id];
   return '+'+earnedPercent(row[0])+(id==='riftattune'?' ':'% ')+row[1];
@@ -3052,8 +3071,8 @@ function projectEarnedEffect(id){
 function projectEarnedMarkup(id){
   var level=longStudyLevel(id);
   var node=LONG_STUDIES.find(function(n){return n.id===id;});
-  var preserved=node.levelCap!==undefined && level>node.levelCap ? ' · Preserved; effect capped at level '+node.levelCap : '';
-  return '<div class="earned-effect" data-project-effect="'+id+'"><strong>Completed level '+level+preserved+'</strong><br>Current Project bonus: '+projectEarnedEffect(id)+(level===0?' · No earned bonus':'')+'</div>';
+  var preserved=node.levelCap!==undefined && level>node.levelCap ? ' · Saved purchases preserved; effect capped.' : '';
+  return '<div class="earned-effect" data-project-effect="'+id+'">Earned: '+projectEarnedEffect(id)+preserved+'</div>';
 }
 
 var RIFT_THEMES = [
@@ -5388,8 +5407,9 @@ function presentControlStates(root){
     var spId=btn.getAttribute('data-empower') || btn.getAttribute('data-rarity') || btn.getAttribute('data-module') || btn.getAttribute('data-ultimate') || btn.getAttribute('data-sigil-resonate') || btn.getAttribute('data-empower-queue') || btn.getAttribute('data-toggle');
     var sp=spId && SPIRITS.find(function(item){return item.id===spId;});
     if(sp) subject=sp.name;
-    if(btn.hasAttribute('data-study')){
-      var studyNode=LONG_STUDIES.find(function(n){return n.id===btn.getAttribute('data-study');});
+    if(btn.hasAttribute('data-study') || btn.hasAttribute('data-study-details') || btn.hasAttribute('data-study-speed-close')){
+      var studyId=btn.getAttribute('data-study') || btn.getAttribute('data-study-details') || btn.getAttribute('data-study-speed-close');
+      var studyNode=LONG_STUDIES.find(function(n){return n.id===studyId;});
       if(studyNode) subject=studyNode.name;
     }
     var queueAttr=toggles.find(function(attr){return btn.hasAttribute('data-'+attr);});
@@ -6229,14 +6249,36 @@ function renderResearch(){
 
 function studyMotesMarkup(node){
   var on=state.studyUseMotes[node.id]===true,target=state.studySpeedTargets[node.id];
-  return '<div class="study-motes-controls"><button class="node-queue-toggle '+(on?'active':'')+'" data-study-use-motes="'+node.id+'">Use Motes '+(on?'ON':'OFF')+'</button>'+
-    '<label>Repeat speed<select data-study-speed-target="'+node.id+'" aria-label="'+node.name+' — Repeat speed">'+LAB_SPEED_TIERS.map(function(mult){
+  return '<div class="study-motes-controls"><button class="node-queue-toggle '+(on?'active':'')+'" data-study-use-motes="'+node.id+'">Queue speed up '+(on?'ON':'OFF')+'</button>'+
+    '<label>Queued speed<select data-study-speed-target="'+node.id+'" aria-label="'+node.name+' — Queued speed">'+LAB_SPEED_TIERS.map(function(mult){
       return '<option value="'+mult+'" '+(mult===target?'selected':'')+'>'+mult+'x · '+speedTierCost(mult)+' Motes per level</option>';
     }).join('')+'</select></label></div>';
 }
+// Disclosure state is presentation-only; saving it must never buy speed or work.
+var openStudySpeedId=null;
+function studySpeedMarkup(node,active,maxed){
+  var open=openStudySpeedId===node.id;
+  return '<button class="mini-btn study-speed-open" id="study-speed-open-'+node.id+'" data-study-details="'+node.id+'" aria-expanded="'+open+'" aria-controls="study-speed-panel-'+node.id+'">Speed up</button>'+
+    '<div class="study-speed-panel" id="study-speed-panel-'+node.id+'" data-study-inspection="'+node.id+'" role="region" aria-labelledby="study-speed-open-'+node.id+'" '+(open?'':'hidden')+'>'+
+    '<div class="effect-note">'+(active?'Current speed: '+active.speedMult+'x. Buy a higher speed for this paid level.':'Begin a Study to buy speed for its current level.')+'</div>'+
+    (active?'<div class="speed-row">'+LAB_SPEED_TIERS.map(function(mult){
+      var current=active.speedMult===mult,acquired=active.speedMult>=mult;
+      return '<button class="speed-btn '+(current?'active':'')+'" data-speed="'+mult+'" data-speed-study="'+node.id+'" '+((acquired||state.motes<speedTierCost(mult)||maxed||active.remainingSec<=SIM_EPS)?'disabled':'')+'>'+mult+'x'+
+        '<span class="speed-cost">'+costIcon('mote')+formatNum(speedTierCost(mult))+'</span>'+(current?'Current':acquired?'Covered':maxed?'Unavailable':'')+'</button>';
+    }).join('')+'</div>':'')+
+    studyMotesMarkup(node)+
+    '<p class="effect-note">Study Queue starts the next paid level at 1x. Queue speed up pays the full selected price for each active level when Motes are available, including offline. While waiting, work continues at its paid speed. OFF keeps speed already paid for.</p>'+
+    '<button class="mini-btn" data-study-speed-close="'+node.id+'">Close speed up</button></div>';
+}
+function closeStudySpeed(id){
+  openStudySpeedId=null;
+  renderLongStudies();
+  var opener=els['study-list'].querySelector('[data-study-details="'+id+'"]');
+  if(opener) opener.focus();
+}
 function renderLongStudies(){
-  var openInspections=Array.from(els['study-list'].querySelectorAll('details[open]')).map(function(el){return el.dataset.studyInspection;});
-  var focusedInspection=document.activeElement && document.activeElement.dataset.studyDetails;
+  var focusedSpeed=document.activeElement && document.activeElement.getAttribute('data-speed-study');
+  var focusedTier=focusedSpeed && document.activeElement.getAttribute('data-speed');
   renderLabCapacityBadge();
   var slots = studySlotCount();
   var openSlots = slots - state.activeStudies.length;
@@ -6257,24 +6299,11 @@ function renderLongStudies(){
         '</div>' +
         (node ? projectEarnedMarkup(active.id) : '') +
         '<div class="effect-note">'+(maxed?'Level cap already reached. Paid work finishes without another level or bonus.':
-          'In progress: level '+(longStudyLevel(active.id)+1)+' · bonus earned only on completion.'+(active.id==='measuredinquiry'?' Next: '+earnedPercent(0.02*studyEffectiveLevel(node,longStudyLevel(active.id)+1))+'% less work.':''))+'</div>' +
-        '<div class="study-time" data-study-text="'+active.id+'">'+studyRemainingText(active)+'</div>' +
-        '<div class="study-bar-track"><div class="study-bar-fill" data-study-bar="'+active.id+'" style="width:'+pct+'%;"></div></div>' +
-        (node ? studyMotesMarkup(node) : '') +
-        '<details class="study-inspection" data-study-inspection="'+active.id+'" '+(openInspections.indexOf(active.id)!==-1?'open':'')+'><summary data-study-details="'+active.id+'">'+(node?node.name:'Study')+' · Details &amp; speed</summary>' +
-        (node ? '<div class="desc">'+node.desc+'</div>' : '') +
-        '<div class="section-sub" style="margin:8px 0;">Spend Motes to speed this Study up:</div>' +
-        '<div class="speed-row">' +
-          LAB_SPEED_TIERS.map(function(mult){
-            var mcost = speedTierCost(mult);
-            var isActive = active.speedMult===mult;
-            var acquired = active.speedMult>=mult;
-            var affordable = state.motes>=mcost;
-            return '<button class="speed-btn '+(isActive?'active':'')+'" data-speed="'+mult+'" data-speed-study="'+active.id+'" '+((acquired||!affordable||maxed)?'disabled':'')+'>'+mult+'x' +
-              (acquired ? (isActive?' · Current':' · Unlocked') : maxed ? ' · Unavailable' : '<span class="speed-cost">'+costIcon('mote')+formatNum(mcost)+'</span>') +
-              '</button>';
-          }).join('') +
-        '</div></details>' +
+          'On completion: '+projectEarnedEffect(active.id,longStudyLevel(active.id)+1)+'.')+'</div>' +
+        '<div class="study-bar-track" role="progressbar" aria-label="'+(node?node.name:'Study')+' progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.round(pct)+'" aria-valuetext="'+Math.round(pct)+'% · '+studyRemainingText(active)+'">'+
+          '<div class="study-bar-fill" aria-hidden="true" data-study-bar="'+active.id+'" style="width:'+pct+'%;"></div>'+
+          '<span class="study-time" data-study-text="'+active.id+'">'+studyRemainingText(active)+'</span></div>' +
+        (node ? studySpeedMarkup(node,active,maxed) : '') +
       '</div>';
     });
   }
@@ -6293,25 +6322,50 @@ function renderLongStudies(){
     var level=plan.level,cost=plan.cost,dur=plan.duration;
     var queueOn = !!state.studyQueue[lnode.id];
     html += '<div class="card study-card" data-study-card="'+lnode.id+'" data-state="'+(plan.maxed?'maxed':plan.affordable?'affordable':'unavailable')+'" style="margin-bottom:10px;">' +
-      '<div class="name">'+lnode.name+' <span style="color:var(--mote);">Lv.'+level+'</span>' +
+      '<div class="name">'+lnode.name+' <span style="color:var(--mote);">'+(plan.maxed?'Lv.'+level+' · Maxed':'Next Lv.'+(level+1))+'</span>' +
         ' <button class="node-queue-toggle '+(queueOn?'active':'')+'" data-study-queue="'+lnode.id+'">Queue '+(queueOn?'ON':'OFF')+'</button>' +
       '</div>' +
-      '<div class="desc">'+lnode.desc+'</div>' +
       projectEarnedMarkup(lnode.id) +
-      '<div class="effect-note">'+(plan.maxed?'Maxed at level '+lnode.levelCap+'. Queue '+(queueOn?'ON':'OFF')+' retained; no new starts.':
-        'Next: level '+(level+1)+' · bonus earned only on completion.'+(lnode.id==='measuredinquiry'?' Next: '+earnedPercent(0.02*studyEffectiveLevel(lnode,level+1))+'% less work.':''))+'</div>' +
+      '<div class="effect-note">'+(plan.maxed?'Effect cap reached. Queue '+(queueOn?'ON':'OFF')+' retained; no new starts.':
+        'On completion: '+projectEarnedEffect(lnode.id,level+1)+'.')+'</div>' +
       (plan.maxed?'':'<div class="study-meta" id="study-price-'+lnode.id+'">Takes '+fmtStudyDuration(dur)+' &middot; '+costIcon('lumen')+formatNum(cost.lumen)+' '+costIcon('shard')+formatNum(cost.shard)+'</div>') +
       '<button class="mini-btn" data-study="'+lnode.id+'" '+(plan.maxed?'':'aria-describedby="study-price-'+lnode.id+'" ')+(plan.affordable?'':'disabled')+' style="margin-top:10px;width:100%;">'+(plan.maxed?'Maxed':plan.reason==='unavailable'?'Unavailable':openSlots>0?'Begin Study':'No open slots')+'</button>' +
-      studyMotesMarkup(lnode) +
+      studySpeedMarkup(lnode,null,plan.maxed) +
     '</div>';
   });
 
-  html += '<div class="section-sub">Unlocking more Studies by pushing deeper raises the slot cap. Studies progress while you’re away. Study Queue begins the next paid level. Use Motes buys the selected repeat speed for each active level, including manual starts, as soon as its full price is available. OFF keeps speed already paid for.</div>';
+  html += '<div class="section-sub">Unlocking more Studies by pushing deeper raises the slot cap. Studies progress while you’re away. Study Queue begins its next level when a slot and currency are free.</div>';
   replaceControlMarkup(els['study-list'],html);
-  if(focusedInspection){
-    var restoredInspection=els['study-list'].querySelector('[data-study-details="'+focusedInspection+'"]');
-    if(restoredInspection) restoredInspection.focus({preventScroll:true});
+  // Keep an available tier focused through updates. When buying/completing removes
+  // that action, return to this Study's visible opener with its panel still open.
+  if(focusedSpeed){
+    var sameTier=els['study-list'].querySelector('[data-speed-study="'+focusedSpeed+'"][data-speed="'+focusedTier+'"]');
+    if(!sameTier || sameTier.disabled){
+      var speedFocus=els['study-list'].querySelector('[data-study-details="'+focusedSpeed+'"]');
+      if(speedFocus) speedFocus.focus();
+    }
   }
+  els['study-list'].querySelectorAll('[data-study-details]').forEach(function(btn){
+    var node=LONG_STUDIES.find(function(n){return n.id===btn.dataset.studyDetails;});
+    btn.setAttribute('aria-label',node.name+' — Speed up');
+    btn.addEventListener('click',function(){
+      var id=btn.dataset.studyDetails;
+      if(openStudySpeedId===id){closeStudySpeed(id);return;}
+      openStudySpeedId=id;
+      renderLongStudies();
+    });
+  });
+  els['study-list'].querySelectorAll('[data-study-speed-close]').forEach(function(btn){
+    btn.addEventListener('click',function(){closeStudySpeed(btn.dataset.studySpeedClose);});
+  });
+  els['study-list'].querySelectorAll('.study-speed-panel').forEach(function(panel){
+    panel.addEventListener('keydown',function(e){
+      // Escape belongs to a native select while its menu is being used.
+      if(e.key==='Escape' && e.target.tagName!=='SELECT'){
+        e.preventDefault();closeStudySpeed(panel.dataset.studyInspection);
+      }
+    });
+  });
   var choose=els['study-list'].querySelector('[data-study-choose]');
   if(choose) choose.addEventListener('click',function(){
     var target=document.getElementById('study-choices');
@@ -8103,7 +8157,7 @@ function studyRemainingText(active){
   if(!active || !Number.isFinite(active.remainingSec) || active.remainingSec<0 ||
       !Number.isFinite(active.speedMult) || active.speedMult<=0) return 'Time unavailable';
   // Membership in activeStudies still means pending authoritative completion.
-  if(active.remainingSec===0) return 'Finishing…';
+  if(active.remainingSec===0) return 'Finishing… · '+active.speedMult+'x';
   var duration = fmtStudyDuration(Math.max(Number.MIN_VALUE,active.remainingSec/active.speedMult));
   return duration==='Time unavailable' ? duration : duration+' remaining · '+active.speedMult+'x';
 }
@@ -8116,6 +8170,9 @@ function updateStudyProgress(){
     fillEl.style.width = pct+'%';
     var text = studyRemainingText(active);
     if(textEl.textContent!==text) textEl.textContent = text;
+    var track=fillEl.parentElement;
+    track.setAttribute('aria-valuenow',String(Math.round(pct)));
+    track.setAttribute('aria-valuetext',Math.round(pct)+'% · '+text);
   });
 }
 
@@ -8171,7 +8228,7 @@ function checkAffordability(){
     var acquired = active.speedMult>=mult;
     var node=LONG_STUDIES.find(function(n){return n.id===active.id;});
     var maxed=node && node.levelCap!==undefined && longStudyLevel(active.id)>=node.levelCap;
-    btn.disabled = acquired || maxed || state.motes<speedTierCost(mult);
+    btn.disabled = acquired || maxed || active.remainingSec<=SIM_EPS || state.motes<speedTierCost(mult);
   });
   ['spirit-list','research-list','study-list','node-list','shop-list'].forEach(function(id){presentControlStates(els[id]);});
   var autoTarget=els['shop-list'].querySelector('[data-autoascend-target]');
