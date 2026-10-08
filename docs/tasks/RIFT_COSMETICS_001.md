@@ -80,8 +80,8 @@ integrated verification; signed APK assets/package/version/cert and Android test
 [Current continuation](../qa/rift-cosmetics-2026-10-08/CURRENT_CHECKPOINT.md)
 and [raw checks](../qa/rift-cosmetics-2026-10-08/checks/) record exact sources,
 commands, versions and failures. Current source SHA256
-8efe1e90c1216627dbb47392aa36a6e5c9e4031a7ab7c196478eec734f193e71.
-Focused168 records PASS (upgrade-candidate/results.json), Chromium151/Node24:
+2d8ec37a57c84c30455dbf4f8d81834cd6191aa352927e02808331389b2f6cc1.
+Focused168 records PASS (chrome154-wrap/results.json), Google Chrome154.0.8037.57:
 162 mobile measurements plus region, persistence, input and negative contracts.
 Combined Save Backup12 profiles, Formation native/contract, source/context/tooling
 and V8 6.0 engine fixture PASS. Actual browser touch/Enter and reload paths tested.
@@ -90,11 +90,15 @@ CI37735266911 caught a region palette regression; removed overrides and added
 coverage. CI37737975796 passed152 scenarios, stalled at own browser startup.
 CI37740747361 passed the incoming Formation cases but failed Resonate's Chromium
 startup. Both drivers now follow the suite's Google Chrome selection order.
-No acceptance assertions/gates weakened; full required CI must pass.
+CI37743831575 passed168 gameplay scenarios, then found large-text card overflow
+on runner Chrome154. Add wrapping to card rows, names/descriptions and status;
+local same-version browser passes (different binary/platform from runner).
+Own check now runs before expensive full suite; all mandatory gates retained.
 
 Signed143 baseline cold-launch passes API27/WebView61. Exact60 environment is now
 created from a pinned historical LineageOS provider on isolated AOSP API25;
-native game acceptance is pending. Provider setup/CDP failures are preserved.
+signed143 cold launch preserves Ember and both Comet effects on actual60.
+Final APK acceptance is pending. Provider setup/CDP failures are preserved.
 No physical/TalkBack or independent-review claim. Baseline large-text region
 heading/Guidance movement limitations are outside this goal.
 

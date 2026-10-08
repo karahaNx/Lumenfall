@@ -226,7 +226,7 @@ async function run() {
         a(state.riftTheme==='ember' && button.getAttribute('aria-pressed')==='true','native Enter selects theme: '+JSON.stringify({theme:state.riftTheme,active:document.activeElement.outerHTML.slice(0,200),inert:document.querySelector('.shell').inert,focus:document.hasFocus()}));
         a(document.activeElement===button,'focus retained after selection rerender');renderAll();
         a(document.activeElement===document.querySelector('[data-theme-select="ember"]'),'focus retained after live render');
-        document.querySelectorAll('[data-theme-select]').forEach(function(b){a(b.getBoundingClientRect().height>=44,'theme control 44px');a(b.scrollWidth<=b.clientWidth+1,'theme text fits at large font');});
+        document.querySelectorAll('[data-theme-select]').forEach(function(b){a(b.getBoundingClientRect().height>=44,'theme control 44px');a(b.scrollWidth<=b.clientWidth+1,'theme text fits at large font: '+JSON.stringify({theme:b.getAttribute('data-theme-select'),scroll:b.scrollWidth,client:b.clientWidth,nameFont:getComputedStyle(b.querySelector('.name')).fontSize,tagFont:getComputedStyle(b.querySelector('.theme-active-tag')).fontSize}));});
         a(button.textContent.indexOf('Selected')>=0 && document.querySelector('[data-theme-select="void"]').textContent.indexOf('Unlocked')>=0,'unlocked and selected use different words');
         return {contract:'keyboard-focus-controls'};
       })()`));

@@ -9,7 +9,10 @@ Current base `31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6`, PR77 Save Backup,
 PR76 Formation, PR80 Resonate, PR84 Auto-Ascend and PR90 upgrade owners. Rebase
 CSS conflict combined upstream upgrade styles with F24; no removals. Current
 product SHA256 `8efe1e90c1216627dbb47392aa36a6e5c9e4031a7ab7c196478eec734f193e71`.
-PR79 open. CI37735266911 caught region backgrounds; removed fixed palette
+PR79 head `5cc602af3dc5093ba76dd54127392090fb55a9ee`. Current required CI
+37743831575/job113200522573 running; Google Chrome154.0.8037.57 now passes
+Resonate, incoming upgrade/Auto-Ascend cases progressing. CI37735266911 caught
+region backgrounds; removed fixed palette
 overrides and added six-region regression. CI37737975796 passed152 scenarios,
 then new driver stalled at Target.createTarget: Chromium launcher was preferred
 over working Google Chrome. Driver now follows established suite's browser order
@@ -31,10 +34,20 @@ V8 6.0 legacy engine test passes current product (not WebView DOM evidence).
 
 Native60 environment now created on separate API25 RiftWebView60 with pinned
 LineageOS60.0.3112.78 (Git blob569b28e, SHA256dd0a6f2...). Provider replacement
-needed explicit block-device remount and extracted x86/x86_64 JNI libraries;
-Android accepts it. Old CDP uses Page.addScriptToEvaluateOnLoad; driver fallback
-added. Native fixture reload timed out and is under investigation before
-claiming actual60 acceptance. API27 baseline remains intact in its own AVD.
+needed explicit block-device remount and extracted x86/x86_64 JNI libraries.
+Actual running game UA confirms Chrome60.0.3112.78. Signed143 prepared baseline
+now PASS, native60/baseline-native.json: Ember + both Comet layers survive real
+cold launch. API27 baseline remains intact in its own AVD.
+Resolved QA failures: old CDP method uses Page.addScriptToEvaluateOnLoad;
+direct storage fixture writes lost to visibility/unload autosave, so fixtures now
+use actual backup Restore (+confirmation on new APK) and its production reload
+guard. Cold launches isolate hooks; interval wrappers use IIFE-local captures.
+Old143 does not immediately persist a clicked theme when periodic saves are
+paused (old-no-immediate-save.json); old baseline is instead imported with Ember
+already selected. New APK must pass immediate selection. Canonical accepted
+seed data can be reused without expensive private debugger scope enumeration;
+fresh emulator falls back to real freshState/accept/catalog handles. No APK edits.
+Current native driver is uncommitted while CI runs; commit at delivery checkpoint.
 
 Isolated native environment: SDK `/tmp/rift-cosmetics-android/sdk`, AVDs
 `/workspace/scratch/rift-cosmetics-android/avd`. API27 RiftCosmetics on5554/5555,

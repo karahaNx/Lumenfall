@@ -2120,7 +2120,9 @@
   .cosmetic-radiant{transform-origin:160px 160px;animation:riftCosmeticOrbit 24s linear infinite;}
   @keyframes riftCosmeticPulse{0%,100%{opacity:.65;}50%{opacity:1;}}
   @keyframes riftCosmeticOrbit{to{transform:rotate(360deg);}}
-  .theme-card[data-theme-select]{min-height:44px;}
+  .theme-card[data-theme-select]{min-height:44px;flex-wrap:wrap;}
+  .theme-card .theme-info{flex-basis:120px;}
+  .theme-info .name,.theme-info .desc,.theme-active-tag{word-wrap:break-word;overflow-wrap:break-word;}
   .theme-active-tag{flex:none;max-width:90px;white-space:normal;line-height:1.4;}
   @media(prefers-reduced-motion:reduce){.cosmetic-aurora,.cosmetic-radiant{animation:none;opacity:1;}}
 </style>
