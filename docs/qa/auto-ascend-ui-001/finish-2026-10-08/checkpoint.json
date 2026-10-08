@@ -1,0 +1,38 @@
+{
+  "feature": "AUTO_ASCEND_UI_001",
+  "status": "integrated; native controls/device acceptance in progress",
+  "pr": 84,
+  "integration": "1282f0cba44a30f39b8a43331395db26600719e8",
+  "featureCi": {
+    "run": 37740305483,
+    "job": 113189323396,
+    "scenarios": 160,
+    "negativeControls": 14,
+    "status": "pass",
+    "sourceSha256": "2398a7506358f9c2ee1d4390314032d878f2e0a8e866f62ba03c0280ee7e3bc0"
+  },
+  "apk": {
+    "version": "0.1.148",
+    "commit": "31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6",
+    "sourceSha256": "f99cb0bcd46d2849977a39cf31bb0dd1a7bb8c0ca7a370f2490ad66ec67a6ec1",
+    "sha256": "cef6c291a4f91a3921bdc3b2d2e6f772906d39560f995fcaedf420ccd9972657",
+    "buildRun": 37742868726,
+    "buildJob": 113197564966,
+    "package": "com.lumenfall.app",
+    "zipEntries": 526,
+    "assets": 15
+  },
+  "checks": {
+    "scoped148": "23 positives and five causal negatives pass",
+    "ui148": "20 normal/reduced-motion profiles pass",
+    "v8": "54 handler assertions on V8 6.0.286.52 pass",
+    "nativeUpdate": "signed143 to148 byte-identical prelaunch storage, ownership/OFF/219 pass",
+    "nativeInteractions": "in progress"
+  },
+  "limits": [
+    "No independent human review",
+    "Local CDP transport is not default CI equivalence",
+    "Native API27/WebView61 is not affected-phone/exact60/TalkBack"
+  ],
+  "next": "Finish native controls, save final supported evidence/status, publish the feature checkpoint. Required affected-phone/exact60/TalkBack stays OPEN."
+}

@@ -1,106 +1,74 @@
-# AUTO_ASCEND_UI_001 — Auto-Ascend controls on Ascend
+# AUTO_ASCEND_UI_001 — Auto-Ascend on Ascend
 
-Status: **candidate verified; integration and APK/device acceptance pending**.
-Owner: this feature chat, AUTO_ASCEND_UI_001. No independent review claimed.
+Status: integrated; signed APK148 verified; required native/device acceptance OPEN.
+Owner: this feature chat. No subagents/message tools or independent human review.
 
-## Goal and original requirements
+Keep unlock in Deeds; put one Rift dropdown and separate clear ON/OFF on Ascend.
+Remove Earlier/Later/Find. All valid targets, including Rift 219+, stay reachable.
+Choosing a target preserves ON/OFF. Keep the cleared-Rift trigger and persistence.
 
-Keep the deterministic Auto-Ascend unlock in Deeds. Move operative controls to
-Ascend: one Rift dropdown and a clearly separate ON/OFF. Remove Earlier/Later/
-Find; preserve every valid target, including Rift219+. Target choice must never
-toggle automation. Preserve the cleared-Rift trigger and persistence.
-
-Original F01/F02/F03:
+Original F01–F03:
 > Auto ascend skal bare have mulighed ligesom billede 2, ikk som det første billede. Hvor der er earlier later find. On off skal være meget tydeligere.
 > Auto ascension bliver unlocket igennem deeds, men skal være på selve ascend skærmen så man vælger at slå fra og til derinde og præcis hvilken rift man vil ascend på.
 
-[Full original](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt),
+[Original](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt),
 [revision/dependencies](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt),
 [decisions](../recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt),
 [findings](../recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/FINDINGS.txt),
 [source index](../recovery/2026-10-07/lead_context/FEEDBACK/Source_Index.txt),
 [image2](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/IMAGES/02-17354.jpg).
-Original/current order takes precedence over suggestions. Image2 save/APK unknown.
+Original/current orders take precedence over suggestions.
 
-## Authorization, baseline and overlap
+The 8 October order “Finish the feature task push to github implement to game”
+authorizes publication, integration and app delivery. Current AGENTS/workflow
+assign one feature owner without a separate writer grant. PR46/B2 are integrated;
+historical handover stops are superseded. No new binding rule or gameplay choice.
 
-8 October correction: **“Finish the feature task push to github implement to game.”**
-This authorizes publication, integration and necessary app delivery for this feature.
-Live AGENTS/bootstrap/workflow use one owner per feature without a separate writer
-grant. Historical handover stops are superseded by current rules and this order.
-No subagents/message tools are used.
+Baseline b0537cb46635555ba2c2e5f3f95bc8fc276aeda5; isolated branch/worktree
+feature/auto-ascend-ui-001, /workspace/AUTO_ASCEND_UI_001-github. PR84 merged at
+1282f0cba44a30f39b8a43331395db26600719e8 after preserving Formation autosave,
+Save Backup and Resonate. Subsequent PR90 supplied APK148 at
+31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6; source SHA256
+f99cb0bcd46d2849977a39cf31bb0dd1a7bb8c0ca7a370f2490ad66ec67a6ec1.
+APK147 build was superseded by148; no APK147 acceptance claimed.
 
-Remote baseline: b0537cb46635555ba2c2e5f3f95bc8fc276aeda5.
-Current combination includes maine2f745c (PR76 Formation autosave, PR77/87
-Save Backup UI/receipt and PR80 Resonate clarity). Their product changes and all
-existing CI cases are preserved. Source SHA256
-2398a7506358f9c2ee1d4390314032d878f2e0a8e866f62ba03c0280ee7e3bc0.
-PR84 CI37737148141 passed on prior source61515269 (153 default scenarios and14
-required negatives). Main advanced afterward; merge conflicts in status/default
-scenario registration retain both features. Renew CI and focused checks before
-integration. Earlier evidence applies only to its labeled source.
-Real Git worktree: /workspace/AUTO_ASCEND_UI_001-github;
-branch feature/auto-ascend-ui-001. Network-enabled Git restored access.
-Earlier local45a5f02/0bcce84 is historical; existing game features are preserved.
-PR46 is merged; B2 integrated through PR57. Its historical stress/device limits
-are separate from this UI task. Open PR66/67/70 overlap index.html; none is
-incorporated or accepted here. Recheck main before serialized integration.
+Product scope: index.html Auto-Ascend UI/target handler only; necessary target,
+accessibility/bridge/scoped tests and evidence. One native select has every target
+for <=1,000 options. Larger histories use one numeric datalist field accepting
+any valid integer, with <=200 suggestions plus saved target. Presentation limits
+create no gameplay cap. Huge legacy saved targets stay visible until replacement.
+Typing is a draft; validated change/Enter saves once. Render/focus/scroll stay
+stable. Unlock cost/default, Comet Trials and schema1 remain; no migration/reset.
+The stored threshold is chosen cleared Rift +1. Target choice never calls Ascend.
+The 22 protected functions match the feature's integration baseline byte-for-byte;
+later PR90 engine/purchase changes belong to that feature, not this UI change.
 
-ASCEND_PRISMS_001: one hook and focused-scroll preservation in renderAscendSummary and an independent
-container before the Tree. Prism calculation/preview/payout stays unchanged.
-Reassess combined renderer diffs when the other feature integrates.
+ASCEND_PRISMS_001 dependency: one renderAscendSummary hook and focused-scroll
+preservation; separate container before Tree. Prism calculation/payout unchanged
+by this feature. Reassess actual overlap on later main; do not incorporate or
+claim another chat's work. Preserve WebView60, com.lumenfall.app, signing,
+deterministic purchases, fixed Luminous Motes rewards and existing save value.
 
-## Scope and decisions
+Acceptance: Deeds unlock/shortcut, one Ascend picker, separate ON/OFF, all valid
+high targets, observer renders, one-save handlers, cleared Push/Farm guards,
+manual/auto Ascend, reload/recovery/backup/chronology/live/offline: focused PASS.
+320/360/390/430px, 160%/200% text, >=44px, contrast/focus/reduced-motion: PASS.
+[Evidence/commands/versions](../qa/auto-ascend-ui-001/finish-2026-10-08/README.md) includes labeled
+raw results. Node24.19 / Chromium151: 23 positive cases and five causal negatives;
+20 UI profiles. V8 6.0.286.52: 54 handler assertions. Local CDP adapter is not
+default dump-dom/virtual-time CI equivalence. CI37740305483: 160 scenarios,
+14 required negatives and runtime smoke PASS on exact PR84 integration bytes.
+GitHub automated reviews reported completed; no review comments observed.
 
-Product change: index.html Auto-Ascend UI/target handler only. Necessary bridge,
-target/native-input oracles, accessibility location and scoped runner are updated.
-Backup/restore is added to the default suite.
+Signed APK148: package/version/certificate and all15 assets/526 ZIP CRCs PASS.
+Native143→148 update: actual installed/source identity, byte-identical prelaunch
+storage and retained ownership/OFF/Rift219 PASS. Interaction checks are ongoing;
+initial stale-object observer and unsupported legacy frame-eval attempts are
+preserved separately. Remaining [device acceptance](../qa/auto-ascend-ui-001/DEVICE_ACCEPTANCE.txt)
+requires affected-phone/exact WebView60/TalkBack; emulator61 is separate evidence.
 
-- Deeds retains Auto-Ascend100, ownership/default and Open Ascend shortcut;
-  existing Comet Trials controls/focus/purchase handlers remain intact.
-- Ascend has one stable labeled card; standalone ON/OFF uses text, aria-pressed,
-  visible focus, contrast and48px controls.
-- Up to1,000 targets: every consecutive Rift in one native select. Larger histories:
-  one numeric datalist dropdown accepting any valid target in the same field,
-  with at most200 suggestions plus saved target. Presentation budget, no gameplay
-  cap. Huge legacy saved targets remain visible/preserved until valid replacement.
-- Typing is a draft; change/Enter commits a validated integer. Invalid/repeated
-  input cannot save. Target choice saves only preference/normal metadata and never
-  calls Ascend or changes ON/OFF. Focused picker replacement is deferred.
-- Schema1 remains: stored thresholdN means cleared RiftN−1. No migration/reset or
-  ownership/value loss.22 gameplay/save functions remain
-  [byte-identical](../qa/auto-ascend-ui-001/protected-functions.json) to current main.
-  Prices/rewards/bulk/queue/chronology/live/offline, com.lumenfall.app and signing
-  remain unchanged. WebView60 compatibility is retained as an acceptance contract.
-  New tooling is JavaScript. No new binding rule or gameplay number.
+Next: finish native interactions, save APK/evidence/task/status in GitHub, pass
+required CI for the combined delivery source and integrate the receipt. Stop this
+feature's shared-file work; keep it OPEN until required device results pass.
+Archive only this owner after [completion criteria](../project/FEATURE_WORKFLOW.md).
 
-## Acceptance and evidence
-
-[Evidence/commands](../qa/auto-ascend-ui-001/README.md) records exact versions,
-raw results, transport limits and subsequent CI/build receipts.
-
-1. Deeds unlock; one Ascend dropdown and separate ON/OFF: local PASS.
-2. No Earlier/Later/Find;219 and safe-integer/high legacy targets: local PASS.
-3. Target choice preserves ON/OFF/currencies/progress; observer render focus/scroll,
-   single-save handlers and Comet Trials interaction: local PASS.
-4. Cleared Push trigger only; Farm/unbeaten/zero-time guards; manual/auto Ascend,
-   save/recovery/restart/backup/lifecycle/chronology/parity: local PASS.
-5.320/360/390/430px,160%/200% text,44px minimum, contrast/focus/reduced-motion:
-   20 normal/reduced-motion profiles PASS. Native Android picker,
-   large-font/TalkBack and exact WebView60 acceptance remain required.
-6. Required CI on integrated source, signed APK identity/assets and final saved
-   status/device evidence: PENDING. Owner chat remains open.
-
-Node24.19.0 / Chromium151.0.7922.173:23 positive scoped scenarios PASS; five causal
-negatives caught with valid failure payloads. Source/tooling PASS. Offline core PASS;54 V8 6.0 handler assertions PASS. Local dump-dom hangs; the supplied CDP adapter executes
-original assertions without proving default virtual-time/CI equivalence.
-Required GitHub CI must pass unchanged.
-
-## Next action
-
-Push the maine2f745c combination, renew CI/focused checks, recheck main and integrate. Renew
-checks on integrated bytes; observe signed APK publication and verify identity/
-assets. Complete available native checks and save supported status here and in
-PROJECT_STATE. Missing required device acceptance stays OPEN. Stop this feature's
-shared-file work and archive only this owner after all
-[completion criteria](../project/FEATURE_WORKFLOW.md) are met.
