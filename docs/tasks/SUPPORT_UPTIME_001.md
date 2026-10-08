@@ -1,6 +1,6 @@
 # SUPPORT_UPTIME_001 — Tide/Aurora downtime
 
-Owner: this feature chat. Status: implementation and delivery in progress.
+Owner: this feature chat. Status: timing candidate published; purchase-value choices and delivery remain open.
 
 ## Requirement and approved contract
 
@@ -17,7 +17,7 @@ anchors, not a claim of measured campaign pacing. Earned legacy deadlines remain
 [8 October continuation](../qa/support-uptime-001/implementation/USER_CONTINUATION.txt).
 The latest instruction explicitly orders completion, GitHub publication and game
 implementation. Old-Ultimate refund/value policy and Swift overcap compensation
-were asked asynchronously and remain pending; do not infer the preselected answer.
+were asked asynchronously and remain pending; do not infer the preselected answer. [Concrete proposal](../qa/support-uptime-001/implementation/VALUE_POLICY_PROPOSAL.md).
 
 ## Baseline, scope and overlap
 
@@ -28,9 +28,7 @@ was the initial8 October baseline (merge3dc1964). Fresh main261b1b7 (PR77 Backup
 Current AGENTS/workflow assigns implementation and delivery to this feature chat;
 historical writer/Lead freezes no longer impose a global gate. PR46/B2 is integrated.
 Standing approval plus the latest user order covers scoped publication/integration
-and the established signed APK workflow. No subagents/messages or other checkouts.
-Model/effort are not exposed by the runtime; the previous recommendation is not an
-execution attestation.
+and the established signed APK workflow. No other checkout/chat changed. Runtime model/effort unknown; the recommendation is not an execution attestation.
 
 Necessary dependency: production Swift cap10 across effects and purchase gates.
 Open PR67 already contains the same numerical contract and reported original-
@@ -60,8 +58,7 @@ legacy engine and necessary native/device acceptance must be recorded honestly.
 
 ## Evidence and current result
 
-Historical preparation is preserved in [startup task](../qa/support-uptime-001/implementation/STARTUP_TASK.md)
-and the existing evidence directory. Current-main baseline probe passes49 motor
+Historical preparation: [startup task](../qa/support-uptime-001/implementation/STARTUP_TASK.md) and original evidence. Current-main baseline probe passes49 motor
 combinations/2121 numeric assertions and98 fractional starts; PR51's endpoint fix
 and subsequent B2/legacy fixes remain. [Baseline results](../qa/support-uptime-001/implementation/baseline-probe.json).
 
@@ -71,8 +68,7 @@ no Swift catalogue stub. The same product JavaScript passes on V8 6.0.286.52.
 [Motor](../qa/support-uptime-001/implementation/production-probe.json),
 [legacy engine](../qa/support-uptime-001/implementation/v8-6.0.json).
 New Swift regression covers210 purchase cases, queue/live/offline and historical
-levels. The original Forge failure is preserved; intentional Swift assumptions
-now have stronger dedicated coverage. Other original Forge checks remain.
+levels. The original Forge failure is preserved; dedicated Swift checks replace its uncapped assumption. Other Forge checks remain.
 Mobile matrix12 profiles at320/390/430 with100/200% changed text,44px controls,
 actual Enter purchase/touch queue, focus/contrast and both motion settings PASS.
 [UI](../qa/support-uptime-001/implementation/ui/result.json).
@@ -80,7 +76,7 @@ All25 focused checks PASS, including paid Resonate and its existing three-use li
 Source, context, tooling and APK-verifier self-test PASS. Tooling first failed under
 default sandbox subprocess output capture, then passed with additional network
 permission; the malformed source stderr in tooling is its required negative control.
-[Draft PR82](https://github.com/karahaNx/Lumenfall/pull/82) publishes the candidate/evidence. Initial full CI failed; scoped fixes preserve the original frozen oracle/save and use measured cap10 totals. Offline core (17cases) and both browser lifecycle checks pass. See [CI disposition](../qa/support-uptime-001/implementation/ci-first-run.json). Required CI, integration and new APK acceptance remain pending.
+[Draft PR82](https://github.com/karahaNx/Lumenfall/pull/82) publishes the candidate/evidence. Initial full CI failed; scoped fixes preserve the original frozen oracle/save and use measured cap10 totals. Offline core (17cases) and both browser lifecycle checks pass. See [CI disposition](../qa/support-uptime-001/implementation/ci-first-run.json). CI37738465847/60a2438 PASS155/14 plus every gate ([receipt](../qa/support-uptime-001/implementation/ci-passed.json)); integration/APK acceptance pending. Signed143 native cold-launch preparation passes ([baseline](../qa/support-uptime-001/implementation/native/README.md)); no candidate/device pass.
 Do not label local motor/browser passes as independent review or physical acceptance.
 
 ## Next action
