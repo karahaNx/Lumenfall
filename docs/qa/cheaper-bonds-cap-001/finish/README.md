@@ -1,8 +1,8 @@
 # F21 implementation and verification
 
 Current source SHA256:
-`f210c893ddf16eaaee8032d51d1bfa446e5c4c797f528141c43e3789bc8e8be5`.
-Baseline main:91decbc8e26744b21c26a21b20742be6ebca1d8e.
+`3f4df7318ce83cc5bf77f845f9d36b79948a2189c1b5a18f447b542b4bade6f7`.
+Baseline main:14d5f3a3a78fe8b63cfa5544efc54f41217b65a5.
 [Task](../../../tasks/CHEAPER_BONDS_CAP_001.md) · [Design/review](DESIGN.md).
 Self-review and automated PR review are distinguished; no independent Core/QA claim.
 
@@ -18,7 +18,7 @@ Self-review and automated PR review are distinguished; no independent Core/QA cl
 | Existing clarity | [clarity-current.txt](clarity-current.txt):926 assertions PASS on current upstream upgrade ownership |
 | Required full CI/integration/APK | [PR89](https://github.com/karahaNx/Lumenfall/pull/89):final run/integration/APK acceptance pending |
 
-CI retains existing172 scenarios,17 harness negative controls, source/tooling/APK
+CI retains existing173 scenarios,17 harness negative controls, source/tooling/APK
 verifier and guarded browser startup. F21 adds focused regression and8 causal
 controls:handler/refund/credit/free-credit/wallet/receipt/cache/credit-record. UI/raw controls
 are also saved locally. A startup failure never counts as a passing defect control.

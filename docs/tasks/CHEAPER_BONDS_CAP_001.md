@@ -16,7 +16,7 @@ Current [AGENTS](../../AGENTS.md) and [workflow](../project/FEATURE_WORKFLOW.md)
 supersede historical Lead/Core/writer ceremonies. No messages, subagents or
 other-chat changes are used; no independent Core/QA review is claimed.
 
-Baseline main:91decbc8e26744b21c26a21b20742be6ebca1d8e. Isolated branch:
+Baseline main:14d5f3a3a78fe8b63cfa5544efc54f41217b65a5. Isolated branch:
 feature/cheaper-bonds-cap-001; worktree:/workspace/CHEAPER_BONDS_CAP_001.
 Original checkout untouched. PR46/B2 merged at20aaae62a4b6e46f8d75775085918eaba4e8de29.
 Save Backup, Formation, Auto-Ascend, Resonate and upgrade ownership are integrated
@@ -58,7 +58,7 @@ identity/assets plus actual relevant Android update/save behavior before closing
 
 ## Checks, evidence and next action
 
-Current source SHA256:f210c893ddf16eaaee8032d51d1bfa446e5c4c797f528141c43e3789bc8e8be5.
+Current source SHA256:3f4df7318ce83cc5bf77f845f9d36b79948a2189c1b5a18f447b542b4bade6f7.
 Local:533 assertions (388 cap/gameplay +145 exact refund),12 mobile profiles,
 10 causal controls,926 current clarity assertions,16 offline catch-up records and V8 6.0 PASS.
 [Evidence/commands](../qa/cheaper-bonds-cap-001/finish/README.md) separates historical

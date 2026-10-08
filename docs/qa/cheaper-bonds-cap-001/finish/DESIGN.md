@@ -80,3 +80,8 @@ the valid own receipt. Null/malformed/fractional entries reject for recovery;
 valid foreign integer credits remain. Nine malformed cases, actual null/0.5
 primary recovery and the V8 6.0 probe pass; a credit-record defect control detects
 removal of validation. No legitimate price, credit or currency is rounded.
+
+Main14d5f3a (Rift guidance and Formation delivery) merges cleanly. Current533
+focused assertions,10 causal controls,926 clarity and V8 6.0 pass on the combined
+source. The earlier full offline16-record check used c54856a source before the
+credit-record/Rift changes; final required full CI verifies the current bytes.
