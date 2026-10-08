@@ -56,7 +56,9 @@ thread resolved. No independent review claim or weakened acceptance.
 Build37746908017 produced signed0.1.151 from015e2e6. Package/certificate,
 526 ZIP CRCs and15 exact-source assets PASS. Actual143→151 signed Android update
 preserved125952 WebView-storage bytes; initial ownership/Wisp levels/old preference
-PASS. Full native acceptance pending after preserved SystemUI/reload-race evidence.
+PASS. Native320px normal/200% toggles, focus/AX PASS. ADB timed swipes emitted
+no moves; the hardware touchscreen diagnostic scrolls28px with real touch moves.
+Full native acceptance is rerunning; preserved failures remain diagnostic evidence.
 Native API27/WebView61 software emulator plus V8 6.0; no physical/TalkBack/FPS claim.
 Baseline-matched local Save reload timeout is documented; remote gate remains required.
 

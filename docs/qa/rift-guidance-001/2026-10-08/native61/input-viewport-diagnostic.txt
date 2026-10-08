@@ -1,0 +1,368 @@
+INPUT MANAGER (dumpsys input)
+
+Input Manager State:
+  Interactive: true
+  System UI Visibility: 0x2608
+  Pointer Speed: 0
+  Pointer Gestures Enabled: true
+  Show Touches: false
+  Pointer Capture Enabled: false
+
+Event Hub State:
+  BuiltInKeyboardId: 3
+  Devices:
+    -1: Virtual
+      Classes: 0x40000023
+      Path: <virtual>
+      Enabled: true
+      Descriptor: a718a782d34bc767f4689c232d64d527998ea7fd
+      Location: 
+      ControllerNumber: 0
+      UniqueId: <virtual>
+      Identifier: bus=0x0000, vendor=0x0000, product=0x0000, version=0x0000
+      KeyLayoutFile: /system/usr/keylayout/Generic.kl
+      KeyCharacterMapFile: /system/usr/keychars/Virtual.kcm
+      ConfigurationFile: 
+      HaveKeyboardLayoutOverlay: false
+    1: Power Button
+      Classes: 0x00000001
+      Path: /dev/input/event0
+      Enabled: true
+      Descriptor: 26d13db3fa0f6bd5d05831266fb01ea6c500b88c
+      Location: LNXPWRBN/button/input0
+      ControllerNumber: 0
+      UniqueId: 
+      Identifier: bus=0x0019, vendor=0x0000, product=0x0001, version=0x0000
+      KeyLayoutFile: /system/usr/keylayout/Generic.kl
+      KeyCharacterMapFile: /system/usr/keychars/Generic.kcm
+      ConfigurationFile: 
+      HaveKeyboardLayoutOverlay: false
+    2: goldfish_rotary
+      Classes: 0x00001000
+      Path: /dev/input/event2
+      Enabled: true
+      Descriptor: 9286b20e4aaa6bcaca619b728b030e3f7b422ee6
+      Location: 
+      ControllerNumber: 0
+      UniqueId: 
+      Identifier: bus=0x0019, vendor=0x0000, product=0x0000, version=0x0000
+      KeyLayoutFile: 
+      KeyCharacterMapFile: 
+      ConfigurationFile: /system/usr/idc/goldfish_rotary.idc
+      HaveKeyboardLayoutOverlay: false
+    3: qwerty2 (aka device 0 - built-in keyboard)
+      Classes: 0x000000bf
+      Path: /dev/input/event1
+      Enabled: true
+      Descriptor: 04c0f71d9920e1e448166e8a4feebf80d1849c2f
+      Location: 
+      ControllerNumber: 0
+      UniqueId: 
+      Identifier: bus=0x0019, vendor=0x0000, product=0x0000, version=0x0000
+      KeyLayoutFile: /system/usr/keylayout/qwerty.kl
+      KeyCharacterMapFile: /system/usr/keychars/qwerty2.kcm
+      ConfigurationFile: /system/usr/idc/qwerty2.idc
+      HaveKeyboardLayoutOverlay: false
+
+Input Reader State:
+  Device -1: Virtual
+    Generation: 2
+    IsExternal: false
+    HasMic:     false
+    Sources: 0x00000301
+    KeyboardType: 2
+    Keyboard Input Mapper:
+      Parameters:
+        HasAssociatedDisplay: false
+        OrientationAware: false
+        HandlesKeyRepeat: false
+      KeyboardType: 2
+      Orientation: 0
+      KeyDowns: 0 keys currently down
+      MetaState: 0x0
+      DownTime: 0
+  Device 0: qwerty2
+    Generation: 29
+    IsExternal: false
+    HasMic:     false
+    Sources: 0x80015307
+    KeyboardType: 2
+    Motion Ranges:
+      X: source=0x00010004, min=-1.000, max=1.000, flat=0.000, fuzz=0.167, resolution=0.000
+      Y: source=0x00010004, min=-1.000, max=1.000, flat=0.000, fuzz=0.167, resolution=0.000
+      PRESSURE: source=0x00010004, min=0.000, max=1.000, flat=0.000, fuzz=0.000, resolution=0.000
+      X: source=0x00005002, min=-35.000, max=354.000, flat=0.000, fuzz=0.000, resolution=0.000
+      Y: source=0x00005002, min=0.000, max=915.000, flat=0.000, fuzz=0.000, resolution=0.000
+      PRESSURE: source=0x00005002, min=0.000, max=1.000, flat=0.000, fuzz=0.000, resolution=0.000
+      SIZE: source=0x00005002, min=0.000, max=1.000, flat=0.000, fuzz=0.000, resolution=0.000
+      TOUCH_MAJOR: source=0x00005002, min=0.000, max=995.568, flat=0.000, fuzz=0.000, resolution=0.000
+      TOUCH_MINOR: source=0x00005002, min=0.000, max=995.568, flat=0.000, fuzz=0.000, resolution=0.000
+      TOOL_MAJOR: source=0x00005002, min=0.000, max=995.568, flat=0.000, fuzz=0.000, resolution=0.000
+      TOOL_MINOR: source=0x00005002, min=0.000, max=995.568, flat=0.000, fuzz=0.000, resolution=0.000
+      ORIENTATION: source=0x00005002, min=-1.571, max=1.571, flat=0.000, fuzz=0.000, resolution=0.000
+    Switch Input Mapper:
+      SwitchValues: 0
+    Keyboard Input Mapper:
+      Parameters:
+        HasAssociatedDisplay: true
+        OrientationAware: true
+        HandlesKeyRepeat: false
+      KeyboardType: 2
+      Orientation: 0
+      KeyDowns: 0 keys currently down
+      MetaState: 0x0
+      DownTime: 0
+    Cursor Input Mapper:
+      Parameters:
+        HasAssociatedDisplay: true
+        Mode: navigation
+        OrientationAware: true
+      XScale: 0.167
+      YScale: 0.167
+      XPrecision: 6.000
+      YPrecision: 6.000
+      HaveVWheel: false
+      HaveHWheel: false
+      VWheelScale: 1.000
+      HWheelScale: 1.000
+      Orientation: 0
+      ButtonState: 0x00000000
+      Down: false
+      DownTime: 0
+    Touch Input Mapper (mode - direct):
+      Parameters:
+        GestureMode: multi-touch
+        DeviceType: touchScreen
+        AssociatedDisplay: hasAssociatedDisplay=true, isExternal=false, displayId=''
+        OrientationAware: true
+      Raw Touch Axes:
+        X: min=0, max=32767, flat=0, fuzz=0, resolution=0
+        Y: min=0, max=32767, flat=0, fuzz=0, resolution=0
+        Pressure: min=0, max=1024, flat=0, fuzz=0, resolution=0
+        TouchMajor: min=0, max=2147483647, flat=0, fuzz=0, resolution=0
+        TouchMinor: min=0, max=2147483647, flat=0, fuzz=0, resolution=0
+        ToolMajor: unknown range
+        ToolMinor: unknown range
+        Orientation: min=0, max=90, flat=0, fuzz=0, resolution=0
+        Distance: unknown range
+        TiltX: unknown range
+        TiltY: unknown range
+        TrackingId: min=0, max=11, flat=0, fuzz=0, resolution=0
+        Slot: min=0, max=10, flat=0, fuzz=0, resolution=0
+      Calibration:
+        touch.size.calibration: geometric
+        touch.pressure.calibration: physical
+        touch.orientation.calibration: interpolated
+        touch.distance.calibration: none
+        touch.coverage.calibration: none
+      Affine Transformation:
+        X scale: 1.000
+        X ymix: 0.000
+        X offset: 0.000
+        Y xmix: 0.000
+        Y scale: 1.000
+        Y offset: 0.000
+      Viewport: displayId=0, orientation=0, logicalFrame=[0, 0, 320, 916], physicalFrame=[35, 0, 355, 916], deviceSize=[390, 916]
+      SurfaceWidth: 390px
+      SurfaceHeight: 916px
+      SurfaceLeft: 35
+      SurfaceTop: 0
+      SurfaceOrientation: 0
+      Translation and Scaling Factors:
+        XTranslate: -35.000
+        YTranslate: 0.000
+        XScale: 0.012
+        YScale: 0.028
+        XPrecision: 84.021
+        YPrecision: 35.773
+        GeometricScale: 0.020
+        PressureScale: 0.001
+        SizeScale: 0.000
+        OrientationScale: 0.017
+        DistanceScale: 0.000
+        HaveTilt: false
+        TiltXCenter: 0.000
+        TiltXScale: 0.000
+        TiltYCenter: 0.000
+        TiltYScale: 0.000
+      Last Raw Button State: 0x00000000
+      Last Raw Touch: pointerCount=0
+      Last Cooked Button State: 0x00000000
+      Last Cooked Touch: pointerCount=0
+      Stylus Fusion:
+        ExternalStylusConnected: false
+        External Stylus ID: -1
+        External Stylus Data Timeout: 9223372036854775807
+      External Stylus State:
+        When: 9223372036854775807
+        Pressure: 0.000000
+        Button State: 0x00000000
+        Tool Type: 0
+  Device 1: Power Button
+    Generation: 9
+    IsExternal: false
+    HasMic:     false
+    Sources: 0x00000101
+    KeyboardType: 1
+    Keyboard Input Mapper:
+      Parameters:
+        HasAssociatedDisplay: false
+        OrientationAware: false
+        HandlesKeyRepeat: false
+      KeyboardType: 1
+      Orientation: 0
+      KeyDowns: 0 keys currently down
+      MetaState: 0x0
+      DownTime: 0
+  Device 2: goldfish_rotary
+    Generation: 7
+    IsExternal: false
+    HasMic:     false
+    Sources: 0x00400000
+    KeyboardType: 0
+    Motion Ranges:
+      26: source=0x00400000, min=-1.000, max=1.000, flat=0.000, fuzz=0.000, resolution=0.791
+    Rotary Encoder Input Mapper:
+      HaveWheel: true
+  Configuration:
+    ExcludedDeviceNames: []
+    VirtualKeyQuietTime: 0.0ms
+    PointerVelocityControlParameters: scale=1.000, lowThreshold=500.000, highThreshold=3000.000, acceleration=3.000
+    WheelVelocityControlParameters: scale=1.000, lowThreshold=15.000, highThreshold=50.000, acceleration=4.000
+    PointerGesture:
+      Enabled: true
+      QuietInterval: 100.0ms
+      DragMinSwitchSpeed: 50.0px/s
+      TapInterval: 150.0ms
+      TapDragInterval: 300.0ms
+      TapSlop: 20.0px
+      MultitouchSettleInterval: 100.0ms
+      MultitouchMinDistance: 15.0px
+      SwipeTransitionAngleCosine: 0.3
+      SwipeMaxWidthRatio: 0.2
+      MovementSpeedRatio: 0.8
+      ZoomSpeedRatio: 0.3
+      Viewports:
+        ViewportInternal:
+          Viewport: displayId=0, orientation=0, uniqueId='', logicalFrame=[0, 0, 320, 916], physicalFrame=[35, 0, 355, 916], deviceSize=[390, 916]
+        ViewportExternal:
+          Viewport: displayId=0, orientation=0, uniqueId='', logicalFrame=[0, 0, 320, 916], physicalFrame=[35, 0, 355, 916], deviceSize=[390, 916]
+        ViewportVirtual:
+
+Input Dispatcher State:
+  DispatchEnabled: 1
+  DispatchFrozen: 0
+  FocusedApplication: name='AppWindowToken{2653d32 token=Token{d0a3ffc ActivityRecord{f5b38ef u0 com.lumenfall.app/.MainActivity t11}}}', dispatchingTimeout=5000.000ms
+  FocusedWindow: name='Window{6f33c92 u0 com.lumenfall.app/com.lumenfall.app.MainActivity}'
+  TouchStates: <no displays touched>
+  Windows:
+    0: name='Window{1953c38 u0 StatusBar}', displayId=0, paused=false, hasFocus=false, hasWallpaper=false, visible=true, canReceiveKeys=false, flags=0x81840048, type=0x000007d0, layer=181000, frame=[0,0][320,24], scale=1.000000, touchableRegion=[0,0][320,24], inputFeatures=0x00000000, ownerPid=3489, ownerUid=10024, dispatchingTimeout=5000.000ms
+    1: name='Window{c337f3e u0 AssistPreviewPanel}', displayId=0, paused=false, hasFocus=false, hasWallpaper=false, visible=false, canReceiveKeys=false, flags=0x01000118, type=0x000007f1, layer=41000, frame=[0,916][390,916], scale=1.000000, touchableRegion=<empty>, inputFeatures=0x00000000, ownerPid=3489, ownerUid=10024, dispatchingTimeout=5000.000ms
+    2: name='Window{d74ba30 u0 DockedStackDivider}', displayId=0, paused=false, hasFocus=false, hasWallpaper=false, visible=false, canReceiveKeys=false, flags=0x21840028, type=0x000007f2, layer=21025, frame=[0,0][0,0], scale=1.000000, touchableRegion=[-48,0][48,48], inputFeatures=0x00000000, ownerPid=3489, ownerUid=10024, dispatchingTimeout=5000.000ms
+    3: name='Window{c0431f9 u0 PopupWindow:a631a03}', displayId=0, paused=false, hasFocus=false, hasWallpaper=false, visible=true, canReceiveKeys=false, flags=0x41800208, type=0x000003ed, layer=21020, frame=[12,60][320,172], scale=1.000000, touchableRegion=[28,116][304,164], inputFeatures=0x00000000, ownerPid=4142, ownerUid=10059, dispatchingTimeout=5000.000ms
+    4: name='Window{de1e243 u0 PopupWindow:58fe763}', displayId=0, paused=false, hasFocus=false, hasWallpaper=false, visible=true, canReceiveKeys=false, flags=0x41800208, type=0x000003ea, layer=21015, frame=[290,210][334,232], scale=1.000000, touchableRegion=[290,210][320,232], inputFeatures=0x00000000, ownerPid=4142, ownerUid=10059, dispatchingTimeout=5000.000ms
+    5: name='Window{19f62fd u0 PopupWindow:13f0b06}', displayId=0, paused=false, hasFocus=false, hasWallpaper=false, visible=true, canReceiveKeys=false, flags=0x41800208, type=0x000003ea, layer=21010, frame=[192,210][236,232], scale=1.000000, touchableRegion=[192,210][236,232], inputFeatures=0x00000000, ownerPid=4142, ownerUid=10059, dispatchingTimeout=5000.000ms
+    6: name='Window{6f33c92 u0 com.lumenfall.app/com.lumenfall.app.MainActivity}', displayId=0, paused=false, hasFocus=true, hasWallpaper=false, visible=true, canReceiveKeys=true, flags=0x81810120, type=0x00000001, layer=21005, frame=[0,0][320,916], scale=1.000000, touchableRegion=[0,0][320,916], inputFeatures=0x00000000, ownerPid=4142, ownerUid=10059, dispatchingTimeout=5000.000ms
+    7: name='Window{9647342 u0 com.android.launcher3/com.android.launcher3.Launcher}', displayId=0, paused=false, hasFocus=false, hasWallpaper=false, visible=false, canReceiveKeys=false, flags=0x81910120, type=0x00000001, layer=21000, frame=[0,0][320,916], scale=1.000000, touchableRegion=[0,0][320,916], inputFeatures=0x00000000, ownerPid=2263, ownerUid=10016, dispatchingTimeout=5000.000ms
+    8: name='Window{7f489d1 u0 com.android.systemui.ImageWallpaper}', displayId=0, paused=false, hasFocus=false, hasWallpaper=false, visible=false, canReceiveKeys=false, flags=0x00010318, type=0x000007dd, layer=11000, frame=[0,0][1243,1024], scale=1.000000, touchableRegion=[0,0][1243,1024], inputFeatures=0x00000000, ownerPid=3489, ownerUid=10024, dispatchingTimeout=5000.000ms
+  MonitoringChannels:
+    0: 'WindowManager (server)'
+  RecentQueue: length=10
+    MotionEvent(deviceId=0, source=0x00001002, action=1, actionButton=0x00000000, flags=0x00000000, metaState=0x00000000, buttonState=0x00000000, edgeFlags=0x00000000, xPrecision=1.0, yPrecision=1.0, displayId=0, pointers=[0: (116.0, 160.0)]), policyFlags=0x6b000000, age=188275.2ms
+    MotionEvent(deviceId=0, source=0x00001002, action=0, actionButton=0x00000000, flags=0x00000000, metaState=0x00000000, buttonState=0x00000000, edgeFlags=0x00000000, xPrecision=1.0, yPrecision=1.0, displayId=0, pointers=[0: (116.0, 160.0)]), policyFlags=0x6b000000, age=167278.2ms
+    MotionEvent(deviceId=0, source=0x00001002, action=1, actionButton=0x00000000, flags=0x00000000, metaState=0x00000000, buttonState=0x00000000, edgeFlags=0x00000000, xPrecision=1.0, yPrecision=1.0, displayId=0, pointers=[0: (116.0, 160.0)]), policyFlags=0x6b000000, age=167278.2ms
+    MotionEvent(deviceId=0, source=0x00001002, action=0, actionButton=0x00000000, flags=0x00000000, metaState=0x00000000, buttonState=0x00000000, edgeFlags=0x00000000, xPrecision=1.0, yPrecision=1.0, displayId=0, pointers=[0: (116.0, 160.0)]), policyFlags=0x6b000000, age=144773.2ms
+    MotionEvent(deviceId=0, source=0x00001002, action=1, actionButton=0x00000000, flags=0x00000000, metaState=0x00000000, buttonState=0x00000000, edgeFlags=0x00000000, xPrecision=1.0, yPrecision=1.0, displayId=0, pointers=[0: (116.0, 160.0)]), policyFlags=0x6b000000, age=144773.2ms
+    MotionEvent(deviceId=0, source=0x00001002, action=0, actionButton=0x00000000, flags=0x00000000, metaState=0x00000000, buttonState=0x00000000, edgeFlags=0x00000000, xPrecision=1.0, yPrecision=1.0, displayId=0, pointers=[0: (116.0, 160.0)]), policyFlags=0x6b000000, age=119000.2ms
+    MotionEvent(deviceId=0, source=0x00001002, action=1, actionButton=0x00000000, flags=0x00000000, metaState=0x00000000, buttonState=0x00000000, edgeFlags=0x00000000, xPrecision=1.0, yPrecision=1.0, displayId=0, pointers=[0: (116.0, 160.0)]), policyFlags=0x6b000000, age=119000.2ms
+    MotionEvent(deviceId=0, source=0x00001002, action=0, actionButton=0x00000000, flags=0x00000000, metaState=0x00000000, buttonState=0x00000000, edgeFlags=0x00000000, xPrecision=1.0, yPrecision=1.0, displayId=0, pointers=[0: (264.0, 178.0)]), policyFlags=0x6b000000, age=101043.2ms
+    MotionEvent(deviceId=0, source=0x00001002, action=2, actionButton=0x00000000, flags=0x00000000, metaState=0x00000000, buttonState=0x00000000, edgeFlags=0x00000000, xPrecision=1.0, yPrecision=1.0, displayId=0, pointers=[0: (264.0, 178.0)]), policyFlags=0x6b000000, age=101043.2ms
+    MotionEvent(deviceId=0, source=0x00001002, action=1, actionButton=0x00000000, flags=0x00000000, metaState=0x00000000, buttonState=0x00000000, edgeFlags=0x00000000, xPrecision=1.0, yPrecision=1.0, displayId=0, pointers=[0: (264.0, 142.0)]), policyFlags=0x6b000000, age=100030.2ms
+  PendingEvent: <none>
+  InboundQueue: <empty>
+  ReplacedKeys: <empty>
+  Connections:
+    0: channelName='WindowManager (server)', windowName='monitor', status=NORMAL, monitor=true, inputPublisherBlocked=false
+      OutboundQueue: <empty>
+      WaitQueue: <empty>
+    1: channelName='9647342 com.android.launcher3/com.android.launcher3.Launcher (server)', windowName='Window{9647342 u0 com.android.launcher3/com.android.launcher3.Launcher}', status=NORMAL, monitor=false, inputPublisherBlocked=false
+      OutboundQueue: <empty>
+      WaitQueue: <empty>
+    2: channelName='7f489d1 com.android.systemui.ImageWallpaper (server)', windowName='Window{7f489d1 u0 com.android.systemui.ImageWallpaper}', status=NORMAL, monitor=false, inputPublisherBlocked=false
+      OutboundQueue: <empty>
+      WaitQueue: <empty>
+    3: channelName='d74ba30 DockedStackDivider (server)', windowName='Window{d74ba30 u0 DockedStackDivider}', status=NORMAL, monitor=false, inputPublisherBlocked=false
+      OutboundQueue: <empty>
+      WaitQueue: <empty>
+    4: channelName='19f62fd PopupWindow:13f0b06 (server)', windowName='Window{19f62fd u0 PopupWindow:13f0b06}', status=NORMAL, monitor=false, inputPublisherBlocked=false
+      OutboundQueue: <empty>
+      WaitQueue: <empty>
+    5: channelName='6f33c92 com.lumenfall.app/com.lumenfall.app.MainActivity (server)', windowName='Window{6f33c92 u0 com.lumenfall.app/com.lumenfall.app.MainActivity}', status=NORMAL, monitor=false, inputPublisherBlocked=false
+      OutboundQueue: <empty>
+      WaitQueue: <empty>
+    6: channelName='pip_input_consumer (server)', windowName='?', status=NORMAL, monitor=false, inputPublisherBlocked=false
+      OutboundQueue: <empty>
+      WaitQueue: <empty>
+    7: channelName='de1e243 PopupWindow:58fe763 (server)', windowName='Window{de1e243 u0 PopupWindow:58fe763}', status=NORMAL, monitor=false, inputPublisherBlocked=false
+      OutboundQueue: <empty>
+      WaitQueue: <empty>
+    8: channelName='c0431f9 PopupWindow:a631a03 (server)', windowName='Window{c0431f9 u0 PopupWindow:a631a03}', status=NORMAL, monitor=false, inputPublisherBlocked=false
+      OutboundQueue: <empty>
+      WaitQueue: <empty>
+    9: channelName='c337f3e AssistPreviewPanel (server)', windowName='Window{c337f3e u0 AssistPreviewPanel}', status=NORMAL, monitor=false, inputPublisherBlocked=false
+      OutboundQueue: <empty>
+      WaitQueue: <empty>
+    10: channelName='1953c38 StatusBar (server)', windowName='Window{1953c38 u0 StatusBar}', status=NORMAL, monitor=false, inputPublisherBlocked=false
+      OutboundQueue: <empty>
+      WaitQueue: <empty>
+  AppSwitch: not pending
+  Configuration:
+    KeyRepeatDelay: 50.0ms
+    KeyRepeatTimeout: 500.0ms
+
+
+  Keyboard Layouts:
+    "English (UK) - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_english_uk
+    "English (US) - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_english_us
+    "English (US), International style - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_english_us_intl
+    "English (US), Colemak style - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_english_us_colemak
+    "English (US), Dvorak style - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_english_us_dvorak
+    "English (US), Workman style - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_english_us_workman
+    "German - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_german
+    "French - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_french
+    "French (Canada) - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_french_ca
+    "Russian - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_russian
+    "Russian, Mac style - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_russian_mac
+    "Spanish - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_spanish
+    "Swiss French - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_swiss_french
+    "Swiss German - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_swiss_german
+    "Belgian - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_belgian
+    "Bulgarian - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_bulgarian
+    "Italian - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_italian
+    "Danish - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_danish
+    "Norwegian - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_norwegian
+    "Swedish - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_swedish
+    "Finnish - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_finnish
+    "Croatian - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_croatian
+    "Czech - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_czech
+    "Estonian - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_estonian
+    "Hungarian - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_hungarian
+    "Icelandic - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_icelandic
+    "Brazilian - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_brazilian
+    "Portuguese - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_portuguese
+    "Slovak - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_slovak
+    "Slovenian - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_slovenian
+    "Turkish - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_turkish
+    "Ukrainian - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_ukrainian
+    "Arabic - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_arabic
+    "Greek - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_greek
+    "Hebrew - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_hebrew
+    "Lithuanian - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_lithuanian
+    "Spanish (Latin) - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_spanish_latin
+    "Latvian - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_latvian
+    "Persian - Android keyboard": com.android.inputdevices/com.android.inputdevices.InputDeviceReceiver/keyboard_layout_persian
+
+  PersistentDataStore
+    mLoaded=true
+    mDirty=false
+    InputDeviceStates:
