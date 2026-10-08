@@ -60,8 +60,12 @@ function baselineState(actual,expected,seed,label){
  const oldOwnership={...expected.owned},legacy={};
  for(const id of ['rememberbulk','offline24','offline48']){if(oldOwnership[id]===true)legacy[id]=true;delete oldOwnership[id];}
  assert.deepEqual(actual.legacyCometPurchases,legacy,label+' full legacy ownership archived');
- const {studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,...existing}=actual;
- assert.deepEqual(existing,{...expected,owned:oldOwnership},label);
+ // F14's marker and selected pending preset are intentional metadata changes.
+ assert.equal(actual.formationAutosaveVersion,1,label+' autosave marker');
+ const selected=expected.formationRebuild ? expected.formationRebuild.preset : expected.activeFormationPreset;
+ assert.equal(actual.activeFormationPreset,selected,label+' exact selected preset');
+ const {studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,formationAutosaveVersion,...existing}=actual;
+ assert.deepEqual(existing,{...expected,activeFormationPreset:selected,owned:oldOwnership},label);
 }
 function runAsync(seed,seconds,batch=256){
  const x=app(seed,source,seconds),before=copy(x.b.get());x.b.batch(batch);
@@ -111,9 +115,15 @@ assert(long.result.completedStudies.includes("Guardian's Mastery"),'study comple
 assert.equal(long.result.kills,cap.result.kills,'beyond-cap time earns no extra combat');
 // Preserve old numerical policy against the unchanged scheduler for short windows
 // and chronological research/Motes/automation boundaries.
+// Counterfactual legacy Bond operands retain the complete archived oracle for
+// unchanged mechanics. Actual eight-Bond chronology/rewards have separate real
+// source coverage in formation-bonds.cjs and the one-second long-window checks.
+const legacyBondSource=source.replace('function bondActive(bondId){',
+ "function bondActive(bondId){\n  if(['kindling','vanguard','quarry','harvest'].indexOf(bondId)!==-1) return false;");
+assert.notEqual(legacyBondSource,source,'exact legacy Bond control anchor');
 for(const seed of [original,clear20,off]){
  for(const seconds of [60,300,3600]){
-  const old=app(seed,baseline,seconds),next=app(seed,source,seconds);
+  const old=app(seed,baseline,seconds),next=app(seed,legacyBondSource,seconds);
   const a=old.b.advance(seconds,{kind:'offline',visual:false,clockStartMs:seed.lastSeen});
   const b=next.b.advance(seconds,{kind:'offline',visual:false,clockStartMs:seed.lastSeen});
   baselineSummary(b,a,'unchanged baseline summary '+seconds);baselineState(next.b.get(),old.b.get(),seed,'unchanged baseline state '+seconds);

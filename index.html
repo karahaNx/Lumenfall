@@ -254,10 +254,10 @@
   .bond-row.active{border-color:color-mix(in srgb,var(--good) 65%,var(--line));background:color-mix(in srgb,var(--good) 8%,var(--bg-elev));}
   .bond-dot{width:8px;height:8px;border-radius:50%;background:var(--ink-dim);flex:none;}
   .bond-row.active .bond-dot{background:var(--good);}
-  .bond-main{flex:1;min-width:0;}
+  .bond-main{flex:1;min-width:0;overflow-wrap:break-word;}
   .bond-name{font-size:.7rem;font-weight:800;}
   .bond-req{font-size:.61rem;color:var(--ink-dim);margin-top:1px;}
-  .bond-effect{font-size:.63rem;font-weight:700;text-align:right;max-width:42%;color:var(--ink-dim);}
+  .bond-effect{min-width:0;overflow-wrap:break-word;font-size:.63rem;font-weight:700;text-align:right;max-width:42%;color:var(--ink-dim);}
   .bond-row.active .bond-effect{color:var(--good);}
   .bond-summary{font-size:.66rem;color:var(--ink-dim);text-align:center;line-height:1.35;margin-top:8px;min-height:1em;}
   .hero-ability strong{color:var(--ink);}
@@ -1711,7 +1711,8 @@
   .formation-preset-title{font-size:.82rem;font-weight:800;}
   .formation-preset-state{font-size:11px;color:var(--ink-dim);font-weight:700;}
   .formation-preset-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;}
-  .formation-preset-slot{display:grid;grid-template-rows:minmax(52px,auto) 44px;gap:4px;}
+  .formation-preset-slot{display:grid;grid-template-rows:minmax(52px,auto);gap:4px;}
+  .formation-autosave-note{font-size:12px;line-height:1.5;color:var(--ink-dim);margin-top:8px;}
   .formation-preset-btn,.formation-save-btn,.auto-empower-all{border:1px solid var(--line);border-radius:10px;background:var(--bg-elev);color:var(--ink);font:700 12px 'Manrope',sans-serif;min-width:0;}
   .formation-preset-btn[aria-pressed="true"]{border-color:var(--lumen);background:color-mix(in srgb,var(--lumen) 12%,var(--bg-elev));}
   .formation-preset-btn span{display:block;font-size:10px;line-height:13px;color:var(--ink-dim);font-weight:500;overflow:hidden;text-overflow:ellipsis;}
@@ -1770,6 +1771,8 @@
   #rift-party{position:relative;display:flex;flex:none;justify-content:center;gap:6px;height:61px;z-index:4;pointer-events:none;}
   .rift-wisp{position:relative;width:calc((100% - 24px)/5);max-width:58px;min-width:0;height:61px;border:1px solid color-mix(in srgb,var(--wisp-color) 30%,#29334e);border-radius:11px;background:linear-gradient(155deg,#263049e0,#101a2eed);display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:27px 3px 13px 14px;gap:0;align-items:center;justify-items:center;padding:1px 3px;box-shadow:inset 0 1px 0 #ffffff0c,0 2px 9px #0004;}
   #rift-party .wisp-portrait{width:27px;height:27px;grid-column:1;grid-row:1;filter:drop-shadow(0 0 5px color-mix(in srgb,var(--wisp-color) 22%,transparent));}
+  .rift-wisp-bonds{position:absolute;top:1px;left:2px;display:flex;flex-direction:column;gap:0;pointer-events:none;}
+  .rift-wisp-bonds .rift-bond-mark{font-size:8px;line-height:8px;margin:0;}
   .rift-wisp-name{grid-column:1;grid-row:3;font-size:10px;line-height:13px;color:#c7cbe0;text-align:center;white-space:nowrap;}
   .rift-wisp-power{grid-column:1;grid-row:4;font:10px/14px 'IBM Plex Mono',monospace;color:#f0effb;text-align:center;}
   .rift-wisp-state{position:absolute;top:2px;right:2px;padding:0 2px;border-radius:3px;background:#0b132ade;font:10px/12px 'IBM Plex Mono',monospace;color:#c4cfe4;text-align:center;}
@@ -1786,9 +1789,9 @@
   .rift-bond-mark{color:var(--bond-color);font-size:9px;line-height:12px;margin-right:2px;}
   .rift-wisp[data-bond] .rift-charge>span{background:var(--bond-color);box-shadow:0 0 8px var(--bond-color);}
   .rift-wisp[data-bond].is-casting{box-shadow:inset 0 2px var(--bond-color),0 0 14px #ffffff70;}
-  #rift-bond-effects{position:relative;z-index:2;display:flex;gap:4px;flex:none;min-height:0;}
+  #rift-bond-effects{position:relative;z-index:2;display:flex;gap:4px;flex:none;min-height:0;flex-wrap:wrap;}
   #rift-bond-effects[hidden]{display:none;}
-  .rift-bond-effect{flex:1;min-width:0;padding:2px 5px;border:0;border-left:2px solid var(--bond-color);border-radius:3px;background:color-mix(in srgb,var(--bond-color) 7%,transparent);font-size:10px;line-height:12px;color:#d2d1e4;}
+  .rift-bond-effect{flex:1 1 42%;min-width:0;padding:2px 5px;border:0;border-left:2px solid var(--bond-color);border-radius:3px;background:color-mix(in srgb,var(--bond-color) 7%,transparent);font-size:10px;line-height:12px;color:#d2d1e4;}
   .stage .enemy-stage::after{background:conic-gradient(from 0deg,transparent 0 15%,#b9b6ff33 16% 17%,transparent 18% 48%,#b9b6ff33 49% 50%,transparent 51% 82%,#b9b6ff33 83% 84%,transparent 85%);animation:riftOrbit 32s linear infinite;width:min(200px,65cqh,65cqw);height:min(200px,65cqh,65cqw);max-width:none;max-height:none;}
   .vfx-ability{background:repeating-conic-gradient(var(--vfx-color) 0deg 5deg,transparent 6deg 45deg);}
   @media(prefers-reduced-motion:reduce){.stage .enemy-stage::after{animation:none!important;}.rift-charge>span{transition:none;}}
@@ -2851,10 +2854,14 @@ var ABILITY_DESC = {
 };
 
 var FORMATION_BONDS = [
-  {id:'starcaller', name:'Starcaller Bond', ids:['ember','void'], effect:'+18% passive & ability damage', tag:'Push'},
-  {id:'dawnpriest', name:'Dawnpriest Bond', ids:['tide','aurora'], effect:'+25% Lumen, Shards & Motes', tag:'Farm'},
-  {id:'duskguard', name:'Duskguard Bond', ids:['stone','titan'], effect:'+35% passive & ability damage vs Bosses', tag:'Boss'},
-  {id:'pathfinder', name:'Pathfinder Bond', ids:['gale','thorn'], effect:'+20% passive & ability damage vs non-Bosses', tag:'Push / Farm'}
+  {id:'starcaller', name:'Starcaller Bond', ids:['ember','void'], effect:'+18% passive & ability damage', riftEffect:'Passive/ability +18%', tag:'Push'},
+  {id:'dawnpriest', name:'Dawnpriest Bond', ids:['tide','aurora'], effect:'+25% Lumen, Shards & Motes', riftEffect:'Lumen/Shards/Motes +25%', tag:'Farm'},
+  {id:'duskguard', name:'Duskguard Bond', ids:['stone','titan'], effect:'+35% passive & ability damage vs Bosses', riftEffect:'Boss Wisps +35%', tag:'Boss'},
+  {id:'pathfinder', name:'Pathfinder Bond', ids:['gale','thorn'], effect:'+20% passive & ability damage vs non-Bosses', riftEffect:'Non-Boss Wisps +20%', tag:'Push / Farm'},
+  {id:'kindling', name:'Kindling Bond', ids:['ember','tide'], effect:'+25% Guardian Tap damage', riftEffect:'Tap +25%', tag:'Push'},
+  {id:'vanguard', name:'Vanguard Bond', ids:['ember','stone'], effect:'20% less Boss regeneration', riftEffect:'Boss regen −20%', tag:'Boss'},
+  {id:'quarry', name:'Quarry Bond', ids:['stone','gale'], effect:'+20% Shards from Gale abilities', riftEffect:'Gale Shards +20%', tag:'Farm'},
+  {id:'harvest', name:'Harvest Bond', ids:['thorn','aurora'], effect:'+20% Lumen from Thorn abilities', riftEffect:'Thorn Lumen +20%', tag:'Farm'}
 ];
 function formationBondPartners(bond){
   return bond.ids.map(function(id){
@@ -2866,7 +2873,11 @@ var BOND_VISUALS = {
   starcaller:{color:'#c4adff',mark:'◆'},
   dawnpriest:{color:'#ffd079',mark:'●'},
   duskguard:{color:'#7edbed',mark:'■'},
-  pathfinder:{color:'#abe58d',mark:'▲'}
+  pathfinder:{color:'#abe58d',mark:'▲'},
+  kindling:{color:'#ffc29c',mark:'✦'},
+  vanguard:{color:'#d4c3a4',mark:'◇'},
+  quarry:{color:'#b3d6ff',mark:'□'},
+  harvest:{color:'#e2b5d5',mark:'○'}
 };
 var FORMATION_PRESET_IDS = ['push','farm','boss'];
 var FORMATION_PRESET_LABELS = {push:'Push',farm:'Farm',boss:'Boss'};
@@ -3152,7 +3163,7 @@ function freshState(){
     riftMode:'push', farmDepth:0, farmReturnDepth:0,
     enemyDepth:0, enemyHp:0, enemyMaxHp:0, enemyIsLuminous:false,
     spirits:spirits, heroRarity:heroRarity, heroResource:heroResource, wispModules:wispModules, wispUltimate:wispUltimate, empowerQueue:empowerQueue, activeParty:['ember'],
-    formationPresets:{push:['ember'],farm:['ember'],boss:['ember']}, activeFormationPreset:'push',
+    formationPresets:{push:['ember'],farm:['ember'],boss:['ember']}, activeFormationPreset:'push', formationAutosaveVersion:1,
     formationRebuild:null,
     nodes:nodes, research:research, researchQueue:researchQueue,
     longStudyLevels:longStudyLevels, activeStudies:[], studyQueue:studyQueue, studyUseMotes:studyUseMotes, studySpeedTargets:studySpeedTargets,
@@ -3408,9 +3419,9 @@ function reconcileFormationRebuild(snapshot){
   // Ember is startup support only. Remove it once an intended member can fight.
   // This projection never recruits or raises a level, including on save loading.
   if(powered.length) snapshot.activeParty = powered;
-  else if((snapshot.spirits.ember||0)>0) snapshot.activeParty = ['ember'];
+  else if((snapshot.spirits.ember||0)>0 && !(snapshot.formationAutosaveVersion===1 && snapshot.activeParty.length===0)) snapshot.activeParty = ['ember'];
   else snapshot.activeParty = [];
-  snapshot.activeFormationPreset = '';
+  snapshot.activeFormationPreset = snapshot.formationAutosaveVersion===1 ? intent.preset : '';
   if(powered.length===intent.members.length){
     if(intent.preset && snapshot.formationPresets[intent.preset].join(',')===intent.members.join(',')){
       snapshot.activeFormationPreset = intent.preset;
@@ -3480,7 +3491,9 @@ function normalizeCurrentSave(input){
     seenParty[id] = true;
     return true;
   }).slice(0,5);
-  if(!out.activeParty.length){
+  var explicitEmptyParty = source.formationAutosaveVersion===1 && Array.isArray(source.activeParty) && source.activeParty.length===0;
+  out.formationAutosaveVersion = 1;
+  if(!out.activeParty.length && !explicitEmptyParty){
     out.spirits.ember = Math.max(1,out.spirits.ember||0);
     out.activeParty = ['ember'];
   }
@@ -3496,17 +3509,18 @@ function normalizeCurrentSave(input){
       seen[id]=true;
       return true;
     }).slice(0,5);
-    out.formationPresets[name] = normalized.length ? normalized : out.activeParty.slice();
+    out.formationPresets[name] = normalized.length || raw.length===0 ? normalized : out.activeParty.slice();
   });
   var requestedPreset = FORMATION_PRESET_IDS.indexOf(source.activeFormationPreset)!==-1
     ? source.activeFormationPreset
     : (sourcePresets ? '' : 'push');
   out.activeFormationPreset = requestedPreset &&
-    out.activeParty.join(',')===out.formationPresets[requestedPreset].join(',') ? requestedPreset : '';
+    (out.activeParty.join(',')===out.formationPresets[requestedPreset].join(',') ||
+      (source.formationAutosaveVersion===1 && isPlainObject(source.formationRebuild) && source.formationRebuild.preset===requestedPreset)) ? requestedPreset : '';
 
   out.formationRebuild = normalizeFormationRebuild(source.formationRebuild,out);
   reconcileFormationRebuild(out);
-  if(!out.activeParty.length){
+  if(!out.activeParty.length && !explicitEmptyParty){
     // Intent can invalidate an otherwise powered but unrelated party. Apply the
     // existing empty-party recovery now, then project again (Ember may be intended).
     out.spirits.ember = Math.max(1,out.spirits.ember||0);
@@ -3908,7 +3922,7 @@ function bossTraitFor(depth){
 }
 function bossRegenRate(depth){
   var trait = bossTraitFor(depth);
-  return trait ? trait.regen : 0;
+  return trait ? trait.regen * (bondActive('vanguard') ? 0.8 : 1) : 0;
 }
 function bossAbilityDamageMult(depth){
   var trait = bossTraitFor(depth);
@@ -4106,9 +4120,9 @@ function formationRewardMult(){
   return bondActive('dawnpriest') ? 1.25 : 1;
 }
 function currentFormationFocus(){
-  if(state.riftMode==='farm') return {label:'Farm', bonds:['dawnpriest','pathfinder']};
-  if(isBoss(state.depth)) return {label:'Boss', bonds:['starcaller','duskguard']};
-  return {label:'Push', bonds:['starcaller','pathfinder']};
+  if(state.riftMode==='farm') return {label:'Farm', bonds:['dawnpriest','pathfinder','quarry','harvest']};
+  if(isBoss(state.depth)) return {label:'Boss', bonds:['starcaller','duskguard','vanguard']};
+  return {label:'Push', bonds:['starcaller','pathfinder','kindling']};
 }
 function formationRecommendationText(){
   var focus = currentFormationFocus();
@@ -4137,14 +4151,14 @@ function formationRecommendationText(){
  * do not modify ability hits.
  *
  * Ability Rewards = Wisp Power × reward coefficient × that Ranged/Druid Module
- * × Ultimate × Dawnpriest reward multiplier. Kill-only Lumen/Shard multipliers
+ * × Ultimate × Dawnpriest reward multiplier × Quarry/Harvest when applicable. Kill-only Lumen/Shard multipliers
  * do not modify ability-generated resources.
  *
  * Support Buff = fixed by the Support ability: +25% for 4s, or +50% for 8s
  * with its Ultimate. Wisp Power, Rarity and Modules do not change this buff.
  *
  * Guardian Tap = (5 + 2% of general Active-party passive power) × Tap-specific
- * upgrades × active Support buff × bossTapDamageMult(). Auto-Tap uses the exact
+ * upgrades × active Support buff × bossTapDamageMult() × Kindling. Auto-Tap uses the exact
  * same hit formula. Context-only Duskguard/Pathfinder damage Bonds do not
  * directly multiply Guardian Tap.
  */
@@ -4220,7 +4234,7 @@ function guardianTapBaseDamage(){
   return 5 + effectivePartyPower()*0.02;
 }
 function guardianTapDamageAt(depth, partyBuffMult){
-  return guardianTapBaseDamage() * tapMult() * (partyBuffMult||1) * bossTapDamageMult(depth);
+  return guardianTapBaseDamage() * tapMult() * (partyBuffMult||1) * bossTapDamageMult(depth) * (bondActive('kindling') ? 1.25 : 1);
 }
 function tapDamage(){
   return guardianTapDamageAt(state.depth, simulationBuffMult(Date.now()));
@@ -4277,8 +4291,8 @@ function abilityRewardRaw(sp,level,conductionLevel){
   var power = wispPower(sp,level);
   var mult = moduleMult(sp.id) * abilityUltimateMult(sp) * formationRewardMult() * researchFactor('conduction',conductionLevel);
   return {
-    lumen:sp.abilityType==='druid' ? power*0.10*mult : 0,
-    shards:sp.abilityType==='ranged' ? power*0.05*mult : 0
+    lumen:sp.abilityType==='druid' ? power*0.10*mult*(bondActive('harvest')?1.20:1) : 0,
+    shards:sp.abilityType==='ranged' ? power*0.05*mult*(bondActive('quarry')?1.20:1) : 0
   };
 }
 function abilityRewardPerCast(sp,level,conductionLevel){
@@ -4787,17 +4801,17 @@ function buyRarity(sp){
 }
 
 function toggleActive(id){
+  if(!SPIRITS.some(function(sp){return sp.id===id;})) return;
   var idx = state.activeParty.indexOf(id);
   if(idx!==-1){
-    if(state.activeParty.length<=1){ showToast('You need at least one Active Wisp.'); return; }
     state.activeParty.splice(idx,1);
   } else {
     if(state.spirits[id]<=0) return;
-    if(state.activeParty.length>=5){ showToast('Bench a Wisp first — max 5 Active.'); return; }
+    var desired = state.formationRebuild ? state.formationRebuild.members : state.activeParty;
+    if(desired.length>=5 && desired.indexOf(id)===-1){ showToast('Choose another formation or recruit and Bench a selected Wisp first — max 5 slots, including Pending.'); return; }
     state.activeParty.push(id);
   }
-  state.formationRebuild = null;
-  state.activeFormationPreset = '';
+  autosaveCurrentFormation(id);
   validateCometTrialParty(state);
   saveState();
   renderSpirits();
@@ -4814,32 +4828,36 @@ function formationPresetUnavailable(name){
   return formationPresetMembers(name).filter(function(id){return (state.spirits[id]||0)<=0;});
 }
 function formationPresetIsActive(name){
-  return state.activeFormationPreset===name && state.activeParty.join(',')===formationPresetMembers(name).join(',');
+  return state.activeFormationPreset===name;
+}
+function autosaveCurrentFormation(explicitMember){
+  var intent=state.formationRebuild;
+  var name=state.activeFormationPreset || (intent && intent.preset) || 'push';
+  var pending=intent ? intent.members.filter(function(id){return (state.spirits[id]||0)<=0;}) : [];
+  var members=state.activeParty.filter(function(id){
+    return !(intent && pending.length && id==='ember' && id!==explicitMember && intent.members.indexOf(id)===-1);
+  });
+  pending.forEach(function(id){if(members.indexOf(id)===-1) members.push(id);});
+  state.formationPresets[name]=members.slice(0,5);
+  state.activeFormationPreset=name;
+  state.formationAutosaveVersion=1;
+  state.formationRebuild=pending.length ? {members:state.formationPresets[name].slice(),preset:name} : null;
+  reconcileFormationRebuild(state);
 }
 function applyFormationPreset(name){
   if(FORMATION_PRESET_IDS.indexOf(name)===-1) return false;
   var members = formationPresetMembers(name);
   var unavailable = formationPresetUnavailable(name);
-  if(!members.length || unavailable.length){
-    if(unavailable.length){
-      var missing = unavailable.map(function(id){
-        var sp=SPIRITS.find(function(item){return item.id===id;});
-        return sp ? sp.shortName : id;
-      });
-      showToast('Recruit '+missing.join(', ')+' before using this formation.');
-    } else {
-      showToast('Save at least one Active Wisp to this formation.');
-    }
-    return false;
-  }
-  state.formationRebuild = null;
-  state.activeParty = members.slice();
+  state.formationRebuild = unavailable.length ? {members:members.slice(),preset:name} : null;
+  state.activeParty = members.filter(function(id){return (state.spirits[id]||0)>0;});
   state.activeFormationPreset = name;
+  state.formationAutosaveVersion = 1;
+  reconcileFormationRebuild(state);
   validateCometTrialParty(state);
   saveState();
   renderSpirits();
   updateBattleFast();
-  showToast(FORMATION_PRESET_LABELS[name]+' formation active.');
+  showToast(FORMATION_PRESET_LABELS[name]+(unavailable.length?' formation selected — recruit pending Wisps.':' formation active. Changes save automatically.'));
   return true;
 }
 function saveFormationPreset(name){
@@ -5859,7 +5877,7 @@ function renderBondSummary(){
   var effects=els['rift-bond-effects'];
   var html=active.map(function(b){
     var visual=BOND_VISUALS[b.id];
-    return '<div class="rift-bond-effect" data-bond-effect="'+b.id+'" style="--bond-color:'+visual.color+'" aria-label="'+b.name+': '+b.effect+'"><span class="rift-bond-mark" aria-hidden="true">'+visual.mark+'</span><span class="rift-bond-copy">'+b.effect+'</span></div>';
+    return '<div class="rift-bond-effect" data-bond-effect="'+b.id+'" style="--bond-color:'+visual.color+'" aria-label="'+b.name+': '+b.effect+'"><span class="rift-bond-mark" aria-hidden="true">'+visual.mark+'</span><span class="rift-bond-copy">'+(b.riftEffect||b.effect)+'</span></div>';
   }).join('');
   if(effects.innerHTML!==html) effects.innerHTML=html;
   effects.hidden=!active.length;
@@ -5868,10 +5886,12 @@ function renderBondSummary(){
 // The DOM is retained between ticks; these observers never mutate save state.
 function renderRiftParty(){
   var root=els['rift-party'];
-  var bonds=activeFormationBonds(),byId={},ordered=[];
-  // Group each powered Bond visually without changing simulation/save order.
+  var bonds=activeFormationBonds(),byId={},memberships={},ordered=[];
+  // Disjoint primary pairs can sit together. Overlapping Bonds retain their
+  // own marks on both partners without duplicating a Wisp's combat card.
   bonds.forEach(function(bond){
-    state.activeParty.filter(function(id){return bond.ids.indexOf(id)!==-1;}).forEach(function(id){byId[id]=bond;ordered.push(id);});
+    bond.ids.forEach(function(id){if(!memberships[id])memberships[id]=[];memberships[id].push(bond);});
+    if(bond.ids.every(function(id){return !byId[id];})) bond.ids.forEach(function(id){byId[id]=bond;ordered.push(id);});
   });
   state.activeParty.forEach(function(id){if(!byId[id])ordered.push(id);});
   var key=state.activeParty.join(',')+'|'+bonds.map(function(b){return b.id;}).join(',');
@@ -5880,9 +5900,10 @@ function renderRiftParty(){
     root.innerHTML=ordered.map(function(id,index){
       var sp=SPIRITS.find(function(x){return x.id===id;}),bond=byId[id],visual=bond&&BOND_VISUALS[bond.id];
       var position=bond ? (byId[ordered[index+1]]===bond?' bond-start':' bond-end') : '';
-      var marker=visual ? '<span class="rift-bond-mark" aria-hidden="true">'+visual.mark+'</span>' : '';
-      return '<div class="rift-wisp'+position+'" data-rift-wisp="'+id+'"'+(bond?' data-bond="'+bond.id+'"':'')+' role="group" aria-label="'+sp.name+(bond?' — '+bond.name:'')+'" style="--wisp-color:'+sp.color+(visual?';--bond-color:'+visual.color:'')+'">'+wispPortrait(sp)+
-        '<span class="rift-wisp-name">'+marker+sp.shortName+'</span><span class="rift-wisp-state"></span><span class="rift-wisp-power" title="Passive Wisp power"></span>'+
+      var all=memberships[id]||[];
+      var marker=all.length ? '<span class="rift-wisp-bonds">'+all.map(function(item){var v=BOND_VISUALS[item.id];return '<span class="rift-bond-mark" data-wisp-bond="'+item.id+'" style="--bond-color:'+v.color+'" aria-hidden="true">'+v.mark+'</span>';}).join('')+'</span>' : '';
+      return '<div class="rift-wisp'+position+'" data-rift-wisp="'+id+'"'+(bond?' data-bond="'+bond.id+'"':'')+' role="group" aria-label="'+sp.name+(all.length?' — '+all.map(function(item){return item.name;}).join(', '):'')+'" style="--wisp-color:'+sp.color+(visual?';--bond-color:'+visual.color:'')+'">'+wispPortrait(sp)+marker+
+        '<span class="rift-wisp-name">'+sp.shortName+'</span><span class="rift-wisp-state"></span><span class="rift-wisp-power" title="Passive Wisp power"></span>'+
         '<div class="rift-charge" role="progressbar" aria-label="'+sp.name+' — '+sp.abilityName+'" aria-valuemin="0" aria-valuemax="100"><span></span></div></div>';
     }).join('');
   }
@@ -5927,11 +5948,10 @@ function renderFormationPresets(){
     var active=formationPresetIsActive(name);
     var detail=unavailable.length ? 'Needs '+unavailable.length+' Wisp'+(unavailable.length===1?'':'s') : members.length+'/5 Wisps';
     html += '<div class="formation-preset-slot">' +
-      '<button class="formation-preset-btn'+(active?' active':'')+'" data-formation-preset="'+name+'" aria-pressed="'+active+'" '+(unavailable.length||!members.length?'disabled':'')+'>'+FORMATION_PRESET_LABELS[name]+'<span>'+(active?'Active · ':'')+detail+'</span></button>' +
-      '<button class="formation-save-btn" data-save-formation="'+name+'" aria-label="Save current formation as '+FORMATION_PRESET_LABELS[name]+'">Save '+FORMATION_PRESET_LABELS[name]+'</button>' +
+      '<button class="formation-preset-btn'+(active?' active':'')+'" data-formation-preset="'+name+'" aria-pressed="'+active+'">'+FORMATION_PRESET_LABELS[name]+'<span>'+(active?'Selected · ':'')+detail+'</span></button>' +
     '</div>';
   });
-  html += '</div>';
+  html += '</div><div class="formation-autosave-note">Field and Bench changes save immediately to the selected formation. Each preset keeps its own lineup.</div>';
   if(state.achieved.labmaster){
     var global=autoEmpowerAllState();
     var pressed=global.value==='mixed' ? 'mixed' : String(global.value==='on');
@@ -5941,9 +5961,6 @@ function renderFormationPresets(){
   replaceControlMarkup(root,html);
   root.querySelectorAll('[data-formation-preset]').forEach(function(btn){
     btn.addEventListener('click',function(){applyFormationPreset(btn.getAttribute('data-formation-preset'));});
-  });
-  root.querySelectorAll('[data-save-formation]').forEach(function(btn){
-    btn.addEventListener('click',function(){saveFormationPreset(btn.getAttribute('data-save-formation'));});
   });
   var all=root.querySelector('[data-empower-all]');
   if(all) all.addEventListener('click',function(){setAutoEmpowerAll(autoEmpowerAllState().value!=='on');});
@@ -7677,9 +7694,11 @@ function advanceAuthoritativeTime(elapsedSec,options){
   var firstFarmGridSec = startPhaseSec===0 ? 1 : 1-startPhaseSec;
   var farmGridRemainingSec = firstFarmGridSec;
   var farmGridCrossings = 0;
-  var targetGridPositionSec = startPhaseSec+elapsedSec;
-  var targetFarmGridCrossings = Math.floor(targetGridPositionSec);
-  var targetGridPhaseSec = targetGridPositionSec-targetFarmGridCrossings;
+  // Separate fraction from whole seconds so split windows retain the same phase.
+  var targetGridPhaseSec = startPhaseSec+targetFractionSec;
+  var targetGridCarry = Math.floor(targetGridPhaseSec);
+  var targetFarmGridCrossings = targetWholeSec+targetGridCarry;
+  targetGridPhaseSec -= targetGridCarry;
   var targetFarmGridRemainingSec = targetGridPhaseSec===0 ? 1 : 1-targetGridPhaseSec;
 
   function advanceFarmGridClock(stepSec){
@@ -7863,8 +7882,8 @@ function advanceAuthoritativeTime(elapsedSec,options){
 
     var killsBefore = summary.kills;
     var ascendsBeforeAdvance = summary.ascends;
-    var elapsedWholeBefore = elapsedWholeSec;
-    var elapsedFractionBefore = elapsedFractionSec;
+    var gridCrossingsBefore = farmGridCrossings;
+    var gridRemainingBefore = farmGridRemainingSec;
     // Sub-nanosecond elapsed time can still carry material damage at mature
     // power. Never discard it merely because it is below a generic time
     // epsilon; only treat the simulator as stalled if floating-point
@@ -7947,7 +7966,8 @@ function advanceAuthoritativeTime(elapsedSec,options){
       });
     }
 
-    if(remaining>0 && elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && actions===0){
+    // A real grid crossing can round to an unchanged derived elapsed value.
+    if(remaining>0 && farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore && actions===0){
       throw new Error('Authoritative simulation stalled without elapsed-time or state progress | '+JSON.stringify({
         elapsedInRun:elapsedInRun,
         elapsedWholeSec:elapsedWholeSec,

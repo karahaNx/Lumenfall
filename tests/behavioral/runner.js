@@ -483,6 +483,7 @@
     if(!bridge || !bridge.getState){ finish('fail','test bridge unavailable'); return; }
     try{
       if(ctx.scenario==='offline-catchup-ui' || ctx.scenario==='offline-catchup-legacy-dom'){window.__offlineCatchupReady=true;return;}
+      if(ctx.scenario==='formation-bonds-mobile'){window.__bondsNativeReady=true;return;}
       await waitForCatchup();
       var s = state();
       if(ctx.scenario==='layout-p2-07a-reconstruction'){
@@ -1608,7 +1609,7 @@
           );
           parityApprox(
             thornReward.abilityReward.lumen,
-            Math.round(thornReward.wispPower*0.10*1.5*1.25),
+            Math.round(thornReward.wispPower*0.10*1.5*1.25*1.20),
             'Thorn Module/Dawnpriest Lumen ability reward'
           );
 
@@ -1628,7 +1629,7 @@
           );
           parityApprox(
             rewardUltThorn.abilityReward.lumen,
-            Math.round(rewardUltThorn.wispPower*0.10*1.5*2*1.25),
+            Math.round(rewardUltThorn.wispPower*0.10*1.5*2*1.25*1.20),
             'Thorn Ultimate must double Lumen ability output'
           );
 
@@ -1834,18 +1835,18 @@
           var pushState=cleanFormulaState(presetState.formationPresets.push);
           var pushSnapshot=formulaSnapshotFor(pushState,'ember',19,1);
           parityApprox(pushSnapshot.formationDamageMult,1.18*1.20,'Push Formation must retain Starcaller + Pathfinder damage');
-          assert(bridge.activeBondIds().sort().join(',')==='pathfinder,starcaller','Push Formation Bonds must remain unchanged');
+          assert(bridge.activeBondIds().sort().join(',')==='kindling,pathfinder,starcaller','Push Formation retains damage Bonds and adds Kindling');
 
           var farmState=cleanFormulaState(presetState.formationPresets.farm);
           var farmSnapshot=formulaSnapshotFor(farmState,'gale',19,1);
           parityApprox(farmSnapshot.formationDamageMult,1.20,'Farm Formation must retain Pathfinder non-Boss damage');
           parityApprox(farmSnapshot.formationRewardMult,1.25,'Farm Formation must retain Dawnpriest reward bonus');
-          assert(bridge.activeBondIds().sort().join(',')==='dawnpriest,pathfinder','Farm Formation Bonds must remain unchanged');
+          assert(bridge.activeBondIds().sort().join(',')==='dawnpriest,harvest,kindling,pathfinder','Farm retains damage/reward Bonds and adds Harvest/Kindling');
 
           var bossState=cleanFormulaState(presetState.formationPresets.boss);
           var bossSnapshot=formulaSnapshotFor(bossState,'stone',20,1);
           parityApprox(bossSnapshot.formationDamageMult,1.18*1.35,'Boss Formation must retain Starcaller + Duskguard damage');
-          assert(bridge.activeBondIds().sort().join(',')==='duskguard,starcaller','Boss Formation Bonds must remain unchanged');
+          assert(bridge.activeBondIds().sort().join(',')==='duskguard,kindling,starcaller,vanguard','Boss retains damage Bonds and adds Kindling/Vanguard');
 
           var liveBreaker=cloneJson(breakerBase);
           liveBreaker.depth=19;liveBreaker.enemyDepth=19;liveBreaker.enemyMaxHp=1e9;liveBreaker.enemyHp=1e9;
@@ -2017,18 +2018,23 @@
           farmPreset.click();
           var afterFarm=state();
           assert(afterFarm.activeParty.join(',')===qol.formationPresets.farm.join(','),'Farm preset must apply the exact saved Wisp Formation');
-          assert(bridge.activeBondIds().sort().join(',')==='dawnpriest,pathfinder','Farm preset must recalculate the intended Formation Bonds');
+          assert(bridge.activeBondIds().sort().join(',')==='dawnpriest,harvest,kindling,pathfinder','Farm preset must recalculate all intended Formation Bonds');
           assert(document.querySelector('[data-formation-preset="farm"]').getAttribute('aria-pressed')==='true','active Formation preset must be visibly and semantically selected');
           assert(document.activeElement===document.querySelector('[data-formation-preset="farm"]'),'Formation quick-switch must preserve keyboard focus after rendering');
 
           var custom=cloneJson(state());
           custom.activeParty=['ember','tide','stone'];
-          custom.activeFormationPreset='';
+          custom.formationPresets.boss=custom.activeParty.slice();
+          custom.activeFormationPreset='boss';
           bridge.setState(custom);
           bridge.renderLayout();
-          document.querySelector('[data-save-formation="boss"]').click();
-          assert(state().formationPresets.boss.join(',')==='ember,tide,stone','Save Boss must store the player-selected current Formation');
-          assert(state().activeFormationPreset==='boss','saving a preset must make that exact Formation active');
+          document.querySelector('[data-toggle="stone"]').click();
+          assert(state().formationPresets.boss.join(',')==='ember,tide','Bench autosaves the selected Boss Formation');
+          document.querySelector('[data-toggle="stone"]').click();
+          assert(state().formationPresets.boss.join(',')==='ember,tide,stone','Field autosaves the selected Boss Formation');
+          assert(state().activeFormationPreset==='boss','autosave retains selected identity');
+          assert(!document.querySelector('[data-save-formation]'),'Formation requires no manual Save control');
+          assert(state().formationPresets.farm.join(',')===qol.formationPresets.farm.join(','),'Boss autosave leaves Farm untouched');
           bridge.save();
           var persisted=JSON.parse(bridge.rawSave());
           var roundTrip=bridge.setState(persisted);
@@ -2041,9 +2047,9 @@
           invalid.formationPresets.push=['deleted-wisp','ember','ember','aurora'];
           var normalized=bridge.setState(invalid);
           assert(normalized.formationPresets.push.join(',')==='ember,aurora','unknown and duplicate preset references must normalize safely while a known unavailable Wisp remains saved');
-          var beforeInvalidParty=normalized.activeParty.join(',');
-          assert(bridge.applyFormationPreset('push')===false,'a preset containing an unavailable Wisp must fail safely');
-          assert(state().activeParty.join(',')===beforeInvalidParty,'failed preset activation must not partially mutate the current Formation');
+          assert(bridge.applyFormationPreset('push')===true,'a known preset can retain unavailable recruitment intent');
+          assert(state().activeParty.join(',')==='ember' && state().spirits.aurora===0,'only its already purchased member enters combat');
+          assert(state().formationRebuild.members.join(',')==='ember,aurora' && state().activeFormationPreset==='push','pending intent and selected preset persist');
 
           bridge.setState(qol);
           bridge.renderLayout();

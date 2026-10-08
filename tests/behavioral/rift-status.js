@@ -162,7 +162,8 @@ window.runRiftStatusQa=async function(b,ctx,assert){
         ok(status&&status.textContent===(!powered?'Lv 0':''),'powered Rift cards do not repeat ability status as visible text');
         ok(!card.querySelector('.rift-wisp-time')&&!/\b\d+(?:\.\d+)?\s*(?:s|sec|seconds)\b/i.test(card.textContent),'Rift card has no visible ability countdown');
       });
-      var active=b.riftStatus.active();same([...document.querySelectorAll('[data-bond-effect]')].map(x=>x.querySelector('.rift-bond-copy').textContent),active.map(x=>x.effect),'Rift shows exact complete active Bond effects');
+      var active=b.riftStatus.active();same([...document.querySelectorAll('[data-bond-effect]')].map(x=>x.querySelector('.rift-bond-copy').textContent),active.map(x=>x.riftEffect||x.effect),'Rift shows exact compact active Bond effects');
+      active.forEach(x=>ok(q('[data-bond-effect="'+x.id+'"]').getAttribute('aria-label')===x.name+': '+x.effect,'full effect remains accessible'));
       ok(q('#rift-bond-effects').hidden===!active.length,'no stale effects when no Bond is active');
     }
     // Deliberately interleave both pairs with the fifth Wisp in the middle.
@@ -174,9 +175,10 @@ window.runRiftStatusQa=async function(b,ctx,assert){
       var cards=[...document.querySelectorAll('[data-rift-wisp]')],active=b.riftStatus.active(),colors=[],marks=[];
       active.forEach(bond=>{
         var pair=cards.filter(x=>bond.ids.includes(x.dataset.riftWisp)),effect=q('[data-bond-effect="'+bond.id+'"]');
-        ok(pair.length===2&&Math.abs(cards.indexOf(pair[0])-cards.indexOf(pair[1]))===1,'Bond partners are adjacent even when save order is interleaved');
+        ok(pair.length===2,'each overlapping Bond has exactly two distinct partner cards');
+        if(pair.every(card=>card.dataset.bond===bond.id))ok(Math.abs(cards.indexOf(pair[0])-cards.indexOf(pair[1]))===1,'primary Bond partners remain adjacent');
         var color=effect.style.getPropertyValue('--bond-color'),mark=effect.querySelector('.rift-bond-mark').textContent;
-        pair.forEach(card=>ok(card.dataset.bond===bond.id&&card.style.getPropertyValue('--bond-color')===color&&card.querySelector('.rift-bond-mark').textContent===mark&&card.getAttribute('aria-label').includes(bond.name),'paired Wisps match bonus color, shape and accessible Bond name'));
+        pair.forEach(card=>{var own=card.querySelector('[data-wisp-bond="'+bond.id+'"]');ok(own&&own.style.getPropertyValue('--bond-color')===color&&own.textContent===mark&&card.getAttribute('aria-label').includes(bond.name),'all overlapping partners match bonus color, shape and accessible name');});
         colors.push(color);marks.push(mark);seenVisuals[bond.id]={color,mark};
       });
       ok(new Set(colors).size===active.length&&new Set(marks).size===active.length,'simultaneous Bonds have distinct colors and shapes');
@@ -185,7 +187,8 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     }
     bondPresentation();s.spirits.void=0;installBond();bondPresentation();s.spirits.void=2;installBond();bondPresentation();
     s.activeParty=['stone','gale','ember','titan','thorn'];s.activeParty.forEach(id=>s.spirits[id]=1);installBond();partyCheck();bondPresentation();
-    ok(Object.keys(seenVisuals).length===4&&new Set(Object.values(seenVisuals).map(x=>x.color)).size===4&&new Set(Object.values(seenVisuals).map(x=>x.mark)).size===4,'all four Bonds keep their own unique color and shape');
+    b.riftStatus.bonds().forEach(bond=>{s.activeParty=bond.ids.slice();s.activeParty.forEach(id=>s.spirits[id]=1);installBond();bondPresentation();});
+    ok(Object.keys(seenVisuals).length===8&&new Set(Object.values(seenVisuals).map(x=>x.color)).size===8&&new Set(Object.values(seenVisuals).map(x=>x.mark)).size===8,'all eight Bonds keep unique color and shape');
     s.activeParty=worst.ids;s.activeParty.forEach(id=>s.spirits[id]=2);install(s);
     partyCheck();s.research.charge=10;install(s);partyCheck();
     var powerId=s.activeParty[0],beforePower=q('[data-rift-wisp="'+powerId+'"] .rift-wisp-power').textContent;
