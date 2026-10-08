@@ -36,8 +36,9 @@ async function run(){
     session=(await send('Target.attachToTarget',{targetId:tab.targetId,flatten:true},null)).sessionId;
     await send('Emulation.setDeviceMetricsOverride',{width,height:844,deviceScaleFactor:1,mobile:true});await send('Emulation.setTouchEmulationEnabled',{enabled:true});
     await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:motion}]});await send('Page.enable');await send('Page.navigate',{url});
-    for(let i=0;i<150&&!await evaluate('!!window.__qaForgeStartup');i++)await new Promise(resolve=>setTimeout(resolve,20));
-    assert(await evaluate('!!window.__qaForgeStartup'),'game bridge ready');await evaluate('window.__qaForgeStartup.promise');await evaluate('document.fonts.ready.then(()=>true)');
+    for(let i=0;i<300&&!await evaluate('!!window.__cometNativeReady');i++)await new Promise(resolve=>setTimeout(resolve,20));
+    assert(await evaluate('!!window.__cometNativeReady'),'native Comet dispatcher ready');await evaluate('window.__qaForgeStartup.promise');await evaluate('document.fonts.ready.then(()=>true)');
+    assert(await evaluate('!document.querySelector("#qa-result[data-status=fail]")'),'no generic harness failure');
     await evaluate(`(()=>{const b=window.__lumenfallQaBridge;b.uiMeasurementPause(true);b.resetFeedback();const s=b.getState();s.maxDepthEver=101;s.depth=16;s.comets=1000;s.autoAscendEnabled=false;s.owned={autoascend:true,comettrials:true,rifttrail:true,starfallcrest:true};s.cometTrial=null;s.cometTrialMarks={};s.cometCosmetics={trail:false,crest:false};b.setState(s);b.comet.render();b.comet.tab('deeds');})()`);
     await new Promise(resolve=>setTimeout(resolve,550));
     if(textScale===2)await evaluate(`(()=>{const selectors=['#shop-list','#theme-list','#shop-list .name','#shop-list .desc','#shop-list .comet-trial-status','#shop-list label','#shop-list button','#shop-list select','#shop-list input','#theme-list .name','#theme-list .desc','#theme-list button'];const rules=selectors.map(selector=>{const el=document.querySelector(selector);return el?selector+'{font-size:'+(parseFloat(getComputedStyle(el).fontSize)*2)+'px!important;}':'';});const style=document.createElement('style');style.textContent=rules.join('');document.head.appendChild(style);})()`);

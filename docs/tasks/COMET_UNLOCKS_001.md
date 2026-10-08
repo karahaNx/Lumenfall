@@ -56,11 +56,12 @@ deterministic purchases and fixed Luminous rewards. Keep WebView 60, package
 - Quest Refresh requires Auto-Ascend plus Trials, retaining access for previous
   complete Rest Stop owners. Deterministic selection and >=max reward cost
   unchanged; cosmetics do not gate functional access.
-- Pending scope choice: include minimal F25/F26 transition now (built-in Forge
-  memory, fixed 12h including Lab, archived ownership and one-time catalog-value
-  refunds), or preserve old offline entitlements until that dependency lands.
-  No retirement/refund ships without this decision. Interim candidate archives
-  legacy ownership and retains its effects.
+- Current catalog scope preserves old offline entitlements until F25/F26 lands,
+  following the original requirement to keep this chat's goal separate. An async
+  question offers broadening to the minimal full transition (built-in memory,
+  fixed12h including Lab and catalog-value refunds); no answer has arrived.
+  Integration of the verified new catalog is authorized by the user's finish
+  request. Retirement/refunds remain excluded until explicitly resolved.
 
 ## Acceptance and evidence
 
@@ -89,6 +90,8 @@ Evidence: [11 focused cases](../qa/comet-unlocks-001/implementation-core.json),
 tooling required the allowed unsandboxed run for executable subprocess fixtures.
 APK verifier self-test passed. The long-offline result predates the PR59/60
 rebase; full CI must recheck the combined candidate.
+The [implementation evidence](../qa/comet-unlocks-001/IMPLEMENTATION.md) records
+12 supplementary mobile/text/motion profiles and their strict limitations.
 
 Changes: `index.html`, focused core/native UI checks and their registration,
 explicit additive-save assertions in the existing offline/endgame checks,

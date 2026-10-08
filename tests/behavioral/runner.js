@@ -495,6 +495,9 @@
         window.runRiftLayoutQa(bridge,ctx,assert).then(function(detail){ finish('pass',detail); },function(error){ finish('fail',error.message); });
         return;
       }
+      if(ctx.scenario==='comet-unlocks-mobile' || ctx.scenario==='comet-unlocks-reduced-motion'){
+        window.__cometNativeReady=true;return; // Native driver owns these scenarios.
+      }
       if(ctx.scenario==='auto-ascend-target-mobile' || ctx.scenario==='auto-ascend-target-reduced-motion'){
         window.__autoAscendTargetReady=true;return;
       }
