@@ -73,9 +73,12 @@ integrated reruns, APK and native acceptance remain pending.
 commands, results and limits. No independent/physical/TalkBack pass claimed.
 
 Publication: [PR81](https://github.com/karahaNx/Lumenfall/pull/81), head
-5ad8f3852abcc95096f8583e41e79cbfbf4c6d78 plus the label-fit correction checkpoint.
-Official API27 software emulator is booted; signed143 is installed. Native
-upgrade/acceptance is being prepared; no pass is claimed yet.
+dc0285fffba7bf2b04e9a852d9fc4359fdbb580f. CI37739007243 passed the corrected
+F07 matrix before newer-main synchronization cancelled the overall run.
+Required CI37741048919 is running. Current-main matrix/contract/V8/tooling PASS.
+Signed143 native baseline PASS on Android8.1/WebView69: cold-launch QA ownership,
+Wisp levels and hidden preference verified. Upgrade/feature acceptance pending.
+[Delivery checkpoint](../qa/rift-guidance-001/2026-10-08/delivery/README.md).
 
 Next: pass required CI and merge;
 rerun on integrated bytes, build/download/verify signed APK and available native
