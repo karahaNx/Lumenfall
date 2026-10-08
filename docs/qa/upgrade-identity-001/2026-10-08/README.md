@@ -48,6 +48,12 @@ Desktop Chromium and mocked engine probes do not establish those native results.
 
 ## Historical candidate evidence
 
+[First combined CI attempt](ci-37745345373-attempt1.txt.gz) failed only the existing
+Resonate driver: `Target.createBrowserContext` timed out before product loading.
+All other default scenarios passed. The same extracted APK Resonate check passed
+locally. The entire required job is rerun on unchanged product/test bytes; no gate
+or timeout was weakened. Its final head/run/outcome is recorded in the delivery PR.
+
 [261b candidate full suite](candidate-261b-suite.json) PASS160 defaults/186 runs;
 [raw log](candidate-261b-suite.txt.gz). [17 causal negatives](negative-controls.json),
 [raw negative logs](negative-controls.txt.gz). A fractional-only clock negative
