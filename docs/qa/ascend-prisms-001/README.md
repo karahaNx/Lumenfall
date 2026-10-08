@@ -86,7 +86,7 @@ single behavioral command, first stage current HTML/fonts/branding into
 The four bonus/payout/repeat mutations and restored old rounding rule are
 permanent negative scenarios named `self-test-ascend-prisms-{tree,lab,payout,repeat,rounding}`.
 They must fail their intended assertions, not time out or fail to start Chrome.
-The regular workflow's12 required harness controls also remain mandatory.
+All existing required harness controls also remain mandatory.
 The workflow now also runs the five F05 controls on every applicable PR.
 `validate.cjs` retains complete stdout, stderr, exit/status and hashes for each.
 
@@ -161,3 +161,25 @@ omitted hashes; result/step receipts remain. Latest rebase preserves PR84,
 Formation/Backup/Resonate and current19 CI negatives. Latest-main motor673/11,822
 passes; exact new source/layout/focused receipts follow in the PR checkpoint.
 The isolated API27 emulator now boots; native APK acceptance remains pending.
+
+## PR94 current-main checkpoint
+
+Combined baseline91decbc8e26744b21c26a21b20742be6ebca1d8e (PR85);
+PR head50df5cdf2ecc0a21165f251e242a31440501e6de. Exact product SHA256
+`895e699607de45d87afd292db825d6f82d5eef72895dc61dfa5e0874937eece5`.
+[Motor/layout/persistence matrix](combined-evidence/manifest.json):673cases/11,822
+assertions,695layout checks and all4 permanent scenarios PASS.
+[Current controls](combined-controls/manifest.json):all22 required negative
+controls and guarded smoke PASS (25process steps). Existing Backup negatives
+now emit native-process JSON; the local wrapper requires their exact mutant
+and causal assertion. Its earlier format failure is retained, not a product failure.
+The product diff remains42 additions/5 deletions and preserves current upgrade
+ownership, legacy paid Clarity levels/work, offline12h refunds, Forge/Formation
+memory and relocated Auto-Ascend controls. Self-review found no unrelated
+product changes; no independent reviewer is claimed.
+
+[PR94](https://github.com/karahaNx/Lumenfall/pull/94), required CI275/run37747203857
+on head50df5cd: in progress. Native bridge calibration originally failed because
+WebView61 cannot resolve private lexical names in debugger eval; use the existing
+F13 approach: actual closure handles and rebind after state replacement. That
+failed harness receipt is preserved. APK/integrated/native acceptance pending.

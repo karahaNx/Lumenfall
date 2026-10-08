@@ -30,7 +30,18 @@ async function step(name,command,timeout=60000,negative=false,marker=null){
   const start=new Date().toISOString(),r=await runLogged(command,name,timeout);
   fs.writeFileSync(path.join(output,name+'-stdout.txt'),r.stdout);
   fs.writeFileSync(path.join(output,name+'-stderr.txt'),r.stderr);
-  const caught=r.stdout.includes('"qa_status": "fail"')&&r.stdout.includes('"valid": true');
+  let caught=r.stdout.includes('"qa_status": "fail"')&&r.stdout.includes('"valid": true');
+  // The existing Backup driver reports native-process JSON, not DOM QA status.
+  // Require its specific mutant and causal assertion; an arbitrary failure is
+  // never accepted as evidence that the negative control was detected.
+  const backupControls={
+    'negative-save-backup-placement':['misplaced-backup','Backup is under Save immediately before separate Reset'],
+    'negative-save-backup-confirmation':['early-restore','Restore request waits for confirmation']
+  };
+  if(backupControls[name]){
+    const detail=/^  detail: (.+)$/m.exec(r.stdout);
+    if(detail){const d=JSON.parse(detail[1]),[mutant,message]=backupControls[name];caught=d.status==='fail'&&d.mutant===mutant&&(d.message||'').startsWith(message);}
+  }
   const passed=!r.timed_out&&(negative?r.exitcode!==0&&caught&&(!marker||r.stdout.includes(marker)):r.exitcode===0);
   receipt.steps.push({name,command,start,exitcode:r.exitcode,timedOut:r.timed_out,signal:r.signal,expected:negative?'intended QA failure':'success',passed,stdoutSha256:hash(r.stdout),stderrSha256:hash(r.stderr)});save();
   console.log((passed?'PASS ':'FAIL ')+name);
