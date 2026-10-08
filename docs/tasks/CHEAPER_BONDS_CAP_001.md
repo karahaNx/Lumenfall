@@ -1,75 +1,65 @@
-# CHEAPER_BONDS_CAP_001 — recruiting floor, effective cap and old value
+# CHEAPER_BONDS_CAP_001 / F21
 
-Owner: this feature chat. Status: **implementation checked; integration/APK pending**.
-One goal/F21: explain the40% normal-price factor / maximum60% discount,
-enforce the existing effective level20 cap, stop ineffective payments and preserve
-old purchases. [Original requirements](../requirements/CHEAPER_BONDS_CAP_001.txt)
-retain the complete initial task byte-for-byte. [Original feedback](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt)
-asks what “floor40%” means. Original requirements outrank historical suggestions.
+Owner: this feature chat. **Open: final CI, integration and APK acceptance pending.**
+One goal: explain the40% normal-price floor / maximum60% discount, enforce the
+existing effective level20 cap, stop ineffective payment and preserve old value.
+[Complete original task](../requirements/CHEAPER_BONDS_CAP_001.txt) is preserved
+byte-for-byte. [Original feedback](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt)
+asks what “floor40%” means; originals outrank historical suggestions.
 
-## Authorization, baseline and scope
+User: **“Find en balance”** and8 October **“Finish the task push to github,
+implement to tame”** (interpreted as game). Standing authorization covers scoped
+publication/integration/signed delivery. Current [AGENTS](../../AGENTS.md) and
+[workflow](../project/FEATURE_WORKFLOW.md) supersede old Lead/Core/writer stages.
+No messages/subagents or other-chat changes; no independent Core/QA claim.
 
-User correction: **“Find en balance”**; latest instruction8 October:
-**“Finish the task push to github, implement to tame”** (interpreted as game).
-Standing authorization covers publication, integration and necessary signed APK.
-Current [AGENTS](../../AGENTS.md) and [workflow](../project/FEATURE_WORKFLOW.md)
-supersede historical Lead/Core/writer ceremonies. No messages, subagents or
-other-chat changes are used; no independent Core/QA review is claimed.
+## Baseline and scope
 
-Baseline main:14d5f3a3a78fe8b63cfa5544efc54f41217b65a5. Isolated branch:
+Main14d5f3a3a78fe8b63cfa5544efc54f41217b65a5. Own branch:
 feature/cheaper-bonds-cap-001; worktree:/workspace/CHEAPER_BONDS_CAP_001.
-Original checkout untouched. PR46/B2 merged at20aaae62a4b6e46f8d75775085918eaba4e8de29.
-Save Backup, Formation, Auto-Ascend, Resonate and upgrade ownership are integrated
-upstream, including schema2/offline refunds; their guards and tests remain. [PR66](https://github.com/karahaNx/Lumenfall/pull/66)
-and [PR67](https://github.com/karahaNx/Lumenfall/pull/67) are separate overlapping
-proposals, never edited/merged here. PR67 receipt shapes are compatible; any later
-integration must retain exact refunds and markers. Recheck main before merging.
-Historical decisions and cap-only freeze9342dbd remain in
-[preserved checkpoint](../qa/cheaper-bonds-cap-001/pre-integration-task-2026-10-07.md).
+Original checkout untouched. PR46/B2 is merged at20aaae62a4b6e46f8d75775085918eaba4e8de29.
+Keep upstream Save Backup, Formation, Resonate, Auto-Ascend, upgrade ownership,
+Forge memory, offline schema2/refunds and Rift guidance. PR66/67 are separate
+proposals, never edited/merged here; later integration must retain F21 receipts.
+Recheck actual main/overlap before serial integration. Historical decisions and
+cap-only freeze9342dbd remain in the [old checkpoint](../qa/cheaper-bonds-cap-001/pre-integration-task-2026-10-07.md).
 
-Changed product: index.html only. Relevant tests/CI and scoped evidence accompany
-it. Persisted ID bonds remains; display Cheaper Recruitment avoids Formation Bonds.
-Existing deterministic prices, rounding, Motes rewards, paid Labs, chronology,
-automation, WebView60, package com.lumenfall.app and signing must survive.
+Product change: index.html, with focused tests/CI and scoped docs/evidence.
+Display Cheaper Recruitment; persisted ID bonds remains. Preserve original
+prices/rounding, deterministic purchases/Motes rewards, paid Labs, chronology,
+online/offline/save/recovery, WebView60, com.lumenfall.app and signing.
 
 ## Decisions and acceptance
 
-Maximum60% discount / minimum40% normal-price factor applies **before existing
-whole-Lumen rounding**. Metadata and canonical handler cap20; disabled Maxed UI
-shows20/20 and retained historical raw levels. No bulk/queue Tree buyer exists.
+The40% minimum factor /60% maximum discount is before existing whole-Lumen
+rounding. Catalog and canonical handler cap20; disabled Maxed UI shows20/20 and
+raw historical count. No Tree bulk/queue buyer exists. Above20 purchases receive
+original rounded Prism prices once. Raw history remains; TwoSum/safe-integer
+allocation and exact debits retain excess as exact credits. Wallet/credits/valid
+receipt persist together. Invalid partial/fractional/null markers reject for
+recovery. F21 record version1 coexists with upstream save schema2 and foreign
+receipts/currencies. Bounded price caching retains per-amount validation.
+[Design/review](../qa/cheaper-bonds-cap-001/finish/DESIGN.md) records costs,
+cross-engine validation, finite history and downgrade limits; no guessed balance.
 
-Above20 purchases receive their original rounded Prism price once. Raw levels
-remain. TwoSum and safe-integer wallet allocation retain excess value as exact
-Prism credits; exact debit checks reject rounded/free wallet or credit payments.
-Wallet/credits/receipt persist together, including restore and recovery. Invalid
-partial markers reject for recovery. Version1 receipt within current save schema2 uses node.bonds;
-foreign receipts/currencies remain. Finite-price history is bounded; no guessed
-balance or compensation percentage. [Design/review](../qa/cheaper-bonds-cap-001/finish/DESIGN.md)
-records original costs, cross-engine receipt validation and downgrade limits.
-Bounded price caching avoids repeated exponentiation at Auto-Ascend boundaries;
-every saved receipt amount is still validated on every normalization.
+Require cap/no-debit and exact old value; idempotent normalization/reload/recovery,
+two confirmed old restores, rollback, paid-Lab preservation and live/offline/
+Ascend parity. UI:320/390/430px,100%/200%,44px targets, real touch/keyboard/focus,
+contrast/reduced motion. Required existing CI and focused causal gates must pass;
+verify integrated bytes and signed APK identity/assets plus relevant actual
+Android update/save behavior. Missing required acceptance keeps this chat open.
 
-Require cap/no-debit, exact old value and raw history, idempotent normalization/
-reload/recovery/twice-confirmed old restore, rollback and paid-Lab preservation;
-live/offline/Ascend parity;320/390/430px,100%/200% text,44px controls, real touch/
-keyboard/focus, contrast and reduced motion. Required existing CI gates plus
-focused checks/causal controls must pass; verify integrated bytes and signed APK
-identity/assets plus actual relevant Android update/save behavior before closing.
+## Evidence and next action
 
-## Checks, evidence and next action
+Source SHA256:3f4df7318ce83cc5bf77f845f9d36b79948a2189c1b5a18f447b542b4bade6f7.
+Local533 assertions (388 gameplay/145 refund),12 mobile profiles,10 causal
+controls,926 clarity and V8 6.0 PASS. Prior combined offline16 records PASS;
+final CI checks current bytes. [Results/commands](../qa/cheaper-bonds-cap-001/finish/README.md)
+distinguish versions/diagnostics. All reported PR89 wallet/receipt/performance/
+rounding/credit-record findings are fixed. [Native baseline](../qa/cheaper-bonds-cap-001/finish/native/baseline-native.json):
+signed143 has21 actual old purchases19→40, wallet7342133 and cold-save retention.
+Final update must retain raw40 and refund12655538 exactly once.
 
-Current source SHA256:3f4df7318ce83cc5bf77f845f9d36b79948a2189c1b5a18f447b542b4bade6f7.
-Local:533 assertions (388 cap/gameplay +145 exact refund),12 mobile profiles,
-10 causal controls,926 current clarity assertions,16 offline catch-up records and V8 6.0 PASS.
-[Evidence/commands](../qa/cheaper-bonds-cap-001/finish/README.md) separates historical
-passes/diagnostics from final acceptance. PR89 review findings about wallet loss,
-receipt amounts, repeated schedule calculation and rounding wording are fixed.
-APK143 native baseline has21 actual purchases19→40, wallet7342133, cold save
-retained. Final signed update must retain raw40 and refund12655538 exactly once;
-[native evidence](../qa/cheaper-bonds-cap-001/finish/native/baseline-native.json).
-
-[PR89](https://github.com/karahaNx/Lumenfall/pull/89) is published; new final CI is
-required after the latest corrections. Next: finish required CI, recheck overlap,
-merge serially, verify integrated source, signed APK and actual Android acceptance,
-then save task/PROJECT_STATE/evidence in GitHub and stop shared-file work.
-Archive status: **open**. Open PR/local checks do not complete the feature.
+[PR89](https://github.com/karahaNx/Lumenfall/pull/89) published. Next: pass final
+CI, recheck main, integrate, verify signed APK/native behavior; save status/evidence
+in GitHub and stop shared-file work. Archive only this owner after completion.
