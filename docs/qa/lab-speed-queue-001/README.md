@@ -9,7 +9,7 @@ No additional F12 product patch is needed.
 
 ## Reproduce fresh integrated checks
 
-Use Node20+ and Chromium at /usr/bin/chromium, with loopback/browser access:
+Use Node20+ and a supported Chromium browser on PATH, with loopback/browser access:
 
 ```sh
 node docs/qa/lab-speed-queue-001/integrated-review.cjs . /tmp/f12-integrated-cdp
@@ -25,6 +25,16 @@ is8.00127:1. All14 records pass with clean browser teardown.
 [Complete report](raw/integrated-cdp/review.json) and individual JSON/screenshots
 are retained. Intentional reloads retry only lost execution contexts; completed
 QA JSON, scenario identity and a clean runtime-error list remain mandatory.
+
+Both replay scripts use the harness's existing browser lookup, exposed by an
+additive export. Google Chrome, Google Chrome Stable, Chromium and
+chromium-browser are supported. An optional third argument or
+LUMENFALL_QA_CDP_CHROME supplies an explicit browser path. Actual selected path
+and version are recorded. The automated-review fix passes both complete replays;
+the existing lookup also passes a Google-Chrome-only PATH check using a host
+Chromium alias. No claim of a separate Google Chrome binary is made.
+Final revision evidence is in raw/replay-revision/. Initial integrated results
+remain in raw/integrated-cdp/ and raw/integrated-drivers/.
 
 The second driver invokes existing process-aware Lab offline/runtime/touch/
 keyboard/reduced-motion drivers unchanged. All four pass. “Native” in these
@@ -67,7 +77,7 @@ assert aliases fix the adapters; retained attempt2 is not called PASS.
 Integrated full CI146 defaults/12 negatives/guarded startup and signed build
 evidence are already durable in
 [the integration receipt](../feature-branch-integration/README.md).
-This documentation checkpoint also runs required pre-merge CI. Build workflow
+This evidence checkpoint also runs required pre-merge CI. Build workflow
 paths do not include these docs; no replacement APK is published.
 
 ## Historical candidate evidence and remaining work
@@ -87,8 +97,12 @@ other layout features and historical B2 stress acceptance are not claimed.
 Self-review is not independent review. Required affected-phone/exact WebView60/
 TalkBack acceptance remains OPEN; use [the checklist](DEVICE_ACCEPTANCE.txt).
 Do not archive this feature chat until the remaining acceptance passes.
+Raw adb preflight failures are in raw/device-preflight/: the read-only Android
+configuration mount prevents enumeration and this host exposes no USB/KVM.
 
 Source_Index.txt and START_HERE.txt describe the current continuation.
 PROJECT_STATE_DELTA.txt is the superseded local proposal retained for history,
 not current policy. manifest.json inventories payloads except itself.
-No costs, rewards, schema, Android files, signing or workflows change.
+No costs, rewards, schema, game/Android files, signing or workflows change.
+The existing browser lookup is exported for these replay scripts; no test
+assertion, instrumentation or acceptance gate changes.

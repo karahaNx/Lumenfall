@@ -4,7 +4,6 @@
   "baseline": "214d45411ce2fb420f0e4b372063811a967679b1",
   "productCommit": "20aaae62a4b6e46f8d75775085918eaba4e8de29",
   "sourceSha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca",
-  "changedProductFiles": 0,
   "newRules": 0,
   "cdp": {
     "status": "pass",
@@ -179,7 +178,7 @@
     "negatives": 12,
     "receipt": "../feature-branch-integration/README.md"
   },
-  "context": "PASS: 29 entrypoints, 47 local Markdown links, shared startup 16359 bytes; startup with docs/tasks/LAB_SPEED_QUEUE_001.md 25095 bytes",
+  "context": "PASS: 29 entrypoints, 47 local Markdown links, shared startup 16359 bytes; startup with docs/tasks/LAB_SPEED_QUEUE_001.md 25737 bytes",
   "review": "Owner self-review and existing automated checks; no independent review claimed",
   "limitations": [
     "No physical device or exact native WebView60/TalkBack results supplied for APK138",
@@ -187,8 +186,71 @@
     "Historical B2 stress/other-feature acceptance not replaced"
   ],
   "remaining": [
-    "Documentation delivery PR required CI and integration receipt",
+    "Final corrected PR65 CI and integration receipt in PR body",
     "Required affected-phone/exact WebView60/TalkBack F12 checklist; save exact version/results",
     "Archive only this owner chat after necessary acceptance passes"
-  ]
+  ],
+  "gameplayAndNativeFilesChanged": 0,
+  "harnessChange": "Additive export of existing findChrome; existing assertions/instrumentation unchanged",
+  "reviewRevision": {
+    "finding": "PR65 discussion_r4213487205 hard-coded browser path",
+    "disposition": "Reuse exported existing browser lookup, accept explicit path, record actual selected browser",
+    "cdp": {
+      "status": "pass",
+      "records": 14,
+      "browser": {
+        "selectedPath": "/usr/bin/chromium",
+        "resolvedPath": "/usr/bin/chromium",
+        "version": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)"
+      },
+      "teardown": {
+        "code": 0,
+        "signal": null
+      }
+    },
+    "drivers": {
+      "node": "v24.19.0",
+      "browser": {
+        "selectedPath": "/usr/bin/chromium",
+        "resolvedPath": "/usr/bin/chromium",
+        "version": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)"
+      },
+      "limitation": "Modern host browser; native WebView60 acceptance remains separate",
+      "records": [
+        {
+          "scenario": "lab-motes-offline-integration",
+          "passed": true
+        },
+        {
+          "scenario": "lab-motes-runtime",
+          "passed": true
+        },
+        {
+          "scenario": "lab-motes-native",
+          "passed": true
+        },
+        {
+          "scenario": "lab-motes-reduced-motion",
+          "passed": true
+        }
+      ]
+    },
+    "googleChromeOnlyPath": "PASS alias to host Chromium; not a separate browser binary",
+    "evidence": "raw/replay-revision/",
+    "tooling": {
+      "firstExit": 1,
+      "firstError": "aapt output did not contain a package line under default sandbox",
+      "authorizedProcessAccessExit": 0,
+      "evidence": "raw/replay-revision/tooling-pass.txt"
+    }
+  },
+  "devicePreflight": {
+    "status": "blocked before enumeration",
+    "usbExposed": false,
+    "kvmExposed": false,
+    "adbFailure": "Cannot mkdir '/home/agent/.android': Read-only file system",
+    "versions": "current platform-tools and29.0.6",
+    "evidence": "raw/device-preflight/"
+  },
+  "deliveryPR": "https://github.com/karahaNx/Lumenfall/pull/65"
 }

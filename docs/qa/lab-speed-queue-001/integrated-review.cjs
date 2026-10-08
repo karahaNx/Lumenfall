@@ -8,7 +8,9 @@ const candidate=path.resolve(process.argv[2]||''),out=path.resolve(process.argv[
 assert(fs.existsSync(path.join(candidate,'tests/behavioral/run.cjs')),'Supply integrated checkout, then evidence directory');
 fs.mkdirSync(out,{recursive:true});
 const stage=fs.mkdtempSync(path.join(os.tmpdir(),'lumenfall-f12-stage-'));
-const {instrumentHtml,loadFixtures}=require(path.join(candidate,'tests/behavioral/run.cjs'));
+const {instrumentHtml,loadFixtures,findChrome}=require(path.join(candidate,'tests/behavioral/run.cjs'));
+const {runProcess}=require(path.join(candidate,'scripts/lib/process.cjs'));
+const chrome=process.argv[4]||process.env.LUMENFALL_QA_CDP_CHROME||findChrome();
 fs.writeFileSync(path.join(stage,'index.html'),instrumentHtml(fs.readFileSync(path.join(candidate,'index.html'),'utf8'),loadFixtures()));
 for(const name of ['fonts','branding'])fs.cpSync(path.join(candidate,name),path.join(stage,name),{recursive:true});
 const source=fs.readFileSync(path.join(candidate,'index.html'));
@@ -88,9 +90,12 @@ async function largeText(width){
  await send('Target.disposeBrowserContext',{browserContextId:context},null);
 }
 async function main(){
+ const version=await runProcess([chrome,'--version'],{timeout:2000});
+ assert(!version.timed_out&&version.exitcode===0,'browser version query');
+ const browserIdentity={selectedPath:chrome,resolvedPath:fs.realpathSync(chrome),version:version.stdout.trim()};
  await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});
  const profile=fs.mkdtempSync(path.join(os.tmpdir(),'lumenfall-f12-cdp-'));
- browser=spawn('/usr/bin/chromium',['--headless=new','--no-sandbox','--disable-gpu','--disable-dev-shm-usage','--remote-debugging-pipe','--user-data-dir='+profile,'about:blank'],{stdio:['ignore','ignore','pipe','pipe','pipe']});
+ browser=spawn(chrome,['--headless=new','--no-sandbox','--disable-gpu','--disable-dev-shm-usage','--remote-debugging-pipe','--user-data-dir='+profile,'about:blank'],{stdio:['ignore','ignore','pipe','pipe','pipe']});
  completion=new Promise(resolve=>{browser.once('error',e=>{rejectAll(e.message);resolve({error:e.message});});browser.once('close',(code,signal)=>{closed=true;rejectAll('browser closed');resolve({code,signal});});});
  browser.stderr.on('data',b=>stderr=(stderr+b).slice(-8000));
  browser.stdio[4].on('data',b=>{buffer+=b;let end;while((end=buffer.indexOf('\0'))!==-1){const raw=buffer.slice(0,end);buffer=buffer.slice(end+1);if(!raw)continue;const m=JSON.parse(raw),p=pending.get(m.id);if(p){pending.delete(m.id);clearTimeout(p.timer);m.error?p.reject(Error(JSON.stringify(m.error))):p.resolve(m.result);}}});
@@ -106,7 +111,7 @@ async function main(){
   if(!closed){browser.kill('SIGKILL');await completion;failure||={message:'browser teardown timeout'};}
   await new Promise(resolve=>server.close(resolve));fs.rmSync(stage,{recursive:true,force:true});fs.rmSync(profile,{recursive:true,force:true});
  }
- const report={status:failure?'fail':'pass',sourceSHA256:sha(source),integratedProductCommit:'20aaae62a4b6e46f8d75775085918eaba4e8de29',verificationBaseline:'214d45411ce2fb420f0e4b372063811a967679b1',node:process.version,browser:'Chromium 151; modern browser only',records,failure,teardown};
+ const report={status:failure?'fail':'pass',sourceSHA256:sha(source),integratedProductCommit:'20aaae62a4b6e46f8d75775085918eaba4e8de29',verificationBaseline:'214d45411ce2fb420f0e4b372063811a967679b1',node:process.version,browser:browserIdentity,limitation:'Modern host browser; native WebView60 acceptance remains separate',records,failure,teardown};
  fs.writeFileSync(path.join(out,'review.json'),JSON.stringify(report,null,2)+'\n');assert.equal(sha(fs.readFileSync(path.join(candidate,'index.html'))),sha(source),'source untouched');
  if(failure||teardown.code!==0)throw Error(failure?.message||'browser exited abnormally');
 }

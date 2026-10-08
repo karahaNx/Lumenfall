@@ -88,7 +88,7 @@ All following fresh results use the integrated product hash above.
 | Reload, backup/restore, canonical recovery, Reset; paid speed/intent through manual and auto Ascend | PASS: four existing persistence scenarios plus chronology |
 | 320/390/430px, named controls >=44px, touch/keyboard, focus, reduced motion | PASS: UI 47 assertions per width and both existing browser input drivers |
 | 200% Lab text, no horizontal overflow, visible focus, control text contrast | PASS: three measured width checks; minimum 8.00:1 |
-| Actual released JavaScript on V8 6.0.286.52 | PASS: Lab offline/payment/retry assertions; release matrix recorded in raw evidence |
+| Actual released JavaScript on V8 6.0.286.52 | PASS: Lab offline/payment/retry assertions and all five existing release matrix cases |
 | Signed APK 0.1.138 identity and asset preservation | PASS: fresh aapt/apksigner, GitHub digest, 526 ZIP CRC entries, all 15 bundled assets |
 | Integrated full required CI | PASS: CI37692669340, 146 default scenarios/12 required negatives/source/tooling/APK self-tests/guarded startup |
 | Affected physical phone, exact WebView60, TalkBack | **OPEN: no device acceptance supplied for APK138** |
@@ -103,11 +103,19 @@ review at observation. Historical B2 stress failures remain historical findings.
 
 ## Delivery, changed files and continuation
 
-This feature's continuation changes only this task/original order, scoped QA
+This feature's continuation changes this task/original order, scoped QA
 documentation/JavaScript replay drivers/raw evidence, and one F12 status row in
-PROJECT_STATE. Product files, existing assertions and release workflows are
-unchanged. The documentation PR's final CI/integration receipt is saved in its
-body and the scoped evidence checkpoint.
+PROJECT_STATE. The behavioral harness additionally exports its existing browser
+lookup for the replay scripts. Game/native files, existing assertions and release
+workflows are unchanged. [Delivery PR65](https://github.com/karahaNx/Lumenfall/pull/65)
+contains the final CI/integration receipt in its body.
+
+Automated review found a hard-coded Chromium path in the replay scripts. The
+revision reuses the existing supported-browser lookup and accepts an explicit
+browser path; both replay drivers pass again and preserve all assertions.
+Device preflight finds no USB/KVM exposed here. Current adb and29.0.6 cannot
+start because /home/agent/.android is on a read-only mount; no device enumeration
+or physical pass is claimed. Raw attempts and the precise next action are saved.
 
 Existing [signed release receipt](../qa/feature-branch-integration/README.md):
 APK0.1.138, versionCode138, package `com.lumenfall.app`, build37694671685,
@@ -116,8 +124,9 @@ established certificate. Asset619954273, 6,837,151 bytes, SHA256
 The mutable android-latest URL must be checked against that digest.
 No new APK is needed for documentation-only continuation.
 
-Next: integrate this checkpoint after required CI, verify the integrated source
-and saved evidence identities, then complete the scoped
+The delivery checkpoint is tracked in PR65, which must pass required CI before
+integration; its final receipt records the integrated source/evidence identities.
+Next feature action: complete the scoped
 [device checklist](../qa/lab-speed-queue-001/DEVICE_ACCEPTANCE.txt) on the affected
 phone/exact WebView60 with TalkBack and save exact version/results in GitHub.
 A device-availability question was sent while independent work continued; no
