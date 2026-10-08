@@ -1,6 +1,6 @@
 # LAB_UI_001 — compact Lab cards and Speed up panel
 
-Status: scoped candidate checks pass; required CI/integration/APK pending.
+Status: focused candidate checks pass; corrected CI run/integration/APK pending.
 Published PR: [83](https://github.com/karahaNx/Lumenfall/pull/83).
 Owner: this LAB_UI_001 feature chat. Exact chat ID/model variant/effort are not
 exposed; GPT-6.1 Sol / High was the user's recommendation, not a runtime receipt.
@@ -48,8 +48,8 @@ not current-main acceptance. Its Python harness changes were not restored.
 The rebase resolved one CSS conflict by retaining current Comet CSS and adding
 only Lab CSS. All current game features, JS harness and assets remain present.
 Main subsequently integrated PR77 Save Backup UI at
-`261b1b7f863f73c324f4ac04acb5bfc95101644d`; merge it before integration,
-retain its Settings controls and new CI gates, and renew affected checks.
+`261b1b7f863f73c324f4ac04acb5bfc95101644d`; merged into this branch,
+with Settings controls and its additional negative CI gates preserved.
 
 ## Scope and decisions
 
@@ -93,11 +93,16 @@ parsing/presentation/offline probes PASS. Android27/WebView61 emulator booted;
 signed143 baseline/save prepared. This is preparation, not feature acceptance.
 Local full-suite attempt hit Chromium151 dump-dom timeout; required GitHub CI
 must pass independently. Results: [QA checkpoint](../qa/LAB_UI_001/README.md).
+Automated review caught premature 100% ARIA while work remained; fixed and
+verified with an old-rounding mutation that fails the relevant assertion.
+CI 37737685149 ran all 152 scenarios: four Rift scroll tests selected the hidden
+panel Close button. Their selectors now use visible controls; all four real-touch
+scroll/hit-test checks pass locally. Full CI is rerun with every gate retained.
 
 ## Next action
 
-Run rebased feature tests and required gates, publish scoped PR, integrate only
-after passing checks on the current merge. Verify integrated behavior and the
+Pass corrected required CI on PR83 and integrate against current main. Verify
+integrated behavior and the
 automatic signed APK release; save results and update PROJECT_STATE. Required
 device acceptance must be recorded before completion/archival. Chat stays open
 while any required acceptance is blocked or unknown.

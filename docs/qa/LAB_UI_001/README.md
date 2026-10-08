@@ -24,3 +24,21 @@ failure); the diagnostic is retained. Required ordinary GitHub CI remains a
 separate integration gate. No weakened gates or skipped default scenarios.
 
 No physical Android, exact WebView60 or TalkBack acceptance is claimed yet.
+
+Latest review checkpoint: main 261b1b7 is included, product source SHA256
+b46079c4e107de0d46b84141de29681aae9604f9ddf13595d65f9db830900e2e.
+`final/` retains renewed source/authority, V8 6.0, all 12 browser profiles and
+19 regression receipts, plus a negative test rejecting premature 100% ARIA.
+It also binds the real signed APK143 baseline and prepared Android27/WebView61
+save (level2, paid3x, work and queue choices) for the subsequent update check.
+The baseline preparation is not feature APK acceptance.
+
+CI [37737685149](https://github.com/karahaNx/Lumenfall/actions/runs/37737685149)
+ran all 152 scenarios; only four Rift native scrolling scenarios failed because
+their last-control selector included the newly hidden Close button. Both
+selectors now filter invisible elements while keeping real-touch scrolling,
+viewport containment and hit-test assertions. All four focused reruns pass;
+their compressed receipts and the complete failed CI log are in `final/`.
+The next ordinary CI run must pass all scenarios, 14 negatives and guarded smoke.
+`native-lab.cjs` and `verify-assets.cjs` prepare source-bound APK update/device
+validation; successful native feature receipts will be added after integration.

@@ -8,6 +8,7 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
 let adb,server,ws,seq=0,onPause;const requests=new Map(),scripts=[],errors=[],records=[];
 function send(method,params={}){return new Promise((resolve,reject)=>{const id=++seq,timer=setTimeout(()=>{requests.delete(id);reject(Error('CDP timeout '+method));},60000);requests.set(id,{resolve,reject,timer});ws.send(JSON.stringify({id,method,params}));});}
 async function evaluate(expression){const r=await send('Runtime.evaluate',{expression,returnByValue:true});if(r.exceptionDetails)throw Error(r.exceptionDetails.exception?.description||r.exceptionDetails.text);return r.result.value;}
+async function key(key,code){await send('Input.dispatchKeyEvent',{type:key==='Enter'?'keyDown':'rawKeyDown',key,code,windowsVirtualKeyCode:key==='Enter'?13:27,...(key==='Enter'?{text:'\r',unmodifiedText:'\r'}:{})});await send('Input.dispatchKeyEvent',{type:'keyUp',key,code});}
 async function until(expression,label){const end=Date.now()+120000;while(Date.now()<end){if(await evaluate(expression))return;await delay(250);}throw Error(label+' timeout');}
 async function connect(){
  await adb.shell('am start -n com.lumenfall.app/.MainActivity');
@@ -20,6 +21,7 @@ async function connect(){
  await send('Runtime.enable');await send('Page.enable');await until('document.readyState==="complete"&&!!document.querySelector(".rift-wisp")','initialized game');
 }
 function pause(){return new Promise((r,j)=>{const t=setTimeout(()=>j(Error('native breakpoint timeout')),60000);onPause=p=>{clearTimeout(t);r(p);};});}
+async function disconnect(){if(ws){ws.close();ws=null;}if(server){for(const s of server.sockets)s.destroy();await new Promise(r=>server.close(r));server=null;}scripts.length=0;}
 async function bridge(){
  await send('Debugger.enable');let product,code;
  for(const p of scripts){if(p.url!=='https://localhost/')continue;const r=await send('Debugger.getScriptSource',{scriptId:p.scriptId});if(r.scriptSource.includes('function renderLongStudies')){product=p;code=r.scriptSource;break;}}assert(product,'actual product script');
@@ -45,12 +47,36 @@ async function main(){
  assert.equal((await adb.shell('getprop sys.boot_completed')).trim(),'1');
  if(mode==='baseline'){await adb.upload(apk,'/data/local/tmp/labui.apk');assert((await adb.shell('pm install -r /data/local/tmp/labui.apk')).includes('Success'));}
  await connect();
+ if(mode==='update'){
+  const baseline=JSON.parse(fs.readFileSync(output+'/baseline.json'));
+  assert.equal(baseline.status,'pass');assert.equal(baseline.saved.longStudyLevels.guardmastery,2);assert.equal(baseline.saved.activeStudies[0].speedMult,3);
+  const oldPath=(await adb.shell('pm path com.lumenfall.app')).trim().replace(/^package:/,'');assert(/^\/data\/app\/[A-Za-z0-9_.=\/-]+\/base\.apk$/.test(oldPath));
+  assert.equal(hash(await adb.exec('cat '+oldPath)),baseline.identity.apkSha256,'attested actual pre-update APK');
+  assert.deepEqual(await evaluate("JSON.parse(localStorage.getItem('lumenfall_save_v2'))"),baseline.saved,'prepared native save still present');
+  await disconnect();await adb.shell('am force-stop com.lumenfall.app');await delay(1000);
+  const storageCommand='run-as com.lumenfall.app tar -cf - app_webview/Default/Local\\ Storage';
+  const before=await adb.exec(storageCommand);assert(before.length>1024,'native storage archive');
+  await adb.upload(apk,'/data/local/tmp/labui-update.apk');assert((await adb.shell('pm install -r /data/local/tmp/labui-update.apk')).includes('Success'));
+  const after=await adb.exec(storageCommand);assert(after.equals(before),'APK update preserves native WebView storage bytes');
+  records.push({case:'attested signed APK update',baselineApkSha256:baseline.identity.apkSha256,storageSha256:hash(before),storageBytes:before.length});
+  await connect();
+  const loaded=await evaluate("JSON.parse(localStorage.getItem('lumenfall_save_v2'))");
+  assert.equal(loaded.longStudyLevels.guardmastery,2);assert.equal(loaded.activeStudies[0].speedMult,3);assert.equal(loaded.activeStudies[0].totalDurationSec,86400);
+  assert.equal(loaded.studySpeedTargets.guardmastery,3);assert.equal(loaded.studyUseMotes.guardmastery,false);assert.equal(loaded.studyQueue.guardmastery,true);
+  records.push({case:'first-launch Lab purchases/work/queue choices preserved',activeStudies:loaded.activeStudies,speedTarget:loaded.studySpeedTargets.guardmastery});
+ }
  const installed=(await adb.shell('pm path com.lumenfall.app')).trim().replace(/^package:/,'');assert(/^\/data\/app\/[A-Za-z0-9_.=\/-]+\/base\.apk$/.test(installed));
  const installedHash=hash(await adb.exec('cat '+installed));assert.equal(installedHash,hash(fs.readFileSync(apk)),'actual installed APK identity');
  const source=fs.readFileSync(index,'utf8'),expected=source.match(/<script>\s*([\s\S]*?)<\/script>/)[1];
- const actual=await evaluate('Array.prototype.filter.call(document.scripts,function(s){return s.textContent.indexOf("function renderLongStudies")!==-1;})[0].textContent');assert.equal(actual.trim(),expected.trim(),'unmodified installed product script');
+ const actual=await evaluate('Array.prototype.filter.call(document.scripts,function(s){return s.textContent.indexOf("function renderLongStudies")!==-1;})[0].textContent');assert(actual.trim()===expected.trim(),'unmodified installed product script');
  const identity={apkSha256:installedHash,sourceSha256:hash(source),api:(await adb.shell('getprop ro.build.version.sdk')).trim(),package:(await adb.shell('dumpsys package com.lumenfall.app')).split('\n').filter(x=>/versionCode=|versionName=/.test(x)),ua:await evaluate('navigator.userAgent')};
  await bridge();
+ await until('document.fonts.status==="loaded"','native fonts');
+ if(mode==='update'){
+  const live=await evaluate('__labNative.get()');assert.equal(live.longStudyLevels.guardmastery,2);assert.equal(live.activeStudies[0].speedMult,3);assert.equal(live.activeStudies[0].totalDurationSec,86400);
+  assert.equal(live.studySpeedTargets.guardmastery,3);assert.equal(live.studyUseMotes.guardmastery,false);assert.equal(live.studyQueue.guardmastery,true);
+  records.push({case:'settled native live work and queue choices preserved',activeStudies:live.activeStudies,speedTarget:live.studySpeedTargets.guardmastery});
+ }
  if(mode==='baseline'){
   const saved=await evaluate("(function(){var b=__labNative,s=b.fresh();s.lastSeen=Date.now();s.depth=s.maxDepthEver=120;s.lumen=10000;s.shards=10000;s.motes=100;s.longStudyLevels.guardmastery=2;s.studyQueue.guardmastery=true;s.studyUseMotes.guardmastery=false;s.studySpeedTargets.guardmastery=3;s.activeStudies=[{id:'guardmastery',remainingSec:86400,totalDurationSec:86400,speedMult:3}];b.install(s);if(!b.save())throw Error('native save failed');var saved=JSON.parse(localStorage.getItem('lumenfall_save_v2'));if(saved.longStudyLevels.guardmastery!==2||saved.activeStudies.length!==1||saved.activeStudies[0].speedMult!==3||saved.studySpeedTargets.guardmastery!==3)throw Error('actual native fixture/save mismatch');return saved;})()");
   fs.writeFileSync(output+'/baseline.json',JSON.stringify({status:'pass',identity,saved,runtimeErrors:errors},null,2));return;
@@ -60,6 +86,9 @@ async function main(){
   await evaluate("document.documentElement.style.fontSize='"+(16*scale)+"px'");
   const result=await evaluate("(function(){var b=__labNative,check=function(v,m){if(!v)throw Error(m);},q=function(s){return document.querySelector(s);},s=b.get();s.motes=100;s.studyUseMotes.guardmastery=false;s.activeStudies=[{id:'guardmastery',remainingSec:150,totalDurationSec:150,speedMult:1}];b.install(s);q('[data-tab=research]').click();var card=q('[data-running-study=guardmastery]'),bar=card.querySelector('[role=progressbar]'),text=card.querySelector('[data-study-text]');check(bar.contains(text)&&bar.getAttribute('aria-valuetext').indexOf('1x')!==-1,'progress time/speed ARIA');check(card.innerText.split(\"Guardian's Mastery\").length===2&&(card.innerText.match(/Lv\\./g)||[]).length===1,'one title/level');check(!card.querySelector('details'),'no repeated disclosure title');var open=q('[data-study-details=guardmastery]'),panel=q('[data-study-inspection=guardmastery]');check(panel.hidden,'default closed');open.focus();open.click();b.render();check(document.activeElement.dataset.studyDetails==='guardmastery','opener focus retained');panel=q('[data-study-inspection=guardmastery]');check(!panel.hidden&&q('[data-study-details=guardmastery]').getAttribute('aria-expanded')==='true','panel open');check(panel.querySelectorAll('[data-speed-study]').length===8,'all tier prices');var buy=q('[data-speed-study=guardmastery][data-speed=3]');buy.focus();buy.click();check(b.get().motes===40&&b.get().activeStudies[0].speedMult===3,'exact 60-Motes purchase');check(document.activeElement.dataset.studyDetails==='guardmastery','purchase focus return');var close=q('[data-study-speed-close=guardmastery]');close.click();check(q('[data-study-inspection=guardmastery]').hidden&&document.activeElement.dataset.studyDetails==='guardmastery','close focus');check(q('#study-list').scrollWidth<=q('#study-list').clientWidth+1,'no Lab overflow');var controls=Array.prototype.filter.call(q('#study-list').querySelectorAll('button,select'),function(e){return e.getClientRects().length;});controls.forEach(function(e){check(e.offsetWidth>=44&&e.offsetHeight>=44,'44px control');});return {width:innerWidth,textScale:"+scale+",time:text.textContent,controls:controls.length};})()");
   records.push(result);const shot=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(output+'/native-'+width+'-text'+scale+'.png',Buffer.from(shot.data,'base64'));
+  await key('Enter','Enter');assert(await evaluate("document.activeElement.dataset.studyDetails==='guardmastery'&&!document.querySelector('[data-study-inspection=guardmastery]').hidden"),'native Enter opens Speed up');
+  await evaluate("document.querySelector('[data-study-speed-close=guardmastery]').focus()");await key('Escape','Escape');assert(await evaluate("document.activeElement.dataset.studyDetails==='guardmastery'&&document.querySelector('[data-study-inspection=guardmastery]').hidden"),'native Escape returns focus');
+  records.push({case:'real native keyboard disclosure',width,textScale:scale});
  }
  assert.deepEqual(errors,[]);fs.writeFileSync(output+'/native.json',JSON.stringify({status:'pass',identity,records,runtimeErrors:errors,limitation:'Android8.1/API27 native WebView61 software emulator and separate V8 6.0 probe; physical exact WebView60/TalkBack acceptance remains open.'},null,2));
 }
