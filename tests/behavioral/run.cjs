@@ -202,5 +202,5 @@ async function main(argv = process.argv.slice(2)) {
   if (failures.length) throw Error('Behavioral QA failed: ' + failures.join(', '));
   console.log(`Behavioral QA passed: ${Object.keys(selected).length} deterministic scenario(s).`);
 }
-module.exports = { runScenario, runNativeProcess, nativeProcessContract, instrumentHtml, loadFixtures, mutateSource, main };
+module.exports = { findChrome, runScenario, runNativeProcess, nativeProcessContract, instrumentHtml, loadFixtures, mutateSource, main };
 if (require.main === module) cliMain(main);

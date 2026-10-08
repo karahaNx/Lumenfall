@@ -1,0 +1,284 @@
+{
+  "observedUTC": "2026-10-07 13:30:58 UTC",
+  "initialMain": "b2a1f440e8ad9fed34b37551e468224310d2a6f6",
+  "privateBaseline": "0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd",
+  "B2tree": "758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef",
+  "pr46": {
+    "url": "https://github.com/karahaNx/Lumenfall/pull/46",
+    "number": 46,
+    "state": "open",
+    "merged": false,
+    "mergeable": false,
+    "draft": true,
+    "body": "Long Studies save independent Use Motes intent and exact repeat-speed targets. Each new level starts at 1x and pays the full selected existing price again; actual Luminous reward boundaries determine payment timing.\n\nR2 fixes QA blocker B1: a Motes boundary exposed double kill rounding in existing farm batching. Damage is decomposed before consuming partial enemy HP, with one coherent quotient/remainder carry. This also preserves small current HP against cancellation at very large damage. Prices, reward rules, save schema, navigation, workflows and existing numeric tolerances remain unchanged.\n\nFinal local validation: all seven workflow gates exit 0; all 140 default scenarios execute, 160 raw real browser/driver results independently replay as complete PASS, and all 12 required negative controls are caught. The aggregate suite console file lacks its tail; complete subprocess outputs and exits are preserved. The permanent B1 ledger covers all 826 QA fixtures with zero unjustified ON/OFF economy differences, rechecks all 43 R1 counterexamples, and rejects the exact old double-round function before undo passes. Additional evidence includes 100 QA motor groups, five persistence paths, 576 exact-rational arithmetic fixtures and 56 scaled whole/split thresholds. Earlier local drafts and interrupted validation are diagnostic evidence, not acceptance.\n\nBase: `1ddc246eb62782a61ec5c486cd5f51ea170bb338`. R2: `3cdebc236e9ee5081a4bca4e323b11f43aa0d46d`, tree `70073a55d7f5fe428ae82223627603498cc372b6`, parent R1 `d1e988816ed10b8f851521938a117a4d84d29e1b`. [B1 contract](https://github.com/karahaNx/Lumenfall/blob/3cdebc236e9ee5081a4bca4e323b11f43aa0d46d/docs/tasks/LAB_MOTES_B1_001.md).\n\nOrdinary same-head pre-merge CI #128 (run 37447570925, attempt 1) completed successfully on R2; all 13 job steps succeeded. Draft for new Core chronology/economy and independent QA review; R1 acceptance does not transfer. Physical Android/TalkBack remain untested. No ready, merge, Android build, dispatch/rerun or release.",
+    "title": "LAB-MOTES-001: exact repeat speeds and B1 farm conservation",
+    "base": "main",
+    "base_sha": "1ddc246eb62782a61ec5c486cd5f51ea170bb338",
+    "head": "02/lab-motes-repeat-v1",
+    "head_sha": "3cdebc236e9ee5081a4bca4e323b11f43aa0d46d",
+    "head_repo_id": 1348277654,
+    "head_repo_full_name": "karahaNx/Lumenfall",
+    "merge_commit_sha": null,
+    "user": {
+      "login": "karahaNx",
+      "name": "karahaNx",
+      "email": null,
+      "avatar_url": "https://avatars.githubusercontent.com/u/63508146?v=4",
+      "id": 63508146
+    },
+    "requested_reviewers": null,
+    "requested_team_reviewers": null,
+    "diff": null,
+    "comments": null,
+    "created_at": "2026-10-05T23:40:51Z",
+    "updated_at": "2026-10-06T10:19:39Z",
+    "closed_at": null,
+    "merged_at": null,
+    "commits": 2,
+    "changed_files": 11,
+    "additions": 655,
+    "deletions": 41,
+    "display_url": "https://github.com/karahaNx/Lumenfall/pull/46",
+    "display_title": "LAB-MOTES-001: exact repeat speeds and B1 farm conservation"
+  },
+  "observations": [
+    {
+      "endpoint": "https://api.github.com/repos/karahaNx/Lumenfall/branches?per_page=100",
+      "observedUTC": "2026-10-07 13:30:58 UTC",
+      "data": [
+        {
+          "name": "00/codex-project-ready-2026-10-07",
+          "sha": "3c95e29ea9c8a75bdafe1cd3bcd6f2a55123c588"
+        },
+        {
+          "name": "00/context-engineering-setup",
+          "sha": "dfce390b5ed65f5a3cbaa6938aacdb299da3dc7e"
+        },
+        {
+          "name": "00/integration-android132-checkpoint",
+          "sha": "45a0c24b1e1efe2bb0a52e3047befacc591b6cb0"
+        },
+        {
+          "name": "00/nav001-android133-checkpoint",
+          "sha": "de48fbe5a99ed0b48b81408623a0248288702920"
+        },
+        {
+          "name": "00/project-state-p2-06",
+          "sha": "8415813436353ab00c1961a20a4d8ff9afda7909"
+        },
+        {
+          "name": "00/project-state-refresh-p1",
+          "sha": "c994618ad4e71808879092d0183b23be62d12679"
+        },
+        {
+          "name": "00/recovery-project-2026-10-07",
+          "sha": "a74427359be0978f183cfdd411b5a3b6cae887bd"
+        },
+        {
+          "name": "01/core-archive-2026-10-07",
+          "sha": "bfcb89270a63ae083df6eb31682a2a5c48f0a4fd"
+        },
+        {
+          "name": "01/p0-02-lock-signing-identity",
+          "sha": "2f91d84b8757cd0f228cf0471197eba2fac03d27"
+        },
+        {
+          "name": "01/p0-04-canonical-save-recovery",
+          "sha": "f572dfb321371bef6bc2c49ca16e66f9e5252015"
+        },
+        {
+          "name": "01/p1-01-final-apk-verification",
+          "sha": "ea05de77d61315044e71f98a636ae63833f42327"
+        },
+        {
+          "name": "01/p1-01-final-apk-verification-fix",
+          "sha": "b287638c87c178a6587e60c6f9bb1601927805d8"
+        },
+        {
+          "name": "01/p2-04-native-android-lifecycle-gate",
+          "sha": "ba1325519bd3e1ce42616d7d9789466a1a68ce58"
+        },
+        {
+          "name": "01/signing-metadata-diagnose-131",
+          "sha": "9b249227e45b93463e2f04d422300ae28b91dc6f"
+        },
+        {
+          "name": "02-p0-05-simulation-parity",
+          "sha": "c000266e2bc5db980c6aa4b0c3b36aa6fe65087a"
+        },
+        {
+          "name": "02-p1-02-chronological-offline-automation",
+          "sha": "8bad251b65714a785b21f819b22494622c2b1b57"
+        },
+        {
+          "name": "02-p1-03-wisp-power-language-contract",
+          "sha": "86fa9763cffe8b622639a182922843ddc995a4b6"
+        },
+        {
+          "name": "02/auto-ascend-target-selector",
+          "sha": "d3daa23d04315ec21776de69b0df960d24cb19b6"
+        },
+        {
+          "name": "02/gameplay-archive-2026-10-07",
+          "sha": "158eb6219544526a3c5d983238fdf4f6576cef60"
+        },
+        {
+          "name": "02/lab-measured-inquiry-v1",
+          "sha": "10f2ff5facef78a7c1d8293b6a8d07be888f7350"
+        },
+        {
+          "name": "02/lab-motes-repeat-v1",
+          "sha": "3cdebc236e9ee5081a4bca4e323b11f43aa0d46d"
+        },
+        {
+          "name": "02/p2-01a-gameplay-integrity",
+          "sha": "1b9f817837930e1f594ce0bb28ef02787abddc19"
+        },
+        {
+          "name": "02/p2-01b-wisp-progression-pacing",
+          "sha": "be6a521632d16de67aeb7dabc14cd02d6a51a877"
+        },
+        {
+          "name": "02/p2-01c-endgame-currency-utility",
+          "sha": "8b2d993c70a77600f66e6ac21920110427d8ee4b"
+        },
+        {
+          "name": "02/p2-03a-wisp-role-integrity",
+          "sha": "4a2eea4789a1df273294da36f724dd1241aa8de0"
+        },
+        {
+          "name": "02/p2-03b-auto-ascend-rift-integrity",
+          "sha": "c68832144a0c5a18c6ce15c9b31b161679969f5a"
+        },
+        {
+          "name": "02/p2-07a-formation-reconstruction",
+          "sha": "1096e951812cd1bccbe52b3500b1dfcf4ee4bcaf"
+        },
+        {
+          "name": "02/rift-forge-v1",
+          "sha": "6f31b6a4746b10b0db475e5e52418126aa367fc0"
+        },
+        {
+          "name": "02/support-stacking-v1",
+          "sha": "8e46a31e45b1123f9351de24d53abb6da928c606"
+        },
+        {
+          "name": "03/compact-empower-control",
+          "sha": "c61c9ff7fd7101786bd609a88d324229d0bae439"
+        },
+        {
+          "name": "03/forge-lab-separation",
+          "sha": "cbcc957612f9c4cb53c31c341ab03f3ebf4b065b"
+        },
+        {
+          "name": "03/nav-001-workshop",
+          "sha": "5be2c0319b9ce11fd8a29f0bb795d7de606858ae"
+        },
+        {
+          "name": "03/p1-04-mobile-rift-layout",
+          "sha": "da4ecc2487725b0fced2399e8ee98e1fc03c8ecf"
+        },
+        {
+          "name": "03/p1-05-visual-accessibility",
+          "sha": "dc648c66499b0c57b87f909b5bf728a20e123a41"
+        },
+        {
+          "name": "03/p2-02a-core-qol",
+          "sha": "39990079b4f2de07bc50eab70f13d91fecd738e3"
+        },
+        {
+          "name": "03/p2-02b-wisp-lab-hierarchy",
+          "sha": "4a82a2567e00fa0bda3521f5f23b453e82459b2e"
+        },
+        {
+          "name": "03/p2-06a-rift-region-boss-identity",
+          "sha": "5f1797223bc800def3f724b2985e58d3eb388890"
+        },
+        {
+          "name": "03/p2-06b-authoritative-feedback",
+          "sha": "6b21e8af2cb0c11485c66b3f8a0da0c200a02650"
+        },
+        {
+          "name": "03/research-duration-clarity",
+          "sha": "8878464c8b3381ab920c47305f0a8ac2c7adc5e7"
+        },
+        {
+          "name": "03/rift-live-formation-visuals",
+          "sha": "52bbd1b2cf0b7116afa2aab528af1d7023be90a3"
+        },
+        {
+          "name": "03/rift-status-and-lab-badge",
+          "sha": "3f42951e899c846ec282ea28a979ba8d2d103eb8"
+        },
+        {
+          "name": "03/rift-status-lines-no-details",
+          "sha": "58dc05f864f024e3438391a1797635cb536e50f8"
+        },
+        {
+          "name": "03/upgrade-effects-and-deed-clarity",
+          "sha": "c3a3703a76c33da035b0fd1b11a2fc00ce5f9048"
+        },
+        {
+          "name": "04/offline-autoascend-evidence-2026-10-07",
+          "sha": "ee427cb05069b988eb1bf896ef39ff7a6fe812e8"
+        },
+        {
+          "name": "04/p1-05-accessibility-qa-prep",
+          "sha": "e92d5c41224c654ca343656160c084c6eea272e4"
+        },
+        {
+          "name": "04/p1-06-android-verification-trigger",
+          "sha": "e437283f1f5a3fb1211956fb19760a850f9d1434"
+        },
+        {
+          "name": "04/p1-06-lifecycle-offline-regression",
+          "sha": "d59c852e85e0014465f804486727f96b41a05c19"
+        },
+        {
+          "name": "docs/javascript-first-2026-10-07",
+          "sha": "31b807532b749c1bbb60f7356e9d68d89c47b9c7"
+        },
+        {
+          "name": "docs/workflow-continuity-2026-10-07",
+          "sha": "d2732dcfe810c7acdfdbd80f3beeb1a72809e1fd"
+        },
+        {
+          "name": "feature/offline-catchup-001",
+          "sha": "bd71a8608d133f99971a74a79e300e1f5db254df"
+        },
+        {
+          "name": "main",
+          "sha": "0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd"
+        },
+        {
+          "name": "p0-03-stateful-behavioral-qa",
+          "sha": "efffcffc8ddb83993c810a88af52e815ea676a38"
+        }
+      ]
+    },
+    {
+      "endpoint": "https://api.github.com/repos/karahaNx/Lumenfall/pulls?state=open&per_page=100",
+      "observedUTC": "2026-10-07 13:30:58 UTC",
+      "data": [
+        {
+          "number": 46,
+          "state": "open",
+          "draft": true,
+          "head": "3cdebc236e9ee5081a4bca4e323b11f43aa0d46d",
+          "base": "1ddc246eb62782a61ec5c486cd5f51ea170bb338",
+          "url": "https://github.com/karahaNx/Lumenfall/pull/46"
+        }
+      ]
+    },
+    {
+      "endpoint": "https://api.github.com/repos/karahaNx/Lumenfall/actions/runs?status=in_progress&per_page=100",
+      "observedUTC": "2026-10-07 13:30:58 UTC",
+      "data": []
+    },
+    {
+      "endpoint": "https://api.github.com/repos/karahaNx/Lumenfall/actions/runs?status=queued&per_page=100",
+      "observedUTC": "2026-10-07 13:30:58 UTC",
+      "data": []
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+Browser identity: {"resolved_path": "/usr/bin/chromium", "selected_path": "/usr/bin/chromium", "sha256": "2c8d32d29dc6781c35ae196ea83299d507ac88fc339301abe74672feda299779", "version": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)", "version_exitcode": 0, "version_stderr": ""}
+Staged source: {"instrumented_sha256": "0f548b2dad4255bfe984387795fbce8aaa7b7ee8b211577b0a4fb2b736693ed4", "source_sha256": "7c25b0b57722bda4ad6842b173bf9a390f2fa39942ad91206675a20e779d4d9b"}
+Traceback (most recent call last):
+  File "/workspace/Lumenfall-LAB_SPEED_QUEUE_001-b2/tests/behavioral/run.py", line 4237, in <module>
+    main()
+  File "/workspace/Lumenfall-LAB_SPEED_QUEUE_001-b2/tests/behavioral/run.py", line 4213, in main
+    server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/socketserver.py", line 453, in __init__
+    self.socket = socket.socket(self.address_family,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/socket.py", line 233, in __init__
+    _socket.socket.__init__(self, family, type, proto, fileno)
+PermissionError: [Errno 1] Operation not permitted
