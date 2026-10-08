@@ -138,9 +138,9 @@ for(const seed of [original,clear20,off]){
 const all=copy(original);all.research.focus=0;Object.keys(all.empowerQueue).forEach(k=>all.empowerQueue[k]=true);
 all.researchQueue.focus=true;all.studyQueue.riftattune=true;
 for(const kind of ['live','offline']){
- const whole=app(all),split=app(all),old=app(all,baseline),options={kind,visual:false,clockStartMs:all.lastSeen};
- const sum=whole.b.advance(3600,options);const oldSum=old.b.advance(3600,options);
- baselineSummary(sum,oldSum,'economy/order baseline '+kind);baselineState(whole.b.get(),old.b.get(),all,'baseline chronology '+kind);
+ const whole=app(all),split=app(all),old=app(all,baseline),legacy=app(all,legacyBondSource),options={kind,visual:false,clockStartMs:all.lastSeen};
+ const sum=whole.b.advance(3600,options),legacySum=legacy.b.advance(3600,options),oldSum=old.b.advance(3600,options);
+ baselineSummary(legacySum,oldSum,'economy/order baseline '+kind);baselineState(legacy.b.get(),old.b.get(),all,'baseline chronology '+kind);
  for(let i=0;i<4;i++)split.b.advance(900,{...options,clockStartMs:all.lastSeen+i*900000,offlineWindowStartMs:all.lastSeen});
  compare(split.b.get(),whole.b.get(),'whole/split '+kind);
  assert(sum.motesGained>0&&sum.empowers>0&&sum.researchBought>0,'Motes, Research and Empower chronology exercised');

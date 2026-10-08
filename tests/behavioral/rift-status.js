@@ -412,14 +412,14 @@ window.riftStatusMobile=(()=>{
    boxes[selector]={x:r.x,y:r.y,width:r.width,height:r.height};
   });
   var cards=[...document.querySelectorAll('[data-rift-wisp]')];
-  active.forEach(bond=>{var pair=cards.filter(x=>x.dataset.bond===bond.id);ok(pair.length===2&&Math.abs(cards.indexOf(pair[0])-cards.indexOf(pair[1]))===1,'mobile Bond partners adjacent');ok(rect(pair[1]).left-rect(pair[0]).right>=0&&rect(pair[1]).left-rect(pair[0]).right<=2.1,'Bond pair is close and does not overlap');});
+  active.forEach(bond=>{var partners=cards.filter(x=>bond.ids.includes(x.dataset.riftWisp));ok(partners.length===2&&partners.every(x=>x.querySelector('[data-wisp-bond="'+bond.id+'"]')&&x.getAttribute('aria-label').includes(bond.name)),'all mobile overlapping Bond partners carry marks and accessible names');var pair=cards.filter(x=>x.dataset.bond===bond.id);if(pair.length){ok(pair.length===2&&Math.abs(cards.indexOf(pair[0])-cards.indexOf(pair[1]))===1,'primary mobile Bond partners adjacent');ok(rect(pair[1]).left-rect(pair[0]).right>=0&&rect(pair[1]).left-rect(pair[0]).right<=2.1,'primary Bond pair is close and does not overlap');}});
   var arena=rect(q('.battle-row')),landscapeEl=q('.rift-landscape'),landscape=rect(landscapeEl),stageEl=q('#tab-battle .stage'),stage=rect(stageEl);
   ok(stageEl.contains(landscapeEl)&&landscape.left>=stage.left-.1&&landscape.right<=stage.right+.1&&landscape.top>=stage.top-.1&&landscape.bottom<=stage.bottom+.1,'shared scenic background stays inside the outer Rift stage');
   ok(landscapeEl.getAttribute('aria-hidden')==='true'&&getComputedStyle(landscapeEl).pointerEvents==='none','shared scenic background stays decorative and cannot intercept input');
   ok(arena.top>=(guidance.hidden?rect(q('.rift-heading')).bottom:rect(guidance).bottom)&&arena.bottom<=buff.top,'integrated combat region stays below guidance and above boost');
   ok(arena.bottom<=stats.top&&getComputedStyle(q('.stat-row')).position==='relative','stat box top borders paint above the combat layer');
   var party=rect(q('#rift-party'));
-  ok(!q('#enemy-stage').contains(q('#rift-party'))&&enemy.bottom<=hp.top&&hp.bottom<=party.top&&party.bottom<=buff.top,'formation follows the attack surface and HP, before boost');
+  ok(!q('#enemy-stage').contains(q('#rift-party'))&&enemy.bottom<=hp.top&&hp.bottom<=party.top&&party.bottom<=buff.top,'formation follows the attack surface and HP, before boost '+JSON.stringify({enemy:enemy.bottom,hp:[hp.top,hp.bottom],party:[party.top,party.bottom],buff:buff.top}));
   ok(q('.battle-row').contains(q('#enemy-stage'))&&q('.battle-row').contains(q('.hp-wrap'))&&q('.battle-row').contains(q('#boss-combat'))&&q('.battle-row').contains(q('#rift-party')),'attack surface, HP, Boss regen and formation share the integrated scenic region');
   ok(q('#boss-combat').hidden||hp.bottom<=rect(q('#boss-combat')).top&&rect(q('#boss-combat')).bottom<=party.top,'boss regen sits between HP and the standalone formation');
   ok(q('#rift-bond-effects').hidden||bonds.bottom<=rect(q('#rift-bond-effects')).top&&rect(q('#rift-bond-effects')).bottom<=stats.top,'full Bond effects separate from names and precede the numeric row');

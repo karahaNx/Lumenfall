@@ -1810,6 +1810,7 @@
     .stage .hp-wrap{height:24px;}
     .stage .hp-text{font-size:11px;line-height:14px;margin-top:2px;}
     #boss-combat{padding:1px 6px;}
+    .boss-net-value{display:none;}
     #rift-party,.rift-wisp{height:58px;}
     .rift-wisp{grid-template-rows:24px 3px 13px 14px;gap:0;padding:1px 3px;}
     #rift-party .wisp-portrait{width:24px;height:24px;}
@@ -5787,7 +5788,7 @@ function updateBattleFast(){
     bossStatus.setAttribute('data-regen',String(regenPerSec));
     bossStatus.setAttribute('data-dps',String(yourDps));
     bossStatus.setAttribute('data-net',String(netDps));
-    var bossText='<strong>Regen +'+formatRiftNumber(regenPerSec)+' HP/s</strong><span class="boss-net '+(enough?'positive':'negative')+'">Auto DPS ≈ '+formatRiftNumber(yourDps)+' · Net '+(netDps>0?'+':netDps<0?'−':'')+formatRiftNumber(Math.abs(netDps))+'/s</span>';
+    var bossText='<strong>Regen +'+formatRiftNumber(regenPerSec)+' HP/s</strong><span class="boss-net '+(enough?'positive':'negative')+'">Auto DPS ≈ '+formatRiftNumber(yourDps)+'<span class="boss-net-value"> · Net '+(netDps>0?'+':netDps<0?'−':'')+formatRiftNumber(Math.abs(netDps))+'/s</span></span>';
     if(bossStatus.innerHTML!==bossText)bossStatus.innerHTML=bossText;
     bossStatus.setAttribute('aria-label','Boss regeneration '+regenPerSec+' HP per second. Estimated sustained damage '+yourDps+' per second, including abilities and Auto-Tap, excluding manual taps. Net '+netDps+' HP per second. Burst timing can change the result.');
     els['enemy-stage'].classList.add(enough ? 'boss-ready' : 'boss-wall');

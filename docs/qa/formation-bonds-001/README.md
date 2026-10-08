@@ -12,7 +12,7 @@ CDP touch/keyboard, not synthetic click replacements. The local existing CDP
 adapter replays the unchanged dump-DOM harness assertions; it is supplementary
 transport evidence. Required GitHub CI must pass on the published exact head.
 
-`core.json` records actual product SHA256, seven grouped contracts and five real
+`core.json` records actual product SHA256, eight grouped contracts and six real
 negative mutations. `equal-budget.json` freezes the same fully purchased eight-
 Wisp account, including Bench, for every formation: 56 five-slot teams at each
 of100m and1T Lumen per Wisp, with proportional Shards and200 Sigils available
@@ -45,10 +45,11 @@ The baseline dump-DOM process timed out; the CDP baseline formula check passed.
 Initial candidate failures showed obsolete four-Bond/manual-Save expectations,
 a Farm grid remainder false stall, and a long effect word at200% text size.
 Corrections retain full effect accessibility, unique marks for all eight pairs,
-the archived legacy-mechanics oracle, and a strict independent fractional
+the exact archived legacy-mechanics counterfactual (four Bonds and old Farm clock), and a strict independent fractional
 support-deadline integral that detects the original lossy epoch subtraction.
-`offline-core.log.gz` retains the actual product long-window and archived oracle
-checks; its precise source is identified by the source/checkpoint receipts.
+Actual-source long-window checks and one-second/split references remain separate
+from that archived counterfactual. `ci-220-failed.log.gz` preserves the prior CI
+failures; all corrections must pass subsequent exact-head CI.
 
 Physical Android/WebView60/TalkBack acceptance is not implied by Chromium or
 Node passes. This environment's emulator ADB port5581 refused connection.

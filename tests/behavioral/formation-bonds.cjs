@@ -13,7 +13,7 @@ function app(html=source){
  renderHud=renderAchievements=renderShop=renderSpirits=renderSideStats=renderDaily=updateBattleFast=renderCosmetics=renderNodes=renderAscendSummary=function(){};
  showToast=spawnFloatNum=emitCombatVfx=function(){};
  window.qa={fresh:freshState,get:()=>state,set:s=>state=acceptPersistedState(s),normalize:acceptPersistedState,
- spirits:SPIRITS,bondCatalog:FORMATION_BONDS,bonds:activeFormationBonds,tap:guardianTapDamageAt,regen:bossRegenRate,hp:enemyHpFor,
+ restore:restoreEnemyOrSpawn,spirits:SPIRITS,bondCatalog:FORMATION_BONDS,bonds:activeFormationBonds,tap:guardianTapDamageAt,regen:bossRegenRate,hp:enemyHpFor,
  passive:passiveWispDpsAt,dps:sustainedCombatDps,reward:abilityRewardPerCast,power:wispPower,cycle:abilityCycleSeconds,
  support:averageSupportBuffMult,rarityCost:rarityCost,moduleCost:moduleCost,ultimateCost:ultimateSigilCost,
  toggle:toggleActive,preset:applyFormationPreset,ascend:applyAscendMutation,
@@ -67,7 +67,7 @@ function checks(html=source){const a=app(html),b=a.b,records=[];function test(na
  });
  test('Farm canonical clock retains whole versus one-second reference at mature power',()=>{
   const fixture=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures.json')))['parity-long-high-power'].save;
-  b.set(fixture);b.advance(60,'offline',2000000000000);const direct=copy(b.get());b.set(fixture);
+  b.set(fixture);b.restore();b.advance(60,'offline',2000000000000);const direct=copy(b.get());b.set(fixture);b.restore();
   for(let i=0;i<60;i++)b.advance(1,'offline',2000000000000+i*1000);parity(b.get(),direct,'Farm clock');
  });
  test('all overlapping choices retain live/offline and split-window chronology',()=>{
@@ -83,8 +83,8 @@ function main(){const records=checks(),negativeControls=[];
   ['Kindling',"(bondActive('kindling') ? 1.25 : 1)","1"],['Vanguard',"(bondActive('vanguard') ? 0.8 : 1)","1"],
   ['Quarry',"(bondActive('quarry')?1.20:1)","1"],['Harvest',"(bondActive('harvest')?1.20:1)","1"],
   ['Autosave','autosaveCurrentFormation(id);','state.formationRebuild = null;'],
-  ['Farm clock','farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore','elapsedInRun===elapsedWholeSec+elapsedFractionSec']]){
-  assert(source.includes(from),name+' mutation anchor');let detected=false;try{checks(source.replace(from,to));}catch(error){detected=true;negativeControls.push({name,error:error.message});}assert(detected,name+' real mutation must fail');
+  ['Farm clock','farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore','elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore']]){
+  assert(source.includes(from),name+' mutation anchor');let detected=false;try{let mutated=source.replace(from,to);if(name==='Farm clock')mutated=mutated.replace('var gridCrossingsBefore = farmGridCrossings;\n    var gridRemainingBefore = farmGridRemainingSec;', 'var elapsedWholeBefore = elapsedWholeSec;\n    var elapsedFractionBefore = elapsedFractionSec;');checks(mutated);}catch(error){detected=true;negativeControls.push({name,error:error.message});}assert(detected,name+' real mutation must fail');
  }
  console.log(JSON.stringify({status:'pass',sourceSha256:crypto.createHash('sha256').update(source).digest('hex'),records,negativeControls}));
 }
