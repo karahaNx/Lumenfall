@@ -1,0 +1,34 @@
+{
+  "status": "fail",
+  "error": "Error: native width 320 timed out\n    at until (/workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:10:160)\n    at async accept (/workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:67:58)\n    at async /workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:78:305",
+  "records": [
+    {
+      "case": "signed update preserves actual native save storage",
+      "install": "Success\n",
+      "bytes": 97792,
+      "beforeSha256": "f2d96574a06453fb0c064c420b96dac9d4cf5a8a2cc488cbf805f37c395e44e6",
+      "afterSha256": "f2d96574a06453fb0c064c420b96dac9d4cf5a8a2cc488cbf805f37c395e44e6"
+    },
+    {
+      "case": "first updated launch preserves Wisp ownership",
+      "activeParty": [
+        "ember",
+        "tide",
+        "stone",
+        "void",
+        "aurora"
+      ],
+      "spirits": {
+        "ember": 1,
+        "tide": 1,
+        "stone": 1,
+        "gale": 0,
+        "thorn": 0,
+        "void": 1,
+        "aurora": 1,
+        "titan": 0
+      }
+    }
+  ],
+  "runtimeErrors": []
+}

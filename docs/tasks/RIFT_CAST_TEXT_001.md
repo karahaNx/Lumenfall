@@ -1,9 +1,8 @@
 # RIFT_CAST_TEXT_001 — remove repeated Rift ability status
 
-Status: **implementation prepared; integration and Android acceptance pending**.
-Owner: this user-created feature chat. One goal: remove repeated visible
-Cast/ability status on compact Rift Wisp cards while preserving ability names
-and required programmatic status. This chat remains open until delivery.
+Status: **complete — integrated, signed APK and required F13 acceptance verified**.
+Owner: this user-created feature chat. One goal: remove repeated visible Cast/Ready
+status from compact Rift Wisp cards, preserving ability names and programmatic status.
 
 ## Original requirements and continuation
 
@@ -27,112 +26,79 @@ Authoritative sources read: [full original](../recovery/2026-10-07/lead_context/
 Original requirements take precedence over suggestions. The supplied screenshots
 show other screens; none directly establishes F13 behavior or an APK/save identity.
 
-## Baseline and isolation
+## Baseline, scope and decisions
 
-- Checkout: `/workspace/lumenfall-rift-cast-text-001`, branch
-  `feature/rift-cast-text-001`. The original `/workspace/Lumenfall` remains untouched.
-- Current live-main baseline: `210005d0ae093d21e846bae41a9bddf25af2800d`.
-  PR61 Bond text merged before F13 integration and changed the shared Rift
-  assertions. Its copy/partner-ID changes are merged into this private branch;
-  F13 remains six product lines in `renderRiftParty()` only. Product SHA256:
-  `835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3`.
-  Combined code checkpoint: `3df6da597f92cc9b26e86e28fc9121c4668e9e93`.
-  Full CI is required on the combined head before integration.
-- Previous live-main baseline: `0e9b54c8d62a873bd48625f4a20ee18078e8a8f1`.
-  Main advanced from `214d45411ce2fb420f0e4b372063811a967679b1` during CI,
-  integrating PR59 Wisp upgrades and PR60 Forge text. F13 rebased cleanly and
-  preserves both features. Rebased candidate before this checkpoint:
-  `64f42fa57fcb36a544f7c00fe7089eda242cbcd5`. Product source SHA256:
-  `567d3821ff42d492a43f75e59f098f26cf354b3007a08e7b29d8ea5128b197d1`.
-- Startup rules, project state, ownership, Visuals guidance and workflow were
-  read from current main. No subagents, message tools or chat renaming are used.
-- PR46/B2 is now integrated through PR57, commit
-  `20aaae62a4b6e46f8d75775085918eaba4e8de29`. APK 0.1.138 is the current release.
-  At continuation startup there are no open PRs or observed unmerged
-  Guidance/Cosmetics patches. Their render selectors/classes remain intact.
-  Main integration is serialized and its current head is rechecked before merge.
-- Earlier preparation baselines `b2a1f440e8ad9fed34b37551e468224310d2a6f6`
-  and `0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd`, and product/test checkpoint
-  `1edc0c8d935279542fab8a1b8dd3852adff1d7a9`, are historical. Their evidence
-  remains in [the QA directory](../qa/rift-cast-text-001/README.md).
+Private checkout: /workspace/lumenfall-rift-cast-text-001, feature/rift-cast-text-001.
+The original /workspace/Lumenfall checkout was untouched. Preparation history is
+preserved in [earlier evidence](../qa/rift-cast-text-001/README.md).
+Continuation began on main 214d45411ce2fb420f0e4b372063811a967679b1.
+Final application baseline 210005d0ae093d21e846bae41a9bddf25af2800d includes
+PR59 Wisp upgrades, PR60 Forge text and PR61 Bond text. All are preserved.
+PR65 later exports the existing findChrome helper; execution/assertions are unchanged.
+PR46/B2 was checked at startup: integrated via PR57 at 20aaae62a4b6e46f8d75775085918eaba4e8de29.
+No subagents, message tools or chat renaming were used. Current live-main rules
+supersede the historical Lead/writer handover gates; standing approval covers delivery.
 
-## Scope and decisions
+Only six product lines in renderRiftParty() change: powered cards omit CAST/Ready;
+unpowered Lv 0 stays visible. The existing progressbar retains Wisp/ability name,
+range, true charge and timing. aria-valuetext exposes Ready/Casting without a live
+region and follows the existing cast expiry. Formation ability names, portraits,
+passive power, Bond grouping, fill, VFX/classes and reduced motion remain intact.
+The compact cards previously had no separate visible ability name.
 
-Only `renderRiftParty()` in root `index.html` changes product behavior:
+Existing Rift assertions and the focused Node driver cover this behavior. A 0.00001
+percentage-point CSS serialization tolerance is limited to displayed width; numeric
+simulation expectations remain unchanged. QA instrumentation is confined to served
+copies or private runtime handles on the isolated emulator; the signed APK is unchanged.
+No gameplay values, deterministic purchases, Luminous Motes rewards, bulk/queue
+handlers, chronology, live/offline policy, save schema/migration, CSS/assets,
+Android package/signing or workflows change. Existing values need no migration.
+Guidance/Cosmetics rendering selectors and classes are preserved; no new design
+choice or unfinished dependent proposal is required for F13.
 
-- Powered cards display no repeated `CAST` or `Ready`. Unpowered `Lv 0` remains.
-- The existing bar retains its Wisp/ability-name `aria-label`, range, actual
-  charge and timing. `aria-valuetext` exposes `Casting;` or `Ready;` when relevant,
-  without a live region. Casting status expires with the existing cosmetic marker.
-- Existing portraits, passive power, Bond grouping, fill, cast/attack classes,
-  VFX, Formation ability names and reduced-motion behavior remain intact.
-  Compact cards had no separate visible ability name; their accessible name stays.
+## Acceptance and delivery evidence
 
-Existing Rift assertions cover the changed contract and all eight actual casts.
-A 0.00001 percentage-point tolerance addresses fractional CSS width serialization
-in those newly inspected cast states, without changing gameplay expectations.
-The new focused browser check uses JavaScript/Node and temporary served-copy
-instrumentation; production has no QA bridge.
+[PR63](https://github.com/karahaNx/Lumenfall/pull/63) merged at
+ab46c0c7f30667c24325b6271f811b46b159d0d1. Integrated application SHA256:
+835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3.
+[Final receipt and raw evidence](../qa/rift-cast-text-001/finish/README.md)
+preserve exact identities, commands, logs and supported limits.
 
-No balance, rewards, currencies, deterministic purchases, bulk/queue limits,
-chronology, simulation, offline policy, save schema, migration, CSS/assets,
-Android package, signing or workflows are changed. Existing owned values and
-Luminous Motes rewards stay intact. This presentation-only change needs no migration.
-WebView 60 compatibility and package `com.lumenfall.app` remain supported.
+| Required criterion | Verified result |
+| --- | --- |
+| No visible powered uncharged/charging/ready/casting duplicates; Lv 0 retained | Integrated 12-profile/384-observation matrix PASS; baseline-visible and missing-ARIA negative controls caught. |
+| Ability names, true resource/timing, programmatic states, expiry and real casts | Existing Rift checks, V8 6.0 renderer 32 states and native 120 observations including 24 actual casts PASS. Rendering/cosmetic updates remain observer-only. |
+| Mobile widths, large text, 44px controls, focus, contrast and reduced motion | Browser320/390/430px × motion × text profiles and existing accessibility checks PASS. Native three widths, 44px controls, real system font scale 2 (20px), AX progressbar and Android Tab/focus PASS. |
+| Relevant save/recovery, live/offline, chronology and required CI | All12 scoped checks rerun on integration PASS. CI37713097586 on 4452f7ad3b84becda0ec3b028a603566b51cc45d passes 148 defaults,12 required negatives and guarded startup. Integrated application bytes equal the tested head; tooling/source/context also pass. |
+| Signed integrated APK and update acceptance | Build37714666181 publishes 0.1.142; package/version/established cert, release digest, all ZIP CRCs and15 bundled assets PASS. Actual signed 138→142 update preserves storage byte-for-byte and ownership on first launch; native acceptance PASS. |
+| Durable status and owner completion | This task, PROJECT_STATE, immutable APK and raw receipts are saved together in the final GitHub checkpoint. Only this owner chat is eligible for archive after remote verification. |
 
-## Acceptance and evidence
+APK SHA256: ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0. Package com.lumenfall.app and the established
+A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21
+certificate are verified. [Immutable APK](../../archive/android/rift-cast-text-001/README.md).
 
-Required feature acceptance:
+## Following Cosmetics integration
 
-1. Powered uncharged/charging/ready/casting cards have no repeated visible status;
-   unpowered cards keep `Lv 0`.
-2. Ability names, charge, timing and programmatic ready/casting/unpowered status
-   are preserved; cast expiry, eight real cast identities and observer-only
-   rendering remain correct.
-3. Affected mobile widths, large text, 44px controls, keyboard focus, contrast and
-   reduced motion are checked, with baseline differences distinguished.
-4. Relevant existing save/recovery, live/offline and chronology checks pass;
-   required unmodified CI passes before integration.
-5. The integrated source is verified in the signed APK with package/version/cert,
-   bundled assets, native Rift behavior and in-place save-preserving update checks.
-6. Supported final status/evidence is saved in this task and PROJECT_STATE before
-   archiving only this owner chat.
+PR69/d95205f6d8059933fac74e8699854f67cb950a7e merged during verification. F13’s renderer is byte-identical. Current-main24 default/equipped-cosmetic profiles (768 observations), all 12 scoped checks and V8 6.0 parser/renderer checks PASS. [Overlap receipt](../qa/rift-cast-text-001/finish/cosmetics-overlap/receipt.json). Native acceptance belongs to the immutable142 APK; no native143 claim is made.
 
-On baseline 214d454, the focused browser matrix passes 12 profiles / 384
-state observations. The default local dump-DOM contract run timed out without
-any completed QA result; it is a diagnostic, not a pass. Existing assertions are
-also replayed through the documented local CDP transport; normal CI remains required.
+## Limits and final action
 
-[PR63](https://github.com/karahaNx/Lumenfall/pull/63) is published. Normal
-[CI37708820963](https://github.com/karahaNx/Lumenfall/actions/runs/37708820963)
-passes all 146 default scenarios, 12 required negatives and guarded startup on
-head `d75ac294c829ebd7d030f8565d2f94a2a99615fa` / baseline214d454.
-The full raw log is preserved in [current evidence](../qa/rift-cast-text-001/finish/README.md).
-After main's advancement, those results are historical; updated branch CI is
-required before integration. Focused/current-baseline checks are rerun.
+The unchanged 200% compact five-Wisp name overflow has identical measured geometry
+on latest baseline and candidate; broader layout acceptance is not claimed.
+Native evidence uses isolated Android8.1/API27/WebView61.0.3163.98 software emulation.
+V8 6.0.286.52 parses/executes the product renderer for Chrome60's engine generation;
+exact physical WebView60/TalkBack testing is not claimed. WebView61 does not support
+prefers-reduced-motion; modern-browser checks verify the existing motion contract.
+Self-review and automated checks were performed; no independent review is claimed.
 
-Normal [CI37710831478](https://github.com/karahaNx/Lumenfall/actions/runs/37710831478)
-also passes 147 defaults, all 12 required negatives and guarded startup on head
-`d7b01c65fe179f03c8622090512f66a1851b682d` / baseline0e9b54c. This receipt predates
-the PR61 dependency merge. The combined-head gate and focused checks supersede it
-for integration. No failed/cancelled or superseded run is called a final pass.
+The default local Chromium151 dump-DOM timeout and two native harness failures
+(startup-socket race and Android's minimum physical display size) are retained as
+diagnostics. Corrected transport/display setup preserves all acceptance assertions;
+the native acceptance combines the successful update/320/390px checkpoint and a same-APK continuation for 430px/AX/font/keyboard. All120 observations and 24 real casts pass. Earlier 146/147 CI receipts are historical.
 
-The product renderer executes correctly in 32 state fixtures on V8 6.0.286.52
-(Node8.3.0), Chrome60's engine generation. Actual signed APK138 is installed on
-isolated Android8.1/API27/WebView61.0.3163.98. Its repeated Ready baseline and
-real persisted save are verified for the subsequent signed in-place update.
-This is emulator evidence, not physical WebView60 or TalkBack acceptance.
+The additional current-main harness attempt initially used old staged835e HTML with the new PR69 bridge, yielding queueCometTrial reference errors. It is preserved as a diagnostic; the corrected current-root run passes all 12 scoped checks.
 
-At 200% compact Wisp text, five-member names overflow on both baseline and
-candidate. This unchanged layout limitation is recorded for separate Visuals
-work; F13 does not claim full large-text layout acceptance or include a broader
-layout change. Browser text doubling is distinct from Android system font scaling.
-Exact physical WebView60/TalkBack acceptance is not implied by modern Chromium
-or a native emulator; device/runtime identities and limitations must be recorded.
-
-## Next action
-
-Complete current-baseline checks and self-review, publish this feature PR, require
-normal CI, serialize integration, verify the resulting signed APK/native behavior,
-then save the delivery receipt and shared state. Independent review is not claimed.
-Missing required acceptance keeps this chat open.
+No required F13 acceptance remains open. Verify the final GitHub checkpoint, stop
+this task's shared-file work, then archive only the calling owner chat via the app
+tool. Other tasks retain their own recorded acceptance. Archive success requires
+an actual tool response; no archive outcome is invented in this document.

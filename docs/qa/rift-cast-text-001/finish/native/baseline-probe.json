@@ -1,0 +1,97 @@
+{
+  "status": "baseline-observation",
+  "identity": {
+    "android": "8.1.0",
+    "api": "27",
+    "package": [
+      "versionCode=138 minSdk=22 targetSdk=34",
+      "versionName=0.1.138"
+    ],
+    "ua": "Mozilla/5.0 (Linux; Android 8.1.0; Android SDK built for x86_64 Build/OSM1.180201.023; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.98 Mobile Safari/537.36",
+    "page": "https://localhost/",
+    "viewport": {
+      "width": 400,
+      "height": 772,
+      "dpr": 0.5
+    }
+  },
+  "records": [
+    {
+      "case": "baseline native AX mapping",
+      "node": {
+        "nodeId": "1",
+        "ignored": false,
+        "role": {
+          "type": "role",
+          "value": "progressbar"
+        },
+        "name": {
+          "type": "computedString",
+          "value": "Ember Wisp — Nova Burst",
+          "sources": [
+            {
+              "type": "relatedElement",
+              "attribute": "aria-labelledby"
+            },
+            {
+              "type": "attribute",
+              "value": {
+                "type": "computedString",
+                "value": "Ember Wisp — Nova Burst"
+              },
+              "attribute": "aria-label",
+              "attributeValue": {
+                "type": "string",
+                "value": "Ember Wisp — Nova Burst"
+              }
+            },
+            {
+              "type": "attribute",
+              "attribute": "title",
+              "superseded": true
+            }
+          ]
+        },
+        "value": {
+          "type": "number",
+          "value": 100
+        },
+        "properties": [
+          {
+            "name": "valuemin",
+            "value": {
+              "type": "number",
+              "value": 0
+            }
+          },
+          {
+            "name": "valuemax",
+            "value": {
+              "type": "number",
+              "value": 100
+            }
+          },
+          {
+            "name": "valuetext",
+            "value": {
+              "type": "string",
+              "value": "100% charged; 0 seconds to next ability"
+            }
+          }
+        ],
+        "childIds": [],
+        "backendDOMNodeId": 549
+      }
+    },
+    {
+      "case": "baseline real Android font scale 2",
+      "ua": "Mozilla/5.0 (Linux; Android 8.1.0; Android SDK built for x86_64 Build/OSM1.180201.023; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.98 Mobile Safari/537.36",
+      "font": "20px"
+    },
+    {
+      "case": "baseline actual Android Tab and focus outline",
+      "focused": "rift-farm-btn",
+      "outline": "auto"
+    }
+  ]
+}

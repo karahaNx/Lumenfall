@@ -39,7 +39,7 @@ class Adb {
   const start=Date.now();while(!responses.length&&Date.now()-start<60000)await new Promise(r=>setTimeout(r,25));
   assert.equal(Buffer.concat(responses).subarray(0,4).toString(),'OKAY','ADB sync upload succeeded');s.destroy();
  }
- async forward(port,service){const sockets=new Set(),server=net.createServer(async socket=>{sockets.add(socket);socket.on('close',()=>sockets.delete(socket));try{const stream=await this.open(service);socket.pipe(stream);stream.pipe(socket);socket.on('close',()=>stream.destroy());stream.on('error',e=>socket.destroy(e));}catch(e){socket.destroy(e);}});server.sockets=sockets;await new Promise(resolve=>server.listen(port,'127.0.0.1',resolve));return server;}
+ async forward(port,service){const sockets=new Set(),server=net.createServer(async socket=>{sockets.add(socket);socket.on('error',()=>{});socket.on('close',()=>sockets.delete(socket));try{const stream=await this.open(service);socket.pipe(stream);stream.pipe(socket);socket.on('close',()=>stream.destroy());stream.on('error',e=>socket.destroy(e));}catch(e){socket.destroy(e);}});server.sockets=sockets;await new Promise(resolve=>server.listen(port,'127.0.0.1',resolve));return server;}
  close(){for(const s of this.streams.values())s.destroy();this.socket.destroy();}
 }
 module.exports=Adb;

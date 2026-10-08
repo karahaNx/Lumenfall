@@ -1,0 +1,83 @@
+{
+  "feature": "RIFT_CAST_TEXT_001",
+  "status": "complete",
+  "completedAt": "2026-10-08T02:21:33.425Z",
+  "owner": "calling user-created feature chat",
+  "integrationCommit": "ab46c0c7f30667c24325b6271f811b46b159d0d1",
+  "pr": 63,
+  "ciHead": "4452f7ad3b84becda0ec3b028a603566b51cc45d",
+  "ciRun": 37713097586,
+  "ciScenarios": 148,
+  "ciRequiredNegatives": 12,
+  "sourceSha256": "835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3",
+  "apkVersion": "0.1.142",
+  "buildRun": 37714666181,
+  "apkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+  "package": "com.lumenfall.app",
+  "matrixProfiles": 12,
+  "matrixObservations": 384,
+  "scopedExistingChecks": 12,
+  "nativeIdentity": {
+    "android": "8.1.0",
+    "api": "27",
+    "package": [
+      "versionCode=142 minSdk=22 targetSdk=34",
+      "versionName=0.1.142"
+    ],
+    "ua": "Mozilla/5.0 (Linux; Android 8.1.0; Android SDK built for x86_64 Build/OSM1.180201.023; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.98 Mobile Safari/537.36",
+    "page": "https://localhost/",
+    "viewport": {
+      "width": 500,
+      "height": 984,
+      "dpr": 0.800000011920929
+    },
+    "apkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+    "sourceSha256": "835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3"
+  },
+  "nativeObservations": 120,
+  "nativeRealCasts": 24,
+  "nativeStorage": {
+    "case": "signed update preserves actual native save storage",
+    "install": "Success\n",
+    "bytes": 126976,
+    "beforeSha256": "554fa2a9935125f795e98565dbec0634de21b6099d79611428b77330fe99663c",
+    "afterSha256": "554fa2a9935125f795e98565dbec0634de21b6099d79611428b77330fe99663c"
+  },
+  "nativeFont": {
+    "case": "native Android system font scale 2",
+    "systemScale": 2,
+    "viewport": {
+      "width": 430,
+      "height": 773
+    },
+    "nameFont": "20px",
+    "noVisibleStatus": true
+  },
+  "independentReview": false,
+  "limitations": [
+    "Isolated software emulator, not physical device or TalkBack.",
+    "Actual legacy runtime is WebView61; exact WebView60 compatibility is checked separately through ES2017/V8 6.0.",
+    "System font scale is distinct from the separately measured 200% compact-text overflow.",
+    "WebView61 does not implement prefers-reduced-motion; existing modern-browser reduced-motion tests retain that contract.",
+    "Unchanged compact five-Wisp name overflow at 200% text: identical measured geometry on current baseline and candidate."
+  ],
+  "archive": "Eligible after this GitHub checkpoint is verified; only the calling owner chat.",
+  "followingCosmetics": {
+    "status": "pass",
+    "main": "d95205f6d8059933fac74e8699854f67cb950a7e",
+    "sourceSha256": "5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c",
+    "f13Renderer": "byte-identical to integrated ab46c0c",
+    "rendererSha256": "970c383aea906859370798cd066ce86b1e41b7dd2d12d24ff293275ede33c5b5",
+    "defaultProfiles": 12,
+    "equippedProfiles": 12,
+    "totalObservations": 768,
+    "nativeAcceptanceVersion": "0.1.142",
+    "native143NotClaimed": true,
+    "scopedExistingChecks": 12,
+    "staleStagingDiagnostic": "Earlier extra run paired old835e staged HTML with the new harness; retained separately and superseded by current-root12 passes."
+  },
+  "nativeContinuation": {
+    "file": "native-attempt-3-width430-failure.json",
+    "sha256": "d4f1e41e5f9c96069a6d8dc3d84237a79587f58da9599e599675ab79925926b4"
+  }
+}
