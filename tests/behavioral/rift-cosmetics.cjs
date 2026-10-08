@@ -193,6 +193,14 @@ async function run() {
         var old=freshState();delete old.riftTheme;a(acceptPersistedState(old,'backup').riftTheme==='default','old save uses default without currency migration');
         return {contract:'unlock-selection-persistence',themes:results};
       })()`));
+      records.push(await evaluate(`(function(){
+        var q=cosmeticQa,a=q.assert;q.fixture('normal',true);
+        var themes=[];RIFT_THEMES.forEach(function(t){
+          selectRiftTheme(t.id);var backgrounds=[];
+          [1,26,51,76,101,126].forEach(function(depth){state.depth=depth;spawnEnemy(false);renderAll();backgrounds.push(getComputedStyle(document.querySelector('#tab-battle .stage')).backgroundImage);});
+          a(new Set(backgrounds).size===6,'all six region palettes remain distinct with '+t.id);themes.push(t.id);
+        });return {contract:'region-palettes-preserved',themes:themes};
+      })()`));
     }
     for (const [width, height, scale, motion] of [[320,640,1,'no-preference'], [390,844,1,'no-preference'], [430,915,1,'no-preference'], [320,640,1.3,'reduce'], [390,844,1.3,'reduce'], [430,915,1,'reduce'], [320,640,2,'reduce'], [390,844,2,'reduce'], [430,915,2,'reduce']]) {
       await send('Emulation.setDeviceMetricsOverride', {width, height, deviceScaleFactor: 1, mobile: true});
