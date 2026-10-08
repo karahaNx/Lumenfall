@@ -74,9 +74,16 @@ checks pass. Both directions of V8 6.0/modern receipt transfer preserve exact pr
 WebView61 signed144 baseline preparation passes, with installed APK SHA-256
 `6e2006cb90ebe27104bd1ae38ba8c8afa700f4ede90e6fe8046bf7b2f505ca5d`.
 Price-ledger checkpoint `1a2a040fc498bef9d1b07ba13b42740933ff5308`, [PR85](https://github.com/karahaNx/Lumenfall/pull/85);
-required CI is rerun after the final deposit regression. Old full-suite runs retain failures from
-obsolete tail expectations; focused corrections pass, final full run is pending.
-Remaining checks and receipts will be added at delivery checkpoint.
+Head `5759eaad48197d316cff4d35d92601790a39b230` passed full GitHub CI
+[run37740953545](https://github.com/karahaNx/Lumenfall/actions/runs/37740953545):
+161 scenarios, 14 expected negative controls and runtime smoke. Main then advanced
+to `31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6`. Combined candidate `9c10ab2`
+preserves Formation autosave, Resonate, Auto-Ascend UI and exclusive upgrade owners.
+Conflicts retain both retirement guards and legacy Lab explanations with the F26
+cap. New upgrade-owner expectations exclude the deliberately retired Reserves
+track. Full F26 regression passes on combined bytes; refreshed CI is pending.
+The suspected CI stall completed normally; the proposed unrelated process helper
+fix remains private, outside this feature. Remaining receipts follow at delivery.
 
 Next: complete current regression/UI/compatibility checks, self-review diff, push
 feature PR, pass required CI, serialize integration, verify signed build and native

@@ -48,7 +48,7 @@ window.runUpgradeIdentityQa=async function(b,ctx,assert,parity,summaryParity){
       [['charge',0,30,1,1.55],['arcanecal',15000,120,1.6,1.6],['conduction',90000,280,1.6,1.6],['luminoustracking',2500000,1500,1.6,1.6]],'retained Forge recipes/prices');
     same(t.nodes().filter(function(n){return !n.retiredTo;}).map(function(n){return [n.id,n.lumenBase,n.shardBase,n.baseDurationSec];}),
       [['wispascend',800,80,180],['guardmastery',600,40,150],['shardstudy',400,150,200],['lumenstudy',1400,120,260],['motestudy',3200,320,380],['measuredinquiry',30000,1200,600]],'retained Lab prices/work');
-    same(u.nodes().filter(function(n){return !n.retiredTo;}).map(function(n){return [n.id,n.baseCost,n.growth];}),[['echo',2,1.4],['bonds',2,1.45],['swift',3,1.5],['reserves',6,1.6]],'retained Prism prices');
+    same(u.nodes().filter(function(n){return !n.retiredTo&&!n.retired;}).map(function(n){return [n.id,n.baseCost,n.growth];}),[['echo',2,1.4],['bonds',2,1.45],['swift',3,1.5]],'retained Prism prices after F26 hours retirement');
     [0,5,10,13].forEach(function(level){var s=seed();s.activeStudies=[];s.longStudyLevels.measuredinquiry=level;install(s);
       t.nodes().filter(function(n){return !n.retiredTo&&n.id!=='measuredinquiry';}).forEach(function(n){near(t.duration(n.id,5),Math.round(Math.round(n.baseDurationSec*Math.pow(1.6,5))*(1-.02*Math.min(10,level))),'bought Inquiry discount preserved '+n.id+' '+level);});
     });
@@ -58,7 +58,7 @@ window.runUpgradeIdentityQa=async function(b,ctx,assert,parity,summaryParity){
     f.achievements();var earned=b.getState();f.achievements();same(b.getState(),earned,'Deed reward only once');
     fresh=b.freshStateSnapshot();fresh.research.charge=60;install(fresh);['labmaster','labqueue'].forEach(function(id){ok(f.deeds().items.find(function(d){return d.id===id;}).eligible,'fresh original Forge threshold reachable '+id);});
     ok(f.deeds().total===683,'one-time Comet reward pool unchanged');
-    return {checks:checks,closedTracks:10,activeTracks:14,exactOldFactors:true,currenciesUnchanged:true,idempotent:true,freshDeeds:true};
+    return {checks:checks,closedTracks:10,activeTracks:13,exactOldFactors:true,currenciesUnchanged:true,idempotent:true,freshDeeds:true};
   }
   if(ctx.scenario==='upgrade-identity-farm-clock'){
     var s=JSON.parse(JSON.stringify(ctx.fixtures['parity-medium-farm'].save)),clocks=[2000000000000,2000000000371];
