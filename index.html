@@ -3679,7 +3679,7 @@ function normalizeCheaperRecruitmentRefund(out,source){
   var hasReceipt=Object.prototype.hasOwnProperty.call(receipts,id),receipt=receipts[id];
   if(hasReceipt && (saved.version!==1 || !isPlainObject(source.refundCredits) || !Array.isArray(source.refundCredits.prisms) || !isPlainObject(receipt) || receipt.from!==20 || receipt.to!==raw ||
       receipt.unpricedFrom!==unpricedFrom || !isPlainObject(receipt.amounts) || !Array.isArray(receipt.amounts.prisms) ||
-      receipt.amounts.prisms.length!==amounts.length || receipt.amounts.prisms.some(function(n){return !Number.isFinite(n) || n<=0;}))){
+      receipt.amounts.prisms.length!==amounts.length || receipt.amounts.prisms.some(function(n,index){return !Number.isFinite(n) || n<=0 || Math.floor(n)!==n || !cheaperRecruitmentReceiptPriceMatches(n,20+index);} ))){
     throw persistenceError('invalid-bonds-refund','Recruitment refund receipt needs recovery');
   }
   credits.forEach(function(entry){
@@ -3695,6 +3695,15 @@ function normalizeCheaperRecruitmentRefund(out,source){
     else credits.push({id:id,amount:amount});
   });
   out.feedbackMigration.receipts[id]={from:20,to:raw,unpricedFrom:unpricedFrom,amounts:{prisms:amounts}};
+}
+// Old V8 and modern engines produce slightly different exponential prices.
+// Bound accumulated floating-point error before whole-Prism rounding; retain
+// the stored original amounts. Small prices still require their exact integer.
+function cheaperRecruitmentReceiptPriceMatches(amount,level){
+  var value=2*Math.pow(1.45,level);
+  var relativeError=level*Number.EPSILON/(1-level*Number.EPSILON);
+  var allowance=value*relativeError;
+  return amount>=Math.ceil(value-allowance) && amount<=Math.ceil(value+allowance);
 }
 // Knuth TwoSum detects loss on either operand, including a small old wallet
 // beside a huge incoming refund. An inverse subtraction alone misses that case.
@@ -3717,7 +3726,9 @@ function prismPurchasePlan(cost){
     entry.amount=left;remaining=next;
   }
   if(state.prisms<remaining) return null;
-  return {prisms:state.prisms-remaining,credits:credits.filter(function(entry){return !entry || entry.amount!==0;})};
+  var wallet=exactPrismArithmetic(state.prisms,-remaining);
+  if(wallet===null) return null;
+  return {prisms:wallet,credits:credits.filter(function(entry){return !entry || entry.amount!==0;})};
 }
 function prismRefundCreditTotal(){
   return ((state.refundCredits && state.refundCredits.prisms)||[]).reduce(function(total,entry){

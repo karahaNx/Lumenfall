@@ -1,48 +1,62 @@
 {
   "status": "PASS",
-  "observedAt": "2026-10-08T06:44:00.367Z",
+  "observedAt": "2026-10-08T07:20:55.012Z",
   "results": [
     {
       "mutation": "handler",
       "expected": "cap prevents direct/repeated debit",
       "status": "CAUGHT",
       "exit": 1,
-      "sourceSha256": "149e3bdc27a1888cecda8e9e8499685cd125abd41185be892cecf87060af5376"
+      "sourceSha256": "270c750bed922ed8ef472758b27af0351b38301fe866762dff4a0d6ca7f2ae81"
     },
     {
       "mutation": "refund",
       "expected": "refund receipt prevents a second credit",
       "status": "CAUGHT",
       "exit": 1,
-      "sourceSha256": "149e3bdc27a1888cecda8e9e8499685cd125abd41185be892cecf87060af5376"
+      "sourceSha256": "270c750bed922ed8ef472758b27af0351b38301fe866762dff4a0d6ca7f2ae81"
     },
     {
       "mutation": "credit",
       "expected": "all finite original purchase value retained",
       "status": "CAUGHT",
       "exit": 1,
-      "sourceSha256": "149e3bdc27a1888cecda8e9e8499685cd125abd41185be892cecf87060af5376"
+      "sourceSha256": "270c750bed922ed8ef472758b27af0351b38301fe866762dff4a0d6ca7f2ae81"
     },
     {
       "mutation": "free-credit",
       "expected": "unrepresentable credit subtraction cannot buy a free level",
       "status": "CAUGHT",
       "exit": 1,
-      "sourceSha256": "149e3bdc27a1888cecda8e9e8499685cd125abd41185be892cecf87060af5376"
+      "sourceSha256": "270c750bed922ed8ef472758b27af0351b38301fe866762dff4a0d6ca7f2ae81"
+    },
+    {
+      "mutation": "wallet",
+      "expected": "unrepresentable wallet debit cannot buy a free level",
+      "status": "CAUGHT",
+      "exit": 1,
+      "sourceSha256": "270c750bed922ed8ef472758b27af0351b38301fe866762dff4a0d6ca7f2ae81"
+    },
+    {
+      "mutation": "receipt",
+      "expected": "wrong receipt amount rejects for recovery",
+      "status": "CAUGHT",
+      "exit": 1,
+      "sourceSha256": "270c750bed922ed8ef472758b27af0351b38301fe866762dff4a0d6ca7f2ae81"
     },
     {
       "mutation": "ui",
       "expected": "UI maxed even with affordable wallet",
       "status": "CAUGHT",
       "exit": 1,
-      "sourceSha256": "149e3bdc27a1888cecda8e9e8499685cd125abd41185be892cecf87060af5376"
+      "sourceSha256": "270c750bed922ed8ef472758b27af0351b38301fe866762dff4a0d6ca7f2ae81"
     },
     {
       "mutation": "raw",
       "expected": "all finite original purchase value retained",
       "status": "CAUGHT",
       "exit": 1,
-      "sourceSha256": "149e3bdc27a1888cecda8e9e8499685cd125abd41185be892cecf87060af5376"
+      "sourceSha256": "270c750bed922ed8ef472758b27af0351b38301fe866762dff4a0d6ca7f2ae81"
     }
   ]
 }

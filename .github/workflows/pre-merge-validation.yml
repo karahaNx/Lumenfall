@@ -57,7 +57,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for mutation in handler refund credit free-credit; do
+          for mutation in handler refund credit free-credit wallet receipt; do
             if node tests/behavioral/cheaper-recruitment.cjs --source mobile/www/index.html --mutation "$mutation" --output "/tmp/cheaper-recruitment-$mutation.json"; then
               echo "::error::Cheaper Recruitment mutation '$mutation' unexpectedly passed."
               exit 1
@@ -65,7 +65,7 @@ jobs:
             node - "$mutation" "/tmp/cheaper-recruitment-$mutation.json" <<'JS'
           const fs = require('node:fs'), assert = require('node:assert/strict');
           const result = JSON.parse(fs.readFileSync(process.argv[3], 'utf8'));
-          const expected = {handler:'cap prevents direct/repeated debit',refund:'refund receipt prevents a second credit',credit:'all finite original purchase value retained', 'free-credit':'unrepresentable credit subtraction cannot buy a free level'};
+          const expected = {handler:'cap prevents direct/repeated debit',refund:'refund receipt prevents a second credit',credit:'all finite original purchase value retained', 'free-credit':'unrepresentable credit subtraction cannot buy a free level',wallet:'unrepresentable wallet debit cannot buy a free level',receipt:'wrong receipt amount rejects for recovery'};
           assert.equal(result.status, 'FAIL');
           assert(result.failure.includes(expected[process.argv[2]]), 'Expected causal assertion missing');
           assert.equal(result.teardown.browser.code, 0);

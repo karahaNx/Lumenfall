@@ -24,8 +24,8 @@ Current rules supersede old role-approval stages.
 - Exact TwoSum detection checks both operands. A refund that cannot be added
   without loss/overflow remains a same-currency credit, never silently truncated.
   Tree payments consume credits only when both subtractions are exact; otherwise
-  those credits remain available for a representable payment. Existing Number
-  wallet debit semantics are preserved. QA uses BigInt as an independent oracle.
+  those credits remain available for a representable payment. Wallet debits also require exact subtraction. Prices remain unchanged;
+  an unrepresentable debit is refused instead of charging a rounded/free amount. QA uses BigInt as an independent oracle.
 - Wallet, remaining credits and versioned receipt share the same canonical
   snapshot. Existing save/restore transactions persist them together. Repeated
   normalization/reload/recovery/restore is idempotent. Restore replaces the whole
@@ -38,3 +38,19 @@ Current rules supersede old role-approval stages.
   ownership survive. No prices/effects/caps outside F21, signing/assets/package,
   unrelated tools or historical originals are changed.
 
+
+## PR89 review corrections
+
+P1: actual raw95 restitution can create a wallet above integer precision. All
+Tree payments now check exact wallet subtraction as well as both credit
+subtractions; representable payments still use the unchanged price. Regression
+covers refusal/no save for1 Prism and a real exact2-Prism debit.
+
+P2: every receipt amount now matches the original rounded price schedule, not
+only its sign/count. Exact cross-engine equality would reject valid data:
+Node8/V8 6.0 and Node24 differ at1822 finite prices, by up to494 ULPs. The
+exponent-scaled relative rounding envelope k*EPSILON/(1-k*EPSILON) is applied
+before ceil. Small prices (including3376) require the exact integer. Stored
+amounts are retained byte-for-number; validation never reprices or recredits.
+Full finite price arrays pass in both engine directions; [1], [3375], [3377]
+receipts reject for recovery. This numeric envelope changes no gameplay prices.

@@ -13,7 +13,9 @@ if(mutation==='raw')source=source.replace('out.nodes[node.id] = nonNegativeInt(n
 if(mutation==='refund')source=source.replace('if(hasReceipt || raw<=20) return;','if(raw<=20) return;');
 if(mutation==='credit')source=source.replace('var sum=exactPrismArithmetic(out.prisms,amount);','var sum=out.prisms+amount;');
 if(mutation==='free-credit')source=source.replace('left=exactPrismArithmetic(entry.amount,-take)','left=entry.amount-take');
-if(!['none','handler','ui','raw','refund','credit','free-credit'].includes(mutation))throw Error('unknown mutation');
+if(mutation==='wallet')source=source.replace('var wallet=exactPrismArithmetic(state.prisms,-remaining);','var wallet=state.prisms-remaining;');
+if(mutation==='receipt')source=source.replace(' || !cheaperRecruitmentReceiptPriceMatches(n,20+index)','');
+if(!['none','handler','ui','raw','refund','credit','free-credit','wallet','receipt'].includes(mutation))throw Error('unknown mutation');
 const bridge=`
 window.__cheaperRecruitment={
  fresh:function(){return freshState();},today:todayStr,
@@ -69,6 +71,7 @@ async function run(){
  for(const pipe of [browser.stdio[3],browser.stdio[4]])pipe.on('error',e=>{for(const p of pending.values()){clearTimeout(p.timer);p.reject(e);}pending.clear();});
  const tab=await send('Target.createTarget',{url:'about:blank'},null);session=(await send('Target.attachToTarget',{targetId:tab.targetId,flatten:true},null)).sessionId;
  await send('Page.enable');await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});await navigate(url);
+ await evaluate('window.cheaperReceiptLegacyPrices='+JSON.stringify(JSON.parse(fs.readFileSync(path.join(__dirname,'cheaper-receipt-prices.json'),'utf8')).legacy));
  records.push({kind:'refund-contracts',result:await evaluate('runCheaperRefundContracts()')});
  records.push({kind:'contracts',result:await evaluate('runCheaperRecruitmentContracts()')});
  for(const width of [320,390,430])for(const fontPercent of [100,200])for(const motion of ['no-preference','reduce']){

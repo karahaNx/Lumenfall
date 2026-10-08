@@ -1,0 +1,9 @@
+{
+  "emulator": "36.2.12 build14214601",
+  "systemImage": "Android27 default x86 r01",
+  "acceleration": "software TCG; no /dev/kvm",
+  "avdConfig": "AvdId = F21\navd.ini.encoding = UTF-8\nabi.type = x86\nhw.cpu.arch = x86\nhw.cpu.ncore = 2\nhw.ramSize = 1536\nhw.gpu.enabled = yes\nhw.gpu.mode = swiftshader_indirect\nhw.lcd.width = 390\nhw.lcd.height = 844\nhw.lcd.density = 160\nhw.keyboard = yes\nhw.mainKeys = no\nhw.device.name = F21\nimage.sysdir.1 = system-images/android-27/default/x86/\ntag.id = default\ntag.display = Default\nshowDeviceFrame = no\ndisk.dataPartition.size = 6442450944\n",
+  "systemSourceProperties": "Pkg.Desc=Android SDK System Image\nPkg.UserSrc=false\nPkg.Revision=1\nAndroidVersion.ApiLevel=27\nSystemImage.Abi=x86\nSystemImage.GpuSupport=true\nSystemImage.TagId=default\nSystemImage.TagDisplay=Default Android System Image\n",
+  "startup": "ANDROID_AVD_HOME=<isolated-avd-root> ANDROID_SDK_ROOT=<isolated-sdk-root> emulator -avd F21 -no-window -no-audio -no-snapshot -no-boot-anim -accel off -gpu swiftshader_indirect -port5554",
+  "scope": "Unauthenticated isolated emulator on5555; ro.kernel.qemu asserted; no physical/TalkBack claim"
+}

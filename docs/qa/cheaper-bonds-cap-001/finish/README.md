@@ -1,18 +1,18 @@
 # F21 current implementation and verification
 
 Current candidate source SHA256:
-`149e3bdc27a1888cecda8e9e8499685cd125abd41185be892cecf87060af5376`.
-Baseline main: `261b1b7f863f73c324f4ac04acb5bfc95101644d`.
+`270c750bed922ed8ef472758b27af0351b38301fe866762dff4a0d6ca7f2ae81`.
+Baseline main: `4ff0ae3025a6e57ba3332280f3db6f65bf5ddf4b`.
 [Task](../../../tasks/CHEAPER_BONDS_CAP_001.md) · [Save/value review](DESIGN.md) ·
 [Preflight](preflight.json). Self-review only; no independent-review claim.
 
 | Check | Result/evidence |
 | --- | --- |
 | Real cap/price/effect/chronology | [candidate.json](candidate.json):383 assertions PASS |
-| One-time old-save restitution | Same report:116 assertions, independent BigInt conservation oracle PASS |
+| One-time old-save restitution | Same report:126 assertions, independent BigInt conservation oracle PASS |
 | Mobile |12 width/text/motion profiles at320/390/430px and100%/200%;44px controls, real touch/Tab/Enter/focus, wrapping and all note text contrast >=9.09:1 PASS |
 | Actual persistence | Old21/40/2000 first launch/reload/recovery, two old-backup restores through actual Settings → Save Backup → confirmation, paid Labs, Ascend, primary restore rollback and recovery-write failure PASS |
-| Causal controls | [negative-feature.json](negative-feature.json):6 real source mutations caught with intended assertion,exit1/valid FAIL/clean browser teardown |
+| Causal controls | [negative-feature.json](negative-feature.json):8 real source mutations caught with intended assertion,exit1/valid FAIL/clean browser teardown |
 | Legacy engine | [cap-v8-6.0.json](cap-v8-6.0.json):Node8.3.0/V8 6.0.286.52,400 blocked purchases, original refunds3376/12655538 and exact credit debit PASS |
 | Existing UI | [layout.txt](layout.txt):5 unchanged dense profiles PASS; [clarity.txt](clarity.txt):941 assertions PASS |
 | Tooling/source/context | Source syntax/IDs, APK verifier self-test, actual task startup budget and [tooling.txt](tooling.txt) PASS |
@@ -47,7 +47,7 @@ npm --cache /tmp/f21-npm-cache exec --yes --package=node@8.3.0 -- node tests/beh
 The workflow runs the focused checks on staged source and four causal mutations:
 handler, refund, credit and free-credit. Each must fail its specific assertion;
 a startup/browser error is not a passing defect control. UI/raw-loss controls
-are additionally saved locally. Full existing152-scenario/14-negative gates and
+are additionally saved locally. Full existing158-scenario/14-negative gates and
 guarded startup remain required. APK/native acceptance is recorded separately
 after actual signed delivery; modern browser/engine evidence is not Android proof.
 
@@ -60,3 +60,15 @@ The full baseline comparison initially rejected only the two new F21 save fields
 The frozen below-cap19 fixture now asserts both exact empty migration/credit
 defaults separately, then still compares every original gameplay field. No
 original numerical oracle, history fixture or failure tolerance is changed.
+
+PR76 Formation autosave integrated locally at a7ce553. F21 source/mobile/499
+checks, V8 and six causal controls PASS on that combined source. CI37740254817
+is the required full run. The pre-correction local full run is saved as an
+interrupted diagnostic, never a pass. The corrected offline direct16-record
+run used the preceding149e3bdc source; current full CI checks the combined version.
+
+PR89 P1/P2 corrected: exact wallet debit and per-price receipt validation, with
+new wallet/receipt causal controls. The cross-engine schedule evidence is in
+receipt-engine-prices.json; complete arrays are the test fixture. The prior
+a7ce553 CI is superseded by these necessary corrections. Native baseline143
+remains prepared; final APK/native acceptance is still pending.

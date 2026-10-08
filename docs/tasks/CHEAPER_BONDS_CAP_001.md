@@ -29,8 +29,8 @@ Domain/save review is performed here; no independent Core/QA approval is claimed
 
 ## Baseline, isolation and overlap
 
-- Current main rechecked 8 October: `261b1b7f863f73c324f4ac04acb5bfc95101644d`.
-  PR77 Save Backup merged cleanly at e6cfa70; F21 tests use its visible confirmation.
+- Current main rechecked 8 October: `4ff0ae3025a6e57ba3332280f3db6f65bf5ddf4b`.
+  PR77/87 Save Backup and PR76 Formation autosave merged at a7ce553; assertions kept.
   Private branch `feature/cheaper-bonds-cap-001`, worktree
   `/workspace/CHEAPER_BONDS_CAP_001`; clean original checkout untouched.
 - Original local freeze9342dbd on main0bcce84 is preserved in Git history and the
@@ -75,19 +75,19 @@ Do not turn unavailable required acceptance into a passing claim.
 cap-only candidate's132 scenarios/383 checks; those are not current acceptance.
 The first new migration oracle caught erased original value at extreme raw2000;
 [raw failure](../qa/cheaper-bonds-cap-001/finish/migration-initial-loss.json) is
-preserved. The final local candidate passes499 assertions/12 mobile profiles,
-6 causal controls, V8 6.0 cap/refund/credit, dense layout and941 clarity checks.
+preserved. The final local candidate passes508 assertions/12 mobile profiles,
+8 causal controls, V8 6.0 cap/refund/credit, dense layout and941 clarity checks.
 [Current versions/results](../qa/cheaper-bonds-cap-001/finish/README.md) distinguish
-them from required full CI, integration and APK acceptance. Required CI gains focused checks/four causal mutations. Frozen offline state now
+them from required full CI, integration and APK acceptance. Required CI gains focused checks/six causal mutations. Frozen offline state now
 asserts exact below-cap migration defaults; original gameplay comparisons remain.
 
 ## Next concrete action and completion
 
 Finish current-source focused/refund/mobile tests, baseline existing checks and
-complete diff review; push the current combined source to PR89. Obtain required CI,
+complete diff review. Current head a7ce553 is pushed; P1/P2 fixed; publish corrected head and obtain final CI.
 address findings, recheck main/overlap and integrate serially. Recheck integrated
 bytes, verify the resulting signed APK and relevant Android acceptance; save
 task/PROJECT_STATE/evidence in GitHub and stop shared-file work.
 
-PR: [89](https://github.com/karahaNx/Lumenfall/pull/89), published. Integration/APK: pending. Archive status: **open**. An open PR or local pass
+PR: [89](https://github.com/karahaNx/Lumenfall/pull/89), published. Integration/APK: pending. Source SHA9e034620 (full hash in evidence). Archive status: **open**. An open PR or local pass
 is not a finished feature. Archive only this owner chat after verified completion.
