@@ -71,14 +71,14 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     ok(!q('#rift-study-status,.rift-study-btn'),'Rift Study DOM/control removed entirely');
     var guidance=q('#rift-objective-row'),dismiss=q('#rift-objective-dismiss'),guidanceToggle=q('#rift-guidance-toggle'),guidanceKey='lumenfall_rift_guidance_hidden_v1';
     ok(guidance&&guidance.contains(q('#rift-objective'))&&guidance.contains(dismiss),'guidance and its separate dismiss control share the objective row');
-    ok(!guidance.hidden&&guidanceToggle.getAttribute('aria-pressed')==='true','Rift guidance is shown by default and Settings reports shown');
+    ok(!q('#rift-objective').hidden&&guidanceToggle.getAttribute('aria-pressed')==='true','Rift guidance is shown by default and Settings reports shown');
     ok(dismiss.tagName==='BUTTON'&&!!dismiss.getAttribute('aria-label'),'guidance dismiss is a named native button');
     var guidanceState=b.getState(),guidanceSave=b.rawSave();
     dismiss.focus({preventScroll:true});dismiss.click();
-    ok(guidance.hidden&&guidanceToggle.getAttribute('aria-pressed')==='false'&&localStorage.getItem(guidanceKey)==='1','dismiss hides guidance and stores only the device preference');
-    ok(document.activeElement===q('#enemy-stage'),'dismissing focused guidance returns focus to the enemy');
+    ok(!guidance.hidden&&q('#rift-objective').hidden&&guidanceToggle.getAttribute('aria-pressed')==='false'&&localStorage.getItem(guidanceKey)==='1','dismiss hides guidance and stores only the device preference');
+    ok(document.activeElement===dismiss,'inline show/hide control retains focus');
     dismiss.focus();q('#rift-objective').focus();
-    ok(document.activeElement===q('#enemy-stage')&&!dismiss.getClientRects().length&&!q('#rift-objective').getClientRects().length,'hidden guidance cannot receive focus or expose controls');
+    ok(document.activeElement===dismiss&&dismiss.getClientRects().length&&!q('#rift-objective').getClientRects().length,'hidden hint content cannot receive focus; show control remains available');
     q('#settings-btn').click();guidanceToggle.focus();guidanceToggle.click();
     ok(!guidance.hidden&&guidanceToggle.getAttribute('aria-pressed')==='true'&&localStorage.getItem(guidanceKey)===null,'Settings restores guidance and clears the hidden preference');
     ok(document.activeElement===guidanceToggle,'restoring guidance leaves focus on the Settings toggle');
@@ -162,7 +162,7 @@ window.runRiftStatusQa=async function(b,ctx,assert){
         ok(status&&status.textContent===(!powered?'Lv 0':''),'powered Rift cards do not repeat ability status as visible text');
         ok(!card.querySelector('.rift-wisp-time')&&!/\b\d+(?:\.\d+)?\s*(?:s|sec|seconds)\b/i.test(card.textContent),'Rift card has no visible ability countdown');
       });
-      var active=b.riftStatus.active();same([...document.querySelectorAll('[data-bond-effect]')].map(x=>x.querySelector('.rift-bond-copy').textContent),active.map(x=>x.effect),'Rift shows exact complete active Bond effects');
+      var active=b.riftStatus.active();same([...document.querySelectorAll('[data-bond-effect]')].map(x=>x.querySelector('.rift-bond-copy').textContent),active.map(x=>x.riftEffect||x.effect),'Rift shows exact compact active Bond effects');active.forEach(x=>ok(q('[data-bond-effect="'+x.id+'"]').getAttribute('aria-label')===x.name+': '+x.effect,'complete Bond explanation remains accessible'));
       ok(q('#rift-bond-effects').hidden===!active.length,'no stale effects when no Bond is active');
     }
     // Deliberately interleave both pairs with the fifth Wisp in the middle.
@@ -174,9 +174,11 @@ window.runRiftStatusQa=async function(b,ctx,assert){
       var cards=[...document.querySelectorAll('[data-rift-wisp]')],active=b.riftStatus.active(),colors=[],marks=[];
       active.forEach(bond=>{
         var pair=cards.filter(x=>bond.ids.includes(x.dataset.riftWisp)),effect=q('[data-bond-effect="'+bond.id+'"]');
-        ok(pair.length===2&&Math.abs(cards.indexOf(pair[0])-cards.indexOf(pair[1]))===1,'Bond partners are adjacent even when save order is interleaved');
+        ok(pair.length===2,'every active Bond has exactly two unique partner cards');
+        var primary=pair.filter(card=>card.dataset.bond===bond.id);
+        ok(primary.length===0 || primary.length===2&&Math.abs(cards.indexOf(primary[0])-cards.indexOf(primary[1]))===1,'disjoint primary Bond partners remain adjacent');
         var color=effect.style.getPropertyValue('--bond-color'),mark=effect.querySelector('.rift-bond-mark').textContent;
-        pair.forEach(card=>ok(card.dataset.bond===bond.id&&card.style.getPropertyValue('--bond-color')===color&&card.querySelector('.rift-bond-mark').textContent===mark&&card.getAttribute('aria-label').includes(bond.name),'paired Wisps match bonus color, shape and accessible Bond name'));
+        pair.forEach(card=>{var badge=card.querySelector('[data-wisp-bond="'+bond.id+'"]');ok(badge&&badge.style.getPropertyValue('--bond-color')===color&&badge.textContent===mark&&card.getAttribute('aria-label').includes(bond.name),'each overlapping Bond keeps its matching color, shape and accessible name on both partners');});
         colors.push(color);marks.push(mark);seenVisuals[bond.id]={color,mark};
       });
       ok(new Set(colors).size===active.length&&new Set(marks).size===active.length,'simultaneous Bonds have distinct colors and shapes');
@@ -185,7 +187,8 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     }
     bondPresentation();s.spirits.void=0;installBond();bondPresentation();s.spirits.void=2;installBond();bondPresentation();
     s.activeParty=['stone','gale','ember','titan','thorn'];s.activeParty.forEach(id=>s.spirits[id]=1);installBond();partyCheck();bondPresentation();
-    ok(Object.keys(seenVisuals).length===4&&new Set(Object.values(seenVisuals).map(x=>x.color)).size===4&&new Set(Object.values(seenVisuals).map(x=>x.mark)).size===4,'all four Bonds keep their own unique color and shape');
+    b.riftStatus.bonds().forEach(bond=>{s.activeParty=bond.ids.slice();bond.ids.forEach(id=>s.spirits[id]=2);installBond();bondPresentation();});
+    ok(Object.keys(seenVisuals).length===8&&new Set(Object.values(seenVisuals).map(x=>x.color)).size===8&&new Set(Object.values(seenVisuals).map(x=>x.mark)).size===8,'all eight Bonds keep their own unique color and shape');
     s.activeParty=worst.ids;s.activeParty.forEach(id=>s.spirits[id]=2);install(s);
     partyCheck();s.research.charge=10;install(s);partyCheck();
     var powerId=s.activeParty[0],beforePower=q('[data-rift-wisp="'+powerId+'"] .rift-wisp-power').textContent;
@@ -372,7 +375,6 @@ window.riftStatusMobile=(()=>{
   ok(m.scrollTop===0&&m.scrollHeight<=m.clientHeight+1&&scrollY===0,'Rift remains scroll-free without clipped content');
   ok(enemy.height>=120,'Guardian Tap >=120');
   var boxes={},guidance=q('#rift-objective-row'),visibleSelectors=['#enemy-stage','#hp-text','#buff-indicator','#bond-summary','#rift-push-btn','#rift-farm-btn'];
-  if(!guidance.hidden)visibleSelectors.push('#rift-objective-row','#rift-objective-dismiss');
   visibleSelectors.forEach(s=>{
    var el=q(s),r=rect(el);ok(r.top>=mr.top&&r.bottom<=nav.top&&r.left>=mr.left&&r.right<=mr.right,s+' fully visible');ok(el.scrollWidth<=el.clientWidth&&el.scrollHeight<=el.clientHeight+1,s+' text/content unclipped');
    if(el.tagName==='BUTTON'){ok(r.width>=44&&r.height>=44,s+' touch minimum');ok(el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)),s+' hit-test');}
@@ -394,10 +396,11 @@ window.riftStatusMobile=(()=>{
     var surface=getComputedStyle(el);ok(surface.backgroundImage!=='none'||surface.backgroundColor!=='rgba(0, 0, 0, 0)','stat boxes retain painted surfaces over the scenic background');
    }
   });
-  if(!guidance.hidden){
-   ['#rift-push-btn','#rift-farm-btn'].forEach(s=>ok(rect(q(s)).bottom<=rect(guidance).top,'mode control clear of objective'));
-   ok(rect(q('#rift-objective')).right<=rect(q('#rift-objective-dismiss')).left,'guidance dismiss is separate from the objective action');
-  }else ok(!q('#rift-objective-dismiss').getClientRects().length&&!q('#rift-objective').getClientRects().length,'hidden guidance exposes no rendered controls');
+  var hint=rect(guidance),toggle=rect(q('#rift-objective-dismiss'));
+  ok(hint.top>=rect(q('header.hud')).bottom && hint.bottom<=mr.top && hint.height===(matchMedia('(max-height:680px)').matches?44:48),'fixed hint slot follows currencies above the Rift');
+  ok(toggle.width>=44&&toggle.height>=44&&q('#rift-objective-dismiss').contains(document.elementFromPoint(toggle.x+toggle.width/2,toggle.y+toggle.height/2)),'inline show/hide remains reachable');
+  if(!q('#rift-objective').hidden)ok(rect(q('#rift-objective')).right<=toggle.left,'show/hide is separate from hint text');
+  else ok(!q('#rift-objective').getClientRects().length,'hidden hint content has no rendered focus target');
   ok(hp.bottom<=buff.top&&buff.bottom<=bonds.top&&bonds.bottom<=stats.top&&stats.bottom<=nav.top,'HP, status, bottom numeric row and nav do not overlap');
   var tabs=[...document.querySelectorAll('nav.tabbar button')];ok(tabs.length===5,'five main tabs');tabs.forEach((el,i)=>{var r=rect(el);ok(r.width>=44&&r.height>=44,'tab touch minimum');ok(el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)),'tab hit-test');if(i)ok(rect(tabs[i-1]).right<=r.left,'one non-overlapping nav row');});
   var active=b.riftStatus.active();ok(active.every(x=>q('#bond-summary').textContent.includes(x.name.replace(' Bond',''))),'all powered Bond names directly visible');
@@ -405,18 +408,18 @@ window.riftStatusMobile=(()=>{
   if(kind!=='fresh' && ctx.scenario.startsWith('rift-status-stacking'))ok(active.length===window.riftStatusWorst(b,ctx).bonds.length && q('#buff-indicator').textContent.includes('+100%') && q('#buff-indicator').textContent.includes('next expiry'),'additive worst boost survives live ticks');
   ['#rift-party','#rift-bond-effects','#boss-combat'].forEach(selector=>{
    var el=q(selector);if(el.hidden)return;var r=rect(el);ok(r.top>=mr.top&&r.bottom<=nav.top&&r.width>0,selector+' visible above navigation');
-   [el,...el.querySelectorAll('.rift-wisp-name,.rift-wisp-power,.rift-wisp-state,.rift-bond-effect,strong,.boss-net')].forEach(x=>ok(x.scrollWidth<=x.clientWidth+1&&x.scrollHeight<=x.clientHeight+1,selector+' full contents fit: '+x.className+' scroll='+x.scrollWidth+'x'+x.scrollHeight+' client='+x.clientWidth+'x'+x.clientHeight+' text='+x.textContent));
+   [el,...el.querySelectorAll('.rift-wisp-name,.rift-wisp-power,.rift-wisp-ability,.rift-bond-effect,strong,.boss-net')].forEach(x=>ok(x.scrollWidth<=x.clientWidth+1&&x.scrollHeight<=x.clientHeight+1,selector+' full contents fit: '+x.className+' scroll='+x.scrollWidth+'x'+x.scrollHeight+' client='+x.clientWidth+'x'+x.clientHeight+' text='+x.textContent));
    boxes[selector]={x:r.x,y:r.y,width:r.width,height:r.height};
   });
   var cards=[...document.querySelectorAll('[data-rift-wisp]')];
-  active.forEach(bond=>{var pair=cards.filter(x=>x.dataset.bond===bond.id);ok(pair.length===2&&Math.abs(cards.indexOf(pair[0])-cards.indexOf(pair[1]))===1,'mobile Bond partners adjacent');ok(rect(pair[1]).left-rect(pair[0]).right>=0&&rect(pair[1]).left-rect(pair[0]).right<=2.1,'Bond pair is close and does not overlap');});
+  active.forEach(bond=>{var partners=cards.filter(x=>bond.ids.includes(x.dataset.riftWisp));ok(partners.length===2&&partners.every(x=>x.querySelector('[data-wisp-bond="'+bond.id+'"]')&&x.getAttribute('aria-label').includes(bond.name)),'mobile overlapping Bonds retain both partner marks');var pair=cards.filter(x=>x.dataset.bond===bond.id);ok(pair.length===0||pair.length===2&&Math.abs(cards.indexOf(pair[0])-cards.indexOf(pair[1]))===1,'mobile primary Bond partners adjacent');if(pair.length)ok(rect(pair[1]).left-rect(pair[0]).right>=0&&rect(pair[1]).left-rect(pair[0]).right<=2.1,'primary Bond pair is close and does not overlap');});
   var arena=rect(q('.battle-row')),landscapeEl=q('.rift-landscape'),landscape=rect(landscapeEl),stageEl=q('#tab-battle .stage'),stage=rect(stageEl);
   ok(stageEl.contains(landscapeEl)&&landscape.left>=stage.left-.1&&landscape.right<=stage.right+.1&&landscape.top>=stage.top-.1&&landscape.bottom<=stage.bottom+.1,'shared scenic background stays inside the outer Rift stage');
   ok(landscapeEl.getAttribute('aria-hidden')==='true'&&getComputedStyle(landscapeEl).pointerEvents==='none','shared scenic background stays decorative and cannot intercept input');
-  ok(arena.top>=(guidance.hidden?rect(q('.rift-heading')).bottom:rect(guidance).bottom)&&arena.bottom<=buff.top,'integrated combat region stays below guidance and above boost');
+  ok(arena.top>=rect(q('.rift-heading')).bottom&&arena.bottom<=buff.top,'integrated combat region stays below the heading and above boost');
   ok(arena.bottom<=stats.top&&getComputedStyle(q('.stat-row')).position==='relative','stat box top borders paint above the combat layer');
   var party=rect(q('#rift-party'));
-  ok(!q('#enemy-stage').contains(q('#rift-party'))&&enemy.bottom<=hp.top&&hp.bottom<=party.top&&party.bottom<=buff.top,'formation follows the attack surface and HP, before boost');
+  ok(!q('#enemy-stage').contains(q('#rift-party'))&&enemy.bottom<=hp.top&&hp.bottom<=party.top&&party.bottom<=buff.top,'formation follows the attack surface and HP, before boost '+JSON.stringify({kind,enemy:enemy.toJSON(),hp:hp.toJSON(),party:party.toJSON(),buff:buff.toJSON()}));
   ok(q('.battle-row').contains(q('#enemy-stage'))&&q('.battle-row').contains(q('.hp-wrap'))&&q('.battle-row').contains(q('#boss-combat'))&&q('.battle-row').contains(q('#rift-party')),'attack surface, HP, Boss regen and formation share the integrated scenic region');
   ok(q('#boss-combat').hidden||hp.bottom<=rect(q('#boss-combat')).top&&rect(q('#boss-combat')).bottom<=party.top,'boss regen sits between HP and the standalone formation');
   ok(q('#rift-bond-effects').hidden||bonds.bottom<=rect(q('#rift-bond-effects')).top&&rect(q('#rift-bond-effects')).bottom<=stats.top,'full Bond effects separate from names and precede the numeric row');
@@ -434,11 +437,12 @@ window.riftStatusMobile=(()=>{
   }finally{saved.forEach(x=>{x.animation.currentTime=x.time;if(x.state==='running')x.animation.play();});}
  }
  function last(view){
-  var all=[...document.querySelectorAll('#tab-'+view+' button:not(:disabled),#tab-'+view+' summary')],el=all[all.length-1],r=rect(el),mr=rect(q('main'));
-  ok(el&&r.top>=mr.top&&r.bottom<=mr.bottom,'native touch scroll reaches last '+view+' control '+JSON.stringify({top:r.top,bottom:r.bottom,area:[mr.top,mr.bottom],scroll:q('main').scrollTop,text:el.textContent}));var x=r.x+r.width/2,y=r.y+r.height/2;ok(el.contains(document.elementFromPoint(x,y)),'last '+view+' control hittable');
+  var all=[...document.querySelectorAll('#tab-'+view+' button:not(:disabled),#tab-'+view+' summary')].filter(visibleControl),el=all[all.length-1],r=rect(el),mr=rect(q('main'));
+  ok(el&&r.top>=mr.top&&r.bottom<=mr.bottom,'native touch scroll reaches last '+view+' control '+JSON.stringify({top:r.top,bottom:r.bottom,area:[mr.top,mr.bottom],scroll:q('main').scrollTop,text:el.textContent}));var x=r.x+r.width/2,y=r.y+r.height/2;ok(el.contains(document.elementFromPoint(x,y)),'last '+view+' control hittable '+JSON.stringify({text:el.textContent,rect:[r.x,r.y,r.width,r.height],hit:document.elementFromPoint(x,y)?.outerHTML.slice(0,250)}));
   return {view,text:el.textContent,x,y,scroll:q('main').scrollTop};
  }
- function locate(view){var all=[...document.querySelectorAll('#tab-'+view+' button:not(:disabled),#tab-'+view+' summary')],el=all[all.length-1],r=rect(el),m=rect(q('main'));return {visible:r.top>=m.top&&r.bottom<=m.bottom,area:{top:m.top,bottom:m.bottom},delta:r.top<m.top?m.top-r.top+12:-(r.bottom-m.bottom+12)};}
+ function visibleControl(el){var closed=el.closest('details:not([open])');return el.getClientRects().length&&(!closed||el.tagName==='SUMMARY'&&el.parentNode===closed);}
+ function locate(view){var all=[...document.querySelectorAll('#tab-'+view+' button:not(:disabled),#tab-'+view+' summary')].filter(visibleControl),el=all[all.length-1],r=rect(el),m=rect(q('main'));return {visible:r.top>=m.top&&r.bottom<=m.bottom,area:{top:m.top,bottom:m.bottom},delta:r.top<m.top?m.top-r.top+12:-(r.bottom-m.bottom+12)};}
  function control(selector){var el=q(selector),r=rect(el),x=r.x+r.width/2,y=r.y+r.height/2;return {x,y,visible:r.width>0&&r.height>0&&r.top>=0&&r.bottom<=innerHeight,hit:el.contains(document.elementFromPoint(x,y))};}
  return {setup,measure,entry,last,control,locate,mutateBoostLine};
 })();

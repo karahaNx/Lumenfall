@@ -130,12 +130,12 @@ async function run(){
    assert(await evaluate('!document.querySelector("#rift-objective-row").hidden&&document.querySelector("#rift-guidance-toggle").getAttribute("aria-pressed")==="true"'),'native guidance begins shown');
    const beforeHide=await evaluate('JSON.stringify(__lumenfallQaBridge.getState())');
    await evaluate('document.querySelector("#rift-objective-dismiss").focus({preventScroll:true})');await touch('#rift-objective-dismiss');
-   assert(await evaluate('document.querySelector("#rift-objective-row").hidden&&document.querySelector("#rift-guidance-toggle").getAttribute("aria-pressed")==="false"&&localStorage.getItem("lumenfall_rift_guidance_hidden_v1")==="1"'),'native dismiss hides and persists Rift guidance');
-   assert(await evaluate('document.activeElement.id')==='enemy-stage','native dismissal returns focus to the enemy');
+   assert(await evaluate('document.querySelector("#rift-objective").hidden&&!document.querySelector("#rift-objective-row").hidden&&document.querySelector("#rift-guidance-toggle").getAttribute("aria-pressed")==="false"&&localStorage.getItem("lumenfall_rift_guidance_hidden_v1")==="1"'),'native dismiss hides content and preserves the reserved hint slot');
+   assert(await evaluate('document.activeElement.id')==='rift-objective-dismiss','native show/hide retains focus');
    assert(await evaluate('JSON.stringify(__lumenfallQaBridge.getState())')===beforeHide,'native guidance dismissal leaves game state unchanged');
    await evaluate('riftStatusMobile.measure()');
    await key('Tab');if(await evaluate('document.activeElement===document.body'))await key('Tab');
-   assert(await evaluate('document.activeElement.id')==='settings-btn','native Tab skips dismissed guidance controls');
+   assert(await evaluate('document.activeElement.dataset.tab')==='spirits','native Tab skips hidden hint content and reaches navigation');
    await evaluate('window.__qaGuidanceReloadToken=true');await send('Page.reload',{ignoreCache:true});
    let reloaded=false;
    for(let i=0;i<150&&!reloaded;i++){
@@ -146,7 +146,7 @@ async function run(){
    assert(reloaded,'native guidance reload reaches the new production document');
    await evaluate('document.fonts.ready');await evaluate('window.__lumenfallQaBridge.uiMeasurementPause(true);window.__lumenfallQaBridge.resetFeedback()');await evaluate('window.__qaForgeStartup.promise');
    await evaluate(`riftStatusMobile.setup(${inset},'fresh')`);await advance();
-   assert(await evaluate('document.querySelector("#rift-objective-row").hidden&&document.querySelector("#rift-guidance-toggle").getAttribute("aria-pressed")==="false"&&localStorage.getItem("lumenfall_rift_guidance_hidden_v1")==="1"'),'hidden guidance survives an actual reload');
+   assert(await evaluate('document.querySelector("#rift-objective").hidden&&!document.querySelector("#rift-objective-row").hidden&&document.querySelector("#rift-guidance-toggle").getAttribute("aria-pressed")==="false"&&localStorage.getItem("lumenfall_rift_guidance_hidden_v1")==="1"'),'hidden hint preference and reserved space survive an actual reload');
    const hiddenMeasurement=await evaluate('riftStatusMobile.measure()');
    await touch('#settings-btn');
    const beforeRestore=await evaluate('JSON.stringify(__lumenfallQaBridge.getState())');

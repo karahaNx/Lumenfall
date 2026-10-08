@@ -12,62 +12,27 @@ window.runAutoTargetWindows=function(b,assert){
   var checks=0,records=[],copy=x=>JSON.parse(JSON.stringify(x));
   function ok(v,m){checks++;assert(v,m);}
   function same(a,c,m){ok(JSON.stringify(a)===JSON.stringify(c),m);}
-  function el(){return document.querySelector('[data-autoascend-target]');}
-  function windowInfo(){var s=el();return {start:Number(s.dataset.windowStart),end:Number(s.dataset.windowEnd),values:Array.from(s.options).map(o=>o.value),value:s.value,key:s.dataset.optionsKey};}
-  function budget(){
-    var w=windowInfo(),target=b.getState().autoAscendTargetDepth-1;
-    var pinned=target<w.start||target>w.end,count=w.end-w.start+1;
-    ok(count>=1&&count<=200&&w.values.length===count+(pinned?1:0),'window budget <=200 consecutive options plus at most one saved target');
-    for(var i=0;i<count;i++)ok(w.values[i]===String(w.start+i),'window integer continuity '+i);
-    ok(w.value===String(target),'window preserves precise current target');
-    if(pinned)ok(w.values.at(-1)===String(target)&&el().options[el().options.length-1].textContent.endsWith('(saved target)'),'pinned current/saved target exact');
-    return w;
-  }
-  [214,215,216,10001,Math.pow(2,53),1e30,Number.MAX_VALUE].forEach(function(history){
-    var s=autoTargetSeed(b,43,false);s.maxDepthEver=history;b.setState(s);b.feedbackSave();
-    var before=autoTargetObservation(b);b.autoTarget.render();same(autoTargetObservation(b),before,'high-history render whole observer '+history);
-    var highest=Math.min(Number.MAX_SAFE_INTEGER,Math.max(15,history-1));
-    ok(b.getState().maxDepthEver===history,'canonical high history unchanged');
-    ok(document.querySelector('[data-autoascend-nav]').hidden===(highest<=214),'small history has no navigation');
-    ok(b.autoTarget.find('15'),'Find minimum');var first=budget();ok(first.start===15&&first.end===Math.min(214,highest),'exact first window endpoints');
-    if(highest>214){
-      ok(!b.autoTarget.shift(-1),'Earlier cannot pass global minimum');
-      ok(b.autoTarget.shift(1),'Later advances');var second=budget();ok(second.start===first.end+1,'adjacent windows have no gap');
-      ok(b.autoTarget.shift(-1),'Earlier returns');same(windowInfo(),first,'Earlier restores first window and selected target');
-    }
-    [43,55,10000,highest].filter(x=>x<=highest).forEach(function(clear){
-      ok(b.autoTarget.find(String(clear)),'Find exact historical target '+clear);
-      var w=budget();ok(w.start<=clear&&w.end>=clear&&w.values.includes(String(clear)),'Find makes requested target available');
-      same(autoTargetObservation(b),before,'navigation is whole state/save/recovery/events/flags observer');
+  function options(){return Array.from(document.querySelectorAll('#auto-ascend-options [data-rift-target]')).map(el=>Number(el.dataset.riftTarget));}
+  [214,215,216,300,10001,Math.pow(2,53),1e30,Number.MAX_VALUE].forEach(function(history){
+    var s=autoTargetSeed(b,43,false);s.maxDepthEver=history;b.setState(s);b.feedbackSave();b.autoTarget.render();
+    var before=autoTargetObservation(b),highest=Math.min(Number.MAX_SAFE_INTEGER,Math.max(15,history-1));
+    ok(!document.querySelector('[data-autoascend-nav],[data-autoascend-later],[data-autoascend-earlier],[data-autoascend-find]'),'one dropdown has no extra navigation controls');
+    [15,43,55,219,275,10000,highest].filter(x=>x<=highest).forEach(function(clear){
+      ok(b.autoTarget.find(String(clear)),'dropdown offers any valid historical target '+clear);
+      var values=options();ok(values.length>=1&&values.length<=40,'bounded40-option virtual window');
+      ok(values.includes(clear),'exact requested integer present');for(var i=1;i<values.length;i++)ok(values[i]===values[i-1]+1,'continuous option window');
+      same(autoTargetObservation(b),before,'browsing does not mutate state/save/events/flags');
     });
-    ok(!b.autoTarget.shift(1),'Later cannot pass last historical endpoint');
-    var last=budget();ok(last.end===highest,'highest safe historical endpoint included');
-    ['', 'NaN','Infinity','43.5','14',' 43','43.0','9007199254740992',null,43].forEach(function(value){
-      var prior=windowInfo();ok(!b.autoTarget.find(value),'invalid Find rejected '+String(value));same(windowInfo(),prior,'invalid Find leaves window');same(autoTargetObservation(b),before,'invalid Find whole observer');
-    });
-    if(highest<Number.MAX_SAFE_INTEGER){ok(!b.autoTarget.find(String(highest+1)),'Find rejects unearned endpoint');same(autoTargetObservation(b),before,'outside history Find observer');}
-    b.autoTarget.render();b.refreshAffordability();same(autoTargetObservation(b),before,'repeated high render/affordability whole observer');
-    records.push({history,highest,first,last});
+    ['', 'NaN','Infinity','43.5','14',' 43','43.0','9007199254740992',null,43].forEach(function(value){var prior=options();ok(!b.autoTarget.find(value),'invalid browse rejected '+String(value));same(options(),prior,'invalid browse preserves options');same(autoTargetObservation(b),before,'invalid browse pure');});
+    if(highest<Number.MAX_SAFE_INTEGER)ok(!b.autoTarget.find(String(highest+1)),'unearned target rejected');
+    b.autoTarget.render();b.refreshAffordability();same(autoTargetObservation(b),before,'all high-history render/affordability observers pure');records.push({history,highest,options:options()});
   });
-  // Non-safe existing legacy values stay exact; safe new choices remain possible.
   [Math.pow(2,53),Math.pow(2,53)+2,1e30,Number.MAX_VALUE].forEach(function(internal){
-    var s=autoTargetSeed(b,43,false);s.maxDepthEver=Math.pow(2,53);s.autoAscendTargetDepth=internal;b.setState(s);b.feedbackSave();
-    var before=autoTargetObservation(b);b.autoTarget.render();budget();
-    ok(b.getState().autoAscendTargetDepth===internal,'non-safe legacy internal preserved');
-    ok(b.autoTarget.find('55'),'Find55 with huge saved target');budget();same(autoTargetObservation(b),before,'huge saved target navigation pure');
-    b.autoTarget.change('55');var after=autoTargetObservation(b),expected=copy(before.state);expected.autoAscendTargetDepth=56;expected.lastSeen=b.clockNow();
-    same(after.state,expected,'safe native selection replaces legacy only by explicit choice');
-    ok(after.events.length===before.events.length+1,'explicit legacy replacement saves once');
+    var s=autoTargetSeed(b,43,false);s.maxDepthEver=Math.pow(2,53);s.autoAscendTargetDepth=internal;b.setState(s);b.feedbackSave();b.autoTarget.render();
+    var before=autoTargetObservation(b);ok(b.getState().autoAscendTargetDepth===internal,'non-safe legacy internal preserved');b.autoTarget.change('55');var after=autoTargetObservation(b),expected=copy(before.state);expected.autoAscendTargetDepth=56;expected.lastSeen=b.clockNow();same(after.state,expected,'explicit safe choice replaces legacy target only');ok(after.events.length===before.events.length+1,'exactly one normal save');
   });
-  // Every safe input at the arithmetic endpoint remains selectable; N=X+1 is exact.
-  var s=autoTargetSeed(b,43,false);s.maxDepthEver=1e30;b.setState(s);b.feedbackSave();b.autoTarget.render();
-  var before=autoTargetObservation(b);b.autoTarget.find(String(Number.MAX_SAFE_INTEGER));same(autoTargetObservation(b),before,'global safe maximum Find is pure');
-  b.autoTarget.change(String(Number.MAX_SAFE_INTEGER));ok(b.getState().autoAscendTargetDepth===Math.pow(2,53),'highest safe clear stores exact N=clear+1');budget();
-  b.autoTarget.find('15');before=autoTargetObservation(b);ok(!b.autoTarget.input('215'),'unoffered valid integer is rejected');same(autoTargetObservation(b),before,'unoffered selection whole observer');
-  // Native navigation handlers remain single after repeated renders.
-  b.autoTarget.find('15');for(var n=0;n<10;n++)b.autoTarget.render();before=autoTargetObservation(b);
-  document.querySelector('[data-autoascend-later]').click();ok(windowInfo().start===215,'one Later click advances exactly one window');same(autoTargetObservation(b),before,'real Later click does not save');
-  var find=document.querySelector('[data-autoascend-find]');find.value='55';document.querySelector('[data-autoascend-find-go]').click();ok(windowInfo().values.includes('55'),'real Find handler navigates');same(autoTargetObservation(b),before,'real Find handler whole observer');
+  var s=autoTargetSeed(b,43,false);s.maxDepthEver=1e30;b.setState(s);b.feedbackSave();b.autoTarget.render();b.autoTarget.change(String(Number.MAX_SAFE_INTEGER));ok(b.getState().autoAscendTargetDepth===Math.pow(2,53),'safe maximum clear stores exact threshold');
+  b.autoTarget.change('215');ok(b.getState().autoAscendTargetDepth===216&&!b.getState().autoAscendEnabled,'valid target outside current window is selectable without toggling OFF');
   return {checks,records};
 };
 window.runAutoTargetContract=function(b,ctx,assert,parity){
@@ -138,11 +103,11 @@ window.runAutoTargetContract=function(b,ctx,assert,parity){
   // Current options, not a guessed history-based fallback.
   var el=select(),before=window.autoTargetObservation(b);el.value='101';el.dispatchEvent(new Event('change',{bubbles:true}));same(window.autoTargetObservation(b),before,'invalid native change pure');b.autoTarget.render();
   s=seed(129,false);s.maxDepthEver=21;b.setState(s);b.autoTarget.render();
-  el=select();ok(el.options.length===7&&el.value==='129','legacy above-history target visibly selected');
-  ok(el.options[el.options.length-1].textContent==='Clear Rift 129 (saved target)','legacy option explicitly labeled');
+  el=select();b.autoTarget.find('15');ok(document.querySelectorAll('#auto-ascend-options [data-rift-target]').length===7&&el.value==='129','legacy above-history target visibly selected');
+  ok(document.querySelector('#auto-ascend-options [data-rift-target="129"]').textContent==='Clear Rift 129 (saved target)','legacy option explicitly labeled');
   before=window.autoTargetObservation(b);b.autoTarget.render();b.refreshAffordability();same(window.autoTargetObservation(b),before,'all render/affordability observers pure');
   s.maxDepthEver=151;b.setState(s);before=window.autoTargetObservation(b);b.autoTarget.render();
-  ok(select().options.length===136&&select().value==='129','history expands every integer without changing target');same(window.autoTargetObservation(b),before,'history option rebuild pure');
+  ok(b.autoTarget.find('150')&&document.querySelectorAll('#auto-ascend-options [data-rift-target]').length===40&&select().value==='129','history exposes frontier while preserving target and bounded DOM');same(window.autoTargetObservation(b),before,'history option rebuild pure');
   // Existing purchase cost/initial target/ON behavior retained.
   s=b.freshStateSnapshot();s.maxDepthEver=56;s.depth=43;s.enemyDepth=43;s.enemyHp=s.enemyMaxHp=b.enemyHpFor(43);s.comets=10000;b.setState(s);b.autoTarget.render();
   var item=b.autoTarget.shopItem(),funds=s.comets;document.querySelector('[data-shop="autoascend"]').click();

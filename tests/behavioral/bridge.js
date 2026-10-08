@@ -185,7 +185,7 @@ window.__lumenfallQaBridge = {
     shift: function(direction){return shiftAutoAscendWindow(direction);},
     flags: function(){return {resetInProgress:resetInProgress,reloadInProgress:reloadInProgress,offlineBusy:!!offlineCatchup,offlinePending:offlinePending,resumeFlowBusy:resumeFlowBusy};},
     input: function(value){var old=reloadInProgress;reloadInProgress=false;try{return setAutoAscendClearedTarget(value);}finally{reloadInProgress=old;}},
-    change: function(value){var old=reloadInProgress;reloadInProgress=false;try{var el=els['shop-list'].querySelector('[data-autoascend-target]');el.value=value;el.dispatchEvent(new Event('change',{bubbles:true}));}finally{reloadInProgress=old;}},
+    change: function(value){var old=reloadInProgress;reloadInProgress=false;try{var el=document.querySelector('#auto-ascend-controls [data-autoascend-target]');el.value=value;el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true}));}finally{reloadInProgress=old;}},
     check: function(){var old=reloadInProgress;reloadInProgress=false;try{return checkAutoAscend();}finally{reloadInProgress=old;}},
     manual: function(){var old=reloadInProgress;reloadInProgress=false;try{return doAscend(false);}finally{reloadInProgress=old;}},
     visibility: async function(hidden){var old=reloadInProgress;reloadInProgress=false;try{var result=window.__lumenfallQaBridge.dispatchVisibility(hidden);while(offlineCatchup)await new Promise(function(resolve){setTimeout(resolve,0);});return result;}finally{reloadInProgress=old;}},
@@ -505,6 +505,13 @@ window.__lumenfallQaBridge = {
   lifecycleTrace: function(){ return JSON.parse(JSON.stringify(qaLifecycleEvents)); },
   clearLifecycleTrace: function(){ qaLifecycleEvents.length = 0; },
   applyOfflineNow: function(){ return applyOfflineProgress(); },
+  // Isolate the saved-away interval from actual CPU time spent replaying it.
+  // Lifecycle tests retain the real processing clock and cover that foreground time.
+  applyOfflineProductiveOnly: function(){
+    var previous=offlineProcessingClock;
+    offlineProcessingClock=function(){return 0;};
+    try{return applyOfflineProgress();}finally{offlineProcessingClock=previous;}
+  },
   setLastSeen: function(value){ state.lastSeen=Number(value); return state.lastSeen; },
   suppressUnloadSave: function(){ reloadInProgress=true; },
   previewOffline: function(snapshot,seconds,startMs){

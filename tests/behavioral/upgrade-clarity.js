@@ -19,12 +19,12 @@ window.runUpgradeClarityQa=function(b,ctx,assert){
     s.research.focus=3;s.research.resolve=4;s.longStudyLevels.lumenstudy=2;
     s.longStudyLevels.guardmastery=3;s.longStudyLevels.riftattune=4;s.longStudyLevels.prismstudy=2;
     s.owned.offline24=true;s.owned.offline48=true;pureRender(s);
-    var expected={starlight:'+'+(l*10)+'% Lumen',steady:'+'+(l*8)+'% tap',swift:'+'+(l*4)+'% Prisms',momentum:'+'+(l*6)+'% passive',reserves:'+'+(l*2)+' hours',echo:'+'+Math.min(30,l*5)+' percentage points',bonds:Math.min(60,l*3)+'% Wisp recruiting discount'};
+    var expected={starlight:'+'+(l*10)+'% Lumen',steady:'+'+(l*8)+'% tap',swift:'+'+(l*4)+'% Prisms',momentum:'+'+(l*6)+'% passive',echo:'+'+Math.min(30,l*5)+' percentage points',bonds:Math.min(60,l*3)+'% Wisp recruiting discount'};
     Object.keys(expected).forEach(function(id){ok(q('[data-node-effect="'+id+'"]').textContent.includes(expected[id]),id+' earned/capped effect at level '+l);});
     var metrics=b.upgradeClarity.metrics();
     ok(Math.abs(metrics.offline-(Math.min(1,.7+l*.05)+.4))<1e-12,'offline production oracle');
     ok(metrics.costReduction===Math.min(.6,l*.03),'cost production floor oracle');
-    ok(metrics.offlineCap===48+l*2,'reserves excludes shop cap');
+    ok(metrics.offlineCap===12,'shared cap is12h independent of historical hours');ok(!q('[data-node-effect="reserves"]'),'retired Deep Reserves has no purchase row');
     ok(Math.abs(metrics.lumen-(1+l*.1)*1.24*1.16)<1e-10,'Lumen contribution differs from multiplicative combined factor');
     ok(q('[data-node-effect="echo"]').textContent.includes('node cap reached')===(l>=6),'node offline cap indication');
     ok(q('[data-node-effect="bonds"]').textContent.includes('cost floor reached')===(l>=20),'node recruiting floor indication');
@@ -36,11 +36,11 @@ window.runUpgradeClarityQa=function(b,ctx,assert){
     s.activeStudies=[{id:'guardmastery',remainingSec:0,totalDurationSec:150,speedMult:1}];pureRender(s);
     Object.keys(projectRates).forEach(function(id){
       var text=q('[data-project-effect="'+id+'"]').textContent;
-      ok(text.includes('Completed level '+l),'completed level on '+id);
+      ok(text.includes('Current bonus:'),'one earned bonus description on '+id);
       ok(text.includes('+'+(l*projectRates[id])+(id==='riftattune'?' percentage points':'%')),'actual earned '+id+' rate at '+l);
       ok(text.includes('No earned bonus')===(l===0),'zero completion is no earned bonus '+id);
     });
-    ok(q('[data-running-study="guardmastery"]').textContent.includes('In progress: level '+(l+1)),'pending preview labelled');
+    ok(q('[data-running-study="guardmastery"] .name').textContent.includes('Lv.'+l),'single current level title');ok(q('[data-running-study="guardmastery"]').textContent.includes('Bonus earned on completion'),'paid pending bonus distinguished');
     ok(q('[data-study-text="guardmastery"]').textContent==='Finishing…','zero pending does not complete');
   });
   var locked=b.freshStateSnapshot();pureRender(locked);

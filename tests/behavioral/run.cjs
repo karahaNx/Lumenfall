@@ -88,6 +88,9 @@ async function browserIdentity(chrome) {
 }
 async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, options = {}) {
   const log = options.log || console.log;
+  if (scenario === 'all-27-core') return runNativeProcess([process.execPath, path.join(ROOT, 'all-27-core.cjs')], scenario, 90000, options);
+  if (scenario === 'all-27-balance') return runNativeProcess([process.execPath, path.join(ROOT, 'all-27-balance.cjs')], scenario, 90000, options);
+  if (scenario === 'all-27-mobile') return runNativeProcess([process.execPath, path.join(ROOT, 'all-27-ui.cjs'), chrome], scenario, 90000, options);
   const urlFor = page => baseUrl + page + '?' + new URLSearchParams({ qaScenario: scenario, qaFixture: fixture });
   if (scenario === 'lab-motes-offline-integration') return runNativeProcess([process.execPath, path.join(ROOT, 'lab-motes-offline.cjs')], scenario, 90000, options);
   if (scenario === 'offline-catchup-core') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-catchup.cjs')], scenario, 300000, options);

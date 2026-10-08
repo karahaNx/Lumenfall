@@ -18,7 +18,9 @@ window.qa.set(seed);var before=JSON.stringify(window.qa.get());
 window.qa.apply(function(r,e){result=r;error=e;});
 assert(window.qa.flags().busy);assert.equal(JSON.stringify(window.qa.get()),before);assert.equal(writes,0);
 while(timers.length){timers.shift()();batches++;assert(batches<100000);}
-assert.ifError(error);assert.equal(result.kills,302400);assert.equal(result.ascends,14400);assert.equal(result.effectiveSec,28800);
+// Verified independently by offline-catchup-core's full-state one-second oracle
+// for this original device backup under the approved Swift10/refund contract.
+assert.ifError(error);assert.equal(result.kills,277929);assert.equal(result.ascends,13234);assert.equal(result.effectiveSec,28800);
 assert(!window.qa.flags().busy&&!window.qa.flags().pending&&!window.qa.flags().resume);
 assert.equal(storage.lumenfall_save_v2,storage.lumenfall_save_recovery_v1);
 assert.equal(window.qa.get().lastSeen,now);

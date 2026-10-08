@@ -1,0 +1,343 @@
+{
+  "source": "User-provided 27 starter TXT files; original requirement text preserved. Current AGENTS overrides historical coordination instructions.",
+  "features": [
+    {
+      "file": "01_ASCEND_PRISMS_001.txt",
+      "id": "ASCEND_PRISMS_001",
+      "requirement": "Undersøg fem-Prism-rapporten og verificér preview mod payout ved samme cleared Rift, benchmark og Tree/Lab-levels. Vis grundbelønning, bonusser, repeat og afrunding.",
+      "sha256": "7226811206c745a8bfa700f599d0e4c4ed62d6f04bd4552457c89b46f439cc40",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "implemented in feature branch",
+      "verification": [
+        "all-27-core"
+      ]
+    },
+    {
+      "file": "02_AUTO_ASCEND_UI_001.txt",
+      "id": "AUTO_ASCEND_UI_001",
+      "requirement": "Bevar unlock i Deeds; flyt den operative kontrol til Ascend med én Rift-dropdown og tydelig separat ON/OFF. Fjern Earlier/Later/Find og bevar adgang til alle gyldige mål, også Rift 219+. Målvalg må ikke ændre ON/OFF. Bevar cleared-Rift-trigger og persistence.",
+      "sha256": "0bb15de23e6e1156937ef5249317cce9acf112b15969ab947afb17de5f0268b6",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "implemented in feature branch",
+      "verification": [
+        "auto-ascend-target-contract",
+        "auto-ascend-target-mobile",
+        "auto-ascend-target-reduced-motion"
+      ]
+    },
+    {
+      "file": "03_RIFT_GUIDANCE_001.txt",
+      "id": "RIFT_GUIDANCE_001",
+      "requirement": "Vis guidance lige under currencies med Show hints/Hide hints. Kampområde, boss-HP, currencies og tapområde skal beholde deres position ved begge tilstande, lange hints og stor tekst. Skjult indhold må ikke fange fokus.",
+      "sha256": "e220feb8d87c6109e2060675572aa95ae49d76bc41abf143ff4e6e552efa8310",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "implemented in feature branch",
+      "verification": [
+        "all-27-mobile",
+        "rift-status-contract"
+      ]
+    },
+    {
+      "file": "04_WISP_UPGRADE_DISPLAY_001.txt",
+      "id": "WISP_UPGRADE_DISPLAY_001",
+      "requirement": "Fjern foldmulighed indtil alle afsluttelige spor er fuldført: Mythic rarity, autoritativt Module-cap og købt Ultimate. Empower og Resonate er ikke maxed-predicate. Valutamangel må ikke skjule ufærdige køb.",
+      "sha256": "11b4af498918eeef9f1e0cf4be2eefaf87682ce873e9f874366e8ec2eef97a54",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "implemented in feature branch",
+      "verification": [
+        "wisp-upgrade-display",
+        "all-27-mobile"
+      ]
+    },
+    {
+      "file": "05_RESONATE_CLARITY_001.txt",
+      "id": "RESONATE_CLARITY_001",
+      "requirement": "Forklar den faktiske Sigil-forbrugsaktion og fælles run-grænse. Den observerede mekanik er 25 Sigils for at fylde ability-resource til 100 efter alle Ultimates er købt, med højst tre anvendelser samlet pr. run.",
+      "sha256": "2fdb7960e5d739bc905cb35ed2e4579efd2d4bc38d1727f684a19dfa41ae3b07",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "implemented in feature branch",
+      "verification": [
+        "all-27-mobile",
+        "p2-endgame-currency-utility"
+      ]
+    },
+    {
+      "file": "06_LAB_UI_001.txt",
+      "id": "LAB_UI_001",
+      "requirement": "Integrér tid og hastighed i progressbaren, vis ét aktuelt level og én titel, forklar effekten før start og lad én Speed up-knap åbne et tilgængeligt panel. Bevar læsbarhed, progress-ARIA og korrekt fokus.",
+      "sha256": "c6ba840907a6a552533980e7879c2e67c065e545024fa361753d31403be343a8",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "implemented in feature branch",
+      "verification": [
+        "lab-motes-ui",
+        "lab-motes-native",
+        "lab-motes-reduced-motion",
+        "all-27-mobile"
+      ]
+    },
+    {
+      "file": "07_LAB_SPEED_QUEUE_001.txt",
+      "id": "LAB_SPEED_QUEUE_001",
+      "requirement": "Gem præcis valgt speed-tier separat fra næste-Lab-køen. Hvert nyt betalt level starter 1x og betaler fuld pris for valgt tier når betalelig. Hvis kun Lab-starten kan betales, fortsætter den 1x mens tier-intent beholdes. Verificér offline, restart, Ascend og konkurrerende studies.",
+      "sha256": "464ca650f75a0acf7b6b763d7dae901d9aee2ca0b1b1fece59b296d03c83409b",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "existing baseline implementation verified locally",
+      "verification": [
+        "lab-motes-contracts",
+        "lab-motes-chronology",
+        "lab-motes-conservation",
+        "lab-motes-save-reload",
+        "lab-motes-backup-restore",
+        "lab-motes-recovery"
+      ]
+    },
+    {
+      "file": "08_RIFT_CAST_TEXT_001.txt",
+      "id": "RIFT_CAST_TEXT_001",
+      "requirement": "Fjern gentagen synlig Cast/ability-status på Rift hvor resource/cooldownbaren viser det. Bevar ability-navn og nødvendig programmatisk status.",
+      "sha256": "6619c1c9b3ae686cd9717910c9d163f6a9b3cad6d505c1725b2391a50a7b1882",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "implemented in feature branch",
+      "verification": [
+        "rift-status-contract",
+        "all-27-mobile"
+      ]
+    },
+    {
+      "file": "09_FORMATION_AUTOSAVE_001.txt",
+      "id": "FORMATION_AUTOSAVE_001",
+      "requirement": "Gem relevante Field/Bench/rosterændringer straks i valgt Push/Farm/Boss-preset og fjern Save-knappen. Bevar preset-isolation, tomme presets og ønskede late-game-medlemmer gennem Ascend-rebuild og recovery. Pending medlemmer giver ikke DPS/Bonds.",
+      "sha256": "46df1d0b8b0884e7025a68e70f6d06e8efa8fd5b526971c057029260fbfe3741",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "implemented in feature branch",
+      "verification": [
+        "p2-07a-formation-reconstruction",
+        "p2-07a-persistence-review",
+        "p2-07a-chronology",
+        "p2-02a-core-qol",
+        "all-27-mobile"
+      ]
+    },
+    {
+      "file": "10_FORMATION_BONDS_001.txt",
+      "id": "FORMATION_BONDS_001",
+      "requirement": "Design og tilføj mere end fire Bonds med forskellige bonusser og brugbare Push/Farm/Boss-valg. Beskriv combo, effekt og stacking, og dokumentér lige investeringsbudgetter.",
+      "sha256": "2f0c59002e5ea2b4c4d5b74d3fdf4a2fd0fd0f294bfbb2ab2b3f2866c2def7b3",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "implemented in feature branch",
+      "verification": [
+        "all-27-balance",
+        "rift-status-contract",
+        "p2-03a-wisp-role-integrity"
+      ]
+    },
+    {
+      "file": "11_BOND_TEXT_001.txt",
+      "id": "BOND_TEXT_001",
+      "requirement": "Vis Bond-partnernavne i Formation Bonds og fjern dem fra Wisp ability-tekster. Ability-tekster skal fortsat forklare evnen korrekt.",
+      "sha256": "ab876bcc7a7363b58aa4cc3a92f1f4d532db7134b510d4dd6145a36dd90752fa",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "implemented in feature branch",
+      "verification": [
+        "bond-text-contract",
+        "p2-03a-wisp-role-integrity",
+        "rift-status-contract"
+      ]
+    },
+    {
+      "file": "12_WISP_ROLES_001.txt",
+      "id": "WISP_ROLES_001",
+      "requirement": "Undersøg Titan-afhængighed med equal-budget og faktiske mid-/late-game-hold. Vis rå skade, marginal supporteffekt, Bonds og ressourceværdi uden dobbeltoptælling. Giv tidlige damage-Wisps en varig grund til at blive valgt.",
+      "sha256": "b66abeb4f51578f85738967e1880a40892a84f7cdf71b8e505db5f1acc1d9e20",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "implemented in feature branch",
+      "verification": [
+        "all-27-balance",
+        "p2-03a-wisp-role-integrity",
+        "wisp-formula-contract"
+      ]
+    },
+    {
+      "file": "13_SUPPORT_UPTIME_001.txt",
+      "id": "SUPPORT_UPTIME_001",
+      "requirement": "Gør permanent Tide/Aurora-boost sværere med konkrete early/mid/late uptime-mål. Verificér varighed, cycle, stacking, faktiske cast/expiry-ticks og live/offline.",
+      "sha256": "45f06ea2e78b833e4ffb72635547faf070d0981602c9af6a9a34a207ccc87c5e",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "implemented in feature branch",
+      "verification": [
+        "support-stacking",
+        "buff-timing",
+        "all-27-core"
+      ]
+    },
+    {
+      "file": "14_SWIFT_RECOVERY_CAP_001.txt",
+      "id": "SWIFT_RECOVERY_CAP_001",
+      "requirement": "Fastlæg et købscap og en positiv minimum cycle time. Håndhæv samme effektive loft i UI, handler, bulk/Max/queue og simulation. Dokumentér værdibevarelse for gamle overlevels.",
+      "sha256": "8c33ddbe8fcf846fa3a993182d7c19749c6c0783a85e3d6cda51f73590721794",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "implemented in feature branch",
+      "verification": [
+        "all-27-core",
+        "forge-contracts"
+      ]
+    },
+    {
+      "file": "15_ECHOING_REST_CAP_001.txt",
+      "id": "ECHOING_REST_CAP_001",
+      "requirement": "Stop køb når næste level ikke giver ny Tree-effekt. Den nuværende 70% base plus fem procentpoint pr. level når 100% ved level 6. Verificér købsgates og bevar gammel købsværdi i en eksplicit overgang.",
+      "sha256": "9f81ae6bca8377e0491d2c04185357a07595d4814c4d2684544caa377b077065",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "implemented in feature branch",
+      "verification": [
+        "all-27-core"
+      ]
+    },
+    {
+      "file": "16_CHEAPER_BONDS_CAP_001.txt",
+      "id": "CHEAPER_BONDS_CAP_001",
+      "requirement": "Forklar at floor 40% betyder pris mindst 40% af normal recruit-pris og højst 60% rabat. Håndhæv det nuværende effektloft level 20 og stop betaling uden effekt. Bevar gammel købsværdi.",
+      "sha256": "390e2a2fa4dfec2059a8bef1f4554df76c8842f0e8a4a347a02e108adf83fb95",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "implemented in feature branch",
+      "verification": [
+        "all-27-core"
+      ]
+    },
+    {
+      "file": "17_SAVE_BACKUP_UI_001.txt",
+      "id": "SAVE_BACKUP_UI_001",
+      "requirement": "Placér eksisterende Backup/Restore i Save-afsnittet ved Reset. Bevar export, kopiering, import/restore, validering og bekræftelse ved erstatning. Backup og Reset er separate handlinger.",
+      "sha256": "ea6e2fa311ac4aabf5592713f6dcf0586bd09115015855e6ccccd518f100a1d0",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "implemented in feature branch",
+      "verification": [
+        "all-27-mobile",
+        "all-27-core",
+        "legacy-backup-restore",
+        "malformed-backup-rejection"
+      ]
+    },
+    {
+      "file": "18_FORGE_TEXT_001.txt",
+      "id": "FORGE_TEXT_001",
+      "requirement": "Fjern den synlige No level cap-standardtekst. Vis de faktiske priser, effekter og caps korrekt.",
+      "sha256": "4342741223450dee625472ee4d379522a6d735768f96e8adaf92bcb33dac7fe3",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "implemented in feature branch",
+      "verification": [
+        "all-27-mobile",
+        "forge-contracts"
+      ]
+    },
+    {
+      "file": "19_RIFT_COSMETICS_001.txt",
+      "id": "RIFT_COSMETICS_001",
+      "requirement": "Kontrollér hvert optjent og valgt cosmetic og gør dets effekt synlig på Rift. Bevar HP-læsbarhed, tapområde og reduced-motion-alternativ; adskil unlocked fra selected.",
+      "sha256": "5c2d5a933b69fc2dd60da577a91753d7831e2c98ca5e30f8dfa2a2fa8d450ea7",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "implemented in feature branch",
+      "verification": [
+        "all-27-mobile"
+      ]
+    },
+    {
+      "file": "20_LOADOUT_MEMORY_001.txt",
+      "id": "LOADOUT_MEMORY_001",
+      "requirement": "Gør Forge bulk-buy-multiplier-hukommelse til baseline fra start, restart og skærmskift. Fjern den gamle Deeds/Comet-gate og bevar allerede betalt værdi i en eksplicit overgang.",
+      "sha256": "bd1a430085202bc08e932eb5aee2d0f0add7399c4df535a9af61dd831ab89cbc",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "implemented in feature branch",
+      "verification": [
+        "all-27-core",
+        "forge-ui-mobile"
+      ]
+    },
+    {
+      "file": "21_OFFLINE_12H_001.txt",
+      "id": "OFFLINE_12H_001",
+      "requirement": "Implementér den besluttede fælles produktive offlineperiode på højst 12h for earnings, combat/rewards, Lab og automation. Håndtér Deep Rest, Extended Rest og Deep Reserves-hours samt gammel købsværdi uden dobbeltudbetaling.",
+      "sha256": "1d3cf604a45dfffab20d45e2e4111cd4ff0fc92e7ba1239d27c7e1442b89740a",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "implemented in feature branch",
+      "verification": [
+        "all-27-core",
+        "lab-motes-chronology",
+        "inquiry-chronology"
+      ]
+    },
+    {
+      "file": "22_COMET_UNLOCKS_001.txt",
+      "id": "COMET_UNLOCKS_001",
+      "requirement": "Design nye egne Deeds-unlocks for Comets som erstatning for fjernede convenience/timecap-køb. Beskriv konkret unlock, effekt, cap, pris og visning; kosmetik kan supplere funktionelle valg.",
+      "sha256": "7756d79dfc665953fb43204243c9c59e4beb823935d4e1eff1938b070f48cbf5",
+      "status": "open: design/progression work pending",
+      "implementation": "pending",
+      "verification": [],
+      "pendingVerification": "Requires the final design choice, implementation and pacing checks."
+    },
+    {
+      "file": "23_PROGRESSION_CURVE_001.txt",
+      "id": "PROGRESSION_CURVE_001",
+      "requirement": "Mål og design fælles pacing for Rift, Empower, Rarity, Module, Ultimate, Forge, Lab og Tree. Undgå brat væg efter hurtig start; mål TTK, upgrade-wait, Ascend/time, reward/time og ROI i early/mid/late.",
+      "sha256": "22e15de622bb4cb857758b11919cc0fee2b097a3e7087a1ced1ae85c81eeea9e",
+      "status": "open: design/progression work pending",
+      "implementation": "pending",
+      "verification": [],
+      "pendingVerification": "Requires the final design choice, implementation and pacing checks."
+    },
+    {
+      "file": "24_UPGRADE_IDENTITY_001.txt",
+      "id": "UPGRADE_IDENTITY_001",
+      "requirement": "Lav en effekt-/currency-matrix over eksisterende og foreslåede Lab/Forge/Tree-upgrades. Beslut hvilke dubletter der omformes, og giv hvert system egne effekter. Dokumentér stacking og værdibevarelse for købte levels.",
+      "sha256": "9e5305b43a2d16636087ff242b2dfec0a0f975c3703575c2693235783818d30d",
+      "status": "open: design/progression work pending",
+      "implementation": "pending",
+      "verification": [],
+      "pendingVerification": "Requires the final design choice, implementation and pacing checks."
+    },
+    {
+      "file": "25_LAB_EXCLUSIVE_001.txt",
+      "id": "LAB_EXCLUSIVE_001",
+      "requirement": "Inventér Lab-dubletter og foreslå egne effekter med tidsinvestering og navngiven valuta. Implementér senere Lab-delen af den fælles aftalte matrix med gennemskuelig stacking, priser og overgang for købt/aktiv forskning.",
+      "sha256": "47c5e5500e9093a829f40abb2c28941465d30340a5da08065f2236615fe01629",
+      "status": "open: design/progression work pending",
+      "implementation": "pending",
+      "verification": [],
+      "pendingVerification": "Requires the final design choice, implementation and pacing checks."
+    },
+    {
+      "file": "26_FORGE_EXCLUSIVE_001.txt",
+      "id": "FORGE_EXCLUSIVE_001",
+      "requirement": "Inventér Forge-dubletter og foreslå egne dyrere/senere unlocks. Implementér senere Forge-delen af den fælles aftalte matrix med caps, priser, stacking og værdibevarelse.",
+      "sha256": "9c68492f7a2e6d1879ad6908b7ae5453cdf304fc7448493374d11a927cfc83e9",
+      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
+      "implementation": "existing baseline implementation verified locally",
+      "verification": [
+        "forge-contracts",
+        "forge-balance",
+        "forge-save-reload",
+        "forge-backup-restore"
+      ]
+    },
+    {
+      "file": "27_TREE_EXCLUSIVE_001.txt",
+      "id": "TREE_EXCLUSIVE_001",
+      "requirement": "Inventér Tree-dubletter og foreslå egne prestige-/run-effekter. Implementér senere Tree-delen af den fælles aftalte matrix med pris/effekt, stacking og idempotent overgang for købt værdi.",
+      "sha256": "bfacfe1cbfc10393fe3343bedcefcfcebe66900a87d1081d0448860c6b2380dc",
+      "status": "open: design/progression work pending",
+      "implementation": "pending",
+      "verification": [],
+      "pendingVerification": "Requires the final design choice, implementation and pacing checks."
+    }
+  ],
+  "checkpoint": {
+    "baseline": "214d45411ce2fb420f0e4b372063811a967679b1",
+    "branch": "feature/all-27-feedback-001",
+    "pr": "https://github.com/karahaNx/Lumenfall/pull/67",
+    "implementedOrExisting": 22,
+    "designOrPacingPending": 5,
+    "completedAndReleased": 0,
+    "physicalAcceptance": "pending after APK delivery"
+  }
+}
