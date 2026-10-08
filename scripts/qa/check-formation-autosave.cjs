@@ -23,7 +23,7 @@ async function run(name,command,argv,input){
  console.log((result.exit===0?'PASS ':'FAIL ')+name+' exit='+result.exit);return result.exit===0;
 }
 async function main(){
- await run('context',process.execPath,['scripts/codex/check_context.cjs']);
+ await run('context',process.execPath,['scripts/codex/check_context.cjs','--task','docs/tasks/FORMATION_AUTOSAVE_001.md']);
  await run('tooling',process.execPath,['tests/tooling/run.cjs']);
  await run('apk-identity-self-test',process.execPath,['scripts/verify_apk_identity.cjs','--self-test']);
  await run('source',process.execPath,['scripts/ci/validate_source.cjs']);

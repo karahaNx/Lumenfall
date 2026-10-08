@@ -1,5 +1,9 @@
 # FORMATION_AUTOSAVE_001 — local evidence
 
+Historical local candidate. The 8 October continuation rebases onto newer main
+and performs fresh integration/delivery checks; see
+[current evidence](../formation-autosave-2026-10-08/README.md) and the task.
+
 Private candidate on `feature/formation-autosave-001`, rebased onto main
 `0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd`. No Formation integration or APK/device acceptance.
 Final product SHA256: `2eda7ffd83e95d2a114403706f488d8c58723726d81314c873fb1393e793bc1b`.
