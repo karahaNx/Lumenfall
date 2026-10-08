@@ -1,0 +1,877 @@
+{
+  "status": "PASS",
+  "sourceSha256": "f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4",
+  "baseline": true,
+  "definitions": {
+    "wisps": [
+      {
+        "id": "ember",
+        "name": "Ember Wisp",
+        "shortName": "Ember",
+        "shape": "shape-triangle",
+        "color": "#e08a2e",
+        "unlockDepth": 1,
+        "baseCost": 10,
+        "basePower": 1,
+        "heroClass": "Starcaller",
+        "role": "Burst",
+        "resource": "mana",
+        "abilityType": "dps",
+        "abilityName": "Nova Burst"
+      },
+      {
+        "id": "tide",
+        "name": "Tide Sprite",
+        "shortName": "Tide",
+        "shape": "shape-droplet",
+        "color": "#3aa0c9",
+        "unlockDepth": 3,
+        "baseCost": 60,
+        "basePower": 5,
+        "heroClass": "Dawnpriest",
+        "role": "Amplifier",
+        "resource": "harmony",
+        "abilityType": "support",
+        "abilityName": "Blessing"
+      },
+      {
+        "id": "stone",
+        "name": "Stoneheart Golem",
+        "shortName": "Stone",
+        "shape": "shape-hex",
+        "color": "#7a8f6a",
+        "unlockDepth": 6,
+        "baseCost": 360,
+        "basePower": 26,
+        "heroClass": "Duskguard",
+        "role": "Breaker",
+        "resource": "rage",
+        "abilityType": "breaker",
+        "abilityName": "Bulwark Slam"
+      },
+      {
+        "id": "gale",
+        "name": "Gale Dancer",
+        "shortName": "Gale",
+        "shape": "shape-diamond",
+        "color": "#79c7d1",
+        "unlockDepth": 9,
+        "baseCost": 2100,
+        "basePower": 130,
+        "heroClass": "Windrunner",
+        "role": "Shard Utility",
+        "resource": "focus",
+        "abilityType": "ranged",
+        "abilityName": "Piercing Volley"
+      },
+      {
+        "id": "thorn",
+        "name": "Thornback",
+        "shortName": "Thorn",
+        "shape": "shape-pentagon",
+        "color": "#4f8f5b",
+        "unlockDepth": 12,
+        "baseCost": 12000,
+        "basePower": 680,
+        "heroClass": "Thornshaper",
+        "role": "Lumen Utility",
+        "resource": "energy",
+        "abilityType": "druid",
+        "abilityName": "Bloom Surge"
+      },
+      {
+        "id": "void",
+        "name": "Voidling",
+        "shortName": "Void",
+        "shape": "shape-star",
+        "color": "#8a5fd6",
+        "unlockDepth": 18,
+        "baseCost": 70000,
+        "basePower": 3400,
+        "heroClass": "Starcaller",
+        "role": "Burst",
+        "resource": "mana",
+        "abilityType": "dps",
+        "abilityName": "Void Nova"
+      },
+      {
+        "id": "aurora",
+        "name": "Aurora Seer",
+        "shortName": "Aurora",
+        "shape": "shape-ring",
+        "color": "#d16fa8",
+        "unlockDepth": 24,
+        "baseCost": 400000,
+        "basePower": 17000,
+        "heroClass": "Dawnpriest",
+        "role": "Amplifier",
+        "resource": "harmony",
+        "abilityType": "support",
+        "abilityName": "Radiant Blessing"
+      },
+      {
+        "id": "titan",
+        "name": "Starforged Titan",
+        "shortName": "Titan",
+        "shape": "shape-octagon",
+        "color": "#d1a72e",
+        "unlockDepth": 32,
+        "baseCost": 2200000,
+        "basePower": 88000,
+        "heroClass": "Duskguard",
+        "role": "Breaker",
+        "resource": "rage",
+        "abilityType": "breaker",
+        "abilityName": "Titanic Slam"
+      }
+    ],
+    "bonds": [
+      {
+        "id": "starcaller",
+        "name": "Starcaller Bond",
+        "ids": [
+          "ember",
+          "void"
+        ],
+        "req": "Ember + Void",
+        "effect": "+18% passive & ability damage",
+        "tag": "Push"
+      },
+      {
+        "id": "dawnpriest",
+        "name": "Dawnpriest Bond",
+        "ids": [
+          "tide",
+          "aurora"
+        ],
+        "req": "Tide + Aurora",
+        "effect": "+25% Lumen, Shards & Motes",
+        "tag": "Farm"
+      },
+      {
+        "id": "duskguard",
+        "name": "Duskguard Bond",
+        "ids": [
+          "stone",
+          "titan"
+        ],
+        "req": "Stone + Titan",
+        "effect": "+35% passive & ability damage vs Bosses",
+        "tag": "Boss"
+      },
+      {
+        "id": "pathfinder",
+        "name": "Pathfinder Bond",
+        "ids": [
+          "gale",
+          "thorn"
+        ],
+        "req": "Gale + Thorn",
+        "effect": "+20% passive & ability damage vs non-Bosses",
+        "tag": "Push / Farm"
+      }
+    ],
+    "abilities": {
+      "breaker": "Heavy ability damage. Stone + Titan together activate the Duskguard boss-damage Bond; its Module boosts the hit and its Ultimate doubles it.",
+      "dps": "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it.",
+      "ranged": "Ability damage + Shards. Module boosts the Shards; Ultimate doubles both.",
+      "druid": "Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both.",
+      "support": "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+    }
+  },
+  "ability": {
+    "wisps": [
+      "Heavy ability damage. Stone + Titan together activate the Duskguard boss-damage Bond; its Module boosts the hit and its Ultimate doubles it.",
+      "Heavy ability damage. Stone + Titan together activate the Duskguard boss-damage Bond; its Module boosts the hit and its Ultimate doubles it.",
+      "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it.",
+      "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s.",
+      "Ability damage + Shards. Module boosts the Shards; Ultimate doubles both.",
+      "Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both.",
+      "Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it.",
+      "Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s."
+    ],
+    "encyclopedia": [
+      "Nova Burst: Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it.",
+      "Blessing: Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s.",
+      "Bulwark Slam: Heavy ability damage. Stone + Titan together activate the Duskguard boss-damage Bond; its Module boosts the hit and its Ultimate doubles it.",
+      "Piercing Volley: Ability damage + Shards. Module boosts the Shards; Ultimate doubles both.",
+      "Bloom Surge: Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both.",
+      "Void Nova: Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it.",
+      "Radiant Blessing: Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s.",
+      "Titanic Slam: Heavy ability damage. Stone + Titan together activate the Duskguard boss-damage Bond; its Module boosts the hit and its Ultimate doubles it."
+    ]
+  },
+  "mechanics": [
+    {
+      "bond": "starcaller",
+      "kind": "active",
+      "active": [
+        "starcaller"
+      ],
+      "nonBoss": 1.18,
+      "boss": 1.18,
+      "reward": 1,
+      "average": 36453.051666666666
+    },
+    {
+      "bond": "starcaller",
+      "kind": "benched",
+      "active": [],
+      "nonBoss": 1,
+      "boss": 1,
+      "reward": 1,
+      "average": 9.083333333333334
+    },
+    {
+      "bond": "starcaller",
+      "kind": "pending",
+      "active": [],
+      "nonBoss": 1,
+      "boss": 1,
+      "reward": 1,
+      "average": 9.083333333333334
+    },
+    {
+      "bond": "dawnpriest",
+      "kind": "active",
+      "active": [
+        "dawnpriest"
+      ],
+      "nonBoss": 1,
+      "boss": 1,
+      "reward": 1.25,
+      "average": 0
+    },
+    {
+      "bond": "dawnpriest",
+      "kind": "benched",
+      "active": [],
+      "nonBoss": 1,
+      "boss": 1,
+      "reward": 1,
+      "average": 0
+    },
+    {
+      "bond": "dawnpriest",
+      "kind": "pending",
+      "active": [],
+      "nonBoss": 1,
+      "boss": 1,
+      "reward": 1,
+      "average": 0
+    },
+    {
+      "bond": "duskguard",
+      "kind": "active",
+      "active": [
+        "duskguard"
+      ],
+      "nonBoss": 1,
+      "boss": 1.35,
+      "reward": 1,
+      "average": 639655.6000000001
+    },
+    {
+      "bond": "duskguard",
+      "kind": "benched",
+      "active": [],
+      "nonBoss": 1,
+      "boss": 1,
+      "reward": 1,
+      "average": 188.93333333333337
+    },
+    {
+      "bond": "duskguard",
+      "kind": "pending",
+      "active": [],
+      "nonBoss": 1,
+      "boss": 1,
+      "reward": 1,
+      "average": 188.93333333333337
+    },
+    {
+      "bond": "pathfinder",
+      "kind": "active",
+      "active": [
+        "pathfinder"
+      ],
+      "nonBoss": 1.2,
+      "boss": 1,
+      "reward": 1,
+      "average": 5297.400000000001
+    },
+    {
+      "bond": "pathfinder",
+      "kind": "benched",
+      "active": [],
+      "nonBoss": 1,
+      "boss": 1,
+      "reward": 1,
+      "average": 708.5
+    },
+    {
+      "bond": "pathfinder",
+      "kind": "pending",
+      "active": [],
+      "nonBoss": 1,
+      "boss": 1,
+      "reward": 1,
+      "average": 708.5
+    }
+  ],
+  "profiles": [
+    {
+      "width": 320,
+      "textScale": 1,
+      "motion": "no-preference",
+      "open": true,
+      "focused": true,
+      "height": 44,
+      "outline": "solid",
+      "outlineWidth": "2px",
+      "rows": [
+        {
+          "partner": "Ember + Void",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Tide + Aurora",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Stone + Titan",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.128941 0.158274 0.239529)"
+        },
+        {
+          "partner": "Gale + Thorn",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        }
+      ],
+      "cardFits": true,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "textScale": 1,
+      "motion": "reduce",
+      "open": true,
+      "focused": true,
+      "height": 44,
+      "outline": "solid",
+      "outlineWidth": "2px",
+      "rows": [
+        {
+          "partner": "Ember + Void",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Tide + Aurora",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Stone + Titan",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.128941 0.158274 0.239529)"
+        },
+        {
+          "partner": "Gale + Thorn",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        }
+      ],
+      "cardFits": true,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "textScale": 2,
+      "motion": "no-preference",
+      "open": true,
+      "focused": true,
+      "height": 44,
+      "outline": "solid",
+      "outlineWidth": "2px",
+      "rows": [
+        {
+          "partner": "Ember + Void",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Tide + Aurora",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Stone + Titan",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.128941 0.158274 0.239529)"
+        },
+        {
+          "partner": "Gale + Thorn",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        }
+      ],
+      "cardFits": true,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "textScale": 2,
+      "motion": "reduce",
+      "open": true,
+      "focused": true,
+      "height": 44,
+      "outline": "solid",
+      "outlineWidth": "2px",
+      "rows": [
+        {
+          "partner": "Ember + Void",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Tide + Aurora",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Stone + Titan",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.128941 0.158274 0.239529)"
+        },
+        {
+          "partner": "Gale + Thorn",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        }
+      ],
+      "cardFits": true,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "textScale": 1,
+      "motion": "no-preference",
+      "open": true,
+      "focused": true,
+      "height": 44,
+      "outline": "solid",
+      "outlineWidth": "2px",
+      "rows": [
+        {
+          "partner": "Ember + Void",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Tide + Aurora",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Stone + Titan",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.128941 0.158274 0.239529)"
+        },
+        {
+          "partner": "Gale + Thorn",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        }
+      ],
+      "cardFits": true,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "textScale": 1,
+      "motion": "reduce",
+      "open": true,
+      "focused": true,
+      "height": 44,
+      "outline": "solid",
+      "outlineWidth": "2px",
+      "rows": [
+        {
+          "partner": "Ember + Void",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Tide + Aurora",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Stone + Titan",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.128941 0.158274 0.239529)"
+        },
+        {
+          "partner": "Gale + Thorn",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        }
+      ],
+      "cardFits": true,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "textScale": 2,
+      "motion": "no-preference",
+      "open": true,
+      "focused": true,
+      "height": 44,
+      "outline": "solid",
+      "outlineWidth": "2px",
+      "rows": [
+        {
+          "partner": "Ember + Void",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Tide + Aurora",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Stone + Titan",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.128941 0.158274 0.239529)"
+        },
+        {
+          "partner": "Gale + Thorn",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        }
+      ],
+      "cardFits": true,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "textScale": 2,
+      "motion": "reduce",
+      "open": true,
+      "focused": true,
+      "height": 44,
+      "outline": "solid",
+      "outlineWidth": "2px",
+      "rows": [
+        {
+          "partner": "Ember + Void",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Tide + Aurora",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Stone + Titan",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.128941 0.158274 0.239529)"
+        },
+        {
+          "partner": "Gale + Thorn",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        }
+      ],
+      "cardFits": true,
+      "errors": []
+    },
+    {
+      "width": 430,
+      "textScale": 1,
+      "motion": "no-preference",
+      "open": true,
+      "focused": true,
+      "height": 44,
+      "outline": "solid",
+      "outlineWidth": "2px",
+      "rows": [
+        {
+          "partner": "Ember + Void",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Tide + Aurora",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Stone + Titan",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.128941 0.158274 0.239529)"
+        },
+        {
+          "partner": "Gale + Thorn",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        }
+      ],
+      "cardFits": true,
+      "errors": []
+    },
+    {
+      "width": 430,
+      "textScale": 1,
+      "motion": "reduce",
+      "open": true,
+      "focused": true,
+      "height": 44,
+      "outline": "solid",
+      "outlineWidth": "2px",
+      "rows": [
+        {
+          "partner": "Ember + Void",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Tide + Aurora",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Stone + Titan",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.128941 0.158274 0.239529)"
+        },
+        {
+          "partner": "Gale + Thorn",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        }
+      ],
+      "cardFits": true,
+      "errors": []
+    },
+    {
+      "width": 430,
+      "textScale": 2,
+      "motion": "no-preference",
+      "open": true,
+      "focused": true,
+      "height": 44,
+      "outline": "solid",
+      "outlineWidth": "2px",
+      "rows": [
+        {
+          "partner": "Ember + Void",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Tide + Aurora",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Stone + Titan",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.128941 0.158274 0.239529)"
+        },
+        {
+          "partner": "Gale + Thorn",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        }
+      ],
+      "cardFits": true,
+      "errors": []
+    },
+    {
+      "width": 430,
+      "textScale": 2,
+      "motion": "reduce",
+      "open": true,
+      "focused": true,
+      "height": 44,
+      "outline": "solid",
+      "outlineWidth": "2px",
+      "rows": [
+        {
+          "partner": "Ember + Void",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Tide + Aurora",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        },
+        {
+          "partner": "Stone + Titan",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.128941 0.158274 0.239529)"
+        },
+        {
+          "partner": "Gale + Thorn",
+          "partnerFits": true,
+          "rowFits": true,
+          "notOverlapping": true,
+          "color": "rgb(181, 180, 203)",
+          "background": "color(srgb 0.0862745 0.0980392 0.2 / 0.78)"
+        }
+      ],
+      "cardFits": true,
+      "errors": []
+    }
+  ],
+  "browser": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)"
+}

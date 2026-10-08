@@ -1742,7 +1742,8 @@
   .wisp-empower-action{width:100%;min-width:44px;min-height:44px;margin:8px 0;display:flex;flex-direction:row;justify-content:space-between;align-items:center;gap:8px;flex-wrap:nowrap;white-space:nowrap;}
   .wisp-empower-action:not(:disabled){border-color:var(--lumen);color:var(--lumen);}
   .wisp-progression{border-top:1px solid var(--line);margin-top:4px;}
-  .wisp-progression>summary{min-height:44px;padding:12px 0;cursor:pointer;font-size:12px;color:var(--ink-dim);font-weight:700;}
+  .wisp-progression>summary,.wisp-progression-title{min-height:44px;padding:12px 0;margin:0;font-size:.75rem;color:var(--ink-dim);font-weight:700;}
+  .wisp-progression>summary{cursor:pointer;}
   .wisp-progression>summary:focus-visible{outline:2px solid var(--lumen);outline-offset:2px;}
   .formation-help{margin-top:12px;}
   .formation-help>summary{min-height:44px;cursor:pointer;padding:12px 2px;font-size:13px;font-weight:700;}
@@ -2894,7 +2895,7 @@ var SPIRITS = [
 ];
 
 var ABILITY_DESC = {
-  breaker: 'Heavy ability damage. Its Module boosts the hit and its Ultimate doubles it.',
+  breaker: 'Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it.',
   dps: 'Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it.',
   ranged: 'Ability damage + Shards. Module boosts the Shards; Ultimate doubles both.',
   druid: 'Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both.',
@@ -2902,15 +2903,20 @@ var ABILITY_DESC = {
 };
 
 var FORMATION_BONDS = [
-  {id:'starcaller', name:'Starcaller Bond', ids:['ember','void'], req:'Ember + Void', effect:'+18% passive & ability damage', riftEffect:'Passive/ability +18%', tag:'Push'},
-  {id:'dawnpriest', name:'Dawnpriest Bond', ids:['tide','aurora'], req:'Tide + Aurora', effect:'+25% Lumen, Shards & Motes', riftEffect:'Lumen/Shards/Motes +25%', tag:'Farm'},
-  {id:'duskguard', name:'Duskguard Bond', ids:['stone','titan'], req:'Stone + Titan', effect:'+35% passive & ability damage vs Bosses', riftEffect:'Boss Wisps +35%', tag:'Boss'},
-  {id:'pathfinder', name:'Pathfinder Bond', ids:['gale','thorn'], req:'Gale + Thorn', effect:'+20% passive & ability damage vs non-Bosses', riftEffect:'Non-Boss Wisps +20%', tag:'Push / Farm'},
-  {id:'kindling', name:'Kindling Bond', ids:['ember','tide'], req:'Ember + Tide', effect:'+25% Guardian Tap damage', riftEffect:'Tap +25%', tag:'Push'},
-  {id:'vanguard', name:'Vanguard Bond', ids:['ember','stone'], req:'Ember + Stone', effect:'20% less Boss regeneration', riftEffect:'Boss regen −20%', tag:'Boss'},
-  {id:'quarry', name:'Quarry Bond', ids:['stone','gale'], req:'Stone + Gale', effect:'+20% Shards from Gale abilities', riftEffect:'Gale Shards +20%', tag:'Farm'},
-  {id:'harvest', name:'Harvest Bond', ids:['thorn','aurora'], req:'Thorn + Aurora', effect:'+20% Lumen from Thorn abilities', riftEffect:'Thorn Lumen +20%', tag:'Farm'}
+  {id:'starcaller', name:'Starcaller Bond', ids:['ember','void'], effect:'+18% passive & ability damage', riftEffect:'Passive/ability +18%', tag:'Push'},
+  {id:'dawnpriest', name:'Dawnpriest Bond', ids:['tide','aurora'], effect:'+25% Lumen, Shards & Motes', riftEffect:'Lumen/Shards/Motes +25%', tag:'Farm'},
+  {id:'duskguard', name:'Duskguard Bond', ids:['stone','titan'], effect:'+35% passive & ability damage vs Bosses', riftEffect:'Boss Wisps +35%', tag:'Boss'},
+  {id:'pathfinder', name:'Pathfinder Bond', ids:['gale','thorn'], effect:'+20% passive & ability damage vs non-Bosses', riftEffect:'Non-Boss Wisps +20%', tag:'Push / Farm'},
+  {id:'kindling', name:'Kindling Bond', ids:['ember','tide'], effect:'+25% Guardian Tap damage', riftEffect:'Tap +25%', tag:'Push'},
+  {id:'vanguard', name:'Vanguard Bond', ids:['ember','stone'], effect:'20% less Boss regeneration', riftEffect:'Boss regen −20%', tag:'Boss'},
+  {id:'quarry', name:'Quarry Bond', ids:['stone','gale'], effect:'+20% Shards from Gale abilities', riftEffect:'Gale Shards +20%', tag:'Farm'},
+  {id:'harvest', name:'Harvest Bond', ids:['thorn','aurora'], effect:'+20% Lumen from Thorn abilities', riftEffect:'Thorn Lumen +20%', tag:'Farm'}
 ];
+function formationBondPartners(bond){
+  return bond.ids.map(function(id){
+    return SPIRITS.find(function(sp){ return sp.id===id; }).name;
+  }).join(' + ');
+}
 // Presentation identities stay stable across formations; shapes supplement color.
 var BOND_VISUALS = {
   starcaller:{color:'#c4adff',mark:'◆'},
@@ -4160,6 +4166,10 @@ function supportMoteBonus(){
   return bonus;
 }
 function ultimateUnlocked(id){ return !!(state.wispUltimate && state.wispUltimate[id]); }
+function wispUpgradesMaxed(id){
+  return (state.heroRarity[id]||0)>=RARITY_NAMES.length-1 &&
+    moduleLevel(id)>=MODULE_MAX_LEVEL && ultimateUnlocked(id);
+}
 function ultimateSigilCost(sp){ return Math.round(5 + sp.unlockDepth*2); }
 function totalUltimateSigilCost(){
   return SPIRITS.reduce(function(sum,sp){ return sum+ultimateSigilCost(sp); },0);
@@ -5518,8 +5528,14 @@ function presentControlStates(root){
         else if(!level || level<rarityReq(tier)){kind='locked';reason=!level?'Recruit first':'';}
         else cost=rarityCost(sp,tier);
       }
-      if(btn.hasAttribute('data-module')) cost=moduleCost(sp,moduleLevel(sp.id));
-      if(btn.hasAttribute('data-ultimate')) cost.sigil=ultimateSigilCost(sp);
+      if(btn.hasAttribute('data-module')){
+        cost=moduleCost(sp,moduleLevel(sp.id));
+        if((state.spirits[sp.id]||0)<=0){kind='locked';reason='Recruit first';}
+      }
+      if(btn.hasAttribute('data-ultimate')){
+        cost.sigil=ultimateSigilCost(sp);
+        if((state.heroRarity[sp.id]||0)<RARITY_NAMES.length-1){kind='locked';reason='Mythic required';}
+      }
       if(btn.hasAttribute('data-sigil-resonate')){
         cost.sigil=SIGIL_RESONANCE_COST;
         if((state.sigilResonanceUses||0)>=SIGIL_RESONANCE_RUN_LIMIT){kind='unavailable';reason='Run limit reached';}
@@ -6042,7 +6058,7 @@ function renderFormationBonds(){
       var recommended = focus.bonds.indexOf(bond.id)!==-1;
       return '<div class="bond-row '+(active?'active':'')+'">' +
         '<span class="bond-dot"></span>' +
-        '<div class="bond-main"><div class="bond-name">'+bond.name+' · '+bond.tag+(recommended?' · Best now':'')+'</div><div class="bond-req">'+bond.req+'</div></div>' +
+        '<div class="bond-main"><div class="bond-name">'+bond.name+' · '+bond.tag+(recommended?' · Best now':'')+'</div><div class="bond-req">'+formationBondPartners(bond)+'</div></div>' +
         '<div class="bond-effect">'+bond.effect+'</div>' +
       '</div>';
     }).join('');
@@ -6088,8 +6104,11 @@ function pulseWispCard(id,tone){
 }
 
 function renderSpirits(){
-  var openProgression=Array.from(els['spirit-list'].querySelectorAll('details[open]')).map(function(el){return el.dataset.wispProgression;});
+  var openProgression=Array.from(els['spirit-list'].querySelectorAll('[data-wisp-progression]')).filter(function(el){
+    return el.tagName!=='DETAILS' || el.open;
+  }).map(function(el){return el.dataset.wispProgression;});
   var focusedProgression=document.activeElement && document.activeElement.dataset.wispDetails;
+  var focusedFinalUpgrade=document.activeElement && (document.activeElement.dataset.module || document.activeElement.dataset.ultimate);
   renderFormationBonds();
   renderRosterJourney();
   var html = '';
@@ -6113,6 +6132,7 @@ function renderSpirits(){
     }
     var recruited = level>0;
     var tier = state.heroRarity[sp.id]||0;
+    var upgradesMaxed = wispUpgradesMaxed(sp.id);
     var power = wispPower(sp,level);
     var cost = spiritCost(sp);
     var active = state.activeParty.indexOf(sp.id)!==-1;
@@ -6127,8 +6147,8 @@ function renderSpirits(){
     var modLvl = moduleLevel(sp.id);
     var modMaxed = modLvl>=MODULE_MAX_LEVEL;
     var modCost = moduleCost(sp, modLvl);
-    var canModule = !modMaxed && currencyAvailable('lumen')>=modCost.lumen && currencyAvailable('shards')>=modCost.shard;
-    var moduleHtml = !recruited ? '' :
+    var canModule = recruited && !modMaxed && currencyAvailable('lumen')>=modCost.lumen && currencyAvailable('shards')>=modCost.shard;
+    var moduleHtml =
       '<div class="module-row">' +
         '<div class="module-name">'+modInfo.name+' <span style="color:var(--shard);">Lv.'+modLvl+'/'+MODULE_MAX_LEVEL+(modMaxed?' · Maxed':'')+'</span></div>' +
         '<div class="module-effect">'+modInfo.effect(modLvl)+'</div>' +
@@ -6146,11 +6166,11 @@ function renderSpirits(){
       '<div class="resonance-help" id="resonance-help-'+sp.id+'">Resonate refills this Wisp’s ability resource to 100. It is a consumable, not a power upgrade. All Wisps share '+SIGIL_RESONANCE_RUN_LIMIT+' refills per run; '+resonanceUses+' used. Resets on Ascend.</div>'+
       '<button class="mini-btn sigil-resonance-btn" aria-describedby="resonance-help-'+sp.id+'" data-sigil-resonate="'+sp.id+'" '+(resonanceDisabled?'disabled':'')+'>Resonate · Refill to 100'+
         '<span style="font-size:.6875rem;">'+costIcon('sigil')+SIGIL_RESONANCE_COST+' · '+(SIGIL_RESONANCE_RUN_LIMIT-resonanceUses)+' shared uses left</span></button>' : '';
-    var ultimateHtml = tier<5 ? '' :
+    var ultimateHtml =
       '<div class="ultimate-row">' +
         (ultimateUnlocked(sp.id) ?
           '<div class="ultimate-badge">Ultimate Unlocked — '+ultimateEffectText(sp)+'</div>'+resonanceHtml :
-          '<button class="mini-btn ultimate-btn" data-ultimate="'+sp.id+'" '+(currencyAvailable('sigils')<ultCost?'disabled':'')+'>Unlock Ultimate<span style="font-size:.6875rem;">'+costIcon('sigil')+ultCost+'</span></button>') +
+          '<button class="mini-btn ultimate-btn" data-ultimate="'+sp.id+'" '+(tier<RARITY_NAMES.length-1 || currencyAvailable('sigils')<ultCost?'disabled':'')+'>Unlock Ultimate<span style="font-size:.6875rem;">'+costIcon('sigil')+ultCost+'</span></button>') +
       '</div>';
     var empowerOn = state.empowerQueue[sp.id]!==false;
     var pendingRebuild = intendedFormationIds().indexOf(sp.id)!==-1 && !recruited;
@@ -6174,21 +6194,24 @@ function renderSpirits(){
       '</div>' +
       (recruited ? wispContributionMarkup(sp) : '') +
       '<button class="mini-btn wisp-empower-action" data-empower="'+sp.id+'" '+(currencyAvailable('lumen')<cost?'disabled':'')+'><strong>'+(recruited?'Empower':'Recruit')+'</strong><span class="mono">'+costIcon('lumen')+formatNum(cost)+'</span></button>' +
-      (tier>=5 && modMaxed && ultimateUnlocked(sp.id) ?
-        '<details class="wisp-progression" data-wisp-progression="'+sp.id+'" '+(openProgression.indexOf(sp.id)!==-1?'open':'')+'><summary data-wisp-details="'+sp.id+'">'+sp.shortName+' · All upgrades complete</summary>' :
-        '<section class="wisp-progression wisp-progression-open" data-wisp-progression="'+sp.id+'" aria-label="'+sp.shortName+' upgrades"><div class="wisp-upgrade-title">Ability, Rarity, Module &amp; Ultimate</div>') +
+      (upgradesMaxed ?
+        '<details class="wisp-progression" data-wisp-progression="'+sp.id+'" '+(openProgression.indexOf(sp.id)!==-1?'open':'')+'><summary data-wisp-details="'+sp.id+'">'+sp.shortName+' · Ability, Rarity, Module &amp; Ultimate</summary>' :
+        '<section class="wisp-progression" data-wisp-progression="'+sp.id+'" aria-labelledby="wisp-progression-'+sp.id+'"><h3 class="wisp-progression-title" id="wisp-progression-'+sp.id+'" data-wisp-details="'+sp.id+'" tabindex="-1">'+sp.shortName+' · Ability, Rarity, Module &amp; Ultimate</h3>') +
       '<div class="hero-ability"><span class="ability-label">Ability</span><strong>'+sp.abilityName+'</strong><span class="ability-desc">'+ABILITY_DESC[sp.abilityType]+'</span></div>' +
       moduleHtml +
       '<div class="hero-actions">' +
         '<button class="mini-btn rarity-btn" data-rarity="'+sp.id+'" '+(canRarity?'':'disabled')+'>'+rarityLabel+'</button>' +
       '</div>' +
       ultimateHtml +
-    (tier>=5 && modMaxed && ultimateUnlocked(sp.id) ? '</details>' : '</section>')+'</div>';
+    (upgradesMaxed ? '</details>' : '</section>')+'</div>';
   });
   replaceControlMarkup(els['spirit-list'],html);
   if(focusedProgression){
     var restoredSummary=els['spirit-list'].querySelector('[data-wisp-details="'+focusedProgression+'"]');
     if(restoredSummary) restoredSummary.focus({preventScroll:true});
+  } else if(focusedFinalUpgrade && wispUpgradesMaxed(focusedFinalUpgrade)){
+    var completedSummary=els['spirit-list'].querySelector('[data-wisp-details="'+focusedFinalUpgrade+'"]');
+    if(completedSummary) completedSummary.focus({preventScroll:true});
   }
   els['spirit-list'].querySelectorAll('[data-empower]').forEach(function(btn){
     btn.addEventListener('click', function(){
@@ -6631,7 +6654,7 @@ var ENCYCLOPEDIA_MECHANICS = [
   {name:'Rarity', meta:'Wisp progression', desc:'Rarity multiplies that Wisp’s Power, so it affects passive damage plus damaging/resource abilities. Every Rarity tier owned across the roster also adds +2% general passive-party power. Rarity does not strengthen Support buffs.'},
   {name:'Modules & Ultimates', meta:'Wisp progression', desc:'Modules are role-specific: Burst/Breaker Modules boost ability damage, Shard/Lumen Utility Modules boost their ability-generated resource, and Amplifier Modules boost Motes while Active. Ultimates double damage/resource ability output; Amplifier Ultimates change the buff from +25% for 1s to +50% for 1.5s.'},
   {name:'Endgame Currency Utility', meta:'Economy rule', desc:'After all eight Ultimates are owned, Sigils can ready one Active Wisp ability for 25 Sigils, at most 3 times per Ascension run. After all four Rest Stop purchases are owned, Comets can replace an unclaimed Daily Quest for at least the richest quest reward, so refreshing cannot generate extra Comets.'},
-  {name:'Wisp Roles', meta:'Build label', desc:'Roles describe authoritative ability output: Burst delivers the highest raw ability coefficient; Breaker delivers heavy ability hits and the Stone + Titan Duskguard pair specializes against bosses; Amplifier buffs passive Wisp damage and your tap damage; Shard Utility and Lumen Utility add their named resource to ability casts. These are output and utility roles, not defensive combat roles.'},
+  {name:'Wisp Roles', meta:'Build label', desc:'Roles describe authoritative ability output: Burst delivers the highest raw ability coefficient; Breaker delivers heavy ability hits; Amplifier buffs passive Wisp damage and your tap damage; Shard Utility and Lumen Utility add their named resource to ability casts. These are output and utility roles, not defensive combat roles.'},
   {name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the run for Prisms. Your first reward sets a cleared-Rift benchmark; repeats at or below it earn a 20% reserve reward, while pushing beyond it adds a new-depth bonus. Permanent systems stay.'},
   {name:'Luminous Enemies', meta:'Rare encounter', desc:'Rare non-boss enemies that drop Motes. Their appearance chance rises as you push deeper.'},
   {name:'Boss Traits', meta:'Boss mechanic', desc:'Regrowth regenerates 0.9% max HP/s. Fractured Core regenerates 0.5%/s and takes +75% from Wisp ability hits only. Guardian’s Mark regenerates 0.6%/s and makes your manual taps and Auto-Tap deal x3; passive Wisp damage is unchanged by those trait bonuses.'},
@@ -6657,7 +6680,7 @@ function renderEncyclopedia(){
   html += '<div class="settings-section-title">Formation Bonds</div><div class="ency-grid">';
   FORMATION_BONDS.forEach(function(bond){
     var active = bondActive(bond.id);
-    html += '<div class="ency-card"><div class="ency-top"><div class="ency-main"><div class="ency-name">'+bond.name+'</div><div class="ency-meta">'+bond.req+' · '+bond.tag+'</div></div>' +
+    html += '<div class="ency-card"><div class="ency-top"><div class="ency-main"><div class="ency-name">'+bond.name+'</div><div class="ency-meta">'+formationBondPartners(bond)+' · '+bond.tag+'</div></div>' +
       '<span class="ency-status '+(active?'on':'')+'">'+(active?'Active':'Inactive')+'</span></div>' +
       '<div class="ency-desc">'+bond.effect+'. Both listed Wisps must be Active and above Lv.0.</div></div>';
   });
@@ -8172,12 +8195,12 @@ function checkAffordability(){
     var level = moduleLevel(sp.id);
     if(level>=MODULE_MAX_LEVEL) return;
     var cost = moduleCost(sp, level);
-    btn.disabled = currencyAvailable('lumen')<cost.lumen || currencyAvailable('shards')<cost.shard;
+    btn.disabled = (state.spirits[sp.id]||0)<=0 || currencyAvailable('lumen')<cost.lumen || currencyAvailable('shards')<cost.shard;
   });
   els['spirit-list'].querySelectorAll('[data-ultimate]').forEach(function(btn){
     var sp = SPIRITS.find(function(s){ return s.id===btn.getAttribute('data-ultimate'); });
     if(!sp) return;
-    btn.disabled = currencyAvailable('sigils')<ultimateSigilCost(sp);
+    btn.disabled = (state.heroRarity[sp.id]||0)<RARITY_NAMES.length-1 || currencyAvailable('sigils')<ultimateSigilCost(sp);
   });
   els['research-list'].querySelectorAll('[data-research]').forEach(function(btn){
     var node = RESEARCH.find(function(n){ return n.id===btn.getAttribute('data-research'); });
