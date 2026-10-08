@@ -1,0 +1,9 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),zlib=require('node:zlib'),crypto=require('node:crypto'),assert=require('node:assert/strict'),{execFileSync}=require('node:child_process');
+const root=path.resolve(__dirname,'../../..'),{verifyZip}=require(path.join(root,'scripts/lib/zip.cjs'));
+const [apk,output,commit]=process.argv.slice(2);assert(apk&&output&&commit,'Usage: node verify-apk-assets.cjs APK output-directory integrated-commit');
+const sha=b=>crypto.createHash('sha256').update(b).digest('hex'),data=fs.readFileSync(apk),rows=verifyZip(data);
+function payload(row){const start=row.offset+30+data.readUInt16LE(row.offset+26)+data.readUInt16LE(row.offset+28),packed=data.subarray(start,start+row.compressed);return row.method===0?packed:zlib.inflateRawSync(packed);}
+function walk(dir){return fs.readdirSync(path.join(root,dir),{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(dir+'/'+e.name):[dir+'/'+e.name]);}
+const assets=['index.html',...walk('fonts'),...walk('branding')].sort().map(file=>{const entries=rows.filter(r=>r.name==='assets/public/'+file);assert.equal(entries.length,1,'one packaged asset '+file);const bytes=payload(entries[0]),source=execFileSync('git',['show',commit+':'+file],{cwd:root});assert(bytes.equals(source),'packaged bytes match exact integrated source: '+file);const target=path.join(output,file);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,bytes);return {file,bytes:bytes.length,sha256:sha(bytes),matchesSource:true};});
+const result={status:'pass',sourceCommit:commit,apkSha256:sha(data),apkBytes:data.length,zipCrcVerifiedEntries:rows.length,matchedSourceAssets:assets.length,assets};fs.writeFileSync(path.join(output,'assets.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({...result,assets:undefined}));
