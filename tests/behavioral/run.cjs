@@ -106,6 +106,10 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
   if (scenario === 'forge-ui-process-contract') return nativeProcessContract(log);
   if (scenario === 'loadout-memory-core' || scenario === 'loadout-memory-mobile') return runNativeProcess([process.execPath, path.join(ROOT, 'loadout-memory.cjs'), '--chrome', chrome, '--source', path.join(options.sourceWebRoot || path.join(ROOT, '../..'), 'index.html'), ...(scenario === 'loadout-memory-core' ? ['--vm-only'] : [])], scenario, 300000, options);
   let driver = null;
+  if (scenario === 'rift-guidance-mobile') {
+    const evidence = path.join(options.rawArtifactRoot || temporary('lumenfall-guidance-raw-'), scenario);
+    return runNativeProcess([process.execPath, path.join(ROOT, 'rift-guidance.cjs'), chrome, options.sourceWebRoot || 'mobile/www', evidence], scenario, 300000, options);
+  }
   if (['comet-unlocks-mobile', 'comet-unlocks-reduced-motion'].includes(scenario)) driver = 'comet-unlocks-ui.cjs';
   if (['rift-status-mobile', 'rift-status-reduced-motion'].includes(scenario) || scenario.startsWith('rift-status-stacking') || scenario.startsWith('self-test-rift-status-line')) driver = 'rift-status.cjs';
   if (['auto-ascend-target-mobile', 'auto-ascend-target-reduced-motion'].includes(scenario)) driver = 'auto-ascend-target.cjs';
