@@ -16,11 +16,11 @@ Current [AGENTS](../../AGENTS.md) and [workflow](../project/FEATURE_WORKFLOW.md)
 supersede historical Lead/Core/writer ceremonies. No messages, subagents or
 other-chat changes are used; no independent Core/QA review is claimed.
 
-Baseline main:31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6. Isolated branch:
+Baseline main:91decbc8e26744b21c26a21b20742be6ebca1d8e. Isolated branch:
 feature/cheaper-bonds-cap-001; worktree:/workspace/CHEAPER_BONDS_CAP_001.
 Original checkout untouched. PR46/B2 merged at20aaae62a4b6e46f8d75775085918eaba4e8de29.
 Save Backup, Formation, Auto-Ascend, Resonate and upgrade ownership are integrated
-upstream; their guards and tests remain. [PR66](https://github.com/karahaNx/Lumenfall/pull/66)
+upstream, including schema2/offline refunds; their guards and tests remain. [PR66](https://github.com/karahaNx/Lumenfall/pull/66)
 and [PR67](https://github.com/karahaNx/Lumenfall/pull/67) are separate overlapping
 proposals, never edited/merged here. PR67 receipt shapes are compatible; any later
 integration must retain exact refunds and markers. Recheck main before merging.
@@ -42,7 +42,7 @@ Above20 purchases receive their original rounded Prism price once. Raw levels
 remain. TwoSum and safe-integer wallet allocation retain excess value as exact
 Prism credits; exact debit checks reject rounded/free wallet or credit payments.
 Wallet/credits/receipt persist together, including restore and recovery. Invalid
-partial markers reject for recovery. Additive schema-v1 receipt uses node.bonds;
+partial markers reject for recovery. Version1 receipt within current save schema2 uses node.bonds;
 foreign receipts/currencies remain. Finite-price history is bounded; no guessed
 balance or compensation percentage. [Design/review](../qa/cheaper-bonds-cap-001/finish/DESIGN.md)
 records original costs, cross-engine receipt validation and downgrade limits.
@@ -58,9 +58,9 @@ identity/assets plus actual relevant Android update/save behavior before closing
 
 ## Checks, evidence and next action
 
-Current source SHA256:d153c6b665ebe5555b9a4079b30d573ba186bbd9e20a2a78fae0a74a8b71a4ad.
-Local:518 assertions (388 cap/gameplay +130 exact refund),12 mobile profiles,
-9 causal controls,935 current clarity assertions and V8 6.0 PASS.
+Current source SHA256:c54856a01166e6e039f1c7b9384d2ff098c8c8e4247c481b0b86d12a54a61404.
+Local:523 assertions (388 cap/gameplay +135 exact refund),12 mobile profiles,
+9 causal controls,926 current clarity assertions,16 offline catch-up records and V8 6.0 PASS.
 [Evidence/commands](../qa/cheaper-bonds-cap-001/finish/README.md) separates historical
 passes/diagnostics from final acceptance. PR89 review findings about wallet loss,
 receipt amounts, repeated schedule calculation and rounding wording are fixed.

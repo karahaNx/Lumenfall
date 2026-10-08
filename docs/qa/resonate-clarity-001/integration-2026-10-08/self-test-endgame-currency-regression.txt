@@ -1,0 +1,79 @@
+Browser identity: { "selected_path": "/workspace/Lumenfall-resonate/docs/qa/resonate-clarity-001/integration-2026-10-08/cdp-bin/google-chrome", "resolved_path": "/workspace/Lumenfall-resonate/docs/qa/resonate-clarity-001/finish-2026-10-08/chromium-cdp.cjs", "sha256": "7480149ee01ca414a966b7b4b5a0eab935f2c60d165fa27257a8b1f1e90ed44b", "version": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)", "version_exitcode": 0, "version_stderr": "" }
+Staged source: { "source_sha256": "ed7e9dc56ee3d068073c9fade277a2b357561d754d13de593420c1da0b27d96d", "instrumented_sha256": "8bb3732fbb3b2db9ecc1e2b96d76f6333a70b6f3f1e87686694e21e050623f61" }
+FAIL self-test-endgame-currency-regression
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 1.293617737, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-endgame-currency-regression", "json_status": "fail", "json_scenario": "self-test-endgame-currency-regression", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /tmp/lumenfall-qa-raw-ENxGaT/self-test-endgame-currency-regression-NvhF4S
+  Chromium stderr tail:
+rg/freedesktop/DBus: unknown error type: 
+[22468:22492:1008/065357.103446:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[22468:22492:1008/065357.103463:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[22468:22468:1008/065357.115310:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[22468:22468:1008/065357.117785:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[22468:22492:1008/065357.120609:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[22468:22468:1008/065357.120633:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[22468:22492:1008/065357.120648:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[22468:22468:1008/065357.122733:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[22468:22492:1008/065357.122814:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+
+(process:22468): dconf-CRITICAL **: 06:53:57.127: unable to create directory '/home/agent/.cache/dconf': Read-only file system.  dconf will not work properly.
+
+(process:22468): dconf-CRITICAL **: 06:53:57.127: unable to create directory '/home/agent/.cache/dconf': Read-only file system.  dconf will not work properly.
+
+(process:22468): dconf-CRITICAL **: 06:53:57.127: unable to create directory '/home/agent/.cache/dconf': Read-only file system.  dconf will not work properly.
+[22468:22504:1008/065357.147683:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:279] Failed to adjust OOM score of renderer with pid 22554: Read-only file system (30)
+[22468:22504:1008/065357.187458:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:279] Failed to adjust OOM score of renderer with pid 22563: Read-only file system (30)
+[22468:22504:1008/065357.188915:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:279] Failed to adjust OOM score of renderer with pid 22564: Read-only file system (30)
+[22468:22504:1008/065357.227251:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:279] Failed to adjust OOM score of renderer with pid 22581: Read-only file system (30)
+[22468:22468:1008/065357.234793:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[22468:22468:1008/065357.235035:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[22468:22492:1008/065357.235152:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[22468:22468:1008/065357.254532:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[22468:22492:1008/065357.254774:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[22468:22468:1008/065357.268352:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+
+  stdout tail:
+      var unsafeEconomy=bridge.endgameEconomyContract();
+          assert(
+            unsafeEconomy.sigilResonanceRunLimit>100 || unsafeEconomy.questRefreshCost<unsafeEconomy.maxQuestCometReward,
+            'intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+
+</script>
+
+
+<pre id="qa-result" data-status="fail" data-scenario="self-test-endgame-currency-regression">{
+  "scenario": "self-test-endgame-currency-regression",
+  "status": "fail",
+  "detail": {
+    "message": "intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected",
+    "stack": "Error: intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected\n    at assert (http://127.0.0.1:38133/index.html?qaScenario=self-test-endgame-currency-regression&amp;qaFixture=fresh:12929:61)\n    at HTMLDocument.run (http://127.0.0.1:38133/index.html?qaScenario=self-test-endgame-currency-regression&amp;qaFixture=fresh:15465:11)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+Behavioral QA failed: self-test-endgame-currency-regression null

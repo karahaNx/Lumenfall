@@ -1,6 +1,6 @@
 /* BigInt is an independent modern-browser QA oracle, never product code. */
 window.cheaperLegacySeed=function(level,wallet){
-  var b=__cheaperRecruitment,s=b.fresh();s.nodes.bonds=level;s.prisms=wallet;
+  var b=__cheaperRecruitment,s=b.fresh();s.schemaVersion=1;s.nodes.bonds=level;s.prisms=wallet;
   s.questDay=b.today();s.maxDepthEver=100;s.achieved.asc5=true;s.achieved.d100=true;
   s.activeStudies=[{id:'guardmastery',remainingSec:70,totalDurationSec:150,speedMult:4}];
   delete s.feedbackMigration;delete s.refundCredits;return s;
@@ -27,7 +27,14 @@ window.runCheaperRefundContracts=function(){
   s=b.canonical(cheaperLegacySeed(40,0));ok(s.prisms===12655538,'documented level40 refund exactly 12655538');
   s=b.canonical(cheaperLegacySeed(21,0.1));ok(s.prisms===0.1&&s.refundCredits.prisms[0].amount===3376,'fractional original wallet retains exact refund value');
   var v0=cheaperLegacySeed(21,17);delete v0.schemaVersion;s=b.canonical(v0);
-  ok(s.prisms===3393&&s.schemaVersion===1,'v0 migrates before one-time restitution');
+  ok(s.prisms===3393&&s.schemaVersion===2,'v0 migrates before one-time restitution');
+  var both=cheaperLegacySeed(21,7);both.nodes.reserves=4;both.owned.offline24=true;both.owned.offline48=true;s=b.canonical(both);
+  ok(s.prisms===3440&&s.comets===300,'old schema1 preserves both original-currency refunds');
+  ok(s.nodes.bonds===21&&s.nodes.reserves===4&&s.schemaVersion===2,'both migrations retain raw purchase history');
+  same(b.canonical(s),s,'both migration receipts prevent repeated refunds');
+  same(b.decode(b.encode(s)),s,'both refund records survive actual backup encoding');
+  var beforeOffline=cheaperLegacySeed(21,3376);beforeOffline.feedbackMigration={version:1,applied:true,receipts:{'node.bonds':{from:20,to:21,unpricedFrom:0,amounts:{prisms:[3376]}}},history:{bonds:{levels:21}}};beforeOffline.refundCredits={prisms:[]};beforeOffline.nodes.reserves=4;s=b.canonical(beforeOffline);
+  ok(s.prisms===3433&&s.feedbackMigration.receipts['node.bonds'].amounts.prisms[0]===3376,'existing F21 schema1 receipt survives schema2 transition without double refund');
   s=b.canonical(cheaperLegacySeed(21,1e30));ok(s.prisms===1e30&&s.refundCredits.prisms[0].amount===3376,'small refund stays exact beside huge wallet');
   b.set(s);b.render();ok(!document.querySelector('[data-node="swift"]').disabled,'credit purchase enabled');
   var original=balance(b.get());

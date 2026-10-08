@@ -66,3 +66,10 @@ boundaries perform zero repeated price calculations; corrupting a completed
 receipt afterwards still rejects. A causal uncached-price mutation detects the
 performance regression. The cache never contains player data or exposes arrays
 to saved state.
+
+Main91decbc (PR78/85) integration retains Forge memory, the common12-hour cap,
+save schema2 and retired Reserves guard. F21 record version remains1 within the
+schema2 save. Legacy fixtures explicitly start at schema1; v0, both old-currency
+refunds, both receipts and the pre-existing F21 receipt through schema2 transition
+are checked. Five added checks pass; existing full offline catch-up16 records
+pass with both exact additive F21 defaults and all upstream F26 assertions.

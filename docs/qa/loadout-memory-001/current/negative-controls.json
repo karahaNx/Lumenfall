@@ -1,0 +1,58 @@
+[
+  {
+    "name": "old-purchase",
+    "exit": 1,
+    "result": {
+      "status": "fail",
+      "checks": 436,
+      "message": "stale or unknown shop handler cannot charge\n+ actual - expected\n... Skipped lines\n\n  {\n    _autoEmpowerAccum: 0,\n    _autoTapAccum: 0,\n    achieved: {},\n    activeFormationPreset: 'push',\n...\n    cometTrialResult: null,\n+   comets: -50,\n-   comets: 0,\n    dailyQuestRefreshes: 0,\n    dailyStats: {\n      ascends: 0,\n      bossKills: 0,\n      empowers: 0,\n",
+      "records": [],
+      "sourceSHA256": "3c962a5024efe3735903897ba92afc502e968d74b91b6b6b47b593a7c6f9d73b",
+      "negative": "old-purchase",
+      "controlledSimulationIntervals": true
+    },
+    "stderr": ""
+  },
+  {
+    "name": "lost-ownership",
+    "exit": 1,
+    "result": {
+      "status": "fail",
+      "checks": 173,
+      "message": "historical ownership preserved",
+      "records": [],
+      "sourceSHA256": "3c962a5024efe3735903897ba92afc502e968d74b91b6b6b47b593a7c6f9d73b",
+      "negative": "lost-ownership",
+      "controlledSimulationIntervals": true
+    },
+    "stderr": ""
+  },
+  {
+    "name": "old-init-gate",
+    "exit": 1,
+    "result": {
+      "status": "fail",
+      "checks": 438,
+      "message": "cold start restores unowned 25x",
+      "records": [],
+      "sourceSHA256": "3c962a5024efe3735903897ba92afc502e968d74b91b6b6b47b593a7c6f9d73b",
+      "negative": "old-init-gate",
+      "controlledSimulationIntervals": true
+    },
+    "stderr": ""
+  },
+  {
+    "name": "no-immediate-save",
+    "exit": 1,
+    "result": {
+      "status": "fail",
+      "checks": 450,
+      "message": "choice immediately written to both slots",
+      "records": [],
+      "sourceSHA256": "3c962a5024efe3735903897ba92afc502e968d74b91b6b6b47b593a7c6f9d73b",
+      "negative": "no-immediate-save",
+      "controlledSimulationIntervals": true
+    },
+    "stderr": ""
+  }
+]
