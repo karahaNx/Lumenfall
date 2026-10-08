@@ -66,7 +66,12 @@ function baselineState(actual,expected,seed,label){
  assert.deepEqual(actual.feedbackMigration,{version:1,applied:true,receipts:{},history:{bonds:{levels:19}}},label+' below-cap migration has no refund');
  assert.deepEqual(actual.refundCredits,{prisms:[]},label+' no unsolicited Prism credits');
  const {studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,feedbackMigration,refundCredits,...existing}=actual;
- assert.deepEqual(existing,{...expected,owned:oldOwnership},label);
+ // F14 changes only the selected destination during a matching partial rebuild.
+ const intent=expected.formationRebuild;
+ const selected=intent&&intent.preset&&expected.formationPresets[intent.preset]&&
+   expected.formationPresets[intent.preset].join(',')===intent.members.join(',')
+   ? intent.preset : expected.activeFormationPreset;
+ assert.deepEqual(existing,{...expected,owned:oldOwnership,activeFormationPreset:selected},label);
 }
 function runAsync(seed,seconds,batch=256){
  const x=app(seed,source,seconds),before=copy(x.b.get());x.b.batch(batch);

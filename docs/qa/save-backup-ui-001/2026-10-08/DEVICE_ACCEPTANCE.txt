@@ -1,0 +1,35 @@
+SAVE_BACKUP_UI_001 / F22 — required physical acceptance
+Status: OPEN. No physical Android, exact WebView60 or TalkBack pass is claimed.
+Fill APK version/digest and integrated source from the final APK receipt before use.
+
+Record: phone/model, Android version, actual WebView provider/version, APK
+versionCode/versionName/SHA256, normal and enlarged font/display settings,
+TalkBack version, date, observations and any failures. Preserve existing progress.
+Use the established signed APK as an update; do not uninstall or clear storage.
+
+1. Before update, record progress/currencies/purchases/Lab work and export a
+   backup. After update, confirm these values remain intact (allow normal elapsed
+   gameplay), with no repeated payment, reward or recovery replay.
+2. Settings: Save Backup appears under Save directly before Reset Save. Check
+   narrow portrait width, enlarged text, visible focus, 44px targets, contrast,
+   reduced motion and scrolling. TalkBack names/order make both actions clear.
+3. Backup opens the existing code view without a Reset prompt. Copy Current Save
+   copies the full code with the device clipboard; if clipboard API is unavailable,
+   the complete code is selected and manually copyable. Returning focuses Backup.
+4. Invalid prefix, invalid encoding and unsupported schema: Restore refuses the
+   code, no confirmation/reload/save replacement, and progress remains intact.
+5. Paste a valid saved backup. Restore Pasted Save presents the explicit replacement
+   warning, locks the reviewed code and starts focus on Cancel. TalkBack reads the
+   warning/group and both actions. Cancel, Back, Close and Escape (if available)
+   leave current progress intact and clear the pending intent.
+6. Request again and explicitly confirm. Only the reviewed backup is restored.
+   Relaunch/force-stop/reopen: restored values persist, primary/recovery agree,
+   and an old backup grants no repeated offline time. Verify the actual native
+   storage/reload flow; browser/mock evidence does not replace this observation.
+7. Reset remains independent: request/cancel preserves progress. Verify confirmed
+   Reset only in a disposable device profile/save with a retained backup; confirm
+   it clears that profile and does not execute merely by opening/copying Backup.
+
+Save observations/evidence in this task's GitHub checkpoint. Keep the owner chat
+open until the required checks pass; report a missing device or any failure as
+unfinished acceptance. Do not claim another task's native observations as F22.
