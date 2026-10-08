@@ -1,78 +1,66 @@
 # SUPPORT_UPTIME_001 — Tide/Aurora downtime
 
-Owner: this feature chat. Status: approved timing/value candidate; final CI and delivery in progress.
+Owner: this feature chat; isolated /workspace/Lumenfall-SUPPORT_UPTIME_001,
+branch feature/support-uptime-001. Status: final combined-main candidate in progress;
+PR82 draft, integrated acceptance/APK still pending. No other checkout/chat changed.
 
-## Requirement and approved contract
+F18 requires harder permanent support with concrete early/mid/late uptime, actual
+cast/expiry, cycle/stacking, chronology and live/offline verification. The user
+requires gaps with both supports and approved normal1s, Ultimate1.5s, Swift cap10.
+Source strengths remain additive +25/+50%. Charge0/5/10 yields cycles
+6/4.285714/3.333333s, Ultimate25/35/45% per source, pair union at most50/70/90%.
+These are charge anchors, not measured campaign pacing. Earned deadlines remain.
 
-F18: make permanent Tide/Aurora support harder and verify actual casts, expiry,
-stacking, chronology, live/offline and saves. The user requires gaps even with
-both supports. Approved normal duration1s, Ultimate1.5s, Swift cap10; preserve
-additive +25/+50 per source. At charge0/5/10 the cycle is6/4.285714/3.333333s;
-Ultimate uptime per source25/35/45%, pair union at most50/70/90%. These are charge
-anchors, not a claim of measured campaign pacing. Earned legacy deadlines remain.
+[Original F18](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt),
+[feature order](../qa/support-uptime-001/USER_REQUEST.txt),
+[numeric decisions](../qa/support-uptime-001/USER_DECISIONS.txt),
+[latest completion order and delegated judgment](../qa/support-uptime-001/implementation/USER_CONTINUATION.txt),
+[implemented value policy](../qa/support-uptime-001/implementation/VALUE_POLICY_PROPOSAL.md).
+“Do what makes sense” resolves remaining value choices: retain owned Ultimates
+without Sigil refund; refund original individually rounded Swift Shard prices above10
+once. Preserve raw history and exact spendable credits beside huge Number wallets.
+No global cross-backup refund accumulator; restore replaces its full snapshot.
 
-[Original feedback](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt),
-[original feature order](../qa/support-uptime-001/USER_REQUEST.txt),
-[exact user decisions](../qa/support-uptime-001/USER_DECISIONS.txt),
-[8 October continuation](../qa/support-uptime-001/implementation/USER_CONTINUATION.txt).
-The latest instruction explicitly orders completion, GitHub publication and game
-implementation. The user delegated remaining value choices (“Do what makes sense”): retain paid Ultimates without Sigil refund; compensate Swift over10 once in Shards, preserving exact spendable value. [Implemented policy](../qa/support-uptime-001/implementation/VALUE_POLICY_PROPOSAL.md).
+Initial8 October live main b0537cb46635555ba2c2e5f3f95bc8fc276aeda5,
+product SHA2565c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c.
+Merged main e2f745c in2a8d7de; now reconcile31eccfb (PR90 upgrade ownership,
+PR84 Auto-Ascend). Preserve every incoming feature/check. PR46/B2 is integrated.
+Live AGENTS/workflow assigns the whole scoped delivery to this owner, without a
+new Lead/writer ceremony. Standing authorization and latest order cover GitHub
+integration and established signed APK delivery. Model/effort recommendation is
+not an execution attestation. No subagents/message tools or other chat changes.
 
-## Baseline, scope and overlap
+Scope: support profiles/descriptions; production Swift effective/purchase cap;
+Swift-only value migration; necessary canonical Farm-clock correction and focused
+regression/oracle updates. Preserve prices, deterministic purchases, Motes rewards,
+schema compatibility, party/Resonate/run limits, saves/recovery/Ascend/Reset,
+WebView60, com.lumenfall.app and signing. No other caps/refunds/retirements added.
+PR67 uses the same forge.charge receipt; its later integration must preserve
+exactRefundCredits and compatible spending. Never merge its broad bundle here.
 
-Separate clone /workspace/Lumenfall-SUPPORT_UPTIME_001; branch
-feature/support-uptime-001. Live main b0537cb46635555ba2c2e5f3f95bc8fc276aeda5
-was the initial8 October baseline (merge3dc1964). Fresh main e2f745c (Backup/Formation/Resonate) merged in2a8d7de; all checks retained. Initial product SHA256
-5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c.
-Current AGENTS/workflow assigns implementation and delivery to this feature chat;
-historical writer/Lead freezes no longer impose a global gate. PR46/B2 is integrated.
-Standing approval plus the latest user order covers scoped publication/integration
-and the established signed APK workflow. No other checkout/chat changed. Runtime model/effort unknown; the recommendation is not an execution attestation.
+Acceptance: actual1s/1.5s casts and source refresh/additive stacking; at least10%
+late pair downtime; fractional/epoch clocks, split/100ms and simultaneous event
+order; Swift direct/bulk/Max/queue; exact/idempotent value through canonical save,
+recovery, old backup restore and live/offline economy; paid Ultimate ownership and
+earned expiry. Mobile320/390/430,200% text,44px, focus/contrast/reduced motion.
+Required full CI; checks on integrated source; signed APK package/version/cert/assets
+and native in-place old-save update/cold/recovery/cast acceptance. Record limitations.
 
-Necessary dependency: production Swift cap10 across effects and purchase gates.
-Open PR67 already contains the same numerical contract and reported original-
-currency refunds; it is unfinished and is not merged wholesale. PR70 contribution
-work also touches support forecasts. Preserve both branches; serialize integration
-and recheck main before publication/merge. The actual Swift transition must remain
-compatible and avoid duplicate compensation. No unrelated caps, Bonds, pacing,
-Lab/Comet/offline retirement, price curves, Motes rewards, signing or package change.
+Evidence: [historical checkpoint](../qa/support-uptime-001/implementation/STARTUP_TASK.md),
+[motor2127 assertions/49 combinations/98 fractional/50 phases/3 causal controls](../qa/support-uptime-001/implementation/production-probe.json),
+[V8 6.0 unchanged product](../qa/support-uptime-001/implementation/v8-6.0.json),
+[exact refund oracle649 checks/36 cases](../qa/support-uptime-001/implementation/refund.json),
+[focused purchase/save/UI checks](../qa/support-uptime-001/implementation/check-results.json).
+Swift210 handler cases,12 mobile profiles and existing gates pass on recorded
+sources. Immutable frozen scheduler/device save remain unchanged; revised offline
+oracles use only approved cap/duration/refund and inherited clock/purchase ownership
+inputs. Earlier full CI60a2438 PASS155/14 is historical; final head needs its own CI.
+[PR82](https://github.com/karahaNx/Lumenfall/pull/82) publishes implementation;
+[CI receipt](../qa/support-uptime-001/implementation/ci-passed.json),
+[native signed143 baseline](../qa/support-uptime-001/implementation/native/README.md).
+Self-review/automated checks, no independent or physical/TalkBack claim.
 
-## Candidate and acceptance
-
-Changed product: central support profile and its two descriptions, Swift catalogue
-cap/description. Existing central effective-level/purchase plans enforce the cap;
-raw levels and earned source/legacy deadlines remain. A necessary scheduler fix counts canonical Farm-grid progress even when composed elapsed rounds unchanged; it discards no damage. Swift value migration is implemented with shared forge.charge receipt and exact spendable credits.
-Updated new-cast timing oracles retain independent legacy4s/8s fixtures, additive
-stacking, causal negative controls and1e-6 timing/damage precision.
-
-Required acceptance: actual1s/1.5s casts, early/mid/late cycles and forecasts; optimal
-pair staggering still leaves at least10% late downtime; fractional clocks, large
-epochs, direct/split/100ms live/offline, simultaneous expiry/cast/Tap/purchase order;
-Swift single/bulk/Max/queue and old levels; no self stacking, reward/burst changes or
-unearned powered sources; canonical/reload/recovery/backup/resume/Ascend/Reset;
-chosen value transition idempotent including old backup restore. Mobile320/390/430,
-large text, controls44px, focus/contrast/reduced motion. Required complete CI,
-integrated checks, APK package com.lumenfall.app/version/established signer/assets,
-legacy engine and necessary native/device acceptance must be recorded honestly.
-
-## Evidence and current result
-
-Historical baseline and original evidence remain in implementation/STARTUP_TASK.md and baseline-probe.json.
-
-Production duration/cap candidate passes49 motor combinations/2127 numeric
-assertions,98 fractional starts,50 phase cases and three causal controls (duration, cap, old grid-stall guard);
-no Swift catalogue stub. The same product JavaScript passes on V8 6.0.286.52.
-[Motor](../qa/support-uptime-001/implementation/production-probe.json),
-[legacy engine](../qa/support-uptime-001/implementation/v8-6.0.json).
-Swift regression covers210 purchase cases, queue/live/offline and history; new BigInt oracle verifies original-price refunds, huge wallets/credits and idempotent recovery. The original Forge failure is preserved; dedicated Swift checks replace its uncapped assumption. Other Forge checks remain.
-Mobile matrix12 profiles at320/390/430 with100/200% changed text,44px controls,
-actual Enter purchase/touch queue, focus/contrast and both motion settings PASS.
-[UI](../qa/support-uptime-001/implementation/ui/result.json).
-Earlier focused checks, tooling and failed-CI dispositions remain in implementation/check-results.json and ci-first-run.json. [Draft PR82](https://github.com/karahaNx/Lumenfall/pull/82) publishes the candidate/evidence. Initial full CI failed; scoped fixes preserve the original frozen oracle/save and use measured cap10 totals. Offline core (17cases) and both browser lifecycle checks pass. See [CI disposition](../qa/support-uptime-001/implementation/ci-first-run.json). CI37738465847/60a2438 PASS155/14 plus every gate ([receipt](../qa/support-uptime-001/implementation/ci-passed.json)); integration/APK acceptance pending. Signed143 native cold-launch preparation passes ([baseline](../qa/support-uptime-001/implementation/native/README.md)); no candidate/device pass.
-Do not label local motor/browser passes as independent review or physical acceptance.
-
-## Next action
-
-Run independent refund and updated offline oracles, freeze/review the scoped diff, publish and pass required CI; integrate against fresh main, build/verify the
-signed APK and run available native checks. Save final version/results/limitations
-and update PROJECT_STATE. Keep this chat open if required acceptance remains missing.
+Next: finish combined-main oracles, publish/pass required CI; merge against fresh
+main, verify integrated source and established signed APK/native update; save final
+receipts/status in GitHub. Archive only this owner after required acceptance and
+saved completion; blocked/missing acceptance stays open.

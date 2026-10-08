@@ -1,5 +1,5 @@
 {
-  "sourceIndexSha256": "08a9022eda813acb9415393f24096427c149e0ece37b31c06216967f89aa4f7b",
+  "sourceIndexSha256": "4991089139d06d6b494bddc81ca3e1a57cc77c02d7dc7dc37a5c65d3a9e38bd2",
   "records": [
     {
       "scenario": "support-stacking",
@@ -47,17 +47,17 @@
         "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
         "tests/behavioral/run.cjs",
         "--web-root",
-        "/tmp/lumenfall-support-stage-tC4Tj3",
+        "/tmp/lumenfall-support-stage-twIa0B",
         "--scenario",
         "forge-contracts",
         "--raw-artifacts",
         "/workspace/Lumenfall-SUPPORT_UPTIME_001/docs/qa/support-uptime-001/implementation/raw-failures"
       ],
-      "indexSha256": "d302bbbd7385d2783b3a0a9819ebc92ee02ee22f1437b62ab87743af30e95470",
+      "indexSha256": "4991089139d06d6b494bddc81ca3e1a57cc77c02d7dc7dc37a5c65d3a9e38bd2",
       "exit": 0,
       "signal": null,
       "error": null,
-      "seconds": 2.481,
+      "seconds": 1.949,
       "status": "pass",
       "log": "forge-contracts.txt"
     },
@@ -67,17 +67,17 @@
         "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
         "tests/behavioral/run.cjs",
         "--web-root",
-        "/tmp/lumenfall-support-stage-tC4Tj3",
+        "/tmp/lumenfall-support-stage-twIa0B",
         "--scenario",
         "forge-chronology",
         "--raw-artifacts",
         "/workspace/Lumenfall-SUPPORT_UPTIME_001/docs/qa/support-uptime-001/implementation/raw-failures"
       ],
-      "indexSha256": "d302bbbd7385d2783b3a0a9819ebc92ee02ee22f1437b62ab87743af30e95470",
+      "indexSha256": "4991089139d06d6b494bddc81ca3e1a57cc77c02d7dc7dc37a5c65d3a9e38bd2",
       "exit": 0,
       "signal": null,
       "error": null,
-      "seconds": 1.392,
+      "seconds": 1.277,
       "status": "pass",
       "log": "forge-chronology.txt"
     },
@@ -267,17 +267,17 @@
         "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
         "tests/behavioral/run.cjs",
         "--web-root",
-        "/tmp/lumenfall-support-stage-tC4Tj3",
+        "/tmp/lumenfall-support-stage-twIa0B",
         "--scenario",
         "swift-recovery-cap",
         "--raw-artifacts",
         "/workspace/Lumenfall-SUPPORT_UPTIME_001/docs/qa/support-uptime-001/implementation/raw-failures"
       ],
-      "indexSha256": "d302bbbd7385d2783b3a0a9819ebc92ee02ee22f1437b62ab87743af30e95470",
+      "indexSha256": "4991089139d06d6b494bddc81ca3e1a57cc77c02d7dc7dc37a5c65d3a9e38bd2",
       "exit": 0,
       "signal": null,
       "error": null,
-      "seconds": 1.793,
+      "seconds": 1.518,
       "status": "pass",
       "log": "swift-recovery-cap.txt"
     },
@@ -307,17 +307,17 @@
         "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
         "tests/behavioral/run.cjs",
         "--web-root",
-        "/tmp/lumenfall-support-stage-a0bxMY",
+        "/tmp/lumenfall-support-stage-twIa0B",
         "--scenario",
         "support-uptime-ui",
         "--raw-artifacts",
         "/workspace/Lumenfall-SUPPORT_UPTIME_001/docs/qa/support-uptime-001/implementation/raw-failures"
       ],
-      "indexSha256": "d302bbbd7385d2783b3a0a9819ebc92ee02ee22f1437b62ab87743af30e95470",
+      "indexSha256": "4991089139d06d6b494bddc81ca3e1a57cc77c02d7dc7dc37a5c65d3a9e38bd2",
       "exit": 0,
       "signal": null,
       "error": null,
-      "seconds": 8.318,
+      "seconds": 8.42,
       "status": "pass",
       "log": "support-uptime-ui.txt"
     },
@@ -660,6 +660,26 @@
       "seconds": 0.042,
       "status": "fail",
       "log": "offline-first-return-failure-ui.txt"
+    },
+    {
+      "scenario": "upgrade-identity",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-support-stage-twIa0B",
+        "--scenario",
+        "upgrade-identity",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-SUPPORT_UPTIME_001/docs/qa/support-uptime-001/implementation/raw-failures"
+      ],
+      "indexSha256": "4991089139d06d6b494bddc81ca3e1a57cc77c02d7dc7dc37a5c65d3a9e38bd2",
+      "exit": 1,
+      "signal": null,
+      "error": null,
+      "seconds": 0.042,
+      "status": "fail",
+      "log": "upgrade-identity.txt"
     }
   ]
 }

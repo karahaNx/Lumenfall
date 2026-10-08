@@ -131,9 +131,9 @@ const start=performance.now();
 const on=runAsync(original,28800);
 // Literal totals independently reproduced with the frozen scheduler in900s
 // windows, including the same original60-level save and unchanged price/rewards.
-assert.equal(on.result.kills,277929);assert.equal(on.result.ascends,13234);
-assert.equal(on.committed.prisms-original.prisms,79404);
-approx(on.committed.lumen,33235.2,'partial final run keeps only its remaining Lumen');
+assert.equal(on.result.kills,277629);assert.equal(on.result.ascends,13220);
+assert.equal(on.committed.prisms-original.prisms,79320);
+approx(on.committed.lumen,9000,'partial final run keeps only its remaining Lumen');
 assert(on.result.earned>on.committed.lumen,'Ascension reset preserves earned vs balance distinction');
 assert.deepEqual(on.committed.formationRebuild,original.formationRebuild,'unaffordable Boss reconstruction intent persists');
 assert.deepEqual(on.committed.empowerQueue,original.empowerQueue,'purchase intent preserved');
@@ -147,10 +147,10 @@ assert.deepEqual(narrow.result,on.result,'changing work budget changes no reward
 const clear20=copy(original);clear20.autoAscendTargetDepth=21;
 const c20=runAsync(clear20,28800);
 const off=copy(original);off.autoAscendEnabled=false;
-const disabled=runAsync(off,28800);assert.equal(disabled.result.kills,758);assert.equal(disabled.result.ascends,0);
+const disabled=runAsync(off,28800);assert.equal(disabled.result.kills,756);assert.equal(disabled.result.ascends,0);
 assert.equal(disabled.committed.spirits.titan,144);
-const cap=runAsync(original,72*3600);assert.equal(cap.result.kills,2504820);assert.equal(cap.result.ascends,119277);
-assert.equal(cap.committed.prisms-original.prisms,715662,'unchanged six-Prism Ascend reward');
+const cap=runAsync(original,72*3600);assert.equal(cap.result.kills,2502168);assert.equal(cap.result.ascends,119150);
+assert.equal(cap.committed.prisms-original.prisms,714900,'unchanged six-Prism Ascend reward');
 const beyond=copy(original);beyond.activeStudies=[{id:'guardmastery',remainingSec:80*3600,totalDurationSec:80*3600,speedMult:1}];beyond.studyQueue={};
 const long=runAsync(beyond,96*3600);assert.equal(long.result.effectiveSec,72*3600);
 assert(long.result.completedStudies.includes("Guardian's Mastery"),'study completes beyond combat cap');

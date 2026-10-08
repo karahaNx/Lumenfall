@@ -28,15 +28,15 @@ for(const level of [0,9,10,11,25,60,100,1700,Number.MAX_SAFE_INTEGER])for(const 
 }
 // Tiny retained refund beside huge wallet is actually consumed by real purchases.
 let s=copy(a.fresh());s.research.charge=11;s.shards=1e300;s.maxDepthEver=101;s.lumen=1e12;a.set(s);
-let before=copy(a.get()),p=a.plan('sense',1);eq(p.affordable,true,'refund-funded handler available');a.buy('sense',1);let after=copy(a.get());eq(after.research.sense,1,'production handler');eq(BigInt(before.exactRefundCredits.shards)-BigInt(after.exactRefundCredits.shards),BigInt(p.cost.shard),'exact credit spent beside huge wallet');eq(after.shards,1e300,'large wallet preserved');
+let before=copy(a.get()),p=a.plan('arcanecal',1);eq(p.affordable,true,'refund-funded handler available');a.buy('arcanecal',1);let after=copy(a.get());eq(after.research.arcanecal,1,'production handler');eq(BigInt(before.exactRefundCredits.shards)-BigInt(after.exactRefundCredits.shards),BigInt(p.cost.shard),'exact credit spent beside huge wallet');eq(after.shards,1e300,'large wallet preserved');
 // Huge exact credit can pay a small price without subtraction rounding to zero.
 s=copy(a.fresh());s.research.charge=1700;s.shards=0;s.maxDepthEver=101;s.lumen=1e300;a.set(s);before=copy(a.get());eq(a.spend(7),true,'huge refund spendable');eq(value(a.get()),value(before)-7n,'huge credit exact small debit');
 // Wallet/credit combination preserves fractional earned Shards and rejects overspend.
 s=copy(a.fresh());s.shards=3.5;s.exactRefundCredits.shards='7';a.set(s);eq(a.can(10),true,'combined whole Shards');eq(a.spend(10),true,'combined debit');eq(a.get().shards,.5,'fractional earned value');eq(a.get().exactRefundCredits.shards,'0','credit debit');before=copy(a.get());eq(a.spend(1),false,'cannot overspend');eq(copy(a.get()),before,'rejection pure');
 for(const bad of [null,-1,'-10','Infinity','9'.repeat(313),{}]){s=copy(a.fresh());s.exactRefundCredits.shards=bad;a.set(s);eq(a.get().exactRefundCredits.shards,'0','malformed credit');}
 // Real queue/live/offline transitions consume migrated value identically.
-s=copy(a.fresh());s.research.charge=25;s.researchQueue.sense=true;s.maxDepthEver=101;s.depth=121;s.lumen=1e9;s.enemyDepth=121;s.enemyHp=s.enemyMaxHp=1e300;s.lastSeen=2000000000000;Object.keys(s.empowerQueue).forEach(k=>s.empowerQueue[k]=false);
-a.set(s);const startValue=value(a.get());a.queue();after=copy(a.get());eq(after.research.sense>0,true,'refund funds queued upgrade');eq(value(after)<startValue,true,'queue actually paid');
+s=copy(a.fresh());s.research.charge=25;s.researchQueue.arcanecal=true;s.maxDepthEver=101;s.depth=121;s.lumen=1e9;s.enemyDepth=121;s.enemyHp=s.enemyMaxHp=1e300;s.lastSeen=2000000000000;Object.keys(s.empowerQueue).forEach(k=>s.empowerQueue[k]=false);
+a.set(s);const startValue=value(a.get());a.queue();after=copy(a.get());eq(after.research.arcanecal>0,true,'refund funds queued upgrade');eq(value(after)<startValue,true,'queue actually paid');
 a.set(s);a.simulate(1,{kind:'live',visual:false,clockStartMs:s.lastSeen});const live=copy(a.get());a.set(s);a.simulate(1,{kind:'offline',visual:false,clockStartMs:s.lastSeen});eq(copy(a.get()),live,'migration/automation live-offline');
 // A rounded display total cannot create a zero-time economy boundary.
 s=copy(a.fresh());s.exactRefundCredits.shards='999999999999999999';a.set(s);eq(a.can(1e18),false,'exact affordability below rounded total');eq(a.shortfall(1e18),1,'one real Shard reward still required');eq(a.shortfall(Infinity),Infinity,'unrepresentable prices remain unavailable');

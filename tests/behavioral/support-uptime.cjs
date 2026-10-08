@@ -204,9 +204,9 @@ function verifyGridClock(sourceScript){
 }
 const gridClock=copy(verifyGridClock(script));
 assert.equal(gridClock.elapsedSec,60,'full Farm clock consumed');assertions++;
-const oldGuard=' && !gridClockAdvanced && actions===0';
+const oldGuard='if(remaining>0 && farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore && actions===0)';
 assert.equal(script.split(oldGuard).length,2,'unique grid-clock causal marker');
-let stalled='';try{verifyGridClock(script.replace(oldGuard,' && actions===0'));}catch(error){stalled=error.message;}
+let stalled='';try{verifyGridClock(script.replace('    var gridCrossingsBefore = farmGridCrossings;', '    var elapsedWholeBefore=elapsedWholeSec,elapsedFractionBefore=elapsedFractionSec;\n    var gridCrossingsBefore = farmGridCrossings;').replace(oldGuard,'if(remaining>0 && elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && actions===0)'));}catch(error){stalled=error.message;}
 assert.match(stalled,/Authoritative simulation stalled/,'old logical-only guard rejects the real Farm clock boundary');
 negativeControls.push({name:'old-grid-clock-guard',caught:stalled});
 const result={status:fractionalFailures||phaseFailures?contract.kind+'-has-failure':'pass',source:{sha256:crypto.createHash('sha256').update(html).digest('hex'),gitBlob:crypto.createHash('sha1').update(Buffer.from('blob '+Buffer.byteLength(html)+'\0')).update(html).digest('hex'),bytes:Buffer.byteLength(html)},contract,node:process.version,assertions,limits:'Full production VM motor with observer wrappers; no cap stub. Browser save/UI and APK/native checks are separate.',negativeControls,gridClock,phaseSweep,fractionalDiagnostics,fractionalFailureControls,rows,staggeredNormalPair:{charge:0,seconds:60,anyActiveSeconds:anySeconds,casts:stagger.log.casts,expiries:stagger.log.expiries},summary:{normalCharge0:normal.sources.tide,ultimateCharge0:ultimate.sources.tide}};
