@@ -21,6 +21,9 @@ async function run(){
   for(let i=0;i<150&&!await evaluate('!!window.__labMotesNativeReady');i++)await new Promise(r=>setTimeout(r,20));
   assert(await evaluate('!!window.__labMotesNativeReady'),'native Lab page ready');await evaluate('window.__qaForgeStartup.promise');await evaluate('document.fonts.ready.then(()=>true)');
   await evaluate(`document.documentElement.style.fontSize='${textScale*16}px';window.__lumenfallQaBridge.uiMeasurementPause(true)`);
+  await evaluate(`(()=>{const b=window.__lumenfallQaBridge,s=labMotesSeed(b,window.__lumenfallQaContext);s.activeStudies=[];b.setState(s);b.renderLayout();document.querySelector('[data-tab="research"]').click();document.querySelector('[data-study="guardmastery"]').focus();})()`);
+  await key('Enter');
+  assert(await evaluate(`document.activeElement.dataset.studyDetails==='guardmastery'&&document.activeElement.getClientRects().length>0&&document.querySelector('[data-study-inspection="guardmastery"]').hidden&&window.__lumenfallQaBridge.getState().activeStudies.some(a=>a.id==='guardmastery')`),'real keyboard Begin retains visible same-Study focus with collapsed panel');
   const labUi=await evaluate('runLabUiQa(window.__lumenfallQaBridge,window.__lumenfallQaContext,function(v,m){if(!v)throw Error(m);})');
   const collapsedAx=await send('Accessibility.getFullAXTree');
   assert(!collapsedAx.nodes.some(n=>!n.ignored&&/Queued speed|Queue speed up|Close speed up/.test(n.name?.value||'')),'closed panels absent from accessibility tree');

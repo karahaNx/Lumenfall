@@ -6283,6 +6283,7 @@ function closeStudySpeed(id){
   if(opener) opener.focus();
 }
 function renderLongStudies(){
+  var focusedBegin=document.activeElement && document.activeElement.getAttribute('data-study');
   var focusedSpeed=document.activeElement && document.activeElement.getAttribute('data-speed-study');
   var focusedTier=focusedSpeed && document.activeElement.getAttribute('data-speed');
   renderLabCapacityBadge();
@@ -6343,6 +6344,11 @@ function renderLongStudies(){
 
   html += '<div class="section-sub">Unlocking more Studies by pushing deeper raises the slot cap. Studies progress while you’re away. Study Queue begins its next level when a slot and currency are free.</div>';
   replaceControlMarkup(els['study-list'],html);
+  // Beginning removes its button; keep focus on this Study's visible card action.
+  if(focusedBegin && findActiveStudy(focusedBegin)){
+    var beganOpener=els['study-list'].querySelector('[data-study-details="'+focusedBegin+'"]');
+    if(beganOpener) beganOpener.focus();
+  }
   // Keep an available tier focused through updates. When buying/completing removes
   // that action, return to this Study's visible opener with its panel still open.
   if(focusedSpeed){

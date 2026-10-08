@@ -42,16 +42,14 @@ Open PR67 overlaps Lab presentation as part of a broader draft bundle; it is
 not the baseline or an accepted gameplay replacement. Keep this scoped change
 separate and serialize integration against fresh main. No messages/subagents.
 
-Earlier private candidate `b46e06a` on synthetic B2 baseline `9463d2f` had 19
-regressions and 12 browser profiles passing. Those are preparation evidence,
-not current-main acceptance. Its Python harness changes were not restored.
-The rebase resolved one CSS conflict by retaining current Comet CSS and adding
-only Lab CSS. All current game features, JS harness and assets remain present.
+Private B2 candidate b46e06a is historical preparation, not current acceptance;
+its Python harness was not restored. Current game features/assets are preserved.
 Main subsequently integrated PR77 Save Backup UI at
 `261b1b7f863f73c324f4ac04acb5bfc95101644d`; merged into this branch,
 with Settings controls and its additional negative CI gates preserved.
 Current main e2f745c Formation/Resonate changes are merged; renewed Lab checks
-pass on source a47cf6f (full hashes and receipts in QA current/).
+pass on source352c0b0 (full hashes/receipts in QA begin/). A reproduced Begin Study
+focus loss is fixed; real Enter now retains same-Study visible focus, panel closed.
 
 ## Scope and decisions
 

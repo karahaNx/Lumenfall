@@ -58,6 +58,14 @@ window.runLabUiQa = function(b,ctx,assert){
   var long=seed();long.activeStudies[0].remainingSec=8640009;long.activeStudies[0].totalDurationSec=9000000;install(long);fit();
   ok(q('[data-study-text="guardmastery"]').textContent.includes('100d'),'long duration remains readable');
 
+  ['guardmastery','wispascend'].forEach(function(id){
+    close();var beginning=seed();beginning.activeStudies=[];install(beginning);
+    var begin=q('[data-study="'+id+'"]');begin.focus();begin.click();
+    ok(b.getState().activeStudies.some(function(active){return active.id===id;}),'Begin Study starts the selected Study');
+    ok(document.activeElement.dataset.studyDetails===id&&document.activeElement.getClientRects().length,'beginning a Study restores focus to its visible Speed up opener');
+    ok(q('[data-study-inspection="'+id+'"]').hidden,'beginning a Study keeps its panel collapsed');
+  });
+
   install(seed());q('[data-study-details="guardmastery"]').click();
   var select=q('[data-study-speed-target="guardmastery"]');select.value='3';select.dispatchEvent(new Event('change',{bubbles:true}));
   var saved=b.getState();ok(saved.studySpeedTargets.guardmastery===3&&saved.motes===1000&&saved.activeStudies[0].speedMult===1,'selection alone never buys');

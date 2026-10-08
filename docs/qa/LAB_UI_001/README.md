@@ -1,12 +1,16 @@
 # LAB_UI_001 validation
 
 Current candidate includes main e2f745cd0ce0dc9e41b06efd842062fd08d7fab4.
-`current/` binds renewed results to product SHA256
-a47cf6f73ee8ffde913afa437c607ef97ee8095135560d3c0004f48500fa3f49.
+`begin/` binds renewed results to product SHA256
+352c0b0c67f5d0817357e6c8b45b2c72c9193c4d08197af3e7b1a29d3ebc3545.
 All 12 browser/text/motion profiles, 19 existing regressions, actual V8 6.0,
 tooling and ES2017/unchanged-authority checks pass on these bytes. Non-presentation
 game statements and the native bridge match this current main exactly.
 Ordinary full CI, integration and feature APK acceptance remain pending.
+The Begin Study focus regression fails on the previous a47cf6f source and passes
+here: the removed Begin button is replaced by focus on the same Study's visible
+Speed up opener, with the panel still collapsed. Real Enter input is checked at
+all 12 mobile/text/motion profiles. `current/` retains the earlier a47cf6f receipts.
 
 [RESULTS.json](RESULTS.json) is historical candidate evidence for source SHA256
 efd89f017cf118c0febb90b4d6952b8993d3d43ce558f6312ddb682844c3c935.
