@@ -2,7 +2,7 @@
 
 Baseline b0537cb has SHA2565c4b3dac. Initial candidate3c962a50 is historical.
 Combined PR77 receipts use34e044cc; Formation combination usesd757fabd.
-Current reviewed game SHA256:
+Previous reviewed game SHA256:
 fe11176fd6b9d2d3406ed0d49bd056d712f9b975ef1cce6ab31084f3548ac5f3.
 
 - baseline.json: expected failure restoring unowned25x on untouched main.
@@ -30,3 +30,12 @@ These historical receipts do not accept later combined source. Renewed full CI,
 integrated checks, signed APK/native acceptance remain pending. Review findings
 about selected browser/source/assets and source-bound receipts are addressed;
 no self-review is represented as independent review.
+
+Latest main31eccfb combination (Auto-Ascend UI/Upgrade Identity), SHA256
+6c6ba30e37ea19edd547ad5a904fb063495cece477b93d193f7b1a8bd5b33e1c:
+identity-combination.json/screenshots1139 checks/six profiles PASS;
+identity-scoped22 cases, identity-v8-6.0/identity-es2017/source PASS.
+identity-resonate.txt and identity-registered-core.txt check normal registration.
+Resonate's upstream separate-browser startup timeout is retained; the necessary
+fix forwards the harness browser, preserving all its assertions. Native143
+baseline/cold restart/database proof is now in ../native; new APK still pending.

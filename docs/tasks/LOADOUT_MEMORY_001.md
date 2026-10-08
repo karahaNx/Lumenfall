@@ -31,10 +31,10 @@ Initial live main b0537cb; index SHA256
 Isolated /workspace/Lumenfall-LOADOUT_MEMORY_001-live,
 feature/loadout-memory-001. Original checkout and old20b8b2e proposal untouched.
 PR46/B2 already integrated via PR57. F14 Formation, F26 timecap and F27 Comet
-content remain separate. Current main e2f745c was merged as4923329 after PR77
-Save Backup, PR76 Formation and PR80 Resonate. Test-registration conflicts keep
-both features' scenarios. Current index SHA256
-fe11176fd6b9d2d3406ed0d49bd056d712f9b975ef1cce6ab31084f3548ac5f3.
+content remain separate. Main31eccfb was merged as05f515d after Save Backup,
+Formation, Resonate, Auto-Ascend UI and Upgrade Identity. Keep all scenarios;
+group F25 with Forge to avoid adjacent unrelated additions. Index SHA256
+6c6ba30e37ea19edd547ad5a904fb063495cece477b93d193f7b1a8bd5b33e1c.
 
 Product delta: remove two legacy ownership gates in selection/init; every choice
 immediately saves existing savedLabMultiplier through saveState (both slots).
@@ -42,8 +42,9 @@ Default1x and choices1/5/10/25/50/100/Max remain. F27 already removed the shop r
 and archives raw owned.rememberbulk in legacyCometPurchases idempotently. Preserve
 that old Rest Stop entitlement, all currency and F27 prices/effects; it never
 gates Forge memory. No balance/schema/migration/Formation/Lab changes.
-Changed root index.html, focused behavioral test and two default scenario
-registrations, task/user decision and scoped QA evidence/helpers.
+Changed root index.html, focused test/two registrations, task/decision/QA.
+Necessary integrated Resonate launcher fix passes the selected browser too;
+no Resonate behavior or assertion changes.
 
 ## Acceptance and evidence
 
@@ -71,10 +72,13 @@ CI37737114019 failed browser creation before UI; the new driver now receives the
 exact harness-selected browser and staged source and retains stderr. Subsequent
 CI37739565902 passed both feature scenarios; combination37741036030 is superseded
 by the final QA fix: selected-artifact fonts/branding, correct CSS MIME, hashed
-asset responses. Current1133 checks PASS (six added asset assertions); same-source
+asset responses. Previous1133 checks PASS (six added asset assertions); same-source
 missing-fonts and staged old-gate artifacts fail as expected. Final CI pending.
-Review browser/source/assets/current-receipt findings are addressed. No assertions/
-gates removed. Self-review is not independent review.
+Run37742051484 passed F25 but Resonate selected a different Chromium154 and timed
+out before UI. Its selected-browser fix passes locally. Current Upgrade Identity
+combination:1139 checks/six profiles,22 scoped cases, V8 6.0/ES2017/source PASS;
+renewed full CI pending. Review findings resolved; no assertion/gate removed.
+Self-review is not independent review.
 Historical20b8b2e/1133 checks and refund proposal do not accept current bytes.
 
 Task-owned Android8.1/API27 software emulator booted; exact signed143 installed.
@@ -82,7 +86,8 @@ Native driver checks installed source, actual save database, upgrade/cold start,
 real Android taps/keyboard and AX. Initial failures were test transport/inset/
 fixture issues, retained in QA. Invalid farmReturnDepth0 normalized to Push and
 earned the existing Rift10 Deed (+5 Comets); corrected test uses valid Farm1 /
-return2 to isolate wallet. Native acceptance still pending. No physical device,
+return2 to isolate wallet. Exact143/native cold restart PASS, two-slot save
+database captured; new APK acceptance pending. No physical device,
 exact WebView60 or TalkBack execution is claimed; record actual runtime/limits.
 
 Next: finish current CI/native baseline, merge PR78 after actual overlap check,
