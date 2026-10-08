@@ -6298,6 +6298,7 @@ function renderLongStudies(){
       var node = LONG_STUDIES.find(function(n){ return n.id===active.id; });
       var maxed=node && node.levelCap!==undefined && longStudyLevel(active.id)>=node.levelCap;
       var pct = Math.max(0, Math.min(100, 100-(active.remainingSec/active.totalDurationSec*100)));
+      var progressValue=active.remainingSec>0?Math.min(99,Math.round(pct)):100;
       var queueOnActive = !!state.studyQueue[active.id];
       html += '<div class="card study-card study-running" data-running-study="'+active.id+'">' +
         '<div class="study-running-label">'+(maxed?'Finishing paid Study':index===0?'Next completion':'Running')+'</div>' +
@@ -6307,7 +6308,7 @@ function renderLongStudies(){
         (node ? projectEarnedMarkup(active.id) : '') +
         '<div class="effect-note">'+(maxed?'Level cap already reached. Paid work finishes without another level or bonus.':
           'On completion: '+projectEarnedEffect(active.id,longStudyLevel(active.id)+1)+'.')+'</div>' +
-        '<div class="study-bar-track" role="progressbar" aria-label="'+(node?node.name:'Study')+' progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.round(pct)+'" aria-valuetext="'+Math.round(pct)+'% · '+studyRemainingText(active)+'">'+
+        '<div class="study-bar-track" role="progressbar" aria-label="'+(node?node.name:'Study')+' progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+progressValue+'" aria-valuetext="'+progressValue+'% · '+studyRemainingText(active)+'">'+
           '<div class="study-bar-fill" aria-hidden="true" data-study-bar="'+active.id+'" style="width:'+pct+'%;"></div>'+
           '<span class="study-time" data-study-text="'+active.id+'">'+studyRemainingText(active)+'</span></div>' +
         (node ? studySpeedMarkup(node,active,maxed) : '') +
@@ -8204,12 +8205,13 @@ function updateStudyProgress(){
     var textEl = els['study-list'].querySelector('[data-study-text="'+active.id+'"]');
     if(!fillEl || !textEl) return;
     var pct = Math.max(0, Math.min(100, 100 - (active.remainingSec/active.totalDurationSec*100)));
+    var progressValue=active.remainingSec>0?Math.min(99,Math.round(pct)):100;
     fillEl.style.width = pct+'%';
     var text = studyRemainingText(active);
     if(textEl.textContent!==text) textEl.textContent = text;
     var track=fillEl.parentElement;
-    track.setAttribute('aria-valuenow',String(Math.round(pct)));
-    track.setAttribute('aria-valuetext',Math.round(pct)+'% · '+text);
+    track.setAttribute('aria-valuenow',String(progressValue));
+    track.setAttribute('aria-valuetext',progressValue+'% · '+text);
   });
 }
 

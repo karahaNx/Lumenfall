@@ -30,9 +30,15 @@ async function bridge(){
  for(const s of p.callFrames[0].scopeChain.filter(x=>x.type==='closure'))props.push(...(await send('Runtime.getProperties',{objectId:s.object.objectId,ownProperties:true})).result);
  const names=['state','freshState','acceptPersistedState','restoreEnemyOrSpawn','renderAll','renderLongStudies','saveState','updateStudyProgress'];
  const handles=names.map(n=>{const p=props.find(x=>x.name===n);assert(p?.value?.objectId,'private handle '+n);return{objectId:p.value.objectId};});
- const r=await send('Runtime.callFunctionOn',{objectId:handles[1].objectId,arguments:handles,functionDeclaration:'function(live,fresh,accept,restore,all,render,save,progress){window.__labNative={fresh:fresh,get:function(){return JSON.parse(JSON.stringify(live));},install:function(s){var next=accept(s,"qa-lab-native");Object.keys(live).forEach(function(k){delete live[k];});Object.keys(next).forEach(function(k){live[k]=next[k];});restore();all();},render:render,save:save,progress:progress};}',returnByValue:true});assert(!r.exceptionDetails,'native QA handles');
+ const r=await send('Runtime.callFunctionOn',{objectId:handles[1].objectId,arguments:handles,functionDeclaration:'function(live,fresh,accept,restore,all,render,save,progress){window.__labNative={rebind:function(next){live=next;},fresh:fresh,get:function(){return JSON.parse(JSON.stringify(live));},install:function(s){var next=accept(s,"qa-lab-native");Object.keys(live).forEach(function(k){delete live[k];});Object.keys(next).forEach(function(k){live[k]=next[k];});restore();all();},render:render,save:save,progress:progress};}',returnByValue:true});assert(!r.exceptionDetails,'native QA handles');
  await send('Debugger.removeBreakpoint',{breakpointId:bp.breakpointId});await send('Debugger.resume');await send('Debugger.disable');await until('!!window.__labNative&&document.readyState==="complete"','QA handles');
- await evaluate("['startup-skip','tut-skip','welcome-claim','daily-claim'].forEach(function(id){var e=document.getElementById(id);if(e&&e.getClientRects().length)e.click();});document.querySelectorAll('.overlay,#startup-intro').forEach(function(e){e.style.display='none';});");
+ await delay(1000);
+ await until("(function(){['startup-skip','tut-skip','welcome-claim','daily-claim'].forEach(function(id){var e=document.getElementById(id);if(e&&e.getClientRects().length)e.click();});return __labNative.save()===true;})()",'settled native save');
+ await send('Debugger.enable');const finalBp=await send('Debugger.setBreakpointByUrl',{url:product.url,lineNumber:line('renderLongStudies')}),finalEvent=pause(),rendering=evaluate('__labNative.render()');const final=await finalEvent,liveProps=[];
+ for(const s of final.callFrames[0].scopeChain.filter(x=>x.type==='closure'))liveProps.push(...(await send('Runtime.getProperties',{objectId:s.object.objectId,ownProperties:true})).result);
+ const live=liveProps.find(x=>x.name==='state');assert(live?.value?.objectId,'settled live state');
+ await send('Runtime.callFunctionOn',{objectId:live.value.objectId,functionDeclaration:'function(){window.__labNative.rebind(this);}',returnByValue:true});
+ await send('Debugger.removeBreakpoint',{breakpointId:finalBp.breakpointId});await send('Debugger.resume');await rendering;await send('Debugger.disable');
 }
 async function main(){
  fs.mkdirSync(output,{recursive:true});adb=await new Adb().connect();
@@ -46,7 +52,7 @@ async function main(){
  const identity={apkSha256:installedHash,sourceSha256:hash(source),api:(await adb.shell('getprop ro.build.version.sdk')).trim(),package:(await adb.shell('dumpsys package com.lumenfall.app')).split('\n').filter(x=>/versionCode=|versionName=/.test(x)),ua:await evaluate('navigator.userAgent')};
  await bridge();
  if(mode==='baseline'){
-  const saved=await evaluate("(function(){var b=__labNative,s=b.fresh();s.lastSeen=Date.now();s.depth=s.maxDepthEver=120;s.lumen=10000;s.shards=10000;s.motes=100;s.longStudyLevels.guardmastery=2;s.studyQueue.guardmastery=true;s.studyUseMotes.guardmastery=false;s.studySpeedTargets.guardmastery=3;s.activeStudies=[{id:'guardmastery',remainingSec:150,totalDurationSec:150,speedMult:3}];b.install(s);if(!b.save())throw Error('native save failed');return JSON.parse(localStorage.getItem('lumenfall_save_v2'));})()");
+  const saved=await evaluate("(function(){var b=__labNative,s=b.fresh();s.lastSeen=Date.now();s.depth=s.maxDepthEver=120;s.lumen=10000;s.shards=10000;s.motes=100;s.longStudyLevels.guardmastery=2;s.studyQueue.guardmastery=true;s.studyUseMotes.guardmastery=false;s.studySpeedTargets.guardmastery=3;s.activeStudies=[{id:'guardmastery',remainingSec:86400,totalDurationSec:86400,speedMult:3}];b.install(s);if(!b.save())throw Error('native save failed');var saved=JSON.parse(localStorage.getItem('lumenfall_save_v2'));if(saved.longStudyLevels.guardmastery!==2||saved.activeStudies.length!==1||saved.activeStudies[0].speedMult!==3||saved.studySpeedTargets.guardmastery!==3)throw Error('actual native fixture/save mismatch');return saved;})()");
   fs.writeFileSync(output+'/baseline.json',JSON.stringify({status:'pass',identity,saved,runtimeErrors:errors},null,2));return;
  }
  for(const width of [320,390,430])for(const scale of [1,2]){

@@ -42,7 +42,8 @@ window.runLabUiQa = function(b,ctx,assert){
     var s=seed();s.activeStudies[0].remainingSec=150*(1-percent/100);s.activeStudies[0].speedMult=8;install(s);
     var bar=q('[data-running-study="guardmastery"] [role="progressbar"]'),text=q('[data-study-text="guardmastery"]');
     ok(bar&&bar.contains(text),'time and speed are inside progressbar');
-    ok(bar.getAttribute('aria-valuemin')==='0'&&bar.getAttribute('aria-valuemax')==='100'&&Number(bar.getAttribute('aria-valuenow'))===Math.round(percent),'progress ARIA range/value');
+    var expected=percent<100?Math.min(99,Math.round(percent)):100;
+    ok(bar.getAttribute('aria-valuemin')==='0'&&bar.getAttribute('aria-valuemax')==='100'&&Number(bar.getAttribute('aria-valuenow'))===expected,'progress ARIA range/value never announces incomplete work as 100%');
     ok(bar.getAttribute('aria-label').includes("Guardian's Mastery")&&bar.getAttribute('aria-valuetext').includes(text.textContent)&&text.textContent.includes('8x'),'named progress with time and speed');
     var tr=text.getBoundingClientRect(),br=bar.getBoundingClientRect(),style=getComputedStyle(text);
     ok(tr.left>=br.left&&tr.right<=br.right&&tr.top>=br.top&&tr.bottom<=br.bottom,'progress text fits its bar');
@@ -50,6 +51,7 @@ window.runLabUiQa = function(b,ctx,assert){
     ok(contrast>=4.5&&style.backgroundColor!=='rgba(0, 0, 0, 0)','opaque text background maintains contrast independent of fill');
     if(matchMedia('(prefers-reduced-motion: reduce)').matches)ok(getComputedStyle(q('[data-study-bar="guardmastery"]')).transitionDuration==='0s','reduced motion removes progress transition');
     var before=JSON.stringify(b.getState()),save=b.rawSave();b.studyPresentation.update();
+    ok(Number(bar.getAttribute('aria-valuenow'))===expected&&bar.getAttribute('aria-valuetext').indexOf(expected+'%')===0,'live progress update preserves incomplete/completed work distinction');
     ok(before===JSON.stringify(b.getState())&&save===b.rawSave(),'progress never completes work or writes save');
     fit();records.push({percent:percent,contrast:contrast,text:text.textContent});
   });
