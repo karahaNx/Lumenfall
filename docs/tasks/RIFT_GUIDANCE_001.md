@@ -57,15 +57,23 @@ normal/long hints and both motion settings; Fresh/dense/Boss/conditional Boss/Fa
 >=44px controls, contrast, focus/AX, native scroll, reload/Settings/save purity.
 Check six themes, F27 trail/crest/visible Trial, existing Rift/navigation and CI.
 
-Refreshed local PASS:160 observations,96themes,48Comet cosmetics,16Trial pairs;
+Corrected-source local PASS:160 observations,96themes,48Comet cosmetics,16Trial pairs;
 80touch scrolls,0px protected movement, minimum Tap121px and contrast8.30:1.
 Existing Rift1,618/navigation295/F13 matrix/tooling/source/context PASS. Legacy
-V8 6.0 exact scripts and23 guidance-function assertions PASS. Required CI,
+V8 6.0 exact scripts and23 guidance-function assertions PASS. CI37735423348
+caught a320px/200% label-fit failure; preserve the assertion and correct only
+toggle width/padding/line-height. The full failed log and fresh passing matrix
+are in [post-ci-fix](../qa/rift-guidance-001/2026-10-08/post-ci-fix/README.md). Required CI,
 integrated reruns, APK and native acceptance remain pending.
 [Fresh evidence](../qa/rift-guidance-001/2026-10-08/README.md) records exact source,
 commands, results and limits. No independent/physical/TalkBack pass claimed.
 
-Next: publish scoped PR after refreshed checks, pass required CI and merge;
+Publication: [PR81](https://github.com/karahaNx/Lumenfall/pull/81), head
+5ad8f3852abcc95096f8583e41e79cbfbf4c6d78 plus the label-fit correction checkpoint.
+Official API27 software emulator is booted; signed143 is installed. Native
+upgrade/acceptance is being prepared; no pass is claimed yet.
+
+Next: pass required CI and merge;
 rerun on integrated bytes, build/download/verify signed APK and available native
 checks. Save PR/merge/build/status/limits in task and PROJECT_STATE. Stop shared
 file work after scope. Missing necessary acceptance keeps feature/chat open;

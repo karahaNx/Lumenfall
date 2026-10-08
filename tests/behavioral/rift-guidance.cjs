@@ -53,7 +53,7 @@ async function inspectContent(){return evaluate(`(()=>{
  const sr=slot.getBoundingClientRect(),rr=row.getBoundingClientRect(),tr=toggle.getBoundingClientRect(),hr=hud.getBoundingClientRect(),mr=main.getBoundingClientRect();
  if(sr.top<hr.bottom||sr.bottom>mr.top)throw Error('guidance must be directly below currencies and clear of combat');
  if(tr.width<44||tr.height<44)throw Error('hints control must be at least 44px');
- if(toggle.scrollWidth>toggle.clientWidth||toggle.scrollHeight>toggle.clientHeight)throw Error('Show hints/Hide hints text must fit at enlarged text size');
+ if(toggle.scrollWidth>toggle.clientWidth||toggle.scrollHeight>toggle.clientHeight)throw Error('Show hints/Hide hints text must fit at enlarged text size: '+JSON.stringify({text:toggle.textContent,width:toggle.clientWidth,height:toggle.clientHeight,scrollWidth:toggle.scrollWidth,scrollHeight:toggle.scrollHeight,font:getComputedStyle(toggle).fontSize,family:getComputedStyle(toggle).fontFamily,lineHeight:getComputedStyle(toggle).lineHeight,rootFont:getComputedStyle(document.documentElement).fontSize,viewport:[innerWidth,innerHeight],ua:navigator.userAgent}));
  if(row.scrollWidth>row.clientWidth+1)throw Error('hint text must wrap without horizontal clipping');
  const actionable=objective.getAttribute('role')==='button',or=objective.getBoundingClientRect();
  if(actionable&&(or.width<44||or.height<44))throw Error('hint navigation must be at least 44px');
