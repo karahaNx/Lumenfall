@@ -21,8 +21,8 @@ Startup product SHA256: 5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e8
 Branch: feature/formation-bonds-001-implementation; private worktree:
 /workspace/Lumenfall-bonds-implementation. Original checkout and proposal
 acab2002c62aa679fa757b720327431da342dd99 remain untouched.
-Current main incorporated: c5fa49704404bccb3ca54d434edb7603dbbf4913
-(PR76 Formation autosave, retaining PR77 Backup).
+Current main incorporated: e2f745cd0ce0dc9e41b06efd842062fd08d7fab4
+(PR76 autosave, PR77 Backup and PR80 Resonate clarity retained).
 [PR86](https://github.com/karahaNx/Lumenfall/pull/86) contains this feature.
 
 Actual overlaps read: PR67 52fa48db51ed6ce58704ec17c593ee68710394e0 and
@@ -90,7 +90,7 @@ contrast/reduced motion; existing regressions and required CI; integrated APK.
 Core passes eight groups and catches six real mutations. Source/tooling/signing
 self-test and focused Formation/Farm/role checks pass; initial12 negatives
 caught. Main adds two Backup negatives, both caught by direct native checks.
-Combined candidate now includes160 default scenarios/14 required negatives. Prior full CI
+Combined candidate now includes161 default scenarios/14 required negatives. Prior full CI
 run37737240652 failed old overlapping-adjacency and exact-legacy assertions;
 raw logs retained. Corrected overlap checks preserve adjacency for disjoint
 primary pairs and require every membership mark/name. Old numeric policy keeps
