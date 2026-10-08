@@ -6570,7 +6570,7 @@ function renderAchievements(){
   var refund=state.offline12hRefund;
   if(refund && (refund.comets>0 || refund.prismsExact!=='0')){
     shopHtml += '<div class="desc" data-offline-refund>Previous offline purchases: '+refund.comets+
-      ' Comets and '+refund.prismsExact+' Prisms. '+(offline12hRefundPending(refund)?
+      ' Comets and '+refund.prismsExact.replace(/\B(?=(\d{3})+(?!\d))/g,' ')+' Prisms. '+(offline12hRefundPending(refund)?
       'Refund value is preserved in the original currencies; remaining credit applies automatically after spending.':
       'Refund credited once.')+' Purchase history is preserved.</div>';
   }
