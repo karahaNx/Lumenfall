@@ -3,7 +3,10 @@
 Scope: eight Bonds, required Formation autosave/preset isolation and the Farm
 clock precision correction exposed by changed reward timing. The original four
 Bonds, paid Wisp progression, support4s/8s and deterministic economy remain.
-The task records the complete design and source provenance.
+The task records the complete design and source provenance. PR76 integrated
+the autosave dependency during review; its product/tests are retained intact.
+The earlier bundled F14 marker/zero-party proposal is retired. Current receipts
+must identify the reconciled source, not those historical candidate bytes.
 
 Reproduce with Node20+: `node tests/behavioral/formation-bonds.cjs` and
 `node tests/behavioral/formation-bonds-budget.cjs --write`; the new core and mobile

@@ -60,12 +60,13 @@ function baselineState(actual,expected,seed,label){
  const oldOwnership={...expected.owned},legacy={};
  for(const id of ['rememberbulk','offline24','offline48']){if(oldOwnership[id]===true)legacy[id]=true;delete oldOwnership[id];}
  assert.deepEqual(actual.legacyCometPurchases,legacy,label+' full legacy ownership archived');
- // F14's marker and selected pending preset are intentional metadata changes.
- assert.equal(actual.formationAutosaveVersion,1,label+' autosave marker');
- const selected=expected.formationRebuild ? expected.formationRebuild.preset : expected.activeFormationPreset;
- assert.equal(actual.activeFormationPreset,selected,label+' exact selected preset');
- const {studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,formationAutosaveVersion,...existing}=actual;
- assert.deepEqual(existing,{...expected,activeFormationPreset:selected,owned:oldOwnership},label);
+ const {studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,...existing}=actual;
+ // F14 changes only the selected destination during a matching partial rebuild.
+ const intent=expected.formationRebuild;
+ const selected=intent&&intent.preset&&expected.formationPresets[intent.preset]&&
+   expected.formationPresets[intent.preset].join(',')===intent.members.join(',')
+   ? intent.preset : expected.activeFormationPreset;
+ assert.deepEqual(existing,{...expected,owned:oldOwnership,activeFormationPreset:selected},label);
 }
 function runAsync(seed,seconds,batch=256){
  const x=app(seed,source,seconds),before=copy(x.b.get());x.b.batch(batch);

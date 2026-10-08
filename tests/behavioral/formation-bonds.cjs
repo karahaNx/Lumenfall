@@ -52,14 +52,15 @@ function checks(html=source){const a=app(html),b=a.b,records=[];function test(na
   assert.deepEqual(b.reward(gale,1),{lumen:0,shards:expectedG});assert.deepEqual(b.reward(thorn,1),{lumen:expectedT,shards:0});
   for(const kind of ['live','offline']){b.set(s);const before=copy(b.get());b.cast('gale',kind);b.cast('thorn',kind);assert.equal(b.get().shards-before.shards,expectedG*(kind==='offline'?.7:1));assert.equal(b.get().lumen-before.lumen,expectedT*(kind==='offline'?.7:1));assert.equal(b.get().motes,before.motes);assert.equal(b.get().prisms,before.prisms);assert.equal(b.get().sigils,before.sigils);}
  });
- test('autosave isolates presets, empty lineup persists and five pending slots cannot be displaced',()=>{
+ test('integrated autosave isolates presets, preserves empty intent and protects five pending slots',()=>{
   const beforeInvalid=copy(b.get());b.toggle('unknown');b.toggle('__proto__');assert.deepEqual(b.get(),beforeInvalid);
-  let s=seed(b,['ember']);s.formationPresets={push:['ember'],farm:['gale'],boss:['stone']};b.set(s);b.preset('farm');b.toggle('thorn');assert.deepEqual(b.get().formationPresets,{push:['ember'],farm:['gale','thorn'],boss:['stone']});b.toggle('gale');b.toggle('thorn');assert.deepEqual(b.get().activeParty,[]);assert.deepEqual(b.normalize(b.get()).activeParty,[]);assert.deepEqual(b.normalize(b.get()).formationPresets.farm,[]);
+  let s=seed(b,['ember']);s.formationPresets={push:['ember'],farm:['gale'],boss:['stone']};b.set(s);b.preset('farm');b.toggle('thorn');assert.deepEqual(b.get().formationPresets,{push:['ember'],farm:['gale','thorn'],boss:['stone']});b.toggle('gale');const last=copy(b.get());b.toggle('thorn');assert.deepEqual(b.get(),last,'last chosen member remains');
+  s=seed(b,['ember']);s.formationPresets.farm=[];b.set(s);b.preset('farm');assert.deepEqual(b.get().activeParty,['ember']);assert.deepEqual(b.normalize(b.get()).formationPresets.farm,[]);assert.deepEqual(b.get().formationRebuild,{members:[],preset:'farm'});assert.deepEqual(b.bonds(),[],'empty intent grants no Bond');
   s=seed(b,['ember']);s.formationPresets.boss=['tide','stone','gale','thorn','void'];for(const id of s.formationPresets.boss)s.spirits[id]=0;b.set(s);b.preset('boss');const before=copy(b.get());b.toggle('aurora');assert.deepEqual(b.get(),before);assert.deepEqual(b.bonds(),[]);
   s=b.get();s.lumen=60;b.set(s);b.recruit('tide');assert.equal(b.get().lumen,0);assert.equal(b.get().spirits.tide,1);assert.deepEqual(b.get().activeParty,['tide']);assert.deepEqual(b.bonds(),[]);
  });
  test('legacy value preservation, idempotence, primary/recovery/backup and repeated Ascend',()=>{
-  let s=seed(b,['ember','tide','stone','gale','void']);delete s.formationAutosaveVersion;s.lumen=12345;s.shards=456;s.motes=17;s.sigils=50;s.wispModules.ember=12;s.heroRarity.ember=5;s.wispUltimate.ember=true;s.owned.comettrials=true;b.set(s);
+  let s=seed(b,['ember','tide','stone','gale','void']);s.lumen=12345;s.shards=456;s.motes=17;s.sigils=50;s.wispModules.ember=12;s.heroRarity.ember=5;s.wispUltimate.ember=true;s.owned.comettrials=true;b.set(s);
   for(const k of ['spirits','heroRarity','wispModules','wispUltimate','lumen','shards','motes','sigils','owned','formationPresets'])assert.deepEqual(b.get()[k],s[k],k);
   const canonical=copy(b.get());assert.deepEqual(b.normalize(canonical),canonical);b.save();const backup=b.backup();assert.deepEqual(b.decode(backup),canonical);
   a.fail(true);b.toggle('void');const changed=copy(b.get());assert.deepEqual(b.decode(b.backup()),changed);a.storage.set('lumenfall_save_v2','invalid');b.load();assert.deepEqual(b.get().formationPresets,changed.formationPresets);a.fail(false);
@@ -82,7 +83,7 @@ function main(){const records=checks(),negativeControls=[];
  for(const [name,from,to] of [
   ['Kindling',"(bondActive('kindling') ? 1.25 : 1)","1"],['Vanguard',"(bondActive('vanguard') ? 0.8 : 1)","1"],
   ['Quarry',"(bondActive('quarry')?1.20:1)","1"],['Harvest',"(bondActive('harvest')?1.20:1)","1"],
-  ['Autosave','autosaveCurrentFormation(id);','state.formationRebuild = null;'],
+  ['Autosave','commitFormationMembers(members);','state.formationRebuild = null;'],
   ['Farm clock','farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore','elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore']]){
   assert(source.includes(from),name+' mutation anchor');let detected=false;try{let mutated=source.replace(from,to);if(name==='Farm clock')mutated=mutated.replace('var gridCrossingsBefore = farmGridCrossings;\n    var gridRemainingBefore = farmGridRemainingSec;', 'var elapsedWholeBefore = elapsedWholeSec;\n    var elapsedFractionBefore = elapsedFractionSec;');checks(mutated);}catch(error){detected=true;negativeControls.push({name,error:error.message});}assert(detected,name+' real mutation must fail');
  }

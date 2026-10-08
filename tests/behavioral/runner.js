@@ -548,6 +548,14 @@
         }
         finish('pass',window.runForgeQa(bridge,ctx,assert,assertProtectedParity,assertSummaryParity,parityApprox));return;
       }
+      if(ctx.scenario.startsWith('formation-autosave-')){
+        if(ctx.scenario==='formation-autosave-native'||ctx.scenario==='formation-autosave-reduced-motion'){window.__formationAutosaveNativeReady=true;return;}
+        bridge.uiMeasurementPause(true);
+        if(['formation-autosave-save-reload','formation-autosave-backup-restore','formation-autosave-recovery'].includes(ctx.scenario)){
+          window.runFormationAutosavePersistence(bridge,ctx,assert,phase,nextPhase,backupCode,finish);return;
+        }
+        finish('pass',window.runFormationAutosaveQa(bridge,ctx,assert));return;
+      }
       switch(ctx.scenario){
         case 'wisp-upgrade-display':
           finish('pass',window.runWispUpgradeQa());return;
@@ -597,7 +605,7 @@
             return;
           }
           var expected=JSON.parse(localStorage.getItem('p207-expected'));
-          ['formationRebuild','activeParty','formationPresets','spirits','empowerQueue','lumen','shards','prisms','comets','motes','sigils','heroResource'].forEach(function(key){assertJsonEqual(state()[key],expected[key],ctx.scenario+' '+key);});
+          ['formationRebuild','activeParty','activeFormationPreset','formationPresets','spirits','empowerQueue','lumen','shards','prisms','comets','motes','sigils','heroResource'].forEach(function(key){assertJsonEqual(state()[key],expected[key],ctx.scenario+' '+key);});
           assert(state().schemaVersion===1,'partial reconstruction remains schema-v1');
           assertJsonEqual(JSON.parse(bridge.rawRecovery()).formationRebuild,expected.formationRebuild,'recovery intent');
           finish('pass',{intent:state().formationRebuild,active:state().activeParty});return;
@@ -2022,23 +2030,15 @@
           assert(document.querySelector('[data-formation-preset="farm"]').getAttribute('aria-pressed')==='true','active Formation preset must be visibly and semantically selected');
           assert(document.activeElement===document.querySelector('[data-formation-preset="farm"]'),'Formation quick-switch must preserve keyboard focus after rendering');
 
-          var custom=cloneJson(state());
-          custom.activeParty=['ember','tide','stone'];
-          custom.formationPresets.boss=custom.activeParty.slice();
-          custom.activeFormationPreset='boss';
-          bridge.setState(custom);
-          bridge.renderLayout();
-          document.querySelector('[data-toggle="stone"]').click();
-          assert(state().formationPresets.boss.join(',')==='ember,tide','Bench autosaves the selected Boss Formation');
-          document.querySelector('[data-toggle="stone"]').click();
-          assert(state().formationPresets.boss.join(',')==='ember,tide,stone','Field autosaves the selected Boss Formation');
-          assert(state().activeFormationPreset==='boss','autosave retains selected identity');
-          assert(!document.querySelector('[data-save-formation]'),'Formation requires no manual Save control');
-          assert(state().formationPresets.farm.join(',')===qol.formationPresets.farm.join(','),'Boss autosave leaves Farm untouched');
+          bridge.applyFormationPreset('boss');
+          bridge.formationTest.toggle('void');bridge.formationTest.toggle('titan');
+          assert(!document.querySelector('[data-save-formation]'),'Formation has no Save button');
+          assert(state().formationPresets.boss.join(',')==='ember,stone,tide','Bench immediately saves to Boss');
+          assert(state().activeFormationPreset==='boss','editing retains the selected preset');
           bridge.save();
           var persisted=JSON.parse(bridge.rawSave());
           var roundTrip=bridge.setState(persisted);
-          assert(roundTrip.formationPresets.boss.join(',')==='ember,tide,stone' && roundTrip.activeFormationPreset==='boss','Formation presets and active identity must survive canonical save/load');
+          assert(roundTrip.formationPresets.boss.join(',')==='ember,stone,tide' && roundTrip.activeFormationPreset==='boss','Formation presets and active identity must survive canonical save/load');
 
           var invalid=cloneJson(roundTrip);
           invalid.activeParty=['ember','tide'];
@@ -2047,9 +2047,8 @@
           invalid.formationPresets.push=['deleted-wisp','ember','ember','aurora'];
           var normalized=bridge.setState(invalid);
           assert(normalized.formationPresets.push.join(',')==='ember,aurora','unknown and duplicate preset references must normalize safely while a known unavailable Wisp remains saved');
-          assert(bridge.applyFormationPreset('push')===true,'a known preset can retain unavailable recruitment intent');
-          assert(state().activeParty.join(',')==='ember' && state().spirits.aurora===0,'only its already purchased member enters combat');
-          assert(state().formationRebuild.members.join(',')==='ember,aurora' && state().activeFormationPreset==='push','pending intent and selected preset persist');
+          assert(bridge.applyFormationPreset('push'),'known unavailable preset remains selectable');
+          assert(state().activeParty.join(',')==='ember' && state().formationRebuild.members.join(',')==='ember,aurora','pending members stay saved and unpowered');
 
           bridge.setState(qol);
           bridge.renderLayout();

@@ -14,7 +14,7 @@ function qaLifecycleRecord(type,detail){
 }
 // Resolve only after the real startup completion callback (including its save).
 // This is installed before DOMContentLoaded/init in the throwaway instrumented app.
-if(window.__lumenfallQaContext.scenario==='formation-bonds-mobile' || window.__lumenfallQaContext.scenario.startsWith('comet-unlocks-') || window.__lumenfallQaContext.scenario==='lab-motes-runtime' || window.__lumenfallQaContext.scenario==='lab-motes-native' || window.__lumenfallQaContext.scenario==='lab-motes-reduced-motion' || window.__lumenfallQaContext.scenario==='auto-ascend-target-mobile' || window.__lumenfallQaContext.scenario==='auto-ascend-target-reduced-motion' || window.__lumenfallQaContext.scenario.startsWith('forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('self-test-forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('rift-status-') || window.__lumenfallQaContext.scenario.startsWith('self-test-rift-status-')){
+if(window.__lumenfallQaContext.scenario==='formation-bonds-mobile' || window.__lumenfallQaContext.scenario==='formation-autosave-native' || window.__lumenfallQaContext.scenario==='formation-autosave-reduced-motion' || window.__lumenfallQaContext.scenario.startsWith('comet-unlocks-') || window.__lumenfallQaContext.scenario==='lab-motes-runtime' || window.__lumenfallQaContext.scenario==='lab-motes-native' || window.__lumenfallQaContext.scenario==='lab-motes-reduced-motion' || window.__lumenfallQaContext.scenario==='auto-ascend-target-mobile' || window.__lumenfallQaContext.scenario==='auto-ascend-target-reduced-motion' || window.__lumenfallQaContext.scenario.startsWith('forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('self-test-forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('rift-status-') || window.__lumenfallQaContext.scenario.startsWith('self-test-rift-status-')){
   var qaStartupResolve;
   window.__qaForgeStartup={completed:false,callbacks:0,promise:new Promise(function(resolve){qaStartupResolve=resolve;})};
   var qaOriginalPlayStartupIntro=playStartupIntro;
@@ -413,6 +413,13 @@ window.__lumenfallQaBridge = {
       }finally{state=saved;}
     },
     toggle: function(id){ toggleActive(id); },
+    mutateAutosave: function(kind){
+      var commit=commitFormationMembers,reconcile=reconcileFormationRebuild,apply=applyFormationPreset;
+      if(kind==='lost-destination') commitFormationMembers=function(members){commit(members);state.activeFormationPreset='';};
+      if(kind==='projection-save') reconcileFormationRebuild=function(snapshot){reconcile(snapshot);if(snapshot.activeFormationPreset)snapshot.formationPresets[snapshot.activeFormationPreset]=snapshot.activeParty.slice();};
+      if(kind==='switch-overwrite') applyFormationPreset=function(name){var leaving=state.activeFormationPreset,result=apply(name);if(leaving)state.formationPresets[leaving]=state.activeParty.slice();return result;};
+      return function(){commitFormationMembers=commit;reconcileFormationRebuild=reconcile;applyFormationPreset=apply;};
+    },
     corruptPrimary: function(){ localStorage.setItem(SAVE_KEY,'broken'); },
     // Negative controls use real production entry points with one scoped mutation.
     mutate: function(kind){
@@ -665,7 +672,6 @@ window.__lumenfallQaBridge = {
     return JSON.parse(JSON.stringify(state));
   },
   applyFormationPreset: function(name){ return applyFormationPreset(name); },
-  saveFormationPreset: function(name){ return saveFormationPreset(name); },
   activeBondIds: function(){ return activeFormationBonds().map(function(bond){return bond.id;}); },
   autoEmpowerAll: function(enabled){ setAutoEmpowerAll(!!enabled); return JSON.parse(JSON.stringify(state.empowerQueue)); },
   simulate: function(seconds,kind,chunkSec,startMs,windowStartMs){

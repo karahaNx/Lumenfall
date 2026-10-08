@@ -21,7 +21,8 @@ Startup product SHA256: 5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e8
 Branch: feature/formation-bonds-001-implementation; private worktree:
 /workspace/Lumenfall-bonds-implementation. Original checkout and proposal
 acab2002c62aa679fa757b720327431da342dd99 remain untouched.
-Current main incorporated: 261b1b7f863f73c324f4ac04acb5bfc95101644d (PR77 Backup).
+Current main incorporated: c5fa49704404bccb3ca54d434edb7603dbbf4913
+(PR76 Formation autosave, retaining PR77 Backup).
 [PR86](https://github.com/karahaNx/Lumenfall/pull/86) contains this feature.
 
 Actual overlaps read: PR67 52fa48db51ed6ce58704ec17c593ee68710394e0 and
@@ -63,12 +64,12 @@ optimality or full campaign balance; Wisp roles/matrix remain separate.
 
 ## Dependency and preservation
 
-FORMATION_AUTOSAVE_001 was absent at baseline. Its scoped prerequisite is
-included before F15 integration: Push/Farm/Boss selection, Field/Bench saves
-only the selected preset, pending/empty intent survives Ascend and reload.
-An additive formationAutosaveVersion=1 marker distinguishes explicit empty
-from damaged legacy saves. Paid values and schema stay intact; idempotent
-normalization, primary/recovery/backup tested; no refunds or free pending power.
+FORMATION_AUTOSAVE_001 integrated through PR76 while this candidate was tested.
+Its current code/tests are preserved exactly: Field/Bench saves the selected
+preset, ordered pending intent includes all five slots; at least one chosen
+member remains. Legacy empty presets retain intent and temporary Ember.
+The earlier bundled F14 proposal/marker is retired; no new save field/schema.
+Pending gives no Bond. Paid values, idempotence, primary/recovery/backup remain.
 Preserve upgrade UI, full partner/effect text, Cast/Ready/progressbar access,
 Comet Trials/ownership, deterministic chronology/purchases/Motes, WebView60,
 com.lumenfall.app and established signing.
@@ -82,19 +83,21 @@ regen/DPS visible and full Net accessible so Formation cannot overlap boost.
 
 [Evidence and reproduction](../qa/formation-bonds-001/README.md): eight exact
 pairs/bonuses/rounding; pending/Bench exclusion; live/offline/one-second/split
-chronology; isolated/empty/five-slot handlers; legacy value/recovery/backup;
+chronology; isolated/legacy-empty/five-slot handlers; legacy value/recovery/backup;
 equal actual investments; mobile320/390/430,200% text,44px controls, focus,
 contrast/reduced motion; existing regressions and required CI; integrated APK.
 
 Core passes eight groups and catches six real mutations. Source/tooling/signing
 self-test and focused Formation/Farm/role checks pass; initial12 negatives
-caught. Main adds two Backup negatives, included in required CI. Prior full CI
+caught. Main adds two Backup negatives, both caught by direct native checks.
+Combined candidate now includes160 default scenarios/14 required negatives. Prior full CI
 run37737240652 failed old overlapping-adjacency and exact-legacy assertions;
 raw logs retained. Corrected overlap checks preserve adjacency for disjoint
 primary pairs and require every membership mark/name. Old numeric policy keeps
 an exact archived counterfactual; actual new policy retains long/split checks.
 Local daily retry exceeds its60s harness budget; hosted CI passed that scenario.
-No timeout/acceptance tolerance is weakened. No independent review claimed.
+No timeout/acceptance tolerance is weakened. Reconciliation preserves every integrated F14 function and test; only F15
+mechanics/presentation/clock hunks apply above main. No independent review claimed.
 
 Next: publish corrected current-main candidate, pass exact-head required CI,
 merge, verify integrated behavior and signed APK; save final receipts/status.
