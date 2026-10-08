@@ -38,7 +38,7 @@ refund decisions remain separate; the catalog does not implement that transition
 - Signed [Android build143](android-143.json), run37715794487, passed source,
   browser startup, build, stable-key verification, final identity and publication.
   This Android workflow does not run the full behavioral suite. The delivery
-  publication PR runs it again on unchanged integrated game/test assets and
+  [publication PR73](https://github.com/karahaNx/Lumenfall/pull/73) runs it again on unchanged integrated game/test assets and
   records the exact final validation head/run/result in its body.
 - [Published identity](published-identity.txt): package com.lumenfall.app,
   versionCode143/name0.1.143, established signing SHA256. Verified independently
@@ -57,6 +57,10 @@ refund decisions remain separate; the catalog does not implement that transition
 is retained for device acceptance even when android-latest advances.
 
 ## Remaining acceptance
+
+The final validation head/run/result and delivery integration commit are saved
+in [PR73's body](https://github.com/karahaNx/Lumenfall/pull/73), which is the
+durable execution receipt for this unchanged integrated product/test tree.
 
 [Native/device checklist](DEVICE_ACCEPTANCE.txt) remains OPEN. Cloud ADB/emulator
 attempts cannot create their default Android configuration paths on the

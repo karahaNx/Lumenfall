@@ -115,7 +115,7 @@ Signed143 run37715794487 and downloaded package/version/signing/526CRC/15asset
 checks passed; extracted APK11 Comet cases pass on V8 6.0.286.52.
 See the [delivery receipt](../qa/comet-unlocks-001/DELIVERY.md), exact signed APK
 and remaining native checklist. Android build checks source/smoke/identity;
-the delivery publication PR runs full CI on unchanged integrated game/test bytes
+[delivery PR73](https://github.com/karahaNx/Lumenfall/pull/73) runs full CI on unchanged integrated game/test bytes
 and records its final exact head/run/result in its body. No independent review
 or native device completion claimed. Current overlapping drafts include Ascension caps (PR66), a
 broad feedback candidate (PR67) and Wisp roles (PR70). Do not absorb their scope;
