@@ -1,5 +1,12 @@
 # LAB_UI_001 validation
 
+Latest combined candidate retains main06b28d5 (Tree contract/Rift cosmetics).
+Product SHA25666b29c9d85de4a47191acbf655e8bb88b18a2517feb18e8f405f2b9041d95709;
+renewed checks for these bytes are pending. Authority/native bridge match main.
+The only merge conflict combined both test module registrations; no gate removed.
+CI37750591389 passed all173 scenarios/17 negatives/guarded smoke on705b6ac and
+the preceding0e1c source. Results below are historical until renewed.
+
 Current candidate includes main14d5f3a3a78fe8b63cfa5544efc54f41217b65a5.
 `complete-controls/` binds renewed results to product SHA256
 0e1c36dceab95feffd1378b8ef179cb564d4a1aa0ab84f4734af49a1b820821b.

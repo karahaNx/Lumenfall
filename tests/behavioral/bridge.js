@@ -196,6 +196,14 @@ window.__lumenfallQaBridge = {
     visibility: async function(hidden){var old=reloadInProgress;reloadInProgress=false;try{var result=window.__lumenfallQaBridge.dispatchVisibility(hidden);while(offlineCatchup)await new Promise(function(resolve){setTimeout(resolve,0);});return result;}finally{reloadInProgress=old;}},
     shopItem: function(){return JSON.parse(JSON.stringify(SHOP.find(function(x){return x.id==='autoascend';})));}
   },
+  treePurchases: {
+    canonical: function(s){return acceptPersistedState(s,'tree-qa');},
+    plan: function(id){return getNodeBuyPlan(NODES.find(function(n){return n.id===id;}));},
+    buy: function(id){var old=reloadInProgress;reloadInProgress=false;try{return buyNode(typeof id==='string'?NODES.find(function(n){return n.id===id;}):id);}finally{reloadInProgress=old;}},
+    click: function(id){var old=reloadInProgress;reloadInProgress=false;try{els['node-list'].querySelector('[data-node="'+id+'"]').click();}finally{reloadInProgress=old;}},
+    render: function(){renderNodes();},
+    roundtrip: function(s){return acceptPersistedState(decodeSaveBackup(encodeSaveBackup(s)),'tree-backup-qa');}
+  },
   upgradeClarity: {
     render: function(){renderNodes();renderLongStudies();renderAchievements();},
     metrics: function(){return {lumen:lumenMult(),tap:tapMult(),momentum:momentumMult(),offline:offlineRate(),costReduction:costReduction(),offlineCap:offlineCapHours(),prisms:prismMult()};},

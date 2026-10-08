@@ -63,7 +63,11 @@ async function run(){
     assert.equal(seed.schemaVersion,1,'baseline save');assert.equal(seed.prisms,100);assert.equal(seed.comets,100);fs.writeFileSync(path.join(out,'baseline.json'),JSON.stringify({identity,seed},null,2));return;
   }
   const baseline=JSON.parse(fs.readFileSync(path.join(out,'baseline.json'))),first=await evaluate('__offlineNative.get()');
-  assert.equal(first.schemaVersion,2);assert.equal(first.prisms,132);assert.equal(first.comets,400);assert.equal(first.nodes.reserves,3);assert.deepEqual(first.legacyCometPurchases,baseline.seed.legacyCometPurchases);assert.equal(first.activeStudies[0].id,baseline.seed.activeStudies[0].id);assert.equal(first.activeStudies[0].totalDurationSec,46800);assert.equal(first.activeStudies[0].speedMult,1);assert(first.activeStudies[0].remainingSec<=46800&&first.activeStudies[0].remainingSec>=3600,'paid snapshot retains only legitimately elapsed work');records.push({case:'signed 144 to F26 update preserves paid work and refunds exactly once',identity});
+  assert.equal(first.schemaVersion,2);assert.equal(first.prisms,132);assert.equal(first.comets,400);assert.equal(first.nodes.reserves,3);assert.deepEqual(first.legacyCometPurchases,baseline.seed.legacyCometPurchases);assert.equal(first.activeStudies[0].id,baseline.seed.activeStudies[0].id);assert.equal(first.activeStudies[0].totalDurationSec,46800);assert.equal(first.activeStudies[0].speedMult,1);assert(first.activeStudies[0].remainingSec<=46800&&first.activeStudies[0].remainingSec>=3600,'paid snapshot retains only legitimately elapsed work');
+  assert.deepEqual(first.offline12hRefund.cometsPaid,[true,true]);assert.deepEqual(first.offline12hRefund.prismsPaid,[true,true,true]);
+  const firstStored=await evaluate("({primary:JSON.parse(localStorage.getItem('lumenfall_save_v2')),recovery:JSON.parse(localStorage.getItem('lumenfall_save_recovery_v1'))})");
+  assert.deepEqual(firstStored.primary,first);assert.deepEqual(firstStored.recovery,first);
+  records.push({case:'signed 144 to F26 update preserves paid work and refunds exactly once',identity,baselineIdentity:baseline.identity,before:baseline.seed,after:first});
   const original=JSON.parse(fs.readFileSync(path.resolve(__dirname,'../offline-autoascend-2026-10-07/device_backup.json')));
   for(const on of [false,true])for(const seconds of [43200,86400]){
     const seed={...original,autoAscendEnabled:on,lastSeen:1800000000000};
@@ -85,4 +89,6 @@ async function run(){
   assert(focus.id&&focus.id!=='comettrials');assert.notEqual(focus.outline,'none');records.push({case:'actual Android Tab focus',nativeWindow,focus});
   assert.equal(errors.length,0,'native runtime errors');fs.writeFileSync(path.join(out,'acceptance.json'),JSON.stringify({status:'pass',identity,records,errors,physicalDevice:false,exactWebView60:false},null,2));
 }
-(async()=>{let error;try{await run();}catch(e){error=e;}try{if(ws)ws.close();if(server){for(const s of server.sockets)s.destroy();await new Promise(r=>server.close(r));}if(adb)adb.close();}catch(e){error=error||e;}console.log(JSON.stringify({status:error?'fail':'pass',mode,message:error?.stack,records:records.length}));if(error)process.exitCode=1;})();
+(async()=>{let error;try{await run();}catch(e){error=e;}try{if(ws)ws.close();if(server){for(const s of server.sockets)s.destroy();await new Promise(r=>server.close(r));}if(adb)adb.close();}catch(e){error=error||e;}
+if(error&&out){fs.mkdirSync(out,{recursive:true});fs.writeFileSync(path.join(out,'failed-attempt-'+Date.now()+'.json'),JSON.stringify({status:'fail',mode,message:error.stack,records,errors},null,2));}
+console.log(JSON.stringify({status:error?'fail':'pass',mode,message:error?.stack,records:records.length}));if(error)process.exitCode=1;})();
