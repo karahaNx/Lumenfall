@@ -1,7 +1,8 @@
 # FORMATION_BONDS_001 evidence
 
 Scope: eight Bonds, required Formation autosave/preset isolation and the Farm
-clock precision correction exposed by changed reward timing. The original four
+clock precision correction exposed by changed reward timing (now upstream
+via PR90). The upgrade matrix and Auto-Ascend integrations are preserved. The original four
 Bonds, paid Wisp progression, support4s/8s and deterministic economy remain.
 The task records the complete design and source provenance. PR76 integrated
 the autosave dependency during review; its product/tests are retained intact.
@@ -37,8 +38,11 @@ marginals are not summed into a fictitious team total.
 Named choices include active Push (Ember/Tide/Gale/Thorn/Void), combined Shard/
 Lumen Farm (Tide/Stone/Gale/Thorn/Aurora), and Boss wall (Ember/Stone/Void/Aurora/
 Titan). Strongest resource-channel parties include Quarry/Harvest. At the late
-frozen account, Vanguard gives a positive estimated net rate at Boss Rift160
-where the best party without Vanguard is regeneration-walled. These sustained
+frozen account, Vanguard clears actual live Boss Rift160 at1002 seconds; the
+highest-net non-Vanguard choice remains blocked at1288 seconds. All36 choices
+without Vanguard have negative estimated net rate. See boss-window.json and
+reproduce with boss-window.cjs after regenerating budgets. Infinite estimate
+ties now use highest net rate, preventing an arbitrary “best” walled party. These sustained
 estimates are separate from cast chronology, which has real live/offline and
 split-window tests. They do not prove Titan-independent damage parity or final
 Lab/Forge/Tree pacing; those remain separate Wisp/matrix scopes.
@@ -59,3 +63,10 @@ Node passes. This environment's emulator ADB port5581 refused connection.
 Publish the signed APK, verify its bundled assets/signature/package, then keep
 required phone/device acceptance pending until supplied. Self-review is not
 independent review. Do not archive this chat while that acceptance is missing.
+
+Stacking: Starcaller × Pathfinder =1.416 passive/ability damage on non-Bosses;
+Starcaller × Duskguard =1.593 on Bosses. Kindling multiplies the final Tap hit;
+two25% Supports add to1.50, then Kindling gives ×1.875 for that hit. Vanguard
+multiplies only regen by0.80. Quarry/Harvest and Dawnpriest multiply resource
+channels before the existing single payout rounding. No overlapping marginals
+are summed. PR90 owns all upgrade/legacy dispositions; F15 adds no migration.

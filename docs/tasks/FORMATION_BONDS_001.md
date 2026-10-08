@@ -20,8 +20,8 @@ Baseline b0537cb46635555ba2c2e5f3f95bc8fc276aeda5; startup product SHA256
 Private branch feature/formation-bonds-001-implementation, worktree
 /workspace/Lumenfall-bonds-implementation. Original checkout and earlier proposal
 acab2002c62aa679fa757b720327431da342dd99 untouched.
-Current incorporated main e2f745cd0ce0dc9e41b06efd842062fd08d7fab4 preserves
-PR76 autosave, PR77 Backup and PR80 Resonate clarity. Recheck main before merge.
+Current incorporated main31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6 also preserves
+PR84 Auto-Ascend and PR90 upgrade matrix. Recheck main before merge.
 Changed files: root index, scoped behavioral checks/bridge/runner, task and
 feature evidence. No mobile/package/signing changes.
 
@@ -31,8 +31,8 @@ Use only F14/F15 design from inspected PR67
 52fa48db51ed6ce58704ec17c593ee68710394e0
 ([contract](https://github.com/karahaNx/Lumenfall/blob/52fa48db51ed6ce58704ec17c593ee68710394e0/docs/requirements/all-27-feedback-001/balance-contract.md)).
 These are scoped design decisions, not individually user-selected numbers.
-PR70 7284cf716250355e1bf68d00590f81ab96f49a3d contributes only its necessary
-Farm precision correction; neither candidate branch is edited or merged.
+PR70 7284cf716250355e1bf68d00590f81ab96f49a3d supplies the clock correction
+now integrated via PR90. No candidate branch is edited or merged.
 
 | Combo | Bond | Exact effect | Choice |
 | --- | --- | --- | --- |
@@ -65,8 +65,9 @@ counts toward five slots; at least one chosen member remains; legacy empty
 intent retains temporary Ember. The earlier bundled F14 marker/zero-party
 proposal is retired. No new field/schema. Preserve paid values and idempotent
 primary/recovery/backup/Ascend behavior, chronology and live/offline parity.
-New rewards exposed a false Farm stall: canonical crossing/remaining progress
-and separate whole/fraction target phase fix it without skipped elapsed time.
+PR90 already integrates the necessary PR70 Farm clock correction; retain it.
+Preserve all24 raw upgrade IDs/paid effects and the matrix
+[contract](UPGRADE_IDENTITY_001/MATRIX.md), with no extra F15 migration.
 Overlapping Bonds each retain marks/full accessible effects without duplicate
 Wisps. Wrapping and compact Boss status preserve short-screen geometry.
 Keep full partner text, Cast/Ready/progressbar,44px controls, focus/contrast,
@@ -77,12 +78,14 @@ pairs/bonuses/rounding, all handlers/pending/five-slot boundaries, save/recovery
 live/offline/one-second/split chronology, equal actual budgets, mobile320/390/430
 and200% text, existing regressions and required CI, then integrated signed APK.
 
-Current product SHA256: 7e49fd411cd2eb1c630a6f56eacc1a771ee1e16fc8e71fc213c187cc0091b0ed.
+Current product SHA256: 4d131993079d7932c696314be761321b350af42d0f2ead294b357d28e826c5e9.
 Core eight groups/six real mutations PASS; combined autosave contract/nine
 focused checks/12 mobile profiles/V8 6.0 PASS. Corrected SRGB contrast handling
 also passes12 profiles. Normal/reduced Rift checks pass three profiles each.
-Source/tooling/context/signing self-test PASS. Required CI now covers161 default
-scenarios/14 negatives; exact final head must pass. Prior CI failures and local
+Source/tooling/context/signing self-test PASS on labeled earlier bytes. Combined CI now covers170 defaults/17 negatives; final head must pass.
+Prior CI254 passed every F15/Rift case; Resonate Chromium startup timed out.
+Actual equal-budget live Boss160 clears with Vanguard at1002s; highest-net
+non-Vanguard remains walled after1288s, matching whole/one-second simulation. Prior CI failures and local
 transport/time-budget limits are retained; no timeout/tolerance is weakened.
 Self-review only; no independent review claimed.
 

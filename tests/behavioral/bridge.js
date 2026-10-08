@@ -156,6 +156,12 @@ window.__lumenfallQaBridge = {
       return function(){commitStudyStart=start;studyMotesPlan=plan;simulationKillsUntilStudyMotes=boundary;simulationApplyFarmPassive=farm;};
     }
   },
+  upgradeIdentity: {
+    nodes: function(){return JSON.parse(JSON.stringify(NODES));},
+    buyNode: function(id){buyNode(NODES.find(function(n){return n.id===id;}));},
+    spoofForge: function(id){buyResearch({id:id,retiredTo:''});},
+    metrics: function(){return {lumen:lumenMult(),shards:shardMult(),tap:tapMult(),formation:formationMult(),power:longStudyPowerMult(),momentum:momentumMult(),offline:offlineRate(),prisms:prismMult(),motes:longStudyMoteMult()};}
+  },
   inquiry: {
     nodes: function(){return JSON.parse(JSON.stringify(LONG_STUDIES));},
     originals: function(){return LEGACY_STUDY_IDS.slice();},
@@ -182,11 +188,9 @@ window.__lumenfallQaBridge = {
   },
   autoTarget: {
     render: function(){renderShop();},
-    find: function(value){return findAutoAscendRift(value);},
-    shift: function(direction){return shiftAutoAscendWindow(direction);},
     flags: function(){return {resetInProgress:resetInProgress,reloadInProgress:reloadInProgress,offlineBusy:!!offlineCatchup,offlinePending:offlinePending,resumeFlowBusy:resumeFlowBusy};},
     input: function(value){var old=reloadInProgress;reloadInProgress=false;try{return setAutoAscendClearedTarget(value);}finally{reloadInProgress=old;}},
-    change: function(value){var old=reloadInProgress;reloadInProgress=false;try{var el=els['shop-list'].querySelector('[data-autoascend-target]');el.value=value;el.dispatchEvent(new Event('change',{bubbles:true}));}finally{reloadInProgress=old;}},
+    change: function(value){var old=reloadInProgress;reloadInProgress=false;try{var el=els['auto-ascend-controls'].querySelector('[data-autoascend-target]');el.value=value;el.dispatchEvent(new Event('change',{bubbles:true}));}finally{reloadInProgress=old;}},
     check: function(){var old=reloadInProgress;reloadInProgress=false;try{return checkAutoAscend();}finally{reloadInProgress=old;}},
     manual: function(){var old=reloadInProgress;reloadInProgress=false;try{return doAscend(false);}finally{reloadInProgress=old;}},
     visibility: async function(hidden){var old=reloadInProgress;reloadInProgress=false;try{var result=window.__lumenfallQaBridge.dispatchVisibility(hidden);while(offlineCatchup)await new Promise(function(resolve){setTimeout(resolve,0);});return result;}finally{reloadInProgress=old;}},
