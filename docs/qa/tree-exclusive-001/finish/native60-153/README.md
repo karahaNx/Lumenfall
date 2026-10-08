@@ -4,6 +4,9 @@ Owned AOSP API25 emulator on5682/5683, writable test system; actual native UA
 Chrome60.0.3112.78 on Android7.1.1. Pinned historical LineageOS provider provenance,
 SHA256/git blob and original source URL are in native60-provider.json.
 No game asset/signing change, UA override, physical device or Google-provider claim.
+The exact executed provider setup is retained in setup-webview60.executed.txt.
+The runnable setup-webview60.cjs resolves its transport/ZIP helper from this
+checkout; only import paths differ. Pinned provider/check/device assertions stay.
 
 Actual signed148 over-cap purchases from the API27 fixture were imported through
 signed148's real confirmed Restore/reload, retaining raw13/9/7/Echo7/Bonds21 and

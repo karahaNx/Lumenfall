@@ -2,8 +2,8 @@
 // Replace only the provider in an isolated writable-system AOSP API25 test AVD.
 // The signed game APK, its certificate and production assets are never modified.
 const fs=require('node:fs'),crypto=require('node:crypto'),assert=require('node:assert/strict'),path=require('node:path'),os=require('node:os'),zlib=require('node:zlib');
-const Adb=require('./direct-adb.cjs');
-const zip=require('../../../../../scripts/lib/zip.cjs');
+const Adb=require('./direct-adb60.cjs');
+const zip=require('/workspace/Lumenfall-TREE_EXCLUSIVE_001/scripts/lib/zip.cjs');
 const [apk,receipt]=process.argv.slice(2),delay=ms=>new Promise(r=>setTimeout(r,ms));
 const bytes=fs.readFileSync(apk),sha=crypto.createHash('sha256').update(bytes).digest('hex');
 assert.equal(sha,'dd0a6f2fc4ecf95f4e51dd9d66abbf4590098d95db505889cab1c37ac942913d');

@@ -9,7 +9,8 @@ verified binaries independently of the mutable android-latest release.
 
 | APK | SHA256 | Purpose |
 | --- | --- | --- |
-| [Lumenfall0.1.152](Lumenfall-0.1.152.apk) | bd17117782adfd37bc5b46cc109e0d6e3e4f290e3bc2df80b47edd2f87e729a8 | Integrated Tree update;6847762bytes |
+| [Milestone0.1.152](Lumenfall-0.1.152.apk) | bd17117782adfd37bc5b46cc109e0d6e3e4f290e3bc2df80b47edd2f87e729a8 | Test-only: initial Tree caps/value update before final accessible-name correction;6847762bytes |
+| [Milestone0.1.153](Lumenfall-0.1.153.apk) | 5374062662994247904792323d332430cd76121157cf8648f9e48163ba8c3d46 | Test-only: native60 update/payment milestone before final accessible-name correction;6849458bytes |
 | [Baseline0.1.148](Lumenfall-0.1.148-baseline.apk) | cef6c291a4f91a3921bdc3b2d2e6f772906d39560f995fcaedf420ccd9972657 | Actual old over-cap purchases/native update fixture;6844772bytes |
 
 Both are com.lumenfall.app with established certificate SHA256
@@ -21,4 +22,5 @@ equal the integrated source. index.html SHA256:
 [Delivery evidence](../../../docs/qa/tree-exclusive-001/finish/integrated/README.md)
 records exact versions, checks, fixtures and limits.
 [Required physical acceptance](../../../docs/qa/tree-exclusive-001/finish/integrated/DEVICE_ACCEPTANCE.md)
-remains OPEN. Install152 as an update;148 is test evidence, not the delivery.
+remains OPEN. All binaries currently listed are test milestones. The final
+accessible-name correction requires a new verified signed APK before delivery.
