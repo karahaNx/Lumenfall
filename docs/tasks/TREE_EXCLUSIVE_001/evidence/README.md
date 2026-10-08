@@ -20,15 +20,18 @@ This folder records analysis, not implemented feature acceptance.
   not proof of a new game regression or compatibility acceptance.
 - No own recorded browser profile remains running (`own-process-stop.json`).
 
-Current read-only reproduction, from repository root:
+Historical read-only reproduction, from repository root (explicit frozen source):
 
 ```sh
-node scripts/codex/check_context.cjs
+git show 0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd:index.html > /tmp/tree-exclusive-0bcce84.html
 node --check scripts/analysis/tree-exclusive-inventory.cjs
-node scripts/analysis/tree-exclusive-inventory.cjs index.html
-node docs/recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/formula_probe.cjs index.html
-node tests/behavioral/run.cjs --web-root . --scenario p2-ascend-integrity --raw-artifacts /tmp/tree-exclusive-review-raw
+node scripts/analysis/tree-exclusive-inventory.cjs /tmp/tree-exclusive-0bcce84.html
+node docs/recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/formula_probe.cjs /tmp/tree-exclusive-0bcce84.html
 ```
+
+These commands reproduce the historical inventory, not current product acceptance.
+Current implementation/checks are recorded in [the task](../../TREE_EXCLUSIVE_001.md)
+and [finish evidence](../../../qa/tree-exclusive-001/finish/README.md).
 
 The formula JSON from both baselines matches the preserved original result
 byte-for-byte. The inventory script refuses unknown product hashes. Existing

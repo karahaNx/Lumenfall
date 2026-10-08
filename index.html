@@ -4997,7 +4997,7 @@ function getNodeBuyPlan(node){
   if(node.requiresAchievement && !state.achieved[node.requiresAchievement]) return {affordable:false,reason:'locked',level:level};
   if(node.levelCap!==undefined && level>=node.levelCap) return {affordable:false,reason:'cap',level:level};
   var cost=nodeCost(node);
-  if(!Number.isFinite(cost) || cost<1 || level+1===level || !Number.isFinite(state.prisms) || (state.prisms>=cost && state.prisms-cost===state.prisms)) return {affordable:false,reason:'unavailable',level:level,cost:cost};
+  if(!Number.isFinite(cost) || cost<1 || level+1===level || !Number.isFinite(state.prisms) || (state.prisms>=cost && state.prisms-(state.prisms-cost)!==cost)) return {affordable:false,reason:'unavailable',level:level,cost:cost};
   return {affordable:state.prisms>=cost,reason:state.prisms>=cost?'available':'unaffordable',level:level,cost:cost};
 }
 

@@ -45,10 +45,11 @@ all gates). [Old evidence](TREE_EXCLUSIVE_001/evidence/current-2026-10-08/README
 is historical. Current main31eccfb merged privately; preserves PR90, Autosave, confirmed
 Backup, Comet/Resonate/Auto-Ascend UI, both test registrations and every required gate.
 
-Current [finish evidence](../qa/tree-exclusive-001/finish/):145 focused handler/cap/retired-ID/
+Current [finish evidence](../qa/tree-exclusive-001/finish/):151 focused handler/cap/retired-ID/
 canonical/recovery/backup assertions PASS; normal320/390/430px actual200% text,44px,
 focus and contrast>=5.50 PASS. Merge initially omitted reduced-motion browser flag;
-real preference assertion caught it; corrected rerun PASS. Source/tooling/APK/context PASS.
+real preference assertion caught it; corrected rerun PASS. Source/tooling/APK/context PASS. Automated review found partial Prism rounding; exact debit
+guard fixed,151 assertions and real old-guard negative PASS. Historical reproduction fixed.
 Task context initially exceeded32KiB; this compact checkpoint resolves own startup size.
 No independent review/native/physical/TalkBack pass claimed.
 

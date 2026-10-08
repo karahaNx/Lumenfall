@@ -17,3 +17,9 @@ was corrected by compacting this task, preserving historical evidence.
 
 Full candidate/integrated CI, signed release and native/device acceptance remain pending.
 Self-review and automated checks only. Old evidence/CI belongs to its recorded source.
+
+Automated review fixes: the payment must subtract exactly its displayed cost, including
+partially rounded large-wallet debits. review-fix/contract.txt passes151 assertions;
+restoring the old guard produces the intended completed in-page failure in the causal
+negative. Historical inventory instructions now use explicit0bcce84 source and were run.
+Preceding logs/hashes above remain versioned; review-fix/identity.json identifies the new source.

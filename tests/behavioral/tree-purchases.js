@@ -71,6 +71,13 @@ window.runTreePurchaseQa=function(b,ctx,assert){
   seed('swift',0,Number.MAX_VALUE);
   ok(button('swift').disabled&&button('swift').querySelector('.cost-icon')&&button('swift').querySelector('.cost').textContent.trim()==='3','unrepresentable payment preserves the finite visible price and currency icon');
   rejected('swift','unrepresentable payment cannot grant a free level');
+  seed('swift',0,1e16);
+  ok(button('swift').disabled&&button('swift').querySelector('.cost').textContent.trim()==='3','partially rounded payment keeps its visible price but is disabled');
+  rejected('swift','a displayed three-Prism price cannot charge four');
+  seed('echo',0,1e16);
+  ok(!button('echo').disabled,'an exactly representable large-wallet payment remains available');
+  ok(b.treePurchases.buy('echo'),'exact large-wallet payment succeeds');
+  ok(b.getState().nodes.echo===1&&b.getState().prisms===1e16-2,'exactly two Prisms charged');
   return {checks:checks,caps:{echo:6,bonds:20},legacyRawValuesPreserved:true,backupIdempotence:true};
 };
 
