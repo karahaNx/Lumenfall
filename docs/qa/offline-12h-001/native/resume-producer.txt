@@ -64,7 +64,6 @@ async function run(){
     console.error('native: continue original async Auto-Ascend job');
     await until('!!window.__offlineJob','continued cap simulation true 43200',3600000);
     await capResult(true,43200);
-    console.error('native: continued 12h Auto-Ascend PASS');
     await capCases([true],[86400]);
     await send('Emulation.setVirtualTimePolicy',{policy:'advance'});
     await uiCases();
@@ -101,7 +100,6 @@ async function capResult(on,seconds){
     assert.equal(result.result.effectiveSec,43200);assert.equal(result.state.lastSeen,1800000000000+seconds*1000);assert.deepEqual(result.primary,result.state);
     if(seconds===43200)records.push({case:'12h',on,...result});else{const before=records.find(x=>x.case==='12h'&&x.on===on);const a={...before.state},b={...result.state};delete a.lastSeen;delete b.lastSeen;assert.deepEqual(b,a,'native 24h shares exact 12h production');records.push({case:'24h capped',on,...result});}
     assert.equal(await evaluate(`(function(){var r='unset';__offlineNative.apply(function(v){r=v;});return r;})()`),null,'native duplicate return');
-    fs.writeFileSync(path.join(out,'cap-progress.json'),JSON.stringify({status:'partial',records,errors},null,2));
 }
 async function capCases(modes,periods){
   const original=JSON.parse(fs.readFileSync(path.resolve(__dirname,'../offline-autoascend-2026-10-07/device_backup.json')));
