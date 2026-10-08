@@ -96,10 +96,18 @@ window.runRiftLayoutQa = async function(bridge, ctx, assert){
       var choose=q('[data-study-choose]');
       if(choose) assert(choose.getBoundingClientRect().height>=44,'Study choice shortcut has a practical target');
       assert(q('#study-list').scrollWidth<=q('#study-list').clientWidth+1,'Lab Study content does not overflow horizontally');
-      document.querySelectorAll('.study-inspection>summary').forEach(function(el){assert(el.getBoundingClientRect().height>=44,'Study inspection has a practical target');});
+      var speedIds=Array.from(document.querySelectorAll('[data-study-details]')).map(function(el){
+        assert(el.getBoundingClientRect().height>=44,'Speed up disclosure has a practical target');return el.dataset.studyDetails;
+      });
+      speedIds.forEach(function(id){
+        q('[data-study-details="'+id+'"]').click();
+        var panel=q('[data-study-inspection="'+id+'"]');
+        assert(!panel.hidden,'Speed up controls can be disclosed');
+        var prices=Array.from(panel.querySelectorAll('.cost-icon'));
+        prices.forEach(function(el){var r=el.getBoundingClientRect();assert(r.width>0&&r.width<=16&&r.height<=16,'disclosed speed price icon sizing');});
+      });
     }
-    document.querySelectorAll('#tab-'+view+' .study-inspection').forEach(function(el){el.open=true;});
-    var icons=Array.from(document.querySelectorAll('#tab-'+view+' .cost-icon'));
+    var icons=Array.from(document.querySelectorAll('#tab-'+view+' .cost-icon')).filter(function(el){return el.getClientRects().length;});
     assert(icons.length>0,'research '+view+' cost icons exist');
     icons.forEach(function(el){var r=el.getBoundingClientRect();assert(r.width>0 && r.width<=16 && r.height<=16,'research '+view+' nested icon sizing');});
     assert(!q('main').classList.contains('rift-scroll-locked') && getComputedStyle(q('main')).overflowY==='auto',view+' main scroll enabled');

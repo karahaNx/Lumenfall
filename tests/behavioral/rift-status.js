@@ -69,16 +69,16 @@ window.runRiftStatusQa=async function(b,ctx,assert){
   var undo=negative&&negative!=='buff'?b.riftStatus.mutate(negative):null;
   try{
     ok(!q('#rift-study-status,.rift-study-btn'),'Rift Study DOM/control removed entirely');
-    var guidance=q('#rift-objective-row'),dismiss=q('#rift-objective-dismiss'),guidanceToggle=q('#rift-guidance-toggle'),guidanceKey='lumenfall_rift_guidance_hidden_v1';
-    ok(guidance&&guidance.contains(q('#rift-objective'))&&guidance.contains(dismiss),'guidance and its separate dismiss control share the objective row');
+    var guidance=q('#rift-objective-row'),dismiss=q('#rift-hints-toggle'),guidanceToggle=q('#rift-guidance-toggle'),guidanceKey='lumenfall_rift_guidance_hidden_v1';
+    ok(guidance&&guidance.contains(q('#rift-objective'))&&q('#rift-guidance-slot').contains(dismiss),'guidance and its persistent toggle share the reserved slot');
     ok(!guidance.hidden&&guidanceToggle.getAttribute('aria-pressed')==='true','Rift guidance is shown by default and Settings reports shown');
-    ok(dismiss.tagName==='BUTTON'&&!!dismiss.getAttribute('aria-label'),'guidance dismiss is a named native button');
+    ok(dismiss.tagName==='BUTTON'&&dismiss.textContent==='Hide hints'&&dismiss.getAttribute('aria-expanded')==='true','guidance toggle is a named native button');
     var guidanceState=b.getState(),guidanceSave=b.rawSave();
     dismiss.focus({preventScroll:true});dismiss.click();
     ok(guidance.hidden&&guidanceToggle.getAttribute('aria-pressed')==='false'&&localStorage.getItem(guidanceKey)==='1','dismiss hides guidance and stores only the device preference');
-    ok(document.activeElement===q('#enemy-stage'),'dismissing focused guidance returns focus to the enemy');
-    dismiss.focus();q('#rift-objective').focus();
-    ok(document.activeElement===q('#enemy-stage')&&!dismiss.getClientRects().length&&!q('#rift-objective').getClientRects().length,'hidden guidance cannot receive focus or expose controls');
+    ok(document.activeElement===dismiss&&dismiss.textContent==='Show hints','hiding hints keeps focus on the persistent toggle');
+    guidance.focus();q('#rift-objective').focus();
+    ok(document.activeElement===dismiss&&!guidance.getClientRects().length&&!q('#rift-objective').getClientRects().length,'hidden hints cannot receive focus or expose controls');
     q('#settings-btn').click();guidanceToggle.focus();guidanceToggle.click();
     ok(!guidance.hidden&&guidanceToggle.getAttribute('aria-pressed')==='true'&&localStorage.getItem(guidanceKey)===null,'Settings restores guidance and clears the hidden preference');
     ok(document.activeElement===guidanceToggle,'restoring guidance leaves focus on the Settings toggle');
@@ -372,7 +372,14 @@ window.riftStatusMobile=(()=>{
   ok(m.scrollTop===0&&m.scrollHeight<=m.clientHeight+1&&scrollY===0,'Rift remains scroll-free without clipped content');
   ok(enemy.height>=120,'Guardian Tap >=120');
   var boxes={},guidance=q('#rift-objective-row'),visibleSelectors=['#enemy-stage','#hp-text','#buff-indicator','#bond-summary','#rift-push-btn','#rift-farm-btn'];
-  if(!guidance.hidden)visibleSelectors.push('#rift-objective-row','#rift-objective-dismiss');
+  var slot=rect(q('#rift-guidance-slot')),hud=rect(q('.hud'));
+  ok(slot.top>=hud.bottom&&slot.bottom<=mr.top,'guidance occupies its reserved slot directly under currencies');
+  ['#rift-guidance-slot','#rift-hints-toggle'].forEach(selector=>{
+   var el=q(selector),r=rect(el);ok(r.left>=0&&r.right<=innerWidth&&r.bottom<=mr.top,selector+' visible above Rift');
+   ok(el.contains(document.elementFromPoint(r.x+r.width/2,r.y+Math.min(r.height/2,22))),selector+' hit-test');
+   if(el.tagName==='BUTTON')ok(r.width>=44&&r.height>=44,selector+' touch minimum');
+   boxes[selector]={x:r.x,y:r.y,width:r.width,height:r.height};
+  });
   visibleSelectors.forEach(s=>{
    var el=q(s),r=rect(el);ok(r.top>=mr.top&&r.bottom<=nav.top&&r.left>=mr.left&&r.right<=mr.right,s+' fully visible');ok(el.scrollWidth<=el.clientWidth&&el.scrollHeight<=el.clientHeight+1,s+' text/content unclipped');
    if(el.tagName==='BUTTON'){ok(r.width>=44&&r.height>=44,s+' touch minimum');ok(el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)),s+' hit-test');}
@@ -395,9 +402,8 @@ window.riftStatusMobile=(()=>{
    }
   });
   if(!guidance.hidden){
-   ['#rift-push-btn','#rift-farm-btn'].forEach(s=>ok(rect(q(s)).bottom<=rect(guidance).top,'mode control clear of objective'));
-   ok(rect(q('#rift-objective')).right<=rect(q('#rift-objective-dismiss')).left,'guidance dismiss is separate from the objective action');
-  }else ok(!q('#rift-objective-dismiss').getClientRects().length&&!q('#rift-objective').getClientRects().length,'hidden guidance exposes no rendered controls');
+   ok(rect(guidance).left>=rect(q('#rift-hints-toggle')).right&&rect(guidance).bottom<=slot.bottom,'hint scroll area stays beside its toggle within the slot');
+  }else ok(!guidance.getClientRects().length&&!q('#rift-objective').getClientRects().length,'hidden hints expose no rendered controls');
   ok(hp.bottom<=buff.top&&buff.bottom<=bonds.top&&bonds.bottom<=stats.top&&stats.bottom<=nav.top,'HP, status, bottom numeric row and nav do not overlap');
   var tabs=[...document.querySelectorAll('nav.tabbar button')];ok(tabs.length===5,'five main tabs');tabs.forEach((el,i)=>{var r=rect(el);ok(r.width>=44&&r.height>=44,'tab touch minimum');ok(el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)),'tab hit-test');if(i)ok(rect(tabs[i-1]).right<=r.left,'one non-overlapping nav row');});
   var active=b.riftStatus.active();ok(active.every(x=>q('#bond-summary').textContent.includes(x.name.replace(' Bond',''))),'all powered Bond names directly visible');
@@ -413,7 +419,7 @@ window.riftStatusMobile=(()=>{
   var arena=rect(q('.battle-row')),landscapeEl=q('.rift-landscape'),landscape=rect(landscapeEl),stageEl=q('#tab-battle .stage'),stage=rect(stageEl);
   ok(stageEl.contains(landscapeEl)&&landscape.left>=stage.left-.1&&landscape.right<=stage.right+.1&&landscape.top>=stage.top-.1&&landscape.bottom<=stage.bottom+.1,'shared scenic background stays inside the outer Rift stage');
   ok(landscapeEl.getAttribute('aria-hidden')==='true'&&getComputedStyle(landscapeEl).pointerEvents==='none','shared scenic background stays decorative and cannot intercept input');
-  ok(arena.top>=(guidance.hidden?rect(q('.rift-heading')).bottom:rect(guidance).bottom)&&arena.bottom<=buff.top,'integrated combat region stays below guidance and above boost');
+  ok(arena.top>=rect(q('.rift-heading')).bottom&&arena.bottom<=buff.top,'integrated combat region stays below the Rift heading and above boost');
   ok(arena.bottom<=stats.top&&getComputedStyle(q('.stat-row')).position==='relative','stat box top borders paint above the combat layer');
   var party=rect(q('#rift-party'));
   ok(!q('#enemy-stage').contains(q('#rift-party'))&&enemy.bottom<=hp.top&&hp.bottom<=party.top&&party.bottom<=buff.top,'formation follows the attack surface and HP, before boost');
@@ -434,11 +440,11 @@ window.riftStatusMobile=(()=>{
   }finally{saved.forEach(x=>{x.animation.currentTime=x.time;if(x.state==='running')x.animation.play();});}
  }
  function last(view){
-  var all=[...document.querySelectorAll('#tab-'+view+' button:not(:disabled),#tab-'+view+' summary')],el=all[all.length-1],r=rect(el),mr=rect(q('main'));
+  var all=[...document.querySelectorAll('#tab-'+view+' button:not(:disabled),#tab-'+view+' summary')].filter(el=>el.getClientRects().length),el=all[all.length-1],r=rect(el),mr=rect(q('main'));
   ok(el&&r.top>=mr.top&&r.bottom<=mr.bottom,'native touch scroll reaches last '+view+' control '+JSON.stringify({top:r.top,bottom:r.bottom,area:[mr.top,mr.bottom],scroll:q('main').scrollTop,text:el.textContent}));var x=r.x+r.width/2,y=r.y+r.height/2;ok(el.contains(document.elementFromPoint(x,y)),'last '+view+' control hittable');
   return {view,text:el.textContent,x,y,scroll:q('main').scrollTop};
  }
- function locate(view){var all=[...document.querySelectorAll('#tab-'+view+' button:not(:disabled),#tab-'+view+' summary')],el=all[all.length-1],r=rect(el),m=rect(q('main'));return {visible:r.top>=m.top&&r.bottom<=m.bottom,area:{top:m.top,bottom:m.bottom},delta:r.top<m.top?m.top-r.top+12:-(r.bottom-m.bottom+12)};}
+ function locate(view){var all=[...document.querySelectorAll('#tab-'+view+' button:not(:disabled),#tab-'+view+' summary')].filter(el=>el.getClientRects().length),el=all[all.length-1],r=rect(el),m=rect(q('main'));return {visible:r.top>=m.top&&r.bottom<=m.bottom,area:{top:m.top,bottom:m.bottom},delta:r.top<m.top?m.top-r.top+12:-(r.bottom-m.bottom+12)};}
  function control(selector){var el=q(selector),r=rect(el),x=r.x+r.width/2,y=r.y+r.height/2;return {x,y,visible:r.width>0&&r.height>0&&r.top>=0&&r.bottom<=innerHeight,hit:el.contains(document.elementFromPoint(x,y))};}
  return {setup,measure,entry,last,control,locate,mutateBoostLine};
 })();

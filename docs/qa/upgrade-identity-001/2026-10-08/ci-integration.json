@@ -1,0 +1,132 @@
+{
+  "ci": {
+    "run": 37740566328,
+    "job": 113190070476,
+    "head": "78885d61aa73d4293517521048782df218c5d963",
+    "status": "success",
+    "scenarios": 167,
+    "negatives": 17,
+    "negativeScenarios": [
+      "self-test-bad-assertion",
+      "self-test-uncaught-error",
+      "self-test-unhandled-rejection",
+      "self-test-parity-regression",
+      "self-test-chronology-regression",
+      "self-test-wisp-formula-regression",
+      "self-test-wisp-pacing-regression",
+      "self-test-endgame-currency-regression",
+      "self-test-wisp-role-regression",
+      "self-test-p1-05-selected",
+      "self-test-p1-05-focus-return",
+      "self-test-lifecycle-duplicate",
+      "self-test-save-backup-placement",
+      "self-test-save-backup-confirmation",
+      "self-test-upgrade-identity-buy",
+      "self-test-upgrade-identity-value",
+      "self-test-upgrade-identity-clock"
+    ]
+  },
+  "jobs": {
+    "jobs": [
+      {
+        "id": 113190070476,
+        "name": "Lumenfall pre-merge validation",
+        "status": "completed",
+        "conclusion": "success",
+        "run_id": 37740566328,
+        "logs_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Checkout",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Set up Node.js",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "APK identity verifier self-test",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Node tooling regression checks",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Validate game source",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Stage web assets",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Stateful behavioral regression suite",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Behavioral harness negative self-test",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Install runtime error guard in staged copy",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Browser runtime smoke test",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Post Set up Node.js",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21
+          },
+          {
+            "name": "Post Checkout",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 23
+          }
+        ]
+      }
+    ]
+  },
+  "merge": {
+    "sha": "31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6",
+    "merged": true,
+    "message": "Pull Request successfully merged"
+  }
+}

@@ -9,12 +9,44 @@ commits below are observed checkpoints, not a promise that main never advances.
 
 ## Product and release evidence
 
+[LOADOUT_MEMORY_001 / F25](tasks/LOADOUT_MEMORY_001.md) integrated through
+[PR78](https://github.com/karahaNx/Lumenfall/pull/78)/9c19664: automatic Forge
+preference, no named shop, legacy value retained. CI173/17 and APK150 signed
+identity/15 assets/extracted V8/1139 checks/native input/restart/upgrade PASS.
+Corrected app-private database capture supersedes invalid shell-error hashes.
+F26 refunds remain separate; PR97 final combined CI/integration pending.
+Owner chat stays open until final acceptance/evidence are saved.
+
+[RIFT_GUIDANCE_001 / F07](tasks/RIFT_GUIDANCE_001.md): stable guidance below
+currencies with Show hints/Hide hints is being published on its isolated branch.
+Rebased onto main b0537cb with integrated F13/F27 preserved. Fresh local160
+measurements/0px shift, focus/AX/reload/save purity and Rift/navigation/F13 checks
+PASS; required PR CI, main integration and signed APK/native acceptance pending.
+[8 October evidence](qa/rift-guidance-001/2026-10-08/README.md). This owner chat
+remains open until required acceptance is saved.
+
+[UPGRADE_IDENTITY_001/F29](tasks/UPGRADE_IDENTITY_001.md) is integrated via PR90/31eccfb:
+14 buying tracks at integration, unchanged currencies and all24 historical levels.
+Subsequent F26/PR85 retires/refunds Deep Reserves: current tracks Lab6/Forge4/Tree3.
+PR90 CI167/17 and combined19 scoped scenarios/23 runs PASS. Signed APK148/151
+identity/CRC526/all15 assets and actual V8 value/offline probes PASS. [Evidence/immutable APKs](qa/upgrade-identity-001/2026-10-08/README.md).
+Required affected-phone/exact WebView60/TalkBack acceptance is OPEN; chat stays open.
+
 F13 delivery added 8 October 2026: [RIFT_CAST_TEXT_001](tasks/RIFT_CAST_TEXT_001.md)
 is complete via PR63/ab46c0c. Full CI151 scenarios/12 required negatives, integrated
 checks and signed APK0.1.142 native acceptance PASS. Package/signing and all 15 assets
 verified; actual138→142 save storage/ownership preserved. [Receipt/limits](qa/rift-cast-text-001/finish/README.md),
 [immutable APK](../archive/android/rift-cast-text-001/README.md). Native evidence is
 API27/WebView61 emulation plus a separate V8 6.0 probe; no physical/TalkBack claim.
+
+F14 [FORMATION_AUTOSAVE_001](tasks/FORMATION_AUTOSAVE_001.md) integrated via
+[PR76](https://github.com/karahaNx/Lumenfall/pull/76)/c5fa497. Selected-preset
+Field/Bench/recruitment saves immediately; Save removed; complete late-game
+intent and stored empty presets survive Ascend/recovery without pending power
+or Bonds. CI158/14, fresh integrated/mobile checks and signed APK0.1.145
+identity/assets/engine/native update/input/Ascend/cold launch PASS. Actual
+Android8.1/API27/WebView61 emulation; required physical/exact WebView60/TalkBack
+acceptance OPEN. [Receipt and immutable APK](qa/formation-autosave-2026-10-08/DELIVERY.md).
 
 
 [COMET_UNLOCKS_001 / F27](tasks/COMET_UNLOCKS_001.md) catalog is integrated
@@ -148,6 +180,7 @@ were recorded as integrated.
 | [AUTO_ASCEND_UI_001 / F01–F03](tasks/AUTO_ASCEND_UI_001.md) | Deeds unlock retained; one Rift dropdown and separate ON/OFF moved to Ascend. Candidate checks PASS:23 scoped positives/five negatives,20 mobile/text/motion profiles and54 V8 6.0 handler assertions. [Evidence](qa/auto-ascend-ui-001/README.md). | Publish/pass required CI/integrate; verify signed APK and required native/device acceptance. Feature/chat OPEN. |
 | [SAVE_BACKUP_UI_001 / F22](tasks/SAVE_BACKUP_UI_001.md) | PR77 integrated; CI152 scenarios/14 negatives, integrated12 UI profiles and signed144 identity/assets/extracted-UI/V8 checks PASS. Backup is beside independent Reset; Restore requires confirmation. | Complete [physical Android/WebView60/TalkBack acceptance](qa/save-backup-ui-001/2026-10-08/DEVICE_ACCEPTANCE.txt). Required acceptance OPEN; keep owner chat open. |
 | RIFT_CAST_TEXT_001 / F13 | **Complete.** PR63 integrated; CI151/12 negatives, integrated UI/save/parity/chronology checks and signed 0.1.142 native acceptance PASS. [Task/evidence](tasks/RIFT_CAST_TEXT_001.md). Existing200% name overflow is recorded separately. | Final checkpoint verified, shared-file work stopped; archive only the owner chat using the app tool. |
+| [FORMATION_AUTOSAVE_001 / F14](tasks/FORMATION_AUTOSAVE_001.md) | PR76/main integrated; CI158/14 and signed145 update/native Formation checks PASS. Later Resonate/main changes preserved. Required device acceptance OPEN. | Complete [physical/exact WebView60/TalkBack checklist](qa/formation-autosave-2026-10-08/DEVICE_ACCEPTANCE.txt); save observed results in GitHub and keep owner chat open. |
 | [COMET_UNLOCKS_001](tasks/COMET_UNLOCKS_001.md) / F27 | PR69/main integrated; full151 pre-merge CI and signed143 package/signing/assets/extracted-engine checks PASS. New catalogue140/50/160; legacy value/effects retained. [PR73](https://github.com/karahaNx/Lumenfall/pull/73) records final integrated-source CI. Required native acceptance OPEN. | Complete exact signed143 native update/interaction, physical WebView60 and TalkBack checklist. Keep feature/chat open; F25/F26 retirement/refunds stay separate. |
 | [BOND_TEXT_001 / F16](tasks/BOND_TEXT_001.md) | PR61 integrated; CI148/12 and fresh integrated checks PASS. Signed0.1.141 identity/assets, V8 6.0 helper, native WebView69 presentation and signed update/save-value checks PASS. | Complete [physical affected-phone/WebView60/TalkBack acceptance](qa/BOND_TEXT_001/android/DEVICE_ACCEPTANCE.txt) and save observations in GitHub. Keep owner chat open. |
 | [LAB_EXCLUSIVE_001](tasks/LAB_EXCLUSIVE_001.md) / F29 | [PR62 proposal checkpoint](https://github.com/karahaNx/Lumenfall/pull/62): 9 Labs inventoried, 7 duplicate rows in 6 effect families; exclusive study-work/reservation effects and value-preserving transition proposed. Actual CI/merge/integrated checks are saved in the PR body. No game behavior changed. | Obtain the agreed UPGRADE_IDENTITY_001 Lab effects/currencies/prices/work/unlocks/caps and migration policy. Full feature and chat remain open; proposed values/mechanics are not approved rules. |
@@ -159,6 +192,7 @@ were recorded as integrated.
 | [LAB_SPEED_QUEUE_001 / F12](tasks/LAB_SPEED_QUEUE_001.md) | PR46/B2 product integrated via PR57. Payment/chronology/offline retry/save/recovery/Ascend/competition and mobile checks renewed PASS on main0e9b54c (PR60/59). Signed APK140 identity/assets and V8 Lab payment/retry PASS. No additional F12 product gap found. | Delivery tracked in PR65; complete [F12 affected-phone/WebView60/TalkBack acceptance](qa/lab-speed-queue-001/DEVICE_ACCEPTANCE.txt). Required physical acceptance OPEN; keep owner chat open. |
 | B2 arithmetic integration | Number/DataView functions from archived tree `758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef` were restored separately, matched exactly and integrated through PR57 with new regression/CI coverage. | Archived stress/physical/review limitations remain distinct from current full 146 CI. |
 | FEEDBACK-REVISION-001 | 29 original points and four images preserved; not collectively implemented. | Follow dependencies in a separately assigned task. Saved next priorities: F20/F21 Echoing Rest cap 6 / Cheaper Bonds cap 20, purchase gates and old-save policy. |
+| [TREE_EXCLUSIVE_001](tasks/TREE_EXCLUSIVE_001.md) | [PR66](https://github.com/karahaNx/Lumenfall/pull/66) follows PR90 ownership with caps/exact purchase gates; main14d5 fixed12h/Reserves refunds preserved. Combined154 assertions, matrix persistence/chronology, F26 and mobile checks PASS; final CI pending. | Pass combined CI, integrate serially, verify signed APK/native acceptance. PR89 refunds/naming and PR88 Forge cap remain separate. Feature/chat OPEN. |
 | FORGE_EXCLUSIVE_001 | [Task/proposal](tasks/FORGE_EXCLUSIVE_001.md): 24 catalogue rows inventoried, four Forge duplicate families identified and three exclusive mechanic candidates proposed. Documentation checkpoint published in [PR64](https://github.com/karahaNx/Lumenfall/pull/64), whose receipt records CI/integration; gameplay not implemented. | Obtain agreed UPGRADE_IDENTITY_001 Forge rows, including prices/caps/stacking and old-purchase value policy, before implementation. Keep feature/chat open. |
 
 B2 original sources/evidence: `handoffs/02_08/2026-10-07/`, index SHA256

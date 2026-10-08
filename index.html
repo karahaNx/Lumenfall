@@ -1683,11 +1683,18 @@
   .stage .depth-label .region-label{font-size:10px;line-height:14px;letter-spacing:.16em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .stage .rift-heading .rift-mode-row{height:46px;min-height:46px;margin:0;gap:3px;padding:1px;background:#090f20a6;border-radius:12px;}
   .stage .rift-mode-btn{min-width:44px;min-height:44px;font-size:12px;padding:3px 6px;letter-spacing:.09em;white-space:nowrap;}
-  #rift-objective-row{position:relative;z-index:2;display:flex;align-items:stretch;gap:0;flex:none;min-height:44px;border:1px solid #3d4963;border-radius:11px;background:#141d30;box-shadow:inset 0 1px 0 #ffffff09;overflow:hidden;}
-  #rift-objective-row[hidden]{display:none;}
-  .stage .rift-objective{flex:1;min-width:0;height:44px;min-height:44px;padding:4px 7px;grid-template-columns:auto minmax(0,1fr) auto;gap:7px;border:0;border-radius:0;background:transparent;box-shadow:none;}
-  #rift-objective-dismiss{flex:none;width:44px;height:44px;min-width:44px;min-height:44px;border:0;border-left:1px solid #3d496355;border-radius:0;background:transparent;color:var(--ink-dim);font:20px/1 'Manrope',sans-serif;cursor:pointer;}
-  #rift-objective-dismiss:focus-visible{outline:2px solid var(--lumen);outline-offset:-3px;}
+  /* F07: the hint body has the same reserved space when hidden or scrollable. */
+  #rift-guidance-slot{display:flex;height:46px;flex:none;margin:0 10px;color:#f0effb;background:#141d30;border:1px solid #52617e;border-radius:11px;box-sizing:border-box;}
+  #rift-guidance-slot[hidden],#rift-objective-row[hidden]{display:none;}
+  #rift-hints-toggle{display:block;flex:none;width:9.5em;max-width:70%;min-width:44px;height:44px;min-height:44px;padding:2px 6px;border:0;border-right:1px solid #52617e;border-radius:10px 0 0 10px;background:#1c2339;color:#f0effb;font:inherit;font-size:.875rem;line-height:1.1;font-weight:700;white-space:nowrap;cursor:pointer;}
+  #rift-objective-row{flex:1;min-width:0;height:44px;min-height:0;overflow-y:auto;overflow-x:hidden;border-radius:0 10px 10px 0;}
+  #rift-guidance-slot .rift-objective{min-width:0;min-height:44px;height:auto;padding:4px 6px;grid-template-columns:minmax(0,1fr) auto;gap:5px;border:0;border-radius:0;background:transparent;box-shadow:none;overflow:visible;}
+  #rift-guidance-slot .objective-kind{display:none;}
+  #rift-guidance-slot .objective-copy strong,#rift-guidance-slot .objective-copy small{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:break-word;}
+  #rift-guidance-slot .objective-copy strong{font-size:.875rem;line-height:1.2;}
+  #rift-guidance-slot .objective-copy small{font-size:.75rem;line-height:1.2;color:#b5b4cb;}
+  #rift-guidance-slot .objective-arrow{color:#b5b4cb;}
+  #rift-hints-toggle:focus,#rift-objective-row:focus,#rift-guidance-slot .rift-objective:focus{outline:2px solid #e7c67e;outline-offset:-3px;}
   .stage .objective-kind{display:block;font-size:9px;line-height:12px;letter-spacing:.05em;padding:3px 5px;white-space:nowrap;}
   .stage .objective-copy strong{font-size:12px;line-height:16px;}
   .stage .objective-copy small{font-size:11px;line-height:14px;}
@@ -2000,6 +2007,7 @@
   #tab-ascend .node-card.locked-node{border-left-color:#566077;}
   #tab-ascend .node-card.locked-node>.shape{filter:saturate(0);opacity:.6;}
   #tab-ascend .node-info .name{color:#ebddff;}
+  #tab-ascend .node-info{min-width:0;overflow-wrap:break-word;overflow-wrap:anywhere;}
   #tab-ascend .node-info .desc{line-height:1.55;margin:5px 0;}
   #tab-ascend .node-info .lvl{display:inline-block;padding:3px 7px;border-radius:5px;border:1px solid #65547b;background:#171c33;}
   #tab-deeds .quest-reward,.ach-card .reward{padding:3px 7px;border:1px solid #426b69;border-radius:6px;background:#142e36;}
@@ -2100,12 +2108,49 @@
   @keyframes cometTrailOrbit{to{transform:rotate(360deg);}}
   @media(max-width:430px){.shop-card{flex-wrap:wrap;}.shop-card>.info{flex-basis:100%;}.shop-card>button{min-height:44px;}}
   @media(prefers-reduced-motion:reduce){.comet-trail-equipped .comet-trail{animation:none!important;transform:rotate(-25deg);}}
+  /* LAB_UI_001: text remains legible at every fill and at enlarged text sizes. */
+  #study-list .study-bar-track{position:relative;display:grid;place-items:center;height:auto;min-height:36px;padding:6px 8px;border-radius:10px;background:#0a1625;border-color:#4c6574;}
+  #study-list .study-bar-fill{position:absolute;top:0;left:0;height:100%;}
+  #study-list .study-bar-track .study-time{position:relative;margin:0;padding:2px 6px;border-radius:4px;background:#0a1625;color:#f2f7ff;font-size:.82rem;line-height:1.5;text-align:center;overflow-wrap:anywhere;}
+  #study-list .study-card .name{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;font-size:.88rem;overflow-wrap:anywhere;}
+  #study-list .study-card .earned-effect,#study-list .study-card .effect-note{font-size:.8rem;overflow-wrap:anywhere;}
+  #study-list .study-card button,#study-list .study-card select{min-width:44px;min-height:44px;font-size:.8rem;white-space:normal;}
+  #study-list .study-speed-open{margin-top:10px;}
+  #study-list .study-speed-panel{border-top:1px solid #40576a;margin-top:10px;padding-top:8px;}
+  #study-list .study-speed-panel[hidden]{display:none;}
+  #study-list .study-speed-panel .speed-row{margin-top:8px;}
+  #study-list .study-speed-panel .speed-btn{flex:1 0 calc(33.333% - 6px);min-width:5em;overflow-wrap:anywhere;}
+  #study-list .study-speed-panel .speed-cost{font-size:.74rem;}
+  #study-list .study-motes-controls label{min-width:0;flex-basis:100%;font-size:.8rem;}
+  #study-list .study-motes-controls select{min-width:0;color-scheme:dark;}
+  #study-list [data-study-speed-close]{margin-top:8px;}
+  #study-list .study-card button:focus,#study-list .study-card select:focus{outline:2px solid var(--lumen);outline-offset:2px;}
+  @media (prefers-reduced-motion:reduce){#study-list .study-bar-fill{transition:none!important;}}
 .legacy-upgrades { margin: 12px 0; }
 .legacy-upgrades h3 { color: var(--ink); overflow-wrap: anywhere; }
 .legacy-upgrade { display: block; overflow-wrap: anywhere; }
 #tab-forge.active,#tab-research.active,#tab-ascend.active { animation-name: upgradePanelIn; }
 #tab-forge .mult-btn { flex-basis: 3.5em; }
 @keyframes upgradePanelIn { from { opacity:0;transform:translateY(7px); } to { opacity:1;transform:none; } }
+  /* RIFT_COSMETICS_001: SVG/rgba fallbacks also render on WebView 60. */
+  .rift-cosmetic-aura{position:absolute;top:0;right:0;bottom:0;left:0;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;}
+  .rift-cosmetic-aura .cosmetic-pattern{display:none;}
+  [data-rift-theme="ember"] .cosmetic-ember,[data-rift-theme="void"] .cosmetic-void,
+  [data-rift-theme="aurora"] .cosmetic-aurora,[data-rift-theme="solar"] .cosmetic-solar,
+  [data-rift-theme="radiant"] .cosmetic-radiant{display:inline;}
+  #tab-battle .enemy-stage[data-rift-theme]:not([data-rift-theme="default"])::before,
+  #tab-battle .enemy-stage[data-rift-theme]:not([data-rift-theme="default"])::after{display:none;}
+  #tab-battle .enemy-stage .enemy-glyph{position:relative;z-index:2;}
+  .rift-cosmetic-name{position:absolute;left:8px;bottom:4px;z-index:3;max-width:calc(100% - 16px);padding:3px 7px;border:1px solid #61718d;border-radius:6px;background:#10182b;color:#f1edff;font:600 .6875rem/1.4 'Manrope',sans-serif;pointer-events:none;}
+  .cosmetic-aurora{animation:riftCosmeticPulse 5s ease-in-out infinite;}
+  .cosmetic-radiant{transform-origin:160px 160px;animation:riftCosmeticOrbit 24s linear infinite;}
+  @keyframes riftCosmeticPulse{0%,100%{opacity:.65;}50%{opacity:1;}}
+  @keyframes riftCosmeticOrbit{to{transform:rotate(360deg);}}
+  .theme-card[data-theme-select]{min-height:44px;flex-wrap:wrap;}
+  .theme-card .theme-info{flex-basis:120px;}
+  .theme-info .name,.theme-info .desc,.theme-active-tag{word-wrap:break-word;overflow-wrap:break-word;}
+  .theme-active-tag{flex:none;max-width:100%;white-space:normal;line-height:1.4;}
+  @media(prefers-reduced-motion:reduce){.cosmetic-aurora,.cosmetic-radiant{animation:none;opacity:1;}}
 </style>
 </head>
 <body>
@@ -2522,6 +2567,12 @@
       <div class="chip"><span class="shape shape-star glyph-icon" style="background:var(--comet)"></span><span class="lbl">Comets</span><span class="val mono" id="hud-comet">0</span></div>
       <div class="chip"><span class="shape shape-octagon glyph-icon" style="background:var(--sigil)"></span><span class="lbl">Sigils</span><span class="val mono" id="hud-sigil">0</span></div>
     </header>
+    <div id="rift-guidance-slot">
+      <button type="button" id="rift-hints-toggle" aria-expanded="true" aria-controls="rift-objective-row">Hide hints</button>
+      <div id="rift-objective-row" role="region" aria-label="Rift guidance" tabindex="0">
+        <div class="rift-objective" id="rift-objective"></div>
+      </div>
+    </div>
     <nav class="tabbar" aria-label="Main navigation">
 <button class="tab-btn" data-tab="spirits"><span class="nav-icon"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c0 6-8 9-7 14a7 7 0 0 0 14 0c1-4-3-7-4-9l-3 6M9 16l3 4 3-4"/></svg></span><span class="lb">Wisps</span></button>
 <button class="tab-btn" data-tab="workshop" aria-label="Workshop"><span class="nav-icon"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18l-3 5H7L3 9V7ZM8 12v4l-3 4h14l-3-4v-4M9 4h8v3"/></svg></span><span class="lb">Workshop</span><span class="lab-capacity-badge" id="lab-capacity-badge" aria-hidden="true" hidden></span></button>
@@ -2546,10 +2597,6 @@
           <button class="rift-mode-btn" id="rift-farm-btn">Farm</button>
         </div></div>
 
-        <div id="rift-objective-row">
-          <div class="rift-objective" id="rift-objective"></div>
-          <button type="button" id="rift-objective-dismiss" aria-label="Hide Rift guidance" title="Hide Rift guidance">×</button>
-        </div>
         <div class="battle-row"><div class="rift-landscape" aria-hidden="true">
  <svg viewBox="0 0 400 440" preserveAspectRatio="xMidYMid slice">
  <defs><linearGradient id="rift-mist" x2="0" y2="1"><stop stop-color="var(--land-light)" stop-opacity=".04"/><stop offset=".6" stop-color="var(--land-light)" stop-opacity=".18"/><stop offset="1" stop-color="#080d19" stop-opacity="0"/></linearGradient></defs>
@@ -2622,6 +2669,45 @@
 
           <div class="enemy-stage-wrap">
             <button type="button" class="enemy-stage" id="enemy-stage" aria-label="Tap enemy to attack"><span class="comet-trail" aria-hidden="true"></span><span class="comet-crest" aria-hidden="true">✦</span><span class="enemy-name" id="enemy-name">Hollow Wisp</span><span class="guardian-label">Tap enemy to attack</span>
+              <svg class="rift-cosmetic-aura" viewBox="0 0 320 320" aria-hidden="true" focusable="false">
+                <defs>
+                  <radialGradient id="cosmetic-ember-glow"><stop stop-color="#ff9d53" stop-opacity=".32"/><stop offset="1" stop-color="#ff9d53" stop-opacity="0"/></radialGradient>
+                  <radialGradient id="cosmetic-void-glow"><stop stop-color="#ad79f2" stop-opacity=".32"/><stop offset="1" stop-color="#ad79f2" stop-opacity="0"/></radialGradient>
+                  <radialGradient id="cosmetic-solar-glow"><stop stop-color="#ffe195" stop-opacity=".28"/><stop offset="1" stop-color="#ffe195" stop-opacity="0"/></radialGradient>
+                </defs>
+                <g class="cosmetic-pattern cosmetic-ember" fill="none" stroke="#ffb878">
+                  <circle cx="160" cy="160" r="148" fill="url(#cosmetic-ember-glow)" stroke="none"/>
+                  <circle cx="160" cy="160" r="119" stroke-width="3" stroke-dasharray="26 10 4 10"/>
+                  <circle cx="160" cy="160" r="129" stroke-width="1" opacity=".5"/>
+                </g>
+                <g class="cosmetic-pattern cosmetic-void" fill="none" stroke="#c49bff">
+                  <circle cx="160" cy="160" r="150" fill="url(#cosmetic-void-glow)" stroke="none"/>
+                  <path d="M160 24 278 92 278 228 160 296 42 228 42 92Z" stroke-width="2"/>
+                  <path d="M160 41 263 101 263 219 160 279 57 219 57 101Z" stroke-width="1" opacity=".5"/>
+                  <path d="M160 14 166 24 160 34 154 24ZM160 286 166 296 160 306 154 296Z" fill="#c49bff"/>
+                </g>
+                <g class="cosmetic-pattern cosmetic-aurora" fill="none" stroke-width="4">
+                  <path d="M35 181C0 74 97 14 184 39S318 143 282 225" stroke="#8cf0dc"/>
+                  <path d="M285 139C320 246 223 306 136 281S2 177 38 95" stroke="#f1a1d2"/>
+                  <circle cx="160" cy="160" r="113" stroke="#b8dbe8" stroke-width="1" opacity=".55"/>
+                </g>
+                <g class="cosmetic-pattern cosmetic-solar" fill="none" stroke="#ffe39a">
+                  <circle cx="160" cy="160" r="150" fill="url(#cosmetic-solar-glow)" stroke="none"/>
+                  <circle cx="160" cy="160" r="115" stroke-width="3"/>
+                  <circle cx="160" cy="160" r="133" stroke-width="14" stroke-dasharray="2 33"/>
+                  <path d="M132 35 138 16 160 31 182 16 188 35" stroke-width="3"/>
+                </g>
+                <g class="cosmetic-pattern cosmetic-radiant" fill="none" stroke-width="5">
+                  <path d="M160 35A125 125 0 0 1 268 97" stroke="#f0d77b"/>
+                  <path d="M273 108A125 125 0 0 1 273 212" stroke="#c9b8f0"/>
+                  <path d="M268 223A125 125 0 0 1 166 285" stroke="#eaa9dc"/>
+                  <path d="M154 285A125 125 0 0 1 52 223" stroke="#8cbce8"/>
+                  <path d="M47 212A125 125 0 0 1 47 108" stroke="#5ee6d0"/>
+                  <path d="M52 97A125 125 0 0 1 148 35" stroke="#ffa17b"/>
+                  <circle cx="160" cy="160" r="138" stroke="#ded7fb" stroke-width="1" opacity=".55"/>
+                </g>
+              </svg>
+              <span class="rift-cosmetic-name" id="rift-cosmetic-name" aria-hidden="true">Starlight</span>
               <div class="enemy-glyph" id="enemy-glyph"><svg class="creature-art" viewBox="0 0 160 160" aria-hidden="true"><use href="#creature-prowler"/></svg><svg class="boss-regalia" viewBox="0 0 160 160" aria-hidden="true" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5">
                 <g class="boss-crest boss-crest-regrowth"><path d="M18 116Q3 90 11 61 M142 116Q157 90 149 61"/><path d="M10 78Q1 70 8 60Q17 69 10 78Z M11 99Q4 90 17 84Q20 94 11 99Z M150 78Q159 70 152 60Q143 69 150 78Z M149 99Q156 90 143 84Q140 94 149 99Z" fill="var(--creature-rim)" stroke="var(--creature-eye)"/></g>
                 <g class="boss-crest boss-crest-fractured"><path d="M11 52 17 62 11 72 5 62Z M8 83 14 93 8 103 2 93Z M149 52 155 62 149 72 143 62Z M152 83 158 93 152 103 146 93Z" fill="var(--creature-color)"/><path d="M11 58V66 M8 89V97 M149 58V66 M152 89V97" stroke="var(--creature-eye)"/></g>
@@ -2924,8 +3010,8 @@ var RESEARCH = [
 var NODES = [
   {id:'starlight', name:'Starlight Affinity', desc:'+10% Lumen from every kill, per level.', baseCost:1, growth:1.35},
   {id:'steady',    name:'Steady Hands',        desc:'+8% tap damage, per level.',              baseCost:1, growth:1.30},
-  {id:'echo',      name:'Echoing Rest',        desc:'+5% offline earning rate, per level (caps at 100%).', baseCost:2, growth:1.40},
-  {id:'bonds',     name:'Cheaper Bonds',       desc:'−3% Wisp recruiting cost, per level (floor 40%).',  baseCost:2, growth:1.45},
+  {id:'echo',      name:'Echoing Rest',        desc:'+5 percentage points offline earning rate per level, up to 100% before Projects (6 levels).', baseCost:2, growth:1.40, levelCap:6},
+  {id:'bonds',     name:'Cheaper Bonds',       desc:'−3% Wisp recruitment and Empower Lumen cost per level, down to 40% cost (20 levels).', baseCost:2, growth:1.45, levelCap:20},
   {id:'swift',     name:'Swift Ascension',     desc:'+4% Prisms earned per Ascend, per level.', baseCost:3, growth:1.50},
   {id:'momentum',  name:'Eternal Momentum',    desc:'+6% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.', baseCost:5, growth:1.55, requiresAchievement:'asc5'},
   {id:'reserves',  name:'Deep Reserves',       desc:'Retired offline extension. Previous purchases are refunded in Prisms.', baseCost:6, growth:1.60, requiresAchievement:'d100', retired:true}
@@ -3067,19 +3153,20 @@ function nodeEarnedEffect(id){
     return '+'+earnedPercent(rate-0.70)+' percentage points offline rate · '+earnedPercent(rate)+'% before Projects'+(rate>=1?' (node cap reached)':'');
   }
   var discount=costReduction();
-  return earnedPercent(discount)+'% Wisp recruiting discount · '+earnedPercent(1-discount)+'% cost'+(discount>=0.6?' (cost floor reached)':'');
+  return earnedPercent(discount)+'% Wisp recruiting discount; also applies to Empower · '+earnedPercent(1-discount)+'% cost'+(discount>=0.6?' (cost floor reached)':'');
 }
-function projectEarnedEffect(id){
-  if(id==='measuredinquiry') return earnedPercent(measuredInquiryReduction())+'% less work for future starts of the 5 current Studies';
+function projectEarnedEffect(id,level){
+  if(level===undefined) level=longStudyLevel(id);
+  if(id==='measuredinquiry') return earnedPercent(0.02*studyEffectiveLevel(LONG_STUDIES.find(function(n){return n.id===id;}),level))+'% less work for future starts of the '+CURRENT_STUDY_IDS.length+' current Studies; running work and Measured Inquiry are unchanged';
   var rows={
-    wispascend:[longStudyPowerMult()-1,'passive Wisp damage and Wisp-powered tap base'],
-    guardmastery:[longStudyTapMult()-1,'tap damage'],
-    riftattune:[longStudyOfflineBonus(),'percentage points offline rate'],
-    shardstudy:[longStudyShardMult()-1,'Shards per kill'],
-    lumenstudy:[longStudyLumenMult()-1,'Lumen per kill'],
-    formationstudy:[longStudyFormationMult()-1,'passive Wisp damage and Wisp-powered tap base'],
-    motestudy:[longStudyMoteMult()-1,'Motes from Luminous enemies'],
-    prismstudy:[longStudyPrismMult()-1,'Prisms per Ascend']
+    wispascend:[level*0.15,'passive Wisp damage and Wisp-powered tap base'],
+    guardmastery:[level*0.20,'tap damage'],
+    riftattune:[level*0.10,'percentage points offline rate'],
+    shardstudy:[level*0.08,'Shards per kill'],
+    lumenstudy:[level*0.08,'Lumen per kill'],
+    formationstudy:[level*0.05,'passive Wisp damage and Wisp-powered tap base'],
+    motestudy:[level*0.10,'Motes from Luminous enemies'],
+    prismstudy:[level*0.05,'Prisms per Ascend']
   };
   var row=rows[id];
   return '+'+earnedPercent(row[0])+(id==='riftattune'?' ':'% ')+row[1];
@@ -3087,17 +3174,17 @@ function projectEarnedEffect(id){
 function projectEarnedMarkup(id){
   var level=longStudyLevel(id);
   var node=LONG_STUDIES.find(function(n){return n.id===id;});
-  var preserved=node.levelCap!==undefined && level>node.levelCap ? ' · Preserved; effect capped at level '+node.levelCap : '';
-  return '<div class="earned-effect" data-project-effect="'+id+'"><strong>Completed level '+level+preserved+'</strong><br>Current Project bonus: '+projectEarnedEffect(id)+(level===0?' · No earned bonus':'')+'</div>';
+  var preserved=node.levelCap!==undefined && level>node.levelCap ? ' · Saved purchases preserved; effect capped.' : '';
+  return '<div class="earned-effect" data-project-effect="'+id+'">Earned: '+projectEarnedEffect(id)+preserved+'</div>';
 }
 
 var RIFT_THEMES = [
   {id:'default', name:'Starlight',    desc:'The Rift as it always looked.', unlockAchievement:null,     accent:null},
-  {id:'ember',   name:'Ember Veil',   desc:'A warm ember aura around the Rift.', unlockAchievement:'d50',    accent:'#e08a2e'},
-  {id:'void',    name:'Void Bloom',   desc:'A deep violet aura around the Rift.', unlockAchievement:'asc5',   accent:'#8a5fd6'},
-  {id:'aurora',  name:'Aurora Pulse', desc:'A rose-teal aura around the Rift.', unlockAchievement:'mythic', accent:'#d16fa8'},
-  {id:'solar',   name:'Solar Crown',  desc:'A golden aura around the Rift.', unlockAchievement:'d250',   accent:'#d1a72e'},
-  {id:'radiant', name:'Radiant',      desc:'A prismatic aura cycling through every currency color.', unlockAchievement:'modulemax', accent:null}
+  {id:'ember',   name:'Ember Veil',   desc:'An ember ring and warm light across the Rift.', unlockAchievement:'d50',    accent:'#e08a2e'},
+  {id:'void',    name:'Void Bloom',   desc:'Violet facets and a deep violet Rift glow.', unlockAchievement:'asc5',   accent:'#8a5fd6'},
+  {id:'aurora',  name:'Aurora Pulse', desc:'Rose-teal waves that gently pulse. Still with reduced motion.', unlockAchievement:'mythic', accent:'#d16fa8'},
+  {id:'solar',   name:'Solar Crown',  desc:'A golden crown of rays around the Rift.', unlockAchievement:'d250',   accent:'#d1a72e'},
+  {id:'radiant', name:'Radiant',      desc:'An orbit of every currency color. Still with reduced motion.', unlockAchievement:'modulemax', accent:null}
 ];
 
 var SHOP = [
@@ -5057,17 +5144,28 @@ function buyUltimate(sp){
 }
 
 function themeUnlocked(theme){ return !theme.unlockAchievement || !!state.achieved[theme.unlockAchievement]; }
+function activeRiftTheme(){
+  var theme = RIFT_THEMES.find(function(t){ return t.id===state.riftTheme; });
+  // A stale/locked preference never grants an unlock. Keep its saved value intact.
+  return theme && themeUnlocked(theme) ? theme : RIFT_THEMES[0];
+}
 function selectRiftTheme(themeId){
   var theme = RIFT_THEMES.find(function(t){ return t.id===themeId; });
   if(!theme || !themeUnlocked(theme)) return;
   state.riftTheme = themeId;
+  saveState();
   applyRiftTheme();
   renderCosmetics();
 }
 function applyRiftTheme(){
   var stageEl = document.getElementById('enemy-stage');
   if(!stageEl) return;
-  var theme = RIFT_THEMES.find(function(t){ return t.id===state.riftTheme; }) || RIFT_THEMES[0];
+  var theme = activeRiftTheme();
+  stageEl.setAttribute('data-rift-theme',theme.id);
+  var battleStage = document.querySelector('#tab-battle .stage');
+  if(battleStage) battleStage.setAttribute('data-rift-theme',theme.id);
+  var caption = document.getElementById('rift-cosmetic-name');
+  if(caption) caption.textContent = theme.name;
   stageEl.classList.toggle('theme-radiant', theme.id==='radiant');
   stageEl.classList.toggle('comet-trail-equipped',!!state.cometCosmetics.trail);
   stageEl.classList.toggle('comet-crest-equipped',!!state.cometCosmetics.crest);
@@ -5076,16 +5174,26 @@ function applyRiftTheme(){
 }
 
 function buyNode(node){
-  node=node && NODES.find(function(n){return n.id===node.id;});
-  if(!node || node.retired || node.retiredTo) return;
-  var cost = nodeCost(node);
-  if(state.prisms < cost) return;
-  state.prisms -= cost;
-  state.nodes[node.id]++;
+  var plan = getNodeBuyPlan(node);
+  if(!plan.affordable) return false;
+  state.prisms -= plan.cost;
+  state.nodes[node.id] = plan.level + 1;
   saveState();
   renderNodes();
   renderAscendSummary();
   updateBattleFast();
+  return true;
+}
+
+function getNodeBuyPlan(node){
+  if(NODES.indexOf(node)<0) return {affordable:false,reason:'invalid'};
+  var level=nodeLevel(node.id);
+  if(node.retired || node.retiredTo) return {affordable:false,reason:'retired',level:level};
+  if(node.requiresAchievement && !state.achieved[node.requiresAchievement]) return {affordable:false,reason:'locked',level:level};
+  if(node.levelCap!==undefined && level>=node.levelCap) return {affordable:false,reason:'cap',level:level};
+  var cost=nodeCost(node);
+  if(!Number.isFinite(cost) || cost<1 || level+1===level || !Number.isFinite(state.prisms) || (state.prisms>=cost && state.prisms-(state.prisms-cost)!==cost)) return {affordable:false,reason:'unavailable',level:level,cost:cost};
+  return {affordable:state.prisms>=cost,reason:state.prisms>=cost?'available':'unaffordable',level:level,cost:cost};
 }
 
 var labMultiplier = 1;
@@ -5547,8 +5655,9 @@ function presentControlStates(root){
     var spId=btn.getAttribute('data-empower') || btn.getAttribute('data-rarity') || btn.getAttribute('data-module') || btn.getAttribute('data-ultimate') || btn.getAttribute('data-sigil-resonate') || btn.getAttribute('data-empower-queue') || btn.getAttribute('data-toggle');
     var sp=spId && SPIRITS.find(function(item){return item.id===spId;});
     if(sp) subject=sp.name;
-    if(btn.hasAttribute('data-study')){
-      var studyNode=LONG_STUDIES.find(function(n){return n.id===btn.getAttribute('data-study');});
+    if(btn.hasAttribute('data-study') || btn.hasAttribute('data-study-details') || btn.hasAttribute('data-study-speed-close')){
+      var studyId=btn.getAttribute('data-study') || btn.getAttribute('data-study-details') || btn.getAttribute('data-study-speed-close');
+      var studyNode=LONG_STUDIES.find(function(n){return n.id===studyId;});
       if(studyNode) subject=studyNode.name;
     }
     var queueAttr=toggles.find(function(attr){return btn.hasAttribute('data-'+attr);});
@@ -5603,7 +5712,13 @@ function presentControlStates(root){
       if(btn.hasAttribute('data-research')){var node=RESEARCH.find(function(n){return n.id===btn.getAttribute('data-research');});subject=node.name;var plan=getResearchBuyPlan(node);cost=plan.needed;
         if(plan.maxed){kind='maxed';reason='Maxed';}
         else if(!plan.unlocked){kind='locked';reason='Reach Rift '+node.unlockDepth;}}
-      if(btn.hasAttribute('data-node')){var node=NODES.find(function(n){return n.id===btn.getAttribute('data-node');});subject=node.name;cost.prism=nodeCost(node);}
+      if(btn.hasAttribute('data-node')){
+        var node=NODES.find(function(n){return n.id===btn.getAttribute('data-node');});subject=node.name;
+        var plan=getNodeBuyPlan(node);
+        if(plan.reason==='cap'){kind='maxed';reason='Maxed';}
+        else if(plan.reason==='unavailable'){kind='unavailable';reason='Unavailable';}
+        else cost.prism=plan.cost;
+      }
       if(btn.hasAttribute('data-study')){
         var node=LONG_STUDIES.find(function(n){return n.id===btn.getAttribute('data-study');});subject=node.name;
         var plan=getStudyStartPlan(node);
@@ -5841,6 +5956,11 @@ function nextRiftObjective(){
 function renderRiftGuidancePreference(){
   var row=document.getElementById('rift-objective-row');
   if(row) row.hidden=riftGuidanceHidden;
+  var hintsToggle=document.getElementById('rift-hints-toggle');
+  if(hintsToggle){
+    hintsToggle.textContent=riftGuidanceHidden ? 'Show hints' : 'Hide hints';
+    hintsToggle.setAttribute('aria-expanded',String(!riftGuidanceHidden));
+  }
   var toggle=document.getElementById('rift-guidance-toggle');
   if(toggle){
     toggle.setAttribute('aria-pressed',String(!riftGuidanceHidden));
@@ -5857,7 +5977,7 @@ function setRiftGuidanceHidden(hidden){
     else localStorage.removeItem(RIFT_GUIDANCE_HIDDEN_KEY);
   }catch(e){}
   renderRiftGuidancePreference();
-  if(returnFocus) els['enemy-stage'].focus({preventScroll:true});
+  if(returnFocus) document.getElementById('rift-hints-toggle').focus({preventScroll:true});
 }
 function renderRiftObjective(){
   var el = els['rift-objective'];
@@ -6395,14 +6515,40 @@ function renderResearch(){
 
 function studyMotesMarkup(node){
   var on=state.studyUseMotes[node.id]===true,target=state.studySpeedTargets[node.id];
-  return '<div class="study-motes-controls"><button class="node-queue-toggle '+(on?'active':'')+'" data-study-use-motes="'+node.id+'">Use Motes '+(on?'ON':'OFF')+'</button>'+
-    '<label>Repeat speed<select data-study-speed-target="'+node.id+'" aria-label="'+node.name+' — Repeat speed">'+LAB_SPEED_TIERS.map(function(mult){
+  return '<div class="study-motes-controls"><button class="node-queue-toggle '+(on?'active':'')+'" data-study-use-motes="'+node.id+'">Queue speed up '+(on?'ON':'OFF')+'</button>'+
+    '<label>Queued speed<select data-study-speed-target="'+node.id+'" aria-label="'+node.name+' — Queued speed">'+LAB_SPEED_TIERS.map(function(mult){
       return '<option value="'+mult+'" '+(mult===target?'selected':'')+'>'+mult+'x · '+speedTierCost(mult)+' Motes per level</option>';
     }).join('')+'</select></label></div>';
 }
+// Disclosure state is presentation-only; saving it must never buy speed or work.
+var openStudySpeedId=null;
+function studySpeedMarkup(node,active,maxed){
+  var open=openStudySpeedId===node.id;
+  return '<button class="mini-btn study-speed-open" id="study-speed-open-'+node.id+'" data-study-details="'+node.id+'" aria-expanded="'+open+'" aria-controls="study-speed-panel-'+node.id+'">Speed up</button>'+
+    '<div class="study-speed-panel" id="study-speed-panel-'+node.id+'" data-study-inspection="'+node.id+'" role="region" aria-labelledby="study-speed-open-'+node.id+'" '+(open?'':'hidden')+'>'+
+    '<div class="effect-note">'+(active?'Current speed: '+active.speedMult+'x. Buy a higher speed for this paid level.':'Begin a Study to buy speed for its current level.')+'</div>'+
+    (active?'<div class="speed-row">'+LAB_SPEED_TIERS.map(function(mult){
+      var current=active.speedMult===mult,acquired=active.speedMult>=mult;
+      return '<button class="speed-btn '+(current?'active':'')+'" data-speed="'+mult+'" data-speed-study="'+node.id+'" '+((acquired||state.motes<speedTierCost(mult)||maxed||active.remainingSec<=SIM_EPS)?'disabled':'')+'>'+mult+'x'+
+        '<span class="speed-cost">'+costIcon('mote')+formatNum(speedTierCost(mult))+'</span>'+(current?'Current':acquired?'Covered':maxed?'Unavailable':'')+'</button>';
+    }).join('')+'</div>':'')+
+    studyMotesMarkup(node)+
+    '<p class="effect-note">Study Queue starts the next paid level at 1x. Queue speed up pays the full selected price for each active level when Motes are available, including offline. While waiting, work continues at its paid speed. OFF keeps speed already paid for.</p>'+
+    '<button class="mini-btn" data-study-speed-close="'+node.id+'">Close speed up</button></div>';
+}
+function closeStudySpeed(id){
+  openStudySpeedId=null;
+  renderLongStudies();
+  var opener=els['study-list'].querySelector('[data-study-details="'+id+'"]');
+  if(opener) opener.focus();
+}
 function renderLongStudies(){
-  var openInspections=Array.from(els['study-list'].querySelectorAll('details[open]')).map(function(el){return el.dataset.studyInspection;});
-  var focusedInspection=document.activeElement && document.activeElement.dataset.studyDetails;
+  var focusedCard=document.activeElement && document.activeElement.closest('[data-running-study],[data-study-card]');
+  var focusedStudy=focusedCard && (focusedCard.getAttribute('data-running-study') || focusedCard.getAttribute('data-study-card'));
+  var focusedLegacy=document.activeElement && document.activeElement.getAttribute('data-legacy-upgrade');
+  var focusedBegin=document.activeElement && document.activeElement.getAttribute('data-study');
+  var focusedSpeed=document.activeElement && document.activeElement.getAttribute('data-speed-study');
+  var focusedTier=focusedSpeed && document.activeElement.getAttribute('data-speed');
   renderLabCapacityBadge();
   var slots = studySlotCount();
   var openSlots = slots - state.activeStudies.length;
@@ -6415,6 +6561,7 @@ function renderLongStudies(){
       var node = LONG_STUDIES.find(function(n){ return n.id===active.id; });
       var maxed=node && node.levelCap!==undefined && longStudyLevel(active.id)>=node.levelCap;
       var pct = Math.max(0, Math.min(100, 100-(active.remainingSec/active.totalDurationSec*100)));
+      var progressValue=active.remainingSec>0?Math.min(99,Math.round(pct)):100;
       var queueOnActive = !!state.studyQueue[active.id];
       html += '<div class="card study-card study-running" data-running-study="'+active.id+'">' +
         '<div class="study-running-label">'+(maxed?'Finishing paid Study':index===0?'Next completion':'Running')+'</div>' +
@@ -6424,24 +6571,11 @@ function renderLongStudies(){
         (node ? projectEarnedMarkup(active.id) : '') +
         (node && node.retiredTo?'<div class="effect-note">Last paid level: work, speed and completion bonus kept. Future upgrades: '+node.retiredTo+'.</div>':'') +
         '<div class="effect-note">'+(maxed?'Level cap already reached. Paid work finishes without another level or bonus.':
-          'In progress: level '+(longStudyLevel(active.id)+1)+' · bonus earned only on completion.'+(active.id==='measuredinquiry'?' Next: '+earnedPercent(0.02*studyEffectiveLevel(node,longStudyLevel(active.id)+1))+'% less work.':''))+'</div>' +
-        '<div class="study-time" data-study-text="'+active.id+'">'+studyRemainingText(active)+'</div>' +
-        '<div class="study-bar-track"><div class="study-bar-fill" data-study-bar="'+active.id+'" style="width:'+pct+'%;"></div></div>' +
-        (node ? studyMotesMarkup(node) : '') +
-        '<details class="study-inspection" data-study-inspection="'+active.id+'" '+(openInspections.indexOf(active.id)!==-1?'open':'')+'><summary data-study-details="'+active.id+'">'+(node?node.name:'Study')+' · Details &amp; speed</summary>' +
-        (node ? '<div class="desc">'+node.desc+'</div>' : '') +
-        '<div class="section-sub" style="margin:8px 0;">Spend Motes to speed this Study up:</div>' +
-        '<div class="speed-row">' +
-          LAB_SPEED_TIERS.map(function(mult){
-            var mcost = speedTierCost(mult);
-            var isActive = active.speedMult===mult;
-            var acquired = active.speedMult>=mult;
-            var affordable = state.motes>=mcost;
-            return '<button class="speed-btn '+(isActive?'active':'')+'" data-speed="'+mult+'" data-speed-study="'+active.id+'" '+((acquired||!affordable||maxed)?'disabled':'')+'>'+mult+'x' +
-              (acquired ? (isActive?' · Current':' · Unlocked') : maxed ? ' · Unavailable' : '<span class="speed-cost">'+costIcon('mote')+formatNum(mcost)+'</span>') +
-              '</button>';
-          }).join('') +
-        '</div></details>' +
+          'On completion: '+projectEarnedEffect(active.id,longStudyLevel(active.id)+1)+'.')+'</div>' +
+        '<div class="study-bar-track" role="progressbar" aria-label="'+(node?node.name:'Study')+' progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+progressValue+'" aria-valuetext="'+progressValue+'% · '+studyRemainingText(active)+'">'+
+          '<div class="study-bar-fill" aria-hidden="true" data-study-bar="'+active.id+'" style="width:'+pct+'%;"></div>'+
+          '<span class="study-time" data-study-text="'+active.id+'">'+studyRemainingText(active)+'</span></div>' +
+        (node ? studySpeedMarkup(node,active,maxed) : '') +
       '</div>';
     });
   }
@@ -6465,25 +6599,62 @@ function renderLongStudies(){
     var level=plan.level,cost=plan.cost,dur=plan.duration;
     var queueOn = !!state.studyQueue[lnode.id];
     html += '<div class="card study-card" data-study-card="'+lnode.id+'" data-state="'+(plan.maxed?'maxed':plan.affordable?'affordable':'unavailable')+'" style="margin-bottom:10px;">' +
-      '<div class="name">'+lnode.name+' <span style="color:var(--mote);">Lv.'+level+'</span>' +
+      '<div class="name">'+lnode.name+' <span style="color:var(--mote);">'+(plan.maxed?'Lv.'+level+' · Maxed':'Next Lv.'+(level+1))+'</span>' +
         ' <button class="node-queue-toggle '+(queueOn?'active':'')+'" data-study-queue="'+lnode.id+'">Queue '+(queueOn?'ON':'OFF')+'</button>' +
       '</div>' +
-      '<div class="desc">'+lnode.desc+'</div>' +
       projectEarnedMarkup(lnode.id) +
-      '<div class="effect-note">'+(plan.maxed?'Maxed at level '+lnode.levelCap+'. Queue '+(queueOn?'ON':'OFF')+' retained; no new starts.':
-        'Next: level '+(level+1)+' · bonus earned only on completion.'+(lnode.id==='measuredinquiry'?' Next: '+earnedPercent(0.02*studyEffectiveLevel(lnode,level+1))+'% less work.':''))+'</div>' +
+      '<div class="effect-note">'+(plan.maxed?'Effect cap reached. Queue '+(queueOn?'ON':'OFF')+' retained; no new starts.':
+        'On completion: '+projectEarnedEffect(lnode.id,level+1)+'.')+'</div>' +
       (plan.maxed?'':'<div class="study-meta" id="study-price-'+lnode.id+'">Takes '+fmtStudyDuration(dur)+' &middot; '+costIcon('lumen')+formatNum(cost.lumen)+' '+costIcon('shard')+formatNum(cost.shard)+'</div>') +
       '<button class="mini-btn" data-study="'+lnode.id+'" '+(plan.maxed?'':'aria-describedby="study-price-'+lnode.id+'" ')+(plan.affordable?'':'disabled')+' style="margin-top:10px;width:100%;">'+(plan.maxed?'Maxed':plan.reason==='unavailable'?'Unavailable':openSlots>0?'Begin Study':'No open slots')+'</button>' +
-      studyMotesMarkup(lnode) +
+      studySpeedMarkup(lnode,null,plan.maxed) +
     '</div>';
   });
 
-  html += legacyUpgradeSection(legacyHtml)+'<div class="section-sub">Lab: permanent damage, kill rewards, Mote yield and Study work. Slot capacity rises at Rift 40, 60 and 90. Studies share the 12-hour offline limit with rewards and automation. Study Queue begins the next paid level. Use Motes buys the selected repeat speed for each active level, including manual starts, as soon as its full price is available. OFF keeps speed already paid for.</div>';
+  html += legacyUpgradeSection(legacyHtml)+'<div class="section-sub">Lab: permanent damage, kill rewards, Mote yield and Study work. Slot capacity rises at Rift 40, 60 and 90. Studies share the 12-hour offline limit with rewards and automation. Study Queue begins its next paid level when a slot and currency are free.</div>';
   replaceControlMarkup(els['study-list'],html);
-  if(focusedInspection){
-    var restoredInspection=els['study-list'].querySelector('[data-study-details="'+focusedInspection+'"]');
-    if(restoredInspection) restoredInspection.focus({preventScroll:true});
+  // Beginning removes its button; keep focus on this Study's visible card action.
+  if(focusedBegin && findActiveStudy(focusedBegin)){
+    var beganOpener=els['study-list'].querySelector('[data-study-details="'+focusedBegin+'"]');
+    if(beganOpener) beganOpener.focus();
   }
+  // Keep available panel controls focused. If completion removes the panel or a
+  // purchase disables its tier, restore a visible target for the same Study.
+  if(focusedSpeed || focusedStudy){
+    var sameTier=els['study-list'].querySelector('[data-speed-study="'+focusedSpeed+'"][data-speed="'+focusedTier+'"]');
+    var cardRemoved=focusedStudy && !els['study-list'].querySelector('[data-running-study="'+focusedStudy+'"],[data-study-card="'+focusedStudy+'"]');
+    if(cardRemoved || (focusedSpeed && (!sameTier || sameTier.disabled))){
+      var restoreStudy=focusedStudy || focusedSpeed;
+      var speedFocus=els['study-list'].querySelector('[data-study-details="'+restoreStudy+'"]') ||
+        els['study-list'].querySelector('[data-legacy-upgrade="'+restoreStudy+'"]') || document.getElementById('study-choices');
+      if(speedFocus){speedFocus.tabIndex=speedFocus.tagName==='BUTTON'?0:-1;speedFocus.focus();}
+    }
+  }
+  if(focusedLegacy){
+    var preservedFocus=els['study-list'].querySelector('[data-legacy-upgrade="'+focusedLegacy+'"]');
+    if(preservedFocus){preservedFocus.tabIndex=-1;preservedFocus.focus();}
+  }
+  els['study-list'].querySelectorAll('[data-study-details]').forEach(function(btn){
+    var node=LONG_STUDIES.find(function(n){return n.id===btn.dataset.studyDetails;});
+    btn.setAttribute('aria-label',node.name+' — Speed up');
+    btn.addEventListener('click',function(){
+      var id=btn.dataset.studyDetails;
+      if(openStudySpeedId===id){closeStudySpeed(id);return;}
+      openStudySpeedId=id;
+      renderLongStudies();
+    });
+  });
+  els['study-list'].querySelectorAll('[data-study-speed-close]').forEach(function(btn){
+    btn.addEventListener('click',function(){closeStudySpeed(btn.dataset.studySpeedClose);});
+  });
+  els['study-list'].querySelectorAll('.study-speed-panel').forEach(function(panel){
+    panel.addEventListener('keydown',function(e){
+      // Escape belongs to a native select while its menu is being used.
+      if(e.key==='Escape' && e.target.tagName!=='SELECT'){
+        e.preventDefault();closeStudySpeed(panel.dataset.studyInspection);
+      }
+    });
+  });
   var choose=els['study-list'].querySelector('[data-study-choose]');
   if(choose) choose.addEventListener('click',function(){
     var target=document.getElementById('study-choices');
@@ -6575,19 +6746,22 @@ function renderNodes(){
       '</div>';
       return;
     }
-    var level = state.nodes[node.id];
-    var cost = nodeCost(node);
+    var plan = getNodeBuyPlan(node);
+    var level = plan.level;
+    var capped = plan.reason==='cap';
+    var unavailable = plan.reason==='unavailable';
+    var priced = Number.isFinite(plan.cost);
     html += '<div class="card node-card">' +
       '<span class="shape shape-diamond" style="width:30px;height:30px;background:var(--prism);"></span>' +
       '<div class="node-info" style="flex:1;">' +
         '<div class="name">'+node.name+'</div>' +
         '<div class="desc">'+node.desc+'</div>' +
-        '<div class="lvl" style="color:var(--prism);">Level '+level+'</div>' +
+        '<div class="lvl" style="color:var(--prism);">Level '+level+(node.levelCap!==undefined?' · Cap '+node.levelCap:'')+(node.levelCap!==undefined && level>node.levelCap?' · Saved level preserved':'')+'</div>' +
         '<div class="earned-effect" data-node-effect="'+node.id+'"><strong>Current node contribution:</strong> '+nodeEarnedEffect(node.id)+'</div>' +
         '<div class="effect-note">From this node only; other upgrades contribute separately.</div>' +
       '</div>' +
-      '<button class="buy-btn" data-node="'+node.id+'" '+(state.prisms<cost?'disabled':'')+' style="min-width:78px;">' +
-        '<span class="cost mono">'+costIcon('prism')+formatNum(cost)+'</span><span class="label">Prisms</span>' +
+      '<button class="buy-btn" data-node="'+node.id+'" '+(plan.affordable?'':'disabled')+' aria-label="'+(capped?node.name+' maximum level reached':unavailable?node.name+' price unavailable':'Buy '+node.name+' level '+(level+1)+' for '+formatNum(plan.cost)+' Prisms')+'" style="min-width:78px;">' +
+        (capped?'<span class="label">Maxed</span>':unavailable&&!priced?'<span class="label">Unavailable</span>':'<span class="cost mono">'+costIcon('prism')+formatNum(plan.cost)+'</span><span class="label">'+(unavailable?'Unavailable':'Prisms')+'</span>') +
       '</button>' +
     '</div>';
   });
@@ -6712,10 +6886,12 @@ function renderAchievements(){
 function renderShop(){ renderAchievements(); }
 
 function renderCosmetics(){
+  applyRiftTheme();
   var html = '';
+  var selected = activeRiftTheme();
   RIFT_THEMES.forEach(function(theme){
     var unlocked = themeUnlocked(theme);
-    var active = state.riftTheme===theme.id;
+    var active = selected.id===theme.id;
     if(!unlocked){
       var reqAch = ACHIEVEMENTS.find(function(a){ return a.id===theme.unlockAchievement; });
       html += '<div class="card theme-card locked-node" data-state="locked" aria-disabled="true">' +
@@ -6724,11 +6900,11 @@ function renderCosmetics(){
       '</div>';
       return;
     }
-    var swatch = theme.accent ? theme.accent : 'conic-gradient(from 0deg, var(--lumen), var(--shard), var(--mote), var(--prism), var(--comet), var(--sigil), var(--lumen))';
+    var swatch = theme.accent ? theme.accent : theme.id==='radiant' ? 'linear-gradient(120deg,#f0d77b,#c9b8f0,#eaa9dc,#5ee6d0,#ffa17b)' : '#9ca7ee';
     html += '<button type="button" class="card theme-card '+(active?'active':'')+'" aria-pressed="'+active+'" data-theme-select="'+theme.id+'">' +
       '<div class="theme-swatch" style="background:'+swatch+';"></div>' +
       '<div class="theme-info"><div class="name">'+theme.name+'</div><div class="desc">'+theme.desc+'</div></div>' +
-      '<span class="theme-active-tag">'+(active?'✓ Equipped':'Equip')+'</span>' +
+      '<span class="theme-active-tag">'+(active?'✓ Selected':'Unlocked · Select')+'</span>' +
     '</button>';
   });
   [{slot:'trail',id:'rifttrail'},{slot:'crest',id:'starfallcrest'}].forEach(function(item){
@@ -7021,6 +7197,7 @@ function syncMainScrollMode(tabName){
   if(!main) return;
   var battlePanel = document.getElementById('tab-battle');
   var battleActive = typeof tabName==='string' ? tabName==='battle' : !!(battlePanel && battlePanel.classList.contains('active'));
+  document.getElementById('rift-guidance-slot').hidden=!battleActive;
   if(main.classList.contains('rift-scroll-locked')!==battleActive){
     main.classList.toggle('rift-scroll-locked', battleActive);
   }
@@ -8317,7 +8494,7 @@ function studyRemainingText(active){
   if(!active || !Number.isFinite(active.remainingSec) || active.remainingSec<0 ||
       !Number.isFinite(active.speedMult) || active.speedMult<=0) return 'Time unavailable';
   // Membership in activeStudies still means pending authoritative completion.
-  if(active.remainingSec===0) return 'Finishing…';
+  if(active.remainingSec===0) return 'Finishing… · '+active.speedMult+'x';
   var duration = fmtStudyDuration(Math.max(Number.MIN_VALUE,active.remainingSec/active.speedMult));
   return duration==='Time unavailable' ? duration : duration+' remaining · '+active.speedMult+'x';
 }
@@ -8327,9 +8504,13 @@ function updateStudyProgress(){
     var textEl = els['study-list'].querySelector('[data-study-text="'+active.id+'"]');
     if(!fillEl || !textEl) return;
     var pct = Math.max(0, Math.min(100, 100 - (active.remainingSec/active.totalDurationSec*100)));
+    var progressValue=active.remainingSec>0?Math.min(99,Math.round(pct)):100;
     fillEl.style.width = pct+'%';
     var text = studyRemainingText(active);
     if(textEl.textContent!==text) textEl.textContent = text;
+    var track=fillEl.parentElement;
+    track.setAttribute('aria-valuenow',String(progressValue));
+    track.setAttribute('aria-valuetext',progressValue+'% · '+text);
   });
 }
 
@@ -8385,7 +8566,7 @@ function checkAffordability(){
     var acquired = active.speedMult>=mult;
     var node=LONG_STUDIES.find(function(n){return n.id===active.id;});
     var maxed=node && node.levelCap!==undefined && longStudyLevel(active.id)>=node.levelCap;
-    btn.disabled = acquired || maxed || state.motes<speedTierCost(mult);
+    btn.disabled = acquired || maxed || active.remainingSec<=SIM_EPS || state.motes<speedTierCost(mult);
   });
   ['spirit-list','research-list','study-list','node-list','shop-list'].forEach(function(id){presentControlStates(els[id]);});
   renderAutoAscendControls();
@@ -8729,7 +8910,7 @@ function init(){
     var target = this.getAttribute('data-target-tab');
     if(target) activateTab(target);
   });
-  document.getElementById('rift-objective-dismiss').addEventListener('click',function(){ setRiftGuidanceHidden(true); });
+  document.getElementById('rift-hints-toggle').addEventListener('click',function(){ setRiftGuidanceHidden(!riftGuidanceHidden); });
   document.getElementById('rift-guidance-toggle').addEventListener('click',function(){ setRiftGuidanceHidden(!riftGuidanceHidden); });
   document.getElementById('ascend-btn').addEventListener('click', function(){ doAscend(false); });
 

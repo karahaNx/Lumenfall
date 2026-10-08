@@ -631,6 +631,13 @@
             nextPhase(1);bridge.suppressUnloadSave();location.reload();return;
           }
           finish('pass',window.checkR3Reload(bridge,ctx,assert,JSON.parse(localStorage.getItem('r3-expected'))));return;
+        case 'tree-purchase-ui':
+        case 'tree-purchase-ui-reduced-motion':
+          bridge.uiMeasurementPause(true);
+          finish('pass',await window.runTreePurchaseUiQa(bridge,ctx,assert));return;
+        case 'tree-purchase-contract':
+          bridge.freeze();
+          finish('pass',window.runTreePurchaseQa(bridge,ctx,assert));return;
         case 'upgrade-effects-and-deeds':
           bridge.freeze();
           finish('pass',window.runUpgradeClarityQa(bridge,ctx,assert));return;
@@ -1952,13 +1959,7 @@
             if(count){
               assert(running[0].dataset.runningStudy==='shardstudy','next completion accounts for speed, without mutating queue order');
               assert(running[0].querySelector('[data-study-text]').textContent==='5m 50s remaining · 2x','remaining display preserves seconds from authoritative work divided by speed');
-              var inspect=running[0].querySelector('details'),summary=inspect.querySelector('summary');
-              assert(!inspect.open,'secondary speed controls begin collapsed');
-              summary.focus();summary.click();bridge.renderLayout();
-              inspect=document.querySelector('[data-study-inspection="shardstudy"]');
-              assert(inspect.open && document.activeElement===inspect.querySelector('summary'),'inspection preserves open state and focus through rendering');
-              assert(inspect.querySelectorAll('[data-speed-study]').length>0 && inspect.querySelector('.desc'),'speed controls and effect information stay reachable');
-              inspect.open=false;
+              window.checkLabSpeedDisclosure(bridge,assert,'shardstudy');
             }
             var choose=document.querySelector('[data-study-choose]');
             assert(!!choose===(count<3),'choose action is offered when a slot is free');
