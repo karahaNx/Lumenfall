@@ -3,7 +3,7 @@
 Updated 8 October 2026. Owner: this BOND_TEXT_001 feature chat.
 One goal: show Bond partner names in Formation Bonds and remove partner references
 from Wisp ability explanations while preserving each ability's explanation.
-Status: current local candidate; integration and Android acceptance pending.
+Status: pushed as PR61; updated for current main; integration/Android acceptance pending.
 
 ## Requirements and sources
 
@@ -71,7 +71,7 @@ signing identity, deterministic purchases and documented Luminous Motes rewards.
   APK and verify bundled assets/package/version/certificate. Required physical
   Android/WebView60/TalkBack acceptance must be recorded honestly.
 
-Fresh source SHA256: feb273d2ff1fb0d514517227d73b3ccb650a850b57f0a8ba5d12bbc77af85ac3.
+Initial current-source SHA256: feb273d2ff1fb0d514517227d73b3ccb650a850b57f0a8ba5d12bbc77af85ac3.
 `bond-text-contract`, source validation, APK verifier self-test and Node tooling
 PASS on Node24.19.0/Chromium151. 14 focused positive scenarios and three negative controls PASS. Fresh probes
 PASS all 12 Bond states and 12 mobile/text/motion profiles; normalized source
@@ -84,9 +84,16 @@ PASS with subprocess access. This is an environment limitation, not game failure
 
 ## Delivery checkpoint
 
-No remote PR/integration/APK for this feature yet. Required physical device
-acceptance is unperformed. No independent review is claimed. Next: collect fresh
-checks and checkpoint/push; pass CI and merge; verify integrated behavior and
+[PR61](https://github.com/karahaNx/Lumenfall/pull/61) pushed at ca00a7a4368dd0ad8fdd81fb623ca0ba99ddb5d0.
+Full CI37708765963 PASS147 scenarios,12 required negatives and guarded smoke.
+Main advanced to 0e9b54c8d62a873bd48625f4a20ee18078e8a8f1 (PR60 Forge text
+and PR59 Wisp upgrades). Merged at 9e6ec1f; resolved only test-module registration
+by retaining both Wisp-upgrade and Bond bridges/modules. Product delta against
+this main is still the same presentation-only change. Updated Bond contract and
+source/context validation PASS; fresh focused/mobile checks and CI follow.
+Updated product SHA256: 1e0d51370b5b62f313dad6953f9b26bb7d7a1a886785dbccc6dfaac379779981.
+No integration/APK for this feature yet. Required physical device
+acceptance is unperformed. No independent review is claimed. Next: pass updated CI and merge serially; verify integrated behavior and
 signed APK; save task/project status and evidence in GitHub. Keep this owner chat
 open if required acceptance remains unavailable. Archive only after completion
 under [FEATURE_WORKFLOW](../project/FEATURE_WORKFLOW.md).
