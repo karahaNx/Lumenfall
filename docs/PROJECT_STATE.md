@@ -17,6 +17,13 @@ PASS; required PR CI, main integration and signed APK/native acceptance pending.
 [8 October evidence](qa/rift-guidance-001/2026-10-08/README.md). This owner chat
 remains open until required acceptance is saved.
 
+[UPGRADE_IDENTITY_001/F29](tasks/UPGRADE_IDENTITY_001.md) is integrated via PR90/31eccfb:
+14 buying tracks at integration, unchanged currencies and all24 historical levels.
+Subsequent F26/PR85 retires/refunds Deep Reserves: current tracks Lab6/Forge4/Tree3.
+PR90 CI167/17 and combined19 scoped scenarios/23 runs PASS. Signed APK148/151
+identity/CRC526/all15 assets and actual V8 value/offline probes PASS. [Evidence/immutable APKs](qa/upgrade-identity-001/2026-10-08/README.md).
+Required affected-phone/exact WebView60/TalkBack acceptance is OPEN; chat stays open.
+
 F13 delivery added 8 October 2026: [RIFT_CAST_TEXT_001](tasks/RIFT_CAST_TEXT_001.md)
 is complete via PR63/ab46c0c. Full CI151 scenarios/12 required negatives, integrated
 checks and signed APK0.1.142 native acceptance PASS. Package/signing and all 15 assets
