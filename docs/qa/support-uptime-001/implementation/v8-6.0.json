@@ -1,9 +1,9 @@
 {
   "status": "pass",
   "source": {
-    "sha256": "ea5294df6772b0a41f55f7bc8791aca926ae7c7fba08145acd76fbc0a7b5831f",
-    "gitBlob": "66b0c2bb0e28c1f794611e39477aafde55cda89b",
-    "bytes": 515721
+    "sha256": "b4cad20a9e4963c12eeade4a61f36d1413b63896bb9c7e3eedee494118e77633",
+    "gitBlob": "b07b8e8dc7e0471bb96d78c2a5087bb42e95712e",
+    "bytes": 516137
   },
   "contract": {
     "normalSec": 1,
@@ -14,7 +14,7 @@
   },
   "node": "v8.3.0",
   "v8": "6.0.286.52",
-  "assertions": 2126,
+  "assertions": 2127,
   "limits": "Full production VM motor with observer wrappers; no cap stub. Browser save/UI and APK/native checks are separate.",
   "negativeControls": [
     {
@@ -24,8 +24,3196 @@
     {
       "name": "uncapped-charge",
       "caught": "production Swift minimum cycle: 0.6666666666666666 vs 3.3333333333333335"
+    },
+    {
+      "name": "old-grid-clock-guard",
+      "caught": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":3,\"elapsedWholeSec\":3,\"elapsedFractionSec\":0,\"elapsedSec\":60,\"remaining\":57,\"stepSec\":1.1102230246251565e-16,\"farmGridRemainingSec\":1,\"farmGridCrossings\":3,\"riftMode\":\"farm\",\"candidates\":{\"ability\":0.9999999999999999,\"autoTap\":1,\"autoEmpower\":1,\"study\":87,\"bossRetreatGrace\":null,\"farmGrid\":1.1102230246251565e-16,\"economy\":3.287715521392588},\"kinds\":[\"farmGrid\"]}"
     }
   ],
+  "gridClock": {
+    "elapsedSec": 60,
+    "lumenGained": 969143971,
+    "shardGained": 19335636,
+    "sigilsGained": 0,
+    "motesGained": 9288,
+    "kills": 1811,
+    "bossKills": 0,
+    "luminousKills": 344,
+    "ascends": 0,
+    "autoTaps": 60,
+    "empowers": 60,
+    "researchBought": 27,
+    "studiesStarted": 2,
+    "studySpeedPurchases": 0,
+    "studyMotesSpent": 0,
+    "completedStudies": [],
+    "closedStudies": [],
+    "achievements": [
+      "tap10000",
+      "asc10",
+      "all",
+      "mythic",
+      "idle8",
+      "study25",
+      "allstudies",
+      "labqueue",
+      "firstultimate",
+      "modulemax"
+    ],
+    "retreated": false,
+    "retreats": 0,
+    "retries": 0,
+    "fastForwardedKills": 1575,
+    "iterations": 212,
+    "ascendGains": [],
+    "timeline": [
+      {
+        "elapsedSec": 0,
+        "type": "research",
+        "detail": {
+          "count": 18,
+          "nodes": [
+            {
+              "id": "focus",
+              "levels": 12
+            },
+            {
+              "id": "sense",
+              "levels": 3
+            },
+            {
+              "id": "formation",
+              "levels": 3
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 0,
+        "type": "studyStart",
+        "detail": {
+          "count": 2,
+          "ids": [
+            "riftattune",
+            "guardmastery"
+          ]
+        }
+      },
+      {
+        "elapsedSec": 7.072316707823489e-7,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 28
+        }
+      },
+      {
+        "elapsedSec": 7.072316707823489e-7,
+        "type": "research",
+        "detail": {
+          "count": 1,
+          "nodes": [
+            {
+              "id": "sense",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 0.6666666666666669,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 15
+        }
+      },
+      {
+        "elapsedSec": 0.6666666666666669,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 1,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 8
+        }
+      },
+      {
+        "elapsedSec": 1,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 1,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 1.5,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 1.5,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 2,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 2,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 2,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 2.1666666666666665,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 3
+        }
+      },
+      {
+        "elapsedSec": 2.1666666666666665,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 2.6666666666666665,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 2.6666666666666665,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 3,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 3,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 3,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 3,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 3,
+        "type": "research",
+        "detail": {
+          "count": 1,
+          "nodes": [
+            {
+              "id": "sense",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 4,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 34
+        }
+      },
+      {
+        "elapsedSec": 4,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 4,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 4,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 4.166666748046875,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 5
+        }
+      },
+      {
+        "elapsedSec": 4.166666748046875,
+        "type": "buffExpire",
+        "detail": null
+      },
+      {
+        "elapsedSec": 4.833333333333333,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 16
+        }
+      },
+      {
+        "elapsedSec": 4.833333333333333,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 5,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 5,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 5,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 5.5,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 5.5,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 6,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 6,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 6,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 6,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 6.333333333333333,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 6.333333333333333,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 6.794754671687556,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 16
+        }
+      },
+      {
+        "elapsedSec": 6.794754671687556,
+        "type": "research",
+        "detail": {
+          "count": 1,
+          "nodes": [
+            {
+              "id": "sense",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 7,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 7
+        }
+      },
+      {
+        "elapsedSec": 7,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 7,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 7.333333333333333,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 7.333333333333333,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 7.5,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 6
+        }
+      },
+      {
+        "elapsedSec": 7.5,
+        "type": "buffExpire",
+        "detail": null
+      },
+      {
+        "elapsedSec": 8,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 8,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 8,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 8.166666666666666,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 3
+        }
+      },
+      {
+        "elapsedSec": 8.166666666666666,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 8.833333333333334,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 16
+        }
+      },
+      {
+        "elapsedSec": 8.833333333333334,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 9,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 9,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 9,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 9.333333333333334,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 7
+        }
+      },
+      {
+        "elapsedSec": 9.333333333333334,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 9.666666666666666,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 9.666666666666666,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 10,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 10,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 10,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "tide",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 10.666666666666666,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 23
+        }
+      },
+      {
+        "elapsedSec": 10.666666666666666,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 10.833333251953125,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 5
+        }
+      },
+      {
+        "elapsedSec": 10.833333251953125,
+        "type": "buffExpire",
+        "detail": null
+      },
+      {
+        "elapsedSec": 11,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 11,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 11,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 11.5,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 11.5,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 12,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 12,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 12,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "tide",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 12.166666666666666,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 3
+        }
+      },
+      {
+        "elapsedSec": 12.166666666666666,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 12.642450244193718,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 12.642450244193718,
+        "type": "research",
+        "detail": {
+          "count": 1,
+          "nodes": [
+            {
+              "id": "sense",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 12.666666666666666,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 13,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 13,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 13,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 13,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 14,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 34
+        }
+      },
+      {
+        "elapsedSec": 14,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 14,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 14,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "tide",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 14.166666748046875,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 5
+        }
+      },
+      {
+        "elapsedSec": 14.166666748046875,
+        "type": "buffExpire",
+        "detail": null
+      },
+      {
+        "elapsedSec": 14.833333333333332,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 16
+        }
+      },
+      {
+        "elapsedSec": 14.833333333333332,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 15,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 15,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 15,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 15.5,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 15.5,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 16,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 16,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 16,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 16,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "tide",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 16.333333333333332,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 16.333333333333332,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 17,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 23
+        }
+      },
+      {
+        "elapsedSec": 17,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 17,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 17.333333333333332,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 17.333333333333332,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 17.5,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 6
+        }
+      },
+      {
+        "elapsedSec": 17.5,
+        "type": "buffExpire",
+        "detail": null
+      },
+      {
+        "elapsedSec": 18,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 18,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 18,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "tide",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 18.166666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 3
+        }
+      },
+      {
+        "elapsedSec": 18.166666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 18.833333333333332,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 16
+        }
+      },
+      {
+        "elapsedSec": 18.833333333333332,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 18.98718489155785,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 18.98718489155785,
+        "type": "research",
+        "detail": {
+          "count": 1,
+          "nodes": [
+            {
+              "id": "formation",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 19,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 19,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 19.333333333333332,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 7
+        }
+      },
+      {
+        "elapsedSec": 19.333333333333332,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 19.666666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 19.666666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 20,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 20,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 20,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "tide",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 20.666666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 23
+        }
+      },
+      {
+        "elapsedSec": 20.666666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 20.833333251953125,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 6
+        }
+      },
+      {
+        "elapsedSec": 20.833333251953125,
+        "type": "buffExpire",
+        "detail": null
+      },
+      {
+        "elapsedSec": 21,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 21,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 21,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 21.499999999999996,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 21.499999999999996,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 22,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 22,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 22,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "tide",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 22.166666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 3
+        }
+      },
+      {
+        "elapsedSec": 22.166666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 22.666666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 22.666666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 22.953131523987658,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 22.953131523987658,
+        "type": "research",
+        "detail": {
+          "count": 1,
+          "nodes": [
+            {
+              "id": "focus",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 23,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 23,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 23,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 23,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 24,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 35
+        }
+      },
+      {
+        "elapsedSec": 24,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 24,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 24,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "tide",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 24.166666748046875,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 5
+        }
+      },
+      {
+        "elapsedSec": 24.166666748046875,
+        "type": "buffExpire",
+        "detail": null
+      },
+      {
+        "elapsedSec": 24.83333333333333,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 16
+        }
+      },
+      {
+        "elapsedSec": 24.83333333333333,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 25,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 25,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 25,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 25.5,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 25.5,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 26,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 26,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 26,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 26,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "tide",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 26.333333333333332,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 26.333333333333332,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 26.981234531884244,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 23
+        }
+      },
+      {
+        "elapsedSec": 26.981234531884244,
+        "type": "research",
+        "detail": {
+          "count": 1,
+          "nodes": [
+            {
+              "id": "sense",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 27,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 27,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 27.333333333333332,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 27.333333333333332,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 27.5,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 6
+        }
+      },
+      {
+        "elapsedSec": 27.5,
+        "type": "buffExpire",
+        "detail": null
+      },
+      {
+        "elapsedSec": 28,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 28,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 28,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "tide",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 28.166666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 3
+        }
+      },
+      {
+        "elapsedSec": 28.166666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 28.833333333333332,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 16
+        }
+      },
+      {
+        "elapsedSec": 28.833333333333332,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 29,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 29,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 29,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 29.333333333333332,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 7
+        }
+      },
+      {
+        "elapsedSec": 29.333333333333332,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 29.666666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 29.666666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 30,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 30,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 30,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "stone",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 30.666666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 23
+        }
+      },
+      {
+        "elapsedSec": 30.666666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 30.833333251953125,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 6
+        }
+      },
+      {
+        "elapsedSec": 30.833333251953125,
+        "type": "buffExpire",
+        "detail": null
+      },
+      {
+        "elapsedSec": 31,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 31,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 31,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "tide",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 31.499999999999996,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 31.499999999999996,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 32,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 32,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 32,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 32.166666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 3
+        }
+      },
+      {
+        "elapsedSec": 32.166666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 32.666666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 32.666666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 33,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 33,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 33,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 33,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "stone",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 34,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 35
+        }
+      },
+      {
+        "elapsedSec": 34,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 34,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 34,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "tide",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 34.16666674804687,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 5
+        }
+      },
+      {
+        "elapsedSec": 34.16666674804687,
+        "type": "buffExpire",
+        "detail": null
+      },
+      {
+        "elapsedSec": 34.83333333333333,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 16
+        }
+      },
+      {
+        "elapsedSec": 34.83333333333333,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 35,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 35,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 35,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 35.5,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 35.5,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 36,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 36,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 36,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 36,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "stone",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 36.33333333333333,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 11
+        }
+      },
+      {
+        "elapsedSec": 36.33333333333333,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 36.92456596794131,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 21
+        }
+      },
+      {
+        "elapsedSec": 36.92456596794131,
+        "type": "research",
+        "detail": {
+          "count": 1,
+          "nodes": [
+            {
+              "id": "formation",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 37,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 2
+        }
+      },
+      {
+        "elapsedSec": 37,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 37,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "tide",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 37.33333333333333,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 37.33333333333333,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 37.5,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 6
+        }
+      },
+      {
+        "elapsedSec": 37.5,
+        "type": "buffExpire",
+        "detail": null
+      },
+      {
+        "elapsedSec": 38,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 38,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 38,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 38.166666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 38.166666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 38.83333333333333,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 16
+        }
+      },
+      {
+        "elapsedSec": 38.83333333333333,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 39,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 39,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 39,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "stone",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 39.33333333333333,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 8
+        }
+      },
+      {
+        "elapsedSec": 39.33333333333333,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 39.666666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 39.666666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 40,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 40,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 40,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "tide",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 40.666666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 24
+        }
+      },
+      {
+        "elapsedSec": 40.666666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 40.83333325195313,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 6
+        }
+      },
+      {
+        "elapsedSec": 40.83333325195313,
+        "type": "buffExpire",
+        "detail": null
+      },
+      {
+        "elapsedSec": 41,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 41,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 41,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 41.49999999999999,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 41.49999999999999,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 42,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 42,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 42,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "stone",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 42.166666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 42.166666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 42.666666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 42.666666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 43,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 43,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 43,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 43,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "tide",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 44,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 36
+        }
+      },
+      {
+        "elapsedSec": 44,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 44,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 44,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 44.16666674804687,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 6
+        }
+      },
+      {
+        "elapsedSec": 44.16666674804687,
+        "type": "buffExpire",
+        "detail": null
+      },
+      {
+        "elapsedSec": 44.83333333333333,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 16
+        }
+      },
+      {
+        "elapsedSec": 44.83333333333333,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 45,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 45,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 45,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "stone",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 45.5,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 45.5,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 45.99999999999999,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 45.99999999999999,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 45.99999999999999,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 45.99999999999999,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "tide",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 46.33333333333333,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 46.33333333333333,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 46.99999999999999,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 24
+        }
+      },
+      {
+        "elapsedSec": 46.99999999999999,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 46.99999999999999,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 47.33333333333333,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 47.33333333333333,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 47.5,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 6
+        }
+      },
+      {
+        "elapsedSec": 47.5,
+        "type": "buffExpire",
+        "detail": null
+      },
+      {
+        "elapsedSec": 47.99999999999999,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 47.99999999999999,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 47.99999999999999,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "stone",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 48.166666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 48.166666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 48.53530352110797,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 9
+        }
+      },
+      {
+        "elapsedSec": 48.53530352110797,
+        "type": "research",
+        "detail": {
+          "count": 1,
+          "nodes": [
+            {
+              "id": "sense",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 48.83333333333333,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 7
+        }
+      },
+      {
+        "elapsedSec": 48.83333333333333,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 48.99999999999999,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 48.99999999999999,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 48.99999999999999,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "tide",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 49.33333333333333,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 8
+        }
+      },
+      {
+        "elapsedSec": 49.33333333333333,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 49.666666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 49.666666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 49.99999999999999,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 49.99999999999999,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 49.99999999999999,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 50.666666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 24
+        }
+      },
+      {
+        "elapsedSec": 50.666666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 50.83333325195313,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 6
+        }
+      },
+      {
+        "elapsedSec": 50.83333325195313,
+        "type": "buffExpire",
+        "detail": null
+      },
+      {
+        "elapsedSec": 50.99999999999999,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 50.99999999999999,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 50.99999999999999,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "stone",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 51.49999999999999,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 51.49999999999999,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 51.99999999999999,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 51.99999999999999,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 51.99999999999999,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "tide",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 52.166666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 52.166666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 52.666666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 52.666666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 52.99999999999999,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 52.99999999999999,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 52.99999999999999,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 52.99999999999999,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 53.99999999999999,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 36
+        }
+      },
+      {
+        "elapsedSec": 53.99999999999999,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 53.99999999999999,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 53.99999999999999,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "stone",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 54.16666674804687,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 6
+        }
+      },
+      {
+        "elapsedSec": 54.16666674804687,
+        "type": "buffExpire",
+        "detail": null
+      },
+      {
+        "elapsedSec": 54.83333333333333,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 16
+        }
+      },
+      {
+        "elapsedSec": 54.83333333333333,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 54.99999999999999,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 54.99999999999999,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 54.99999999999999,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "tide",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 55.49999999999999,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 55.49999999999999,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 55.99999999999999,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 55.99999999999999,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 55.99999999999999,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 55.99999999999999,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "gale",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 56.33333333333333,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 56.33333333333333,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 56.99999999999999,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 24
+        }
+      },
+      {
+        "elapsedSec": 56.99999999999999,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 56.99999999999999,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "ember",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 57.33333333333333,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 57.33333333333333,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 57.5,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 6
+        }
+      },
+      {
+        "elapsedSec": 57.5,
+        "type": "buffExpire",
+        "detail": null
+      },
+      {
+        "elapsedSec": 57.99999999999999,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 57.99999999999999,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 57.99999999999999,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "stone",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 58.166666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 58.166666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 58.83333333333333,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 16
+        }
+      },
+      {
+        "elapsedSec": 58.83333333333333,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 58.99999999999999,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 4
+        }
+      },
+      {
+        "elapsedSec": 58.99999999999999,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 58.99999999999999,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "tide",
+              "levels": 1
+            }
+          ]
+        }
+      },
+      {
+        "elapsedSec": 59.33333333333333,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 8
+        }
+      },
+      {
+        "elapsedSec": 59.33333333333333,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 59.666666666666664,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 59.666666666666664,
+        "type": "ability",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 59.99999999999999,
+        "type": "enemyDeath",
+        "detail": {
+          "count": 12
+        }
+      },
+      {
+        "elapsedSec": 59.99999999999999,
+        "type": "autoTap",
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "elapsedSec": 59.99999999999999,
+        "type": "autoEmpower",
+        "detail": {
+          "count": 1,
+          "wisps": [
+            {
+              "id": "gale",
+              "levels": 1
+            }
+          ]
+        }
+      }
+    ],
+    "endDepth": 89,
+    "pushDepth": 90,
+    "clockEndMs": 2000000060000
+  },
   "phaseSweep": [
     {
       "charge": 0,

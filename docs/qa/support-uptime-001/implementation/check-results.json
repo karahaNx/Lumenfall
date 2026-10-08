@@ -1,5 +1,5 @@
 {
-  "sourceIndexSha256": "ea5294df6772b0a41f55f7bc8791aca926ae7c7fba08145acd76fbc0a7b5831f",
+  "sourceIndexSha256": "b4cad20a9e4963c12eeade4a61f36d1413b63896bb9c7e3eedee494118e77633",
   "records": [
     {
       "scenario": "support-stacking",
@@ -287,17 +287,17 @@
         "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
         "tests/behavioral/run.cjs",
         "--web-root",
-        "/tmp/lumenfall-support-stage-W98YwT",
+        "/tmp/lumenfall-support-stage-uR8cy8",
         "--scenario",
         "support-uptime-core",
         "--raw-artifacts",
         "/workspace/Lumenfall-SUPPORT_UPTIME_001/docs/qa/support-uptime-001/implementation/raw-failures"
       ],
-      "indexSha256": "ea5294df6772b0a41f55f7bc8791aca926ae7c7fba08145acd76fbc0a7b5831f",
+      "indexSha256": "b4cad20a9e4963c12eeade4a61f36d1413b63896bb9c7e3eedee494118e77633",
       "exit": 0,
       "signal": null,
       "error": null,
-      "seconds": 2.704,
+      "seconds": 3.201,
       "status": "pass",
       "log": "support-uptime-core.txt"
     },
@@ -307,7 +307,7 @@
         "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
         "tests/behavioral/run.cjs",
         "--web-root",
-        "/tmp/lumenfall-support-stage-esZkrB",
+        "/tmp/lumenfall-support-stage-ESMmOo",
         "--scenario",
         "support-uptime-ui",
         "--raw-artifacts",
@@ -317,7 +317,7 @@
       "exit": 0,
       "signal": null,
       "error": null,
-      "seconds": 8.081,
+      "seconds": 8.223,
       "status": "pass",
       "log": "support-uptime-ui.txt"
     },
@@ -500,6 +500,146 @@
       "seconds": 1.207,
       "status": "pass",
       "log": "p2-03a-wisp-role-integrity-endgame.txt"
+    },
+    {
+      "scenario": "offline-catchup-ui",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-support-stage-MFGLE0",
+        "--scenario",
+        "offline-catchup-ui",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-SUPPORT_UPTIME_001/docs/qa/support-uptime-001/implementation/raw-failures"
+      ],
+      "indexSha256": "ea5294df6772b0a41f55f7bc8791aca926ae7c7fba08145acd76fbc0a7b5831f",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "seconds": 91.789,
+      "status": "pass",
+      "log": "offline-catchup-ui.txt"
+    },
+    {
+      "scenario": "offline-catchup-legacy-dom",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-support-stage-MFGLE0",
+        "--scenario",
+        "offline-catchup-legacy-dom",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-SUPPORT_UPTIME_001/docs/qa/support-uptime-001/implementation/raw-failures"
+      ],
+      "indexSha256": "ea5294df6772b0a41f55f7bc8791aca926ae7c7fba08145acd76fbc0a7b5831f",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "seconds": 98.881,
+      "status": "pass",
+      "log": "offline-catchup-legacy-dom.txt"
+    },
+    {
+      "scenario": "forge-balance",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-support-stage-uR8cy8",
+        "--scenario",
+        "forge-balance",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-SUPPORT_UPTIME_001/docs/qa/support-uptime-001/implementation/raw-failures"
+      ],
+      "indexSha256": "b4cad20a9e4963c12eeade4a61f36d1413b63896bb9c7e3eedee494118e77633",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "seconds": 3.049,
+      "status": "pass",
+      "log": "forge-balance.txt"
+    },
+    {
+      "scenario": "parity-medium-farm",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-support-stage-uR8cy8",
+        "--scenario",
+        "parity-medium-farm",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-SUPPORT_UPTIME_001/docs/qa/support-uptime-001/implementation/raw-failures"
+      ],
+      "indexSha256": "b4cad20a9e4963c12eeade4a61f36d1413b63896bb9c7e3eedee494118e77633",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "seconds": 2.671,
+      "status": "pass",
+      "log": "parity-medium-farm.txt"
+    },
+    {
+      "scenario": "p2-07a-farm-retention",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-support-stage-uR8cy8",
+        "--scenario",
+        "p2-07a-farm-retention",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-SUPPORT_UPTIME_001/docs/qa/support-uptime-001/implementation/raw-failures"
+      ],
+      "indexSha256": "b4cad20a9e4963c12eeade4a61f36d1413b63896bb9c7e3eedee494118e77633",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "seconds": 3.265,
+      "status": "pass",
+      "log": "p2-07a-farm-retention.txt"
+    },
+    {
+      "scenario": "lab-motes-numerical",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-support-stage-uR8cy8",
+        "--scenario",
+        "lab-motes-numerical",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-SUPPORT_UPTIME_001/docs/qa/support-uptime-001/implementation/raw-failures"
+      ],
+      "indexSha256": "b4cad20a9e4963c12eeade4a61f36d1413b63896bb9c7e3eedee494118e77633",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "seconds": 1.476,
+      "status": "pass",
+      "log": "lab-motes-numerical.txt"
+    },
+    {
+      "scenario": "lab-motes-conservation",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-support-stage-uR8cy8",
+        "--scenario",
+        "lab-motes-conservation",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-SUPPORT_UPTIME_001/docs/qa/support-uptime-001/implementation/raw-failures"
+      ],
+      "indexSha256": "b4cad20a9e4963c12eeade4a61f36d1413b63896bb9c7e3eedee494118e77633",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "seconds": 1.632,
+      "status": "pass",
+      "log": "lab-motes-conservation.txt"
     }
   ]
 }

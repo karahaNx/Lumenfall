@@ -90,7 +90,7 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
   const log = options.log || console.log;
   const urlFor = page => baseUrl + page + '?' + new URLSearchParams({ qaScenario: scenario, qaFixture: fixture });
   if (scenario === 'support-uptime-core') return runNativeProcess([process.execPath, path.join(ROOT, 'support-uptime.cjs')], scenario, 90000, options);
-  if (scenario === 'support-uptime-ui') return runNativeProcess([process.execPath, path.join(ROOT, 'support-uptime-ui.cjs'), path.join(ROOT, '../..'), temporary('lumenfall-support-ui-')], scenario, 90000, options);
+  if (scenario === 'support-uptime-ui') return runNativeProcess([process.execPath, path.join(ROOT, 'support-uptime-ui.cjs'), path.join(ROOT, '../..'), temporary('lumenfall-support-ui-'), chrome], scenario, 90000, options);
   if (scenario === 'comet-unlocks-core') return runNativeProcess([process.execPath, path.join(ROOT, 'comet-unlocks-core.cjs')], scenario, 90000, options);
   if (scenario === 'lab-motes-offline-integration') return runNativeProcess([process.execPath, path.join(ROOT, 'lab-motes-offline.cjs')], scenario, 90000, options);
   if (scenario === 'offline-catchup-core') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-catchup.cjs')], scenario, 300000, options);

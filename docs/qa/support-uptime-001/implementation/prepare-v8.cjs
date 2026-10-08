@@ -6,4 +6,5 @@ s=s.replaceAll("require('node:","require('").replace("require('assert/strict')",
 s=s.replace("const root = path.resolve(__dirname, '../..');","const root = "+JSON.stringify(root)+"; assert.equal=assert.strictEqual;");
 s=s.replace("  vm.runInContext(sourceScript","  context.globalThis=context;\n  vm.runInContext(sourceScript");
 s=s.replace("assert.match(caught,/production (Ultimate duration|Swift minimum cycle)/,'causal timing control');","assert.ok(/production (Ultimate duration|Swift minimum cycle)/.test(caught),'causal timing control');");
+s=s.replace("assert.match(stalled,/Authoritative simulation stalled/,'old logical-only guard rejects the real Farm clock boundary');","assert.ok(/Authoritative simulation stalled/.test(stalled),'old logical-only guard rejects the real Farm clock boundary');");
 s=s.replace('node:process.version,assertions','node:process.version,v8:process.versions.v8,assertions');fs.writeFileSync(target,s);

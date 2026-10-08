@@ -7865,6 +7865,8 @@ function advanceAuthoritativeTime(elapsedSec,options){
     var ascendsBeforeAdvance = summary.ascends;
     var elapsedWholeBefore = elapsedWholeSec;
     var elapsedFractionBefore = elapsedFractionSec;
+    var farmGridCrossingsBefore = farmGridCrossings;
+    var farmGridRemainingBefore = farmGridRemainingSec;
     // Sub-nanosecond elapsed time can still carry material damage at mature
     // power. Never discard it merely because it is below a generic time
     // epsilon; only treat the simulator as stalled if floating-point
@@ -7947,7 +7949,10 @@ function advanceAuthoritativeTime(elapsedSec,options){
       });
     }
 
-    if(remaining>0 && elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && actions===0){
+    // A tiny final grid remainder may round to the same composed elapsed value.
+    // Processing it still advances the canonical clock; retain its full damage.
+    var gridClockAdvanced = farmGridCrossings!==farmGridCrossingsBefore || farmGridRemainingSec!==farmGridRemainingBefore;
+    if(remaining>0 && elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && !gridClockAdvanced && actions===0){
       throw new Error('Authoritative simulation stalled without elapsed-time or state progress | '+JSON.stringify({
         elapsedInRun:elapsedInRun,
         elapsedWholeSec:elapsedWholeSec,

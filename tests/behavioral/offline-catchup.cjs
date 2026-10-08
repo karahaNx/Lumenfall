@@ -8,8 +8,13 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const root=path.resolve(__dirname,'../..');
 const sourceArg=process.argv.indexOf('--source');
 const source=fs.readFileSync(sourceArg<0?path.join(root,'index.html'):process.argv[sourceArg+1],'utf8');
-const baseline=fs.readFileSync(path.join(root,'docs/recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/main-index.html'),'utf8');
-assert.equal(require('node:crypto').createHash('sha1').update('blob '+Buffer.byteLength(baseline)+'\0'+baseline).digest('hex'),'ea44431c163569548973d9e489f75345749a07ee','original product oracle blob');
+const frozen=fs.readFileSync(path.join(root,'docs/recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/main-index.html'),'utf8');
+assert.equal(require('node:crypto').createHash('sha1').update('blob '+Buffer.byteLength(frozen)+'\0'+frozen).digest('hex'),'ea44431c163569548973d9e489f75345749a07ee','original product oracle blob');
+// Preserve the independent frozen scheduler/economy. Apply only the two approved
+// timing constants in memory; never edit the original product or device save.
+// The device save owns charge60, whose effective level is now10 for every Wisp.
+function contractOnce(text,before,after){assert.equal(text.split(before).length,2,'unique frozen contract marker');return text.replace(before,after);}
+const baseline=contractOnce(contractOnce(frozen,"{id:'charge', effectPerLevel:0.08,","{id:'charge', effectPerLevel:0.08, levelCap:10,"),'durationMs:ultimate ? 8000 : 4000','durationMs:ultimate ? 1500 : 1000');
 const original=JSON.parse(fs.readFileSync(path.join(root,'docs/qa/offline-autoascend-2026-10-07/device_backup.json'),'utf8'));
 const copy=x=>JSON.parse(JSON.stringify(x)),records=[];
 function app(seed,html=source,seconds=0){
@@ -87,9 +92,12 @@ function runAsync(seed,seconds,batch=256){
 const start=performance.now();
 // Fails on the unchanged product through the reported production entry.
 const on=runAsync(original,28800);
-assert.equal(on.result.kills,302400);assert.equal(on.result.ascends,14400);
-assert.equal(on.committed.prisms-original.prisms,86400);
-assert.equal(on.committed.lumen,0,'Ascension reset preserves earned vs balance distinction');
+// Literal totals independently reproduced with the frozen scheduler in900s
+// windows, including the same original60-level save and unchanged price/rewards.
+assert.equal(on.result.kills,277629);assert.equal(on.result.ascends,13220);
+assert.equal(on.committed.prisms-original.prisms,79320);
+approx(on.committed.lumen,9000,'partial final run keeps only its remaining Lumen');
+assert(on.result.earned>on.committed.lumen,'Ascension reset preserves earned vs balance distinction');
 assert.deepEqual(on.committed.formationRebuild,original.formationRebuild,'unaffordable Boss reconstruction intent persists');
 assert.deepEqual(on.committed.empowerQueue,original.empowerQueue,'purchase intent preserved');
 assert.deepEqual(on.committed.activeParty,['ember']);
@@ -102,21 +110,26 @@ assert.deepEqual(narrow.result,on.result,'changing work budget changes no reward
 const clear20=copy(original);clear20.autoAscendTargetDepth=21;
 const c20=runAsync(clear20,28800);
 const off=copy(original);off.autoAscendEnabled=false;
-const disabled=runAsync(off,28800);assert.equal(disabled.result.kills,773);assert.equal(disabled.result.ascends,0);
+const disabled=runAsync(off,28800);assert.equal(disabled.result.kills,756);assert.equal(disabled.result.ascends,0);
 assert.equal(disabled.committed.spirits.titan,144);
-const cap=runAsync(original,72*3600);assert.equal(cap.result.kills,2721600);assert.equal(cap.result.ascends,129600);
+const cap=runAsync(original,72*3600);assert.equal(cap.result.kills,2502168);assert.equal(cap.result.ascends,119150);
+assert.equal(cap.committed.prisms-original.prisms,714900,'unchanged six-Prism Ascend reward');
 const beyond=copy(original);beyond.activeStudies=[{id:'guardmastery',remainingSec:80*3600,totalDurationSec:80*3600,speedMult:1}];beyond.studyQueue={};
 const long=runAsync(beyond,96*3600);assert.equal(long.result.effectiveSec,72*3600);
 assert(long.result.completedStudies.includes("Guardian's Mastery"),'study completes beyond combat cap');
-assert.equal(long.result.kills,cap.result.kills,'beyond-cap time earns no extra combat');
-// Preserve old numerical policy against the unchanged scheduler for short windows
-// and chronological research/Motes/automation boundaries.
+// Compare the same study seed: replacing the original active studies can change
+// combat before72h now that Swift is capped, so unrelated seeds are not an oracle.
+const sameStudiesAtCap=runAsync(beyond,72*3600);
+assert.equal(long.result.kills,sameStudiesAtCap.result.kills,'beyond-cap time earns no extra combat');
+assert.equal(long.result.ascends,sameStudiesAtCap.result.ascends,'beyond-cap time earns no extra Ascends');
+// Preserve all other numerical policy against the independent frozen scheduler
+// for short windows and chronological research/Motes/automation boundaries.
 for(const seed of [original,clear20,off]){
  for(const seconds of [60,300,3600]){
   const old=app(seed,baseline,seconds),next=app(seed,source,seconds);
   const a=old.b.advance(seconds,{kind:'offline',visual:false,clockStartMs:seed.lastSeen});
   const b=next.b.advance(seconds,{kind:'offline',visual:false,clockStartMs:seed.lastSeen});
-  baselineSummary(b,a,'unchanged baseline summary '+seconds);baselineState(next.b.get(),old.b.get(),seed,'unchanged baseline state '+seconds);
+  baselineSummary(b,a,'approved timing baseline summary '+seconds);baselineState(next.b.get(),old.b.get(),seed,'approved timing baseline state '+seconds);
  }
 }
 const all=copy(original);all.research.focus=0;Object.keys(all.empowerQueue).forEach(k=>all.empowerQueue[k]=true);

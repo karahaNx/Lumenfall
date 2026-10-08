@@ -181,11 +181,13 @@ window.runForgeExtended = function(b,ctx,assert,parity,summaryParity,near){
       function execute(chunk){
         var costs={lumen:0,shards:0},buys={},first=null;
         if(mode==='manual'){
-          first=b.simulate(60,kind,chunk,clock);
+          // Approved shorter supports reduce this fixture's60s earnings. Keep
+          // the600s economy/ledger test and make the real paid buy at120s.
+          first=b.simulate(120,kind,chunk,clock);
           ids.forEach(function(id){var plan=f.plan(id,1),before=b.getState();buys[id]=plan.buyCount;costs.lumen+=plan.cost.lumen;costs.shards+=plan.cost.shard;f.buy(id,1);
-            ok(b.getState().lumen===before.lumen-plan.cost.lumen && b.getState().shards===before.shards-plan.cost.shard,'manual exact ledger at 60s');});
+            ok(b.getState().lumen===before.lumen-plan.cost.lumen && b.getState().shards===before.shards-plan.cost.shard,'manual exact ledger at 120s');});
         }
-        var result=b.simulate(first?540:600,kind,chunk,clock+(first?60000:0),clock);
+        var result=b.simulate(first?480:600,kind,chunk,clock+(first?120000:0),clock);
         if(first)Object.keys(first.summary).forEach(function(k){
           if(['endDepth','pushDepth','clockEndMs'].includes(k))return;
           if(k==='achievements')result.summary[k]=Array.from(new Set(first.summary[k].concat(result.summary[k])));
@@ -202,7 +204,7 @@ window.runForgeExtended = function(b,ctx,assert,parity,summaryParity,near){
       near(runStart.lumen+run.summary.lumenGained-spent.lumen-spent.resetLumen-manualCosts.lumen,run.state.lumen,'balance Lumen including reset ledger');near(runStart.shards+run.summary.shardGained-spent.shards-manualCosts.shards,run.state.shards,'balance Shard ledger');
       ok(spent.researchLevels===run.summary.researchBought,'actual paid queue levels match summary');
       if(mode==='manual')ok(manualBuys.arcanecal>0,'real mid/mature manual purchase with earned resources');
-      records.push({fixture:name,mode:mode,kind:kind,seconds:600,manualPurchaseSec:mode==='manual'?60:null,start:{depth:start.depth,lumen:start.lumen,shards:start.shards},manualBuys:manualBuys,manualCosts:manualCosts,research:run.state.research,spent:spent,kills:run.summary.kills,depth:run.state.depth,motes:run.summary.motesGained,remaining:{lumen:run.state.lumen,shards:run.state.shards},formation:run.state.formationRebuild,active:run.state.activeParty,causalAudit:audit.counts});
+      records.push({fixture:name,mode:mode,kind:kind,seconds:600,manualPurchaseSec:mode==='manual'?120:null,start:{depth:start.depth,lumen:start.lumen,shards:start.shards},manualBuys:manualBuys,manualCosts:manualCosts,research:run.state.research,spent:spent,kills:run.summary.kills,depth:run.state.depth,motes:run.summary.motesGained,remaining:{lumen:run.state.lumen,shards:run.state.shards},formation:run.state.formationRebuild,active:run.state.activeParty,causalAudit:audit.counts});
     });});});
     return {checks:checks,records:records,realPaidSimulation:true};
   }

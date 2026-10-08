@@ -1,5 +1,5 @@
-/* Focused F13 browser check. Node 20+ tooling; product still targets WebView 60.
- * Usage: node tests/behavioral/support-uptime.cjs [web-root] [evidence-dir]
+/* Focused SUPPORT_UPTIME_001 browser check. Product targets WebView 60.
+ * Usage: node tests/behavioral/support-uptime-ui.cjs [web-root] [evidence-dir] [chrome]
  * Only the served copy receives a state bridge and a paused interval clock.
  */
 'use strict';
@@ -63,7 +63,7 @@ async function run() {
   fs.mkdirSync(evidence,{recursive:true});
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
   profile=fs.mkdtempSync(path.join(os.tmpdir(),'lumenfall-f13-'));
-  browser=spawn(process.env.LUMENFALL_QA_CDP_CHROME||'chromium',[
+  browser=spawn(process.env.LUMENFALL_QA_CDP_CHROME||process.argv[4]||'chromium',[
     '--headless=new','--no-sandbox','--disable-gpu','--disable-dev-shm-usage',
     '--remote-debugging-pipe','--user-data-dir='+profile,'about:blank'
   ],{stdio:['ignore','ignore','pipe','pipe','pipe']});

@@ -44,7 +44,7 @@ Lab/Comet/offline retirement, price curves, Motes rewards, signing or package ch
 
 Changed product: central support profile and its two descriptions, Swift catalogue
 cap/description. Existing central effective-level/purchase plans enforce the cap;
-raw levels and earned source/legacy deadlines remain. Save value handling is pending.
+raw levels and earned source/legacy deadlines remain. A necessary scheduler fix counts canonical Farm-grid progress even when composed elapsed rounds unchanged; it discards no damage. Save value handling is pending.
 Updated new-cast timing oracles retain independent legacy4s/8s fixtures, additive
 stacking, causal negative controls and1e-6 timing/damage precision.
 
@@ -65,8 +65,8 @@ and the existing evidence directory. Current-main baseline probe passes49 motor
 combinations/2121 numeric assertions and98 fractional starts; PR51's endpoint fix
 and subsequent B2/legacy fixes remain. [Baseline results](../qa/support-uptime-001/implementation/baseline-probe.json).
 
-Production duration/cap candidate passes49 motor combinations/2126 numeric
-assertions,98 fractional starts,50 phase cases and both causal timing controls;
+Production duration/cap candidate passes49 motor combinations/2127 numeric
+assertions,98 fractional starts,50 phase cases and three causal controls (duration, cap, old grid-stall guard);
 no Swift catalogue stub. The same product JavaScript passes on V8 6.0.286.52.
 [Motor](../qa/support-uptime-001/implementation/production-probe.json),
 [legacy engine](../qa/support-uptime-001/implementation/v8-6.0.json).
@@ -76,11 +76,11 @@ now have stronger dedicated coverage. Other original Forge checks remain.
 Mobile matrix12 profiles at320/390/430 with100/200% changed text,44px controls,
 actual Enter purchase/touch queue, focus/contrast and both motion settings PASS.
 [UI](../qa/support-uptime-001/implementation/ui/result.json).
-Focused results and limitations: [checks](../qa/support-uptime-001/implementation/check-results.json).
+All25 focused checks PASS, including paid Resonate and its existing three-use limit. Wisp/Bond new-cast oracles now use1s/1.5s; legacy earned deadlines remain unchanged. Focused results and limitations: [checks](../qa/support-uptime-001/implementation/check-results.json).
 Source, context, tooling and APK-verifier self-test PASS. Tooling first failed under
 default sandbox subprocess output capture, then passed with additional network
 permission; the malformed source stderr in tooling is its required negative control.
-[Draft PR82](https://github.com/karahaNx/Lumenfall/pull/82) now publishes candidate412a948 and all originals/evidence. Required full CI is running; integration and new APK acceptance remain pending.
+[Draft PR82](https://github.com/karahaNx/Lumenfall/pull/82) publishes the candidate/evidence. Initial full CI failed; scoped fixes preserve the original frozen oracle/save and use measured cap10 totals. Offline core (17cases) and both browser lifecycle checks pass. See [CI disposition](../qa/support-uptime-001/implementation/ci-first-run.json). Required CI, integration and new APK acceptance remain pending.
 Do not label local motor/browser passes as independent review or physical acceptance.
 
 ## Next action

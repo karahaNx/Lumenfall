@@ -1,6 +1,6 @@
-/* Read-only F18 motor diagnosis. Observer wrappers preserve all return values.
+/* SUPPORT_UPTIME_001 production motor regression. Observers preserve returns.
  * DOM startup is suspended; browser persistence uses the existing harness.
- * Usage: node docs/qa/support-uptime-001/probe.cjs [index.html] [output.json] [contract.json]
+ * Usage: node tests/behavioral/support-uptime.cjs [index.html] [output.json]
  */
 const fs = require('node:fs');
 const path = require('node:path');
@@ -194,7 +194,22 @@ for(const [name,before,after] of [['old-duration','durationMs:ultimate ? 1500 : 
  let caught='';try{verifyTiming(script.replace(before,after));}catch(error){caught=error.message;}
  assert.match(caught,/production (Ultimate duration|Swift minimum cycle)/,'causal timing control');negativeControls.push({name,caught});
 }
-const result={status:fractionalFailures||phaseFailures?contract.kind+'-has-failure':'pass',source:{sha256:crypto.createHash('sha256').update(html).digest('hex'),gitBlob:crypto.createHash('sha1').update(Buffer.from('blob '+Buffer.byteLength(html)+'\0')).update(html).digest('hex'),bytes:Buffer.byteLength(html)},contract,node:process.version,assertions,limits:'Full production VM motor with observer wrappers; no cap stub. Browser save/UI and APK/native checks are separate.',negativeControls,phaseSweep,fractionalDiagnostics,fractionalFailureControls,rows,staggeredNormalPair:{charge:0,seconds:60,anyActiveSeconds:anySeconds,casts:stagger.log.casts,expiries:stagger.log.expiries},summary:{normalCharge0:normal.sources.tide,ultimateCharge0:ultimate.sources.tide}};
+// Shorter expiries exercise a tiny remainder at the Farm grid boundary. Its
+// canonical clock advances even when composed elapsed rounds to the same value.
+// Keep the real medium economy and all damage; disabling the fix must stall.
+const farmSeed=JSON.parse(fs.readFileSync(path.join(root,'tests/behavioral/fixtures.json'),'utf8'))['parity-medium-farm'].save;
+function verifyGridClock(sourceScript){
+ const c=engine(false,sourceScript);c.set(copy(farmSeed));
+ return c.simulate(60,'live',start);
+}
+const gridClock=copy(verifyGridClock(script));
+assert.equal(gridClock.elapsedSec,60,'full Farm clock consumed');assertions++;
+const oldGuard=' && !gridClockAdvanced && actions===0';
+assert.equal(script.split(oldGuard).length,2,'unique grid-clock causal marker');
+let stalled='';try{verifyGridClock(script.replace(oldGuard,' && actions===0'));}catch(error){stalled=error.message;}
+assert.match(stalled,/Authoritative simulation stalled/,'old logical-only guard rejects the real Farm clock boundary');
+negativeControls.push({name:'old-grid-clock-guard',caught:stalled});
+const result={status:fractionalFailures||phaseFailures?contract.kind+'-has-failure':'pass',source:{sha256:crypto.createHash('sha256').update(html).digest('hex'),gitBlob:crypto.createHash('sha1').update(Buffer.from('blob '+Buffer.byteLength(html)+'\0')).update(html).digest('hex'),bytes:Buffer.byteLength(html)},contract,node:process.version,assertions,limits:'Full production VM motor with observer wrappers; no cap stub. Browser save/UI and APK/native checks are separate.',negativeControls,gridClock,phaseSweep,fractionalDiagnostics,fractionalFailureControls,rows,staggeredNormalPair:{charge:0,seconds:60,anyActiveSeconds:anySeconds,casts:stagger.log.casts,expiries:stagger.log.expiries},summary:{normalCharge0:normal.sources.tide,ultimateCharge0:ultimate.sources.tide}};
 if(outputPath)fs.writeFileSync(outputPath,JSON.stringify(result,null,2)+'\n');
 console.log(JSON.stringify({status:result.status,assertions,rows:rows.length,fractionalCases:fractionalDiagnostics.length,fractionalFailures,phaseCases:phaseSweep.length,phaseFailures,source:result.source,summary:result.summary,staggeredAnyActiveSeconds:anySeconds}));
 if(fractionalFailures||phaseFailures)process.exitCode=1;
