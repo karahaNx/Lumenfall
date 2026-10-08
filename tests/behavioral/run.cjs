@@ -122,7 +122,7 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
   if (['p1-05-reduced-motion', 'p2-06b-reduced-motion', 'research-duration-reduced-motion', 'inquiry-ui-reduced-motion'].includes(scenario)) command.splice(-1, 0, '--force-prefers-reduced-motion');
   const started = performance.now();
   let result;
-  const domCommand = process.env.LUMENFALL_QA_DOM_TRANSPORT === 'pipe'
+  const domCommand = !options.execute && process.env.LUMENFALL_QA_DOM_TRANSPORT === 'pipe'
     ? [process.execPath, path.join(ROOT, 'browser-dom.cjs'), chrome, url, profile, command.includes('--force-prefers-reduced-motion')?'reduce':'no-preference'] : command;
   try { result = await (options.execute || runProcess)(domCommand, { timeout: 25000 }); }
   finally { fs.rmSync(profile, { recursive: true, force: true }); }

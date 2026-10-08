@@ -123,9 +123,9 @@ window.runInquiryQa=function(b,ctx,assert,assertProtectedParity,assertSummaryPar
     var events=offline.timeline||offline.summary.timeline||[];
     var full=seed();full.longStudyLevels.measuredinquiry=13;
     full.activeStudies=[{id:'measuredinquiry',remainingSec:43201,totalDurationSec:43201,speedMult:1},{id:'guardmastery',remainingSec:43202,totalDurationSec:43202,speedMult:1}];install(full);b.setLastSeen(b.clockNow()-43203*1000);
-    var actual=b.applyOfflineNow();ok(actual.effectiveSec===43200 && b.getState().longStudyLevels.guardmastery===1&&b.getState().longStudyLevels.measuredinquiry===13,'actual applyOfflineProgress continues studies past12h cap');
-    same(actual.completedStudies,["Guardian's Mastery"],'actual offline report earned only');same(actual.closedStudies,['Measured Inquiry'],'actual offline neutral disposal');
-    return {checks:checks,negativeControls:2,capCompletion:true,overcapTail:true,dueEntry:true,arrayOrder:true,liveOfflineChunkParity:true,actual12hTail:true,timelineEvents:events.length};
+    var actual=b.applyOfflineNow();ok(actual.effectiveSec===43200 && b.getState().longStudyLevels.guardmastery===0&&b.getState().longStudyLevels.measuredinquiry===13,'actual applyOfflineProgress stops all Study work at12h');
+    same(actual.completedStudies,[],'no completion beyond12h');same(actual.closedStudies,[],'no disposal beyond12h');ok(Math.abs(active('guardmastery').remainingSec-2)<1e-5,'unpaid tail work stays pending');ok(Math.abs(active('measuredinquiry').remainingSec-1)<1e-5,'overcap paid record stays pending');
+    return {checks:checks,negativeControls:2,capCompletion:true,overcapTail:true,dueEntry:true,arrayOrder:true,liveOfflineChunkParity:true,actual12hCommonCap:true,timelineEvents:events.length};
   }
   // Actual current Lab controls and observer purity, including small viewports.
   [0,5,10,13].forEach(function(k){
