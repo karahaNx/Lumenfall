@@ -1,0 +1,533 @@
+{
+  "status": "fail",
+  "mode": "accept",
+  "message": "Error: CDP deadline Runtime.evaluate\n    at Timeout._onTimeout (/workspace/offline-12h-preparation/docs/qa/offline-12h-001/native.cjs:9:134)\n    at listOnTimeout (node:internal/timers:635:17)\n    at process.processTimers (node:internal/timers:571:7)",
+  "records": [
+    {
+      "case": "signed 144 to F26 update preserves paid work and refunds exactly once",
+      "identity": {
+        "installedApkSha256": "8ad8aeab6df7224e629c8a93805386a5c16851ffeb53e2f7338f42c76b0d79bc",
+        "sourceSha256": "84ca8f6a50d0df5046c86ddb4a354850aca6273e4581e11b94acc95b10ae885f",
+        "ua": "Mozilla/5.0 (Linux; Android 8.1.0; Android SDK built for x86_64 Build/OSM1.180201.023; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.98 Mobile Safari/537.36",
+        "android": "8.1.0"
+      },
+      "baselineIdentity": {
+        "installedApkSha256": "6e2006cb90ebe27104bd1ae38ba8c8afa700f4ede90e6fe8046bf7b2f505ca5d",
+        "sourceSha256": "18d5b7775c7e69e0419d2d96a52ddddc5180790bc67672c1f93f880f1f49c8cf",
+        "ua": "Mozilla/5.0 (Linux; Android 8.1.0; Android SDK built for x86_64 Build/OSM1.180201.023; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.98 Mobile Safari/537.36",
+        "android": "8.1.0"
+      },
+      "before": {
+        "schemaVersion": 1,
+        "lumen": 0,
+        "shards": 0,
+        "prisms": 100,
+        "comets": 100,
+        "motes": 0,
+        "sigils": 0,
+        "depth": 1,
+        "maxDepthEver": 101,
+        "riftMode": "push",
+        "farmDepth": 0,
+        "farmReturnDepth": 0,
+        "enemyDepth": 1,
+        "enemyHp": 11,
+        "enemyMaxHp": 11,
+        "enemyIsLuminous": false,
+        "spirits": {
+          "ember": 1,
+          "tide": 0,
+          "stone": 0,
+          "gale": 0,
+          "thorn": 0,
+          "void": 0,
+          "aurora": 0,
+          "titan": 0
+        },
+        "heroRarity": {
+          "ember": 0,
+          "tide": 0,
+          "stone": 0,
+          "gale": 0,
+          "thorn": 0,
+          "void": 0,
+          "aurora": 0,
+          "titan": 0
+        },
+        "heroResource": {
+          "ember": 0,
+          "tide": 0,
+          "stone": 0,
+          "gale": 0,
+          "thorn": 0,
+          "void": 0,
+          "aurora": 0,
+          "titan": 0
+        },
+        "wispModules": {
+          "ember": 0,
+          "tide": 0,
+          "stone": 0,
+          "gale": 0,
+          "thorn": 0,
+          "void": 0,
+          "aurora": 0,
+          "titan": 0
+        },
+        "wispUltimate": {
+          "ember": false,
+          "tide": false,
+          "stone": false,
+          "gale": false,
+          "thorn": false,
+          "void": false,
+          "aurora": false,
+          "titan": false
+        },
+        "empowerQueue": {
+          "ember": true,
+          "tide": true,
+          "stone": true,
+          "gale": true,
+          "thorn": true,
+          "void": true,
+          "aurora": true,
+          "titan": true
+        },
+        "activeParty": [
+          "ember"
+        ],
+        "formationPresets": {
+          "push": [
+            "ember"
+          ],
+          "farm": [
+            "ember"
+          ],
+          "boss": [
+            "ember"
+          ]
+        },
+        "activeFormationPreset": "push",
+        "formationRebuild": null,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 3
+        },
+        "research": {
+          "focus": 0,
+          "sense": 0,
+          "formation": 0,
+          "resolve": 0,
+          "charge": 0,
+          "arcanecal": 0,
+          "conduction": 0,
+          "luminoustracking": 0
+        },
+        "researchQueue": {
+          "focus": false,
+          "sense": false,
+          "formation": false,
+          "resolve": false,
+          "charge": false,
+          "arcanecal": false,
+          "conduction": false,
+          "luminoustracking": false
+        },
+        "longStudyLevels": {
+          "wispascend": 0,
+          "guardmastery": 0,
+          "riftattune": 0,
+          "shardstudy": 0,
+          "lumenstudy": 0,
+          "formationstudy": 0,
+          "motestudy": 0,
+          "prismstudy": 0,
+          "measuredinquiry": 0
+        },
+        "activeStudies": [
+          {
+            "id": "guardmastery",
+            "remainingSec": 46800,
+            "totalDurationSec": 46800,
+            "speedMult": 1
+          }
+        ],
+        "studyQueue": {
+          "wispascend": false,
+          "guardmastery": false,
+          "riftattune": false,
+          "shardstudy": false,
+          "lumenstudy": false,
+          "formationstudy": false,
+          "motestudy": false,
+          "prismstudy": false,
+          "measuredinquiry": false
+        },
+        "studyUseMotes": {
+          "wispascend": false,
+          "guardmastery": false,
+          "riftattune": false,
+          "shardstudy": false,
+          "lumenstudy": false,
+          "formationstudy": false,
+          "motestudy": false,
+          "prismstudy": false,
+          "measuredinquiry": false
+        },
+        "studySpeedTargets": {
+          "wispascend": 1.5,
+          "guardmastery": 1.5,
+          "riftattune": 1.5,
+          "shardstudy": 1.5,
+          "lumenstudy": 1.5,
+          "formationstudy": 1.5,
+          "motestudy": 1.5,
+          "prismstudy": 1.5,
+          "measuredinquiry": 1.5
+        },
+        "achieved": {
+          "d10": true,
+          "d25": true,
+          "d50": true,
+          "d100": true,
+          "d250": true,
+          "tap100": true,
+          "tap1000": true,
+          "tap10000": true,
+          "fullparty": true,
+          "asc1": true,
+          "asc5": true,
+          "asc10": true,
+          "all": true,
+          "mythic": true,
+          "idle8": true,
+          "autotap": true,
+          "labmaster": true,
+          "study1": true,
+          "study25": true,
+          "allstudies": true,
+          "labqueue": true,
+          "firstultimate": true,
+          "modulemax": true
+        },
+        "owned": {},
+        "riftTheme": "default",
+        "cometTrial": null,
+        "cometTrialMarks": {},
+        "cometTrialResult": null,
+        "cometCosmetics": {
+          "trail": false,
+          "crest": false
+        },
+        "legacyCometPurchases": {
+          "rememberbulk": true,
+          "offline24": true,
+          "offline48": true
+        },
+        "buffUntil": 0,
+        "buffMult": 1,
+        "supportBuffs": null,
+        "ascendCount": 0,
+        "ascendRewardedDepth": 0,
+        "sigilResonanceUses": 0,
+        "totalTaps": 0,
+        "totalKills": 0,
+        "totalOfflineSeconds": 0,
+        "luminousAccum": 0.03,
+        "savedLabMultiplier": 1,
+        "autoAscendEnabled": false,
+        "autoAscendTargetDepth": 16,
+        "loginStreak": 1,
+        "questDay": "2026-10-08",
+        "questIds": [],
+        "questClaimed": {},
+        "dailyQuestRefreshes": 0,
+        "dailyStats": {
+          "taps": 0,
+          "kills": 0,
+          "empowers": 0,
+          "research": 0,
+          "bossKills": 0,
+          "luminousKills": 0,
+          "ascends": 0
+        },
+        "lastSeen": 1791443653606,
+        "_autoTapAccum": 0,
+        "_autoEmpowerAccum": 0
+      },
+      "after": {
+        "schemaVersion": 2,
+        "offline12hRefund": {
+          "policy": "OFFLINE_12H_001:140/160:sum-ceil-6x1.6^level",
+          "offline24": true,
+          "offline48": true,
+          "reservesLevel": 3,
+          "comets": 300,
+          "prismPrices": [
+            6,
+            10,
+            16
+          ],
+          "prismsExact": "32",
+          "cometsPaid": [
+            true,
+            true
+          ],
+          "prismsPaid": [
+            true,
+            true,
+            true
+          ]
+        },
+        "lumen": 40.99999999999932,
+        "shards": 1654.0999999999976,
+        "prisms": 132,
+        "comets": 400,
+        "motes": 46,
+        "sigils": 6,
+        "depth": 40,
+        "maxDepthEver": 101,
+        "riftMode": "push",
+        "farmDepth": 0,
+        "farmReturnDepth": 0,
+        "enemyDepth": 40,
+        "enemyHp": 13189.275630999156,
+        "enemyMaxHp": 13501,
+        "enemyIsLuminous": false,
+        "spirits": {
+          "ember": 44,
+          "tide": 0,
+          "stone": 0,
+          "gale": 0,
+          "thorn": 0,
+          "void": 0,
+          "aurora": 0,
+          "titan": 0
+        },
+        "heroRarity": {
+          "ember": 0,
+          "tide": 0,
+          "stone": 0,
+          "gale": 0,
+          "thorn": 0,
+          "void": 0,
+          "aurora": 0,
+          "titan": 0
+        },
+        "heroResource": {
+          "ember": 39.65000000000144,
+          "tide": 0,
+          "stone": 0,
+          "gale": 0,
+          "thorn": 0,
+          "void": 0,
+          "aurora": 0,
+          "titan": 0
+        },
+        "wispModules": {
+          "ember": 0,
+          "tide": 0,
+          "stone": 0,
+          "gale": 0,
+          "thorn": 0,
+          "void": 0,
+          "aurora": 0,
+          "titan": 0
+        },
+        "wispUltimate": {
+          "ember": false,
+          "tide": false,
+          "stone": false,
+          "gale": false,
+          "thorn": false,
+          "void": false,
+          "aurora": false,
+          "titan": false
+        },
+        "empowerQueue": {
+          "ember": true,
+          "tide": true,
+          "stone": true,
+          "gale": true,
+          "thorn": true,
+          "void": true,
+          "aurora": true,
+          "titan": true
+        },
+        "activeParty": [
+          "ember"
+        ],
+        "formationPresets": {
+          "push": [
+            "ember"
+          ],
+          "farm": [
+            "ember"
+          ],
+          "boss": [
+            "ember"
+          ]
+        },
+        "activeFormationPreset": "push",
+        "formationRebuild": null,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 3
+        },
+        "research": {
+          "focus": 0,
+          "sense": 0,
+          "formation": 0,
+          "resolve": 0,
+          "charge": 0,
+          "arcanecal": 0,
+          "conduction": 0,
+          "luminoustracking": 0
+        },
+        "researchQueue": {
+          "focus": false,
+          "sense": false,
+          "formation": false,
+          "resolve": false,
+          "charge": false,
+          "arcanecal": false,
+          "conduction": false,
+          "luminoustracking": false
+        },
+        "longStudyLevels": {
+          "wispascend": 0,
+          "guardmastery": 0,
+          "riftattune": 0,
+          "shardstudy": 0,
+          "lumenstudy": 0,
+          "formationstudy": 0,
+          "motestudy": 0,
+          "prismstudy": 0,
+          "measuredinquiry": 0
+        },
+        "activeStudies": [
+          {
+            "id": "guardmastery",
+            "remainingSec": 43881.621,
+            "totalDurationSec": 46800,
+            "speedMult": 1
+          }
+        ],
+        "studyQueue": {
+          "wispascend": false,
+          "guardmastery": false,
+          "riftattune": false,
+          "shardstudy": false,
+          "lumenstudy": false,
+          "formationstudy": false,
+          "motestudy": false,
+          "prismstudy": false,
+          "measuredinquiry": false
+        },
+        "studyUseMotes": {
+          "wispascend": false,
+          "guardmastery": false,
+          "riftattune": false,
+          "shardstudy": false,
+          "lumenstudy": false,
+          "formationstudy": false,
+          "motestudy": false,
+          "prismstudy": false,
+          "measuredinquiry": false
+        },
+        "studySpeedTargets": {
+          "wispascend": 1.5,
+          "guardmastery": 1.5,
+          "riftattune": 1.5,
+          "shardstudy": 1.5,
+          "lumenstudy": 1.5,
+          "formationstudy": 1.5,
+          "motestudy": 1.5,
+          "prismstudy": 1.5,
+          "measuredinquiry": 1.5
+        },
+        "achieved": {
+          "d10": true,
+          "d25": true,
+          "d50": true,
+          "d100": true,
+          "d250": true,
+          "tap100": true,
+          "tap1000": true,
+          "tap10000": true,
+          "fullparty": true,
+          "asc1": true,
+          "asc5": true,
+          "asc10": true,
+          "all": true,
+          "mythic": true,
+          "idle8": true,
+          "autotap": true,
+          "labmaster": true,
+          "study1": true,
+          "study25": true,
+          "allstudies": true,
+          "labqueue": true,
+          "firstultimate": true,
+          "modulemax": true
+        },
+        "owned": {},
+        "riftTheme": "default",
+        "cometTrial": null,
+        "cometTrialMarks": {},
+        "cometTrialResult": null,
+        "cometCosmetics": {
+          "trail": false,
+          "crest": false
+        },
+        "legacyCometPurchases": {
+          "rememberbulk": true,
+          "offline24": true,
+          "offline48": true
+        },
+        "buffUntil": 0,
+        "buffMult": 1,
+        "supportBuffs": null,
+        "ascendCount": 0,
+        "ascendRewardedDepth": 0,
+        "sigilResonanceUses": 0,
+        "totalTaps": 2918,
+        "totalKills": 106,
+        "totalOfflineSeconds": 2918.379,
+        "luminousAccum": 0.1899999999999989,
+        "savedLabMultiplier": 1,
+        "autoAscendEnabled": false,
+        "autoAscendTargetDepth": 16,
+        "loginStreak": 1,
+        "questDay": "2026-10-08",
+        "questIds": [],
+        "questClaimed": {},
+        "dailyQuestRefreshes": 0,
+        "dailyStats": {
+          "taps": 2918,
+          "kills": 106,
+          "empowers": 43,
+          "research": 0,
+          "bossKills": 3,
+          "luminousKills": 8,
+          "ascends": 0
+        },
+        "lastSeen": 1791446571985,
+        "_autoTapAccum": 379.0000000000865,
+        "_autoEmpowerAccum": 379.0000000000865
+      }
+    }
+  ],
+  "errors": []
+}
