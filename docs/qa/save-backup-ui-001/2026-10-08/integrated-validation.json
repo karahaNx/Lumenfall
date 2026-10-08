@@ -1,0 +1,17 @@
+{
+  "source_commit": "261b1b7f863f73c324f4ac04acb5bfc95101644d",
+  "source_HTML_sha256": "18d5b7775c7e69e0419d2d96a52ddddc5180790bc67672c1f93f880f1f49c8cf",
+  "source_check": "pass",
+  "full_tree_equal_to_CI_validated_head": true,
+  "integrated_UI": {
+    "command": "node tests/behavioral/save-backup-ui.cjs --chrome /tmp/lumenfall-save-ui-chrome/opt/google/chrome/google-chrome --web-root . --evidence docs/qa/save-backup-ui-001/2026-10-08/integrated-ui",
+    "status": "pass",
+    "profiles": 12
+  },
+  "APK_UI": {
+    "command": "node tests/behavioral/save-backup-ui.cjs --chrome /tmp/lumenfall-save-ui-chrome/opt/google/chrome/google-chrome --web-root /tmp/lumenfall-save-ui-apk144 --evidence docs/qa/save-backup-ui-001/2026-10-08/apk-ui",
+    "status": "pass",
+    "profiles": 12
+  },
+  "physical": "OPEN"
+}

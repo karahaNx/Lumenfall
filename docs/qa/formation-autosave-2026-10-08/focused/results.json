@@ -1,0 +1,270 @@
+{
+  "nativeBrowser": "/usr/bin/chromium",
+  "started": "2026-10-08T05:52:19.302Z",
+  "base": "0ad88ca27b1f5430f2bc45995c97c240ebeda304",
+  "sourceSha256": "312a7e22702f54853565dc9b8b8f3aa7ad8bca8f0fd2f9f8424456ed364328e3",
+  "checks": [
+    {
+      "name": "context",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "scripts/codex/check_context.cjs"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 0.046
+    },
+    {
+      "name": "tooling",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/tooling/run.cjs"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 0.567
+    },
+    {
+      "name": "apk-identity-self-test",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "scripts/verify_apk_identity.cjs",
+        "--self-test"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 0.042
+    },
+    {
+      "name": "source",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "scripts/ci/validate_source.cjs"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 0.111
+    },
+    {
+      "name": "formation-autosave-contract",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "formation-autosave-contract",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-formation-autosave/docs/qa/formation-autosave-2026-10-08/focused/formation-autosave-contract-raw"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.675
+    },
+    {
+      "name": "formation-autosave-save-reload",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "formation-autosave-save-reload",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-formation-autosave/docs/qa/formation-autosave-2026-10-08/focused/formation-autosave-save-reload-raw"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.611
+    },
+    {
+      "name": "formation-autosave-backup-restore",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "formation-autosave-backup-restore",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-formation-autosave/docs/qa/formation-autosave-2026-10-08/focused/formation-autosave-backup-restore-raw"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.613
+    },
+    {
+      "name": "formation-autosave-recovery",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "formation-autosave-recovery",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-formation-autosave/docs/qa/formation-autosave-2026-10-08/focused/formation-autosave-recovery-raw"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.623
+    },
+    {
+      "name": "formation-autosave-native",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "formation-autosave-native",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-formation-autosave/docs/qa/formation-autosave-2026-10-08/focused/formation-autosave-native-raw"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 42.741
+    },
+    {
+      "name": "formation-autosave-reduced-motion",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "formation-autosave-reduced-motion",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-formation-autosave/docs/qa/formation-autosave-2026-10-08/focused/formation-autosave-reduced-motion-raw"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 29.044
+    },
+    {
+      "name": "p2-07a-formation-reconstruction",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "p2-07a-formation-reconstruction",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-formation-autosave/docs/qa/formation-autosave-2026-10-08/focused/p2-07a-formation-reconstruction-raw"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.816
+    },
+    {
+      "name": "p2-07a-persistence-review",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "p2-07a-persistence-review",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-formation-autosave/docs/qa/formation-autosave-2026-10-08/focused/p2-07a-persistence-review-raw"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.451
+    },
+    {
+      "name": "p2-07a-chronology",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "p2-07a-chronology",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-formation-autosave/docs/qa/formation-autosave-2026-10-08/focused/p2-07a-chronology-raw"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.575
+    },
+    {
+      "name": "p2-02a-core-qol",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "p2-02a-core-qol",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-formation-autosave/docs/qa/formation-autosave-2026-10-08/focused/p2-02a-core-qol-raw"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.761
+    },
+    {
+      "name": "runtime-guard",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "scripts/ci/smoke.cjs",
+        "--install-guard",
+        "/workspace/Lumenfall-formation-autosave/mobile/www/index.html"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 0.039
+    },
+    {
+      "name": "runtime-smoke",
+      "command": "google-chrome",
+      "argv": [
+        "--headless=new",
+        "--no-sandbox",
+        "--disable-gpu",
+        "--disable-dev-shm-usage",
+        "--user-data-dir=/workspace/Lumenfall-formation-autosave/docs/qa/formation-autosave-2026-10-08/focused/smoke-profile",
+        "--window-size=390,844",
+        "--virtual-time-budget=1800",
+        "--dump-dom",
+        "http://127.0.0.1:34283/index.html"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 0.911
+    },
+    {
+      "name": "runtime-smoke-assertions",
+      "exit": 0,
+      "checks": {
+        "guard": true,
+        "noUncaught": true,
+        "noRejection": true,
+        "zone": true,
+        "riftLock": true,
+        "enemy": true,
+        "hud": true
+      }
+    }
+  ],
+  "finished": "2026-10-08T05:53:45.964Z",
+  "passed": true
+}
