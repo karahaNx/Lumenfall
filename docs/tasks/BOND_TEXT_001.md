@@ -40,6 +40,10 @@ conflict retains both Wisp-upgrade and Bond bridges/modules. Later Forge/Lab
 proposal and F12 receipt merges add documentation; no related product change.
 F15/new Bonds remains separate. An open broader PR67 also changes Bonds;
 partner names resolve from the same `FORMATION_BONDS.ids` used by simulation.
+Receipt branch also incorporates main ab46c0c7f30667c24325b6271f811b46b159d0d1
+(PR63 Rift Cast/Ready text). Its six product-line changes preserve the Bond
+definitions/helper/descriptions; receipt CI and affected checks assess the combined
+version. APK141 evidence remains bound to its earlier recorded integration.
 
 ## Implementation and preservation
 
