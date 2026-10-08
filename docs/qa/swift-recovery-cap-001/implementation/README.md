@@ -29,3 +29,8 @@ milliseconds. Required restored whole/split checks use 0ms and123ms endpoints,
 retain existing tolerances and catch the original stall. No physical Android,
 TalkBack or exact WebView60 device result is claimed. Native API27/WebView61
 emulator and actual V8 6.0 cover scoped compatibility separately.
+
+Full-suite diagnostic reached offline-core process timeout300s; standalone complete
+replay passes in330.358s. Only that new72h exhaustive oracle has a bounded600s
+process budget. Assertions, event/work guards, browser limits and other process
+timeouts remain unchanged.
