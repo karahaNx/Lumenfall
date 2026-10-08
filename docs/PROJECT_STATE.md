@@ -9,6 +9,14 @@ commits below are observed checkpoints, not a promise that main never advances.
 
 ## Product and release evidence
 
+[LOADOUT_MEMORY_001 / F25](tasks/LOADOUT_MEMORY_001.md) integrated through
+[PR78](https://github.com/karahaNx/Lumenfall/pull/78)/9c19664: automatic Forge
+preference, no named shop, legacy value retained. CI173/17 and APK150 signed
+identity/15 assets/extracted V8/1139 checks/native input/restart/upgrade PASS.
+Corrected app-private database capture supersedes invalid shell-error hashes.
+F26 refunds remain separate; PR97 final combined CI/integration pending.
+Owner chat stays open until final acceptance/evidence are saved.
+
 [RIFT_GUIDANCE_001 / F07](tasks/RIFT_GUIDANCE_001.md): PR81/015e2e6 integrates
 stable guidance below currencies. UI160/0px, focus/AX/state purity, Rift/navigation
 and V8 6.0 PASS. Signed0.1.151 identity/assets and actual143→151 Android update,
@@ -17,6 +25,13 @@ source checks pass. [PR98](https://github.com/karahaNx/Lumenfall/pull/98) saves 
 [completion receipt](qa/rift-guidance-001/2026-10-08/delivery/README.md); completion
 on main requires its final mandatory CI/merge. No physical/TalkBack/FPS claim;
 archive only this owner after merge, or report unavailable app tooling.
+
+[UPGRADE_IDENTITY_001/F29](tasks/UPGRADE_IDENTITY_001.md) is integrated via PR90/31eccfb:
+14 buying tracks at integration, unchanged currencies and all24 historical levels.
+Subsequent F26/PR85 retires/refunds Deep Reserves: current tracks Lab6/Forge4/Tree3.
+PR90 CI167/17 and combined19 scoped scenarios/23 runs PASS. Signed APK148/151
+identity/CRC526/all15 assets and actual V8 value/offline probes PASS. [Evidence/immutable APKs](qa/upgrade-identity-001/2026-10-08/README.md).
+Required affected-phone/exact WebView60/TalkBack acceptance is OPEN; chat stays open.
 
 F13 delivery added 8 October 2026: [RIFT_CAST_TEXT_001](tasks/RIFT_CAST_TEXT_001.md)
 is complete via PR63/ab46c0c. Full CI151 scenarios/12 required negatives, integrated

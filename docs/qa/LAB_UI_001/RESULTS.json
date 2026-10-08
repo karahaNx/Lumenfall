@@ -1,0 +1,211 @@
+{
+  "sourceSha256": "efd89f017cf118c0febb90b4d6952b8993d3d43ce558f6312ddb682844c3c935",
+  "baseline": "b0537cb46635555ba2c2e5f3f95bc8fc276aeda5",
+  "status": "scoped browser checks pass; full CI/integration/APK/device pending",
+  "checks": {
+    "baseline-source": {
+      "sha256": "554c0938eec03dd8c8db111b0fcc9c537dd5b879531a874c492090a357d941e6",
+      "passed": true
+    },
+    "baseline-tooling": {
+      "sha256": "5a555b1f0b2af8afee6edc401ff8e3b5a84fe679131974dcf0b5b1b4f74d7ffe",
+      "passed": true
+    },
+    "baseline-native": {
+      "sha256": "dc2481a3acdf5f911c0a7c8f71fc5665b9d9d4be49287c074f13ccb7ec175fd6",
+      "passed": true
+    },
+    "native": {
+      "sha256": "14f2b4f0198e5862d001ff347bb1498875f809ddd1f72c8e0f6a3771b5d438b4",
+      "passed": true,
+      "status": "pass",
+      "profiles": [
+        {
+          "width": 320,
+          "textScale": 1,
+          "motion": "no-preference",
+          "checks": 250
+        },
+        {
+          "width": 320,
+          "textScale": 2,
+          "motion": "no-preference",
+          "checks": 250
+        },
+        {
+          "width": 390,
+          "textScale": 1,
+          "motion": "no-preference",
+          "checks": 250
+        },
+        {
+          "width": 390,
+          "textScale": 2,
+          "motion": "no-preference",
+          "checks": 250
+        },
+        {
+          "width": 430,
+          "textScale": 1,
+          "motion": "no-preference",
+          "checks": 250
+        },
+        {
+          "width": 430,
+          "textScale": 2,
+          "motion": "no-preference",
+          "checks": 250
+        }
+      ]
+    },
+    "reduced-motion": {
+      "sha256": "fa9e3d47ee1db2c8e4ab14b5b308c63ac85b81eed10f2aedee23ef192ca58cac",
+      "passed": true,
+      "status": "pass",
+      "profiles": [
+        {
+          "width": 320,
+          "textScale": 1,
+          "motion": "reduce",
+          "checks": 254
+        },
+        {
+          "width": 320,
+          "textScale": 2,
+          "motion": "reduce",
+          "checks": 254
+        },
+        {
+          "width": 390,
+          "textScale": 1,
+          "motion": "reduce",
+          "checks": 254
+        },
+        {
+          "width": 390,
+          "textScale": 2,
+          "motion": "reduce",
+          "checks": 254
+        },
+        {
+          "width": 430,
+          "textScale": 1,
+          "motion": "reduce",
+          "checks": 254
+        },
+        {
+          "width": 430,
+          "textScale": 2,
+          "motion": "reduce",
+          "checks": 254
+        }
+      ]
+    },
+    "regression": {
+      "sha256": "2e82a27d7a38796ed4009800350f67a231f782bbadb1bdc7408b26a4caddd31b",
+      "passed": true,
+      "status": "pass",
+      "profiles": [
+        {
+          "scenario": "lab-motes-contracts",
+          "status": "pass",
+          "errors": 0
+        },
+        {
+          "scenario": "lab-motes-chronology",
+          "status": "pass",
+          "errors": 0
+        },
+        {
+          "scenario": "lab-motes-conservation",
+          "status": "pass",
+          "errors": 0
+        },
+        {
+          "scenario": "lab-motes-save-reload",
+          "status": "pass",
+          "errors": 0
+        },
+        {
+          "scenario": "lab-motes-backup-restore",
+          "status": "pass",
+          "errors": 0
+        },
+        {
+          "scenario": "lab-motes-recovery",
+          "status": "pass",
+          "errors": 0
+        },
+        {
+          "scenario": "lab-motes-reset",
+          "status": "pass",
+          "errors": 0
+        },
+        {
+          "scenario": "inquiry-contracts",
+          "status": "pass",
+          "errors": 0
+        },
+        {
+          "scenario": "inquiry-chronology",
+          "status": "pass",
+          "errors": 0
+        },
+        {
+          "scenario": "inquiry-ui",
+          "status": "pass",
+          "errors": 0
+        },
+        {
+          "scenario": "inquiry-ui-reduced-motion",
+          "status": "pass",
+          "errors": 0
+        },
+        {
+          "scenario": "inquiry-save-reload",
+          "status": "pass",
+          "errors": 0
+        },
+        {
+          "scenario": "inquiry-backup-restore",
+          "status": "pass",
+          "errors": 0
+        },
+        {
+          "scenario": "inquiry-recovery",
+          "status": "pass",
+          "errors": 0
+        },
+        {
+          "scenario": "research-duration",
+          "status": "pass",
+          "errors": 0
+        },
+        {
+          "scenario": "research-duration-reduced-motion",
+          "status": "pass",
+          "errors": 0
+        },
+        {
+          "scenario": "upgrade-effects-and-deeds",
+          "status": "pass",
+          "errors": 0
+        },
+        {
+          "scenario": "p2-02b-lab-hierarchy",
+          "status": "pass",
+          "errors": 0
+        },
+        {
+          "scenario": "nav-workshop-contract",
+          "status": "pass",
+          "errors": 0
+        }
+      ]
+    },
+    "tooling": {
+      "sha256": "6fefaeea1fcb49445dfbf2a532646c9fd09879c0437f385142392ea7b4233593",
+      "passed": true
+    }
+  }
+}
