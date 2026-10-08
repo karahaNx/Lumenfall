@@ -41,7 +41,7 @@ function extract(name) {
 
 const lab = catalogue('LONG_STUDIES'), forge = catalogue('RESEARCH'), tree = catalogue('NODES');
 const shop = catalogue('SHOP');
-const state = {nodes: {}, research: {}, longStudyLevels: {}, owned: {}};
+const state = {nodes: {}, research: {}, longStudyLevels: {}, owned: {}, legacyCometPurchases: {}};
 const context = {state, RESEARCH: forge, Math};
 vm.createContext(context);
 const functions = [

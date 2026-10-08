@@ -156,6 +156,12 @@ window.__lumenfallQaBridge = {
       return function(){commitStudyStart=start;studyMotesPlan=plan;simulationKillsUntilStudyMotes=boundary;simulationApplyFarmPassive=farm;};
     }
   },
+  upgradeIdentity: {
+    nodes: function(){return JSON.parse(JSON.stringify(NODES));},
+    buyNode: function(id){buyNode(NODES.find(function(n){return n.id===id;}));},
+    spoofForge: function(id){buyResearch({id:id,retiredTo:''});},
+    metrics: function(){return {lumen:lumenMult(),shards:shardMult(),tap:tapMult(),formation:formationMult(),power:longStudyPowerMult(),momentum:momentumMult(),offline:offlineRate(),prisms:prismMult(),motes:longStudyMoteMult()};}
+  },
   inquiry: {
     nodes: function(){return JSON.parse(JSON.stringify(LONG_STUDIES));},
     originals: function(){return LEGACY_STUDY_IDS.slice();},

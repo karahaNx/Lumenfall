@@ -533,6 +533,13 @@
         }
         finish('pass',window.runLabMotesQa(bridge,ctx,assert,assertProtectedParity,assertSummaryParity));return;
       }
+      if(ctx.scenario.startsWith('upgrade-identity-')||ctx.scenario.startsWith('self-test-upgrade-identity-')){
+        bridge.freeze();
+        if(['upgrade-identity-save-reload','upgrade-identity-backup-restore','upgrade-identity-recovery'].includes(ctx.scenario)){
+          window.runUpgradeIdentityPersistence(bridge,ctx,assert,phase,nextPhase,backupCode,finish);return;
+        }
+        window.runUpgradeIdentityQa(bridge,ctx.scenario.startsWith('self-test-')?Object.assign({},ctx,{scenario:ctx.scenario.endsWith('-clock')?'upgrade-identity-farm-clock':'upgrade-identity-contracts'}):ctx,assert,assertProtectedParity,assertSummaryParity).then(function(detail){finish('pass',detail);},function(error){finish('fail',error.message);});return;
+      }
       if(ctx.scenario.startsWith('inquiry-')){
         bridge.freeze();
         if(['inquiry-save-reload','inquiry-backup-restore','inquiry-recovery','inquiry-reset'].includes(ctx.scenario)){
@@ -1019,24 +1026,24 @@
           var researchEvent = firstTimelineEvent(researchDirect,'research');
           assert(researchEvent,'queued Research must be purchased during the offline window');
           assert(researchEvent.elapsedSec>0 && researchEvent.elapsedSec<60,'Research purchase must occur mid-window');
-          assert(researchDirect.state.research.formation===1,'Formation Research must advance exactly one level in this fixture');
+          assert(researchDirect.state.research.charge===2,'Swift Recovery earns exactly two individually paid levels in this fixture');
           var researchSplit = assertChronologicalSplit(
             researchBaseline,60,researchEvent.elapsedSec,researchDirect,
             'mid-window Research'
           );
-          assert(researchSplit.first.state.research.formation===1,'Research must already be applied at its affordability timestamp');
+          assert(researchSplit.first.state.research.charge===1,'Research must already be applied at its affordability timestamp');
 
           var researchControl = cloneJson(researchBaseline);
-          researchControl.researchQueue.formation = false;
+          researchControl.researchQueue.charge = false;
           bridge.setState(researchControl);
           var researchWithoutQueue = bridge.simulateTimeline(60,'offline',PARITY_CLOCK_MS);
           assert(
             researchDirect.state.totalKills>researchWithoutQueue.state.totalKills,
-            'mid-window Formation Research must affect combat during the remaining offline time'
+            'mid-window Swift Recovery must affect combat during the remaining offline time'
           );
           finish('pass',{
             eventSec:researchEvent.elapsedSec,
-            formationLevel:researchDirect.state.research.formation,
+            chargeLevel:researchDirect.state.research.charge,
             killsWithResearch:researchDirect.state.totalKills-researchBaseline.totalKills,
             killsWithoutResearch:researchWithoutQueue.state.totalKills-researchControl.totalKills
           });
@@ -1409,8 +1416,8 @@
           assertOfflineExactlyOnce(bridge.lifecycleTrace(),60,'Lab queue cold restart');
           var researchEvent = firstTimelineEvent(expectedLab,'research');
           assert(researchEvent && researchEvent.elapsedSec>0 && researchEvent.elapsedSec<60,'queued Research must purchase chronologically during cold offline time');
-          assert(state().research.formation===1,'queued Formation Research must purchase exactly once');
-          assert(state().researchQueue.formation===true,'Research queue enablement must survive save/reload');
+          assert(state().research.charge===2,'queued charge earns exactly two paid levels');
+          assert(state().researchQueue.charge===true,'Research queue enablement must survive save/reload');
           parityApprox(state().lumen,expectedLab.state.lumen,'Research lifecycle Lumen spending');
           parityApprox(state().shards,expectedLab.state.shards,'Research lifecycle Shard spending');
           var labBeforeVisible = cloneJson(state());
@@ -2072,13 +2079,14 @@
           assert(document.activeElement===document.querySelector('[data-tab="research"]') && document.querySelector('[data-tab="research"]').getAttribute('aria-selected')==='true','Workshop sections must support arrow-key selection and focus');
 
           document.querySelector('[data-tab="forge"]').click();
+          var fundedResearch=state();fundedResearch.shards=1e9;bridge.setState(fundedResearch);bridge.renderLayout();
           var beforeResearch=state();
-          var beforeResearchLevel=beforeResearch.research.focus;
+          var beforeResearchLevel=beforeResearch.research.charge;
           var studiesBeforeResearch=JSON.stringify(beforeResearch.activeStudies);
-          var researchButton=document.querySelector('[data-research="focus"]');
+          var researchButton=document.querySelector('[data-research="charge"]');
           assert(researchButton && !researchButton.disabled,'funded Permanent Research action must remain available');
           researchButton.click();
-          assert(state().research.focus>beforeResearchLevel,'Forge destination must preserve upgrade purchasing');
+          assert(state().research.charge>beforeResearchLevel,'Forge destination must preserve upgrade purchasing');
           assert(JSON.stringify(state().activeStudies)===studiesBeforeResearch,'Permanent Research must not disturb Long Studies');
 
           var studyState=cloneJson(state());
