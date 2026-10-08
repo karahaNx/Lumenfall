@@ -1,0 +1,64 @@
+{
+  "feature": "SAVE_BACKUP_UI_001",
+  "status": "local candidate; remote/integration/APK/device gates pending",
+  "observedUtc": "2026-10-07T13:40:00Z",
+  "observedCopenhagen": "2026-10-07T15:40:00+02:00",
+  "base": "0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd",
+  "codeCommit": "e4f39c83226067d6a808823f2da20a185c1ae429",
+  "codeTree": "2b6eea397c85f3d1724e074edc0ad7692e36ca94",
+  "sourceHashes": {
+    "index.html": "b247680333f2a732c952221dd83a80237d9ffe6b320021c533e636f19eb8947c",
+    "tests/behavioral/run.cjs": "05916dcfb19fed440e7402f14a9661dea47111e5c3912d75891c51639651d925",
+    "tests/behavioral/save-backup-ui.cjs": "6c6d4799d144b57c37a5620fdb5cf07f3305de0acca2dad88ce9447097c8e40d",
+    "tests/behavioral/scenarios.json": "6d6e27e45d2ade6efdbb3c3098a882d06053458338471cc88c78b12f87b2db34"
+  },
+  "fullSuite": {
+    "exitCode": 0,
+    "scenarios": 133,
+    "viewportExpandedResults": 153,
+    "sourceSha256": "b247680333f2a732c952221dd83a80237d9ffe6b320021c533e636f19eb8947c",
+    "note": "Product/runner/registration bytes fixed during suite. The final test-only explicit Close case was added afterwards; the affected UI scenario was rerun on final test bytes."
+  },
+  "finalUi": {
+    "exitCode": 0,
+    "profiles": 12,
+    "browser": "Chrome/155.0.8059.39",
+    "minContrast": 6.32788890709516,
+    "evidence": "final-ui/save-backup-ui/ui-result.json"
+  },
+  "negativeControls": {
+    "existing": 12,
+    "new": 2,
+    "caught": 14,
+    "exitCode": 0,
+    "evidence": "negative-controls.json"
+  },
+  "gates": {
+    "source": true,
+    "tooling": true,
+    "apkVerifierSelfTest": true,
+    "contextArchives": true,
+    "browserSmoke": true,
+    "es2017Syntax": true,
+    "backupCoreIdenticalToBase": true,
+    "b2PatchDryRun": true,
+    "diffCheck": true
+  },
+  "limits": {
+    "PR46": "open/Draft R2 3cdebc236e9ee5081a4bca4e323b11f43aa0d46d",
+    "B2": "fresh scoped reviews and writer handover still pending",
+    "remoteFeatureWrites": false,
+    "mainIntegration": null,
+    "featureAPK": null,
+    "physicalAndroid": false,
+    "WebView60Device": false,
+    "TalkBack": false,
+    "ownerArchived": false
+  },
+  "agent": {
+    "identity": "Codex based on GPT-6",
+    "exactVariant": null,
+    "effort": null,
+    "userRecommendation": "GPT-6.1 Sol / High; not actual execution evidence"
+  }
+}
