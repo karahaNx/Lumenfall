@@ -373,18 +373,20 @@
   }
   .shop-card button:disabled{opacity:1;cursor:not-allowed;}
   .shop-card button.owned{color:var(--good);}
-  .auto-ascend-card .info{min-width:0;}
-  .auto-ascend-target-label{display:block;margin-top:8px;font-size:.72rem;font-weight:700;color:var(--prism);}
-  .auto-ascend-target{display:block;width:100%;min-width:0;min-height:44px;margin-top:4px;padding:8px;
-    border:1px solid var(--soft-line);border-radius:8px;background:var(--bg-elev);color:var(--ink);font:inherit;font-size:.8rem;color-scheme:dark;}
-  .auto-ascend-nav{margin-top:8px;}
-  .auto-ascend-nav[hidden]{display:none;}
-  .auto-ascend-nav .nav-row{display:flex;gap:6px;margin-top:6px;}
-  .auto-ascend-nav .nav-row button{flex:1;min-width:0;min-height:44px;padding:6px;font-size:.7rem;}
-  .auto-ascend-find-label{display:block;font-size:.72rem;color:var(--ink-dim);}
-  .auto-ascend-find{width:100%;min-width:0;min-height:44px;padding:6px;border:1px solid var(--soft-line);border-radius:8px;background:var(--bg-elev);color:var(--ink);font:inherit;font-size:.75rem;}
-  .auto-ascend-nav .find-row input{flex:2;}
-  .auto-ascend-range{margin-top:6px;font-size:.7rem;color:var(--ink-dim);overflow-wrap:anywhere;}
+  .auto-ascend-card .name{font-size:1rem;font-weight:800;color:var(--ink);}
+  .auto-ascend-row{display:flex;align-items:flex-end;gap:12px;margin-top:12px;}
+  .auto-ascend-target-label{display:block;flex:1;min-width:0;font-size:.85rem;font-weight:700;color:var(--prism);}
+  .auto-ascend-target{display:block;box-sizing:border-box;width:100%;min-width:0;min-height:48px;margin-top:6px;padding:10px;
+    border:2px solid #b6a0e6;border-radius:10px;background:#141b31;color:#f1edff;font:inherit;font-size:1rem;color-scheme:dark;}
+  .auto-ascend-target:focus,[data-autoascend-toggle]:focus,[data-autoascend-open]:focus{outline:3px solid #f6dc9b;outline-offset:3px;}
+  input.auto-ascend-target{font-size:.8rem;}
+  .auto-ascend-toggle{flex:none;min-width:76px;min-height:48px;padding:10px;border:2px solid #b9b8c9;border-radius:10px;
+    background:#20273a;color:#f1edff;font:inherit;font-size:1.1rem;font-weight:800;cursor:pointer;}
+  .auto-ascend-toggle[aria-pressed="true"]{border-color:#a4dfc2;background:#244538;color:#d9ffec;}
+  .auto-ascend-card .desc{margin-top:10px;font-size:.8rem;line-height:1.5;color:var(--ink-dim);}
+  .auto-ascend-error{color:#ffd4cc;font-size:.8rem;line-height:1.5;overflow-wrap:anywhere;}
+  [data-autoascend-open],[data-autoascend-unlock]{min-width:44px;min-height:44px;}
+  @media(max-width:360px){.auto-ascend-row{flex-wrap:wrap;}.auto-ascend-target-label{flex-basis:100%;}.auto-ascend-toggle{width:100%;}}
   .theme-card{display:flex;align-items:center;gap:12px;margin-bottom:10px;cursor:pointer;border-color:transparent;}
   .theme-card.active{border-color:var(--good);}
   .theme-card.locked-node{cursor:default;}
@@ -2098,6 +2100,12 @@
   @keyframes cometTrailOrbit{to{transform:rotate(360deg);}}
   @media(max-width:430px){.shop-card{flex-wrap:wrap;}.shop-card>.info{flex-basis:100%;}.shop-card>button{min-height:44px;}}
   @media(prefers-reduced-motion:reduce){.comet-trail-equipped .comet-trail{animation:none!important;transform:rotate(-25deg);}}
+.legacy-upgrades { margin: 12px 0; }
+.legacy-upgrades h3 { color: var(--ink); overflow-wrap: anywhere; }
+.legacy-upgrade { display: block; overflow-wrap: anywhere; }
+#tab-forge.active,#tab-research.active,#tab-ascend.active { animation-name: upgradePanelIn; }
+#tab-forge .mult-btn { flex-basis: 3.5em; }
+@keyframes upgradePanelIn { from { opacity:0;transform:translateY(7px); } to { opacity:1;transform:none; } }
 </style>
 </head>
 <body>
@@ -2674,6 +2682,7 @@
         <button class="big-btn" id="ascend-btn">Ascend</button>
         <div class="lock-note" id="ascend-note"></div>
       </div>
+      <div id="auto-ascend-controls"></div>
       <div class="section-label">Ascension Tree</div>
       <div id="node-list"></div>
     </section>
@@ -2933,10 +2942,28 @@ var LONG_STUDIES = [
   {id:'formationstudy',name:'Formation Insight',  desc:'+5% passive Wisp damage permanently; also raises the Wisp-powered part of your tap damage.', unlockDepth:40, baseDurationSec:320, durationGrowth:1.6, lumenBase:2200, lumenGrowth:1.8, shardBase:220, shardGrowth:1.8},
   {id:'motestudy',     name:'Luminous Sense',     desc:'+10% Motes gained from Luminous enemies, permanently.',           unlockDepth:60, baseDurationSec:380, durationGrowth:1.6, lumenBase:3200, lumenGrowth:1.8, shardBase:320, shardGrowth:1.8},
   {id:'prismstudy',    name:'Ascendant Clarity',  desc:'+5% Prisms earned per Ascend, permanently.',                      unlockDepth:90, baseDurationSec:450, durationGrowth:1.6, lumenBase:4800, lumenGrowth:1.8, shardBase:480, shardGrowth:1.8},
-  {id:'measuredinquiry', name:'Measured Inquiry', desc:'2% less work per completed level, up to 20%, for future starts of Wisp Ascendancy, Guardian’s Mastery, Rift Attunement, Shard Attunement, Lumen Wellspring, Formation Insight, Luminous Sense and Ascendant Clarity. Running Studies and Measured Inquiry itself are unchanged.', unlockDepth:60, levelCap:10, baseDurationSec:600, durationGrowth:1.6, lumenBase:30000, lumenGrowth:1.8, shardBase:1200, shardGrowth:1.8}
+  {id:'measuredinquiry', name:'Measured Inquiry', desc:'2% less work per completed level, up to 20%, for future starts of Wisp Ascendancy, Guardian’s Mastery, Shard Attunement, Lumen Wellspring and Luminous Sense. Running Studies and Measured Inquiry itself are unchanged.', unlockDepth:60, levelCap:10, baseDurationSec:600, durationGrowth:1.6, lumenBase:30000, lumenGrowth:1.8, shardBase:1200, shardGrowth:1.8}
 ];
 
 var LAB_SPEED_TIERS = [1.5, 2, 3, 4, 5, 6, 7, 8];
+// One future purchase owner per effect. Old IDs and formula operands remain:
+// purchased levels and paid Study work retain their exact original value.
+var UPGRADE_FUSIONS = {
+  forge:{focus:'Lab: Lumen Wellspring',sense:'Lab: Shard Attunement',formation:'Lab: Wisp Ascendancy',resolve:'Lab: Guardian’s Mastery'},
+  lab:{riftattune:'Tree: Echoing Rest',formationstudy:'Lab: Wisp Ascendancy',prismstudy:'Tree: Swift Ascension'},
+  tree:{starlight:'Lab: Lumen Wellspring',steady:'Lab: Guardian’s Mastery',momentum:'Lab: Wisp Ascendancy'}
+};
+RESEARCH.forEach(function(node){node.retiredTo=UPGRADE_FUSIONS.forge[node.id]||'';});
+LONG_STUDIES.forEach(function(node){node.retiredTo=UPGRADE_FUSIONS.lab[node.id]||'';});
+NODES.forEach(function(node){node.retiredTo=UPGRADE_FUSIONS.tree[node.id]||'';});
+var CURRENT_STUDY_IDS = LEGACY_STUDY_IDS.filter(function(id){return !UPGRADE_FUSIONS.lab[id];});
+function legacyUpgradeMarkup(node,effect){
+  return '<div class="card legacy-upgrade" data-legacy-upgrade="'+node.id+'"><div class="name">'+node.name+'</div><div class="desc">'+node.desc+'</div>'+effect+
+    '<div class="effect-note">Existing bonus kept. Future upgrades: '+node.retiredTo+'. No further purchases here.</div></div>';
+}
+function legacyUpgradeSection(html){
+  return html ? '<section class="legacy-upgrades" aria-label="Preserved upgrades"><h3>Preserved upgrades</h3>'+html+'</section>' : '';
+}
 function speedTierCost(mult){
   return Math.round(6 * Math.pow(mult, 2.1));
 }
@@ -2961,7 +2988,7 @@ var ACHIEVEMENTS = [
   {id:'labmaster', name:'The Forge Never Sleeps', reward:30, unlocks:'Auto-Empower — spare Lumen levels up your party for you, live or while you\'re offline', check:function(s){return legacyResearchLevels(s)>=20;}},
   {id:'study1',    name:'First Discovery',     reward:15, check:function(s){return totalStudyLevels(s)>=1;}},
   {id:'study25',   name:'Devoted Scholar',     reward:50, check:function(s){return totalStudyLevels(s)>=25;}},
-  {id:'allstudies',name:'Every Path Studied',  reward:35, check:function(s){return LEGACY_STUDY_IDS.every(function(id){return (s.longStudyLevels[id]||0)>=1;});}},
+  {id:'allstudies',name:'Every Path Studied',  reward:35, check:function(s){return CURRENT_STUDY_IDS.every(function(id){return (s.longStudyLevels[id]||0)>=1;});}},
   {id:'labqueue',  name:'Endless Curiosity',   reward:40, check:function(s){return legacyResearchLevels(s)>=60;}},
   {id:'firstultimate', name:'Awakened Power',  reward:45, check:function(s){return SPIRITS.some(function(sp){return !!(s.wispUltimate && s.wispUltimate[sp.id]);});}},
   {id:'modulemax', name:'Perfect Synergy',     reward:45, unlocks:'Cosmetics: Radiant Rift aura', check:function(s){return SPIRITS.some(function(sp){return (s.wispModules[sp.id]||0)>=MODULE_MAX_LEVEL;});}}
@@ -2982,7 +3009,7 @@ function deedProgress(a,s){
     autotap:[s.ascendCount,12],
     labmaster:[researchLevels(),20],
     study1:[totalStudyLevels(s),1],study25:[totalStudyLevels(s),25],
-    allstudies:[LEGACY_STUDY_IDS.filter(function(id){return (s.longStudyLevels[id]||0)>=1;}).length,LEGACY_STUDY_IDS.length],
+    allstudies:[CURRENT_STUDY_IDS.filter(function(id){return (s.longStudyLevels[id]||0)>=1;}).length,CURRENT_STUDY_IDS.length],
     labqueue:[researchLevels(),60],
     firstultimate:[SPIRITS.some(function(sp){return !!(s.wispUltimate&&s.wispUltimate[sp.id]);})?1:0,1],
     modulemax:[Math.max.apply(null,SPIRITS.map(function(sp){return (s.wispModules&&s.wispModules[sp.id])||0;})),MODULE_MAX_LEVEL]
@@ -3014,9 +3041,9 @@ function deedPresentation(a){
     idle8:['Accumulate 8 hours offline.','offline hours'],
     autotap:['Ascend 12 times.','Ascensions'],
     labmaster:['Gain 20 total levels in the 5 original Forge upgrades.','original Forge levels',scope],
-    study1:['Complete one level in the 8 listed Research Projects.','completed Project levels',studyScope],
-    study25:['Complete 25 levels in total in the 8 listed Research Projects.','completed Project levels',studyScope],
-    allstudies:['Complete at least one level in each of the 8 listed Research Projects.','Projects completed',studyScope],
+    study1:['Complete one level in the 8 original Research Projects.','completed Project levels',studyScope+' Completed levels in preserved Projects also count.'],
+    study25:['Complete 25 levels in total in the 8 original Research Projects.','completed Project levels',studyScope+' Completed levels in preserved Projects also count.'],
+    allstudies:['Complete at least one level in each of the 5 current Research Projects.','Projects completed','Counts Wisp Ascendancy, Guardian’s Mastery, Shard Attunement, Lumen Wellspring and Luminous Sense. Measured Inquiry does not count.'],
     labqueue:['Gain 60 total levels in the 5 original Forge upgrades.','original Forge levels',scope],
     firstultimate:['Unlock one Wisp Ultimate.','Ultimate unlocked'],
     modulemax:['Raise one Wisp Module to level 20.','levels on one Module','Uses your highest single Module level. Levels on different Wisps are not added together.']
@@ -3043,7 +3070,7 @@ function nodeEarnedEffect(id){
   return earnedPercent(discount)+'% Wisp recruiting discount · '+earnedPercent(1-discount)+'% cost'+(discount>=0.6?' (cost floor reached)':'');
 }
 function projectEarnedEffect(id){
-  if(id==='measuredinquiry') return earnedPercent(measuredInquiryReduction())+'% less work for future starts of the 8 listed Studies';
+  if(id==='measuredinquiry') return earnedPercent(measuredInquiryReduction())+'% less work for future starts of the 5 current Studies';
   var rows={
     wispascend:[longStudyPowerMult()-1,'passive Wisp damage and Wisp-powered tap base'],
     guardmastery:[longStudyTapMult()-1,'tap damage'],
@@ -4567,67 +4594,93 @@ function autoAscendReady(){
 function autoAscendHighestClearedTarget(){
   return Math.min(Number.MAX_SAFE_INTEGER,Math.max(15,Math.floor(state.maxDepthEver||1)-1));
 }
-var autoAscendWindowStart=null; // Local view only; never persisted.
-function renderAutoAscendTarget(select){
+// Presentation limits only: every valid safe-integer target remains selectable.
+var AUTO_ASCEND_NATIVE_OPTIONS = 1000;
+function renderAutoAscendTarget(control){
   var highest=autoAscendHighestClearedTarget(),target=autoAscendClearedTarget();
-  if(highest<=214) autoAscendWindowStart=15;
-  else if(autoAscendWindowStart===null || !select.dataset.optionsKey)
-    autoAscendWindowStart=Math.max(15,Math.min(target,highest)-99);
-  else if(autoAscendWindowStart>highest) autoAscendWindowStart=Math.max(15,highest-199);
-  var start=autoAscendWindowStart;
-  var count=Math.min(200,highest-start+1);
+  var typed=control.tagName==='INPUT' && document.activeElement===control;
+  var draft=typed ? Number(control.value) : target;
+  if(!Number.isSafeInteger(draft)) draft=target;
+  var start=control.tagName==='SELECT' ? 15 : Math.max(15,Math.min(draft,highest)-99);
+  var count=control.tagName==='SELECT' ? highest-14 : Math.min(200,highest-start+1);
   var end=start+count-1,pinned=target<start || target>end;
   var key=start+'|'+end+'|'+(pinned?target:'');
-  if(select.dataset.optionsKey!==key){
+  var list=control.tagName==='SELECT' ? control : control.parentNode.querySelector('datalist');
+  if(control.dataset.optionsKey!==key){
     var options=document.createDocumentFragment();
-    // Offset arithmetic stays exact even at the final safe-integer endpoint.
     for(var offset=0;offset<count;offset++){
       var cleared=start+offset;
       options.appendChild(new Option('Clear Rift '+cleared,String(cleared)));
     }
     if(pinned) options.appendChild(new Option('Clear Rift '+target+' (saved target)',String(target)));
-    // Keep the existing select/focus; replaceChildren is absent in WebView60.
-    while(select.firstChild) select.removeChild(select.firstChild);
-    select.appendChild(options);
-    select.dataset.optionsKey=key;
+    while(list.firstChild) list.removeChild(list.firstChild);
+    list.appendChild(options);
+    control.dataset.optionsKey=key;
   }
-  select.dataset.windowStart=String(start);select.dataset.windowEnd=String(end);
-  select.value=String(target);
-  var card=select.closest('[data-autoascend-card]'),nav=card.querySelector('[data-autoascend-nav]');
-  nav.hidden=highest<=214;
-  card.querySelector('[data-autoascend-earlier]').disabled=start===15;
-  card.querySelector('[data-autoascend-later]').disabled=end===highest;
-  card.querySelector('[data-autoascend-range]').textContent='Showing Rifts '+start+'–'+end+'. Find moves this list without changing your target.';
-  presentControlStates(nav);
-}
-function findAutoAscendRift(value){
-  var cleared=Number(value),select=els['shop-list'].querySelector('[data-autoascend-target]');
-  if(!state.owned.autoascend || !select || typeof value!=='string' || String(cleared)!==value ||
-    !Number.isSafeInteger(cleared) || cleared<15 || cleared>autoAscendHighestClearedTarget()) return false;
-  autoAscendWindowStart=Math.max(15,cleared-99);
-  renderAutoAscendTarget(select);
-  return true;
-}
-function shiftAutoAscendWindow(direction){
-  var select=els['shop-list'].querySelector('[data-autoascend-target]');
-  if(!state.owned.autoascend || !select || (direction!==-1 && direction!==1)) return false;
-  var start=Number(select.dataset.windowStart),end=Number(select.dataset.windowEnd);
-  if(direction===-1){if(start===15) return false;autoAscendWindowStart=Math.max(15,start-200);}
-  else {if(end===autoAscendHighestClearedTarget()) return false;autoAscendWindowStart=end+1;}
-  renderAutoAscendTarget(select);
-  return true;
+  if(!typed) control.value=String(target);
 }
 function setAutoAscendClearedTarget(value){
   var cleared=Number(value);
   if(!state.owned.autoascend || typeof value!=='string' || String(cleared)!==value ||
     !Number.isSafeInteger(cleared) || cleared<15 ||
-    (cleared>autoAscendHighestClearedTarget() && cleared!==autoAscendClearedTarget())) return false;
-  var select=els['shop-list'].querySelector('[data-autoascend-target]');
-  if(!select || !select.querySelector('option[value="'+value+'"]') || cleared+1===state.autoAscendTargetDepth) return false;
+    (cleared>autoAscendHighestClearedTarget() && cleared!==autoAscendClearedTarget()) ||
+    cleared+1===state.autoAscendTargetDepth) return false;
   state.autoAscendTargetDepth=cleared+1;
   saveState();
   return true;
 }
+function renderAutoAscendControls(){
+  var root=els['auto-ascend-controls'];
+  if(!root) return;
+  if(!state.owned.autoascend){
+    if(root.dataset.owned!=='false'){
+      var oldControl=root.querySelector('[data-autoascend-target]');
+      if(oldControl) oldControl.onblur=null;
+      root.dataset.owned='false';
+      root.innerHTML='<div class="card auto-ascend-card"><div class="name">Auto-Ascend · Locked</div><div class="desc">Unlock Auto-Ascend Ritual in the Deeds Comet Rest Stop.</div><button class="auto-ascend-toggle" type="button" data-autoascend-unlock>Open Deeds</button></div>';
+      root.querySelector('[data-autoascend-unlock]').onclick=function(){activateTab('deeds');var buy=els['shop-list'].querySelector('[data-shop="autoascend"]');if(buy){buy.scrollIntoView({block:'center'});buy.focus({preventScroll:true});}};
+    }
+    return;
+  }
+  if(root.dataset.owned!=='true'){
+    root.dataset.owned='true';
+    root.innerHTML='<div class="card auto-ascend-card" data-autoascend-card><div class="name">Auto-Ascend Ritual</div>'+
+      '<div class="auto-ascend-row"><label class="auto-ascend-target-label">Auto-Ascend after clearing<span data-autoascend-picker></span></label>'+
+      '<button type="button" data-autoascend-toggle class="auto-ascend-toggle"></button></div>'+
+      '<div class="desc" id="auto-ascend-target-help">ON: Ascend after defeating the chosen Rift. OFF: keep pushing. Your target stays saved across Ascensions.</div>'+
+      '<div class="auto-ascend-error" id="auto-ascend-target-error" aria-live="polite"></div></div>';
+    root.querySelector('[data-autoascend-toggle]').onclick=toggleAutoAscend;
+  }
+  var picker=root.querySelector('[data-autoascend-picker]'),control=picker.querySelector('[data-autoascend-target]');
+  var native=autoAscendHighestClearedTarget()-14<=AUTO_ASCEND_NATIVE_OPTIONS;
+  // Defer changing the native picker type while the player is using it.
+  if(!control || ((control.tagName==='SELECT')!==native && document.activeElement!==control)){
+    if(control) control.onblur=null;
+    picker.innerHTML=native ? '<select class="auto-ascend-target" data-autoascend-target aria-describedby="auto-ascend-target-help auto-ascend-target-error"></select>' :
+      '<input class="auto-ascend-target" data-autoascend-target type="text" inputmode="numeric" list="auto-ascend-rifts" aria-describedby="auto-ascend-target-help auto-ascend-target-error" autocomplete="off"><datalist id="auto-ascend-rifts"></datalist>';
+    control=picker.querySelector('[data-autoascend-target]');
+    control.onchange=function(){
+      var value=control.value;
+      var valid=String(Number(value))===value && Number.isSafeInteger(Number(value)) && Number(value)>=15 &&
+        (Number(value)<=autoAscendHighestClearedTarget() || Number(value)===autoAscendClearedTarget());
+      control.setAttribute('aria-invalid',String(!valid));
+      root.querySelector('.auto-ascend-error').textContent=valid ? '' : 'Choose a whole Rift from 15 to '+autoAscendHighestClearedTarget()+'.';
+      if(valid && setAutoAscendClearedTarget(value)) renderShop();
+    };
+    control.oninput=function(){if(control.tagName==='INPUT') renderAutoAscendTarget(control);};
+    control.onkeydown=function(event){if(control.tagName==='INPUT' && event.key==='Enter'){event.preventDefault();control.onchange();}};
+    control.onblur=function(){
+      control.value=String(autoAscendClearedTarget());control.setAttribute('aria-invalid','false');
+      root.querySelector('.auto-ascend-error').textContent='';renderAutoAscendControls();
+    };
+  }
+  // Avoid growing an open native picker without bound after a frontier jump.
+  if(control.tagName!=='SELECT' || autoAscendHighestClearedTarget()-14<=AUTO_ASCEND_NATIVE_OPTIONS) renderAutoAscendTarget(control);
+  var toggle=root.querySelector('[data-autoascend-toggle]');
+  toggle.textContent=state.autoAscendEnabled ? 'ON' : 'OFF';
+  presentControlStates(root);
+}
+
 function checkAutoAscend(){
   if(!autoAscendReady()) return false;
   doAscend(true);
@@ -4925,6 +4978,8 @@ function applyRiftTheme(){
 }
 
 function buyNode(node){
+  node=node && NODES.find(function(n){return n.id===node.id;});
+  if(!node || node.retiredTo) return;
   var cost = nodeCost(node);
   if(state.prisms < cost) return;
   state.prisms -= cost;
@@ -4967,15 +5022,17 @@ function maxAffordableLevels(node, level, lumenBudget, shardBudget){
 }
 function researchEligibility(node){
   var level = researchLevel(node.id);
-  return {level:level,unlocked:state.maxDepthEver>=(node.unlockDepth||1),
+  return {level:level,unlocked:!node.retiredTo && state.maxDepthEver>=(node.unlockDepth||1),
     maxed:node.levelCap!==undefined && level>=node.levelCap};
 }
 function getResearchBuyPlan(node,requested){
+  node=node && RESEARCH.find(function(n){return n.id===node.id;});
+  if(!node) return {count:0,buyCount:0,cost:{lumen:0,shard:0},needed:{lumen:0,shard:0},affordable:false,reason:'unknown'};
   var e = researchEligibility(node);
   requested = requested===undefined ? labMultiplier : requested;
   var validRequest = requested==='max' || (Number.isInteger(requested) && requested>0);
   var count = 0, cost = {lumen:0,shard:0};
-  var reason = !e.unlocked ? 'locked' : e.maxed ? 'maxed' : !validRequest ? 'unavailable' : '';
+  var reason = node.retiredTo ? 'retired' : !e.unlocked ? 'locked' : e.maxed ? 'maxed' : !validRequest ? 'unavailable' : '';
   if(!reason){
     if(node.levelCap!==undefined){
       var limit = Math.min(node.levelCap-e.level,requested==='max' ? Infinity : requested);
@@ -5134,7 +5191,7 @@ function getStudyStartPlan(node){
   var unlocked=state.maxDepthEver>=(node.unlockDepth||1);
   var maxed=node.levelCap!==undefined && level>=node.levelCap;
   var valid=Number.isFinite(cost.lumen) && cost.lumen>=0 && Number.isFinite(cost.shard) && cost.shard>=0 && Number.isFinite(duration) && duration>0;
-  var reason=!unlocked ? 'locked' : maxed ? 'maxed' : findActiveStudy(node.id) ? 'active' : state.activeStudies.length>=studySlotCount() ? 'slots' : !valid ? 'unavailable' : '';
+  var reason=node.retiredTo ? 'retired' : !unlocked ? 'locked' : maxed ? 'maxed' : findActiveStudy(node.id) ? 'active' : state.activeStudies.length>=studySlotCount() ? 'slots' : !valid ? 'unavailable' : '';
   var eligible=!reason;
   if(eligible && (state.lumen<cost.lumen || state.shards<cost.shard)) reason='unaffordable';
   return {node:node,level:level,cost:cost,duration:duration,unlocked:unlocked,maxed:maxed,eligible:eligible,affordable:!reason,reason:reason};
@@ -5574,7 +5631,7 @@ function setupOverlayFocus(){
 function cacheEls(){
   ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','rift-push-btn','rift-farm-btn','rift-objective','lab-capacity-badge','enemy-name','buff-indicator','enemy-stage','enemy-glyph',
    'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','formation-presets','bond-card','bond-summary','rift-bond-effects','rift-party','boss-combat','research-list','study-list',
-   'prism-preview','ascend-btn','ascend-note','node-list','ach-list','roster-journey','shop-list','theme-list','manifesto','toast',
+   'prism-preview','ascend-btn','ascend-note','auto-ascend-controls','node-list','ach-list','roster-journey','shop-list','theme-list','manifesto','toast',
    'daily-streak-badge','daily-quest-list','settings-overlay','settings-home','settings-encyclopedia','settings-title','settings-back','encyclopedia-content'
   ].forEach(function(id){ els[id]=document.getElementById(id); });
 }
@@ -6168,8 +6225,12 @@ function renderResearch(){
     return '<button class="mult-btn '+(active?'active':'')+'" data-mult="'+m+'">'+label+'</button>';
   }).join('') + '</div>';
 
-  var html = '';
+  var html = '',legacyHtml='';
   RESEARCH.forEach(function(node){
+    if(node.retiredTo){
+      if(researchLevel(node.id)>0) legacyHtml+=legacyUpgradeMarkup(node,'<div class="earned-effect">Level '+researchLevel(node.id)+' · '+researchEffectText(node,researchEffectPreview(node,researchLevel(node.id)))+'</div>');
+      return;
+    }
     var level = state.research[node.id];
     var queueOn = !!state.researchQueue[node.id];
     html += '<div class="card node-card" data-forge-card="'+node.id+'">' +
@@ -6190,8 +6251,8 @@ function renderResearch(){
   // Build the authoritative previews and control states off-DOM. Restoring
   // focus on empty cards would clamp the scroll area before they reach full size.
   var prepared=document.createElement('div');
-  prepared.innerHTML=multHtml + html;
-  RESEARCH.forEach(function(node){updateResearchCard(node,prepared.querySelector('[data-forge-card="'+node.id+'"]'));});
+  prepared.innerHTML='<div class="section-sub">Forge: ability charge, ability damage, cast resources and Luminous encounters.</div>'+multHtml + html+legacyUpgradeSection(legacyHtml);
+  RESEARCH.filter(function(node){return !node.retiredTo;}).forEach(function(node){updateResearchCard(node,prepared.querySelector('[data-forge-card="'+node.id+'"]'));});
   presentControlStates(prepared);
   replaceControlMarkup(root,prepared.innerHTML);
   main.scrollTop=scrollTop;
@@ -6260,9 +6321,10 @@ function renderLongStudies(){
       html += '<div class="card study-card study-running" data-running-study="'+active.id+'">' +
         '<div class="study-running-label">'+(maxed?'Finishing paid Study':index===0?'Next completion':'Running')+'</div>' +
         '<div class="name"><span>'+(node?node.name:'')+' <span style="color:var(--mote);">Lv.'+(longStudyLevel(active.id)+(maxed?0:1))+(maxed?' · Maxed':'')+'</span></span>' +
-          ' <button class="node-queue-toggle '+(queueOnActive?'active':'')+'" data-study-queue="'+active.id+'">Queue '+(queueOnActive?'ON':'OFF')+'</button>' +
+          (node && node.retiredTo?'':' <button class="node-queue-toggle '+(queueOnActive?'active':'')+'" data-study-queue="'+active.id+'">Queue '+(queueOnActive?'ON':'OFF')+'</button>') +
         '</div>' +
         (node ? projectEarnedMarkup(active.id) : '') +
+        (node && node.retiredTo?'<div class="effect-note">Last paid level: work, speed and completion bonus kept. Future upgrades: '+node.retiredTo+'.</div>':'') +
         '<div class="effect-note">'+(maxed?'Level cap already reached. Paid work finishes without another level or bonus.':
           'In progress: level '+(longStudyLevel(active.id)+1)+' · bonus earned only on completion.'+(active.id==='measuredinquiry'?' Next: '+earnedPercent(0.02*studyEffectiveLevel(node,longStudyLevel(active.id)+1))+'% less work.':''))+'</div>' +
         '<div class="study-time" data-study-text="'+active.id+'">'+studyRemainingText(active)+'</div>' +
@@ -6287,8 +6349,13 @@ function renderLongStudies(){
   }
 
   html += '<h3 class="study-choices-title" id="study-choices" tabindex="-1">'+(openSlots>0 ? 'Choose a Study to begin' : 'Study choices — no open slots')+'</h3>';
+  var legacyHtml='';
   LONG_STUDIES.forEach(function(lnode){
     if(findActiveStudy(lnode.id)) return;
+    if(lnode.retiredTo){
+      if(longStudyLevel(lnode.id)>0) legacyHtml+=legacyUpgradeMarkup(lnode,projectEarnedMarkup(lnode.id));
+      return;
+    }
     var plan=getStudyStartPlan(lnode);
     if(!plan.unlocked){
       html += '<div class="card study-card locked-node" data-state="locked" aria-disabled="true" style="margin-bottom:10px;">' +
@@ -6313,7 +6380,7 @@ function renderLongStudies(){
     '</div>';
   });
 
-  html += '<div class="section-sub">Unlocking more Studies by pushing deeper raises the slot cap. Studies progress while you’re away. Study Queue begins the next paid level. Use Motes buys the selected repeat speed for each active level, including manual starts, as soon as its full price is available. OFF keeps speed already paid for.</div>';
+  html += legacyUpgradeSection(legacyHtml)+'<div class="section-sub">Lab: permanent damage, kill rewards, Mote yield and Study work. Slot capacity rises at Rift 40, 60 and 90. Studies progress while you’re away. Study Queue begins the next paid level. Use Motes buys the selected repeat speed for each active level, including manual starts, as soon as its full price is available. OFF keeps speed already paid for.</div>';
   replaceControlMarkup(els['study-list'],html);
   if(focusedInspection){
     var restoredInspection=els['study-list'].querySelector('[data-study-details="'+focusedInspection+'"]');
@@ -6362,6 +6429,10 @@ function renderLongStudies(){
 }
 
 function renderAscendSummary(){
+  var autoRoot=els['auto-ascend-controls'];
+  var editingAuto=autoRoot && autoRoot.contains(document.activeElement);
+  var main=editingAuto ? document.querySelector('main') : null;
+  var scroll=main ? main.scrollTop : 0;
   var cleared = clearedProgressionRift();
   var eligible = ascendEligible();
   var breakdown = ascendPrismBreakdown(progressionDepth());
@@ -6381,11 +6452,19 @@ function renderAscendSummary(){
   } else {
     els['ascend-note'].textContent = 'Repeat reward: 20% reserve. Push beyond cleared Rift '+breakdown.benchmark+' to add a depth bonus.';
   }
+  renderAutoAscendControls();
+  // Changed reward text may wrap while a native picker is open. Flush that
+  // layout before restoring the player's scroll, without replacing/focusing it.
+  if(main){main.getBoundingClientRect();main.scrollTop=scroll;}
 }
 
 function renderNodes(){
-  var html = '';
+  var html = '<div class="section-sub">Tree: Ascend rewards, offline rules and Wisp recruitment.</div>',legacyHtml='';
   NODES.forEach(function(node){
+    if(node.retiredTo){
+      if(nodeLevel(node.id)>0) legacyHtml+=legacyUpgradeMarkup(node,'<div class="earned-effect" data-node-effect="'+node.id+'">Level '+nodeLevel(node.id)+' · '+nodeEarnedEffect(node.id)+'</div>');
+      return;
+    }
     if(node.requiresAchievement && !state.achieved[node.requiresAchievement]){
       var reqAch = ACHIEVEMENTS.find(function(a){ return a.id===node.requiresAchievement; });
       html += '<div class="card node-card locked-node" data-state="locked" aria-disabled="true">' +
@@ -6413,7 +6492,7 @@ function renderNodes(){
       '</button>' +
     '</div>';
   });
-  replaceControlMarkup(els['node-list'],html);
+  replaceControlMarkup(els['node-list'],html+legacyUpgradeSection(legacyHtml));
   els['node-list'].querySelectorAll('[data-node]').forEach(function(btn){
     btn.addEventListener('click', function(){
       var node = NODES.find(function(n){ return n.id===btn.getAttribute('data-node'); });
@@ -6473,23 +6552,15 @@ function renderAchievements(){
     var extra = '';
     var buttonHtml = '';
     if(item.id==='autoascend' && owned){
-      var enabled = !!state.autoAscendEnabled;
-      extra = '<label class="auto-ascend-target-label">Auto-Ascend after clearing' +
-        '<select class="auto-ascend-target" data-autoascend-target aria-describedby="auto-ascend-target-help"></select></label>' +
-        '<div class="desc" id="auto-ascend-target-help">ON: automatically Ascend after the selected Rift is defeated. OFF: keep pushing. Manual Ascend keeps this target.</div>' +
-        '<div class="auto-ascend-nav" data-autoascend-nav hidden>' +
-          '<div class="nav-row"><button type="button" data-autoascend-earlier>Earlier Rifts</button><button type="button" data-autoascend-later>Later Rifts</button></div>' +
-          '<label class="auto-ascend-find-label">Find Rift (move list)<span class="nav-row find-row"><input class="auto-ascend-find" data-autoascend-find type="text" inputmode="numeric" aria-describedby="auto-ascend-range"><button type="button" data-autoascend-find-go>Find</button></span></label>' +
-          '<div class="auto-ascend-range" id="auto-ascend-range" data-autoascend-range aria-live="polite"></div>' +
-        '</div>';
-      buttonHtml = '<button data-autoascend-toggle class="'+(enabled?'owned':'')+'">'+(enabled?'ON':'OFF')+'</button>';
+      extra = '<div class="desc">'+(state.autoAscendEnabled?'ON':'OFF')+' · Clear Rift '+autoAscendClearedTarget()+'. Controls are on Ascend.</div>';
+      buttonHtml = '<button type="button" data-autoascend-open>Open Ascend</button>';
     } else {
       buttonHtml = '<button data-shop="'+item.id+'" class="'+(owned?'owned':'')+'" '+((owned||state.comets<item.cost)?'disabled':'')+'>' +
         (owned ? 'Owned' : formatNum(item.cost)+' '+costIcon('comet')) +
       '</button>';
     }
     if(item.id==='comettrials' && owned) extra=cometTrialControls();
-    shopHtml += '<div class="card shop-card'+(item.id==='autoascend' && owned?' auto-ascend-card':'')+'"'+(item.id==='autoascend' && owned?' data-autoascend-card':'')+(item.id==='comettrials' && owned?' data-comet-trial-card':'')+'>' +
+    shopHtml += '<div class="card shop-card"'+(item.id==='comettrials' && owned?' data-comet-trial-card':'')+'>' +
       '<div class="info"><div class="name">'+item.name+'</div><div class="desc">'+item.desc+'</div>'+extra+'</div>' +
       buttonHtml +
     '</div>';
@@ -6521,19 +6592,13 @@ function renderAchievements(){
   }
   var cancel=els['shop-list'].querySelector('[data-trial-cancel]');
   if(cancel) cancel.onclick=cancelCometTrial;
-  var autoToggle = els['shop-list'].querySelector('[data-autoascend-toggle]');
-  if(autoToggle){ autoToggle.onclick=toggleAutoAscend; }
-  var autoTarget=els['shop-list'].querySelector('[data-autoascend-target]');
-  if(autoTarget){
-    renderAutoAscendTarget(autoTarget);
-    autoTarget.onchange=function(){if(setAutoAscendClearedTarget(autoTarget.value)) renderShop();};
-    var card=autoTarget.closest('[data-autoascend-card]'),find=card.querySelector('[data-autoascend-find]');
-    card.querySelector('[data-autoascend-earlier]').onclick=function(){shiftAutoAscendWindow(-1);};
-    card.querySelector('[data-autoascend-later]').onclick=function(){shiftAutoAscendWindow(1);};
-    var findGo=card.querySelector('[data-autoascend-find-go]');
-    findGo.onclick=function(){find.setAttribute('aria-invalid',String(!findAutoAscendRift(find.value)));};
-    find.onkeydown=function(event){if(event.key==='Enter'){event.preventDefault();findGo.click();}};
-  }
+  var openAscend=els['shop-list'].querySelector('[data-autoascend-open]');
+  if(openAscend) openAscend.onclick=function(){
+    activateTab('ascend');
+    var control=els['auto-ascend-controls'].querySelector('[data-autoascend-target]');
+    if(control){control.scrollIntoView({block:'center'});control.focus({preventScroll:true});}
+  };
+  renderAutoAscendControls();
 }
 function renderShop(){ renderAchievements(); }
 
@@ -7714,9 +7779,11 @@ function advanceAuthoritativeTime(elapsedSec,options){
   var firstFarmGridSec = startPhaseSec===0 ? 1 : 1-startPhaseSec;
   var farmGridRemainingSec = firstFarmGridSec;
   var farmGridCrossings = 0;
-  var targetGridPositionSec = startPhaseSec+elapsedSec;
-  var targetFarmGridCrossings = Math.floor(targetGridPositionSec);
-  var targetGridPhaseSec = targetGridPositionSec-targetFarmGridCrossings;
+  // Keep endpoint fractions separate from whole seconds (PR70 clock fix).
+  var targetGridPhaseSec = startPhaseSec+targetFractionSec;
+  var targetGridCarry = Math.floor(targetGridPhaseSec);
+  var targetFarmGridCrossings = targetWholeSec+targetGridCarry;
+  targetGridPhaseSec -= targetGridCarry;
   var targetFarmGridRemainingSec = targetGridPhaseSec===0 ? 1 : 1-targetGridPhaseSec;
 
   function advanceFarmGridClock(stepSec){
@@ -7900,8 +7967,8 @@ function advanceAuthoritativeTime(elapsedSec,options){
 
     var killsBefore = summary.kills;
     var ascendsBeforeAdvance = summary.ascends;
-    var elapsedWholeBefore = elapsedWholeSec;
-    var elapsedFractionBefore = elapsedFractionSec;
+    var gridCrossingsBefore = farmGridCrossings;
+    var gridRemainingBefore = farmGridRemainingSec;
     // Sub-nanosecond elapsed time can still carry material damage at mature
     // power. Never discard it merely because it is below a generic time
     // epsilon; only treat the simulator as stalled if floating-point
@@ -7984,7 +8051,8 @@ function advanceAuthoritativeTime(elapsedSec,options){
       });
     }
 
-    if(remaining>0 && elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && actions===0){
+    // A real grid crossing can leave the derived elapsed value rounded unchanged.
+    if(remaining>0 && farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore && actions===0){
       throw new Error('Authoritative simulation stalled without elapsed-time or state progress | '+JSON.stringify({
         elapsedInRun:elapsedInRun,
         elapsedWholeSec:elapsedWholeSec,
@@ -8211,8 +8279,7 @@ function checkAffordability(){
     btn.disabled = acquired || maxed || state.motes<speedTierCost(mult);
   });
   ['spirit-list','research-list','study-list','node-list','shop-list'].forEach(function(id){presentControlStates(els[id]);});
-  var autoTarget=els['shop-list'].querySelector('[data-autoascend-target]');
-  if(autoTarget && state.owned.autoascend) renderAutoAscendTarget(autoTarget);
+  renderAutoAscendControls();
 }
 
 // ---------------------------------------------------------------
