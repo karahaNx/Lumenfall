@@ -1,6 +1,6 @@
 {
-  "status": "local verification; required CI and final APK pending",
-  "latestIntegratedBase": "20efc396a5307560bafa4b2e7d4c9f11bf2b35b4",
+  "status": "recorded CI checkpoint passed; six final design/pacing rows and complete APK pending",
+  "latestIntegratedBase": "fe52747a02fd008ebcedf2f1e78950ef5c8ae363",
   "existingSuite": {
     "sourceBlob": "f2106a29876efc1b88fa6a130b5a130c5f316f9c",
     "transport": "Supplementary Playwright, unchanged embedded assertion modules",
@@ -759,6 +759,48 @@
     "Native/UI results span recorded implementation checkpoints; required remote CI must pass on the published head.",
     "Local dump-DOM Chromium runner times out even on the baseline; supplementary transport does not replace that required gate.",
     "No physical Android/WebView acceptance or final APK publication yet.",
-    "Five feature rows remain pending final exclusive-matrix/Comet decisions and full pacing."
-  ]
+    "Six feature rows remain pending final exclusive-matrix/Comet decisions and full pacing."
+  ],
+  "overlapNegatives": [
+    {
+      "scenario": "self-test-auto-ascend-target-window",
+      "caught": true,
+      "message": "bounded40-option virtual window"
+    },
+    {
+      "scenario": "self-test-auto-ascend-target-manual",
+      "caught": true,
+      "message": "manual keeps target 43 at higher clear Rift 100"
+    },
+    {
+      "scenario": "self-test-bond-text-ability",
+      "caught": true,
+      "message": "stone ability does not repeat Bond partnerships"
+    },
+    {
+      "scenario": "self-test-bond-text-partners",
+      "caught": true,
+      "message": "starcaller Formation row identifies full partner names"
+    }
+  ],
+  "latestOverlap": {
+    "sourceSha256": "373bf4b502995f58ad885e3676c70e5233c9cb475375e84fff5cc64b2a9bdc5a",
+    "scenarios": [
+      "wisp-upgrade-display",
+      "rift-status-contract",
+      "bond-text-contract"
+    ],
+    "status": "pass",
+    "nativeCastProfiles": 12
+  },
+  "requiredCI": {
+    "status": "pass",
+    "evidence": "ci-verification.json",
+    "runId": 37714789186,
+    "checkedHead": "20e877c1f697465597ace49cb2bf491fca301d38",
+    "checkedTestMerge": "45574115780ee895deed31091335376328c86720",
+    "sourceSha256": "373bf4b502995f58ad885e3676c70e5233c9cb475375e84fff5cc64b2a9bdc5a",
+    "scenarios": 151,
+    "negativeControls": 12
+  }
 }

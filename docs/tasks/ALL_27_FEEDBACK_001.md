@@ -64,7 +64,7 @@ by0b138d4, then current main20efc396 merged as b5c4c55. Compatibility/evidence
 checkpointcd1ec51 is published. Current main includes PR59 Wisp display, PR60
 Forge text and PR61 centralized full Bond partner names; all are preserved.
 
-The inventory records22 implemented/existing features and five pending
+The inventory records21 implemented/existing features and six pending
 matrix/pacing/Comet rows. **Zero are declared integrated/released complete.**
 The [exclusive matrix and Comet proposal](../requirements/all-27-feedback-001/exclusive-matrix-proposal.md)
 makes two unanswered gameplay choices reviewable: preserve historical bonuses
@@ -134,7 +134,7 @@ pass on the exact published head, then on the final integrated main version.
 
 ## Remaining work
 
-Publish this complete checkpoint and record its exact-head CI. Resolve the two
+Preserve this complete checkpoint and its recorded CI. Resolve the two
 pending gameplay questions, implement the final Lab/Tree/Comet matrix and measure
 full eight-system pacing. Reverify changed mechanics and the complete required
 suite, integrate and publish the correctly signed APK with verified assets,
@@ -142,3 +142,20 @@ version/hash and the [27-item phone checklist](../qa/all-27-feedback-001/phone-c
 User phone acceptance follows delivery and stays pending until reported. Keep
 the task open while any required decision/check is missing. A partial APK does
 not fulfill the all27 request.
+
+Latest continuation: current main fe52747a02fd008ebcedf2f1e78950ef5c8ae363 is
+merged as5fe3a6a43e65493ab690ecac0b9bcd1a3eefbe6d. PR63 Cast/Ready status in
+chargebar aria-valuetext is preserved. Overlap tests and12 native Cast profiles
+pass. All four final Rift profiles pass; four real Auto-target/Bond mutations
+are caught, including the updated40-option window mutation anchor.
+
+[Required CI37714789186](../qa/all-27-feedback-001/ci-verification.json) passes
+151 scenarios,12 required negatives, source/tooling/signing-verifier guards and
+runtime smoke. It checked head20e877c1 and test-merge45574115; product SHA256
+373bf4b502995f58ad885e3676c70e5233c9cb475375e84fff5cc64b2a9bdc5a matches
+current production bytes. Subsequent checkpoint/final main must retain their own
+required CI. The Forge row is corrected to partial: three existing cap10 rows
+do not establish the final agreed Forge identity. Current count is21 implemented/
+existing, six matrix/Comet/pacing pending, zero complete releases. Two gameplay
+questions are still unanswered. No dependent implementation or partial APK is
+released; continue with the final approved matrix after the answers arrive.

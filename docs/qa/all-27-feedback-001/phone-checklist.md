@@ -32,7 +32,7 @@ separate fresh save, including restart and background/foreground transitions.
 |23|Progression|Pending final matrix/pacing: fresh, middle and late progression exercise all eight systems without a compulsory Comet gate.|
 |24|Upgrade identity|Pending final matrix: Forge/Lab/Tree effects have distinct jobs and clear stacking; old purchases retain their approved value treatment.|
 |25|Lab exclusives|Pending final matrix: unique effects, paid time and independently paid speed tiers work across offline completion and reload.|
-|26|Forge exclusives|Three existing exclusive upgrades stop at10 and retain their documented operands and purchase currencies.|
+|26|Forge exclusives|Pending final matrix: existing three cap10 upgrades remain correct; verify the agreed Forge identity, prices, unlocks, stacking and purchase-value transition.|
 |27|Tree exclusives|Pending final matrix: prestige effects are unique; new-run/recruitment grants occur once and cannot repeat on loading or preview.|
 
 Record each item as pass/fail with device model, Android/WebView version, build

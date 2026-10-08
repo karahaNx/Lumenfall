@@ -311,14 +311,15 @@
       "id": "FORGE_EXCLUSIVE_001",
       "requirement": "Inventér Forge-dubletter og foreslå egne dyrere/senere unlocks. Implementér senere Forge-delen af den fælles aftalte matrix med caps, priser, stacking og værdibevarelse.",
       "sha256": "9c68492f7a2e6d1879ad6908b7ae5453cdf304fc7448493374d11a927cfc83e9",
-      "status": "open: implementation present; final integrated CI/APK/device acceptance pending",
-      "implementation": "existing baseline implementation verified locally",
+      "status": "open: existing exclusive caps verified; final agreed Forge matrix pending",
+      "implementation": "partial baseline; final matrix pending",
       "verification": [
         "forge-contracts",
         "forge-balance",
         "forge-save-reload",
         "forge-backup-restore"
-      ]
+      ],
+      "pendingVerification": "Existing Forge contracts pass, but these do not prove the final exclusive-matrix requirement."
     },
     {
       "file": "27_TREE_EXCLUSIVE_001.txt",
@@ -335,8 +336,8 @@
     "baseline": "214d45411ce2fb420f0e4b372063811a967679b1",
     "branch": "feature/all-27-feedback-001",
     "pr": "https://github.com/karahaNx/Lumenfall/pull/67",
-    "implementedOrExisting": 22,
-    "designOrPacingPending": 5,
+    "implementedOrExisting": 21,
+    "designOrPacingPending": 6,
     "completedAndReleased": 0,
     "physicalAcceptance": "pending after APK delivery"
   }
