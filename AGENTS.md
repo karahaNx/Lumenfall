@@ -71,6 +71,11 @@ Read archives and technical guides only when needed.
 - Accepted requirements and verified code determine mechanics, balance, caps
   and migrations. Proposed or archived candidates are not implemented rules.
 
+F05 approved rule (7 October 2026): calculate the new-depth bonus from the
+unrounded depth-curve difference with current Tree/completed Lab bonuses and
+round up once. Preserve first reward, 20% repeat, minimum 1 and the full-reward
+cap. [Decision and status](docs/decisions/2026-10-07-ascend-prisms-rounding.md).
+
 ## Language and new rules
 Use JavaScript/Node.js 20+ for code, tests, test execution, CI logic and helper
 scripts where technically possible. HTML, necessary declarative formats and

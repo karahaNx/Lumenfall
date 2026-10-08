@@ -41,7 +41,7 @@ function instrumentHtml(source, fixtures) {
   const marker = '\n})();\n</script>\n<script>\nif(window.Capacitor';
   replaceOnce(marker, '\n' + read('bridge.js') + '\n' + read('wisp-upgrades-bridge.js') + marker, 'main game IIFE marker changed; test bridge could not be installed');
   const modules = ['rift-status', 'bond-text', 'layout', 'accessibility', 'accessibility-controls', 'nav-workshop', 'r3-destinations',
-    'research-duration', 'upgrade-clarity', 'feedback', 'formation', 'formation-autosave', 'forge', 'support-stacking', 'auto-ascend-target', 'buff-timing', 'measured-inquiry', 'lab-motes', 'farm-conservation', 'farm-numerical', 'wisp-upgrades'];
+    'research-duration', 'upgrade-clarity', 'feedback', 'formation', 'formation-autosave', 'forge', 'support-stacking', 'auto-ascend-target', 'buff-timing', 'measured-inquiry', 'lab-motes', 'farm-conservation', 'farm-numerical', 'wisp-upgrades', 'ascend-prisms'];
   replaceOnce('</body>', modules.map(name => '<script>' + read(name + '.js') + '</script>').join('') +
     '<script id="qa-behavior-runner">\n' + read('runner.js') + '\n</script>\n</body>', 'expected exactly one </body> marker');
   return source;
@@ -133,7 +133,7 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
   if (passed) {
     log('PASS ' + scenario + (viewport ? ' ' + JSON.stringify(viewport) : ''));
     if (viewport || ['upgrade-effects-and-deeds', 'parity-long-high-power', 'parity-medium-farm'].includes(scenario) ||
-        ['auto-ascend-target-', 'chronology-', 'p1-05-', 'p2-07a-', 'forge-', 'buff-', 'support-', 'inquiry-', 'lab-motes-'].some(prefix => scenario.startsWith(prefix))) log('  detail: ' + reportJson(payload?.detail ?? null));
+        ['ascend-prisms-', 'auto-ascend-target-', 'chronology-', 'p1-05-', 'p2-07a-', 'forge-', 'buff-', 'support-', 'inquiry-', 'lab-motes-'].some(prefix => scenario.startsWith(prefix))) log('  detail: ' + reportJson(payload?.detail ?? null));
     return true;
   }
   log('FAIL ' + scenario);
@@ -154,6 +154,18 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
 }
 function mutateSource(source, scenario) {
   const replaceOnce = (rule, replacement) => { assert.equal(source.split(rule).length, 2); source = source.replace(rule, () => replacement); };
+  const prismMutations = {
+    'tree': ["(1 + nodeLevel('swift')*0.04) * longStudyPrismMult()", "1 * longStudyPrismMult()"],
+    'lab': ["function longStudyPrismMult(){ return 1 + longStudyLevel('prismstudy')*0.05; }", "function longStudyPrismMult(){ return 1; }"],
+    'payout': ["  state.prisms += gain;", "  state.prisms += gain + 1;"],
+    'repeat': ["var ASCEND_REPEAT_REWARD_RATE = 0.20;", "var ASCEND_REPEAT_REWARD_RATE = 0.25;"],
+    'rounding': ["  var progressBonus = ascendProgressPrismBonusForCleared(cleared,benchmark);", "  var progressBonus = cleared>benchmark ? Math.max(0,full-ascendFullPrismGainForCleared(benchmark)) : 0;"]
+  };
+  if (typeof scenario === 'string' && scenario.startsWith('self-test-ascend-prisms-')) {
+    const pair = prismMutations[scenario.slice('self-test-ascend-prisms-'.length)];
+    if (!pair) throw Error('Unknown F05 negative control');
+    replaceOnce(pair[0], pair[1]);
+  }
   if (scenario === 'self-test-bond-text-ability') replaceOnce('Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it.', 'Heavy ability damage. Stone + Titan activate the Duskguard Bond. Its Module boosts the hit; its Ultimate doubles it.');
   if (scenario === 'self-test-bond-text-partners') replaceOnce("return SPIRITS.find(function(sp){ return sp.id===id; }).name;", "return SPIRITS.find(function(sp){ return sp.id===id; }).shortName;");
   if (scenario === 'self-test-auto-ascend-target-window') replaceOnce('Math.min(200,highest-start+1)', 'Math.min(201,highest-start+1)');

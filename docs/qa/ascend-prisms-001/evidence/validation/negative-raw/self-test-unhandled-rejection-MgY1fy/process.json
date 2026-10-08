@@ -1,0 +1,38 @@
+{
+  "command": [
+    "/tmp/lumenfall-f05-bin/google-chrome",
+    "--headless=new",
+    "--no-sandbox",
+    "--disable-gpu",
+    "--disable-dev-shm-usage",
+    "--disable-background-networking",
+    "--disable-background-timer-throttling",
+    "--no-first-run",
+    "--window-size=390,844",
+    "--virtual-time-budget=1500",
+    "--user-data-dir=/tmp/lumenfall-qa-self-test-unhandled-rejection-U8CKZp",
+    "--dump-dom",
+    "http://127.0.0.1:42469/index.html?qaScenario=self-test-unhandled-rejection&qaFixture=fresh"
+  ],
+  "fixture": "fresh",
+  "viewport": null,
+  "process": {
+    "exitcode": 0,
+    "timed_out": false,
+    "elapsed_sec": 0.778501074,
+    "timeout_sec": 25
+  },
+  "qa": {
+    "qa_count": 1,
+    "qa_status": "fail",
+    "qa_scenario": "self-test-unhandled-rejection",
+    "json_status": "fail",
+    "json_scenario": "self-test-unhandled-rejection",
+    "runtime_markers": [
+      "unhandled-rejection"
+    ],
+    "runtime_error_count": 1,
+    "json_error": null,
+    "valid": true
+  }
+}

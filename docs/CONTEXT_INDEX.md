@@ -19,6 +19,7 @@ Filer i samme række er kandidater; indlæs kun det, som den konkrete opgave kr�
 | Lead-recovery, original feedback og fire billeder | `recovery/2026-10-07/SOURCE_INDEX.txt`, `recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/` | Originalkrav og dependencies |
 | Åbne problemer og ny offline-diagnose | `project/KNOWN_ISSUES.md`, `project/SAVE_OFFLINE_AUTOASCEND_DIAGNOSE_2026-10-07.txt` | Særskilt offline-scope |
 | Offline fix and remaining acceptance | `tasks/OFFLINE_CATCHUP_001.md` → `qa/offline-catchup-001/README.md`; `PROJECT_STATE.md` | Earlier task records are publication checkpoints; verify current integration/device state |
+| F05 Ascend Prisms | `tasks/ASCEND_PRISMS_001.md` → `qa/ascend-prisms-001/README.md`, `decisions/2026-10-07-ascend-prisms-rounding.md` | Approved rounding; current publication and acceptance checkpoint |
 | Offline-originalsave, driver og rå VM-resultater | `qa/offline-autoascend-2026-10-07/Source_Index.txt`, `qa/offline-autoascend-2026-10-07/README_REPRO.txt` | Reproduktion på fast produktbaseline; bevaret via PR47 |
 | Integritet og historiske manifeststier | `../scripts/codex/check_context.cjs --archives`, `decisions/2026-10-07-codex-project-ready.md` | Genfinding og docs-integration |
 | Measured Inquiry | `tasks/MEASURED_INQUIRY_001.md`, `tasks/MEASURED_INQUIRY_001_REQUIREMENTS.txt` | Originalkrav før implementering/review |

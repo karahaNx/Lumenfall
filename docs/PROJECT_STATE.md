@@ -7,6 +7,17 @@ preserving other features' recorded status and the integrated
 Repository: `karahaNx/Lumenfall`. Verify relevant live state before acting;
 commits below are observed checkpoints, not a promise that main never advances.
 
+F05 [ASCEND_PRISMS_001](tasks/ASCEND_PRISMS_001.md) resumed 8 October under
+the user instruction “Finish the task push to github”. The approved new-depth
+rounding fix and calculation explanation are being reconciled with main
+`b0537cb46635555ba2c2e5f3f95bc8fc276aeda5`. PR46/B2 is merged; historical
+writer releases no longer block this feature under the current workflow.
+Motor673/11,822, phone layout695, permanent F05/persistence and17 negative
+controls/smoke pass. A full local wrapper timeout and baseline-reproduced offline
+UI timeout are retained; remote CI remains required. Publication, integration
+and signed APK/native acceptance are in progress.
+The exact reported save/+50 case remains unavailable and unreproduced.
+
 ## Product and release evidence
 
 F13 delivery added 8 October 2026: [RIFT_CAST_TEXT_001](tasks/RIFT_CAST_TEXT_001.md)

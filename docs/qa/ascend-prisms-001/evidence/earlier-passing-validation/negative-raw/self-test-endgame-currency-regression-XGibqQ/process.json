@@ -1,0 +1,36 @@
+{
+  "command": [
+    "/tmp/lumenfall-f05-bin/google-chrome",
+    "--headless=new",
+    "--no-sandbox",
+    "--disable-gpu",
+    "--disable-dev-shm-usage",
+    "--disable-background-networking",
+    "--disable-background-timer-throttling",
+    "--no-first-run",
+    "--window-size=390,844",
+    "--virtual-time-budget=1500",
+    "--user-data-dir=/tmp/lumenfall-qa-self-test-endgame-currency-regression-356fxR",
+    "--dump-dom",
+    "http://127.0.0.1:36911/index.html?qaScenario=self-test-endgame-currency-regression&qaFixture=fresh"
+  ],
+  "fixture": "fresh",
+  "viewport": null,
+  "process": {
+    "exitcode": 0,
+    "timed_out": false,
+    "elapsed_sec": 0.7607469160000001,
+    "timeout_sec": 25
+  },
+  "qa": {
+    "qa_count": 1,
+    "qa_status": "fail",
+    "qa_scenario": "self-test-endgame-currency-regression",
+    "json_status": "fail",
+    "json_scenario": "self-test-endgame-currency-regression",
+    "runtime_markers": [],
+    "runtime_error_count": 0,
+    "json_error": null,
+    "valid": true
+  }
+}

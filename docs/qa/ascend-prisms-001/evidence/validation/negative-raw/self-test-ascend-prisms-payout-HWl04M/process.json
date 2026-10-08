@@ -1,0 +1,36 @@
+{
+  "command": [
+    "/tmp/lumenfall-f05-bin/google-chrome",
+    "--headless=new",
+    "--no-sandbox",
+    "--disable-gpu",
+    "--disable-dev-shm-usage",
+    "--disable-background-networking",
+    "--disable-background-timer-throttling",
+    "--no-first-run",
+    "--window-size=390,844",
+    "--virtual-time-budget=1500",
+    "--user-data-dir=/tmp/lumenfall-qa-self-test-ascend-prisms-payout-0tDjws",
+    "--dump-dom",
+    "http://127.0.0.1:36131/index.html?qaScenario=self-test-ascend-prisms-payout&qaFixture=fresh"
+  ],
+  "fixture": "fresh",
+  "viewport": null,
+  "process": {
+    "exitcode": 0,
+    "timed_out": false,
+    "elapsed_sec": 0.8393729289999999,
+    "timeout_sec": 25
+  },
+  "qa": {
+    "qa_count": 1,
+    "qa_status": "fail",
+    "qa_scenario": "self-test-ascend-prisms-payout",
+    "json_status": "fail",
+    "json_scenario": "self-test-ascend-prisms-payout",
+    "runtime_markers": [],
+    "runtime_error_count": 0,
+    "json_error": null,
+    "valid": true
+  }
+}

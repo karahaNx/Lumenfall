@@ -1,0 +1,36 @@
+{
+  "command": [
+    "/tmp/lumenfall-f05-bin/google-chrome",
+    "--headless=new",
+    "--no-sandbox",
+    "--disable-gpu",
+    "--disable-dev-shm-usage",
+    "--disable-background-networking",
+    "--disable-background-timer-throttling",
+    "--no-first-run",
+    "--window-size=390,844",
+    "--virtual-time-budget=1500",
+    "--user-data-dir=/tmp/lumenfall-qa-self-test-lifecycle-duplicate-eBW2Eh",
+    "--dump-dom",
+    "http://127.0.0.1:43135/index.html?qaScenario=self-test-lifecycle-duplicate&qaFixture=lifecycle-basic"
+  ],
+  "fixture": "lifecycle-basic",
+  "viewport": null,
+  "process": {
+    "exitcode": 0,
+    "timed_out": false,
+    "elapsed_sec": 0.8356144189999999,
+    "timeout_sec": 25
+  },
+  "qa": {
+    "qa_count": 1,
+    "qa_status": "fail",
+    "qa_scenario": "self-test-lifecycle-duplicate",
+    "json_status": "fail",
+    "json_scenario": "self-test-lifecycle-duplicate",
+    "runtime_markers": [],
+    "runtime_error_count": 0,
+    "json_error": null,
+    "valid": true
+  }
+}
