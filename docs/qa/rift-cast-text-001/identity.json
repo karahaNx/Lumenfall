@@ -1,0 +1,46 @@
+{
+  "feature": "RIFT_CAST_TEXT_001",
+  "observedAt": "2026-10-07T13:35:52.148Z",
+  "timezone": "Europe/Copenhagen",
+  "base": "0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd",
+  "validatedCodeCommit": "1edc0c8d935279542fab8a1b8dd3852adff1d7a9",
+  "branch": "feature/rift-cast-text-001",
+  "status": "local candidate; unfinished; no repository writer allocation",
+  "browser": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/151.0.7922.173",
+    "revision": "@a96602f30358e9b5d256a0464e7e4d4bec223004",
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+    "jsVersion": "15.1.206.23"
+  },
+  "sources": [
+    {
+      "path": "index.html",
+      "sha256": "23ca21c1a53a3fa899b66740b9fc10713a18b10c0f6f4572003871f63c7b5e40"
+    },
+    {
+      "path": "tests/behavioral/rift-status.js",
+      "sha256": "bb93c69605564ef50582ecc85a4aec5c700f77f26910ed07be457be0b418600e"
+    },
+    {
+      "path": "tests/behavioral/rift-cast-text.cjs",
+      "sha256": "13a9d7e92e1228bbe9b5ff122b4245c9e8686b597f988c7b6894b5246acb7453"
+    }
+  ],
+  "unchangedF13Domains": [
+    "simulation",
+    "buying/bulk/queue gates",
+    "save/value/migration",
+    "CSS/assets",
+    "mobile/signing/package",
+    "CI/workflows"
+  ],
+  "acceptancePending": [
+    "coordinated GitHub checkpoint",
+    "PR46/B2 review/handover",
+    "integrated F13 validation",
+    "large-text/device acceptance",
+    "APK/signing/device receipts",
+    "writer release"
+  ]
+}
