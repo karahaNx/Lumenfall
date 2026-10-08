@@ -6,7 +6,7 @@ const scenarios=['rift-status-contract','rift-status-mobile','rift-status-reduce
 const results=[];
 async function run(scenario){return new Promise(resolve=>{
  const log=fs.openSync(path.join(out,scenario+'.log'),'w');
- const p=spawn(process.execPath,['tests/behavioral/run.cjs','--web-root','mobile/www','--scenario',scenario,'--raw-artifacts',path.join(out,'failed-processes')],{cwd,env:{...process.env,PATH:adapter+':'+process.env.PATH,LUMENFALL_QA_CDP_CHROME:'/usr/bin/chromium'},stdio:['ignore',log,log]});
+ const p=spawn(process.execPath,['tests/behavioral/run.cjs','--web-root','.','--scenario',scenario,'--raw-artifacts',path.join(out,'failed-processes')],{cwd,env:{...process.env,PATH:adapter+':'+process.env.PATH,LUMENFALL_QA_CDP_CHROME:'/usr/bin/chromium'},stdio:['ignore',log,log]});
  p.once('error',e=>{fs.closeSync(log);resolve({scenario,error:e.message,exitCode:null});});
  p.once('exit',code=>{fs.closeSync(log);const result={scenario,exitCode:code,transport:'CDP adapter; unchanged existing harness/assertions'};results.push(result);console.log(JSON.stringify(result));resolve(result);});
 });}

@@ -1,0 +1,21 @@
+node:events:487
+      throw er; // Unhandled 'error' event
+      ^
+
+AssertionError [ERR_ASSERTION]: ADB service opened: localabstract:webview_devtools_remote_3350
+    at Adb.open (/workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/direct-adb.cjs:28:129)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Server.<anonymous> (/workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/direct-adb.cjs:42:176)
+Emitted 'error' event on Socket instance at:
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: null,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.19.0
