@@ -2,6 +2,14 @@
 
 Status: **product integrated; scoped integrated checks and APK identity PASS;
 required physical Android/WebView60/TalkBack acceptance OPEN**.
+Delivery PR65 merged at `641697e4208ac41a6116b903ab136e54571818bd` after
+CI37711345707 PASS147 defaults/12 negatives/guarded startup. Post-merge F12
+replays PASS on actual source SHA256
+`1e0d51370b5b62f313dad6953f9b26bb7d7a1a886785dbccc6dfaac379779981`.
+Current signed APK141 package/signature/assets/V8 Lab checks PASS. Full raw CI
+and post-integration evidence: [receipt](../qa/lab-speed-queue-001/post-integration.json).
+Supplementary receipt checkpoint is on this feature branch and linked from PR65;
+it adds no product change or release. Main already contains the accepted delivery.
 Owner: this Lab speed queue feature chat. Repository: `karahaNx/Lumenfall`.
 Private branch: `feature/LAB_SPEED_QUEUE_001`; checkout:
 `/workspace/Lumenfall-LAB_SPEED_QUEUE_001`. No other checkout is changed.
@@ -142,8 +150,11 @@ The original signed140APK is preserved unchanged in
 so the remaining device checks can target an immutable artifact. No private
 signing material is included. Do not downgrade an already newer installation.
 
-The delivery checkpoint is tracked in PR65, which must pass required CI before
-integration; its final receipt records the integrated source/evidence identities.
+The delivery checkpoint is integrated through PR65. Its final receipt records
+the tested head, actual integrated source/tree and post-merge checks. Independently
+merged PR61 Bond text and PR62 inventory/docs are preserved; the full integrated
+tree differs from the147-scenario CI tree. The actual148-scenario main received
+the unchanged scoped F12 replays; no full148-suite claim is made for PR65.
 Next feature action: complete the scoped
 [device checklist](../qa/lab-speed-queue-001/DEVICE_ACCEPTANCE.txt) on the affected
 phone/exact WebView60 with TalkBack and save exact version/results in GitHub.

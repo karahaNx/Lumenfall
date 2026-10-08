@@ -1,5 +1,22 @@
 # F12 integrated verification
 
+Final delivery: PR65 merged at641697e4208ac41a6116b903ab136e54571818bd;
+CI37711345707 PASS147 defaults/12negatives/guarded startup. Actual post-merge
+F12 replays PASS on source1e0d51370b5b62f313dad6953f9b26bb7d7a1a886785dbccc6dfaac379779981.
+Signed APK141 identity/15assets/526CRC/V8 Lab payment-retry PASS. Full CI log,
+post-merge results and exact fingerprint adapter are in raw/post-integration/.
+[Final receipt](post-integration.json) distinguishes the tested tree from actual
+integration, which also preserves independently merged Bond text/Lab inventory.
+These supplementary receipts are saved on the feature branch and linked from
+merged PR65. Product delivery is already in main; physical acceptance stays OPEN.
+
+Reproduce exact post-merge source checks on the recorded source version:
+`node docs/qa/lab-speed-queue-001/raw/post-integration/integrated-review.cjs . /tmp/f12-post`.
+The adapter changes only the expected fingerprint/provenance/label, retaining
+the complete original assertions and requiring the actual recorded source hash.
+The existing four-driver command below also passed on the actual integrated code.
+The148-scenario current registry is not claimed as a fully rerun147-case CI tree.
+
 The [task](../../tasks/LAB_SPEED_QUEUE_001.md) records original requirements,
 baseline, scope and remaining acceptance. PR46/B2 is integrated through PR57 at
 20aaae62a4b6e46f8d75775085918eaba4e8de29. Main advanced through PR60/59 during CI;

@@ -1,5 +1,14 @@
 # Signed APK140 for F12 device acceptance
 
+The supplementary post-integration checkpoint also preserves signed
+`Lumenfall-0.1.141.apk`,6,837,505bytes, SHA256
+`0b278ffce3819a40b98c44b738b79123ec2d7fb273a3820bc13ed71940214d44`.
+It matches actual integrated source641697e (including independently merged Bond
+text); fresh package/version/signature/15assets/526CRC/V8 Lab checks PASS.
+Both versions retain the established signer. Physical acceptance is untested.
+The141 artifact/receipt is on the feature branch, linked from merged PR65;
+140 is already integrated into main. Preserve both original published artifacts.
+
 This is the original published APK0.1.140/versionCode140 from main
 `0e9b54c8d62a873bd48625f4a20ee18078e8a8f1`, build37710185974, asset620269725.
 It is archived unchanged because android-latest is mutable and required F12
