@@ -1,96 +1,89 @@
 # LOADOUT_MEMORY_001 / F25 — automatic Forge bulk preference
 
-Status: in progress; [PR78](https://github.com/karahaNx/Lumenfall/pull/78)
-pushed, current combined CI and signed APK/native acceptance pending.
-Owner: this feature chat; no subagents/message tools. Runtime model/effort is
-not exposed verifiably; the startup recommendation is not an execution receipt.
+Status: integrated; final combined CI and APK150 native acceptance pending.
+Owner: this feature chat; no subagents/message tools. Runtime model/effort is not
+verifiably exposed; startup recommendation is not an execution receipt.
 
 ## Requirement and decisions
 
 Original [F25](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt):
 “Loadout memory fra deeds skal fjernes, det skal bare være indbygget i spillet.”
-The user's [correction](LOADOUT_MEMORY_001_USER_CORRECTION.txt) removes the named
-feature entirely because the game is not released. Forge remembers automatically
-from first use, screen switches and restart. No shop/name/refund/credit/history
-message/new save field. Existing wallet and raw ownership retain value.
+The [user correction](LOADOUT_MEMORY_001_USER_CORRECTION.txt) removes the named
+feature because the game is not released. Forge remembers automatically from
+first use, screen changes and restart. No memory shop/name/refund/credit/history
+message/new save field. Preserve raw ownership, wallet and saved preference.
 Latest instruction: “Finish the feature task push to github implement to game”.
 
-Read original, [revision/dependencies](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt),
-[Lead decisions](../recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt),
+Read [revision/dependencies](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt),
+[decisions](../recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt),
 [findings](../recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/FINDINGS.txt) and
 [source index](../recovery/2026-10-07/lead_context/FEEDBACK/Source_Index.txt).
 Original/user correction outrank proposals. Current live AGENTS/bootstrap,
 PROJECT_STATE, CHAT_OWNERSHIP, 02_GAMEPLAY, CONTEXT_INDEX, CODEX_START and
 FEATURE_WORKFLOW were read. Current standing scope authorization supersedes
-historical Lead/writer holds. No new binding rule introduced.
+historical Lead/writer holds. No new binding rule.
 
-## Baseline and scope
+## Baseline, scope and integration
 
-Initial live main b0537cb; index SHA256
+Initial main b0537cb; index SHA256
 5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c.
 Isolated /workspace/Lumenfall-LOADOUT_MEMORY_001-live,
-feature/loadout-memory-001. Original checkout and old20b8b2e proposal untouched.
-PR46/B2 already integrated via PR57. F14 Formation, F26 timecap and F27 Comet
-content remain separate. Main31eccfb was merged as05f515d after Save Backup,
-Formation, Resonate, Auto-Ascend UI and Upgrade Identity. Keep all scenarios;
-group F25 with Forge to avoid adjacent unrelated additions. Index SHA256
-6c6ba30e37ea19edd547ad5a904fb063495cece477b93d193f7b1a8bd5b33e1c.
+feature/loadout-memory-001; original checkout/old20b8b2e proposal untouched.
+PR46/B2 already integrated via PR57. F14/F26/F27 are separate features.
 
-Product delta: remove two legacy ownership gates in selection/init; every choice
-immediately saves existing savedLabMultiplier through saveState (both slots).
-Default1x and choices1/5/10/25/50/100/Max remain. F27 already removed the shop row
-and archives raw owned.rememberbulk in legacyCometPurchases idempotently. Preserve
-that old Rest Stop entitlement, all currency and F27 prices/effects; it never
-gates Forge memory. No balance/schema/migration/Formation/Lab changes.
-Changed root index.html, focused test/two registrations, task/decision/QA.
-Necessary integrated Resonate launcher fix passes the selected browser too;
-no Resonate behavior or assertion changes.
+[PR78](https://github.com/karahaNx/Lumenfall/pull/78) merged at
+9c19664a80e4637b10dd955bb63630f776acacde. Product/test/tooling/workflow bytes
+equal validated e1115f6. Later F26/PR85 merged at91decbc; its build150 superseded
+cancelled149. Memory gates remain removed. Final receipt checks the150 combination.
 
-## Acceptance and evidence
+Product delta: remove two legacy ownership gates and immediately save every
+selection through existing saveState/two slots. Reuse savedLabMultiplier;
+default1x and1/5/10/25/50/100/Max unchanged. F27 already removed the shop and
+archives owned.rememberbulk idempotently in legacyCometPurchases. Keep that old
+Rest Stop value; it never gates memory. Preserve other systems/schema/balance.
+F26 separately refunds old offline24/48 for documented140/160 Comets, preserves
+history and moves saves to schema2; F25 adds no memory refund. Actual143 test save
+owns both caps: expected150 wallet425=125+300, unchanged17 Prisms/20 pre-gameplay
+Motes, preference25 and archive. F26 credit must occur once.
 
-- All seven unowned choices, touch/keyboard, immediate primary/recovery saves,
-  screen switching, cold reload, malformed/legacy/repeated restore preservation.
-- No named shop feature; stale calls cannot debit or erase old entitlement.
-- Preserve deterministic bulk/Max/queue, chronology/live-offline parity,
-  documented fixed Luminous Motes, package com.lumenfall.app, signing/WebView60.
-- Verify320/390/430px,160% text,44px controls, focus/contrast/reduced motion.
-- Required current CI and integrated behavior pass; publish and verify signed
-  APK/assets, complete relevant native acceptance; save status in GitHub.
-  Missing required acceptance keeps chat open; archive only this owner afterward.
+Changed index.html, focused test/default registrations, task/decision/QA.
+Necessary Resonate driver fix forwards selected browser, changing no assertion
+or Resonate behavior. Preserve Formation, Backup, Auto-Ascend and Upgrade Identity.
 
-[Current evidence](../qa/loadout-memory-001/current/baseline.json) reproduces
-baseline failure at unowned25x cold startup (438 checks). Focused candidate and
-successive combinations pass1127 checks/six profiles; four causal mutations
-fail as expected. Minimum controls45x44px, contrast7.49:1. ES2017 parsing,
-actual Node8.3/V8 6.0.286.52 VM437 checks, source/tooling/APK-verifier/context PASS.
-Existing22 scoped cases (20 positives/two negatives) PASS on unchanged assertions
-using the existing local CDP adapter. Stock local Chromium151 dump-dom timeout is
-retained as a failure, not counted as acceptance. Normal GitHub CI is mandatory.
+## Acceptance and checks
 
-Initial CI37735117429 PASS153 defaults/12 negatives/all gates. Combination
-CI37737114019 failed browser creation before UI; the new driver now receives the
-exact harness-selected browser and staged source and retains stderr. Subsequent
-CI37739565902 passed both feature scenarios; combination37741036030 is superseded
-by the final QA fix: selected-artifact fonts/branding, correct CSS MIME, hashed
-asset responses. Previous1133 checks PASS (six added asset assertions); same-source
-missing-fonts and staged old-gate artifacts fail as expected. Final CI pending.
-Run37742051484 passed F25 but Resonate selected a different Chromium154 and timed
-out before UI. Its selected-browser fix passes locally. Current Upgrade Identity
-combination:1139 checks/six profiles,22 scoped cases, V8 6.0/ES2017/source PASS;
-renewed full CI pending. Review findings resolved; no assertion/gate removed.
-Self-review is not independent review.
-Historical20b8b2e/1133 checks and refund proposal do not accept current bytes.
+- Seven unowned choices, touch/keyboard, immediate primary/recovery save, screen
+  switches/cold restart, malformed/legacy/repeated backup/recovery preservation.
+- Retired name/shop absent; stale calls cannot debit or erase entitlement.
+- Deterministic bulk/Max/queue, chronology/live-offline parity and fixed Motes.
+-320/390/430px,160% text,44px controls, focus/contrast/reduced motion;
+  WebView60-compatible source, package com.lumenfall.app and established signer.
+- Required CI on integrated bytes, signed APK/assets/native upgrade acceptance,
+  GitHub task/state/evidence checkpoint; archive only this owner after acceptance.
 
-Task-owned Android8.1/API27 software emulator booted; exact signed143 installed.
-Native driver checks installed source, actual save database, upgrade/cold start,
-real Android taps/keyboard and AX. Initial failures were test transport/inset/
-fixture issues, retained in QA. Invalid farmReturnDepth0 normalized to Push and
-earned the existing Rift10 Deed (+5 Comets); corrected test uses valid Farm1 /
-return2 to isolate wallet. Exact143/native cold restart PASS, two-slot save
-database captured; new APK acceptance pending. No physical device,
-exact WebView60 or TalkBack execution is claimed; record actual runtime/limits.
+Evidence in [current QA](../qa/loadout-memory-001/current/README.md) and
+[native QA](../qa/loadout-memory-001/native/README.md). Baseline fails unowned25x
+cold start; causal mutants catch purchase debit, lost ownership, old init gate
+and missing immediate save. Missing staged fonts/old staged gate also rejected.
+Current integrated checks1139/six profiles,45x44px minimum, contrast7.49:1;
+22 scoped cases, ES2017 and437 V8 6.0.286.52 production contracts PASS.
+Stock local Chromium151 dump-DOM timeout retained as FAIL; existing CDP transport
+runs unchanged assertions. Browser interval fixtures do not prove native timing.
 
-Next: finish current CI/native baseline, merge PR78 after actual overlap check,
-reassess integrated bytes, verify published signed APK/native update and persist
-final task/PROJECT_STATE/evidence. [Continuation](LOADOUT_MEMORY_001_CONTINUATION.txt)
-records environment and concrete commands; do not restart completed work.
+CI37743551318 PASS170 defaults/17 required negatives/all gates on e1115f6;
+[receipt](../qa/loadout-memory-001/current/final-ci.json) and full compressed log
+retained. Earlier browser/source/assets findings fixed/resolved; superseded
+startup/fixture failures remain distinct. Self-review is not independent review.
+Old20b8b2e/1133/refund proposal never accepts current product.
+
+Signed APK150 published; identity/CRC/all15 source assets and extracted V8 checks
+PASS. Exact143 native cold restart/database/archive/value/preference PASS on
+task-owned Android8.1/API27/WebView61.0.3163.98. Native150 upgrade underway:
+database bytes before/after install, F26 refund once, all choices/two slots,
+screen changes/real restart, geometry, actual Android taps/Space/focus/AX.
+Advancing farm may earn documented Motes; pure normalization checks exact wallet
+before gameplay. No physical/TalkBack/exact native WebView60 run claimed.
+Node20 native replay requires --experimental-websocket; recorded runtimeNode24.
+
+Next: complete150 native/combined CI, save final task/PROJECT_STATE/APK receipts
+in GitHub, stop shared edits, then archive only this owner if all acceptance passes.

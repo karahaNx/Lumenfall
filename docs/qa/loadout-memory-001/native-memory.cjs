@@ -82,8 +82,17 @@ async function main(){
  }
  const baseline=JSON.parse(fs.readFileSync(path.join(out,'baseline.json')));assert(baseline.coldLaunchVerified);assert.equal(baseline.artifact.sha256,'45d1032ae6e77362d3540db740c6cfbdc4d275f2e3f6b98f4cecb1229e3205e7','known signed143 baseline');assert.equal(baseline.sourceSHA256,'5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c','known143 source');assert.equal((await installed()).sha256,baseline.artifact.sha256,'actual installed baseline before update');
  const before=await storage();assert.equal(sha(before),baseline.storageSHA256,'attested baseline storage before update');const artifact=await install();assert.equal(sha(await storage()),sha(before),'native update preserves actual save database bytes');
- await adb.shell('am start -n com.lumenfall.app/.MainActivity');await connect();await dismiss();await forge();const legacy=await checkChoice(25);assert(legacy.primary.legacyCometPurchases.rememberbulk,'updated legacy entitlement');assert.equal(legacy.primary.comets,125);assert.equal(legacy.primary.prisms,17);assert.equal(legacy.primary.motes,20);
- records.push({case:'signed143 update preserves database/legacy ownership/wallet/preference',baseline:baseline.artifact,artifact});
+ await adb.shell('am start -n com.lumenfall.app/.MainActivity');await connect();await dismiss();await forge();const legacy=await checkChoice(25);assert(legacy.primary.legacyCometPurchases.rememberbulk,'updated legacy entitlement');
+ // Separate accepted F26 policy: old offline24/48 purchases refund140/160.
+ // This fixture owns both, no Deep Reserves; F25 adds no memory refund.
+ const expectedComets=baseline.slots.primary.comets+140+160;
+ assert.equal(legacy.primary.offline12hRefund.comets,300,'documented F26 credit only');assert.equal(legacy.primary.comets,expectedComets);assert.equal(legacy.primary.prisms,17);
+ // Real offline/live farming earns documented fixed Luminous Motes. Exact
+ // pre-gameplay wallet preservation is covered by the pure production VM;
+ // native database bytes must match before launch, then value cannot be lost.
+ assert(legacy.primary.motes>=baseline.slots.primary.motes,'existing Motes preserved with real offline rewards');
+ await coldStart();const repeated=await checkChoice(25);assert.equal(repeated.primary.comets,expectedComets,'F26 credit remains idempotent on native restart');
+ records.push({case:'signed143 update preserves database/legacy ownership/wallet/preference; separate F26 credit once',baseline:baseline.artifact,artifact,cometsBefore:baseline.slots.primary.comets,cometsAfter:legacy.primary.comets,separateF26Credit:300,motesBefore:baseline.slots.primary.motes,motesAfter:legacy.primary.motes});
  await seed(fixture(false));await forge();let unowned=await checkChoice(25);assert(!unowned.primary.legacyCometPurchases.rememberbulk,'unowned native cold preference');
  for(const value of [1,5,10,25,50,100,'max']){await touch('[data-mult="'+value+'"]');await checkChoice(value);records.push({case:'native immediate primary/recovery choice',value});}
  await touch('[data-tab="research"]');await touch('[data-tab="battle"]');await forge();await checkChoice('max');await coldStart();await checkChoice('max');records.push({case:'screen switching and actual force-stop/restart preserve unowned Max'});

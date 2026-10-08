@@ -3,7 +3,8 @@
 Task-owned software emulator: Android8.1/API27, default x86_64 image r01,
 emulator37.3.3, WebView61.0.3163.98. No phone/KVM. Actual provider is recorded
 in webview-provider.txt; the native product clock and APK scripts are unmodified.
-Node24 driver uses the existing direct-ADB transport and an actual WebView CDP
+The recorded run uses Node24. Node20 replay requires --experimental-websocket
+to enable its built-in WebSocket client. The driver uses direct-ADB and WebView CDP
 target. Real Android input taps/Space and OS screencap; measured StatusBar inset.
 Only isolated test saves are seeded while paused, followed by actual cold launches.
 
@@ -14,6 +15,10 @@ exact5c4b3dac product, archived old ownership,125 Comets/17 Prisms/20 Motes and2
 persist through real force-stop/restart. Both save slots and raw storage hash
 are retained. The driver rejects a wrong/already-upgraded installed baseline.
 The new APK update/native receipt is still pending.
+During an advancing-clock update, Farm1 can earn the existing fixed Luminous
+Motes. Native checks preserve the exact database before first launch, require
+unchanged Comets/Prisms and no lost Motes afterward; the pure production VM
+checks exact pre-gameplay wallet equality/idempotence without offline rewards.
 
 Prepare failures are superseded setup/transport/fixture diagnostics, never PASS:
 old CDP touch schema/dispatch; full-screen inset included navigation bar; private
@@ -26,9 +31,9 @@ Android screencap. prepare-adb-screenshot.log.gz records the successful rerun.
 Replay on a task-owned API27 emulator/ADB port5555:
 
 ```bash
-node docs/qa/loadout-memory-001/native-memory.cjs prepare archive/android/comet-unlocks-001/Lumenfall-0.1.143.apk BASELINE_143_INDEX OUTPUT
+node --experimental-websocket docs/qa/loadout-memory-001/native-memory.cjs prepare archive/android/comet-unlocks-001/Lumenfall-0.1.143.apk BASELINE_143_INDEX OUTPUT
 node docs/qa/loadout-memory-001/verify-assets.cjs NEW_APK ASSET_RECEIPT EXTRACTED_INDEX EXACT_INTEGRATION_SOURCE_ROOT
-node docs/qa/loadout-memory-001/native-memory.cjs accept NEW_APK EXTRACTED_INDEX OUTPUT
+node --experimental-websocket docs/qa/loadout-memory-001/native-memory.cjs accept NEW_APK EXTRACTED_INDEX OUTPUT
 ```
 
 Extract the baseline index from exact b0537cb; verify the new APK against an
