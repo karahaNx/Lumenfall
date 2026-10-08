@@ -1,0 +1,6590 @@
+{
+  "status": "pass",
+  "baseline": false,
+  "negative": true,
+  "source": "/workspace/Lumenfall-rift-guidance-001/mobile/www/index.html",
+  "sourceSHA256": "66b29c9d85de4a47191acbf655e8bb88b18a2517feb18e8f405f2b9041d95709",
+  "browser": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)",
+  "chromeExecutable": "chromium",
+  "node": "v24.19.0",
+  "records": [
+    {
+      "contract": "unlock-selection-persistence",
+      "themes": [
+        "default",
+        "ember",
+        "void",
+        "aurora",
+        "solar",
+        "radiant"
+      ]
+    },
+    {
+      "contract": "region-palettes-preserved",
+      "themes": [
+        "default",
+        "ember",
+        "void",
+        "aurora",
+        "solar",
+        "radiant"
+      ]
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "normal",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "normal",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "normal",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "normal",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "riftCosmeticPulse"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "normal",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "normal",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "riftCosmeticOrbit"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "boss",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          199
+        ],
+        "hp-text": [
+          32.203125,
+          397,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          388,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "boss",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          199
+        ],
+        "hp-text": [
+          32.203125,
+          397,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          388,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "boss",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          199
+        ],
+        "hp-text": [
+          32.203125,
+          397,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          388,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "boss",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          199
+        ],
+        "hp-text": [
+          32.203125,
+          397,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          388,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "riftCosmeticPulse"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "boss",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          199
+        ],
+        "hp-text": [
+          32.203125,
+          397,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          388,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "boss",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          199
+        ],
+        "hp-text": [
+          32.203125,
+          397,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          388,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "riftCosmeticOrbit"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "luminous",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "luminous",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "luminous",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "luminous",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "riftCosmeticPulse"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "luminous",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "luminous",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "riftCosmeticOrbit"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "normal",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "normal",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "normal",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "normal",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "riftCosmeticPulse"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "normal",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "normal",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "riftCosmeticOrbit"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "boss",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          288
+        ],
+        "hp-text": [
+          35.703125,
+          567,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          557,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "boss",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          288
+        ],
+        "hp-text": [
+          35.703125,
+          567,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          557,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "boss",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          288
+        ],
+        "hp-text": [
+          35.703125,
+          567,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          557,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "boss",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          288
+        ],
+        "hp-text": [
+          35.703125,
+          567,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          557,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "riftCosmeticPulse"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "boss",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          288
+        ],
+        "hp-text": [
+          35.703125,
+          567,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          557,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "boss",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          288
+        ],
+        "hp-text": [
+          35.703125,
+          567,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          557,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "riftCosmeticOrbit"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "luminous",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "luminous",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "luminous",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "luminous",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "riftCosmeticPulse"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "luminous",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "luminous",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "riftCosmeticOrbit"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "normal",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "normal",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "normal",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "normal",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "riftCosmeticPulse"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "normal",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "normal",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "riftCosmeticOrbit"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "boss",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          359
+        ],
+        "hp-text": [
+          45,
+          638,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          628,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "boss",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          359
+        ],
+        "hp-text": [
+          45,
+          638,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          628,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "boss",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          359
+        ],
+        "hp-text": [
+          45,
+          638,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          628,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "boss",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          359
+        ],
+        "hp-text": [
+          45,
+          638,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          628,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "riftCosmeticPulse"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "boss",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          359
+        ],
+        "hp-text": [
+          45,
+          638,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          628,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "boss",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          359
+        ],
+        "hp-text": [
+          45,
+          638,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          628,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "riftCosmeticOrbit"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "luminous",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "luminous",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "luminous",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "luminous",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "riftCosmeticPulse"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "luminous",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "no-preference",
+      "kind": "luminous",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "riftCosmeticOrbit"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          199
+        ],
+        "hp-text": [
+          32.203125,
+          397,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          388,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          199
+        ],
+        "hp-text": [
+          32.203125,
+          397,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          388,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          199
+        ],
+        "hp-text": [
+          32.203125,
+          397,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          388,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          199
+        ],
+        "hp-text": [
+          32.203125,
+          397,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          388,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          199
+        ],
+        "hp-text": [
+          32.203125,
+          397,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          388,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          199
+        ],
+        "hp-text": [
+          32.203125,
+          397,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          388,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          288
+        ],
+        "hp-text": [
+          35.703125,
+          567,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          557,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          288
+        ],
+        "hp-text": [
+          35.703125,
+          567,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          557,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          288
+        ],
+        "hp-text": [
+          35.703125,
+          567,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          557,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          288
+        ],
+        "hp-text": [
+          35.703125,
+          567,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          557,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          288
+        ],
+        "hp-text": [
+          35.703125,
+          567,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          557,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          288
+        ],
+        "hp-text": [
+          35.703125,
+          567,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          557,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1.3,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          359
+        ],
+        "hp-text": [
+          45,
+          638,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          628,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          359
+        ],
+        "hp-text": [
+          45,
+          638,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          628,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          359
+        ],
+        "hp-text": [
+          45,
+          638,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          628,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          359
+        ],
+        "hp-text": [
+          45,
+          638,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          628,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          359
+        ],
+        "hp-text": [
+          45,
+          638,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          628,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          359
+        ],
+        "hp-text": [
+          45,
+          638,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          628,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 1,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          199
+        ],
+        "hp-text": [
+          32.203125,
+          397,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          388,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          199
+        ],
+        "hp-text": [
+          32.203125,
+          397,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          388,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          199
+        ],
+        "hp-text": [
+          32.203125,
+          397,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          388,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          199
+        ],
+        "hp-text": [
+          32.203125,
+          397,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          388,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          199
+        ],
+        "hp-text": [
+          32.203125,
+          397,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          388,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          199
+        ],
+        "hp-text": [
+          32.203125,
+          397,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          388,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          187,
+          284,
+          231
+        ],
+        "hp-text": [
+          32.203125,
+          429,
+          255.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          187,
+          276,
+          22
+        ],
+        "hp-track": [
+          32.203125,
+          420,
+          255.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          288
+        ],
+        "hp-text": [
+          35.703125,
+          567,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          557,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          288
+        ],
+        "hp-text": [
+          35.703125,
+          567,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          557,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          288
+        ],
+        "hp-text": [
+          35.703125,
+          567,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          557,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          288
+        ],
+        "hp-text": [
+          35.703125,
+          567,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          557,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          288
+        ],
+        "hp-text": [
+          35.703125,
+          567,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          557,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          288
+        ],
+        "hp-text": [
+          35.703125,
+          567,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          557,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          354,
+          314
+        ],
+        "hp-text": [
+          35.703125,
+          593,
+          318.59375,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          346,
+          22
+        ],
+        "hp-track": [
+          35.703125,
+          583,
+          318.59375,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "normal",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#9ca7ee"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          359
+        ],
+        "hp-text": [
+          45,
+          638,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          628,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          359
+        ],
+        "hp-text": [
+          45,
+          638,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          628,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          359
+        ],
+        "hp-text": [
+          45,
+          638,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          628,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          359
+        ],
+        "hp-text": [
+          45,
+          638,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          628,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          359
+        ],
+        "hp-text": [
+          45,
+          638,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          628,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "boss",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          359
+        ],
+        "hp-text": [
+          45,
+          638,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          628,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "default",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [],
+      "animation": [],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "ember",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-ember"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "void",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-void"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "aurora",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-aurora"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "solar",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-solar"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "width": 430,
+      "height": 915,
+      "scale": 2,
+      "motion": "reduce",
+      "kind": "luminous",
+      "id": "radiant",
+      "geometry": {
+        "enemy-stage": [
+          18,
+          264,
+          394,
+          385
+        ],
+        "hp-text": [
+          45,
+          664,
+          340,
+          14
+        ],
+        "enemy-name": [
+          22,
+          264,
+          386,
+          22
+        ],
+        "hp-track": [
+          45,
+          654,
+          340,
+          7
+        ]
+      },
+      "visiblePatterns": [
+        "cosmetic-pattern cosmetic-radiant"
+      ],
+      "animation": [
+        "none"
+      ],
+      "landLight": "#f3a874"
+    },
+    {
+      "contract": "keyboard-focus-controls"
+    },
+    {
+      "contract": "native-tap",
+      "before": 1000000,
+      "after": 999994.98
+    },
+    {
+      "contract": "actual-reload-recovery-backup",
+      "selected": "ember"
+    },
+    {
+      "contract": "negative-hidden-aura",
+      "caught": "one visible pattern for selected theme"
+    }
+  ],
+  "runtimeErrors": [],
+  "exitInfo": {
+    "code": 0,
+    "signal": null
+  },
+  "stderr": "OR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\n[28711:28740:1008/095907.569638:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\n[28711:28740:1008/095907.569947:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[28711:28740:1008/095907.584174:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[28711:28740:1008/095907.621195:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[28711:28711:1008/095907.640212:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[28711:28711:1008/095907.640311:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[28711:28740:1008/095907.640324:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[28711:28740:1008/095907.640341:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[28711:28711:1008/095907.640607:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[28711:28711:1008/095907.660444:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[28711:28711:1008/095907.662574:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[28711:28711:1008/095907.662915:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[28711:28740:1008/095907.664968:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\n[28711:28740:1008/095907.665131:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\n[28711:28740:1008/095907.665143:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[28711:28711:1008/095907.817700:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: \n[28711:28711:1008/095907.817738:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[28711:28740:1008/095907.818042:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[28711:28711:1008/095907.840066:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[28711:28740:1008/095907.840185:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[28711:28711:1008/095907.852873:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n"
+}

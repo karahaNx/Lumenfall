@@ -1,25 +1,23 @@
-# RIFT_GUIDANCE_001 — 8 October integration evidence
+# RIFT_GUIDANCE_001 — 8 October evidence index
 
-Status: refreshed local checks PASS; required CI/integration/APK acceptance pending.
-Baseline: b0537cb46635555ba2c2e5f3f95bc8fc276aeda5. Isolated branch feature/rift-guidance-001.
-Original7 October evidence is retained separately; it does not accept these bytes.
+Use [delivery/README.md](delivery/README.md) for the final integrated source,
+APK, Android acceptance, CI status and limits. Earlier receipts below describe
+their named source hashes and do not accept the final version.
 
-The user's follow-up authorizes publication/implementation. Current rules
-supersede the earlier global writer-release gate. PR46/B2 and F13 are integrated.
-Preserve F27 cosmetics/Trial status and all newer game/test changes.
+- [7 October task](previous-task-2026-10-07.md): original frozen proposal.
+- [First publication baseline](source-identity.json) and [summary](summary.json).
+- first-attempt/ and second-attempt/: preserved test failures and fixture fixes.
+- [Label-fit correction](post-ci-fix/README.md): required CI caught enlarged text.
+- merged-main/ and current-main/: successive dependency refreshes.
+- [Review correction](review-fix/README.md): exact keyboard next stop, negative
+  control and successful169-scenario feature-head CI before newer F25/F26.
+- [Integrated publication](integrated/publication.json), [APK identity](integrated/apk-identity.txt)
+  and [asset/CRC proof](integrated/apk-assets.json): exact015e2e6/0.1.151.
+- native/: earlier WebView69 emulator preflight, with failures retained.
+- native61/: actual WebView61 signed143 baseline,151 update and native checks.
+  SystemUI/reload/window-format diagnostic failures stay alongside final results.
 
-Fresh matrix, contract, tooling and build receipts are stored here.
-Modern Chromium/root-font scaling do not prove physical WebView60/TalkBack.
-Native preflight: no emulator on local port5555; no native pass is claimed.
-
-The first matrix attempt completed147 observations before a post-fling touch was
-suppressed. Its raw failure is retained in first-attempt/. The driver now waits
-for native scroll position to settle before the next tap, without retries,
-scroll correction, product changes or weaker assertions. F27 coverage is added. The second attempt correctly rejected cosmetics that the
-fixture had not applied; corrected fixtures now invoke the actual theme/cosmetic
-selection handlers before measuring, and assert the equipped DOM classes.
-
-Replay after staging index.html/fonts/branding in mobile/www:
+Replay after staging root index.html/fonts/branding in mobile/www:
 
 ```bash
 node scripts/codex/check_context.cjs --task docs/tasks/RIFT_GUIDANCE_001.md
@@ -29,11 +27,6 @@ node tests/behavioral/rift-guidance.cjs chromium mobile/www /tmp/rift-guidance-c
 node tests/tooling/run.cjs
 ```
 
-Fresh results: summary.json, registered/rift-guidance-mobile/results.json and
-source-identity.json. 160 observations/96 actual theme selections/48 Comet
-cosmetic pairs/16 visible Trials, 0px protected movement and80 native touch
-scrolls PASS. Rift1,618/navigation295/F13 12-profile matrix and source/context/
-tooling checks PASS. Actual V8 6.0.286.52 parses both product scripts and runs
-23 preference/focus/storage/tab assertions plus the preserved F13 renderer.
-
-The current task supersedes the earlier writer-gated historical handoff.
+Actual V8 6.0 replay uses Node8.3.0 with legacy-guidance.cjs and the exact index.
+Native helpers operate only on the task-owned AVD; never player storage.
+No physical Android, TalkBack, frame-rate or independent human review is claimed.

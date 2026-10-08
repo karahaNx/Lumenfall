@@ -22,13 +22,14 @@ Corrected app-private database capture supersedes invalid shell-error hashes.
 F26 refunds remain separate; PR97 final combined CI/integration pending.
 Owner chat stays open until final acceptance/evidence are saved.
 
-[RIFT_GUIDANCE_001 / F07](tasks/RIFT_GUIDANCE_001.md): stable guidance below
-currencies with Show hints/Hide hints is being published on its isolated branch.
-Rebased onto main b0537cb with integrated F13/F27 preserved. Fresh local160
-measurements/0px shift, focus/AX/reload/save purity and Rift/navigation/F13 checks
-PASS; required PR CI, main integration and signed APK/native acceptance pending.
-[8 October evidence](qa/rift-guidance-001/2026-10-08/README.md). This owner chat
-remains open until required acceptance is saved.
+[RIFT_GUIDANCE_001 / F07](tasks/RIFT_GUIDANCE_001.md): PR81/015e2e6 integrates
+stable guidance below currencies. UI160/0px, focus/AX/state purity, Rift/navigation
+and V8 6.0 PASS. Signed0.1.151 identity/assets and actual143→151 Android update,
+four-width touch/large-text/keyboard/reload acceptance PASS. Later Tree/cosmetics/Lab
+source checks pass. [PR98](https://github.com/karahaNx/Lumenfall/pull/98) saves the
+[completion receipt](qa/rift-guidance-001/2026-10-08/delivery/README.md); completion
+on main requires its final mandatory CI/merge. No physical/TalkBack/FPS claim;
+archive only this owner after merge, or report unavailable app tooling.
 
 [UPGRADE_IDENTITY_001/F29](tasks/UPGRADE_IDENTITY_001.md) is integrated via PR90/31eccfb:
 14 buying tracks at integration, unchanged currencies and all24 historical levels.

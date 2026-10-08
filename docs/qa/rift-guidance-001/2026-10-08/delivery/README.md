@@ -1,39 +1,113 @@
-# Stable Rift Guidance delivery checkpoint
+# Stable Rift Guidance — accepted delivery
 
-Status: current-main local acceptance passes; required full CI/integration,
-feature APK and native upgrade acceptance remain pending. This is not completion.
+[PR81](https://github.com/karahaNx/Lumenfall/pull/81) merged the feature as
+015e2e667afac1b4d3cf0bfebf535add3600ab01. [PR98](https://github.com/karahaNx/Lumenfall/pull/98)
+saves this receipt and the immutable APK. Completion requires that delivery PR
+to merge with all required checks passing; an open draft remains incomplete.
 
-PR81 head dc0285fffba7bf2b04e9a852d9fc4359fdbb580f incorporates main e2f745c:
-Save Backup, Formation autosave, Resonate clarity and earlier F13/F27 survive.
-Current source SHA256:076731fe1201f9045cf0d77b36e7bbe76137658b9688d4b50a3ec5ace5201b3b.
+Guidance sits directly below currencies. The fixed46px slot retains a44px
+Show hints/Hide hints button, with full wrapped title/detail in a bounded
+scrolling region. Hidden content leaves focus/AX; hiding focused content returns
+focus to the visible toggle. Existing preference/Settings behavior survives.
+No F07 balance, purchase, reward/Mote, schema, migration, chronology or signing change.
 
-CI37735423348 rejected the enlarged label. The correction preserves the fit
-assertion,44px control and46px reservation. CI37739007243 passed F07 at07:00:42
-UTC before synchronization with new main cancelled the overall run. Its full
-log is retained losslessly here. CI37741048919 checks the current head; neither
-the failed nor cancelled runs accept the final candidate.
+## Versions and accepted checks
 
-Fresh current-main receipts in ../current-main/:16 profiles/160 observations,
-96 theme/48 Comet cosmetic/16 visible Trial pairs,80 touch scrolls. Protected
-movement0px, minimum Tap121px and text contrast8.2966:1. Existing Rift1,618 and
-navigation295 assertions pass; V8 6.0.286.52 parses both scripts and passes23
-guidance-function assertions. Source/context/tooling pass.
+| Version | Source SHA256 | Acceptance |
+| --- | --- | --- |
+| Own integration015e2e6 / APK151 | 852f32974f52d757406ac8a54b668969a2e0667e7acdd85192d63dbdc31ad262 | Integrated UI/contracts/V8; signed APK/native update PASS |
+| Later Tree mainac0d28e | 45ae4c62bd37aed28bfd2b77147bffcbda1a9b6a699c4a3107e0fd1a4feccd02 | Fresh UI/contracts/V8 and full CI176/17/smoke PASS |
+| Later Deed cosmetics main06b28d5 | c1e23bb552666ecc0067a755c0ad30e13aee1827bf6371919d96003a88919a4b | Fresh UI/contracts/V8 plus168-sample cosmetics/negative check PASS; final PR CI required |
+| Later Lab main3f1b6fa | 66b29c9d85de4a47191acbf655e8bb88b18a2517feb18e8f405f2b9041d95709 | Fresh UI/contracts/V8/cosmetics PASS; final PR CI required |
 
-Native ../native/baseline-native.json attests actual installed signed0.1.143,
-its exact APK/source bytes and a cold launch preserving seeded QA ownership,
-Wisp levels and hidden preference. The task-owned API27 emulator is Android8.1/
-WebView69, not a physical device. Earlier SystemUI/DevTools timeout evidence is
-retained; a data-preserving cold launch restored DevTools responses.
+[integrated/](../integrated/README.md), [after-tree/](../after-tree/README.md) and
+[after-cosmetics/](../after-cosmetics/README.md) and [after-lab/](../after-lab/README.md) preserve separate exact-source
+results. Every matrix passes16 profiles/160 Fresh/dense/Boss/conditional Boss/Farm
+measurements at320/360/390/430px,100/200% text and both motion settings. Protected
+geometry movement0px; minimum Guardian Tap121px; contrast>=8.2966:1.
+96 theme selections,48 Comet trail/crest pairs,16 visible Trials and80 Chromium
+touch scrolls pass, alongside focus/AX, Tab, full state/storage purity,
+reload/Settings synchronization and bounded long-text behavior.
+Existing Rift1,618/navigation255 and actual V8 6.0/23 guidance checks pass.
 
-Replay uses native-guidance.cjs prepare/accept with the exact APK/extracted index
-and evidence directory. accept attests143 before installing the signed update,
-compares actual WebView storage bytes before first launch, then checks ownership,
-preference, real taps, geometry, focus/AX, Android Tab/reload and system font scale.
-resume requires the original exact update/initial-launch receipts and never
-downgrades/clears saves. DevTools clock/text fixtures measure layout; product
-APK bytes remain unchanged. No physical WebView60, TalkBack, performance or
-independent review is claimed. Separate V8 6.0 covers Chrome60 JS generation.
+F13 Cast text and F27 Comet cosmetics survive. Later F24 changes add absolute
+decorative layers and persistent selection; they preserve the seven F07 code/
+markup/style regions byte-for-byte. Fresh full-source checks cover that combination.
+Later Lab changes affect Study presentation/controls; the seven F07 regions still
+match151. Its full-source UI/contracts/cosmetics/V8 pass separately in after-lab/.
+Other features and their APK/device delivery remain with their owners.
 
-Next: complete required CI, merge PR81, rerun integrated source checks, verify
-the released APK identity/CRC/all15 assets and perform native signed-update
-acceptance. Save final receipts and status before archiving this owner chat.
+## Signed APK and actual Android update
+
+[Immutable APK0.1.151](../../../../../archive/android/rift-guidance-001/README.md)
+comes from [Build37746908017](https://github.com/karahaNx/Lumenfall/actions/runs/37746908017),
+number151, exact015e2e6. Package com.lumenfall.app, code151/name0.1.151 and
+established certificate A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21 pass.
+APK SHA256 cc4c6d45720659ff81fe11c6eb858407b09f46a9abeea593714d3840c018c238;
+all526 ZIP CRC entries and15 source assets match. Build log and release/tag
+metadata are copied into integrated/, so the moving release is not the only proof.
+
+[native61/README.md](../native61/README.md) and
+[native-acceptance.json](../native61/native-acceptance.json) accept that exact APK
+on actual Android8.1/API27/WebView61.0.3163.98 emulation. Installed143 bytes are
+attested before pm install -r.125952 actual WebView-storage bytes stay identical
+before first new launch; ownership, Wisp levels and old hidden preference survive.
+29 records cover16 native geometry/text cases,4 real hardware touch scrolls,
+hidden focus/AX, actual Android Tab, reload and OS font scale2.0
+(computed root32px/toggle28px). Controls>=44px; geometry tolerance<=0.1px;
+all other storage stays unchanged within toggles/scrolls; no runtime errors.
+Font restored to1.0, only the verified task QEMU stopped, userdata retained.
+
+Native whole-APK acceptance covers151. It does not attest a newer APK.
+V8 6.0 parses both exact product scripts and exercises guidance functions.
+No physical Android, TalkBack, frame-rate/performance or independent human review
+is claimed. The software emulator is not a performance acceptance environment.
+
+## CI, review and preserved failures
+
+PR81 CI37744052638 passed169 defaults/17 required negatives/smoke before F25/F26.
+[CI37752425389](https://github.com/karahaNx/Lumenfall/actions/runs/37752425389)
+passed176 defaults/17 required negatives and guarded smoke on Tree45ae4c62.
+The full decoded log is copied as ../after-tree/ci-37752425389.log.gz.
+It predates F24. PR98's final commit must pass the added cosmetics gate and all
+current default/negative/smoke gates before normal merge; no gate is weakened.
+
+Required CI on headsafddf9a/68fb471/fa39042 repeatedly failed before assertions:
+Chrome154 cold startup exceeded the cosmetic driver's10-second Target.createTarget
+deadline. Raw runs37759463651/37759577649(both attempts)/37760158913 are retained
+here. Failure-only browser version/exit/stderr diagnostics identify the startup phase.
+The bounded initial deadline is now30s; all later10s protocol deadlines, assertions,
+168 cases, negative controls and CI steps remain unchanged. This necessary CI
+fix is in tests/behavioral/rift-cosmetics.cjs; it changes no game/APK bytes.
+Final head still requires full CI before merge.
+
+Automated review P1 PRRT_kwDOUF0Vls6qPbmK is resolved. The existing mobile driver
+requires exact nav-spirits focus; a captured/prevented real Tab must fail the same
+oracle. No independent reviewer is claimed.
+Retained failures include the CI-caught enlarged-label fit, first post-fling
+test input, unapplied cosmetic fixture, native reload race/window format,
+and software ADB swipes with no moves. Native hardware events solve the test
+input problem; actual down/move/up and scroll are now mandatory.
+Earlier local Save reload timeout matched untouched main; remote gates pass.
+Historical candidate receipts keep their original source identity and do not
+accept later bytes. MANIFEST_FINAL.json hashes the final evidence payload, including this README,
+summary-final.json, context-final.txt and admin-tool-status.json; only its own
+self-referential digest is excluded. Review P2 findings are fixed: reproducible
+same-boundary APK/Lab region comparison with both hashes, and complete final
+delivery metadata coverage. Earlier receipt extraction boundaries remain explicit.
+
+## Sources, ownership and closure
+
+[Original](../../../../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt),
+[F07/dependencies/save](../../../../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt),
+[Lead decisions](../../../../recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt),
+[findings](../../../../recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/FINDINGS.txt),
+[source index](../../../../recovery/2026-10-07/lead_context/FEEDBACK/Source_Index.txt).
+Originals prevail. Current feature workflow and the explicit finish instruction
+authorize this scoped integration/release; no repeated general approval or new rule.
+Shared checkout67c3e99 remains clean; all preparation and QA used task-owned paths.
+No subagents, message tools or other-chat renaming/archiving occurred.
+
+After PR98 passes and merges, shared-file work for this goal stops. Archive only
+this owner chat. The app's attachment/metadata calls did not return success;
+post-merge archival must be confirmed or reported as manual. See admin-tool-status.json.

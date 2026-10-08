@@ -1,0 +1,10 @@
+STAGE native WebView target ws://127.0.0.1:9225/devtools/page/d74d8cb4-aa14-47b7-89e5-fa4b6ba5f6e6
+STAGE native WebSocket connected
+STAGE native runtime enabled
+STAGE native toggle 320px text1
+AssertionError [ERR_ASSERTION]: native screen-to-WebView coordinate frame
+    at tap (/workspace/Lumenfall-rift-guidance-001/docs/qa/rift-guidance-001/2026-10-08/native-guidance.cjs:36:59)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async toggleCase (/workspace/Lumenfall-rift-guidance-001/docs/qa/rift-guidance-001/2026-10-08/native-guidance.cjs:48:77)
+    at async accept (/workspace/Lumenfall-rift-guidance-001/docs/qa/rift-guidance-001/2026-10-08/native-guidance.cjs:74:330)
+    at async /workspace/Lumenfall-rift-guidance-001/docs/qa/rift-guidance-001/2026-10-08/native-guidance.cjs:84:276
