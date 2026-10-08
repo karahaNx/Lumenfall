@@ -59,15 +59,18 @@ com.lumenfall.app, established signing and deterministic Luminous Motes.
 - Integrated V8 6.0.286.52 without BigInt PASS; paid13h Study retains3600s after24h.
   Old/new receipts transfer at levels80/200/1000 unchanged.
 - [CI37744077662](https://github.com/karahaNx/Lumenfall/actions/runs/37744077662)
-  PASS170 scenarios/17 required negatives/smoke before PR78. Combined integrated
-  full CI acceptance remains pending.
+  PASS170 scenarios/17 required negatives/smoke before PR78. Integrated
+  [CI37747973888](https://github.com/karahaNx/Lumenfall/actions/runs/37747973888)
+  PASS173 scenarios/17 required negatives/smoke; delivery PR95/d24166a merged.
 - [Android37746590452](https://github.com/karahaNx/Lumenfall/actions/runs/37746590452)
   PASS. APK150 package/version/signing,526 ZIP CRCs/all15 integrated assets PASS.
   Source SHA84ca8f6a50d0df5046c86ddb4a354850aca6273e4581e11b94acc95b10ae885f;
   APK SHA8ad8aeab6df7224e629c8a93805386a5c16851ffeb53e2f7338f42c76b0d79bc.
 - Native signed144→150 update PASS: paid snapshot,300 Comets/32 Prisms credited
-  once and matching primary/recovery. Dense cap replay exceeded the recorder's60s
-  observation window; remaining native checks are OPEN. Physical WebView60,
+  once and matching primary/recovery. Timed-out observations are retained; a
+  subsequent inspection found a completed12h replay with matching slots. A fresh
+  synchronous-query recorder allows20min per software-emulator case; native cap/
+  UI/focus checks are still OPEN. Physical WebView60,
   TalkBack and independent review are not claimed.
 
 Next: finish native update/12h-vs24h/duplicate/UI/focus acceptance; pass combined

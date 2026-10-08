@@ -7,8 +7,8 @@ const [mode,apk,index,out]=process.argv.slice(2),records=[],errors=[];
 const sha=b=>crypto.createHash('sha256').update(b).digest('hex'),delay=ms=>new Promise(r=>setTimeout(r,ms));
 let adb,server,ws,seq=0,pauseResolve;const pending=new Map(),scripts=[];
 function send(method,params={}){return new Promise((resolve,reject)=>{const id=++seq,timer=setTimeout(()=>{pending.delete(id);reject(Error('CDP deadline '+method));},60000);pending.set(id,{resolve,reject,timer});ws.send(JSON.stringify({id,method,params}));});}
-async function evaluate(expression){const r=await send('Runtime.evaluate',{expression:'Promise.resolve('+expression+')',returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(r.exceptionDetails.exception?.description||r.exceptionDetails.text);return r.result.value;}
-async function until(expression,label){const start=Date.now();while(Date.now()-start<120000){if(await evaluate(expression))return;await delay(250);}throw Error('Native deadline '+label);}
+async function evaluate(expression){const r=await send('Runtime.evaluate',{expression,returnByValue:true});if(r.exceptionDetails)throw Error(r.exceptionDetails.exception?.description||r.exceptionDetails.text);return r.result.value;}
+async function until(expression,label,budget=120000){const start=Date.now();while(Date.now()-start<budget){if(await evaluate(expression))return;await delay(250);}throw Error('Native deadline '+label);}
 async function connect(){
   let pid,target;for(let i=0;i<240;i++){pid=(await adb.shell('pidof com.lumenfall.app')).trim();if(pid)break;await delay(500);}assert(pid,'native app PID');
   server=await adb.forward(9223,'localabstract:webview_devtools_remote_'+pid);
@@ -53,7 +53,7 @@ async function run(){
     assert.equal(sha(await adb.exec('cat '+file)),baseline.identity.installedApkSha256,'actual prepared baseline installed before target update');
   }
   console.error('native: installing APK');
-  await adb.upload(apk,'/data/local/tmp/offline12h.apk');assert((await adb.shell('pm install -r /data/local/tmp/offline12h.apk')).includes('Success'),'signed app install/update');
+  await adb.upload(apk,'/data/local/tmp/offline12h.apk');assert((await adb.shell('pm install -r '+(mode==='prepare'?'-d ':'')+'/data/local/tmp/offline12h.apk')).includes('Success'),'signed app install/update');
   await adb.shell('input keyevent KEYCODE_WAKEUP');await adb.shell('wm dismiss-keyguard');
   await adb.shell('wm size 390x844');await adb.shell('wm density 160');await adb.shell('am force-stop com.lumenfall.app');await adb.shell('am start -n com.lumenfall.app/.MainActivity');
   console.error('native: connect WebView');await connect();console.error('native: bind game');await bridge();console.error('native: attest installed bytes');const identity=await attest();identity.ua=await evaluate('navigator.userAgent');identity.android=(await adb.shell('getprop ro.build.version.release')).trim();
@@ -71,7 +71,12 @@ async function run(){
   const original=JSON.parse(fs.readFileSync(path.resolve(__dirname,'../offline-autoascend-2026-10-07/device_backup.json')));
   for(const on of [false,true])for(const seconds of [43200,86400]){
     const seed={...original,autoAscendEnabled:on,lastSeen:1800000000000};
-    const result=await evaluate(`(function(){var b=__offlineNative;window.__offlineNow=${seed.lastSeen+seconds*1000};b.set(${JSON.stringify(seed)});return new Promise(function(resolve,reject){b.apply(function(r,e){if(e)reject(e);else resolve({result:r,state:b.get(),primary:JSON.parse(localStorage.getItem('lumenfall_save_v2'))});});});})()`);
+    const started=Date.now();
+    await evaluate(`(function(){var b=__offlineNative;window.__offlineNow=${seed.lastSeen+seconds*1000};b.set(${JSON.stringify(seed)});window.__offlineJob=null;b.apply(function(r,e){window.__offlineJob={error:e?e.message:null,result:r,state:b.get(),primary:JSON.parse(localStorage.getItem('lumenfall_save_v2')),recovery:JSON.parse(localStorage.getItem('lumenfall_save_recovery_v1'))};});return true;})()`);
+    // Observe cooperative batches without keeping an old-CDP awaitPromise open.
+    await until('!!window.__offlineJob','cap simulation '+on+' '+seconds,1200000);
+    const result=await evaluate('window.__offlineJob');assert.equal(result.error,null);assert.deepEqual(result.recovery,result.state);
+    console.error('native: cap completed '+JSON.stringify({on,seconds,elapsedMs:Date.now()-started}));
     assert.equal(result.result.effectiveSec,43200);assert.equal(result.state.lastSeen,seed.lastSeen+seconds*1000);assert.deepEqual(result.primary,result.state);
     if(seconds===43200)records.push({case:'12h',on,...result});else{const before=records.find(x=>x.case==='12h'&&x.on===on);const a={...before.state},b={...result.state};delete a.lastSeen;delete b.lastSeen;assert.deepEqual(b,a,'native 24h shares exact 12h production');records.push({case:'24h capped',on,...result});}
     assert.equal(await evaluate(`(function(){var r='unset';__offlineNative.apply(function(v){r=v;});return r;})()`),null,'native duplicate return');
