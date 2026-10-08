@@ -1,8 +1,8 @@
 # F21 implementation and verification
 
 Current source SHA256:
-`0e93a8e930a507a028a784363d227db75aecc24b7c927a1d27236fe3fcee48f6`.
-Baseline main:ac0d28e589bd1caef4b9c70f2383a8b3ee384acd.
+`2e691820c76cc264e0bfa0d8430c177cf4edddd61fc310e4049df539c769b21c`.
+Baseline main:06b28d5e80269dc5c8a609540bc75e27c842da4b.
 [Task](../../../tasks/CHEAPER_BONDS_CAP_001.md) · [Design/review](DESIGN.md).
 Self-review and automated PR review are distinguished; no independent Core/QA claim.
 

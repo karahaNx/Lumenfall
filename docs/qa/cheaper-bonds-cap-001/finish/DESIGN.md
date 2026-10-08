@@ -107,3 +107,8 @@ normalizations, preserve identity/exact values and match full normalization.
 A specific ascend-copy mutation restores the slow path and is caught. Existing
 chronology live/offline/split passes on0e93a8e9 source. Timing is local evidence,
 not a physical-device performance claim.
+
+Main06b28d5 Rift cosmetic implementation merges cleanly, preserving its source
+and required gate. Focused538 checks including14400 actual Ascends pass on
+combined2e691820 source. Earlier individual controls/chronology/offline results
+record0e93a8e9; final required CI checks the combined bytes and all gates.

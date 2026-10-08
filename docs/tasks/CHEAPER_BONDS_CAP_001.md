@@ -10,7 +10,7 @@ Current [AGENTS](../../AGENTS.md)/[workflow](../project/FEATURE_WORKFLOW.md) sup
 old role/writer ceremonies. No subagents/messages/other-chat changes or claimed
 independent review.
 
-Baseline main:ac0d28e589bd1caef4b9c70f2383a8b3ee384acd. Own branch/worktree:
+Baseline main:06b28d5e80269dc5c8a609540bc75e27c842da4b. Own branch/worktree:
 feature/cheaper-bonds-cap-001,/workspace/CHEAPER_BONDS_CAP_001. Original checkout
 untouched. PR46/B2 merged20aaae62a4b6e46f8d75775085918eaba4e8de29. PR66 now
 integrated:preserve canonical-node/unlock/retirement/Echo-cap/price guards, extend
