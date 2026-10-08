@@ -2823,7 +2823,7 @@ var SPIRITS = [
 ];
 
 var ABILITY_DESC = {
-  breaker: 'Heavy ability damage. Stone + Titan together activate the Duskguard boss-damage Bond; its Module boosts the hit and its Ultimate doubles it.',
+  breaker: 'Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it.',
   dps: 'Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it.',
   ranged: 'Ability damage + Shards. Module boosts the Shards; Ultimate doubles both.',
   druid: 'Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both.',
@@ -2831,11 +2831,16 @@ var ABILITY_DESC = {
 };
 
 var FORMATION_BONDS = [
-  {id:'starcaller', name:'Starcaller Bond', ids:['ember','void'], req:'Ember + Void', effect:'+18% passive & ability damage', tag:'Push'},
-  {id:'dawnpriest', name:'Dawnpriest Bond', ids:['tide','aurora'], req:'Tide + Aurora', effect:'+25% Lumen, Shards & Motes', tag:'Farm'},
-  {id:'duskguard', name:'Duskguard Bond', ids:['stone','titan'], req:'Stone + Titan', effect:'+35% passive & ability damage vs Bosses', tag:'Boss'},
-  {id:'pathfinder', name:'Pathfinder Bond', ids:['gale','thorn'], req:'Gale + Thorn', effect:'+20% passive & ability damage vs non-Bosses', tag:'Push / Farm'}
+  {id:'starcaller', name:'Starcaller Bond', ids:['ember','void'], effect:'+18% passive & ability damage', tag:'Push'},
+  {id:'dawnpriest', name:'Dawnpriest Bond', ids:['tide','aurora'], effect:'+25% Lumen, Shards & Motes', tag:'Farm'},
+  {id:'duskguard', name:'Duskguard Bond', ids:['stone','titan'], effect:'+35% passive & ability damage vs Bosses', tag:'Boss'},
+  {id:'pathfinder', name:'Pathfinder Bond', ids:['gale','thorn'], effect:'+20% passive & ability damage vs non-Bosses', tag:'Push / Farm'}
 ];
+function formationBondPartners(bond){
+  return bond.ids.map(function(id){
+    return SPIRITS.find(function(sp){ return sp.id===id; }).name;
+  }).join(' + ');
+}
 // Presentation identities stay stable across formations; shapes supplement color.
 var BOND_VISUALS = {
   starcaller:{color:'#c4adff',mark:'◆'},
@@ -5816,7 +5821,7 @@ function renderFormationBonds(){
       var recommended = focus.bonds.indexOf(bond.id)!==-1;
       return '<div class="bond-row '+(active?'active':'')+'">' +
         '<span class="bond-dot"></span>' +
-        '<div class="bond-main"><div class="bond-name">'+bond.name+' · '+bond.tag+(recommended?' · Best now':'')+'</div><div class="bond-req">'+bond.req+'</div></div>' +
+        '<div class="bond-main"><div class="bond-name">'+bond.name+' · '+bond.tag+(recommended?' · Best now':'')+'</div><div class="bond-req">'+formationBondPartners(bond)+'</div></div>' +
         '<div class="bond-effect">'+bond.effect+'</div>' +
       '</div>';
     }).join('');
@@ -6419,7 +6424,7 @@ var ENCYCLOPEDIA_MECHANICS = [
   {name:'Rarity', meta:'Wisp progression', desc:'Rarity multiplies that Wisp’s Power, so it affects passive damage plus damaging/resource abilities. Every Rarity tier owned across the roster also adds +2% general passive-party power. Rarity does not strengthen Support buffs.'},
   {name:'Modules & Ultimates', meta:'Wisp progression', desc:'Modules are role-specific: Burst/Breaker Modules boost ability damage, Shard/Lumen Utility Modules boost their ability-generated resource, and Amplifier Modules boost Motes while Active. Ultimates double damage/resource ability output; Amplifier Ultimates change the buff from +25% for 4s to +50% for 8s.'},
   {name:'Endgame Currency Utility', meta:'Economy rule', desc:'After all eight Ultimates are owned, Sigils can ready one Active Wisp ability for 25 Sigils, at most 3 times per Ascension run. After all four Rest Stop purchases are owned, Comets can replace an unclaimed Daily Quest for at least the richest quest reward, so refreshing cannot generate extra Comets.'},
-  {name:'Wisp Roles', meta:'Build label', desc:'Roles describe authoritative ability output: Burst delivers the highest raw ability coefficient; Breaker delivers heavy ability hits and the Stone + Titan Duskguard pair specializes against bosses; Amplifier buffs passive Wisp damage and your tap damage; Shard Utility and Lumen Utility add their named resource to ability casts. These are output and utility roles, not defensive combat roles.'},
+  {name:'Wisp Roles', meta:'Build label', desc:'Roles describe authoritative ability output: Burst delivers the highest raw ability coefficient; Breaker delivers heavy ability hits; Amplifier buffs passive Wisp damage and your tap damage; Shard Utility and Lumen Utility add their named resource to ability casts. These are output and utility roles, not defensive combat roles.'},
   {name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the run for Prisms. Your first reward sets a cleared-Rift benchmark; repeats at or below it earn a 20% reserve reward, while pushing beyond it adds a new-depth bonus. Permanent systems stay.'},
   {name:'Luminous Enemies', meta:'Rare encounter', desc:'Rare non-boss enemies that drop Motes. Their appearance chance rises as you push deeper.'},
   {name:'Boss Traits', meta:'Boss mechanic', desc:'Regrowth regenerates 0.9% max HP/s. Fractured Core regenerates 0.5%/s and takes +75% from Wisp ability hits only. Guardian’s Mark regenerates 0.6%/s and makes your manual taps and Auto-Tap deal x3; passive Wisp damage is unchanged by those trait bonuses.'},
@@ -6445,7 +6450,7 @@ function renderEncyclopedia(){
   html += '<div class="settings-section-title">Formation Bonds</div><div class="ency-grid">';
   FORMATION_BONDS.forEach(function(bond){
     var active = bondActive(bond.id);
-    html += '<div class="ency-card"><div class="ency-top"><div class="ency-main"><div class="ency-name">'+bond.name+'</div><div class="ency-meta">'+bond.req+' · '+bond.tag+'</div></div>' +
+    html += '<div class="ency-card"><div class="ency-top"><div class="ency-main"><div class="ency-name">'+bond.name+'</div><div class="ency-meta">'+formationBondPartners(bond)+' · '+bond.tag+'</div></div>' +
       '<span class="ency-status '+(active?'on':'')+'">'+(active?'Active':'Inactive')+'</span></div>' +
       '<div class="ency-desc">'+bond.effect+'. Both listed Wisps must be Active and above Lv.0.</div></div>';
   });

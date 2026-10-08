@@ -1,0 +1,46 @@
+Browser identity: { "selected_path": "/tmp/bond-check-tools/google-chrome", "resolved_path": "/workspace/BOND_TEXT_001-evidence/chromium-cdp.cjs", "sha256": "73ac862c4288eb0a53ca7cd6c959ebe42a40f2094a3f9df5d0d4c7c095b474cb", "version": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)", "version_exitcode": 0, "version_stderr": "" }
+Staged source: { "source_sha256": "0f54adf7366cdb023c4b127107896c4ff22b9fbf2ab19204ae27d1d37186b22e", "instrumented_sha256": "37a423e96e812c4263b7fd4570a858b8cad2188e19715b2b365a60adb19211b3" }
+FAIL self-test-bond-text-partners
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 1.0167370869999999, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-bond-text-partners", "json_status": "fail", "json_scenario": "self-test-bond-text-partners", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /tmp/lumenfall-qa-raw-dmu33G/self-test-bond-text-partners-1BNgZk
+  stdout tail:
+ession was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+
+</script>
+
+
+<pre id="qa-result" data-status="fail" data-scenario="self-test-bond-text-partners">{
+  "scenario": "self-test-bond-text-partners",
+  "status": "fail",
+  "detail": {
+    "message": "starcaller Formation row identifies full partner names",
+    "stack": "Error: starcaller Formation row identifies full partner names\n    at assert (http://127.0.0.1:34839/index.html?qaScenario=self-test-bond-text-partners&amp;qaFixture=fresh:12458:61)\n    at ok (http://127.0.0.1:34839/index.html?qaScenario=self-test-bond-text-partners&amp;qaFixture=fresh:9987:30)\n    at checkRows (http://127.0.0.1:34839/index.html?qaScenario=self-test-bond-text-partners&amp;qaFixture=fresh:10003:5)\n    at http://127.0.0.1:34839/index.html?qaScenario=self-test-bond-text-partners&amp;qaFixture=fresh:10011:29\n    at Array.forEach (&lt;anonymous&gt;)\n    at window.runBondTextQa (http://127.0.0.1:34839/index.html?qaScenario=self-test-bond-text-partners&amp;qaFixture=fresh:10010:9)\n    at HTMLDocument.run (http://127.0.0.1:34839/index.html?qaScenario=self-test-bond-text-partners&amp;qaFixture=fresh:13935:48)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+Behavioral QA failed: self-test-bond-text-partners null

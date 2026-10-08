@@ -134,7 +134,7 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     s=seed();install(s);ok(q('#bond-summary').textContent==='No Formation Bond active.','neutral Bonds');
     var worst=window.riftStatusWorst(b,ctx);s.activeParty=worst.ids;s.activeParty.forEach(id=>s.spirits[id]=1);install(s);
     var active=b.riftStatus.active();ok(active.length===worst.bonds.length&&q('#bond-summary').textContent===worst.text,'every actual powered Bond name visible');
-    active.forEach(x=>{var row=[...document.querySelectorAll('#bond-card .bond-row')].find(row=>row.querySelector('.bond-name').textContent.includes(x.name));ok(row && row.classList.contains('active') && row.querySelector('.bond-req').textContent===x.req && row.querySelector('.bond-effect').textContent===x.effect,'existing Formation retains active Bond requirements and full effects');});
+    active.forEach(x=>{var row=[...document.querySelectorAll('#bond-card .bond-row')].find(row=>row.querySelector('.bond-name').textContent.includes(x.name));var partners=x.ids.map(id=>b.wispRoleContract().find(sp=>sp.id===id).name).join(' + ');ok(row && row.classList.contains('active') && row.querySelector('.bond-req').textContent===partners && row.querySelector('.bond-effect').textContent===x.effect,'existing Formation retains active Bond requirements and full effects');});
     s.spirits[worst.bonds[0].ids[0]]=0;install(s);
     ok(!b.riftStatus.active().some(x=>x.id===worst.bonds[0].id)&&!q('#bond-summary').textContent.includes(worst.bonds[0].name.replace(' Bond','')),'unpowered members cannot show an active Bond');
     var remaining=b.riftStatus.active();
