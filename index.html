@@ -1738,6 +1738,15 @@
   #tab-spirits .hero-grid{display:flex;flex-direction:column;gap:10px;}
   .roster-group-label{font-size:12px;font-weight:800;color:var(--ink-dim);margin:2px 0;}
   #tab-spirits .hero-card{margin:0;padding:12px;}
+  /* 45px also remains above 44px during the existing .995x panel animation. */
+  #tab-spirits button,#tab-spirits summary{min-height:45px;min-width:45px;}
+  .wisp-role-summary{margin-bottom:12px;}
+  .wisp-role-summary h3{font-size:1rem;line-height:1.4;margin:0 0 8px;}
+  .wisp-role-readout{margin:8px 0;padding:8px 0;border-top:1px solid var(--line);}
+  .wisp-role-line{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;margin:5px 0;font-size:.8125rem;line-height:1.5;}
+  .wisp-role-line strong{max-width:100%;overflow-wrap:break-word;}
+  .wisp-role-note{margin:6px 0;font-size:.8125rem;line-height:1.5;color:var(--ink);}
+  .wisp-role-summary,.wisp-role-readout,.wisp-role-line,.wisp-role-note{animation:none!important;transition:none!important;}
   #tab-spirits .hero-top{margin-bottom:6px;}
   .wisp-empower-action{width:100%;min-width:44px;min-height:44px;margin:8px 0;display:flex;flex-direction:row;justify-content:space-between;align-items:center;gap:8px;flex-wrap:nowrap;white-space:nowrap;}
   .wisp-empower-action:not(:disabled){border-color:var(--lumen);color:var(--lumen);}
@@ -2625,6 +2634,7 @@
         <div class="section-sub">Up to 5 Wisps can be Active at once. Pair specific powered Wisps to activate simple Formation Bonds for Push, Farm or Boss fights.</div>
         <div class="card bond-card" id="bond-card"></div>
       </details>
+      <section class="card wisp-role-summary" aria-label="Formation contribution" id="wisp-role-summary"></section>
       <div class="hero-grid" id="spirit-list"></div>
       <div class="roster-journey" id="roster-journey"></div>
     </section>
@@ -4047,26 +4057,32 @@ function synergyMult(){
 function poweredActiveIds(){
   return state.activeParty.filter(function(id){ return (state.spirits[id]||0)>0; });
 }
-function bondActive(bondId){
+function bondActive(bondId,ids){
   var bond = FORMATION_BONDS.find(function(b){ return b.id===bondId; });
   if(!bond) return false;
-  var active = poweredActiveIds();
+  var active = ids || poweredActiveIds();
   return bond.ids.every(function(id){ return active.indexOf(id)!==-1; });
 }
 function activeFormationBonds(){
   return FORMATION_BONDS.filter(function(b){ return bondActive(b.id); });
 }
-function formationGeneralDamageMult(){
-  return bondActive('starcaller') ? 1.18 : 1;
+function formationBondDamageFactor(id,depth){
+  if(id==='starcaller') return 1.18;
+  if(id==='duskguard' && isBoss(depth)) return 1.35;
+  if(id==='pathfinder' && !isBoss(depth)) return 1.20;
+  return 1;
 }
-function formationContextDamageMult(depth){
-  var mult = formationGeneralDamageMult();
-  if(isBoss(depth) && bondActive('duskguard')) mult *= 1.35;
-  if(!isBoss(depth) && bondActive('pathfinder')) mult *= 1.20;
+function formationGeneralDamageMult(ids){
+  return bondActive('starcaller',ids) ? formationBondDamageFactor('starcaller') : 1;
+}
+function formationContextDamageMult(depth,ids){
+  var mult = formationGeneralDamageMult(ids);
+  if(bondActive('duskguard',ids)) mult *= formationBondDamageFactor('duskguard',depth);
+  if(bondActive('pathfinder',ids)) mult *= formationBondDamageFactor('pathfinder',depth);
   return mult;
 }
-function formationRewardMult(){
-  return bondActive('dawnpriest') ? 1.25 : 1;
+function formationRewardMult(ids){
+  return bondActive('dawnpriest',ids) ? 1.25 : 1;
 }
 function currentFormationFocus(){
   if(state.riftMode==='farm') return {label:'Farm', bonds:['dawnpriest','pathfinder']};
@@ -4235,17 +4251,17 @@ function abilityBurstDamage(sp, depth){
   if(level<=0) return 0;
   return abilityRawBurst(sp,level) * formationContextDamageMult(depth) * bossAbilityDamageMult(depth);
 }
-function abilityRewardRaw(sp,level,conductionLevel){
+function abilityRewardRaw(sp,level,conductionLevel,ids){
   if(!sp || level<=0) return {lumen:0,shards:0};
   var power = wispPower(sp,level);
-  var mult = moduleMult(sp.id) * abilityUltimateMult(sp) * formationRewardMult() * researchFactor('conduction',conductionLevel);
+  var mult = moduleMult(sp.id) * abilityUltimateMult(sp) * formationRewardMult(ids) * researchFactor('conduction',conductionLevel);
   return {
     lumen:sp.abilityType==='druid' ? power*0.10*mult : 0,
     shards:sp.abilityType==='ranged' ? power*0.05*mult : 0
   };
 }
-function abilityRewardPerCast(sp,level,conductionLevel){
-  var raw = abilityRewardRaw(sp,level,conductionLevel);
+function abilityRewardPerCast(sp,level,conductionLevel,ids){
+  var raw = abilityRewardRaw(sp,level,conductionLevel,ids);
   return {lumen:Math.round(raw.lumen),shards:Math.round(raw.shards)};
 }
 function ultimateEffectText(sp){
@@ -4295,6 +4311,64 @@ function abilityResourceRates(){
     rates.shards += rewards.shards/cycle;
   });
   return rates;
+}
+// Read-only role ledger. Shared multipliers are counted once; removal previews
+// are separate counterfactuals and must never be added to this ledger.
+function wispRoleSnapshot(depth,nowMs,ids,sustained){
+  ids = ids || poweredActiveIds();
+  var cycle = abilityCycleSeconds(), global = passiveGlobalPowerMult();
+  var tapFactor = state.achieved.autotap ? tapMult()*bossTapDamageMult(depth) : 0;
+  var rawPassive=0, rawAbility=0, rawTap=0, baseTap=5*tapFactor;
+  var rows=SPIRITS.map(function(sp){
+    var active=ids.indexOf(sp.id)!==-1 && (state.spirits[sp.id]||0)>0;
+    var power=active ? wispPower(sp,state.spirits[sp.id]) : 0;
+    var passive=power*global;
+    var ability=active ? abilityRawBurst(sp,state.spirits[sp.id])*bossAbilityDamageMult(depth)/cycle : 0;
+    var tap=passive*0.02*tapFactor;
+    rawPassive+=passive; rawAbility+=ability; rawTap+=tap;
+    var rewards=active ? abilityRewardPerCast(sp,state.spirits[sp.id],undefined,ids) : {lumen:0,shards:0};
+    return {id:sp.id,active:active,rawDps:passive+ability+tap,passiveDps:passive,abilityDps:ability,autoTapDps:tap,
+      lumenPerCast:rewards.lumen,shardsPerCast:rewards.shards,supportDps:0,
+      moteBonus:active && sp.abilityType==='support' ? moduleLevel(sp.id)*0.05 : 0};
+  });
+  var context=1,general=1;
+  var bonds=FORMATION_BONDS.filter(function(b){return bondActive(b.id,ids);}).map(function(b){
+    var oldContext=context,oldGeneral=general;
+    var factor=formationBondDamageFactor(b.id,depth);
+    context*=factor;
+    if(b.id==='starcaller') general*=factor;
+    return {id:b.id,name:b.name,damageDps:(rawPassive+rawAbility)*(context-oldContext)+rawTap*(general-oldGeneral),
+      rewardMult:b.id==='dawnpriest' ? formationRewardMult(ids) : 1};
+  });
+  var supportBase=rawPassive*context+rawTap*general+baseTap;
+  var known=1,support=0;
+  rows.forEach(function(row,i){
+    var sp=SPIRITS[i], extra=0;
+    if(sustained && row.active && sp.abilityType==='support'){
+      var profile=supportAbilityProfile(sp);
+      extra=(profile.strength-1)*Math.min(1,profile.durationMs/1000/cycle);
+    } else if(!sustained){
+      var entry=state.supportBuffs && state.supportBuffs.sources[row.id];
+      if(entry && supportDeadlineSecondsRemaining(entry.until,nowMs)>0) extra=entry.mult-1;
+    }
+    known+=extra; row.supportDps=supportBase*extra; support+=row.supportDps;
+  });
+  var legacy=!sustained && simulationBuffSecondsRemaining(nowMs)>0 ? Math.max(0,state.buffMult-known)*supportBase : 0;
+  var raw=rawPassive+rawAbility+rawTap+baseTap;
+  var bondDps=bonds.reduce(function(sum,b){return sum+b.damageDps;},0);
+  return {depth:depth,cycle:cycle,rows:rows,bonds:bonds,rawDps:raw,guardianBaseDps:baseTap,
+    bondDps:bondDps,supportDps:support,legacyDps:legacy,totalDps:raw+bondDps+support+legacy,
+    passiveDps:rawPassive*context*(known+(supportBase>0 ? legacy/supportBase : 0))};
+}
+function wispRoleComparison(depth,nowMs){
+  var ids=poweredActiveIds(), steady=wispRoleSnapshot(depth,nowMs,ids,true);
+  steady.rows.forEach(function(row){
+    row.removalDps=row.active ? steady.totalDps-wispRoleSnapshot(depth,nowMs,ids.filter(function(id){return id!==row.id;}),true).totalDps : 0;
+    row.bondNames=steady.bonds.filter(function(b){
+      return FORMATION_BONDS.find(function(x){return x.id===b.id;}).ids.indexOf(row.id)!==-1;
+    }).map(function(b){return b.name;});
+  });
+  return {steady:steady,current:wispRoleSnapshot(depth,nowMs)};
 }
 function enemyHpFor(depth){
   return Math.round(10 * Math.pow(1.145, depth) * (isBoss(depth)?6:1));
@@ -5437,7 +5511,7 @@ function setupOverlayFocus(){
 
 function cacheEls(){
   ['hud-lumen','hud-shard','hud-mote','hud-prism','hud-comet','hud-sigil','depth-label','rift-push-btn','rift-farm-btn','rift-objective','lab-capacity-badge','enemy-name','buff-indicator','enemy-stage','enemy-glyph',
-   'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','formation-presets','bond-card','bond-summary','rift-bond-effects','rift-party','boss-combat','research-list','study-list',
+   'hp-fill','hp-text','stat-tap','stat-idle','spirit-list','wisp-role-summary','formation-presets','bond-card','bond-summary','rift-bond-effects','rift-party','boss-combat','research-list','study-list',
    'prism-preview','ascend-btn','ascend-note','node-list','ach-list','roster-journey','shop-list','theme-list','manifesto','toast',
    'daily-streak-badge','daily-quest-list','settings-overlay','settings-home','settings-encyclopedia','settings-title','settings-back','encyclopedia-content'
   ].forEach(function(id){ els[id]=document.getElementById(id); });
@@ -5864,6 +5938,52 @@ function pulseWispCard(id,tone){
   setTimeout(function(){ card.classList.remove(cls); },720);
 }
 
+function roleValueLine(label,value){
+  return '<div class="wisp-role-line"><span>'+label+'</span><strong class="mono">'+value+'</strong></div>';
+}
+var wispRoleLastRenderMs=0;
+function renderWispRoles(){
+  if(!els['wisp-role-summary']) return;
+  wispRoleLastRenderMs=Date.now();
+  var report=wispRoleComparison(state.depth,Date.now()),steady=report.steady,current=report.current;
+  var html='<h3>Formation contribution · Rift '+state.depth+'</h3><p class="wisp-role-note">Sustained preview: ability cycles and Auto-Tap included. First casts, overkill and boss regeneration affect clear time.</p>'+
+    roleValueLine('Raw damage',formatNum(steady.rawDps)+' /s')+
+    roleValueLine('Bonds added',formatNum(steady.bondDps)+' /s')+
+    roleValueLine('Support added',formatNum(steady.supportDps)+' /s')+
+    roleValueLine('Total preview',formatNum(steady.totalDps)+' /s');
+  steady.bonds.forEach(function(b){
+    html+=roleValueLine(b.name,b.rewardMult>1 ? '+25% Lumen, Shards &amp; Motes' : '+'+formatNum(b.damageDps)+' /s');
+  });
+  var moteReward=Math.max(1,Math.round(motesDropFor(state.depth)*(1+supportMoteBonus())));
+  html+='<p class="wisp-role-note">Resources stay separate from damage. '+(isBoss(state.depth) ? 'This Boss drops no Luminous Motes.' : 'Luminous reward at this Rift: '+formatNum(moteReward)+' Motes per Luminous kill.')+'</p>'+
+    roleValueLine('Passive damage now',formatNum(current.passiveDps)+' /s')+
+    roleValueLine('Guardian Tap now',formatNum(tapDamage())+' /tap');
+  if(current.legacyDps>0) html+=roleValueLine('Saved legacy boost added',formatNum(current.legacyDps)+' /s');
+  html+='<p class="wisp-role-note">Below: removing one Wisp keeps all other levels and permanent purchases. These comparisons overlap through Bonds and buffs; do not add them.</p>';
+  els['wisp-role-summary'].innerHTML=html;
+  steady.rows.forEach(function(row,i){
+    var el=els['spirit-list'].querySelector('[data-wisp-role="'+row.id+'"]');
+    if(!el) return;
+    if(!row.active){
+      el.innerHTML='<p class="wisp-role-note">'+((state.spirits[row.id]||0)>0 ? 'Benched · no sustained party contribution.' : 'Not recruited · no power, Bonds or rewards.')+'</p>';
+    } else {
+      var text=roleValueLine('Raw damage',formatNum(row.rawDps)+' /s');
+      if(SPIRITS[i].abilityType==='support'){
+        var profile=supportAbilityProfile(SPIRITS[i]),uptime=Math.min(1,profile.durationMs/1000/steady.cycle);
+        text+=roleValueLine('Support added to party',formatNum(row.supportDps)+' /s')+
+          '<p class="wisp-role-note">'+Math.round(uptime*100)+'% sustained uptime · actual boost begins when cast.</p>';
+        if(row.moteBonus>0) text+=roleValueLine('Motes from Module','+'+Math.round(row.moteBonus*100)+'%');
+      }
+      if(row.lumenPerCast>0) text+=roleValueLine('Lumen per cast',formatNum(row.lumenPerCast));
+      if(row.shardsPerCast>0) text+=roleValueLine('Shards per cast',formatNum(row.shardsPerCast));
+      if(row.bondNames.length) text+='<p class="wisp-role-note">Enables '+row.bondNames.join(' · ')+'</p>';
+      text+=roleValueLine('Party damage lost if removed',formatNum(row.removalDps)+' /s ('+(steady.totalDps>0 ? (100*row.removalDps/steady.totalDps).toFixed(1) : '0.0')+'%)');
+      el.innerHTML=text;
+    }
+    var earned=current.rows[i].supportDps;
+    if(earned>0) el.innerHTML+=roleValueLine('Earned boost now',formatNum(earned)+' /s');
+  });
+}
 function renderSpirits(){
   var openProgression=Array.from(els['spirit-list'].querySelectorAll('[data-wisp-progression]')).filter(function(el){
     return el.tagName!=='DETAILS' || el.open;
@@ -5952,6 +6072,7 @@ function renderSpirits(){
         '<span class="rarity-badge" style="--badge-color:'+RARITY_COLORS[tier]+';">'+RARITY_NAMES[tier]+'</span>' +
         empowerHtml +
       '</div>' +
+      '<div class="wisp-role-readout" data-wisp-role="'+sp.id+'"></div>' +
       '<button class="mini-btn wisp-empower-action" data-empower="'+sp.id+'" '+(state.lumen<cost?'disabled':'')+'><strong>'+(recruited?'Empower':'Recruit')+'</strong><span class="mono">'+costIcon('lumen')+formatNum(cost)+'</span></button>' +
       (upgradesMaxed ?
         '<details class="wisp-progression" data-wisp-progression="'+sp.id+'" '+(openProgression.indexOf(sp.id)!==-1?'open':'')+'><summary data-wisp-details="'+sp.id+'">'+sp.shortName+' · Ability, Rarity, Module &amp; Ultimate</summary>' :
@@ -5965,6 +6086,7 @@ function renderSpirits(){
     (upgradesMaxed ? '</details>' : '</section>')+'</div>';
   });
   replaceControlMarkup(els['spirit-list'],html);
+  renderWispRoles();
   if(focusedProgression){
     var restoredSummary=els['spirit-list'].querySelector('[data-wisp-details="'+focusedProgression+'"]');
     if(restoredSummary) restoredSummary.focus({preventScroll:true});
@@ -7487,9 +7609,13 @@ function advanceAuthoritativeTime(elapsedSec,options){
   var firstFarmGridSec = startPhaseSec===0 ? 1 : 1-startPhaseSec;
   var farmGridRemainingSec = firstFarmGridSec;
   var farmGridCrossings = 0;
-  var targetGridPositionSec = startPhaseSec+elapsedSec;
-  var targetFarmGridCrossings = Math.floor(targetGridPositionSec);
-  var targetGridPhaseSec = targetGridPositionSec-targetFarmGridCrossings;
+  // Keep the target fraction separate from whole seconds. Adding 60s versus
+  // 10s to the same fractional start and subtracting the whole part yields
+  // different binary phases, material at mature Wisp damage.
+  var targetGridPhaseSec = startPhaseSec+targetFractionSec;
+  var targetGridCarry = Math.floor(targetGridPhaseSec);
+  var targetFarmGridCrossings = targetWholeSec+targetGridCarry;
+  targetGridPhaseSec -= targetGridCarry;
   var targetFarmGridRemainingSec = targetGridPhaseSec===0 ? 1 : 1-targetGridPhaseSec;
 
   function advanceFarmGridClock(stepSec){
@@ -7673,8 +7799,8 @@ function advanceAuthoritativeTime(elapsedSec,options){
 
     var killsBefore = summary.kills;
     var ascendsBeforeAdvance = summary.ascends;
-    var elapsedWholeBefore = elapsedWholeSec;
-    var elapsedFractionBefore = elapsedFractionSec;
+    var gridCrossingsBefore = farmGridCrossings;
+    var gridRemainingBefore = farmGridRemainingSec;
     // Sub-nanosecond elapsed time can still carry material damage at mature
     // power. Never discard it merely because it is below a generic time
     // epsilon; only treat the simulator as stalled if floating-point
@@ -7757,7 +7883,9 @@ function advanceAuthoritativeTime(elapsedSec,options){
       });
     }
 
-    if(remaining>0 && elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && actions===0){
+    // A tiny grid remainder can round to the same derived elapsed value on
+    // both sides of a real crossing. Detect progress on the canonical clock.
+    if(remaining>0 && farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore && actions===0){
       throw new Error('Authoritative simulation stalled without elapsed-time or state progress | '+JSON.stringify({
         elapsedInRun:elapsedInRun,
         elapsedWholeSec:elapsedWholeSec,
@@ -7891,6 +8019,7 @@ function tick(){
   }
   updateBattleFast();
   checkAffordability();
+  if(document.getElementById('tab-spirits').classList.contains('active') && Date.now()-wispRoleLastRenderMs>=1000) renderWispRoles();
   presentLiveRiftResult(feedbackBefore,sim);
 }
 

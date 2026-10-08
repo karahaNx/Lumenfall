@@ -69,6 +69,7 @@ offlineProgressSteps = function*(){
 };
 
 window.__lumenfallQaBridge = {
+  wispRoles: {compare:wispRoleComparison,snapshot:wispRoleSnapshot,render:renderWispRoles,steady:sustainedCombatDps},
   offlineTest: {
     seed:function(){return JSON.parse(JSON.stringify(window.__lumenfallQaContext.fixtures['offline-catchup-device'].save));},
     failNext:function(){var original=simulationResolveTimestamp;simulationResolveTimestamp=function(){simulationResolveTimestamp=original;throw new Error('injected offline failure');};}

@@ -11,6 +11,7 @@ const source=fs.readFileSync(sourceArg<0?path.join(root,'index.html'):process.ar
 const baseline=fs.readFileSync(path.join(root,'docs/recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/main-index.html'),'utf8');
 assert.equal(require('node:crypto').createHash('sha1').update('blob '+Buffer.byteLength(baseline)+'\0'+baseline).digest('hex'),'ea44431c163569548973d9e489f75345749a07ee','original product oracle blob');
 const original=JSON.parse(fs.readFileSync(path.join(root,'docs/qa/offline-autoascend-2026-10-07/device_backup.json'),'utf8'));
+const clockOracle=require('./wisp-clock-oracle.json');
 const copy=x=>JSON.parse(JSON.stringify(x)),records=[];
 function app(seed,html=source,seconds=0){
  let now=seed.lastSeen+seconds*1000,monotonic=0,seq=0,fault=null,primaryFail=false,recoveryFail=false;
@@ -40,13 +41,29 @@ function compare(a,b,label='state'){
 }
 // The frozen product has no repeat-speed fields. Assert their exact legacy OFF
 // defaults separately, then retain the complete original state/summary oracle.
-function baselineSummary(actual,expected,label){
+function correctedClockOracle(expected,id,field){
+ const entry=clockOracle.cases.find(item=>item.id===id);
+ assert(entry,'recorded clock oracle '+id);
+ const corrected=copy(expected);
+ for(const change of entry[field+'Changes']){
+  assert(field==='summary' ? change.path==='iterations' && change.after===change.before+1 :
+   /^(enemyHp|_autoTapAccum|_autoEmpowerAccum|heroResource\.(ember|titan))$/.test(change.path),
+   'clock correction cannot alter economy, ownership or paid metadata');
+  const parts=change.path.split('.'),key=parts.pop();
+  const parent=parts.reduce((value,part)=>value[part],corrected);
+  assert.equal(parent[key],change.before,'immutable original clock value '+id+'.'+change.path);
+  if(field==='state') approx(change.before,change.after,'bounded intentional clock correction '+id+'.'+change.path);
+  parent[key]=change.after;
+ }
+ return corrected;
+}
+function baselineSummary(actual,expected,label,id){
  assert.equal(actual.studySpeedPurchases,0,label+' no legacy repeat purchases');
  assert.equal(actual.studyMotesSpent,0,label+' no legacy repeat spending');
  const {studySpeedPurchases,studyMotesSpent,...existing}=actual;
- assert.deepEqual(existing,expected,label);
+ assert.deepEqual(existing,correctedClockOracle(expected,id,'summary'),label+' complete summary exact');
 }
-function baselineState(actual,expected,seed,label){
+function baselineState(actual,expected,seed,label,id){
  const ids=Object.keys(expected.longStudyLevels);
  assert.deepEqual(actual.studyUseMotes,Object.fromEntries(ids.map(id=>[id,false])),label+' legacy OFF intent');
  assert.deepEqual(actual.studySpeedTargets,Object.fromEntries(ids.map(id=>{
@@ -54,7 +71,9 @@ function baselineState(actual,expected,seed,label){
   return [id,paid&&paid.speedMult>1?paid.speedMult:1.5];
  })),label+' remembered legacy paid tier');
  const {studyUseMotes,studySpeedTargets,...existing}=actual;
- assert.deepEqual(existing,expected,label);
+ // Explicit revised golden values retain exact equality for the complete
+ // state. The archived product and its original values remain immutable.
+ assert.deepEqual(existing,correctedClockOracle(expected,id,'state'),label+' complete state exact');
 }
 function runAsync(seed,seconds,batch=256){
  const x=app(seed,source,seconds),before=copy(x.b.get());x.b.batch(batch);
@@ -104,12 +123,12 @@ assert(long.result.completedStudies.includes("Guardian's Mastery"),'study comple
 assert.equal(long.result.kills,cap.result.kills,'beyond-cap time earns no extra combat');
 // Preserve old numerical policy against the unchanged scheduler for short windows
 // and chronological research/Motes/automation boundaries.
-for(const seed of [original,clear20,off]){
+for(const [id,seed] of [['clear21',original],['clear20',clear20],['off',off]]){
  for(const seconds of [60,300,3600]){
   const old=app(seed,baseline,seconds),next=app(seed,source,seconds);
   const a=old.b.advance(seconds,{kind:'offline',visual:false,clockStartMs:seed.lastSeen});
   const b=next.b.advance(seconds,{kind:'offline',visual:false,clockStartMs:seed.lastSeen});
-  baselineSummary(b,a,'unchanged baseline summary '+seconds);baselineState(next.b.get(),old.b.get(),seed,'unchanged baseline state '+seconds);
+  baselineSummary(b,a,'unchanged baseline summary '+seconds,id+'-'+seconds);baselineState(next.b.get(),old.b.get(),seed,'unchanged baseline state '+seconds,id+'-'+seconds);
  }
 }
 const all=copy(original);all.research.focus=0;Object.keys(all.empowerQueue).forEach(k=>all.empowerQueue[k]=true);
@@ -117,7 +136,7 @@ all.researchQueue.focus=true;all.studyQueue.riftattune=true;
 for(const kind of ['live','offline']){
  const whole=app(all),split=app(all),old=app(all,baseline),options={kind,visual:false,clockStartMs:all.lastSeen};
  const sum=whole.b.advance(3600,options);const oldSum=old.b.advance(3600,options);
- baselineSummary(sum,oldSum,'economy/order baseline '+kind);baselineState(whole.b.get(),old.b.get(),all,'baseline chronology '+kind);
+ baselineSummary(sum,oldSum,'economy/order baseline '+kind,'boundaries-'+kind);baselineState(whole.b.get(),old.b.get(),all,'baseline chronology '+kind,'boundaries-'+kind);
  for(let i=0;i<4;i++)split.b.advance(900,{...options,clockStartMs:all.lastSeen+i*900000,offlineWindowStartMs:all.lastSeen});
  compare(split.b.get(),whole.b.get(),'whole/split '+kind);
  assert(sum.motesGained>0&&sum.empowers>0&&sum.researchBought>0,'Motes, Research and Empower chronology exercised');
