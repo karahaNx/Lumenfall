@@ -1,6 +1,6 @@
 # FORMATION_AUTOSAVE_001 — Formation autosave (F14)
 
-Status: rebased candidate; publication and integration in progress.
+Status: PR76 published; updated main combination under verification.
 Owner: this Formation autosave feature chat. Codex based on GPT-6; exact
 variant/effort are not exposed. The user's GPT-6.1 Sol / Extra high
 recommendation is not execution evidence.
@@ -49,6 +49,9 @@ legacy value handling are retained. No other feature branch is imported.
 PR67 has an overlapping broader autosave/Bonds proposal; PR70 changes Wisp
 contribution presentation. Their work is left intact and this change stays F14
 only. Recheck main/actual overlap before integration and assess any moved baseline.
+PR77 subsequently integrated Save Backup placement/confirmed restore at
+`261b1b7f863f73c324f4ac04acb5bfc95101644d`. This main update merged cleanly
+into the candidate; its UI, handlers and two additional CI negatives are retained.
 
 Product change is confined to `index.html`. Tests add
 `formation-autosave.js/.cjs` plus six scenarios and scoped bridge/harness
@@ -90,13 +93,18 @@ They do not accept the new rebased bytes.
 ## Checks and delivery checkpoint
 
 [8 October evidence](../qa/formation-autosave-2026-10-08/README.md) identifies
-baseline, commands, exact source and results. Unmodified main passes existing
-Formation reconstruction, persistence and Core QoL scenarios. The rebased
-candidate passes the new contract/reload/backup/recovery; native and remaining
-checks are in progress. No final CI or integrated acceptance is claimed yet.
+baseline, commands, exact source and results. Existing main Formation,
+persistence and Core QoL checks pass. Candidate65e959 passes focused checks,
+12 mobile browser profiles and133 contract assertions on V8 6.0; full CI37734955018
+PASS157 scenarios/12 negatives/guarded startup. Main then advanced with PR77.
+Combined focused checks (including confirmed Save Backup UI) and renewed V8
+contract PASS on source `d4b0d7227b2c46ef7c2bde406ea07f2a5a2f34fc395e51fbafcf061e2562ed3e`.
+Final CI now requires158 scenarios/14 negatives.
+Android8.1/API27/WebView61 emulator boots; signed143 baseline preparation is
+in progress. No integrated APK/device acceptance is claimed yet.
 
-Next: finish focused checks, publish the branch/PR and attach it to this chat;
-wait for required CI, review the full diff, recheck main and merge exact validated
+Next: push updated PR76; wait for required CI,
+review the full diff, recheck main and merge exact validated
 bytes. The main product change automatically triggers the established Android
 workflow; avoid unnecessary dispatch. Verify the signed APK and available native
 checks, preserve immutable receipts and update project status. Keep required

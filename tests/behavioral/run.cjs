@@ -91,6 +91,13 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
   const urlFor = page => baseUrl + page + '?' + new URLSearchParams({ qaScenario: scenario, qaFixture: fixture });
   if (scenario === 'comet-unlocks-core') return runNativeProcess([process.execPath, path.join(ROOT, 'comet-unlocks-core.cjs')], scenario, 90000, options);
   if (scenario === 'lab-motes-offline-integration') return runNativeProcess([process.execPath, path.join(ROOT, 'lab-motes-offline.cjs')], scenario, 90000, options);
+  if (['save-backup-ui', 'self-test-save-backup-placement', 'self-test-save-backup-confirmation'].includes(scenario)) {
+    const command = [process.execPath, path.join(ROOT, 'save-backup-ui.cjs'), '--chrome', chrome, '--quiet',
+      '--web-root', options.sourceWebRoot || path.join(ROOT, '../..'),
+      '--evidence', path.join(options.rawArtifactRoot || os.tmpdir(), scenario)];
+    if (scenario !== 'save-backup-ui') command.push('--mutant', scenario.endsWith('placement') ? 'misplaced-backup' : 'early-restore');
+    return runNativeProcess(command, scenario, 150000, options);
+  }
   if (scenario === 'offline-catchup-core') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-catchup.cjs')], scenario, 300000, options);
   if (scenario === 'offline-catchup-ui' || scenario === 'offline-catchup-legacy-dom') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-catchup-ui.cjs'), chrome, urlFor('/index.html'), scenario], scenario, 210000, options);
   if (['formation-autosave-native','formation-autosave-reduced-motion'].includes(scenario)) return runNativeProcess([process.execPath,path.join(ROOT,'formation-autosave.cjs'),chrome,urlFor('/index.html'),scenario],scenario,120000,options);
@@ -196,7 +203,7 @@ async function main(argv = process.argv.slice(2)) {
     const baseUrl = 'http://127.0.0.1:' + server.address().port;
     for (const [scenario, fixture] of Object.entries(selected)) {
       const viewports = scenario === 'lab-motes-ui' ? [[320,844,0,0],[390,844,0,0],[430,844,0,0]] : scenario.startsWith('layout-') || scenario === 'self-test-layout-collapse' ? LAYOUT_VIEWPORTS : [null];
-      for (const viewport of viewports) if (!await runScenario(chrome, baseUrl, scenario, fixture, viewport, { rawArtifactRoot })) failures.push(scenario + ' ' + JSON.stringify(viewport));
+      for (const viewport of viewports) if (!await runScenario(chrome, baseUrl, scenario, fixture, viewport, { rawArtifactRoot, sourceWebRoot:webRoot })) failures.push(scenario + ' ' + JSON.stringify(viewport));
     }
   } finally {
     if (server) { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
