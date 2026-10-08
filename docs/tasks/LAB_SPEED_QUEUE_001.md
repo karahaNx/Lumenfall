@@ -137,6 +137,10 @@ the release digest: asset620269725,6,837,509bytes, SHA256
 `c0c81462151c485b16f85dc2c0e53d258ba45c60f92a32539e9e2d6a7153696d`.
 Current raw evidence is in `../qa/lab-speed-queue-001/raw/current-main-140/`.
 No release was dispatched by this chat; older138 results remain preserved.
+The original signed140APK is preserved unchanged in
+[`archive/android/lab-speed-queue-001/`](../../archive/android/lab-speed-queue-001/README.md)
+so the remaining device checks can target an immutable artifact. No private
+signing material is included. Do not downgrade an already newer installation.
 
 The delivery checkpoint is tracked in PR65, which must pass required CI before
 integration; its final receipt records the integrated source/evidence identities.

@@ -55,6 +55,9 @@ Lab offline/payment/retry assertions PASS. Current release asset620269725 is
 6,837,509bytes; SHA256c0c81462151c485b16f85dc2c0e53d258ba45c60f92a32539e9e2d6a7153696d
 matches GitHub's digest. Results: raw/current-main-140/identity.txt, assets.json
 and integrated-apk-v8-lab.json. No new release was requested by this chat.
+The original published signed140APK is preserved unchanged in
+[the Android archive](../../../archive/android/lab-speed-queue-001/README.md)
+for exact-version device acceptance after android-latest changes.
 The following138 evidence remains historical and is not claimed as140 acceptance.
 
 The actual release APK was freshly downloaded and checked with existing tools:
