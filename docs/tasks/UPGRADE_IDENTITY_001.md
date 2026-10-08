@@ -78,10 +78,12 @@ Ascends. Source/context/tooling/APK-verifier self-test pass. Full suite running;
 initial probe found obsolete closed-row expectations/mobile issues, corrected.
 Queue closure also exposed a Farm clock stall. Only the two clock corrections
 from PR70 head7284cf716250355e1bf68d00590f81ab96f49a3d are included; no Wisp
-role/UI/catalog changes copied. A dedicated saved-queue fractional-clock case
+role/UI/catalog changes copied. A dedicated saved-queue zero/fractional-clock case
 and causal old-guard negative protect this dependency. Offline baseline comparisons
 keep exact full equality against the immutable engine plus only those clock fixes.
 [PR90](https://github.com/karahaNx/Lumenfall/pull/90) is pushed as a draft;
+all17 causal negatives now detect their intended failures.
+[Candidate evidence](../qa/upgrade-identity-001/2026-10-08/README.md);
 full final-source CI/integration/APK acceptance are not yet claimed.
 Next: implement, verify fresh baseline/focused regressions, publish/integrate
 following required CI, build/verify APK. Keep owner chat open until required
