@@ -22,7 +22,8 @@ Full commands/exits are in [check-results.json](check-results.json); individual
 logs are stored alongside. Tooling's smoke checks exercise fixture/guard
 contracts, not an actual successful Chromium game launch.
 
-Publication/integration pending. Full feature remains blocked on the approved
+Publication/integration was pending at the timestamp above; the final receipt is
+saved in [PR62](https://github.com/karahaNx/Lumenfall/pull/62). Full feature remains blocked on the approved
 UPGRADE_IDENTITY_001 matrix. No APK/device acceptance of new Lab mechanics is
 claimed. Self-review only; no independent review claimed.
 

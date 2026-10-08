@@ -14,6 +14,11 @@ endnu — lav forslaget” (no agreed matrix; make the proposal), then requested
 proposal; they do not supply the missing gameplay values. Recommendations below
 are not approved mechanics. Do not mark the full feature complete or archive it.
 
+GitHub checkpoint: [PR62](https://github.com/karahaNx/Lumenfall/pull/62).
+Its body records the actual CI, merge commit and checks on the integrated version
+after those actions finish. The PR's live state distinguishes publication from
+integration; full-feature status remains blocked in either case.
+
 Original request and correction are saved in
 [USER_REQUEST.txt](LAB_EXCLUSIVE_001/USER_REQUEST.txt),
 [USER_DECISION_2026-10-07.txt](LAB_EXCLUSIVE_001/USER_DECISION_2026-10-07.txt) and
@@ -154,9 +159,11 @@ device acceptance. Never reuse the old baseline-only inventory as that proof.
 Current checks/publication results: see
 [current verification receipt](LAB_EXCLUSIVE_001/evidence/current/check-results.md).
 Old Chromium timeouts and raw artifacts remain dated evidence; they are not
-passes. Self-review is not independent review. Publication/integration receipt
-is appended after actual checks and merge.
+passes. Self-review is not independent review. The actual publication/integration
+receipt is saved in PR62's body after checks and merge, following the existing
+project practice for final documentation-PR receipts.
 
-Next action: finish this proposal's GitHub checkpoint, then obtain the exact
-agreed Lab matrix fields above and implement only those Lab rows. Product work
-and full-feature completion stay open while those decisions are missing.
+Next action: use PR62's live state/receipt to verify this proposal checkpoint,
+then obtain the exact agreed Lab matrix fields above and implement only those
+Lab rows. Product work and full-feature completion stay open while those
+decisions are missing.
