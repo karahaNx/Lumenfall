@@ -1,0 +1,51 @@
+Browser identity: { "selected_path": "/tmp/bond-check-tools/google-chrome", "resolved_path": "/workspace/BOND_TEXT_001-evidence/chromium-cdp.cjs", "sha256": "73ac862c4288eb0a53ca7cd6c959ebe42a40f2094a3f9df5d0d4c7c095b474cb", "version": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)", "version_exitcode": 0, "version_stderr": "" }
+Staged source: { "source_sha256": "1e0d51370b5b62f313dad6953f9b26bb7d7a1a886785dbccc6dfaac379779981", "instrumented_sha256": "75183d65e2ff7e197302c8dc47d42a706c8f7afa0f723c076727789497c46881" }
+FAIL self-test-wisp-formula-regression
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 1.1536636249999999, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-wisp-formula-regression", "json_status": "fail", "json_scenario": "self-test-wisp-formula-regression", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /tmp/lumenfall-qa-raw-EM3Wzb/self-test-wisp-formula-regression-lRB8DF
+  stdout tail:
+    var unsafeEconomy=bridge.endgameEconomyContract();
+          assert(
+            unsafeEconomy.sigilResonanceRunLimit>100 || unsafeEconomy.questRefreshCost<unsafeEconomy.maxQuestCometReward,
+            'intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+
+</script>
+
+
+<pre id="qa-result" data-status="fail" data-scenario="self-test-wisp-formula-regression">{
+  "scenario": "self-test-wisp-formula-regression",
+  "status": "fail",
+  "detail": {
+    "message": "intentional Wisp formula regression: passive-only Formation Training incorrectly expected to scale ability damage",
+    "stack": "Error: intentional Wisp formula regression: passive-only Formation Training incorrectly expected to scale ability damage\n    at assert (http://127.0.0.1:37691/index.html?qaScenario=self-test-wisp-formula-regression&amp;qaFixture=fresh:12589:61)\n    at HTMLDocument.run (http://127.0.0.1:37691/index.html?qaScenario=self-test-wisp-formula-regression&amp;qaFixture=fresh:15098:11)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+Behavioral QA failed: self-test-wisp-formula-regression null

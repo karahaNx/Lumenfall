@@ -1,6 +1,7 @@
 # Lumenfall — current project status
 
-Updated 8 October 2026 for [WISP_UPGRADE_DISPLAY_001](tasks/WISP_UPGRADE_DISPLAY_001.md),
+Updated 8 October 2026 for [BOND_TEXT_001](tasks/BOND_TEXT_001.md), preserving
+[WISP_UPGRADE_DISPLAY_001](tasks/WISP_UPGRADE_DISPLAY_001.md),
 preserving other features' recorded status and the integrated
 [feature-chat workflow](tasks/FEATURE_CHAT_WORKFLOW_001.md).
 Repository: `karahaNx/Lumenfall`. Verify relevant live state before acting;
@@ -29,6 +30,26 @@ fails in kernel/init before app installation. F25/F26
 built-in memory/fixed12h retirement/refunds are separate dependencies.
 [143 receipt, immutable APK and remaining checks](qa/comet-unlocks-001/DELIVERY.md).
 
+[BOND_TEXT_001 / F16](tasks/BOND_TEXT_001.md) is integrated via
+[PR61](https://github.com/karahaNx/Lumenfall/pull/61) at210005d0ae093d21e846bae41a9bddf25af2800d:
+full partner names appear in both Formation Bonds views; ability text retains
+its effects without partnership instructions. Bond IDs/effects/simulation and
+save/purchase rules are unchanged. Final CI37710741132 PASS148 scenarios/12
+negatives/guarded startup; fresh integrated checks PASS.
+
+Verified signed APK **0.1.141**, build37712548224, package com.lumenfall.app,
+established certificate/v1/v2; SHA256
+`0b278ffce3819a40b98c44b738b79123ec2d7fb273a3820bc13ed71940214d44`.
+526 ZIP CRC entries/all15 assets match integration. Actual APK V8 6.0 syntax/helper,
+signed138→141 storage preservation, first-launch purchased tiers and installed
+Android8.1/API27/WebView69 Bond/ability DOM checks PASS. The initial native capture
+has a System UI ANR overlay; the subsequent unobstructed capture is preserved.
+No native performance or physical acceptance is inferred. Required affected-phone/
+exact WebView60/TalkBack acceptance remains OPEN; owner chat stays open.
+[Android evidence](qa/BOND_TEXT_001/android/README.md) and
+[immutable141 APK](../archive/android/bond-text-001/README.md). Later releases
+may supersede this observed artifact; check live identity for new delivery.
+
 [WISP_UPGRADE_DISPLAY_001 / F04](tasks/WISP_UPGRADE_DISPLAY_001.md) is implemented
 through PR59, merge0e9b54c8d62a873bd48625f4a20ee18078e8a8f1. Unfinished Wisp
 upgrades stay open without a fold control; folding requires Mythic rarity,
@@ -54,7 +75,7 @@ full tree equals validated candidate b62476dc461f00d2a7ea756f700f755bd763326e.
 PR46 is now merged too. Fresh CI37692669340 PASS 146 default scenarios,
 12 required negative controls, source/tooling checks and guarded startup.
 
-Previous published signed APK **0.1.138**, build 37694671685, package com.lumenfall.app,
+Earlier verified signed APK **0.1.138**, build 37694671685, package com.lumenfall.app,
 established signing certificate; APK SHA256
 `81b9be7edea971335a06f06d1894d91e75a92736738cc935fc2a920a26a02e1e`.
 Downloaded release digest/526 ZIP CRC entries/all 15 bundled assets match the
@@ -103,6 +124,7 @@ were recorded as integrated.
 | Work | Evidence/status | Next action within its own task |
 | --- | --- | --- |
 | [COMET_UNLOCKS_001](tasks/COMET_UNLOCKS_001.md) / F27 | PR69/main integrated; full151 pre-merge CI and signed143 package/signing/assets/extracted-engine checks PASS. New catalogue140/50/160; legacy value/effects retained. [PR73](https://github.com/karahaNx/Lumenfall/pull/73) records final integrated-source CI. Required native acceptance OPEN. | Complete exact signed143 native update/interaction, physical WebView60 and TalkBack checklist. Keep feature/chat open; F25/F26 retirement/refunds stay separate. |
+| [BOND_TEXT_001 / F16](tasks/BOND_TEXT_001.md) | PR61 integrated; CI148/12 and fresh integrated checks PASS. Signed0.1.141 identity/assets, V8 6.0 helper, native WebView69 presentation and signed update/save-value checks PASS. | Complete [physical affected-phone/WebView60/TalkBack acceptance](qa/BOND_TEXT_001/android/DEVICE_ACCEPTANCE.txt) and save observations in GitHub. Keep owner chat open. |
 | [LAB_EXCLUSIVE_001](tasks/LAB_EXCLUSIVE_001.md) / F29 | [PR62 proposal checkpoint](https://github.com/karahaNx/Lumenfall/pull/62): 9 Labs inventoried, 7 duplicate rows in 6 effect families; exclusive study-work/reservation effects and value-preserving transition proposed. Actual CI/merge/integrated checks are saved in the PR body. No game behavior changed. | Obtain the agreed UPGRADE_IDENTITY_001 Lab effects/currencies/prices/work/unlocks/caps and migration policy. Full feature and chat remain open; proposed values/mechanics are not approved rules. |
 | WISP_UPGRADE_DISPLAY_001 / F04 | [Integrated PR59 and signed140](tasks/WISP_UPGRADE_DISPLAY_001.md); required CI147 scenarios/12 negatives and integrated12 mobile profiles/12,912 assertions PASS. Signed138→140 native save preservation PASS. | Complete and save affected-phone/exact WebView60/TalkBack acceptance. Available implementation/delivery is published; feature/chat remains open. |
 | FEATURE-CHAT-WORKFLOW-001 | Current docs/context-tooling cleanup; see task for publication/integration receipt. | Verify document/tooling checks and GitHub integration; no game build. |
