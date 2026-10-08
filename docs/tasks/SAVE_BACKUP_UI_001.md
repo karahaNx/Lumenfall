@@ -6,10 +6,10 @@ replacement and the save/recovery contract. Original point F22.
 
 Owner: this feature's Codex chat. Isolated checkout:
 `/workspace/lumenfall-save-backup-ui-001`; branch `feature/save-backup-ui-001`.
-Status: **implementation prepared; publication/integration and app acceptance in progress**.
+Status: **integrated and signed APK144 published; physical acceptance OPEN**.
 No other checkout was edited; no subagents or message tools were used.
-Available agent identity: Codex based on GPT-6; exact variant/effort is not exposed.
-The recommended GPT-6.1 Sol / High is not an execution record.
+Agent: Codex based on GPT-6; exact variant/effort unavailable. Recommended
+GPT-6.1 Sol / High is not an execution record.
 
 ## Requirements and authorization
 
@@ -28,30 +28,26 @@ User correction, 8 October 2026:
 
 > Finish the feature task push to github implement to game
 
-This authorizes publishing, integrating and delivering this feature. Current
-AGENTS/bootstrap/[workflow](../project/FEATURE_WORKFLOW.md) supersede historical
-Lead/writer-release gates. Standing authorization applies; no new general
-approval is needed. No new project rule or gameplay number is introduced.
+This authorizes publication/integration/delivery. Current AGENTS/bootstrap/
+[workflow](../project/FEATURE_WORKFLOW.md) supersede historical writer gates.
+No new approval, project rule or gameplay number is needed.
 
 ## Baseline and actual dependencies
 
 Initial shared checkout: clean `67c3e99c24587f6c13fc65cfd27f8dcb8e289602`.
-Historical preparation used `b2a1f440e8ad9fed34b37551e468224310d2a6f6`, then
-PR51/main `0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd`.
-[Historical evidence](../qa/save-backup-ui-001/README.md) remains unchanged.
+[Historical evidence](../qa/save-backup-ui-001/README.md) preserves initial
+preparation and its baselines.
 
 Current integration baseline, 8 October: **`b0537cb46635555ba2c2e5f3f95bc8fc276aeda5`**.
-The unpublished candidate was rebased onto this main. Only test-registration
-conflicts required resolution; both existing and new registrations were kept,
-including the Lab viewport expansion. Product hunks applied without conflicts.
+Rebase preserved both test registrations and Lab viewport expansion; product
+hunks applied without conflicts.
 PR46/B2 implementation is already integrated via PR57; its historical physical
 acceptance does not block this task. Current save normalization, offline
 cancellation and legacy Comet purchase handling must remain intact.
 
-Preflight found draft PR67's feedback bundle overlaps Settings; it is not used
-as this feature's implementation. Draft PR66/70 are outside this goal. No
-active Android/main integration run was observed. Recheck current main and CI
-before merging; preserve concurrent work and serialize this integration.
+Draft PR67 overlaps Settings; its bundle is not used here. Draft PR66/70 are
+outside scope. No active Android/main run was observed; main integration was
+serialized after rechecking its baseline.
 
 ## Scope and decisions
 
@@ -70,39 +66,54 @@ before merging; preserve concurrent work and serialize this integration.
 
 ## Acceptance
 
-1. Backup appears under Save immediately before independently actionable Reset.
-2. Export/copy preserve complete current progress; clipboard success and manual
-   fallback work. Invalid/future-schema codes do not alter either save.
-3. Valid Restore requests do not replace progress. Cancel/Back/Escape/Close
-   clear pending intent; only explicit confirmation replaces the reviewed save.
-   Primary-write failure rolls recovery back; restored values survive reload.
-4. Old backup starts from now without duplicate offline time. Reset retains
-   its own request/cancel/confirm behavior. Current engine/save contracts pass.
+1. Backup is under Save immediately before independently actionable Reset.
+2. Complete export/copy and clipboard/manual fallback work. Invalid/future-schema
+   codes alter neither save.
+3. Restore request is nonmutating; Cancel/Back/Escape/Close clear intent. Only
+   explicit confirmation replaces the captured code. Failed primary writes roll
+   recovery back; restored values persist through reload.
+4. Old backups start from now without duplicate offline time. Reset retains its
+   independent request/cancel/confirm behavior; current engine/save contracts pass.
 5. 320/390/430px × normal/200% text × normal/reduced motion: labels fit,
-   controls are at least 44px, focus/order/trap work and text contrast ≥4.5:1.
-6. Required CI and affected checks pass on integrated main. Publish the APK;
-   verify exact packaged assets, `com.lumenfall.app`, version and established
-   signing. Preserve WebView60, deterministic purchases and Motes rewards.
-7. Save supported status/evidence in GitHub. Required Android/device acceptance
-   must pass before completion/archiving; blocked acceptance keeps this chat open.
+   controls ≥44px, focus/order/trap work and text contrast ≥4.5:1.
+6. Required CI/affected checks pass on integrated main. Published APK matches its
+   source, package/version/certificate; preserve WebView60, deterministic purchases,
+   Motes rewards and existing data. No migration is needed.
+7. GitHub status/evidence is saved; required Android/device acceptance passes
+   before completion/archiving. Blocked acceptance keeps this chat open.
 
-## Checks, limitations and next action
+## Checks, delivery and next action
 
-[Current evidence](../qa/save-backup-ui-001/2026-10-08/README.md) records commands,
-versions, source hashes and outcomes. Historical 7 October passes are not
-current-main acceptance. Browser tests control time/intervals only in the test
-page and explicitly stub clipboard/storage-failure branches; normal engine and
-lifecycle behavior is covered by the unchanged existing suite.
+[Current evidence](../qa/save-backup-ui-001/2026-10-08/README.md) records exact
+commands, versions, source hashes, raw logs, screenshots and the immutable APK.
 
-Current source, tooling, task context (31,329 bytes), ES2017 grammar and all 12
-focused UI profiles PASS; six core backup functions match current main exactly.
-The complete current default suite is running. No current feature
-PR, integration, APK or physical acceptance is claimed yet. This environment
-has no Android SDK/emulator, `/dev/kvm` or USB passthrough at preflight; required
-physical WebView60/TalkBack observations cannot be invented. Complete available
-source/APK/runtime checks, record the precise remaining device checklist, and
-keep acceptance open if no device is available.
+[PR77](https://github.com/karahaNx/Lumenfall/pull/77) merged at
+`261b1b7f863f73c324f4ac04acb5bfc95101644d`; full tree equals validated head
+`35fa2c8da59b5db457a84adfae8ec468e3a5fcfe` (tree `321a4d98e4da8ef2efee8916ec40b17a9e80a854`).
+CI `37735085451`: source/tooling, 152 scenarios / 174 results, all 14 required
+negative controls and guarded startup PASS. Local full suite likewise PASS.
+Six core backup functions match the baseline exactly; both inline scripts parse
+as ES2017. Self-review/automated checks only; no human review or inline finding was observed.
 
-Next: finish current-baseline checks, publish the feature branch/PR, merge after
-required CI and review, verify integrated bytes, publish/verify the signed APK,
-then save task/PROJECT_STATE receipts. Archive only after all required acceptance.
+Integrated-source UI and extracted-APK UI each PASS all 12 profiles. Browser
+clock/interval control and clipboard/storage-failure injection are test-only;
+normal engine/save/lifecycle behavior is covered by the unchanged existing suite.
+Exact extracted APK script additionally PASS on V8 6.0 with minimal mocked
+DOM/storage; this is engine evidence, not physical WebView60 acceptance.
+
+Signed APK **0.1.144**, build `37736693432` on the integration commit, is
+published. Package `com.lumenfall.app`, version144, established certificate and
+v1/v2 signatures PASS; all15 source assets match, all526 ZIP entries pass CRC.
+SHA256: `6e2006cb90ebe27104bd1ae38ba8c8afa700f4ede90e6fe8046bf7b2f505ca5d`.
+[APK/receipt](../qa/save-backup-ui-001/2026-10-08/README.md) preserves the binary
+because the latest-release URL is mutable. No package/signing change or migration.
+
+Required physical Android/WebView60/TalkBack acceptance remains **OPEN**.
+This environment provides no connected device/emulator, KVM or USB passthrough.
+[Device checklist](../qa/save-backup-ui-001/2026-10-08/DEVICE_ACCEPTANCE.txt)
+covers signed update/save preservation, actual clipboard, native reload/storage,
+layout/accessibility and independent Reset. No native/device pass is invented.
+
+Next: complete and save the physical checklist on signed144. Shared-file work
+for this feature stops after this delivery checkpoint. Keep the feature/chat open until required acceptance passes;
+archive only this owner chat afterward. No other chat's work is released here.
