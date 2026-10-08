@@ -131,6 +131,11 @@ async function run(){
   await evaluate(`(()=>{var b=__cheaperRecruitment,s=b.get();s.depth=s.enemyDepth=16;b.set(s);b.ascend();})()`);s=await evaluate('__cheaperRecruitment.get()');assert(sameRefund({...s,prisms:expected.prisms}),'Ascend preserves refund receipt/credits '+level);
   records.push({kind:'migration-persistence',level,oldFirstLaunch:true,reload:true,recovery:true,oldRestoreRepetitions:2,ascend:true});
  }
+ // A plausible incomplete marker must select the intact recovery slot.
+ await evaluate(`(()=>{var b=__cheaperRecruitment;b.set(b.canonical(cheaperLegacySeed(21,17)));b.save();var bad=b.get();bad.prisms=0;bad.feedbackMigration.receipts['node.bonds'].amounts.prisms=[1];b.corruptPrimary();localStorage.setItem('lumenfall_save_v2',JSON.stringify(bad));})()`);
+ await navigate(url);let repaired=await evaluate('__cheaperRecruitment.get()');
+ assert(repaired.nodes.bonds===21&&repaired.prisms===3393&&repaired.feedbackMigration.receipts['node.bonds'].amounts.prisms[0]===3376,'wrong positive receipt amount selects intact actual recovery');
+ records.push({kind:'receipt-recovery',primaryAmount:1,recoveredAmount:3376,wallet:3393});
  const oldBackup=await evaluate('__cheaperRecruitment.encode(cheaperLegacySeed(21,0))');
  await evaluate('(()=>{var b=__cheaperRecruitment;b.set(cheaperRecruitmentSeed(0));b.save();})()');
  const beforeRollback=await evaluate('__cheaperRecruitment.disk()');
