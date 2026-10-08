@@ -31,7 +31,14 @@ show other screens; none directly establishes F13 behavior or an APK/save identi
 
 - Checkout: `/workspace/lumenfall-rift-cast-text-001`, branch
   `feature/rift-cast-text-001`. The original `/workspace/Lumenfall` remains untouched.
-- Current live-main baseline: `0e9b54c8d62a873bd48625f4a20ee18078e8a8f1`.
+- Current live-main baseline: `210005d0ae093d21e846bae41a9bddf25af2800d`.
+  PR61 Bond text merged before F13 integration and changed the shared Rift
+  assertions. Its copy/partner-ID changes are merged into this private branch;
+  F13 remains six product lines in `renderRiftParty()` only. Product SHA256:
+  `835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3`.
+  Combined code checkpoint: `3df6da597f92cc9b26e86e28fc9121c4668e9e93`.
+  Full CI is required on the combined head before integration.
+- Previous live-main baseline: `0e9b54c8d62a873bd48625f4a20ee18078e8a8f1`.
   Main advanced from `214d45411ce2fb420f0e4b372063811a967679b1` during CI,
   integrating PR59 Wisp upgrades and PR60 Forge text. F13 rebased cleanly and
   preserves both features. Rebased candidate before this checkpoint:
@@ -103,6 +110,12 @@ head `d75ac294c829ebd7d030f8565d2f94a2a99615fa` / baseline214d454.
 The full raw log is preserved in [current evidence](../qa/rift-cast-text-001/finish/README.md).
 After main's advancement, those results are historical; updated branch CI is
 required before integration. Focused/current-baseline checks are rerun.
+
+Normal [CI37710831478](https://github.com/karahaNx/Lumenfall/actions/runs/37710831478)
+also passes 147 defaults, all 12 required negatives and guarded startup on head
+`d7b01c65fe179f03c8622090512f66a1851b682d` / baseline0e9b54c. This receipt predates
+the PR61 dependency merge. The combined-head gate and focused checks supersede it
+for integration. No failed/cancelled or superseded run is called a final pass.
 
 The product renderer executes correctly in 32 state fixtures on V8 6.0.286.52
 (Node8.3.0), Chrome60's engine generation. Actual signed APK138 is installed on
