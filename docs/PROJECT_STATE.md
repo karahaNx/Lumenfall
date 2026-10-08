@@ -9,6 +9,14 @@ commits below are observed checkpoints, not a promise that main never advances.
 
 ## Product and release evidence
 
+[RIFT_GUIDANCE_001 / F07](tasks/RIFT_GUIDANCE_001.md): stable guidance below
+currencies with Show hints/Hide hints is being published on its isolated branch.
+Rebased onto main b0537cb with integrated F13/F27 preserved. Fresh local160
+measurements/0px shift, focus/AX/reload/save purity and Rift/navigation/F13 checks
+PASS; required PR CI, main integration and signed APK/native acceptance pending.
+[8 October evidence](qa/rift-guidance-001/2026-10-08/README.md). This owner chat
+remains open until required acceptance is saved.
+
 F13 delivery added 8 October 2026: [RIFT_CAST_TEXT_001](tasks/RIFT_CAST_TEXT_001.md)
 is complete via PR63/ab46c0c. Full CI151 scenarios/12 required negatives, integrated
 checks and signed APK0.1.142 native acceptance PASS. Package/signing and all 15 assets
