@@ -1,5 +1,12 @@
 # Current BOND_TEXT_001 candidate verification
 
+This is the earlier candidate checkpoint; its CI/integration/build pending text
+below belongs to that snapshot. Final delivery is in ../integrated/ and
+../android/. Raw result files are unchanged. `run-checks-initial.cjs` preserves
+the original runner; `run-checks.cjs` now removes the wrapper directory entirely
+for native pipe checks. Prepending /usr/bin did not override browser-name search
+order. MANIFEST.json was refreshed for this documented helper fix and CI receipt.
+
 Baseline: 214d45411ce2fb420f0e4b372063811a967679b1. Product SHA256:
 `feb273d2ff1fb0d514517227d73b3ccb650a850b57f0a8ba5d12bbc77af85ac3`.
 Node24.19.0, Chromium151.0.7922.173. Self-review and automated checks only.

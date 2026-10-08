@@ -18,7 +18,7 @@ try{
   for(const name of ['fonts','branding'])fs.cpSync(path.join(root,name),path.join(stage,name),{recursive:true});
   for(const scenario of positives.concat(Object.keys(negatives))){
     // Native pipe drivers need the real browser's inherited CDP file descriptors.
-    const env=scenario==='rift-status-mobile'?{...process.env,PATH:process.env.PATH.split(path.delimiter).filter(p=>p!=='/tmp/bond-check-tools').join(path.delimiter)}:process.env;
+    const env=scenario==='rift-status-mobile'?{...process.env,PATH:'/usr/bin:/bin:'+process.env.PATH}:process.env;
     const r=spawnSync(process.execPath,[path.join(root,'tests/behavioral/run.cjs'),'--web-root',stage,'--scenario',scenario],{cwd:root,env,encoding:'utf8',timeout:150000,maxBuffer:8*1024*1024});
     const log=(r.stdout||'')+(r.stderr||'');
     fs.writeFileSync(path.join(out,scenario+'.txt'),log);
