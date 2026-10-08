@@ -1,9 +1,12 @@
-# F25 current-main candidate evidence
+# F25 evidence by source revision
 
-Baseline b0537cb; source SHA256 3c962a5024efe3735903897ba92afc502e968d74b91b6b6b47b593a7c6f9d73b.
+Baseline b0537cb has SHA2565c4b3dac. Initial candidate3c962a50 is historical.
+Combined PR77 receipts use34e044cc; Formation combination usesd757fabd.
+Current reviewed game SHA256:
+fe11176fd6b9d2d3406ed0d49bd056d712f9b975ef1cce6ab31084f3548ac5f3.
 
 - baseline.json: expected failure restoring unowned25x on untouched main.
-- contract.json/screenshots:1127 checks, six profiles; real handlers/reloads/restore,
+- Initial contract.json/screenshots:1127 checks, six profiles; real handlers/reloads/restore,
   controlled simulation intervals. Minimum45x44px; conservative text contrast7.49:1.
 - negative-controls.json: four expected failures, correct causal assertions.
 - source.txt, es2017.json, tooling.txt, apk-identity-self-test.txt, context.txt:
@@ -11,5 +14,19 @@ Baseline b0537cb; source SHA256 3c962a5024efe3735903897ba92afc502e968d74b91b6b6b
 - forge-contracts-stock.txt: local Chromium151 stock dump-DOM timeout, recorded FAIL.
 
 Self-review only. Current F27 catalog/archive retained; no wallet compensation.
-Normal GitHub CI, integrated checks, real APK identity/assets and required device
-acceptance remain pending. Historical local-candidate evidence accepts older bytes.
+final-contract.json/final-screenshots:1133 checks/six profiles on current game,
+including six new selected-artifact asset assertions. Every font/branding response
+is hashed; assets come from the HTML's own web root with correct CSS MIME type.
+final-negative-controls.json: all four causal mutants caught. missing-artifact-fonts.json
+rejects a same-HTML artifact without its fonts at the asset assertion (exit1).
+staged-artifact-old-gate.txt: normal run.cjs --web-root invocation rejects the
+staged old startup gate, rather than reading the passing checkout (exit1).
+final-scoped/results.json:20 positive/two negative existing cases PASS. Raw negative
+DOM/process records and gzipped full per-case logs are retained. final-v8-6.0.json:
+437 production VM assertions PASS on Node8.3/V8 6.0.286.52; final-es2017.json PASS.
+
+Initial CI37735117429 passed153/12/all gates; full log and metadata retained.
+These historical receipts do not accept later combined source. Renewed full CI,
+integrated checks, signed APK/native acceptance remain pending. Review findings
+about selected browser/source/assets and source-bound receipts are addressed;
+no self-review is represented as independent review.

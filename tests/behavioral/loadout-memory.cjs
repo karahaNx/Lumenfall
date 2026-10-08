@@ -11,6 +11,7 @@ const {spawn}=require('node:child_process'),crypto=require('node:crypto');
 const args=process.argv.slice(2),root=path.resolve(__dirname,'../..');
 function option(name,fallback){const i=args.indexOf(name);return i<0?fallback:args[i+1];}
 const sourcePath=path.resolve(option('--source',path.join(root,'index.html')));
+const sourceWebRoot=path.dirname(sourcePath),assetRequests=[];
 const original=fs.readFileSync(sourcePath,'utf8');let html=original;
 const negative=option('--negative','');
 const mutations={
@@ -109,8 +110,10 @@ async function browserContracts(){
   const prelude=`<script>window.setInterval=function(){return 0;};window.__f25Errors=[];window.addEventListener('error',e=>__f25Errors.push(e.message));window.addEventListener('unhandledrejection',e=>__f25Errors.push(String(e.reason)));<\/script>`;
   const staged=html.replace('<head>','<head>'+prelude).replace(marker,browserBridge+marker);
   server=http.createServer((req,res)=>{const name=decodeURIComponent((req.url||'/').split('?')[0]);if(name==='/'||name==='/index.html'){res.setHeader('Content-Type','text/html');res.end(staged);return;}
-    const file=path.resolve(root,'.'+name);if(!file.startsWith(root+path.sep)||!fs.existsSync(file)||!fs.statSync(file).isFile()){res.writeHead(404);res.end();return;}
-    const types={'.woff2':'font/woff2','.svg':'image/svg+xml','.png':'image/png'};res.setHeader('Content-Type',types[path.extname(file)]||'application/octet-stream');fs.createReadStream(file).pipe(res);
+    const file=path.resolve(sourceWebRoot,'.'+name),asset=/^\/(fonts|branding)\//.test(name);
+    if(!file.startsWith(sourceWebRoot+path.sep)||!fs.existsSync(file)||!fs.statSync(file).isFile()){if(asset)assetRequests.push({path:name,status:404});res.writeHead(404);res.end();return;}
+    const bytes=fs.readFileSync(file);if(asset)assetRequests.push({path:name,status:200,sha256:crypto.createHash('sha256').update(bytes).digest('hex')});
+    const types={'.css':'text/css','.woff2':'font/woff2','.svg':'image/svg+xml','.png':'image/png'};res.setHeader('Content-Type',types[path.extname(file)]||'application/octet-stream');res.end(bytes);
   });await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});
   profile=fs.mkdtempSync(path.join(os.tmpdir(),'lumenfall-f25-'));
   browser=spawn(option('--chrome','chromium'),['--headless=new','--no-sandbox','--disable-gpu','--disable-dev-shm-usage','--remote-debugging-pipe','--user-data-dir='+profile,'about:blank'],{stdio:['ignore','ignore','pipe','pipe','pipe']});
@@ -122,6 +125,7 @@ async function browserContracts(){
     await send('Emulation.setDeviceMetricsOverride',{width,height:844,deviceScaleFactor:1,mobile:true});await send('Emulation.setTouchEmulationEnabled',{enabled:true});
     await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:motion}]});await send('Page.enable');
     await send('Page.navigate',{url:`http://127.0.0.1:${server.address().port}/index.html`});await ready();
+    ok(!assetRequests.some(r=>r.status!==200),'selected artifact has all requested fonts/branding');
     await evaluate(`document.documentElement.style.fontSize=${JSON.stringify(large?'160%':'100%')}`);
     const seed=await evaluate('__f25.fresh()');seed.savedLabMultiplier=25;await evaluate(`__f25.seed(${JSON.stringify(seed)},null)`);await reload();
     ok(await evaluate('__f25.mult()===25&&!__f25.get().legacyCometPurchases.rememberbulk'),'cold start restores unowned 25x');
@@ -177,6 +181,6 @@ async function cleanup(){
 }
 (async()=>{let result;try{contracts();if(!args.includes('--vm-only'))await browserContracts();result={status:'pass',checks,records};}catch(e){result={status:'fail',checks,message:e.message,records};}
   try{await cleanup();}catch(e){result.status='fail';result.cleanupError=e.message;}
-  result.sourceSHA256=crypto.createHash('sha256').update(original).digest('hex');result.negative=negative||null;result.controlledSimulationIntervals=true;result.browserCommand=option('--chrome','chromium');if(result.status==='fail')result.browserStderr=browserStderr;
+  result.sourceSHA256=crypto.createHash('sha256').update(original).digest('hex');result.sourceWebRoot=sourceWebRoot;result.assetRequests=assetRequests;result.negative=negative||null;result.controlledSimulationIntervals=true;result.browserCommand=option('--chrome','chromium');if(result.status==='fail')result.browserStderr=browserStderr;
   console.log(JSON.stringify(result));if(result.status!=='pass')process.exitCode=1;
 })();
