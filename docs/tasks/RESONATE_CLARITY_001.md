@@ -66,6 +66,15 @@ Modern Chromium results do not establish native WebView60 or TalkBack acceptance
 Physical Android/WebView60, device large-text and TalkBack remain required
 pending checks if no suitable device is available; the feature stays open.
 
+## Updated dependency checkpoint
+
+Main advanced through PR77 to261b1b7f863f73c324f4ac04acb5bfc95101644d
+on8 October. Save Backup gained confirmation and two mandatory negative checks.
+Both features and their shared runner parameters are preserved. Combined-source
+Resonate mobile/persistence/folding and the Save Backup native-browser check PASS;
+13 mechanic/save/reward function bodies match new main. V8 6.0 passes again.
+Full CI must now cover153 default scenarios and14 required negative controls.
+
 ## Next action
 
 Run source/context/tooling and relevant existing checks, publish the feature PR,
