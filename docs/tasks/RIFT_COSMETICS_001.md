@@ -63,7 +63,7 @@ CI; integrated checks; signed APK identity/assets/update and Android acceptance.
 
 [Checkpoint](../qa/rift-cosmetics-2026-10-08/CURRENT_CHECKPOINT.md) and
 [checks](../qa/rift-cosmetics-2026-10-08/checks/) contain exact versions/failures.
-Current product SHA256 c84660dd0849a9c101184cd3d242bf2ec0ec0ac1a7d33c20a009d5558e7a9da1.
+Current product SHA256 696d9e22cae0f4482becf6fda3f6db64544945952803ce1bd45870f41f83cfaf.
 Focused168 PASS; source/tooling/V8 checks PASS. Checkpoint records browser versions,
 CI failures/fixes and prior Save Backup/Formation/region checks; no gate weakened.
 Created isolated API25/pinned LineageOS WebView60.0.3112.78: signed143 cold launch

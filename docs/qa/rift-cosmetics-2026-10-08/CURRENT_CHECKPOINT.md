@@ -7,7 +7,7 @@ or subagents. Current AGENTS assigns delivery to owner; no historical writer gat
 Merged main14d5f3a3a78fe8b63cfa5544efc54f41217b65a5 into e1e0bb48469b313a9ef4d0d558e4be965fa01f7a.
 Includes Guidance/Loadout/Offline12h and earlier Formation/Resonate/upgrade owners.
 Resonate conflict retains upstream --chrome/init fixes and Google-first fallback.
-Product SHA256 c84660dd0849a9c101184cd3d242bf2ec0ec0ac1a7d33c20a009d5558e7a9da1.
+Product SHA256 696d9e22cae0f4482becf6fda3f6db64544945952803ce1bd45870f41f83cfaf.
 Focused168 PASS on this source with pinned local Chrome154.0.8037.57;
 guidance-candidate/results.json. Source/tooling/V8 6.0 PASS, checks/legacy-guidance.json.
 Plain-sandbox tooling subprocess failed; rerun with execution network grant PASS.
@@ -16,7 +16,11 @@ PR79 open. Required CI37743831575 passed168 gameplay cases but failed F24 large
 text card width. Local exact-version Chrome did not reproduce (different binary
 and platform); wrap cards/names/descriptions/status, keep assertion with metrics.
 F24 now precedes expensive full suite; all gates/negative controls retained.
-New combined-head CI pending. Older raw CI failures retained as gzip in checks/.
+CI37749249589 passed all168 F24 records before the gameplay suite; superseded
+by a label-width refinement: screenshot review at200% showed a word breaking
+inside the90px status cap, so allow full card width. Focused168 and V8 PASS;
+updated screenshot shows intact words. New combined-head CI pending.
+Older raw CI failures retained as gzip in checks/.
 
 Native60 RUNNING RiftWebView60 API25 on5554/5555, own qemu pid19220 at last check.
 SDK /tmp/rift-cosmetics-android/sdk, AVDs /workspace/scratch/rift-cosmetics-android/avd.
