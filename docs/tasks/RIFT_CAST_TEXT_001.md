@@ -28,7 +28,7 @@ show other screens; none directly establishes F13 behavior or an APK/save identi
 
 ## Baseline, scope and decisions
 
-Private checkout: /workspace/lumenfall-rift-cast-text-001, feature/rift-cast-text-001.
+Private checkout: /workspace/lumenfall-rift-cast-text-001. Product branch feature/rift-cast-text-001; final delivery branch docs/rift-cast-text-001-delivery. Protected main requires the final documentation PR and its existing pre-merge gate.
 The original /workspace/Lumenfall checkout was untouched. Preparation history is
 preserved in [earlier evidence](../qa/rift-cast-text-001/README.md).
 Continuation began on main 214d45411ce2fb420f0e4b372063811a967679b1.
