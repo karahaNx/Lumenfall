@@ -95,3 +95,15 @@ checks forged-object refusal, and retains all original Tree state assertions
 with the explicit additive F21 history expectation. Current534 focused checks,
 10 causal controls,155 Tree contract checks,693 Tree mobile checks,926 clarity
 and V8 6.0 pass on81fcc461 source. Full required176-scenario CI remains pending.
+
+PR89 automated P2 (review70e6f82) correctly identified repeated cloning/scanning
+of large F21 records at each simulated Ascend. The private internal simulation
+now calls the same gameplay normalizer while retaining untouched, already
+canonical F21 record references. This path cannot import saves; every load,
+backup restore/export and persisted save still fully validates all records.
+Schema2 and all other gameplay/offline-refund normalization stay in force.
+Actual14400 raw2000 auto-Ascends take323ms locally, perform zero F21 record
+normalizations, preserve identity/exact values and match full normalization.
+A specific ascend-copy mutation restores the slow path and is caught. Existing
+chronology live/offline/split passes on0e93a8e9 source. Timing is local evidence,
+not a physical-device performance claim.

@@ -1,8 +1,8 @@
 {
   "status": "Combined main candidate ready; full CI/integration/APK pending",
   "baselineMain": "ac0d28e589bd1caef4b9c70f2383a8b3ee384acd",
-  "sourceSha256": "81fcc46101661755d334183f72c2ceca18784878a9744232cc9be8da5301a7bb",
-  "observedAt": "2026-10-08T09:02:48.842Z",
+  "sourceSha256": "0e93a8e930a507a028a784363d227db75aecc24b7c927a1d27236fe3fcee48f6",
+  "observedAt": "2026-10-08T09:09:46.007Z",
   "historicalCi": {
     "run": 37748215097,
     "conclusion": "failure",
@@ -12,12 +12,20 @@
     "correction": "Google Chrome priority and browser identity/stderr"
   },
   "local": {
-    "focusedAssertions": 534,
-    "negativeControls": 10,
+    "focusedAssertions": 538,
+    "negativeControls": 11,
     "treeContractChecks": 155,
     "treeMobileChecks": 693,
     "clarityChecks": 926,
-    "legacyV8": "6.0.286.52 PASS"
+    "legacyV8": "6.0.286.52 PASS",
+    "treeEvidenceSource": "81fcc46101661755d334183f72c2ceca18784878a9744232cc9be8da5301a7bb",
+    "actualAutoAscends": {
+      "boundaries": 14400,
+      "refundNormalizations": 0,
+      "exactRecordsRetained": true,
+      "canonicalParity": true,
+      "localElapsedMs": 323.3
+    }
   },
   "nativeBaseline": "native/baseline-native.json",
   "nativeStorage": "native/baseline-storage.tar",

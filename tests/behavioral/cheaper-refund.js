@@ -70,6 +70,12 @@ window.runCheaperRefundContracts=function(){
   ok(repeatedPrices===0,'completed large refund avoids repeated price calculation at Ascend boundaries');
   ok(JSON.stringify(compatible.feedbackMigration.receipts['node.bonds'].amounts.prisms)===originalPrices,'repeated boundaries preserve original receipt amounts');
   records.push({kind:'completed-refund-boundaries',raw:2000,boundaries:100,priceCalculations:repeatedPrices,elapsedMs:performance.now()-started});
+  b.set(compatible);var ascendStarted=performance.now(),ascendResult=b.ascendBoundaries(14400);
+  ok(ascendResult.refundNormalizations===0,'actual auto-Ascends avoid repeated refund cloning and validation');
+  ok(ascendResult.boundaries===14400,'all actual high-level legacy auto-Ascend boundaries run');
+  ok(ascendResult.recordsRetained,'auto-Ascend retains exact existing receipts and credits');
+  ok(ascendResult.canonicalParity,'auto-Ascend gameplay matches full canonical normalization');
+  records.push({kind:'actual-auto-ascend-boundaries',raw:2000,result:ascendResult,elapsedMs:performance.now()-ascendStarted});
   // Compatibility with the separately proposed feedback bundle's receipt shape.
   s=b.canonical(cheaperLegacySeed(21,0));s.feedbackMigration.receipts['node.echo']={from:6,to:7,unpricedFrom:0,amounts:{prisms:[16]}};
   s.feedbackMigration.history.echo={levels:7};s.refundCredits.comets=[{id:'shop.offline24',amount:140}];

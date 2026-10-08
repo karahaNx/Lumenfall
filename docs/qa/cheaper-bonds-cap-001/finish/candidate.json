@@ -1,19 +1,19 @@
 {
   "status": "PASS",
   "sourcePath": "/workspace/CHEAPER_BONDS_CAP_001/index.html",
-  "sourceSha256": "81fcc46101661755d334183f72c2ceca18784878a9744232cc9be8da5301a7bb",
+  "sourceSha256": "0e93a8e930a507a028a784363d227db75aecc24b7c927a1d27236fe3fcee48f6",
   "browserIdentity": {
     "selected": "/usr/bin/chromium",
     "resolved": "/usr/bin/chromium",
     "version": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)"
   },
   "mutation": "none",
-  "observedAt": "2026-10-08T08:52:23.200Z",
+  "observedAt": "2026-10-08T09:07:39.002Z",
   "records": [
     {
       "kind": "refund-contracts",
       "result": {
-        "checks": 145,
+        "checks": 149,
         "records": [
           {
             "raw": 19,
@@ -69,7 +69,18 @@
             "raw": 2000,
             "boundaries": 100,
             "priceCalculations": 0,
-            "elapsedMs": 194.70000000298023
+            "elapsedMs": 174.8999999910593
+          },
+          {
+            "kind": "actual-auto-ascend-boundaries",
+            "raw": 2000,
+            "result": {
+              "boundaries": 14400,
+              "refundNormalizations": 0,
+              "recordsRetained": true,
+              "canonicalParity": true
+            },
+            "elapsedMs": 323.29999999701977
           }
         ],
         "receipt": "feedbackMigration.receipts[node.bonds]",

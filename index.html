@@ -3571,7 +3571,7 @@ function autoEmpowerCandidateIds(){
     return ids.indexOf(id)===index && SPIRITS.some(function(sp){return sp.id===id && state.maxDepthEver>=sp.unlockDepth;});
   });
 }
-function normalizeCurrentSave(input){
+function normalizeCurrentSave(input,retainRecruitmentRefund){
   var fresh = freshState();
   var out = freshState();
   var source = isPlainObject(input) ? input : {};
@@ -3779,7 +3779,12 @@ function normalizeCurrentSave(input){
   out.lastSeen = finiteNonNegative(source.lastSeen,Date.now());
   if(out.lastSeen<=0) out.lastSeen = Date.now();
   normalizeCometTrials(source,out);
-  normalizeCheaperRecruitmentRefund(out,source);
+  if(retainRecruitmentRefund){
+    // Internal simulation already holds canonical records. Ascend cannot change
+    // these receipts/credits; imports and every persisted save validate fully.
+    out.feedbackMigration=source.feedbackMigration;
+    out.refundCredits=source.refundCredits;
+  }else normalizeCheaperRecruitmentRefund(out,source);
   return out;
 }
 // F21 only. The node.bonds receipt/credit shape also prevents a second refund
@@ -7581,9 +7586,10 @@ function simulationApplyAutoAscend(summary){
   var gain = applyAscendMutation();
   summary.ascends++;
   summary.ascendGains.push(gain);
-  // saveState() canonicalizes runtime state after a normal Auto-Ascend. Do the
-  // same in-memory here so live and offline do not diverge before persistence.
-  state = acceptPersistedState(state,'simulation-ascend');
+  // Normalize the same gameplay fields as a live save. This current-schema
+  // runtime state was accepted on entry; preserve untouched F21 value records
+  // instead of cloning/scanning them at every offline Ascend boundary.
+  state = normalizeCurrentSave(state,true);
   simulationRecordAchievements(summary);
   return true;
 }

@@ -32,8 +32,9 @@ old restores/rollback, paid Labs and Ascend/live-offline parity. UI:320/390/430p
 integrated bytes and signed APK identity/assets/actual Android update-save checks
 must pass. Missing acceptance stays open.
 
-[Evidence/commands](../qa/cheaper-bonds-cap-001/finish/README.md):current534 assertions,
-12 mobile profiles,10 defect controls,155 Tree checks and V8 6.0 PASS.
+[Evidence/commands](../qa/cheaper-bonds-cap-001/finish/README.md):current538 assertions,
+12 mobile profiles,11 defect controls and V8 6.0 PASS; Tree155/693 passed before
+the internal performance fix.14400 real auto-Ascends preserve records/parity.
 CI37748215097 passed173 scenarios then failed browser startup before F21; browser
 priority corrected, new full CI required on combined source. [Native baseline](../qa/cheaper-bonds-cap-001/finish/native/baseline-native.json):
 signed143,21 paid purchases19→40, wallet7342133/cold save retained. Update must keep

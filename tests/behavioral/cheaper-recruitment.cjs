@@ -17,13 +17,15 @@ if(mutation==='wallet')source=source.replace('var wallet=exactPrismArithmetic(st
 if(mutation==='receipt')source=source.replace(' || !cheaperRecruitmentReceiptPriceMatches(n,20+index)','');
 if(mutation==='cache')source=source.replace('var entry=cheaperRecruitmentRefundPrices[level-20];','var value=2*Math.pow(1.45,level),allowance=value*level*Number.EPSILON/(1-level*Number.EPSILON); var entry={min:Math.ceil(value-allowance),max:Math.ceil(value+allowance)};');
 if(mutation==='credit-record')source=source.replace("if(!isPlainObject(entry) || typeof entry.id!=='string' || !entry.id || !Number.isFinite(entry.amount) || entry.amount<=0 || Math.floor(entry.amount)!==entry.amount || (entry.id===id && !hasReceipt)){",'if(entry && entry.id===id && !hasReceipt){');
-if(!['none','handler','ui','raw','refund','credit','free-credit','wallet','receipt','cache','credit-record'].includes(mutation))throw Error('unknown mutation');
+if(mutation==='ascend-copy')source=source.replace('state = normalizeCurrentSave(state,true);',"state = acceptPersistedState(state,'simulation-ascend');");
+if(!['none','handler','ui','raw','refund','credit','free-credit','wallet','receipt','cache','credit-record','ascend-copy'].includes(mutation))throw Error('unknown mutation');
 const bridge=`
 window.__cheaperRecruitment={
  fresh:function(){return freshState();},today:todayStr,
  get:function(){return JSON.parse(JSON.stringify(state));},
  set:function(s){state=acceptPersistedState(JSON.parse(JSON.stringify(s)),'f21-qa');restoreEnemyOrSpawn();},
  canonical:function(s){return acceptPersistedState(s,'f21-qa');},
+ ascendBoundaries:function(count){var receipt=state.feedbackMigration,credits=state.refundCredits,calls=0,original=normalizeCheaperRecruitmentRefund,summary={ascends:0,ascendGains:[],achievements:[]};normalizeCheaperRecruitmentRefund=function(out,source){calls++;return original(out,source);};try{for(var i=0;i<count;i++){state.depth=16;state.maxDepthEver=Math.max(16,state.maxDepthEver);state.owned.autoascend=true;state.autoAscendEnabled=true;state.autoAscendTargetDepth=16;if(!simulationApplyAutoAscend(summary))throw Error('actual auto-Ascend boundary required');if(calls)break;}}finally{normalizeCheaperRecruitmentRefund=original;}return {boundaries:summary.ascends,refundNormalizations:calls,recordsRetained:state.feedbackMigration===receipt&&state.refundCredits===credits,canonicalParity:JSON.stringify(state)===JSON.stringify(acceptPersistedState(state,'f21-ascend-parity'))};},
  render:renderAll,buy:function(node){return buyNode(node && NODES.find(function(n){return n.id===node.id;}));},direct:buyNode,save:saveState,discount:costReduction,
  spirits:function(){return SPIRITS.map(function(s){return {id:s.id,baseCost:s.baseCost};});},
  recruitCost:function(id){return spiritCost(SPIRITS.find(function(s){return s.id===id;}));},
