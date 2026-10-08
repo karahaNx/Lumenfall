@@ -55,3 +55,14 @@ before ceil. Small prices (including3376) require the exact integer. Stored
 amounts are retained byte-for-number; validation never reprices or recredits.
 Full finite price arrays pass in both engine directions; [1], [3375], [3377]
 receipts reject for recovery. This numeric envelope changes no gameplay prices.
+
+Further P2 corrections: the40% floor/60% cap is now explicitly before existing
+whole-Lumen rounding (e.g. normal Ember2 costs13, discounted costs5). No price
+changes. The finite original schedule and cross-engine bounds are cached once,
+limited by the first nonfinite price. Completed receipts no longer rebuild a
+refund array or repeat exponentiation; every persisted amount is still validated.
+The redundant second receipt/history clone is removed.100 raw2000 canonical
+boundaries perform zero repeated price calculations; corrupting a completed
+receipt afterwards still rejects. A causal uncached-price mutation detects the
+performance regression. The cache never contains player data or exposes arrays
+to saved state.

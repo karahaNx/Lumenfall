@@ -15,7 +15,8 @@ if(mutation==='credit')source=source.replace('var sum=exactPrismArithmetic(out.p
 if(mutation==='free-credit')source=source.replace('left=exactPrismArithmetic(entry.amount,-take)','left=entry.amount-take');
 if(mutation==='wallet')source=source.replace('var wallet=exactPrismArithmetic(state.prisms,-remaining);','var wallet=state.prisms-remaining;');
 if(mutation==='receipt')source=source.replace(' || !cheaperRecruitmentReceiptPriceMatches(n,20+index)','');
-if(!['none','handler','ui','raw','refund','credit','free-credit','wallet','receipt'].includes(mutation))throw Error('unknown mutation');
+if(mutation==='cache')source=source.replace('var entry=cheaperRecruitmentRefundPrices[level-20];','var value=2*Math.pow(1.45,level),allowance=value*level*Number.EPSILON/(1-level*Number.EPSILON); var entry={min:Math.ceil(value-allowance),max:Math.ceil(value+allowance)};');
+if(!['none','handler','ui','raw','refund','credit','free-credit','wallet','receipt','cache'].includes(mutation))throw Error('unknown mutation');
 const bridge=`
 window.__cheaperRecruitment={
  fresh:function(){return freshState();},today:todayStr,

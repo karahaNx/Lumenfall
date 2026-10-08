@@ -28,6 +28,7 @@ window.runCheaperRecruitmentContracts=function(){
     if(level>20)ok(card.querySelector('.lvl').textContent.includes(level.toLocaleString('en-US')+' purchased levels preserved'),'legacy raw count visible');
     var effect=card.querySelector('[data-node-effect]').textContent;
     ok(effect.includes('60% Wisp recruiting discount (also Empower)')&&effect.includes('40% of normal price'),'cap earned effect');
+    ok(effect.includes('before whole-Lumen rounding')&&card.textContent.includes('normal price before whole-Lumen rounding'),'floor wording qualifies existing integer rounding');
   });
   install(0);var total=0;
   for(var level=0;level<20;level++){

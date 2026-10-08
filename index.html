@@ -2926,7 +2926,7 @@ var NODES = [
   {id:'starlight', name:'Starlight Affinity', desc:'+10% Lumen from every kill, per level.', baseCost:1, growth:1.35},
   {id:'steady',    name:'Steady Hands',        desc:'+8% tap damage, per level.',              baseCost:1, growth:1.30},
   {id:'echo',      name:'Echoing Rest',        desc:'+5% offline earning rate, per level (caps at 100%).', baseCost:2, growth:1.40},
-  {id:'bonds',     name:'Cheaper Recruitment', desc:'3 percentage points more discount per level, up to 60%. Wisp recruiting and Empower cost at least 40% of the normal price. Level cap: 20.', levelCap:20, baseCost:2, growth:1.45},
+  {id:'bonds',     name:'Cheaper Recruitment', desc:'3 percentage points more discount per level, up to 60%. Wisp recruiting and Empower cost at least 40% of the normal price before whole-Lumen rounding. Level cap: 20.', levelCap:20, baseCost:2, growth:1.45},
   {id:'swift',     name:'Swift Ascension',     desc:'+4% Prisms earned per Ascend, per level.', baseCost:3, growth:1.50},
   {id:'momentum',  name:'Eternal Momentum',    desc:'+6% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.', baseCost:5, growth:1.55, requiresAchievement:'asc5'},
   {id:'reserves',  name:'Deep Reserves',       desc:'+2 hours to your offline cap, per level.', baseCost:6, growth:1.60, requiresAchievement:'d100'}
@@ -3068,7 +3068,7 @@ function nodeEarnedEffect(id){
     return '+'+earnedPercent(rate-0.70)+' percentage points offline rate · '+earnedPercent(rate)+'% before Projects'+(rate>=1?' (node cap reached)':'');
   }
   var discount=costReduction();
-  return earnedPercent(discount)+'% Wisp recruiting discount (also Empower) · '+earnedPercent(1-discount)+'% of normal price · Price at least 40% of normal (max 60% discount)'+(discount>=0.6?' (cost floor reached)':'');
+  return earnedPercent(discount)+'% Wisp recruiting discount (also Empower) · '+earnedPercent(1-discount)+'% of normal price · Price at least 40% of normal (max 60% discount), before whole-Lumen rounding'+(discount>=0.6?' (cost floor reached)':'');
 }
 function projectEarnedEffect(id){
   if(id==='measuredinquiry') return earnedPercent(measuredInquiryReduction())+'% less work for future starts of the 5 current Studies';
@@ -3688,26 +3688,19 @@ function normalizeCheaperRecruitmentRefund(out,source){
   out.feedbackMigration.version=saved.version===undefined ? 1 : saved.version;
   out.feedbackMigration.applied=true;
   var receipts=isPlainObject(saved.receipts) ? saved.receipts : {};
-  out.feedbackMigration.receipts=clonePersistedValue(receipts);
-  out.feedbackMigration.history=isPlainObject(saved.history) ? clonePersistedValue(saved.history) : {};
+  out.feedbackMigration.history=isPlainObject(saved.history) ? out.feedbackMigration.history : {};
   out.feedbackMigration.history.bonds={levels:out.nodes.bonds};
   out.refundCredits=isPlainObject(source.refundCredits) ? clonePersistedValue(source.refundCredits) : {};
   var credits=out.refundCredits.prisms;
   if(credits===undefined) credits=[];
   if(!Array.isArray(credits)) throw persistenceError('invalid-bonds-refund','Prism refund credits need recovery');
   out.refundCredits.prisms=credits;
-  var id='node.bonds',raw=out.nodes.bonds,amounts=[],unpricedFrom=0;
-  for(var level=20;level<raw;level++){
-    var price=Math.ceil(2*Math.pow(1.45,level));
-    // A finite Number wallet could never pay the first nonfinite old price.
-    // Preserve those raw levels, without inventing purchases or discarding data.
-    if(!Number.isFinite(price)){unpricedFrom=level+1;break;}
-    amounts.push(price);
-  }
+  if(!isPlainObject(out.feedbackMigration.receipts)) out.feedbackMigration.receipts={};
+  var id='node.bonds',raw=out.nodes.bonds,schedule=cheaperRecruitmentRefundSchedule(raw),unpricedFrom=schedule.unpricedFrom;
   var hasReceipt=Object.prototype.hasOwnProperty.call(receipts,id),receipt=receipts[id];
   if(hasReceipt && (saved.version!==1 || !isPlainObject(source.refundCredits) || !Array.isArray(source.refundCredits.prisms) || !isPlainObject(receipt) || receipt.from!==20 || receipt.to!==raw ||
       receipt.unpricedFrom!==unpricedFrom || !isPlainObject(receipt.amounts) || !Array.isArray(receipt.amounts.prisms) ||
-      receipt.amounts.prisms.length!==amounts.length || receipt.amounts.prisms.some(function(n,index){return !Number.isFinite(n) || n<=0 || Math.floor(n)!==n || !cheaperRecruitmentReceiptPriceMatches(n,20+index);} ))){
+      receipt.amounts.prisms.length!==schedule.count || receipt.amounts.prisms.some(function(n,index){return !Number.isFinite(n) || n<=0 || Math.floor(n)!==n || !cheaperRecruitmentReceiptPriceMatches(n,20+index);} ))){
     throw persistenceError('invalid-bonds-refund','Recruitment refund receipt needs recovery');
   }
   credits.forEach(function(entry){
@@ -3717,6 +3710,7 @@ function normalizeCheaperRecruitmentRefund(out,source){
   });
   if(hasReceipt || raw<=20) return;
   if(out.feedbackMigration.version!==1) throw persistenceError('invalid-bonds-refund','Recruitment refund version needs recovery');
+  var amounts=cheaperRecruitmentRefundPrices.slice(0,schedule.count).map(function(entry){return entry.price;});
   amounts.forEach(function(amount){
     var sum=exactPrismArithmetic(out.prisms,amount);
     // Keep new restitution spendable at whole-Prism prices. Existing mature
@@ -3726,14 +3720,27 @@ function normalizeCheaperRecruitmentRefund(out,source){
   });
   out.feedbackMigration.receipts[id]={from:20,to:raw,unpricedFrom:unpricedFrom,amounts:{prisms:amounts}};
 }
+// Cache only the bounded original price schedule, never player receipts. Later
+// Ascends still validate every saved amount, without repeating exponentiation
+// or rebuilding a refund array. No cached array is exposed to saved state.
+var cheaperRecruitmentRefundPrices=[],cheaperRecruitmentUnpricedFrom=0;
+function cheaperRecruitmentRefundSchedule(raw){
+  var wanted=Math.max(0,raw-20);
+  while(cheaperRecruitmentRefundPrices.length<wanted && !cheaperRecruitmentUnpricedFrom){
+    var level=20+cheaperRecruitmentRefundPrices.length,value=2*Math.pow(1.45,level),price=Math.ceil(value);
+    // No finite Number wallet could pay the first nonfinite original price.
+    if(!Number.isFinite(price)){cheaperRecruitmentUnpricedFrom=level+1;break;}
+    var relativeError=level*Number.EPSILON/(1-level*Number.EPSILON),allowance=value*relativeError;
+    cheaperRecruitmentRefundPrices.push({price:price,min:Math.ceil(value-allowance),max:Math.ceil(value+allowance)});
+  }
+  return {count:Math.min(wanted,cheaperRecruitmentRefundPrices.length),unpricedFrom:wanted>cheaperRecruitmentRefundPrices.length ? cheaperRecruitmentUnpricedFrom : 0};
+}
 // Old V8 and modern engines produce slightly different exponential prices.
 // Bound accumulated floating-point error before whole-Prism rounding; retain
 // the stored original amounts. Small prices still require their exact integer.
 function cheaperRecruitmentReceiptPriceMatches(amount,level){
-  var value=2*Math.pow(1.45,level);
-  var relativeError=level*Number.EPSILON/(1-level*Number.EPSILON);
-  var allowance=value*relativeError;
-  return amount>=Math.ceil(value-allowance) && amount<=Math.ceil(value+allowance);
+  var entry=cheaperRecruitmentRefundPrices[level-20];
+  return !!entry && amount>=entry.min && amount<=entry.max;
 }
 // Knuth TwoSum detects loss on either operand, including a small old wallet
 // beside a huge incoming refund. An inverse subtraction alone misses that case.

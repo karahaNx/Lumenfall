@@ -1,14 +1,14 @@
 {
   "status": "PASS",
   "sourcePath": "/workspace/CHEAPER_BONDS_CAP_001/index.html",
-  "sourceSha256": "17c2982c5e34b54714a08f8a0e1660fa5baa9bfa1a8cd4820cd271def3529642",
+  "sourceSha256": "d153c6b665ebe5555b9a4079b30d573ba186bbd9e20a2a78fae0a74a8b71a4ad",
   "mutation": "none",
-  "observedAt": "2026-10-08T07:39:05.018Z",
+  "observedAt": "2026-10-08T07:53:16.021Z",
   "records": [
     {
       "kind": "refund-contracts",
       "result": {
-        "checks": 127,
+        "checks": 130,
         "records": [
           {
             "raw": 19,
@@ -58,6 +58,13 @@
             "creditEntries": 1815,
             "retainedValue": "500418951316020346374805022355282317780449426181363160303338266762162525661395694676831500690685622528529603255164132549785994972331229476147011586874768732691769709368441918306677540259696361594196651871027864015140465356943618210621957308488438697056853198063751717235222524750980854410475681046445288096194",
             "unpricedFrom": 1910
+          },
+          {
+            "kind": "completed-refund-boundaries",
+            "raw": 2000,
+            "boundaries": 100,
+            "priceCalculations": 0,
+            "elapsedMs": 150.09999999403954
           }
         ],
         "receipt": "feedbackMigration.receipts[node.bonds]",
@@ -68,7 +75,7 @@
     {
       "kind": "contracts",
       "result": {
-        "checks": 384,
+        "checks": 388,
         "purchaseCap": 20,
         "finalPrice": 2329,
         "pricesThroughCap": 7507,

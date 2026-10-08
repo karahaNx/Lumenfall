@@ -56,6 +56,13 @@ window.runCheaperRefundContracts=function(){
   var compatible=b.canonical(cheaperLegacySeed(2000,0));compatible.feedbackMigration.receipts['node.bonds'].amounts.prisms=cheaperReceiptLegacyPrices.slice();
   var originalPrices=JSON.stringify(compatible.feedbackMigration.receipts['node.bonds'].amounts.prisms);
   ok(JSON.stringify(b.canonical(compatible).feedbackMigration.receipts['node.bonds'].amounts.prisms)===originalPrices,'legacy-engine receipt prices preserved without a second refund');
+  var originalPow=Math.pow,repeatedPrices=0,started=performance.now();
+  Math.pow=function(base,level){if(base===1.45&&level>=20)repeatedPrices++;return originalPow(base,level);};
+  try{for(var boundary=0;boundary<100;boundary++)compatible=b.canonical(compatible);}
+  finally{Math.pow=originalPow;}
+  ok(repeatedPrices===0,'completed large refund avoids repeated price calculation at Ascend boundaries');
+  ok(JSON.stringify(compatible.feedbackMigration.receipts['node.bonds'].amounts.prisms)===originalPrices,'repeated boundaries preserve original receipt amounts');
+  records.push({kind:'completed-refund-boundaries',raw:2000,boundaries:100,priceCalculations:repeatedPrices,elapsedMs:performance.now()-started});
   // Compatibility with the separately proposed feedback bundle's receipt shape.
   s=b.canonical(cheaperLegacySeed(21,0));s.feedbackMigration.receipts['node.echo']={from:6,to:7,unpricedFrom:0,amounts:{prisms:[16]}};
   s.feedbackMigration.history.echo={levels:7};s.refundCredits.comets=[{id:'shop.offline24',amount:140}];
@@ -76,5 +83,8 @@ window.runCheaperRefundContracts=function(){
   });
   var orphan=cheaperLegacySeed(21,0);orphan.refundCredits={prisms:[{id:'node.bonds',amount:3376}]};var caught=false;
   try{b.canonical(orphan);}catch(e){caught=e.code==='invalid-bonds-refund';}ok(caught,'orphan credit cannot trigger a second compensation');
+  var damagedCached=JSON.parse(JSON.stringify(compatible));damagedCached.feedbackMigration.receipts['node.bonds'].amounts.prisms[0]=1;var cachedRejected=false;
+  try{b.canonical(damagedCached);}catch(e){cachedRejected=e.code==='invalid-bonds-refund';}
+  ok(cachedRejected,'cached schedule still rejects a changed completed receipt');
   return {checks,records,receipt:'feedbackMigration.receipts[node.bonds]',rawHistoryRetained:true,exactCreditDebit:true};
 };
