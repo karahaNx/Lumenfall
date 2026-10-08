@@ -55,140 +55,90 @@ diff, integrate the accepted version, build and publish the signed APK, and veri
 the published identity/assets. Deliver a 27-item user test checklist. User phone
 testing follows delivery; retain that acceptance as pending until reported.
 
-## Checkpoint and next action
-
-Fresh baseline and all27 original requirements are preserved. Product UI changes
-are in progress in index.html: Ascend controls/Prism explanation, fixed hint slot,
-unfinished Wisp visibility, Resonate explanation, Lab cards/speed panels,
-Formation autosave, cast text, save controls, Forge multiplier memory and Rift
-cosmetic presentation. Existing paid Lab speed queue behavior remains intact.
-
-Preliminary Playwright verification passed at320/390/430px without runtime
-errors, covering these changed interactions and fixed hint geometry. This is
-supplementary evidence, not the final required CI gate. The baseline native
-dump-DOM upgrade-effects-and-deeds scenario timed out locally at25s; keep this
-failure open and distinguish it from product failures. Native CDP verification
-and required remote CI remain necessary. Next: approved caps/support durations,
-shared12h offline policy and idempotent original-currency refunds, then the
-exclusive upgrade/Bond/progression changes. Update the matrix at each milestone.
-
-### Implementation checkpoint: UI and approved mechanics
-
-The approved caps, support durations, fixed12h policy and retirement/refunds are
-implemented. `tests/behavioral/all-27-core.cjs` passes six independent groups:
-direct/bulk/Max/automation caps, exact original-currency compensation,
-reload/recovery/backup idempotence, tiny-credit preservation beside1e250 wallets,
-support downtime and the shared12h paid-Study limit, plus Prism preview/payout.
-Native CDP touch/keyboard verification passes at320/390/430px with large hint
-text, both motion modes, persistent distinct themes and no runtime errors.
-Evidence is under [all27 QA](../qa/all-27-feedback-001/).
-
-Eight Bonds and bounded older-Wisp catch-up are implemented as described in the
-[measured balance contract](../requirements/all-27-feedback-001/balance-contract.md).
-Five-slot marginal/support/resource evidence and final pacing remain pending.
-The first supplemental existing-suite run has102 passes and27 failures so far:
-some intentionally outdated4s/8s, Study-tail, native-selector and save/refund
-expectations; genuine Farm clock/focus/geometry/lifecycle concerns must be fixed.
-The Farm stall guard now recognizes progress in the authoritative split grid,
-even if a tiny residual rounds to unchanged display time. Reverify parity and
-the independent Farm conservation/numerical gates before declaring it fixed.
-
-Two asynchronous user design questions remain pending: preserve legacy bonus
-value while reshaping Lab/Tree duplicates vs remove/refund; and the concrete
-140/50/160 Comet Trials/Trail/Crest proposal. Do not implement dependent choices
-until the answer arrives. Continue meaningful regression/native/formation/
-balance work meanwhile. Register the new native/core tests in required CI;
-finish all remaining regressions and matrix/pacing before integration/release.
-
-### Current continuation checkpoint
+## Current checkpoint
 
 Draft [PR67](https://github.com/karahaNx/Lumenfall/pull/67) is attached to this
-chat. Published checkpoint65385aac68dc878bffecfdf54de1e4cf2687c5bc preserves the
-UI/approved-mechanics work. Follow-up code/test changes are on the same branch.
-The requirement inventory now records22 implemented/existing features and five
-pending design/pacing rows; **zero are declared integrated/released complete**.
+chat. Branch feature/all-27-feedback-001 preserves all work; the original
+checkout remains untouched. The initial published checkpoint65385aac is followed
+by0b138d4, then current main20efc396 merged as b5c4c55. Compatibility/evidence
+checkpointcd1ec51 is published. Current main includes PR59 Wisp display, PR60
+Forge text and PR61 centralized full Bond partner names; all are preserved.
+
+The inventory records22 implemented/existing features and five pending
+matrix/pacing/Comet rows. **Zero are declared integrated/released complete.**
 The [exclusive matrix and Comet proposal](../requirements/all-27-feedback-001/exclusive-matrix-proposal.md)
-make the two unanswered design choices reviewable. Original-currency refunds
-are already approved; do not request that general permission again.
+makes two unanswered gameplay choices reviewable: preserve historical bonuses
+when reshaping duplicate Lab/Tree upgrades vs remove/refund; and140/50/160
+Comet Trials/Trail/Crest vs purely cosmetic replacements. The user has approved
+original-currency refunds, Swift10 and1s/1.5s buffs, not these additional choices.
+Do not implement dependent changes until their answer arrives. Latest Lab
+proposal documentation explicitly records that no final matrix is agreed.
 
-The real medium-Farm parity divergence is fixed by sharing absolute second
-boundaries between Push/Farm. Its long-run and one-second reference now have
-identical HP. The old-deadline negative control now uses an independent
-fractional-event damage integral, which detects the actual lossy epoch mutation
-at the unchanged1e-6 tolerance. Existing4s/8s, separate Formation Save, Study-only
-tail and native-select assertions were updated for the intentionally changed
-requirements; all other conservation/projection oracles remain intact.
+## Implemented behavior and regression corrections
 
-Formation fixes preserve explicitly empty pending presets and an explicit Field
-of Ember during rebuilding. Actual Field/Bench changes merge still-unrecruited
-intent into the selected preset and preserve the other presets. Supplemental
-Formation reconstruction326 checks, canonical persistence, chronology and core
-QoL pass. Paid Study cap checks use a scoped zero processing clock to isolate
-exactly12h of absence from the separately tested actual live CPU replay; remaining
-work retains the established1e-7 numerical check rather than requiring binary
-floating-point equality after thousands of segments.
+Ascend has one editable Rift dropdown and independent ON/OFF after the Deeds
+unlock. Fixed hint geometry, complete unfinished Wisp tracks, Resonate clarity,
+Lab progress/time/speed display, Formation autosave, hidden repeated Cast text,
+Backup/Restore beside Save/Reset, baseline Forge multiplier memory, visible
+persistent cosmetics and capped Forge purchases are implemented. Eight Bonds
+and bounded older-Wisp catch-up follow the
+[balance contract](../requirements/all-27-feedback-001/balance-contract.md).
+Equal-budget measurements include real Rarity/Module/Ultimate spending and unused
+currency; full eight-system campaign pacing remains dependent on the matrix.
 
-Native Auto-Ascend touch/keyboard now passes normal/reduced motion at320/360/430px;
-Lab passes both motion modes at320/390/430px. Rift mobile tests exposed real
-clipping/overlap at360x640 with Boss status/four Bonds/safe insets. Work in progress:
-fixed44/48px hint slot, complete ability names in dedicated card rows, compact
-Bond effects with full accessible explanations, all overlapping Bond marks and
-disjoint primary visual pairs, and compact low-height layout. Reverify every
-required Rift profile after these corrections; do not treat preliminary native
-UI evidence as final layout acceptance.
+Swift10, Echo6, Bonds20, all productive offline work capped12h and one-time
+original-currency refunds are implemented. Raw purchase history is retained;
+small refunds beside huge wallets remain spendable exact credits through primary,
+recovery and backup. Active paid work remains intact. Paid Study speed tiers and
+future queue purchases keep the already-integrated independent payment contract.
 
-New core/mobile/balance process tests are registered in the default required
-suite149 scenarios. Equal-budget measurements include actual Rarity/Module/
-Ultimate purchases and unused currency; the same marginal gate rejects the old
-Titan curve. Full eight-system progression still depends on the final matrix.
-Node tooling, source validation and context checks pass when run with the cloud
-tool's additional network access. Default sandbox child-process capture produced
-a false empty-aapt-output failure; the unchanged tooling suite passes with access.
-Local Chromium dump-DOM remains blocked by the recorded timeout; native CDP and
-supplemental Playwright are working. Required remote CI must pass on the exact
-published head before integration, and again on the integrated version before APK.
+Formation preserves empty pending presets and an explicit Field of Ember during
+rebuilding. Field/Bench updates retain still-unrecruited intent in only the
+selected preset; pending members produce no DPS/Bonds. Medium-Farm parity is
+fixed by sharing absolute-second boundaries between Push/Farm. The original
+lossy-deadline mutation is still detected by an independent fractional-event
+integral at the unchanged1e-6 tolerance. Intentional old4s/8s, manual Formation
+Save, separate Study tail and native-select assertions were replaced by equivalent
+or stronger requirements; conservation/projection tolerances remain unchanged.
 
-Next: complete Rift/full regression/negative checks, publish this checkpoint and
-exact-head CI evidence, then implement the pending approved matrix/Comet choice,
-measure full pacing, integrate and publish the signed APK with the27-item phone
-checklist. Keep the task open while those decisions or required acceptance remain
-pending. No partial APK is the requested all27 delivery.
+Rift preserves fixed44/48px hints, ability names, all overlapping Bond marks,
+compact effects with full accessible text and short-screen Boss geometry. The
+new fallback follows actual tab classes instead of unsupported CSS :has and
+uses legacy rgba gradients. Physical WebView60 acceptance remains unverified.
 
-Latest local milestone: all four required native Rift normal/reduced/stacking
-profiles pass after the layout correction. The supplementary existing suite
-passes129 scenarios and all12 required negative controls are detected. New
-native/core/balance checks and native Forge/Lab/Auto-Ascend also pass. These are
-local transport-specific results; required remote CI remains pending.
+## Verified checks and evidence
 
-Long-offline assertions are being updated for intentional Swift10/refund/12h
-changes. A separate one-second partition matches the complete current state
-after8h ON,8h OFF and the12h cap. Preserve the byte-verified frozen baseline for
-fixtures outside the changed mechanics, including every currency/state field
-and unchanged numerical tolerance. Preserve cancellation, storage failure,
-processing-time replay and daily-rollover acceptance. Native return/restart
-verification and the full offline runner are still running at this checkpoint.
+- Supplemental existing suite:131/131 pass after main integration; all12 required
+  negative controls detected. This uses actual embedded assertion modules over
+  Playwright, not the required dump-DOM transport.
+- Native Rift: all four normal/reduced/stacking profiles pass, including360x640
+  and390x844 with safe insets. Auto-Ascend and Lab normal/reduced pass.
+- Native offline cold/resume/restart, cancellation, daily rollover, Lab offline
+  and Farm runtime pass. Forge UI and process guards pass.
+- New core cap/refund/save/Prism checks and equal-budget balance checks pass;
+  native all27 mobile passes four profiles including unsupported modern CSS
+  removed at360x640. Separate Wisp gate passes12 profiles/12912 checks.
+- Offline core passes in135s: full-state one-second8h ON/OFF and12h references,
+  byte-verified archived-product oracle for unchanged fixtures, cancellation,
+  primary/recovery failures, CPU-time replay and wall-clock corrections.
+- Source validation, Node tooling and task-context checks pass. Additional
+  network permission is needed for reliable local child-process output; default
+  sandbox capture falsely returned empty aapt output.
 
-Fresh main20efc396a5307560bafa4b2e7d4c9f11bf2b35b4 includes Wisp display and
-centralized Bond partner improvements plus Lab/Forge proposal documentation.
-Merge and preserve those product improvements before publishing exact-head CI.
-The [phone checklist](../qa/all-27-feedback-001/phone-checklist.md) has all27
-original acceptance items; version/hash and five pending design rows remain open.
+[Local verification](../qa/all-27-feedback-001/local-verification.json) records
+source/checkpoint limits; [offline proof](../qa/all-27-feedback-001/offline-verification.json)
+records the actual windows. The required default suite contains151 scenarios.
+Local dump-DOM times out even on the original baseline; keep this open rather
+than replacing required CI with supplementary evidence. Required remote CI must
+pass on the exact published head, then on the final integrated main version.
 
-Post-integration checkpoint: main20ef is merged as b5c4c55 with the full
-unfinished-Wisp predicate, prerequisite guards, final-purchase focus and
-centralized full Bond partner names preserved across all eight Bonds. The
-supplementary suite passes131 scenarios; all12 required negative controls are
-detected. Native offline cold/resume/restart/daily rollover, Lab offline and Farm
-runtime pass; the separate Wisp gate passes12 profiles/12912 checks. The offline
-core passes in135s, including full-state one-second8h/12h references and original
-frozen-product comparisons outside intentionally changed mechanics.
+## Remaining work
 
-A final compatibility correction replaces unsupported CSS `:has` with the
-actual tab class and gives new cosmetic gradients legacy `rgba` colors. The
-native all27 gate passes four profiles, including360x640 with unsupported
-modern CSS removed. [Local verification](../qa/all-27-feedback-001/local-verification.json)
-and [offline proof](../qa/all-27-feedback-001/offline-verification.json) record the
-precise scope/limitations. The required suite now has151 default scenarios.
-Publish this head and run its required CI before treating these results as
-integration acceptance. The two pending design answers still block five rows,
-full pacing and the requested complete APK; do not release a partial candidate.
+Publish this complete checkpoint and record its exact-head CI. Resolve the two
+pending gameplay questions, implement the final Lab/Tree/Comet matrix and measure
+full eight-system pacing. Reverify changed mechanics and the complete required
+suite, integrate and publish the correctly signed APK with verified assets,
+version/hash and the [27-item phone checklist](../qa/all-27-feedback-001/phone-checklist.md).
+User phone acceptance follows delivery and stays pending until reported. Keep
+the task open while any required decision/check is missing. A partial APK does
+not fulfill the all27 request.
