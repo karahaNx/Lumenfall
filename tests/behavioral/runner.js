@@ -2082,7 +2082,7 @@
           assert(document.activeElement===document.querySelector('[data-tab="research"]') && document.querySelector('[data-tab="research"]').getAttribute('aria-selected')==='true','Workshop sections must support arrow-key selection and focus');
 
           document.querySelector('[data-tab="forge"]').click();
-          var fundedResearch=state();fundedResearch.shards=1e9;bridge.setState(fundedResearch);bridge.renderLayout();
+          var fundedResearch=state();fundedResearch.research.charge=9;fundedResearch.shards=1e9;bridge.setState(fundedResearch);bridge.renderLayout();
           var beforeResearch=state();
           var beforeResearchLevel=beforeResearch.research.charge;
           var studiesBeforeResearch=JSON.stringify(beforeResearch.activeStudies);

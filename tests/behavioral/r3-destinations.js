@@ -83,9 +83,10 @@ window.runR3DestinationsQa = function(b,ctx,assert){
     var funded=JSON.parse(JSON.stringify(seed));funded.lumen=1e24;funded.shards=1e24;
     b.setState(funded);b.renderLayout();go('forge');q('[data-mult="'+mult+'"]').click();
     var plan=b.r3.plan('charge'),prior=b.getState();
-    ok(plan.affordable && plan.buyCount===Number(mult),'funded large bulk available '+mult);
+    var expectedCount=Math.min(10-prior.research.charge,Number(mult));
+    ok(plan.affordable && plan.buyCount===expectedCount,'funded large bulk available within Swift cap '+mult);
     q('[data-research="charge"]').click();var after=b.getState();
-    ok(after.research.charge===prior.research.charge+Number(mult) && after.lumen===prior.lumen-plan.cost.lumen && after.shards===prior.shards-plan.cost.shard,'funded large bulk exact purchase '+mult);
+    ok(after.research.charge===prior.research.charge+expectedCount && after.lumen===prior.lumen-plan.cost.lumen && after.shards===prior.shards-plan.cost.shard,'funded large bulk exact purchase '+mult);
   });
   b.setState(seed);b.renderLayout();go('forge');
   ['charge','arcanecal','conduction','luminoustracking'].forEach(function(id){

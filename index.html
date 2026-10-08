@@ -3836,14 +3836,14 @@ function canSpendShards(cost,wallet){
   if(wallet>=cost) return true;
   if(shardCredit()==='0') return false;
   // Purchase prices are whole Shards; retain a fractional earned wallet remainder.
-  var needed=refundNumberInteger(cost-Math.floor(wallet));
+  var needed=refundSubtract(refundNumberInteger(cost),refundNumberInteger(Math.floor(wallet)));
   return refundCompare(shardCredit(),needed)>=0;
 }
 function shardShortfall(cost){
   if(!Number.isFinite(cost)) return Infinity;
   if(canSpendShards(cost)) return 0;
   if(shardCredit()==='0') return Math.max(0,cost-state.shards);
-  var wallet=Math.floor(state.shards),needed=refundNumberInteger(cost-wallet);
+  var wallet=Math.floor(state.shards),needed=refundSubtract(refundNumberInteger(cost),refundNumberInteger(wallet));
   return Number(refundSubtract(needed,shardCredit()))-(state.shards-wallet);
 }
 function spendShards(cost){
@@ -3853,7 +3853,7 @@ function spendShards(cost){
   var price=refundNumberInteger(cost);
   if(credit!=='0' && refundCompare(credit,price)>=0){state.exactRefundCredits.shards=refundSubtract(credit,price);return true;}
   if(state.shards>=cost){state.shards-=cost;return true;}
-  var wallet=Math.floor(state.shards),needed=refundNumberInteger(cost-wallet);
+  var wallet=Math.floor(state.shards),needed=refundSubtract(price,refundNumberInteger(wallet));
   state.exactRefundCredits.shards=refundSubtract(credit,needed);
   state.shards-=wallet;
   return true;

@@ -217,7 +217,9 @@ window.runP207PersistenceReview = function(b,ctx,assert){
 
 window.runP207FarmReview = function(b,ctx,assert,parity,summaryParity,isolated){
   var seed=b.getState(),clock=2000000000000,t=b.formationTest;
-  seed.researchQueue.charge=true;b.setState(seed);seed=b.getState();
+  // Exercise the final buyable Swift level with the existing medium economy.
+  // Legacy Forge queues are retired; charge16 cannot buy past the new cap10.
+  seed.research.charge=9;seed.researchQueue.charge=true;b.setState(seed);seed=b.getState();
   // A non-Boss Push return has no automatic Boss retry path, regardless of
   // power growth. Keep automation/Auto-Ascend enabled and the medium economy.
   if(isolated){seed.farmReturnDepth=91;seed.maxDepthEver=Math.max(seed.maxDepthEver,91);b.setState(seed);seed=b.getState();}

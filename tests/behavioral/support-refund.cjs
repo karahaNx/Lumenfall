@@ -40,6 +40,13 @@ a.set(s);const startValue=value(a.get());a.queue();after=copy(a.get());eq(after.
 a.set(s);a.simulate(1,{kind:'live',visual:false,clockStartMs:s.lastSeen});const live=copy(a.get());a.set(s);a.simulate(1,{kind:'offline',visual:false,clockStartMs:s.lastSeen});eq(copy(a.get()),live,'migration/automation live-offline');
 // A rounded display total cannot create a zero-time economy boundary.
 s=copy(a.fresh());s.exactRefundCredits.shards='999999999999999999';a.set(s);eq(a.can(1e18),false,'exact affordability below rounded total');eq(a.shortfall(1e18),1,'one real Shard reward still required');eq(a.shortfall(Infinity),Infinity,'unrepresentable prices remain unavailable');
+// A very large price minus a small wallet must not lose the wallet to Number
+// subtraction rounding. Compare and debit the combined integer value exactly.
+for(const price of [1e18,1e30,1e100])for(const wallet of [3.5,5000]){
+ const needed=BigInt(price)-BigInt(Math.floor(wallet));s=copy(a.fresh());s.shards=wallet;s.exactRefundCredits.shards=(needed-1n).toString();a.set(s);
+ eq(a.can(price),false,'large combined price one integer short');eq(a.shortfall(price),1-wallet%1,'exact large-price reward deficit');before=copy(a.get());eq(a.spend(price),false,'large-price rejection');eq(copy(a.get()),before,'large-price rejection pure');
+ s.exactRefundCredits.shards=needed.toString();a.set(s);before=copy(a.get());eq(a.can(price),true,'exact combined large price affordable');eq(a.spend(price),true,'combined large-price debit');eq(value(a.get()),value(before)-BigInt(price),'combined large-price exact total debit');eq(a.get().shards,wallet%1,'large debit retains fractional wallet');eq(a.get().exactRefundCredits.shards,'0','large debit consumes exact credit remainder');
+}
 // Shared namespace prevents a second refund when the coordinated bundle lands.
 s=copy(a.fresh());s.research.charge=25;s.feedbackMigration.receipts['forge.charge']={from:10,to:25,unpricedFrom:0,amounts:{shards:refund(25).prices}};a.set(s);eq(value(a.get()),0n,'existing shared receipt not re-awarded');
 const result={status:'pass',checks,cases:records.length,sourceSha256:crypto.createHash('sha256').update(html).digest('hex'),records};if(process.argv[3])fs.writeFileSync(process.argv[3],JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({status:result.status,checks,cases:records.length,sourceSha256:result.sourceSha256}));

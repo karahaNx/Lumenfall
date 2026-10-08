@@ -152,7 +152,7 @@ const c20=runAsync(clear20,28800);
 const off=copy(original);off.autoAscendEnabled=false;
 const disabled=runAsync(off,28800);assert.equal(disabled.result.kills,756);assert.equal(disabled.result.ascends,0);
 assert.equal(disabled.committed.spirits.titan,144);
-const cap=runAsync(original,72*3600);assert.equal(cap.result.kills,453600);assert.equal(cap.result.ascends,21600);
+const cap=runAsync(original,72*3600);assert.equal(cap.result.kills,416439);assert.equal(cap.result.ascends,19830);
 const beyond=copy(original);beyond.activeStudies=[{id:'guardmastery',remainingSec:80*3600,totalDurationSec:80*3600,speedMult:1}];beyond.studyQueue={};
 const long=runAsync(beyond,96*3600);assert.equal(long.result.effectiveSec,12*3600);
 assert(!long.result.completedStudies.includes("Guardian's Mastery"),'Study cannot complete beyond the common cap');assert(Math.abs(long.committed.activeStudies[0].remainingSec-68*3600)<1e-5,'12h paid work within existing scheduler epsilon');
