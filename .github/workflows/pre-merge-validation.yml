@@ -53,6 +53,29 @@ jobs:
         shell: bash
         run: node tests/behavioral/run.cjs --web-root mobile/www
 
+      - name: Cheaper Recruitment cap and refund regression
+        run: node tests/behavioral/cheaper-recruitment.cjs --source mobile/www/index.html --output /tmp/cheaper-recruitment.json
+
+      - name: Cheaper Recruitment defect controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          for mutation in handler refund credit free-credit wallet receipt cache credit-record ascend-copy version-check credit-reconcile; do
+            if node tests/behavioral/cheaper-recruitment.cjs --source mobile/www/index.html --mutation "$mutation" --output "/tmp/cheaper-recruitment-$mutation.json"; then
+              echo "::error::Cheaper Recruitment mutation '$mutation' unexpectedly passed."
+              exit 1
+            fi
+            node - "$mutation" "/tmp/cheaper-recruitment-$mutation.json" <<'JS'
+          const fs = require('node:fs'), assert = require('node:assert/strict');
+          const result = JSON.parse(fs.readFileSync(process.argv[3], 'utf8'));
+          const expected = {handler:'cap prevents direct/repeated debit',refund:'refund receipt prevents a second credit',credit:'fractional original wallet retains exact refund value', 'free-credit':'unrepresentable credit subtraction cannot buy a free level',wallet:'unrepresentable wallet debit cannot buy a free level',receipt:'wrong receipt amount rejects for recovery',cache:'completed large refund avoids repeated price calculation at Ascend boundaries','credit-record':'malformed persisted Prism credit rejects for recovery','ascend-copy':'actual auto-Ascends avoid repeated refund cloning and validation','version-check':'unsupported migration version rejects before any early return','credit-reconcile':'own credit sequence reconciles with saved receipt'};
+          assert.equal(result.status, 'FAIL');
+          assert(result.failure.includes(expected[process.argv[2]]), 'Expected causal assertion missing');
+          assert.equal(result.teardown.browser.code, 0);
+          assert.equal(result.teardown.pending, 0);
+          JS
+          done
+
       - name: Behavioral harness negative self-test
         shell: bash
         run: |

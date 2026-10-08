@@ -15,8 +15,11 @@ const source = path.resolve(option('--source', path.join(root, 'index.html')));
 const out = path.resolve(option('--out', '/tmp/lumenfall-rift-cosmetics'));
 const baseline = args.includes('--baseline');
 const negative = args.includes('--negative');
-const chrome = option('--chrome', ['google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser'].find(name => spawnSync('which', [name]).status === 0));
+const selectedChrome = option('--chrome', process.env.LUMENFALL_QA_CDP_CHROME || ['google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser'].find(name => spawnSync('which', [name]).status === 0));
+const chrome = selectedChrome && spawnSync('which', [selectedChrome], {encoding:'utf8'}).stdout.trim();
 if (!chrome) throw Error('Chromium is required');
+const browserIdentity = {selected:chrome,resolved:fs.realpathSync(chrome),version:spawnSync(chrome,['--version'],{encoding:'utf8',timeout:5000}).stdout.trim()};
+console.log('Browser identity: '+JSON.stringify(browserIdentity));
 fs.mkdirSync(out, {recursive: true});
 const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'lumenfall-cosmetics-'));
 const sourceBytes = fs.readFileSync(source);
@@ -40,7 +43,7 @@ const server = http.createServer((req, res) => {
 function send(method, params = {}, sid = session) {
   return new Promise((resolve, reject) => {
     const id = ++seq;
-    const timer = setTimeout(() => { pending.delete(id); reject(Error('CDP timeout: ' + method)); }, 10000);
+    const timer = setTimeout(() => { pending.delete(id); reject(Error('CDP timeout: ' + method+'; '+stderr)); }, 30000);
     pending.set(id, {resolve, reject, timer});
     browser.stdio[3].write(JSON.stringify({id, method, params, ...(sid ? {sessionId: sid} : {})}) + '\0');
   });
@@ -150,6 +153,7 @@ async function run() {
     }
   });
   try {
+    browserIdentity.protocol = await send('Browser.getVersion', {}, null);
     const target = await send('Target.createTarget', {url: 'about:blank'}, null);
     session = (await send('Target.attachToTarget', {targetId: target.targetId, flatten: true}, null)).sessionId;
     await send('Page.bringToFront');
@@ -273,6 +277,6 @@ async function run() {
 run().catch(error=>{failure=error.stack;}).finally(()=>{
   const result={status:failure?'fail':'pass',baseline,negative,source,sourceSHA256:crypto.createHash('sha256').update(sourceBytes).digest('hex'),browser:spawnSync(chrome,['--version'],{encoding:'utf8'}).stdout.trim(),chromeExecutable:chrome,node:process.version,records,runtimeErrors,exitInfo,failure,stderr};
   fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(result,null,2)+'\n');
-  console.log(JSON.stringify({status:result.status,samples:records.length,out,failure}));
+  console.log(JSON.stringify({status:result.status,samples:records.length,out,browserIdentity,exitInfo,failure,stderr:failure?stderr:undefined}));
   if(failure)process.exitCode=1;
 });

@@ -20,6 +20,7 @@ window.runTreePurchaseQa=function(b,ctx,assert){
     ok(b.lifecycleTrace().length===events+1,'one actual handler save '+id);
     ok(after.nodes[id]===cap&&after.prisms===0,'one final level for exact payment '+id);
     var expected=JSON.parse(JSON.stringify(initial));expected.nodes[id]=cap;expected.prisms=0;expected.lastSeen=after.lastSeen;
+    if(id==='bonds'){ok(after.feedbackMigration.history.bonds.levels===cap,'F21 history follows the actual final purchase');expected.feedbackMigration.history.bonds.levels=cap;}
     same(after,expected,'purchase changes only level, Prisms and save metadata '+id);
     ok(button(id).disabled&&button(id).textContent==='Maxed','at cap control '+id);
     b.refreshAffordability();ok(button(id).disabled&&button(id).dataset.state==='maxed','refresh preserves cap state '+id);

@@ -1,0 +1,37 @@
+{
+  "status": "Credit audit correction passes locally; final CI/integration/APK pending",
+  "baselineMain": "3f1b6faf9f253e6dfe8a3bf408e7f7a9891ca52d",
+  "sourceSha256": "7eba40d8f1ff012235b0b7e4cbb447bc10690abd06be33cbc2c0c4404db8674d",
+  "observedAt": "2026-10-08T10:17:21.252Z",
+  "historicalCi": {
+    "run": 37748215097,
+    "conclusion": "failure",
+    "existingScenariosPassed": 173,
+    "f21": "startup timeout before assertions",
+    "remainingGates": "skipped",
+    "correction": "Google Chrome priority and browser identity/stderr"
+  },
+  "local": {
+    "focusedAssertions": 567,
+    "negativeControls": 13,
+    "treeContractChecks": 155,
+    "treeMobileChecks": 693,
+    "clarityChecks": 926,
+    "legacyV8": "6.0.286.52 PASS",
+    "treeEvidenceSource": "81fcc46101661755d334183f72c2ceca18784878a9744232cc9be8da5301a7bb",
+    "actualAutoAscends": {
+      "boundaries": 14400,
+      "refundNormalizations": 0,
+      "exactRecordsRetained": true,
+      "canonicalParity": true,
+      "localElapsedMs": 323.3
+    },
+    "negativeEvidenceSource": "7eba40d8f1ff012235b0b7e4cbb447bc10690abd06be33cbc2c0c4404db8674d",
+    "actualVersionRecovery": true,
+    "actualCreditBalanceRecovery": 4
+  },
+  "nativeBaseline": "native/baseline-native.json",
+  "nativeStorage": "native/baseline-storage.tar",
+  "next": "Publish combined main merge, pass required CI, integrate expected head, verify signed APK identity/assets and actual update acceptance.",
+  "previousPassingCi": 37756169423
+}

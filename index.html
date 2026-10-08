@@ -2011,6 +2011,7 @@
   .wisp-progression .module-effect{line-height:1.5;}
   .study-card .study-meta{padding:8px 10px;border-radius:8px;background:#0c1b2c;border:1px solid #365365;line-height:1.5;}
   #tab-ascend .node-card{position:relative;align-items:flex-start;border-left:3px solid #9c8bc4;}
+  #tab-ascend .node-info{min-width:0;overflow-wrap:break-word;word-break:break-word;overflow-wrap:anywhere;}
   #tab-ascend .node-card>.shape{margin-top:5px;background:linear-gradient(135deg,#e3d6ff 0 35%,#b390e5 36% 58%,#5e4d8c 59%)!important;}
   #tab-ascend .node-card.locked-node{border-left-color:#566077;}
   #tab-ascend .node-card.locked-node>.shape{filter:saturate(0);opacity:.6;}
@@ -3028,7 +3029,7 @@ var NODES = [
   {id:'starlight', name:'Starlight Affinity', desc:'+10% Lumen from every kill, per level.', baseCost:1, growth:1.35},
   {id:'steady',    name:'Steady Hands',        desc:'+8% tap damage, per level.',              baseCost:1, growth:1.30},
   {id:'echo',      name:'Echoing Rest',        desc:'+5 percentage points offline earning rate per level, up to 100% before Projects (6 levels).', baseCost:2, growth:1.40, levelCap:6},
-  {id:'bonds',     name:'Cheaper Bonds',       desc:'−3% Wisp recruitment and Empower Lumen cost per level, down to 40% cost (20 levels).', baseCost:2, growth:1.45, levelCap:20},
+  {id:'bonds',     name:'Cheaper Recruitment', desc:'3 percentage points more discount per level, up to 60%. Wisp recruiting and Empower cost at least 40% of the normal price before whole-Lumen rounding. Level cap: 20.', levelCap:20, baseCost:2, growth:1.45},
   {id:'swift',     name:'Swift Ascension',     desc:'+4% Prisms earned per Ascend, per level.', baseCost:3, growth:1.50},
   {id:'momentum',  name:'Eternal Momentum',    desc:'+6% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.', baseCost:5, growth:1.55, requiresAchievement:'asc5'},
   {id:'reserves',  name:'Deep Reserves',       desc:'Retired offline extension. Previous purchases are refunded in Prisms.', baseCost:6, growth:1.60, requiresAchievement:'d100', retired:true}
@@ -3170,7 +3171,7 @@ function nodeEarnedEffect(id){
     return '+'+earnedPercent(rate-0.70)+' percentage points offline rate · '+earnedPercent(rate)+'% before Projects'+(rate>=1?' (node cap reached)':'');
   }
   var discount=costReduction();
-  return earnedPercent(discount)+'% Wisp recruiting discount; also applies to Empower · '+earnedPercent(1-discount)+'% cost'+(discount>=0.6?' (cost floor reached)':'');
+  return earnedPercent(discount)+'% Wisp recruiting discount (also Empower) · '+earnedPercent(1-discount)+'% of normal price · Price at least 40% of normal (max 60% discount), before whole-Lumen rounding'+(discount>=0.6?' (cost floor reached)':'');
 }
 function projectEarnedEffect(id,level){
   if(level===undefined) level=longStudyLevel(id);
@@ -3288,6 +3289,7 @@ function freshState(){
   LONG_STUDIES.forEach(function(l){ longStudyLevels[l.id] = 0; studyQueue[l.id] = false; studyUseMotes[l.id] = false; studySpeedTargets[l.id] = 1.5; });
   return {
     schemaVersion:SAVE_SCHEMA_VERSION, offline12hRefund:null,
+    feedbackMigration:{version:1,applied:true,bondsCreditAuditVersion:1,receipts:{},history:{bonds:{levels:0}}}, refundCredits:{prisms:[]},
     lumen:0, shards:0, prisms:0, comets:0, motes:0, sigils:0,
     depth:1, maxDepthEver:1,
     riftMode:'push', farmDepth:0, farmReturnDepth:0,
@@ -3663,7 +3665,7 @@ function autoEmpowerCandidateIds(){
     return ids.indexOf(id)===index && SPIRITS.some(function(sp){return sp.id===id && state.maxDepthEver>=sp.unlockDepth;});
   });
 }
-function normalizeCurrentSave(input){
+function normalizeCurrentSave(input,retainRecruitmentRefund){
   var fresh = freshState();
   var out = freshState();
   var source = isPlainObject(input) ? input : {};
@@ -3871,7 +3873,134 @@ function normalizeCurrentSave(input){
   out.lastSeen = finiteNonNegative(source.lastSeen,Date.now());
   if(out.lastSeen<=0) out.lastSeen = Date.now();
   normalizeCometTrials(source,out);
+  if(retainRecruitmentRefund){
+    // Internal simulation already holds canonical records. Ascend cannot change
+    // these receipts/credits; imports and every persisted save validate fully.
+    out.feedbackMigration=source.feedbackMigration;
+    out.refundCredits=source.refundCredits;
+  }else normalizeCheaperRecruitmentRefund(out,source);
   return out;
+}
+// F21 only. The node.bonds receipt/credit shape also prevents a second refund
+// when the separately proposed feedback bundle is integrated. Keep raw levels.
+function normalizeCheaperRecruitmentRefund(out,source){
+  if(source.feedbackMigration!==undefined && (!isPlainObject(source.feedbackMigration) || !isPlainObject(source.feedbackMigration.receipts))){
+    throw persistenceError('invalid-bonds-refund','Refund migration record needs recovery');
+  }
+  if(source.refundCredits!==undefined && !isPlainObject(source.refundCredits)){
+    throw persistenceError('invalid-bonds-refund','Refund credit record needs recovery');
+  }
+  var saved=isPlainObject(source.feedbackMigration) ? source.feedbackMigration : {};
+  out.feedbackMigration=clonePersistedValue(saved);
+  out.feedbackMigration.version=saved.version===undefined ? 1 : saved.version;
+  if(out.feedbackMigration.version!==1) throw persistenceError('invalid-bonds-refund','Recruitment refund version needs recovery');
+  if(saved.bondsCreditAuditVersion!==undefined && saved.bondsCreditAuditVersion!==1) throw persistenceError('invalid-bonds-refund','Recruitment credit audit version needs recovery');
+  out.feedbackMigration.bondsCreditAuditVersion=1;
+  out.feedbackMigration.applied=true;
+  var receipts=isPlainObject(saved.receipts) ? saved.receipts : {};
+  out.feedbackMigration.history=isPlainObject(saved.history) ? out.feedbackMigration.history : {};
+  out.feedbackMigration.history.bonds={levels:out.nodes.bonds};
+  out.refundCredits=isPlainObject(source.refundCredits) ? clonePersistedValue(source.refundCredits) : {};
+  var credits=out.refundCredits.prisms;
+  if(credits===undefined) credits=[];
+  if(!Array.isArray(credits)) throw persistenceError('invalid-bonds-refund','Prism refund credits need recovery');
+  out.refundCredits.prisms=credits;
+  if(!isPlainObject(out.feedbackMigration.receipts)) out.feedbackMigration.receipts={};
+  var id='node.bonds',raw=out.nodes.bonds,schedule=cheaperRecruitmentRefundSchedule(raw),unpricedFrom=schedule.unpricedFrom;
+  var hasReceipt=Object.prototype.hasOwnProperty.call(receipts,id),receipt=receipts[id];
+  if(hasReceipt && (saved.version!==1 || !isPlainObject(source.refundCredits) || !Array.isArray(source.refundCredits.prisms) || !isPlainObject(receipt) || receipt.from!==20 || receipt.to!==raw ||
+      receipt.unpricedFrom!==unpricedFrom || !isPlainObject(receipt.amounts) || !Array.isArray(receipt.amounts.prisms) ||
+      receipt.amounts.prisms.length!==schedule.count || receipt.amounts.prisms.some(function(n,index){return !Number.isFinite(n) || n<=0 || Math.floor(n)!==n || !cheaperRecruitmentReceiptPriceMatches(n,20+index);} ))){
+    throw persistenceError('invalid-bonds-refund','Recruitment refund receipt needs recovery');
+  }
+  credits.forEach(function(entry){
+    if(!isPlainObject(entry) || typeof entry.id!=='string' || !entry.id || !Number.isFinite(entry.amount) || entry.amount<=0 || Math.floor(entry.amount)!==entry.amount || (entry.id===id && !hasReceipt)){
+      throw persistenceError('invalid-bonds-refund','Recruitment refund credits need recovery');
+    }
+  });
+  if(hasReceipt){
+    validateCheaperRecruitmentCreditAudit(receipt,credits,saved.bondsCreditAuditVersion===1);
+    // Earlier additive candidate records did not track credit debits. Preserve
+    // their known remaining value once; never infer missing historical value.
+    if(receipt.creditAuditVersion===undefined){
+      out.feedbackMigration.receipts[id].creditAuditVersion=1;
+      out.feedbackMigration.receipts[id].remainingCredits=cheaperRecruitmentOwnedCredits(credits);
+    }
+  }
+  if(hasReceipt || raw<=20) return;
+  var amounts=cheaperRecruitmentRefundPrices.slice(0,schedule.count).map(function(entry){return entry.price;});
+  amounts.forEach(function(amount){
+    var sum=exactPrismArithmetic(out.prisms,amount);
+    // Keep new restitution spendable at whole-Prism prices. Existing mature
+    // wallets are preserved; excess refunds remain exact original credits.
+    if(sum!==null && sum<=Number.MAX_SAFE_INTEGER) out.prisms=sum;
+    else credits.push({id:id,amount:amount});
+  });
+  out.feedbackMigration.receipts[id]={from:20,to:raw,unpricedFrom:unpricedFrom,amounts:{prisms:amounts},creditAuditVersion:1,remainingCredits:cheaperRecruitmentOwnedCredits(credits)};
+}
+function cheaperRecruitmentOwnedCredits(credits){
+  return credits.filter(function(entry){return entry.id==='node.bonds';}).map(function(entry){return entry.amount;});
+}
+function validateCheaperRecruitmentCreditAudit(receipt,credits,required){
+  if(!required && receipt.creditAuditVersion===undefined && receipt.remainingCredits===undefined) return;
+  var owned=cheaperRecruitmentOwnedCredits(credits),remaining=receipt.remainingCredits;
+  if(receipt.creditAuditVersion!==1 || !Array.isArray(remaining) || remaining.length!==owned.length ||
+      remaining.some(function(amount,index){return amount!==owned[index];})){
+    throw persistenceError('invalid-bonds-refund','Recruitment refund credit balance needs recovery');
+  }
+}
+// Cache only the bounded original price schedule, never player receipts. Later
+// Ascends still validate every saved amount, without repeating exponentiation
+// or rebuilding a refund array. No cached array is exposed to saved state.
+var cheaperRecruitmentRefundPrices=[],cheaperRecruitmentUnpricedFrom=0;
+function cheaperRecruitmentRefundSchedule(raw){
+  var wanted=Math.max(0,raw-20);
+  while(cheaperRecruitmentRefundPrices.length<wanted && !cheaperRecruitmentUnpricedFrom){
+    var level=20+cheaperRecruitmentRefundPrices.length,value=2*Math.pow(1.45,level),price=Math.ceil(value);
+    // No finite Number wallet could pay the first nonfinite original price.
+    if(!Number.isFinite(price)){cheaperRecruitmentUnpricedFrom=level+1;break;}
+    var relativeError=level*Number.EPSILON/(1-level*Number.EPSILON),allowance=value*relativeError;
+    cheaperRecruitmentRefundPrices.push({price:price,min:Math.ceil(value-allowance),max:Math.ceil(value+allowance)});
+  }
+  return {count:Math.min(wanted,cheaperRecruitmentRefundPrices.length),unpricedFrom:wanted>cheaperRecruitmentRefundPrices.length ? cheaperRecruitmentUnpricedFrom : 0};
+}
+// Old V8 and modern engines produce slightly different exponential prices.
+// Bound accumulated floating-point error before whole-Prism rounding; retain
+// the stored original amounts. Small prices still require their exact integer.
+function cheaperRecruitmentReceiptPriceMatches(amount,level){
+  var entry=cheaperRecruitmentRefundPrices[level-20];
+  return !!entry && amount>=entry.min && amount<=entry.max;
+}
+// Knuth TwoSum detects loss on either operand, including a small old wallet
+// beside a huge incoming refund. An inverse subtraction alone misses that case.
+function exactPrismArithmetic(left,right){
+  var sum=left+right;
+  if(!Number.isFinite(sum)) return null;
+  var rightInSum=sum-left;
+  return (left-(sum-rightInSum))+(right-rightInSum)===0 ? sum : null;
+}
+// Plan before mutating. A credit stays intact unless BOTH subtractions retain
+// its exact value; tiny costs must not become free beside a large credit.
+function prismPurchasePlan(cost){
+  if(!Number.isFinite(cost) || cost<0) return null;
+  var credits=clonePersistedValue((state.refundCredits && state.refundCredits.prisms)||[]),remaining=cost;
+  for(var i=0;i<credits.length && remaining>0;i++){
+    var entry=credits[i];
+    if(!entry || !Number.isFinite(entry.amount) || entry.amount<=0) continue;
+    var take=Math.min(remaining,entry.amount),next=exactPrismArithmetic(remaining,-take),left=exactPrismArithmetic(entry.amount,-take);
+    if(next===null || left===null) continue;
+    entry.amount=left;remaining=next;
+  }
+  if(state.prisms<remaining) return null;
+  var wallet=exactPrismArithmetic(state.prisms,-remaining);
+  if(wallet===null) return null;
+  credits=credits.filter(function(entry){return !entry || entry.amount!==0;});
+  return {prisms:wallet,credits:credits,remainingOwnCredits:cheaperRecruitmentOwnedCredits(credits)};
+}
+function prismRefundCreditTotal(){
+  return ((state.refundCredits && state.refundCredits.prisms)||[]).reduce(function(total,entry){
+    return total+(entry && Number.isFinite(entry.amount) && entry.amount>0 ? entry.amount : 0);
+  },0);
 }
 function acceptPersistedState(input,sourceName){
   assertPersistedRootShape(input);
@@ -5193,7 +5322,10 @@ function applyRiftTheme(){
 function buyNode(node){
   var plan = getNodeBuyPlan(node);
   if(!plan.affordable) return false;
-  state.prisms -= plan.cost;
+  state.prisms = plan.payment.prisms;
+  state.refundCredits.prisms = plan.payment.credits;
+  var receipt=state.feedbackMigration.receipts['node.bonds'];
+  if(receipt) receipt.remainingCredits=plan.payment.remainingOwnCredits;
   state.nodes[node.id] = plan.level + 1;
   saveState();
   renderNodes();
@@ -5209,8 +5341,10 @@ function getNodeBuyPlan(node){
   if(node.requiresAchievement && !state.achieved[node.requiresAchievement]) return {affordable:false,reason:'locked',level:level};
   if(node.levelCap!==undefined && level>=node.levelCap) return {affordable:false,reason:'cap',level:level};
   var cost=nodeCost(node);
-  if(!Number.isFinite(cost) || cost<1 || level+1===level || !Number.isFinite(state.prisms) || (state.prisms>=cost && state.prisms-(state.prisms-cost)!==cost)) return {affordable:false,reason:'unavailable',level:level,cost:cost};
-  return {affordable:state.prisms>=cost,reason:state.prisms>=cost?'available':'unaffordable',level:level,cost:cost};
+  if(!Number.isFinite(cost) || cost<1 || level+1===level || !Number.isFinite(state.prisms)) return {affordable:false,reason:'unavailable',level:level,cost:cost};
+  var payment=prismPurchasePlan(cost);
+  var reason=payment ? 'available' : state.prisms+prismRefundCreditTotal()>=cost ? 'unavailable' : 'unaffordable';
+  return {affordable:!!payment,reason:reason,level:level,cost:cost,payment:payment};
 }
 
 var labMultiplier = 1;
@@ -6803,14 +6937,18 @@ function renderNodes(){
     var capped = plan.reason==='cap';
     var unavailable = plan.reason==='unavailable';
     var priced = Number.isFinite(plan.cost);
+    var levelText = 'Level '+level+(node.levelCap!==undefined?' · Cap '+node.levelCap:'')+(node.levelCap!==undefined && level>node.levelCap?' · Saved level preserved':'');
+    if(node.id==='bonds'){levelText='Level '+Math.min(level,20)+' / 20';if(level>20)levelText+=' · '+level.toLocaleString('en-US')+' purchased levels preserved';}
     html += '<div class="card node-card">' +
       '<span class="shape shape-diamond" style="width:30px;height:30px;background:var(--prism);"></span>' +
       '<div class="node-info" style="flex:1;">' +
         '<div class="name">'+node.name+'</div>' +
         '<div class="desc">'+node.desc+'</div>' +
-        '<div class="lvl" style="color:var(--prism);">Level '+level+(node.levelCap!==undefined?' · Cap '+node.levelCap:'')+(node.levelCap!==undefined && level>node.levelCap?' · Saved level preserved':'')+'</div>' +
+        '<div class="lvl" style="color:var(--prism);">'+levelText+'</div>' +
         '<div class="earned-effect" data-node-effect="'+node.id+'"><strong>Current node contribution:</strong> '+nodeEarnedEffect(node.id)+'</div>' +
         '<div class="effect-note">From this node only; other upgrades contribute separately.</div>' +
+        (node.id==='bonds' && state.feedbackMigration.receipts['node.bonds'] ? '<div class="effect-note">Saved level preserved; '+(state.feedbackMigration.receipts['node.bonds'].unpricedFrom ? 'refunds cover purchases with available prices.' : 'purchases above level 20 refunded in Prisms.')+'</div>' : '') +
+        (node.id==='bonds' && prismRefundCreditTotal()>0 ? '<div class="effect-note">Remaining Prism refund credit: '+(Number.isFinite(prismRefundCreditTotal()) ? formatNum(prismRefundCreditTotal()) : 'above display range')+'. Available for Tree purchases.</div>' : '') +
       '</div>' +
       '<button class="buy-btn" data-node="'+node.id+'" '+(plan.affordable?'':'disabled')+' aria-label="'+(capped?node.name+' maximum level reached':unavailable?node.name+' price unavailable':'Buy '+node.name+' level '+(level+1)+' for '+formatNum(plan.cost)+' Prisms')+'" style="min-width:78px;">' +
         (capped?'<span class="label">Maxed</span>':unavailable&&!priced?'<span class="label">Unavailable</span>':'<span class="cost mono">'+costIcon('prism')+formatNum(plan.cost)+'</span><span class="label">'+(unavailable?'Unavailable':'Prisms')+'</span>') +
@@ -7667,9 +7805,10 @@ function simulationApplyAutoAscend(summary){
   var gain = applyAscendMutation();
   summary.ascends++;
   summary.ascendGains.push(gain);
-  // saveState() canonicalizes runtime state after a normal Auto-Ascend. Do the
-  // same in-memory here so live and offline do not diverge before persistence.
-  state = acceptPersistedState(state,'simulation-ascend');
+  // Normalize the same gameplay fields as a live save. This current-schema
+  // runtime state was accepted on entry; preserve untouched F21 value records
+  // instead of cloning/scanning them at every offline Ascend boundary.
+  state = normalizeCurrentSave(state,true);
   simulationRecordAchievements(summary);
   return true;
 }

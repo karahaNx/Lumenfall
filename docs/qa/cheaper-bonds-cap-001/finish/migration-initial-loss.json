@@ -1,0 +1,34 @@
+{
+  "status": "FAIL",
+  "sourcePath": "/workspace/CHEAPER_BONDS_CAP_001/index.html",
+  "sourceSha256": "9ec4d8e4e0fa76071feeb73a47737bd9b842c8238ac43144c0a998011e7bda48",
+  "mutation": "none",
+  "observedAt": "2026-10-08T06:04:10.946Z",
+  "records": [
+    {
+      "kind": "contracts",
+      "result": {
+        "checks": 383,
+        "purchaseCap": 20,
+        "finalPrice": 2329,
+        "pricesThroughCap": 7507,
+        "legacyLevels": [
+          21,
+          40,
+          2000
+        ],
+        "migration": "one-time original-curve Prism restitution; raw levels retained"
+      }
+    }
+  ],
+  "teardown": {
+    "browser": {
+      "code": 0,
+      "signal": null
+    },
+    "pending": 0,
+    "profileRemoved": true
+  },
+  "failure": "Error: Error: all finite original purchase value retained 2000/1000000\n    at ok (http://127.0.0.1:33141/index.html:8868:41)\n    at http://127.0.0.1:33141/index.html:8874:5\n    at Array.forEach (<anonymous>)\n    at window.runCheaperRefundContracts (http://127.0.0.1:33141/index.html:8872:71)\n    at <anonymous>:1:1\n    at evaluate (/workspace/CHEAPER_BONDS_CAP_001/tests/behavioral/cheaper-recruitment.cjs:53:154)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async run (/workspace/CHEAPER_BONDS_CAP_001/tests/behavioral/cheaper-recruitment.cjs:71:47)\n    at async /workspace/CHEAPER_BONDS_CAP_001/tests/behavioral/cheaper-recruitment.cjs:144:6",
+  "stderr": "rg/freedesktop/DBus: unknown error type: \n[41450:41479:1008/060409.653390:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[41450:41479:1008/060409.653405:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[41450:41450:1008/060409.653602:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[41450:41450:1008/060409.680753:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[41450:41450:1008/060409.683173:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[41450:41450:1008/060409.683663:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[41450:41479:1008/060409.687759:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\n[41450:41479:1008/060409.687787:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\n[41450:41479:1008/060409.687793:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n\n(process:41450): dconf-CRITICAL **: 06:04:09.695: unable to create file '/home/agent/.cache/dconf/user': Read-only file system.  dconf will not work properly.\n\n(process:41450): dconf-CRITICAL **: 06:04:09.696: unable to create file '/home/agent/.cache/dconf/user': Read-only file system.  dconf will not work properly.\n\n(process:41450): dconf-CRITICAL **: 06:04:09.696: unable to create file '/home/agent/.cache/dconf/user': Read-only file system.  dconf will not work properly.\n[41450:41490:1008/060409.745355:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:279] Failed to adjust OOM score of renderer with pid 41539: Read-only file system (30)\n[41450:41490:1008/060409.800299:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:279] Failed to adjust OOM score of renderer with pid 41548: Read-only file system (30)\n[41450:41490:1008/060409.806938:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:279] Failed to adjust OOM score of renderer with pid 41550: Read-only file system (30)\n[41450:41490:1008/060409.878654:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:279] Failed to adjust OOM score of renderer with pid 41566: Read-only file system (30)\n[41450:41450:1008/060409.896202:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: \n[41450:41450:1008/060409.896242:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[41450:41479:1008/060409.896350:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[41450:41450:1008/060409.928927:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[41450:41479:1008/060409.929033:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[41450:41450:1008/060409.949709:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n"
+}
