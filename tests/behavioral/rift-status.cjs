@@ -136,8 +136,14 @@ async function run(){
    assert(await evaluate('JSON.stringify(__lumenfallQaBridge.getState())')===beforeHide,'native guidance dismissal leaves game state unchanged');
    const afterHide=await evaluate('riftStatusMobile.measure()');
    assert(JSON.stringify(visibleMeasurement.boxes)===JSON.stringify(afterHide.boxes),'guidance hide preserves the measured combat boxes');
+   const nextTabStop='document.activeElement.id==="nav-spirits"';
+   if(width===360&&inset===0){
+    await evaluate('window.__qaBlockedHintTab=function(event){if(event.key==="Tab")event.preventDefault();};document.addEventListener("keydown",window.__qaBlockedHintTab,true)');
+    await key('Tab');assert(!await evaluate(nextTabStop),'the Tab oracle rejects a key that leaves focus on the hints toggle');
+    await evaluate('document.removeEventListener("keydown",window.__qaBlockedHintTab,true);delete window.__qaBlockedHintTab');
+   }
    await key('Tab');if(await evaluate('document.activeElement===document.body'))await key('Tab');
-   assert(await evaluate('!document.querySelector("#rift-objective-row").contains(document.activeElement)&&document.activeElement!==document.body'),'native Tab skips hidden hints and reaches a visible control');
+   assert(await evaluate(nextTabStop),'native Tab leaves the hints toggle, skips hidden hints and reaches Wisps navigation');
    await evaluate('window.__qaGuidanceReloadToken=true');await send('Page.reload',{ignoreCache:true});
    let reloaded=false;
    for(let i=0;i<150&&!reloaded;i++){

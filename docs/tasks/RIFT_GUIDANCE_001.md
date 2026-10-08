@@ -36,6 +36,8 @@ Bring in subsequent main261b1b7 (PR77 Save Backup). Preserve its product,
 registered UI checks and two new negative gates; share sourceWebRoot in runner.
 Subsequent main e2f745c adds Formation autosave and Resonate clarity; merge
 without removing their product or checks. Latest main receipt governs release.
+Current baseline31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6 adds Auto-Ascend UI
+and exclusive upgrade owners. Preserve its gameplay, migrations and gates.
 PR46/B2, F13 Cast removal and F27 cosmetics/Trial status are integrated.
 Open PR70 Wisp roles, PR67 feedback bundle and PR66 tree caps stay separate.
 
@@ -45,7 +47,7 @@ Open PR70 Wisp roles, PR67 feedback bundle and PR66 tree caps stay separate.
 - Keep `lumenfall_rift_guidance_hidden_v1` and Settings sync. Hiding focused
   content returns focus to visible toggle; hidden hints leave focus/AX trees.
 - Preserve game data, purchased value, queue/bulk/payment, chronology, offline/
-  live, rewards/Motes and save schema. No migration needed. Preserve package
+  live, rewards/Motes and main's migrations. No F07 migration needed. Preserve package
   `com.lumenfall.app`, WebView60 and established signing.
 - Resolve runner conflict by retaining newer offline legacy-DOM/timeout and Lab
   viewport checks while adding F07. No existing gates removed/weakened.
@@ -73,10 +75,11 @@ integrated reruns, APK and native acceptance remain pending.
 commands, results and limits. No independent/physical/TalkBack pass claimed.
 
 Publication: [PR81](https://github.com/karahaNx/Lumenfall/pull/81), head
-dc0285fffba7bf2b04e9a852d9fc4359fdbb580f. CI37739007243 passed the corrected
-F07 matrix before newer-main synchronization cancelled the overall run.
-Required CI37741048919 is running. Current-main matrix/contract/V8/tooling PASS.
-Signed143 native baseline PASS on Android8.1/WebView69: cold-launch QA ownership,
+dc0285fffba7bf2b04e9a852d9fc4359fdbb580f passed full CI37741048919:
+160 defaults/14 negatives/smoke. New-main169 defaults and review fix require
+fresh current-head CI. Review P1: require Tab to reach nav-spirits, with an
+actual prevented-Tab negative; unchanged focus cannot pass.
+Signed143 native baseline PASS on Android8.1/WebView61: cold-launch QA ownership,
 Wisp levels and hidden preference verified. Upgrade/feature acceptance pending.
 [Delivery checkpoint](../qa/rift-guidance-001/2026-10-08/delivery/README.md).
 
