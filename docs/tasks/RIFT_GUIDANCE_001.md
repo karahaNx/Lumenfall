@@ -22,6 +22,7 @@ Tree/F24/Lab combinations checked. Finish instruction authorizes delivery.
 
 Fixed46px slot/44px toggle; full wrapped hint scrolls inside44px. Preference/Settings sync; hiding focused hints returns focus to toggle.
 Scope: index.html, guidance/status/runner/scenario tests and own evidence/status/APK.
+Required CI cosmetics cold-start fix preserves every assertion.
 Preserve WebView60, package/signing, gameplay/save/value/Mote rewards, chronology,
 bulk/queue; no F07 migration. No subagents/messages/other-chat changes.
 

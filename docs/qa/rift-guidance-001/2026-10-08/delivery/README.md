@@ -72,6 +72,15 @@ The full decoded log is copied as ../after-tree/ci-37752425389.log.gz.
 It predates F24. PR98's final commit must pass the added cosmetics gate and all
 current default/negative/smoke gates before normal merge; no gate is weakened.
 
+Required CI on headsafddf9a/68fb471/fa39042 repeatedly failed before assertions:
+Chrome154 cold startup exceeded the cosmetic driver's10-second Target.createTarget
+deadline. Raw runs37759463651/37759577649(both attempts)/37760158913 are retained
+here. Failure-only browser version/exit/stderr diagnostics identify the startup phase.
+The bounded initial deadline is now30s; all later10s protocol deadlines, assertions,
+168 cases, negative controls and CI steps remain unchanged. This necessary CI
+fix is in tests/behavioral/rift-cosmetics.cjs; it changes no game/APK bytes.
+Final head still requires full CI before merge.
+
 Automated review P1 PRRT_kwDOUF0Vls6qPbmK is resolved. The existing mobile driver
 requires exact nav-spirits focus; a captured/prevented real Tab must fail the same
 oracle. No independent reviewer is claimed.

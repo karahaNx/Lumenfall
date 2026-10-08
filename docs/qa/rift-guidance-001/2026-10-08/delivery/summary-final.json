@@ -71,5 +71,20 @@
   "sharedCheckout": {
     "head": "67c3e99c24587f6c13fc65cfd27f8dcb8e289602",
     "untouched": true
+  },
+  "requiredCIStartupFix": {
+    "runs": [
+      37759463651,
+      37759577649,
+      37760158913
+    ],
+    "phase": "Target.createTarget before any acceptance assertion",
+    "browser": "Google Chrome154.0.8037.57",
+    "oldInitialDeadlineMs": 10000,
+    "newInitialDeadlineMs": 30000,
+    "laterProtocolDeadlineMs": 10000,
+    "assertionsAndCISelection": "unchanged",
+    "rawLogs": "ci-*-browser-start.log.gz and ci-37760158913-startup-diagnostic.log.gz",
+    "finalRequiredCI": "pending"
   }
 }

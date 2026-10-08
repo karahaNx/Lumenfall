@@ -40,7 +40,9 @@ const server = http.createServer((req, res) => {
 function send(method, params = {}, sid = session) {
   return new Promise((resolve, reject) => {
     const id = ++seq;
-    const timer = setTimeout(() => { pending.delete(id); reject(Error('CDP timeout: ' + method)); }, 10000);
+    // Cold Chrome startup on CI can exceed 10s; later protocol actions keep
+    // their existing deadline and every acceptance assertion stays unchanged.
+    const timer = setTimeout(() => { pending.delete(id); reject(Error('CDP timeout: ' + method)); }, method === 'Target.createTarget' ? 30000 : 10000);
     pending.set(id, {resolve, reject, timer});
     browser.stdio[3].write(JSON.stringify({id, method, params, ...(sid ? {sessionId: sid} : {})}) + '\0');
   });
