@@ -1,51 +1,39 @@
 # ASCEND-PRISMS-001 — F05
 
-Status: PR94 open; integration/APK acceptance pending. Updated8October2026.
-Owner:01_ASCEND_PRISMS_001,chat01a11671-0a13-755b-9b2b-83cb96f6a044.
-Goal: understandable Ascend rewards and identical preview/payout rules.
-[Original requirements/follow-ups](ASCEND_PRISMS_001_REQUIREMENTS.txt),
-[approved decision](../decisions/2026-10-07-ascend-prisms-rounding.md),
-[versions/raw evidence/reproduction](../qa/ascend-prisms-001/README.md),
+Status: PR94 open; integrated APK acceptance pending. Updated 8 October 2026.
+Owner:01_ASCEND_PRISMS_001 / chat01a11671-0a13-755b-9b2b-83cb96f6a044.
+Goal: understandable Prism rewards and identical preview/payout rules.
+[Verbatim requirements/sources](ASCEND_PRISMS_001_REQUIREMENTS.txt),
+[approved design](../decisions/2026-10-07-ascend-prisms-rounding.md),
+[versions, raw evidence and checks](../qa/ascend-prisms-001/README.md),
 [workflow](../project/FEATURE_WORKFLOW.md),[PR94](https://github.com/karahaNx/Lumenfall/pull/94).
-Standing scope approval covers delivery. User requested finish/push and notice
-when complete so they can archive; keep this chat open meanwhile, no auto-archive.
+Standing approval covers delivery; user will archive after completion notice.
 
-Linked requirements preserve original sources/F05/dependencies/save/review.
-Archives are immutable; other feature scopes remain separate.
+Worktree:/workspace/Lumenfall-f05-implementation;
+branch:feature/ascend-prisms-001-live. Latest combined main9153710 (Lab UI).
+PR46/B2 is merged. Preserve all other features, save rules and CI gates.
+Original APK133 blob ea44431c163569548973d9e489f75345749a07ee and original
+F05/dependency/save/review sources are detailed in linked requirements/QA.
 
-Baseline APK133 index blob ea44431c163569548973d9e489f75345749a07ee matches
-feedback. PR46/B2 merged; current feature workflow replaces historical writer
-gates. Latest combined mainac0d28e (PR66). Isolated worktree:
-/workspace/Lumenfall-f05-implementation,branch feature/ascend-prisms-001-live.
-Preserve all integrated features, saves and every CI gate. F05 changes42/5 index lines, one behavioral
-module/registration/five causal controls and scoped docs/QA; no F05 save migration.
+Confirmed:cleared16/benchmark15/Lab0 paid2 at Swift0 but1 at Swift1.
+Approved:ceil the unrounded depth-curve difference with current Tree/completed
+Lab multipliers once. Keep first reward,20%repeat,minimum1,full cap; no per-buy
++1 or F05 save migration. Canonical breakdown serves preview/manual/auto.
+Player text shows cleared/base/bonuses/benchmark/rounding/exact reward now.
 
-Confirmed bug:cleared16/benchmark15/Lab0 paid2 at Swift0 but1 at Swift1.
-User approved unrounded depth-curve difference with current Tree/completed Lab
-multipliers, rounded up once. Keep first reward,20%repeat,minimum1,full cap.
-No automatic+1 per purchase. Canonical breakdown serves preview/manual/auto;
-player text shows cleared/base/bonuses/completed levels/full/benchmark/repeat/
-new-depth/rounding/exact-now. Ascend action precedes the calculation details.
+Required:four bonus configurations;first/repeat/new-depth/thresholds;actual
+manual/auto/live/offline;farm/boss/Lab order;reload/backup/recovery;phone/font/
+motion;full CI/integration;signed APK identity/all15assets/native/legacy.
+CI286 PASS177/203/22; CI303 PASS180/210/22 on preceding precise sources.
+Current9153710 motor673/11,822 and actual Swift contract4,723 PASS; new final
+CI required after preserving Lab registration. Native signed142 cold save
+preserves100Prisms/benchmark219/Tree17/Lab18; target update remains pending.
+Raw receipts distinguish versions, failed baseline runs and omitted opaque DOMs.
+Self-review only; physical WebView60/TalkBack not attested.
 
-Report boundary:APK133,encounter220 boss uncleared,earlier+50 around20–30,
-about90%Forge/70%Tree. Exact save/current clear/benchmark/levels unknown.
-Forge has no Prism operand. Swift4% and completed Clarity5% apply. Synthetic
-cleared20/benchmark219/Tree17/Lab18 gives first28/repeat5; it is not the user
-save. Rounding can hide a small increase. The exact old+50 report remains open.
+User:APK133,encounter220 boss uncleared,earlier+50 around20–30,about90%Forge/
+70%Tree. Exact save/clear/benchmark/levels unknown. Synthetic20/219/Tree17/Lab18
+first28/repeat5 is not a reproduction; exact historical+50 remains unconfirmed.
 
-Required:four bonus configurations;first/repeat/new-depth/thresholds;canonical
-preview/manual/live/offline;farm/boss/Lab order;all persistence routes;phone/
-font/motion;full CI/integration;signed APK identity/all assets/native/legacy.
-Self-review is not independent review. No physical WebView60/TalkBack attestation.
-
-CI286/head785bf32 on14d5f3a PASS:177scenarios/203instances/22negatives
-plus source/tooling/smoke. Motor673/11,822,layout695,V8 6.0(168/2,215)PASS.
-Main then added Tree purchase gates; resolve both test registrations and
-reassess actual Swift purchases/motor/layout on combinedac0d28e.
-Signed142 cold restart preserves100Prisms/benchmark219/Tree17/Lab18.
-QA retains historical/failed baseline receipts and limits; opaque redundant
-DOMs omitted after automatic review rejection, hashes/results retained.
-
-Next:PR94 final-head required CI;merge/integrated verification;signed APK/native
-142→target update and payout/layout/AX;save final receipts/task/state in GitHub.
-Stop this chat's shared-file work and notify user only after required acceptance.
+Next:final-head CI;merge/integrated checks;signed APK/native142→target;publish
+final evidence/task/state in GitHub, stop own shared-file work and notify user.

@@ -1,35 +1,86 @@
-# F29 implementation evidence — 8 October 2026
+# F29 delivery evidence — 8 October 2026
 
-Private checkout: `/workspace/Lumenfall-upgrade-identity-001`, branch
-`feature/upgrade-identity-001`. Original product baseline b0537cb; rebased onto
-261b1b7 (Backup UI). [PR90](https://github.com/karahaNx/Lumenfall/pull/90)
-is a candidate, not completed delivery. No independent review is claimed.
+The game feature is integrated through [PR90](https://github.com/karahaNx/Lumenfall/pull/90),
+merge31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6. Signed APK0.1.148 is published.
+Required native/device acceptance remains OPEN; owner chat stays open.
+[Task](../../../tasks/UPGRADE_IDENTITY_001.md) · [final24-row matrix](../../../tasks/UPGRADE_IDENTITY_001/MATRIX.md)
+· [immutable signed148 APK](../../../../archive/android/upgrade-identity-001/README.md).
 
-The final [matrix](../../../tasks/UPGRADE_IDENTITY_001/MATRIX.md) uses unchanged
-recipes/effects and preserves all24 raw level fields. Four numerical profiles
-in [value-parity.json](value-parity.json) match the original source exactly.
+## Bound results
 
-Candidate commands, run with Node20+ and Chrome155:
+| Check | Evidence/result |
+| --- | --- |
+| Required pre-merge CI | [metadata/integration](ci-integration.json), [full raw log](ci-37740566328.txt.gz): run37740566328/head78885d61 PASS167 defaults/17 negatives and every required gate. |
+| Exact purchased value | [four integrated numerical profiles](integrated-value-parity.json), independent old operands in production contract tests; all24 saved IDs remain. |
+| Combined integration | [19 scoped scenarios/23 runs](integrated-focused/results.json), raw compressed logs alongside it; [Auto-Ascend mobile](integrated-auto-ascend-mobile.txt.gz) PASS on source f99cb0bc. PR84 landed immediately before PR90; integration includes it. |
+| Android release | [build/release](build-release.json), [raw build log](build-37742868726.txt.gz), [identity](apk148-identity.txt), [CRC/assets](apk148-assets.json): package com.lumenfall.app/version148/established signer/release digest/526 entries/all15 assets PASS. |
+| Actual extracted APK engine | [legacy results](apk148-v8/results.json): V8 6.0.287.53 parses both scripts, PASS129 value/closed-handler/backup/paid-work checks; original26-Mote speed intent on three closed paid Studies pays78 once. Full8h offline entry PASS302400 kills/14400 Ascends. |
+| Actual extracted APK desktop behavior | [19 scoped scenarios/23 runs](apk148-focused/results.json), compressed raw logs alongside it; mobile320/390/430, normal/200% text and normal/reduced motion included. |
+| Required combined CI | Final delivery PR93 body records exact head/run/outcome. Delivery rebases onto ac0d28e, preserving F07/F25/F26/F14 and Tree PR66 caps/exact Prism debits. Historical31eccfb/APK148 and14d5f3a/APK151 receipts remain immutable. Current full gate176 scenarios/17 negatives. |
+| Current combined source | [main14 focused](main14-focused/results.json):19 scenarios/23 runs PASS on852f3297. |
+| Tree-cap integration ac0d28e | [19 scenarios/23 runs](main-ac0-focused/results.json) PASS; [Tree purchase contract](main-ac0-tree-contract.txt.gz), [mobile/text/focus](main-ac0-tree-ui.txt.gz), [reduced motion](main-ac0-tree-motion.txt.gz) PASS. Current source hash is in the focused receipt. |
+| Combined signed APK151 | [build/release](build151-release.json), [identity](apk151-identity.txt), [assets](apk151-assets.json): version151/signing/release digest/526 CRC/all15 assets PASS. [Actual extracted desktop](apk151-focused/results.json):19 scenarios/23 runs PASS; [Resonate](apk151-resonate.txt) PASS. [V8 6.0](apk151-v8/results.json):129 checks,13 tracks,8h302400 kills/14400 Ascends PASS. |
+
+Integrated/actual APK index SHA256:
+`f99cb0bcd46d2849977a39cf31bb0dd1a7bb8c0ca7a370f2490ad66ec67a6ec1`.
+APK SHA256:
+`cef6c291a4f91a3921bdc3b2d2e6f772906d39560f995fcaedf420ccd9972657`.
+Self-review/automated checks only; no independent review is claimed.
+
+The delivery baseline14d5f3a includes F26's shared12-hour productive window and
+Deep Reserves retirement/refund, plus F25 bulk-memory and F07 guidance changes.
+The current matrix records these dependencies. APK148 proves PR90's release;
+it is an immutable historical version rather than a claim about the moving
+android-latest asset. Later-source checks use the current tests and source hash.
+Combined APK151 SHA256 is `cc4c6d45720659ff81fe11c6eb858407b09f46a9abeea593714d3840c018c238`;
+its index SHA256 is `852f32974f52d757406ac8a54b668969a2e0667e7acdd85192d63dbdc31ad262`.
+All15 assets equal build source015e2e6 and delivery baseline14d5f3a. Both signed
+binaries are archived; use151 for current combined native acceptance.
+
+## Replay
+
+Run from the clone root using Node20+ and a Chromium browser. For the engine
+probe, explicitly supply the official Node8.6.0 runtime (V8 6.0.287.53).
+The orchestrator uses modern Node; only the existing compatibility harness and
+full supplied product execute in the legacy child. Product source is unmodified.
 
 ```sh
-node tests/behavioral/run.cjs --web-root /tmp/upgrade-identity-001/candidate-web
-node tests/behavioral/run.cjs --web-root /tmp/upgrade-identity-001/candidate-web --scenario upgrade-identity-farm-clock
-node scripts/ci/validate_source.cjs
-node tests/tooling/run.cjs
-node scripts/codex/check_context.cjs --task docs/tasks/UPGRADE_IDENTITY_001.md
+node docs/qa/upgrade-identity-001/2026-10-08/verify-apk-assets.cjs archive/android/upgrade-identity-001/Lumenfall-0.1.148.apk SOURCE_ROOT cef6c291a4f91a3921bdc3b2d2e6f772906d39560f995fcaedf420ccd9972657 /tmp/f29-assets.json /tmp/f29-apk/index.html
+node docs/qa/upgrade-identity-001/2026-10-08/run-focused.cjs /tmp/f29-apk /tmp/f29-focused
+node docs/qa/upgrade-identity-001/2026-10-08/run-legacy.cjs NODE8_RUNTIME /tmp/f29-apk/index.html /tmp/f29-v8
 node scripts/verify_apk_identity.cjs --self-test
+node scripts/codex/check_context.cjs --task docs/tasks/UPGRADE_IDENTITY_001.md
 ```
 
-Focused contract/chronology/persistence/320–430px mobile, 200% text and motion
-checks pass. The full suite and required GitHub CI remain in progress.
-[17 causal negatives](negative-controls.json) detect their intended failures,
-including the [zero/fractional Farm clock positive](farm-clock-final.txt).
-The earlier fractional-only clock negative unexpectedly passed; the added
-zero-phase case reproduces the original2s stall under the restored old guard.
-No gate was removed.
+Use historical source31eccfb for `SOURCE_ROOT` (detached checkout if main advances).
+For APK151 use source015e2e6/14d5f3a, its recorded digest and151 paths; append
+`13` to the legacy orchestrator command. Default14 remains the148 contract.
+[Count controls](legacy-track-controls.txt) verify148 and reject wrong14 on151.
+The verifier requires the external release digest and exact source match. The
+[old144 APK control](old-apk-negative.txt) is rejected for mismatched index.html.
+[Device checklist](DEVICE_ACCEPTANCE.txt) covers actual signed update/storage,
+interaction/background/offline/recovery, affected-phone/exact WebView60/TalkBack.
+Desktop Chromium and mocked engine probes do not establish those native results.
 
-[V8 6.0.287.53 result](v8-6.0.json) tests source parsing/full offline simulation
-with the official Node8.6.0 runtime. It is not Android WebView DOM/device evidence.
-Current signed APK0.1.144 was checked only as the package/signer baseline;
-it does not contain F29. Integrated checks/new signed APK/native acceptance are
-pending. Physical affected-phone/exact WebView60/TalkBack remain required.
+## Historical candidate evidence
+
+[First combined CI attempt](ci-37745345373-attempt1.txt.gz) failed only the existing
+Resonate driver: `Target.createBrowserContext` timed out before product loading.
+All other default scenarios passed. The same extracted APK Resonate check passed
+locally. The entire required job is rerun on unchanged product/test bytes; no gate
+or timeout was weakened. Its final head/run/outcome is recorded in the delivery PR.
+
+[261b candidate full suite](candidate-261b-suite.json) PASS160 defaults/186 runs;
+[raw log](candidate-261b-suite.txt.gz). [17 causal negatives](negative-controls.json),
+[raw negative logs](negative-controls.txt.gz). A fractional-only clock negative
+initially passed unexpectedly; the zero-phase case restores the original2s stall
+under the old guard. No gate was removed. [Positive clock](farm-clock-final.txt).
+
+Exploratory [first full failures](historical-full-suite.txt.gz) and
+[later failures](historical-final-suite.txt.gz) are superseded snapshots, not
+acceptance. Closed-row expectations, chronology budgets and mobile wrapping were
+corrected before final CI. [Combined e2 focused](combined-e2-focused/results.json),
+[exact offline reference](combined-e2-offline-core.txt.gz) and
+[earlier V8 offline](combined-e2-v8-offline.json) record reassessment through
+Formation Autosave/Backup/Resonate. Original proposal/baseline receipts retain
+their original dates and versions; they do not establish implementation acceptance.

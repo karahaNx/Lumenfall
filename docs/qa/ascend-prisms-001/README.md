@@ -193,3 +193,10 @@ reassess actual Swift purchase plus motor673/11,822/layout695:PASS.
 [Current source](delivery/tree-combined-source.json). Final combined CI and
 APK/native acceptance remain pending. Native accept-prepared mode cryptographically
 binds the already cold-tested baseline APK/storage before the signed update.
+
+CI303 completed PASS on a6f196e/ac0d28e:180 named scenarios,210 PASS
+instances,22 required negatives and every gate; [raw receipt](delivery/ci303.json).
+The merge was blocked by a concurrent Lab UI registration conflict. Preserve
+Lab UI, load F05 separately from the shared module list, and keep F05-only
+logging/mutations outside shared registration edits. Actual current9153710
+motor673/11,822 and Swift contract4,723 PASS; final combined CI is pending.
