@@ -1,6 +1,7 @@
 # LAB_UI_001 — compact Lab cards and Speed up panel
 
 Status: scoped candidate checks pass; required CI/integration/APK pending.
+Published PR: [83](https://github.com/karahaNx/Lumenfall/pull/83).
 Owner: this LAB_UI_001 feature chat. Exact chat ID/model variant/effort are not
 exposed; GPT-6.1 Sol / High was the user's recommendation, not a runtime receipt.
 Latest instruction, 8 October 2026: “Finish the feature task push to github
@@ -46,6 +47,9 @@ regressions and 12 browser profiles passing. Those are preparation evidence,
 not current-main acceptance. Its Python harness changes were not restored.
 The rebase resolved one CSS conflict by retaining current Comet CSS and adding
 only Lab CSS. All current game features, JS harness and assets remain present.
+Main subsequently integrated PR77 Save Backup UI at
+`261b1b7f863f73c324f4ac04acb5bfc95101644d`; merge it before integration,
+retain its Settings controls and new CI gates, and renew affected checks.
 
 ## Scope and decisions
 
@@ -84,6 +88,9 @@ only Lab CSS. All current game features, JS harness and assets remain present.
 Baseline source, tooling and native Lab checks PASS (Chromium151, Node24).
 Candidate: 19 regressions and 12 mobile/text/motion profiles PASS. Source,
 tooling, task context, ES2017 and unchanged-authority byte comparison PASS.
+11 additional layout/accessibility/navigation checks and actual V8 6.0 product
+parsing/presentation/offline probes PASS. Android27/WebView61 emulator booted;
+signed143 baseline/save prepared. This is preparation, not feature acceptance.
 Local full-suite attempt hit Chromium151 dump-dom timeout; required GitHub CI
 must pass independently. Results: [QA checkpoint](../qa/LAB_UI_001/README.md).
 

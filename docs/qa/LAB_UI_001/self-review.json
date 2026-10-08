@@ -1,0 +1,59 @@
+{
+  "status": "pass",
+  "review": "self-review; no independent reviewer claim",
+  "head": "30022f1ae4a98b9e941d59d777e1ca93808ffdfd",
+  "productSourceSha256": "efd89f017cf118c0febb90b4d6952b8993d3d43ce558f6312ddb682844c3c935",
+  "findings": [
+    "Three-way CSS conflict retained current Comet styling and added only Lab rules.",
+    "No changed non-presentation product statements, native bridge, assets or save schema.",
+    "Legacy layout/selected-speed checks adapted to open disclosure before measuring actual controls; existing assertions retained.",
+    "Additional 11 layout/accessibility/navigation scenarios pass with no runtime errors.",
+    "Required ordinary CI pending; no completion claim."
+  ],
+  "additional": [
+    {
+      "scenario": "layout-fresh",
+      "status": "pass"
+    },
+    {
+      "scenario": "layout-dense",
+      "status": "pass"
+    },
+    {
+      "scenario": "layout-boss",
+      "status": "pass"
+    },
+    {
+      "scenario": "layout-accessibility-states",
+      "status": "pass"
+    },
+    {
+      "scenario": "p1-05-accessibility-baseline",
+      "status": "pass"
+    },
+    {
+      "scenario": "p1-05-accessibility-contract",
+      "status": "pass"
+    },
+    {
+      "scenario": "p1-05-control-regressions",
+      "status": "pass"
+    },
+    {
+      "scenario": "p1-05-reduced-motion",
+      "status": "pass"
+    },
+    {
+      "scenario": "r3-destinations",
+      "status": "pass"
+    },
+    {
+      "scenario": "r3-save-reload",
+      "status": "pass"
+    },
+    {
+      "scenario": "lab-motes-ui",
+      "status": "pass"
+    }
+  ]
+}
