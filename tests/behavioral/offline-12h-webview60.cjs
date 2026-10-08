@@ -41,6 +41,12 @@ assert.strictEqual(qa.get().lastSeen,now);
 assert.deepStrictEqual(JSON.parse(storage.lumenfall_save_v2),qa.get());
 assert.deepStrictEqual(JSON.parse(storage.lumenfall_save_recovery_v1),qa.get());
 assert.strictEqual(qa.apply(),null);
+var interop=[];
+[80,200,1000].forEach(function(level){
+  var old=qa.fresh();old.schemaVersion=1;delete old.offline12hRefund;old.nodes.reserves=level;old.prisms=1e300;old.legacyCometPurchases={offline24:true,offline48:true};
+  interop.push(qa.accept(old));
+});
+if(process.argv[3]) fs.writeFileSync(process.argv[3],JSON.stringify(interop,null,2));
 console.log(JSON.stringify({status:'pass',scenario:'offline-12h-runtime',node:process.version,
   v8:process.versions.v8,BigIntAvailable:false,cap:12,comets:400,prisms:132,
   studyRemaining:3600,deviceVerified:false},null,2));

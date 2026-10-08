@@ -171,6 +171,14 @@ for(const level of [80,200,1000]) {
   assert.equal(a.b.get().offline12hRefund.prismsExact,String(exact));
   assert.equal(a.b.get().nodes.reserves,level);assert.deepEqual(a.b.accept(a.b.get()),a.b.get());
 }
+// Frozen receipts produced by the full game on Node8.3/V8 6.0 with BigInt absent.
+// Preserve recorded original prices instead of re-evaluating newer Math.pow.
+for(const seed of JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures-offline-refund-interop.json'),'utf8'))) {
+  const a=app(seed);assert.deepEqual(a.b.get().offline12hRefund,seed.offline12hRefund);
+  assert.equal(a.b.get().prisms,seed.prisms);a.b.save();a.b.set(a.b.load());
+  assert.deepEqual(a.b.get().offline12hRefund,seed.offline12hRefund);
+  assert.deepEqual(a.b.decode(a.b.backup(a.b.get())),a.b.get());
+}
 // Partial credit retains each unpaid original price rather than rounding a sum.
 const partial=app({...legacy(),prisms:2**53});
 assert.deepEqual(partial.b.get().offline12hRefund.prismsPaid,[true,true,true]);

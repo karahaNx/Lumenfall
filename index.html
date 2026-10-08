@@ -3398,8 +3398,8 @@ function offline12hPrices(level){
   }
   return prices;
 }
-function offline12hPrismRefund(level){
-  return offline12hPrices(level).reduce(function(total,price){
+function offline12hPrismRefund(level,prices){
+  return (prices || offline12hPrices(level)).reduce(function(total,price){
     return offlineRefundDecimalAdd(total,offlineRefundExactInteger(price));
   },'0');
 }
@@ -3409,7 +3409,9 @@ function normalizeOffline12hRefund(receipt){
       typeof receipt.offline24!=='boolean' || typeof receipt.offline48!=='boolean' ||
       !Number.isSafeInteger(receipt.reservesLevel) || receipt.reservesLevel<0 ||
       receipt.comets!==(receipt.offline24?140:0)+(receipt.offline48?160:0) ||
-      receipt.prismsExact!==offline12hPrismRefund(receipt.reservesLevel) ||
+      !Array.isArray(receipt.prismPrices) || receipt.prismPrices.length!==receipt.reservesLevel ||
+      receipt.prismPrices.some(function(price){return !Number.isFinite(price) || !Number.isInteger(price) || price<6;}) ||
+      receipt.prismsExact!==offline12hPrismRefund(receipt.reservesLevel,receipt.prismPrices) ||
       !Array.isArray(receipt.cometsPaid) || receipt.cometsPaid.length!==2 ||
       !Array.isArray(receipt.prismsPaid) || receipt.prismsPaid.length!==receipt.reservesLevel ||
       receipt.cometsPaid.concat(receipt.prismsPaid).some(function(v){return typeof v!=='boolean';})){
@@ -3431,7 +3433,9 @@ function settleOffline12hRefund(out){
   }
   credit('comets',receipt.offline24?140:0,receipt.cometsPaid,0);
   credit('comets',receipt.offline48?160:0,receipt.cometsPaid,1);
-  offline12hPrices(receipt.reservesLevel).forEach(function(price,i){credit('prisms',price,receipt.prismsPaid,i);});
+  // Keep the originally recorded Number prices across engines: Math.pow can
+  // differ by an ulp between WebView60-generation and newer V8 versions.
+  receipt.prismPrices.forEach(function(price,i){credit('prisms',price,receipt.prismsPaid,i);});
 }
 function offline12hRefundPending(receipt){
   return receipt && receipt.cometsPaid.concat(receipt.prismsPaid).some(function(paid){return !paid;});
@@ -3445,7 +3449,7 @@ function migrateSaveV1ToV2(input){
   var a=owned.offline24===true || legacy.offline24===true;
   var b=owned.offline48===true || legacy.offline48===true;
   migrated.offline12hRefund={policy:OFFLINE_12H_REFUND_POLICY,offline24:a,offline48:b,
-    reservesLevel:level,comets:(a?140:0)+(b?160:0),prismsExact:offline12hPrismRefund(level),
+    reservesLevel:level,comets:(a?140:0)+(b?160:0),prismPrices:offline12hPrices(level),prismsExact:offline12hPrismRefund(level),
     cometsPaid:[false,false],prismsPaid:offline12hPrices(level).map(function(){return false;})};
   // Keep archived ownership, raw levels, paid Lab snapshots and lastSeen.
   // Crediting and its receipt commit together through the existing save path.
