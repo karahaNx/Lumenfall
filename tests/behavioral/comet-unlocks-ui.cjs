@@ -62,6 +62,7 @@ async function run(){
     assert(cosmetic.controls.every(control=>control.w>=44&&control.h>=44&&control.pressed==='true'),'cosmetic controls >=44px and pressed');
     assert(motion!=='reduce'||cosmetic.animation==='none','reduced-motion trail static');assert(!cosmetic.errors.length,'no runtime errors');
     await evaluate('window.__lumenfallQaBridge.comet.tab("battle")');
+    await new Promise(resolve=>setTimeout(resolve,550));
     const geometry=await evaluate(`(()=>{const hp=document.querySelector('.hp-wrap').getBoundingClientRect(),trail=document.querySelector('.comet-trail').getBoundingClientRect(),crest=document.querySelector('.comet-crest'),r=crest.getBoundingClientRect(),stage=document.querySelector('#enemy-stage');return {hpClear:trail.bottom<=hp.top&&r.bottom<=hp.top,trailPointer:getComputedStyle(document.querySelector('.comet-trail')).pointerEvents,crest:crest.textContent,crestVisible:r.width===32&&r.height===32&&getComputedStyle(crest).display==='block',tapHit:stage.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)),button:stage.tagName};})()`);
     assert(geometry.hpClear&&geometry.trailPointer==='none'&&geometry.crest.includes('✦')&&geometry.crestVisible&&geometry.tapHit&&geometry.button==='BUTTON','cosmetics visible and preserve HP/tap geometry '+JSON.stringify(geometry));
     await screenshot(`comet-rift-${width}-${textScale}-${motion}`);
