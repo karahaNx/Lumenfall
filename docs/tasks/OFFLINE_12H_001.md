@@ -21,7 +21,8 @@ prisregel; bevar rå ownership og levels som historik.” Original prices are
 The earlier local proposal blocked large balances; it was never published.
 Current implementation preserves unrepresentable original-currency deposits in
 an exact decimal ledger with a paid bit per original price. Canonical saves retry
-unpaid deposits after spending. This implements exact value preservation without
+unpaid deposits after spending. The receipt stores the original calculated prices,
+so different Math.pow rounding in old/new V8 cannot reprice a saved refund. This implements exact value preservation without
 inventing compensation prices or blocking legitimate large saves. Product uses
 no BigInt. Migration, currency credit and receipt use existing atomic primary-save
 commit and recovery behavior. Restore replaces the entire save rather than adding
@@ -35,6 +36,8 @@ Isolated checkout `/workspace/offline-12h-preparation`, branch
 Earlier private proposal `a70cfb133efb953aaa9201e836ac0e6811c044ab` is historical.
 PR46/B2 accepted through PR57 merge `20aaae62a4b6e46f8d75775085918eaba4e8de29`.
 Current offline catchup and foreground processing replay are integrated.
+PR77 Backup UI was incorporated from main `261b1b7f863f73c324f4ac04acb5bfc95101644d`,
+retaining its placement and confirmed restore.
 F27 Comet unlocks are integrated; preserve its archived legacy ownership and
 Rest Stop eligibility. Current workflow supersedes historical writer-handover
 gates; serialize actual main integration and refresh main before merging.
@@ -65,8 +68,15 @@ incorporate their independent goals or replace their checkout files.
 Focused full-product F26 regression passes locally on Node24.19.0: 32 original
 refund combinations, cap/paid snapshots/queues, production device save with
 Auto-Ascend ON/OFF, storage rollback/recovery, duplicate return, large balances,
-partial credit and three causal mutants. Comet unlock and B2 offline integration
-checks pass. Remaining checks and receipts will be added at delivery checkpoint.
+partial credit, deposits that dominate existing balances and three causal mutants. Comet unlock and B2 offline integration
+checks pass. Both directions of V8 6.0/modern receipt transfer preserve exact prices at levels
+80/200/1000. All 14 mandatory negative controls pass locally. Native Android8.1 /
+WebView61 signed144 baseline preparation passes, with installed APK SHA-256
+`6e2006cb90ebe27104bd1ae38ba8c8afa700f4ede90e6fe8046bf7b2f505ca5d`.
+Price-ledger checkpoint `1a2a040fc498bef9d1b07ba13b42740933ff5308`, [PR85](https://github.com/karahaNx/Lumenfall/pull/85);
+required CI is rerun after the final deposit regression. Old full-suite runs retain failures from
+obsolete tail expectations; focused corrections pass, final full run is pending.
+Remaining checks and receipts will be added at delivery checkpoint.
 
 Next: complete current regression/UI/compatibility checks, self-review diff, push
 feature PR, pass required CI, serialize integration, verify signed build and native

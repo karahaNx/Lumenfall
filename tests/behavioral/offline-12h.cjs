@@ -179,6 +179,12 @@ for(const seed of JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures-offli
   assert.deepEqual(a.b.get().offline12hRefund,seed.offline12hRefund);
   assert.deepEqual(a.b.decode(a.b.backup(a.b.get())),a.b.get());
 }
+// A dominating refund must not erase a small existing balance by subtraction rounding.
+const dominant=app({...legacy(200),prisms:1e300}).b.get();
+dominant.offline12hRefund.prismsPaid.fill(true);dominant.offline12hRefund.prismsPaid[199]=false;dominant.prisms=6;
+const deposit=app(dominant);assert.equal(deposit.b.get().prisms,6);assert.equal(deposit.b.get().offline12hRefund.prismsPaid[199],false);
+deposit.b.get().prisms=0;deposit.b.save();assert.equal(deposit.b.get().prisms,dominant.offline12hRefund.prismPrices[199]);
+deposit.b.save();assert.equal(deposit.b.get().prisms,dominant.offline12hRefund.prismPrices[199],'dominant refund paid once');
 // Partial credit retains each unpaid original price rather than rounding a sum.
 const partial=app({...legacy(),prisms:2**53});
 assert.deepEqual(partial.b.get().offline12hRefund.prismsPaid,[true,true,true]);

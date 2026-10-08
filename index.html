@@ -3427,7 +3427,7 @@ function settleOffline12hRefund(out){
     var result=out[currency]+amount;
     // Preserve an unrepresentable deposit in its original currency. Try again
     // on the next canonical save after spending; never round away or overpay it.
-    if(Number.isFinite(result) && result-out[currency]===amount){
+    if(Number.isFinite(result) && result-out[currency]===amount && result-amount===out[currency]){
       out[currency]=result;paid[index]=true;
     }
   }
