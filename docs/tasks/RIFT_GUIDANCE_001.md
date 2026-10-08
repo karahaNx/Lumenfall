@@ -8,10 +8,10 @@ feature/rift-guidance-001 and docs/rift-guidance-001-delivery. Shared checkout u
 
 Guidance below currencies with Show hints/Hide hints. Currency/combat/Boss HP/Tap
 bounds stay fixed through toggle, long hints and large text. Hidden hints exclude focus/AX.
-Original: “når man fjerner rift guideline så rykker hele billedet sig, det skal være fast.”
+Original: “rift guideline … det skal være fast.”
 [Original](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt),
 [F07/dependencies/save](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt).
-Originals prevail; receipt links Lead/findings/index.
+Originals prevail; receipt links decisions/evidence.
 
 Freeze7c5ecf6/main0bcce84; refreshb0537cb verified PR46/B2 and F13/F27.
 [PR81](https://github.com/karahaNx/Lumenfall/pull/81) head db6ba6241ccf3d7ec74bd2a1b677c19f387514d6
@@ -20,11 +20,10 @@ Tree/F24/Lab combinations checked. Finish instruction authorizes delivery.
 
 ## Scope and decisions
 
-Fixed46px slot/44px toggle; full wrapped hint scrolls inside44px. Existing preference/
-Settings sync; hiding focused hints returns focus to toggle. index.html and guidance/
-status/runner/scenario tests; this task's evidence/status/APK. Other goals remain separate.
+Fixed46px slot/44px toggle; full wrapped hint scrolls inside44px. Preference/Settings sync; hiding focused hints returns focus to toggle.
+Scope: index.html, guidance/status/runner/scenario tests and own evidence/status/APK.
 Preserve WebView60, package/signing, gameplay/save/value/Mote rewards, chronology,
-bulk/queue; no F07 migration. No subagents/messages or other-chat changes.
+bulk/queue; no F07 migration. No subagents/messages/other-chat changes.
 
 ## Acceptance and next action
 
@@ -37,7 +36,7 @@ Signed151/015e2e6 identity/526 CRCs/15 assets and actual143→151 storage/owners
 Android8.1/WebView61 touch/layout/Tab/reload/OS200% font PASS; no runtime errors.
 No physical/TalkBack/FPS/human-review or newer-APK claim.
 
-CI37752425389 passed176 defaults/17 negatives/smoke on Tree source. Final PR98
+CI37752425389 passed176/17/smoke on Tree source. Final PR98
 requires current cosmetics/default/negative/smoke gates before merge; no weakened gates.
 Emulator stopped/font restored/data retained. After merge archive only this owner;
 confirm app response or report manual archival. Missing required acceptance keeps this open.

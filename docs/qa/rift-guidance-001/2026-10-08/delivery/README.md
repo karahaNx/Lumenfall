@@ -18,9 +18,10 @@ No F07 balance, purchase, reward/Mote, schema, migration, chronology or signing 
 | Own integration015e2e6 / APK151 | 852f32974f52d757406ac8a54b668969a2e0667e7acdd85192d63dbdc31ad262 | Integrated UI/contracts/V8; signed APK/native update PASS |
 | Later Tree mainac0d28e | 45ae4c62bd37aed28bfd2b77147bffcbda1a9b6a699c4a3107e0fd1a4feccd02 | Fresh UI/contracts/V8 and full CI176/17/smoke PASS |
 | Later Deed cosmetics main06b28d5 | c1e23bb552666ecc0067a755c0ad30e13aee1827bf6371919d96003a88919a4b | Fresh UI/contracts/V8 plus168-sample cosmetics/negative check PASS; final PR CI required |
+| Later Lab main3f1b6fa | 66b29c9d85de4a47191acbf655e8bb88b18a2517feb18e8f405f2b9041d95709 | Fresh UI/contracts/V8/cosmetics PASS; final PR CI required |
 
 [integrated/](../integrated/README.md), [after-tree/](../after-tree/README.md) and
-[after-cosmetics/](../after-cosmetics/README.md) preserve separate exact-source
+[after-cosmetics/](../after-cosmetics/README.md) and [after-lab/](../after-lab/README.md) preserve separate exact-source
 results. Every matrix passes16 profiles/160 Fresh/dense/Boss/conditional Boss/Farm
 measurements at320/360/390/430px,100/200% text and both motion settings. Protected
 geometry movement0px; minimum Guardian Tap121px; contrast>=8.2966:1.
@@ -32,6 +33,8 @@ Existing Rift1,618/navigation255 and actual V8 6.0/23 guidance checks pass.
 F13 Cast text and F27 Comet cosmetics survive. Later F24 changes add absolute
 decorative layers and persistent selection; they preserve the seven F07 code/
 markup/style regions byte-for-byte. Fresh full-source checks cover that combination.
+Later Lab changes affect Study presentation/controls; the seven F07 regions still
+match151. Its full-source UI/contracts/cosmetics/V8 pass separately in after-lab/.
 Other features and their APK/device delivery remain with their owners.
 
 ## Signed APK and actual Android update

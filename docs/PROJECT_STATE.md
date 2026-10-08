@@ -20,7 +20,7 @@ Owner chat stays open until final acceptance/evidence are saved.
 [RIFT_GUIDANCE_001 / F07](tasks/RIFT_GUIDANCE_001.md): PR81/015e2e6 integrates
 stable guidance below currencies. UI160/0px, focus/AX/state purity, Rift/navigation
 and V8 6.0 PASS. Signed0.1.151 identity/assets and actual143→151 Android update,
-four-width touch/large-text/keyboard/reload acceptance PASS. Later Tree/cosmetics
+four-width touch/large-text/keyboard/reload acceptance PASS. Later Tree/cosmetics/Lab
 source checks pass. [PR98](https://github.com/karahaNx/Lumenfall/pull/98) saves the
 [completion receipt](qa/rift-guidance-001/2026-10-08/delivery/README.md); completion
 on main requires its final mandatory CI/merge. No physical/TalkBack/FPS claim;
