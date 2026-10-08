@@ -1,6 +1,8 @@
 # Current-main continuation — RIFT_CAST_TEXT_001
 
-Baseline `214d45411ce2fb420f0e4b372063811a967679b1`, 8 October 2026.
+Initial continuation baseline `214d45411ce2fb420f0e4b372063811a967679b1`,
+8 October 2026. Main subsequently advanced to `0e9b54c8d62a873bd48625f4a20ee18078e8a8f1`;
+the task records the rebased identity and required fresh CI.
 Product SHA256 `3f201d135b89ceb6f0c518d0094284130f958ee98e6bf20d6821b72a284205be`.
 Integration/APK acceptance is pending; see [the task](../../../tasks/RIFT_CAST_TEXT_001.md).
 Evidence in the parent directory is historical preparation on a different baseline.
@@ -30,3 +32,26 @@ identity must be recorded after release; no independent review is claimed.
 
 Replay the focused driver and existing checks using the parent README commands,
 but use this baseline/source identity. Required normal CI remains unchanged.
+
+Normal [CI37708820963](https://github.com/karahaNx/Lumenfall/actions/runs/37708820963)
+passes 146 scenarios, all 12 required negatives and guarded startup on the initial
+continuation head d75ac294. [Full raw log](ci-37708820963.log.gz) and
+[acceptance lines](ci-37708820963-acceptance.txt) survive Actions retention.
+This is historical after the clean PR59/60 rebase; new-head CI remains required.
+
+[V8 renderer probe](v8-f13.cjs), [32-state result](v8-f13.json) and the actual
+[signed138 baseline](baseline-native.json) are separately identified. The native
+driver uses direct ADB protocol to the isolated unauthenticated emulator because
+the SDK client requires writing to the read-only user home. [Transport](direct-adb.cjs)
+and [native driver](native-f13.cjs) are verification tooling, not product changes.
+Private runtime handles and a paused test clock supply fixtures; APK assets stay
+unchanged. Reproduce with Node22+ and the isolated emulator's local port5555:
+
+```bash
+node docs/qa/rift-cast-text-001/finish/native-f13.cjs prepare BASELINE_APK index.html EVIDENCE_DIR
+node docs/qa/rift-cast-text-001/finish/native-f13.cjs accept FINAL_APK EXTRACTED_INDEX EVIDENCE_DIR
+```
+
+The first command replaces only the isolated emulator's QA save. The second
+compares actual WebView storage across `pm install -r` before first launch and
+then checks the real signed app; it must not be run against a user's device/save.

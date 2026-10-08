@@ -31,10 +31,12 @@ show other screens; none directly establishes F13 behavior or an APK/save identi
 
 - Checkout: `/workspace/lumenfall-rift-cast-text-001`, branch
   `feature/rift-cast-text-001`. The original `/workspace/Lumenfall` remains untouched.
-- Current live-main baseline: `214d45411ce2fb420f0e4b372063811a967679b1`.
-  Rebased candidate: `689390aa205fcdf6da3467117fe046ae5c378e68` before the
-  continuation documentation checkpoint. Product source SHA256:
-  `3f201d135b89ceb6f0c518d0094284130f958ee98e6bf20d6821b72a284205be`.
+- Current live-main baseline: `0e9b54c8d62a873bd48625f4a20ee18078e8a8f1`.
+  Main advanced from `214d45411ce2fb420f0e4b372063811a967679b1` during CI,
+  integrating PR59 Wisp upgrades and PR60 Forge text. F13 rebased cleanly and
+  preserves both features. Rebased candidate before this checkpoint:
+  `64f42fa57fcb36a544f7c00fe7089eda242cbcd5`. Product source SHA256:
+  `567d3821ff42d492a43f75e59f098f26cf354b3007a08e7b29d8ea5128b197d1`.
 - Startup rules, project state, ownership, Visuals guidance and workflow were
   read from current main. No subagents, message tools or chat renaming are used.
 - PR46/B2 is now integrated through PR57, commit
@@ -89,10 +91,24 @@ Required feature acceptance:
 6. Supported final status/evidence is saved in this task and PROJECT_STATE before
    archiving only this owner chat.
 
-On the current baseline, the focused browser matrix passes 12 profiles / 384
+On baseline 214d454, the focused browser matrix passes 12 profiles / 384
 state observations. The default local dump-DOM contract run timed out without
 any completed QA result; it is a diagnostic, not a pass. Existing assertions are
 also replayed through the documented local CDP transport; normal CI remains required.
+
+[PR63](https://github.com/karahaNx/Lumenfall/pull/63) is published. Normal
+[CI37708820963](https://github.com/karahaNx/Lumenfall/actions/runs/37708820963)
+passes all 146 default scenarios, 12 required negatives and guarded startup on
+head `d75ac294c829ebd7d030f8565d2f94a2a99615fa` / baseline214d454.
+The full raw log is preserved in [current evidence](../qa/rift-cast-text-001/finish/README.md).
+After main's advancement, those results are historical; updated branch CI is
+required before integration. Focused/current-baseline checks are rerun.
+
+The product renderer executes correctly in 32 state fixtures on V8 6.0.286.52
+(Node8.3.0), Chrome60's engine generation. Actual signed APK138 is installed on
+isolated Android8.1/API27/WebView61.0.3163.98. Its repeated Ready baseline and
+real persisted save are verified for the subsequent signed in-place update.
+This is emulator evidence, not physical WebView60 or TalkBack acceptance.
 
 At 200% compact Wisp text, five-member names overflow on both baseline and
 candidate. This unchanged layout limitation is recorded for separate Visuals
