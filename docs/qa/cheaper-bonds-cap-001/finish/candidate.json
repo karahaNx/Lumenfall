@@ -1,19 +1,19 @@
 {
   "status": "PASS",
   "sourcePath": "/workspace/CHEAPER_BONDS_CAP_001/index.html",
-  "sourceSha256": "175f70131bd38a0b3633471851b5c0f7e5b2aead0e685c75a5f06b03a4d5419f",
+  "sourceSha256": "7eba40d8f1ff012235b0b7e4cbb447bc10690abd06be33cbc2c0c4404db8674d",
   "browserIdentity": {
     "selected": "/usr/bin/chromium",
     "resolved": "/usr/bin/chromium",
     "version": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)"
   },
   "mutation": "none",
-  "observedAt": "2026-10-08T09:50:49.972Z",
+  "observedAt": "2026-10-08T10:13:27.549Z",
   "records": [
     {
       "kind": "refund-contracts",
       "result": {
-        "checks": 164,
+        "checks": 178,
         "records": [
           {
             "raw": 19,
@@ -69,7 +69,7 @@
             "raw": 2000,
             "boundaries": 100,
             "priceCalculations": 0,
-            "elapsedMs": 192.20000000298023
+            "elapsedMs": 209.5
           },
           {
             "kind": "actual-auto-ascend-boundaries",
@@ -80,7 +80,7 @@
               "recordsRetained": true,
               "canonicalParity": true
             },
-            "elapsedMs": 345.19999998807907
+            "elapsedMs": 363.29999999701977
           }
         ],
         "receipt": "feedbackMigration.receipts[node.bonds]",
@@ -363,6 +363,30 @@
       "recoveredVersion": 1,
       "raw": 20,
       "wallet": 1000000
+    },
+    {
+      "kind": "credit-balance-recovery",
+      "damage": "deleted",
+      "raw": 95,
+      "exactCreditAndReceiptRetained": true
+    },
+    {
+      "kind": "credit-balance-recovery",
+      "damage": "duplicated",
+      "raw": 95,
+      "exactCreditAndReceiptRetained": true
+    },
+    {
+      "kind": "credit-balance-recovery",
+      "damage": "changed",
+      "raw": 95,
+      "exactCreditAndReceiptRetained": true
+    },
+    {
+      "kind": "credit-balance-recovery",
+      "damage": "missing-audit",
+      "raw": 95,
+      "exactCreditAndReceiptRetained": true
     },
     {
       "kind": "migration-write-failure",

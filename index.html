@@ -3272,7 +3272,7 @@ function freshState(){
   LONG_STUDIES.forEach(function(l){ longStudyLevels[l.id] = 0; studyQueue[l.id] = false; studyUseMotes[l.id] = false; studySpeedTargets[l.id] = 1.5; });
   return {
     schemaVersion:SAVE_SCHEMA_VERSION, offline12hRefund:null,
-    feedbackMigration:{version:1,applied:true,receipts:{},history:{bonds:{levels:0}}}, refundCredits:{prisms:[]},
+    feedbackMigration:{version:1,applied:true,bondsCreditAuditVersion:1,receipts:{},history:{bonds:{levels:0}}}, refundCredits:{prisms:[]},
     lumen:0, shards:0, prisms:0, comets:0, motes:0, sigils:0,
     depth:1, maxDepthEver:1,
     riftMode:'push', farmDepth:0, farmReturnDepth:0,
@@ -3877,6 +3877,8 @@ function normalizeCheaperRecruitmentRefund(out,source){
   out.feedbackMigration=clonePersistedValue(saved);
   out.feedbackMigration.version=saved.version===undefined ? 1 : saved.version;
   if(out.feedbackMigration.version!==1) throw persistenceError('invalid-bonds-refund','Recruitment refund version needs recovery');
+  if(saved.bondsCreditAuditVersion!==undefined && saved.bondsCreditAuditVersion!==1) throw persistenceError('invalid-bonds-refund','Recruitment credit audit version needs recovery');
+  out.feedbackMigration.bondsCreditAuditVersion=1;
   out.feedbackMigration.applied=true;
   var receipts=isPlainObject(saved.receipts) ? saved.receipts : {};
   out.feedbackMigration.history=isPlainObject(saved.history) ? out.feedbackMigration.history : {};
@@ -3899,6 +3901,15 @@ function normalizeCheaperRecruitmentRefund(out,source){
       throw persistenceError('invalid-bonds-refund','Recruitment refund credits need recovery');
     }
   });
+  if(hasReceipt){
+    validateCheaperRecruitmentCreditAudit(receipt,credits,saved.bondsCreditAuditVersion===1);
+    // Earlier additive candidate records did not track credit debits. Preserve
+    // their known remaining value once; never infer missing historical value.
+    if(receipt.creditAuditVersion===undefined){
+      out.feedbackMigration.receipts[id].creditAuditVersion=1;
+      out.feedbackMigration.receipts[id].remainingCredits=cheaperRecruitmentOwnedCredits(credits);
+    }
+  }
   if(hasReceipt || raw<=20) return;
   var amounts=cheaperRecruitmentRefundPrices.slice(0,schedule.count).map(function(entry){return entry.price;});
   amounts.forEach(function(amount){
@@ -3908,7 +3919,18 @@ function normalizeCheaperRecruitmentRefund(out,source){
     if(sum!==null && sum<=Number.MAX_SAFE_INTEGER) out.prisms=sum;
     else credits.push({id:id,amount:amount});
   });
-  out.feedbackMigration.receipts[id]={from:20,to:raw,unpricedFrom:unpricedFrom,amounts:{prisms:amounts}};
+  out.feedbackMigration.receipts[id]={from:20,to:raw,unpricedFrom:unpricedFrom,amounts:{prisms:amounts},creditAuditVersion:1,remainingCredits:cheaperRecruitmentOwnedCredits(credits)};
+}
+function cheaperRecruitmentOwnedCredits(credits){
+  return credits.filter(function(entry){return entry.id==='node.bonds';}).map(function(entry){return entry.amount;});
+}
+function validateCheaperRecruitmentCreditAudit(receipt,credits,required){
+  if(!required && receipt.creditAuditVersion===undefined && receipt.remainingCredits===undefined) return;
+  var owned=cheaperRecruitmentOwnedCredits(credits),remaining=receipt.remainingCredits;
+  if(receipt.creditAuditVersion!==1 || !Array.isArray(remaining) || remaining.length!==owned.length ||
+      remaining.some(function(amount,index){return amount!==owned[index];})){
+    throw persistenceError('invalid-bonds-refund','Recruitment refund credit balance needs recovery');
+  }
 }
 // Cache only the bounded original price schedule, never player receipts. Later
 // Ascends still validate every saved amount, without repeating exponentiation
@@ -3955,7 +3977,8 @@ function prismPurchasePlan(cost){
   if(state.prisms<remaining) return null;
   var wallet=exactPrismArithmetic(state.prisms,-remaining);
   if(wallet===null) return null;
-  return {prisms:wallet,credits:credits.filter(function(entry){return !entry || entry.amount!==0;})};
+  credits=credits.filter(function(entry){return !entry || entry.amount!==0;});
+  return {prisms:wallet,credits:credits,remainingOwnCredits:cheaperRecruitmentOwnedCredits(credits)};
 }
 function prismRefundCreditTotal(){
   return ((state.refundCredits && state.refundCredits.prisms)||[]).reduce(function(total,entry){
@@ -5284,6 +5307,8 @@ function buyNode(node){
   if(!plan.affordable) return false;
   state.prisms = plan.payment.prisms;
   state.refundCredits.prisms = plan.payment.credits;
+  var receipt=state.feedbackMigration.receipts['node.bonds'];
+  if(receipt) receipt.remainingCredits=plan.payment.remainingOwnCredits;
   state.nodes[node.id] = plan.level + 1;
   saveState();
   renderNodes();

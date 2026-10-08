@@ -134,3 +134,19 @@ Their product changes merge without conflicts; all553 F21 assertions pass on
 source; required CI is rerun for this final main combination. No assertion or
 upstream gate is removed. The growing shared startup requires a shorter F21
 task index; the complete decisions, requirements and raw evidence stay linked.
+
+PR89 P2 (reviewb060ed42):own refund credits now reconcile exactly with the
+receipt.remainingCredits sequence, protected by own/root audit-version markers.
+Creation and each actual credit debit update both records in the same canonical
+save; deletion, duplication, altered positive amounts, reordering, missing audit
+and unsupported versions reject for recovery. Four actual damaged-primary cases
+recover the exact intact wallet/credit/receipt. A credit-reconcile control catches
+removal of this validation.13 controls,567 assertions/30 groups and V8 6.0 pass.
+Old additive candidate records with no audit marker adopt their known remaining
+credits once, preserving wallet/original prices/value without issuing refunds.
+Untracked historical losses cannot be inferred; this limitation is explicit.
+New audit markers prevent missing receipt audit fields being mistaken for that
+legacy format. Foreign records remain intact; save schema2/global F21 version1
+remain compatible. The private14,400-Ascend path retains these validated records
+without extra per-boundary scans. QA spent-credit fixtures now include a coherent
+zero remaining-credit record; new damage tests separately verify removal rejects.

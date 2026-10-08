@@ -1,7 +1,7 @@
 # F21 implementation and verification
 
 Current source SHA256:
-`175f70131bd38a0b3633471851b5c0f7e5b2aead0e685c75a5f06b03a4d5419f`.
+`7eba40d8f1ff012235b0b7e4cbb447bc10690abd06be33cbc2c0c4404db8674d`.
 Baseline main:3f1b6faf9f253e6dfe8a3bf408e7f7a9891ca52d.
 [Task](../../../tasks/CHEAPER_BONDS_CAP_001.md) · [Design/review](DESIGN.md).
 Self-review and automated PR review are distinguished; no independent Core/QA claim.
@@ -9,10 +9,10 @@ Self-review and automated PR review are distinguished; no independent Core/QA cl
 | Check | Current evidence |
 | --- | --- |
 | Cap/price/effect/chronology | [candidate.json](candidate.json):389 assertions PASS |
-| Exact old value and idempotence | Same report:164 assertions with independent BigInt conservation PASS |
+| Exact old value and idempotence | Same report:178 assertions with independent BigInt conservation PASS |
 | Mobile |12 profiles:320/390/430px ×100%/200% ×normal/reduced motion;44px controls, real touch/Tab/Enter/focus, wrapping, contrast>=9.09:1 PASS |
 | Save/recovery/restore | Old21/40/2000 first launch/reload/recovery, two actual confirmed Settings restores, wrong-positive-receipt recovery, paid Labs/Ascend, primary rollback and recovery-write failure PASS |
-| Causal controls | [negative-feature.json](negative-feature.json):12 mutations caught at intended assertions, exit1/valid FAIL/clean browser teardown |
+| Causal controls | [negative-feature.json](negative-feature.json):13 mutations caught at intended assertions, exit1/valid FAIL/clean browser teardown |
 | Actual auto-Ascends |14,400 raw2000 boundaries preserve record references, skip repeated cloning/scanning and match full gameplay normalization:323ms locally; [candidate.json](candidate.json) |
 | Completed refund boundaries |100 canonical raw2000 boundaries:zero repeated price calculations; changed receipt still rejected; measured time in candidate.json |
 | Legacy engine | [cap-v8-6.0.json](cap-v8-6.0.json):Node8.3.0/V8 6.0.286.52,400 blocked purchases, original refunds and exact payments PASS |
@@ -22,8 +22,8 @@ Self-review and automated PR review are distinguished; no independent Core/QA cl
 | Required full CI/integration/APK | [PR89](https://github.com/karahaNx/Lumenfall/pull/89):final run/integration/APK acceptance pending |
 
 CI retains existing176 scenarios,17 harness negative controls, source/tooling/APK
-verifier and guarded browser startup. F21 adds focused regression and10 causal
-controls:handler/refund/credit/free-credit/wallet/receipt/cache/credit-record/ascend-copy/version-check. UI/raw controls
+verifier and guarded browser startup. F21 adds focused regression and11 causal
+controls:handler/refund/credit/free-credit/wallet/receipt/cache/credit-record/ascend-copy/version-check/credit-reconcile. UI/raw controls
 are also saved locally. A startup failure never counts as a passing defect control.
 
 PR89 review corrections: exact wallet debit; new unsafe refunds retained as
@@ -74,9 +74,9 @@ getNodeBuyPlan retains all upstream guards and adds the exact Prism payment plan
 QA clicks resolve real catalog nodes; a forged catalog object is separately
 rejected. Native QA resolves the same nodes without modifying APK product bytes.
 
-CI37756169423 passed all176 scenarios,553 F21 assertions,10 F21 controls,
-17 harness negatives and runtime/source/tooling gates on38594553 source.
+CI37756169423 passed all176 scenarios,567 F21 assertions,10 F21 controls,
+17 harness negatives and runtime/source/tooling gates on38594567 source.
 Before integration, main moved to3f1b6fa (Lab UI/upgrade identity/loadout delivery).
-It merges cleanly;553 focused assertions pass on175f7013 combined source.
+It merges cleanly;567 focused assertions pass on175f7013 combined source.
 New full CI is required before integration. Earlier individual Tree/clarity/
 chronology/negative reports identify their own hashes; final CI covers new bytes.

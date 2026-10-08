@@ -27,10 +27,10 @@ old restores/rollback/paid Labs/Ascend/live-offline. UI:320/390/430px,100%/200%,
 touch/keyboard/focus/contrast/reduced motion. Required CI/integrated bytes and
 signed APK identity/assets/actual Android update must pass; otherwise stay open.
 
-[Evidence/versions](../qa/cheaper-bonds-cap-001/finish/README.md):553 focused checks
-and V8 PASS on current source.12 controls/earlier Tree checks retain their hashes.
+[Evidence/versions](../qa/cheaper-bonds-cap-001/finish/README.md):567 focused checks
+and V8 PASS on current source.13 controls/earlier Tree checks retain their hashes.
 CI37756169423 passed176 scenarios/all gates before latest main; new full CI needed.
 Signed143 fixture:21 paid purchases19→40/wallet7342133; update keeps raw40/refunds
-12655538 once. Eight findings fixed/resolved. [PR89](https://github.com/karahaNx/Lumenfall/pull/89).
+12655678 once. Review fixes in evidence. [PR89](https://github.com/karahaNx/Lumenfall/pull/89).
 Next:final CI/main recheck/integration/APK/native acceptance; save GitHub status/
 evidence, stop shared work, archive only this owner after verified completion.

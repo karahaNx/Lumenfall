@@ -46,7 +46,7 @@ window.runCheaperRefundContracts=function(){
   ok(balance(b.get())<original,'refund really pays, not a free purchase');
   s=b.canonical(cheaperLegacySeed(200,1e100));var large=s.refundCredits.prisms.find(function(e){return e.amount>1e25;});
   ok(!!large,'large-credit fixture is an actual originally-priced refund');
-  s.prisms=0;s.refundCredits.prisms=[large];b.set(s);var before=b.get();
+  s.prisms=0;s.refundCredits.prisms=[large];s.feedbackMigration.receipts['node.bonds'].remainingCredits=[large.amount];b.set(s);var before=b.get();
   ok(!b.payment(1),'unrepresentable credit subtraction cannot buy a free level');
   b.buy({id:'swift'});same(b.get(),before,'unspendable small debit retains entire credit');
   ok(b.payment(large.amount).prisms===0&&b.payment(large.amount).credits.length===0,'whole large credit can pay exactly');
@@ -54,7 +54,7 @@ window.runCheaperRefundContracts=function(){
   ok(s.prisms<=Number.MAX_SAFE_INTEGER&&s.refundCredits.prisms.length>0,'large restitution stays spendable as exact credits');
   b.set(s);var refunded=balance(b.get());b.buy({id:'swift'});
   ok(b.get().nodes.swift===1&&balance(b.get())===refunded-BigInt(3),'actual raw95 refund pays original Swift price exactly');
-  s=b.canonical(cheaperLegacySeed(21,1e30));s.refundCredits.prisms=[];b.set(s);before=b.get();var disk=b.disk();
+  s=b.canonical(cheaperLegacySeed(21,1e30));s.refundCredits.prisms=[];s.feedbackMigration.receipts['node.bonds'].remainingCredits=[];b.set(s);before=b.get();var disk=b.disk();
   ok(!b.payment(1),'unrepresentable wallet debit cannot buy a free level');
   b.buy({id:'swift'});same(b.get(),before,'wallet rejection retains exact original value');same(b.disk(),disk,'wallet rejection never saves');
   s.prisms=9007199254740992;b.set(s);var value=balance(b.get());b.buy({id:'echo'});
@@ -106,6 +106,12 @@ window.runCheaperRefundContracts=function(){
   });
   var foreign=b.canonical(cheaperLegacySeed(21,0));foreign.refundCredits.prisms.push({id:'node.echo',amount:16});
   same(b.canonical(foreign).refundCredits.prisms,foreign.refundCredits.prisms,'valid foreign integer Prism credit retained');
+  [function(x){x.refundCredits.prisms=[];},function(x){x.refundCredits.prisms.push(x.refundCredits.prisms[0]);},function(x){x.refundCredits.prisms[0].amount+=2;},function(x){x.refundCredits.prisms.reverse();},function(x){delete x.feedbackMigration.receipts['node.bonds'].remainingCredits;},function(x){x.feedbackMigration.receipts['node.bonds'].creditAuditVersion=2;}].forEach(function(damage){var broken=b.canonical(cheaperLegacySeed(2000,0));damage(broken);var rejected=false;try{b.canonical(broken);}catch(e){rejected=e.code==='invalid-bonds-refund';}ok(rejected,'own credit sequence reconciles with saved receipt');});
+  var legacy=b.canonical(cheaperLegacySeed(95,0)),legacyValue=balance(legacy),oldReceipt=legacy.feedbackMigration.receipts['node.bonds'];delete legacy.feedbackMigration.bondsCreditAuditVersion;delete oldReceipt.creditAuditVersion;delete oldReceipt.remainingCredits;
+  var adopted=b.canonical(legacy);ok(balance(adopted)===legacyValue,'untracked candidate audit adoption preserves known value');same(adopted.refundCredits,legacy.refundCredits,'audit adoption keeps original remaining credits');same(b.canonical(adopted),adopted,'audit adoption is idempotent');
+  var stripped=b.canonical(cheaperLegacySeed(95,0));delete stripped.feedbackMigration.receipts['node.bonds'].creditAuditVersion;delete stripped.feedbackMigration.receipts['node.bonds'].remainingCredits;stripped.refundCredits.prisms=[];var strippedRejected=false;try{b.canonical(stripped);}catch(e){strippedRejected=e.code==='invalid-bonds-refund';}ok(strippedRejected,'new audit marker prevents downgrade to an untracked receipt');
+  [0,20].forEach(function(raw){var broken=b.canonical(cheaperLegacySeed(raw,0));broken.feedbackMigration.bondsCreditAuditVersion=2;var rejected=false;try{b.canonical(broken);}catch(e){rejected=e.code==='invalid-bonds-refund';}ok(rejected,'unsupported own audit marker rejects below cap');});
+  b.set(b.canonical(cheaperLegacySeed(21,1e30)));b.buy({id:'swift'});var paid=b.get();same(paid.feedbackMigration.receipts['node.bonds'].remainingCredits,[3373],'real debit updates receipt balance atomically');ok(JSON.parse(b.disk().primary).feedbackMigration.receipts['node.bonds'].remainingCredits[0]===3373,'paid credit audit persists with wallet and level');
   [0,20,21].forEach(function(raw){
     [0,2,'1',null].forEach(function(version){var damaged=b.canonical(cheaperLegacySeed(raw,0));damaged.feedbackMigration.version=version;var rejected=false;try{b.canonical(damaged);}catch(e){rejected=e.code==='invalid-bonds-refund';}ok(rejected,'unsupported migration version rejects before any early return');});
     var old=cheaperLegacySeed(raw,0);ok(b.canonical(old).feedbackMigration.version===1,'missing legacy marker defaults to supported version');

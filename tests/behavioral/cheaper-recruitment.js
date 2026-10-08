@@ -5,6 +5,7 @@ window.cheaperRecruitmentSeed=function(level){
   s.nodes.bonds=level;s.prisms=1000000;s.maxDepthEver=100;
   s.questDay=b.today();s.achieved.asc5=true;s.achieved.d100=true;
   s=b.canonical(s);s.prisms=1000000;s.refundCredits.prisms=[];
+  if(s.feedbackMigration.receipts['node.bonds'])s.feedbackMigration.receipts['node.bonds'].remainingCredits=[];
   return s;
 };
 window.runCheaperRecruitmentContracts=function(){

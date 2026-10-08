@@ -80,7 +80,7 @@ function baselineState(actual,expected,seed,label){
  // This frozen player's Bonds level is below the new purchase cap. Assert the
  // exact additive F21 defaults before comparing every original gameplay field.
  assert.equal(seed.nodes.bonds,19,label+' immutable below-cap refund fixture');
- assert.deepEqual(actual.feedbackMigration,{version:1,applied:true,receipts:{},history:{bonds:{levels:19}}},label+' below-cap migration has no refund');
+ assert.deepEqual(actual.feedbackMigration,{version:1,applied:true,bondsCreditAuditVersion:1,receipts:{},history:{bonds:{levels:19}}},label+' below-cap migration has no refund');
  assert.deepEqual(actual.refundCredits,{prisms:[]},label+' no unsolicited Prism credits');
  const {studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,offline12hRefund,feedbackMigration,refundCredits,...existing}=actual;
  // F14 changes only the selected destination during a matching partial rebuild.

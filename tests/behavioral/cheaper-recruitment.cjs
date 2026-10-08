@@ -19,7 +19,8 @@ if(mutation==='cache')source=source.replace('var entry=cheaperRecruitmentRefundP
 if(mutation==='credit-record')source=source.replace("if(!isPlainObject(entry) || typeof entry.id!=='string' || !entry.id || !Number.isFinite(entry.amount) || entry.amount<=0 || Math.floor(entry.amount)!==entry.amount || (entry.id===id && !hasReceipt)){",'if(entry && entry.id===id && !hasReceipt){');
 if(mutation==='ascend-copy')source=source.replace('state = normalizeCurrentSave(state,true);',"state = acceptPersistedState(state,'simulation-ascend');");
 if(mutation==='version-check')source=source.replace("if(out.feedbackMigration.version!==1) throw persistenceError('invalid-bonds-refund','Recruitment refund version needs recovery');",'');
-if(!['none','handler','ui','raw','refund','credit','free-credit','wallet','receipt','cache','credit-record','ascend-copy','version-check'].includes(mutation))throw Error('unknown mutation');
+if(mutation==='credit-reconcile')source=source.replace('validateCheaperRecruitmentCreditAudit(receipt,credits,saved.bondsCreditAuditVersion===1);','');
+if(!['none','handler','ui','raw','refund','credit','free-credit','wallet','receipt','cache','credit-record','ascend-copy','version-check','credit-reconcile'].includes(mutation))throw Error('unknown mutation');
 const bridge=`
 window.__cheaperRecruitment={
  fresh:function(){return freshState();},today:todayStr,
@@ -154,6 +155,13 @@ async function run(){
  await navigate(url);repaired=await evaluate('__cheaperRecruitment.get()');
  assert(repaired.nodes.bonds===20&&repaired.prisms===1000000&&repaired.feedbackMigration.version===1,'unsupported below-cap marker selects intact actual recovery');
  records.push({kind:'version-recovery',primaryVersion:2,recoveredVersion:1,raw:20,wallet:1000000});
+ for(const damage of ['deleted','duplicated','changed','missing-audit']){
+  const expected=await evaluate(`(()=>{var b=__cheaperRecruitment;b.set(b.canonical(cheaperLegacySeed(95,17)));b.save();return b.get();})()`);
+  await evaluate(`(()=>{var b=__cheaperRecruitment,bad=b.get();if(${JSON.stringify(damage)}==='deleted')bad.refundCredits.prisms=[];else if(${JSON.stringify(damage)}==='duplicated')bad.refundCredits.prisms.push(bad.refundCredits.prisms[0]);else if(${JSON.stringify(damage)}==='changed')bad.refundCredits.prisms[0].amount+=2;else delete bad.feedbackMigration.receipts['node.bonds'].remainingCredits;b.corruptPrimary();localStorage.setItem('lumenfall_save_v2',JSON.stringify(bad));})()`);
+  await navigate(url);repaired=await evaluate('__cheaperRecruitment.get()');
+  assert(repaired.prisms===expected.prisms&&JSON.stringify(repaired.refundCredits)===JSON.stringify(expected.refundCredits)&&JSON.stringify(repaired.feedbackMigration)===JSON.stringify(expected.feedbackMigration),'damaged credit balance selects intact actual recovery '+damage);
+  records.push({kind:'credit-balance-recovery',damage,raw:95,exactCreditAndReceiptRetained:true});
+ }
  const oldBackup=await evaluate('__cheaperRecruitment.encode(cheaperLegacySeed(21,0))');
  await evaluate('(()=>{var b=__cheaperRecruitment;b.set(cheaperRecruitmentSeed(0));b.save();})()');
  const beforeRollback=await evaluate('__cheaperRecruitment.disk()');
