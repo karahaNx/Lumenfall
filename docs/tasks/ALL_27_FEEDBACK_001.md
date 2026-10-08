@@ -173,3 +173,22 @@ centralized Bond partner improvements plus Lab/Forge proposal documentation.
 Merge and preserve those product improvements before publishing exact-head CI.
 The [phone checklist](../qa/all-27-feedback-001/phone-checklist.md) has all27
 original acceptance items; version/hash and five pending design rows remain open.
+
+Post-integration checkpoint: main20ef is merged as b5c4c55 with the full
+unfinished-Wisp predicate, prerequisite guards, final-purchase focus and
+centralized full Bond partner names preserved across all eight Bonds. The
+supplementary suite passes131 scenarios; all12 required negative controls are
+detected. Native offline cold/resume/restart/daily rollover, Lab offline and Farm
+runtime pass; the separate Wisp gate passes12 profiles/12912 checks. The offline
+core passes in135s, including full-state one-second8h/12h references and original
+frozen-product comparisons outside intentionally changed mechanics.
+
+A final compatibility correction replaces unsupported CSS `:has` with the
+actual tab class and gives new cosmetic gradients legacy `rgba` colors. The
+native all27 gate passes four profiles, including360x640 with unsupported
+modern CSS removed. [Local verification](../qa/all-27-feedback-001/local-verification.json)
+and [offline proof](../qa/all-27-feedback-001/offline-verification.json) record the
+precise scope/limitations. The required suite now has151 default scenarios.
+Publish this head and run its required CI before treating these results as
+integration acceptance. The two pending design answers still block five rows,
+full pacing and the requested complete APK; do not release a partial candidate.

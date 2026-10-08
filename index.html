@@ -1667,10 +1667,10 @@
   nav.tabbar button{min-width:44px;height:var(--nav-height);min-height:var(--nav-height);padding:4px 2px;}
   nav.tabbar .lb{font-size:10px;}
   main.rift-scroll-locked{padding:6px 10px;}
-  .shell:has(#tab-battle.active) .hud .brand{text-transform:uppercase;font-family:'Cinzel',serif;}
-  .shell:has(#tab-battle.active) .hud{gap:4px;padding:calc(4px + var(--safe-top)) 10px 4px;background:#171930;}
-  .shell:has(#tab-battle.active) .hud .chip{display:flex;align-items:center;gap:3px;height:24px;padding:2px 3px;border-color:#343950;background:linear-gradient(180deg,#222540,#191d34);box-shadow:inset 0 1px 0 #ffffff0a;}
-  .shell:has(#tab-battle.active) .hud .chip .val{flex:none;margin-left:auto;font-size:10px;line-height:16px;white-space:nowrap;}
+  .shell.rift-active .hud .brand{text-transform:uppercase;font-family:'Cinzel',serif;}
+  .shell.rift-active .hud{gap:4px;padding:calc(4px + var(--safe-top)) 10px 4px;background:#171930;}
+  .shell.rift-active .hud .chip{display:flex;align-items:center;gap:3px;height:24px;padding:2px 3px;border-color:#343950;background:linear-gradient(180deg,#222540,#191d34);box-shadow:inset 0 1px 0 #ffffff0a;}
+  .shell.rift-active .hud .chip .val{flex:none;margin-left:auto;font-size:10px;line-height:16px;white-space:nowrap;}
   #tab-battle.active{animation-name:riftPanelIn;}
   @keyframes riftPanelIn{from{opacity:0;}to{opacity:1;}}
   #tab-battle .stage{--ink:#f0effb;--ink-dim:#b5b4cb;--bg-elev:#13192d;--bg-elev-2:#1c2339;--line:#30364d;--danger:#ff7b92;--lumen:#e7c67e;--prism:#bd9bef;--shard:#82d2ec;--mote:#ffb4d5;--good:#9ed9b1;padding:8px 10px;gap:4px!important;background:radial-gradient(ellipse at 50% 38%,var(--land-far) 0,#11182d 47%,#0b1121 100%)!important;}
@@ -1796,8 +1796,8 @@
   @media(prefers-reduced-motion:reduce){.stage .enemy-stage::after{animation:none!important;}.rift-charge>span{transition:none;}}
 
   @media(max-height:680px){
-    .shell:has(#tab-battle.active) .hud{gap:3px;padding:calc(1px + var(--safe-top)) 10px 1px;}
-    .shell:has(#tab-battle.active) .hud .chip{height:20px;padding:1px 3px;}
+    .shell.rift-active .hud{gap:3px;padding:calc(1px + var(--safe-top)) 10px 1px;}
+    .shell.rift-active .hud .chip{height:20px;padding:1px 3px;}
     main.rift-scroll-locked{padding:2px 10px;}
     #tab-battle .stage{padding:3px 8px;gap:1px!important;}
     .rift-heading{display:grid;grid-template-columns:minmax(0,1fr) 160px;gap:4px;height:44px;}
@@ -2037,9 +2037,9 @@
 
   /* NAV-001 navigation. Five stable main destinations. */
   :root{--nav-lift:8px;}
-  .shell,.shell:has(#tab-battle.active){--nav-height:54px;}
+  .shell,.shell.rift-active{--nav-height:54px;}
   @media(max-height:650px){
-    .shell,.shell:has(#tab-battle.active){--nav-height:48px;}
+    .shell,.shell.rift-active{--nav-height:48px;}
     /* Reclaim decorative vertical padding for the raised nav on short Rifts. */
     #tab-battle .stage{padding-top:0;padding-bottom:0;}
   }
@@ -2104,7 +2104,7 @@
   .rift-wisp-power{grid-row:5;line-height:12px;}
   .rift-wisp-ability{grid-column:1;grid-row:4;font-size:9px;line-height:10px;overflow-wrap:anywhere;text-align:center;}
   @media(max-height:680px){
-    .shell:has(#tab-battle.active) .hud{gap:0;padding:var(--safe-top) 10px 0;}
+    .shell.rift-active .hud{gap:0;padding:var(--safe-top) 10px 0;}
     #rift-objective-row{height:44px;min-height:44px;max-height:44px;margin:2px 10px;}
     #rift-objective{height:42px;min-height:42px;padding:4px 9px;}
     #rift-objective-dismiss{height:44px;}
@@ -2139,11 +2139,11 @@
   .rift-cosmetic-aura span:nth-child(1){left:8px;top:18%;}
   .rift-cosmetic-aura span:nth-child(2){right:8px;top:46%;}
   .rift-cosmetic-aura span:nth-child(3){left:15px;bottom:10%;}
-  [data-rift-theme="ember"] .rift-cosmetic-aura{opacity:.8;background:linear-gradient(0deg,#e08a2e22,transparent 70%);}
-  [data-rift-theme="void"] .rift-cosmetic-aura{opacity:.8;background:radial-gradient(ellipse at 50% 60%,transparent 35%,#8a5fd622 70%);}
-  [data-rift-theme="aurora"] .rift-cosmetic-aura{opacity:.8;background:linear-gradient(115deg,#d16fa822,transparent 45%,#72b9cf22);}
-  [data-rift-theme="solar"] .rift-cosmetic-aura{opacity:.9;background:radial-gradient(ellipse at 50% 10%,#d1a72e44,transparent 65%);}
-  [data-rift-theme="radiant"] .rift-cosmetic-aura{opacity:.8;background:linear-gradient(135deg,#e08a2e33,#3aa0c922,#8a5fd633);animation:riftCosmeticGlow 4s ease-in-out infinite alternate;}
+  [data-rift-theme="ember"] .rift-cosmetic-aura{opacity:.8;background:linear-gradient(0deg,rgba(224,138,46,0.13333333333333333),transparent 70%);}
+  [data-rift-theme="void"] .rift-cosmetic-aura{opacity:.8;background:radial-gradient(ellipse at 50% 60%,transparent 35%,rgba(138,95,214,0.13333333333333333) 70%);}
+  [data-rift-theme="aurora"] .rift-cosmetic-aura{opacity:.8;background:linear-gradient(115deg,rgba(209,111,168,0.13333333333333333),transparent 45%,rgba(114,185,207,0.13333333333333333));}
+  [data-rift-theme="solar"] .rift-cosmetic-aura{opacity:.9;background:radial-gradient(ellipse at 50% 10%,rgba(209,167,46,0.26666666666666666),transparent 65%);}
+  [data-rift-theme="radiant"] .rift-cosmetic-aura{opacity:.8;background:linear-gradient(135deg,rgba(224,138,46,0.2),rgba(58,160,201,0.13333333333333333),rgba(138,95,214,0.2));animation:riftCosmeticGlow 4s ease-in-out infinite alternate;}
   @keyframes riftCosmeticGlow{from{opacity:.4;}to{opacity:.9;}}
   @media(prefers-reduced-motion:reduce){[data-rift-theme="radiant"] .rift-cosmetic-aura{animation:none;opacity:.7;}}
 </style>
@@ -2548,7 +2548,7 @@
     </symbol>
 </defs></svg>
 
-<div class="shell">
+<div class="shell rift-active">
   <div class="topbar">
     <header class="hud">
       <div class="hud-title-row">
@@ -6855,6 +6855,8 @@ function syncMainScrollMode(tabName){
   if(main.classList.contains('rift-scroll-locked')!==battleActive){
     main.classList.toggle('rift-scroll-locked', battleActive);
   }
+  var shell=document.querySelector('.shell');
+  if(shell) shell.classList.toggle('rift-active',battleActive);
   if(battleActive && main.scrollTop!==0) main.scrollTop = 0;
 }
 var workshopSection='forge';
