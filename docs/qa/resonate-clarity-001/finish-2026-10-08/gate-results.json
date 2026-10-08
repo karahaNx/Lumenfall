@@ -1,0 +1,33 @@
+[
+  {
+    "name": "source",
+    "args": [
+      "scripts/ci/validate_source.cjs"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "context",
+    "args": [
+      "scripts/codex/check_context.cjs",
+      "--task",
+      "docs/tasks/RESONATE_CLARITY_001.md"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "apk-self-test",
+    "args": [
+      "scripts/verify_apk_identity.cjs",
+      "--self-test"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "tooling",
+    "args": [
+      "tests/tooling/run.cjs"
+    ],
+    "exit": 0
+  }
+]

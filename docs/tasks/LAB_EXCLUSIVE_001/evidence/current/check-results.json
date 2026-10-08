@@ -1,0 +1,47 @@
+{
+  "recordedAt": "2026-10-08T00:36:24.332Z",
+  "baseline": "214d45411ce2fb420f0e4b372063811a967679b1",
+  "indexSha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca",
+  "node": "v24.19.0",
+  "checks": [
+    {
+      "command": "node docs/tasks/LAB_EXCLUSIVE_001/evidence/current/inventory.cjs",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/codex/check_context.cjs --task docs/tasks/LAB_EXCLUSIVE_001.md",
+      "exitCode": 0,
+      "log": "check-context.log"
+    },
+    {
+      "command": "node tests/tooling/run.cjs",
+      "exitCode": 1,
+      "environment": "default restricted sandbox",
+      "log": "tooling.log"
+    },
+    {
+      "command": "node tests/tooling/run.cjs",
+      "exitCode": 0,
+      "environment": "local-network sandbox grant",
+      "log": "tooling-network-grant.log"
+    },
+    {
+      "command": "node scripts/verify_apk_identity.cjs --self-test",
+      "exitCode": 0,
+      "log": "apk-identity-self-test.log"
+    },
+    {
+      "command": "node tests/behavioral/run.cjs --web-root . --scenario inquiry-contracts --raw-artifacts docs/tasks/LAB_EXCLUSIVE_001/evidence/current/raw",
+      "exitCode": 1,
+      "browser": "Chromium 151.0.7922.173",
+      "reason": "browser process timeout; no usable QA DOM",
+      "log": "inquiry-contracts.log"
+    },
+    {
+      "command": "node tests/behavioral/run.cjs --web-root . --scenario lab-motes-offline-integration --raw-artifacts docs/tasks/LAB_EXCLUSIVE_001/evidence/current/raw",
+      "exitCode": 0,
+      "log": "lab-motes-offline-integration.log"
+    }
+  ],
+  "scope": "documentation/proposal and current-baseline checks; no new mechanic implemented"
+}

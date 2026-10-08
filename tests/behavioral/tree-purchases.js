@@ -38,7 +38,7 @@ window.runTreePurchaseQa=function(b,ctx,assert){
     ok(document.querySelector('[data-node-effect="'+row[0]+'"]').parentElement.textContent.includes('Saved level preserved'),'raw legacy level explanation '+row);
   });
 
-  ['momentum','reserves'].forEach(function(id){
+  ['reserves'].forEach(function(id){
     seed(id,0,1000);ok(!button(id),'achievement-locked node has no purchase control '+id);
     rejected(id,'direct handler respects achievement '+id);
     var s=b.getState();s.achieved[id==='momentum'?'asc5':'d100']=true;b.setState(s);b.treePurchases.render();
@@ -47,13 +47,30 @@ window.runTreePurchaseQa=function(b,ctx,assert){
     ok(b.getState().nodes[id]===1&&b.getState().prisms===prisms-cost,'unlocked price unchanged '+id);
   });
 
-  seed('starlight',0,1000);
+  // The integrated matrix closes generic damage/kill tracks. Raw ownership,
+  // exact old operands and complete snapshots survive repeated normalization.
+  ['starlight','steady','momentum'].forEach(function(id){
+    [0,7,1000000].forEach(function(level){
+      var s=seed(id,level,1000);
+      ok(!button(id),'retired node has no purchase control '+id+' '+level);
+      ok(b.treePurchases.plan(id).reason==='retired','shared plan rejects retired node '+id);
+      rejected(id,'retired node cannot charge '+id+' '+level);
+      var canonical=b.treePurchases.canonical(s);
+      same(canonical.nodes,s.nodes,'retired raw levels survive normalization '+id);
+      same(b.treePurchases.canonical(canonical),canonical,'retired transition is idempotent '+id);
+      same(b.treePurchases.roundtrip(canonical),canonical,'backup preserves retired value '+id);
+      var row=document.querySelector('[data-legacy-upgrade="'+id+'"]');
+      ok(level?row&&row.textContent.includes('Existing bonus kept.'):!row,'preserved contribution shown only when owned '+id);
+    });
+  });
+
+  seed('swift',0,1000);
   [undefined,null,'unknown',{id:'starlight',baseCost:0,growth:1}].forEach(function(id){rejected(id,'invalid or forged node');});
-  seed('starlight',1000000,1000);ok(button('starlight').disabled&&button('starlight').textContent==='Unavailable','nonfinite price disabled');
-  rejected('starlight','nonfinite price cannot debit');
-  seed('starlight',0,Number.MAX_VALUE);
-  ok(button('starlight').disabled&&button('starlight').querySelector('.cost-icon')&&button('starlight').querySelector('.cost').textContent.trim()==='1','unrepresentable payment preserves the finite visible price and currency icon');
-  rejected('starlight','unrepresentable payment cannot grant a free level');
+  seed('swift',1000000,1000);ok(button('swift').disabled&&button('swift').textContent==='Unavailable','nonfinite price disabled');
+  rejected('swift','nonfinite price cannot debit');
+  seed('swift',0,Number.MAX_VALUE);
+  ok(button('swift').disabled&&button('swift').querySelector('.cost-icon')&&button('swift').querySelector('.cost').textContent.trim()==='3','unrepresentable payment preserves the finite visible price and currency icon');
+  rejected('swift','unrepresentable payment cannot grant a free level');
   return {checks:checks,caps:{echo:6,bonds:20},legacyRawValuesPreserved:true,backupIdempotence:true};
 };
 
@@ -64,7 +81,7 @@ window.runTreePurchaseUiQa=async function(b,ctx,assert){
   ok(innerWidth===Number(params.get('width')),'exact mobile viewport');
   var reduced=ctx.scenario.includes('reduced-motion');
   ok(matchMedia('(prefers-reduced-motion: reduce)').matches===reduced,'requested motion preference');
-  var s=b.freshStateSnapshot();s.prisms=10000;s.nodes.echo=7;s.nodes.bonds=21;s.achieved.asc5=true;s.achieved.d100=true;b.setState(s);
+  var s=b.freshStateSnapshot();s.prisms=10000;s.nodes.echo=7;s.nodes.bonds=21;s.nodes.starlight=12;s.nodes.steady=9;s.nodes.momentum=7;s.achieved.asc5=true;s.achieved.d100=true;b.setState(s);
   document.querySelectorAll('.overlay,#startup-intro').forEach(function(el){el.style.display='none';});
   b.renderLayout();document.querySelector('[data-tab="ascend"]').click();await document.fonts.ready;
   var panel=document.getElementById('tab-ascend');
@@ -115,11 +132,11 @@ window.runTreePurchaseUiQa=async function(b,ctx,assert){
   style.textContent=['.name','.desc','.lvl','.earned-effect','.effect-note','.buy-btn .cost','.buy-btn .label'].map(function(selector){
     return '#node-list '+selector+'{font-size:'+parseFloat(getComputedStyle(document.querySelector('#node-list '+selector)).fontSize)*2+'px!important;}';
   }).join('');document.head.appendChild(style);measure(2);
-  var button=document.querySelector('[data-node="starlight"]');button.focus();
+  var button=document.querySelector('[data-node="swift"]');button.focus();
   ok(document.activeElement===button,'available Tree control takes focus');
   ok(parseFloat(getComputedStyle(button).outlineWidth)>=2&&getComputedStyle(button).outlineStyle!=='none','visible keyboard focus');
   style.remove();b.treePurchases.render();
-  ok(document.activeElement===document.querySelector('[data-node="starlight"]'),'render preserves available-control focus');
+  ok(document.activeElement===document.querySelector('[data-node="swift"]'),'render preserves available-control focus');
   ok(document.querySelector('[data-node="echo"]').disabled&&document.querySelector('[data-node="bonds"]').disabled,'over-cap controls remain disabled');
   ok(JSON.stringify(b.getState())===JSON.stringify(before)&&b.rawSave()===primary,'UI measurements never change gameplay or saves');
   return {checks:checks,records:records,reducedMotion:reduced,textScale:2,minimumContrast:minimumContrast};

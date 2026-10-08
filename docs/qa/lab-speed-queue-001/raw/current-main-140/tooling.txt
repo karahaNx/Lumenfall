@@ -1,0 +1,28 @@
+PASS archive integrity: stored/deflated ZIP CRC, truncation, hash and symlink escape controls
+PASS: restored 96 files; tree 758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef to /tmp/lumenfall-node-tools-HuiRuE/candidate
+PASS candidate recovery: 96 exact files/modes, tree 758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef, overwrite and overlap rejection
+Restored 66 verified payloads to /tmp/lumenfall-node-tools-HuiRuE/package
+PASS package recovery: 66 byte-identical logical payloads
+PASS APK identity: real subprocess arguments, complete identity, wrong signer and tool failure rejection
+Android versionCode=134, versionName=0.1.134
+PASS Android version support: expected fields and invalid build-number rejection
+
+/tmp/lumenfall-source-5mPjvs/script-1.js:1
+var = broken;
+    ^
+
+SyntaxError: Unexpected token '='
+    at wrapSafe (node:internal/modules/cjs/loader:1804:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v24.19.0
+
+Browser smoke test passed: game initialized without uncaught runtime errors at a 390x844 mobile viewport.
+<html data-ci-runtime-error="uncaught-error"><script id="ci-runtime-error-guard"></script><main class="rift-scroll-locked" data-zone-index="0"></main><div id="enemy-name">Enemy</div><div id="hud-lumen">0</div></html>
+<html data-ci-runtime-error="unhandled-rejection"><script id="ci-runtime-error-guard"></script><main class="rift-scroll-locked" data-zone-index="0"></main><div id="enemy-name">Enemy</div><div id="hud-lumen">0</div></html>
+Installed CI-only runtime error guard in staged HTML.
+PASS source/smoke gates: missing/duplicate IDs, syntax failure and runtime error rejection
+PASS: 29 entrypoints, 42 local Markdown links, shared startup 16800 bytes; startup with docs/tasks/.context-check-3TXbGG/feature.md 16854 bytes
+PASS feature checkpoints: real task links/budget and missing, misplaced, traversal/symlink, broken-link and oversized task rejection
+PASS local server: real requests and traversal/symlink rejection
+Node tooling checks passed.

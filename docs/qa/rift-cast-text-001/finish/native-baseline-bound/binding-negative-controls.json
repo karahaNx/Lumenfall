@@ -1,0 +1,38 @@
+[
+  {
+    "case": "missing-identity",
+    "status": "caught",
+    "expected": "prior results include installed APK/source identity",
+    "artifactIdentity": {
+      "installedApkPath": "/data/app/com.lumenfall.app-NvAw-17JhD2wrWfVTe7rlg==/base.apk",
+      "installedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+      "providedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+      "sourceSha256": "835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3"
+    },
+    "message": "AssertionError [ERR_ASSERTION]: prior results include installed APK/source identity\n    at accept (/workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:82:1076)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async /workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:102:323"
+  },
+  {
+    "case": "different-apk",
+    "status": "caught",
+    "expected": "resume uses same installed APK bytes",
+    "artifactIdentity": {
+      "installedApkPath": "/data/app/com.lumenfall.app-NvAw-17JhD2wrWfVTe7rlg==/base.apk",
+      "installedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+      "providedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+      "sourceSha256": "835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3"
+    },
+    "message": "AssertionError [ERR_ASSERTION]: resume uses same installed APK bytes\n+ actual - expected\n\n+ '0000000000000000000000000000000000000000000000000000000000000000'\n- 'ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0'\n\n    at accept (/workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:82:1168)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async /workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:102:323"
+  },
+  {
+    "case": "different-source",
+    "status": "caught",
+    "expected": "resume uses same source",
+    "artifactIdentity": {
+      "installedApkPath": "/data/app/com.lumenfall.app-NvAw-17JhD2wrWfVTe7rlg==/base.apk",
+      "installedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+      "providedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+      "sourceSha256": "835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3"
+    },
+    "message": "AssertionError [ERR_ASSERTION]: resume uses same source\n+ actual - expected\n\n+ '0000000000000000000000000000000000000000000000000000000000000000'\n- '835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3'\n\n    at accept (/workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:82:1289)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async /workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:102:323"
+  }
+]

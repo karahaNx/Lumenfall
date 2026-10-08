@@ -1,0 +1,548 @@
+{
+  "feature": "RIFT_CAST_TEXT_001",
+  "status": "complete",
+  "completedAt": "2026-10-08T03:23:16.077Z",
+  "owner": "calling user-created feature chat",
+  "integrationCommit": "ab46c0c7f30667c24325b6271f811b46b159d0d1",
+  "pr": 63,
+  "ciHead": "4452f7ad3b84becda0ec3b028a603566b51cc45d",
+  "ciRun": 37713097586,
+  "ciScenarios": 148,
+  "ciRequiredNegatives": 12,
+  "sourceSha256": "835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3",
+  "apkVersion": "0.1.142",
+  "buildRun": 37714666181,
+  "apkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+  "package": "com.lumenfall.app",
+  "matrixProfiles": 12,
+  "matrixObservations": 384,
+  "scopedExistingChecks": 12,
+  "nativeIdentity": {
+    "android": "8.1.0",
+    "api": "27",
+    "package": [
+      "versionCode=142 minSdk=22 targetSdk=34",
+      "versionName=0.1.142"
+    ],
+    "ua": "Mozilla/5.0 (Linux; Android 8.1.0; Android SDK built for x86_64 Build/OSM1.180201.023; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.98 Mobile Safari/537.36",
+    "page": "https://localhost/",
+    "viewport": {
+      "width": 430,
+      "height": 773,
+      "dpr": 0.800000011920929
+    },
+    "apkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+    "sourceSha256": "835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3"
+  },
+  "nativeObservations": 120,
+  "nativeRealCasts": 24,
+  "nativeStorage": {
+    "case": "signed update preserves actual native save storage",
+    "preUpdateIdentity": {
+      "installedApkPath": "/data/app/com.lumenfall.app-vGAEcH_po_ZbEfhvywTKYw==/base.apk",
+      "installedApkSha256": "81b9be7edea971335a06f06d1894d91e75a92736738cc935fc2a920a26a02e1e",
+      "preparedSourceSha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca"
+    },
+    "install": "Success\n",
+    "bytes": 101888,
+    "beforeSha256": "40589473d4b897a6a0f4d18655981fe59d92d10fb7ffa0a6ca4eb6a7cab91cf7",
+    "afterSha256": "40589473d4b897a6a0f4d18655981fe59d92d10fb7ffa0a6ca4eb6a7cab91cf7"
+  },
+  "nativeFont": {
+    "case": "native Android system font scale 2",
+    "systemScale": 2,
+    "viewport": {
+      "width": 430,
+      "height": 773
+    },
+    "nameFont": "20px",
+    "noVisibleStatus": true
+  },
+  "independentReview": false,
+  "limitations": [
+    "Isolated software emulator, not physical device or TalkBack.",
+    "Actual legacy runtime is WebView61; exact WebView60 compatibility is checked separately through ES2017/V8 6.0.",
+    "System font scale is distinct from the separately measured 200% compact-text overflow.",
+    "WebView61 does not implement prefers-reduced-motion; existing modern-browser reduced-motion tests retain that contract.",
+    "Unchanged compact five-Wisp name overflow at 200% text: identical measured geometry on current baseline and candidate."
+  ],
+  "archive": "Eligible after this GitHub checkpoint is verified; only the calling owner chat.",
+  "followingCosmetics": {
+    "status": "pass",
+    "main": "d95205f6d8059933fac74e8699854f67cb950a7e",
+    "sourceSha256": "5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c",
+    "f13Renderer": "byte-identical to integrated ab46c0c",
+    "rendererSha256": "970c383aea906859370798cd066ce86b1e41b7dd2d12d24ff293275ede33c5b5",
+    "defaultProfiles": 12,
+    "equippedProfiles": 12,
+    "totalObservations": 768,
+    "nativeAcceptanceVersion": "0.1.142",
+    "native143NotClaimed": true,
+    "scopedExistingChecks": 12,
+    "staleStagingDiagnostic": "Earlier extra run paired old835e staged HTML with the new harness; retained separately and superseded by current-root12 passes."
+  },
+  "nativeContinuation": {
+    "file": "accept-failure.json",
+    "sha256": "395f0cb71bf7d75f1a2d3f95d711e2ff266465abf8656db8bcae09cd298525a1",
+    "phase": "bound120 states/24 casts/AX/font; signed update superseded by pre-attested baseline phase",
+    "followup": "keyboard-followup.json",
+    "followupSha256": "c33a965552e5e82920a80df8643be2af6711ef1bda5a46b15587c90f56f91b57",
+    "installedArtifactReconfirmed": true
+  },
+  "nativeArtifactIdentity": {
+    "installedApkPath": "/data/app/com.lumenfall.app-6aiOxKjjbptA4d3zQE87UA==/base.apk",
+    "installedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+    "providedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+    "sourceSha256": "835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3"
+  },
+  "firstDeliveryCI": {
+    "head": "75d7782c1481122d51a7079bbbdd78f59429e2c6",
+    "runs": {
+      "workflow_runs": [
+        {
+          "id": 37718210381,
+          "name": "Pre-merge validation",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 187,
+          "jobs_url": "https://api.github.com/repos/karahaNx/Lumenfall/actions/runs/37718210381/jobs",
+          "logs_url": "https://api.github.com/repos/karahaNx/Lumenfall/actions/runs/37718210381/logs",
+          "workflow_id": 367572756
+        }
+      ]
+    },
+    "jobs": {
+      "jobs": [
+        {
+          "id": 113119541351,
+          "name": "Lumenfall pre-merge validation",
+          "status": "completed",
+          "conclusion": "success",
+          "run_id": 37718210381,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Checkout",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Set up Node.js",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "APK identity verifier self-test",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Node tooling regression checks",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Validate game source",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Stage web assets",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Stateful behavioral regression suite",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Behavioral harness negative self-test",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Install runtime error guard in staged copy",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 10
+            },
+            {
+              "name": "Browser runtime smoke test",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 11
+            },
+            {
+              "name": "Post Set up Node.js",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 21
+            },
+            {
+              "name": "Post Checkout",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 22
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 23
+            }
+          ]
+        }
+      ]
+    },
+    "sourceSha256": "5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c"
+  },
+  "identityNegativeControls": [
+    {
+      "case": "missing-identity",
+      "status": "caught",
+      "expected": "prior results include installed APK/source identity",
+      "artifactIdentity": {
+        "installedApkPath": "/data/app/com.lumenfall.app-NvAw-17JhD2wrWfVTe7rlg==/base.apk",
+        "installedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+        "providedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+        "sourceSha256": "835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3"
+      },
+      "message": "AssertionError [ERR_ASSERTION]: prior results include installed APK/source identity\n    at accept (/workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:82:1076)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async /workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:102:323"
+    },
+    {
+      "case": "different-apk",
+      "status": "caught",
+      "expected": "resume uses same installed APK bytes",
+      "artifactIdentity": {
+        "installedApkPath": "/data/app/com.lumenfall.app-NvAw-17JhD2wrWfVTe7rlg==/base.apk",
+        "installedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+        "providedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+        "sourceSha256": "835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3"
+      },
+      "message": "AssertionError [ERR_ASSERTION]: resume uses same installed APK bytes\n+ actual - expected\n\n+ '0000000000000000000000000000000000000000000000000000000000000000'\n- 'ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0'\n\n    at accept (/workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:82:1168)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async /workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:102:323"
+    },
+    {
+      "case": "different-source",
+      "status": "caught",
+      "expected": "resume uses same source",
+      "artifactIdentity": {
+        "installedApkPath": "/data/app/com.lumenfall.app-NvAw-17JhD2wrWfVTe7rlg==/base.apk",
+        "installedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+        "providedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+        "sourceSha256": "835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3"
+      },
+      "message": "AssertionError [ERR_ASSERTION]: resume uses same source\n+ actual - expected\n\n+ '0000000000000000000000000000000000000000000000000000000000000000'\n- '835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3'\n\n    at accept (/workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:82:1289)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async /workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:102:323"
+    }
+  ],
+  "deliveryPullRequest": 74,
+  "finalGate": "Required final-head CI and merge evidence saved in PR74 description",
+  "nativeBaselineArtifactIdentity": {
+    "installedApkPath": "/data/app/com.lumenfall.app-vGAEcH_po_ZbEfhvywTKYw==/base.apk",
+    "installedApkSha256": "81b9be7edea971335a06f06d1894d91e75a92736738cc935fc2a920a26a02e1e",
+    "providedApkSha256": "81b9be7edea971335a06f06d1894d91e75a92736738cc935fc2a920a26a02e1e",
+    "sourceSha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca"
+  },
+  "nativeUpdateEvidence": {
+    "file": "../native-baseline-bound/native-update.json",
+    "sha256": "d8b498c7e4c813feca0d780dfcba1b5c747cefc4cc3808d16c3e88655cdee155",
+    "baselineFile": "../native-baseline-bound/baseline-native.json",
+    "baselineSha256": "1111256b5157142ee2a66df7fa2e4b2055478fc8f1106e9e5284b656067ec031",
+    "targetMatchesAllOtherPhases": true
+  },
+  "preUpdateNegativeControl": {
+    "case": "actual emulator already142 instead of prepared138",
+    "status": "caught",
+    "expected": "pre-update installed APK matches prepared138",
+    "beforeSnapshotOrInstall": true,
+    "error": "AssertionError [ERR_ASSERTION]: pre-update installed APK matches prepared138\n+ actual - expected\n\n+ 'ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0'\n- '81b9be7edea971335a06f06d1894d91e75a92736738cc935fc2a920a26a02e1e'\n\n    at attestBaseline (/workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:60:83)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async accept (/workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:83:77)\n    at async /workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:102:323"
+  },
+  "followingDeliveryCI": {
+    "head": "e25fa6b808072904bf3e5a9dac4654703f7f3600",
+    "run": 37722694441,
+    "job": 113134033122,
+    "applicationSha256": "5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c",
+    "runs": {
+      "workflow_runs": [
+        {
+          "id": 37722694441,
+          "name": "Pre-merge validation",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 194,
+          "jobs_url": "https://api.github.com/repos/karahaNx/Lumenfall/actions/runs/37722694441/jobs",
+          "logs_url": "https://api.github.com/repos/karahaNx/Lumenfall/actions/runs/37722694441/logs",
+          "workflow_id": 367572756
+        }
+      ]
+    },
+    "jobs": {
+      "jobs": [
+        {
+          "id": 113134033122,
+          "name": "Lumenfall pre-merge validation",
+          "status": "completed",
+          "conclusion": "success",
+          "run_id": 37722694441,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Checkout",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Set up Node.js",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "APK identity verifier self-test",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Node tooling regression checks",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Validate game source",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Stage web assets",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Stateful behavioral regression suite",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Behavioral harness negative self-test",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Install runtime error guard in staged copy",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 10
+            },
+            {
+              "name": "Browser runtime smoke test",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 11
+            },
+            {
+              "name": "Post Set up Node.js",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 21
+            },
+            {
+              "name": "Post Checkout",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 22
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 23
+            }
+          ]
+        }
+      ]
+    },
+    "acceptance": {
+      "head": "e25fa6b808072904bf3e5a9dac4654703f7f3600",
+      "run": 37722694441,
+      "job": 113134033122,
+      "positive": [
+        "2026-10-08T03:47:25.1381752Z Behavioral QA passed: 151 deterministic scenario(s)."
+      ],
+      "negative": [
+        "2026-10-08T03:47:26.5146045Z Behavioral harness correctly caught expected failure: self-test-bad-assertion",
+        "2026-10-08T03:47:27.7269982Z Behavioral harness correctly caught expected failure: self-test-uncaught-error",
+        "2026-10-08T03:47:28.9177917Z Behavioral harness correctly caught expected failure: self-test-unhandled-rejection",
+        "2026-10-08T03:47:30.0981589Z Behavioral harness correctly caught expected failure: self-test-parity-regression",
+        "2026-10-08T03:47:31.2659503Z Behavioral harness correctly caught expected failure: self-test-chronology-regression",
+        "2026-10-08T03:47:32.4299716Z Behavioral harness correctly caught expected failure: self-test-wisp-formula-regression",
+        "2026-10-08T03:47:33.6488560Z Behavioral harness correctly caught expected failure: self-test-wisp-pacing-regression",
+        "2026-10-08T03:47:34.8487746Z Behavioral harness correctly caught expected failure: self-test-endgame-currency-regression",
+        "2026-10-08T03:47:36.0378342Z Behavioral harness correctly caught expected failure: self-test-wisp-role-regression",
+        "2026-10-08T03:47:37.2257309Z Behavioral harness correctly caught expected failure: self-test-p1-05-selected",
+        "2026-10-08T03:47:38.4164182Z Behavioral harness correctly caught expected failure: self-test-p1-05-focus-return",
+        "2026-10-08T03:47:39.6495714Z Behavioral harness correctly caught expected failure: self-test-lifecycle-duplicate"
+      ],
+      "guarded": [
+        "2026-10-08T03:27:23.3308544Z Browser smoke test passed: game initialized without uncaught runtime errors at a 390x844 mobile viewport.",
+        "2026-10-08T03:47:41.0392433Z Browser smoke test passed: game initialized without uncaught runtime errors at a 390x844 mobile viewport."
+      ],
+      "bytes": 3447029
+    },
+    "subsequentReview": "Native baseline pre-update evidence review fixed in following checkpoint; application/test/rule/workflow bytes unchanged."
+  },
+  "nativeBaselineColdEvidence": {
+    "origin": "Structured fields recovered from retained successful cold-launch equality assertions; only asserted selected-Wisp levels recorded.",
+    "originalReceipt": "baseline-native-before-cold-fields.json",
+    "originalReceiptSha256": "3321d04b5332532e4d7829df485028c445c9895e06354244411b1c378f57fc1b",
+    "log": "baseline-prepare.log",
+    "logSha256": "27d0c6322eafcf11b38d0b0ef92671f2de2a1fa7ac916b28b6124016c0e2126a",
+    "assertion": "for each prepared activeParty Wisp, cold.spirits[id] === prepared.spirits[id] after real138 force-stop/relaunch",
+    "selectedWisps": [
+      "ember",
+      "tide",
+      "stone",
+      "void",
+      "aurora"
+    ]
+  },
+  "receiptReplayControls": [
+    {
+      "case": "missing-cold-flag",
+      "status": "caught",
+      "expected": "prepared138 cold launch verified"
+    },
+    {
+      "case": "missing-cold-ownership",
+      "status": "caught",
+      "expected": "recorded baseline cold ownership"
+    },
+    {
+      "case": "different-cold-ownership",
+      "status": "caught",
+      "expected": "prepared138 cold ownership tide"
+    },
+    {
+      "case": "current source root for historical142",
+      "status": "caught",
+      "expected": "byte-identical released asset: index.html"
+    }
+  ],
+  "assetReplay": {
+    "status": "pass",
+    "sourceRoot": "/workspace/rift-cast-text-001-evidence/finish/historical-apk142-source",
+    "apkBytes": 6837507,
+    "apkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+    "crcEntries": 526,
+    "matchedAssets": 15,
+    "files": [
+      {
+        "file": "index.html",
+        "bytes": 503539,
+        "sha256": "835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3"
+      },
+      {
+        "file": "fonts/cinzel-500.woff2",
+        "bytes": 25904,
+        "sha256": "09941fb1c169c38fd414536b37690057fc01b3117a5c63dd6571186540c8f370"
+      },
+      {
+        "file": "fonts/cinzel-600.woff2",
+        "bytes": 25904,
+        "sha256": "09941fb1c169c38fd414536b37690057fc01b3117a5c63dd6571186540c8f370"
+      },
+      {
+        "file": "fonts/cinzel-700.woff2",
+        "bytes": 25904,
+        "sha256": "09941fb1c169c38fd414536b37690057fc01b3117a5c63dd6571186540c8f370"
+      },
+      {
+        "file": "fonts/fonts.css",
+        "bytes": 1482,
+        "sha256": "befd8e42d48b477c567ba3ce469ff475c12a1f8724c98258469dea11b15065d7"
+      },
+      {
+        "file": "fonts/ibm-plex-mono-400.woff2",
+        "bytes": 14708,
+        "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7"
+      },
+      {
+        "file": "fonts/ibm-plex-mono-500.woff2",
+        "bytes": 14888,
+        "sha256": "01d285447409c8a588692162439a038b8cbd7871309ee20267b0d2d91c6e8e22"
+      },
+      {
+        "file": "fonts/ibm-plex-mono-600.woff2",
+        "bytes": 15620,
+        "sha256": "0d1f0b8d0722224e32e9f28261bdc86c79115be73444ae5eceb73976a1bcdf83"
+      },
+      {
+        "file": "fonts/manrope-400.woff2",
+        "bytes": 24836,
+        "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972"
+      },
+      {
+        "file": "fonts/manrope-500.woff2",
+        "bytes": 24836,
+        "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972"
+      },
+      {
+        "file": "fonts/manrope-600.woff2",
+        "bytes": 24836,
+        "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972"
+      },
+      {
+        "file": "fonts/manrope-700.woff2",
+        "bytes": 24836,
+        "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972"
+      },
+      {
+        "file": "fonts/manrope-800.woff2",
+        "bytes": 24836,
+        "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972"
+      },
+      {
+        "file": "branding/README.md",
+        "bytes": 988,
+        "sha256": "2ec43b9b11efdf98f802942dfb09740ebdbb08bb3a1364be2bb29f1a7bc19050"
+      },
+      {
+        "file": "branding/lumenfall-mark.svg",
+        "bytes": 3933,
+        "sha256": "976398b0e662181ae6dbb3430ce74d606a9db3a3f6c451818d5fda9e0f9395e4"
+      }
+    ]
+  },
+  "assetCompletenessControl": {
+    "case": "correct142 index with empty fonts/branding",
+    "status": "caught",
+    "expected": "complete historical source asset set",
+    "passingReceiptWritten": false
+  }
+}

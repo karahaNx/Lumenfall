@@ -39,9 +39,9 @@ function instrumentHtml(source, fixtures) {
   const prelude = read('prelude.js').replace('__QA_FIXTURES_JSON__', () => JSON.stringify(fixtures));
   replaceOnce('<head>', '<head>\n<script id="qa-behavior-prelude">\n' + prelude + '\n</script>', 'expected exactly one <head> marker');
   const marker = '\n})();\n</script>\n<script>\nif(window.Capacitor';
-  replaceOnce(marker, '\n' + read('bridge.js') + marker, 'main game IIFE marker changed; test bridge could not be installed');
-  const modules = ['rift-status', 'layout', 'accessibility', 'accessibility-controls', 'nav-workshop', 'r3-destinations',
-    'research-duration', 'upgrade-clarity', 'tree-purchases', 'feedback', 'formation', 'forge', 'support-stacking', 'auto-ascend-target', 'buff-timing', 'measured-inquiry', 'lab-motes', 'farm-conservation', 'farm-numerical'];
+  replaceOnce(marker, '\n' + read('bridge.js') + '\n' + read('wisp-upgrades-bridge.js') + marker, 'main game IIFE marker changed; test bridge could not be installed');
+  const modules = ['rift-status', 'bond-text', 'layout', 'accessibility', 'accessibility-controls', 'nav-workshop', 'r3-destinations',
+    'research-duration', 'upgrade-clarity', 'upgrade-identity', 'tree-purchases', 'feedback', 'formation', 'formation-autosave', 'forge', 'support-stacking', 'auto-ascend-target', 'buff-timing', 'measured-inquiry', 'lab-motes', 'farm-conservation', 'farm-numerical', 'wisp-upgrades'];
   replaceOnce('</body>', modules.map(name => '<script>' + read(name + '.js') + '</script>').join('') +
     '<script id="qa-behavior-runner">\n' + read('runner.js') + '\n</script>\n</body>', 'expected exactly one </body> marker');
   return source;
@@ -89,12 +89,23 @@ async function browserIdentity(chrome) {
 async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, options = {}) {
   const log = options.log || console.log;
   const urlFor = page => baseUrl + page + '?' + new URLSearchParams({ qaScenario: scenario, qaFixture: fixture });
+  if (scenario === 'resonate-clarity') return runNativeProcess([process.execPath, path.join(ROOT, 'resonate-clarity.cjs'), '--source', path.join(options.sourceWebRoot || path.join(ROOT, '../..'), 'index.html')], scenario, 150000, options);
+  if (scenario === 'comet-unlocks-core') return runNativeProcess([process.execPath, path.join(ROOT, 'comet-unlocks-core.cjs')], scenario, 90000, options);
   if (scenario === 'lab-motes-offline-integration') return runNativeProcess([process.execPath, path.join(ROOT, 'lab-motes-offline.cjs')], scenario, 90000, options);
+  if (['save-backup-ui', 'self-test-save-backup-placement', 'self-test-save-backup-confirmation'].includes(scenario)) {
+    const command = [process.execPath, path.join(ROOT, 'save-backup-ui.cjs'), '--chrome', chrome, '--quiet',
+      '--web-root', options.sourceWebRoot || path.join(ROOT, '../..'),
+      '--evidence', path.join(options.rawArtifactRoot || os.tmpdir(), scenario)];
+    if (scenario !== 'save-backup-ui') command.push('--mutant', scenario.endsWith('placement') ? 'misplaced-backup' : 'early-restore');
+    return runNativeProcess(command, scenario, 150000, options);
+  }
   if (scenario === 'offline-catchup-core') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-catchup.cjs')], scenario, 300000, options);
   if (scenario === 'offline-catchup-ui' || scenario === 'offline-catchup-legacy-dom') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-catchup-ui.cjs'), chrome, urlFor('/index.html'), scenario], scenario, 210000, options);
+  if (['formation-autosave-native','formation-autosave-reduced-motion'].includes(scenario)) return runNativeProcess([process.execPath,path.join(ROOT,'formation-autosave.cjs'),chrome,urlFor('/index.html'),scenario],scenario,120000,options);
   if (scenario === 'raw-process-contract') return require('./process_contract.cjs').runContract(runScenario, log);
   if (scenario === 'forge-ui-process-contract') return nativeProcessContract(log);
   let driver = null;
+  if (['comet-unlocks-mobile', 'comet-unlocks-reduced-motion'].includes(scenario)) driver = 'comet-unlocks-ui.cjs';
   if (['rift-status-mobile', 'rift-status-reduced-motion'].includes(scenario) || scenario.startsWith('rift-status-stacking') || scenario.startsWith('self-test-rift-status-line')) driver = 'rift-status.cjs';
   if (['auto-ascend-target-mobile', 'auto-ascend-target-reduced-motion'].includes(scenario)) driver = 'auto-ascend-target.cjs';
   if (scenario.startsWith('forge-ui-') || scenario.startsWith('self-test-forge-ui-')) driver = 'forge-ui.cjs';
@@ -107,8 +118,8 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
   const url = baseUrl + (viewport ? '/layout.html' : '/index.html') + '?' + new URLSearchParams(params);
   const command = [chrome, '--headless=new', '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage',
     '--disable-background-networking', '--disable-background-timer-throttling', '--no-first-run', '--window-size=390,844',
-    '--virtual-time-budget=1500', '--user-data-dir=' + profile, '--dump-dom', url];
-  if (['p1-05-reduced-motion', 'p2-06b-reduced-motion', 'research-duration-reduced-motion', 'inquiry-ui-reduced-motion', 'tree-purchase-ui-reduced-motion'].includes(scenario)) command.splice(-1, 0, '--force-prefers-reduced-motion');
+    '--virtual-time-budget='+(['upgrade-identity-ui','upgrade-identity-reduced-motion', 'tree-purchase-ui-reduced-motion'].includes(scenario)?5000:1500), '--user-data-dir=' + profile, '--dump-dom', url];
+  if (['p1-05-reduced-motion', 'p2-06b-reduced-motion', 'research-duration-reduced-motion', 'inquiry-ui-reduced-motion', 'upgrade-identity-reduced-motion', 'tree-purchase-ui-reduced-motion'].includes(scenario)) command.splice(-1, 0, '--force-prefers-reduced-motion');
   const started = performance.now();
   let result;
   try { result = await (options.execute || runProcess)(command, { timeout: 25000 }); }
@@ -143,7 +154,15 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
 }
 function mutateSource(source, scenario) {
   const replaceOnce = (rule, replacement) => { assert.equal(source.split(rule).length, 2); source = source.replace(rule, () => replacement); };
-  if (scenario === 'self-test-auto-ascend-target-window') replaceOnce('var count=Math.min(200,highest-start+1);', 'var count=highest-start+1;');
+  if (scenario === 'self-test-upgrade-identity-buy') replaceOnce("focus:'Lab: Lumen Wellspring'", "focus:''");
+  if (scenario === 'self-test-upgrade-identity-value') replaceOnce("function formationMult(){ return researchFactor('formation') * longStudyFormationMult(); }", "function formationMult(){ return researchFactor('formation'); }");
+  if (scenario === 'self-test-upgrade-identity-clock') {
+    replaceOnce('    var gridCrossingsBefore = farmGridCrossings;\n    var gridRemainingBefore = farmGridRemainingSec;', '    var elapsedWholeBefore = elapsedWholeSec;\n    var elapsedFractionBefore = elapsedFractionSec;');
+    replaceOnce('if(remaining>0 && farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore && actions===0){', 'if(remaining>0 && elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && actions===0){');
+  }
+  if (scenario === 'self-test-bond-text-ability') replaceOnce('Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it.', 'Heavy ability damage. Stone + Titan activate the Duskguard Bond. Its Module boosts the hit; its Ultimate doubles it.');
+  if (scenario === 'self-test-bond-text-partners') replaceOnce("return SPIRITS.find(function(sp){ return sp.id===id; }).name;", "return SPIRITS.find(function(sp){ return sp.id===id; }).shortName;");
+  if (scenario === 'self-test-auto-ascend-target-window') replaceOnce('Math.min(200,highest-start+1)', 'Math.min(201,highest-start+1)');
   if (scenario === 'self-test-auto-ascend-target-manual') {
     const rule = 'function doAscend(auto){';
     replaceOnce(rule, rule + '\n  if(!auto && state.owned.autoascend) state.autoAscendTargetDepth=Math.max(autoAscendTarget(),clearedProgressionRift()+1);');
@@ -190,8 +209,8 @@ async function main(argv = process.argv.slice(2)) {
     server = await serve(stage);
     const baseUrl = 'http://127.0.0.1:' + server.address().port;
     for (const [scenario, fixture] of Object.entries(selected)) {
-      const viewports = scenario === 'lab-motes-ui' || scenario.startsWith('tree-purchase-ui') ? [[320,844,0,0],[390,844,0,0],[430,844,0,0]] : scenario.startsWith('layout-') || scenario === 'self-test-layout-collapse' ? LAYOUT_VIEWPORTS : [null];
-      for (const viewport of viewports) if (!await runScenario(chrome, baseUrl, scenario, fixture, viewport, { rawArtifactRoot })) failures.push(scenario + ' ' + JSON.stringify(viewport));
+      const viewports = (['lab-motes-ui','upgrade-identity-ui','upgrade-identity-reduced-motion'].includes(scenario) || scenario.startsWith('tree-purchase-ui')) ? [[320,844,0,0],[390,844,0,0],[430,844,0,0]] : scenario.startsWith('layout-') || scenario === 'self-test-layout-collapse' ? LAYOUT_VIEWPORTS : [null];
+      for (const viewport of viewports) if (!await runScenario(chrome, baseUrl, scenario, fixture, viewport, { rawArtifactRoot, sourceWebRoot:webRoot })) failures.push(scenario + ' ' + JSON.stringify(viewport));
     }
   } finally {
     if (server) { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
@@ -200,5 +219,5 @@ async function main(argv = process.argv.slice(2)) {
   if (failures.length) throw Error('Behavioral QA failed: ' + failures.join(', '));
   console.log(`Behavioral QA passed: ${Object.keys(selected).length} deterministic scenario(s).`);
 }
-module.exports = { runScenario, runNativeProcess, nativeProcessContract, instrumentHtml, loadFixtures, mutateSource, main };
+module.exports = { findChrome, runScenario, runNativeProcess, nativeProcessContract, instrumentHtml, loadFixtures, mutateSource, main };
 if (require.main === module) cliMain(main);

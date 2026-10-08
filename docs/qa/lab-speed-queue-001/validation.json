@@ -1,0 +1,174 @@
+{
+  "status": "scoped-pass; feature unfinished",
+  "baselineMain": "0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd",
+  "tree": "758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef",
+  "sourceSHA256": "7c25b0b57722bda4ad6842b173bf9a390f2fa39942ad91206675a20e779d4d9b",
+  "sourceFilesAndModesVerified": 96,
+  "sourceFilesChanged": 0,
+  "productDelta": 0,
+  "newRules": 0,
+  "CDP": {
+    "exit": 0,
+    "records": [
+      {
+        "kind": "unchanged-existing-assertions",
+        "width": 390,
+        "scenario": "lab-motes-contracts",
+        "checks": 82,
+        "negativeControls": [
+          "fallback",
+          "free-carry"
+        ]
+      },
+      {
+        "kind": "unchanged-existing-assertions",
+        "width": 390,
+        "scenario": "lab-motes-chronology",
+        "checks": 101,
+        "negativeControls": [
+          "batch-end"
+        ]
+      },
+      {
+        "kind": "unchanged-existing-assertions",
+        "width": 390,
+        "scenario": "lab-motes-save-reload"
+      },
+      {
+        "kind": "unchanged-existing-assertions",
+        "width": 390,
+        "scenario": "lab-motes-backup-restore"
+      },
+      {
+        "kind": "unchanged-existing-assertions",
+        "width": 390,
+        "scenario": "lab-motes-recovery"
+      },
+      {
+        "kind": "unchanged-existing-assertions",
+        "width": 390,
+        "scenario": "lab-motes-reset"
+      },
+      {
+        "kind": "unchanged-existing-assertions",
+        "width": 320,
+        "scenario": "lab-motes-ui",
+        "checks": 47
+      },
+      {
+        "kind": "unchanged-existing-assertions",
+        "width": 390,
+        "scenario": "lab-motes-ui",
+        "checks": 47
+      },
+      {
+        "kind": "unchanged-existing-assertions",
+        "width": 430,
+        "scenario": "lab-motes-ui",
+        "checks": 47
+      },
+      {
+        "kind": "additional-large-text",
+        "width": 320
+      },
+      {
+        "kind": "additional-large-text",
+        "width": 390
+      },
+      {
+        "kind": "additional-large-text",
+        "width": 430
+      }
+    ],
+    "minMeasuredTextContrast": 8.001272198252899,
+    "teardown": {
+      "code": 0,
+      "signal": null
+    }
+  },
+  "native": [
+    {
+      "name": "native",
+      "exit": 0,
+      "widths": [
+        320,
+        390,
+        430
+      ],
+      "motion": "no-preference",
+      "teardown": {
+        "browser": {
+          "code": 0,
+          "signal": null
+        },
+        "pending": 0,
+        "profileRemoved": true
+      }
+    },
+    {
+      "name": "reduced-motion",
+      "exit": 0,
+      "widths": [
+        320,
+        390,
+        430
+      ],
+      "motion": "reduce",
+      "teardown": {
+        "browser": {
+          "code": 0,
+          "signal": null
+        },
+        "pending": 0,
+        "profileRemoved": true
+      }
+    }
+  ],
+  "context": {
+    "exit": 0,
+    "entrypoints": 21,
+    "links": 24,
+    "archiveChecks": 1509
+  },
+  "failedAttempts": [
+    {
+      "file": "contracts.log",
+      "exit": 1,
+      "reason": "sandbox loopback socket denied"
+    },
+    {
+      "file": "contracts-network.log",
+      "exit": 1,
+      "reason": "dump-dom timed out without completed QA"
+    },
+    {
+      "file": "contracts-escalated.log",
+      "exit": 1,
+      "reason": "dump-dom timed out without completed QA"
+    },
+    {
+      "file": "main-inquiry.log",
+      "exit": 1,
+      "reason": "same dump-dom timeout on current main"
+    },
+    {
+      "file": "cdp-attempt-1.log",
+      "exit": 1,
+      "reason": "review driver did not handle intentional reload context loss"
+    },
+    {
+      "file": "cdp-attempt-2.log",
+      "exit": 0,
+      "reason": "superseded: incorrect units when parsing computed color(srgb ...)"
+    }
+  ],
+  "remaining": [
+    "B2 exact candidate Core/QA accept",
+    "prior writer/process handover",
+    "coordinated GitHub checkpoint",
+    "reconcile B2 with PR51 offline scheduler and Node tooling",
+    "integrated-version checks/full gates",
+    "APK/signing/WebView60/Android/TalkBack acceptance",
+    "GitHub final status/writer release/owner-chat archive"
+  ]
+}

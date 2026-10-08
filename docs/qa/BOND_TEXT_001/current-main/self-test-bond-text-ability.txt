@@ -1,0 +1,48 @@
+Browser identity: { "selected_path": "/tmp/bond-check-tools/google-chrome", "resolved_path": "/workspace/BOND_TEXT_001-evidence/chromium-cdp.cjs", "sha256": "73ac862c4288eb0a53ca7cd6c959ebe42a40f2094a3f9df5d0d4c7c095b474cb", "version": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)", "version_exitcode": 0, "version_stderr": "" }
+Staged source: { "source_sha256": "def2d0a0802e0d996703da3388cc65294d5c45dc92390c4300213aae61e59ebc", "instrumented_sha256": "0f4519348b3298f05014f8e802af460e4e3dea686cd09989311c4fbecff3824c" }
+FAIL self-test-bond-text-ability
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 1.4178369259999999, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-bond-text-ability", "json_status": "fail", "json_scenario": "self-test-bond-text-ability", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /tmp/lumenfall-qa-raw-2l7EOn/self-test-bond-text-ability-DURPrJ
+  stdout tail:
+ssion: bounded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+
+</script>
+
+
+<pre id="qa-result" data-status="fail" data-scenario="self-test-bond-text-ability">{
+  "scenario": "self-test-bond-text-ability",
+  "status": "fail",
+  "detail": {
+    "message": "stone ability does not repeat Bond partnerships",
+    "stack": "Error: stone ability does not repeat Bond partnerships\n    at assert (http://127.0.0.1:41469/index.html?qaScenario=self-test-bond-text-ability&amp;qaFixture=fresh:12589:61)\n    at ok (http://127.0.0.1:41469/index.html?qaScenario=self-test-bond-text-ability&amp;qaFixture=fresh:10024:30)\n    at http://127.0.0.1:41469/index.html?qaScenario=self-test-bond-text-ability&amp;qaFixture=fresh:10059:5\n    at Array.forEach (&lt;anonymous&gt;)\n    at window.runBondTextQa (http://127.0.0.1:41469/index.html?qaScenario=self-test-bond-text-ability&amp;qaFixture=fresh:10053:9)\n    at HTMLDocument.run (http://127.0.0.1:41469/index.html?qaScenario=self-test-bond-text-ability&amp;qaFixture=fresh:14068:48)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+Behavioral QA failed: self-test-bond-text-ability null

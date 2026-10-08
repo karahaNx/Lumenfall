@@ -1,0 +1,28 @@
+{
+  "baseline": "b0537cb46635555ba2c2e5f3f95bc8fc276aeda5",
+  "node": "v24.19.0",
+  "checks": {
+    "context": {
+      "status": "pass",
+      "task_startup_bytes": 31329
+    },
+    "source": "pass",
+    "tooling": "pass",
+    "es2017": "pass",
+    "focused_UI": {
+      "status": "pass",
+      "profiles": 12
+    },
+    "full_default_suite": {
+      "status": "pass",
+      "exitcode": 0,
+      "deterministic_scenarios": 152,
+      "viewport_expanded_results": 174,
+      "command": "PATH=/tmp/lumenfall-save-ui-chrome/opt/google/chrome:$PATH node tests/behavioral/run.cjs --web-root mobile/www --raw-artifacts /tmp/lumenfall-save-ui-current-suite-raw"
+    },
+    "feature_negative_controls": "both expected failures caught",
+    "V8_6_0_UI": "pass"
+  },
+  "physical_acceptance": "pending; no USB/device/KVM or Android SDK/emulator available",
+  "validated_head": "35fa2c8da59b5db457a84adfae8ec468e3a5fcfe"
+}

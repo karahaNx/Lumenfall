@@ -1,0 +1,241 @@
+{
+  "observedAt": "2026-10-08T00:37:58.028Z",
+  "baseline": "214d45411ce2fb420f0e4b372063811a967679b1",
+  "indexSha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca",
+  "node": "v24.19.0",
+  "chromium": "151.0.7922.173",
+  "positivePass": 9,
+  "negativeDetected": 1,
+  "scope": "Existing unchanged product baseline, not new Forge mechanic acceptance",
+  "newFeatureAcceptance": false,
+  "fullCi": "pending",
+  "otherChecks": [
+    {
+      "command": "node scripts/codex/check_context.cjs --task docs/tasks/FORGE_EXCLUSIVE_001.md",
+      "exit": 0,
+      "bytes": 26517
+    },
+    {
+      "command": "node scripts/ci/validate_source.cjs",
+      "exit": 0
+    },
+    {
+      "command": "node tests/tooling/run.cjs",
+      "exit": 0
+    },
+    {
+      "command": "node --check [four task-local scripts]",
+      "exit": 0
+    }
+  ],
+  "sourceReview": "24 catalogue rows, price examples and stacking unchanged; 20/21 consumer hashes unchanged; normalizeCurrentSave delta is upstream Lab snapshot normalization only; no product edits in this branch",
+  "overlap": "At 00:37 UTC, PR59 Wisp display and PR60 Forge text are open on the same main baseline. Neither supplies a Forge gameplay matrix. Shared project-state insertions must be preserved on rebase; main integration serialized.",
+  "results": [
+    {
+      "scenario": "forge-contracts",
+      "start": "2026-10-08T00:36:10.880Z",
+      "end": "2026-10-08T00:36:14.393Z",
+      "transport": "local CDP adapter for dump-dom; native UI uses original driver",
+      "command": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/forge-exclusive-001-current-web",
+        "--scenario",
+        "forge-contracts",
+        "--raw-artifacts",
+        "/workspace/forge-exclusive-001-current-checks/current-raw/forge-contracts"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "scenario": "forge-effects",
+      "start": "2026-10-08T00:36:14.395Z",
+      "end": "2026-10-08T00:36:15.972Z",
+      "transport": "local CDP adapter for dump-dom; native UI uses original driver",
+      "command": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/forge-exclusive-001-current-web",
+        "--scenario",
+        "forge-effects",
+        "--raw-artifacts",
+        "/workspace/forge-exclusive-001-current-checks/current-raw/forge-effects"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "scenario": "forge-chronology",
+      "start": "2026-10-08T00:36:15.973Z",
+      "end": "2026-10-08T00:36:17.325Z",
+      "transport": "local CDP adapter for dump-dom; native UI uses original driver",
+      "command": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/forge-exclusive-001-current-web",
+        "--scenario",
+        "forge-chronology",
+        "--raw-artifacts",
+        "/workspace/forge-exclusive-001-current-checks/current-raw/forge-chronology"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "scenario": "forge-baseline",
+      "start": "2026-10-08T00:36:17.325Z",
+      "end": "2026-10-08T00:36:18.783Z",
+      "transport": "local CDP adapter for dump-dom; native UI uses original driver",
+      "command": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/forge-exclusive-001-current-web",
+        "--scenario",
+        "forge-baseline",
+        "--raw-artifacts",
+        "/workspace/forge-exclusive-001-current-checks/current-raw/forge-baseline"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "scenario": "forge-save-reload",
+      "start": "2026-10-08T00:36:18.783Z",
+      "end": "2026-10-08T00:36:20.118Z",
+      "transport": "local CDP adapter for dump-dom; native UI uses original driver",
+      "command": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/forge-exclusive-001-current-web",
+        "--scenario",
+        "forge-save-reload",
+        "--raw-artifacts",
+        "/workspace/forge-exclusive-001-current-checks/current-raw/forge-save-reload"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "scenario": "forge-backup-restore",
+      "start": "2026-10-08T00:36:20.119Z",
+      "end": "2026-10-08T00:36:21.573Z",
+      "transport": "local CDP adapter for dump-dom; native UI uses original driver",
+      "command": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/forge-exclusive-001-current-web",
+        "--scenario",
+        "forge-backup-restore",
+        "--raw-artifacts",
+        "/workspace/forge-exclusive-001-current-checks/current-raw/forge-backup-restore"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "scenario": "forge-recovery",
+      "start": "2026-10-08T00:36:21.573Z",
+      "end": "2026-10-08T00:36:23.162Z",
+      "transport": "local CDP adapter for dump-dom; native UI uses original driver",
+      "command": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/forge-exclusive-001-current-web",
+        "--scenario",
+        "forge-recovery",
+        "--raw-artifacts",
+        "/workspace/forge-exclusive-001-current-checks/current-raw/forge-recovery"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "scenario": "forge-ui-mobile",
+      "start": "2026-10-08T00:36:23.162Z",
+      "end": "2026-10-08T00:36:51.565Z",
+      "transport": "local CDP adapter for dump-dom; native UI uses original driver",
+      "command": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/forge-exclusive-001-current-web",
+        "--scenario",
+        "forge-ui-mobile",
+        "--raw-artifacts",
+        "/workspace/forge-exclusive-001-current-checks/current-raw/forge-ui-mobile"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "scenario": "forge-ui-reduced-motion",
+      "start": "2026-10-08T00:36:51.565Z",
+      "end": "2026-10-08T00:37:19.989Z",
+      "transport": "local CDP adapter for dump-dom; native UI uses original driver",
+      "command": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/forge-exclusive-001-current-web",
+        "--scenario",
+        "forge-ui-reduced-motion",
+        "--raw-artifacts",
+        "/workspace/forge-exclusive-001-current-checks/current-raw/forge-ui-reduced-motion"
+      ],
+      "exit": 0,
+      "expectedExit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "scenario": "self-test-bad-assertion",
+      "start": "2026-10-08T00:37:19.989Z",
+      "end": "2026-10-08T00:37:21.211Z",
+      "transport": "local CDP adapter for dump-dom; native UI uses original driver",
+      "command": [
+        "node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/forge-exclusive-001-current-web",
+        "--scenario",
+        "self-test-bad-assertion",
+        "--raw-artifacts",
+        "/workspace/forge-exclusive-001-current-checks/current-raw/self-test-bad-assertion"
+      ],
+      "exit": 1,
+      "expectedExit": 1,
+      "signal": null,
+      "error": null
+    }
+  ],
+  "deliveryReceipt": "https://github.com/karahaNx/Lumenfall/pull/64",
+  "finalContextCheck": {
+    "command": "node scripts/codex/check_context.cjs --task docs/tasks/FORGE_EXCLUSIVE_001.md",
+    "exit": 0,
+    "output": "PASS: 29 entrypoints, 52 local Markdown links, shared startup 16380 bytes; startup with docs/tasks/FORGE_EXCLUSIVE_001.md 27421 bytes"
+  }
+}

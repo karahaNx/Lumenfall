@@ -1,0 +1,371 @@
+{
+  "feature": "FORGE_TEXT_001",
+  "baseline": "214d45411ce2fb420f0e4b372063811a967679b1",
+  "candidateIndexSha256": "7e12642138fd2338fc07919aca01ee9c14c5f56bd0460d0d70c1a9193f4ff307",
+  "sourceInvariant": "One presentation literal; all other product bytes unchanged",
+  "checks": [
+    {
+      "name": "baseline-forge-contracts-chrome",
+      "status": "PASS",
+      "sha256": "d6dc9b3ed0920ce85fb4e99e64256f8533e94c0a886fdcb30ce137af0a2afa80"
+    },
+    {
+      "name": "forge-contracts",
+      "status": "PASS",
+      "sha256": "a9d12ee490c6265325303cd8dbcfcdc5708002c861e7ed0c3c853fe20440862c"
+    },
+    {
+      "name": "forge-effects",
+      "status": "PASS",
+      "sha256": "a3a78eecf3cc819b2612c08aae14134e123e42c07fdfdd37f19d6b45bc480b91"
+    },
+    {
+      "name": "forge-chronology",
+      "status": "PASS",
+      "sha256": "ee54f6bd7f81b476a1fa7c1402f51a6b4de6dd088e68b2bac6a44499a54f5073"
+    },
+    {
+      "name": "forge-save-reload",
+      "status": "PASS",
+      "sha256": "7232afeaf3af5a601b39121f9929b8814e571aab3ab7a551766a0edfce9b64c6"
+    },
+    {
+      "name": "forge-backup-restore",
+      "status": "PASS",
+      "sha256": "335c10721eef4511f8bbd77ad12da57ddd91f5e62b39adf43d070ea8fde9da23"
+    },
+    {
+      "name": "forge-recovery",
+      "status": "PASS",
+      "sha256": "6c4bd69ba5ef815914eb52730d71f220cf2bb0d686cce24d9677cf644681d879"
+    },
+    {
+      "name": "forge-baseline",
+      "status": "PASS",
+      "sha256": "288a4fc9a2637b62f418342358b3c3c1bdef05f724b3a02237b81b45dcce01f6"
+    },
+    {
+      "name": "forge-balance",
+      "status": "PASS",
+      "sha256": "e4f4b00844f5163453c9a9f84ae25873f6164cd7c1e01d1146d8e5e7c4a03ae3"
+    },
+    {
+      "name": "p1-05-control-regressions",
+      "status": "PASS",
+      "sha256": "a05b9de34623f9a4c70365c0d6e97e1c4895c2b45db7615f798cf3d7e17eb34b"
+    },
+    {
+      "name": "p1-05-reduced-motion",
+      "status": "PASS",
+      "sha256": "ebe196d192676a1d91d56d7465aaa2e427e8530865e7a10e14ab7c145a39be9d"
+    },
+    {
+      "name": "forge-ui-mobile-chrome",
+      "status": "PASS",
+      "sha256": "d89536e1cc7ea25581c6c2c3c7354b5ecc2e8f92490957b45cc75933976eabb3"
+    },
+    {
+      "name": "forge-ui-reduced-motion-chrome",
+      "status": "PASS",
+      "sha256": "be6c24e5c7cf4f92e5f44eb7cc59482e7dc634f5b610db7d79606f5028aec6af"
+    }
+  ],
+  "presentationComparisons": 56,
+  "viewportProfiles": 12,
+  "existing200PercentOverflow": true,
+  "remoteCI": {
+    "status": "PASS",
+    "feature": "FORGE_TEXT_001",
+    "pr": 60,
+    "head": "5c77129de961bb1d6a6cba6a8990f8625e146acd",
+    "run": 37708469018,
+    "job": 113088414722,
+    "url": "https://github.com/karahaNx/Lumenfall/actions/runs/37708469018",
+    "defaultScenarios": 146,
+    "requiredNegativeControls": 12,
+    "guardedStartup": true,
+    "sourceAndTooling": "PASS",
+    "log": "ci-37708469018.log.gz",
+    "rawLogSha256": "fb5e90d2abaa89b3d8a2f7701c7c5ffd6d58c66f3e4fbb8d08c84aca536f3196"
+  },
+  "APK": {
+    "status": "PASS",
+    "feature": "FORGE_TEXT_001",
+    "observedAt": "2026-10-08 00:53:12 UTC",
+    "pr": 60,
+    "sourceCommit": "e189a3a8aba0c7cc377bad8980c62d75d1279189",
+    "run": 37709745605,
+    "job": 113092611786,
+    "runConclusion": "success",
+    "versionCode": 139,
+    "versionName": "0.1.139",
+    "package": "com.lumenfall.app",
+    "certificateSha256": "A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21",
+    "apkSha256": "827d364f7071ab6c32e39ebd6efe3a758fa1741568fc26ca21589aaaace27551",
+    "assetId": 620261746,
+    "releaseDigest": "sha256:827d364f7071ab6c32e39ebd6efe3a758fa1741568fc26ca21589aaaace27551",
+    "assetBytes": 6837160,
+    "downloadUrl": "https://github.com/karahaNx/Lumenfall/releases/download/android-latest/Lumenfall.apk",
+    "releaseTag": "android-latest",
+    "tagSourceCommit": "e189a3a8aba0c7cc377bad8980c62d75d1279189",
+    "identityLog": "android-139-identity.log.gz",
+    "assetReceipt": "android-139-assets.json",
+    "buildLog": "android-build-139.log.gz",
+    "deviceAcceptance": "NOT_RUN: physical affected-phone/exact WebView60/TalkBack remains open"
+  },
+  "deviceAcceptance": "NOT_RUN",
+  "guardedStartup": "PASS_EXISTING_GATE_WITH_WRITABLE_ISOLATED_LOCAL_PROFILE",
+  "integration": {
+    "status": "pass",
+    "feature": "FORGE_TEXT_001",
+    "pr": 60,
+    "candidateHead": "5c77129de961bb1d6a6cba6a8990f8625e146acd",
+    "integrationCommit": "e189a3a8aba0c7cc377bad8980c62d75d1279189",
+    "candidateTree": "637f476947165de3e83a78dc866a0db0c3ebc2b4",
+    "integrationTree": "637f476947165de3e83a78dc866a0db0c3ebc2b4",
+    "fullTreeEquality": true,
+    "indexSha256": "7e12642138fd2338fc07919aca01ee9c14c5f56bd0460d0d70c1a9193f4ff307"
+  },
+  "webView60Engine": {
+    "status": "pass",
+    "scenario": "offline-catchup-v8",
+    "node": "v8.3.0",
+    "v8": "6.0.286.52",
+    "batches": 1181,
+    "kills": 302400,
+    "ascends": 14400,
+    "wallMs": 14205.293765,
+    "limitation": "JS engine probe; actual Android WebView60/device acceptance remains required"
+  },
+  "combinedSource": {
+    "status": "PASS",
+    "feature": "FORGE_TEXT_001",
+    "currentSourceCommit": "0e9b54c8d62a873bd48625f4a20ee18078e8a8f1",
+    "indexSha256": "a64747dcec3c26c0b5dea3f2e5c1bac521de557e38547b1195b5a3660234b0df",
+    "parallelChange": "PR59 WISP_UPGRADE_DISPLAY_001",
+    "forgeFunctionsUnchanged": [
+      {
+        "name": "renderResearch",
+        "sha256": "4ae4f837f6327eac6c6751270ee95cb4170520804fbf3f290a68b3f1d4603b61",
+        "unchanged": true
+      },
+      {
+        "name": "researchPreview",
+        "sha256": "fa8f74c5f6632554efce84e5e02d79b5fcc0aa976c89e57b735c9b1a983ae296",
+        "unchanged": true
+      },
+      {
+        "name": "getResearchBuyPlan",
+        "sha256": "ef46a069e7c043d6015f332a822b30bc3137665ab002613e505c7660a398f275",
+        "unchanged": true
+      },
+      {
+        "name": "updateResearchCard",
+        "sha256": "e08fb6b5b1b8ab8a519f18c9cd45a3a6e5ca0a9f4cb277b2cb9383b47ef28374",
+        "unchanged": true
+      }
+    ],
+    "normalIntegratedForgeContracts": "PASS",
+    "testedStagedSourceSha256": "a64747dcec3c26c0b5dea3f2e5c1bac521de557e38547b1195b5a3660234b0df",
+    "stageDiagnostic": "A first post-rebase probe used prior staged HTML and was excluded; fresh root HTML was staged and its recorded harness SHA256 verified.",
+    "contractsLog": "integrated-forge-contracts.log.gz",
+    "apk": {
+      "version": "0.1.140",
+      "build": 37710185974,
+      "sourceCommit": "0e9b54c8d62a873bd48625f4a20ee18078e8a8f1",
+      "sha256": "c0c81462151c485b16f85dc2c0e53d258ba45c60f92a32539e9e2d6a7153696d",
+      "bytes": 6837509,
+      "crcEntries": 526,
+      "assets": 15,
+      "identity": "PASS established package/signer; code140/name0.1.140",
+      "identityLog": "android-140-identity.log.gz",
+      "assetReceipt": "android-140-assets.json"
+    },
+    "deviceAcceptance": "OPEN / NOT RUN",
+    "functionHashRange": "From function declaration start through its closing brace inclusive; excludes following separator newline."
+  },
+  "postBondSource": {
+    "status": "PASS",
+    "feature": "FORGE_TEXT_001",
+    "mainCheckpoint": "641697e4208ac41a6116b903ab136e54571818bd",
+    "productSourceCommit": "210005d0ae093d21e846bae41a9bddf25af2800d",
+    "parallelChanges": "PR61 Bond text; PR62/65 Lab documentation",
+    "indexSha256": "1e0d51370b5b62f313dad6953f9b26bb7d7a1a886785dbccc6dfaac379779981",
+    "forgeFunctionsUnchanged": [
+      {
+        "name": "renderResearch",
+        "unchanged": true,
+        "sha256": "4ae4f837f6327eac6c6751270ee95cb4170520804fbf3f290a68b3f1d4603b61"
+      },
+      {
+        "name": "researchPreview",
+        "unchanged": true,
+        "sha256": "fa8f74c5f6632554efce84e5e02d79b5fcc0aa976c89e57b735c9b1a983ae296"
+      },
+      {
+        "name": "getResearchBuyPlan",
+        "unchanged": true,
+        "sha256": "ef46a069e7c043d6015f332a822b30bc3137665ab002613e505c7660a398f275"
+      },
+      {
+        "name": "updateResearchCard",
+        "unchanged": true,
+        "sha256": "e08fb6b5b1b8ab8a519f18c9cd45a3a6e5ca0a9f4cb277b2cb9383b47ef28374"
+      }
+    ],
+    "stagedSourceSha256": "1e0d51370b5b62f313dad6953f9b26bb7d7a1a886785dbccc6dfaac379779981",
+    "forgeContracts": "PASS fresh exact source",
+    "contractsLog": "post-bond-forge-contracts.log.gz",
+    "apk": {
+      "version": "0.1.141",
+      "build": 37712548224,
+      "sha256": "0b278ffce3819a40b98c44b738b79123ec2d7fb273a3820bc13ed71940214d44",
+      "bytes": 6837505,
+      "crcEntries": 526,
+      "sourceVerifiedAssets": 15,
+      "identity": "PASS package/code141/name0.1.141/established signer",
+      "identityLog": "android-141-identity.log.gz",
+      "assetReceipt": "android-141-assets.json"
+    },
+    "deviceAcceptance": "OPEN / NOT RUN",
+    "functionHashRange": "From function declaration start through its closing brace inclusive; excludes following separator newline."
+  },
+  "historicalAPK140": {
+    "status": "PASS",
+    "feature": "FORGE_TEXT_001",
+    "sourceCommit": "0e9b54c8d62a873bd48625f4a20ee18078e8a8f1",
+    "run": 37710185974,
+    "runNumber": 140,
+    "runConclusion": "success",
+    "version": "0.1.140",
+    "package": "com.lumenfall.app",
+    "certificateSha256": "A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21",
+    "assetId": 620269725,
+    "releaseDigest": "sha256:c0c81462151c485b16f85dc2c0e53d258ba45c60f92a32539e9e2d6a7153696d",
+    "apkBytes": 6837509,
+    "downloadUrl": "https://github.com/karahaNx/Lumenfall/releases/download/android-latest/Lumenfall.apk",
+    "tagSourceCommit": "0e9b54c8d62a873bd48625f4a20ee18078e8a8f1",
+    "independentIdentity": "PASS",
+    "assetReceipt": "android-140-assets.json",
+    "identityLog": "android-140-identity.log.gz",
+    "combinedReceipt": "combined-acceptance.json",
+    "deviceAcceptance": "OPEN / NOT RUN"
+  },
+  "historicalAPK141": {
+    "status": "PASS",
+    "feature": "FORGE_TEXT_001",
+    "sourceCommit": "210005d0ae093d21e846bae41a9bddf25af2800d",
+    "mainCheckpoint": "641697e4208ac41a6116b903ab136e54571818bd",
+    "run": 37712548224,
+    "version": "0.1.141",
+    "package": "com.lumenfall.app",
+    "establishedSignerVerified": true,
+    "assetId": 620323694,
+    "releaseDigest": "sha256:0b278ffce3819a40b98c44b738b79123ec2d7fb273a3820bc13ed71940214d44",
+    "apkBytes": 6837505,
+    "downloadUrl": "https://github.com/karahaNx/Lumenfall/releases/download/android-latest/Lumenfall.apk",
+    "downloadIsMutable": true,
+    "identityLog": "android-141-identity.log.gz",
+    "assetReceipt": "android-141-assets.json",
+    "forgeReceipt": "post-bond-acceptance.json",
+    "requiredDeviceAcceptance": "OPEN / NOT RUN",
+    "archivedBinary": "APK/Lumenfall-0.1.141.apk",
+    "archivedBinarySha256": "0b278ffce3819a40b98c44b738b79123ec2d7fb273a3820bc13ed71940214d44"
+  },
+  "currentSource": {
+    "status": "PASS available integrated source/APK checks; physical acceptance OPEN",
+    "feature": "FORGE_TEXT_001",
+    "mainCheckpoint": "e0fd100afc8e429227acbcbde3840adc70e9bbc8",
+    "productSourceCommit": "d95205f6d8059933fac74e8699854f67cb950a7e",
+    "parallelChanges": "PR63 Rift wording; PR69 Comet Trial/Rift cosmetics; subsequent delivery documentation",
+    "indexSha256": "5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c",
+    "forgeFunctionsComparison": [
+      {
+        "name": "renderResearch",
+        "sha256": "556723b6290eef1ab0def306fa96aa75e0a763346b4b0692e50d2fa667472f55",
+        "unchanged": false,
+        "change": "PR69 changes Remember Bulk ownership lookup to preserved legacyCometPurchases; all other renderer bytes identical"
+      },
+      {
+        "name": "researchPreview",
+        "sha256": "fa8f74c5f6632554efce84e5e02d79b5fcc0aa976c89e57b735c9b1a983ae296",
+        "unchanged": true,
+        "change": null
+      },
+      {
+        "name": "getResearchBuyPlan",
+        "sha256": "ef46a069e7c043d6015f332a822b30bc3137665ab002613e505c7660a398f275",
+        "unchanged": true,
+        "change": null
+      },
+      {
+        "name": "updateResearchCard",
+        "sha256": "e08fb6b5b1b8ab8a519f18c9cd45a3a6e5ca0a9f4cb277b2cb9383b47ef28374",
+        "unchanged": true,
+        "change": null
+      }
+    ],
+    "stagedSourceSha256": "5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c",
+    "forgeContracts": "PASS 3508 assertions / 336 purchase cases / four causal negatives",
+    "contractsLog": "current-forge-contracts.log.gz",
+    "apk": {
+      "version": "0.1.143",
+      "build": 37715794487,
+      "sourceCommit": "d95205f6d8059933fac74e8699854f67cb950a7e",
+      "sha256": "45d1032ae6e77362d3540db740c6cfbdc4d275f2e3f6b98f4cecb1229e3205e7",
+      "bytes": 6841573,
+      "crcEntries": 526,
+      "sourceVerifiedAssets": 15,
+      "identity": "PASS package/code143/name0.1.143/established signer",
+      "identityLog": "android-143-identity.log.gz",
+      "assetReceipt": "android-143-assets.json"
+    },
+    "deviceAcceptance": "OPEN / NOT RUN",
+    "mobile": {
+      "status": "PASS",
+      "scenarios": [
+        "forge-ui-mobile",
+        "forge-ui-reduced-motion"
+      ],
+      "profilesPerScenario": 3,
+      "logs": [
+        "current-forge-ui-mobile.log.gz",
+        "current-forge-ui-reduced-motion.log.gz"
+      ]
+    },
+    "functionHashRange": "From function declaration start through its closing brace inclusive; excludes following separator newline.",
+    "webView60Engine": {
+      "status": "pass",
+      "scenario": "offline-catchup-v8",
+      "node": "v8.3.0",
+      "v8": "6.0.286.52",
+      "batches": 1181,
+      "kills": 302400,
+      "ascends": 14400,
+      "wallMs": 15324.239258,
+      "limitation": "JS engine probe; actual Android WebView60/device acceptance remains required",
+      "sourceSha256": "5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c",
+      "sourceByteIdenticalToAPK143": true,
+      "evidence": "current-webview60-engine.json"
+    }
+  },
+  "latestVerifiedAPK": {
+    "status": "PASS",
+    "feature": "FORGE_TEXT_001",
+    "sourceCommit": "d95205f6d8059933fac74e8699854f67cb950a7e",
+    "mainCheckpoint": "e0fd100afc8e429227acbcbde3840adc70e9bbc8",
+    "run": 37715794487,
+    "version": "0.1.143",
+    "package": "com.lumenfall.app",
+    "establishedSignerVerified": true,
+    "assetId": 620415874,
+    "releaseDigest": "sha256:45d1032ae6e77362d3540db740c6cfbdc4d275f2e3f6b98f4cecb1229e3205e7",
+    "apkBytes": 6841573,
+    "identityLog": "android-143-identity.log.gz",
+    "assetReceipt": "android-143-assets.json",
+    "forgeReceipt": "current-acceptance.json",
+    "requiredDeviceAcceptance": "OPEN / NOT RUN",
+    "archivedBinary": "APK/Lumenfall-0.1.143.apk",
+    "archivedBinarySha256": "45d1032ae6e77362d3540db740c6cfbdc4d275f2e3f6b98f4cecb1229e3205e7"
+  }
+}

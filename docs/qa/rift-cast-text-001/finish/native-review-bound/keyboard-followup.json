@@ -1,0 +1,41 @@
+{
+  "status": "pass",
+  "case": "actual Android Tab and focus outline",
+  "artifactIdentity": {
+    "installedApkPath": "/data/app/com.lumenfall.app-6aiOxKjjbptA4d3zQE87UA==/base.apk",
+    "installedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+    "providedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+    "sourceSha256": "835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3"
+  },
+  "reconfirmedInstalledApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+  "identity": {
+    "android": "8.1.0",
+    "api": "27",
+    "package": [
+      "versionCode=142 minSdk=22 targetSdk=34",
+      "versionName=0.1.142"
+    ],
+    "ua": "Mozilla/5.0 (Linux; Android 8.1.0; Android SDK built for x86_64 Build/OSM1.180201.023; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.98 Mobile Safari/537.36",
+    "page": "https://localhost/",
+    "viewport": {
+      "width": 430,
+      "height": 773,
+      "dpr": 0.800000011920929
+    },
+    "apkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+    "sourceSha256": "835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3"
+  },
+  "exactProductScript": true,
+  "diagnostic": "Android SystemUI ANR owned actual native input focus; isolated SystemUI restarted, app input focus reconfirmed before actual Tab",
+  "before": {
+    "active": "rift-push-btn",
+    "hasFocus": true
+  },
+  "after": {
+    "active": "rift-farm-btn",
+    "hasFocus": true,
+    "outline": "auto"
+  },
+  "waitMs": 13233,
+  "completedAt": "2026-10-08T03:22:31.939Z"
+}

@@ -134,7 +134,7 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     s=seed();install(s);ok(q('#bond-summary').textContent==='No Formation Bond active.','neutral Bonds');
     var worst=window.riftStatusWorst(b,ctx);s.activeParty=worst.ids;s.activeParty.forEach(id=>s.spirits[id]=1);install(s);
     var active=b.riftStatus.active();ok(active.length===worst.bonds.length&&q('#bond-summary').textContent===worst.text,'every actual powered Bond name visible');
-    active.forEach(x=>{var row=[...document.querySelectorAll('#bond-card .bond-row')].find(row=>row.querySelector('.bond-name').textContent.includes(x.name));ok(row && row.classList.contains('active') && row.querySelector('.bond-req').textContent===x.req && row.querySelector('.bond-effect').textContent===x.effect,'existing Formation retains active Bond requirements and full effects');});
+    active.forEach(x=>{var row=[...document.querySelectorAll('#bond-card .bond-row')].find(row=>row.querySelector('.bond-name').textContent.includes(x.name));var partners=x.ids.map(id=>b.wispRoleContract().find(sp=>sp.id===id).name).join(' + ');ok(row && row.classList.contains('active') && row.querySelector('.bond-req').textContent===partners && row.querySelector('.bond-effect').textContent===x.effect,'existing Formation retains active Bond requirements and full effects');});
     s.spirits[worst.bonds[0].ids[0]]=0;install(s);
     ok(!b.riftStatus.active().some(x=>x.id===worst.bonds[0].id)&&!q('#bond-summary').textContent.includes(worst.bonds[0].name.replace(' Bond','')),'unpowered members cannot show an active Bond');
     var remaining=b.riftStatus.active();
@@ -153,12 +153,13 @@ window.runRiftStatusQa=async function(b,ctx,assert){
       cards.forEach(card=>{
         var id=card.dataset.riftWisp,powered=state.spirits[id]>0,value=powered?state.heroResource[id]:0,bar=card.querySelector('[role="progressbar"]'),power=card.querySelector('.rift-wisp-power'),status=card.querySelector('.rift-wisp-state');
         ok(Number(bar.getAttribute('aria-valuenow'))===Math.round(value),'bar reads real ability resource');
-        ok(parseFloat(bar.firstElementChild.style.width)===value,'visible bar matches accessible charge');
+        ok(Math.abs(parseFloat(bar.firstElementChild.style.width)-value)<=0.00001,'visible bar matches charge within CSS serialization precision');
         ok(bar.getAttribute('aria-valuemin')==='0'&&bar.getAttribute('aria-valuemax')==='100','ability charge retains its accessible percentage range');
-        ok(bar.getAttribute('aria-valuetext')===(powered?Math.round(value)+'% charged; '+Math.ceil((1-value/100)*b.riftStatus.visualMetrics().cycle)+' seconds to next ability':'Unpowered — Empower this Wisp'),'ability timing remains accessible and uses actual charge speed');
+        var expectedStatus=powered?(card.classList.contains('is-casting')?'Casting; ':value>=100?'Ready; ':'')+Math.round(value)+'% charged; '+Math.ceil((1-value/100)*b.riftStatus.visualMetrics().cycle)+' seconds to next ability':'Unpowered — Empower this Wisp';
+        ok(bar.getAttribute('aria-valuetext')===expectedStatus,'ability status and timing remain accessible and use actual charge speed');
         var expectedPower=powerText(id,state);
         ok(power&&power.textContent===expectedPower&&power.title==='Passive Wisp power'&&power.getAttribute('aria-label')==='Passive Wisp power: '+expectedPower,'Rift card displays its authoritative passive Wisp power');
-        ok(status&&status.textContent===(!powered?'Lv 0':card.classList.contains('is-casting')?'CAST':value>=100?'Ready':''),'card state is only unpowered, casting, ready or empty');
+        ok(status&&status.textContent===(!powered?'Lv 0':''),'powered Rift cards do not repeat ability status as visible text');
         ok(!card.querySelector('.rift-wisp-time')&&!/\b\d+(?:\.\d+)?\s*(?:s|sec|seconds)\b/i.test(card.textContent),'Rift card has no visible ability countdown');
       });
       var active=b.riftStatus.active();same([...document.querySelectorAll('[data-bond-effect]')].map(x=>x.querySelector('.rift-bond-copy').textContent),active.map(x=>x.effect),'Rift shows exact complete active Bond effects');
@@ -196,7 +197,7 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     b.advanceTime(2000);b.riftStatus.update();partyCheck();
     ok(q('[data-rift-wisp="'+powerId+'"] .rift-wisp-power').textContent===beforePower,'displayed passive power drops the expired support buff');
     s.heroResource[powerId]=100;install(s);partyCheck();
-    ok(q('[data-rift-wisp="'+powerId+'"] .rift-wisp-state').textContent==='Ready','full real charge displays Ready without seconds');
+    ok(q('[data-rift-wisp="'+powerId+'"] .rift-charge').getAttribute('aria-valuetext').startsWith('Ready; 100% charged;'),'full real charge exposes Ready on the progressbar');
     s.spirits[s.activeParty[0]]=0;install(s);partyCheck();
     s.activeParty=s.activeParty.slice(1).reverse();install(s);partyCheck();
     s=seed();install(s);partyCheck();ok(q('#boss-combat').hidden,'regen hidden for ordinary enemies');
@@ -211,7 +212,8 @@ window.runRiftStatusQa=async function(b,ctx,assert){
       b.advanceTime(400);b.feedbackTick(false);b.riftStatus.update();
       var fx=q('.cast-'+id);ok(motion?!fx:!!fx,'actual '+id+' ability uses its own effect, suppressed in reduced motion');
       if(fx)styles.push(fx.className);
-      ok(q('[data-rift-wisp="'+id+'"] .rift-wisp-state').textContent==='CAST','cast marker follows real '+id+' ability');
+      partyCheck();
+      ok(q('[data-rift-wisp="'+id+'"] .rift-charge').getAttribute('aria-valuetext').startsWith('Casting; '),'accessible cast status follows real '+id+' ability');
     });
     if(!motion)ok(new Set(styles).size===8,'eight distinct Wisp cast identities');
     s=seed();s.activeParty=['ember'];s.spirits.ember=1;s.heroResource.ember=0;install(s);q('[data-tab="battle"]').click();b.resetFeedback();
@@ -223,11 +225,12 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     b.resetFeedback();q('[data-tab="spirits"]').click();b.advanceTime(400);b.feedbackTick(false);ok(!q('.combat-vfx'),'no passive effects accumulate off Rift');
     s=seed();s.activeParty=['ember'];s.spirits.ember=1;s.heroResource.ember=99.9;install(s);q('[data-tab="battle"]').click();
     b.advanceTime(100);b.feedbackTick(false);b.riftStatus.update();
-    ok(b.getState().heroResource.ember<5&&q('[data-rift-wisp="ember"] .rift-wisp-state').textContent==='CAST','production simulation cast resets charge and lights the casting Wisp');
+    ok(b.getState().heroResource.ember<5&&q('[data-rift-wisp="ember"]').classList.contains('is-casting')&&q('[data-rift-wisp="ember"] .rift-charge').getAttribute('aria-valuetext').startsWith('Casting; '),'production simulation cast resets charge and exposes the casting Wisp');
     b.advanceTime(700);b.riftStatus.update();
     q('[data-tab="battle"]').click();b.resetFeedback();
     var castId=b.getState().activeParty[0];for(var n=0;n<20;n++)b.riftStatus.emit(castId);b.riftStatus.update();
-    ok(q('[data-rift-wisp="'+castId+'"] .rift-wisp-state').textContent==='CAST','actual cast event marks the correct Wisp');
+    partyCheck();
+    ok(q('[data-rift-wisp="'+castId+'"] .rift-charge').getAttribute('aria-valuetext').startsWith('Casting; '),'actual cast event exposes status on the correct Wisp bar');
     ok(document.querySelectorAll('.combat-vfx').length===(matchMedia('(prefers-reduced-motion: reduce)').matches?0:8),'effects are bounded and absent in reduced motion');
     b.advanceTime(700);b.riftStatus.update();ok(!q('.rift-wisp.is-casting'),'cast marker expires');
     b.resetFeedback();q('[data-tab="spirits"]').click();b.riftStatus.emit(castId);ok(!q('.combat-vfx'),'no effects accumulate off Rift');q('[data-tab="battle"]').click();

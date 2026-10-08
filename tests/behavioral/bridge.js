@@ -14,7 +14,7 @@ function qaLifecycleRecord(type,detail){
 }
 // Resolve only after the real startup completion callback (including its save).
 // This is installed before DOMContentLoaded/init in the throwaway instrumented app.
-if(window.__lumenfallQaContext.scenario==='lab-motes-runtime' || window.__lumenfallQaContext.scenario==='lab-motes-native' || window.__lumenfallQaContext.scenario==='lab-motes-reduced-motion' || window.__lumenfallQaContext.scenario==='auto-ascend-target-mobile' || window.__lumenfallQaContext.scenario==='auto-ascend-target-reduced-motion' || window.__lumenfallQaContext.scenario.startsWith('forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('self-test-forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('rift-status-') || window.__lumenfallQaContext.scenario.startsWith('self-test-rift-status-')){
+if(window.__lumenfallQaContext.scenario==='formation-autosave-native' || window.__lumenfallQaContext.scenario==='formation-autosave-reduced-motion' || window.__lumenfallQaContext.scenario.startsWith('comet-unlocks-') || window.__lumenfallQaContext.scenario==='lab-motes-runtime' || window.__lumenfallQaContext.scenario==='lab-motes-native' || window.__lumenfallQaContext.scenario==='lab-motes-reduced-motion' || window.__lumenfallQaContext.scenario==='auto-ascend-target-mobile' || window.__lumenfallQaContext.scenario==='auto-ascend-target-reduced-motion' || window.__lumenfallQaContext.scenario.startsWith('forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('self-test-forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('rift-status-') || window.__lumenfallQaContext.scenario.startsWith('self-test-rift-status-')){
   var qaStartupResolve;
   window.__qaForgeStartup={completed:false,callbacks:0,promise:new Promise(function(resolve){qaStartupResolve=resolve;})};
   var qaOriginalPlayStartupIntro=playStartupIntro;
@@ -69,6 +69,7 @@ offlineProgressSteps = function*(){
 };
 
 window.__lumenfallQaBridge = {
+  comet: {render:renderAll,shop:renderShop,cosmetics:renderCosmetics,tab:activateTab,ascend:function(){doAscend(false);},queue:queueCometTrial,cancel:cancelCometTrial},
   offlineTest: {
     seed:function(){return JSON.parse(JSON.stringify(window.__lumenfallQaContext.fixtures['offline-catchup-device'].save));},
     failNext:function(){var original=simulationResolveTimestamp;simulationResolveTimestamp=function(){simulationResolveTimestamp=original;throw new Error('injected offline failure');};}
@@ -155,6 +156,12 @@ window.__lumenfallQaBridge = {
       return function(){commitStudyStart=start;studyMotesPlan=plan;simulationKillsUntilStudyMotes=boundary;simulationApplyFarmPassive=farm;};
     }
   },
+  upgradeIdentity: {
+    nodes: function(){return JSON.parse(JSON.stringify(NODES));},
+    buyNode: function(id){buyNode(NODES.find(function(n){return n.id===id;}));},
+    spoofForge: function(id){buyResearch({id:id,retiredTo:''});},
+    metrics: function(){return {lumen:lumenMult(),shards:shardMult(),tap:tapMult(),formation:formationMult(),power:longStudyPowerMult(),momentum:momentumMult(),offline:offlineRate(),prisms:prismMult(),motes:longStudyMoteMult()};}
+  },
   inquiry: {
     nodes: function(){return JSON.parse(JSON.stringify(LONG_STUDIES));},
     originals: function(){return LEGACY_STUDY_IDS.slice();},
@@ -181,11 +188,9 @@ window.__lumenfallQaBridge = {
   },
   autoTarget: {
     render: function(){renderShop();},
-    find: function(value){return findAutoAscendRift(value);},
-    shift: function(direction){return shiftAutoAscendWindow(direction);},
     flags: function(){return {resetInProgress:resetInProgress,reloadInProgress:reloadInProgress,offlineBusy:!!offlineCatchup,offlinePending:offlinePending,resumeFlowBusy:resumeFlowBusy};},
     input: function(value){var old=reloadInProgress;reloadInProgress=false;try{return setAutoAscendClearedTarget(value);}finally{reloadInProgress=old;}},
-    change: function(value){var old=reloadInProgress;reloadInProgress=false;try{var el=els['shop-list'].querySelector('[data-autoascend-target]');el.value=value;el.dispatchEvent(new Event('change',{bubbles:true}));}finally{reloadInProgress=old;}},
+    change: function(value){var old=reloadInProgress;reloadInProgress=false;try{var el=els['auto-ascend-controls'].querySelector('[data-autoascend-target]');el.value=value;el.dispatchEvent(new Event('change',{bubbles:true}));}finally{reloadInProgress=old;}},
     check: function(){var old=reloadInProgress;reloadInProgress=false;try{return checkAutoAscend();}finally{reloadInProgress=old;}},
     manual: function(){var old=reloadInProgress;reloadInProgress=false;try{return doAscend(false);}finally{reloadInProgress=old;}},
     visibility: async function(hidden){var old=reloadInProgress;reloadInProgress=false;try{var result=window.__lumenfallQaBridge.dispatchVisibility(hidden);while(offlineCatchup)await new Promise(function(resolve){setTimeout(resolve,0);});return result;}finally{reloadInProgress=old;}},
@@ -420,6 +425,13 @@ window.__lumenfallQaBridge = {
       }finally{state=saved;}
     },
     toggle: function(id){ toggleActive(id); },
+    mutateAutosave: function(kind){
+      var commit=commitFormationMembers,reconcile=reconcileFormationRebuild,apply=applyFormationPreset;
+      if(kind==='lost-destination') commitFormationMembers=function(members){commit(members);state.activeFormationPreset='';};
+      if(kind==='projection-save') reconcileFormationRebuild=function(snapshot){reconcile(snapshot);if(snapshot.activeFormationPreset)snapshot.formationPresets[snapshot.activeFormationPreset]=snapshot.activeParty.slice();};
+      if(kind==='switch-overwrite') applyFormationPreset=function(name){var leaving=state.activeFormationPreset,result=apply(name);if(leaving)state.formationPresets[leaving]=state.activeParty.slice();return result;};
+      return function(){commitFormationMembers=commit;reconcileFormationRebuild=reconcile;applyFormationPreset=apply;};
+    },
     corruptPrimary: function(){ localStorage.setItem(SAVE_KEY,'broken'); },
     // Negative controls use real production entry points with one scoped mutation.
     mutate: function(kind){
@@ -672,7 +684,6 @@ window.__lumenfallQaBridge = {
     return JSON.parse(JSON.stringify(state));
   },
   applyFormationPreset: function(name){ return applyFormationPreset(name); },
-  saveFormationPreset: function(name){ return saveFormationPreset(name); },
   activeBondIds: function(){ return activeFormationBonds().map(function(bond){return bond.id;}); },
   autoEmpowerAll: function(enabled){ setAutoEmpowerAll(!!enabled); return JSON.parse(JSON.stringify(state.empowerQueue)); },
   simulate: function(seconds,kind,chunkSec,startMs,windowStartMs){

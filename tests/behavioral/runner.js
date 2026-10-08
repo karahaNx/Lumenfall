@@ -495,6 +495,9 @@
         window.runRiftLayoutQa(bridge,ctx,assert).then(function(detail){ finish('pass',detail); },function(error){ finish('fail',error.message); });
         return;
       }
+      if(ctx.scenario==='comet-unlocks-mobile' || ctx.scenario==='comet-unlocks-reduced-motion'){
+        window.__cometNativeReady=true;return; // Native driver owns these scenarios.
+      }
       if(ctx.scenario==='auto-ascend-target-mobile' || ctx.scenario==='auto-ascend-target-reduced-motion'){
         window.__autoAscendTargetReady=true;return;
       }
@@ -530,6 +533,13 @@
         }
         finish('pass',window.runLabMotesQa(bridge,ctx,assert,assertProtectedParity,assertSummaryParity));return;
       }
+      if(ctx.scenario.startsWith('upgrade-identity-')||ctx.scenario.startsWith('self-test-upgrade-identity-')){
+        bridge.freeze();
+        if(['upgrade-identity-save-reload','upgrade-identity-backup-restore','upgrade-identity-recovery'].includes(ctx.scenario)){
+          window.runUpgradeIdentityPersistence(bridge,ctx,assert,phase,nextPhase,backupCode,finish);return;
+        }
+        window.runUpgradeIdentityQa(bridge,ctx.scenario.startsWith('self-test-')?Object.assign({},ctx,{scenario:ctx.scenario.endsWith('-clock')?'upgrade-identity-farm-clock':'upgrade-identity-contracts'}):ctx,assert,assertProtectedParity,assertSummaryParity).then(function(detail){finish('pass',detail);},function(error){finish('fail',error.message);});return;
+      }
       if(ctx.scenario.startsWith('inquiry-')){
         bridge.freeze();
         if(['inquiry-save-reload','inquiry-backup-restore','inquiry-recovery','inquiry-reset'].includes(ctx.scenario)){
@@ -544,7 +554,17 @@
         }
         finish('pass',window.runForgeQa(bridge,ctx,assert,assertProtectedParity,assertSummaryParity,parityApprox));return;
       }
+      if(ctx.scenario.startsWith('formation-autosave-')){
+        if(ctx.scenario==='formation-autosave-native'||ctx.scenario==='formation-autosave-reduced-motion'){window.__formationAutosaveNativeReady=true;return;}
+        bridge.uiMeasurementPause(true);
+        if(['formation-autosave-save-reload','formation-autosave-backup-restore','formation-autosave-recovery'].includes(ctx.scenario)){
+          window.runFormationAutosavePersistence(bridge,ctx,assert,phase,nextPhase,backupCode,finish);return;
+        }
+        finish('pass',window.runFormationAutosaveQa(bridge,ctx,assert));return;
+      }
       switch(ctx.scenario){
+        case 'wisp-upgrade-display':
+          finish('pass',window.runWispUpgradeQa());return;
         case 'p2-07a-persistence-review':
           bridge.freeze();
           finish('pass',window.runP207PersistenceReview(bridge,ctx,assert));
@@ -591,7 +611,7 @@
             return;
           }
           var expected=JSON.parse(localStorage.getItem('p207-expected'));
-          ['formationRebuild','activeParty','formationPresets','spirits','empowerQueue','lumen','shards','prisms','comets','motes','sigils','heroResource'].forEach(function(key){assertJsonEqual(state()[key],expected[key],ctx.scenario+' '+key);});
+          ['formationRebuild','activeParty','activeFormationPreset','formationPresets','spirits','empowerQueue','lumen','shards','prisms','comets','motes','sigils','heroResource'].forEach(function(key){assertJsonEqual(state()[key],expected[key],ctx.scenario+' '+key);});
           assert(state().schemaVersion===1,'partial reconstruction remains schema-v1');
           assertJsonEqual(JSON.parse(bridge.rawRecovery()).formationRebuild,expected.formationRebuild,'recovery intent');
           finish('pass',{intent:state().formationRebuild,active:state().activeParty});return;
@@ -661,7 +681,7 @@
           assert(s.research.focus===24 && s.longStudyLevels.wispascend===9,'mature Lab progression must load intact');
           assert(s.owned.autoascend===true && s.autoAscendEnabled===true,'mature automation flags must load intact');
           assert(s.comets===850 && s.sigils===210,'existing mature Comet/Sigil balances must load intact');
-          assert(s.owned.autoascend && s.owned.offline24 && s.owned.offline48 && s.owned.rememberbulk,'all existing Rest Stop purchases must remain owned');
+          assert(s.owned.autoascend && s.legacyCometPurchases.offline24 && s.legacyCometPurchases.offline48 && s.legacyCometPurchases.rememberbulk,'existing Auto-Ascend and archived Rest Stop entitlements must remain owned');
           assert(s.sigilResonanceUses===0 && s.dailyQuestRefreshes===0,'older schema-v1 saves must safely default new utility counters to zero');
           assert(s.ascendRewardedDepth===0,'existing schema-v1 saves without a benchmark must safely default to 0');
           assert(s.activeFormationPreset==='push' && s.formationPresets.push.join(',')===s.activeParty.join(','),'older schema-v1 saves must seed presets from their current Formation');
@@ -1013,24 +1033,24 @@
           var researchEvent = firstTimelineEvent(researchDirect,'research');
           assert(researchEvent,'queued Research must be purchased during the offline window');
           assert(researchEvent.elapsedSec>0 && researchEvent.elapsedSec<60,'Research purchase must occur mid-window');
-          assert(researchDirect.state.research.formation===1,'Formation Research must advance exactly one level in this fixture');
+          assert(researchDirect.state.research.charge===2,'Swift Recovery earns exactly two individually paid levels in this fixture');
           var researchSplit = assertChronologicalSplit(
             researchBaseline,60,researchEvent.elapsedSec,researchDirect,
             'mid-window Research'
           );
-          assert(researchSplit.first.state.research.formation===1,'Research must already be applied at its affordability timestamp');
+          assert(researchSplit.first.state.research.charge===1,'Research must already be applied at its affordability timestamp');
 
           var researchControl = cloneJson(researchBaseline);
-          researchControl.researchQueue.formation = false;
+          researchControl.researchQueue.charge = false;
           bridge.setState(researchControl);
           var researchWithoutQueue = bridge.simulateTimeline(60,'offline',PARITY_CLOCK_MS);
           assert(
             researchDirect.state.totalKills>researchWithoutQueue.state.totalKills,
-            'mid-window Formation Research must affect combat during the remaining offline time'
+            'mid-window Swift Recovery must affect combat during the remaining offline time'
           );
           finish('pass',{
             eventSec:researchEvent.elapsedSec,
-            formationLevel:researchDirect.state.research.formation,
+            chargeLevel:researchDirect.state.research.charge,
             killsWithResearch:researchDirect.state.totalKills-researchBaseline.totalKills,
             killsWithoutResearch:researchWithoutQueue.state.totalKills-researchControl.totalKills
           });
@@ -1403,8 +1423,8 @@
           assertOfflineExactlyOnce(bridge.lifecycleTrace(),60,'Lab queue cold restart');
           var researchEvent = firstTimelineEvent(expectedLab,'research');
           assert(researchEvent && researchEvent.elapsedSec>0 && researchEvent.elapsedSec<60,'queued Research must purchase chronologically during cold offline time');
-          assert(state().research.formation===1,'queued Formation Research must purchase exactly once');
-          assert(state().researchQueue.formation===true,'Research queue enablement must survive save/reload');
+          assert(state().research.charge===2,'queued charge earns exactly two paid levels');
+          assert(state().researchQueue.charge===true,'Research queue enablement must survive save/reload');
           parityApprox(state().lumen,expectedLab.state.lumen,'Research lifecycle Lumen spending');
           parityApprox(state().shards,expectedLab.state.shards,'Research lifecycle Shard spending');
           var labBeforeVisible = cloneJson(state());
@@ -1497,6 +1517,11 @@
           });
           return;
         }
+
+        case 'bond-text-contract':
+        case 'self-test-bond-text-ability':
+        case 'self-test-bond-text-partners':
+          bridge.freeze();finish('pass',window.runBondTextQa(bridge,assert));return;
 
         case 'wisp-formula-contract': {
           var formulaBase = cleanFormulaState(['ember']);
@@ -1968,13 +1993,14 @@
           assert(help.open,'refresh must retain Formation guidance disclosure state');
           help.open=false;
           var progression=document.querySelector('.wisp-progression');
-          assert(progression && !progression.open,'secondary Wisp progression starts collapsed');
-          var summary=progression.querySelector('summary');
-          var inspectId=summary.dataset.wispDetails;
-          summary.focus();summary.click();bridge.renderLayout();
+          var inspectId=progression.dataset.wispProgression;
+          var complete=state().heroRarity[inspectId]>=5 && state().wispModules[inspectId]>=20 && state().wispUltimate[inspectId];
+          assert((progression.tagName==='DETAILS')===!!complete,'only completed Wisp progression has native disclosure');
+          var title=progression.querySelector('[data-wisp-details]');
+          title.focus();if(complete) progression.open=true;bridge.renderLayout();
           progression=document.querySelector('[data-wisp-progression="'+inspectId+'"]');
-          assert(progression.open,'Wisp disclosure remains open through refresh');
-          assert(document.activeElement===progression.querySelector('summary'),'refresh preserves disclosure keyboard focus');
+          assert(complete ? progression.open : !progression.querySelector('summary'),'progression stays open through refresh');
+          assert(document.activeElement===progression.querySelector('[data-wisp-details]'),'refresh preserves progression keyboard focus');
           assert(progression.querySelector('[data-rarity]') && progression.querySelector('.hero-ability'),'secondary upgrade information remains reachable');
           assert(JSON.stringify(state())===beforeHierarchy,'hierarchy/navigation/inspection must not mutate gameplay state');
           finish('pass',{activeFirst:true,empowerFirst:true,stateUnchanged:true});return;
@@ -2017,18 +2043,15 @@
           assert(document.querySelector('[data-formation-preset="farm"]').getAttribute('aria-pressed')==='true','active Formation preset must be visibly and semantically selected');
           assert(document.activeElement===document.querySelector('[data-formation-preset="farm"]'),'Formation quick-switch must preserve keyboard focus after rendering');
 
-          var custom=cloneJson(state());
-          custom.activeParty=['ember','tide','stone'];
-          custom.activeFormationPreset='';
-          bridge.setState(custom);
-          bridge.renderLayout();
-          document.querySelector('[data-save-formation="boss"]').click();
-          assert(state().formationPresets.boss.join(',')==='ember,tide,stone','Save Boss must store the player-selected current Formation');
-          assert(state().activeFormationPreset==='boss','saving a preset must make that exact Formation active');
+          bridge.applyFormationPreset('boss');
+          bridge.formationTest.toggle('void');bridge.formationTest.toggle('titan');
+          assert(!document.querySelector('[data-save-formation]'),'Formation has no Save button');
+          assert(state().formationPresets.boss.join(',')==='ember,stone,tide','Bench immediately saves to Boss');
+          assert(state().activeFormationPreset==='boss','editing retains the selected preset');
           bridge.save();
           var persisted=JSON.parse(bridge.rawSave());
           var roundTrip=bridge.setState(persisted);
-          assert(roundTrip.formationPresets.boss.join(',')==='ember,tide,stone' && roundTrip.activeFormationPreset==='boss','Formation presets and active identity must survive canonical save/load');
+          assert(roundTrip.formationPresets.boss.join(',')==='ember,stone,tide' && roundTrip.activeFormationPreset==='boss','Formation presets and active identity must survive canonical save/load');
 
           var invalid=cloneJson(roundTrip);
           invalid.activeParty=['ember','tide'];
@@ -2037,9 +2060,8 @@
           invalid.formationPresets.push=['deleted-wisp','ember','ember','aurora'];
           var normalized=bridge.setState(invalid);
           assert(normalized.formationPresets.push.join(',')==='ember,aurora','unknown and duplicate preset references must normalize safely while a known unavailable Wisp remains saved');
-          var beforeInvalidParty=normalized.activeParty.join(',');
-          assert(bridge.applyFormationPreset('push')===false,'a preset containing an unavailable Wisp must fail safely');
-          assert(state().activeParty.join(',')===beforeInvalidParty,'failed preset activation must not partially mutate the current Formation');
+          assert(bridge.applyFormationPreset('push'),'known unavailable preset remains selectable');
+          assert(state().activeParty.join(',')==='ember' && state().formationRebuild.members.join(',')==='ember,aurora','pending members stay saved and unpowered');
 
           bridge.setState(qol);
           bridge.renderLayout();
@@ -2064,13 +2086,14 @@
           assert(document.activeElement===document.querySelector('[data-tab="research"]') && document.querySelector('[data-tab="research"]').getAttribute('aria-selected')==='true','Workshop sections must support arrow-key selection and focus');
 
           document.querySelector('[data-tab="forge"]').click();
+          var fundedResearch=state();fundedResearch.shards=1e9;bridge.setState(fundedResearch);bridge.renderLayout();
           var beforeResearch=state();
-          var beforeResearchLevel=beforeResearch.research.focus;
+          var beforeResearchLevel=beforeResearch.research.charge;
           var studiesBeforeResearch=JSON.stringify(beforeResearch.activeStudies);
-          var researchButton=document.querySelector('[data-research="focus"]');
+          var researchButton=document.querySelector('[data-research="charge"]');
           assert(researchButton && !researchButton.disabled,'funded Permanent Research action must remain available');
           researchButton.click();
-          assert(state().research.focus>beforeResearchLevel,'Forge destination must preserve upgrade purchasing');
+          assert(state().research.charge>beforeResearchLevel,'Forge destination must preserve upgrade purchasing');
           assert(JSON.stringify(state().activeStudies)===studiesBeforeResearch,'Permanent Research must not disturb Long Studies');
 
           var studyState=cloneJson(state());
@@ -2439,7 +2462,7 @@
           assert(refresh1.state.comets===refreshBase.comets-economy.questRefreshCost,'Quest Refresh must spend exactly its Comet cost');
           assert(refresh1.state.questIds.length===3 && refresh1.state.questIds[0]!=='q_tap_small','Quest Refresh must replace one quest without adding extra quest slots');
           assert(refresh1.state.dailyQuestRefreshes===1,'Quest Refresh count must persist deterministically');
-          assert(refresh1.state.owned.autoascend && refresh1.state.owned.offline24 && refresh1.state.owned.offline48 && refresh1.state.owned.rememberbulk,'refreshing a quest must not invalidate any finite Rest Stop purchase');
+          assert(refresh1.state.owned.autoascend && refresh1.state.legacyCometPurchases.offline24 && refresh1.state.legacyCometPurchases.offline48 && refresh1.state.legacyCometPurchases.rememberbulk,'refreshing a quest must preserve Auto-Ascend and archived legacy purchase ownership');
 
           bridge.setState(refreshBase);
           var refresh2=bridge.refreshQuest('q_tap_small');
