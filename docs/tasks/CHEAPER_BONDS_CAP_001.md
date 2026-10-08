@@ -45,7 +45,8 @@ actual Android update-save acceptance must pass. Missing acceptance stays open.
 
 Source:3f4df7318ce83cc5bf77f845f9d36b79948a2189c1b5a18f447b542b4bade6f7.
 Local533 assertions,12 mobile profiles,10 causal controls,926 clarity and V8 6.0
-PASS. Earlier combined offline16 records PASS; final CI checks current bytes.
+PASS. CI37748215097 passed173 scenarios, then browser startup failed before F21 checks.
+Browser priority fixed; new full CI required. Earlier offline16 records PASS.
 [Evidence/commands](../qa/cheaper-bonds-cap-001/finish/README.md) distinguishes versions
 and failures. Reported PR89 wallet/receipt/performance/rounding/credit findings fixed.
 [Native baseline](../qa/cheaper-bonds-cap-001/finish/native/baseline-native.json):

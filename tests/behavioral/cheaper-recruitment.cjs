@@ -53,9 +53,9 @@ const server=http.createServer((req,res)=>{
  if(!file.startsWith(root+path.sep)||!fs.existsSync(file)||!fs.statSync(file).isFile()){res.statusCode=404;res.end();return;}
  const types={'.css':'text/css','.svg':'image/svg+xml','.woff2':'font/woff2'};res.setHeader('Content-Type',types[path.extname(file)]||'application/octet-stream');fs.createReadStream(file).pipe(res);
 });
-let browser,profile,session,seq=0,buffer='',stderr='',closed=false;
+let browser,profile,session,seq=0,buffer='',stderr='',closed=false,browserIdentity;
 const pending=new Map();let completion;
-function send(method,params={},sid=session){return new Promise((resolve,reject)=>{const id=++seq,timer=setTimeout(()=>{pending.delete(id);reject(Error('CDP timeout '+method));},15000);pending.set(id,{resolve,reject,timer});browser.stdio[3].write(JSON.stringify({id,method,params,...(sid?{sessionId:sid}:{})})+'\0');});}
+function send(method,params={},sid=session){return new Promise((resolve,reject)=>{const id=++seq,timer=setTimeout(()=>{pending.delete(id);reject(Error('CDP timeout '+method+' '+stderr));},15000);pending.set(id,{resolve,reject,timer});browser.stdio[3].write(JSON.stringify({id,method,params,...(sid?{sessionId:sid}:{})})+'\0');});}
 async function evaluate(expression){const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(r.exceptionDetails.exception?.description||r.exceptionDetails.text);return r.result.value;}
 function assert(v,m){if(!v)throw Error(m);}
 async function key(key){await send('Input.dispatchKeyEvent',{type:key==='Enter'?'keyDown':'rawKeyDown',key,code:key,...(key==='Enter'?{text:'\r'}:{}),windowsVirtualKeyCode:key==='Enter'?13:9});await send('Input.dispatchKeyEvent',{type:'keyUp',key,code:key,windowsVirtualKeyCode:key==='Enter'?13:9});}
@@ -64,7 +64,10 @@ async function navigate(url){await send('Page.navigate',{url});await ready();awa
 async function run(){
  await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});
  const url='http://127.0.0.1:'+server.address().port+'/index.html';
- const chrome=option('--chrome',['chromium','google-chrome','google-chrome-stable'].find(c=>{try{execFileSync('which',[c]);return true;}catch{return false;}}));assert(chrome,'Chromium required');
+ const chrome=option('--chrome',process.env.LUMENFALL_QA_CDP_CHROME||['google-chrome','google-chrome-stable','chromium','chromium-browser'].find(c=>{try{execFileSync('which',[c],{stdio:'pipe'});return true;}catch{return false;}}));assert(chrome,'Chromium required');
+ const executable=execFileSync('which',[chrome],{encoding:'utf8',stdio:'pipe'}).trim();
+ browserIdentity={selected:executable,resolved:fs.realpathSync(executable),version:execFileSync(chrome,['--version'],{encoding:'utf8',timeout:3000,stdio:'pipe'}).trim()};
+ console.log('Browser identity: '+JSON.stringify(browserIdentity));
  profile=fs.mkdtempSync(path.join(os.tmpdir(),'lumenfall-f21-'));
  browser=spawn(chrome,['--headless=new','--no-sandbox','--disable-gpu','--disable-dev-shm-usage','--remote-debugging-pipe','--user-data-dir='+profile,'about:blank'],{stdio:['ignore','ignore','pipe','pipe','pipe']});
  completion=new Promise(resolve=>{browser.once('error',error=>resolve({error:error.message}));browser.once('close',(code,signal)=>{closed=true;for(const p of pending.values()){clearTimeout(p.timer);p.reject(Error('browser closed'));}pending.clear();resolve({code,signal});});});
@@ -169,7 +172,7 @@ async function run(){
   if(ended?.code!==0)failure=failure||'Browser teardown failed '+JSON.stringify(ended);
  }
  await new Promise(resolve=>server.close(resolve));
- const result={status:failure?'FAIL':'PASS',sourcePath,sourceSha256,mutation,observedAt:new Date().toISOString(),records,teardown,...(failure?{failure,stderr}:{})};
+ const result={status:failure?'FAIL':'PASS',sourcePath,sourceSha256,browserIdentity,mutation,observedAt:new Date().toISOString(),records,teardown,...(failure?{failure,stderr}:{})};
  fs.mkdirSync(path.dirname(output),{recursive:true});fs.writeFileSync(output,JSON.stringify(result,null,2)+'\n');
  console.log(result.status+' Cheaper Recruitment: '+records.length+' result groups; '+output);if(failure){console.error(failure);process.exitCode=1;}
 })();

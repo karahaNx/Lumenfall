@@ -57,3 +57,14 @@ Android27/WebView61 and21 paid old purchases19→40; raw40/wallet7342133 survive
 cold launch. Final update/native acceptance is pending; modern/V8 results alone
 are not Android proof. Software emulator evidence does not claim physical device
 or TalkBack testing.
+
+CI37748215097 passed all173 existing scenarios, then F21 failed before any
+assertion at Target.createTarget. The full log and disposition are preserved in
+ci-browser-startup-failure.log.gz/json. Remaining gates were skipped, never
+claimed passing. The runner now uses repository browser priority (Google Chrome
+first), respects the selected-browser environment/explicit option, records actual
+executable/version and includes startup stderr. A local launcher collision
+control puts a working google-chrome symlink and a failing chromium executable
+on PATH; all533 assertions/25 groups and10 specific defect controls still pass.
+Final required CI must run again on this runner correction; product bytes stay
+at the current recorded hash.
