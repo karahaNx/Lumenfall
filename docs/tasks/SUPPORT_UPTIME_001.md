@@ -31,11 +31,11 @@ old-save/backup value; live/offline;320/390/430,200% text,44px,focus/contrast/
 reduced motion; full CI/integrated checks; signed APK identity/assets and native
 in-place old-save update/cold/recovery.
 
-[Checks](../qa/support-uptime-001/implementation/check-results.json): local
+[Checks](../qa/support-uptime-001/implementation/check-results.json): source59cbadb32
 motor2127/49/98/50, refund703/36, V8 6.0 currency46 PASS. CI293 feafdb16
 PASS177/17/all gates, then broader Arcane/hour regression confirmed/fixed:
 [clock evidence](../qa/support-uptime-001/implementation/CLOCK_FIX.md),2998 strict
-live/offline1s/100ms/split/save checks. Frozen12h416439kills/19830Ascends;
+live/offline split/save checks; exact12h Study rounding fixed. Frozen12h416439/19830;
 [PR82](https://github.com/karahaNx/Lumenfall/pull/82).
 Native baseline/limits: implementation/native/README.md. Self-review.
 

@@ -7557,10 +7557,29 @@ function simulationNextStudySeconds(){
   });
   return next;
 }
-function simulationAdvanceStudyProgress(elapsedSec){
+// Ephemeral anchors keep paid work exact across clock cuts. Keys are the live
+// Study objects; no cache fields enter saves, and changed work/speed/clock resets it.
+var studyWorkClocks = new WeakMap();
+function simulationAdvanceStudyProgress(elapsedSec,clockStart,clockEnd){
   if(elapsedSec<=0) return;
   state.activeStudies.forEach(function(active){
-    active.remainingSec -= elapsedSec * active.speedMult;
+    if(!clockStart || !clockEnd){
+      studyWorkClocks.delete(active);
+      active.remainingSec -= elapsedSec * active.speedMult;
+      return;
+    }
+    var anchor=studyWorkClocks.get(active);
+    if(!anchor || anchor.lastRemaining!==active.remainingSec || anchor.speed!==active.speedMult ||
+        anchor.end.wholeSec!==clockStart.wholeSec || anchor.end.remainingSec!==clockStart.remainingSec){
+      anchor={remaining:active.remainingSec,speed:active.speedMult,start:clockStart};
+      studyWorkClocks.set(active,anchor);
+    }
+    // Subtract whole work before fractional work so a large original snapshot
+    // cannot accumulate hundreds of thousands of rounded 100ms decrements.
+    active.remainingSec = (anchor.remaining-(clockEnd.wholeSec-anchor.start.wholeSec)*anchor.speed) -
+      (anchor.start.remainingSec-clockEnd.remainingSec)*anchor.speed;
+    anchor.lastRemaining=active.remainingSec;
+    anchor.end=clockEnd;
   });
 }
 function simulationCompleteDueStudies(summary){
@@ -8370,7 +8389,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
         simulationAdvanceAbilityResources(next);
         simulationAdvanceAutomationTimers(next);
       }
-      simulationAdvanceStudyProgress(next);
+      var studyClockStart = simulationClockPosition();
       var crossedFarmGrids = advanceFarmGridClock(next);
       if(hitsFarmGrid && crossedFarmGrids!==1){
         throw new Error('Authoritative Farm grid clock crossed an unexpected boundary count');
@@ -8389,6 +8408,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
         farmGridCrossings = targetFarmGridCrossings;
         farmGridRemainingSec = targetFarmGridRemainingSec;
       }
+      simulationAdvanceStudyProgress(next,studyClockStart,simulationClockPosition());
       elapsedInRun = currentElapsedSec();
       remaining = hitsWindowEnd ? 0 : simulationRemainingSec();
     }

@@ -29,62 +29,6 @@ function app(seed,html=source,seconds=0){
  return {b,storage,writes,queue,clock:v=>now=v,monotonic:v=>monotonic=v,failPrimary:v=>primaryFail=v,failRecovery:v=>recoveryFail=v,
   drain(){let batches=0;while(queue.length){queue.shift().fn();batches++;assert(batches<100000,'bounded number of work batches');}return batches;}};
 }
-function approx(a,b,label){const tolerance=Math.max(1e-6,Math.max(Math.abs(a),Math.abs(b))*1e-12);assert(Number.isFinite(a)&&Number.isFinite(b)&&Math.abs(a-b)<=tolerance,`${label}: ${a} vs ${b}, tolerance ${tolerance}`);}
-function compare(a,b,label='state'){
- if(typeof a==='number'&&typeof b==='number'){approx(a,b,label);return;}
- if(Array.isArray(a)||a&&typeof a==='object'){
-  assert.deepEqual(Object.keys(a).sort(),Object.keys(b).sort(),label+' keys');
-  Object.keys(a).forEach(k=>compare(a[k],b[k],label+'.'+k));return;
- }
- assert.equal(a,b,label);
-}
-// The frozen product has no repeat-speed fields. Assert their exact legacy OFF
-// defaults separately, then retain the complete original state/summary oracle.
-function baselineSummary(actual,expected,label){
- assert.equal(actual.studySpeedPurchases,0,label+' no legacy repeat purchases');
- assert.equal(actual.studyMotesSpent,0,label+' no legacy repeat spending');
- const {studySpeedPurchases,studyMotesSpent,...existing}=actual;
- assert.deepEqual(existing,expected,label);
-}
-function baselineState(actual,expected,seed,label){
- const ids=Object.keys(expected.longStudyLevels);
- assert.deepEqual(actual.studyUseMotes,Object.fromEntries(ids.map(id=>[id,false])),label+' legacy OFF intent');
- assert.deepEqual(actual.studySpeedTargets,Object.fromEntries(ids.map(id=>{
-  const paid=(seed.activeStudies||[]).find(study=>study.id===id);
-  return [id,paid&&paid.speedMult>1?paid.speedMult:1.5];
- })),label+' remembered legacy paid tier');
- assert.equal(actual.cometTrial,null,label+' no unsolicited Trial');
- assert.equal(actual.cometTrialResult,null,label+' no unsolicited result');
- assert.deepEqual(actual.cometTrialMarks,{},label+' no unsolicited marks');
- assert.deepEqual(actual.cometCosmetics,{trail:false,crest:false},label+' new cosmetics default OFF');
- const oldOwnership={...expected.owned},legacy={};
- for(const id of ['rememberbulk','offline24','offline48']){if(oldOwnership[id]===true)legacy[id]=true;delete oldOwnership[id];}
- assert.deepEqual(actual.legacyCometPurchases,legacy,label+' full legacy ownership archived');
- const {studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,...existing}=actual;
- assert.deepEqual(existing,{...expected,owned:oldOwnership},label);
-}
-function runAsync(seed,seconds,batch=256){
- const x=app(seed,source,seconds),before=copy(x.b.get());x.b.batch(batch);
- let result=null,error=null,callbacks=0;
- x.b.apply((r,e)=>{result=r;error=e;callbacks++;});
- assert(x.b.flags().busy,'long catch-up must yield before returning');
- assert.deepEqual(x.b.get(),before,'yield leaves authoritative runtime unchanged');
- assert.deepEqual(JSON.parse(x.storage.get('lumenfall_save_v2')),seed,'no partial primary save');
- assert.equal(x.b.save(),false,'autosave blocked while busy');
- assert.equal(x.b.apply(()=>{throw Error('duplicate return callback');}),null,'duplicate return cannot start another job');
- const batches=x.drain();assert.ifError(error);assert.equal(callbacks,1,'complete once');
- assert(!x.b.flags().busy&&!x.b.flags().pending&&!x.b.flags().resume,'flags clear after completion');
- assert.equal(x.b.get().lastSeen,seed.lastSeen+seconds*1000,'consumed endpoint');
- assert.equal(x.b.get().totalOfflineSeconds,seed.totalOfflineSeconds+Math.min(seconds,72*3600),'combat accounting/cap');
- const committed=copy(x.b.get());let duplicate;
- x.b.apply(r=>duplicate=r);assert.equal(duplicate,null,'repeated return awards nothing');
- assert.deepEqual(x.b.get(),committed,'repeated return preserves state');
- assert.deepEqual(JSON.parse(x.storage.get('lumenfall_save_v2')),committed,'primary completed save');
- assert.deepEqual(JSON.parse(x.storage.get('lumenfall_save_recovery_v1')),committed,'recovery completed save');
- records.push({case:seed.autoAscendEnabled?'ON Clear'+(seed.autoAscendTargetDepth-1):'OFF',seconds,batch,batches,kills:result.kills,ascends:result.ascends,iterations:result.iterations,earned:result.earned});
- return {x,result,committed};
-}
-
 const {clockReference}=require('../../../../tests/behavioral/support-clock-reference.cjs');
 
 const contract=clockReference(baseline.replace("{id:'charge', effectPerLevel:0.08,", "{id:'charge', effectPerLevel:0.08, levelCap:10,").replace('durationMs:ultimate ? 8000 : 4000','durationMs:ultimate ? 1500 : 1000'));
