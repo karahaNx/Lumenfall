@@ -1,0 +1,36 @@
+{
+  "command": [
+    "/tmp/lumenfall-save-ui-chrome/opt/google/chrome/google-chrome",
+    "--headless=new",
+    "--no-sandbox",
+    "--disable-gpu",
+    "--disable-dev-shm-usage",
+    "--disable-background-networking",
+    "--disable-background-timer-throttling",
+    "--no-first-run",
+    "--window-size=390,844",
+    "--virtual-time-budget=1500",
+    "--user-data-dir=/tmp/lumenfall-qa-self-test-wisp-pacing-regression-L3ppAf",
+    "--dump-dom",
+    "http://127.0.0.1:39327/index.html?qaScenario=self-test-wisp-pacing-regression&qaFixture=fresh"
+  ],
+  "fixture": "fresh",
+  "viewport": null,
+  "process": {
+    "exitcode": 0,
+    "timed_out": false,
+    "elapsed_sec": 0.9043932929999999,
+    "timeout_sec": 25
+  },
+  "qa": {
+    "qa_count": 1,
+    "qa_status": "fail",
+    "qa_scenario": "self-test-wisp-pacing-regression",
+    "json_status": "fail",
+    "json_scenario": "self-test-wisp-pacing-regression",
+    "runtime_markers": [],
+    "runtime_error_count": 0,
+    "json_error": null,
+    "valid": true
+  }
+}
