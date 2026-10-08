@@ -1,0 +1,39 @@
+[
+  {
+    "name": "source",
+    "command": [
+      "node",
+      "scripts/ci/validate_source.cjs"
+    ],
+    "exit": 0,
+    "signal": null
+  },
+  {
+    "name": "context",
+    "command": [
+      "node",
+      "scripts/codex/check_context.cjs"
+    ],
+    "exit": 0,
+    "signal": null
+  },
+  {
+    "name": "apk-self-test",
+    "command": [
+      "node",
+      "scripts/verify_apk_identity.cjs",
+      "--self-test"
+    ],
+    "exit": 0,
+    "signal": null
+  },
+  {
+    "name": "tooling",
+    "command": [
+      "node",
+      "tests/tooling/run.cjs"
+    ],
+    "exit": 0,
+    "signal": null
+  }
+]
