@@ -183,3 +183,13 @@ on head50df5cd: in progress. Native bridge calibration originally failed because
 WebView61 cannot resolve private lexical names in debugger eval; use the existing
 F13 approach: actual closure handles and rebind after state replacement. That
 failed harness receipt is preserved. APK/integrated/native acceptance pending.
+
+CI286 completed PASS on head785bf32 / baseline14d5f3a:177 named defaults,
+203 PASS instances,22 required negative controls and every source/tooling/smoke
+gate. [Raw log/summary](delivery/ci286.json) retain exact identities. During that
+run main integrated PR66 at ac0d28e. Keep both Tree and F05 registrations, use
+an independent F05 module append to reduce concurrent list conflicts, and
+reassess actual Swift purchase plus motor673/11,822/layout695:PASS.
+[Current source](delivery/tree-combined-source.json). Final combined CI and
+APK/native acceptance remain pending. Native accept-prepared mode cryptographically
+binds the already cold-tested baseline APK/storage before the signed update.
