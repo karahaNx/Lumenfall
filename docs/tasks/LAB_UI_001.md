@@ -1,108 +1,81 @@
 # LAB_UI_001 — compact Lab cards and Speed up panel
 
-Status: focused candidate checks pass; corrected CI run/integration/APK pending.
-Published PR: [83](https://github.com/karahaNx/Lumenfall/pull/83).
-Owner: this LAB_UI_001 feature chat. Exact chat ID/model variant/effort are not
-exposed; GPT-6.1 Sol / High was the user's recommendation, not a runtime receipt.
-Latest instruction, 8 October 2026: “Finish the feature task push to github
-implement to game”. Necessary publication, integration and app delivery are
-authorized by that request and current [project rules](../../AGENTS.md).
+Status: candidate on current main; required CI/integration/APK pending.
+[PR83](https://github.com/karahaNx/Lumenfall/pull/83). Owner: this feature chat;
+actual chat ID/model/effort not exposed. GPT-6.1 Sol/High was a recommendation.
+The 8 October request “Finish the feature task push to github implement to game”
+authorizes implementation, integration and app delivery under current AGENTS.
+No new rule, subagents or message tools. Current rules supersede historical gates.
 
-## Goal and original requirements
+## Original goal and sources
 
-One goal, F08–F11: merge remaining time and actual speed into the progress bar;
-one title and current level; show the effect before starting; one Speed up
-button opens a closable accessible panel with tier, price and queue controls.
+One goal, F08–F11: remaining time and actual speed in the progress bar; one title
+and current level; effects before starting; one Speed up button opens a closable,
+named panel with tier/price and queue controls, retaining readability/ARIA/focus.
+Original phrases: “skriv tiden indeni selve progress baren”, “kun det lvl man er
+igang med”, no repeated title, “der skal stå hvad lab gør, før man starter den”,
+and “Speed up skal have en knap … hvor man også kan vælge at queue speed up”.
 
-The [original user requirements](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt)
-take precedence. Relevant phrases: “skriv tiden indeni selve progress baren”,
-“kun det lvl man er igang med”, no repeated “guardians mastery igen med pil
-ned”, “der skal stå hvad lab gør, før man starter den”, and “Speed up skal
-have en knap … hvor man også kan vælge at queue speed up”.
-Sources read: F08–F12 and dependency/save sections in
-[revision](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt),
+Read original [requirements](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt),
+F08–F12/dependency/save sections of [revision](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt),
 [Lead decisions](../recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt),
 [findings](../recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/FINDINGS.txt) and
 [source index](../recovery/2026-10-07/lead_context/FEEDBACK/Source_Index.txt).
-Image 3 was inspected during preparation; its APK/save identity is unknown.
+Original takes precedence. Image3 inspected; its APK/save identity unknown.
+AGENTS/bootstrap/ownership/Visuals/state/workflow/context read from live main.
 
-## Baseline and dependencies
+## Baseline, scope and dependencies
 
-Fresh isolated checkout: `/workspace/Lumenfall-LAB_UI_001-current`, branch
-`feature/LAB_UI_001`; baseline `b0537cb46635555ba2c2e5f3f95bc8fc276aeda5`.
-Baseline index SHA256: `5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c`.
-Original `/workspace/Lumenfall` and private B2 proposal remain untouched.
-Root AGENTS/bootstrap/state/workflow, context index and Visuals guidance read.
-Current rules supersede historical writer gates; no separate writer grant.
+Private `/workspace/Lumenfall-LAB_UI_001-current`, `feature/LAB_UI_001`;
+initial baseline b0537cb46635555ba2c2e5f3f95bc8fc276aeda5. Original checkout and
+private B2 proposal untouched. Main31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6
+includes Save Backup, Formation, Resonate, Auto-Ascend and Upgrade Identity.
+Preserve them through merge/conflict resolution. PR46/B2 is integrated by PR57
+(20aaae6); LAB_SPEED_QUEUE_001/F12 is implemented. Reuse authoritative handlers.
+PR67 is a separate overlapping draft, not an accepted baseline.
 
-PR46 is merged (`20aaae62a4b6e46f8d75775085918eaba4e8de29`); accepted B2
-arithmetic is integrated by PR57. LAB_SPEED_QUEUE_001/F12 is already implemented
-and verified on main. This task reuses its handlers and saved fields.
-Open PR67 overlaps Lab presentation as part of a broader draft bundle; it is
-not the baseline or an accepted gameplay replacement. Keep this scoped change
-separate and serialize integration against fresh main. No messages/subagents.
+Product changes only in index.html Lab presentation/focus; necessary JS
+regressions and QA/docs. No authority/payment/cost/reward/save-schema/native/
+package/signing changes relative to current main. No migration added. Preserve
+its exclusive upgrade owners, all raw purchased contributions, paid legacy work/
+speed/completion and idempotent save/recovery. Inquiry text reflects five current
+Studies. Retired rows are read-only preserved bonuses; no starts reintroduced.
 
-Private B2 candidate b46e06a is historical preparation, not current acceptance;
-its Python harness was not restored. Current game features/assets are preserved.
-Main subsequently integrated PR77 Save Backup UI at
-`261b1b7f863f73c324f4ac04acb5bfc95101644d`; merged into this branch,
-with Settings controls and its additional negative CI gates preserved.
-Current main e2f745c Formation/Resonate changes are merged; renewed Lab checks
-pass on source352c0b0 (full hashes/receipts in QA begin/). A reproduced Begin Study
-focus loss is fixed; real Enter now retains same-Study visible focus, panel closed.
+## Decisions and acceptance
 
-## Scope and decisions
+Active cards: one title/current level, earned and completion effects. Idle:
+next level/effect/cost/time. Opaque bar text maintains contrast at every fill;
+positive work never announces100%, zero-work pending completion shows Finishing
+and actual speed. Overcap purchases remain preserved with capped effects.
+One inline named panel, aria-expanded/controls and hidden controls absent from
+accessible traversal. Begin/open/render/buy/finish/Close retain useful focus;
+Close/Escape return to opener and native select owns Escape. Disclosure is
+unsaved ephemeral UI and never purchases or advances work.
+Queue speed up/Queued speed label existing saved fields; Study Queue remains
+independent. New levels start1x, paying the full selected price when affordable,
+including offline. OFF keeps paid speed; no fallback/free carry or new economy.
 
-- Presentation only in index.html: earned/completion effects, readable bar,
-  ARIA and disclosure focus. No simulator, payment, tier/cost/reward, save-schema,
-  unlock/cap, package/signing or native-source change; no migration is needed.
-- Active cards show one title and one current level. Idle cards show next
-  level/effect/cost/time. Earned and completion effects are distinct; saved
-  overcap purchases remain preserved and capped effects remain accurate.
-- An opaque text surface keeps bar contrast independent of fill. Progressbar
-  name/range/value and time/speed update together, including pending completion.
-- Inline disclosure, aria-expanded/controls and named region, one open panel.
-  Opening retains opener focus; Tab enters available controls. Close/Escape
-  return focus; native select owns Escape. Purchase/completion restores opener
-  when a focused tier disappears or becomes disabled. Rendering preserves focus.
-- “Queue speed up” and “Queued speed” label existing studyUseMotes and
-  studySpeedTargets. Study Queue stays separate. Each new level starts 1x;
-  full exact tier price is paid when affordable, including offline. OFF retains
-  paid speed. No cheaper fallback, free carry or second economy path.
-- No new binding rule or guessed gameplay number. Tests use Node.js and current
-  JS harness. Self-review and automated checks are not independent review.
+Accept: readable bars/ARIA/one title/level/pre-start effects; named panel/selected
+speed/prices; >=44px targets; 320/390/430px,100/200% text, keyboard/touch/focus,
+contrast/reduced-motion; relevant handler/bulk/queue/chronology/live/offline/save/
+recovery; required CI and integrated checks; published APK identity/assets and
+native update. Record physical/WebView60/TalkBack observations/limits honestly.
 
-## Acceptance and checks
+## Checks and next action
 
-1. Readable time/speed at 0/50/99.999/100%, long durations and reduced motion;
-   meaningful progress ARIA. One visible title/level and clear earned/next effect.
-2. Closed panels have no accessible/focusable controls. Named panel, selected
-   speed, prices, queue controls, 44px targets and correct keyboard/touch focus.
-3. Mobile 320/390/430px, 100/200% text, contrast and reduced motion pass.
-4. Open/close/render never mutate gameplay/save. Existing handler, chronology,
-   competition, live/offline, reload/backup/recovery/Ascend contracts pass.
-5. Required CI and focused checks pass on integrated source. Build/publish APK;
-   verify com.lumenfall.app, version, established signer and source assets.
-   Record actual Android/WebView60/device acceptance and limitations honestly.
+[QA checkpoint](../qa/LAB_UI_001/README.md) binds historical and renewed receipts.
+Earlier12 profiles/19 regressions/V8 6.0/source/tooling pass. Automated review's
+premature100% ARIA, stale evidence hash and Begin focus findings corrected. Old
+rounding is rejected; Begin focus fails on old source and passes real Enter on
+all12 profiles. Four old Rift scroll selectors included hidden Close controls;
+visible selectors preserve real-touch viewport/hit assertions and all four pass.
+No independent human review claimed. Source authority/ES2017 checks pass after
+current-main merge; renew affected checks and all168 default/17 negative CI gates.
+Android27/WebView61 emulator has attested signed143 save prepared: level2/paid3x,
+work/queue choices. This is preparation, not feature APK acceptance.
 
-Baseline source, tooling and native Lab checks PASS (Chromium151, Node24).
-Candidate: 19 regressions and 12 mobile/text/motion profiles PASS. Source,
-tooling, task context, ES2017 and unchanged-authority byte comparison PASS.
-11 additional layout/accessibility/navigation checks and actual V8 6.0 product
-parsing/presentation/offline probes PASS. Android27/WebView61 emulator booted;
-signed143 baseline/save prepared. This is preparation, not feature acceptance.
-Local full-suite attempt hit Chromium151 dump-dom timeout; required GitHub CI
-must pass independently. Results: [QA checkpoint](../qa/LAB_UI_001/README.md).
-Automated review caught premature 100% ARIA while work remained; fixed and
-verified with an old-rounding mutation that fails the relevant assertion.
-CI 37737685149 ran all 152 scenarios: four Rift scroll tests selected the hidden
-panel Close button. Their selectors now use visible controls; all four real-touch
-scroll/hit-test checks pass locally. Full CI is rerun with every gate retained.
-
-## Next action
-
-Pass corrected required CI on PR83 and integrate against current main. Verify
-integrated behavior and the
-automatic signed APK release; save results and update PROJECT_STATE. Required
-device acceptance must be recorded before completion/archival. Chat stays open
-while any required acceptance is blocked or unknown.
+Next: finish current-main candidate checks, publish, pass full CI and integrate
+PR83. Verify integrated behavior, signed APK/package/version/signer/assets and
+native update/save/focus. Save delivery receipts/status in GitHub through protected
+main's PR workflow. Missing required device acceptance stays open; archive only
+this owner chat after verified completion under FEATURE_WORKFLOW.

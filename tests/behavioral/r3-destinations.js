@@ -69,31 +69,31 @@ window.runR3DestinationsQa = function(b,ctx,assert){
     b.setState(seed);b.renderLayout();go('forge');
     q('[data-mult="'+mult+'"]').click();
     ok(q('[data-mult="'+mult+'"]').getAttribute('aria-pressed')==='true','bulk selected '+mult);
-    var plan=b.r3.plan('focus'),prior=b.getState();q('[data-research="focus"]').click();var after=b.getState();
-    ok(after.research.focus===prior.research.focus+plan.buyCount,'exact bulk levels '+mult);
+    var plan=b.r3.plan('charge'),prior=b.getState();q('[data-research="charge"]').click();var after=b.getState();
+    ok(after.research.charge===prior.research.charge+plan.buyCount,'exact bulk levels '+mult);
     if(plan.affordable){
       ok(after.lumen===prior.lumen-plan.cost.lumen && after.shards===prior.shards-plan.cost.shard,'exact bulk debit '+mult);
     } else {
-      ok(q('[data-research="focus"]').disabled,'unaffordable bulk stays disabled '+mult);
+      ok(q('[data-research="charge"]').disabled,'unaffordable bulk stays disabled '+mult);
       same(after,prior,'unaffordable bulk cannot change state '+mult);
     }
     same(after.activeStudies,prior.activeStudies,'direct upgrade never creates timed project');
   });
   ['50','100'].forEach(function(mult){
-    var funded=JSON.parse(JSON.stringify(seed));funded.lumen=1e24;
+    var funded=JSON.parse(JSON.stringify(seed));funded.lumen=1e24;funded.shards=1e24;
     b.setState(funded);b.renderLayout();go('forge');q('[data-mult="'+mult+'"]').click();
-    var plan=b.r3.plan('focus'),prior=b.getState();
+    var plan=b.r3.plan('charge'),prior=b.getState();
     ok(plan.affordable && plan.buyCount===Number(mult),'funded large bulk available '+mult);
-    q('[data-research="focus"]').click();var after=b.getState();
-    ok(after.research.focus===prior.research.focus+Number(mult) && after.lumen===prior.lumen-plan.cost.lumen,'funded large bulk exact purchase '+mult);
+    q('[data-research="charge"]').click();var after=b.getState();
+    ok(after.research.charge===prior.research.charge+Number(mult) && after.lumen===prior.lumen-plan.cost.lumen && after.shards===prior.shards-plan.cost.shard,'funded large bulk exact purchase '+mult);
   });
   b.setState(seed);b.renderLayout();go('forge');
-  catalogue.upgrades.forEach(function(id){
+  ['charge','arcanecal','conduction','luminoustracking'].forEach(function(id){
     q('[data-queue="'+id+'"]').click();ok(b.getState().researchQueue[id]===true,'individual Forge queue ON');
     q('[data-queue="'+id+'"]').click();ok(b.getState().researchQueue[id]===false,'individual Forge queue OFF');
   });
   go('research');
-  catalogue.projects.forEach(function(id){
+  ['wispascend','guardmastery','shardstudy','lumenstudy','motestudy','measuredinquiry'].forEach(function(id){
     q('[data-study-queue="'+id+'"]').click();ok(b.getState().studyQueue[id]===true,'individual Lab queue ON');
     q('[data-study-queue="'+id+'"]').click();ok(b.getState().studyQueue[id]===false,'individual Lab queue OFF');
   });
@@ -118,7 +118,7 @@ window.prepareR3Reload = function(b,ctx,assert){
   var s=window.seedR3(b,ctx);s.owned.rememberbulk=true;
   b.setState(s);b.renderLayout();
   document.querySelector('[data-tab="forge"]').click();document.querySelector('[data-mult="5"]').click();
-  document.querySelector('[data-research="focus"]').click();
+  document.querySelector('[data-research="charge"]').click();
   document.querySelector('[data-tab="research"]').click();document.querySelector('[data-study="guardmastery"]').click();
   document.querySelector('[data-study-details="guardmastery"]').click();document.querySelector('[data-speed-study="guardmastery"][data-speed="2"]').click();
   b.feedbackTick(false);
