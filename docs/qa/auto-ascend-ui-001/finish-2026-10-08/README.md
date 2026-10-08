@@ -1,5 +1,22 @@
 # AUTO_ASCEND_UI_001 — integrated delivery
 
+Current frozen game download: [signed APK153](APK/Lumenfall-0.1.153.apk).
+Historical APK148 and its native receipt remain below.
+
+APK153/build37753284691 contains main06b28d5e80269dc5c8a609540bc75e27c842da4b,
+sourcec1e23bb552666ecc0067a755c0ad30e13aee1827bf6371919d96003a88919a4b.
+SHA2565374062662994247904792323d332430cd76121157cf8648f9e48163ba8c3d46.
+Package com.lumenfall.app, version0.1.153/code153, established signer, all15 assets
+and CRC526 PASS. Exact packaged source passes28 focused cases/20 UI profiles/
+54 V8 assertions and the updated Resonate harness. Native148 evidence does not
+prove153 native/device acceptance; required current153 acceptance stays OPEN.
+
+[Checkpoint PR99](https://github.com/karahaNx/Lumenfall/pull/99) first full CI
+37752941310 failed on Resonate Target.createBrowserContext timeout before game
+assertions (records empty); Auto scenarios passed. Raw failed output is retained.
+Upstream main06b28d5 prioritizes the direct Google Chrome binary for that harness.
+The updated required full CI must pass before this documentation integrates.
+
 Deeds retains the Auto-Ascend unlock. Ascend now has one Rift picker and a
 separate ON/OFF button; Earlier/Later/Find are removed. Choosing a target retains
 ON/OFF, existing save values and the cleared-Push-Rift trigger. Every valid target,
@@ -15,7 +32,7 @@ and guarded browser smoke. Product, tests and tooling match the tested PR head
 73c321d083565a8c639daa03781003222c49f475; integrated focused checks were renewed.
 Automated GitHub review completed without comments; no human review is claimed.
 
-Signed [APK 0.1.148](APK/Lumenfall-0.1.148.apk) was built by
+Historical signed [APK 0.1.148](APK/Lumenfall-0.1.148.apk) was built by
 [37742868726](https://github.com/karahaNx/Lumenfall/actions/runs/37742868726),
 job 113197564966, from later main31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6.
 Source SHA256: f99cb0bcd46d2849977a39cf31bb0dd1a7bb8c0ca7a370f2490ad66ec67a6ec1.
@@ -99,7 +116,7 @@ Native accept requires the prepared signed143 baseline. Resume binds the complet
 update receipt; finish also validates the completed core cases, without reinstalling
 or resetting the app. Fixtures are confined to the asserted isolated emulator.
 
-Required [affected-phone/exact WebView60/TalkBack acceptance](../DEVICE_ACCEPTANCE.txt)
+Current153 required [affected-phone/exact WebView60/TalkBack acceptance](../DEVICE_ACCEPTANCE.txt)
 remains OPEN. A native AX tree is not TalkBack. Android system font scale is not
 browser root200% text. WebView60/61 lack prefers-reduced-motion; modern coverage
 and the physical checklist stay separate. Keep this feature/chat OPEN until the

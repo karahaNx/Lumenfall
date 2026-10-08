@@ -1,6 +1,6 @@
 {
   "feature": "AUTO_ASCEND_UI_001",
-  "status": "integrated and signed APK148 delivered; native61 PASS; required physical/exact60/TalkBack OPEN",
+  "status": "Product PR84 integrated; signedAPK153 delivered/verified; native148/WebView61 PASS; current153 required device acceptance OPEN",
   "pr": 84,
   "integration": "1282f0cba44a30f39b8a43331395db26600719e8",
   "featureCi": {
@@ -12,6 +12,45 @@
     "sourceSha256": "2398a7506358f9c2ee1d4390314032d878f2e0a8e866f62ba03c0280ee7e3bc0"
   },
   "apk": {
+    "version": "0.1.153",
+    "commit": "06b28d5e80269dc5c8a609540bc75e27c842da4b",
+    "sourceSha256": "c1e23bb552666ecc0067a755c0ad30e13aee1827bf6371919d96003a88919a4b",
+    "sha256": "5374062662994247904792323d332430cd76121157cf8648f9e48163ba8c3d46",
+    "buildRun": 37753284691,
+    "package": "com.lumenfall.app",
+    "zipEntries": 526,
+    "assets": 15
+  },
+  "checks": {
+    "scoped148": "23 positives and five causal negatives pass",
+    "ui148": "20 normal/reduced-motion profiles pass",
+    "v8": "54 handler assertions on V8 6.0.286.52 pass",
+    "nativeUpdate": "signed143 to148 byte-identical prelaunch storage, ownership/OFF/219 pass",
+    "nativeInteractions": "Historical exact148 Android/WebView61 controls/update/input/cold/save PASS; not153 native acceptance",
+    "nativeFontAndGuards": "Historical exact148 system font2/cleared-Rift guards PASS; not physical/exact60/TalkBack"
+  },
+  "limits": [
+    "No independent human review",
+    "Local CDP transport is not default CI equivalence",
+    "Native API27/WebView61 is not affected-phone/exact60/TalkBack"
+  ],
+  "next": "Pass required PR99 CI and integrate this checkpoint. Complete current153 affected-phone/exact WebView60/TalkBack acceptance; keep feature/chat OPEN.",
+  "mainReassessment": {
+    "commit": "06b28d5e80269dc5c8a609540bc75e27c842da4b",
+    "sourceSha256": "c1e23bb552666ecc0067a755c0ad30e13aee1827bf6371919d96003a88919a4b",
+    "scopedCases": 28,
+    "positiveCases": 23,
+    "causalNegatives": 5,
+    "mobileProfiles": 20,
+    "v8Assertions": 54,
+    "resonate": "pass with upstream harness browser-selection update",
+    "scope": "Exact APK153 assets and updated integrated F24 source; local CDP not default CI equivalence"
+  },
+  "nativeReceipt": "native/native-acceptance.json",
+  "sharedWork": "Final checkpoint stops only this owner's shared-file work; own native tests/emulator/crash reporter stopped. Other owners untouched. Required physical acceptance OPEN.",
+  "publicationBaseline": "06b28d5e80269dc5c8a609540bc75e27c842da4b",
+  "publicationScope": "Documentation/evidence only; preserve integrated upstream Tree purchase contract. Current-main Auto-Ascend checks renewed after that shared Ascend change.",
+  "historicalApk148": {
     "version": "0.1.148",
     "commit": "31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6",
     "sourceSha256": "f99cb0bcd46d2849977a39cf31bb0dd1a7bb8c0ca7a370f2490ad66ec67a6ec1",
@@ -22,33 +61,10 @@
     "zipEntries": 526,
     "assets": 15
   },
-  "checks": {
-    "scoped148": "23 positives and five causal negatives pass",
-    "ui148": "20 normal/reduced-motion profiles pass",
-    "v8": "54 handler assertions on V8 6.0.286.52 pass",
-    "nativeUpdate": "signed143 to148 byte-identical prelaunch storage, ownership/OFF/219 pass",
-    "nativeInteractions": "source-bound actual Android320/390/430 keyboard/touch218/219/input9999 ON/OFF/AX label/save/recovery/cold PASS",
-    "nativeFontAndGuards": "continued actual Android font scale2 and OFF/Push/Farm/unbeaten/cleared219 triggers PASS; zero runtime errors"
-  },
-  "limits": [
-    "No independent human review",
-    "Local CDP transport is not default CI equivalence",
-    "Native API27/WebView61 is not affected-phone/exact60/TalkBack"
-  ],
-  "next": "Complete required affected-phone/exact WebView60/TalkBack acceptance on the immutable signed APK and save observed results in GitHub. Keep feature/chat OPEN until it passes.",
-  "mainReassessment": {
-    "commit": "ac0d28e589bd1caef4b9c70f2383a8b3ee384acd",
-    "sourceSha256": "45ae4c62bd37aed28bfd2b77147bffcbda1a9b6a699c4a3107e0fd1a4feccd02",
-    "scopedCases": 28,
-    "positiveCases": 23,
-    "causalNegatives": 5,
-    "mobileProfiles": 20,
-    "v8Assertions": 54,
-    "sourceValidation": "pass",
-    "scope": "Auto-Ascend reassessed after PR66 Tree purchase contract; no full combined-game CI claim"
-  },
-  "nativeReceipt": "native/native-acceptance.json",
-  "sharedWork": "Final checkpoint stops only this owner's shared-file work; own native tests/emulator/crash reporter stopped. Other owners untouched. Required physical acceptance OPEN.",
-  "publicationBaseline": "ac0d28e589bd1caef4b9c70f2383a8b3ee384acd",
-  "publicationScope": "Documentation/evidence only; preserve integrated upstream Tree purchase contract. Current-main Auto-Ascend checks renewed after that shared Ascend change."
+  "deliveryPR": 99,
+  "deliveryValidation": {
+    "firstRun": 37752941310,
+    "firstJob": 113230347129,
+    "status": "failed; Resonate Target.createBrowserContext timeout before game assertions, all Auto cases passed; current main harness update integrated; required full CI rerun pending"
+  }
 }

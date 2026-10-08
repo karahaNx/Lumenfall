@@ -1,6 +1,6 @@
 # AUTO_ASCEND_UI_001 — Auto-Ascend on Ascend
 
-Status: implemented/integrated; signed APK148 delivered; device acceptance OPEN.
+Status: implemented/integrated; signed APK153 delivered; device acceptance OPEN.
 Owner: this chat, isolated /workspace/AUTO_ASCEND_UI_001-github,
 docs/auto-ascend-ui-001-delivery.
 
@@ -46,12 +46,13 @@ causal negatives;20 profiles (320/360/390/430px,160%/200% text,44px/focus/contra
 motion);54 V8 6.0 assertions PASS. Mainac0 Tree reassessment PASS, recorded in the receipt.
 Local CDP is not CI equivalence. Automated review; no human review.
 
-Signed148 identity/15 assets/CRC526 PASS. Actual signed143→148 storage unchanged;
-native WebView61 controls/touch218/219/input9999 ON/OFF/cold persistence/font2/
+Signed153 identity/15 assets/CRC526 and28 scoped/20 UI/54 V8 PASS. Actual signed143→148 storage unchanged;
+historical148 native WebView61 controls/touch218/219/input9999 ON/OFF/cold/font2/
 cleared-Rift guards PASS. Source-bound receipts, raw results and failed driver
 attempts are retained. Emulator61 does not establish physical/exact60/TalkBack.
 
 This checkpoint stops this owner's shared work; own emulator/tests stopped.
-Next: complete [required device acceptance](../qa/auto-ascend-ui-001/DEVICE_ACCEPTANCE.txt)
+Next: pass/integrate PR99 CI (first run hit a Resonate browser-start timeout);
+complete [required current153 device acceptance](../qa/auto-ascend-ui-001/DEVICE_ACCEPTANCE.txt)
 and save observed results in GitHub. Keep feature/chat OPEN; archive only this
 owner after [completion](../project/FEATURE_WORKFLOW.md).

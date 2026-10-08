@@ -1,7 +1,7 @@
 {
   "feature": "AUTO_ASCEND_UI_001",
-  "sourceCommit": "31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6",
-  "sourceSha256": "f99cb0bcd46d2849977a39cf31bb0dd1a7bb8c0ca7a370f2490ad66ec67a6ec1",
+  "sourceCommit": "06b28d5e80269dc5c8a609540bc75e27c842da4b",
+  "sourceSha256": "c1e23bb552666ecc0067a755c0ad30e13aee1827bf6371919d96003a88919a4b",
   "note": "Source-labeled older/current-main evidence is retained separately; this manifest binds stored bytes and external feature helpers.",
   "files": [
     {
@@ -10,9 +10,14 @@
       "sha256": "cef6c291a4f91a3921bdc3b2d2e6f772906d39560f995fcaedf420ccd9972657"
     },
     {
+      "path": "APK/Lumenfall-0.1.153.apk",
+      "bytes": 6849458,
+      "sha256": "5374062662994247904792323d332430cd76121157cf8648f9e48163ba8c3d46"
+    },
+    {
       "path": "README.md",
-      "bytes": 7168,
-      "sha256": "edc23677c6273ada15049d9ffb4d359521502b3b89a4db1bbaf5c8918fa81f2c"
+      "bytes": 8264,
+      "sha256": "c0a82997646579926ada458edf594efb08a3d62c3ea27d9766d0de0ebc34e527"
     },
     {
       "path": "apk148-assets.json",
@@ -270,14 +275,274 @@
       "sha256": "52b55562298257e7b0a3aaafcc2775165fbd88334eddd17ceddb2f39b0820125"
     },
     {
+      "path": "apk153-assets.json",
+      "bytes": 3080,
+      "sha256": "5edbb0092f661e91d10f6ad8315c1110141ef09f80aac500d66ba8ef9ca42a35"
+    },
+    {
+      "path": "apk153-assets.log.gz",
+      "bytes": 198,
+      "sha256": "4fb7bca35cfe60e109f8df9a242f952309473afd09d4bb973dcc9dfda056dee8"
+    },
+    {
+      "path": "apk153-identity.log.gz",
+      "bytes": 207,
+      "sha256": "ba5961bcc7cfb6c765c18ad11119a69b8c2860f4dc22fea8fb4e07db1ecab919"
+    },
+    {
+      "path": "apk153-mobile.log.gz",
+      "bytes": 26771,
+      "sha256": "d94297aba37ff78b5c2f45f2e326e7e52900eca47320f500a867d4bb9f888a44"
+    },
+    {
+      "path": "apk153-motion.log.gz",
+      "bytes": 26570,
+      "sha256": "40d2c37fceec04c162164406577edae9411e35fd19fa09d861bfa86d9a024ed1"
+    },
+    {
+      "path": "apk153-resonate.log.gz",
+      "bytes": 1057,
+      "sha256": "7e5f5195e2672cf355ce450f70b211e90c1c0105641eb720ed0dfee1863e5f63"
+    },
+    {
+      "path": "apk153-suite/auto-ascend-load.log.gz",
+      "bytes": 427,
+      "sha256": "57248cd27f1ee70d9f7d79938ca85ad29ade26b8ad1885f2985244120a49df6c"
+    },
+    {
+      "path": "apk153-suite/auto-ascend-target-backup-restore.log.gz",
+      "bytes": 2363,
+      "sha256": "af53e587bbea49ff0f88e42b6f394ace87286b05d3037971a0cf02a7ac7c8e47"
+    },
+    {
+      "path": "apk153-suite/auto-ascend-target-cold-resume.log.gz",
+      "bytes": 2595,
+      "sha256": "db6d05e3d0ee34e4d8e028881ed9275c21454cfc5f4641767bbb81e6c9838bbd"
+    },
+    {
+      "path": "apk153-suite/auto-ascend-target-contract.log.gz",
+      "bytes": 2399,
+      "sha256": "d94300792349f6799f6fa4b6ec5d23bc348b29067bc1f59fa852107af6dcb69c"
+    },
+    {
+      "path": "apk153-suite/auto-ascend-target-legacy130.log.gz",
+      "bytes": 2358,
+      "sha256": "bff2fa366142c4a718a34052ec91ac4edd3ffb63b16ccbe582e8185b61e761c3"
+    },
+    {
+      "path": "apk153-suite/auto-ascend-target-legacy16.log.gz",
+      "bytes": 2357,
+      "sha256": "8e977ef90dcae1f66534b93e6e693bd966dc6b43f200ce228ac6365beb285b45"
+    },
+    {
+      "path": "apk153-suite/auto-ascend-target-legacy44.log.gz",
+      "bytes": 2358,
+      "sha256": "a224c7612d8642c95b280d3707fb06dc16fdf6be083a0b83164630fbd53f7f33"
+    },
+    {
+      "path": "apk153-suite/auto-ascend-target-legacy56.log.gz",
+      "bytes": 2360,
+      "sha256": "924a7dc1b0d774d550c9393e9c81a15d8b76ae1d6f0bcd24d02e0c28d96de7f9"
+    },
+    {
+      "path": "apk153-suite/auto-ascend-target-manual-reload.log.gz",
+      "bytes": 2418,
+      "sha256": "d81729c978c20d0e4a26d9e28ad1b0d00d771e7d237cd5c75cba84135c581683"
+    },
+    {
+      "path": "apk153-suite/auto-ascend-target-recovery.log.gz",
+      "bytes": 2359,
+      "sha256": "91583dbcb2c35fcddb1c02a914ce07863308c804cf481159d2a66b4ce85cea53"
+    },
+    {
+      "path": "apk153-suite/auto-ascend-target-reset.log.gz",
+      "bytes": 1401,
+      "sha256": "89ae99a3f04b7757ac6c96f020594ebc5a92f61d328b73e548dd4121de0f6d0a"
+    },
+    {
+      "path": "apk153-suite/auto-ascend-target-resume.log.gz",
+      "bytes": 2877,
+      "sha256": "14412e05a534435aca65f65c6bddae83bc03c9b92a2fb1ce85587ca7e40348a8"
+    },
+    {
+      "path": "apk153-suite/chronology-auto-ascend-mid-window.log.gz",
+      "bytes": 498,
+      "sha256": "e168b641d40d56e83e83a949ed615897f8e861bb877863bac610ad9f73e26814"
+    },
+    {
+      "path": "apk153-suite/future-backup-rejection.log.gz",
+      "bytes": 434,
+      "sha256": "9cffed631ccad635e0e4d0f103cd94f96e536841e129b3342d948ae8b7f1af65"
+    },
+    {
+      "path": "apk153-suite/legacy-backup-restore.log.gz",
+      "bytes": 433,
+      "sha256": "880d8d46a8d30d70ebf70435eb60d787db909af5cab3de637c3db3416ed1e679"
+    },
+    {
+      "path": "apk153-suite/lifecycle-auto-ascend.log.gz",
+      "bytes": 432,
+      "sha256": "4d1282b5bbc4b808a9bb383276c33254a54ea2127281922c37ba4933e40e6662"
+    },
+    {
+      "path": "apk153-suite/malformed-backup-rejection.log.gz",
+      "bytes": 437,
+      "sha256": "46cfdfd68a7292d78339e599d2f30c232c87c9b28e9554b5e0a388997b16f1da"
+    },
+    {
+      "path": "apk153-suite/nav-workshop-contract.log.gz",
+      "bytes": 432,
+      "sha256": "8e8b714fcee3a135d2be4daca71dfac04bf3c5aa9fb65eb157bd2ea26b9a1f58"
+    },
+    {
+      "path": "apk153-suite/p1-05-accessibility-contract.log.gz",
+      "bytes": 457,
+      "sha256": "563f50f940c19830202b9a490dc904cc319fb5c172d08747f827ce0015fdc9e4"
+    },
+    {
+      "path": "apk153-suite/p1-05-control-regressions.log.gz",
+      "bytes": 530,
+      "sha256": "d254ce343331b3e1df3fe7e53010504d30f38f862a78fbf65a41950686d74076"
+    },
+    {
+      "path": "apk153-suite/p2-03b-auto-ascend-integrity.log.gz",
+      "bytes": 437,
+      "sha256": "64bd156c43e919655e48d7b4d85a29b36f2411d80a78c6b3e234088c682a8f4a"
+    },
+    {
+      "path": "apk153-suite/parity-auto-ascend.log.gz",
+      "bytes": 430,
+      "sha256": "48a883c6603ecb21a038ebafb7cccef68c9b7c2428102cc2b3968f10fff84970"
+    },
+    {
+      "path": "apk153-suite/restore-roundtrip.log.gz",
+      "bytes": 429,
+      "sha256": "7458e1fa210fdd72665c79dda4067a3eb9f00098900f73348496b8ae17a1f8d8"
+    },
+    {
+      "path": "apk153-suite/self-test-auto-ascend-target-manual/self-test-auto-ascend-target-manual-NzEG6q/process.json.gz",
+      "bytes": 514,
+      "sha256": "90871b15445d240198764be954e6c73ff2d0fbf1ffc3a7e3b148a32933a67131"
+    },
+    {
+      "path": "apk153-suite/self-test-auto-ascend-target-manual/self-test-auto-ascend-target-manual-NzEG6q/stderr.log.gz",
+      "bytes": 106,
+      "sha256": "b068cf9c30ee2570497ff192b24086faa19f377702e9f4c874325e3040ef5560"
+    },
+    {
+      "path": "apk153-suite/self-test-auto-ascend-target-manual/self-test-auto-ascend-target-manual-NzEG6q/stdout.html.gz",
+      "bytes": 282239,
+      "sha256": "df85762de1b3723f3494549504a6a2b9db6c3ebb90ecb0f1449dabfaa079375f"
+    },
+    {
+      "path": "apk153-suite/self-test-auto-ascend-target-manual.log.gz",
+      "bytes": 1459,
+      "sha256": "3097a2b5f832876330504ad19e766ea8d1f47f7ee4ec3f802d54885c436aba2b"
+    },
+    {
+      "path": "apk153-suite/self-test-auto-ascend-target-window/self-test-auto-ascend-target-window-bZgNrU/process.json.gz",
+      "bytes": 510,
+      "sha256": "70baf4137a0bda3495de3763e9b598eda11d2e637a314030bdb8757b4372719c"
+    },
+    {
+      "path": "apk153-suite/self-test-auto-ascend-target-window/self-test-auto-ascend-target-window-bZgNrU/stderr.log.gz",
+      "bytes": 106,
+      "sha256": "b068cf9c30ee2570497ff192b24086faa19f377702e9f4c874325e3040ef5560"
+    },
+    {
+      "path": "apk153-suite/self-test-auto-ascend-target-window/self-test-auto-ascend-target-window-bZgNrU/stdout.html.gz",
+      "bytes": 283015,
+      "sha256": "4fd3f0084ebd3c57c64e54f6bf8337372af3f9a4f5be9a4f39047f4b4cf39f95"
+    },
+    {
+      "path": "apk153-suite/self-test-auto-ascend-target-window.log.gz",
+      "bytes": 1423,
+      "sha256": "2c69ed64fa0835fd756bfcdf0a99e3251d86c0fe5d509c8158dd3fbb0fce9243"
+    },
+    {
+      "path": "apk153-suite/self-test-bad-assertion/self-test-bad-assertion-8joaEF/process.json.gz",
+      "bytes": 506,
+      "sha256": "2089e2060f9f81ba6114b255afc5ae5087aea0eaf1d5dc4e823dbd7a3a663368"
+    },
+    {
+      "path": "apk153-suite/self-test-bad-assertion/self-test-bad-assertion-8joaEF/stderr.log.gz",
+      "bytes": 106,
+      "sha256": "b068cf9c30ee2570497ff192b24086faa19f377702e9f4c874325e3040ef5560"
+    },
+    {
+      "path": "apk153-suite/self-test-bad-assertion/self-test-bad-assertion-8joaEF/stdout.html.gz",
+      "bytes": 279732,
+      "sha256": "268cf03830539da91a36ca1ea37eef12ecbd03c482bfe89c5be70796646adafe"
+    },
+    {
+      "path": "apk153-suite/self-test-bad-assertion.log.gz",
+      "bytes": 1416,
+      "sha256": "c8461d836e3a08eda3f5abb0a855322a335e958e51d8d3be14d535a032af7757"
+    },
+    {
+      "path": "apk153-suite/self-test-uncaught-error/self-test-uncaught-error-fDvOKz/process.json.gz",
+      "bytes": 509,
+      "sha256": "d19a22a7fc6e3afec3e65ebdfb10e7d28a27c2e38b8899a7d3e66adcb028079b"
+    },
+    {
+      "path": "apk153-suite/self-test-uncaught-error/self-test-uncaught-error-fDvOKz/stderr.log.gz",
+      "bytes": 106,
+      "sha256": "b068cf9c30ee2570497ff192b24086faa19f377702e9f4c874325e3040ef5560"
+    },
+    {
+      "path": "apk153-suite/self-test-uncaught-error/self-test-uncaught-error-fDvOKz/stdout.html.gz",
+      "bytes": 279686,
+      "sha256": "700481d818a38141d6f8bc5b2819eb579f832eaa8619d2394c1ff4fc3bccb413"
+    },
+    {
+      "path": "apk153-suite/self-test-uncaught-error.log.gz",
+      "bytes": 1402,
+      "sha256": "33ffd8d4b599575d7c74c640dd923dc9680adf48d44427194bc3a4f54c95a8ea"
+    },
+    {
+      "path": "apk153-suite/self-test-unhandled-rejection/self-test-unhandled-rejection-pfWrpT/process.json.gz",
+      "bytes": 515,
+      "sha256": "d6a50654d98f70eb6b391f83bf638c1406b10294dcaefdf4878ea2f39ced60e3"
+    },
+    {
+      "path": "apk153-suite/self-test-unhandled-rejection/self-test-unhandled-rejection-pfWrpT/stderr.log.gz",
+      "bytes": 106,
+      "sha256": "b068cf9c30ee2570497ff192b24086faa19f377702e9f4c874325e3040ef5560"
+    },
+    {
+      "path": "apk153-suite/self-test-unhandled-rejection/self-test-unhandled-rejection-pfWrpT/stdout.html.gz",
+      "bytes": 279765,
+      "sha256": "62b0dcec5afa8b3dbbc561782758c0adfb3a1a2a32788771b30c23bcb023346c"
+    },
+    {
+      "path": "apk153-suite/self-test-unhandled-rejection.log.gz",
+      "bytes": 1432,
+      "sha256": "6e31d574874df8c2639c2725b85873c07df262e4d231a080047707123616b730"
+    },
+    {
+      "path": "apk153-suite/summary.json",
+      "bytes": 6404,
+      "sha256": "91fd87df66a6d4a7ee6671db61633919208f1ad85b8a04f5a00e77f8b7a29a47"
+    },
+    {
+      "path": "apk153-suite.log.gz",
+      "bytes": 312,
+      "sha256": "4e8aa517be6a6ab014232bf988e08a389fc3f3adb9d93b9a0d98bec786db44f0"
+    },
+    {
+      "path": "apk153-v8.log.gz",
+      "bytes": 229,
+      "sha256": "2583c4a7d310e2d09c89850d5811e53dd058e64c1fd6c29218bf721e882f2cee"
+    },
+    {
       "path": "build-37742868726.log.gz",
       "bytes": 20843,
       "sha256": "3972fcf47146f645bf7d682e14725434a7016ceb8d37d58b2c36d52ce0005666"
     },
     {
       "path": "checkpoint.json",
-      "bytes": 2715,
-      "sha256": "7a2217b422a93588e9699af9ca480e194fba28e654d29a897d8a6a6c22a0e84c"
+      "bytes": 3418,
+      "sha256": "dadeec18ed20cef769eb53657b2e129469d79dd8a44873c9b44d805ee9c894f1"
     },
     {
       "path": "ci-37737148141.json",
@@ -293,6 +558,16 @@
       "path": "ci-37740305483.log.gz",
       "bytes": 159060,
       "sha256": "362dd5afc0d84af54e27422dd6c034591460dc4b65046e04945e03496ba4edcc"
+    },
+    {
+      "path": "ci-37752941310-failed.txt.gz",
+      "bytes": 149980,
+      "sha256": "5645bfeefe9ab0a02cb5dfa53fef84cf94fd606b3478c88021fb566492bd6bb6"
+    },
+    {
+      "path": "context-153.log.gz",
+      "bytes": 141,
+      "sha256": "cbd10430411d51ccc4f0da86705603e7737252dd2147af3570dddad8168e0032"
     },
     {
       "path": "context-main-ac0.log.gz",
@@ -1533,9 +1808,9 @@
     },
     {
       "path": "../DEVICE_ACCEPTANCE.txt",
-      "bytes": 2285,
-      "sha256": "af837680ae0747a93b2a1e82e5be0829e26d7589e6b552d7acabef0d22ad7d42"
+      "bytes": 2367,
+      "sha256": "ccf12d1afaec63d13c71d8fb4fcb58a6b3b28290cdd3650617038b4b59073653"
     }
   ],
-  "publicationBaseline": "ac0d28e589bd1caef4b9c70f2383a8b3ee384acd"
+  "publicationBaseline": "06b28d5e80269dc5c8a609540bc75e27c842da4b"
 }
