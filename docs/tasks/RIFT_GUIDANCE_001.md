@@ -32,6 +32,8 @@ or other-chat changes; serialize actual overlapping main integration.
 [task](../qa/rift-guidance-001/2026-10-08/previous-task-2026-10-07.md) and
 [evidence](../qa/rift-guidance-001/README.md) as historical results.
 Refreshed baseline, fetched 8 October: `b0537cb46635555ba2c2e5f3f95bc8fc276aeda5`.
+Bring in subsequent main261b1b7 (PR77 Save Backup). Preserve its product,
+registered UI checks and two new negative gates; share sourceWebRoot in runner.
 PR46/B2, F13 Cast removal and F27 cosmetics/Trial status are integrated.
 Open PR70 Wisp roles, PR67 feedback bundle and PR66 tree caps stay separate.
 
