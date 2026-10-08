@@ -65,7 +65,8 @@ Check six themes, F27 trail/crest/visible Trial, existing Rift/navigation and CI
 
 Corrected-source local PASS:160 observations,96themes,48Comet cosmetics,16Trial pairs;
 80touch scrolls,0px protected movement, minimum Tap121px and contrast8.30:1.
-Existing Rift1,618/navigation295/F13 matrix/tooling/source/context PASS. Legacy
+Current Rift1,618/navigation255/mobile/tooling/source/context PASS; older
+navigation295/F13 receipts precede the new Auto-Ascend layout. Legacy
 V8 6.0 exact scripts and23 guidance-function assertions PASS. CI37735423348
 caught a320px/200% label-fit failure; preserve the assertion and correct only
 toggle width/padding/line-height. The full failed log and fresh passing matrix
@@ -75,10 +76,10 @@ integrated reruns, APK and native acceptance remain pending.
 commands, results and limits. No independent/physical/TalkBack pass claimed.
 
 Publication: [PR81](https://github.com/karahaNx/Lumenfall/pull/81), head
-dc0285fffba7bf2b04e9a852d9fc4359fdbb580f passed full CI37741048919:
-160 defaults/14 negatives/smoke. New-main169 defaults and review fix require
-fresh current-head CI. Review P1: require Tab to reach nav-spirits, with an
-actual prevented-Tab negative; unchanged focus cannot pass.
+db6ba6241ccf3d7ec74bd2a1b677c19f387514d6, CI37744052638 running169 defaults.
+Prior dc0285f passed CI37741048919:160 defaults/14 negatives/smoke. Review P1:
+exact nav-spirits stop and actual prevented-Tab negative PASS; thread resolved.
+Current480687e9 source matrix/contract/V8 PASS. No required gates weakened.
 Signed143 native baseline PASS on Android8.1/WebView61: cold-launch QA ownership,
 Wisp levels and hidden preference verified. Upgrade/feature acceptance pending.
 [Delivery checkpoint](../qa/rift-guidance-001/2026-10-08/delivery/README.md).
