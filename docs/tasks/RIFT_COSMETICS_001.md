@@ -35,7 +35,10 @@ Original startup main `b2a1f440e8ad9fed34b37551e468224310d2a6f6`, then
 [7 October evidence](../qa/rift-cosmetics-2026-10-07/README.md) remain historical.
 They do not verify the refreshed implementation.
 
-8 October live main baseline `b0537cb46635555ba2c2e5f3f95bc8fc276aeda5`.
+8 October initial live main `b0537cb46635555ba2c2e5f3f95bc8fc276aeda5`.
+Rebased again onto PR77 main `261b1b7f863f73c324f4ac04acb5bfc95101644d`;
+preserve Save Backup placement, confirmed restore and all incoming tests.
+CI37737518062 on the older base is superseded by this combined version.
 Rebased onto this baseline; both cosmetic CSS and button conflicts combine F27
 Comet decorations and F24 SVG layers. Preserve all upstream gameplay and tests.
 PR46/B2 are integrated via PR57 (`20aaae62a4b6e46f8d75775085918eaba4e8de29`).
@@ -98,7 +101,7 @@ Hidden-aura negative is detected. Browser Chromium151, Node24.19.
 PR79 head f0ae15b passed gameplay but CI37735266911 caught fixed regional
 palettes in 15 layout cases. Remove those overrides, retain auras and add a
 six-region contract; all three original layout scenarios now pass locally.
-Full CI reruns before integration. Signed143 native baseline passes actual cold
+Full CI reruns on the combined current-main version before integration. Signed143 native baseline passes actual cold
 launch on API27/WebView61; V8 6.0 parses both scripts and saves all six themes.
 Remaining integration/APK evidence will be recorded after delivery. This is self-review and automated verification;
 independent review is not claimed. Exact WebView60, physical Android and TalkBack
