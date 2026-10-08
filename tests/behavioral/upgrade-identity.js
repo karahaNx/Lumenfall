@@ -61,19 +61,19 @@ window.runUpgradeIdentityQa=async function(b,ctx,assert,parity,summaryParity){
     return {checks:checks,closedTracks:10,activeTracks:14,exactOldFactors:true,currenciesUnchanged:true,idempotent:true,freshDeeds:true};
   }
   if(ctx.scenario==='upgrade-identity-farm-clock'){
-    var s=JSON.parse(JSON.stringify(ctx.fixtures['parity-medium-farm'].save)),clock=2000000000371;
+    var s=JSON.parse(JSON.stringify(ctx.fixtures['parity-medium-farm'].save)),clocks=[2000000000000,2000000000371];
     // Keep the saved old ON queues: stopping duplicate purchases exposes the
     // real sub-nanosecond grid crossing, without changing purchased factors.
     install(s);s=b.getState();var records=[];
     // This old save earns more than100% offline. Preserve that policy and
     // compare each mode to its own split reference, rather than changing it.
-    for(var kind of ['live','offline']){
+    for(var clock of clocks)for(var kind of ['live','offline']){
       install(s);var whole=b.simulate(60,kind,60,clock);
-      install(s);for(var i=0;i<6;i++)var split=b.simulate(10,kind,10,clock+i*10000);parity(whole.state,split.state,'fractional Farm endpoint whole/split '+kind);
+      install(s);for(var i=0;i<6;i++)var split=b.simulate(10,kind,10,clock+i*10000);parity(whole.state,split.state,'Farm endpoint whole/split '+kind+' '+clock);
       closedForge.forEach(function(id){ok(whole.state.research[id]===s.research[id],'clock cannot invent retired ownership '+id);});
-      records.push({kind:kind,kills:whole.summary.kills});
+      records.push({kind:kind,clockStartMs:clock,kills:whole.summary.kills});
     }
-    return {checks:checks,savedCharge:s.research.charge,clockStartMs:clock,wholeSplit:true,records:records};
+    return {checks:checks,savedCharge:s.research.charge,clockStartsMs:clocks,wholeSplit:true,records:records};
   }
   if(ctx.scenario==='upgrade-identity-chronology'){
     var s=seed();s.activeStudies=closedLab.map(function(id){return {id:id,remainingSec:1,totalDurationSec:123,speedMult:2};});install(s);var before=b.getState();

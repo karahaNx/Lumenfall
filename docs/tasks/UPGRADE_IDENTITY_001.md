@@ -13,7 +13,9 @@ requires unchanged Workshop currencies. On 2026-10-08 the user instructed:
 
 Private checkout /workspace/Lumenfall-upgrade-identity-001, branch
 feature/upgrade-identity-001, product baseline main
-b0537cb46635555ba2c2e5f3f95bc8fc276aeda5. Earlier proposal was rebased;
+b0537cb46635555ba2c2e5f3f95bc8fc276aeda5. Rebased onto current main
+261b1b7f863f73c324f4ac04acb5bfc95101644d (PR77 Backup UI) before publication.
+Both new test registrations/required negatives are retained. Earlier proposal was rebased;
 [historical proposal](UPGRADE_IDENTITY_001/PROPOSAL_2026-10-07.txt) and old checks
 remain historical. PR46/B2 is integrated via PR57, not a current gate. Live rules
 assign implementation/delivery to this chat. No subagents/message tools used.
@@ -79,7 +81,8 @@ from PR70 head7284cf716250355e1bf68d00590f81ab96f49a3d are included; no Wisp
 role/UI/catalog changes copied. A dedicated saved-queue fractional-clock case
 and causal old-guard negative protect this dependency. Offline baseline comparisons
 keep exact full equality against the immutable engine plus only those clock fixes.
-PR/integration/APK acceptance are not yet claimed.
+[PR90](https://github.com/karahaNx/Lumenfall/pull/90) is pushed as a draft;
+full final-source CI/integration/APK acceptance are not yet claimed.
 Next: implement, verify fresh baseline/focused regressions, publish/integrate
 following required CI, build/verify APK. Keep owner chat open until required
 acceptance and GitHub status evidence are saved.
