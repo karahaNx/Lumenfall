@@ -1,5 +1,5 @@
 const fs=require('node:fs'),crypto=require('node:crypto');
-const acorn=require('internal/deps/acorn/acorn/dist/acorn');
+const acorn=require('./vendor/acorn.cjs');
 const baseline=fs.readFileSync(process.argv[2],'utf8');
 const candidate=fs.readFileSync('index.html','utf8');
 const scripts=s=>Array.from(s.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g),m=>m[1]);
@@ -15,4 +15,4 @@ next.forEach(code=>acorn.parse(code,{ecmaVersion:2017}));
 if(protectedStatements(old[0])!==protectedStatements(next[0]))throw Error('non-presentation statements changed');
 if(old.slice(1).join('')!==next.slice(1).join(''))throw Error('native bridge changed');
 const hash=s=>crypto.createHash('sha256').update(s).digest('hex');
-console.log(JSON.stringify({status:'pass',baselineIndexSHA256:hash(baseline),candidateIndexSHA256:hash(candidate),grammar:'ES2017',parser:'Node embedded acorn '+acorn.version,protectedStatementsSHA256:hash(protectedStatements(next[0])),allowedPresentationFunctions:Array.from(allowed),newEphemeralState:'openStudySpeedId',limitation:'Syntax and unchanged-authority proof; not physical WebView60, APK or TalkBack acceptance.'},null,2));
+console.log(JSON.stringify({status:'pass',baselineIndexSHA256:hash(baseline),candidateIndexSHA256:hash(candidate),grammar:'ES2017',parser:'Public pinned Acorn '+acorn.version,protectedStatementsSHA256:hash(protectedStatements(next[0])),allowedPresentationFunctions:Array.from(allowed),newEphemeralState:'openStudySpeedId',limitation:'Syntax and unchanged-authority proof; not physical WebView60, APK or TalkBack acceptance.'},null,2));

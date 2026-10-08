@@ -87,6 +87,12 @@ window.runLabUiQa = function(b,ctx,assert){
   q('[data-speed-study="guardmastery"][data-speed="2"]').focus();b.inquiry.tail(.1);b.renderLayout();
   ok(!b.getState().activeStudies.length&&document.activeElement.dataset.studyDetails==='guardmastery','completion leaves focus on the same Study opener');
   ok(!q('[data-study-inspection="guardmastery"] [data-speed-study]'),'completed record cannot be bought again');
+  close();var legacy=seed();legacy.longStudyLevels.riftattune=2;legacy.activeStudies=[{id:'riftattune',remainingSec:.1,totalDurationSec:150,speedMult:2}];install(legacy);
+  q('[data-study-details="riftattune"]').click();q('[data-speed-study="riftattune"][data-speed="3"]').focus();
+  b.inquiry.tail(.1);b.renderLayout();
+  ok(b.getState().longStudyLevels.riftattune===3&&!b.getState().activeStudies.length,'retired paid work earns its last level');
+  ok(document.activeElement.dataset.legacyUpgrade==='riftattune'&&document.activeElement.getClientRects().length,'retired completion focuses the visible preserved card');
+  b.renderLayout();ok(document.activeElement.dataset.legacyUpgrade==='riftattune','preserved card focus survives rendering');
   close();install(seed());fit();
   return {checks:checks,progress:records};
 };

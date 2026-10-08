@@ -79,3 +79,8 @@ PR83. Verify integrated behavior, signed APK/package/version/signer/assets and
 native update/save/focus. Save delivery receipts/status in GitHub through protected
 main's PR workflow. Missing required device acceptance stays open; archive only
 this owner chat after verified completion under FEATURE_WORKFLOW.
+
+Retired completion focus regression reproduced and fixed: focus moves to the
+preserved card and survives rendering. Renewed12 profiles/19 regressions/V8 pass
+on source2de645b; public pinned Acorn makes source proof reproducible without
+Node internals. Receipts in QA retired/; all original gates retained.
