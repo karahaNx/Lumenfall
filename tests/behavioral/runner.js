@@ -545,6 +545,8 @@
         finish('pass',window.runForgeQa(bridge,ctx,assert,assertProtectedParity,assertSummaryParity,parityApprox));return;
       }
       switch(ctx.scenario){
+        case 'wisp-upgrade-display':
+          finish('pass',window.runWispUpgradeQa());return;
         case 'p2-07a-persistence-review':
           bridge.freeze();
           finish('pass',window.runP207PersistenceReview(bridge,ctx,assert));
@@ -1966,13 +1968,14 @@
           assert(help.open,'refresh must retain Formation guidance disclosure state');
           help.open=false;
           var progression=document.querySelector('.wisp-progression');
-          assert(progression && !progression.open,'secondary Wisp progression starts collapsed');
-          var summary=progression.querySelector('summary');
-          var inspectId=summary.dataset.wispDetails;
-          summary.focus();summary.click();bridge.renderLayout();
+          var inspectId=progression.dataset.wispProgression;
+          var complete=state().heroRarity[inspectId]>=5 && state().wispModules[inspectId]>=20 && state().wispUltimate[inspectId];
+          assert((progression.tagName==='DETAILS')===!!complete,'only completed Wisp progression has native disclosure');
+          var title=progression.querySelector('[data-wisp-details]');
+          title.focus();if(complete) progression.open=true;bridge.renderLayout();
           progression=document.querySelector('[data-wisp-progression="'+inspectId+'"]');
-          assert(progression.open,'Wisp disclosure remains open through refresh');
-          assert(document.activeElement===progression.querySelector('summary'),'refresh preserves disclosure keyboard focus');
+          assert(complete ? progression.open : !progression.querySelector('summary'),'progression stays open through refresh');
+          assert(document.activeElement===progression.querySelector('[data-wisp-details]'),'refresh preserves progression keyboard focus');
           assert(progression.querySelector('[data-rarity]') && progression.querySelector('.hero-ability'),'secondary upgrade information remains reachable');
           assert(JSON.stringify(state())===beforeHierarchy,'hierarchy/navigation/inspection must not mutate gameplay state');
           finish('pass',{activeFirst:true,empowerFirst:true,stateUnchanged:true});return;

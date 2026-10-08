@@ -1,0 +1,31 @@
+LUMENFALL — ÉN FEATURECHAT: Wisp-upgrades åbne indtil maxed
+Feature-ID: WISP_UPGRADE_DISPLAY_001
+Originalpunkter: F04
+Repository: karahaNx/Lumenfall
+Anbefalet model: GPT-6.1 Sol · Effort: High
+Model/effort er en anbefaling til opstart, ikke dokumentation af kørt model.
+
+BESTILLING
+Fjern foldmulighed indtil alle afsluttelige spor er fuldført: Mythic rarity, autoritativt Module-cap og købt Ultimate. Empower og Resonate er ikke maxed-predicate. Valutamangel må ikke skjule ufærdige køb.
+
+OPSTART OG KILDER
+Læs aktuel AGENTS.md, PROJECT_BOOTSTRAP.txt, egen række i docs/CHAT_OWNERSHIP.md, docs/agents/03_VISUALS.md, docs/PROJECT_STATE.md og docs/project/FEATURE_WORKFLOW.md. Brug docs/CONTEXT_INDEX.md målrettet.
+Læs originalen: docs/recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt.
+Læs relevante F04-afsnit i docs/recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt og relevante afhængigheder/save-afsnit.
+Læs konkrete Lead-beslutninger i docs/recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt.
+Brug docs/recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/FINDINGS.txt samt Source_Index.txt til relevante beviser/billeder. Originalen har forrang for forslag.
+
+PARALLEL FORBEREDELSE
+Hver ejerchat arbejder fra en særskilt checkout eller worktree med sin egen featurebranch. Registrér præcis baseline og hvad der undersøges; delte filer ændres ikke i en anden chats checkout. Forbered den lokale kandidat/patch og relevante checks for dette ene mål.
+AGENTS kræver fortsat én repo-writer ad gangen. Private forslag tildeler ikke samtidigt skriveejerskab til det fælles repository. Remote ændringer, integration og release koordineres med Lead efter eksisterende workflow. Den stående godkendelse gælder aftalt scope; der kræves ikke en ny generel godkendelse.
+Læs aktuelle regler fra live main; nye scripts bruger JavaScript hvor teknisk muligt. Brug ingen subagenter/beskedværktøjer og omdøb ikke andre chats.
+
+AFHÆNGIGHEDER OG KOORDINATION
+Brug Lead-beslutningen i FEEDBACK_REGISTERED_001.txt og billede 4.
+PR46/B2 skal kontrolleres ved opstart. Den gemte status sætter kandidat-review og writer-handover før nye produktændringer; parallel analyse og lokale forslag kan forberedes imens. Hold denne feature adskilt fra en anden chats mål.
+
+ACCEPT OG CHECKPOINT
+Skriv et lokalt forslag til docs/tasks/WISP_UPGRADE_DISPLAY_001.md med dette ene mål, originalkrav, ejerchat, baseline, scope, beslutninger, acceptkriterier, dependencies, testresultater og næste handling. Gem det i GitHub ved et koordineret writer-checkpoint.
+Verificér den konkrete adfærd som målet ændrer med relevante eksisterende checks. UI: relevante mobilbredder, stor tekst, mindst 44px kontroller, fokus/kontrast/reduced-motion. Gameplay: relevante handler/bulk/queue-grænser, chronology, live/offline og save/recovery. Gæt ikke gameplaytal; konkretiser manglende designbeslutninger.
+Bevar WebView 60, package com.lumenfall.app, signing, deterministiske køb og dokumenterede Luminous Motes-belønninger. Gamle køb/data kræver eksplicit værdibevarelse og idempotent migration hvor relevant.
+En lokal kandidat eller åben PR er ikke en færdig feature. Efter koordineret integration skal adfærd verificeres på den integrerede version, nødvendige APK/devicechecks udføres, status/beviser gemmes og writer frigives. Arkivér derefter kun denne ejerchat efter FEATURE_WORKFLOW. Rapportér manglende nødvendig accept som uafsluttet.

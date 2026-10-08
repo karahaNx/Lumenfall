@@ -1,0 +1,364 @@
+{
+  "status": "pass",
+  "source": "/workspace/Lumenfall-WISP_UPGRADE_DISPLAY_001/index.html",
+  "existingAssertions": true,
+  "records": [
+    {
+      "scenario": "p2-02b-wisp-hierarchy",
+      "status": "pass",
+      "detail": {
+        "activeFirst": true,
+        "empowerFirst": true,
+        "stateUnchanged": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "p2-02a-core-qol",
+      "status": "pass",
+      "detail": {
+        "formation": [
+          "tide",
+          "aurora",
+          "gale",
+          "thorn",
+          "ember"
+        ],
+        "bonds": [
+          "starcaller",
+          "pathfinder"
+        ],
+        "labCapacity": "1",
+        "destination": "workshop",
+        "autoEmpower": "mixed-after-individual",
+        "deedProgress": "4,286 / 10,000 strikes"
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "p2-wisp-progression-pacing",
+      "status": "pass",
+      "detail": {
+        "rarityRequirements": [
+          8,
+          18,
+          30,
+          45,
+          65
+        ],
+        "rarityShardCosts": [
+          15,
+          90,
+          900,
+          15000,
+          500000
+        ],
+        "emberRarityTotal": {
+          "lumen": 29080,
+          "shard": 516005
+        },
+        "emberModuleTotal": {
+          "lumen": 385336,
+          "shard": 38534
+        },
+        "voidModuleTotal": {
+          "lumen": 2697350220,
+          "shard": 269735024
+        },
+        "titanModuleTotal": {
+          "lumen": 84773863972,
+          "shard": 8477386399
+        },
+        "rosterTotals": {
+          "rarity": {
+            "lumen": 7806613240,
+            "shard": 4128040
+          },
+          "module": {
+            "lumen": 103444536841,
+            "shard": 10344453688
+          }
+        }
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "p2-endgame-currency-utility",
+      "status": "pass",
+      "detail": {
+        "ultimateSigilTotal": 250,
+        "sigilsThroughRift220": 253,
+        "restStopCometTotal": 450,
+        "deedCometTotal": 683,
+        "resonanceCost": 25,
+        "resonanceRunLimit": 3,
+        "questRefreshCost": 25,
+        "maxQuestReward": 25,
+        "deterministicReplacement": "q_ascend"
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "p2-03a-wisp-role-integrity",
+      "status": "pass",
+      "detail": {
+        "roles": [
+          [
+            "ember",
+            "Burst",
+            5
+          ],
+          [
+            "tide",
+            "Amplifier",
+            0
+          ],
+          [
+            "stone",
+            "Breaker",
+            4
+          ],
+          [
+            "gale",
+            "Shard Utility",
+            3
+          ],
+          [
+            "thorn",
+            "Lumen Utility",
+            3
+          ],
+          [
+            "void",
+            "Burst",
+            5
+          ],
+          [
+            "aurora",
+            "Amplifier",
+            0
+          ],
+          [
+            "titan",
+            "Breaker",
+            4
+          ]
+        ],
+        "pushMult": 1.416,
+        "farmMult": 1.2,
+        "farmRewardMult": 1.25,
+        "bossMult": 1.593,
+        "earlyKills": 6,
+        "presetsPreserved": true,
+        "liveOfflineBreakerDamage": -769
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "p1-05-control-regressions",
+      "status": "pass",
+      "detail": {
+        "selectedContrast": {
+          ".mult-btn.active": 10.820790238811385,
+          ".speed-btn.active": 10.860326278711556
+        },
+        "liveStates": true,
+        "focus": true,
+        "untrustedTapGuard": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "p1-05-accessibility-contract",
+      "status": "pass",
+      "detail": {
+        "findings": []
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "p1-05-reduced-motion",
+      "status": "pass",
+      "detail": {
+        "reduced": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "layout-dense",
+      "status": "pass",
+      "detail": {
+        "viewport": [
+          390,
+          844
+        ],
+        "safeInsets": [
+          "0",
+          "0"
+        ],
+        "minimumEnemyHeight": 238,
+        "hudHeight": 109,
+        "party": 5,
+        "presentationStates": 16
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "layout-fresh",
+      "status": "pass",
+      "detail": {
+        "viewport": [
+          390,
+          844
+        ],
+        "safeInsets": [
+          "0",
+          "0"
+        ],
+        "minimumEnemyHeight": 284,
+        "hudHeight": 109,
+        "party": 1,
+        "presentationStates": 16
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "parity-short",
+      "status": "pass",
+      "detail": {
+        "durationSec": 60,
+        "liveKills": 22,
+        "offlineKills": 22,
+        "liveWallMs": 0.8000000000465661,
+        "offlineWallMs": 1,
+        "tolerance": {
+          "absolute": 0.000001,
+          "relative": 1e-12
+        }
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "parity-medium-farm",
+      "status": "pass",
+      "detail": {
+        "isolated": false,
+        "durationSec": 3600,
+        "finalMode": "push",
+        "farmDepth": 0,
+        "pushReturn": 0,
+        "audited": {
+          "retries": 1,
+          "ascends": 11,
+          "purchases": 3593,
+          "rebuildPurchases": 41,
+          "deaths": 1389
+        },
+        "strictReference": true,
+        "split": true,
+        "negatives": [
+          "premature",
+          "duplicate",
+          "free"
+        ]
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "chronology-auto-empower-mid-window",
+      "status": "pass",
+      "detail": {
+        "firstEmpowerSec": 27.999999999999996,
+        "finalEmberLevel": 12,
+        "killsWithEmpower": 55,
+        "killsWithoutEmpower": 13
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "chronology-simultaneous-order",
+      "status": "pass",
+      "detail": {
+        "boundarySec": 5.999999999999999,
+        "order": [
+          "ability",
+          "autoTap",
+          "autoEmpower",
+          "research",
+          "studyComplete"
+        ]
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "restore-roundtrip",
+      "status": "pass",
+      "detail": {
+        "depth": 33,
+        "lumen": 777777,
+        "schemaVersion": 1
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "legacy-backup-restore",
+      "status": "pass",
+      "detail": {
+        "schemaVersion": 1,
+        "depth": 22
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "recovery-from-corrupt-primary",
+      "status": "pass",
+      "detail": {
+        "recovered": true,
+        "depth": 17
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "recovery-offline-once",
+      "status": "pass",
+      "detail": {
+        "offlineSeconds": 60
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "lifecycle-background-resume",
+      "status": "pass",
+      "detail": {
+        "elapsedSec": 30,
+        "kills": 35,
+        "lumen": 171.5000000000001,
+        "offlineApplications": 1,
+        "lastSeen": 2052475230000
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "wisp-formula-contract",
+      "status": "pass",
+      "detail": {
+        "baseWispPower": 10.9,
+        "rarityAbility": 81.75,
+        "moduleAbility": 81.75,
+        "supportBase": {
+          "strength": 1.25,
+          "durationMs": 4000
+        },
+        "supportUltimate": {
+          "strength": 1.5,
+          "durationMs": 8000
+        },
+        "galeShards": 12197,
+        "thornLumen": 127602,
+        "guardianTap": 7.438780800000001,
+        "guardianBossTap": 22.316342400000003
+      },
+      "runtimeErrors": []
+    }
+  ]
+}

@@ -39,9 +39,9 @@ function instrumentHtml(source, fixtures) {
   const prelude = read('prelude.js').replace('__QA_FIXTURES_JSON__', () => JSON.stringify(fixtures));
   replaceOnce('<head>', '<head>\n<script id="qa-behavior-prelude">\n' + prelude + '\n</script>', 'expected exactly one <head> marker');
   const marker = '\n})();\n</script>\n<script>\nif(window.Capacitor';
-  replaceOnce(marker, '\n' + read('bridge.js') + marker, 'main game IIFE marker changed; test bridge could not be installed');
+  replaceOnce(marker, '\n' + read('bridge.js') + '\n' + read('wisp-upgrades-bridge.js') + marker, 'main game IIFE marker changed; test bridge could not be installed');
   const modules = ['rift-status', 'bond-text', 'layout', 'accessibility', 'accessibility-controls', 'nav-workshop', 'r3-destinations',
-    'research-duration', 'upgrade-clarity', 'feedback', 'formation', 'forge', 'support-stacking', 'auto-ascend-target', 'buff-timing', 'measured-inquiry', 'lab-motes', 'farm-conservation', 'farm-numerical'];
+    'research-duration', 'upgrade-clarity', 'feedback', 'formation', 'forge', 'support-stacking', 'auto-ascend-target', 'buff-timing', 'measured-inquiry', 'lab-motes', 'farm-conservation', 'farm-numerical', 'wisp-upgrades'];
   replaceOnce('</body>', modules.map(name => '<script>' + read(name + '.js') + '</script>').join('') +
     '<script id="qa-behavior-runner">\n' + read('runner.js') + '\n</script>\n</body>', 'expected exactly one </body> marker');
   return source;

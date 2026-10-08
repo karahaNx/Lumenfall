@@ -1,0 +1,107 @@
+{
+  "status": "local scoped PASS; integration/app acceptance pending",
+  "scoped": {
+    "profiles": 12,
+    "fixturesPerProfile": 128,
+    "assertions": 12804
+  },
+  "existing": {
+    "transport": "CDP via active Node harness instrumenter",
+    "scenarios": [
+      "p2-02b-wisp-hierarchy",
+      "p2-02a-core-qol",
+      "p2-wisp-progression-pacing",
+      "p2-endgame-currency-utility",
+      "p2-03a-wisp-role-integrity",
+      "p1-05-control-regressions",
+      "p1-05-accessibility-contract",
+      "p1-05-reduced-motion",
+      "layout-dense",
+      "layout-fresh",
+      "parity-short",
+      "parity-medium-farm",
+      "chronology-auto-empower-mid-window",
+      "chronology-simultaneous-order",
+      "restore-roundtrip",
+      "legacy-backup-restore",
+      "recovery-from-corrupt-primary",
+      "recovery-offline-once",
+      "lifecycle-background-resume",
+      "wisp-formula-contract"
+    ],
+    "status": "pass"
+  },
+  "negativeControls": [
+    {
+      "scenario": "self-test-bad-assertion",
+      "caught": true
+    },
+    {
+      "scenario": "self-test-uncaught-error",
+      "caught": true
+    },
+    {
+      "scenario": "self-test-unhandled-rejection",
+      "caught": true
+    },
+    {
+      "scenario": "self-test-parity-regression",
+      "caught": true
+    },
+    {
+      "scenario": "self-test-chronology-regression",
+      "caught": true
+    },
+    {
+      "scenario": "self-test-wisp-formula-regression",
+      "caught": true
+    },
+    {
+      "scenario": "self-test-wisp-pacing-regression",
+      "caught": true
+    },
+    {
+      "scenario": "self-test-endgame-currency-regression",
+      "caught": true
+    },
+    {
+      "scenario": "self-test-wisp-role-regression",
+      "caught": true
+    },
+    {
+      "scenario": "self-test-p1-05-selected",
+      "caught": true
+    },
+    {
+      "scenario": "self-test-p1-05-focus-return",
+      "caught": true
+    },
+    {
+      "scenario": "self-test-lifecycle-duplicate",
+      "caught": true
+    }
+  ],
+  "baselineNegative": {
+    "status": "expected rejection",
+    "message": "Error: Error: fold available iff all three tracks complete ember/0\n    at ok (http://127.0.0.1:32871/index.html:8299:56)\n    at http://127.0.0.1:32871/index.html:8319:9\n    at Array.forEach (<anonymous>)\n    at http://127.0.0.1:32871/index.html:8312:20\n    at Array.forEach (<anonymous>)\n    at http://127.0.0.1:32871/index.html:8311:23\n    at Array.forEach (<anonymous>)\n    at window.runWispUpgradeQa (http://127.0.0.1:32871/index.html:8310:9)\n    at <anonymous>:1:8\n    at evaluate (/workspace/Lumenfall-WISP_UPGRADE_DISPLAY_001/tests/behavioral/wisp-upgrades.cjs:42:154)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async run (/workspace/Lumenfall-WISP_UPGRADE_DISPLAY_001/tests/behavioral/wisp-upgrades.cjs:83:18)\n    at async /workspace/Lumenfall-WISP_UPGRADE_DISPLAY_001/tests/behavioral/wisp-upgrades.cjs:99:25"
+  },
+  "regularCli": {
+    "status": "timeout/no completed QA result",
+    "log": "official-hierarchy.log"
+  },
+  "gates": {
+    "context": "PASS",
+    "source": "PASS",
+    "apkVerifierSelfTest": "PASS",
+    "nodeTooling": "PASS",
+    "es2017": "PASS (syntax only)",
+    "contrast": "minimum 5.46:1 conservative estimate"
+  },
+  "limitations": [
+    "No ordinary full-suite or CI pass claimed",
+    "No exact-candidate independent Core/QA acceptance",
+    "No APK build/signing/device acceptance",
+    "No coordinated writer checkpoint, GitHub publication or integration",
+    "No chat archival"
+  ]
+}
