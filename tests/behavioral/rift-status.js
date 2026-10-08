@@ -33,7 +33,7 @@ window.riftStatusWorst=function(b,ctx){
   function choose(at,party){
     if(party.length===5){
       var active=bonds.filter(x=>x.ids.every(id=>party.includes(id)));
-      var text='Active Bonds: '+active.map(x=>x.name.replace(' Bond','')).join(' · ');
+      var text=active.map(x=>x.name.replace(' Bond','')).join(' · ');
       if(text.length>best.text.length)best={text,ids:party.slice(),bonds:active};return;
     }
     for(var i=at;i<ids.length;i++)choose(i+1,party.concat(ids[i]));
@@ -138,7 +138,7 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     s.spirits[worst.bonds[0].ids[0]]=0;install(s);
     ok(!b.riftStatus.active().some(x=>x.id===worst.bonds[0].id)&&!q('#bond-summary').textContent.includes(worst.bonds[0].name.replace(' Bond','')),'unpowered members cannot show an active Bond');
     var remaining=b.riftStatus.active();
-    ok(remaining.length===1 && q('#bond-summary').textContent==='Active Bonds: '+remaining[0].name.replace(' Bond',''),'one remaining powered Bond stays visible');
+    ok(remaining.length===1 && q('#bond-summary').textContent===remaining[0].name.replace(' Bond',''),'one remaining powered Bond stays visible');
     s=seed();s.activeParty=worst.ids;s.activeParty.forEach(id=>s.spirits[id]=2);install(s);b.ascendManual();b.renderLayout();
     ok(!!b.getState().formationRebuild && !b.riftStatus.active().length,'pending intent is not active Bonds');
     ok(q('#bond-summary').textContent==='No Formation Bond active.','Ascension neutral actual Formation');
@@ -162,7 +162,8 @@ window.runRiftStatusQa=async function(b,ctx,assert){
         ok(status&&status.textContent===(!powered?'Lv 0':''),'powered Rift cards do not repeat ability status as visible text');
         ok(!card.querySelector('.rift-wisp-time')&&!/\b\d+(?:\.\d+)?\s*(?:s|sec|seconds)\b/i.test(card.textContent),'Rift card has no visible ability countdown');
       });
-      var active=b.riftStatus.active();same([...document.querySelectorAll('[data-bond-effect]')].map(x=>x.querySelector('.rift-bond-copy').textContent),active.map(x=>x.effect),'Rift shows exact complete active Bond effects');
+      var active=b.riftStatus.active();same([...document.querySelectorAll('[data-bond-effect]')].map(x=>x.querySelector('.rift-bond-copy').textContent),active.map(x=>x.riftEffect||x.effect),'Rift shows exact compact active Bond effects');
+      active.forEach(x=>ok(q('[data-bond-effect="'+x.id+'"]').getAttribute('aria-label')===x.name+': '+x.effect,'full effect remains accessible'));
       ok(q('#rift-bond-effects').hidden===!active.length,'no stale effects when no Bond is active');
     }
     // Deliberately interleave both pairs with the fifth Wisp in the middle.
@@ -174,9 +175,10 @@ window.runRiftStatusQa=async function(b,ctx,assert){
       var cards=[...document.querySelectorAll('[data-rift-wisp]')],active=b.riftStatus.active(),colors=[],marks=[];
       active.forEach(bond=>{
         var pair=cards.filter(x=>bond.ids.includes(x.dataset.riftWisp)),effect=q('[data-bond-effect="'+bond.id+'"]');
-        ok(pair.length===2&&Math.abs(cards.indexOf(pair[0])-cards.indexOf(pair[1]))===1,'Bond partners are adjacent even when save order is interleaved');
+        ok(pair.length===2,'each overlapping Bond has exactly two distinct partner cards');
+        if(pair.every(card=>card.dataset.bond===bond.id))ok(Math.abs(cards.indexOf(pair[0])-cards.indexOf(pair[1]))===1,'primary Bond partners remain adjacent');
         var color=effect.style.getPropertyValue('--bond-color'),mark=effect.querySelector('.rift-bond-mark').textContent;
-        pair.forEach(card=>ok(card.dataset.bond===bond.id&&card.style.getPropertyValue('--bond-color')===color&&card.querySelector('.rift-bond-mark').textContent===mark&&card.getAttribute('aria-label').includes(bond.name),'paired Wisps match bonus color, shape and accessible Bond name'));
+        pair.forEach(card=>{var own=card.querySelector('[data-wisp-bond="'+bond.id+'"]');ok(own&&own.style.getPropertyValue('--bond-color')===color&&own.textContent===mark&&card.getAttribute('aria-label').includes(bond.name),'all overlapping partners match bonus color, shape and accessible name');});
         colors.push(color);marks.push(mark);seenVisuals[bond.id]={color,mark};
       });
       ok(new Set(colors).size===active.length&&new Set(marks).size===active.length,'simultaneous Bonds have distinct colors and shapes');
@@ -185,7 +187,8 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     }
     bondPresentation();s.spirits.void=0;installBond();bondPresentation();s.spirits.void=2;installBond();bondPresentation();
     s.activeParty=['stone','gale','ember','titan','thorn'];s.activeParty.forEach(id=>s.spirits[id]=1);installBond();partyCheck();bondPresentation();
-    ok(Object.keys(seenVisuals).length===4&&new Set(Object.values(seenVisuals).map(x=>x.color)).size===4&&new Set(Object.values(seenVisuals).map(x=>x.mark)).size===4,'all four Bonds keep their own unique color and shape');
+    b.riftStatus.bonds().forEach(bond=>{s.activeParty=bond.ids.slice();s.activeParty.forEach(id=>s.spirits[id]=1);installBond();bondPresentation();});
+    ok(Object.keys(seenVisuals).length===8&&new Set(Object.values(seenVisuals).map(x=>x.color)).size===8&&new Set(Object.values(seenVisuals).map(x=>x.mark)).size===8,'all eight Bonds keep unique color and shape');
     s.activeParty=worst.ids;s.activeParty.forEach(id=>s.spirits[id]=2);install(s);
     partyCheck();s.research.charge=10;install(s);partyCheck();
     var powerId=s.activeParty[0],beforePower=q('[data-rift-wisp="'+powerId+'"] .rift-wisp-power').textContent;
@@ -392,6 +395,7 @@ window.riftStatusMobile=(()=>{
    var el=q(selector),range=document.createRange();range.selectNodeContents(el);
    var text=range.getBoundingClientRect(),lineHeight=parseFloat(getComputedStyle(el).lineHeight);
    ok(Number.isFinite(lineHeight)&&text.width>0&&text.height>0&&text.height<=lineHeight+1,selector+' text occupies one independent line');
+   if(selector==='#bond-summary'){var summaryBox=rect(el);ok(text.left>=summaryBox.left-1&&text.right<=summaryBox.right+1,'every Bond name fits without horizontal clipping');}
   });
   [q('.stat-row'),...q('.stat-row').querySelectorAll('.stat-box,.k,.v')].forEach(el=>{
    ok(el.scrollHeight<=el.clientHeight+1,'numeric row and stat boxes fit their full vertical content: '+el.className+' scroll='+el.scrollHeight+' client='+el.clientHeight+' text='+el.textContent);
@@ -407,6 +411,7 @@ window.riftStatusMobile=(()=>{
   ok(hp.bottom<=buff.top&&buff.bottom<=bonds.top&&bonds.bottom<=stats.top&&stats.bottom<=nav.top,'HP, status, bottom numeric row and nav do not overlap');
   var tabs=[...document.querySelectorAll('nav.tabbar button')];ok(tabs.length===5,'five main tabs');tabs.forEach((el,i)=>{var r=rect(el);ok(r.width>=44&&r.height>=44,'tab touch minimum');ok(el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)),'tab hit-test');if(i)ok(rect(tabs[i-1]).right<=r.left,'one non-overlapping nav row');});
   var active=b.riftStatus.active();ok(active.every(x=>q('#bond-summary').textContent.includes(x.name.replace(' Bond',''))),'all powered Bond names directly visible');
+  ok(q('#bond-summary').getAttribute('aria-label')===(active.length?'Active Bonds: '+active.map(x=>x.name).join(', '):'No Formation Bond active.'),'full Bond summary remains accessible');
   if(kind!=='fresh' && !ctx.scenario.startsWith('rift-status-stacking'))ok(active.length===window.riftStatusWorst(b,ctx).bonds.length&&q('#buff-indicator').textContent.includes('+50%'),'worst current Bonds and buff fixture survives live ticks');
   if(kind!=='fresh' && ctx.scenario.startsWith('rift-status-stacking'))ok(active.length===window.riftStatusWorst(b,ctx).bonds.length && q('#buff-indicator').textContent.includes('+100%') && q('#buff-indicator').textContent.includes('next expiry'),'additive worst boost survives live ticks');
   ['#rift-party','#rift-bond-effects','#boss-combat'].forEach(selector=>{
@@ -415,14 +420,14 @@ window.riftStatusMobile=(()=>{
    boxes[selector]={x:r.x,y:r.y,width:r.width,height:r.height};
   });
   var cards=[...document.querySelectorAll('[data-rift-wisp]')];
-  active.forEach(bond=>{var pair=cards.filter(x=>x.dataset.bond===bond.id);ok(pair.length===2&&Math.abs(cards.indexOf(pair[0])-cards.indexOf(pair[1]))===1,'mobile Bond partners adjacent');ok(rect(pair[1]).left-rect(pair[0]).right>=0&&rect(pair[1]).left-rect(pair[0]).right<=2.1,'Bond pair is close and does not overlap');});
+  active.forEach(bond=>{var partners=cards.filter(x=>bond.ids.includes(x.dataset.riftWisp));ok(partners.length===2&&partners.every(x=>x.querySelector('[data-wisp-bond="'+bond.id+'"]')&&x.getAttribute('aria-label').includes(bond.name)),'all mobile overlapping Bond partners carry marks and accessible names');var pair=cards.filter(x=>x.dataset.bond===bond.id);if(pair.length){ok(pair.length===2&&Math.abs(cards.indexOf(pair[0])-cards.indexOf(pair[1]))===1,'primary mobile Bond partners adjacent');ok(rect(pair[1]).left-rect(pair[0]).right>=0&&rect(pair[1]).left-rect(pair[0]).right<=2.1,'primary Bond pair is close and does not overlap');}});
   var arena=rect(q('.battle-row')),landscapeEl=q('.rift-landscape'),landscape=rect(landscapeEl),stageEl=q('#tab-battle .stage'),stage=rect(stageEl);
   ok(stageEl.contains(landscapeEl)&&landscape.left>=stage.left-.1&&landscape.right<=stage.right+.1&&landscape.top>=stage.top-.1&&landscape.bottom<=stage.bottom+.1,'shared scenic background stays inside the outer Rift stage');
   ok(landscapeEl.getAttribute('aria-hidden')==='true'&&getComputedStyle(landscapeEl).pointerEvents==='none','shared scenic background stays decorative and cannot intercept input');
   ok(arena.top>=rect(q('.rift-heading')).bottom&&arena.bottom<=buff.top,'integrated combat region stays below the Rift heading and above boost');
   ok(arena.bottom<=stats.top&&getComputedStyle(q('.stat-row')).position==='relative','stat box top borders paint above the combat layer');
   var party=rect(q('#rift-party'));
-  ok(!q('#enemy-stage').contains(q('#rift-party'))&&enemy.bottom<=hp.top&&hp.bottom<=party.top&&party.bottom<=buff.top,'formation follows the attack surface and HP, before boost');
+  ok(!q('#enemy-stage').contains(q('#rift-party'))&&enemy.bottom<=hp.top&&hp.bottom<=party.top&&party.bottom<=buff.top,'formation follows the attack surface and HP, before boost '+JSON.stringify({enemy:enemy.bottom,hp:[hp.top,hp.bottom],party:[party.top,party.bottom],buff:buff.top}));
   ok(q('.battle-row').contains(q('#enemy-stage'))&&q('.battle-row').contains(q('.hp-wrap'))&&q('.battle-row').contains(q('#boss-combat'))&&q('.battle-row').contains(q('#rift-party')),'attack surface, HP, Boss regen and formation share the integrated scenic region');
   ok(q('#boss-combat').hidden||hp.bottom<=rect(q('#boss-combat')).top&&rect(q('#boss-combat')).bottom<=party.top,'boss regen sits between HP and the standalone formation');
   ok(q('#rift-bond-effects').hidden||bonds.bottom<=rect(q('#rift-bond-effects')).top&&rect(q('#rift-bond-effects')).bottom<=stats.top,'full Bond effects separate from names and precede the numeric row');

@@ -72,7 +72,8 @@ window.runRiftLayoutQa = async function(bridge, ctx, assert){
   if(ctx.scenario!=='layout-fresh'){
     assert(initial.activeParty.length===5,'full Active party fixture');
     assert(initial.buffUntil>Date.now(),'active buff fixture');
-    assert(q('#bond-summary').textContent.indexOf('Active Bonds:')===0,'active Formation Bonds');
+    var activeBonds=bridge.riftStatus.active();
+    assert(activeBonds.length>0 && q('#bond-summary').textContent===activeBonds.map(function(bond){return bond.name.replace(' Bond','');}).join(' · ') && q('#bond-summary').getAttribute('aria-label')==='Active Bonds: '+activeBonds.map(function(bond){return bond.name;}).join(', '),'complete visible and accessible active Formation Bonds');
     if(ctx.scenario==='layout-boss') assert(q('#enemy-glyph').classList.contains('boss'),'boss fixture');
     q('#rift-farm-btn').click();check('farm');
     q('#rift-push-btn').click();check('push');

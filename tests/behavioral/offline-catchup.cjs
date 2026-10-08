@@ -138,12 +138,17 @@ assert.equal(long.result.kills,cap.result.kills,'beyond-cap time earns no extra 
 // and chronological research/Motes/automation boundaries.
 // Compare unchanged chronology with closed purchase intent disabled on both
 // sides. UPGRADE_IDENTITY tests separately exercise old ON intent and paid work.
+// New F15 operands are intentional. Preserve the upstream exact legacy oracle
+// as a four-Bond counterfactual; actual eight-Bond long/split checks stay intact.
+const legacyBondSource=source.replace('function bondActive(bondId){',
+ "function bondActive(bondId){\n  if(['kindling','vanguard','quarry','harvest'].indexOf(bondId)!==-1) return false;");
+assert.notEqual(legacyBondSource,source,'legacy Bond control anchor');
 for(const rawSeed of [original,clear20,off]){
  const seed=copy(rawSeed);
  for(const id of ['focus','sense','formation','resolve'])seed.researchQueue[id]=false;
  for(const id of ['riftattune','formationstudy','prismstudy'])seed.studyQueue[id]=false;
  for(const seconds of [60,300,3600]){
-  const old=app(seed,correctedClockBaseline,seconds),next=app(seed,source,seconds);
+  const old=app(seed,correctedClockBaseline,seconds),next=app(seed,legacyBondSource,seconds);
   const a=old.b.advance(seconds,{kind:'offline',visual:false,clockStartMs:seed.lastSeen});
   const b=next.b.advance(seconds,{kind:'offline',visual:false,clockStartMs:seed.lastSeen});
   baselineSummary(b,a,'unchanged baseline summary '+seconds);baselineState(next.b.get(),old.b.get(),seed,'unchanged baseline state '+seconds);
@@ -154,9 +159,9 @@ for(const id of ['focus','sense','formation','resolve'])all.researchQueue[id]=fa
 for(const id of ['riftattune','formationstudy','prismstudy'])all.studyQueue[id]=false;Object.keys(all.empowerQueue).forEach(k=>all.empowerQueue[k]=true);
 all.researchQueue.charge=true;all.studyQueue.guardmastery=true;
 for(const kind of ['live','offline']){
- const whole=app(all),split=app(all),old=app(all,correctedClockBaseline),options={kind,visual:false,clockStartMs:all.lastSeen};
- const sum=whole.b.advance(3600,options);const oldSum=old.b.advance(3600,options);
- baselineSummary(sum,oldSum,'economy/order baseline '+kind);baselineState(whole.b.get(),old.b.get(),all,'baseline chronology '+kind);
+ const whole=app(all),split=app(all),old=app(all,correctedClockBaseline),legacy=app(all,legacyBondSource),options={kind,visual:false,clockStartMs:all.lastSeen};
+ const sum=whole.b.advance(3600,options),legacySum=legacy.b.advance(3600,options),oldSum=old.b.advance(3600,options);
+ baselineSummary(legacySum,oldSum,'economy/order baseline '+kind);baselineState(legacy.b.get(),old.b.get(),all,'baseline chronology '+kind);
  for(let i=0;i<4;i++)split.b.advance(900,{...options,clockStartMs:all.lastSeen+i*900000,offlineWindowStartMs:all.lastSeen});
  compare(split.b.get(),whole.b.get(),'whole/split '+kind);
  assert(sum.motesGained>0&&sum.empowers>0&&sum.researchBought>0,'Motes, Research and Empower chronology exercised');

@@ -255,10 +255,10 @@
   .bond-row.active{border-color:color-mix(in srgb,var(--good) 65%,var(--line));background:color-mix(in srgb,var(--good) 8%,var(--bg-elev));}
   .bond-dot{width:8px;height:8px;border-radius:50%;background:var(--ink-dim);flex:none;}
   .bond-row.active .bond-dot{background:var(--good);}
-  .bond-main{flex:1;min-width:0;}
+  .bond-main{flex:1;min-width:0;overflow-wrap:break-word;}
   .bond-name{font-size:.7rem;font-weight:800;}
   .bond-req{font-size:.61rem;color:var(--ink-dim);margin-top:1px;}
-  .bond-effect{font-size:.63rem;font-weight:700;text-align:right;max-width:42%;color:var(--ink-dim);}
+  .bond-effect{min-width:0;overflow-wrap:break-word;font-size:.63rem;font-weight:700;text-align:right;max-width:42%;color:var(--ink-dim);}
   .bond-row.active .bond-effect{color:var(--good);}
   .bond-summary{font-size:.66rem;color:var(--ink-dim);text-align:center;line-height:1.35;margin-top:8px;min-height:1em;}
   .hero-ability strong{color:var(--ink);}
@@ -1785,6 +1785,8 @@
   #rift-party{position:relative;display:flex;flex:none;justify-content:center;gap:6px;height:61px;z-index:4;pointer-events:none;}
   .rift-wisp{position:relative;width:calc((100% - 24px)/5);max-width:58px;min-width:0;height:61px;border:1px solid color-mix(in srgb,var(--wisp-color) 30%,#29334e);border-radius:11px;background:linear-gradient(155deg,#263049e0,#101a2eed);display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:27px 3px 13px 14px;gap:0;align-items:center;justify-items:center;padding:1px 3px;box-shadow:inset 0 1px 0 #ffffff0c,0 2px 9px #0004;}
   #rift-party .wisp-portrait{width:27px;height:27px;grid-column:1;grid-row:1;filter:drop-shadow(0 0 5px color-mix(in srgb,var(--wisp-color) 22%,transparent));}
+  .rift-wisp-bonds{position:absolute;top:1px;left:2px;display:flex;flex-direction:column;gap:0;pointer-events:none;}
+  .rift-wisp-bonds .rift-bond-mark{font-size:8px;line-height:8px;margin:0;}
   .rift-wisp-name{grid-column:1;grid-row:3;font-size:10px;line-height:13px;color:#c7cbe0;text-align:center;white-space:nowrap;}
   .rift-wisp-power{grid-column:1;grid-row:4;font:10px/14px 'IBM Plex Mono',monospace;color:#f0effb;text-align:center;}
   .rift-wisp-state{position:absolute;top:2px;right:2px;padding:0 2px;border-radius:3px;background:#0b132ade;font:10px/12px 'IBM Plex Mono',monospace;color:#c4cfe4;text-align:center;}
@@ -1801,9 +1803,9 @@
   .rift-bond-mark{color:var(--bond-color);font-size:9px;line-height:12px;margin-right:2px;}
   .rift-wisp[data-bond] .rift-charge>span{background:var(--bond-color);box-shadow:0 0 8px var(--bond-color);}
   .rift-wisp[data-bond].is-casting{box-shadow:inset 0 2px var(--bond-color),0 0 14px #ffffff70;}
-  #rift-bond-effects{position:relative;z-index:2;display:flex;gap:4px;flex:none;min-height:0;}
+  #rift-bond-effects{position:relative;z-index:2;display:flex;gap:4px;flex:none;min-height:0;flex-wrap:wrap;}
   #rift-bond-effects[hidden]{display:none;}
-  .rift-bond-effect{flex:1;min-width:0;padding:2px 5px;border:0;border-left:2px solid var(--bond-color);border-radius:3px;background:color-mix(in srgb,var(--bond-color) 7%,transparent);font-size:10px;line-height:12px;color:#d2d1e4;}
+  .rift-bond-effect{flex:1 1 42%;min-width:0;padding:2px 5px;border:0;border-left:2px solid var(--bond-color);border-radius:3px;background:color-mix(in srgb,var(--bond-color) 7%,transparent);font-size:10px;line-height:12px;color:#d2d1e4;}
   .stage .enemy-stage::after{background:conic-gradient(from 0deg,transparent 0 15%,#b9b6ff33 16% 17%,transparent 18% 48%,#b9b6ff33 49% 50%,transparent 51% 82%,#b9b6ff33 83% 84%,transparent 85%);animation:riftOrbit 32s linear infinite;width:min(200px,65cqh,65cqw);height:min(200px,65cqh,65cqw);max-width:none;max-height:none;}
   .vfx-ability{background:repeating-conic-gradient(var(--vfx-color) 0deg 5deg,transparent 6deg 45deg);}
   @media(prefers-reduced-motion:reduce){.stage .enemy-stage::after{animation:none!important;}.rift-charge>span{transition:none;}}
@@ -1822,10 +1824,11 @@
     .stage .hp-wrap{height:24px;}
     .stage .hp-text{font-size:11px;line-height:14px;margin-top:2px;}
     #boss-combat{padding:1px 6px;}
-    #rift-party,.rift-wisp{height:58px;}
-    .rift-wisp{grid-template-rows:24px 3px 13px 14px;gap:0;padding:1px 3px;}
+    .boss-net-value{display:none;}
+    #rift-party,.rift-wisp{height:54px;}
+    .rift-wisp{grid-template-rows:24px 3px 13px 10px;gap:0;padding:1px 3px;}
     #rift-party .wisp-portrait{width:24px;height:24px;}
-    .rift-wisp-power{font-size:10px;}
+    .rift-wisp-power{font-size:10px;line-height:10px;}
     .stage .buff-indicator{padding:0 8px;line-height:14px;}
     .stage .stat-box{padding:2px 7px;}
     .rift-bond-effect{padding:2px 5px;}
@@ -2729,7 +2732,7 @@
         </div>
         <div class="buff-indicator" id="buff-indicator">Boost · passive Wisps + Tap · <strong>Inactive</strong></div>
         <div id="comet-trial-status" class="comet-trial-status" hidden></div>
-        <div class="bond-summary" id="bond-summary">No Formation Bond active.</div>
+        <div class="bond-summary" id="bond-summary" role="group" aria-label="No Formation Bond active.">No Formation Bond active.</div>
         <div id="rift-bond-effects" aria-label="Formation Bond bonuses"></div>
         <div class="stat-row">
           <div class="stat-box"><div class="k">Tap damage</div><div class="v mono" id="stat-tap">1</div></div>
@@ -2960,10 +2963,14 @@ var ABILITY_DESC = {
 };
 
 var FORMATION_BONDS = [
-  {id:'starcaller', name:'Starcaller Bond', ids:['ember','void'], effect:'+18% passive & ability damage', tag:'Push'},
-  {id:'dawnpriest', name:'Dawnpriest Bond', ids:['tide','aurora'], effect:'+25% Lumen, Shards & Motes', tag:'Farm'},
-  {id:'duskguard', name:'Duskguard Bond', ids:['stone','titan'], effect:'+35% passive & ability damage vs Bosses', tag:'Boss'},
-  {id:'pathfinder', name:'Pathfinder Bond', ids:['gale','thorn'], effect:'+20% passive & ability damage vs non-Bosses', tag:'Push / Farm'}
+  {id:'starcaller', name:'Starcaller Bond', ids:['ember','void'], effect:'+18% passive & ability damage', riftEffect:'Passive/ability +18%', tag:'Push'},
+  {id:'dawnpriest', name:'Dawnpriest Bond', ids:['tide','aurora'], effect:'+25% Lumen, Shards & Motes', riftEffect:'Lumen/Shards/Motes +25%', tag:'Farm'},
+  {id:'duskguard', name:'Duskguard Bond', ids:['stone','titan'], effect:'+35% passive & ability damage vs Bosses', riftEffect:'Boss Wisps +35%', tag:'Boss'},
+  {id:'pathfinder', name:'Pathfinder Bond', ids:['gale','thorn'], effect:'+20% passive & ability damage vs non-Bosses', riftEffect:'Non-Boss Wisps +20%', tag:'Push / Farm'},
+  {id:'kindling', name:'Kindling Bond', ids:['ember','tide'], effect:'+25% Guardian Tap damage', riftEffect:'Tap +25%', tag:'Push'},
+  {id:'vanguard', name:'Vanguard Bond', ids:['ember','stone'], effect:'20% less Boss regeneration', riftEffect:'Boss regen −20%', tag:'Boss'},
+  {id:'quarry', name:'Quarry Bond', ids:['stone','gale'], effect:'+20% Shards from Gale abilities', riftEffect:'Gale Shards +20%', tag:'Farm'},
+  {id:'harvest', name:'Harvest Bond', ids:['thorn','aurora'], effect:'+20% Lumen from Thorn abilities', riftEffect:'Thorn Lumen +20%', tag:'Farm'}
 ];
 function formationBondPartners(bond){
   return bond.ids.map(function(id){
@@ -2975,7 +2982,11 @@ var BOND_VISUALS = {
   starcaller:{color:'#c4adff',mark:'◆'},
   dawnpriest:{color:'#ffd079',mark:'●'},
   duskguard:{color:'#7edbed',mark:'■'},
-  pathfinder:{color:'#abe58d',mark:'▲'}
+  pathfinder:{color:'#abe58d',mark:'▲'},
+  kindling:{color:'#ffc29c',mark:'✦'},
+  vanguard:{color:'#d4c3a4',mark:'◇'},
+  quarry:{color:'#b3d6ff',mark:'□'},
+  harvest:{color:'#e2b5d5',mark:'○'}
 };
 var FORMATION_PRESET_IDS = ['push','farm','boss'];
 var FORMATION_PRESET_LABELS = {push:'Push',farm:'Farm',boss:'Boss'};
@@ -4138,7 +4149,7 @@ function bossTraitFor(depth){
 }
 function bossRegenRate(depth){
   var trait = bossTraitFor(depth);
-  return trait ? trait.regen : 0;
+  return trait ? trait.regen * (bondActive('vanguard') ? 0.8 : 1) : 0;
 }
 function bossAbilityDamageMult(depth){
   var trait = bossTraitFor(depth);
@@ -4336,9 +4347,9 @@ function formationRewardMult(){
   return bondActive('dawnpriest') ? 1.25 : 1;
 }
 function currentFormationFocus(){
-  if(state.riftMode==='farm') return {label:'Farm', bonds:['dawnpriest','pathfinder']};
-  if(isBoss(state.depth)) return {label:'Boss', bonds:['starcaller','duskguard']};
-  return {label:'Push', bonds:['starcaller','pathfinder']};
+  if(state.riftMode==='farm') return {label:'Farm', bonds:['dawnpriest','pathfinder','quarry','harvest']};
+  if(isBoss(state.depth)) return {label:'Boss', bonds:['starcaller','duskguard','vanguard']};
+  return {label:'Push', bonds:['starcaller','pathfinder','kindling']};
 }
 function formationRecommendationText(){
   var focus = currentFormationFocus();
@@ -4367,14 +4378,14 @@ function formationRecommendationText(){
  * do not modify ability hits.
  *
  * Ability Rewards = Wisp Power × reward coefficient × that Ranged/Druid Module
- * × Ultimate × Dawnpriest reward multiplier. Kill-only Lumen/Shard multipliers
+ * × Ultimate × Dawnpriest reward multiplier × Quarry/Harvest when applicable. Kill-only Lumen/Shard multipliers
  * do not modify ability-generated resources.
  *
  * Support Buff = fixed by the Support ability: +25% for 4s, or +50% for 8s
  * with its Ultimate. Wisp Power, Rarity and Modules do not change this buff.
  *
  * Guardian Tap = (5 + 2% of general Active-party passive power) × Tap-specific
- * upgrades × active Support buff × bossTapDamageMult(). Auto-Tap uses the exact
+ * upgrades × active Support buff × bossTapDamageMult() × Kindling. Auto-Tap uses the exact
  * same hit formula. Context-only Duskguard/Pathfinder damage Bonds do not
  * directly multiply Guardian Tap.
  */
@@ -4450,7 +4461,7 @@ function guardianTapBaseDamage(){
   return 5 + effectivePartyPower()*0.02;
 }
 function guardianTapDamageAt(depth, partyBuffMult){
-  return guardianTapBaseDamage() * tapMult() * (partyBuffMult||1) * bossTapDamageMult(depth);
+  return guardianTapBaseDamage() * tapMult() * (partyBuffMult||1) * bossTapDamageMult(depth) * (bondActive('kindling') ? 1.25 : 1);
 }
 function tapDamage(){
   return guardianTapDamageAt(state.depth, simulationBuffMult(Date.now()));
@@ -4507,8 +4518,8 @@ function abilityRewardRaw(sp,level,conductionLevel){
   var power = wispPower(sp,level);
   var mult = moduleMult(sp.id) * abilityUltimateMult(sp) * formationRewardMult() * researchFactor('conduction',conductionLevel);
   return {
-    lumen:sp.abilityType==='druid' ? power*0.10*mult : 0,
-    shards:sp.abilityType==='ranged' ? power*0.05*mult : 0
+    lumen:sp.abilityType==='druid' ? power*0.10*mult*(bondActive('harvest')?1.20:1) : 0,
+    shards:sp.abilityType==='ranged' ? power*0.05*mult*(bondActive('quarry')?1.20:1) : 0
   };
 }
 function abilityRewardPerCast(sp,level,conductionLevel){
@@ -6053,7 +6064,7 @@ function updateBattleFast(){
     bossStatus.setAttribute('data-regen',String(regenPerSec));
     bossStatus.setAttribute('data-dps',String(yourDps));
     bossStatus.setAttribute('data-net',String(netDps));
-    var bossText='<strong>Regen +'+formatRiftNumber(regenPerSec)+' HP/s</strong><span class="boss-net '+(enough?'positive':'negative')+'">Auto DPS ≈ '+formatRiftNumber(yourDps)+' · Net '+(netDps>0?'+':netDps<0?'−':'')+formatRiftNumber(Math.abs(netDps))+'/s</span>';
+    var bossText='<strong>Regen +'+formatRiftNumber(regenPerSec)+' HP/s</strong><span class="boss-net '+(enough?'positive':'negative')+'">Auto DPS ≈ '+formatRiftNumber(yourDps)+'<span class="boss-net-value"> · Net '+(netDps>0?'+':netDps<0?'−':'')+formatRiftNumber(Math.abs(netDps))+'/s</span></span>';
     if(bossStatus.innerHTML!==bossText)bossStatus.innerHTML=bossText;
     bossStatus.setAttribute('aria-label','Boss regeneration '+regenPerSec+' HP per second. Estimated sustained damage '+yourDps+' per second, including abilities and Auto-Tap, excluding manual taps. Net '+netDps+' HP per second. Burst timing can change the result.');
     els['enemy-stage'].classList.add(enough ? 'boss-ready' : 'boss-wall');
@@ -6144,13 +6155,14 @@ function renderBondSummary(){
   if(!els['bond-summary']) return;
   var active = activeFormationBonds();
   var summary = active.length
-    ? 'Active Bonds: ' + active.map(function(b){return '<span style="color:'+BOND_VISUALS[b.id].color+'">'+b.name.replace(' Bond','')+'</span>';}).join(' · ')
+    ? active.map(function(b){return '<span style="color:'+BOND_VISUALS[b.id].color+'">'+b.name.replace(' Bond','')+'</span>';}).join(' · ')
     : 'No Formation Bond active.';
   if(els['bond-summary'].innerHTML!==summary) els['bond-summary'].innerHTML = summary;
+  els['bond-summary'].setAttribute('aria-label',active.length ? 'Active Bonds: '+active.map(function(b){return b.name;}).join(', ') : 'No Formation Bond active.');
   var effects=els['rift-bond-effects'];
   var html=active.map(function(b){
     var visual=BOND_VISUALS[b.id];
-    return '<div class="rift-bond-effect" data-bond-effect="'+b.id+'" style="--bond-color:'+visual.color+'" aria-label="'+b.name+': '+b.effect+'"><span class="rift-bond-mark" aria-hidden="true">'+visual.mark+'</span><span class="rift-bond-copy">'+b.effect+'</span></div>';
+    return '<div class="rift-bond-effect" data-bond-effect="'+b.id+'" style="--bond-color:'+visual.color+'" aria-label="'+b.name+': '+b.effect+'"><span class="rift-bond-mark" aria-hidden="true">'+visual.mark+'</span><span class="rift-bond-copy">'+(b.riftEffect||b.effect)+'</span></div>';
   }).join('');
   if(effects.innerHTML!==html) effects.innerHTML=html;
   effects.hidden=!active.length;
@@ -6159,10 +6171,12 @@ function renderBondSummary(){
 // The DOM is retained between ticks; these observers never mutate save state.
 function renderRiftParty(){
   var root=els['rift-party'];
-  var bonds=activeFormationBonds(),byId={},ordered=[];
-  // Group each powered Bond visually without changing simulation/save order.
+  var bonds=activeFormationBonds(),byId={},memberships={},ordered=[];
+  // Disjoint primary pairs can sit together. Overlapping Bonds retain their
+  // own marks on both partners without duplicating a Wisp's combat card.
   bonds.forEach(function(bond){
-    state.activeParty.filter(function(id){return bond.ids.indexOf(id)!==-1;}).forEach(function(id){byId[id]=bond;ordered.push(id);});
+    bond.ids.forEach(function(id){if(!memberships[id])memberships[id]=[];memberships[id].push(bond);});
+    if(bond.ids.every(function(id){return !byId[id];})) bond.ids.forEach(function(id){byId[id]=bond;ordered.push(id);});
   });
   state.activeParty.forEach(function(id){if(!byId[id])ordered.push(id);});
   var key=state.activeParty.join(',')+'|'+bonds.map(function(b){return b.id;}).join(',');
@@ -6171,9 +6185,10 @@ function renderRiftParty(){
     root.innerHTML=ordered.map(function(id,index){
       var sp=SPIRITS.find(function(x){return x.id===id;}),bond=byId[id],visual=bond&&BOND_VISUALS[bond.id];
       var position=bond ? (byId[ordered[index+1]]===bond?' bond-start':' bond-end') : '';
-      var marker=visual ? '<span class="rift-bond-mark" aria-hidden="true">'+visual.mark+'</span>' : '';
-      return '<div class="rift-wisp'+position+'" data-rift-wisp="'+id+'"'+(bond?' data-bond="'+bond.id+'"':'')+' role="group" aria-label="'+sp.name+(bond?' — '+bond.name:'')+'" style="--wisp-color:'+sp.color+(visual?';--bond-color:'+visual.color:'')+'">'+wispPortrait(sp)+
-        '<span class="rift-wisp-name">'+marker+sp.shortName+'</span><span class="rift-wisp-state"></span><span class="rift-wisp-power" title="Passive Wisp power"></span>'+
+      var all=memberships[id]||[];
+      var marker=all.length ? '<span class="rift-wisp-bonds">'+all.map(function(item){var v=BOND_VISUALS[item.id];return '<span class="rift-bond-mark" data-wisp-bond="'+item.id+'" style="--bond-color:'+v.color+'" aria-hidden="true">'+v.mark+'</span>';}).join('')+'</span>' : '';
+      return '<div class="rift-wisp'+position+'" data-rift-wisp="'+id+'"'+(bond?' data-bond="'+bond.id+'"':'')+' role="group" aria-label="'+sp.name+(all.length?' — '+all.map(function(item){return item.name;}).join(', '):'')+'" style="--wisp-color:'+sp.color+(visual?';--bond-color:'+visual.color:'')+'">'+wispPortrait(sp)+marker+
+        '<span class="rift-wisp-name">'+sp.shortName+'</span><span class="rift-wisp-state"></span><span class="rift-wisp-power" title="Passive Wisp power"></span>'+
         '<div class="rift-charge" role="progressbar" aria-label="'+sp.name+' — '+sp.abilityName+'" aria-valuemin="0" aria-valuemax="100"><span></span></div></div>';
     }).join('');
   }

@@ -483,6 +483,7 @@
     if(!bridge || !bridge.getState){ finish('fail','test bridge unavailable'); return; }
     try{
       if(ctx.scenario==='offline-catchup-ui' || ctx.scenario==='offline-catchup-legacy-dom'){window.__offlineCatchupReady=true;return;}
+      if(ctx.scenario==='formation-bonds-mobile'){window.__bondsNativeReady=true;return;}
       await waitForCatchup();
       var s = state();
       if(ctx.scenario==='layout-p2-07a-reconstruction'){
@@ -1630,7 +1631,7 @@
           );
           parityApprox(
             thornReward.abilityReward.lumen,
-            Math.round(thornReward.wispPower*0.10*1.5*1.25),
+            Math.round(thornReward.wispPower*0.10*1.5*1.25*1.20),
             'Thorn Module/Dawnpriest Lumen ability reward'
           );
 
@@ -1650,7 +1651,7 @@
           );
           parityApprox(
             rewardUltThorn.abilityReward.lumen,
-            Math.round(rewardUltThorn.wispPower*0.10*1.5*2*1.25),
+            Math.round(rewardUltThorn.wispPower*0.10*1.5*2*1.25*1.20),
             'Thorn Ultimate must double Lumen ability output'
           );
 
@@ -1856,18 +1857,18 @@
           var pushState=cleanFormulaState(presetState.formationPresets.push);
           var pushSnapshot=formulaSnapshotFor(pushState,'ember',19,1);
           parityApprox(pushSnapshot.formationDamageMult,1.18*1.20,'Push Formation must retain Starcaller + Pathfinder damage');
-          assert(bridge.activeBondIds().sort().join(',')==='pathfinder,starcaller','Push Formation Bonds must remain unchanged');
+          assert(bridge.activeBondIds().sort().join(',')==='kindling,pathfinder,starcaller','Push Formation retains damage Bonds and adds Kindling');
 
           var farmState=cleanFormulaState(presetState.formationPresets.farm);
           var farmSnapshot=formulaSnapshotFor(farmState,'gale',19,1);
           parityApprox(farmSnapshot.formationDamageMult,1.20,'Farm Formation must retain Pathfinder non-Boss damage');
           parityApprox(farmSnapshot.formationRewardMult,1.25,'Farm Formation must retain Dawnpriest reward bonus');
-          assert(bridge.activeBondIds().sort().join(',')==='dawnpriest,pathfinder','Farm Formation Bonds must remain unchanged');
+          assert(bridge.activeBondIds().sort().join(',')==='dawnpriest,harvest,kindling,pathfinder','Farm retains damage/reward Bonds and adds Harvest/Kindling');
 
           var bossState=cleanFormulaState(presetState.formationPresets.boss);
           var bossSnapshot=formulaSnapshotFor(bossState,'stone',20,1);
           parityApprox(bossSnapshot.formationDamageMult,1.18*1.35,'Boss Formation must retain Starcaller + Duskguard damage');
-          assert(bridge.activeBondIds().sort().join(',')==='duskguard,starcaller','Boss Formation Bonds must remain unchanged');
+          assert(bridge.activeBondIds().sort().join(',')==='duskguard,kindling,starcaller,vanguard','Boss retains damage Bonds and adds Kindling/Vanguard');
 
           var liveBreaker=cloneJson(breakerBase);
           liveBreaker.depth=19;liveBreaker.enemyDepth=19;liveBreaker.enemyMaxHp=1e9;liveBreaker.enemyHp=1e9;
@@ -2033,7 +2034,7 @@
           farmPreset.click();
           var afterFarm=state();
           assert(afterFarm.activeParty.join(',')===qol.formationPresets.farm.join(','),'Farm preset must apply the exact saved Wisp Formation');
-          assert(bridge.activeBondIds().sort().join(',')==='dawnpriest,pathfinder','Farm preset must recalculate the intended Formation Bonds');
+          assert(bridge.activeBondIds().sort().join(',')==='dawnpriest,harvest,kindling,pathfinder','Farm preset must recalculate all intended Formation Bonds');
           assert(document.querySelector('[data-formation-preset="farm"]').getAttribute('aria-pressed')==='true','active Formation preset must be visibly and semantically selected');
           assert(document.activeElement===document.querySelector('[data-formation-preset="farm"]'),'Formation quick-switch must preserve keyboard focus after rendering');
 

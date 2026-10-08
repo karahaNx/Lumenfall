@@ -90,7 +90,8 @@ async function browserIdentity(chrome) {
 async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, options = {}) {
   const log = options.log || console.log;
   const urlFor = page => baseUrl + page + '?' + new URLSearchParams({ qaScenario: scenario, qaFixture: fixture });
-  if (scenario === 'resonate-clarity') return runNativeProcess([process.execPath, path.join(ROOT, 'resonate-clarity.cjs'), '--chrome', chrome, '--source', path.join(options.sourceWebRoot || path.join(ROOT, '../..'), 'index.html')], scenario, 150000, options);
+  if (scenario === 'formation-bonds-core') return runNativeProcess([process.execPath, path.join(ROOT, 'formation-bonds.cjs')], scenario, 90000, options);
+  if (scenario === 'resonate-clarity') return runNativeProcess([process.execPath, path.join(ROOT, 'resonate-clarity.cjs'), '--chrome', process.env.LUMENFALL_QA_CDP_CHROME || chrome, '--source', path.join(options.sourceWebRoot || path.join(ROOT, '../..'), 'index.html')], scenario, 150000, options);
   if (scenario === 'comet-unlocks-core') return runNativeProcess([process.execPath, path.join(ROOT, 'comet-unlocks-core.cjs')], scenario, 90000, options);
   if (scenario === 'lab-motes-offline-integration') return runNativeProcess([process.execPath, path.join(ROOT, 'lab-motes-offline.cjs')], scenario, 90000, options);
   if (['save-backup-ui', 'self-test-save-backup-placement', 'self-test-save-backup-confirmation'].includes(scenario)) {
@@ -107,6 +108,7 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
   if (scenario === 'forge-ui-process-contract') return nativeProcessContract(log);
   if (scenario === 'loadout-memory-core' || scenario === 'loadout-memory-mobile') return runNativeProcess([process.execPath, path.join(ROOT, 'loadout-memory.cjs'), '--chrome', chrome, '--source', path.join(options.sourceWebRoot || path.join(ROOT, '../..'), 'index.html'), ...(scenario === 'loadout-memory-core' ? ['--vm-only'] : [])], scenario, 300000, options);
   let driver = null;
+  if (scenario === 'formation-bonds-mobile') driver = 'formation-bonds-ui.cjs';
   if (scenario === 'rift-guidance-mobile') {
     const evidence = path.join(options.rawArtifactRoot || temporary('lumenfall-guidance-raw-'), scenario);
     return runNativeProcess([process.execPath, path.join(ROOT, 'rift-guidance.cjs'), chrome, options.sourceWebRoot || 'mobile/www', evidence], scenario, 300000, options);

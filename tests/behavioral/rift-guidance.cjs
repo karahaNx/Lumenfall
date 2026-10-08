@@ -46,7 +46,19 @@ function sameGeometry(a,b,label){for(const selector of Object.keys(a.boxes)){con
 function sameData(a,b,label){assert(a.state===b.state,label+' preserves full game state');assert(JSON.stringify(a.saves)===JSON.stringify(b.saves),label+' preserves all other localStorage bytes');}
 async function screenshot(name){const r=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(out,name+'.png'),Buffer.from(r.data,'base64'));}
 async function hiddenAccessibility(){const {root:dom}=await send('DOM.getDocument');for(const selector of ['#rift-objective-row','#rift-objective']){const {nodeId}=await send('DOM.querySelector',{nodeId:dom.nodeId,selector});const tree=await send('Accessibility.getPartialAXTree',{nodeId,fetchRelatives:false});assert(tree.nodes.every(node=>node.ignored),'hidden hint is absent from accessibility tree: '+selector);}const tree=await send('Accessibility.getFullAXTree');assert(!tree.nodes.some(node=>!node.ignored&&/Guidance stress sentinel/.test(node.name?.value||'')),'hidden long hint is absent from full accessibility tree');}
-async function toggleWithInput(useTouch=false){if(useTouch)await settleHintScroll();await evaluate('document.querySelector("#rift-hints-toggle").focus({preventScroll:true})');if(useTouch)await touch('#rift-hints-toggle');else await key('Space');}
+async function toggleWithInput(useTouch=false){
+ if(useTouch)await settleHintScroll();
+ const before=await evaluate('document.querySelector("#rift-hints-toggle").getAttribute("aria-expanded")');
+ await evaluate('document.querySelector("#rift-hints-toggle").focus({preventScroll:true})');
+ if(useTouch)await touch('#rift-hints-toggle');else await key('Space');
+ // Native Space activation can finish after CDP acknowledges key-up. Observe
+ // the committed toggle once; never retry input or manufacture a DOM click.
+ for(let i=0;i<50;i++){
+  if(await evaluate('document.querySelector("#rift-hints-toggle").getAttribute("aria-expanded")')!==before)return;
+  await pause(20);
+ }
+ throw Error('native hints input did not commit a state change');
+}
 async function scrollHintsWithTouch(){const r=await evaluate('(()=>{const r=document.querySelector("#rift-objective-row").getBoundingClientRect();return {x:r.x+r.width/2,top:r.top+4,bottom:r.bottom-4};})()');await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:r.x,y:r.bottom}]});for(let i=1;i<=4;i++){await send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:r.x,y:r.bottom+(r.top-r.bottom)*i/4}]});await pause(16);}await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await pause(100);}
 async function inspectContent(){return evaluate(`(()=>{
  const row=document.querySelector('#rift-objective-row'),objective=document.querySelector('#rift-objective'),toggle=document.querySelector('#rift-hints-toggle'),slot=document.querySelector('#rift-guidance-slot'),hud=document.querySelector('.hud'),main=document.querySelector('main');
