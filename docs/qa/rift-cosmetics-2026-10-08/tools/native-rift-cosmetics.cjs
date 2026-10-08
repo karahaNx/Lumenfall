@@ -20,7 +20,7 @@ async function identity(expected=apk){const p=(await adb.shell('pm path com.lume
 async function screenshot(name){fs.writeFileSync(path.join(out,name+'.png'),await adb.exec('screencap -p'));}
 async function dismiss(){await evaluate(`(function(){['startup-skip','tut-skip','welcome-claim','daily-claim'].forEach(function(id){var e=document.getElementById(id);if(e&&e.getClientRects().length)e.click();});})()`);await delay(700);}
 async function fixtureClock(){
- const prelude='(function(){var now=Date.now(),interval=window.setInterval;Date.now=function(){return now;};window.setInterval=function(fn,ms){return interval(function(){if(window.__f24Run)fn();},ms);};})();';
+ const prelude='(function(){var now=Date.now(),interval=window.setInterval;window.__f24Clock=true;Date.now=function(){return now;};window.setInterval=function(fn,ms){return interval(function(){if(window.__f24Run)fn();},ms);};})();';
  try{await send('Page.addScriptToEvaluateOnNewDocument',{source:prelude});}catch(e){if(!e.message.includes('-32601'))throw e;await send('Page.addScriptToEvaluateOnLoad',{scriptSource:prelude});}
 }
 async function fixturesFromCanonicalSave(){
@@ -45,12 +45,13 @@ async function bridge(){
 
 }
 async function fixture(kind,theme='default'){
- const state=JSON.parse(JSON.stringify(template));state.riftTheme=theme;state.depth=kind==='boss'?30:kind==='luminous'?31:1;state.enemyDepth=state.depth;state.enemyMaxHp=state.enemyHp=100;state.enemyIsLuminous=kind==='luminous';state.lastSeen=Date.now();
+ const state=JSON.parse(JSON.stringify(template));state.riftTheme=theme;state.riftMode='push';state.farmDepth=0;state.farmReturnDepth=0;state.depth=kind==='boss'?30:kind==='luminous'?31:1;state.enemyDepth=state.depth;state.enemyMaxHp=state.enemyHp=100;state.enemyIsLuminous=kind==='luminous';state.lastSeen=Date.now();
  // Use the game's actual backup restore and reload guard. Direct storage writes
  // are overwritten by the old WebView's visibility/unload autosave callbacks.
  const backup='LUMENFALL1:'+encodeURIComponent(JSON.stringify(state)),token=Math.random().toString();
  await evaluate('window.__fixtureToken='+JSON.stringify(token)+';document.getElementById("save-backup-code").value='+JSON.stringify(backup)+';document.getElementById("restore-save-backup").click();var confirm=document.getElementById("save-restore-confirm-btn");if(confirm&&getComputedStyle(document.getElementById("save-restore-confirm")).display!=="none")confirm.click();');
  try{await until('window.__fixtureToken!=='+JSON.stringify(token)+' && document.readyState==="complete" && document.querySelectorAll("[data-theme-select]").length===6','real canonical fixture reload');}catch(e){throw Error(e.message+' '+JSON.stringify(await evaluate('(function(){var s=JSON.parse(localStorage.getItem("lumenfall_save_v2"));return {ready:document.readyState,buttons:document.querySelectorAll("[data-theme-select]").length,depth:s.depth,maxDepth:s.maxDepthEver,achieved:s.achieved,toast:document.getElementById("toast").textContent};})()')));}
+ assert.equal(await evaluate('window.__f24Clock'),true,'UI fixture has an isolated simulation clock after real reload');
  for(let i=0;i<3;i++)await dismiss();await evaluate('document.querySelector("[data-tab=battle]").click()');await delay(500);
  const rendered=await evaluate('(function(){var g=document.getElementById("enemy-glyph");return {boss:g.classList.contains("boss"),luminous:g.classList.contains("luminous")};})()');
  assert.equal(rendered.boss,kind==='boss','actual native boss state');assert.equal(rendered.luminous,kind==='luminous','actual native Luminous state');
@@ -63,8 +64,17 @@ async function run(){
   await connect();const id=await identity();console.log('Actual native runtime: '+id.ua);assert(id.package.some(x=>x.includes('versionName=0.1.143')));await fixturesFromCanonicalSave();console.log('Canonical template and isolated QA clock ready');await fixture('normal','ember');console.log('Canonical earned fixture loaded through native initialization');const saved=await evaluate('JSON.parse(localStorage.getItem("lumenfall_save_v2"))');assert.equal(saved.riftTheme,'ember');assert(saved.cometCosmetics.trail&&saved.cometCosmetics.crest);await screenshot('baseline-143-selected');
   await disconnect();await adb.shell('am force-stop com.lumenfall.app');await adb.shell('am start -n com.lumenfall.app/.MainActivity');await connect();const cold=await evaluate('JSON.parse(localStorage.getItem("lumenfall_save_v2"))');assert.equal(cold.riftTheme,'ember');assert(cold.cometCosmetics.trail&&cold.cometCosmetics.crest);fs.writeFileSync(path.join(out,'baseline-native.json'),JSON.stringify({status:'prepared',identity:id,saved,cold},null,2)+'\n');console.log('PASS signed143 cosmetic fixture survives actual native cold launch');return;
  }
+ let id;
+ if(mode==='resume'){
+  // Preserve the completed real signed upgrade/cold-launch evidence. Only the
+  // later UI matrix is retried after fixing an invalid Farm-mode boss fixture.
+  const proofFile=path.join(out,'accept-first-fixture-failure.json'),proof=JSON.parse(fs.readFileSync(proofFile)),upgrade=proof.records[0],cold=proof.records[1];
+  assert(proof.error.includes('actual native boss state'));assert(proof.records.length>=8);assert(upgrade.install.includes('Success'));assert.equal(upgrade.beforeUpdate.schemaVersion,1);assert.equal(upgrade.afterUpdate.schemaVersion,2);assert.equal(upgrade.afterUpdate.comets,upgrade.beforeUpdate.comets+140);assert.equal(cold.comets,upgrade.afterUpdate.comets);assert.deepEqual(cold.receipt,upgrade.afterUpdate.offline12hRefund);
+  for(const key of ['owned','legacyCometPurchases','cometTrialMarks','achieved','cometCosmetics'])assert.deepEqual(upgrade.afterUpdate[key],upgrade.beforeUpdate[key]);
+  await adb.shell('am force-stop com.lumenfall.app');await adb.shell('am start -n com.lumenfall.app/.MainActivity');await connect();id=await identity();await select('ember');records.push(upgrade,cold,{case:'resume UI matrix on the same verified signed artifact',proofFile,proofSha256:sha(fs.readFileSync(proofFile)),identity:id});
+ }else{
  assert.equal(mode,'accept');const baseline=JSON.parse(fs.readFileSync(path.join(out,'baseline-native.json')));assert.equal(baseline.status,'prepared');await connect();const installed=await identity(null);assert.equal(installed.apkSha256,baseline.identity.apkSha256,'baseline APK is installed before update');const beforeUpdate=await evaluate('JSON.parse(localStorage.getItem("lumenfall_save_v2"))');assert.equal(beforeUpdate.riftTheme,'ember');await disconnect();await adb.shell('am force-stop com.lumenfall.app');
- await adb.upload(apk,'/data/local/tmp/rift-final.apk');const install=await adb.shell('pm install -r /data/local/tmp/rift-final.apk');assert(install.includes('Success'),'signed update succeeds without clearing data');await adb.shell('am start -n com.lumenfall.app/.MainActivity');await connect();const id=await identity();await until('(function(){var e=document.querySelector("[data-theme-select=ember]");if(!e)return false;e.click();return JSON.parse(localStorage.getItem("lumenfall_save_v2")).lastSeen>'+beforeUpdate.lastSeen+';})()','updated runtime canonical save');const saved=await evaluate('JSON.parse(localStorage.getItem("lumenfall_save_v2"))');assert.equal(saved.riftTheme,'ember');assert.deepEqual(saved.owned,beforeUpdate.owned);assert.deepEqual(saved.legacyCometPurchases,beforeUpdate.legacyCometPurchases);assert.deepEqual(saved.cometTrialMarks,beforeUpdate.cometTrialMarks);assert.deepEqual(saved.achieved,beforeUpdate.achieved);assert.deepEqual(saved.cometCosmetics,beforeUpdate.cometCosmetics);
+ await adb.upload(apk,'/data/local/tmp/rift-final.apk');const install=await adb.shell('pm install -r /data/local/tmp/rift-final.apk');assert(install.includes('Success'),'signed update succeeds without clearing data');await adb.shell('am start -n com.lumenfall.app/.MainActivity');await connect();id=await identity();await until('(function(){var e=document.querySelector("[data-theme-select=ember]");if(!e)return false;e.click();return JSON.parse(localStorage.getItem("lumenfall_save_v2")).lastSeen>'+beforeUpdate.lastSeen+';})()','updated runtime canonical save');const saved=await evaluate('JSON.parse(localStorage.getItem("lumenfall_save_v2"))');assert.equal(saved.riftTheme,'ember');assert.deepEqual(saved.owned,beforeUpdate.owned);assert.deepEqual(saved.legacyCometPurchases,beforeUpdate.legacyCometPurchases);assert.deepEqual(saved.cometTrialMarks,beforeUpdate.cometTrialMarks);assert.deepEqual(saved.achieved,beforeUpdate.achieved);assert.deepEqual(saved.cometCosmetics,beforeUpdate.cometCosmetics);
  // Incoming OFFLINE_12H_001 explicitly refunds the original Extended Rest
  // price (140 Comets). Assert that accepted migration rather than requiring
  // the retired purchase to lose its value, and verify it never pays twice.
@@ -72,9 +82,10 @@ async function run(){
  assert.equal(saved.schemaVersion,2);assert.equal(saved.comets,beforeUpdate.comets+140);assert.equal(saved.offline12hRefund.offline24,true);assert.equal(saved.offline12hRefund.offline48,false);assert.equal(saved.offline12hRefund.comets,140);assert.equal(saved.offline12hRefund.prismsExact,'0');assert.deepEqual(saved.offline12hRefund.cometsPaid,[true,true]);
  records.push({case:'signed update preserves cosmetics and original purchase value with documented one-time 140-Comet refund',install,beforeUpdate,afterUpdate:saved});
  await disconnect();await adb.shell('am force-stop com.lumenfall.app');await adb.shell('am start -n com.lumenfall.app/.MainActivity');await connect();await select('ember');const secondCold=await evaluate('JSON.parse(localStorage.getItem("lumenfall_save_v2"))');assert.equal(secondCold.comets,saved.comets,'refund is idempotent after cold reload and selection');assert.deepEqual(secondCold.offline12hRefund,saved.offline12hRefund);records.push({case:'second actual cold launch does not repay retired purchase',comets:secondCold.comets,receipt:secondCold.offline12hRefund});
+ }
  await until('document.getElementById("enemy-stage").getAttribute("data-rift-theme")==="ember"','cold launch reapplies Ember');await screenshot('native-update-ember');await fixturesFromCanonicalSave();
  for(const width of [320,390,430]){
-  await disconnect();await adb.shell('wm size '+width+'x844');await delay(1000);await connect();
+  await disconnect();await adb.shell('wm size '+width+'x844');await delay(1000);await connect();await fixtureClock();
   for(const kind of ['normal','boss','luminous']){
    // Reload a canonical QA save through the unchanged native initialization.
    await fixture(kind);
@@ -86,7 +97,7 @@ async function run(){
   }
  }
 
- await disconnect();await adb.shell('settings put system font_scale 2');await delay(1000);await connect();await fixture('boss');await select('radiant');
+ await disconnect();await adb.shell('settings put system font_scale 2');await delay(1000);await connect();await fixtureClock();await fixture('boss');await select('radiant');
  const large=await evaluate('(function(){var c=document.getElementById("rift-cosmetic-name").getBoundingClientRect(),s=document.getElementById("enemy-stage").getBoundingClientRect(),hp=document.getElementById("hp-text").getBoundingClientRect();return {rootFont:getComputedStyle(document.documentElement).fontSize,captionFont:getComputedStyle(document.getElementById("rift-cosmetic-name")).fontSize,viewport:[innerWidth,innerHeight],hpClear:hp.top>=s.bottom-1&&c.bottom<=s.bottom,tap:s.width>=44&&s.height>=44};})()');assert(large.hpClear&&large.tap);records.push({case:'real Android font_scale 2',...large});await screenshot('native-font-scale-2');
  // Physical Android input coordinates come from the actual WebView bounds.
  await fixture('normal');await select('radiant');
