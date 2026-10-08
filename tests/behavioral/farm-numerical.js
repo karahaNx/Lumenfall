@@ -45,15 +45,22 @@ window.runFarmNumericalQa=function(b,ctx,assert){
   function run(natural,use,kind,split){
     var s=seed(natural,use),normalized=b.setState(s),dps=natural?t.naturalDps():2**55+16,seconds=natural?.9:1;
     if(natural){ok(dps===40052722017724424,'actual natural product DPS');var costs=t.numericCosts();Object.values(costs).forEach(function(c){if(typeof c==='object')Object.values(c).forEach(function(v){ok(Number.isFinite(v)&&v>=0,'finite normalized next price');});else ok(Number.isFinite(c)&&c>0,'finite normalized next price');});ok(normalized.spirits.titan===1635&&normalized.research.formation===500,'normalization preserves stress investments');}
+    var calls=[];
+    function segment(seconds,start){var trace=t.traceFarm(function(){return t.direct(seconds,kind,start);});calls.push(trace);return trace.result;}
     var trace=t.traceFarm(function(){
-      function execute(){var a=t.direct(split||seconds,kind,clock);if(!split)return a;var z=t.direct(seconds-split,kind,clock+split*1000);['kills','luminousKills','lumenGained','shardGained','motesGained','studySpeedPurchases','studyMotesSpent'].forEach(function(k){z.summary[k]+=a.summary[k];});z.summary.timeline=a.summary.timeline.concat(z.summary.timeline.map(function(e){return Object.assign({},e,{elapsedSec:e.elapsedSec+split});}));return z;}
+      function execute(){var a=segment(split||seconds,clock);if(!split)return a;var z=segment(seconds-split,clock+split*1000);['kills','luminousKills','lumenGained','shardGained','motesGained','studySpeedPurchases','studyMotesSpent'].forEach(function(k){z.summary[k]+=a.summary[k];});z.summary.timeline=a.summary.timeline.concat(z.summary.timeline.map(function(e){return Object.assign({},e,{elapsedSec:e.elapsedSec+split});}));return z;}
       return natural?execute():t.withDps(dps,execute);
     });
     var r=trace.result,o=verifySegments(trace,kind),expected=natural?3277040892359271:3275345183542180;
     ok(r.summary.kills===expected&&r.state.totalKills===expected,'documented safe kill count');
     ok(r.summary.kills===o.kills&&r.summary.luminousKills===o.luminous,'segment kill and spawn ledger');
-    ok(r.summary.lumenGained===o.lumen&&r.state.lumen===o.lumen,'represented Lumen policy and sum');
-    ok(r.summary.shardGained===o.shards&&r.state.shards===o.shards,'represented Shard policy and sum');
+    // State sums every reward segment; the public split-call summary combines
+    // separately rounded call totals. Preserve both exact represented orders.
+    var callLedgers=calls.map(function(call){return verifySegments(call,kind);});
+    var summaryLumen=callLedgers.reduce(function(n,c){return n+c.lumen;},0);
+    var summaryShards=callLedgers.reduce(function(n,c){return n+c.shards;},0);
+    ok(r.summary.lumenGained===summaryLumen&&r.state.lumen===o.lumen,'represented Lumen policy and sum');
+    ok(r.summary.shardGained===summaryShards&&r.state.shards===o.shards,'represented Shard policy and sum');
     var buys=natural&&use?1:0;
     ok(r.summary.studySpeedPurchases===buys&&r.summary.studyMotesSpent===buys*60,'one full-price actual Motes purchase');
     ok(r.state.motes===s.motes+o.motes-buys*60,'Motes ledger');

@@ -15,22 +15,10 @@ assert.equal(require('node:crypto').createHash('sha1').update('blob '+Buffer.byt
 // The device save owns charge60, whose effective level is now10 for every Wisp.
 function contractOnce(text,before,after){assert.equal(text.split(before).length,2,'unique frozen contract marker');return text.replace(before,after);}
 const baseline=contractOnce(contractOnce(frozen,"{id:'charge', effectPerLevel:0.08,","{id:'charge', effectPerLevel:0.08, levelCap:10,"),'durationMs:ultimate ? 8000 : 4000','durationMs:ultimate ? 1500 : 1000');
-// PR70's independently prepared clock correction is a necessary dependency:
-// closing old queues exposes a canonical-grid stall. Keep the immutable old
-// engine as the reference, applying ONLY its two clock corrections. The complete
-// state and summary comparisons below remain exact, including economy/ownership.
-function clockReference(original){
- const replacements=[
-  ['  var targetGridPositionSec = startPhaseSec+elapsedSec;\n  var targetFarmGridCrossings = Math.floor(targetGridPositionSec);\n  var targetGridPhaseSec = targetGridPositionSec-targetFarmGridCrossings;',
-   '  var targetGridPhaseSec = startPhaseSec+targetFractionSec;\n  var targetGridCarry = Math.floor(targetGridPhaseSec);\n  var targetFarmGridCrossings = targetWholeSec+targetGridCarry;\n  targetGridPhaseSec -= targetGridCarry;'],
-  ['    var elapsedWholeBefore = elapsedWholeSec;\n    var elapsedFractionBefore = elapsedFractionSec;',
-   '    var gridCrossingsBefore = farmGridCrossings;\n    var gridRemainingBefore = farmGridRemainingSec;'],
-  ['if(elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && actions===0){',
-   'if(farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore && actions===0){']
- ];
- for(const [before,after] of replacements){assert.equal(original.split(before).length,2,'unique frozen clock marker');original=original.replace(before,after);}
- return original;
-}
+// Keep the independent frozen engine's prices/economy and event order. Adapt
+// its clock to the integrated grid guard and this feature's canonical100ms
+// intervals. The full state/summary and reward comparisons remain strict.
+const {clockReference}=require('./support-clock-reference.cjs');
 const correctedClockBaseline=clockReference(baseline);
 const original=JSON.parse(fs.readFileSync(path.join(root,'docs/qa/offline-autoascend-2026-10-07/device_backup.json'),'utf8'));
 const copy=x=>JSON.parse(JSON.stringify(x)),records=[];

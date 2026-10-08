@@ -1,7 +1,7 @@
 # SUPPORT_UPTIME_001 — Tide/Aurora downtime
 
 Owner: this feature chat, isolated /workspace/Lumenfall-SUPPORT_UPTIME_001,
-branch feature/support-uptime-001. PR82 draft; final CI/integration/APK pending.
+branch feature/support-uptime-001. PR82 draft; CI293 PASS177/17/all gates. Chronology fix passes locally; final CI/integration/APK pending.
 No other checkout/chat changed; no subagents/message tools used.
 
 F18: harder permanent support, concrete early/mid/late uptime, actual casts/expiry,
@@ -41,7 +41,7 @@ exact/idempotent migration, old backups and live/offline; mobile320/390/430,
 signed APK package/version/cert/assets; native in-place old-save update/cold/recovery.
 
 [Evidence/check versions](../qa/support-uptime-001/implementation/check-results.json):
-current product 588f64e80094b0768f37b9963c49d924b8fe644fac4f03c90830efee29cc8ebd
+clock candidate954174dd03a37562acbb37677acaba53fd90d8f17a9f43a5ef75aebd34a85268
 passes motor2127 assertions/49 combinations/98 fractional/50 phases/3 causal controls,
 refund703 checks/36 cases and actual Ascend/canonical/fresh Reset retention.
 Historical CI155/14 PASS is not final acceptance. CI271 on e3e2df5 failed five
@@ -51,8 +51,10 @@ Combined12h frozen-engine oracle gives416439 kills/19830 Ascends; originals unch
 [native baseline](../qa/support-uptime-001/implementation/native/README.md).
 Self-review/automated checks; no independent/physical/TalkBack claim.
 
-Five failed cap fixtures now pass; combined12h core and UI pass. Added a causal
-regression/fix for exact large-price wallet/credit subtraction. Next: push/pass CI;
-integrate against fresh main, verify
+Five failed cap fixtures now pass; combined12h core/UI pass. Exact large-price
+spending fixed. A broader Arcane queue/hour case passes main14d but drifts with
+short buffs; canonical100ms/full-clock fix passes2998 strict live/offline checks;
+[clock evidence](../qa/support-uptime-001/implementation/CLOCK_FIX.md).
+Next: merge fresh main, final CI/integration and verify
 signed APK/native update, save final evidence/status in GitHub. Archive only this
 owner after required acceptance; missing/failed acceptance remains open.

@@ -85,18 +85,7 @@ function runAsync(seed,seconds,batch=256){
  return {x,result,committed};
 }
 
-function clockReference(original){
- const replacements=[
-  ['  var targetGridPositionSec = startPhaseSec+elapsedSec;\n  var targetFarmGridCrossings = Math.floor(targetGridPositionSec);\n  var targetGridPhaseSec = targetGridPositionSec-targetFarmGridCrossings;',
-   '  var targetGridPhaseSec = startPhaseSec+targetFractionSec;\n  var targetGridCarry = Math.floor(targetGridPhaseSec);\n  var targetFarmGridCrossings = targetWholeSec+targetGridCarry;\n  targetGridPhaseSec -= targetGridCarry;'],
-  ['    var elapsedWholeBefore = elapsedWholeSec;\n    var elapsedFractionBefore = elapsedFractionSec;',
-   '    var gridCrossingsBefore = farmGridCrossings;\n    var gridRemainingBefore = farmGridRemainingSec;'],
-  ['if(elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && actions===0){',
-   'if(farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore && actions===0){']
- ];
- for(const [before,after] of replacements){assert.equal(original.split(before).length,2,'unique frozen clock marker');original=original.replace(before,after);}
- return original;
-}
+const {clockReference}=require('../../../../tests/behavioral/support-clock-reference.cjs');
 
 const contract=clockReference(baseline.replace("{id:'charge', effectPerLevel:0.08,", "{id:'charge', effectPerLevel:0.08, levelCap:10,").replace('durationMs:ultimate ? 8000 : 4000','durationMs:ultimate ? 1500 : 1000'));
 for(const enabled of [true,false])for(const seconds of enabled?[28800,43200]:[28800]){const seed=copy(original);for(const id of ['focus','sense','formation','resolve'])seed.researchQueue[id]=false;for(const id of ['riftattune','formationstudy','prismstudy'])seed.studyQueue[id]=false;for(let k=10;k<seed.research.charge;k++)seed.shards+=Math.ceil(30*1.55**k);seed.autoAscendEnabled=enabled;const next=app(seed,contract);const total={kills:0,ascends:0};for(let elapsed=0;elapsed<seconds;elapsed+=900){const r=next.b.advance(Math.min(900,seconds-elapsed),{kind:'offline',visual:false,clockStartMs:seed.lastSeen+elapsed*1000,offlineWindowStartMs:seed.lastSeen});total.kills+=r.kills;total.ascends+=r.ascends;}console.log(JSON.stringify({enabled,seconds,result:total,prisms:next.b.get().prisms-seed.prisms,titan:next.b.get().spirits.titan,lumen:next.b.get().lumen}));}

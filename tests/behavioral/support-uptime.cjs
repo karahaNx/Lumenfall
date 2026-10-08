@@ -196,7 +196,8 @@ for(const [name,before,after] of [['old-duration','durationMs:ultimate ? 1500 : 
 }
 // Shorter expiries exercise a tiny remainder at the Farm grid boundary. Its
 // canonical clock advances even when composed elapsed rounds to the same value.
-// Keep the real medium economy and all damage; disabling the fix must stall.
+// Keep the real medium economy and all damage. Restore the original one-second
+// cuts as well as its logical-only guard: the new100ms cuts avoid this old edge.
 const farmSeed=JSON.parse(fs.readFileSync(path.join(root,'tests/behavioral/fixtures.json'),'utf8'))['parity-medium-farm'].save;
 function verifyGridClock(sourceScript){
  const c=engine(false,sourceScript);c.set(copy(farmSeed));
@@ -206,7 +207,9 @@ const gridClock=copy(verifyGridClock(script));
 assert.equal(gridClock.elapsedSec,60,'full Farm clock consumed');assertions++;
 const oldGuard='if(remaining>0 && farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore && actions===0)';
 assert.equal(script.split(oldGuard).length,2,'unique grid-clock causal marker');
-let stalled='';try{verifyGridClock(script.replace('    var gridCrossingsBefore = farmGridCrossings;', '    var elapsedWholeBefore=elapsedWholeSec,elapsedFractionBefore=elapsedFractionSec;\n    var gridCrossingsBefore = farmGridCrossings;').replace(oldGuard,'if(remaining>0 && elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && actions===0)'));}catch(error){stalled=error.message;}
+const tickCuts='    for(var tickGridIndex=0;tickGridIndex<SIM_TICK_REMAINING.length;tickGridIndex++){\n      var tickTarget=SIM_TICK_REMAINING[tickGridIndex];\n      if(tickTarget<farmGridRemainingSec){farmGridStep=farmGridRemainingSec-tickTarget;break;}\n    }\n';
+assert.equal(script.split(tickCuts).length,2,'unique legacy cadence marker');
+let stalled='';try{verifyGridClock(script.replace(tickCuts,'').replace('    var gridCrossingsBefore = farmGridCrossings;', '    var elapsedWholeBefore=elapsedWholeSec,elapsedFractionBefore=elapsedFractionSec;\n    var gridCrossingsBefore = farmGridCrossings;').replace(oldGuard,'if(remaining>0 && elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && actions===0)'));}catch(error){stalled=error.message;}
 assert.match(stalled,/Authoritative simulation stalled/,'old logical-only guard rejects the real Farm clock boundary');
 negativeControls.push({name:'old-grid-clock-guard',caught:stalled});
 const result={status:fractionalFailures||phaseFailures?contract.kind+'-has-failure':'pass',source:{sha256:crypto.createHash('sha256').update(html).digest('hex'),gitBlob:crypto.createHash('sha1').update(Buffer.from('blob '+Buffer.byteLength(html)+'\0')).update(html).digest('hex'),bytes:Buffer.byteLength(html)},contract,node:process.version,assertions,limits:'Full production VM motor with observer wrappers; no cap stub. Browser save/UI and APK/native checks are separate.',negativeControls,gridClock,phaseSweep,fractionalDiagnostics,fractionalFailureControls,rows,staggeredNormalPair:{charge:0,seconds:60,anyActiveSeconds:anySeconds,casts:stagger.log.casts,expiries:stagger.log.expiries},summary:{normalCharge0:normal.sources.tide,ultimateCharge0:ultimate.sources.tide}};

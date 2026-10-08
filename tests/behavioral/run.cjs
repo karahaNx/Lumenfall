@@ -91,6 +91,7 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
   const urlFor = page => baseUrl + page + '?' + new URLSearchParams({ qaScenario: scenario, qaFixture: fixture });
   if (scenario === 'support-refund-core') return runNativeProcess([process.execPath, path.join(ROOT, 'support-refund.cjs'), path.join(options.sourceWebRoot || path.join(ROOT, '../..'), 'index.html')], scenario, 150000, options);
   if (scenario === 'support-uptime-core') return runNativeProcess([process.execPath, path.join(ROOT, 'support-uptime.cjs')], scenario, 90000, options);
+  if (scenario === 'support-economy-parity') return runNativeProcess([process.execPath, path.join(ROOT, 'support-economy-parity.cjs'), path.join(options.sourceWebRoot || path.join(ROOT, '../..'), 'index.html')], scenario, 150000, options);
   if (scenario === 'support-uptime-ui') return runNativeProcess([process.execPath, path.join(ROOT, 'support-uptime-ui.cjs'), path.join(ROOT, '../..'), temporary('lumenfall-support-ui-'), chrome], scenario, 90000, options);
   if (scenario === 'resonate-clarity') return runNativeProcess([process.execPath, path.join(ROOT, 'resonate-clarity.cjs'), '--chrome', chrome, '--source', path.join(options.sourceWebRoot || path.join(ROOT, '../..'), 'index.html')], scenario, 150000, options);
   if (scenario === 'comet-unlocks-core') return runNativeProcess([process.execPath, path.join(ROOT, 'comet-unlocks-core.cjs')], scenario, 90000, options);

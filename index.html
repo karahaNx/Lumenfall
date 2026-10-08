@@ -4367,7 +4367,7 @@ function formationRecommendationText(){
  * × Ultimate × Dawnpriest reward multiplier. Kill-only Lumen/Shard multipliers
  * do not modify ability-generated resources.
  *
- * Support Buff = fixed by the Support ability: +25% for 4s, or +50% for 8s
+ * Support Buff = fixed by the Support ability: +25% for 1s, or +50% for 1.5s
  * with its Ultimate. Wisp Power, Rarity and Modules do not change this buff.
  *
  * Guardian Tap = (5 + 2% of general Active-party passive power) × Tap-specific
@@ -6887,7 +6887,7 @@ var ENCYCLOPEDIA_MECHANICS = [
   {name:'Ability Output', meta:'Combat / economy rule', desc:'Damaging abilities use Wisp Power, their relevant Module, Ultimate, damage Bonds and Boss ability modifiers. Gale/Thorn resource output uses Wisp Power, its Module, Ultimate and Dawnpriest; passive-only party upgrades and Support buffs do not increase ability output.'},
   {name:'Tap damage (Guardian Tap)', meta:'Damage from tapping the enemy', desc:'This is your damage per tap on the enemy. Tap starts at 5 damage plus 2% of your general Active-Wisp passive power, then Tap upgrades apply. Support buffs and Guardian’s Mark also multiply it. Auto-Tap uses the same hit once per second.'},
   {name:'Rarity', meta:'Wisp progression', desc:'Rarity multiplies that Wisp’s Power, so it affects passive damage plus damaging/resource abilities. Every Rarity tier owned across the roster also adds +2% general passive-party power. Rarity does not strengthen Support buffs.'},
-  {name:'Modules & Ultimates', meta:'Wisp progression', desc:'Modules are role-specific: Burst/Breaker Modules boost ability damage, Shard/Lumen Utility Modules boost their ability-generated resource, and Amplifier Modules boost Motes while Active. Ultimates double damage/resource ability output; Amplifier Ultimates change the buff from +25% for 4s to +50% for 8s.'},
+  {name:'Modules & Ultimates', meta:'Wisp progression', desc:'Modules are role-specific: Burst/Breaker Modules boost ability damage, Shard/Lumen Utility Modules boost their ability-generated resource, and Amplifier Modules boost Motes while Active. Ultimates double damage/resource ability output; Amplifier Ultimates change the buff from +25% for 1s to +50% for 1.5s.'},
   {name:'Endgame Currency Utility', meta:'Economy rule', desc:'After all eight Ultimates are owned, Sigils can ready one Active Wisp ability for 25 Sigils, at most 3 times per Ascension run. Auto-Ascend plus Comet Trials unlock Quest Refresh; previous complete Rest Stop owners retain access. A refresh costs at least the richest quest reward, so refreshing cannot generate extra Comets.'},
   {name:'Wisp Roles', meta:'Build label', desc:'Roles describe authoritative ability output: Burst delivers the highest raw ability coefficient; Breaker delivers heavy ability hits; Amplifier buffs passive Wisp damage and your tap damage; Shard Utility and Lumen Utility add their named resource to ability casts. These are output and utility roles, not defensive combat roles.'},
   {name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the run for Prisms. Your first reward sets a cleared-Rift benchmark; repeats at or below it earn a 20% reserve reward, while pushing beyond it adds a new-depth bonus. Permanent systems stay.'},
@@ -7934,6 +7934,10 @@ function simulationResolveTimestamp(nowMs,elapsedSec,policy,summary,clock){
 
   return actions;
 }
+// Share the existing 100ms live cadence with longer windows. The countdown
+// coordinates retain fractional events; this cuts intervals without rounding
+// away time, changing rewards or introducing a per-kill loop.
+var SIM_TICK_REMAINING = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9].map(function(phase){return 1-phase;});
 function advanceAuthoritativeTime(elapsedSec,options){
   // A cursor retains this scheduler's exact clock/phase across yields. Calling
   // the synchronous facade still uses the identical event ordering.
@@ -7986,10 +7990,10 @@ function advanceAuthoritativeTime(elapsedSec,options){
   var farmGridRemainingSec = firstFarmGridSec;
   var farmGridCrossings = 0;
   // Keep endpoint fractions separate from whole seconds (PR70 clock fix).
-  var targetGridPhaseSec = startPhaseSec+targetFractionSec;
-  var targetGridCarry = Math.floor(targetGridPhaseSec);
+  var targetGridPhaseMs = (((clockStartMs%1000)+1000)%1000)+targetFractionSec*1000;
+  var targetGridCarry = Math.floor(targetGridPhaseMs/1000);
   var targetFarmGridCrossings = targetWholeSec+targetGridCarry;
-  targetGridPhaseSec -= targetGridCarry;
+  var targetGridPhaseSec = (targetGridPhaseMs-targetGridCarry*1000)/1000;
   var targetFarmGridRemainingSec = targetGridPhaseSec===0 ? 1 : 1-targetGridPhaseSec;
 
   function advanceFarmGridClock(stepSec){
@@ -8087,6 +8091,10 @@ function advanceAuthoritativeTime(elapsedSec,options){
   }
   simulationResolveTimestamp(initialNowMs,0,policy,summary,simulationClockPosition());
 
+  // Use the same coordinate difference for the first interval as every later
+  // one. Literal 0.1 can otherwise clip a slightly longer grid interval, while
+  // the endpoint still advances the clock to the full requested boundary.
+  remaining = simulationRemainingSec();
   var batchEvents = 0;
   var batchStarted = simulationWorkNow();
   while(remaining>0){
@@ -8136,12 +8144,21 @@ function advanceAuthoritativeTime(elapsedSec,options){
     next = Math.min(next,buffStep);
     next = Math.min(next,bossRetreatStep);
 
-    var farmGridStep = Infinity;
+    var farmGridStep = farmGridRemainingSec;
     var economyStep = Infinity;
+    for(var tickGridIndex=0;tickGridIndex<SIM_TICK_REMAINING.length;tickGridIndex++){
+      var tickTarget=SIM_TICK_REMAINING[tickGridIndex];
+      if(tickTarget<farmGridRemainingSec){farmGridStep=farmGridRemainingSec-tickTarget;break;}
+    }
+    // A timer accumulated across clock cuts can round a few ulps before a
+    // coincident support deadline. Resolve both at the deadline, preserving
+    // the complete passive interval and the established expiry-first order.
+    if(Number.isFinite(buffStep) && buffStep>=next &&
+        buffStep-next<=32*Number.EPSILON*Math.max(1,buffStep) &&
+        (next===abilityStep || next===autoTapStep || next===autoEmpowerStep)) next=buffStep;
+    next = Math.min(next,farmGridStep);
     if(state.riftMode==='farm'){
-      farmGridStep = farmGridRemainingSec;
       economyStep = simulationFarmEconomyBoundarySeconds(dps,rewardScale);
-      next = Math.min(next,farmGridStep);
       next = Math.min(next,economyStep);
     } else {
       next = Math.min(next,simulationPassiveKillSeconds(dps));
@@ -8149,7 +8166,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
 
     if(!Number.isFinite(next)) next = remaining;
     next = Math.max(0,Math.min(remaining,next));
-    var hitsFarmGrid = state.riftMode==='farm' && next===farmGridStep;
+    var hitsFarmGrid = next===farmGridRemainingSec;
     var hitsWindowEnd = next===remaining;
     var diagnosticEventKinds = [];
     if(next===abilityStep) diagnosticEventKinds.push('ability');
