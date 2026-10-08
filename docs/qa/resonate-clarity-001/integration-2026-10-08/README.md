@@ -16,9 +16,15 @@ passes the same12 browser profiles. Raw logs/DOM/all36 screenshots are in
 Selected screenshots remain directly viewable. `run-integrated-checks.cjs`
 and `check-apk-assets.cjs` reproduce available checks from the exact checkout.
 
-The full159-scenario integrated-source CI must pass before this delivery
-checkpoint merges. Final run/commit/result are recorded in PR80's linked
-publication PR; additional final raw evidence is retained on this feature's
-delivery branch. `DEVICE_ACCEPTANCE.txt` and `device-environment.json` explain
-remaining required phone/WebView60/native large-text/TalkBack acceptance.
+`ci-integrated-159.txt.gz` and `final-ci-record.json` preserve the final successful
+run37741921916:159 scenarios/14 required negatives and all validation gates on
+the exact integrated APK146 source. Later main31eccf is retained in the
+documentation-only publication; that later product is not claimed as full-suite
+tested by this run.
+
+`publication-checks.json` and `latest-main-browser/` record the scoped F06
+recheck on31eccf/sourcef99cb0bc:12 profiles and real action/persistence checks,
+V8 6.0 probe and document/source/tooling PASS. This is separate from full-suite CI.
+`DEVICE_ACCEPTANCE.txt` and `device-environment.json` explain remaining required
+phone/WebView60/native large-text/TalkBack acceptance.
 Feature/chat stay OPEN; no independent review or native acceptance is claimed.

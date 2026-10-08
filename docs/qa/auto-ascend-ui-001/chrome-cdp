@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+/* Local verification transport for this environment's hanging --dump-dom process.
+ * Runs the original instrumented page and prints its complete DOM after QA finishes.
+ * This is evidence tooling, not a replacement for the repository/CI browser contract.
+ */
+const {spawn}=require('node:child_process');
+const args=process.argv.slice(2),binary='/usr/bin/chromium';
+if(!args.includes('--dump-dom')){
+  const child=spawn(binary,args,{stdio:args.includes('--remote-debugging-pipe')?['inherit','inherit','inherit',3,4]:'inherit'});
+  child.once('error',e=>{process.stderr.write(e.stack+'\n');process.exitCode=1;});
+  child.once('close',code=>{process.exitCode=code===null?1:code;});
+} else {
+  const url=args[args.length-1];
+  const browser=spawn(binary,args.slice(0,-1).filter(x=>x!=='--dump-dom'&&!x.startsWith('--virtual-time-budget=')).concat('--remote-debugging-pipe','about:blank'),{stdio:['ignore','ignore','pipe','pipe','pipe']});
+  let session,seq=0,buffer='',closed=false;const pending=new Map();
+  let resolveClosed;const completion=new Promise(r=>{resolveClosed=r;});
+  browser.once('close',(code,signal)=>{closed=true;for(const p of pending.values()){clearTimeout(p.timer);p.reject(Error('browser closed'));}pending.clear();resolveClosed({code,signal});});
+  browser.stderr.on('data',()=>{});
+  browser.stdio[4].on('data',bytes=>{buffer+=bytes;let end;while((end=buffer.indexOf('\0'))>=0){const raw=buffer.slice(0,end);buffer=buffer.slice(end+1);if(!raw)continue;const m=JSON.parse(raw);if(m.id&&pending.has(m.id)){const p=pending.get(m.id);pending.delete(m.id);clearTimeout(p.timer);m.error?p.reject(Error(JSON.stringify(m.error))):p.resolve(m.result);}}});
+  function send(method,params={},sid=session){return new Promise((resolve,reject)=>{const id=++seq,timer=setTimeout(()=>{pending.delete(id);reject(Error('CDP timeout '+method));},15000);pending.set(id,{resolve,reject,timer});browser.stdio[3].write(JSON.stringify({id,method,params,...(sid?{sessionId:sid}:{})})+'\0');});}
+  async function evaluate(expression){const x=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(x.exceptionDetails)throw Error(x.exceptionDetails.text);return x.result.value;}
+  (async()=>{
+    try{
+      const target=await send('Target.createTarget',{url:'about:blank'},null);session=(await send('Target.attachToTarget',{targetId:target.targetId,flatten:true},null)).sessionId;
+      await send('Page.enable');await send('Runtime.enable');await send('Page.navigate',{url});
+      let result;
+      for(let i=0;i<500;i++){
+        try{result=await evaluate('(()=>{const e=document.getElementById("qa-result");if(!e||!["pass","fail"].includes(e.dataset.status))return null;try{return JSON.parse(e.textContent);}catch(_){return null;}})()');}
+        catch(error){if(!/Inspected target navigated|Execution context was destroyed|Cannot find context/.test(error.message))throw error;}
+        if(result)break;await new Promise(r=>setTimeout(r,20));
+      }
+      if(!result)throw Error('No completed QA result in pipe transport');
+      process.stdout.write(await evaluate('document.documentElement.outerHTML'));
+      process.stderr.write('Local CDP transport: original QA page executed; no virtual-time/dump-dom equivalence claimed.\n');
+    } catch(error){process.stderr.write(error.stack+'\n');process.exitCode=1;}
+    finally{
+      if(!closed)await send('Browser.close',{},null).catch(()=>{});
+      const ended=await Promise.race([completion,new Promise(r=>setTimeout(()=>r(null),3000))]);
+      if(!ended){browser.kill('SIGTERM');await completion;process.exitCode=1;}
+      else if(ended.code!==0)process.exitCode=1;
+    }
+  })().catch(e=>{process.stderr.write(e.stack+'\n');browser.kill('SIGTERM');process.exitCode=1;});
+}

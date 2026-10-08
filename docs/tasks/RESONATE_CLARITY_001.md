@@ -53,8 +53,17 @@ chronology/parity/persistence scenarios and three negative controls pass on
 integrated code through the recorded CDP adapter. Source/context/tooling/APK
 verifier gates pass. [CI37737584516](https://github.com/karahaNx/Lumenfall/actions/runs/37737584516)
 passes153 scenarios/14 negatives and guarded startup on the combined head.
-This delivery checkpoint merges after its full159-scenario integrated-source
-CI gate passes; exact final run/result are recorded in PR80's linked delivery PR.
+[CI37741921916](https://github.com/karahaNx/Lumenfall/actions/runs/37741921916)
+passes all159 scenarios/14 required negatives and startup/tooling/source/APK gates
+on the exact integrated APK146 source. Tested PR91 merge
+`fa14c75949bf3c3ca314ad9f583441af1486dffc`; head
+`93fdb9dd6b721e189d134f1aa8e0791897da71b2`.
+[Final raw log and receipt](../qa/resonate-clarity-001/integration-2026-10-08/final-ci-record.json).
+Delivery publication combines later main31eccf without product changes; this
+full-suite result applies to APK146, not later unrelated features.
+Fresh targeted F06 checks on31eccf/sourceSHA256f99cb0bc PASS:12 browser profiles,
+actual handler boundaries/shared limit/save/recovery/Ascend and V8 6.0 probe;
+source/context/tooling checks PASS. [Publication checks](../qa/resonate-clarity-001/integration-2026-10-08/publication-checks.json).
 Only self-review/automated checks are claimed.
 
 Build37740071058 PASS: signed versionCode146/versionName0.1.146,
