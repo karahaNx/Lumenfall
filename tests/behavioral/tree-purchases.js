@@ -82,6 +82,15 @@ window.runTreePurchaseQa=function(b,ctx,assert){
   ok(!button('echo').disabled,'an exactly representable large-wallet payment remains available');
   ok(b.treePurchases.buy('echo'),'exact large-wallet payment succeeds');
   ok(b.getState().nodes.echo===1&&b.getState().prisms===1e16-2,'exactly two Prisms charged');
+  // Equal-price buttons must remain distinguishable after shared presentation
+  // and affordability refresh, including the two initial two-Prism upgrades.
+  seed('swift',0,1000);
+  ['echo','bonds','swift'].forEach(function(id){
+    var name=button(id).closest('.node-card').querySelector('.name').textContent;
+    ok(!button(id).disabled&&button(id).getAttribute('aria-label').startsWith(name+' — '),'available control retains its upgrade name '+id);
+    b.refreshAffordability();
+    ok(button(id).getAttribute('aria-label').startsWith(name+' — '),'refresh retains available upgrade name '+id);
+  });
   return {checks:checks,caps:{echo:6,bonds:20},legacyRawValuesPreserved:true,backupIdempotence:true};
 };
 
@@ -132,7 +141,7 @@ window.runTreePurchaseUiQa=async function(b,ctx,assert){
         ok(p.width>=44&&p.height>=44,'44px Tree control '+scale+' '+button.dataset.node+' '+JSON.stringify({width:p.width,height:p.height,minHeight:getComputedStyle(button).minHeight,transform:getComputedStyle(button).transform}));
         ok(p.left>=r.left&&p.right<=r.right+1,'control stays inside card '+scale);
         ok(p.top>=main.top&&p.bottom<=main.bottom+1,'control scrolls into view '+scale);
-        ok(button.getAttribute('aria-label')&&button.textContent.trim(),'visible and accessible label '+scale);
+        ok(button.getAttribute('aria-label').startsWith(card.querySelector('.name').textContent+' — ')&&button.textContent.trim(),'visible named upgrade and accessible label '+scale);
       }
     });
     records.push({width:innerWidth,scale:scale,maxed:Array.from(root.querySelectorAll('button:disabled')).map(function(el){return {id:el.dataset.node,label:el.textContent};})});

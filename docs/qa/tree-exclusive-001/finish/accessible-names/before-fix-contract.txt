@@ -1,0 +1,73 @@
+Browser identity: { "selected_path": "/tmp/tree-browser-bin/google-chrome", "resolved_path": "/tmp/tree-chrome/opt/google/chrome/google-chrome", "sha256": "aea09d69ce7f24d5901f6bfb15dd44d0c856e793e0a498f8d8393ec7d2c308ec", "version": "Google Chrome 155.0.8059.39", "version_exitcode": 0, "version_stderr": "mkdir: cannot create directory ‘/home/agent/.local/share/applications’: Read-only file system\ntouch: cannot touch '/home/agent/.local/share/applications/mimeapps.list': No such file or directory\n" }
+Staged source: { "source_sha256": "c1e23bb552666ecc0067a755c0ad30e13aee1827bf6371919d96003a88919a4b", "instrumented_sha256": "9dab0caf1a70f400a859e292653725ddb4dc0848d666298d08c5b00b165f0bec" }
+FAIL tree-purchase-contract
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 1.5947133279999999, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "tree-purchase-contract", "json_status": "fail", "json_scenario": "tree-purchase-contract", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /tmp/lumenfall-qa-raw-uK4zVY/tree-purchase-contract-ldhXC9
+  Chromium stderr tail:
+80:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[56966:56983:1008/093544.861489:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[56966:56983:1008/093544.861503:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[56966:56983:1008/093544.861508:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[56966:56993:1008/093544.862320:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 57031: Read-only file system (30)
+[56966:56993:1008/093544.871448:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 57032: Read-only file system (30)
+[56966:56983:1008/093544.874737:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[56966:56983:1008/093544.874761:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[56966:56966:1008/093544.879633:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[56966:56966:1008/093544.879940:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[56966:56966:1008/093544.879988:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[56966:56983:1008/093544.880095:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[56966:56993:1008/093544.908769:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 57039: Read-only file system (30)
+[56966:56966:1008/093544.909575:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[56966:56966:1008/093544.917528:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[56966:56993:1008/093544.921112:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 57050: Read-only file system (30)
+[56966:56983:1008/093544.921207:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[56966:56966:1008/093544.928299:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[56966:56983:1008/093544.932125:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[56966:56966:1008/093544.934764:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[56966:56993:1008/093544.948709:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 57061: Read-only file system (30)
+[56966:56993:1008/093545.086557:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 57095: Read-only file system (30)
+
+  stdout tail:
+tional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+
+</script>
+
+
+<pre id="qa-result" data-status="fail" data-scenario="tree-purchase-contract">{
+  "scenario": "tree-purchase-contract",
+  "status": "fail",
+  "detail": {
+    "message": "available control retains its upgrade name echo",
+    "stack": "Error: available control retains its upgrade name echo\n    at assert (http://127.0.0.1:36955/index.html?qaScenario=tree-purchase-contract&amp;qaFixture=fresh:13517:61)\n    at ok (http://127.0.0.1:36955/index.html?qaScenario=tree-purchase-contract&amp;qaFixture=fresh:11768:39)\n    at http://127.0.0.1:36955/index.html?qaScenario=tree-purchase-contract&amp;qaFixture=fresh:11853:5\n    at Array.forEach (&lt;anonymous&gt;)\n    at window.runTreePurchaseQa (http://127.0.0.1:36955/index.html?qaScenario=tree-purchase-contract&amp;qaFixture=fresh:11852:83)\n    at HTMLDocument.run (http://127.0.0.1:36955/index.html?qaScenario=tree-purchase-contract&amp;qaFixture=fresh:14137:32)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+
+Behavioral QA failed: tree-purchase-contract null

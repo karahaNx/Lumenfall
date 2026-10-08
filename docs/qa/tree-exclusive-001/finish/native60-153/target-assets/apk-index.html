@@ -255,10 +255,10 @@
   .bond-row.active{border-color:color-mix(in srgb,var(--good) 65%,var(--line));background:color-mix(in srgb,var(--good) 8%,var(--bg-elev));}
   .bond-dot{width:8px;height:8px;border-radius:50%;background:var(--ink-dim);flex:none;}
   .bond-row.active .bond-dot{background:var(--good);}
-  .bond-main{flex:1;min-width:0;overflow-wrap:break-word;}
+  .bond-main{flex:1;min-width:0;}
   .bond-name{font-size:.7rem;font-weight:800;}
   .bond-req{font-size:.61rem;color:var(--ink-dim);margin-top:1px;}
-  .bond-effect{min-width:0;overflow-wrap:break-word;font-size:.63rem;font-weight:700;text-align:right;max-width:42%;color:var(--ink-dim);}
+  .bond-effect{font-size:.63rem;font-weight:700;text-align:right;max-width:42%;color:var(--ink-dim);}
   .bond-row.active .bond-effect{color:var(--good);}
   .bond-summary{font-size:.66rem;color:var(--ink-dim);text-align:center;line-height:1.35;margin-top:8px;min-height:1em;}
   .hero-ability strong{color:var(--ink);}
@@ -319,11 +319,6 @@
   .ab-keep .ab-head{color:var(--good);}
   .ab-col ul{margin:0;padding-left:15px;font-size:.71rem;color:var(--ink-dim);line-height:1.6;}
   .prism-preview{font-family:'IBM Plex Mono',monospace;font-size:1.6rem;font-weight:600;color:var(--prism);}
-  .prism-calculation{width:100%;text-align:left;font-size:.8rem;color:var(--ink-dim);line-height:1.5;overflow-wrap:break-word;}
-  .prism-calculation dl{margin:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:5px 10px;}
-  .prism-calculation dt,.prism-calculation dd{margin:0;}
-  .prism-calculation dd{text-align:right;color:var(--ink);}
-  .prism-calculation p{margin:10px 0 0;}
   .big-btn{
     width:100%;padding:12px;border-radius:12px;border:none;cursor:pointer;
     font-weight:700;font-size:.92rem;letter-spacing:.01em;
@@ -1785,8 +1780,6 @@
   #rift-party{position:relative;display:flex;flex:none;justify-content:center;gap:6px;height:61px;z-index:4;pointer-events:none;}
   .rift-wisp{position:relative;width:calc((100% - 24px)/5);max-width:58px;min-width:0;height:61px;border:1px solid color-mix(in srgb,var(--wisp-color) 30%,#29334e);border-radius:11px;background:linear-gradient(155deg,#263049e0,#101a2eed);display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:27px 3px 13px 14px;gap:0;align-items:center;justify-items:center;padding:1px 3px;box-shadow:inset 0 1px 0 #ffffff0c,0 2px 9px #0004;}
   #rift-party .wisp-portrait{width:27px;height:27px;grid-column:1;grid-row:1;filter:drop-shadow(0 0 5px color-mix(in srgb,var(--wisp-color) 22%,transparent));}
-  .rift-wisp-bonds{position:absolute;top:1px;left:2px;display:flex;flex-direction:column;gap:0;pointer-events:none;}
-  .rift-wisp-bonds .rift-bond-mark{font-size:8px;line-height:8px;margin:0;}
   .rift-wisp-name{grid-column:1;grid-row:3;font-size:10px;line-height:13px;color:#c7cbe0;text-align:center;white-space:nowrap;}
   .rift-wisp-power{grid-column:1;grid-row:4;font:10px/14px 'IBM Plex Mono',monospace;color:#f0effb;text-align:center;}
   .rift-wisp-state{position:absolute;top:2px;right:2px;padding:0 2px;border-radius:3px;background:#0b132ade;font:10px/12px 'IBM Plex Mono',monospace;color:#c4cfe4;text-align:center;}
@@ -1803,9 +1796,9 @@
   .rift-bond-mark{color:var(--bond-color);font-size:9px;line-height:12px;margin-right:2px;}
   .rift-wisp[data-bond] .rift-charge>span{background:var(--bond-color);box-shadow:0 0 8px var(--bond-color);}
   .rift-wisp[data-bond].is-casting{box-shadow:inset 0 2px var(--bond-color),0 0 14px #ffffff70;}
-  #rift-bond-effects{position:relative;z-index:2;display:flex;gap:4px;flex:none;min-height:0;flex-wrap:wrap;}
+  #rift-bond-effects{position:relative;z-index:2;display:flex;gap:4px;flex:none;min-height:0;}
   #rift-bond-effects[hidden]{display:none;}
-  .rift-bond-effect{flex:1 1 42%;min-width:0;padding:2px 5px;border:0;border-left:2px solid var(--bond-color);border-radius:3px;background:color-mix(in srgb,var(--bond-color) 7%,transparent);font-size:10px;line-height:12px;color:#d2d1e4;}
+  .rift-bond-effect{flex:1;min-width:0;padding:2px 5px;border:0;border-left:2px solid var(--bond-color);border-radius:3px;background:color-mix(in srgb,var(--bond-color) 7%,transparent);font-size:10px;line-height:12px;color:#d2d1e4;}
   .stage .enemy-stage::after{background:conic-gradient(from 0deg,transparent 0 15%,#b9b6ff33 16% 17%,transparent 18% 48%,#b9b6ff33 49% 50%,transparent 51% 82%,#b9b6ff33 83% 84%,transparent 85%);animation:riftOrbit 32s linear infinite;width:min(200px,65cqh,65cqw);height:min(200px,65cqh,65cqw);max-width:none;max-height:none;}
   .vfx-ability{background:repeating-conic-gradient(var(--vfx-color) 0deg 5deg,transparent 6deg 45deg);}
   @media(prefers-reduced-motion:reduce){.stage .enemy-stage::after{animation:none!important;}.rift-charge>span{transition:none;}}
@@ -1824,11 +1817,10 @@
     .stage .hp-wrap{height:24px;}
     .stage .hp-text{font-size:11px;line-height:14px;margin-top:2px;}
     #boss-combat{padding:1px 6px;}
-    .boss-net-value{display:none;}
-    #rift-party,.rift-wisp{height:54px;}
-    .rift-wisp{grid-template-rows:24px 3px 13px 10px;gap:0;padding:1px 3px;}
+    #rift-party,.rift-wisp{height:58px;}
+    .rift-wisp{grid-template-rows:24px 3px 13px 14px;gap:0;padding:1px 3px;}
     #rift-party .wisp-portrait{width:24px;height:24px;}
-    .rift-wisp-power{font-size:10px;line-height:10px;}
+    .rift-wisp-power{font-size:10px;}
     .stage .buff-indicator{padding:0 8px;line-height:14px;}
     .stage .stat-box{padding:2px 7px;}
     .rift-bond-effect{padding:2px 5px;}
@@ -2116,24 +2108,6 @@
   @keyframes cometTrailOrbit{to{transform:rotate(360deg);}}
   @media(max-width:430px){.shop-card{flex-wrap:wrap;}.shop-card>.info{flex-basis:100%;}.shop-card>button{min-height:44px;}}
   @media(prefers-reduced-motion:reduce){.comet-trail-equipped .comet-trail{animation:none!important;transform:rotate(-25deg);}}
-  /* LAB_UI_001: text remains legible at every fill and at enlarged text sizes. */
-  #study-list .study-bar-track{position:relative;display:grid;place-items:center;height:auto;min-height:36px;padding:6px 8px;border-radius:10px;background:#0a1625;border-color:#4c6574;}
-  #study-list .study-bar-fill{position:absolute;top:0;left:0;height:100%;}
-  #study-list .study-bar-track .study-time{position:relative;margin:0;padding:2px 6px;border-radius:4px;background:#0a1625;color:#f2f7ff;font-size:.82rem;line-height:1.5;text-align:center;overflow-wrap:anywhere;}
-  #study-list .study-card .name{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;font-size:.88rem;overflow-wrap:anywhere;}
-  #study-list .study-card .earned-effect,#study-list .study-card .effect-note{font-size:.8rem;overflow-wrap:anywhere;}
-  #study-list .study-card button,#study-list .study-card select{min-width:44px;min-height:44px;font-size:.8rem;white-space:normal;}
-  #study-list .study-speed-open{margin-top:10px;}
-  #study-list .study-speed-panel{border-top:1px solid #40576a;margin-top:10px;padding-top:8px;}
-  #study-list .study-speed-panel[hidden]{display:none;}
-  #study-list .study-speed-panel .speed-row{margin-top:8px;}
-  #study-list .study-speed-panel .speed-btn{flex:1 0 calc(33.333% - 6px);min-width:5em;overflow-wrap:anywhere;}
-  #study-list .study-speed-panel .speed-cost{font-size:.74rem;}
-  #study-list .study-motes-controls label{min-width:0;flex-basis:100%;font-size:.8rem;}
-  #study-list .study-motes-controls select{min-width:0;color-scheme:dark;}
-  #study-list [data-study-speed-close]{margin-top:8px;}
-  #study-list .study-card button:focus,#study-list .study-card select:focus{outline:2px solid var(--lumen);outline-offset:2px;}
-  @media (prefers-reduced-motion:reduce){#study-list .study-bar-fill{transition:none!important;}}
 .legacy-upgrades { margin: 12px 0; }
 .legacy-upgrades h3 { color: var(--ink); overflow-wrap: anywhere; }
 .legacy-upgrade { display: block; overflow-wrap: anywhere; }
@@ -2732,7 +2706,7 @@
         </div>
         <div class="buff-indicator" id="buff-indicator">Boost · passive Wisps + Tap · <strong>Inactive</strong></div>
         <div id="comet-trial-status" class="comet-trial-status" hidden></div>
-        <div class="bond-summary" id="bond-summary" role="group" aria-label="No Formation Bond active.">No Formation Bond active.</div>
+        <div class="bond-summary" id="bond-summary">No Formation Bond active.</div>
         <div id="rift-bond-effects" aria-label="Formation Bond bonuses"></div>
         <div class="stat-row">
           <div class="stat-box"><div class="k">Tap damage</div><div class="v mono" id="stat-tap">1</div></div>
@@ -2775,7 +2749,6 @@
         <div class="prism-preview mono" id="prism-preview">+0 Prisms</div>
         <button class="big-btn" id="ascend-btn">Ascend</button>
         <div class="lock-note" id="ascend-note"></div>
-        <div class="prism-calculation" id="prism-calculation" aria-label="Prism reward calculation"></div>
       </div>
       <div id="auto-ascend-controls"></div>
       <div class="section-label">Ascension Tree</div>
@@ -2963,14 +2936,10 @@ var ABILITY_DESC = {
 };
 
 var FORMATION_BONDS = [
-  {id:'starcaller', name:'Starcaller Bond', ids:['ember','void'], effect:'+18% passive & ability damage', riftEffect:'Passive/ability +18%', tag:'Push'},
-  {id:'dawnpriest', name:'Dawnpriest Bond', ids:['tide','aurora'], effect:'+25% Lumen, Shards & Motes', riftEffect:'Lumen/Shards/Motes +25%', tag:'Farm'},
-  {id:'duskguard', name:'Duskguard Bond', ids:['stone','titan'], effect:'+35% passive & ability damage vs Bosses', riftEffect:'Boss Wisps +35%', tag:'Boss'},
-  {id:'pathfinder', name:'Pathfinder Bond', ids:['gale','thorn'], effect:'+20% passive & ability damage vs non-Bosses', riftEffect:'Non-Boss Wisps +20%', tag:'Push / Farm'},
-  {id:'kindling', name:'Kindling Bond', ids:['ember','tide'], effect:'+25% Guardian Tap damage', riftEffect:'Tap +25%', tag:'Push'},
-  {id:'vanguard', name:'Vanguard Bond', ids:['ember','stone'], effect:'20% less Boss regeneration', riftEffect:'Boss regen −20%', tag:'Boss'},
-  {id:'quarry', name:'Quarry Bond', ids:['stone','gale'], effect:'+20% Shards from Gale abilities', riftEffect:'Gale Shards +20%', tag:'Farm'},
-  {id:'harvest', name:'Harvest Bond', ids:['thorn','aurora'], effect:'+20% Lumen from Thorn abilities', riftEffect:'Thorn Lumen +20%', tag:'Farm'}
+  {id:'starcaller', name:'Starcaller Bond', ids:['ember','void'], effect:'+18% passive & ability damage', tag:'Push'},
+  {id:'dawnpriest', name:'Dawnpriest Bond', ids:['tide','aurora'], effect:'+25% Lumen, Shards & Motes', tag:'Farm'},
+  {id:'duskguard', name:'Duskguard Bond', ids:['stone','titan'], effect:'+35% passive & ability damage vs Bosses', tag:'Boss'},
+  {id:'pathfinder', name:'Pathfinder Bond', ids:['gale','thorn'], effect:'+20% passive & ability damage vs non-Bosses', tag:'Push / Farm'}
 ];
 function formationBondPartners(bond){
   return bond.ids.map(function(id){
@@ -2982,11 +2951,7 @@ var BOND_VISUALS = {
   starcaller:{color:'#c4adff',mark:'◆'},
   dawnpriest:{color:'#ffd079',mark:'●'},
   duskguard:{color:'#7edbed',mark:'■'},
-  pathfinder:{color:'#abe58d',mark:'▲'},
-  kindling:{color:'#ffc29c',mark:'✦'},
-  vanguard:{color:'#d4c3a4',mark:'◇'},
-  quarry:{color:'#b3d6ff',mark:'□'},
-  harvest:{color:'#e2b5d5',mark:'○'}
+  pathfinder:{color:'#abe58d',mark:'▲'}
 };
 var FORMATION_PRESET_IDS = ['push','farm','boss'];
 var FORMATION_PRESET_LABELS = {push:'Push',farm:'Farm',boss:'Boss'};
@@ -3172,18 +3137,17 @@ function nodeEarnedEffect(id){
   var discount=costReduction();
   return earnedPercent(discount)+'% Wisp recruiting discount; also applies to Empower · '+earnedPercent(1-discount)+'% cost'+(discount>=0.6?' (cost floor reached)':'');
 }
-function projectEarnedEffect(id,level){
-  if(level===undefined) level=longStudyLevel(id);
-  if(id==='measuredinquiry') return earnedPercent(0.02*studyEffectiveLevel(LONG_STUDIES.find(function(n){return n.id===id;}),level))+'% less work for future starts of the '+CURRENT_STUDY_IDS.length+' current Studies; running work and Measured Inquiry are unchanged';
+function projectEarnedEffect(id){
+  if(id==='measuredinquiry') return earnedPercent(measuredInquiryReduction())+'% less work for future starts of the 5 current Studies';
   var rows={
-    wispascend:[level*0.15,'passive Wisp damage and Wisp-powered tap base'],
-    guardmastery:[level*0.20,'tap damage'],
-    riftattune:[level*0.10,'percentage points offline rate'],
-    shardstudy:[level*0.08,'Shards per kill'],
-    lumenstudy:[level*0.08,'Lumen per kill'],
-    formationstudy:[level*0.05,'passive Wisp damage and Wisp-powered tap base'],
-    motestudy:[level*0.10,'Motes from Luminous enemies'],
-    prismstudy:[level*0.05,'Prisms per Ascend']
+    wispascend:[longStudyPowerMult()-1,'passive Wisp damage and Wisp-powered tap base'],
+    guardmastery:[longStudyTapMult()-1,'tap damage'],
+    riftattune:[longStudyOfflineBonus(),'percentage points offline rate'],
+    shardstudy:[longStudyShardMult()-1,'Shards per kill'],
+    lumenstudy:[longStudyLumenMult()-1,'Lumen per kill'],
+    formationstudy:[longStudyFormationMult()-1,'passive Wisp damage and Wisp-powered tap base'],
+    motestudy:[longStudyMoteMult()-1,'Motes from Luminous enemies'],
+    prismstudy:[longStudyPrismMult()-1,'Prisms per Ascend']
   };
   var row=rows[id];
   return '+'+earnedPercent(row[0])+(id==='riftattune'?' ':'% ')+row[1];
@@ -3191,8 +3155,8 @@ function projectEarnedEffect(id,level){
 function projectEarnedMarkup(id){
   var level=longStudyLevel(id);
   var node=LONG_STUDIES.find(function(n){return n.id===id;});
-  var preserved=node.levelCap!==undefined && level>node.levelCap ? ' · Saved purchases preserved; effect capped.' : '';
-  return '<div class="earned-effect" data-project-effect="'+id+'">Earned: '+projectEarnedEffect(id)+preserved+'</div>';
+  var preserved=node.levelCap!==undefined && level>node.levelCap ? ' · Preserved; effect capped at level '+node.levelCap : '';
+  return '<div class="earned-effect" data-project-effect="'+id+'"><strong>Completed level '+level+preserved+'</strong><br>Current Project bonus: '+projectEarnedEffect(id)+(level===0?' · No earned bonus':'')+'</div>';
 }
 
 var RIFT_THEMES = [
@@ -4149,7 +4113,7 @@ function bossTraitFor(depth){
 }
 function bossRegenRate(depth){
   var trait = bossTraitFor(depth);
-  return trait ? trait.regen * (bondActive('vanguard') ? 0.8 : 1) : 0;
+  return trait ? trait.regen : 0;
 }
 function bossAbilityDamageMult(depth){
   var trait = bossTraitFor(depth);
@@ -4347,9 +4311,9 @@ function formationRewardMult(){
   return bondActive('dawnpriest') ? 1.25 : 1;
 }
 function currentFormationFocus(){
-  if(state.riftMode==='farm') return {label:'Farm', bonds:['dawnpriest','pathfinder','quarry','harvest']};
-  if(isBoss(state.depth)) return {label:'Boss', bonds:['starcaller','duskguard','vanguard']};
-  return {label:'Push', bonds:['starcaller','pathfinder','kindling']};
+  if(state.riftMode==='farm') return {label:'Farm', bonds:['dawnpriest','pathfinder']};
+  if(isBoss(state.depth)) return {label:'Boss', bonds:['starcaller','duskguard']};
+  return {label:'Push', bonds:['starcaller','pathfinder']};
 }
 function formationRecommendationText(){
   var focus = currentFormationFocus();
@@ -4378,14 +4342,14 @@ function formationRecommendationText(){
  * do not modify ability hits.
  *
  * Ability Rewards = Wisp Power × reward coefficient × that Ranged/Druid Module
- * × Ultimate × Dawnpriest reward multiplier × Quarry/Harvest when applicable. Kill-only Lumen/Shard multipliers
+ * × Ultimate × Dawnpriest reward multiplier. Kill-only Lumen/Shard multipliers
  * do not modify ability-generated resources.
  *
  * Support Buff = fixed by the Support ability: +25% for 4s, or +50% for 8s
  * with its Ultimate. Wisp Power, Rarity and Modules do not change this buff.
  *
  * Guardian Tap = (5 + 2% of general Active-party passive power) × Tap-specific
- * upgrades × active Support buff × bossTapDamageMult() × Kindling. Auto-Tap uses the exact
+ * upgrades × active Support buff × bossTapDamageMult(). Auto-Tap uses the exact
  * same hit formula. Context-only Duskguard/Pathfinder damage Bonds do not
  * directly multiply Guardian Tap.
  */
@@ -4461,7 +4425,7 @@ function guardianTapBaseDamage(){
   return 5 + effectivePartyPower()*0.02;
 }
 function guardianTapDamageAt(depth, partyBuffMult){
-  return guardianTapBaseDamage() * tapMult() * (partyBuffMult||1) * bossTapDamageMult(depth) * (bondActive('kindling') ? 1.25 : 1);
+  return guardianTapBaseDamage() * tapMult() * (partyBuffMult||1) * bossTapDamageMult(depth);
 }
 function tapDamage(){
   return guardianTapDamageAt(state.depth, simulationBuffMult(Date.now()));
@@ -4518,8 +4482,8 @@ function abilityRewardRaw(sp,level,conductionLevel){
   var power = wispPower(sp,level);
   var mult = moduleMult(sp.id) * abilityUltimateMult(sp) * formationRewardMult() * researchFactor('conduction',conductionLevel);
   return {
-    lumen:sp.abilityType==='druid' ? power*0.10*mult*(bondActive('harvest')?1.20:1) : 0,
-    shards:sp.abilityType==='ranged' ? power*0.05*mult*(bondActive('quarry')?1.20:1) : 0
+    lumen:sp.abilityType==='druid' ? power*0.10*mult : 0,
+    shards:sp.abilityType==='ranged' ? power*0.05*mult : 0
   };
 }
 function abilityRewardPerCast(sp,level,conductionLevel){
@@ -5522,13 +5486,6 @@ function ascendFullPrismGainForCleared(cleared){
   cleared = Math.max(0,Math.floor(cleared||0));
   return cleared>=15 ? Math.max(1,Math.floor(2*Math.sqrt(cleared)*prismMult())) : 0;
 }
-// Approved F05 policy: round the unrounded new-depth difference up once.
-// Rationalize sqrt(c)-sqrt(b) to preserve small positive depth increments.
-function ascendProgressPrismBonusForCleared(cleared,benchmark){
-  if(cleared<=benchmark) return 0;
-  var rawDifference = 2*((cleared-benchmark)/(Math.sqrt(cleared)+Math.sqrt(benchmark)));
-  return Math.ceil(rawDifference*prismMult());
-}
 function ascendPrismBreakdown(depth){
   var cleared = Math.max(0,(depth===undefined ? progressionDepth() : depth)-1);
   var full = ascendFullPrismGainForCleared(cleared);
@@ -5546,7 +5503,8 @@ function ascendPrismBreakdown(depth){
   // rewarded cleared Rift adds only the newly unlocked part of the same Prism
   // curve. No new currency/layer is introduced.
   var reserve = Math.max(1,Math.floor(full*ASCEND_REPEAT_REWARD_RATE));
-  var progressBonus = ascendProgressPrismBonusForCleared(cleared,benchmark);
+  var benchmarkFull = ascendFullPrismGainForCleared(benchmark);
+  var progressBonus = cleared>benchmark ? Math.max(0,full-benchmarkFull) : 0;
   var gain = Math.max(1,Math.min(full,reserve+progressBonus));
   return {
     gain:gain,
@@ -5678,14 +5636,9 @@ function presentControlStates(root){
     var spId=btn.getAttribute('data-empower') || btn.getAttribute('data-rarity') || btn.getAttribute('data-module') || btn.getAttribute('data-ultimate') || btn.getAttribute('data-sigil-resonate') || btn.getAttribute('data-empower-queue') || btn.getAttribute('data-toggle');
     var sp=spId && SPIRITS.find(function(item){return item.id===spId;});
     if(sp) subject=sp.name;
-    if(btn.hasAttribute('data-study') || btn.hasAttribute('data-study-details') || btn.hasAttribute('data-study-speed-close')){
-      var studyId=btn.getAttribute('data-study') || btn.getAttribute('data-study-details') || btn.getAttribute('data-study-speed-close');
-      var studyNode=LONG_STUDIES.find(function(n){return n.id===studyId;});
+    if(btn.hasAttribute('data-study')){
+      var studyNode=LONG_STUDIES.find(function(n){return n.id===btn.getAttribute('data-study');});
       if(studyNode) subject=studyNode.name;
-    }
-    if(btn.hasAttribute('data-node')){
-      var treeNode=NODES.find(function(n){return n.id===btn.getAttribute('data-node');});
-      if(treeNode) subject=treeNode.name;
     }
     var queueAttr=toggles.find(function(attr){return btn.hasAttribute('data-'+attr);});
     if(queueAttr){
@@ -6068,7 +6021,7 @@ function updateBattleFast(){
     bossStatus.setAttribute('data-regen',String(regenPerSec));
     bossStatus.setAttribute('data-dps',String(yourDps));
     bossStatus.setAttribute('data-net',String(netDps));
-    var bossText='<strong>Regen +'+formatRiftNumber(regenPerSec)+' HP/s</strong><span class="boss-net '+(enough?'positive':'negative')+'">Auto DPS ≈ '+formatRiftNumber(yourDps)+'<span class="boss-net-value"> · Net '+(netDps>0?'+':netDps<0?'−':'')+formatRiftNumber(Math.abs(netDps))+'/s</span></span>';
+    var bossText='<strong>Regen +'+formatRiftNumber(regenPerSec)+' HP/s</strong><span class="boss-net '+(enough?'positive':'negative')+'">Auto DPS ≈ '+formatRiftNumber(yourDps)+' · Net '+(netDps>0?'+':netDps<0?'−':'')+formatRiftNumber(Math.abs(netDps))+'/s</span>';
     if(bossStatus.innerHTML!==bossText)bossStatus.innerHTML=bossText;
     bossStatus.setAttribute('aria-label','Boss regeneration '+regenPerSec+' HP per second. Estimated sustained damage '+yourDps+' per second, including abilities and Auto-Tap, excluding manual taps. Net '+netDps+' HP per second. Burst timing can change the result.');
     els['enemy-stage'].classList.add(enough ? 'boss-ready' : 'boss-wall');
@@ -6159,14 +6112,13 @@ function renderBondSummary(){
   if(!els['bond-summary']) return;
   var active = activeFormationBonds();
   var summary = active.length
-    ? active.map(function(b){return '<span style="color:'+BOND_VISUALS[b.id].color+'">'+b.name.replace(' Bond','')+'</span>';}).join(' · ')
+    ? 'Active Bonds: ' + active.map(function(b){return '<span style="color:'+BOND_VISUALS[b.id].color+'">'+b.name.replace(' Bond','')+'</span>';}).join(' · ')
     : 'No Formation Bond active.';
   if(els['bond-summary'].innerHTML!==summary) els['bond-summary'].innerHTML = summary;
-  els['bond-summary'].setAttribute('aria-label',active.length ? 'Active Bonds: '+active.map(function(b){return b.name;}).join(', ') : 'No Formation Bond active.');
   var effects=els['rift-bond-effects'];
   var html=active.map(function(b){
     var visual=BOND_VISUALS[b.id];
-    return '<div class="rift-bond-effect" data-bond-effect="'+b.id+'" style="--bond-color:'+visual.color+'" aria-label="'+b.name+': '+b.effect+'"><span class="rift-bond-mark" aria-hidden="true">'+visual.mark+'</span><span class="rift-bond-copy">'+(b.riftEffect||b.effect)+'</span></div>';
+    return '<div class="rift-bond-effect" data-bond-effect="'+b.id+'" style="--bond-color:'+visual.color+'" aria-label="'+b.name+': '+b.effect+'"><span class="rift-bond-mark" aria-hidden="true">'+visual.mark+'</span><span class="rift-bond-copy">'+b.effect+'</span></div>';
   }).join('');
   if(effects.innerHTML!==html) effects.innerHTML=html;
   effects.hidden=!active.length;
@@ -6175,12 +6127,10 @@ function renderBondSummary(){
 // The DOM is retained between ticks; these observers never mutate save state.
 function renderRiftParty(){
   var root=els['rift-party'];
-  var bonds=activeFormationBonds(),byId={},memberships={},ordered=[];
-  // Disjoint primary pairs can sit together. Overlapping Bonds retain their
-  // own marks on both partners without duplicating a Wisp's combat card.
+  var bonds=activeFormationBonds(),byId={},ordered=[];
+  // Group each powered Bond visually without changing simulation/save order.
   bonds.forEach(function(bond){
-    bond.ids.forEach(function(id){if(!memberships[id])memberships[id]=[];memberships[id].push(bond);});
-    if(bond.ids.every(function(id){return !byId[id];})) bond.ids.forEach(function(id){byId[id]=bond;ordered.push(id);});
+    state.activeParty.filter(function(id){return bond.ids.indexOf(id)!==-1;}).forEach(function(id){byId[id]=bond;ordered.push(id);});
   });
   state.activeParty.forEach(function(id){if(!byId[id])ordered.push(id);});
   var key=state.activeParty.join(',')+'|'+bonds.map(function(b){return b.id;}).join(',');
@@ -6189,10 +6139,9 @@ function renderRiftParty(){
     root.innerHTML=ordered.map(function(id,index){
       var sp=SPIRITS.find(function(x){return x.id===id;}),bond=byId[id],visual=bond&&BOND_VISUALS[bond.id];
       var position=bond ? (byId[ordered[index+1]]===bond?' bond-start':' bond-end') : '';
-      var all=memberships[id]||[];
-      var marker=all.length ? '<span class="rift-wisp-bonds">'+all.map(function(item){var v=BOND_VISUALS[item.id];return '<span class="rift-bond-mark" data-wisp-bond="'+item.id+'" style="--bond-color:'+v.color+'" aria-hidden="true">'+v.mark+'</span>';}).join('')+'</span>' : '';
-      return '<div class="rift-wisp'+position+'" data-rift-wisp="'+id+'"'+(bond?' data-bond="'+bond.id+'"':'')+' role="group" aria-label="'+sp.name+(all.length?' — '+all.map(function(item){return item.name;}).join(', '):'')+'" style="--wisp-color:'+sp.color+(visual?';--bond-color:'+visual.color:'')+'">'+wispPortrait(sp)+marker+
-        '<span class="rift-wisp-name">'+sp.shortName+'</span><span class="rift-wisp-state"></span><span class="rift-wisp-power" title="Passive Wisp power"></span>'+
+      var marker=visual ? '<span class="rift-bond-mark" aria-hidden="true">'+visual.mark+'</span>' : '';
+      return '<div class="rift-wisp'+position+'" data-rift-wisp="'+id+'"'+(bond?' data-bond="'+bond.id+'"':'')+' role="group" aria-label="'+sp.name+(bond?' — '+bond.name:'')+'" style="--wisp-color:'+sp.color+(visual?';--bond-color:'+visual.color:'')+'">'+wispPortrait(sp)+
+        '<span class="rift-wisp-name">'+marker+sp.shortName+'</span><span class="rift-wisp-state"></span><span class="rift-wisp-power" title="Passive Wisp power"></span>'+
         '<div class="rift-charge" role="progressbar" aria-label="'+sp.name+' — '+sp.abilityName+'" aria-valuemin="0" aria-valuemax="100"><span></span></div></div>';
     }).join('');
   }
@@ -6546,40 +6495,14 @@ function renderResearch(){
 
 function studyMotesMarkup(node){
   var on=state.studyUseMotes[node.id]===true,target=state.studySpeedTargets[node.id];
-  return '<div class="study-motes-controls"><button class="node-queue-toggle '+(on?'active':'')+'" data-study-use-motes="'+node.id+'">Queue speed up '+(on?'ON':'OFF')+'</button>'+
-    '<label>Queued speed<select data-study-speed-target="'+node.id+'" aria-label="'+node.name+' — Queued speed">'+LAB_SPEED_TIERS.map(function(mult){
+  return '<div class="study-motes-controls"><button class="node-queue-toggle '+(on?'active':'')+'" data-study-use-motes="'+node.id+'">Use Motes '+(on?'ON':'OFF')+'</button>'+
+    '<label>Repeat speed<select data-study-speed-target="'+node.id+'" aria-label="'+node.name+' — Repeat speed">'+LAB_SPEED_TIERS.map(function(mult){
       return '<option value="'+mult+'" '+(mult===target?'selected':'')+'>'+mult+'x · '+speedTierCost(mult)+' Motes per level</option>';
     }).join('')+'</select></label></div>';
 }
-// Disclosure state is presentation-only; saving it must never buy speed or work.
-var openStudySpeedId=null;
-function studySpeedMarkup(node,active,maxed){
-  var open=openStudySpeedId===node.id;
-  return '<button class="mini-btn study-speed-open" id="study-speed-open-'+node.id+'" data-study-details="'+node.id+'" aria-expanded="'+open+'" aria-controls="study-speed-panel-'+node.id+'">Speed up</button>'+
-    '<div class="study-speed-panel" id="study-speed-panel-'+node.id+'" data-study-inspection="'+node.id+'" role="region" aria-labelledby="study-speed-open-'+node.id+'" '+(open?'':'hidden')+'>'+
-    '<div class="effect-note">'+(active?'Current speed: '+active.speedMult+'x. Buy a higher speed for this paid level.':'Begin a Study to buy speed for its current level.')+'</div>'+
-    (active?'<div class="speed-row">'+LAB_SPEED_TIERS.map(function(mult){
-      var current=active.speedMult===mult,acquired=active.speedMult>=mult;
-      return '<button class="speed-btn '+(current?'active':'')+'" data-speed="'+mult+'" data-speed-study="'+node.id+'" '+((acquired||state.motes<speedTierCost(mult)||maxed||active.remainingSec<=SIM_EPS)?'disabled':'')+'>'+mult+'x'+
-        '<span class="speed-cost">'+costIcon('mote')+formatNum(speedTierCost(mult))+'</span>'+(current?'Current':acquired?'Covered':maxed?'Unavailable':'')+'</button>';
-    }).join('')+'</div>':'')+
-    studyMotesMarkup(node)+
-    '<p class="effect-note">Study Queue starts the next paid level at 1x. Queue speed up pays the full selected price for each active level when Motes are available, including offline. While waiting, work continues at its paid speed. OFF keeps speed already paid for.</p>'+
-    '<button class="mini-btn" data-study-speed-close="'+node.id+'">Close speed up</button></div>';
-}
-function closeStudySpeed(id){
-  openStudySpeedId=null;
-  renderLongStudies();
-  var opener=els['study-list'].querySelector('[data-study-details="'+id+'"]');
-  if(opener) opener.focus();
-}
 function renderLongStudies(){
-  var focusedCard=document.activeElement && document.activeElement.closest('[data-running-study],[data-study-card]');
-  var focusedStudy=focusedCard && (focusedCard.getAttribute('data-running-study') || focusedCard.getAttribute('data-study-card'));
-  var focusedLegacy=document.activeElement && document.activeElement.getAttribute('data-legacy-upgrade');
-  var focusedBegin=document.activeElement && document.activeElement.getAttribute('data-study');
-  var focusedSpeed=document.activeElement && document.activeElement.getAttribute('data-speed-study');
-  var focusedTier=focusedSpeed && document.activeElement.getAttribute('data-speed');
+  var openInspections=Array.from(els['study-list'].querySelectorAll('details[open]')).map(function(el){return el.dataset.studyInspection;});
+  var focusedInspection=document.activeElement && document.activeElement.dataset.studyDetails;
   renderLabCapacityBadge();
   var slots = studySlotCount();
   var openSlots = slots - state.activeStudies.length;
@@ -6592,7 +6515,6 @@ function renderLongStudies(){
       var node = LONG_STUDIES.find(function(n){ return n.id===active.id; });
       var maxed=node && node.levelCap!==undefined && longStudyLevel(active.id)>=node.levelCap;
       var pct = Math.max(0, Math.min(100, 100-(active.remainingSec/active.totalDurationSec*100)));
-      var progressValue=active.remainingSec>0?Math.min(99,Math.round(pct)):100;
       var queueOnActive = !!state.studyQueue[active.id];
       html += '<div class="card study-card study-running" data-running-study="'+active.id+'">' +
         '<div class="study-running-label">'+(maxed?'Finishing paid Study':index===0?'Next completion':'Running')+'</div>' +
@@ -6602,11 +6524,24 @@ function renderLongStudies(){
         (node ? projectEarnedMarkup(active.id) : '') +
         (node && node.retiredTo?'<div class="effect-note">Last paid level: work, speed and completion bonus kept. Future upgrades: '+node.retiredTo+'.</div>':'') +
         '<div class="effect-note">'+(maxed?'Level cap already reached. Paid work finishes without another level or bonus.':
-          'On completion: '+projectEarnedEffect(active.id,longStudyLevel(active.id)+1)+'.')+'</div>' +
-        '<div class="study-bar-track" role="progressbar" aria-label="'+(node?node.name:'Study')+' progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+progressValue+'" aria-valuetext="'+progressValue+'% · '+studyRemainingText(active)+'">'+
-          '<div class="study-bar-fill" aria-hidden="true" data-study-bar="'+active.id+'" style="width:'+pct+'%;"></div>'+
-          '<span class="study-time" data-study-text="'+active.id+'">'+studyRemainingText(active)+'</span></div>' +
-        (node ? studySpeedMarkup(node,active,maxed) : '') +
+          'In progress: level '+(longStudyLevel(active.id)+1)+' · bonus earned only on completion.'+(active.id==='measuredinquiry'?' Next: '+earnedPercent(0.02*studyEffectiveLevel(node,longStudyLevel(active.id)+1))+'% less work.':''))+'</div>' +
+        '<div class="study-time" data-study-text="'+active.id+'">'+studyRemainingText(active)+'</div>' +
+        '<div class="study-bar-track"><div class="study-bar-fill" data-study-bar="'+active.id+'" style="width:'+pct+'%;"></div></div>' +
+        (node ? studyMotesMarkup(node) : '') +
+        '<details class="study-inspection" data-study-inspection="'+active.id+'" '+(openInspections.indexOf(active.id)!==-1?'open':'')+'><summary data-study-details="'+active.id+'">'+(node?node.name:'Study')+' · Details &amp; speed</summary>' +
+        (node ? '<div class="desc">'+node.desc+'</div>' : '') +
+        '<div class="section-sub" style="margin:8px 0;">Spend Motes to speed this Study up:</div>' +
+        '<div class="speed-row">' +
+          LAB_SPEED_TIERS.map(function(mult){
+            var mcost = speedTierCost(mult);
+            var isActive = active.speedMult===mult;
+            var acquired = active.speedMult>=mult;
+            var affordable = state.motes>=mcost;
+            return '<button class="speed-btn '+(isActive?'active':'')+'" data-speed="'+mult+'" data-speed-study="'+active.id+'" '+((acquired||!affordable||maxed)?'disabled':'')+'>'+mult+'x' +
+              (acquired ? (isActive?' · Current':' · Unlocked') : maxed ? ' · Unavailable' : '<span class="speed-cost">'+costIcon('mote')+formatNum(mcost)+'</span>') +
+              '</button>';
+          }).join('') +
+        '</div></details>' +
       '</div>';
     });
   }
@@ -6630,62 +6565,25 @@ function renderLongStudies(){
     var level=plan.level,cost=plan.cost,dur=plan.duration;
     var queueOn = !!state.studyQueue[lnode.id];
     html += '<div class="card study-card" data-study-card="'+lnode.id+'" data-state="'+(plan.maxed?'maxed':plan.affordable?'affordable':'unavailable')+'" style="margin-bottom:10px;">' +
-      '<div class="name">'+lnode.name+' <span style="color:var(--mote);">'+(plan.maxed?'Lv.'+level+' · Maxed':'Next Lv.'+(level+1))+'</span>' +
+      '<div class="name">'+lnode.name+' <span style="color:var(--mote);">Lv.'+level+'</span>' +
         ' <button class="node-queue-toggle '+(queueOn?'active':'')+'" data-study-queue="'+lnode.id+'">Queue '+(queueOn?'ON':'OFF')+'</button>' +
       '</div>' +
+      '<div class="desc">'+lnode.desc+'</div>' +
       projectEarnedMarkup(lnode.id) +
-      '<div class="effect-note">'+(plan.maxed?'Effect cap reached. Queue '+(queueOn?'ON':'OFF')+' retained; no new starts.':
-        'On completion: '+projectEarnedEffect(lnode.id,level+1)+'.')+'</div>' +
+      '<div class="effect-note">'+(plan.maxed?'Maxed at level '+lnode.levelCap+'. Queue '+(queueOn?'ON':'OFF')+' retained; no new starts.':
+        'Next: level '+(level+1)+' · bonus earned only on completion.'+(lnode.id==='measuredinquiry'?' Next: '+earnedPercent(0.02*studyEffectiveLevel(lnode,level+1))+'% less work.':''))+'</div>' +
       (plan.maxed?'':'<div class="study-meta" id="study-price-'+lnode.id+'">Takes '+fmtStudyDuration(dur)+' &middot; '+costIcon('lumen')+formatNum(cost.lumen)+' '+costIcon('shard')+formatNum(cost.shard)+'</div>') +
       '<button class="mini-btn" data-study="'+lnode.id+'" '+(plan.maxed?'':'aria-describedby="study-price-'+lnode.id+'" ')+(plan.affordable?'':'disabled')+' style="margin-top:10px;width:100%;">'+(plan.maxed?'Maxed':plan.reason==='unavailable'?'Unavailable':openSlots>0?'Begin Study':'No open slots')+'</button>' +
-      studySpeedMarkup(lnode,null,plan.maxed) +
+      studyMotesMarkup(lnode) +
     '</div>';
   });
 
-  html += legacyUpgradeSection(legacyHtml)+'<div class="section-sub">Lab: permanent damage, kill rewards, Mote yield and Study work. Slot capacity rises at Rift 40, 60 and 90. Studies share the 12-hour offline limit with rewards and automation. Study Queue begins its next paid level when a slot and currency are free.</div>';
+  html += legacyUpgradeSection(legacyHtml)+'<div class="section-sub">Lab: permanent damage, kill rewards, Mote yield and Study work. Slot capacity rises at Rift 40, 60 and 90. Studies share the 12-hour offline limit with rewards and automation. Study Queue begins the next paid level. Use Motes buys the selected repeat speed for each active level, including manual starts, as soon as its full price is available. OFF keeps speed already paid for.</div>';
   replaceControlMarkup(els['study-list'],html);
-  // Beginning removes its button; keep focus on this Study's visible card action.
-  if(focusedBegin && findActiveStudy(focusedBegin)){
-    var beganOpener=els['study-list'].querySelector('[data-study-details="'+focusedBegin+'"]');
-    if(beganOpener) beganOpener.focus();
+  if(focusedInspection){
+    var restoredInspection=els['study-list'].querySelector('[data-study-details="'+focusedInspection+'"]');
+    if(restoredInspection) restoredInspection.focus({preventScroll:true});
   }
-  // Keep available panel controls focused. If completion removes the panel or a
-  // purchase disables its tier, restore a visible target for the same Study.
-  if(focusedSpeed || focusedStudy){
-    var sameTier=els['study-list'].querySelector('[data-speed-study="'+focusedSpeed+'"][data-speed="'+focusedTier+'"]');
-    var cardRemoved=focusedStudy && !els['study-list'].querySelector('[data-running-study="'+focusedStudy+'"],[data-study-card="'+focusedStudy+'"]');
-    if(cardRemoved || (focusedSpeed && (!sameTier || sameTier.disabled))){
-      var restoreStudy=focusedStudy || focusedSpeed;
-      var speedFocus=els['study-list'].querySelector('[data-study-details="'+restoreStudy+'"]') ||
-        els['study-list'].querySelector('[data-legacy-upgrade="'+restoreStudy+'"]') || document.getElementById('study-choices');
-      if(speedFocus){speedFocus.tabIndex=speedFocus.tagName==='BUTTON'?0:-1;speedFocus.focus();}
-    }
-  }
-  if(focusedLegacy){
-    var preservedFocus=els['study-list'].querySelector('[data-legacy-upgrade="'+focusedLegacy+'"]');
-    if(preservedFocus){preservedFocus.tabIndex=-1;preservedFocus.focus();}
-  }
-  els['study-list'].querySelectorAll('[data-study-details]').forEach(function(btn){
-    var node=LONG_STUDIES.find(function(n){return n.id===btn.dataset.studyDetails;});
-    btn.setAttribute('aria-label',node.name+' — Speed up');
-    btn.addEventListener('click',function(){
-      var id=btn.dataset.studyDetails;
-      if(openStudySpeedId===id){closeStudySpeed(id);return;}
-      openStudySpeedId=id;
-      renderLongStudies();
-    });
-  });
-  els['study-list'].querySelectorAll('[data-study-speed-close]').forEach(function(btn){
-    btn.addEventListener('click',function(){closeStudySpeed(btn.dataset.studySpeedClose);});
-  });
-  els['study-list'].querySelectorAll('.study-speed-panel').forEach(function(panel){
-    panel.addEventListener('keydown',function(e){
-      // Escape belongs to a native select while its menu is being used.
-      if(e.key==='Escape' && e.target.tagName!=='SELECT'){
-        e.preventDefault();closeStudySpeed(panel.dataset.studyInspection);
-      }
-    });
-  });
   var choose=els['study-list'].querySelector('[data-study-choose]');
   if(choose) choose.addEventListener('click',function(){
     var target=document.getElementById('study-choices');
@@ -6728,30 +6626,6 @@ function renderLongStudies(){
   });
 }
 
-// Display approximations are marked; the canonical breakdown determines payout.
-function prismCalculationText(breakdown){
-  var tree=1+nodeLevel('swift')*0.04,lab=longStudyPrismMult();
-  var base=2*Math.sqrt(breakdown.cleared),raw=base*prismMult();
-  function approximate(value){return 'about '+value.toFixed(3);}
-  var rows=[['Cleared Rift',String(breakdown.cleared)],
-    ['Depth reward before bonuses',approximate(base)],
-    ['Swift Ascension',nodeLevel('swift')+' levels · +'+(nodeLevel('swift')*4)+'%'],
-    ['Ascendant Clarity',longStudyLevel('prismstudy')+' completed levels · +'+(longStudyLevel('prismstudy')*5)+'%'],
-    ['Combined bonus',approximate(tree*lab)+'×']];
-  if(breakdown.full>0){
-    rows.push(['With bonuses, before rounding',approximate(raw)]);
-    rows.push(['Full depth reward',String(breakdown.full)+' Prisms']);
-    if(breakdown.benchmark>0){
-      rows.push(['Best rewarded clear','Rift '+breakdown.benchmark]);
-      rows.push(['20% repeat reward',String(breakdown.reserve)+' Prisms']);
-      if(breakdown.cleared>breakdown.benchmark) rows.push(['New-depth bonus',String(breakdown.progressBonus)+' Prisms']);
-    }
-  }
-  rows.push(['You receive now',String(breakdown.gain)+' Prisms']);
-  return '<dl>'+rows.map(function(row){return '<dt>'+row[0]+'</dt><dd>'+row[1]+'</dd>';}).join('')+'</dl>'+
-    '<p>Tree and completed Lab bonuses multiply together before the full reward is rounded down. Repeats round 20% of that whole reward down again. A small upgrade may keep the same whole-Prism reward. Lab work in progress adds its bonus when it finishes.</p>'+
-    (breakdown.cleared>breakdown.benchmark && breakdown.benchmark>0 ? '<p>The new-depth bonus uses the difference between the depth curves before rounding, with your current Tree and Lab bonuses. That difference is rounded up once; the total cannot exceed the full depth reward.</p>' : '');
-}
 function renderAscendSummary(){
   var autoRoot=els['auto-ascend-controls'];
   var editingAuto=autoRoot && autoRoot.contains(document.activeElement);
@@ -6761,11 +6635,10 @@ function renderAscendSummary(){
   var eligible = ascendEligible();
   var breakdown = ascendPrismBreakdown(progressionDepth());
   var gain = eligible ? breakdown.gain : 0;
-  document.getElementById('prism-calculation').innerHTML = prismCalculationText(breakdown);
   els['prism-preview'].textContent = '+' + formatNum(gain) + ' Prisms';
   els['ascend-btn'].disabled = !eligible;
   els['ascend-btn'].setAttribute('data-state',eligible?'available':'locked');
-  els['ascend-btn'].setAttribute('aria-describedby','ascend-note prism-calculation');
+  els['ascend-btn'].setAttribute('aria-describedby','ascend-note');
   var ascendTab = document.querySelector('.tab-btn[data-tab="ascend"]');
   if(ascendTab) ascendTab.classList.toggle('has-attention',eligible);
   if(!eligible){
@@ -6773,9 +6646,9 @@ function renderAscendSummary(){
   } else if(breakdown.benchmark<=0){
     els['ascend-note'].textContent = 'First reward benchmark — this Ascend receives the full depth reward.';
   } else if(cleared>breakdown.benchmark){
-    els['ascend-note'].textContent = 'New progress: '+formatNum(breakdown.reserve)+' repeat reward + '+formatNum(breakdown.progressBonus)+' new-depth bonus, up to '+formatNum(breakdown.full)+' Prisms. Best rewarded clear becomes Rift '+cleared+'.';
+    els['ascend-note'].textContent = 'New progress: '+formatNum(breakdown.reserve)+' reserve + '+formatNum(breakdown.progressBonus)+' depth bonus. Benchmark becomes cleared Rift '+cleared+'.';
   } else {
-    els['ascend-note'].textContent = 'Repeat reward: 20% of your full reward, rounded down (at least 1 Prism). Clear beyond Rift '+breakdown.benchmark+' to add a new-depth bonus.';
+    els['ascend-note'].textContent = 'Repeat reward: 20% reserve. Push beyond cleared Rift '+breakdown.benchmark+' to add a depth bonus.';
   }
   renderAutoAscendControls();
   // Changed reward text may wrap while a native picker is open. Flush that
@@ -8550,7 +8423,7 @@ function studyRemainingText(active){
   if(!active || !Number.isFinite(active.remainingSec) || active.remainingSec<0 ||
       !Number.isFinite(active.speedMult) || active.speedMult<=0) return 'Time unavailable';
   // Membership in activeStudies still means pending authoritative completion.
-  if(active.remainingSec===0) return 'Finishing… · '+active.speedMult+'x';
+  if(active.remainingSec===0) return 'Finishing…';
   var duration = fmtStudyDuration(Math.max(Number.MIN_VALUE,active.remainingSec/active.speedMult));
   return duration==='Time unavailable' ? duration : duration+' remaining · '+active.speedMult+'x';
 }
@@ -8560,13 +8433,9 @@ function updateStudyProgress(){
     var textEl = els['study-list'].querySelector('[data-study-text="'+active.id+'"]');
     if(!fillEl || !textEl) return;
     var pct = Math.max(0, Math.min(100, 100 - (active.remainingSec/active.totalDurationSec*100)));
-    var progressValue=active.remainingSec>0?Math.min(99,Math.round(pct)):100;
     fillEl.style.width = pct+'%';
     var text = studyRemainingText(active);
     if(textEl.textContent!==text) textEl.textContent = text;
-    var track=fillEl.parentElement;
-    track.setAttribute('aria-valuenow',String(progressValue));
-    track.setAttribute('aria-valuetext',progressValue+'% · '+text);
   });
 }
 
@@ -8622,7 +8491,7 @@ function checkAffordability(){
     var acquired = active.speedMult>=mult;
     var node=LONG_STUDIES.find(function(n){return n.id===active.id;});
     var maxed=node && node.levelCap!==undefined && longStudyLevel(active.id)>=node.levelCap;
-    btn.disabled = acquired || maxed || active.remainingSec<=SIM_EPS || state.motes<speedTierCost(mult);
+    btn.disabled = acquired || maxed || state.motes<speedTierCost(mult);
   });
   ['spirit-list','research-list','study-list','node-list','shop-list'].forEach(function(id){presentControlStates(els[id]);});
   renderAutoAscendControls();
