@@ -119,3 +119,11 @@ without rewriting future history.15 direct checks cover raw0/20/21 and malformed
 versions, missing legacy markers remain compatible, V8 6.0 rejects them, and an
 actual unsupported-version primary falls back to the intact recovery slot. A
 version-check mutation is caught.553 focused assertions/26 result groups pass.
+
+CI37755569019 failed in the newly integrated Rift cosmetic gate before any
+assertion:Target.createTarget timeout. Full failure log retained. Unmodified
+Rift168 samples and F21 Node20 checks pass locally on38594553. Its gate now
+records resolved browser/protocol identity and stderr, waits for the browser
+version handshake and allows30s protocol startup. Assertions are unchanged;
+this scoped delivery fix diagnoses/handles cold browser startup without skipping
+the new required gate. Native input/product bytes remain unchanged.
