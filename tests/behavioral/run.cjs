@@ -89,6 +89,7 @@ async function browserIdentity(chrome) {
 async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, options = {}) {
   const log = options.log || console.log;
   const urlFor = page => baseUrl + page + '?' + new URLSearchParams({ qaScenario: scenario, qaFixture: fixture });
+  if (scenario === 'resonate-clarity') return runNativeProcess([process.execPath, path.join(ROOT, 'resonate-clarity.cjs'), '--source', path.join(options.sourceWebRoot || path.join(ROOT, '../..'), 'index.html')], scenario, 150000, options);
   if (scenario === 'comet-unlocks-core') return runNativeProcess([process.execPath, path.join(ROOT, 'comet-unlocks-core.cjs')], scenario, 90000, options);
   if (scenario === 'lab-motes-offline-integration') return runNativeProcess([process.execPath, path.join(ROOT, 'lab-motes-offline.cjs')], scenario, 90000, options);
   if (['save-backup-ui', 'self-test-save-backup-placement', 'self-test-save-backup-confirmation'].includes(scenario)) {
