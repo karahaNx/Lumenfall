@@ -1,6 +1,6 @@
 # SWIFT_RECOVERY_CAP_001 — bounded ability recovery
 
-Status: [PR88](https://github.com/karahaNx/Lumenfall/pull/88), acceptance in progress.
+Status: [PR88](https://github.com/karahaNx/Lumenfall/pull/88), progression choice pending.
 Owner: this Swift Recovery feature chat. Branch `feature/swift-recovery-cap-001`,
 private checkout `/workspace/Lumenfall-swift-recovery`. No subagents/messages.
 
@@ -24,7 +24,10 @@ PR46/B2 is merged via PR57 `20aaae62a4b6e46f8d75775085918eaba4e8de29`.
 Current AGENTS/FEATURE_WORKFLOW replace historical Lead/writer permission gates;
 this feature owns implementation and delivery. Current open PR67 overlaps Swift
 and saves; its 27-feature bundle is not main and is not imported as a product.
-Main merged: `e2f745cd0ce0dc9e41b06efd842062fd08d7fab4`; retained F14/F13 UI.
+Main31eccfb now closes the other four Forge purchase tracks. Merge preparation
+preserves PR84/90 changes; cap10 would make fresh Forge20/60 Deeds unreachable.
+[Concrete continuation proposal](../qa/swift-recovery-cap-001/implementation/deed-continuity-proposal.md)
+is awaiting user choice; do not integrate the broken progression route.
 PR70 overlaps two necessary Farm clock fixes; no Wisp roles imported. PR66 is Tree.
 Historical local preparation is preserved in
 [the frozen checkpoint](../qa/swift-recovery-cap-001/preparation-task-2026-10-07.md)
@@ -90,6 +93,6 @@ runner now passes its selected browser. Fresh CI required. Diagnostics retained.
 [implementation evidence](../qa/swift-recovery-cap-001/implementation/README.md).
 Signed143 cold/storage preparation passes. No independent/physical/TalkBack claim.
 
-Next: complete current-head CI, integrate PR88, verify signed APK/native save
-update and integrated behavior, persist receipts and status. Archive only this
-owner after completion; keep open if required acceptance is missing.
+Next: record the user’s Deed-continuity choice; finish merged-main checks/CI,
+integrate and verify the signed APK/native update. Preserve all receipts. Keep
+this chat open; archive only after all required acceptance is complete.

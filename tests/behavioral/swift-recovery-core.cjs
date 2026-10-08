@@ -106,14 +106,14 @@ test('precision credits pay through real Forge, queued Forge, Rarity, Module and
     const s=seed(b,100);s.lumen=1e30;s.spirits.ember=40;b.set(s);
     b.get().shards=0;const credit=b.get().swiftRecoveryRefund;credit.remainingShardsHex=(1000000n).toString(16);
     let cost;
-    if(kind==='research'||kind==='queue'){cost=b.researchCost('sense').shard;if(kind==='queue'){b.get().researchQueue.sense=true;credit.remainingShardsHex=BigInt(cost).toString(16);}}
+    if(kind==='research'||kind==='queue'){cost=b.researchCost('arcanecal').shard;if(kind==='queue'){b.get().researchQueue.arcanecal=true;credit.remainingShardsHex=BigInt(cost).toString(16);}}
     if(kind==='rarity')cost=b.rarityCost().shard;
     if(kind==='module')cost=b.moduleCost().shard;
     if(kind==='study')cost=b.studyCost('guardmastery').shard;
     const before=balance(b);
-    if(kind==='research')b.research('sense',1);if(kind==='queue')b.queue();if(kind==='rarity')b.rarity();if(kind==='module')b.module();if(kind==='study')assert(b.study('guardmastery'));
+    if(kind==='research')b.research('arcanecal',1);if(kind==='queue')b.queue();if(kind==='rarity')b.rarity();if(kind==='module')b.module();if(kind==='study')assert(b.study('guardmastery'));
     assert.equal(balance(b),before-BigInt(cost),kind+' actual debit');
-    if(kind==='research'||kind==='queue')assert.equal(b.get().research.sense,1);
+    if(kind==='research'||kind==='queue')assert.equal(b.get().research.arcanecal,1);
     if(kind==='rarity')assert.equal(b.get().heroRarity.ember,1);if(kind==='module')assert.equal(b.get().wispModules.ember,1);
   }
 });

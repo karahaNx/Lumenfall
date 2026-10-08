@@ -72,3 +72,13 @@ out before any assertions (records=[]). The runner now supplies its selected
 browser with --chrome; the driver honors it, with existing explicit environment
 override/default for standalone use. No test, timeout or assertion is skipped.
 Failure excerpt: ci-37741028367-failure-excerpt.stdout.txt.
+
+Main advanced to31eccfb: PR84 Auto-Ascend UI and PR90 exclusive upgrade owners
+are retained in this checkout. Retirement keeps original effects/raw levels;
+Swift remains its own buyable track. Core13 groups pass after changing the
+existing Forge credit consumer from retired Shard Sense to current Arcane
+Calibration. The native baseline is re-prepared with Lumen for that120-Shard
+real purchase; previous native preparation remains historical evidence.
+Cap10 plus the newly retired tracks makes Forge20/60 fresh progression impossible.
+The explicit proposed continuation and pending user question are recorded in
+deed-continuity-proposal.md. No progression rule is implemented pending choice.
