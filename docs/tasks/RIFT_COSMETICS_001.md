@@ -32,8 +32,9 @@ Model/effort recommendation GPT-6.1 Sol/High; running variant unverified.
 Initial b2a1f440, then0bcce84; frozen 7 October candidate6c79ebc is historical
 ([evidence](../qa/rift-cosmetics-2026-10-07/README.md)).
 8 October resumed from b0537cb46635555ba2c2e5f3f95bc8fc276aeda5.
-Current base e2f745cd0ce0dc9e41b06efd842062fd08d7fab4 includes PR77 Save Backup,
-PR76 Formation and PR80 Resonate. Earlier F27 CSS/button conflicts were combined;
+Current base 31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6 includes PR77 Save Backup,
+PR76 Formation, PR80 Resonate, PR84 Auto-Ascend and PR90 upgrade owners.
+CSS conflicts preserve upstream controls/styles plus F24; F27 layers were combined.
 preserve all upstream code/tests and recheck main before integration.
 
 PR46/B2 verified merged via PR57/20aaae62. F27 catalog/equipment integrated via
@@ -79,8 +80,8 @@ integrated verification; signed APK assets/package/version/cert and Android test
 [Current continuation](../qa/rift-cosmetics-2026-10-08/CURRENT_CHECKPOINT.md)
 and [raw checks](../qa/rift-cosmetics-2026-10-08/checks/) record exact sources,
 commands, versions and failures. Current source SHA256
-afe8f0f267441932cbe9e7515584987c66388c4f5b6b81ce08b20d4e624a956f.
-Focused168 records PASS (formation-candidate/results.json), Chromium151/Node24:
+8efe1e90c1216627dbb47392aa36a6e5c9e4031a7ab7c196478eec734f193e71.
+Focused168 records PASS (upgrade-candidate/results.json), Chromium151/Node24:
 162 mobile measurements plus region, persistence, input and negative contracts.
 Combined Save Backup12 profiles, Formation native/contract, source/context/tooling
 and V8 6.0 engine fixture PASS. Actual browser touch/Enter and reload paths tested.

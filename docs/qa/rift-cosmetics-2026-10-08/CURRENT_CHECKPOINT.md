@@ -5,24 +5,36 @@ User authorizes finish, GitHub integration and creating needed tests. No message
 or subagents. Live AGENTS assigns delivery to owner; historical Lead freeze is
 obsolete. Original sources and acceptance are in the task document.
 
-Current base `e2f745cd0ce0dc9e41b06efd842062fd08d7fab4`, containing PR77 Save
-Backup, PR76 Formation autosave and PR80 Resonate. No rebase conflicts. Current
-product SHA256 `afe8f0f267441932cbe9e7515584987c66388c4f5b6b81ce08b20d4e624a956f`.
+Current base `31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6`, PR77 Save Backup,
+PR76 Formation, PR80 Resonate, PR84 Auto-Ascend and PR90 upgrade owners. Rebase
+CSS conflict combined upstream upgrade styles with F24; no removals. Current
+product SHA256 `8efe1e90c1216627dbb47392aa36a6e5c9e4031a7ab7c196478eec734f193e71`.
 PR79 open. CI37735266911 caught region backgrounds; removed fixed palette
 overrides and added six-region regression. CI37737975796 passed152 scenarios,
 then new driver stalled at Target.createTarget: Chromium launcher was preferred
 over working Google Chrome. Driver now follows established suite's browser order
 and records executable/stderr. Full required rerun must pass before integration.
-Logs preserved as gzip under checks/. No assertions or CI gates weakened.
+CI37740747361 passed incoming Formation cases but Resonate chose the broken
+Chromium154.0.8037.0 launcher and stalled at browser-context creation. Its driver
+now also follows the suite's Google Chrome order; local13 records pass. 305b832
+had no new CI because newer main caused a merge conflict; latest rebase resolves
+that conflict. Logs preserved as gzip; no assertions or CI gates weakened.
 
 Focused168 records PASS on this combined product, Chromium151/Node24.19,
-formation-candidate/results.json. Includes six themes, nine mobile/text/motion
+upgrade-candidate/results.json. Includes six themes, nine mobile/text/motion
 profiles x three enemy states, persistence/reload/recovery/restore, native browser
 touch/Enter/focus, region palettes and both F27 Comet layers. Tooling, source and
 Formation native/contract checks pass. Save Backup12-profile and three layout15-
 profile evidence predates Formation/Resonate; full CI rechecks incoming scenarios.
 Local recovery adapter failed on navigation, not an assertion; failure recorded.
 V8 6.0 legacy engine test passes current product (not WebView DOM evidence).
+
+Native60 environment now created on separate API25 RiftWebView60 with pinned
+LineageOS60.0.3112.78 (Git blob569b28e, SHA256dd0a6f2...). Provider replacement
+needed explicit block-device remount and extracted x86/x86_64 JNI libraries;
+Android accepts it. Old CDP uses Page.addScriptToEvaluateOnLoad; driver fallback
+added. Native fixture reload timed out and is under investigation before
+claiming actual60 acceptance. API27 baseline remains intact in its own AVD.
 
 Isolated native environment: SDK `/tmp/rift-cosmetics-android/sdk`, AVDs
 `/workspace/scratch/rift-cosmetics-android/avd`. API27 RiftCosmetics on5554/5555,
