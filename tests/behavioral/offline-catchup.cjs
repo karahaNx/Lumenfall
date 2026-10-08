@@ -61,9 +61,14 @@ function baselineState(actual,expected,seed,label){
  for(const id of ['rememberbulk','offline24','offline48']){if(oldOwnership[id]===true)legacy[id]=true;delete oldOwnership[id];}
  assert.deepEqual(actual.legacyCometPurchases,legacy,label+' full legacy ownership archived');
  const {studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,offline12hRefund,...existing}=actual;
+ // Preserve F14's selected destination during a matching partial rebuild.
+ const intent=expected.formationRebuild;
+ const selected=intent&&intent.preset&&expected.formationPresets[intent.preset]&&
+   expected.formationPresets[intent.preset].join(',')===intent.members.join(',')
+   ? intent.preset : expected.activeFormationPreset;
  let refund=0;for(let i=0;i<(seed.nodes?.reserves||0);i++)refund+=Math.ceil(6*Math.pow(1.6,i));
  assert.equal(actual.schemaVersion,2,label+' migrated schema');
- assert.deepEqual(existing,{...expected,schemaVersion:2,owned:oldOwnership,
+ assert.deepEqual(existing,{...expected,schemaVersion:2,owned:oldOwnership,activeFormationPreset:selected,
   prisms:expected.prisms+refund,comets:expected.comets+(legacy.offline24?140:0)+(legacy.offline48?160:0)},label);
 }
 function runAsync(seed,seconds,batch=256){

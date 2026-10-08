@@ -41,7 +41,7 @@ function instrumentHtml(source, fixtures) {
   const marker = '\n})();\n</script>\n<script>\nif(window.Capacitor';
   replaceOnce(marker, '\n' + read('bridge.js') + '\n' + read('wisp-upgrades-bridge.js') + marker, 'main game IIFE marker changed; test bridge could not be installed');
   const modules = ['rift-status', 'bond-text', 'layout', 'accessibility', 'accessibility-controls', 'nav-workshop', 'r3-destinations',
-    'research-duration', 'upgrade-clarity', 'feedback', 'formation', 'forge', 'support-stacking', 'auto-ascend-target', 'buff-timing', 'measured-inquiry', 'lab-motes', 'farm-conservation', 'farm-numerical', 'wisp-upgrades'];
+    'research-duration', 'upgrade-clarity', 'feedback', 'formation', 'formation-autosave', 'forge', 'support-stacking', 'auto-ascend-target', 'buff-timing', 'measured-inquiry', 'lab-motes', 'farm-conservation', 'farm-numerical', 'wisp-upgrades'];
   replaceOnce('</body>', modules.map(name => '<script>' + read(name + '.js') + '</script>').join('') +
     '<script id="qa-behavior-runner">\n' + read('runner.js') + '\n</script>\n</body>', 'expected exactly one </body> marker');
   return source;
@@ -102,6 +102,7 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
   }
   if (scenario === 'offline-catchup-core') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-catchup.cjs')], scenario, 300000, options);
   if (scenario === 'offline-catchup-ui' || scenario === 'offline-catchup-legacy-dom') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-catchup-ui.cjs'), chrome, urlFor('/index.html'), scenario], scenario, 210000, options);
+  if (['formation-autosave-native','formation-autosave-reduced-motion'].includes(scenario)) return runNativeProcess([process.execPath,path.join(ROOT,'formation-autosave.cjs'),chrome,urlFor('/index.html'),scenario],scenario,120000,options);
   if (scenario === 'raw-process-contract') return require('./process_contract.cjs').runContract(runScenario, log);
   if (scenario === 'forge-ui-process-contract') return nativeProcessContract(log);
   let driver = null;
