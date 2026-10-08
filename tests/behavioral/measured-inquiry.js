@@ -35,7 +35,7 @@ window.runInquiryQa=function(b,ctx,assert,assertProtectedParity,assertSummaryPar
     var legacy=seed();delete legacy.schemaVersion;delete legacy.studyQueue;legacy.owned.autostudy=true;
     var migrated=b.forge.canonical(legacy);
     window.inquiryOriginals.forEach(function(id){ok(migrated.studyQueue[id],'v0 original auto-study '+id);});
-    ok(!migrated.studyQueue.measuredinquiry && migrated.schemaVersion===1,'v0 InquiryOFF, schema unchanged');
+    ok(!migrated.studyQueue.measuredinquiry && migrated.schemaVersion===2,'v0 InquiryOFF, schema unchanged');
     [[0,30000,1200,600],[5,566870,22675,6291],[9,5950779,238031,41232],[10,10711402,428456,65971]].forEach(function(v){
       install(seed());same(t.cost('measuredinquiry',v[0]),{lumen:v[1],shard:v[2]},'precise raw price '+v[0]);
       ok(t.duration('measuredinquiry',v[0])===v[3],'precise own duration '+v[0]);
@@ -124,9 +124,11 @@ window.runInquiryQa=function(b,ctx,assert,assertProtectedParity,assertSummaryPar
     var events=offline.timeline||offline.summary.timeline||[];
     var full=seed();full.longStudyLevels.measuredinquiry=13;
     full.activeStudies=[{id:'measuredinquiry',remainingSec:43201,totalDurationSec:43201,speedMult:1},{id:'guardmastery',remainingSec:43202,totalDurationSec:43202,speedMult:1}];install(full);b.setLastSeen(b.clockNow()-43203*1000);
-    var actual=b.applyOfflineNow();ok(actual.effectiveSec===43200 && b.getState().longStudyLevels.guardmastery===1&&b.getState().longStudyLevels.measuredinquiry===13,'actual applyOfflineProgress continues studies past12h cap');
-    same(actual.completedStudies,["Guardian's Mastery"],'actual offline report earned only');same(actual.closedStudies,['Measured Inquiry'],'actual offline neutral disposal');
-    return {checks:checks,negativeControls:2,capCompletion:true,overcapTail:true,dueEntry:true,arrayOrder:true,liveOfflineChunkParity:true,actual12hTail:true,timelineEvents:events.length};
+    // Keep real foreground replay separate from this exact offline-work oracle.
+    var clock=performance.now;Object.defineProperty(performance,'now',{configurable:true,value:function(){return 0;}});
+    var actual=b.applyOfflineNow();Object.defineProperty(performance,'now',{configurable:true,value:clock});ok(actual.effectiveSec===43200 && b.getState().longStudyLevels.guardmastery===0&&b.getState().longStudyLevels.measuredinquiry===13,'actual applyOfflineProgress stops all Study work at12h');
+    same(actual.completedStudies,[],'no completion beyond12h');same(actual.closedStudies,[],'no disposal beyond12h');ok(Math.abs(active('guardmastery').remainingSec-2)<1e-5,'unpaid tail work stays pending');ok(Math.abs(active('measuredinquiry').remainingSec-1)<1e-5,'overcap paid record stays pending');
+    return {checks:checks,negativeControls:2,capCompletion:true,overcapTail:true,dueEntry:true,arrayOrder:true,liveOfflineChunkParity:true,actual12hCommonCap:true,timelineEvents:events.length};
   }
   // Actual current Lab controls and observer purity, including small viewports.
   [0,5,10,13].forEach(function(k){
@@ -177,7 +179,7 @@ window.runInquiryPersistence=function(b,ctx,assert,phase,nextPhase,backupCode,fi
   }
   var state=b.getState(),expected=JSON.parse(localStorage.getItem('inquiry-expected'));
   if(ctx.scenario==='inquiry-reset'){
-    assert(state.schemaVersion===1&&state.longStudyLevels.measuredinquiry===0&&!state.studyQueue.measuredinquiry&&!state.activeStudies.length,'Reset new fields0/OFF and no paid work');
+    assert(state.schemaVersion===2&&state.longStudyLevels.measuredinquiry===0&&!state.studyQueue.measuredinquiry&&!state.activeStudies.length,'Reset new fields0/OFF and no paid work');
     finish('pass',{reset:true});return;
   }
   keys.forEach(function(key){assert(JSON.stringify(state[key])===JSON.stringify(expected[key]),'actual '+ctx.scenario+' preserves '+key);});

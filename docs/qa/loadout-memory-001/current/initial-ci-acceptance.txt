@@ -1,0 +1,466 @@
+2026-10-08T05:58:58.7140904Z PASS archive integrity: stored/deflated ZIP CRC, truncation, hash and symlink escape controls
+2026-10-08T05:58:58.7631749Z PASS candidate recovery: 96 exact files/modes, tree 758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef, overwrite and overlap rejection
+2026-10-08T05:58:58.7965160Z PASS package recovery: 66 byte-identical logical payloads
+2026-10-08T05:58:58.9371152Z PASS APK identity: real subprocess arguments, complete identity, wrong signer and tool failure rejection
+2026-10-08T05:58:58.9375100Z PASS Android version support: expected fields and invalid build-number rejection
+2026-10-08T05:58:58.9782592Z PASS source/smoke gates: missing/duplicate IDs, syntax failure and runtime error rejection
+2026-10-08T05:58:58.9880670Z PASS feature checkpoints: real task links/budget and missing, misplaced, traversal/symlink, broken-link and oversized task rejection
+2026-10-08T05:58:59.0176539Z PASS local server: real requests and traversal/symlink rejection
+2026-10-08T05:58:59.1691350Z QA passed: 2 scripts syntax-checked, 16 unique IDs verified, cache/state lifecycle guards present.
+2026-10-08T05:58:59.4815834Z PASS loadout-memory-core
+2026-10-08T06:01:27.2615360Z PASS loadout-memory-mobile
+2026-10-08T06:01:29.7404044Z PASS wisp-upgrade-display
+2026-10-08T06:01:29.9452329Z PASS comet-unlocks-core
+2026-10-08T06:02:04.0808810Z PASS comet-unlocks-mobile
+2026-10-08T06:02:24.8719684Z PASS comet-unlocks-reduced-motion
+2026-10-08T06:02:25.1686761Z PASS lab-motes-offline-integration
+2026-10-08T06:02:25.9752792Z PASS lab-motes-numerical
+2026-10-08T06:02:30.4027502Z PASS lab-motes-runtime
+2026-10-08T06:02:31.5354809Z PASS lab-motes-conservation
+2026-10-08T06:02:32.6181350Z PASS lab-motes-contracts
+2026-10-08T06:02:34.0082078Z PASS lab-motes-chronology
+2026-10-08T06:02:34.9393105Z PASS lab-motes-ui [320,844,0,0]
+2026-10-08T06:02:35.7816409Z PASS lab-motes-ui [390,844,0,0]
+2026-10-08T06:02:36.5674165Z PASS lab-motes-ui [430,844,0,0]
+2026-10-08T06:02:52.7338984Z PASS lab-motes-native
+2026-10-08T06:03:02.3060815Z PASS lab-motes-reduced-motion
+﻿2026-10-08T06:03:03.3387211Z PASS lab-motes-save-reload
+2026-10-08T06:03:04.3792954Z PASS lab-motes-backup-restore
+2026-10-08T06:03:05.3240197Z PASS lab-motes-recovery
+2026-10-08T06:03:06.2590173Z PASS lab-motes-reset
+2026-10-08T06:05:23.8973060Z PASS offline-catchup-core
+2026-10-08T06:06:41.6387834Z PASS offline-catchup-ui
+2026-10-08T06:08:00.0534264Z PASS offline-catchup-legacy-dom
+2026-10-08T06:08:01.2840242Z PASS nav-workshop-contract
+2026-10-08T06:08:02.5957939Z PASS inquiry-contracts
+2026-10-08T06:08:03.8603400Z PASS inquiry-chronology
+2026-10-08T06:08:04.9108629Z PASS inquiry-ui
+2026-10-08T06:08:06.3220553Z PASS inquiry-ui-reduced-motion
+2026-10-08T06:08:07.3443824Z PASS inquiry-save-reload
+2026-10-08T06:08:08.3432059Z PASS inquiry-backup-restore
+2026-10-08T06:08:09.4077701Z PASS inquiry-recovery
+2026-10-08T06:08:10.5266269Z PASS inquiry-reset
+2026-10-08T06:08:10.7878241Z   raw gate control real-bounded-partial-pass: expected FAIL (0.25s child budget; gate requests 25s)
+2026-10-08T06:08:10.7919396Z PASS raw-process-contract: 31 result controls, real timeout, artifact bounds, two causal negatives/undo
+2026-10-08T06:08:11.6905059Z PASS support-stacking
+2026-10-08T06:08:12.8038874Z PASS auto-ascend-target-contract
+2026-10-08T06:08:13.7578808Z PASS auto-ascend-target-legacy16
+2026-10-08T06:08:15.0311014Z PASS auto-ascend-target-legacy44
+2026-10-08T06:08:16.4098394Z PASS auto-ascend-target-legacy56
+2026-10-08T06:08:17.4120137Z PASS auto-ascend-target-legacy130
+2026-10-08T06:08:18.3910441Z PASS auto-ascend-target-recovery
+2026-10-08T06:08:19.4203519Z PASS auto-ascend-target-resume
+2026-10-08T06:08:20.4015084Z PASS auto-ascend-target-reset
+2026-10-08T06:08:21.4601232Z PASS auto-ascend-target-manual-reload
+2026-10-08T06:08:22.4698804Z PASS auto-ascend-target-cold-resume
+2026-10-08T06:08:29.0971243Z PASS auto-ascend-target-mobile
+2026-10-08T06:08:34.0457752Z PASS auto-ascend-target-reduced-motion
+2026-10-08T06:10:17.5680922Z PASS rift-status-stacking-mobile
+2026-10-08T06:11:27.7262859Z PASS rift-status-stacking-reduced-motion
+2026-10-08T06:11:28.6613929Z PASS support-save-reload
+2026-10-08T06:11:29.5782670Z PASS support-backup-restore
+2026-10-08T06:11:30.7895319Z PASS support-recovery
+2026-10-08T06:11:31.7904817Z PASS support-resume
+2026-10-08T06:11:32.8267262Z PASS support-recovery-resume
+2026-10-08T06:11:33.8102891Z PASS support-visibility-resume
+2026-10-08T06:11:34.7513285Z PASS support-reset
+2026-10-08T06:11:35.9320066Z PASS upgrade-effects-and-deeds
+2026-10-08T06:11:38.2665701Z PASS rift-status-contract
+2026-10-08T06:11:39.2015747Z PASS bond-text-contract
+2026-10-08T06:13:19.2412937Z PASS rift-status-mobile
+2026-10-08T06:14:29.8805183Z PASS rift-status-reduced-motion
+2026-10-08T06:14:29.9249816Z     FAIL pass-nonzero
+2026-10-08T06:14:29.9460160Z     FAIL invalid-json
+2026-10-08T06:14:30.4495187Z     FAIL timeout
+2026-10-08T06:14:30.4496461Z PASS forge-ui-process-contract
+2026-10-08T06:14:58.2195809Z PASS forge-ui-mobile
+2026-10-08T06:15:25.5070008Z PASS forge-ui-reduced-motion
+2026-10-08T06:15:26.3233069Z PASS buff-timing
+2026-10-08T06:15:27.4560805Z PASS buff-save-reload
+2026-10-08T06:15:28.8959157Z PASS forge-contracts
+2026-10-08T06:15:29.7424189Z PASS forge-effects
+2026-10-08T06:15:30.5624206Z PASS forge-chronology
+2026-10-08T06:15:31.5461477Z PASS forge-save-reload
+2026-10-08T06:15:32.4533559Z PASS forge-backup-restore
+2026-10-08T06:15:33.3920484Z PASS forge-recovery
+2026-10-08T06:15:34.2040503Z PASS forge-baseline
+2026-10-08T06:15:35.9669562Z PASS forge-balance
+2026-10-08T06:15:37.3728846Z PASS r3-destinations
+2026-10-08T06:15:38.4494611Z PASS r3-save-reload
+2026-10-08T06:15:39.2987644Z PASS research-duration
+2026-10-08T06:15:40.1354793Z PASS research-duration-reduced-motion
+2026-10-08T06:15:40.8977665Z PASS p2-07a-persistence-review
+2026-10-08T06:15:41.8945467Z PASS p2-07a-persist-save-reload
+2026-10-08T06:15:42.7971040Z PASS p2-07a-persist-backup-restore
+2026-10-08T06:15:43.7233042Z PASS p2-07a-persist-recovery
+2026-10-08T06:15:44.6217746Z PASS p2-07a-persist-reset
+2026-10-08T06:15:45.7191403Z PASS p2-07a-formation-reconstruction
+2026-10-08T06:15:46.6689553Z PASS p2-07a-save-reload
+2026-10-08T06:15:47.6241874Z PASS p2-07a-backup-restore
+2026-10-08T06:15:48.6202384Z PASS p2-07a-recovery
+2026-10-08T06:15:49.5216516Z PASS p2-07a-chronology
+2026-10-08T06:15:50.3268180Z PASS layout-p2-07a-reconstruction [360,800,0,0]
+2026-10-08T06:15:51.1313345Z PASS layout-p2-07a-reconstruction [360,780,0,0]
+2026-10-08T06:15:51.9941215Z PASS layout-p2-07a-reconstruction [390,844,0,0]
+2026-10-08T06:15:52.8183248Z PASS layout-p2-07a-reconstruction [412,915,0,0]
+2026-10-08T06:15:53.6374683Z PASS layout-p2-07a-reconstruction [360,640,24,24]
+2026-10-08T06:15:54.8050031Z PASS p2-06b-live-feedback
+2026-10-08T06:15:55.8453652Z PASS p2-06b-reduced-motion
+2026-10-08T06:15:56.7423428Z PASS layout-fresh [360,800,0,0]
+2026-10-08T06:15:57.6342698Z PASS layout-fresh [360,780,0,0]
+2026-10-08T06:15:58.5728356Z PASS layout-fresh [390,844,0,0]
+2026-10-08T06:15:59.4793734Z PASS layout-fresh [412,915,0,0]
+2026-10-08T06:16:00.3676920Z PASS layout-fresh [360,640,24,24]
+2026-10-08T06:16:01.3977324Z PASS layout-dense [360,800,0,0]
+2026-10-08T06:16:02.3503269Z PASS layout-dense [360,780,0,0]
+2026-10-08T06:16:03.3121569Z PASS layout-dense [390,844,0,0]
+2026-10-08T06:16:04.2707674Z PASS layout-dense [412,915,0,0]
+2026-10-08T06:16:05.1942761Z PASS layout-dense [360,640,24,24]
+2026-10-08T06:16:06.1538045Z PASS layout-boss [360,800,0,0]
+2026-10-08T06:16:07.0787451Z PASS layout-boss [360,780,0,0]
+2026-10-08T06:16:08.0183701Z PASS layout-boss [390,844,0,0]
+2026-10-08T06:16:08.9539038Z PASS layout-boss [412,915,0,0]
+2026-10-08T06:16:09.8743479Z PASS layout-boss [360,640,24,24]
+2026-10-08T06:16:10.8304565Z PASS layout-accessibility-states [360,800,0,0]
+2026-10-08T06:16:11.7608389Z PASS layout-accessibility-states [360,780,0,0]
+2026-10-08T06:16:12.7385751Z PASS layout-accessibility-states [390,844,0,0]
+2026-10-08T06:16:13.7669981Z PASS layout-accessibility-states [412,915,0,0]
+2026-10-08T06:16:14.6950270Z PASS layout-accessibility-states [360,640,24,24]
+2026-10-08T06:16:15.5501899Z PASS p1-05-accessibility-baseline
+2026-10-08T06:16:16.3987851Z PASS p1-05-accessibility-contract
+2026-10-08T06:16:17.5905333Z PASS p1-05-control-regressions
+2026-10-08T06:16:18.4344450Z PASS p1-05-reduced-motion
+2026-10-08T06:16:19.2115887Z PASS fresh-load
+2026-10-08T06:16:19.9873002Z PASS midgame-load
+2026-10-08T06:16:20.7412642Z PASS mature-load
+2026-10-08T06:16:21.4763103Z PASS legacy-load
+2026-10-08T06:16:22.3146456Z PASS corrupted-load
+2026-10-08T06:16:23.0738687Z PASS malformed-daily-load
+2026-10-08T06:16:23.8286809Z PASS farm-load
+2026-10-08T06:16:24.7976525Z PASS farm-roundtrip
+2026-10-08T06:16:25.6617673Z PASS enemy-normal-reload
+2026-10-08T06:16:26.5381274Z PASS enemy-boss-reload
+2026-10-08T06:16:27.3242720Z PASS active-studies-load
+2026-10-08T06:16:28.1128362Z PASS auto-ascend-load
+2026-10-08T06:16:29.0525589Z PASS reset-roundtrip
+2026-10-08T06:16:29.9494933Z PASS restore-roundtrip
+2026-10-08T06:16:30.6949068Z PASS malformed-backup-rejection
+2026-10-08T06:16:31.8443939Z PASS recovery-from-corrupt-primary
+2026-10-08T06:16:32.5766654Z PASS unsupported-future-load
+2026-10-08T06:16:33.4655285Z PASS legacy-backup-restore
+2026-10-08T06:16:34.2496659Z PASS future-backup-rejection
+2026-10-08T06:16:35.1381305Z PASS recovery-offline-once
+2026-10-08T06:16:35.8631088Z PASS save-failure-warning
+2026-10-08T06:16:36.6832624Z PASS parity-short
+2026-10-08T06:16:38.2422870Z PASS parity-medium-farm
+2026-10-08T06:16:40.1028028Z PASS p2-07a-farm-retention
+2026-10-08T06:16:40.8848232Z PASS p2-07a-timer-boundary
+2026-10-08T06:16:43.2547164Z PASS parity-long-high-power
+2026-10-08T06:16:44.0023090Z PASS parity-boss-short
+2026-10-08T06:16:44.9140322Z PASS parity-boss-retry
+2026-10-08T06:16:45.7250958Z PASS parity-auto-ascend
+2026-10-08T06:16:46.4993930Z PASS chronology-research-mid-window
+2026-10-08T06:16:47.2977783Z PASS chronology-study-mid-window
+2026-10-08T06:16:48.0835462Z PASS chronology-auto-empower-mid-window
+2026-10-08T06:16:48.8621001Z PASS chronology-auto-ascend-mid-window
+2026-10-08T06:16:49.7240809Z PASS chronology-boss-retry
+2026-10-08T06:16:50.4903209Z PASS chronology-simultaneous-order
+2026-10-08T06:16:51.2634607Z PASS lifecycle-background-resume
+2026-10-08T06:16:52.1094958Z PASS lifecycle-repeated-resume
+2026-10-08T06:16:53.0208797Z PASS lifecycle-cold-restart
+2026-10-08T06:16:53.7869520Z PASS lifecycle-partial-enemy
+2026-10-08T06:16:54.5318505Z PASS lifecycle-boss-background-short
+2026-10-08T06:16:55.4392454Z PASS lifecycle-boss-retry
+2026-10-08T06:16:56.2447409Z PASS lifecycle-auto-ascend
+2026-10-08T06:16:57.1090693Z PASS p2-ascend-integrity
+2026-10-08T06:16:57.9299778Z PASS p2-03b-auto-ascend-integrity
+2026-10-08T06:16:58.7878328Z PASS p2-wisp-progression-pacing
+2026-10-08T06:16:59.6060569Z PASS p2-endgame-currency-utility
+2026-10-08T06:17:00.4159084Z PASS p2-03a-wisp-role-integrity
+2026-10-08T06:17:01.2630146Z PASS p2-03a-wisp-role-integrity-mature
+2026-10-08T06:17:02.4558247Z PASS p2-03a-wisp-role-integrity-endgame
+2026-10-08T06:17:03.5281838Z PASS p2-02a-core-qol
+2026-10-08T06:17:04.4001590Z PASS p2-02b-wisp-hierarchy
+2026-10-08T06:17:05.3300539Z PASS p2-02b-lab-hierarchy
+2026-10-08T06:17:06.2564796Z PASS lifecycle-long-study
+2026-10-08T06:17:07.1663988Z PASS lifecycle-lab-queue
+2026-10-08T06:17:08.0804359Z PASS lifecycle-daily-rollover
+2026-10-08T06:17:08.8739852Z PASS wisp-formula-contract
+2026-10-08T06:17:08.8765929Z Behavioral QA passed: 153 deterministic scenario(s).
+2026-10-08T06:17:08.8896634Z [36;1m  echo "Behavioral harness correctly caught expected failure: $scenario"[0m
+2026-10-08T06:17:09.8337049Z FAIL self-test-bad-assertion
+2026-10-08T06:17:09.8355762Z 709.034203:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:09.8357122Z [32910:32931:1008/061709.034850:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:09.8358275Z [32910:32931:1008/061709.043947:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:09.8359445Z [32910:32931:1008/061709.069047:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:09.8360583Z [32910:32910:1008/061709.120274:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:09.8361296Z [32910:32910:1008/061709.120325:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:09.8362328Z [32910:32910:1008/061709.120690:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:09.8363034Z [32910:32931:1008/061709.120923:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:09.8364509Z [32910:32931:1008/061709.120934:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:09.8365391Z [32910:32910:1008/061709.122966:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:09.8366659Z [32910:32931:1008/061709.123257:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:09.8367421Z [32910:32910:1008/061709.140475:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:09.8368286Z [32910:32910:1008/061709.142312:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:09.8369204Z [32910:32931:1008/061709.142484:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:09.8370039Z [32910:32910:1008/061709.148329:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:09.8371219Z [32910:32910:1008/061709.164316:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.UPower was not provided by any .service files
+2026-10-08T06:17:09.8372388Z [32910:32910:1008/061709.164373:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:09.8373326Z [32910:32931:1008/061709.164798:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:09.8374076Z [32910:32910:1008/061709.179532:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:09.8374945Z [32910:32931:1008/061709.179645:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:09.8375873Z [32910:32910:1008/061709.197910:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:09.8441526Z Behavioral harness correctly caught expected failure: self-test-bad-assertion
+2026-10-08T06:17:10.7794498Z FAIL self-test-uncaught-error
+2026-10-08T06:17:10.7808426Z 709.973989:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:10.7809229Z [33075:33096:1008/061709.974496:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:10.7810150Z [33075:33096:1008/061709.981422:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:10.7810866Z [33075:33096:1008/061710.006284:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:10.7812024Z [33075:33075:1008/061710.059045:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:10.7813207Z [33075:33096:1008/061710.059123:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:10.7814347Z [33075:33075:1008/061710.059148:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:10.7815609Z [33075:33096:1008/061710.059182:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:10.7816904Z [33075:33075:1008/061710.059440:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:10.7818918Z [33075:33075:1008/061710.061200:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:10.7820317Z [33075:33096:1008/061710.062765:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:10.7821012Z [33075:33075:1008/061710.080904:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:10.7821724Z [33075:33075:1008/061710.081384:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:10.7822419Z [33075:33096:1008/061710.081514:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:10.7823114Z [33075:33075:1008/061710.084404:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:10.7824093Z [33075:33075:1008/061710.101965:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.UPower was not provided by any .service files
+2026-10-08T06:17:10.7825016Z [33075:33075:1008/061710.102236:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:10.7825714Z [33075:33096:1008/061710.103209:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:10.7826529Z [33075:33075:1008/061710.116364:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:10.7827227Z [33075:33096:1008/061710.119673:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:10.7828026Z [33075:33075:1008/061710.134720:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:10.7876787Z Behavioral harness correctly caught expected failure: self-test-uncaught-error
+2026-10-08T06:17:11.7281534Z FAIL self-test-unhandled-rejection
+2026-10-08T06:17:11.7297478Z 710.919410:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:11.7298617Z [33242:33266:1008/061710.921474:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:11.7299496Z [33242:33266:1008/061710.928688:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:11.7300199Z [33242:33266:1008/061710.950750:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:11.7300904Z [33242:33242:1008/061711.016517:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:11.7301598Z [33242:33242:1008/061711.016621:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:11.7302293Z [33242:33266:1008/061711.016815:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:11.7302997Z [33242:33266:1008/061711.016829:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:11.7303683Z [33242:33242:1008/061711.016945:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:11.7304369Z [33242:33242:1008/061711.019951:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:11.7305064Z [33242:33266:1008/061711.020028:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:11.7305755Z [33242:33242:1008/061711.037345:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:11.7306648Z [33242:33242:1008/061711.037470:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:11.7307487Z [33242:33266:1008/061711.037921:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:11.7308174Z [33242:33242:1008/061711.040465:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:11.7308847Z [33242:33242:1008/061711.058455:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:11.7309613Z [33242:33266:1008/061711.058765:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:11.7310601Z [33242:33242:1008/061711.060774:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.UPower was not provided by any .service files
+2026-10-08T06:17:11.7311520Z [33242:33242:1008/061711.068255:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:11.7312261Z [33242:33266:1008/061711.068325:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:11.7312950Z [33242:33242:1008/061711.076924:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:11.7370438Z Behavioral harness correctly caught expected failure: self-test-unhandled-rejection
+2026-10-08T06:17:12.6485379Z FAIL self-test-parity-regression
+2026-10-08T06:17:12.6501589Z 711.870742:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:12.6502678Z [33406:33427:1008/061711.871842:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:12.6503728Z [33406:33427:1008/061711.875650:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:12.6504434Z [33406:33427:1008/061711.900428:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:12.6505138Z [33406:33406:1008/061711.955440:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:12.6505829Z [33406:33406:1008/061711.955501:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:12.6506619Z [33406:33406:1008/061711.955658:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:12.6507513Z [33406:33427:1008/061711.955758:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:12.6508215Z [33406:33427:1008/061711.955768:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:12.6508988Z [33406:33406:1008/061711.956627:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:12.6509677Z [33406:33427:1008/061711.956746:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:12.6510364Z [33406:33406:1008/061711.990700:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:12.6511102Z [33406:33406:1008/061711.990840:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:12.6511797Z [33406:33427:1008/061711.991430:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:12.6512480Z [33406:33406:1008/061711.994899:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:12.6513152Z [33406:33406:1008/061712.006072:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:12.6514125Z [33406:33406:1008/061712.006132:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.UPower was not provided by any .service files
+2026-10-08T06:17:12.6515070Z [33406:33427:1008/061712.006392:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:12.6515762Z [33406:33406:1008/061712.015563:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:12.6516604Z [33406:33427:1008/061712.019043:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:12.6517293Z [33406:33406:1008/061712.036924:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:12.6571915Z Behavioral harness correctly caught expected failure: self-test-parity-regression
+2026-10-08T06:17:13.5010946Z FAIL self-test-chronology-regression
+2026-10-08T06:17:13.5027542Z 712.783905:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:13.5028631Z [33573:33594:1008/061712.784324:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:13.5030026Z [33573:33594:1008/061712.790218:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:13.5031170Z [33573:33594:1008/061712.812820:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:13.5032372Z [33573:33573:1008/061712.868632:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:13.5033057Z [33573:33573:1008/061712.868682:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:13.5034095Z [33573:33594:1008/061712.868714:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:13.5034986Z [33573:33594:1008/061712.868723:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:13.5036256Z [33573:33573:1008/061712.868821:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:13.5037076Z [33573:33573:1008/061712.872595:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:13.5038027Z [33573:33594:1008/061712.872705:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:13.5038717Z [33573:33573:1008/061712.888488:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:13.5039607Z [33573:33573:1008/061712.889660:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:13.5040356Z [33573:33594:1008/061712.889862:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:13.5041186Z [33573:33573:1008/061712.893446:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:13.5042383Z [33573:33573:1008/061712.900662:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.UPower was not provided by any .service files
+2026-10-08T06:17:13.5043532Z [33573:33573:1008/061712.900687:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:13.5044312Z [33573:33594:1008/061712.903011:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:13.5045121Z [33573:33573:1008/061712.911732:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:13.5046030Z [33573:33594:1008/061712.911898:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:13.5046957Z [33573:33573:1008/061712.920771:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:13.5105937Z Behavioral harness correctly caught expected failure: self-test-chronology-regression
+2026-10-08T06:17:14.3883655Z FAIL self-test-wisp-formula-regression
+2026-10-08T06:17:14.3898002Z 713.642071:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:14.3898700Z [33736:33757:1008/061713.642529:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:14.3899495Z [33736:33757:1008/061713.649863:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:14.3900191Z [33736:33757:1008/061713.672676:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:14.3900882Z [33736:33736:1008/061713.725133:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:14.3901573Z [33736:33757:1008/061713.725488:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:14.3902256Z [33736:33736:1008/061713.725528:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:14.3902928Z [33736:33736:1008/061713.725727:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:14.3903616Z [33736:33757:1008/061713.725750:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:14.3904297Z [33736:33736:1008/061713.727147:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:14.3904979Z [33736:33757:1008/061713.727210:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:14.3905660Z [33736:33736:1008/061713.738626:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:14.3906527Z [33736:33736:1008/061713.738823:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:14.3907214Z [33736:33757:1008/061713.742076:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:14.3907889Z [33736:33736:1008/061713.742330:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:14.3908668Z [33736:33736:1008/061713.761810:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:14.3909636Z [33736:33736:1008/061713.762147:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.UPower was not provided by any .service files
+2026-10-08T06:17:14.3910603Z [33736:33757:1008/061713.762255:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:14.3911285Z [33736:33736:1008/061713.770792:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:14.3911971Z [33736:33757:1008/061713.771146:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:14.3912751Z [33736:33736:1008/061713.776073:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:14.3969526Z Behavioral harness correctly caught expected failure: self-test-wisp-formula-regression
+2026-10-08T06:17:15.2596327Z FAIL self-test-wisp-pacing-regression
+2026-10-08T06:17:15.2612126Z 714.535731:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:15.2612828Z [33903:33924:1008/061714.536339:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:15.2613540Z [33903:33924:1008/061714.541422:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:15.2614245Z [33903:33924:1008/061714.562835:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:15.2614946Z [33903:33903:1008/061714.624016:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:15.2615636Z [33903:33903:1008/061714.624476:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:15.2616555Z [33903:33924:1008/061714.624506:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:15.2617262Z [33903:33924:1008/061714.624644:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:15.2617948Z [33903:33903:1008/061714.624739:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:15.2618623Z [33903:33903:1008/061714.626806:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:15.2619520Z [33903:33924:1008/061714.627646:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:15.2620215Z [33903:33903:1008/061714.644841:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:15.2620964Z [33903:33903:1008/061714.647052:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:15.2621655Z [33903:33924:1008/061714.647436:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:15.2622345Z [33903:33903:1008/061714.656118:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:15.2623325Z [33903:33903:1008/061714.673479:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.UPower was not provided by any .service files
+2026-10-08T06:17:15.2624305Z [33903:33903:1008/061714.674244:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:15.2625002Z [33903:33924:1008/061714.674482:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:15.2625694Z [33903:33903:1008/061714.692187:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:15.2626545Z [33903:33924:1008/061714.692549:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:15.2627238Z [33903:33903:1008/061714.708469:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:15.2688945Z Behavioral harness correctly caught expected failure: self-test-wisp-pacing-regression
+2026-10-08T06:17:16.2820932Z FAIL self-test-endgame-currency-regression
+2026-10-08T06:17:16.2835721Z 715.412192:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:16.2836585Z [34070:34091:1008/061715.413180:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:16.2837301Z [34070:34091:1008/061715.417442:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:16.2838003Z [34070:34091:1008/061715.443401:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:16.2838923Z [34070:34070:1008/061715.496206:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:16.2839622Z [34070:34070:1008/061715.496524:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:16.2840400Z [34070:34091:1008/061715.496522:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:16.2841112Z [34070:34091:1008/061715.496779:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:16.2841807Z [34070:34070:1008/061715.496850:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:16.2842558Z [34070:34070:1008/061715.499371:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:16.2843256Z [34070:34091:1008/061715.499430:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:16.2843950Z [34070:34070:1008/061715.519069:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:16.2844656Z [34070:34070:1008/061715.519904:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:16.2845363Z [34070:34091:1008/061715.523912:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:16.2846210Z [34070:34070:1008/061715.526501:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:16.2846968Z [34070:34070:1008/061715.545404:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:16.2847668Z [34070:34091:1008/061715.545638:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:16.2848667Z [34070:34070:1008/061715.546239:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.UPower was not provided by any .service files
+2026-10-08T06:17:16.2849596Z [34070:34070:1008/061715.556890:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:16.2850302Z [34070:34091:1008/061715.558468:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:16.2850994Z [34070:34070:1008/061715.570995:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:16.2903438Z Behavioral harness correctly caught expected failure: self-test-endgame-currency-regression
+2026-10-08T06:17:17.1499169Z FAIL self-test-wisp-role-regression
+2026-10-08T06:17:17.1513590Z 716.417792:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:17.1514365Z [34236:34257:1008/061716.418061:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:17.1515071Z [34236:34257:1008/061716.423554:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:17.1515776Z [34236:34257:1008/061716.446810:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:17.1516625Z [34236:34236:1008/061716.500376:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:17.1517315Z [34236:34236:1008/061716.500434:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:17.1517993Z [34236:34236:1008/061716.500578:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:17.1518682Z [34236:34257:1008/061716.500677:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:17.1519386Z [34236:34257:1008/061716.500689:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:17.1520069Z [34236:34236:1008/061716.501523:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:17.1520758Z [34236:34257:1008/061716.501580:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:17.1521439Z [34236:34236:1008/061716.524761:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:17.1522114Z [34236:34236:1008/061716.526584:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:17.1522811Z [34236:34257:1008/061716.527199:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:17.1523493Z [34236:34236:1008/061716.530595:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:17.1524165Z [34236:34236:1008/061716.552513:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:17.1525140Z [34236:34236:1008/061716.552570:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.UPower was not provided by any .service files
+2026-10-08T06:17:17.1526230Z [34236:34257:1008/061716.552587:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:17.1526918Z [34236:34236:1008/061716.561112:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:17.1527658Z [34236:34257:1008/061716.561632:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:17.1528341Z [34236:34236:1008/061716.579644:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:17.1583590Z Behavioral harness correctly caught expected failure: self-test-wisp-role-regression
+2026-10-08T06:17:18.0359459Z FAIL self-test-p1-05-selected
+2026-10-08T06:17:18.0374056Z 717.295718:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:18.0374749Z [34403:34424:1008/061717.296633:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:18.0375462Z [34403:34424:1008/061717.301941:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:18.0376322Z [34403:34424:1008/061717.325567:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:18.0377026Z [34403:34403:1008/061717.379089:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:18.0377722Z [34403:34424:1008/061717.379178:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:18.0378408Z [34403:34403:1008/061717.379218:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:18.0379100Z [34403:34424:1008/061717.379245:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:18.0379781Z [34403:34403:1008/061717.379359:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:18.0380450Z [34403:34403:1008/061717.383550:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:18.0381141Z [34403:34424:1008/061717.383626:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:18.0381975Z [34403:34403:1008/061717.405090:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:18.0382647Z [34403:34403:1008/061717.405227:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:18.0383338Z [34403:34424:1008/061717.405757:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:18.0384089Z [34403:34403:1008/061717.411967:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:18.0384756Z [34403:34403:1008/061717.433112:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:18.0385719Z [34403:34403:1008/061717.433169:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.UPower was not provided by any .service files
+2026-10-08T06:17:18.0386823Z [34403:34424:1008/061717.433717:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:18.0387511Z [34403:34403:1008/061717.449056:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:18.0388197Z [34403:34424:1008/061717.449235:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:18.0388879Z [34403:34403:1008/061717.468133:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:18.0444667Z Behavioral harness correctly caught expected failure: self-test-p1-05-selected
+2026-10-08T06:17:18.8903407Z FAIL self-test-p1-05-focus-return
+2026-10-08T06:17:18.8918124Z 718.172991:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:18.8919214Z [34564:34586:1008/061718.173972:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:18.8920233Z [34564:34586:1008/061718.180118:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:18.8920929Z [34564:34586:1008/061718.200466:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:18.8921618Z [34564:34564:1008/061718.254660:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:18.8922298Z [34564:34564:1008/061718.254972:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:18.8923174Z [34564:34564:1008/061718.255102:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:18.8923863Z [34564:34586:1008/061718.255365:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:18.8924560Z [34564:34586:1008/061718.255373:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:18.8925309Z [34564:34564:1008/061718.257077:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:18.8925993Z [34564:34586:1008/061718.258493:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:18.8926830Z [34564:34564:1008/061718.273252:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:18.8927560Z [34564:34564:1008/061718.273664:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:18.8928244Z [34564:34586:1008/061718.273844:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:18.8928925Z [34564:34564:1008/061718.276746:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:18.8929610Z [34564:34564:1008/061718.285154:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:18.8930573Z [34564:34564:1008/061718.285208:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.UPower was not provided by any .service files
+2026-10-08T06:17:18.8931503Z [34564:34586:1008/061718.286283:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:18.8932190Z [34564:34564:1008/061718.296217:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:18.8932878Z [34564:34586:1008/061718.296368:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:18.8933557Z [34564:34564:1008/061718.306917:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:18.8992298Z Behavioral harness correctly caught expected failure: self-test-p1-05-focus-return
+2026-10-08T06:17:19.7911524Z FAIL self-test-lifecycle-duplicate
+2026-10-08T06:17:19.7926828Z 719.026892:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:19.7928656Z [34730:34751:1008/061719.027665:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:19.7929831Z [34730:34751:1008/061719.030963:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:19.7931011Z [34730:34751:1008/061719.056765:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:19.7931909Z [34730:34730:1008/061719.107734:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:19.7932798Z [34730:34730:1008/061719.107814:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:19.7933603Z [34730:34730:1008/061719.107936:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:19.7934621Z [34730:34751:1008/061719.109047:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:19.7935705Z [34730:34751:1008/061719.109061:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:19.7936592Z [34730:34730:1008/061719.110406:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:19.7937548Z [34730:34751:1008/061719.110600:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:19.7938317Z [34730:34730:1008/061719.144907:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:19.7939147Z [34730:34730:1008/061719.145086:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:19.7939954Z [34730:34751:1008/061719.145475:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:19.7940743Z [34730:34730:1008/061719.145739:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:19.7941939Z [34730:34730:1008/061719.161648:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.UPower was not provided by any .service files
+2026-10-08T06:17:19.7943075Z [34730:34730:1008/061719.162398:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:19.7943812Z [34730:34751:1008/061719.162467:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:19.7944668Z [34730:34730:1008/061719.173422:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:19.7945576Z [34730:34751:1008/061719.173497:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+2026-10-08T06:17:19.7946657Z [34730:34730:1008/061719.189179:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+2026-10-08T06:17:19.8008478Z Behavioral harness correctly caught expected failure: self-test-lifecycle-duplicate

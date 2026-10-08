@@ -23,3 +23,10 @@ partially rounded large-wallet debits. review-fix/contract.txt passes151 asserti
 restoring the old guard produces the intended completed in-page failure in the causal
 negative. Historical inventory instructions now use explicit0bcce84 source and were run.
 Preceding logs/hashes above remain versioned; review-fix/identity.json identifies the new source.
+
+combined-14d5 incorporates the now-integrated F25/F26/Rift-guidance dependency.
+The Tree shared plan respects both retirement flags.154 focused assertions PASS,
+including Reserves history/original6+10+16 refund/idempotence/no future payment.
+Fresh F26, matrix chronology/persistence, normal/reduced320/390/430px UI, source,
+context/tooling and V8 Tree/F26 probes PASS. identity.json versions these exact bytes.
+Earlier checks belong to their earlier sources; final combined CI/delivery still pending.

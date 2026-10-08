@@ -102,12 +102,12 @@ test('Auto-Empower reconstruction latches Single Star failure at the purchase bo
   clear(a);assert.equal(a.b.get().cometTrialResult.outcome,'failed');
 });
 test('legacy ownership archive, normalized saves and full-snapshot backup restore',()=>{
-  const a=ready(),old=copy(a.b.get());old.owned={autoascend:true,rememberbulk:true,offline24:true,offline48:true};old.nodes.reserves=6;old.comets=789;
+  const a=ready(),old=copy(a.b.get());old.schemaVersion=1;delete old.offline12hRefund;old.owned={autoascend:true,rememberbulk:true,offline24:true,offline48:true};old.nodes.reserves=6;old.comets=789;
   const once=a.b.normalize(old),twice=a.b.normalize(copy(once));assert.deepEqual(twice,once);
-  assert.deepEqual(once.legacyCometPurchases,{rememberbulk:true,offline24:true,offline48:true});assert.equal(once.nodes.reserves,6);assert.equal(once.comets,789);
-  a.b.set(once);assert(a.b.gate());assert.equal(a.b.cap(),60);
+  assert.deepEqual(once.legacyCometPurchases,{rememberbulk:true,offline24:true,offline48:true});assert.equal(once.nodes.reserves,6);assert.equal(once.comets,1089);
+  a.b.set(once);assert(a.b.gate());assert.equal(a.b.cap(),12);
   assert(a.b.save());const backup=a.b.backup();assert.deepEqual(a.b.decode(backup),once);
-  a.b.get().comets+=999;a.b.set(a.b.decode(backup));assert.equal(a.b.get().comets,789);
+  a.b.get().comets+=999;a.b.set(a.b.decode(backup));assert.equal(a.b.get().comets,1089);
   a.storage.set('lumenfall_save_v2','broken');a.b.set(a.b.load());assert.deepEqual(a.b.get(),once);
 });
 test('active Trial and equipment survive normalization, backup and recovery',()=>{

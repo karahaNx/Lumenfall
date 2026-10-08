@@ -1,61 +1,47 @@
 # TREE_EXCLUSIVE_001 — exclusive Ascension Tree (F29)
 
-Status: **implementation prepared; integration/app acceptance pending**.
-Owner: this chat. Private /workspace/Lumenfall-TREE_EXCLUSIVE_001,
-branch feature/tree-exclusive-001; [PR66](https://github.com/karahaNx/Lumenfall/pull/66).
-Shared checkout/other chats untouched; no subagents/messages. Precise model/effort unknown.
+Status: **candidate prepared; integration/app acceptance pending**. Owner: this chat.
+Private /workspace/Lumenfall-TREE_EXCLUSIVE_001, feature/tree-exclusive-001;
+[PR66](https://github.com/karahaNx/Lumenfall/pull/66). Shared checkout/other chats untouched.
+No subagents/messages; precise runtime model/effort unknown.
 
-Original goal: exclusive Tree effects, visible prices/stacking and idempotent purchased-value
-preservation. [Mandate](TREE_EXCLUSIVE_001/USER_REQUEST.txt),
+Goal: exclusive Tree effects, visible prices/stacking and idempotent purchased-value preservation.
+[Mandate](TREE_EXCLUSIVE_001/USER_REQUEST.txt),
 [original feedback](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt)
-and [historical inventory/proposal](TREE_EXCLUSIVE_001/proposal-2026-10-07.md) preserved.
-Original takes precedence. Latest user instruction8October: “then finish this feature task,
-push to github, implement to my game” authorizes necessary implementation/integration/delivery.
-Live-main AGENTS/bootstrap/workflow govern; protect overlaps and serialize integration.
+and [inventory/proposal](TREE_EXCLUSIVE_001/proposal-2026-10-07.md) preserved; original wins.
+User8October: “then finish this feature task, push to github, implement to my game”.
+Live AGENTS/workflow and standing scope authorize implementation/integration/delivery.
+Protect actual overlap/serialize integration. Historical writer gates do not apply.
 
-## Contract, scope and preservation
+PR90/main31eccfb resolves the missing [matrix](UPGRADE_IDENTITY_001/MATRIX.md).
+Tree owns future Prism/offline-rate/recruitment+Empower purchases. Starlight/Steady/Momentum
+close; every raw level and original stacking operand remains as a read-only bonus.
+No speculative First Light/Anchor, conversion or destination bonus. Complete restore replaces
+snapshots; M(M(S))=M(S). Echo stops charging at6; Bonds20. Existing ceil(P2×1.40^k),
+ceil(P2×1.45^k) and Swift ceil(P3×1.50^k) stay. No Tree bulk/Max/queue added.
 
-The earlier missing matrix is resolved by PR90/main31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6.
-Use its delegated [24-row contract](UPGRADE_IDENTITY_001/MATRIX.md). First Light/Anchor remain
-unaccepted suggestions. No invented numerical tuning.
+Current main14d5f3a incorporates F25, PR85 fixed12h/schema2/Reserves refund, Rift guidance
+and delivery receipts. Merged privately; keep every test/gate and unrelated feature.
+Shared plan rejects invalid/forged, both retirement flags, locked, capped, unaffordable,
+nonfinite or inexact debits. UI shares plan, retains finite prices/icons, describes Empower,
+and wraps at320px with a WebView60 fallback. PR85 retires Reserves; preserve its raw history
+and exact once-only original-price receipt. PR89 Bonds refunds/naming and PR88 Forge cap
+remain unintegrated/separate. PR46/B2 already integrated; no new B2 work.
 
-Tree owns future Prism (swift), offline base rate (echo), recruitment/Empower (bonds) buying.
-Starlight/Steady/Momentum close; exact old raw ownership and stacking remain read-only.
-No conversion/refund/schema bump or destination bonus: M(M(S))=M(S). Restore replaces
-complete snapshots. Over-cap raw levels/effects stay; Echo stops charging at6, Bonds20.
-Prices remain ceil(P2×1.40^k), ceil(P2×1.45^k), Swift ceil(P3×1.50^k).
-Reserves keeps ceil(P6×1.60^k), d100 unlock and2h/level pending separate F26.
+Changed index.html; tree-purchases.js and bridge/runner/prelude/run/scenario registrations;
+own task/status/evidence. Preserve Prism `(1+.04swift)×(1+.05prismstudy)`/floors/benchmarks,
+paid Lab, fixed Motes, formation/Ascend, chronology/live/offline and save/recovery.
 
-Shared buy plan/UI reject invalid/forged, retired, locked, capped, unaffordable, nonfinite
-and unrepresentable payments before mutation. Finite prices/icons remain visible.
-Bonds description includes existing Empower discount;320px wrapping uses WebView60 fallback.
-No Tree bulk/Max/queue added. Changed index.html, focused tree-purchases.js and test
-bridge/runner/prelude/run/scenarios; task/status/evidence. Existing assertions remain.
+[Versioned evidence](../qa/tree-exclusive-001/finish/README.md): old1a476ba CI37709730712
+PASS149/12; preceding151 assertions/partial-debit causal negative and V8119 PASS.
+Combined14d5:154 handler/value assertions, F26 cap/refund regressions, matrix chronology,
+real reload/recovery/backup and320/390/430px normal/reduced,200% text/44px/focus/contrast>=5.50
+PASS. Automated review fixes exact partial Prism rounding and runnable frozen inventory.
+Native signed148/API27/WebView61 old save/actual over-cap buys/storage captured for update.
+No human-independent review or physical/exactWebView60/TalkBack pass claimed.
 
-Preserve Prism `(1+.04swift)×(1+.05prismstudy)`, reward flooring/benchmarks,
-paid Lab values/work, fixed Motes, formation rebuild, manual/auto Ascend, chronology,
-live/offline and save/recovery. PR89 owns Bonds naming/over20 refunds; PR85 owns fixed12h/
-Reserves refunds; PR88 owns Swift Recovery cap. Do not import unintegrated migrations.
-PR46/B2 already integrated via PR57; no historical writer gate applies.
-
-## Baseline, checks and acceptance
-
-Old1a476ba candidate/main214d454 passed full CI37709730712 (149 scenarios/12 negatives,
-all gates). [Old evidence](TREE_EXCLUSIVE_001/evidence/current-2026-10-08/README.md)
-is historical. Current main31eccfb merged privately; preserves PR90, Autosave, confirmed
-Backup, Comet/Resonate/Auto-Ascend UI, both test registrations and every required gate.
-
-Current [finish evidence](../qa/tree-exclusive-001/finish/):151 focused handler/cap/retired-ID/
-canonical/recovery/backup assertions PASS; normal320/390/430px actual200% text,44px,
-focus and contrast>=5.50 PASS. Merge initially omitted reduced-motion browser flag;
-real preference assertion caught it; corrected rerun PASS. Source/tooling/APK/context PASS. Automated review found partial Prism rounding; exact debit
-guard fixed,151 assertions and real old-guard negative PASS. Historical reproduction fixed.
-Task context initially exceeded32KiB; this compact checkpoint resolves own startup size.
-No independent review/native/physical/TalkBack pass claimed.
-
-Combined matrix chronology, real persistence and reduced-motion checks PASS.
-Remaining acceptance: full current CI; PR66 main integration and fresh integrated checks;
-signed APK with com.lumenfall.app/established signer/assets; required Android/WebView60/device
-acceptance and durable receipt. Missing required acceptance keeps feature/chat OPEN.
-Next: finish gates, push PR66, integrate against fresh main, verify/release actual APK,
-save acceptance and archive only this owner chat after verified completion.
+Remaining: current full CI/source/tooling/context; serial PR66 integration/fresh checks;
+signed APK com.lumenfall.app/established signer/assets; native update/mobile acceptance;
+required physical/WebView60/TalkBack evidence and durable GitHub receipt. Missing required
+acceptance keeps feature/chat OPEN. Archive only owner after verified completion.
+Next: publish combined candidate, pass gates, integrate and deliver verified APK.

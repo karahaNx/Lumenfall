@@ -38,14 +38,18 @@ window.runTreePurchaseQa=function(b,ctx,assert){
     ok(document.querySelector('[data-node-effect="'+row[0]+'"]').parentElement.textContent.includes('Saved level preserved'),'raw legacy level explanation '+row);
   });
 
-  ['reserves'].forEach(function(id){
-    seed(id,0,1000);ok(!button(id),'achievement-locked node has no purchase control '+id);
-    rejected(id,'direct handler respects achievement '+id);
-    var s=b.getState();s.achieved[id==='momentum'?'asc5':'d100']=true;b.setState(s);b.treePurchases.render();
-    var cost=id==='momentum'?5:6,prisms=s.prisms;
-    ok(b.treePurchases.buy(id),'achievement unlock allows purchase '+id);
-    ok(b.getState().nodes[id]===1&&b.getState().prisms===prisms-cost,'unlocked price unchanged '+id);
-  });
+  // F26 is now integrated: retired hours keep their raw purchase history and
+  // the approved original-price refund, without an extra future payment.
+  var old=b.freshStateSnapshot();old.schemaVersion=1;delete old.offline12hRefund;
+  old.nodes.reserves=3;old.prisms=100;old.achieved.d100=true;
+  b.setState(old);b.feedbackSave();b.treePurchases.render();var migrated=b.getState();
+  ok(migrated.nodes.reserves===3&&migrated.prisms===132,'three original Reserves prices refund 6+10+16 once');
+  ok(b.treePurchases.plan('reserves').reason==='retired'&&!button('reserves'),'shared plan and UI retire Reserves even with its old Deed');
+  rejected('reserves','retired Reserves cannot charge');
+  same(b.treePurchases.canonical(migrated),migrated,'F26 transition remains idempotent');
+  same(b.treePurchases.roundtrip(migrated),migrated,'backup cannot repeat the Reserves refund');
+  same(JSON.parse(b.rawSave()).nodes,migrated.nodes,'canonical save retains retired hours history');
+  same(JSON.parse(b.rawRecovery()).nodes,migrated.nodes,'recovery retains retired hours history');
 
   // The integrated matrix closes generic damage/kill tracks. Raw ownership,
   // exact old operands and complete snapshots survive repeated normalization.
