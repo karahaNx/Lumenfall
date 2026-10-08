@@ -199,6 +199,7 @@ window.__lumenfallQaBridge = {
   },
   uiMeasurementPause: function(paused){ window.__qaUiMeasurementPause(paused); },
   supportTest: {
+    resonate: function(id){return useSigilResonance(SPIRITS.find(function(sp){return sp.id===id;}));},
     factor: function(now){return simulationBuffMult(now===undefined?Date.now():now);},
     next: function(now){return simulationNextBuffSeconds(now);},
     average: function(){return averageSupportBuffMult();},

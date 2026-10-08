@@ -49,5 +49,20 @@ window.runSwiftRecoveryQa=function(b,ctx,assert,parity){
   ok(card.querySelector('[data-research="charge"]').disabled,'cap button disabled');
   ok(card.textContent.includes('Next: Maxed'),'no false next-level promise');
   b.renderLayout();same(b.getState(),before,'Swift render has no payment or migration');
-  return {checks:checks,purchaseCases:cases,queueCases:4,rawHistory:true,cycleMinimum:10/3};
+  // Paid manual readiness uses the same cast duration and cannot bypass the
+  // existing three-use run limit. Same-source recasts do not stack strength.
+  ctx.setClock(T);s=seed(10);s.sigils=1000;s.activeParty=['tide','aurora'];
+  Object.keys(s.wispUltimate).forEach(function(id){s.wispUltimate[id]=true;s.heroRarity[id]=5;});
+  s.spirits.tide=s.spirits.aurora=1;b.setState(s);
+  ['tide','aurora','tide'].forEach(function(id){
+    ok(b.supportTest.resonate(id),'real paid Resonate accepted');
+    b.simulateTimeline(0,'live',T);
+    ok(b.getState().supportBuffs.sources[id].until===T+1500,'Resonate uses actual1.5s cast');
+  });
+  before=b.getState();ok(before.sigilResonanceUses===3,'existing Resonate run limit retained');
+  ok(!b.supportTest.resonate('aurora'),'fourth manual readiness rejected');
+  same(b.getState(),before,'rejected Resonate no payment');
+  ok(b.supportTest.factor(T)===2,'manual recasts retain additive pair; no self stacking');
+  b.simulateTimeline(1.5,'live',T);ok(b.supportTest.factor(T+1500)===1,'manual cast pair expires exactly with a gap');
+  return {checks:checks,purchaseCases:cases,queueCases:4,resonate:true,rawHistory:true,cycleMinimum:10/3};
 };

@@ -80,7 +80,7 @@ Focused results and limitations: [checks](../qa/support-uptime-001/implementatio
 Source, context, tooling and APK-verifier self-test PASS. Tooling first failed under
 default sandbox subprocess output capture, then passed with additional network
 permission; the malformed source stderr in tooling is its required negative control.
-No full CI, remote feature checkpoint, integration or new APK acceptance yet.
+[Draft PR82](https://github.com/karahaNx/Lumenfall/pull/82) now publishes candidate412a948 and all originals/evidence. Required full CI is running; integration and new APK acceptance remain pending.
 Do not label local motor/browser passes as independent review or physical acceptance.
 
 ## Next action

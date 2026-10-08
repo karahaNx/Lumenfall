@@ -267,7 +267,7 @@
         "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
         "tests/behavioral/run.cjs",
         "--web-root",
-        "/tmp/lumenfall-support-stage-W98YwT",
+        "/tmp/lumenfall-support-stage-GypVKV",
         "--scenario",
         "swift-recovery-cap",
         "--raw-artifacts",
@@ -277,7 +277,7 @@
       "exit": 0,
       "signal": null,
       "error": null,
-      "seconds": 1.305,
+      "seconds": 1.421,
       "status": "pass",
       "log": "swift-recovery-cap.txt"
     },
@@ -340,6 +340,66 @@
       "seconds": 106.262,
       "status": "pass",
       "log": "rift-status-stacking-mobile.txt"
+    },
+    {
+      "scenario": "rift-status-stacking-reduced-motion",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-support-stage-esZkrB",
+        "--scenario",
+        "rift-status-stacking-reduced-motion",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-SUPPORT_UPTIME_001/docs/qa/support-uptime-001/implementation/raw-failures"
+      ],
+      "indexSha256": "ea5294df6772b0a41f55f7bc8791aca926ae7c7fba08145acd76fbc0a7b5831f",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "seconds": 72.417,
+      "status": "pass",
+      "log": "rift-status-stacking-reduced-motion.txt"
+    },
+    {
+      "scenario": "forge-ui-mobile",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-support-stage-esZkrB",
+        "--scenario",
+        "forge-ui-mobile",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-SUPPORT_UPTIME_001/docs/qa/support-uptime-001/implementation/raw-failures"
+      ],
+      "indexSha256": "ea5294df6772b0a41f55f7bc8791aca926ae7c7fba08145acd76fbc0a7b5831f",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "seconds": 28.232,
+      "status": "pass",
+      "log": "forge-ui-mobile.txt"
+    },
+    {
+      "scenario": "forge-ui-reduced-motion",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-support-stage-esZkrB",
+        "--scenario",
+        "forge-ui-reduced-motion",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-SUPPORT_UPTIME_001/docs/qa/support-uptime-001/implementation/raw-failures"
+      ],
+      "indexSha256": "ea5294df6772b0a41f55f7bc8791aca926ae7c7fba08145acd76fbc0a7b5831f",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "seconds": 28.228,
+      "status": "pass",
+      "log": "forge-ui-reduced-motion.txt"
     }
   ]
 }
