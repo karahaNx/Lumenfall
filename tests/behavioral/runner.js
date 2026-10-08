@@ -547,6 +547,9 @@
       switch(ctx.scenario){
         case 'wisp-upgrade-display':
           finish('pass',window.runWispUpgradeQa());return;
+        case 'wisp-roles-ui':
+        case 'wisp-roles-ui-reduced-motion':
+          finish('pass',await window.runWispRolesUi(bridge,ctx,assert));return;
         case 'p2-07a-persistence-review':
           bridge.freeze();
           finish('pass',window.runP207PersistenceReview(bridge,ctx,assert));

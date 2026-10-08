@@ -16,7 +16,11 @@ const sha256 = b => crypto.createHash('sha256').update(b).digest('hex');
 const near = (a, b, label) => assert(Math.abs(a-b) <= Math.max(1,Math.abs(a),Math.abs(b))*1e-10, label);
 const anchor = "if(document.readyState==='loading'){";
 assert.equal(script.split(anchor).length, 2, 'one startup injection anchor');
-const bridge = `var measurementDeaths=[],measurementSummary=null,measurementKillCount=0;
+const calibration = process.env.WISP_CALIBRATION ? JSON.parse(process.env.WISP_CALIBRATION) : null;
+const calibrationCode = calibration ? `var calibrationSpiritPower=spiritPower;
+spiritPower=function(sp,level){return calibrationSpiritPower(sp,level)+
+ ((sp.id==='ember'||sp.id==='stone') ? ${Number(calibration.coefficient)}*Math.pow(Math.max(0,level-${Number(calibration.start)}),2) : 0);};\n` : '';
+const bridge = calibrationCode+`var measurementDeaths=[],measurementSummary=null,measurementKillCount=0;
 var measurementTimelinePush=simulationTimelinePush;
 simulationTimelinePush=function(summary,elapsedSec,type,detail){
   if(summary!==measurementSummary){measurementSummary=summary;measurementKillCount=0;measurementDeaths=[];}
@@ -69,6 +73,7 @@ const original = JSON.parse(fs.readFileSync(savePath,'utf8'));
 const encoded = fs.readFileSync(path.join(path.dirname(savePath),'backup_code.txt'),'utf8').trim();
 assert.deepEqual(JSON.parse(decodeURIComponent(encoded.slice('LUMENFALL1:'.length))),original,'archived backup code matches decoded save');
 const provenance = {
+  calibrationOnly:calibration,
   measuredAt:new Date().toISOString(), tool:process.version, indexPath,
   indexSha256:sha256(bytes), indexGitBlob:crypto.createHash('sha1').update(Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes])).digest('hex'),
   liveMain:'b2a1f440e8ad9fed34b37551e468224310d2a6f6', localCheckout:'67c3e99c24587f6c13fc65cfd27f8dcb8e289602',
@@ -80,6 +85,10 @@ if(provenance.indexSha256==='7c25b0b57722bda4ad6842b173bf9a390f2fa39942ad9120667
 if(provenance.indexGitBlob==='90e4678cb28fa833fdacbc01d1744d9465f6a356'){
   provenance.liveMain='0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd';
   provenance.sourceKind='verified latest live-main product bytes';
+}
+if(provenance.indexGitBlob==='b0bff3729e1fd0047c13d3e3acb74212722a6824'){
+  provenance.liveMain='214d45411ce2fb420f0e4b372063811a967679b1';
+  provenance.sourceKind='verified 8 October baseline product bytes';
 }
 function evaluate(s, depth) {
   api.rawSet(copy(s));
@@ -156,7 +165,9 @@ function budgetState(profile,ids,budget, allocation='equal') {
       spentById[id]+=cost; api.get().spirits[id]++;
     }
   }
-  const result=copy(api.get());
+  // Add fields introduced by current canonical saves before engine replay.
+  // Formula-only raw snapshots above intentionally retain fixed purchased levels.
+  const result=copy(api.set(copy(api.get())));
   const spent=Object.values(spentById).reduce((a,b)=>a+b,0);
   return {state:result,budget,spent,residual:budget-spent,spentById,allocation,
     permanentPolicy:profile==='saved-permanent' ? 'Identical saved permanent collection; historic purchase ledger unknown.' : 'No Rarity, Modules, Ultimates, nodes, Forge or Lab purchases.'};
