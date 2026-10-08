@@ -50,6 +50,13 @@ Original image 03-17363.jpg was viewed; its APK/save identity is unknown.
 - Integrated product HTML SHA256:
   `6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca`.
   **No remaining F12 product gap was found; no second payment system is added.**
+- Main advanced during CI through PR60/59 (Forge text/Wisp upgrades). They were
+  merged into this private branch without conflicts. Latest verification baseline:
+  `0e9b54c8d62a873bd48625f4a20ee18078e8a8f1`, product SHA256
+  `a64747dcec3c26c0b5dea3f2e5c1bac521de557e38547b1195b5a3660234b0df`.
+  The complete F12 replays pass again on these bytes; existing payment/save/
+  simulation code is unchanged by that main delta. Current signed APK140 matches
+  this baseline. Earlier138 evidence remains version-specific historical evidence.
 - Current live AGENTS/feature workflow supersede archived role/writer mandates:
   the feature owner may finish scoped checks, GitHub publication and integration
   under standing authorization. Historical writer release is not a current
@@ -73,7 +80,7 @@ No schema, balance, fixed Luminous reward, cap, package, signing or native chang
 
 ## Acceptance and evidence
 
-All following fresh results use the integrated product hash above.
+All following F12 results are renewed on the latest baseline/hash above.
 [Evidence and commands](../qa/lab-speed-queue-001/README.md).
 
 | Acceptance criterion | Result |
@@ -88,10 +95,10 @@ All following fresh results use the integrated product hash above.
 | Reload, backup/restore, canonical recovery, Reset; paid speed/intent through manual and auto Ascend | PASS: four existing persistence scenarios plus chronology |
 | 320/390/430px, named controls >=44px, touch/keyboard, focus, reduced motion | PASS: UI 47 assertions per width and both existing browser input drivers |
 | 200% Lab text, no horizontal overflow, visible focus, control text contrast | PASS: three measured width checks; minimum 8.00:1 |
-| Actual released JavaScript on V8 6.0.286.52 | PASS: Lab offline/payment/retry assertions and all five existing release matrix cases |
-| Signed APK 0.1.138 identity and asset preservation | PASS: fresh aapt/apksigner, GitHub digest, 526 ZIP CRC entries, all 15 bundled assets |
-| Integrated full required CI | PASS: CI37692669340, 146 default scenarios/12 required negatives/source/tooling/APK self-tests/guarded startup |
-| Affected physical phone, exact WebView60, TalkBack | **OPEN: no device acceptance supplied for APK138** |
+| Actual released JavaScript on V8 6.0.286.52 | PASS: APK140 Lab offline/payment/retry assertions. Five full release matrix cases passed on earlier138; they are not claimed as140 results |
+| Signed APK 0.1.140 identity and asset preservation | PASS: fresh aapt/apksigner, GitHub digest, 526 ZIP CRC entries, all 15 bundled assets |
+| Full required CI | Earlier integrated CI37692669340 PASS146/12; final PR65 CI on latest147-scenario baseline is recorded in its final receipt |
+| Affected physical phone, exact WebView60, TalkBack | **OPEN: no device acceptance supplied for APK140** |
 
 Modern local host: Node24.19.0 / Chromium151. Test names containing “native”
 refer to browser touch/keyboard input drivers, not Android native acceptance.
@@ -123,6 +130,13 @@ established certificate. Asset619954273, 6,837,151 bytes, SHA256
 `81b9be7edea971335a06f06d1894d91e75a92736738cc935fc2a920a26a02e1e`.
 The mutable android-latest URL must be checked against that digest.
 No new APK is needed for documentation-only continuation.
+
+Current signed APK0.1.140/versionCode140 was already built by main run37710185974
+at0e9b54c. Fresh F12 checks verify package/signing, all15assets/526CRC entries and
+the release digest: asset620269725,6,837,509bytes, SHA256
+`c0c81462151c485b16f85dc2c0e53d258ba45c60f92a32539e9e2d6a7153696d`.
+Current raw evidence is in `../qa/lab-speed-queue-001/raw/current-main-140/`.
+No release was dispatched by this chat; older138 results remain preserved.
 
 The delivery checkpoint is tracked in PR65, which must pass required CI before
 integration; its final receipt records the integrated source/evidence identities.

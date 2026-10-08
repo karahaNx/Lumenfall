@@ -2,9 +2,10 @@
 
 The [task](../../tasks/LAB_SPEED_QUEUE_001.md) records original requirements,
 baseline, scope and remaining acceptance. PR46/B2 is integrated through PR57 at
-20aaae62a4b6e46f8d75775085918eaba4e8de29; continuation baseline is
-214d45411ce2fb420f0e4b372063811a967679b1. Fresh verification uses product SHA256
-6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca.
+20aaae62a4b6e46f8d75775085918eaba4e8de29. Main advanced through PR60/59 during CI;
+latest baseline is0e9b54c8d62a873bd48625f4a20ee18078e8a8f1, product SHA256
+a64747dcec3c26c0b5dea3f2e5c1bac521de557e38547b1195b5a3660234b0df.
+All F12 replays pass again on this source and published APK0.1.140.
 No additional F12 product patch is needed.
 
 ## Reproduce fresh integrated checks
@@ -33,8 +34,9 @@ LUMENFALL_QA_CDP_CHROME supplies an explicit browser path. Actual selected path
 and version are recorded. The automated-review fix passes both complete replays;
 the existing lookup also passes a Google-Chrome-only PATH check using a host
 Chromium alias. No claim of a separate Google Chrome binary is made.
-Final revision evidence is in raw/replay-revision/. Initial integrated results
-remain in raw/integrated-cdp/ and raw/integrated-drivers/.
+Latest current-main evidence is in raw/current-main-140/. Prior review revision
+evidence is in raw/replay-revision/; initial integrated results remain in
+raw/integrated-cdp/ and raw/integrated-drivers/. Each retains its own source hash.
 
 The second driver invokes existing process-aware Lab offline/runtime/touch/
 keyboard/reduced-motion drivers unchanged. All four pass. “Native” in these
@@ -46,6 +48,14 @@ recovery failure, processing time and the existing cap/tail.
 [Driver result](raw/integrated-drivers/results.json).
 
 ## Released APK and legacy engine
+
+Current APK0.1.140/versionCode140 was built at main0e9b54c by run37710185974.
+Fresh aapt/apksigner identity, all15assets/526CRC entries and the actual V8 6.0
+Lab offline/payment/retry assertions PASS. Current release asset620269725 is
+6,837,509bytes; SHA256c0c81462151c485b16f85dc2c0e53d258ba45c60f92a32539e9e2d6a7153696d
+matches GitHub's digest. Results: raw/current-main-140/identity.txt, assets.json
+and integrated-apk-v8-lab.json. No new release was requested by this chat.
+The following138 evidence remains historical and is not claimed as140 acceptance.
 
 The actual release APK was freshly downloaded and checked with existing tools:
 aapt/apksigner identity gate and the unchanged Node ZIP/asset verifier.
@@ -68,7 +78,7 @@ Only builtin import names, equivalent strict assert aliases, and source path
 are adapted. All assertion statements and product bytes are unchanged.
 [Lab result](raw/integrated-apk-v8-lab.json) records original/adapted hashes.
 The existing release matrix checks Clear21/Clear20/OFF8h,72h cap and96h Study
-tail; final raw JSON/text record its actual outcome. These are engine checks,
+tail; its138 raw JSON/text record five passing cases. These are engine checks,
 not native DOM/lifecycle/TalkBack acceptance.
 Initial adapter failures (old Node cannot classify modern socket stdout or
 import assert/strict) were host tooling failures. Regular-file output and strict

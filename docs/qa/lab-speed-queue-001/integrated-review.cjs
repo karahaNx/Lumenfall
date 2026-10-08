@@ -15,7 +15,7 @@ fs.writeFileSync(path.join(stage,'index.html'),instrumentHtml(fs.readFileSync(pa
 for(const name of ['fonts','branding'])fs.cpSync(path.join(candidate,name),path.join(stage,name),{recursive:true});
 const source=fs.readFileSync(path.join(candidate,'index.html'));
 const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
-assert.equal(sha(source),'6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca','exact integrated APK 138 source');
+assert.equal(sha(source),'a64747dcec3c26c0b5dea3f2e5c1bac521de557e38547b1195b5a3660234b0df','exact integrated APK 140 source');
 const server=http.createServer((req,res)=>{
  const file=path.resolve(stage,'.'+new URL(req.url,'http://localhost').pathname);
  if(!file.startsWith(stage+path.sep)){res.writeHead(403);res.end();return;}
@@ -111,7 +111,7 @@ async function main(){
   if(!closed){browser.kill('SIGKILL');await completion;failure||={message:'browser teardown timeout'};}
   await new Promise(resolve=>server.close(resolve));fs.rmSync(stage,{recursive:true,force:true});fs.rmSync(profile,{recursive:true,force:true});
  }
- const report={status:failure?'fail':'pass',sourceSHA256:sha(source),integratedProductCommit:'20aaae62a4b6e46f8d75775085918eaba4e8de29',verificationBaseline:'214d45411ce2fb420f0e4b372063811a967679b1',node:process.version,browser:browserIdentity,limitation:'Modern host browser; native WebView60 acceptance remains separate',records,failure,teardown};
+ const report={status:failure?'fail':'pass',sourceSHA256:sha(source),integratedProductCommit:'20aaae62a4b6e46f8d75775085918eaba4e8de29',verificationBaseline:'0e9b54c8d62a873bd48625f4a20ee18078e8a8f1',node:process.version,browser:browserIdentity,limitation:'Modern host browser; native WebView60 acceptance remains separate',records,failure,teardown};
  fs.writeFileSync(path.join(out,'review.json'),JSON.stringify(report,null,2)+'\n');assert.equal(sha(fs.readFileSync(path.join(candidate,'index.html'))),sha(source),'source untouched');
  if(failure||teardown.code!==0)throw Error(failure?.message||'browser exited abnormally');
 }

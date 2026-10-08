@@ -186,7 +186,7 @@
     "Historical B2 stress/other-feature acceptance not replaced"
   ],
   "remaining": [
-    "Final corrected PR65 CI and integration receipt in PR body",
+    "Final latest-main PR65 CI and integration receipt in PR body",
     "Required affected-phone/exact WebView60/TalkBack F12 checklist; save exact version/results",
     "Archive only this owner chat after necessary acceptance passes"
   ],
@@ -252,5 +252,68 @@
     "versions": "current platform-tools and29.0.6",
     "evidence": "raw/device-preflight/"
   },
-  "deliveryPR": "https://github.com/karahaNx/Lumenfall/pull/65"
+  "deliveryPR": "https://github.com/karahaNx/Lumenfall/pull/65",
+  "currentMainVerification": {
+    "baseline": "0e9b54c8d62a873bd48625f4a20ee18078e8a8f1",
+    "sourceSha256": "a64747dcec3c26c0b5dea3f2e5c1bac521de557e38547b1195b5a3660234b0df",
+    "reason": "Main advanced through PR60/59; preserve other features and renew F12 on current source",
+    "cdp": {
+      "status": "pass",
+      "records": 14,
+      "browser": {
+        "selectedPath": "/usr/bin/chromium",
+        "resolvedPath": "/usr/bin/chromium",
+        "version": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)"
+      },
+      "teardown": {
+        "code": 0,
+        "signal": null
+      }
+    },
+    "drivers": {
+      "node": "v24.19.0",
+      "browser": {
+        "selectedPath": "/usr/bin/chromium",
+        "resolvedPath": "/usr/bin/chromium",
+        "version": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)"
+      },
+      "limitation": "Modern host browser; native WebView60 acceptance remains separate",
+      "records": [
+        {
+          "scenario": "lab-motes-offline-integration",
+          "passed": true
+        },
+        {
+          "scenario": "lab-motes-runtime",
+          "passed": true
+        },
+        {
+          "scenario": "lab-motes-native",
+          "passed": true
+        },
+        {
+          "scenario": "lab-motes-reduced-motion",
+          "passed": true
+        }
+      ]
+    },
+    "apk": {
+      "version": "0.1.140",
+      "versionCode": 140,
+      "build": 37710185974,
+      "assetId": 620269725,
+      "sha256": "c0c81462151c485b16f85dc2c0e53d258ba45c60f92a32539e9e2d6a7153696d",
+      "bytes": 6837509,
+      "crcEntries": 526,
+      "matchedAssets": 15,
+      "identity": "raw/current-main-140/identity.txt"
+    },
+    "legacyLab": {
+      "status": "pass",
+      "node": "v8.3.0",
+      "v8": "6.0.286.52"
+    },
+    "defaultScenarios": 147,
+    "evidence": "raw/current-main-140/"
+  }
 }
