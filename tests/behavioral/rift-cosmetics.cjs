@@ -85,6 +85,9 @@ const setup = `window.cosmeticQa = {
   assert: function(ok, message){ if(!ok) throw Error(message); },
   fixture: function(kind, unlocked){
     state=freshState();
+    // Preserve the integrated F27 purchases and show both independent layers.
+    state.owned.rifttrail=true;state.owned.starfallcrest=true;
+    state.cometCosmetics={trail:true,crest:true};
     if(unlocked) RIFT_THEMES.forEach(function(t){if(t.unlockAchievement) state.achieved[t.unlockAchievement]=true;});
     state.depth=kind==='boss'?30:kind==='luminous'?31:1;
     state.maxDepthEver=state.depth;spawnEnemy(false);
@@ -103,6 +106,12 @@ const setup = `window.cosmeticQa = {
     a(caption.textContent===RIFT_THEMES.find(function(t){return t.id===id;}).name,'visible theme name');
     a(getComputedStyle(caption).color==='rgb(241, 237, 255)' && getComputedStyle(caption).backgroundColor==='rgb(16, 24, 43)','opaque readable caption');
     a(halo.getAttribute('aria-hidden')==='true' && getComputedStyle(halo).pointerEvents==='none','decorations cannot capture taps or screen reader focus');
+    ['trail','crest'].forEach(function(slot){
+      var decoration=stage.querySelector('.comet-'+slot),style=getComputedStyle(decoration);
+      a(state.cometCosmetics[slot] && style.display!=='none','Comet '+slot+' remains equipped and visible with '+id);
+      a(style.pointerEvents==='none','Comet '+slot+' remains pointer inert');
+      if(reduced) a(style.animationName==='none','Comet '+slot+' reduced motion remains static');
+    });
     var visible=Array.from(halo.querySelectorAll('.cosmetic-pattern')).filter(function(g){return getComputedStyle(g).display!=='none';});
     a(visible.length===(id==='default'?0:1),'one visible pattern for selected theme');
     if(visible.length){
@@ -185,7 +194,7 @@ async function run() {
         return {contract:'unlock-selection-persistence',themes:results};
       })()`));
     }
-    for (const [width, height, scale, motion] of [[320,640,1,'no-preference'], [390,844,1,'no-preference'], [430,915,1,'no-preference'], [320,640,1.3,'reduce'], [390,844,1.3,'reduce'], [430,915,1,'reduce']]) {
+    for (const [width, height, scale, motion] of [[320,640,1,'no-preference'], [390,844,1,'no-preference'], [430,915,1,'no-preference'], [320,640,1.3,'reduce'], [390,844,1.3,'reduce'], [430,915,1,'reduce'], [320,640,2,'reduce'], [390,844,2,'reduce'], [430,915,2,'reduce']]) {
       await send('Emulation.setDeviceMetricsOverride', {width, height, deviceScaleFactor: 1, mobile: true});
       await send('Emulation.setEmulatedMedia', {features: [{name: 'prefers-reduced-motion', value: motion}]});
       await evaluate(`document.documentElement.style.fontSize=${JSON.stringify(16 * scale + 'px')}`);

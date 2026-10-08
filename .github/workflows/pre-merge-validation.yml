@@ -50,6 +50,9 @@ jobs:
         shell: bash
         run: node tests/behavioral/run.cjs --web-root mobile/www
 
+      - name: Rift cosmetics selection, persistence and mobile acceptance
+        run: node tests/behavioral/rift-cosmetics.cjs --source mobile/www/index.html --negative
+
       - name: Behavioral harness negative self-test
         shell: bash
         run: |
