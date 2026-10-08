@@ -96,6 +96,8 @@ raw logs retained. Corrected overlap checks preserve adjacency for disjoint
 primary pairs and require every membership mark/name. Old numeric policy keeps
 an exact archived counterfactual; actual new policy retains long/split checks.
 Local daily retry exceeds its60s harness budget; hosted CI passed that scenario.
+Reconciled source8a19001f: eight core groups/six mutations, nine focused
+checks, autosave contract and12 mobile profiles PASS. V8 6.0 probe PASS.
 No timeout/acceptance tolerance is weakened. Reconciliation preserves every integrated F14 function and test; only F15
 mechanics/presentation/clock hunks apply above main. No independent review claimed.
 
