@@ -495,6 +495,9 @@
         window.runRiftLayoutQa(bridge,ctx,assert).then(function(detail){ finish('pass',detail); },function(error){ finish('fail',error.message); });
         return;
       }
+      if(ctx.scenario==='comet-unlocks-mobile' || ctx.scenario==='comet-unlocks-reduced-motion'){
+        window.__cometNativeReady=true;return; // Native driver owns these scenarios.
+      }
       if(ctx.scenario==='auto-ascend-target-mobile' || ctx.scenario==='auto-ascend-target-reduced-motion'){
         window.__autoAscendTargetReady=true;return;
       }
@@ -656,7 +659,7 @@
           assert(s.research.focus===24 && s.longStudyLevels.wispascend===9,'mature Lab progression must load intact');
           assert(s.owned.autoascend===true && s.autoAscendEnabled===true,'mature automation flags must load intact');
           assert(s.comets===850 && s.sigils===210,'existing mature Comet/Sigil balances must load intact');
-          assert(s.owned.autoascend && s.owned.offline24 && s.owned.offline48 && s.owned.rememberbulk,'all existing Rest Stop purchases must remain owned');
+          assert(s.owned.autoascend && s.legacyCometPurchases.offline24 && s.legacyCometPurchases.offline48 && s.legacyCometPurchases.rememberbulk,'existing Auto-Ascend and archived Rest Stop entitlements must remain owned');
           assert(s.sigilResonanceUses===0 && s.dailyQuestRefreshes===0,'older schema-v1 saves must safely default new utility counters to zero');
           assert(s.ascendRewardedDepth===0,'existing schema-v1 saves without a benchmark must safely default to 0');
           assert(s.activeFormationPreset==='push' && s.formationPresets.push.join(',')===s.activeParty.join(','),'older schema-v1 saves must seed presets from their current Formation');
@@ -2440,7 +2443,7 @@
           assert(refresh1.state.comets===refreshBase.comets-economy.questRefreshCost,'Quest Refresh must spend exactly its Comet cost');
           assert(refresh1.state.questIds.length===3 && refresh1.state.questIds[0]!=='q_tap_small','Quest Refresh must replace one quest without adding extra quest slots');
           assert(refresh1.state.dailyQuestRefreshes===1,'Quest Refresh count must persist deterministically');
-          assert(refresh1.state.owned.autoascend && refresh1.state.owned.offline24 && refresh1.state.owned.offline48 && refresh1.state.owned.rememberbulk,'refreshing a quest must not invalidate any finite Rest Stop purchase');
+          assert(refresh1.state.owned.autoascend && refresh1.state.legacyCometPurchases.offline24 && refresh1.state.legacyCometPurchases.offline48 && refresh1.state.legacyCometPurchases.rememberbulk,'refreshing a quest must preserve Auto-Ascend and archived legacy purchase ownership');
 
           bridge.setState(refreshBase);
           var refresh2=bridge.refreshQuest('q_tap_small');

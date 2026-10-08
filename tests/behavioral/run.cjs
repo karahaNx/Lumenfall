@@ -89,12 +89,14 @@ async function browserIdentity(chrome) {
 async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, options = {}) {
   const log = options.log || console.log;
   const urlFor = page => baseUrl + page + '?' + new URLSearchParams({ qaScenario: scenario, qaFixture: fixture });
+  if (scenario === 'comet-unlocks-core') return runNativeProcess([process.execPath, path.join(ROOT, 'comet-unlocks-core.cjs')], scenario, 90000, options);
   if (scenario === 'lab-motes-offline-integration') return runNativeProcess([process.execPath, path.join(ROOT, 'lab-motes-offline.cjs')], scenario, 90000, options);
   if (scenario === 'offline-catchup-core') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-catchup.cjs')], scenario, 300000, options);
   if (scenario === 'offline-catchup-ui' || scenario === 'offline-catchup-legacy-dom') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-catchup-ui.cjs'), chrome, urlFor('/index.html'), scenario], scenario, 210000, options);
   if (scenario === 'raw-process-contract') return require('./process_contract.cjs').runContract(runScenario, log);
   if (scenario === 'forge-ui-process-contract') return nativeProcessContract(log);
   let driver = null;
+  if (['comet-unlocks-mobile', 'comet-unlocks-reduced-motion'].includes(scenario)) driver = 'comet-unlocks-ui.cjs';
   if (['rift-status-mobile', 'rift-status-reduced-motion'].includes(scenario) || scenario.startsWith('rift-status-stacking') || scenario.startsWith('self-test-rift-status-line')) driver = 'rift-status.cjs';
   if (['auto-ascend-target-mobile', 'auto-ascend-target-reduced-motion'].includes(scenario)) driver = 'auto-ascend-target.cjs';
   if (scenario.startsWith('forge-ui-') || scenario.startsWith('self-test-forge-ui-')) driver = 'forge-ui.cjs';
