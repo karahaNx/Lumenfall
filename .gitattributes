@@ -23,3 +23,5 @@ docs/qa/offline-catchup-001/android-137/*.txt -text whitespace=-trailing-space
 # Swift validation raw browser/command receipts retain original whitespace.
 docs/qa/swift-recovery-cap-001/implementation/*.stdout.txt -text whitespace=-trailing-space
 docs/qa/swift-recovery-cap-001/implementation/*.stderr.txt -text whitespace=-trailing-space
+# Retain these existing raw failure transcripts, including their final newline.
+docs/qa/swift-recovery-cap-001/implementation-regression/*.stdout.txt -text whitespace=-blank-at-eof

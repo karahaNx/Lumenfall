@@ -1,12 +1,13 @@
 # Swift implementation evidence
 
-Current main31eccfb candidate source SHA256: 4fee51e342873f819170b2f9298eee7b50666c277ec7ae94194ea5c797399bba.
+Current main14d5f3a candidate source SHA256: 319e69db68f96f30e4d5b1a56ae15101c9fba21552d09c79ac2e8d3601ff6916.
 PR88: https://github.com/karahaNx/Lumenfall/pull/88. Integration blocked on the
 progression choice in deed-continuity-proposal.md; no Swift APK released.
-Current core-study-clock.json passes14 groups/110 purchase cases; all five causal
+Earlier main31 core-study-clock.json passes14 groups/110 purchase cases; all five causal
 mutants fail with assertions (mutants-study-clock.json). v8-study-clock.json and
 its independent Node24 integer oracle pass on actual V8 6.0. Latest full/offline
-and17 required negative checks are running; older results below identify their
+and17 required negative checks passed. Full-study-clock.* was stopped (130) after
+main merged the shared12h contract; partial receipts are not a full pass. Older results below identify their
 own source and are not acceptance for the current source.
 
 Earlier-source receipts: core-current.json (13 groups/110 purchase cases),
@@ -111,3 +112,25 @@ Earlier main31eccfb attempts are retained: first no app PID, then an ON
 Auto-Empower fixture bought150 Ember levels before capture. Those are preparation
 diagnostics; the production APK was never modified. Use the new prepared save
 for signed update acceptance, with real Arcane Calibration120-Shard input.
+
+Main14d5f3a merge preserves PR78 Forge memory, PR85 shared12h/schema2 refunds,
+PR81 stable guidance and PR92 Formation delivery. Only Swift's optional receipt
+v1 is added to schema2; F26's receipt and original Comet/Prism value remain.
+Core-main14d5f3a.json and shared12h-main14d5f3a.stdout.txt pass. Source-bound
+goldens regenerate from the one-second8h oracle. A72h return is now compared
+to12h productive one-second replay with its consumed endpoint72h;96h cannot
+finish80h paid work and must retain exactly68h remaining. No productive tail.
+Full exact frozen-state assertions include approved F26 original-price refunds.
+Offline-main14d5f3a originally completed successfully, but its stdout was
+overwritten by a duplicate launch; that duplicate was stopped (130). The unique
+offline-main14d5f3a-final.* rerun is the durable acceptance receipt. Do not use
+the empty first stdout as proof. Full current CI/integration/native update remain
+open, with the Deed-continuity question still pending.
+
+Checkpoint-main14d5f3a.json summarizes the durable current-source passes:
+14core groups/110 purchases, five causal mutants, unchanged-source V8 6.0 plus
+independent integer accounting, shared12h regression, offline-main14d5f3a-final
+complete replay,12 actual mobile/text/motion profiles, source and tooling checks.
+The full required gate still needs current-head CI. The superseded partial
+main31 full run is not a complete current-main acceptance. Signed Swift update
+is not run because progression is blocked. Archive status: owner chat OPEN.

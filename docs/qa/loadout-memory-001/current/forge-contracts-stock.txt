@@ -1,0 +1,35 @@
+Browser identity: { "selected_path": "/usr/bin/chromium", "resolved_path": "/usr/bin/chromium", "sha256": "2c8d32d29dc6781c35ae196ea83299d507ac88fc339301abe74672feda299779", "version": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)", "version_exitcode": 0, "version_stderr": "" }
+Staged source: { "source_sha256": "3c962a5024efe3735903897ba92afc502e968d74b91b6b6b47b593a7c6f9d73b", "instrumented_sha256": "15a6708cfed5e42023ff264045f09c5d9c72e62d6717dcf0ec5b05510261a0ae" }
+FAIL forge-contracts
+  process: { "exitcode": null, "timed_out": true, "elapsed_sec": 25.018540562, "timeout_sec": 25 }
+  observed QA: { "qa_count": 0, "qa_status": null, "qa_scenario": null, "json_status": null, "json_scenario": null, "runtime_markers": [], "runtime_error_count": null, "json_error": "Expected exactly one completed QA result", "valid": false }
+  raw artifacts: /tmp/lumenfall-qa-raw-xQvws1/forge-contracts-dvrGja
+  Chromium stderr tail:
+rg/freedesktop/DBus: unknown error type: 
+[14474:14474:1008/055618.595995:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[14474:14504:1008/055618.596012:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[14474:14504:1008/055618.596024:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[14474:14474:1008/055618.612551:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[14474:14474:1008/055618.616266:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[14474:14504:1008/055618.618323:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[14474:14474:1008/055618.618323:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[14474:14504:1008/055618.618355:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[14474:14474:1008/055618.618522:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[14474:14504:1008/055618.618604:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+
+(process:14474): dconf-CRITICAL **: 05:56:18.624: unable to create directory '/home/agent/.cache/dconf': Read-only file system.  dconf will not work properly.
+
+(process:14474): dconf-CRITICAL **: 05:56:18.625: unable to create directory '/home/agent/.cache/dconf': Read-only file system.  dconf will not work properly.
+
+(process:14474): dconf-CRITICAL **: 05:56:18.625: unable to create directory '/home/agent/.cache/dconf': Read-only file system.  dconf will not work properly.
+[14474:14515:1008/055618.650819:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:279] Failed to adjust OOM score of renderer with pid 14562: Read-only file system (30)
+[14474:14515:1008/055618.673161:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:279] Failed to adjust OOM score of renderer with pid 14571: Read-only file system (30)
+[14474:14515:1008/055618.678583:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:279] Failed to adjust OOM score of renderer with pid 14572: Read-only file system (30)
+[14474:14474:1008/055618.686708:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[14474:14474:1008/055618.687284:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[14474:14504:1008/055618.687391:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[14474:14474:1008/055618.722120:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[14474:14504:1008/055618.722253:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[14474:14474:1008/055618.731034:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+
+Behavioral QA failed: forge-contracts null

@@ -1683,11 +1683,18 @@
   .stage .depth-label .region-label{font-size:10px;line-height:14px;letter-spacing:.16em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .stage .rift-heading .rift-mode-row{height:46px;min-height:46px;margin:0;gap:3px;padding:1px;background:#090f20a6;border-radius:12px;}
   .stage .rift-mode-btn{min-width:44px;min-height:44px;font-size:12px;padding:3px 6px;letter-spacing:.09em;white-space:nowrap;}
-  #rift-objective-row{position:relative;z-index:2;display:flex;align-items:stretch;gap:0;flex:none;min-height:44px;border:1px solid #3d4963;border-radius:11px;background:#141d30;box-shadow:inset 0 1px 0 #ffffff09;overflow:hidden;}
-  #rift-objective-row[hidden]{display:none;}
-  .stage .rift-objective{flex:1;min-width:0;height:44px;min-height:44px;padding:4px 7px;grid-template-columns:auto minmax(0,1fr) auto;gap:7px;border:0;border-radius:0;background:transparent;box-shadow:none;}
-  #rift-objective-dismiss{flex:none;width:44px;height:44px;min-width:44px;min-height:44px;border:0;border-left:1px solid #3d496355;border-radius:0;background:transparent;color:var(--ink-dim);font:20px/1 'Manrope',sans-serif;cursor:pointer;}
-  #rift-objective-dismiss:focus-visible{outline:2px solid var(--lumen);outline-offset:-3px;}
+  /* F07: the hint body has the same reserved space when hidden or scrollable. */
+  #rift-guidance-slot{display:flex;height:46px;flex:none;margin:0 10px;color:#f0effb;background:#141d30;border:1px solid #52617e;border-radius:11px;box-sizing:border-box;}
+  #rift-guidance-slot[hidden],#rift-objective-row[hidden]{display:none;}
+  #rift-hints-toggle{display:block;flex:none;width:9.5em;max-width:70%;min-width:44px;height:44px;min-height:44px;padding:2px 6px;border:0;border-right:1px solid #52617e;border-radius:10px 0 0 10px;background:#1c2339;color:#f0effb;font:inherit;font-size:.875rem;line-height:1.1;font-weight:700;white-space:nowrap;cursor:pointer;}
+  #rift-objective-row{flex:1;min-width:0;height:44px;min-height:0;overflow-y:auto;overflow-x:hidden;border-radius:0 10px 10px 0;}
+  #rift-guidance-slot .rift-objective{min-width:0;min-height:44px;height:auto;padding:4px 6px;grid-template-columns:minmax(0,1fr) auto;gap:5px;border:0;border-radius:0;background:transparent;box-shadow:none;overflow:visible;}
+  #rift-guidance-slot .objective-kind{display:none;}
+  #rift-guidance-slot .objective-copy strong,#rift-guidance-slot .objective-copy small{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:break-word;}
+  #rift-guidance-slot .objective-copy strong{font-size:.875rem;line-height:1.2;}
+  #rift-guidance-slot .objective-copy small{font-size:.75rem;line-height:1.2;color:#b5b4cb;}
+  #rift-guidance-slot .objective-arrow{color:#b5b4cb;}
+  #rift-hints-toggle:focus,#rift-objective-row:focus,#rift-guidance-slot .rift-objective:focus{outline:2px solid #e7c67e;outline-offset:-3px;}
   .stage .objective-kind{display:block;font-size:9px;line-height:12px;letter-spacing:.05em;padding:3px 5px;white-space:nowrap;}
   .stage .objective-copy strong{font-size:12px;line-height:16px;}
   .stage .objective-copy small{font-size:11px;line-height:14px;}
@@ -2524,6 +2531,12 @@
       <div class="chip"><span class="shape shape-star glyph-icon" style="background:var(--comet)"></span><span class="lbl">Comets</span><span class="val mono" id="hud-comet">0</span></div>
       <div class="chip"><span class="shape shape-octagon glyph-icon" style="background:var(--sigil)"></span><span class="lbl">Sigils</span><span class="val mono" id="hud-sigil">0</span></div>
     </header>
+    <div id="rift-guidance-slot">
+      <button type="button" id="rift-hints-toggle" aria-expanded="true" aria-controls="rift-objective-row">Hide hints</button>
+      <div id="rift-objective-row" role="region" aria-label="Rift guidance" tabindex="0">
+        <div class="rift-objective" id="rift-objective"></div>
+      </div>
+    </div>
     <nav class="tabbar" aria-label="Main navigation">
 <button class="tab-btn" data-tab="spirits"><span class="nav-icon"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c0 6-8 9-7 14a7 7 0 0 0 14 0c1-4-3-7-4-9l-3 6M9 16l3 4 3-4"/></svg></span><span class="lb">Wisps</span></button>
 <button class="tab-btn" data-tab="workshop" aria-label="Workshop"><span class="nav-icon"><svg class="nav-art" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18l-3 5H7L3 9V7ZM8 12v4l-3 4h14l-3-4v-4M9 4h8v3"/></svg></span><span class="lb">Workshop</span><span class="lab-capacity-badge" id="lab-capacity-badge" aria-hidden="true" hidden></span></button>
@@ -2548,10 +2561,6 @@
           <button class="rift-mode-btn" id="rift-farm-btn">Farm</button>
         </div></div>
 
-        <div id="rift-objective-row">
-          <div class="rift-objective" id="rift-objective"></div>
-          <button type="button" id="rift-objective-dismiss" aria-label="Hide Rift guidance" title="Hide Rift guidance">×</button>
-        </div>
         <div class="battle-row"><div class="rift-landscape" aria-hidden="true">
  <svg viewBox="0 0 400 440" preserveAspectRatio="xMidYMid slice">
  <defs><linearGradient id="rift-mist" x2="0" y2="1"><stop stop-color="var(--land-light)" stop-opacity=".04"/><stop offset=".6" stop-color="var(--land-light)" stop-opacity=".18"/><stop offset="1" stop-color="#080d19" stop-opacity="0"/></linearGradient></defs>
@@ -2930,7 +2939,7 @@ var NODES = [
   {id:'bonds',     name:'Cheaper Bonds',       desc:'−3% Wisp recruiting cost, per level (floor 40%).',  baseCost:2, growth:1.45},
   {id:'swift',     name:'Swift Ascension',     desc:'+4% Prisms earned per Ascend, per level.', baseCost:3, growth:1.50},
   {id:'momentum',  name:'Eternal Momentum',    desc:'+6% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.', baseCost:5, growth:1.55, requiresAchievement:'asc5'},
-  {id:'reserves',  name:'Deep Reserves',       desc:'+2 hours to your offline cap, per level.', baseCost:6, growth:1.60, requiresAchievement:'d100'}
+  {id:'reserves',  name:'Deep Reserves',       desc:'Retired offline extension. Previous purchases are refunded in Prisms.', baseCost:6, growth:1.60, requiresAchievement:'d100', retired:true}
 ];
 
 // Existing slot, Deed and v0 automation contracts are independent of additions.
@@ -2974,7 +2983,7 @@ var ACHIEVEMENTS = [
   {id:'d10',   name:'Reach Rift 10',        reward:5,  check:function(s){return s.maxDepthEver>=10;}},
   {id:'d25',   name:'Reach Rift 25',        reward:10, check:function(s){return s.maxDepthEver>=25;}},
   {id:'d50',   name:'Reach Rift 50',        reward:20, check:function(s){return s.maxDepthEver>=50;}},
-  {id:'d100',  name:'Reach Rift 100',       reward:50, unlocks:'Ascension Tree: Deep Reserves', check:function(s){return s.maxDepthEver>=100;}},
+  {id:'d100',  name:'Reach Rift 100',       reward:50, check:function(s){return s.maxDepthEver>=100;}},
   {id:'d250',  name:'Reach Rift 250',       reward:100, check:function(s){return s.maxDepthEver>=250;}},
   {id:'tap100',  name:'Strike 100 times',    reward:3,  check:function(s){return s.totalTaps>=100;}},
   {id:'tap1000', name:'Strike 1,000 times',  reward:8,  check:function(s){return s.totalTaps>=1000;}},
@@ -3063,7 +3072,7 @@ function nodeEarnedEffect(id){
   if(id==='steady') return '+'+earnedPercent(level*0.08)+'% tap damage';
   if(id==='swift') return '+'+earnedPercent(level*0.04)+'% Prisms per Ascend';
   if(id==='momentum') return '+'+earnedPercent(momentumMult()-1)+'% passive Wisp damage and Wisp-powered tap base';
-  if(id==='reserves') return '+'+formatNum(level*2)+' hours to the offline cap';
+  if(id==='reserves') return 'Retired · previous level '+formatNum(level)+' preserved in purchase history';
   if(id==='echo'){
     var rate=Math.min(1,0.70+level*0.05);
     return '+'+earnedPercent(rate-0.70)+' percentage points offline rate · '+earnedPercent(rate)+'% before Projects'+(rate>=1?' (node cap reached)':'');
@@ -3162,7 +3171,9 @@ var SAVE_KEY = 'lumenfall_save_v2';
 var RECOVERY_SAVE_KEY = 'lumenfall_save_recovery_v1';
 var RIFT_GUIDANCE_HIDDEN_KEY = 'lumenfall_rift_guidance_hidden_v1';
 var riftGuidanceHidden = false;
-var SAVE_SCHEMA_VERSION = 1;
+var SAVE_SCHEMA_VERSION = 2;
+var PRODUCTIVE_OFFLINE_CAP_SEC = 12 * 3600;
+var OFFLINE_12H_REFUND_POLICY = 'OFFLINE_12H_001:140/160:sum-ceil-6x1.6^level';
 var RESET_PENDING_KEY = 'lumenfall_reset_pending_v1';
 var TICK_MS = 100;
 var ABILITY_BASE_CYCLE_SEC = 6;
@@ -3184,7 +3195,7 @@ function freshState(){
   RESEARCH.forEach(function(r){ research[r.id] = 0; researchQueue[r.id] = false; });
   LONG_STUDIES.forEach(function(l){ longStudyLevels[l.id] = 0; studyQueue[l.id] = false; studyUseMotes[l.id] = false; studySpeedTargets[l.id] = 1.5; });
   return {
-    schemaVersion:SAVE_SCHEMA_VERSION,
+    schemaVersion:SAVE_SCHEMA_VERSION, offline12hRefund:null,
     swiftRecoveryRefund:null,
     lumen:0, shards:0, prisms:0, comets:0, motes:0, sigils:0,
     depth:1, maxDepthEver:1,
@@ -3394,8 +3405,101 @@ function migrateSaveV0ToV1(input){
   migrated.schemaVersion = 1;
   return migrated;
 }
+// Original prices are Number integers, including prices beyond 2^53. Convert
+// their exact binary integer value to decimal without BigInt (WebView 60).
+function offlineRefundDecimalAdd(a,b){
+  var result='',carry=0,i=a.length-1,j=b.length-1;
+  while(i>=0 || j>=0 || carry){
+    var n=(i>=0?Number(a.charAt(i--)):0)+(j>=0?Number(b.charAt(j--)):0)+carry;
+    result=String(n%10)+result; carry=Math.floor(n/10);
+  }
+  return result || '0';
+}
+function offlineRefundExactInteger(value){
+  var digits=[];
+  while(value>0){digits.push(value%1024);value=Math.floor(value/1024);}
+  var result='0';
+  while(digits.length){
+    var carry=digits.pop(),next='';
+    for(var i=result.length-1;i>=0;i--){
+      var n=Number(result.charAt(i))*1024+carry;
+      next=String(n%10)+next;carry=Math.floor(n/10);
+    }
+    result=(carry?String(carry):'')+next;
+  }
+  return result;
+}
+function offline12hPrices(level){
+  var prices=[];
+  for(var i=0;i<level;i++){
+    var price=Math.ceil(6*Math.pow(1.60,i));
+    // A non-finite price could never have been purchased in the original game.
+    if(!Number.isFinite(price)) throw persistenceError('invalid-offline-refund','Offline purchase history contains a non-finite original price.');
+    prices.push(price);
+  }
+  return prices;
+}
+function offline12hPrismRefund(level,prices){
+  return (prices || offline12hPrices(level)).reduce(function(total,price){
+    return offlineRefundDecimalAdd(total,offlineRefundExactInteger(price));
+  },'0');
+}
+function normalizeOffline12hRefund(receipt){
+  if(receipt===null || receipt===undefined) return null;
+  if(!isPlainObject(receipt) || receipt.policy!==OFFLINE_12H_REFUND_POLICY ||
+      typeof receipt.offline24!=='boolean' || typeof receipt.offline48!=='boolean' ||
+      !Number.isSafeInteger(receipt.reservesLevel) || receipt.reservesLevel<0 ||
+      receipt.comets!==(receipt.offline24?140:0)+(receipt.offline48?160:0) ||
+      !Array.isArray(receipt.prismPrices) || receipt.prismPrices.length!==receipt.reservesLevel ||
+      receipt.prismPrices.some(function(price){return !Number.isFinite(price) || !Number.isInteger(price) || price<6;}) ||
+      receipt.prismsExact!==offline12hPrismRefund(receipt.reservesLevel,receipt.prismPrices) ||
+      !Array.isArray(receipt.cometsPaid) || receipt.cometsPaid.length!==2 ||
+      !Array.isArray(receipt.prismsPaid) || receipt.prismsPaid.length!==receipt.reservesLevel ||
+      receipt.cometsPaid.concat(receipt.prismsPaid).some(function(v){return typeof v!=='boolean';})){
+    throw persistenceError('invalid-offline-refund','Offline purchase refund history is invalid.');
+  }
+  return clonePersistedValue(receipt);
+}
+function settleOffline12hRefund(out){
+  var receipt=out.offline12hRefund;
+  if(!receipt) return;
+  function credit(currency,amount,paid,index){
+    if(paid[index]) return;
+    var result=out[currency]+amount;
+    // Preserve an unrepresentable deposit in its original currency. Try again
+    // on the next canonical save after spending; never round away or overpay it.
+    if(Number.isFinite(result) && result-out[currency]===amount && result-amount===out[currency]){
+      out[currency]=result;paid[index]=true;
+    }
+  }
+  credit('comets',receipt.offline24?140:0,receipt.cometsPaid,0);
+  credit('comets',receipt.offline48?160:0,receipt.cometsPaid,1);
+  // Keep the originally recorded Number prices across engines: Math.pow can
+  // differ by an ulp between WebView60-generation and newer V8 versions.
+  receipt.prismPrices.forEach(function(price,i){credit('prisms',price,receipt.prismsPaid,i);});
+}
+function offline12hRefundPending(receipt){
+  return receipt && receipt.cometsPaid.concat(receipt.prismsPaid).some(function(paid){return !paid;});
+}
+function migrateSaveV1ToV2(input){
+  var migrated=clonePersistedValue(input);
+  var owned=isPlainObject(migrated.owned)?migrated.owned:{};
+  var legacy=isPlainObject(migrated.legacyCometPurchases)?migrated.legacyCometPurchases:{};
+  var nodes=isPlainObject(migrated.nodes)?migrated.nodes:{};
+  var level=nonNegativeInt(nodes.reserves,0);
+  var a=owned.offline24===true || legacy.offline24===true;
+  var b=owned.offline48===true || legacy.offline48===true;
+  migrated.offline12hRefund={policy:OFFLINE_12H_REFUND_POLICY,offline24:a,offline48:b,
+    reservesLevel:level,comets:(a?140:0)+(b?160:0),prismPrices:offline12hPrices(level),prismsExact:offline12hPrismRefund(level),
+    cometsPaid:[false,false],prismsPaid:offline12hPrices(level).map(function(){return false;})};
+  // Keep archived ownership, raw levels, paid Lab snapshots and lastSeen.
+  // Crediting and its receipt commit together through the existing save path.
+  migrated.schemaVersion=2;
+  return migrated;
+}
 var SAVE_MIGRATIONS = {
-  0: migrateSaveV0ToV1
+  0: migrateSaveV0ToV1,
+  1: migrateSaveV1ToV2
 };
 function migratePersistedState(input){
   var migrated = clonePersistedValue(input);
@@ -3474,10 +3578,13 @@ function normalizeCurrentSave(input){
   var source = isPlainObject(input) ? input : {};
 
   out.schemaVersion = SAVE_SCHEMA_VERSION;
+  out.offline12hRefund = normalizeOffline12hRefund(source.offline12hRefund);
 
   ['lumen','shards','prisms','comets','motes','sigils'].forEach(function(key){
     out[key] = finiteNonNegative(source[key],fresh[key]);
   });
+
+  settleOffline12hRefund(out);
 
   out.depth = Math.max(1,nonNegativeInt(source.depth,1));
   out.maxDepthEver = Math.max(1,nonNegativeInt(source.maxDepthEver,out.depth));
@@ -4123,7 +4230,7 @@ function fillRateMult(level){ return Math.min(researchFactor('charge',level),ABI
 function offlineRate(){ return Math.min(1, 0.70 + nodeLevel('echo')*0.05) + longStudyOfflineBonus(); }
 function prismMult(){ return (1 + nodeLevel('swift')*0.04) * longStudyPrismMult(); }
 function costReduction(){ return Math.min(0.6, nodeLevel('bonds')*0.03); }
-function offlineCapHours(){ return 12 + (state.legacyCometPurchases.offline24?12:0) + (state.legacyCometPurchases.offline48?24:0) + nodeLevel('reserves')*2; }
+function offlineCapHours(){ return PRODUCTIVE_OFFLINE_CAP_SEC / 3600; }
 function eliteChance(depth,level){ return Math.min(0.35, Math.min(0.30, 0.03 + Math.floor(depth/10)*0.02) + researchBonus('luminoustracking',level)); }
 function motesDropFor(depth){ return Math.max(1, Math.round((1 + depth/8) * longStudyMoteMult() * formationRewardMult())); }
 function sigilsFromBoss(depth){ return Math.max(1, Math.floor(depth/10)); }
@@ -5047,7 +5154,7 @@ function applyRiftTheme(){
 
 function buyNode(node){
   node=node && NODES.find(function(n){return n.id===node.id;});
-  if(!node || node.retiredTo) return;
+  if(!node || node.retired || node.retiredTo) return;
   var cost = nodeCost(node);
   if(state.prisms < cost) return;
   state.prisms -= cost;
@@ -5811,6 +5918,11 @@ function nextRiftObjective(){
 function renderRiftGuidancePreference(){
   var row=document.getElementById('rift-objective-row');
   if(row) row.hidden=riftGuidanceHidden;
+  var hintsToggle=document.getElementById('rift-hints-toggle');
+  if(hintsToggle){
+    hintsToggle.textContent=riftGuidanceHidden ? 'Show hints' : 'Hide hints';
+    hintsToggle.setAttribute('aria-expanded',String(!riftGuidanceHidden));
+  }
   var toggle=document.getElementById('rift-guidance-toggle');
   if(toggle){
     toggle.setAttribute('aria-pressed',String(!riftGuidanceHidden));
@@ -5827,7 +5939,7 @@ function setRiftGuidanceHidden(hidden){
     else localStorage.removeItem(RIFT_GUIDANCE_HIDDEN_KEY);
   }catch(e){}
   renderRiftGuidancePreference();
-  if(returnFocus) els['enemy-stage'].focus({preventScroll:true});
+  if(returnFocus) document.getElementById('rift-hints-toggle').focus({preventScroll:true});
 }
 function renderRiftObjective(){
   var el = els['rift-objective'];
@@ -6342,7 +6454,8 @@ function renderResearch(){
     btn.addEventListener('click', function(){
       var v = btn.getAttribute('data-mult');
       labMultiplier = v==='max' ? 'max' : parseInt(v,10);
-      if(state.legacyCometPurchases.rememberbulk){ state.savedLabMultiplier = labMultiplier; }
+      state.savedLabMultiplier = labMultiplier;
+      saveState();
       renderResearch();
     });
   });
@@ -6448,7 +6561,7 @@ function renderLongStudies(){
     '</div>';
   });
 
-  html += legacyUpgradeSection(legacyHtml)+'<div class="section-sub">Lab: permanent damage, kill rewards, Mote yield and Study work. Slot capacity rises at Rift 40, 60 and 90. Studies progress while you’re away. Study Queue begins the next paid level. Use Motes buys the selected repeat speed for each active level, including manual starts, as soon as its full price is available. OFF keeps speed already paid for.</div>';
+  html += legacyUpgradeSection(legacyHtml)+'<div class="section-sub">Lab: permanent damage, kill rewards, Mote yield and Study work. Slot capacity rises at Rift 40, 60 and 90. Studies share the 12-hour offline limit with rewards and automation. Study Queue begins the next paid level. Use Motes buys the selected repeat speed for each active level, including manual starts, as soon as its full price is available. OFF keeps speed already paid for.</div>';
   replaceControlMarkup(els['study-list'],html);
   if(focusedInspection){
     var restoredInspection=els['study-list'].querySelector('[data-study-details="'+focusedInspection+'"]');
@@ -6529,6 +6642,7 @@ function renderAscendSummary(){
 function renderNodes(){
   var html = '<div class="section-sub">Tree: Ascend rewards, offline rules and Wisp recruitment.</div>',legacyHtml='';
   NODES.forEach(function(node){
+    if(node.retired) return;
     if(node.retiredTo){
       if(nodeLevel(node.id)>0) legacyHtml+=legacyUpgradeMarkup(node,'<div class="earned-effect" data-node-effect="'+node.id+'">Level '+nodeLevel(node.id)+' · '+nodeEarnedEffect(node.id)+'</div>');
       return;
@@ -6614,7 +6728,17 @@ function renderAchievements(){
   });
   els['ach-list'].innerHTML = html;
 
-  var shopHtml = '';
+  var shopHtml = '<div class="card shop-card" data-offline-policy><div class="info">' +
+    '<div class="name">12 hours of offline progress</div>' +
+    '<div class="desc">Rewards, combat, Lab and automation share the same 12-hour limit. Offline earning rate is separate.</div>';
+  var refund=state.offline12hRefund;
+  if(refund && (refund.comets>0 || refund.prismsExact!=='0')){
+    shopHtml += '<div class="desc" data-offline-refund>Previous offline purchases: '+refund.comets+
+      ' Comets and '+refund.prismsExact.replace(/\B(?=(\d{3})+(?!\d))/g,' ')+' Prisms. '+(offline12hRefundPending(refund)?
+      'Refund value is preserved in the original currencies; remaining credit applies automatically after spending.':
+      'Refund credited once.')+' Purchase history is preserved.</div>';
+  }
+  shopHtml += '</div></div>';
   SHOP.forEach(function(item){
     var owned = !!state.owned[item.id];
     var extra = '';
@@ -6756,7 +6880,7 @@ var ENCYCLOPEDIA_MECHANICS = [
   {name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the run for Prisms. Your first reward sets a cleared-Rift benchmark; repeats at or below it earn a 20% reserve reward, while pushing beyond it adds a new-depth bonus. Permanent systems stay.'},
   {name:'Luminous Enemies', meta:'Rare encounter', desc:'Rare non-boss enemies that drop Motes. Their appearance chance rises as you push deeper.'},
   {name:'Boss Traits', meta:'Boss mechanic', desc:'Regrowth regenerates 0.9% max HP/s. Fractured Core regenerates 0.5%/s and takes +75% from Wisp ability hits only. Guardian’s Mark regenerates 0.6%/s and makes your manual taps and Auto-Tap deal x3; passive Wisp damage is unchanged by those trait bonuses.'},
-  {name:'Offline Progress', meta:'Idle system', desc:'Combat, Wisp abilities, Auto-Tap, Farm, Auto-Ascend, Long Studies and automation continue while you are away. If Auto-Empower makes you strong enough after a boss retreat, the game retries the saved Boss automatically.'}
+  {name:'Offline Progress', meta:'Idle system', desc:'Combat, Wisp abilities, Auto-Tap, Farm, Auto-Ascend, Long Studies and automation share one productive offline period of up to 12 hours. Offline earning rate is separate. If Auto-Empower makes you strong enough after a boss retreat, the game retries the saved Boss automatically.'}
 ];
 
 function renderEncyclopedia(){
@@ -6980,6 +7104,7 @@ function syncMainScrollMode(tabName){
   if(!main) return;
   var battlePanel = document.getElementById('tab-battle');
   var battleActive = typeof tabName==='string' ? tabName==='battle' : !!(battlePanel && battlePanel.classList.contains('active'));
+  document.getElementById('rift-guidance-slot').hidden=!battleActive;
   if(main.classList.contains('rift-scroll-locked')!==battleActive){
     main.classList.toggle('rift-scroll-locked', battleActive);
   }
@@ -8455,10 +8580,8 @@ function* offlineProgressSteps(now,lastSeen,elapsedSec,effectiveSec,processingSt
     kind:'offline',visual:false,clockStartMs:lastSeen,
     offlineWindowStartMs:lastSeen,resumable:true
   });
-  // Studies keep their existing real-time semantics beyond the combat cap.
-  if(elapsedSec>effectiveSec){
-    yield* advanceStudyOnlyTime(elapsedSec-effectiveSec,lastSeen+effectiveSec*1000,sim,true);
-  }
+  // Every productive system shares this interval; consume the rest of the
+  // absence without a productive Study-only tail. Foreground replay stays live.
   state.totalOfflineSeconds += effectiveSec;
   // Input and live ticks were suspended while the offline transaction ran.
   // Replay that foreground time with the existing live policy before committing.
@@ -8649,6 +8772,7 @@ function offlineReturnMessage(offline){
     (offline.shardEarned>1 ? ' and ' + formatNum(offline.shardEarned) + ' Shards' : '') +
     (offline.sigilsEarned>0 ? ' and ' + formatNum(offline.sigilsEarned) + ' Sigils' : '') +
     (offline.motesEarned>0 ? ' and ' + formatNum(offline.motesEarned) + ' Motes' : '') + ' while you were gone.';
+  msg += ' Offline progress is limited to 12 hours for rewards, Lab and automation.';
   if(offline.ascends>0){ msg += ' They ascended ' + offline.ascends + ' time' + (offline.ascends===1?'':'s') + ' on their own!'; }
   if(offline.retreated){ msg += ' After the Boss remained an impossible wall for 5 minutes offline, they switched to Farm at Rift ' + offline.endDepth + '. Your Push point at Rift ' + offline.pushDepth + ' is still saved.'; }
   if(offline.completedStudies.length===1){ msg += ' Your Long Study "' + offline.completedStudies[0] + '" finished while you were away!'; }
@@ -8683,7 +8807,7 @@ function init(){
   cacheEls();
   try{ riftGuidanceHidden=localStorage.getItem(RIFT_GUIDANCE_HIDDEN_KEY)==='1'; }catch(e){ riftGuidanceHidden=false; }
   state = loadState();
-  if(state.legacyCometPurchases.rememberbulk && state.savedLabMultiplier!==undefined){ labMultiplier = state.savedLabMultiplier; }
+  labMultiplier = state.savedLabMultiplier;
   var dailyRolled = ensureDaily();
   restoreEnemyOrSpawn();
   setupTabs();
@@ -8717,7 +8841,7 @@ function init(){
     var target = this.getAttribute('data-target-tab');
     if(target) activateTab(target);
   });
-  document.getElementById('rift-objective-dismiss').addEventListener('click',function(){ setRiftGuidanceHidden(true); });
+  document.getElementById('rift-hints-toggle').addEventListener('click',function(){ setRiftGuidanceHidden(!riftGuidanceHidden); });
   document.getElementById('rift-guidance-toggle').addEventListener('click',function(){ setRiftGuidanceHidden(!riftGuidanceHidden); });
   document.getElementById('ascend-btn').addEventListener('click', function(){ doAscend(false); });
 

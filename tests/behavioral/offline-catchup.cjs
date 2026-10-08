@@ -104,13 +104,16 @@ function baselineState(actual,expected,seed,label){
  const oldOwnership={...expected.owned},legacy={};
  for(const id of ['rememberbulk','offline24','offline48']){if(oldOwnership[id]===true)legacy[id]=true;delete oldOwnership[id];}
  assert.deepEqual(actual.legacyCometPurchases,legacy,label+' full legacy ownership archived');
- const {swiftRecoveryRefund,studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,...existing}=actual;
- // F14 changes only the selected destination during a matching partial rebuild.
+ const {swiftRecoveryRefund,studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,offline12hRefund,...existing}=actual;
+ // Preserve F14's selected destination during a matching partial rebuild.
  const intent=expected.formationRebuild;
  const selected=intent&&intent.preset&&expected.formationPresets[intent.preset]&&
    expected.formationPresets[intent.preset].join(',')===intent.members.join(',')
    ? intent.preset : expected.activeFormationPreset;
- assert.deepEqual(existing,{...expected,owned:oldOwnership,activeFormationPreset:selected},label);
+ let refund=0;for(let i=0;i<(seed.nodes?.reserves||0);i++)refund+=Math.ceil(6*Math.pow(1.6,i));
+ assert.equal(actual.schemaVersion,2,label+' migrated schema');
+ assert.deepEqual(existing,{...expected,schemaVersion:2,owned:oldOwnership,activeFormationPreset:selected,
+  prisms:expected.prisms+refund,comets:expected.comets+(legacy.offline24?140:0)+(legacy.offline48?160:0)},label);
 }
 function runAsync(seed,seconds,batch=256){
  const x=app(seed,source,seconds),before=copy(x.b.get());x.b.batch(batch);
@@ -124,7 +127,7 @@ function runAsync(seed,seconds,batch=256){
  const batches=x.drain();assert.ifError(error);assert.equal(callbacks,1,'complete once');
  assert(!x.b.flags().busy&&!x.b.flags().pending&&!x.b.flags().resume,'flags clear after completion');
  assert.equal(x.b.get().lastSeen,seed.lastSeen+seconds*1000,'consumed endpoint');
- assert.equal(x.b.get().totalOfflineSeconds,seed.totalOfflineSeconds+Math.min(seconds,72*3600),'combat accounting/cap');
+ assert.equal(x.b.get().totalOfflineSeconds,seed.totalOfflineSeconds+Math.min(seconds,12*3600),'combat accounting/cap');
  const committed=copy(x.b.get());let duplicate;
  x.b.apply(r=>duplicate=r);assert.equal(duplicate,null,'repeated return awards nothing');
  assert.deepEqual(x.b.get(),committed,'repeated return preserves state');
@@ -151,7 +154,8 @@ if(process.argv.includes('--generate-swift-golden')){
 const on=runAsync(original,28800);
 const onReference=oneSecondReference(original,28800);
 assert.equal(on.result.kills,onReference.kills);assert.equal(on.result.ascends,onReference.ascends);
-assert.equal(on.committed.prisms-original.prisms,onReference.prisms);
+let migratedPrisms=0;for(let i=0;i<original.nodes.reserves;i++)migratedPrisms+=Math.ceil(6*Math.pow(1.6,i));
+assert.equal(on.committed.prisms-original.prisms,onReference.prisms+migratedPrisms);
 compare(on.committed,onReference.state,'Swift60 capped full8h one-second reference');
 assert.equal(on.committed.lumen,onReference.state.lumen,'post-Ascend partial run balance matches one-second reference');
 assert(on.result.earned>on.committed.lumen,'Ascend resets run Lumen, not the reported earned total');
@@ -169,12 +173,14 @@ const c20=runAsync(clear20,28800);
 const off=copy(original);off.autoAscendEnabled=false;
 const disabled=runAsync(off,28800),offReference=oneSecondReference(off,28800);assert.equal(disabled.result.kills,offReference.kills);assert.equal(disabled.result.ascends,0);
 compare(disabled.committed,offReference.state,'Swift60 capped OFF full8h reference');
-const cap=runAsync(original,72*3600),capReference=oneSecondReference(original,72*3600);assert.equal(cap.result.kills,capReference.kills);assert.equal(cap.result.ascends,capReference.ascends);
-compare(cap.committed,capReference.state,'Swift60 capped full72h one-second reference');
+const cap=runAsync(original,72*3600),capReference=oneSecondReference(original,12*3600);assert.equal(cap.result.kills,capReference.kills);assert.equal(cap.result.ascends,capReference.ascends);
+capReference.state.lastSeen=original.lastSeen+72*3600000;
+compare(cap.committed,capReference.state,'Swift60 capped72h return with full12h one-second reference');
 const beyond=copy(original);beyond.activeStudies=[{id:'guardmastery',remainingSec:80*3600,totalDurationSec:80*3600,speedMult:1}];beyond.studyQueue={};
-const long=runAsync(beyond,96*3600);assert.equal(long.result.effectiveSec,72*3600);
-assert(long.result.completedStudies.includes("Guardian's Mastery"),'study completes beyond combat cap');
-const samePaidWork=runAsync(beyond,72*3600);
+const long=runAsync(beyond,96*3600);assert.equal(long.result.effectiveSec,12*3600);
+assert(!long.result.completedStudies.includes("Guardian's Mastery"),'Study cannot complete beyond the common cap');
+assert.equal(long.committed.activeStudies[0].remainingSec,68*3600,'exact12h paid work, no productive Study tail');
+const samePaidWork=runAsync(beyond,12*3600);
 assert.equal(long.result.kills,samePaidWork.result.kills,'beyond-cap time earns no extra combat with the same paid work');
 // Preserve old numerical policy against the unchanged scheduler for short windows
 // and chronological research/Motes/automation boundaries.
@@ -237,7 +243,7 @@ for(const seconds of [28800,72*3600]){
  reference.b.advance(60,{kind:'live',visual:false,clockStartMs:original.lastSeen+seconds*1000});
  reference.b.get().lastSeen=original.lastSeen+(seconds+60)*1000;
  compare(slow.b.get(),reference.b.get(),'processing time live parity '+seconds);
- approx(slow.b.get().totalOfflineSeconds-original.totalOfflineSeconds,seconds,'processing time does not expand offline cap/accounting');
+ approx(slow.b.get().totalOfflineSeconds-original.totalOfflineSeconds,Math.min(seconds,43200),'processing time does not expand offline cap/accounting');
  records.push({case:'processing time '+seconds,kills:result.kills,lastSeen:slow.b.get().lastSeen});
 }
 for(const jump of [-7*86400000,7*86400000]){
