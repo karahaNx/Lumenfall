@@ -10,7 +10,7 @@ function option(name,fallback){const i=args.indexOf(name);return i<0?fallback:ar
 const sourcePath=path.resolve(option('--source',path.join(root,'index.html')));
 const evidence=option('--evidence',null),source=fs.readFileSync(sourcePath,'utf8');
 const sourceSha256=require('node:crypto').createHash('sha256').update(source).digest('hex');
-const chrome=process.env.LUMENFALL_QA_CDP_CHROME||['chromium','google-chrome','google-chrome-stable','chromium-browser'].find(x=>spawnSync('which',[x]).status===0);
+const chrome=process.env.LUMENFALL_QA_CDP_CHROME||['google-chrome','google-chrome-stable','chromium','chromium-browser'].find(x=>spawnSync('which',[x]).status===0);
 function assert(value,message){if(!value)throw Error(message);}
 const bridge=String.raw`
 window.resonateQa={

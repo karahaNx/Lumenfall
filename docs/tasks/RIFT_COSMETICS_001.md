@@ -1,115 +1,103 @@
 # RIFT_COSMETICS_001 — visible Deed cosmetics on Rift
 
-Status: **PR79; 168 focused checks pass; CI browser setup fixed, rerun pending**.
-Owner: this feature chat; isolated `/workspace/RIFT_COSMETICS_001`, branch
-`feature/rift-cosmetics-001`. No subagents or messaging tools.
+Status: PR79 open; focused checks pass; required CI and APK acceptance pending.
+Owner: this chat, /workspace/RIFT_COSMETICS_001, feature/rift-cosmetics-001.
+No subagents/messages. Current AGENTS/workflow assigns delivery to owner; the
+historical Lead/writer freeze is superseded. No new binding rule.
 
-## Goal, sources and authorization
+## Original goal and sources
 
-F24: show every earned and selected cosmetic on Rift, preserve HP readability,
-Guardian Tap, 44px controls, focus/contrast and a visible static reduced-motion
-alternative. Keep unlocked and selected distinct. Original: “Når det kommer til
-deeds cosmetics, så synes jeg ikke de effekter man låser op er synlige ved rift
-skærmen.” Original requirements take precedence over suggestions.
+F24: show every earned and selected cosmetic on Rift; preserve HP readability,
+Guardian Tap, 44px controls, focus/contrast and static reduced-motion effects.
+Separate unlocked from selected. Original: “Når det kommer til deeds cosmetics,
+så synes jeg ikke de effekter man låser op er synlige ved rift skærmen.”
+Original requirements take precedence over suggestions.
 
-Sources: [owner request](RIFT_COSMETICS_001_REQUIREMENTS.txt),
-[original](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt),
+[Owner request and corrections](RIFT_COSMETICS_001_REQUIREMENTS.txt):
+8 October “Finish the feature task push to github implement to game” and
+“If theres not a test, then create one” authorize implementation, tests,
+GitHub integration and app delivery.
+
+Read: [original](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt),
 [F24/dependencies/save revision](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt),
 [Lead decisions](../recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt),
 [findings](../recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/FINDINGS.txt),
-[source index](../recovery/2026-10-07/lead_context/FEEDBACK/Source_Index.txt).
-Read with AGENTS, bootstrap, ownership/visual guide, PROJECT_STATE and workflow.
-Original images concern other points and are not cosmetic evidence.
+[source index](../recovery/2026-10-07/lead_context/FEEDBACK/Source_Index.txt),
+plus AGENTS/bootstrap/ownership/visual guide/PROJECT_STATE/workflow/context index.
+Original images address other feedback, not cosmetics.
+Model/effort recommendation GPT-6.1 Sol/High; running variant unverified.
 
-8 October: “Finish the feature task push to github implement to game”; “If theres
-not a test, then create one”. Automated browser and signed-APK tests are created.
-This authorizes implementation, GitHub publication, integration and app delivery.
-Current main's AGENTS/workflow assign delivery to the feature owner; historical
-writer/Lead freezes no longer gate this task. No new binding rules are introduced.
-Recommended model/effort: GPT-6.1 Sol/High; exact running variant/effort unverified.
+## Baseline and scope
 
-## Baseline, scope and dependencies
+Initial b2a1f440, then0bcce84; frozen 7 October candidate6c79ebc is historical
+([evidence](../qa/rift-cosmetics-2026-10-07/README.md)).
+8 October resumed from b0537cb46635555ba2c2e5f3f95bc8fc276aeda5.
+Current base e2f745cd0ce0dc9e41b06efd842062fd08d7fab4 includes PR77 Save Backup,
+PR76 Formation and PR80 Resonate. Earlier F27 CSS/button conflicts were combined;
+preserve all upstream code/tests and recheck main before integration.
 
-Original startup main `b2a1f440e8ad9fed34b37551e468224310d2a6f6`, then
-`0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd`. Frozen local candidate
-`6c79ebc698947a603363ac686e646fba0a032cbf` and its
-[7 October evidence](../qa/rift-cosmetics-2026-10-07/README.md) remain historical.
-They do not verify the refreshed implementation.
+PR46/B2 verified merged via PR57/20aaae62. F27 catalog/equipment integrated via
+PR69; preserve prices, purchases, marks, Trail/Crest toggles and both visible layers.
+F07 Guidance layout is separate (PR81); cosmetics remain inside the existing
+attack button. PR67 overlaps a broad proposal; do not adopt it. Only this goal
+and necessary regression/test/delivery fixes are included.
 
-8 October initial live main `b0537cb46635555ba2c2e5f3f95bc8fc276aeda5`.
-Current base `e2f745cd0ce0dc9e41b06efd842062fd08d7fab4`: PR77 Save Backup,
-PR76 Formation autosave and PR80 Resonate. Preserve their code and tests.
-Earlier CSS/button conflicts combined F27 decorations with F24 SVG layers.
-PR46/B2 are integrated via PR57 (`20aaae62a4b6e46f8d75775085918eaba4e8de29`).
-F27 Comet catalog is integrated via PR69; retain purchases, toggles and marks.
-Open PR67 includes overlapping cosmetic work; this isolated F24 change is based
-on merged main and does not integrate that broad proposal. PR66/70 are separate.
-Integration must recheck actual current main and serialize overlapping changes.
-
-Product scope: the six existing theme effects, selection/persistence and labels.
-Add focused browser regression coverage, one required CI step and own evidence/task.
-No new cosmetic unlock, price, reward, currency, cap or schema. No migration:
-existing purchase/ownership data and saved preferences retain their value.
-Package `com.lumenfall.app`, established signing, WebView60 compatibility,
-deterministic purchases and documented Luminous Motes rewards remain unchanged.
-Handler/bulk/queue, chronology and live/offline rules remain upstream behavior.
-
-F07 Guidance remains a separate layout dependency. Cosmetics sit inside the
-existing tap button; do not alter Guidance flow. Existing 320px large-text region
-heading clipping and Guidance-hide movement are recorded baseline limitations.
-F27 Rift Trail/Starfall Crest remain independent equipped layers across themes.
+Files: index.html, focused tests/behavioral/rift-cosmetics.cjs, one required CI
+step, own task/evidence. A one-line Resonate test browser-order repair is necessary
+for merged-main validation; it changes no assertions or Resonate product behavior.
+No new unlock/price/reward/currency/cap/schema/migration. Preserve old purchase
+value, saved preferences, deterministic purchases, documented Luminous rewards,
+handler/bulk/queue, chronology and live/offline/save recovery contracts.
+Keep WebView60, package com.lumenfall.app and established signing.
 
 ## Behavior and acceptance
 
 | Theme | Existing unlock | Visible effect |
 | --- | --- | --- |
-| Starlight | Built in | Existing region artwork/aura |
-| Ember Veil | d50 | Orange dashed rings and warm glow |
-| Void Bloom | asc5 | Violet nested hexagons and cool glow |
-| Aurora Pulse | mythic | Rose/teal curved rings and gentle opacity pulse |
-| Solar Crown | d250 | Gold rays/crown and warm glow |
-| Radiant | modulemax | Six currency-colored arcs and slow orbit |
+| Starlight | Built in | Existing regional artwork/aura |
+| Ember Veil | d50 | Orange dashed rings, warm glow |
+| Void Bloom | asc5 | Violet nested hexagons |
+| Aurora Pulse | mythic | Rose/teal curves, gentle pulse |
+| Solar Crown | d250 | Gold rays/crown |
+| Radiant | modulemax | Six currency-colored arcs, slow orbit |
 
-SVG is decorative, hidden from accessibility focus and pointer inert. Caption
-uses opaque colors (15.41:1 contrast), below the enemy name and above HP.
-Reduced motion keeps the geometry visible and removes pulse/orbit animation.
-Deeds buttons show `Unlocked · Select` or `✓ Selected` and native pressed state.
-Unlocking a Deed does not select it. Selection saves immediately to primary and
-recovery storage. A known locked saved preference is preserved but displays
-Starlight until earned; renderer does not mutate saved data.
+Decorative SVG is pointer inert and accessibility hidden. Opaque caption has
+15.41:1 contrast, away from HP/name. Reduced motion keeps static geometry.
+All six regional palettes are preserved. Deeds use native pressed buttons,
+“Unlocked · Select” and “✓ Selected”. Earning does not select. Selection saves
+immediately to primary/recovery. Known locked preferences remain saved but show
+Starlight until earned; rendering never grants unlocks or changes saved value.
 
-Acceptance: correct visible effect for all six themes on normal/boss/Luminous;
-one earned effective selection; unchanged HP/name/tap geometry; no input capture;
-320/390/430px, large text, focus/keyboard/touch, 44px, contrast/reduced motion;
-primary/recovery/backup/reload preservation; F27 equipment/purchases preserved;
-relevant existing checks and full required CI; integrated verification; signed
-APK package/version/asset checks and required Android/device acceptance.
+Acceptance: six themes x normal/boss/Luminous; one earned effective selection;
+unchanged HP/name/tap geometry; 320/390/430px, 130%/200% text, keyboard/touch/focus,
+44px, contrast/reduced motion; immediate saves, actual reload/corrupt-primary
+recovery/backup restore; independent F27 layers; relevant checks/full required CI;
+integrated verification; signed APK assets/package/version/cert and Android tests.
 
-## Checks and delivery checkpoint
+## Checks and next action
 
-Current combined candidate: `node tests/behavioral/rift-cosmetics.cjs --chrome
- /usr/bin/chromium --negative --out docs/qa/rift-cosmetics-2026-10-08/formation-candidate`
-PASS, 168 records: 162 mobile
-state/theme measurements plus six region/persistence/input/negative contracts. Nine
-profiles cover normal, 130% and 200% root text; 320/390/430px; normal and reduced
-motion. Both Comet decorations remain visibly equipped with every selected theme.
-Actual native browser touch attacks through the aura; Enter selects and focus
-survives rerender. All six selections preserve economic/ownership data and save
-immediately; real page reload, corrupt-primary recovery and backup restore pass.
-Hidden-aura negative is detected. Browser Chromium151, Node24.19.
+[Current continuation](../qa/rift-cosmetics-2026-10-08/CURRENT_CHECKPOINT.md)
+and [raw checks](../qa/rift-cosmetics-2026-10-08/checks/) record exact sources,
+commands, versions and failures. Current source SHA256
+afe8f0f267441932cbe9e7515584987c66388c4f5b6b81ce08b20d4e624a956f.
+Focused168 records PASS (formation-candidate/results.json), Chromium151/Node24:
+162 mobile measurements plus region, persistence, input and negative contracts.
+Combined Save Backup12 profiles, Formation native/contract, source/context/tooling
+and V8 6.0 engine fixture PASS. Actual browser touch/Enter and reload paths tested.
 
-PR79 head f0ae15b passed gameplay but CI37735266911 caught fixed regional
-palettes in 15 layout cases. Remove those overrides, retain auras and add a
-six-region contract; all three original layout scenarios now pass locally.
-CI37737975796 passed all152 scenarios then timed out at browser target creation:
-the new driver preferred Ubuntu's Chromium launcher over the working Google
-Chrome used by the suite. It now uses the suite's order and records executable
-and stderr. Full required CI must pass before integration. Raw logs are in
-[checks](../qa/rift-cosmetics-2026-10-08/checks/).
-Signed143 baseline passes cold launch on isolated API27/WebView61; V8 6.0 parses
-both scripts and saves all themes. Exact WebView60 remains unverified. Official
-API26 image has WebView58 and no allowed provider, so cannot substantiate60.
-This is self-review/automation; no independent review or physical/TalkBack claim.
+CI37735266911 caught a region palette regression; removed overrides and added
+coverage. CI37737975796 passed152 scenarios, stalled at own browser startup.
+CI37740747361 passed the incoming Formation cases but failed Resonate's Chromium
+startup. Both drivers now follow the suite's Google Chrome selection order.
+No acceptance assertions/gates weakened; full required CI must pass.
 
-Next: pass required CI, merge PR79 against checked main, verify integrated game
-and signed APK, save final evidence/status. Keep open for missing required checks.
+Signed143 baseline cold-launch passes API27/WebView61. Exact60 environment is now
+created from a pinned historical LineageOS provider on isolated AOSP API25;
+native game acceptance is pending. Provider setup/CDP failures are preserved.
+No physical/TalkBack or independent-review claim. Baseline large-text region
+heading/Guidance movement limitations are outside this goal.
+
+Next: publish repaired test setup, pass required CI, merge PR79 against checked
+main, verify integrated game and signed APK/update, persist final receipts and
+own PROJECT_STATE status. Keep open for missing required checks; archive only
+this chat after verified delivery.
