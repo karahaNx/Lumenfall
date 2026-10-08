@@ -1,0 +1,67 @@
+{
+  "status": "pass",
+  "sourceSha256": "f99cb0bcd46d2849977a39cf31bb0dd1a7bb8c0ca7a370f2490ad66ec67a6ec1",
+  "records": [
+    {
+      "name": "upgrade-identity-v8",
+      "command": [
+        "/workspace/.cache/lumenfall/node60/node-v8.6.0-linux-x64/bin/node",
+        "/workspace/Lumenfall-upgrade-identity-001/docs/qa/upgrade-identity-001/2026-10-08/legacy-engine.cjs",
+        "/tmp/upgrade-identity-001/apk148-web/index.html"
+      ],
+      "result": {
+        "status": "pass",
+        "node": "v8.6.0",
+        "v8": "6.0.287.53",
+        "htmlSha256": "f99cb0bcd46d2849977a39cf31bb0dd1a7bb8c0ca7a370f2490ad66ec67a6ec1",
+        "parsedScripts": 2,
+        "checks": 129,
+        "activeTracks": 14,
+        "paidCompletions": 3,
+        "farm": [
+          {
+            "clockStartMs": 2000000000000,
+            "kind": "live",
+            "kills": 1965
+          },
+          {
+            "clockStartMs": 2000000000000,
+            "kind": "offline",
+            "kills": 79
+          },
+          {
+            "clockStartMs": 2000000000371,
+            "kind": "live",
+            "kills": 1965
+          },
+          {
+            "clockStartMs": 2000000000371,
+            "kind": "offline",
+            "kills": 79
+          }
+        ],
+        "limitation": "Complete product JS with minimal storage/timer mocks; Android DOM/device/TalkBack acceptance remains required"
+      }
+    },
+    {
+      "name": "offline-entry-v8",
+      "command": [
+        "/workspace/.cache/lumenfall/node60/node-v8.6.0-linux-x64/bin/node",
+        "/workspace/Lumenfall-upgrade-identity-001/docs/qa/upgrade-identity-001/2026-10-08/apk148-v8/offline-catchup-v8.cjs",
+        "/tmp/upgrade-identity-001/apk148-web/index.html"
+      ],
+      "result": {
+        "status": "pass",
+        "htmlSha256": "f99cb0bcd46d2849977a39cf31bb0dd1a7bb8c0ca7a370f2490ad66ec67a6ec1",
+        "scenario": "offline-catchup-v8",
+        "node": "v8.6.0",
+        "v8": "6.0.287.53",
+        "batches": 1181,
+        "kills": 302400,
+        "ascends": 14400,
+        "wallMs": 8986.131848,
+        "limitation": "JS engine probe; actual Android WebView60/device acceptance remains required"
+      }
+    }
+  ]
+}
