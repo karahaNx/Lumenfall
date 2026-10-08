@@ -1,0 +1,24 @@
+node:internal/assert/utils:77
+    throw err;
+    ^
+
+AssertionError [ERR_ASSERTION]: capped whole/split parity-long-high-power.enemyHp 14.99999897410328 vs 14.999997062204846
+    at parity (/workspace/Lumenfall-swift-recovery/tests/behavioral/swift-recovery-core.cjs:145:52)
+    at parity (/workspace/Lumenfall-swift-recovery/tests/behavioral/swift-recovery-core.cjs:145:266)
+    at /workspace/Lumenfall-swift-recovery/tests/behavioral/swift-recovery-core.cjs:150:110
+    at test (/workspace/Lumenfall-swift-recovery/tests/behavioral/swift-recovery-core.cjs:46:24)
+    at Object.<anonymous> (/workspace/Lumenfall-swift-recovery/tests/behavioral/swift-recovery-core.cjs:143:1)
+    at Module._compile (node:internal/modules/cjs/loader:1872:14)
+    at Object..js (node:internal/modules/cjs/loader:2003:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

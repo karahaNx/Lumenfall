@@ -1,0 +1,137 @@
+node:assert:152
+  throw new AssertionError(obj);
+  ^
+
+AssertionError [ERR_ASSERTION]: unchanged baseline summary 60
++ actual - expected
+... Skipped lines
+
+  {
+    achievements: [],
+    ascendGains: [
+      6,
+      6,
+...
+      6,
+-     6,
+-     6,
+-     6,
+-     6,
+-     6
+    ],
++   ascends: 27,
++   autoTaps: 55,
++   bossKills: 55,
+-   ascends: 32,
+-   autoTaps: 33,
+-   bossKills: 65,
+    clockEndMs: 1791361624477,
+    closedStudies: [],
+    completedStudies: [],
+    elapsedSec: 60,
+    empowers: 0,
+    endDepth: 20,
+    fastForwardedKills: 0,
++   iterations: 587,
++   kills: 586,
++   lumenGained: 2466405.5999999964,
++   luminousKills: 48,
++   motesGained: 233,
+-   iterations: 725,
+-   kills: 691,
+-   lumenGained: 2914341.5999999903,
+-   luminousKills: 57,
+-   motesGained: 281,
+    pushDepth: 20,
++   researchBought: 1,
+-   researchBought: 38,
+    retreated: false,
+    retreats: 0,
+    retries: 0,
++   shardGained: 100286.40000000014,
++   sigilsGained: 82,
+-   shardGained: 118430.40000000023,
+-   sigilsGained: 97,
+    studiesStarted: 0
+  }
+
+    at baselineSummary (/workspace/Lumenfall-swift-recovery/tests/behavioral/offline-catchup.cjs:47:9)
+    at Object.<anonymous> (/workspace/Lumenfall-swift-recovery/tests/behavioral/offline-catchup.cjs:139:3)
+    at Module._compile (node:internal/modules/cjs/loader:1872:14)
+    at Object..js (node:internal/modules/cjs/loader:2003:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: {
+    elapsedSec: 60,
+    lumenGained: 2466405.5999999964,
+    shardGained: 100286.40000000014,
+    sigilsGained: 82,
+    motesGained: 233,
+    kills: 586,
+    bossKills: 55,
+    luminousKills: 48,
+    ascends: 27,
+    autoTaps: 55,
+    empowers: 0,
+    researchBought: 1,
+    studiesStarted: 0,
+    completedStudies: [],
+    closedStudies: [],
+    achievements: [],
+    retreated: false,
+    retreats: 0,
+    retries: 0,
+    fastForwardedKills: 0,
+    iterations: 587,
+    ascendGains: [
+      6, 6, 6, 6, 6, 6, 6, 6,
+      6, 6, 6, 6, 6, 6, 6, 6,
+      6, 6, 6, 6, 6, 6, 6, 6,
+      6, 6, 6
+    ],
+    endDepth: 20,
+    pushDepth: 20,
+    clockEndMs: 1791361624477
+  },
+  expected: {
+    elapsedSec: 60,
+    lumenGained: 2914341.5999999903,
+    shardGained: 118430.40000000023,
+    sigilsGained: 97,
+    motesGained: 281,
+    kills: 691,
+    bossKills: 65,
+    luminousKills: 57,
+    ascends: 32,
+    autoTaps: 33,
+    empowers: 0,
+    researchBought: 38,
+    studiesStarted: 0,
+    completedStudies: [],
+    closedStudies: [],
+    achievements: [],
+    retreated: false,
+    retreats: 0,
+    retries: 0,
+    fastForwardedKills: 0,
+    iterations: 725,
+    ascendGains: [
+      6, 6, 6, 6, 6, 6, 6, 6, 6,
+      6, 6, 6, 6, 6, 6, 6, 6, 6,
+      6, 6, 6, 6, 6, 6, 6, 6, 6,
+      6, 6, 6, 6, 6
+    ],
+    endDepth: 20,
+    pushDepth: 20,
+    clockEndMs: 1791361624477
+  },
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0
