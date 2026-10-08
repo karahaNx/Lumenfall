@@ -3,6 +3,7 @@
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 const assert=require('node:assert/strict'),crypto=require('node:crypto');
 const Adb=require('../rift-cast-text-001/finish/direct-adb.cjs');
+const inspectStorage=require('./storage-tar.cjs');
 const [mode,apk,index,out]=process.argv.slice(2),records=[],errors=[];
 const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
 const delay=ms=>new Promise(r=>setTimeout(r,ms)),pending=new Map(),scripts=[];
@@ -76,7 +77,7 @@ async function forge(){await touch('[data-tab="workshop"]');await touch('[data-t
 async function slots(){return evaluate('({primary:JSON.parse(localStorage.getItem("lumenfall_save_v2")),recovery:JSON.parse(localStorage.getItem("lumenfall_save_recovery_v1"))})');}
 async function checkChoice(value){const s=await slots();assert.equal(s.primary.savedLabMultiplier,value,'native primary choice');assert.equal(s.recovery.savedLabMultiplier,value,'native recovery choice');
  assert.equal(await evaluate('document.querySelector("[data-mult].active").dataset.mult'),String(value),'native selected choice');return s;}
-async function storage(){return adb.exec('sh -c \'cd /data/data/com.lumenfall.app/app_webview/Default; tar -cf - "Local Storage"\'');}
+async function storage(){const raw=await adb.exec('run-as com.lumenfall.app tar -C /data/data/com.lumenfall.app/app_webview -cf - "Local Storage"');inspectStorage(raw);return raw;}
 async function coldStart(){await disconnect();await adb.shell('am force-stop com.lumenfall.app');await adb.shell('am start -n com.lumenfall.app/.MainActivity');await connect();await dismiss();await forge();}
 async function screenshot(name){const png=await adb.exec('screencap -p');assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a','actual Android PNG');fs.writeFileSync(path.join(out,name+'.png'),png);}
 async function main(){
@@ -85,11 +86,13 @@ async function main(){
   let artifact;try{const found=await installed();if(found.sha256===sha(fs.readFileSync(apk)))artifact=found;}catch{}if(!artifact)artifact=await install();console.log('Verified actual signed baseline APK installed');await adb.shell('am force-stop com.lumenfall.app');await adb.shell('am start -n com.lumenfall.app/.MainActivity');await connect();console.log('Baseline source verified; replacing isolated fixture before cold acceptance');await seed(fixture(true));console.log('Legacy fixture seeded');await forge();const s=await checkChoice(25);fs.writeFileSync(path.join(out,'seed-observation.json'),JSON.stringify(s,null,2));
   assert(s.primary.legacyCometPurchases.rememberbulk,'old entitlement archived');assert.equal(s.primary.comets,125);await coldStart();const cold=await checkChoice(25);assert(cold.primary.legacyCometPurchases.rememberbulk,'old ownership on real cold launch');
   await screenshot('baseline-143-forge');await disconnect();await adb.shell('am force-stop com.lumenfall.app');const raw=await storage();fs.writeFileSync(path.join(out,'baseline-storage.tar'),raw);
-  fs.writeFileSync(path.join(out,'baseline.json'),JSON.stringify({status:'pass',artifact,sourceSHA256:sha(Buffer.from(html)),coldLaunchVerified:true,slots:cold,storageSHA256:sha(raw)},null,2));console.log('PASS signed143 baseline, legacy value and real cold restart');return;
+  fs.writeFileSync(path.join(out,'baseline.json'),JSON.stringify({status:'pass',artifact,sourceSHA256:sha(Buffer.from(html)),coldLaunchVerified:true,slots:cold,storageSHA256:sha(raw),storage:inspectStorage(raw)},null,2));console.log('PASS signed143 baseline, legacy value and real cold restart');return;
  }
  const baseline=JSON.parse(fs.readFileSync(path.join(out,'baseline.json')));assert(baseline.coldLaunchVerified);assert.equal(baseline.artifact.sha256,'45d1032ae6e77362d3540db740c6cfbdc4d275f2e3f6b98f4cecb1229e3205e7','known signed143 baseline');assert.equal(baseline.sourceSHA256,'5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c','known143 source');assert.equal((await installed()).sha256,baseline.artifact.sha256,'actual installed baseline before update');
+ inspectStorage(fs.readFileSync(path.join(out,'baseline-storage.tar')));assert(baseline.storage,'validated baseline capture required');
  const before=await storage();assert.equal(sha(before),baseline.storageSHA256,'attested baseline storage before update');const artifact=await install(),after=await storage();assert.equal(sha(after),sha(before),'native update preserves actual save database bytes');
- fs.writeFileSync(path.join(out,'update.json'),JSON.stringify({status:'pass',baseline:baseline.artifact,artifact,sourceSHA256:sha(Buffer.from(html)),storageBeforeSHA256:sha(before),storageAfterSHA256:sha(after)},null,2));console.log('PASS actual signed update/database identity; continuing native UI');
+ fs.writeFileSync(path.join(out,'update-storage.tar'),after);
+ fs.writeFileSync(path.join(out,'update.json'),JSON.stringify({status:'pass',baseline:baseline.artifact,artifact,sourceSHA256:sha(Buffer.from(html)),storageBefore:inspectStorage(before),storageAfter:inspectStorage(after)},null,2));console.log('PASS actual signed update/database identity; continuing native UI');
  await adb.shell('am start -n com.lumenfall.app/.MainActivity');await connect();await dismiss();await forge();const legacy=await checkChoice(25);assert(legacy.primary.legacyCometPurchases.rememberbulk,'updated legacy entitlement');
  // Separate accepted F26 policy: old offline24/48 purchases refund140/160.
  // This fixture owns both, no Deep Reserves; F25 adds no memory refund.
@@ -101,6 +104,7 @@ async function main(){
  assert(legacy.primary.motes>=baseline.slots.primary.motes,'existing Motes preserved with real offline rewards');
  await coldStart();const repeated=await checkChoice(25);assert.equal(repeated.primary.comets,expectedComets,'F26 credit remains idempotent on native restart');
  records.push({case:'signed143 update preserves database/legacy ownership/wallet/preference; separate F26 credit once',baseline:baseline.artifact,artifact,cometsBefore:baseline.slots.primary.comets,cometsAfter:legacy.primary.comets,separateF26Credit:300,motesBefore:baseline.slots.primary.motes,motesAfter:legacy.primary.motes});
+ if(process.argv.includes('--update-only')){const identity=await evaluate('({ua:navigator.userAgent})');assert.deepEqual(errors,[]);fs.writeFileSync(path.join(out,'update-native.json'),JSON.stringify({status:'pass',artifact,baseline:baseline.artifact,sourceSHA256:sha(Buffer.from(html)),identity,records,legacy,repeated,runtimeErrors:errors},null,2));console.log('PASS validated native database update, legacy preference/value and real cold restart');return;}
  await seed(fixture(false));await forge();let unowned=await checkChoice(25);assert(!unowned.primary.legacyCometPurchases.rememberbulk,'unowned native cold preference');
  for(const value of [1,5,10,25,50,100,'max']){await touch('[data-mult="'+value+'"]');await checkChoice(value);records.push({case:'native immediate primary/recovery choice',value});}
  await touch('[data-tab="research"]');await touch('[data-tab="battle"]');await forge();await checkChoice('max');await coldStart();await checkChoice('max');records.push({case:'screen switching and actual force-stop/restart preserve unowned Max'});
