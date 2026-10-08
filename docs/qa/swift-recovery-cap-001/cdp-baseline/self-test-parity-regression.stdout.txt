@@ -1,0 +1,50 @@
+Browser identity: {"resolved_path": "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/cdp-dump-dom.cjs", "selected_path": "/tmp/swift-cdp-bin-0eZMeT/google-chrome", "sha256": "5c13ba367a3843e6b002788a67cb90fce1a92b5607bdf356b69b4f52e558c62e", "version": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)", "version_exitcode": 0, "version_stderr": ""}
+Staged source: {"instrumented_sha256": "6a7bdf5fc95047c3c3b4fea4327573d560fbc30ecca1a050a54c7778eec60c72", "source_sha256": "f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4"}
+FAIL self-test-parity-regression
+  process: {"elapsed_sec": 0.8720753770001011, "exitcode": 0, "timed_out": false, "timeout_sec": 25}
+  observed QA: {"json_error": null, "json_scenario": "self-test-parity-regression", "json_status": "fail", "qa_count": 1, "qa_scenario": "self-test-parity-regression", "qa_status": "fail", "runtime_error_count": 0, "runtime_markers": [], "valid": true}
+  raw artifacts: /workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/cdp-baseline/negative-processes/self-test-parity-regression-pqof6436
+  Chromium stderr tail:
+Supplemental transport: Chromium CDP; unchanged assertions; no virtual-time CLI
+
+  stdout tail:
+nded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+</script>
+
+
+<pre id="qa-result" data-status="fail" data-scenario="self-test-parity-regression">{
+  "scenario": "self-test-parity-regression",
+  "status": "fail",
+  "detail": {
+    "message": "intentional parity regression totalKills must match exactly (expected 42, got 43)",
+    "stack": "Error: intentional parity regression totalKills must match exactly (expected 42, got 43)\n    at assert (http://127.0.0.1:35897/index.html?qaScenario=self-test-parity-regression&amp;qaFixture=parity-early-simple:11811:61)\n    at http://127.0.0.1:35897/index.html?qaScenario=self-test-parity-regression&amp;qaFixture=parity-early-simple:11844:7\n    at Array.forEach (&lt;anonymous&gt;)\n    at assertProtectedParity (http://127.0.0.1:35897/index.html?qaScenario=self-test-parity-regression&amp;qaFixture=parity-early-simple:11843:7)\n    at HTMLDocument.run (http://127.0.0.1:35897/index.html?qaScenario=self-test-parity-regression&amp;qaFixture=parity-early-simple:14255:11)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+

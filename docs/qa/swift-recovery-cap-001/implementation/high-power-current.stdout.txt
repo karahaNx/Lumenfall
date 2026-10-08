@@ -1,0 +1,42 @@
+Browser identity: { "selected_path": "/tmp/swift-browser-bin/google-chrome", "resolved_path": "/tmp/swift-chrome-stable/opt/google/chrome/chrome", "sha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58", "version": "Google Chrome 155.0.8059.39 unknown", "version_exitcode": 0, "version_stderr": "" }
+Staged source: { "source_sha256": "317bb879280fdfbf2d86f0e9466260a09ade709342e61ec5f8832777d42e380d", "instrumented_sha256": "c5a9f453075a7db3f9771f5162b6c60603710c1c8c5f98c92b062ec1613897be" }
+FAIL parity-long-high-power
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 1.208133104, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "parity-long-high-power", "json_status": "fail", "json_scenario": "parity-long-high-power", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /tmp/lumenfall-qa-raw-VxjcMe/parity-long-high-power-qAqAse
+  Chromium stderr tail:
+07:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[44133:44133:1008/063044.597199:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[44133:44144:1008/063044.597231:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[44133:44133:1008/063044.597814:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[44133:44133:1008/063044.598593:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[44133:44144:1008/063044.601560:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[44133:44155:1008/063044.606421:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 44216: Read-only file system (30)
+[44133:44155:1008/063044.612249:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 44218: Read-only file system (30)
+[44133:44133:1008/063044.618216:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[44133:44133:1008/063044.618571:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[44133:44144:1008/063044.620619:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[44133:44144:1008/063044.620666:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[44133:44144:1008/063044.620679:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[44133:44133:1008/063044.632187:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[44133:44133:1008/063044.643841:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[44133:44133:1008/063044.643869:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[44133:44144:1008/063044.644630:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[44133:44133:1008/063044.655155:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[44133:44144:1008/063044.655232:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[44133:44133:1008/063044.666358:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[44133:44155:1008/063044.685123:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 44248: Read-only file system (30)
+[44133:44155:1008/063044.709687:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 44255: Read-only file system (30)
+
+  stdout tail:
+
+<pre id="qa-result" data-status="fail" data-scenario="parity-long-high-power">{
+  "scenario": "parity-long-high-power",
+  "status": "fail",
+  "detail": {
+    "message": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":2,\"elapsedWholeSec\":2,\"elapsedFractionSec\":0,\"elapsedSec\":60,\"remaining\":58,\"stepSec\":1.1102230246251565e-16,\"farmGridRemainingSec\":1,\"farmGridCrossings\":2,\"riftMode\":\"farm\",\"candidates\":{\"ability\":0.16666666666666713,\"autoTap\":1,\"autoEmpower\":1,\"study\":57.999999999999986,\"bossRetreatGrace\":null,\"farmGrid\":1.1102230246251565e-16,\"economy\":0.0886789872805871},\"kinds\":[\"farmGrid\"]}",
+    "stack": "Error: Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":2,\"elapsedWholeSec\":2,\"elapsedFractionSec\":0,\"elapsedSec\":60,\"remaining\":58,\"stepSec\":1.1102230246251565e-16,\"farmGridRemainingSec\":1,\"farmGridCrossings\":2,\"riftMode\":\"farm\",\"candidates\":{\"ability\":0.16666666666666713,\"autoTap\":1,\"autoEmpower\":1,\"study\":57.999999999999986,\"bossRetreatGrace\":null,\"farmGrid\":1.1102230246251565e-16,\"economy\":0.0886789872805871},\"kinds\":[\"farmGrid\"]}\n    at run (http://127.0.0.1:39363/index.html?qaScenario=parity-long-high-power&amp;qaFixture=parity-long-high-power:8244:13)\n    at run.next (&lt;anonymous&gt;)\n    at advanceAuthoritativeTime (http://127.0.0.1:39363/index.html?qaScenario=parity-long-high-power&amp;qaFixture=parity-long-high-power:8268:21)\n    at Object.simulate (http://127.0.0.1:39363/index.html?qaScenario=parity-long-high-power&amp;qaFixture=parity-long-high-power:9653:18)\n    at runParityPair (http://127.0.0.1:39363/index.html?qaScenario=parity-long-high-power&amp;qaFixture=parity-long-high-power:12972:28)\n    at HTMLDocument.run (http://127.0.0.1:39363/index.html?qaScenario=parity-long-high-power&amp;qaFixture=parity-long-high-power:13816:26)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+

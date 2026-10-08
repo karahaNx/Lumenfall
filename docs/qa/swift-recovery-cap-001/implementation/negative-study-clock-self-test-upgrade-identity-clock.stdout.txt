@@ -1,0 +1,75 @@
+Browser identity: { "selected_path": "/tmp/swift-browser-bin/google-chrome", "resolved_path": "/tmp/swift-chrome-stable/opt/google/chrome/chrome", "sha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58", "version": "Google Chrome 155.0.8059.39 unknown", "version_exitcode": 0, "version_stderr": "" }
+Staged source: { "source_sha256": "c8627b3ea0fef483445953e77071add66387512dd12bbe9c0d1015692b700a5c", "instrumented_sha256": "3ee88b93fc5e4264b10bde64ae86682d892f4ce253400dfb3767c40aa0a540fd" }
+FAIL self-test-upgrade-identity-clock
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 1.1235570390000003, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-upgrade-identity-clock", "json_status": "fail", "json_scenario": "self-test-upgrade-identity-clock", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /tmp/lumenfall-qa-raw-Hq6Ugu/self-test-upgrade-identity-clock-wVwksB
+  Chromium stderr tail:
+desktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[115711:115722:1008/075758.995994:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[115711:115711:1008/075758.996207:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[115711:115711:1008/075758.998102:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[115711:115722:1008/075758.998273:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[115711:115734:1008/075759.005559:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 115795: Read-only file system (30)
+[115711:115734:1008/075759.008068:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 115797: Read-only file system (30)
+[115711:115711:1008/075759.028693:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[115711:115711:1008/075759.030952:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[115711:115722:1008/075759.033043:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[115711:115722:1008/075759.033104:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[115711:115722:1008/075759.033113:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[115711:115711:1008/075759.035027:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[115711:115711:1008/075759.052253:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[115711:115711:1008/075759.052282:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[115711:115722:1008/075759.052341:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[115711:115711:1008/075759.070818:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[115711:115722:1008/075759.070926:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[115711:115711:1008/075759.098701:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[115711:115734:1008/075759.123454:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 115826: Read-only file system (30)
+[115711:115734:1008/075759.126766:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 115828: Read-only file system (30)
+[115736:115751:1008/075759.671956:ERROR:gpu/command_buffer/service/shared_image/shared_image_manager.cc:401] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+
+  stdout tail:
+     }
+
+        case 'self-test-endgame-currency-regression': {
+          var unsafeEconomy=bridge.endgameEconomyContract();
+          assert(
+            unsafeEconomy.sigilResonanceRunLimit>100 || unsafeEconomy.questRefreshCost<unsafeEconomy.maxQuestCometReward,
+            'intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+
+</script>
+
+
+<pre id="qa-result" data-status="fail" data-scenario="self-test-upgrade-identity-clock">{
+  "scenario": "self-test-upgrade-identity-clock",
+  "status": "fail",
+  "detail": "Authoritative simulation stalled without elapsed-time or state progress | {\"elapsedInRun\":3,\"elapsedWholeSec\":3,\"elapsedFractionSec\":0,\"elapsedSec\":60,\"remaining\":57,\"stepSec\":5.551115123125783e-17,\"farmGridRemainingSec\":1,\"farmGridCrossings\":3,\"riftMode\":\"farm\",\"candidates\":{\"ability\":1,\"autoTap\":1,\"autoEmpower\":1,\"study\":87,\"bossRetreatGrace\":null,\"farmGrid\":5.551115123125783e-17,\"economy\":null},\"kinds\":[\"farmGrid\"]}",
+  "runtimeErrors": []
+}</pre></body></html>
+

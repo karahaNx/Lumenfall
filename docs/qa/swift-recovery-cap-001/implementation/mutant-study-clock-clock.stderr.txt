@@ -1,0 +1,49 @@
+node:assert:152
+  throw new AssertionError(obj);
+  ^
+
+AssertionError [ERR_ASSERTION]: capped Farm grid advances without discarding tiny elapsed steps
++ actual - expected
+
++ Error: Authoritative simulation stalled without elapsed-time or state progress | {"elapsedInRun":3,"elapsedWholeSec":3,"elapsedFractionSec":0,"elapsedSec":60,"remaining":57,"stepSec":5.551115123125783e-17,"farmGridRemainingSec":1,"farmGridCrossings":3,"riftMode":"farm","candidates":{"ability":1,"autoTap":1,"autoEmpower":1,"study":57,"bossRetreatGrace":null,"farmGrid":5.551115123125783e-17,"economy":null},"kinds":["farmGrid"]}
++     at run (eval at app (/workspace/Lumenfall-swift-recovery/tests/behavioral/swift-recovery-core.cjs:42:3), <anonymous>:5308:13)
++     at run.next (<anonymous>)
++     at Object.advanceAuthoritativeTime [as advance] (eval at app (/workspace/Lumenfall-swift-recovery/tests/behavioral/swift-recovery-core.cjs:42:3), <anonymous>:5332:21)
++     at /workspace/Lumenfall-swift-recovery/tests/behavioral/swift-recovery-core.cjs:149:11
++     at test (/workspace/Lumenfall-swift-recovery/tests/behavioral/swift-recovery-core.cjs:47:24)
++     at Object.<anonymous> (/workspace/Lumenfall-swift-recovery/tests/behavioral/swift-recovery-core.cjs:144:1)
++     at Module._compile (node:internal/modules/cjs/loader:1872:14)
++     at Object..js (node:internal/modules/cjs/loader:2003:10)
++     at Module.load (node:internal/modules/cjs/loader:1594:32)
++     at Module._load (node:internal/modules/cjs/loader:1396:12)
+- null
+
+    at /workspace/Lumenfall-swift-recovery/tests/behavioral/swift-recovery-core.cjs:150:12
+    at test (/workspace/Lumenfall-swift-recovery/tests/behavioral/swift-recovery-core.cjs:47:24)
+    at Object.<anonymous> (/workspace/Lumenfall-swift-recovery/tests/behavioral/swift-recovery-core.cjs:144:1)
+    at Module._compile (node:internal/modules/cjs/loader:1872:14)
+    at Object..js (node:internal/modules/cjs/loader:2003:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: Error: Authoritative simulation stalled without elapsed-time or state progress | {"elapsedInRun":3,"elapsedWholeSec":3,"elapsedFractionSec":0,"elapsedSec":60,"remaining":57,"stepSec":5.551115123125783e-17,"farmGridRemainingSec":1,"farmGridCrossings":3,"riftMode":"farm","candidates":{"ability":1,"autoTap":1,"autoEmpower":1,"study":57,"bossRetreatGrace":null,"farmGrid":5.551115123125783e-17,"economy":null},"kinds":["farmGrid"]}
+      at run (eval at app (/workspace/Lumenfall-swift-recovery/tests/behavioral/swift-recovery-core.cjs:42:3), <anonymous>:5308:13)
+      at run.next (<anonymous>)
+      at Object.advanceAuthoritativeTime [as advance] (eval at app (/workspace/Lumenfall-swift-recovery/tests/behavioral/swift-recovery-core.cjs:42:3), <anonymous>:5332:21)
+      at /workspace/Lumenfall-swift-recovery/tests/behavioral/swift-recovery-core.cjs:149:11
+      at test (/workspace/Lumenfall-swift-recovery/tests/behavioral/swift-recovery-core.cjs:47:24)
+      at Object.<anonymous> (/workspace/Lumenfall-swift-recovery/tests/behavioral/swift-recovery-core.cjs:144:1)
+      at Module._compile (node:internal/modules/cjs/loader:1872:14)
+      at Object..js (node:internal/modules/cjs/loader:2003:10)
+      at Module.load (node:internal/modules/cjs/loader:1594:32)
+      at Module._load (node:internal/modules/cjs/loader:1396:12),
+  expected: null,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

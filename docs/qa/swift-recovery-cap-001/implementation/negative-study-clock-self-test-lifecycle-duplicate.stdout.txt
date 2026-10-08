@@ -1,0 +1,73 @@
+Browser identity: { "selected_path": "/tmp/swift-browser-bin/google-chrome", "resolved_path": "/tmp/swift-chrome-stable/opt/google/chrome/chrome", "sha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58", "version": "Google Chrome 155.0.8059.39 unknown", "version_exitcode": 0, "version_stderr": "" }
+Staged source: { "source_sha256": "4fee51e342873f819170b2f9298eee7b50666c277ec7ae94194ea5c797399bba", "instrumented_sha256": "282a1405ce32c4d2fe6c5910aba7a63c4afe20ccfb209899d454548ad8f681d2" }
+FAIL self-test-lifecycle-duplicate
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 1.0865867830000002, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-lifecycle-duplicate", "json_status": "fail", "json_scenario": "self-test-lifecycle-duplicate", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /tmp/lumenfall-qa-raw-fZYrCH/self-test-lifecycle-duplicate-7O0oAD
+  Chromium stderr tail:
+the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[114844:114855:1008/075739.432300:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[114844:114844:1008/075739.432807:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[114844:114844:1008/075739.433558:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[114844:114855:1008/075739.433638:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[114844:114882:1008/075739.442384:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 114935: Read-only file system (30)
+[114844:114844:1008/075739.445023:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[114844:114855:1008/075739.445060:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[114844:114855:1008/075739.445088:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[114844:114844:1008/075739.445564:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[114844:114855:1008/075739.445617:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[114844:114882:1008/075739.447712:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 114943: Read-only file system (30)
+[114844:114844:1008/075739.449981:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[114844:114882:1008/075739.450639:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 114950: Read-only file system (30)
+[114844:114844:1008/075739.457748:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[114844:114844:1008/075739.457788:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[114844:114855:1008/075739.457851:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[114844:114844:1008/075739.466788:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[114844:114855:1008/075739.466879:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[114844:114844:1008/075739.481197:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[114844:114882:1008/075739.505584:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 114977: Read-only file system (30)
+[114844:114882:1008/075739.539792:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 114989: Read-only file system (30)
+
+  stdout tail:
+esonanceRunLimit>100 || unsafeEconomy.questRefreshCost<unsafeEconomy.maxQuestCometReward,
+            'intentional endgame currency regression: bounded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+
+</script>
+
+
+<pre id="qa-result" data-status="fail" data-scenario="self-test-lifecycle-duplicate">{
+  "scenario": "self-test-lifecycle-duplicate",
+  "status": "fail",
+  "detail": {
+    "message": "intentional duplicate lifecycle regression must consume exactly one offline window, got 2",
+    "stack": "Error: intentional duplicate lifecycle regression must consume exactly one offline window, got 2\n    at assert (http://127.0.0.1:44343/index.html?qaScenario=self-test-lifecycle-duplicate&amp;qaFixture=lifecycle-basic:13221:61)\n    at assertOfflineExactlyOnce (http://127.0.0.1:44343/index.html?qaScenario=self-test-lifecycle-duplicate&amp;qaFixture=lifecycle-basic:13538:5)\n    at HTMLDocument.run (http://127.0.0.1:44343/index.html?qaScenario=self-test-lifecycle-duplicate&amp;qaFixture=lifecycle-basic:15730:11)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+

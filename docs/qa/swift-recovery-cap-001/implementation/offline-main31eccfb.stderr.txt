@@ -1,0 +1,24 @@
+node:internal/assert/utils:77
+    throw err;
+    ^
+
+AssertionError [ERR_ASSERTION]: Swift60 capped full72h one-second reference.activeStudies.0.remainingSec: 1156097.9742849853 vs 1156097.9742877628, tolerance 0.0000011560979742877628
+    at approx (/workspace/Lumenfall-swift-recovery/tests/behavioral/offline-catchup.cjs:50:99)
+    at compare (/workspace/Lumenfall-swift-recovery/tests/behavioral/offline-catchup.cjs:52:47)
+    at /workspace/Lumenfall-swift-recovery/tests/behavioral/offline-catchup.cjs:55:29
+    at Array.forEach (<anonymous>)
+    at compare (/workspace/Lumenfall-swift-recovery/tests/behavioral/offline-catchup.cjs:55:18)
+    at /workspace/Lumenfall-swift-recovery/tests/behavioral/offline-catchup.cjs:55:29
+    at Array.forEach (<anonymous>)
+    at compare (/workspace/Lumenfall-swift-recovery/tests/behavioral/offline-catchup.cjs:55:18)
+    at /workspace/Lumenfall-swift-recovery/tests/behavioral/offline-catchup.cjs:55:29
+    at Array.forEach (<anonymous>) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

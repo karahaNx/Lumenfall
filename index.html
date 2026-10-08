@@ -1951,6 +1951,8 @@
   #tab-forge .forge-actions .buy-btn{flex:1;min-width:0;flex-direction:row;flex-wrap:wrap;justify-content:center;gap:2px 10px;}
   .forge-actions .buy-btn .label,.forge-actions .buy-btn .control-state{flex-basis:100%;text-align:center;}
   .forge-actions .buy-btn .cost{font-size:12px;}
+  /* Swift keyboard focus also works in WebView60, without :focus-visible. */
+  #tab-forge [data-forge-card="charge"] button:focus{outline:2px solid var(--prism);outline-offset:2px;}
   .upgrade-emblem{width:32px;height:38px;flex:none;color:var(--chapter);}
   #tab-forge [data-forge-preview]{white-space:pre-line;overflow-wrap:anywhere;font-size:12px;line-height:1.45;margin-top:8px;padding:8px 10px;border:1px solid #3e4a61;border-radius:8px;background:#0e192b;}
   #tab-forge .node-info>.name{color:#ffe0b6;}
@@ -2924,7 +2926,7 @@ var RESEARCH = [
   {id:'sense', effectPerLevel:0.08,     name:'Shard Sense',        desc:'+8% Shards from every kill, per level.',                 lumenBase:150, lumenGrowth:1.5,  shardBase:20, shardGrowth:1.5},
   {id:'formation', effectPerLevel:0.05, name:'Formation Training', desc:'+5% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.', lumenBase:0, lumenGrowth:1, shardBase:40, shardGrowth:1.6},
   {id:'resolve', effectPerLevel:0.1,   name:"Guardian's Resolve", desc:'+10% tap damage, per level.',                   lumenBase:150, lumenGrowth:1.45, shardBase:0,  shardGrowth:1},
-  {id:'charge', effectPerLevel:0.08,    name:'Swift Recovery',     desc:'+8% faster Wisp ability charge, per level.',              lumenBase:0,   lumenGrowth:1,    shardBase:30, shardGrowth:1.55},
+  {id:'charge', effectPerLevel:0.08, levelCap:10, name:'Swift Recovery', desc:'+8% faster Wisp ability charge per level, up to level 10. Minimum ability cycle: 3.33 seconds.', lumenBase:0, lumenGrowth:1, shardBase:30, shardGrowth:1.55},
   {id:'arcanecal', name:'Arcane Calibration', desc:'+3 percentage points to the damaging Wisp ability factor per level. Burst, Breaker, Gale and Thorn only; no passive or Tap bonus.', unlockDepth:12, levelCap:10, effectPerLevel:0.03, lumenBase:15000, lumenGrowth:1.60, shardBase:120, shardGrowth:1.60},
   {id:'conduction', name:'Resource Conduction', desc:'+4 percentage points to the ability resource factor per level. Gale Shards and Thorn Lumen only; rounded per cast, not kill rewards.', unlockDepth:18, levelCap:10, effectPerLevel:0.04, lumenBase:90000, lumenGrowth:1.60, shardBase:280, shardGrowth:1.60},
   {id:'luminoustracking', name:'Luminous Tracking', desc:'+0.5 percentage points Luminous chance per level for future eligible encounters; total chance at most 35%. No extra Motes per kill.', unlockDepth:32, levelCap:10, effectPerLevel:0.005, lumenBase:2500000, lumenGrowth:1.60, shardBase:1500, shardGrowth:1.60}
@@ -3175,6 +3177,7 @@ var OFFLINE_12H_REFUND_POLICY = 'OFFLINE_12H_001:140/160:sum-ceil-6x1.6^level';
 var RESET_PENDING_KEY = 'lumenfall_reset_pending_v1';
 var TICK_MS = 100;
 var ABILITY_BASE_CYCLE_SEC = 6;
+var ABILITY_MIN_CYCLE_SEC = 10 / 3;
 var ASCEND_REPEAT_REWARD_RATE = 0.20;
 var OFFLINE_BOSS_RETREAT_GRACE_SEC = 5 * 60;
 var SIGIL_RESONANCE_COST = 25;
@@ -3193,6 +3196,7 @@ function freshState(){
   LONG_STUDIES.forEach(function(l){ longStudyLevels[l.id] = 0; studyQueue[l.id] = false; studyUseMotes[l.id] = false; studySpeedTargets[l.id] = 1.5; });
   return {
     schemaVersion:SAVE_SCHEMA_VERSION, offline12hRefund:null,
+    swiftRecoveryRefund:null,
     lumen:0, shards:0, prisms:0, comets:0, motes:0, sigils:0,
     depth:1, maxDepthEver:1,
     riftMode:'push', farmDepth:0, farmReturnDepth:0,
@@ -3776,7 +3780,71 @@ function normalizeCurrentSave(input){
   out.lastSeen = finiteNonNegative(source.lastSeen,Date.now());
   if(out.lastSeen<=0) out.lastSeen = Date.now();
   normalizeCometTrials(source,out);
+  normalizeSwiftRecoveryRefund(source,out);
   return out;
+}
+// Exact integer Shard credits use hexadecimal strings, supported by WebView60.
+// A Number wallet alone can lose a small refund or overflow for old overlevels.
+function shardIntegerHex(value){ return Math.floor(value).toString(16); }
+function shardHexCompare(a,b){ return a.length===b.length ? (a===b?0:a>b?1:-1) : a.length>b.length?1:-1; }
+function shardHexAdd(a,b){
+  var result='',carry=0,i=a.length-1,j=b.length-1;
+  while(i>=0 || j>=0 || carry){
+    var sum=(i>=0?parseInt(a.charAt(i--),16):0)+(j>=0?parseInt(b.charAt(j--),16):0)+carry;
+    result=(sum%16).toString(16)+result;carry=Math.floor(sum/16);
+  }
+  return result || '0';
+}
+function shardHexSubtract(a,b){
+  var result='',borrow=0,j=b.length-1;
+  for(var i=a.length-1;i>=0;i--){
+    var difference=parseInt(a.charAt(i),16)-(j>=0?parseInt(b.charAt(j--),16):0)-borrow;
+    borrow=difference<0?1:0;result=(difference+borrow*16).toString(16)+result;
+  }
+  return result.replace(/^0+/,'') || '0';
+}
+function swiftShardCredit(s){ return s.swiftRecoveryRefund ? s.swiftRecoveryRefund.remainingShardsHex : '0'; }
+function shardBudgetHex(s){ return shardHexAdd(shardIntegerHex(s.shards),swiftShardCredit(s)); }
+function shardsAvailable(){ return Math.min(Number.MAX_VALUE,state.shards+parseInt(swiftShardCredit(state),16)); }
+function canSpendShards(cost){
+  return Number.isFinite(cost) && cost>=0 && Number.isInteger(cost) && shardHexCompare(shardBudgetHex(state),shardIntegerHex(cost))>=0;
+}
+function spendShards(cost){
+  if(!canSpendShards(cost)) return false;
+  if(!state.swiftRecoveryRefund){state.shards-=cost;return true;}
+  var remaining=shardHexSubtract(shardBudgetHex(state),shardIntegerHex(cost));
+  var wallet=parseInt(remaining,16),fraction=state.shards-Math.floor(state.shards);
+  // Recombine only when every integer Shard and the old fractional balance fit.
+  if(Number.isFinite(wallet) && shardIntegerHex(wallet)===remaining && (wallet+fraction)-wallet===fraction){
+    state.shards=wallet+fraction;state.swiftRecoveryRefund.remainingShardsHex='0';
+  }else{state.shards=fraction;state.swiftRecoveryRefund.remainingShardsHex=remaining;}
+  return true;
+}
+function normalizeSwiftRecoveryRefund(source,out){
+  var saved=source.swiftRecoveryRefund;
+  if(isPlainObject(saved) && saved.version===1 && saved.from===10 && Number.isInteger(saved.to) && saved.to>10 &&
+      typeof saved.remainingShardsHex==='string' && /^(0|[1-9a-f][0-9a-f]{0,259})$/.test(saved.remainingShardsHex) &&
+      typeof saved.refundedShardsHex==='string' && /^(0|[1-9a-f][0-9a-f]{0,259})$/.test(saved.refundedShardsHex)){
+    out.swiftRecoveryRefund={version:1,from:10,to:saved.to,unpricedFrom:nonNegativeInt(saved.unpricedFrom,0),
+      refundedShardsHex:saved.refundedShardsHex,remainingShardsHex:saved.remainingShardsHex};
+    return;
+  }
+  var level=out.research.charge,node=RESEARCH.find(function(n){return n.id==='charge';});
+  if(level<=node.levelCap) return;
+  var refund='0',unpricedFrom=0;
+  // The original individually rounded price curve, not an invented bulk ledger.
+  // Exponential prices become nonfinite before 4096; never loop to a saved level.
+  for(var i=node.levelCap;i<level && i<4096;i++){
+    var price=Math.ceil(node.shardBase*Math.pow(node.shardGrowth,i));
+    if(!Number.isFinite(price)){unpricedFrom=i+1;break;}
+    refund=shardHexAdd(refund,shardIntegerHex(price));
+  }
+  out.swiftRecoveryRefund={version:1,from:node.levelCap,to:level,unpricedFrom:unpricedFrom,
+    refundedShardsHex:refund,remainingShardsHex:'0'};
+  var amount=parseInt(refund,16),sum=out.shards+amount;
+  if(Number.isFinite(sum) && shardIntegerHex(sum)===shardHexAdd(shardIntegerHex(out.shards),refund) &&
+      sum-Math.floor(sum)===out.shards-Math.floor(out.shards)){out.shards=sum;}
+  else out.swiftRecoveryRefund.remainingShardsHex=refund;
 }
 function acceptPersistedState(input,sourceName){
   assertPersistedRootShape(input);
@@ -4157,8 +4225,8 @@ function longStudyPrismMult(){ return 1 + longStudyLevel('prismstudy')*0.05; }
 function tapMult(){ return (1 + nodeLevel('steady')*0.08) * researchFactor('resolve') * longStudyTapMult(); }
 function formationMult(){ return researchFactor('formation') * longStudyFormationMult(); }
 function momentumMult(){ return 1 + nodeLevel('momentum')*0.06; }
-function fillRateMult(level){ return researchFactor('charge',level); }
-function abilityCycleSeconds(level){ return ABILITY_BASE_CYCLE_SEC / fillRateMult(level); }
+function abilityCycleSeconds(level){ return Math.max(ABILITY_MIN_CYCLE_SEC,ABILITY_BASE_CYCLE_SEC / researchFactor('charge',level)); }
+function fillRateMult(level){ return Math.min(researchFactor('charge',level),ABILITY_BASE_CYCLE_SEC / ABILITY_MIN_CYCLE_SEC); }
 function offlineRate(){ return Math.min(1, 0.70 + nodeLevel('echo')*0.05) + longStudyOfflineBonus(); }
 function prismMult(){ return (1 + nodeLevel('swift')*0.04) * longStudyPrismMult(); }
 function costReduction(){ return Math.min(0.6, nodeLevel('bonds')*0.03); }
@@ -4947,8 +5015,8 @@ function buyRarity(sp){
   var level = state.spirits[sp.id];
   if(level < rarityReq(tier)) return;
   var cost = rarityCost(sp, tier);
-  if(state.shards<cost.shard || state.lumen<cost.lumen) return;
-  state.shards -= cost.shard;
+  if(!canSpendShards(cost.shard) || state.lumen<cost.lumen) return;
+  spendShards(cost.shard);
   state.lumen -= cost.lumen;
   state.heroRarity[sp.id] = tier+1;
   checkAchievements();
@@ -5037,9 +5105,9 @@ function buyModule(sp){
   var level = moduleLevel(sp.id);
   if(level>=MODULE_MAX_LEVEL) return;
   var cost = moduleCost(sp, level);
-  if(state.lumen<cost.lumen || state.shards<cost.shard) return;
+  if(state.lumen<cost.lumen || !canSpendShards(cost.shard)) return;
   state.lumen -= cost.lumen;
-  state.shards -= cost.shard;
+  spendShards(cost.shard);
   state.wispModules[sp.id] = level+1;
   saveState();
   renderSpirits();
@@ -5111,11 +5179,11 @@ function researchCostForLevels(node, level, count){
     shard: Math.ceil(geometricSum(node.shardBase, node.shardGrowth, level, count))
   };
 }
-function maxAffordableLevels(node, level, lumenBudget, shardBudget){
+function maxAffordableLevels(node, level, lumenBudget, shardBudget, exactShards){
   var hi = 1;
   while(true){
     var c = researchCostForLevels(node, level, hi);
-    if(c.lumen>lumenBudget || c.shard>shardBudget || hi>1000000) break;
+    if(c.lumen>lumenBudget || (exactShards?!canSpendShards(c.shard):c.shard>shardBudget) || hi>1000000) break;
     hi *= 2;
   }
   var lo = Math.floor(hi/2);
@@ -5123,7 +5191,7 @@ function maxAffordableLevels(node, level, lumenBudget, shardBudget){
   while(lo<hi){
     var mid = Math.ceil((lo+hi+1)/2);
     var cm = researchCostForLevels(node, level, mid);
-    if(cm.lumen<=lumenBudget && cm.shard<=shardBudget){ lo = mid; } else { hi = mid-1; }
+    if(cm.lumen<=lumenBudget && (exactShards?canSpendShards(cm.shard):cm.shard<=shardBudget)){ lo = mid; } else { hi = mid-1; }
   }
   return lo;
 }
@@ -5134,7 +5202,7 @@ function researchEligibility(node){
 }
 function getResearchBuyPlan(node,requested){
   node=node && RESEARCH.find(function(n){return n.id===node.id;});
-  if(!node) return {count:0,buyCount:0,cost:{lumen:0,shard:0},needed:{lumen:0,shard:0},affordable:false,reason:'unknown'};
+  if(!node) return {count:0,buyCount:0,cost:{lumen:0,shard:0},needed:{lumen:0,shard:0},affordable:false,reason:'unknown',level:0,unlocked:false,maxed:false};
   var e = researchEligibility(node);
   requested = requested===undefined ? labMultiplier : requested;
   var validRequest = requested==='max' || (Number.isInteger(requested) && requested>0);
@@ -5147,13 +5215,13 @@ function getResearchBuyPlan(node,requested){
       // geometric sum, never a sum of individually rounded level prices.
       while(count<limit){
         var next = researchCostForLevels(node,e.level,count+1);
-        if(!Number.isFinite(next.lumen) || !Number.isFinite(next.shard) || next.lumen>state.lumen || next.shard>state.shards) break;
+        if(!Number.isFinite(next.lumen) || next.lumen>state.lumen || !canSpendShards(next.shard)) break;
         count++;cost=next;
       }
     } else {
-      var n = requested==='max' ? maxAffordableLevels(node,e.level,state.lumen,state.shards) : requested;
+      var n = requested==='max' ? maxAffordableLevels(node,e.level,state.lumen,shardsAvailable(),true) : requested;
       var candidate = researchCostForLevels(node,e.level,n);
-      if(n>0 && Number.isFinite(candidate.lumen) && Number.isFinite(candidate.shard) && candidate.lumen<=state.lumen && candidate.shard<=state.shards){count=n;cost=candidate;}
+      if(n>0 && Number.isFinite(candidate.lumen) && candidate.lumen<=state.lumen && canSpendShards(candidate.shard)){count=n;cost=candidate;}
     }
     if(!count) reason='unaffordable';
   }
@@ -5213,7 +5281,7 @@ function buyResearch(node){
   var plan = getResearchBuyPlan(node);
   if(!plan.affordable || plan.buyCount<1) return;
   state.lumen -= plan.cost.lumen;
-  state.shards -= plan.cost.shard;
+  spendShards(plan.cost.shard);
   state.research[node.id] += plan.buyCount;
   trackDaily('research', plan.buyCount);
   saveState();
@@ -5232,13 +5300,13 @@ function autoLabQueueTick(){
       if(!plan.affordable) return;
       var cost = plan.cost;
       var total = cost.lumen + cost.shard;
-      if(state.lumen>=cost.lumen && state.shards>=cost.shard && total<cheapestTotal){
+      if(state.lumen>=cost.lumen && canSpendShards(cost.shard) && total<cheapestTotal){
         cheapestTotal = total; cheapest = node; cheapestCost = cost;
       }
     });
     if(!cheapest) break;
     state.lumen -= cheapestCost.lumen;
-    state.shards -= cheapestCost.shard;
+    spendShards(cheapestCost.shard);
     state.research[cheapest.id] += 1;
     trackDaily('research');
     boughtAny = true;
@@ -5300,14 +5368,14 @@ function getStudyStartPlan(node){
   var valid=Number.isFinite(cost.lumen) && cost.lumen>=0 && Number.isFinite(cost.shard) && cost.shard>=0 && Number.isFinite(duration) && duration>0;
   var reason=node.retiredTo ? 'retired' : !unlocked ? 'locked' : maxed ? 'maxed' : findActiveStudy(node.id) ? 'active' : state.activeStudies.length>=studySlotCount() ? 'slots' : !valid ? 'unavailable' : '';
   var eligible=!reason;
-  if(eligible && (state.lumen<cost.lumen || state.shards<cost.shard)) reason='unaffordable';
+  if(eligible && (state.lumen<cost.lumen || !canSpendShards(cost.shard))) reason='unaffordable';
   return {node:node,level:level,cost:cost,duration:duration,unlocked:unlocked,maxed:maxed,eligible:eligible,affordable:!reason,reason:reason};
 }
 function commitStudyStart(node){
   var plan=getStudyStartPlan(node);
   if(!plan.affordable) return false;
   state.lumen-=plan.cost.lumen;
-  state.shards-=plan.cost.shard;
+  spendShards(plan.cost.shard);
   state.activeStudies.push({id:plan.node.id,remainingSec:plan.duration,totalDurationSec:plan.duration,speedMult:1});
   return true;
 }
@@ -5751,7 +5819,7 @@ function formatRiftNumber(value){
 }
 function renderHud(){
   els['hud-lumen'].textContent = formatRiftNumber(state.lumen);
-  els['hud-shard'].textContent = formatRiftNumber(state.shards);
+  els['hud-shard'].textContent = formatRiftNumber(shardsAvailable());
   els['hud-mote'].textContent = formatRiftNumber(state.motes);
   els['hud-prism'].textContent = formatRiftNumber(state.prisms);
   els['hud-comet'].textContent = formatRiftNumber(state.comets);
@@ -6208,7 +6276,7 @@ function renderSpirits(){
     var active = state.activeParty.indexOf(sp.id)!==-1;
     var req = rarityReq(tier);
     var rc = rarityCost(sp, tier);
-    var canRarity = recruited && tier<5 && level>=req && state.shards>=rc.shard && state.lumen>=rc.lumen;
+    var canRarity = recruited && tier<5 && level>=req && canSpendShards(rc.shard) && state.lumen>=rc.lumen;
     var rarityLabel = tier>=5 ? 'Maxed' : (level<req ? ('Lv.'+req+' req') :
       ('<span style="font-size:.6875rem;">Rarity Up</span>' +
        '<span style="font-size:.6875rem;">'+costIcon('lumen')+formatNum(rc.lumen)+'</span>' +
@@ -6217,7 +6285,7 @@ function renderSpirits(){
     var modLvl = moduleLevel(sp.id);
     var modMaxed = modLvl>=MODULE_MAX_LEVEL;
     var modCost = moduleCost(sp, modLvl);
-    var canModule = recruited && !modMaxed && state.lumen>=modCost.lumen && state.shards>=modCost.shard;
+    var canModule = recruited && !modMaxed && state.lumen>=modCost.lumen && canSpendShards(modCost.shard);
     var moduleHtml =
       '<div class="module-row">' +
         '<div class="module-name">'+modInfo.name+' <span style="color:var(--shard);">Lv.'+modLvl+'/'+MODULE_MAX_LEVEL+(modMaxed?' · Maxed':'')+'</span></div>' +
@@ -6348,8 +6416,9 @@ function renderResearch(){
     html += '<div class="card node-card" data-forge-card="'+node.id+'">' +
       '<div class="forge-head"><svg class="upgrade-emblem" viewBox="0 0 32 38" aria-hidden="true" focusable="false"><use href="#upgrade-forge"/></svg>' +
         '<div class="node-info"><div class="name">'+node.name+'</div>' +
-          '<div class="lvl">Level '+level+(node.levelCap===undefined?'':' / '+node.levelCap)+'</div></div></div>' +
+          '<div class="lvl">Level '+(node.id==='charge'?researchEffectiveLevel(node,level):level)+(node.levelCap===undefined?'':' / '+node.levelCap)+(node.id==='charge' && level>node.levelCap?' ('+level+' historical)':'')+'</div></div></div>' +
       '<div class="desc forge-description">'+node.desc+'</div>' +
+      (node.id==='charge' && state.swiftRecoveryRefund?'<div class="effect-note">Legacy levels still count for Deeds. Purchases above level 10 were refunded in Shards.</div>':'') +
       '<div class="desc" data-forge-preview></div>' +
       '<div class="forge-actions"><button class="node-queue-toggle '+(queueOn?'active':'')+'" data-queue="'+node.id+'">Queue '+(queueOn?'ON':'OFF')+'</button>' +
         '<button class="buy-btn" data-research="'+node.id+'"></button></div>' +
@@ -7369,7 +7438,7 @@ function simulationDrainResearchQueue(summary){
 }
 function simulationCurrencyKillsNeeded(cost,lumenPerKill,shardPerKill){
   var lumenDeficit = Math.max(0,cost.lumen-state.lumen);
-  var shardDeficit = Math.max(0,cost.shard-state.shards);
+  var shardDeficit = canSpendShards(cost.shard) ? 0 : Math.max(1,cost.shard-shardsAvailable());
   // Affordability itself is strict (budget >= cost), so any positive deficit
   // needs at least one real reward event. Never round a tiny deficit down to a
   // zero-time economy boundary.
@@ -7943,6 +8012,33 @@ function advanceAuthoritativeTime(elapsedSec,options){
     }
   }
 
+  // Derive paid work from the canonical clock instead of subtracting from a
+  // large countdown at every combat event. Keep anchors across Ascend's
+  // canonical state copy; re-anchor only new work or an actual speed change.
+  var studyProgressAnchors = {};
+  function captureStudyProgressAnchors(){
+    state.activeStudies.forEach(function(active){
+      var anchor = studyProgressAnchors[active.id];
+      if(!anchor || anchor.lastRemaining!==active.remainingSec ||
+          anchor.speed!==active.speedMult || anchor.total!==active.totalDurationSec){
+        studyProgressAnchors[active.id] = {
+          remaining:active.remainingSec,lastRemaining:active.remainingSec,
+          speed:active.speedMult,total:active.totalDurationSec,
+          crossings:farmGridCrossings,gridRemaining:farmGridRemainingSec
+        };
+      }
+    });
+  }
+  function advanceStudyProgressToClock(){
+    state.activeStudies.forEach(function(active){
+      var anchor = studyProgressAnchors[active.id];
+      var workSeconds = (farmGridCrossings-anchor.crossings)+
+        (anchor.gridRemaining-farmGridRemainingSec);
+      active.remainingSec = anchor.remaining-workSeconds*anchor.speed;
+      anchor.lastRemaining = active.remainingSec;
+    });
+  }
+
   var traceEverySec = Math.max(0,Number(options.traceEverySec)||0);
   var nextTraceElapsedSec = traceEverySec>0 ? traceEverySec : Infinity;
   if(traceEverySec>0) summary.trace = [];
@@ -8099,6 +8195,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
     // subtraction literally cannot advance the remaining clock and no state
     // event fires.
     if(next>0){
+      captureStudyProgressAnchors();
       if(policy.visual && policy.kind==='live' && dps>0)presentPassiveWispAttack();
       var ascendsBeforePassive = state.ascendCount;
       if(state.riftMode==='farm') simulationApplyFarmPassive(next,dps,policy,summary);
@@ -8109,7 +8206,6 @@ function advanceAuthoritativeTime(elapsedSec,options){
         simulationAdvanceAbilityResources(next);
         simulationAdvanceAutomationTimers(next);
       }
-      simulationAdvanceStudyProgress(next);
       var crossedFarmGrids = advanceFarmGridClock(next);
       if(hitsFarmGrid && crossedFarmGrids!==1){
         throw new Error('Authoritative Farm grid clock crossed an unexpected boundary count');
@@ -8128,6 +8224,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
         farmGridCrossings = targetFarmGridCrossings;
         farmGridRemainingSec = targetFarmGridRemainingSec;
       }
+      advanceStudyProgressToClock();
       elapsedInRun = currentElapsedSec();
       remaining = hitsWindowEnd ? 0 : simulationRemainingSec();
     }
@@ -8367,7 +8464,7 @@ function checkAffordability(){
     var level = state.spirits[id];
     var req = rarityReq(tier);
     var cost = rarityCost(sp, tier);
-    btn.disabled = !(level>=req && state.shards>=cost.shard && state.lumen>=cost.lumen);
+    btn.disabled = !(level>=req && canSpendShards(cost.shard) && state.lumen>=cost.lumen);
   });
   els['spirit-list'].querySelectorAll('[data-module]').forEach(function(btn){
     var sp = SPIRITS.find(function(s){ return s.id===btn.getAttribute('data-module'); });
@@ -8375,7 +8472,7 @@ function checkAffordability(){
     var level = moduleLevel(sp.id);
     if(level>=MODULE_MAX_LEVEL) return;
     var cost = moduleCost(sp, level);
-    btn.disabled = (state.spirits[sp.id]||0)<=0 || state.lumen<cost.lumen || state.shards<cost.shard;
+    btn.disabled = (state.spirits[sp.id]||0)<=0 || state.lumen<cost.lumen || !canSpendShards(cost.shard);
   });
   els['spirit-list'].querySelectorAll('[data-ultimate]').forEach(function(btn){
     var sp = SPIRITS.find(function(s){ return s.id===btn.getAttribute('data-ultimate'); });

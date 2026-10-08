@@ -8,20 +8,46 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const root=path.resolve(__dirname,'../..');
 const sourceArg=process.argv.indexOf('--source');
 const source=fs.readFileSync(sourceArg<0?path.join(root,'index.html'):process.argv[sourceArg+1],'utf8');
-const baseline=fs.readFileSync(path.join(root,'docs/recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/main-index.html'),'utf8');
+const baselineOriginal=fs.readFileSync(path.join(root,'docs/recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/main-index.html'),'utf8');
+let baseline=baselineOriginal;
 assert.equal(require('node:crypto').createHash('sha1').update('blob '+Buffer.byteLength(baseline)+'\0'+baseline).digest('hex'),'ea44431c163569548973d9e489f75345749a07ee','original product oracle blob');
 // PR70's independently prepared clock correction is a necessary dependency:
 // closing old queues exposes a canonical-grid stall. Keep the immutable old
-// engine as the reference, applying ONLY its two clock corrections. The complete
+// engine as the reference, applying ONLY necessary clock corrections. The complete
 // state and summary comparisons below remain exact, including economy/ownership.
 function clockReference(original){
+ // A separate paid-work clock adapter avoids preserving the old timer's
+ // rounding drift as a required behavior. Only the countdown arithmetic changes;
+ // all original event ordering, work, prices, completions and rewards stay intact.
+ const paidClock=`  var paidWorkOrigins = {};
+  function pinPaidWork(){
+    state.activeStudies.forEach(function(a){
+      var x=paidWorkOrigins[a.id];
+      if(x && x.result===a.remainingSec && x.rate===a.speedMult && x.duration===a.totalDurationSec) return;
+      paidWorkOrigins[a.id]={value:a.remainingSec,result:a.remainingSec,rate:a.speedMult,
+        duration:a.totalDurationSec,second:farmGridCrossings,countdown:farmGridRemainingSec};
+    });
+  }
+  function applyPaidWorkClock(){
+    state.activeStudies.forEach(function(a){
+      var x=paidWorkOrigins[a.id];
+      var dt=(farmGridCrossings-x.second)+(x.countdown-farmGridRemainingSec);
+      x.result=a.remainingSec=x.value-dt*x.rate;
+    });
+  }
+`;
  const replacements=[
   ['  var targetGridPositionSec = startPhaseSec+elapsedSec;\n  var targetFarmGridCrossings = Math.floor(targetGridPositionSec);\n  var targetGridPhaseSec = targetGridPositionSec-targetFarmGridCrossings;',
    '  var targetGridPhaseSec = startPhaseSec+targetFractionSec;\n  var targetGridCarry = Math.floor(targetGridPhaseSec);\n  var targetFarmGridCrossings = targetWholeSec+targetGridCarry;\n  targetGridPhaseSec -= targetGridCarry;'],
   ['    var elapsedWholeBefore = elapsedWholeSec;\n    var elapsedFractionBefore = elapsedFractionSec;',
    '    var gridCrossingsBefore = farmGridCrossings;\n    var gridRemainingBefore = farmGridRemainingSec;'],
   ['if(elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && actions===0){',
-   'if(farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore && actions===0){']
+   'if(farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore && actions===0){'],
+  ['  var traceEverySec = Math.max(0,Number(options.traceEverySec)||0);',
+   paidClock+'  var traceEverySec = Math.max(0,Number(options.traceEverySec)||0);'],
+  ['    if(next>0){\n      if(policy.visual', '    if(next>0){\n      pinPaidWork();\n      if(policy.visual'],
+  ['      simulationAdvanceStudyProgress(next);\n      var crossedFarmGrids', '      var crossedFarmGrids'],
+  ['      elapsedInRun = currentElapsedSec();', '      applyPaidWorkClock();\n      elapsedInRun = currentElapsedSec();']
  ];
  for(const [before,after] of replacements){assert.equal(original.split(before).length,2,'unique frozen clock marker');original=original.replace(before,after);}
  return original;
@@ -64,6 +90,7 @@ function baselineSummary(actual,expected,label){
  assert.deepEqual(existing,expected,label);
 }
 function baselineState(actual,expected,seed,label){
+ assert.equal(actual.swiftRecoveryRefund,null,label+' no cap migration below10');
  const ids=Object.keys(expected.longStudyLevels);
  assert.deepEqual(actual.studyUseMotes,Object.fromEntries(ids.map(id=>[id,false])),label+' legacy OFF intent');
  assert.deepEqual(actual.studySpeedTargets,Object.fromEntries(ids.map(id=>{
@@ -77,7 +104,7 @@ function baselineState(actual,expected,seed,label){
  const oldOwnership={...expected.owned},legacy={};
  for(const id of ['rememberbulk','offline24','offline48']){if(oldOwnership[id]===true)legacy[id]=true;delete oldOwnership[id];}
  assert.deepEqual(actual.legacyCometPurchases,legacy,label+' full legacy ownership archived');
- const {studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,offline12hRefund,...existing}=actual;
+ const {swiftRecoveryRefund,studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,offline12hRefund,...existing}=actual;
  // Preserve F14's selected destination during a matching partial rebuild.
  const intent=expected.formationRebuild;
  const selected=intent&&intent.preset&&expected.formationPresets[intent.preset]&&
@@ -110,11 +137,28 @@ function runAsync(seed,seconds,batch=256){
  return {x,result,committed};
 }
 const start=performance.now();
+// The immutable device backup owns Swift60. Its new rewards are independently
+// replayed in one-second calls; archived old-product parity uses Swift9 below.
+function oneSecondReference(seed,seconds){
+ const x=app(seed,source,seconds),before=copy(x.b.get());
+ for(let i=0;i<seconds;i++)x.b.advance(1,{kind:'offline',visual:false,clockStartMs:seed.lastSeen+i*1000,offlineWindowStartMs:seed.lastSeen});
+ x.b.get().totalOfflineSeconds+=seconds;x.b.get().lastSeen=seed.lastSeen+seconds*1000;x.b.save();
+ return {state:copy(x.b.get()),kills:x.b.get().totalKills-before.totalKills,ascends:x.b.get().ascendCount-before.ascendCount,prisms:x.b.get().prisms-before.prisms};
+}
+if(process.argv.includes('--generate-swift-golden')){
+ let seed=copy(original);const phases=[];
+ for(let i=0;i<4;i++){const reference=oneSecondReference(seed,28800);phases.push({kills:reference.kills,ascends:reference.ascends,prisms:reference.prisms,stateSha256:require('node:crypto').createHash('sha256').update(JSON.stringify(reference.state)).digest('hex')});seed=reference.state;}
+ console.log(JSON.stringify({sourceSha256:require('node:crypto').createHash('sha256').update(source).digest('hex'),oracle:'independent one-second advance calls, fixed whole-window start',phases},null,2));process.exit(0);
+}
 // Fails on the unchanged product through the reported production entry.
 const on=runAsync(original,28800);
-assert.equal(on.result.kills,302400);assert.equal(on.result.ascends,14400);
-assert.equal(on.committed.prisms-original.prisms,86400+2810);
-assert.equal(on.committed.lumen,0,'Ascension reset preserves earned vs balance distinction');
+const onReference=oneSecondReference(original,28800);
+assert.equal(on.result.kills,onReference.kills);assert.equal(on.result.ascends,onReference.ascends);
+let migratedPrisms=0;for(let i=0;i<original.nodes.reserves;i++)migratedPrisms+=Math.ceil(6*Math.pow(1.6,i));
+assert.equal(on.committed.prisms-original.prisms,onReference.prisms+migratedPrisms);
+compare(on.committed,onReference.state,'Swift60 capped full8h one-second reference');
+assert.equal(on.committed.lumen,onReference.state.lumen,'post-Ascend partial run balance matches one-second reference');
+assert(on.result.earned>on.committed.lumen,'Ascend resets run Lumen, not the reported earned total');
 assert.deepEqual(on.committed.formationRebuild,original.formationRebuild,'unaffordable Boss reconstruction intent persists');
 assert.deepEqual(on.committed.empowerQueue,original.empowerQueue,'purchase intent preserved');
 assert.deepEqual(on.committed.activeParty,['ember']);
@@ -127,19 +171,23 @@ assert.deepEqual(narrow.result,on.result,'changing work budget changes no reward
 const clear20=copy(original);clear20.autoAscendTargetDepth=21;
 const c20=runAsync(clear20,28800);
 const off=copy(original);off.autoAscendEnabled=false;
-const disabled=runAsync(off,28800);assert.equal(disabled.result.kills,773);assert.equal(disabled.result.ascends,0);
-assert.equal(disabled.committed.spirits.titan,144);
-const cap=runAsync(original,72*3600);assert.equal(cap.result.kills,453600);assert.equal(cap.result.ascends,21600);
+const disabled=runAsync(off,28800),offReference=oneSecondReference(off,28800);assert.equal(disabled.result.kills,offReference.kills);assert.equal(disabled.result.ascends,0);
+compare(disabled.committed,offReference.state,'Swift60 capped OFF full8h reference');
+const cap=runAsync(original,72*3600),capReference=oneSecondReference(original,12*3600);assert.equal(cap.result.kills,capReference.kills);assert.equal(cap.result.ascends,capReference.ascends);
+capReference.state.lastSeen=original.lastSeen+72*3600000;
+compare(cap.committed,capReference.state,'Swift60 capped72h return with full12h one-second reference');
 const beyond=copy(original);beyond.activeStudies=[{id:'guardmastery',remainingSec:80*3600,totalDurationSec:80*3600,speedMult:1}];beyond.studyQueue={};
 const long=runAsync(beyond,96*3600);assert.equal(long.result.effectiveSec,12*3600);
-assert(!long.result.completedStudies.includes("Guardian's Mastery"),'Study cannot complete beyond the common cap');assert(Math.abs(long.committed.activeStudies[0].remainingSec-68*3600)<1e-5,'12h paid work within existing scheduler epsilon');
-assert.equal(long.result.kills,cap.result.kills,'beyond-cap time earns no extra combat');
+assert(!long.result.completedStudies.includes("Guardian's Mastery"),'Study cannot complete beyond the common cap');
+assert.equal(long.committed.activeStudies[0].remainingSec,68*3600,'exact12h paid work, no productive Study tail');
+const samePaidWork=runAsync(beyond,12*3600);
+assert.equal(long.result.kills,samePaidWork.result.kills,'beyond-cap time earns no extra combat with the same paid work');
 // Preserve old numerical policy against the unchanged scheduler for short windows
 // and chronological research/Motes/automation boundaries.
 // Compare unchanged chronology with closed purchase intent disabled on both
 // sides. UPGRADE_IDENTITY tests separately exercise old ON intent and paid work.
 for(const rawSeed of [original,clear20,off]){
- const seed=copy(rawSeed);
+ const seed=copy(rawSeed);seed.research.charge=9;seed.researchQueue.charge=false;
  for(const id of ['focus','sense','formation','resolve'])seed.researchQueue[id]=false;
  for(const id of ['riftattune','formationstudy','prismstudy'])seed.studyQueue[id]=false;
  for(const seconds of [60,300,3600]){
@@ -149,10 +197,10 @@ for(const rawSeed of [original,clear20,off]){
   baselineSummary(b,a,'unchanged baseline summary '+seconds);baselineState(next.b.get(),old.b.get(),seed,'unchanged baseline state '+seconds);
  }
 }
-const all=copy(original);all.research.charge=0;
+const all=copy(original);all.research.charge=9;all.researchQueue.charge=false;all.research.arcanecal=0;
 for(const id of ['focus','sense','formation','resolve'])all.researchQueue[id]=false;
 for(const id of ['riftattune','formationstudy','prismstudy'])all.studyQueue[id]=false;Object.keys(all.empowerQueue).forEach(k=>all.empowerQueue[k]=true);
-all.researchQueue.charge=true;all.studyQueue.guardmastery=true;
+all.researchQueue.arcanecal=true;all.studyQueue.guardmastery=true;
 for(const kind of ['live','offline']){
  const whole=app(all),split=app(all),old=app(all,correctedClockBaseline),options={kind,visual:false,clockStartMs:all.lastSeen};
  const sum=whole.b.advance(3600,options);const oldSum=old.b.advance(3600,options);

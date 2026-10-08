@@ -1,0 +1,30 @@
+{
+  "status": "blocked",
+  "sourceSha256": "319e69db68f96f30e4d5b1a56ae15101c9fba21552d09c79ac2e8d3601ff6916",
+  "main": "14d5f3a",
+  "checks": {
+    "core": "14 groups/110 purchases",
+    "causalMutants": 5,
+    "shared12h": "pass",
+    "offline": {
+      "status": "pass",
+      "wallMs": 105552.50258100001,
+      "records": 17
+    },
+    "mobileProfiles": 12,
+    "v8": "6.0.286.52",
+    "v8IntegerOracle": "pass",
+    "source": "pass",
+    "tooling": "pass"
+  },
+  "blocker": "User Deed progression choice pending after PR90 retirement; do not merge cap10 with unreachable fresh20/60 Deeds",
+  "requiredRemaining": [
+    "agreed Deed continuity implementation/regression",
+    "current-head full CI",
+    "integration verification",
+    "signed Swift APK identity/assets/native update acceptance"
+  ],
+  "nativeBaseline": "signed143 raw12,1e30 Shards,1e12 Lumen; Auto-Empower OFF, cold storage verified",
+  "supersededRun": "full-study-clock-result.json",
+  "chat": "open"
+}

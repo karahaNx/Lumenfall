@@ -4,6 +4,8 @@
 const {spawn}=require('node:child_process'),fs=require('node:fs'),os=require('node:os'),path=require('node:path');
 const [chrome,url,scenario]=process.argv.slice(2),profile=fs.mkdtempSync(path.join(os.tmpdir(),'lumenfall-auto-target-'));
 const browser=spawn(process.env.LUMENFALL_QA_CDP_CHROME||chrome,['--headless=new','--no-sandbox','--disable-gpu','--disable-dev-shm-usage','--remote-debugging-pipe','--user-data-dir='+profile,'about:blank'],{stdio:['ignore','ignore','pipe','pipe','pipe']});
+const swiftGolden=require('./offline-swift-golden.json');
+if(require('node:crypto').createHash('sha256').update(fs.readFileSync(path.resolve(__dirname,'../../index.html'))).digest('hex')!==swiftGolden.sourceSha256)throw Error('Swift offline golden must be regenerated for the changed product');
 let seq=0,buffer='',stderr='',session,records=[];const pending=new Map(),listeners=[],shutdownEvents=[];
 let browserClosed=false;
 function rejectPending(message){for(const p of pending.values()){clearTimeout(p.timer);p.reject(Error(message+' '+p.method));}pending.clear();}
@@ -54,11 +56,11 @@ async function run(){
  assert(await evaluate('window.__lumenfallQaBridge.save()===false'),'save cannot consume incomplete cold window');
  await until('!window.__lumenfallQaBridge.getFlags().offlineBusy','cold8h catch-up');
  const cold=await stateSummary();assert(!cold.flags.offlinePending&&!cold.flags.resumeFlowBusy,'cold flags cleared');
- assert(cold.kills-before.kills===302400&&cold.ascends-before.ascends===14400,'cold full8h rewards');
+ assert(cold.kills-before.kills===swiftGolden.phases[0].kills&&cold.ascends-before.ascends===swiftGolden.phases[0].ascends,'cold full8h rewards');
  assert(cold.primaryKills===cold.kills&&cold.recoveryMatches,'cold canonical primary/recovery');
  assert(cold.heartbeat.frames>5,'animation/event loop progresses during long catch-up');
  assert(cold.errors===0,'cold no runtime errors');
- assert(await evaluate('document.getElementById("welcome-text").textContent.includes("14400 times")'),'normal return message shown');
+ assert(await evaluate('document.getElementById("welcome-text").textContent.includes('+JSON.stringify(swiftGolden.phases[0].ascends+' times')+')'),'normal return message shown');
  const returnGeometry=await evaluate(`(()=>{const overlay=document.getElementById('welcome-overlay'),button=document.getElementById('welcome-claim'),r=overlay.getBoundingClientRect(),b=button.getBoundingClientRect();return {overlay:{x:r.x,y:r.y,width:r.width,height:r.height},button:{x:b.x,y:b.y,width:b.width,height:b.height},viewport:{width:innerWidth,height:innerHeight},hit:document.elementFromPoint(b.x+b.width/2,b.y+b.height/2)===button};})()`);
  assert(returnGeometry.overlay.x===0 && returnGeometry.overlay.y===0 && returnGeometry.overlay.width===returnGeometry.viewport.width && returnGeometry.overlay.height===returnGeometry.viewport.height,'return overlay covers viewport without CSS inset: '+JSON.stringify(returnGeometry));
  assert(returnGeometry.button.y>=0 && returnGeometry.button.y+returnGeometry.button.height<=returnGeometry.viewport.height && returnGeometry.hit,'return Continue is visible and receives real input: '+JSON.stringify(returnGeometry));
@@ -75,7 +77,7 @@ async function run(){
  assert((await stateSummary()).flags.offlineBusy,'resume8h yields');
  await evaluate('window.__lumenfallQaBridge.dispatchVisibility(false)');
  await until('!window.__lumenfallQaBridge.getFlags().offlineBusy','resume8h');
- const resumed=await stateSummary();assert(resumed.kills-cold.kills===302400&&resumed.ascends-cold.ascends===14400,'resume full8h exactly once');
+ const resumed=await stateSummary();assert(resumed.kills-cold.kills===swiftGolden.phases[1].kills&&resumed.ascends-cold.ascends===swiftGolden.phases[1].ascends,'resume full8h exactly once');
  await evaluate('window.__lumenfallQaBridge.dispatchVisibility(false)');const repeated=await stateSummary();assert(repeated.kills===resumed.kills&&repeated.lastSeen===resumed.lastSeen,'repeated visible notification has no additional award');
  records.push({case:'resume/repeated',resumed});
  // Abort between batches by backgrounding. Disk/runtime retain prior endpoint.
@@ -87,13 +89,13 @@ async function run(){
  // Real page reload after interruption, no unload write may erase the debt.
  await evaluate('localStorage.setItem(window.__lumenfallQaContext.phaseKey,"1")');
  await send('Page.reload');await until('!!window.__lumenfallQaBridge && window.__lumenfallQaBridge.getFlags().offlineBusy','restart catch-up starts');await until('!window.__lumenfallQaBridge.getFlags().offlineBusy','restart catch-up');
- const restarted=await stateSummary();assert(restarted.kills-resumed.kills===302400&&restarted.primaryKills===restarted.kills,'restart awards interrupted window once');
+ const restarted=await stateSummary();assert(restarted.kills-resumed.kills===swiftGolden.phases[2].kills&&restarted.primaryKills===restarted.kills,'restart awards interrupted window once');
  records.push({case:'interruption/restart',interrupted,restarted});
  // Runtime failure clears all busy flags; the next real return retries fully.
  await evaluate('(()=>{const b=window.__lumenfallQaBridge;b.dispatchVisibility(true);b.advanceTime(28800000);b.offlineTest.failNext();b.dispatchVisibility(false);})()');
  const failed=await stateSummary();assert(!failed.flags.offlineBusy&&!failed.flags.resumeFlowBusy&&failed.flags.offlinePending,'failed resume clears busy flags');assert(failed.kills===restarted.kills&&failed.primaryLastSeen===restarted.lastSeen,'failed resume preserves endpoint');
  await evaluate('(()=>{const b=window.__lumenfallQaBridge;b.dispatchVisibility(true);b.dispatchVisibility(false);})()');
- await until('!window.__lumenfallQaBridge.getFlags().offlineBusy','failure retry');const recovered=await stateSummary();assert(recovered.kills-restarted.kills===302400&&!recovered.flags.offlinePending,'failure retry finishes entire window once');assert(recovered.errors===0,'failure handled without uncaught errors');
+ await until('!window.__lumenfallQaBridge.getFlags().offlineBusy','failure retry');const recovered=await stateSummary();assert(recovered.kills-restarted.kills===swiftGolden.phases[3].kills&&!recovered.flags.offlinePending,'failure retry finishes entire window once');assert(recovered.errors===0,'failure handled without uncaught errors');
  records.push({case:'failure/retry',failed,recovered});
  // A cancelled/failed first return must still present its daily-rollover reward
  // after retry, even though ensureDaily has already updated the in-memory day.

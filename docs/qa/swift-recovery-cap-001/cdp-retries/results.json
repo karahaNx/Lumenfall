@@ -1,0 +1,76 @@
+{
+  "commit": "b2a1f440e8ad9fed34b37551e468224310d2a6f6",
+  "tree": "60bb2fce00d0c230a4dd3fd9b61fd7992fb94d60",
+  "sourceSha256": "f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4",
+  "harness": "tests/behavioral/run.py",
+  "harnessSha256": "caebb7d75c16a2123e5d046daed6aa66966fc79bac379327b4b286db22e42731",
+  "transport": "supplemental Chromium CDP adapter; CLI timeout evidence retained separately",
+  "adapterSha256": "c36951937c5f4d998900b32aec0d6f4bc881151fd009dbe9056540ba848ce967",
+  "scope": "baseline only; no product candidate, migration or Android acceptance",
+  "startedAt": "2026-10-07T13:33:14.345Z",
+  "results": [
+    {
+      "name": "forge-save-reload",
+      "command": "python3",
+      "args": [
+        "tests/behavioral/run.py",
+        "--web-root",
+        ".",
+        "--scenario",
+        "forge-save-reload",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/cdp-retries/failed-processes"
+      ],
+      "startedAt": "2026-10-07T13:33:14.346Z",
+      "finishedAt": "2026-10-07T13:33:16.243Z",
+      "expectedFailure": false,
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "passed": true
+    },
+    {
+      "name": "forge-recovery",
+      "command": "python3",
+      "args": [
+        "tests/behavioral/run.py",
+        "--web-root",
+        ".",
+        "--scenario",
+        "forge-recovery",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/cdp-retries/failed-processes"
+      ],
+      "startedAt": "2026-10-07T13:33:16.245Z",
+      "finishedAt": "2026-10-07T13:33:18.030Z",
+      "expectedFailure": false,
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "passed": true
+    },
+    {
+      "name": "buff-save-reload",
+      "command": "python3",
+      "args": [
+        "tests/behavioral/run.py",
+        "--web-root",
+        ".",
+        "--scenario",
+        "buff-save-reload",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/cdp-retries/failed-processes"
+      ],
+      "startedAt": "2026-10-07T13:33:18.031Z",
+      "finishedAt": "2026-10-07T13:33:19.679Z",
+      "expectedFailure": false,
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "passed": true
+    }
+  ],
+  "finishedAt": "2026-10-07T13:33:19.679Z",
+  "sourceUnchanged": true,
+  "harnessUnchanged": true
+}

@@ -204,3 +204,5 @@ JavaScript is the active-tooling standard; see
 `decisions/2026-10-07-javascript-first.md`. P2-04/native, P2-05/release-hardening
 and A40 remain recorded as deferred/retired. Earlier status:
 `project/PROJECT_STATE_2026-10-05_HISTORICAL.md`.
+
+Swift Recovery: [PR88](https://github.com/karahaNx/Lumenfall/pull/88), cap10/min10/3s candidate; core14/110 and shared12h pass. Blocked: PR90 removes fresh Forge20/60 route; user choice pending. CI/integration/signed update OPEN. [Task](tasks/SWIFT_RECOVERY_CAP_001.md).

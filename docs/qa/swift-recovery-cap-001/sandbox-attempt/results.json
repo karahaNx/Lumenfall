@@ -1,0 +1,248 @@
+{
+  "commit": "b2a1f440e8ad9fed34b37551e468224310d2a6f6",
+  "tree": "60bb2fce00d0c230a4dd3fd9b61fd7992fb94d60",
+  "sourceSha256": "f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4",
+  "harnessSha256": "caebb7d75c16a2123e5d046daed6aa66966fc79bac379327b4b286db22e42731",
+  "scope": "baseline only; no product candidate, migration or Android acceptance",
+  "startedAt": "2026-10-07T13:15:50.388Z",
+  "results": [
+    {
+      "name": "context",
+      "command": "python3",
+      "args": [
+        "scripts/codex/check_context.py"
+      ],
+      "startedAt": "2026-10-07T13:15:50.390Z",
+      "finishedAt": "2026-10-07T13:15:50.429Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": "spawnSync python3 EPERM",
+      "passed": false
+    },
+    {
+      "name": "formula-probe",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "docs/qa/swift-recovery-cap-001/baseline-probe.cjs"
+      ],
+      "startedAt": "2026-10-07T13:15:50.431Z",
+      "finishedAt": "2026-10-07T13:15:50.479Z",
+      "exitCode": 1,
+      "signal": null,
+      "error": "spawnSync /opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node EPERM",
+      "passed": false
+    },
+    {
+      "name": "forge-contracts",
+      "command": "python3",
+      "args": [
+        "tests/behavioral/run.py",
+        "--web-root",
+        ".",
+        "--scenario",
+        "forge-contracts",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/baseline/failed-processes"
+      ],
+      "startedAt": "2026-10-07T13:15:50.479Z",
+      "finishedAt": "2026-10-07T13:15:50.829Z",
+      "exitCode": 1,
+      "signal": null,
+      "error": "spawnSync python3 EPERM",
+      "passed": false
+    },
+    {
+      "name": "forge-effects",
+      "command": "python3",
+      "args": [
+        "tests/behavioral/run.py",
+        "--web-root",
+        ".",
+        "--scenario",
+        "forge-effects",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/baseline/failed-processes"
+      ],
+      "startedAt": "2026-10-07T13:15:50.830Z",
+      "finishedAt": "2026-10-07T13:15:51.069Z",
+      "exitCode": 1,
+      "signal": null,
+      "error": "spawnSync python3 EPERM",
+      "passed": false
+    },
+    {
+      "name": "forge-chronology",
+      "command": "python3",
+      "args": [
+        "tests/behavioral/run.py",
+        "--web-root",
+        ".",
+        "--scenario",
+        "forge-chronology",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/baseline/failed-processes"
+      ],
+      "startedAt": "2026-10-07T13:15:51.070Z",
+      "finishedAt": "2026-10-07T13:15:51.308Z",
+      "exitCode": 1,
+      "signal": null,
+      "error": "spawnSync python3 EPERM",
+      "passed": false
+    },
+    {
+      "name": "forge-save-reload",
+      "command": "python3",
+      "args": [
+        "tests/behavioral/run.py",
+        "--web-root",
+        ".",
+        "--scenario",
+        "forge-save-reload",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/baseline/failed-processes"
+      ],
+      "startedAt": "2026-10-07T13:15:51.308Z",
+      "finishedAt": "2026-10-07T13:15:51.550Z",
+      "exitCode": 1,
+      "signal": null,
+      "error": "spawnSync python3 EPERM",
+      "passed": false
+    },
+    {
+      "name": "forge-backup-restore",
+      "command": "python3",
+      "args": [
+        "tests/behavioral/run.py",
+        "--web-root",
+        ".",
+        "--scenario",
+        "forge-backup-restore",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/baseline/failed-processes"
+      ],
+      "startedAt": "2026-10-07T13:15:51.550Z",
+      "finishedAt": "2026-10-07T13:15:51.792Z",
+      "exitCode": 1,
+      "signal": null,
+      "error": "spawnSync python3 EPERM",
+      "passed": false
+    },
+    {
+      "name": "forge-recovery",
+      "command": "python3",
+      "args": [
+        "tests/behavioral/run.py",
+        "--web-root",
+        ".",
+        "--scenario",
+        "forge-recovery",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/baseline/failed-processes"
+      ],
+      "startedAt": "2026-10-07T13:15:51.792Z",
+      "finishedAt": "2026-10-07T13:15:52.032Z",
+      "exitCode": 1,
+      "signal": null,
+      "error": "spawnSync python3 EPERM",
+      "passed": false
+    },
+    {
+      "name": "support-stacking",
+      "command": "python3",
+      "args": [
+        "tests/behavioral/run.py",
+        "--web-root",
+        ".",
+        "--scenario",
+        "support-stacking",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/baseline/failed-processes"
+      ],
+      "startedAt": "2026-10-07T13:15:52.032Z",
+      "finishedAt": "2026-10-07T13:15:52.270Z",
+      "exitCode": 1,
+      "signal": null,
+      "error": "spawnSync python3 EPERM",
+      "passed": false
+    },
+    {
+      "name": "buff-timing",
+      "command": "python3",
+      "args": [
+        "tests/behavioral/run.py",
+        "--web-root",
+        ".",
+        "--scenario",
+        "buff-timing",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/baseline/failed-processes"
+      ],
+      "startedAt": "2026-10-07T13:15:52.270Z",
+      "finishedAt": "2026-10-07T13:15:52.520Z",
+      "exitCode": 1,
+      "signal": null,
+      "error": "spawnSync python3 EPERM",
+      "passed": false
+    },
+    {
+      "name": "buff-save-reload",
+      "command": "python3",
+      "args": [
+        "tests/behavioral/run.py",
+        "--web-root",
+        ".",
+        "--scenario",
+        "buff-save-reload",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/baseline/failed-processes"
+      ],
+      "startedAt": "2026-10-07T13:15:52.521Z",
+      "finishedAt": "2026-10-07T13:15:52.769Z",
+      "exitCode": 1,
+      "signal": null,
+      "error": "spawnSync python3 EPERM",
+      "passed": false
+    },
+    {
+      "name": "forge-ui-mobile",
+      "command": "python3",
+      "args": [
+        "tests/behavioral/run.py",
+        "--web-root",
+        ".",
+        "--scenario",
+        "forge-ui-mobile",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/baseline/failed-processes"
+      ],
+      "startedAt": "2026-10-07T13:15:52.769Z",
+      "finishedAt": "2026-10-07T13:15:53.023Z",
+      "exitCode": 1,
+      "signal": null,
+      "error": "spawnSync python3 EPERM",
+      "passed": false
+    },
+    {
+      "name": "forge-ui-reduced-motion",
+      "command": "python3",
+      "args": [
+        "tests/behavioral/run.py",
+        "--web-root",
+        ".",
+        "--scenario",
+        "forge-ui-reduced-motion",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/baseline/failed-processes"
+      ],
+      "startedAt": "2026-10-07T13:15:53.024Z",
+      "finishedAt": "2026-10-07T13:15:53.273Z",
+      "exitCode": 1,
+      "signal": null,
+      "error": "spawnSync python3 EPERM",
+      "passed": false
+    }
+  ],
+  "finishedAt": "2026-10-07T13:15:53.274Z",
+  "sourceUnchanged": true,
+  "harnessUnchanged": true
+}
