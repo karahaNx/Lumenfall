@@ -86,3 +86,16 @@ PR78 automatic Forge memory, PR85 shared12h productive cap/idempotent exact
 refunds and PR81 stable Rift guidance. Preserve all their product/checks.
 Combined product SHA25674b03446ee543ac90f9bcc51636d17dc1855c4234b871dbc3f43d47d18175f1d
 requires a fresh175-default CI run. F15 introduces no additional migration.
+
+CI287 / run37748819115 failed only rift-guidance-mobile at320px: the longer
+four-Bond summary wrapped.174 other defaults passed. Preserve ci-287-failed.log.gz.
+The visible Active Bonds prefix is removed; every name remains visible, with
+the complete label on an accessible group. Existing one-line geometry checks
+remain and now also reject horizontal clipping/missing accessible names.
+Final candidate product SHA256d6803602517b5507c256552b8f7037d305d045f0d2d2c917bbf00d0b7b3d774d.
+Local wrapper transport failed with ECONNRESET; native Chromium then exposed an
+intermittent key-up completion race at profile11. A repeated unchanged native
+helper passed all16 profiles. The helper now awaits one actual aria-expanded
+change within1s after one native input; no retry, injected click or changed
+geometry/focus/AX assertion. Existing300s process limit is retained. Raw local
+failures remain alongside the subsequent final checks.

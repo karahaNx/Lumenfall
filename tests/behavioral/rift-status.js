@@ -33,7 +33,7 @@ window.riftStatusWorst=function(b,ctx){
   function choose(at,party){
     if(party.length===5){
       var active=bonds.filter(x=>x.ids.every(id=>party.includes(id)));
-      var text='Active Bonds: '+active.map(x=>x.name.replace(' Bond','')).join(' · ');
+      var text=active.map(x=>x.name.replace(' Bond','')).join(' · ');
       if(text.length>best.text.length)best={text,ids:party.slice(),bonds:active};return;
     }
     for(var i=at;i<ids.length;i++)choose(i+1,party.concat(ids[i]));
@@ -138,7 +138,7 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     s.spirits[worst.bonds[0].ids[0]]=0;install(s);
     ok(!b.riftStatus.active().some(x=>x.id===worst.bonds[0].id)&&!q('#bond-summary').textContent.includes(worst.bonds[0].name.replace(' Bond','')),'unpowered members cannot show an active Bond');
     var remaining=b.riftStatus.active();
-    ok(remaining.length===1 && q('#bond-summary').textContent==='Active Bonds: '+remaining[0].name.replace(' Bond',''),'one remaining powered Bond stays visible');
+    ok(remaining.length===1 && q('#bond-summary').textContent===remaining[0].name.replace(' Bond',''),'one remaining powered Bond stays visible');
     s=seed();s.activeParty=worst.ids;s.activeParty.forEach(id=>s.spirits[id]=2);install(s);b.ascendManual();b.renderLayout();
     ok(!!b.getState().formationRebuild && !b.riftStatus.active().length,'pending intent is not active Bonds');
     ok(q('#bond-summary').textContent==='No Formation Bond active.','Ascension neutral actual Formation');
@@ -395,6 +395,7 @@ window.riftStatusMobile=(()=>{
    var el=q(selector),range=document.createRange();range.selectNodeContents(el);
    var text=range.getBoundingClientRect(),lineHeight=parseFloat(getComputedStyle(el).lineHeight);
    ok(Number.isFinite(lineHeight)&&text.width>0&&text.height>0&&text.height<=lineHeight+1,selector+' text occupies one independent line');
+   if(selector==='#bond-summary'){var summaryBox=rect(el);ok(text.left>=summaryBox.left-1&&text.right<=summaryBox.right+1,'every Bond name fits without horizontal clipping');}
   });
   [q('.stat-row'),...q('.stat-row').querySelectorAll('.stat-box,.k,.v')].forEach(el=>{
    ok(el.scrollHeight<=el.clientHeight+1,'numeric row and stat boxes fit their full vertical content: '+el.className+' scroll='+el.scrollHeight+' client='+el.clientHeight+' text='+el.textContent);
@@ -410,6 +411,7 @@ window.riftStatusMobile=(()=>{
   ok(hp.bottom<=buff.top&&buff.bottom<=bonds.top&&bonds.bottom<=stats.top&&stats.bottom<=nav.top,'HP, status, bottom numeric row and nav do not overlap');
   var tabs=[...document.querySelectorAll('nav.tabbar button')];ok(tabs.length===5,'five main tabs');tabs.forEach((el,i)=>{var r=rect(el);ok(r.width>=44&&r.height>=44,'tab touch minimum');ok(el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)),'tab hit-test');if(i)ok(rect(tabs[i-1]).right<=r.left,'one non-overlapping nav row');});
   var active=b.riftStatus.active();ok(active.every(x=>q('#bond-summary').textContent.includes(x.name.replace(' Bond',''))),'all powered Bond names directly visible');
+  ok(q('#bond-summary').getAttribute('aria-label')===(active.length?'Active Bonds: '+active.map(x=>x.name).join(', '):'No Formation Bond active.'),'full Bond summary remains accessible');
   if(kind!=='fresh' && !ctx.scenario.startsWith('rift-status-stacking'))ok(active.length===window.riftStatusWorst(b,ctx).bonds.length&&q('#buff-indicator').textContent.includes('+50%'),'worst current Bonds and buff fixture survives live ticks');
   if(kind!=='fresh' && ctx.scenario.startsWith('rift-status-stacking'))ok(active.length===window.riftStatusWorst(b,ctx).bonds.length && q('#buff-indicator').textContent.includes('+100%') && q('#buff-indicator').textContent.includes('next expiry'),'additive worst boost survives live ticks');
   ['#rift-party','#rift-bond-effects','#boss-combat'].forEach(selector=>{

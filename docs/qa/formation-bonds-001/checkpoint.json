@@ -1,11 +1,11 @@
 {
-  "productSha256": "74b03446ee543ac90f9bcc51636d17dc1855c4234b871dbc3f43d47d18175f1d",
+  "productSha256": "d6803602517b5507c256552b8f7037d305d045f0d2d2c917bbf00d0b7b3d774d",
   "includedMain": "14d5f3a3a78fe8b63cfa5544efc54f41217b65a5",
   "node": "v24.19.0",
   "browser": "Chromium 151.0.7922.173",
   "core": {
     "status": "pass",
-    "sourceSha256": "74b03446ee543ac90f9bcc51636d17dc1855c4234b871dbc3f43d47d18175f1d",
+    "sourceSha256": "d6803602517b5507c256552b8f7037d305d045f0d2d2c917bbf00d0b7b3d774d",
     "records": [
       "eight named pairs, paid Field activation and no pending/Bench bonus",
       "Kindling shared manual/Auto-Tap exact 25%, no passive or ability increase",
@@ -47,7 +47,7 @@
     "status": "pass",
     "groups": 16,
     "sourceAtStart": "74b03446ee543ac90f9bcc51636d17dc1855c4234b871dbc3f43d47d18175f1d",
-    "note": "Combined shared12h cap/paid refunds; all upstream fixtures retained",
+    "note": "PASS mechanics on74b034; only summary markup/renderer changed since",
     "wallMs": 117967.911351
   },
   "mobileProfiles": 12,
@@ -101,7 +101,7 @@
     "node": "v8.3.0",
     "v8": "6.0.286.52",
     "limitation": "JS engine probe only; native WebView60/device acceptance remains required",
-    "sourceSha256": "74b03446ee543ac90f9bcc51636d17dc1855c4234b871dbc3f43d47d18175f1d",
+    "sourceSha256": "d6803602517b5507c256552b8f7037d305d045f0d2d2c917bbf00d0b7b3d774d",
     "records": [
       "eight named pairs, paid Field activation and no pending/Bench bonus",
       "Kindling shared manual/Auto-Tap exact 25%, no passive or ability increase",
@@ -148,10 +148,19 @@
     "mandatoryNegatives": 17,
     "note": "Prior source; newer F25/F26/F07 integration requires fresh CI"
   },
-  "mobileNote": "PASS12 on combined74b034 source; native Chromium CDP inputs",
+  "mobileNote": "12 profiles on74b034; final presentation refresh in full CI",
   "focusedNote": "Historical matrix-only source; full combined CI pending",
   "offline12h": {
     "status": "pass",
     "source": "74b03446ee543ac90f9bcc51636d17dc1855c4234b871dbc3f43d47d18175f1d"
-  }
+  },
+  "ci287": {
+    "status": "failed",
+    "run": 37748819115,
+    "head": "0438e96193d70b3b7c51e536da41106ca7ffcba4",
+    "defaults": 175,
+    "failing": "rift-guidance-mobile: Bond summary wrapped;174 other scenarios passed"
+  },
+  "summaryFix": "Remove visible Active Bonds prefix; retain all names and full aria group; strengthen no-clipping/accessible-name checks",
+  "nativeGuidance": "Actual aria-expanded completion is awaited after one native input; no retry/synthetic click; original process limit unchanged"
 }

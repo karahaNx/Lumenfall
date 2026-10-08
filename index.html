@@ -2650,7 +2650,7 @@
         </div>
         <div class="buff-indicator" id="buff-indicator">Boost · passive Wisps + Tap · <strong>Inactive</strong></div>
         <div id="comet-trial-status" class="comet-trial-status" hidden></div>
-        <div class="bond-summary" id="bond-summary">No Formation Bond active.</div>
+        <div class="bond-summary" id="bond-summary" role="group" aria-label="No Formation Bond active.">No Formation Bond active.</div>
         <div id="rift-bond-effects" aria-label="Formation Bond bonuses"></div>
         <div class="stat-row">
           <div class="stat-box"><div class="k">Tap damage</div><div class="v mono" id="stat-tap">1</div></div>
@@ -6037,9 +6037,10 @@ function renderBondSummary(){
   if(!els['bond-summary']) return;
   var active = activeFormationBonds();
   var summary = active.length
-    ? 'Active Bonds: ' + active.map(function(b){return '<span style="color:'+BOND_VISUALS[b.id].color+'">'+b.name.replace(' Bond','')+'</span>';}).join(' · ')
+    ? active.map(function(b){return '<span style="color:'+BOND_VISUALS[b.id].color+'">'+b.name.replace(' Bond','')+'</span>';}).join(' · ')
     : 'No Formation Bond active.';
   if(els['bond-summary'].innerHTML!==summary) els['bond-summary'].innerHTML = summary;
+  els['bond-summary'].setAttribute('aria-label',active.length ? 'Active Bonds: '+active.map(function(b){return b.name;}).join(', ') : 'No Formation Bond active.');
   var effects=els['rift-bond-effects'];
   var html=active.map(function(b){
     var visual=BOND_VISUALS[b.id];

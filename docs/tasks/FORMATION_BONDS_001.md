@@ -33,5 +33,5 @@ F14 prerequisite PR76 stays intact: selected-preset autosave, ordered pending in
 ## Acceptance and next action
 
 Require exact8 pairs/bonuses/rounding, bulk/queue/slot boundaries, chronology/live-offline/save recovery, equal actual budgets; overlapping marks/full accessible effects with each Wisp once;320/390/430px/200% text/44px/focus/contrast/reduced motion and short Boss geometry. Preserve package com.lumenfall.app/signing/WebView60.
-Prior CI273 PASS170 defaults/17 mandatory negatives/all gates on21964991df49b92047b9b5018af1ad442007705e. New main requires combined reruns; core8 groups/6 causal mutations already PASS. Historical logs stay; assertions/timeouts/tolerances are not weakened. Self-review only.
+CI273 PASS170/17/all gates. Combined CI287 failed only the Bond summary's one-line guidance contract;174 other defaults passed. All names now fit with a full accessible label. Native key-up completion is observed within1s; process limits/assertions stay. Core8 groups/6 mutations/V8 and Rift checks PASS; final175/17 CI pending. Self-review only.
 Next: pass combined required CI, integrate, verify integrated behavior/signed APK and save delivery/status in GitHub. Required physical Android/exact WebView60/TalkBack remains OPEN: ADB5581 refuses connection and local ADB encounters read-only home. Keep this owner chat open until necessary acceptance passes.
