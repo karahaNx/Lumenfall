@@ -5755,7 +5755,7 @@ function renderRiftParty(){
     var powered=(state.spirits[id]||0)>0,charge=powered ? Math.max(0,Math.min(100,state.heroResource[id]||0)) : 0;
     var seconds=Math.max(0,(1-charge/100)*abilityCycleSeconds());
     var casting=powered && Date.now()<Number(card.getAttribute('data-cast-until')||0);
-    var label=!powered ? 'Lv 0' : casting ? 'CAST' : charge>=100 ? 'Ready' : '';
+    var label=!powered ? 'Lv 0' : '';
     card.classList.toggle('unpowered',!powered);card.classList.toggle('is-casting',casting);
     card.classList.toggle('is-attacking',powered && Date.now()<Number(card.getAttribute('data-shot-until')||0));
     var status=card.querySelector('.rift-wisp-state');if(status.textContent!==label)status.textContent=label;
@@ -5764,7 +5764,9 @@ function renderRiftParty(){
     power.setAttribute('aria-label','Passive Wisp power: '+powerText);
     bar.querySelector('span').style.width=charge+'%';
     bar.setAttribute('aria-valuenow',String(Math.round(charge)));
-    bar.setAttribute('aria-valuetext',!powered ? 'Unpowered — Empower this Wisp' : Math.round(charge)+'% charged; '+Math.ceil(seconds)+' seconds to next ability');
+    var abilityStatus=!powered ? 'Unpowered — Empower this Wisp' :
+      (casting ? 'Casting; ' : charge>=100 ? 'Ready; ' : '')+Math.round(charge)+'% charged; '+Math.ceil(seconds)+' seconds to next ability';
+    bar.setAttribute('aria-valuetext',abilityStatus);
   });
 }
 function renderFormationPresets(){
