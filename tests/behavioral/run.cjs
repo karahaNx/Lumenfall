@@ -89,7 +89,7 @@ async function browserIdentity(chrome) {
 async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, options = {}) {
   const log = options.log || console.log;
   const urlFor = page => baseUrl + page + '?' + new URLSearchParams({ qaScenario: scenario, qaFixture: fixture });
-  if (scenario === 'resonate-clarity') return runNativeProcess([process.execPath, path.join(ROOT, 'resonate-clarity.cjs')], scenario, 150000, options);
+  if (scenario === 'resonate-clarity') return runNativeProcess([process.execPath, path.join(ROOT, 'resonate-clarity.cjs'), '--source', options.sourcePath || path.join(ROOT, '../../index.html')], scenario, 150000, options);
   if (scenario === 'comet-unlocks-core') return runNativeProcess([process.execPath, path.join(ROOT, 'comet-unlocks-core.cjs')], scenario, 90000, options);
   if (scenario === 'lab-motes-offline-integration') return runNativeProcess([process.execPath, path.join(ROOT, 'lab-motes-offline.cjs')], scenario, 90000, options);
   if (scenario === 'offline-catchup-core') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-catchup.cjs')], scenario, 300000, options);
@@ -196,7 +196,7 @@ async function main(argv = process.argv.slice(2)) {
     const baseUrl = 'http://127.0.0.1:' + server.address().port;
     for (const [scenario, fixture] of Object.entries(selected)) {
       const viewports = scenario === 'lab-motes-ui' ? [[320,844,0,0],[390,844,0,0],[430,844,0,0]] : scenario.startsWith('layout-') || scenario === 'self-test-layout-collapse' ? LAYOUT_VIEWPORTS : [null];
-      for (const viewport of viewports) if (!await runScenario(chrome, baseUrl, scenario, fixture, viewport, { rawArtifactRoot })) failures.push(scenario + ' ' + JSON.stringify(viewport));
+      for (const viewport of viewports) if (!await runScenario(chrome, baseUrl, scenario, fixture, viewport, { rawArtifactRoot, sourcePath: path.join(webRoot, 'index.html') })) failures.push(scenario + ' ' + JSON.stringify(viewport));
     }
   } finally {
     if (server) { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
