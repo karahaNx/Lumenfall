@@ -29,6 +29,19 @@ the18 Formation checks on the combined product, source SHA256
 byte-identical to APK145 source. Final delivery changes only
 scoped documentation/evidence and the immutable APK; no new game release trigger.
 
+Main advanced again during checkpoint CI: PR84 Auto-Ascend controls and PR90
+exclusive upgrade ownership/paid-value preservation integrated at
+`31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6`, source SHA256
+`f99cb0bcd46d2849977a39cf31bb0dd1a7bb8c0ca7a370f2490ad66ec67a6ec1`.
+The sole shared-document merge conflict was resolved by keeping both F14 and
+Auto-Ascend status rows verbatim. No other feature's status was rewritten.
+`latest-main-focused/` repeats Formation and relevant persistence/UI/chronology
+checks; `latest-main-v8.json` PASS133/three causal controls and recovered intent;
+`latest-main-preservation.json` verifies the same11 contract functions remain
+byte-identical to APK145. The final checkpoint CI now includes168 default
+scenarios and17 required negatives from current main; its actual final result
+and merge receipt are kept in PR92's body.
+
 ## Validation
 
 - `ci-final.json`: [CI37737385840](https://github.com/karahaNx/Lumenfall/actions/runs/37737385840) PASS158 deterministic scenarios, all14 required negative controls, tooling/source/APK-identity self-test and guarded startup. `ci-initial.json` is the earlier157/12 run before PR77.
@@ -40,7 +53,7 @@ scoped documentation/evidence and the immutable APK; no new game release trigger
 Focused command: `PATH=/tmp/formation-tools:$PATH LUMENFALL_QA_CDP_CHROME=/usr/bin/chromium node scripts/qa/check-formation-autosave.cjs --evidence <evidence-dir>`.
 Each results file retains commands, source, baseline, exits/timeouts and timings.
 Local Chromium151/CDP and Chrome155 CLI; CI Chrome154/Node20.
-`RAW_LOG_MANIFEST.json` identifies34 byte-exact raw focused outputs stored as
+`RAW_LOG_MANIFEST.json` identifies byte-exact raw focused outputs stored as
 lossless `.log.gz` files; browser profile caches are excluded.
 
 ## Signed Android release
@@ -102,6 +115,9 @@ preset, narrow/large-text/focus/reduced-motion and TalkBack/exact WebView60 chec
 Physical affected-phone, exact native WebView60 and TalkBack are unavailable in
 this environment. Save observed device/version/result evidence in GitHub;
 missing required acceptance keeps the feature and this owner chat open.
+The user identifies the affected phone as Redmagic11 Pro and says, verbatim,
+"i'll test that later just continue work". Device/runtime versions and observed
+physical/TalkBack results remain pending; checkpoint integration continues.
 Do not archive or claim full completion. Shared-file work stops after the final
 delivery checkpoint; preserve other feature owners' statuses.
 The delivery PR body retains its final CI and integration receipt, avoiding an

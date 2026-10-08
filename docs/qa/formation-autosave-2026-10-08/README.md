@@ -15,6 +15,8 @@ targeted autosave/Ascend/recovery/browser input checks. `integrated-focused/`
 repeats these on c5fa497; `current-main-focused/` checks the later Resonate
 combination. `android/` holds actual signed APK145/native receipts. Earlier
 7 October evidence is historical.
+`latest-main-focused/` checks the subsequent PR84/90 Auto-Ascend/upgrades main
+combination; older receipts remain tied to their recorded exact sources.
 
 Publication/integration is explicitly authorized by the user's current request.
 Available integrated checks are recorded separately from remaining physical

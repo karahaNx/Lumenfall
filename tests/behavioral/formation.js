@@ -120,7 +120,7 @@ window.runP207ChronologyQa = function(b,ctx,assert,parity,summaryParity){
   compare(seed,300,'offline','mid-window Ascension');compare(seed,30,'live','live Auto-Ascend');
   // Shared economy ordering remains protected while a missing intended Wisp participates.
   var economy=copy(ctx.fixtures['chronology-simultaneous-order'].save);
-  economy.formationRebuild={members:['gale','tide'],preset:''};economy.empowerQueue.tide=true;economy.studyQueue.guardmastery=true;economy.shards=10000;
+  economy.formationRebuild={members:['gale','tide'],preset:''};economy.empowerQueue.tide=true;economy.studyQueue.guardmastery=true;economy.shards=10000;economy.researchQueue.charge=true;
   b.setState(economy);economy=b.getState();
   var competition=compare(economy,7,'offline','Research/Study/Wisp competition');
   assert(competition.summary.empowers>0 && competition.summary.researchBought>0 && competition.summary.studiesStarted>0,'exercise all three spenders '+JSON.stringify(competition.summary));
@@ -217,6 +217,7 @@ window.runP207PersistenceReview = function(b,ctx,assert){
 
 window.runP207FarmReview = function(b,ctx,assert,parity,summaryParity,isolated){
   var seed=b.getState(),clock=2000000000000,t=b.formationTest;
+  seed.researchQueue.charge=true;b.setState(seed);seed=b.getState();
   // A non-Boss Push return has no automatic Boss retry path, regardless of
   // power growth. Keep automation/Auto-Ascend enabled and the medium economy.
   if(isolated){seed.farmReturnDepth=91;seed.maxDepthEver=Math.max(seed.maxDepthEver,91);b.setState(seed);seed=b.getState();}

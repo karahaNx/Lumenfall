@@ -41,42 +41,31 @@ Wisp/Bond/Rift and Comet fixes/legacy value handling are retained.
 Overlapping PR67 autosave/Bonds and PR70 Wisp presentation remain separate.
 PR77 Save Backup/confirmed restore at261b1b7 and its two CI negatives are retained.
 
-PR76 merged at `c5fa49704404bccb3ca54d434edb7603dbbf4913`, with the same
-tree as CI-validated head014854c3. Main later integrated Save Backup's evidence
-PR87 and Resonate text PR80 at `e2f745c`; their changes are preserved and
-Formation checks are repeated on that combination.
+PR76/c5fa497 matches validated head014854c3. Later main PR87/80 Save Backup/
+Resonate and PR84/90 Auto-Ascend/upgrades at31eccfb are preserved. Repeat
+Formation checks on that combination; see the delivery receipt for exact hashes.
 
-Product change: `index.html`. Tests: `formation-autosave.js/.cjs`, six scenarios,
-scoped bridge/harness registrations and required selected/pending assertions.
-Offline oracle retains Lab/Comet migration and exact state/reward comparisons.
-Comet Trial validation remains in reconciler and affected roster/preset handlers.
+Product: `index.html`; tests: `formation-autosave.js/.cjs`, six scenarios and
+scoped harness updates. Preserve Lab/Comet oracle comparisons and Trial hooks.
 
 [7 October evidence](../qa/formation-autosave-2026-10-07/README.md) is historical.
 
 ## Decisions and acceptance
 
-- The selected preset is the immediate save destination for Field/Bench and
-  recruitment. Other presets never receive the departing party.
-- Edit the entire desired roster, including pending members; five desired
-  slots include pending. Paid rebuild purchases never overwrite intent with
-  a temporary powered projection. Empower alone does not change membership.
-- At least one actual active Wisp remains. Fresh presets still start with
-  Ember. Existing stored `[]` stays empty and uses temporary Ember until an
-  explicit Field/recruitment edit; it never creates a zero-Wisp startup.
-- Invalid/unavailable/sixth Field and removing the last chosen member are
-  no-ops. Bench of a pending member preserves all other intended members.
-- Repeated Ascend, canonical normalization, reload, backup and recovery retain
-  ordered intent and destination. Pending grants no combat/ability/support/Bond
-  benefit. No new save key/schema, purchase/refund or balance rule.
-- Preserve deterministic prices, queue/cadence, chronology, live/offline,
-  existing paid ownership/currencies, documented Luminous Motes, WebView60,
-  package `com.lumenfall.app` and established signing.
-- Verify 320/390/430px, 200% relevant text, native touch/keyboard, actual ≥44px
-  controls, focus/contrast/reduced motion and render/save purity.
-- Required CI passes on the final PR; verify integrated bytes and relevant
-  behavior, signed APK/package/version/certificate/assets and required device
-  acceptance. Save status/evidence in GitHub before marking complete/archiving.
-  Self-review is not independent review.
+- Field/Bench/recruitment save immediately to the selected preset, never another
+  preset. Edit full desired intent, including pending; max5 desired slots.
+  Paid/queued rebuild and Empower never overwrite intent with a powered subset.
+- Fresh presets/actual party start with Ember. Stored[] survives with temporary
+  Ember until explicit Field/recruitment. Never start with zero powered Wisps.
+  Invalid/unavailable/sixth Field and last-chosen Bench are no-ops; pending Bench
+  preserves all other intent.
+- Ascend/normalize/reload/backup/recovery retain ordered intent/destination;
+  pending grants no power/Bonds. No new save schema, purchase or balance rule.
+- Preserve deterministic prices/paid data/rewards, queue/bulk/cadence,
+  chronology/live-offline parity, WebView60, package/signing. Verify320/390/430px,
+  200% text, >=44px controls, touch/keyboard/focus/contrast/reduced motion and
+  render/save purity. Required CI, integrated checks and signed APK/device
+  acceptance must pass with GitHub evidence before completion/archiving.
 
 ## Checks and delivery checkpoint
 
