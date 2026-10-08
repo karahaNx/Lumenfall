@@ -1,7 +1,7 @@
 /* F06: real Chromium input, Resonate eligibility and persistence.
  * node tests/behavioral/resonate-clarity.cjs [--source index.html] [--evidence DIR]
  * Test instrumentation is served in memory; product bytes are never rewritten.
- * Timers pause for deterministic fixtures; engine parity uses existing run.py.
+ * Timers pause for deterministic fixtures; engine parity uses existing run.cjs.
  */
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os');
 const http=require('node:http'),{spawn,spawnSync}=require('node:child_process');
@@ -9,6 +9,7 @@ const root=path.resolve(__dirname,'../..'),args=process.argv.slice(2);
 function option(name,fallback){const i=args.indexOf(name);return i<0?fallback:args[i+1];}
 const sourcePath=path.resolve(option('--source',path.join(root,'index.html')));
 const evidence=option('--evidence',null),source=fs.readFileSync(sourcePath,'utf8');
+const sourceSha256=require('node:crypto').createHash('sha256').update(source).digest('hex');
 const chrome=process.env.LUMENFALL_QA_CDP_CHROME||['chromium','google-chrome','google-chrome-stable','chromium-browser'].find(x=>spawnSync('which',[x]).status===0);
 function assert(value,message){if(!value)throw Error(message);}
 const bridge=String.raw`
@@ -18,6 +19,7 @@ window.resonateQa={
   s.activeParty=['ember','tide','stone'];
   SPIRITS.forEach(function(sp){s.spirits[sp.id]=1;s.heroRarity[sp.id]=5;s.wispUltimate[sp.id]=true;s.heroResource[sp.id]=0;});
   return s;},
+ seedMaxed:function(){var s=this.seed();s.wispModules.ember=MODULE_MAX_LEVEL;return s;},
  set:function(s){state=acceptPersistedState(s,'runtime');renderAll();return this.get();},
  render:function(){renderSpirits();},
  use:function(id){return useSigilResonance(SPIRITS.find(function(sp){return sp.id===id;}));},
@@ -149,6 +151,17 @@ async function run(){
    var b=resonateQa.button('ember');if(b&&!b.disabled)throw Error(c[0]+' button enabled');
    if(c[0]==='missing Ultimate'&&(!resonateQa.help('ember')||b))throw Error('pre-unlock explanation');return c[0];});
  })()`);
+ await evaluate('resonateQa.set(resonateQa.seedMaxed());resonateQa.save()');
+ await send('Page.reload');await pause(200);await ready();
+ const folding=await evaluate(`(function(){
+  var d=document.querySelector('[data-wisp-progression="ember"]');
+  if(d.tagName!=='DETAILS'||d.open)throw Error('maxed Wisp initially folded');
+  resonateQa.open('ember');resonateQa.button('ember').focus();resonateQa.render();
+  d=document.querySelector('[data-wisp-progression="ember"]');
+  if(!d.open||document.activeElement!==resonateQa.button('ember'))throw Error('fold/open/focus preservation');
+  if(!resonateQa.use('ember')||resonateQa.get().sigils!==75||resonateQa.get().heroResource.ember!==100)throw Error('Resonate in maxed Wisp');
+  return {maxedInitiallyFolded:true,openFocusPreserved:true,refill:true};
+ })()`);
  await fresh();
  const shared=await evaluate(`(function(){['ember','tide','stone'].forEach(function(id){if(!resonateQa.use(id))throw Error('shared use '+id);});var s=resonateQa.get();if(s.sigils!==25||s.sigilResonanceUses!==3)throw Error('three uses total');s.heroResource.ember=0;resonateQa.set(s);if(resonateQa.use('ember'))throw Error('fourth use');return resonateQa.get();})()`);
  await evaluate('resonateQa.save()');await send('Page.reload');await pause(200);await ready();
@@ -162,13 +175,14 @@ async function run(){
  const ascend=await evaluate(`(function(){var s=resonateQa.get();s.depth=101;s.maxDepthEver=250;resonateQa.set(s);return resonateQa.ascend();})()`);
  assert(ascend.sigilResonanceUses===0&&ascend.sigils===25&&Object.values(ascend.wispUltimate).every(Boolean),'Ascend resets allowance and preserves Sigils/Ultimates');
  const boundary=await evaluate(`(function(){var s=resonateQa.seed();s.sigils=25;s.heroResource.ember=99;s.sigilResonanceUses=2;resonateQa.set(s);if(!resonateQa.use('ember'))throw Error('last affordable use');s=resonateQa.get();if(s.sigils!==0||s.heroResource.ember!==100||s.sigilResonanceUses!==3)throw Error('25/99/2 boundary');return {sigils:s.sigils,resource:s.heroResource.ember,uses:s.sigilResonanceUses};})()`);
- records.push({gates,shared:{sigils:shared.sigils,uses:shared.sigilResonanceUses},persistence:['reload','backup restore with reload','canonical corruption/recovery'],ascend:{sigils:ascend.sigils,uses:ascend.sigilResonanceUses},boundary});
+ records.push({gates,folding,shared:{sigils:shared.sigils,uses:shared.sigilResonanceUses},persistence:['reload','backup restore with reload','canonical corruption/recovery'],ascend:{sigils:ascend.sigils,uses:ascend.sigilResonanceUses},boundary});
  assert((await evaluate('window.__resonateErrors')).length===0,'no persistence runtime errors');
  await send('Target.disposeBrowserContext',{browserContextId:context.browserContextId},null);
 }
 (async()=>{
  let result;
- try{await run();result={status:'pass',source:sourcePath,records};}catch(error){result={status:'fail',message:error.stack,source:sourcePath,records};}
+ const identity={source:sourcePath,sourceSha256,node:process.version,browser:chrome&&spawnSync(chrome,['--version'],{encoding:'utf8'}).stdout.trim()};
+ try{await run();result={status:'pass',...identity,records};}catch(error){result={status:'fail',message:error.stack,...identity,records};}
  try{
   if(browser){assert(pending.size===0,'no pending protocol operations');if(!closed)await send('Browser.close',{},null).catch(()=>{});
    let exit;try{exit=await bounded(completion,5000);}catch(error){browser.kill('SIGKILL');exit=await bounded(completion,2000);throw error;}
