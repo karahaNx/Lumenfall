@@ -7,11 +7,10 @@ const path = require('node:path');
 const vm = require('node:vm');
 const crypto = require('node:crypto');
 const assert = require('node:assert/strict');
-const root = path.resolve(__dirname, '../../..');
+const root = path.resolve(__dirname, '../..');
 const sourcePath = path.resolve(process.argv[2] || path.join(root, 'index.html'));
-const outputPath = path.resolve(process.argv[3] || path.join(__dirname, 'probe-results.json'));
-const contract = process.argv[4] ? JSON.parse(fs.readFileSync(process.argv[4],'utf8')) :
-  {normalSec:4,ultimateSec:8,chargeCap:null,kind:'baseline'};
+const outputPath = process.argv[3] ? path.resolve(process.argv[3]) : null;
+const contract = {normalSec:1,ultimateSec:1.5,chargeCap:10,kind:'production',dependencyStub:false};
 const html = fs.readFileSync(sourcePath, 'utf8');
 const script = html.match(/<script>\s*([\s\S]*?)<\/script>/)[1];
 const marker = "if(document.readyState==='loading'){";
@@ -36,19 +35,16 @@ simulationApplyPushPassive=function(dt,dps,policy,summary){
 };
 }
 globalThis.audit={
-  dependencyCap:n=>RESEARCH.find(node=>node.id==='charge').levelCap=n,
+  profile:id=>supportAbilityProfile(SPIRITS.find(sp=>sp.id===id)),
   fresh:()=>freshState(), set:s=>state=acceptPersistedState(s,'support-uptime-audit'), get:()=>state,
   hp:d=>enemyHpFor(d), average:()=>averageSupportBuffMult(), cycle:()=>abilityCycleSeconds(),
   simulate:(dt,kind,start)=>advanceAuthoritativeTime(dt,{kind:kind,visual:false,clockStartMs:start,offlineWindowStartMs:start,captureTimeline:true}),
   log:()=>auditLog, clear:()=>auditLog={casts:[],expiries:[],intervals:[]}
 };
 `;
-function engine(observe=true) {
+function engine(observe=true,sourceScript=script) {
   const context = vm.createContext({auditObserve:observe,document:{readyState:'loading', addEventListener(){}}, window:{addEventListener(){}}, console});
-  vm.runInContext(script.replace(marker, bridge + '\n' + marker), context, {timeout:2000});
-  // Explicit model of the separately owned Swift dependency; never a hidden
-  // F18 cap. It does not model overlevel refunds or a save migration.
-  if(contract.chargeCap!==null && contract.dependencyStub!==false)context.audit.dependencyCap(contract.chargeCap);
+  vm.runInContext(sourceScript.replace(marker, bridge + '\n' + marker), context, {timeout:2000});
   return context.audit;
 }
 const copy = value => JSON.parse(JSON.stringify(value));
@@ -184,7 +180,21 @@ for(const c of fractionalDiagnostics.filter(r=>r.status==='fail')) {
   fractionalFailureControls.push({ids:c.ids,ultimates:c.ultimates,charge:c.charge,kind:c.kind,observerWrappers:false,error});
 }
 const phaseFailures=phaseSweep.filter(r=>r.status==='fail').length;
-const result={status:fractionalFailures||phaseFailures?contract.kind+'-has-failure':'pass',source:{sha256:crypto.createHash('sha256').update(html).digest('hex'),gitBlob:crypto.createHash('sha1').update(Buffer.from('blob '+Buffer.byteLength(html)+'\0')).update(html).digest('hex'),bytes:Buffer.byteLength(html)},contract,node:process.version,assertions,limits:'VM observer, DOM startup suspended; profile-proposal uses an explicit Swift cap catalogue stub; no Android/device or migration acceptance',phaseSweep,fractionalDiagnostics,fractionalFailureControls,rows,staggeredNormalPair:{charge:0,seconds:60,anyActiveSeconds:anySeconds,casts:stagger.log.casts,expiries:stagger.log.expiries},summary:{normalCharge0:normal.sources.tide,ultimateCharge0:ultimate.sources.tide}};
-fs.writeFileSync(outputPath,JSON.stringify(result,null,2)+'\n');
+// Causal controls: restoring either original duration or unlimited speed fails
+// the same literal profile/cycle checks. No reference to production constants.
+function verifyTiming(sourceScript){
+ const c=engine(true,sourceScript);seed(c,['tide','aurora'],['tide','aurora'],100);
+ near(c.cycle(),10/3,'production Swift minimum cycle');
+ near(c.profile('tide').durationMs,1500,'production Ultimate duration');
+}
+verifyTiming(script);
+const negativeControls=[];
+for(const [name,before,after] of [['old-duration','durationMs:ultimate ? 1500 : 1000','durationMs:ultimate ? 8000 : 4000'],['uncapped-charge',"effectPerLevel:0.08, levelCap:10, name:'Swift Recovery'","effectPerLevel:0.08, name:'Swift Recovery'"]]){
+ assert.equal(script.split(before).length,2,'unique causal mutation');
+ let caught='';try{verifyTiming(script.replace(before,after));}catch(error){caught=error.message;}
+ assert.match(caught,/production (Ultimate duration|Swift minimum cycle)/,'causal timing control');negativeControls.push({name,caught});
+}
+const result={status:fractionalFailures||phaseFailures?contract.kind+'-has-failure':'pass',source:{sha256:crypto.createHash('sha256').update(html).digest('hex'),gitBlob:crypto.createHash('sha1').update(Buffer.from('blob '+Buffer.byteLength(html)+'\0')).update(html).digest('hex'),bytes:Buffer.byteLength(html)},contract,node:process.version,assertions,limits:'Full production VM motor with observer wrappers; no cap stub. Browser save/UI and APK/native checks are separate.',negativeControls,phaseSweep,fractionalDiagnostics,fractionalFailureControls,rows,staggeredNormalPair:{charge:0,seconds:60,anyActiveSeconds:anySeconds,casts:stagger.log.casts,expiries:stagger.log.expiries},summary:{normalCharge0:normal.sources.tide,ultimateCharge0:ultimate.sources.tide}};
+if(outputPath)fs.writeFileSync(outputPath,JSON.stringify(result,null,2)+'\n');
 console.log(JSON.stringify({status:result.status,assertions,rows:rows.length,fractionalCases:fractionalDiagnostics.length,fractionalFailures,phaseCases:phaseSweep.length,phaseFailures,source:result.source,summary:result.summary,staggeredAnyActiveSeconds:anySeconds}));
 if(fractionalFailures||phaseFailures)process.exitCode=1;

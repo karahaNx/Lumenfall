@@ -507,6 +507,9 @@
       if(ctx.scenario.startsWith('auto-ascend-target-')){
         bridge.freeze();window.runAutoTargetPersistence(bridge,ctx,assert,phase,nextPhase,finish);return;
       }
+      if(ctx.scenario==='swift-recovery-cap'){
+        bridge.freeze();finish('pass',window.runSwiftRecoveryQa(bridge,ctx,assert,assertProtectedParity));return;
+      }
       if(ctx.scenario==='support-stacking'){
         bridge.freeze();finish('pass',window.runSupportStacking(bridge,ctx,assert,assertProtectedParity));return;
       }

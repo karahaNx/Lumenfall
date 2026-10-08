@@ -19,19 +19,19 @@ window.runSupportStacking=function(b,ctx,assert,parity){
         seed(ids,ults);if(kind==='manual')ids.forEach(id=>cast(id,T,true));else{q.ready(ids);b.simulateTimeline(0,kind,T);}
         var expected=1.5+ults.length*.25;factor(T,expected,'simultaneous additive '+kind+' '+ids+' '+ults);
         var s=b.getState();ok(s.buffUntil===0&&s.buffMult===1,'new cast leaves legacy untouched');
-        ids.forEach(id=>{ok(s.supportBuffs.sources[id].mult===(ults.includes(id)?1.5:1.25),'cast-time source strength');ok(s.supportBuffs.sources[id].until===T+(ults.includes(id)?1500:1000),'cast-time source deadline');});
-        near(q.average(),1+ids.reduce((n,id)=>n+(ults.includes(id)?.5:.25)*(ults.includes(id)?1.5/6:1/6),0),'additive mean forecast');
+        ids.forEach(id=>{ok(s.supportBuffs.sources[id].mult===(ults.includes(id)?1.5:1.25),'cast-time source strength');ok(s.supportBuffs.sources[id].until===T+(ults.includes(id)?8000:4000),'cast-time source deadline');});
+        near(q.average(),1+ids.reduce((n,id)=>n+(ults.includes(id)?.5:.25)*(ults.includes(id)?1:4/6),0),'additive mean forecast');
         records.push({kind,ids,ults,factor:expected,records:s.supportBuffs});
       });
     });
   });
   ['tide','aurora'].forEach(id=>{seed([id]);cast(id,T);factor(T,1.25,'single support');});
-  function stagger(){seed(['tide','aurora'],['aurora']);cast('aurora',T);cast('tide',T+1000);factor(T+1499.999,1.75,'stagger before');factor(T+1500,1.25,'stagger exact');factor(T+1500.001,1.25,'stagger after');factor(T+2000,1,'last expiry');ok(q.next(T+1000)===.5,'earliest independent expiry');}
+  function stagger(){seed(['tide','aurora'],['aurora']);cast('aurora',T);cast('tide',T+6000);factor(T+7999.999,1.75,'stagger before');factor(T+8000,1.25,'stagger exact');factor(T+8000.001,1.25,'stagger after');factor(T+10000,1,'last expiry');ok(q.next(T+6000)===2,'earliest independent expiry');}
   stagger();
-  function refresh(){seed(['tide'],['tide']);cast('tide',T);var s=b.getState();s.wispUltimate.tide=false;b.setState(s);cast('tide',T+100);factor(T+100,1.5,'same source max strength');ok(b.getState().supportBuffs.sources.tide.until===T+1500,'same source shorter refresh');cast('tide',T+1400);ok(b.getState().supportBuffs.sources.tide.until===T+2400,'same source longer refresh');factor(T+1400,1.5,'same source no self stacking');cast('tide',T+2400);factor(T+2400,1.25,'expired source cannot pass old strength');}
+  function refresh(){seed(['tide'],['tide']);cast('tide',T);var s=b.getState();s.wispUltimate.tide=false;b.setState(s);cast('tide',T+1000);factor(T+1000,1.5,'same source max strength');ok(b.getState().supportBuffs.sources.tide.until===T+8000,'same source shorter refresh');cast('tide',T+7000);ok(b.getState().supportBuffs.sources.tide.until===T+11000,'same source longer refresh');factor(T+7000,1.5,'same source no self stacking');cast('tide',T+11000);factor(T+11000,1.25,'expired source cannot pass old strength');}
   refresh();
   function legacy(){seed(['tide','aurora']);var s=b.getState();s.buffUntil=T+7000;s.buffMult=1.8;b.setState(s);cast('tide',T);cast('aurora',T+1000);factor(T+1000,1.8,'legacy floor without double counting');ok(b.getState().buffUntil===T+7000&&b.getState().buffMult===1.8,'legacy exact entitlement unchanged');factor(T+7000,1,'expired legacy neutral');}
-  legacy();seed(['tide','aurora']);var ls=b.getState();ls.buffUntil=T+3000;ls.buffMult=1.25;b.setState(ls);cast('tide',T);cast('aurora',T);factor(T+500,1.5,'known sources exceed legacy without duplication');
+  legacy();seed(['tide','aurora']);var ls=b.getState();ls.buffUntil=T+3000;ls.buffMult=1.25;b.setState(ls);cast('tide',T);cast('aurora',T);factor(T+1000,1.5,'known sources exceed legacy without duplication');
   // Earned records remain after a Formation change to a constant-rate Ember.
   [T,4102444800125.25].forEach(function(start){['live','offline'].forEach(function(kind){
     var s=seed(['ember']);s.supportBuffs={version:1,sources:{tide:{mult:1.25,until:start+2234.375},aurora:{mult:1.5,until:start+4109.125}}};b.setState(s);s=b.getState();var rate=b.wispFormulaSnapshot('ember').passiveDps;

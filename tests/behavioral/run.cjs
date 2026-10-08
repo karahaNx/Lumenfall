@@ -41,7 +41,7 @@ function instrumentHtml(source, fixtures) {
   const marker = '\n})();\n</script>\n<script>\nif(window.Capacitor';
   replaceOnce(marker, '\n' + read('bridge.js') + '\n' + read('wisp-upgrades-bridge.js') + marker, 'main game IIFE marker changed; test bridge could not be installed');
   const modules = ['rift-status', 'bond-text', 'layout', 'accessibility', 'accessibility-controls', 'nav-workshop', 'r3-destinations',
-    'research-duration', 'upgrade-clarity', 'feedback', 'formation', 'forge', 'support-stacking', 'auto-ascend-target', 'buff-timing', 'measured-inquiry', 'lab-motes', 'farm-conservation', 'farm-numerical', 'wisp-upgrades'];
+    'research-duration', 'upgrade-clarity', 'feedback', 'formation', 'forge', 'swift-recovery', 'support-stacking', 'auto-ascend-target', 'buff-timing', 'measured-inquiry', 'lab-motes', 'farm-conservation', 'farm-numerical', 'wisp-upgrades'];
   replaceOnce('</body>', modules.map(name => '<script>' + read(name + '.js') + '</script>').join('') +
     '<script id="qa-behavior-runner">\n' + read('runner.js') + '\n</script>\n</body>', 'expected exactly one </body> marker');
   return source;
@@ -89,6 +89,8 @@ async function browserIdentity(chrome) {
 async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, options = {}) {
   const log = options.log || console.log;
   const urlFor = page => baseUrl + page + '?' + new URLSearchParams({ qaScenario: scenario, qaFixture: fixture });
+  if (scenario === 'support-uptime-core') return runNativeProcess([process.execPath, path.join(ROOT, 'support-uptime.cjs')], scenario, 90000, options);
+  if (scenario === 'support-uptime-ui') return runNativeProcess([process.execPath, path.join(ROOT, 'support-uptime-ui.cjs'), path.join(ROOT, '../..'), temporary('lumenfall-support-ui-')], scenario, 90000, options);
   if (scenario === 'comet-unlocks-core') return runNativeProcess([process.execPath, path.join(ROOT, 'comet-unlocks-core.cjs')], scenario, 90000, options);
   if (scenario === 'lab-motes-offline-integration') return runNativeProcess([process.execPath, path.join(ROOT, 'lab-motes-offline.cjs')], scenario, 90000, options);
   if (scenario === 'offline-catchup-core') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-catchup.cjs')], scenario, 300000, options);

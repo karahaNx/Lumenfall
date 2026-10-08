@@ -2847,7 +2847,7 @@ var ABILITY_DESC = {
   dps: 'Focused burst ability damage. Its Module boosts the hit; its Ultimate doubles it.',
   ranged: 'Ability damage + Shards. Module boosts the Shards; Ultimate doubles both.',
   druid: 'Ability damage + Lumen. Module boosts the Lumen; Ultimate doubles both.',
-  support: 'Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 4s. Ultimate: +50% for 8s.'
+  support: 'Boosts passive Wisp damage and Guardian Tap (your damage per tap) by +25% for 1s. Ultimate: +50% for 1.5s.'
 };
 
 var FORMATION_BONDS = [
@@ -2898,7 +2898,7 @@ var RESEARCH = [
   {id:'sense', effectPerLevel:0.08,     name:'Shard Sense',        desc:'+8% Shards from every kill, per level.',                 lumenBase:150, lumenGrowth:1.5,  shardBase:20, shardGrowth:1.5},
   {id:'formation', effectPerLevel:0.05, name:'Formation Training', desc:'+5% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.', lumenBase:0, lumenGrowth:1, shardBase:40, shardGrowth:1.6},
   {id:'resolve', effectPerLevel:0.1,   name:"Guardian's Resolve", desc:'+10% tap damage, per level.',                   lumenBase:150, lumenGrowth:1.45, shardBase:0,  shardGrowth:1},
-  {id:'charge', effectPerLevel:0.08,    name:'Swift Recovery',     desc:'+8% faster Wisp ability charge, per level.',              lumenBase:0,   lumenGrowth:1,    shardBase:30, shardGrowth:1.55},
+  {id:'charge', effectPerLevel:0.08, levelCap:10, name:'Swift Recovery', desc:'+8% faster Wisp ability charge per level, up to level 10. Minimum ability cycle: 3.33s.', lumenBase:0, lumenGrowth:1, shardBase:30, shardGrowth:1.55},
   {id:'arcanecal', name:'Arcane Calibration', desc:'+3 percentage points to the damaging Wisp ability factor per level. Burst, Breaker, Gale and Thorn only; no passive or Tap bonus.', unlockDepth:12, levelCap:10, effectPerLevel:0.03, lumenBase:15000, lumenGrowth:1.60, shardBase:120, shardGrowth:1.60},
   {id:'conduction', name:'Resource Conduction', desc:'+4 percentage points to the ability resource factor per level. Gale Shards and Thorn Lumen only; rounded per cast, not kill rewards.', unlockDepth:18, levelCap:10, effectPerLevel:0.04, lumenBase:90000, lumenGrowth:1.60, shardBase:280, shardGrowth:1.60},
   {id:'luminoustracking', name:'Luminous Tracking', desc:'+0.5 percentage points Luminous chance per level for future eligible encounters; total chance at most 35%. No extra Motes per kill.', unlockDepth:32, levelCap:10, effectPerLevel:0.005, lumenBase:2500000, lumenGrowth:1.60, shardBase:1500, shardGrowth:1.60}
@@ -4236,7 +4236,7 @@ function supportAbilityProfile(sp){
   var ultimate = !!(sp && ultimateUnlocked(sp.id));
   return {
     strength:ultimate ? 1.5 : 1.25,
-    durationMs:ultimate ? 8000 : 4000
+    durationMs:ultimate ? 1500 : 1000
   };
 }
 function averageSupportBuffMult(){
@@ -4287,7 +4287,7 @@ function abilityRewardPerCast(sp,level,conductionLevel){
 }
 function ultimateEffectText(sp){
   if(!sp) return 'Ultimate unlocked';
-  if(sp.abilityType==='support') return 'Support buff becomes +50% for 8s';
+  if(sp.abilityType==='support') return 'Support buff becomes +50% for 1.5s';
   if(sp.abilityType==='ranged') return 'Ability damage and Shards ×2';
   if(sp.abilityType==='druid') return 'Ability damage and Lumen ×2';
   return 'Ability damage ×2';
