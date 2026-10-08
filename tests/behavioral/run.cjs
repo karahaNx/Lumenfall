@@ -89,8 +89,6 @@ async function browserIdentity(chrome) {
 async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, options = {}) {
   const log = options.log || console.log;
   const urlFor = page => baseUrl + page + '?' + new URLSearchParams({ qaScenario: scenario, qaFixture: fixture });
-  if (scenario === 'offline-12h-ui') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-12h-ui.cjs'), chrome], scenario, 180000, options);
-  if (scenario === 'offline-12h-core') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-12h.cjs')], scenario, 300000, options);
   if (scenario === 'resonate-clarity') return runNativeProcess([process.execPath, path.join(ROOT, 'resonate-clarity.cjs'), '--source', path.join(options.sourceWebRoot || path.join(ROOT, '../..'), 'index.html')], scenario, 150000, options);
   if (scenario === 'comet-unlocks-core') return runNativeProcess([process.execPath, path.join(ROOT, 'comet-unlocks-core.cjs')], scenario, 90000, options);
   if (scenario === 'lab-motes-offline-integration') return runNativeProcess([process.execPath, path.join(ROOT, 'lab-motes-offline.cjs')], scenario, 90000, options);
@@ -114,6 +112,8 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
   if (scenario === 'lab-motes-runtime') driver = 'farm-runtime.cjs';
   if (['lab-motes-native', 'lab-motes-reduced-motion'].includes(scenario)) driver = 'lab-motes.cjs';
   if (driver) return runNativeProcess([process.execPath, path.join(ROOT, driver), chrome, urlFor('/index.html'), scenario], scenario, driver === 'rift-status.cjs' ? 120000 : 90000, options);
+  if (scenario === 'offline-12h-ui') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-12h-ui.cjs'), chrome], scenario, 180000, options);
+  if (scenario === 'offline-12h-core') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-12h.cjs')], scenario, 300000, options);
   const profile = temporary('lumenfall-qa-' + scenario + '-');
   const params = { qaScenario: scenario, qaFixture: fixture };
   if (viewport) ['width', 'height', 'safeTop', 'safeBottom'].forEach((key, i) => { params[key] = viewport[i]; });
