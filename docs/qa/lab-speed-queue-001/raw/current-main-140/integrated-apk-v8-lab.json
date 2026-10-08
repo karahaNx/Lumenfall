@@ -1,0 +1,59 @@
+{
+  "status": "pass",
+  "node": "v8.3.0",
+  "v8": "6.0.286.52",
+  "sourceSha256": "a64747dcec3c26c0b5dea3f2e5c1bac521de557e38547b1195b5a3660234b0df",
+  "originalDriverSha256": "8a698b3ef0e8ad46c98105876a3caf1ca49f4f45d6efbe04982fbe327c87841f",
+  "adaptedDriverSha256": "159cec3fb80d4a8aa29bcff7b165fbf1f32909467ed7ac0cd9f49408a1686359",
+  "adaptation": "Builtin import names, equal/deepEqual aliases to strictEqual/deepStrictEqual and input path only; all existing assertions retained",
+  "limitation": "Actual legacy JS engine; no native DOM/lifecycle/TalkBack acceptance",
+  "report": {
+    "status": "pass",
+    "scenario": "lab-motes-offline-integration",
+    "records": [
+      {
+        "case": "yielding",
+        "budget": 1,
+        "batches": 30,
+        "purchases": 1,
+        "spent": 60
+      },
+      {
+        "case": "yielding",
+        "budget": 2,
+        "batches": 15,
+        "purchases": 1,
+        "spent": 60
+      },
+      {
+        "case": "yielding",
+        "budget": 31,
+        "batches": 0,
+        "purchases": 1,
+        "spent": 60
+      },
+      {
+        "case": "yielding",
+        "budget": 256,
+        "batches": 0,
+        "purchases": 1,
+        "spent": 60
+      },
+      {
+        "case": "primary-failure-and-retry",
+        "purchases": 1,
+        "spent": 60
+      },
+      {
+        "case": "simulation-failure-and-retry",
+        "purchases": 1,
+        "spent": 60
+      }
+    ],
+    "recoveryFailure": "committed primary retained",
+    "legacy": "OFF",
+    "processing": "paid speed retained",
+    "tail": "existing cap and completion retained"
+  },
+  "stderr": ""
+}

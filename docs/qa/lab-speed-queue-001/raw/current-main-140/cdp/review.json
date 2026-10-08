@@ -1,0 +1,2862 @@
+{
+  "status": "pass",
+  "sourceSHA256": "a64747dcec3c26c0b5dea3f2e5c1bac521de557e38547b1195b5a3660234b0df",
+  "integratedProductCommit": "20aaae62a4b6e46f8d75775085918eaba4e8de29",
+  "verificationBaseline": "0e9b54c8d62a873bd48625f4a20ee18078e8a8f1",
+  "node": "v24.19.0",
+  "browser": {
+    "selectedPath": "/usr/bin/chromium",
+    "resolvedPath": "/usr/bin/chromium",
+    "version": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)"
+  },
+  "limitation": "Modern host browser; native WebView60 acceptance remains separate",
+  "records": [
+    {
+      "kind": "unchanged-existing-assertions",
+      "width": 390,
+      "result": {
+        "scenario": "lab-motes-contracts",
+        "status": "pass",
+        "detail": {
+          "checks": 82,
+          "negativeControls": [
+            "fallback",
+            "free-carry"
+          ],
+          "tiers": [
+            1.5,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "prices": [
+            14,
+            26,
+            60,
+            110,
+            176,
+            258,
+            357,
+            473
+          ],
+          "normalizationPure": true
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "kind": "unchanged-existing-assertions",
+      "width": 390,
+      "result": {
+        "scenario": "lab-motes-chronology",
+        "status": "pass",
+        "detail": {
+          "checks": 101,
+          "negativeControls": [
+            "batch-end"
+          ],
+          "timelineEvidence": [
+            {
+              "case": "second-kill",
+              "summary": {
+                "elapsedSec": 0.1,
+                "lumenGained": 112,
+                "shardGained": 20.999999999999996,
+                "sigilsGained": 0,
+                "motesGained": 2,
+                "kills": 10,
+                "bossKills": 0,
+                "luminousKills": 1,
+                "ascends": 0,
+                "autoTaps": 0,
+                "empowers": 0,
+                "researchBought": 0,
+                "studiesStarted": 0,
+                "studySpeedPurchases": 1,
+                "studyMotesSpent": 60,
+                "completedStudies": [],
+                "closedStudies": [],
+                "achievements": [],
+                "retreated": false,
+                "retreats": 0,
+                "retries": 0,
+                "fastForwardedKills": 8,
+                "iterations": 2,
+                "ascendGains": [],
+                "timeline": [
+                  {
+                    "elapsedSec": 0.015000000000000013,
+                    "type": "enemyDeath",
+                    "detail": {
+                      "count": 2
+                    }
+                  },
+                  {
+                    "elapsedSec": 0.015000000000000013,
+                    "type": "studySpeed",
+                    "detail": {
+                      "id": "guardmastery",
+                      "speed": 3,
+                      "cost": 60
+                    }
+                  },
+                  {
+                    "elapsedSec": 0.1,
+                    "type": "enemyDeath",
+                    "detail": {
+                      "count": 8
+                    }
+                  }
+                ],
+                "endDepth": 11,
+                "pushDepth": 12,
+                "clockEndMs": 2000000000100
+              },
+              "active": [
+                {
+                  "id": "guardmastery",
+                  "remainingSec": 149.73000000000002,
+                  "totalDurationSec": 180,
+                  "speedMult": 3
+                }
+              ],
+              "motes": 0
+            },
+            {
+              "case": "second-kill",
+              "summary": {
+                "elapsedSec": 0.1,
+                "lumenGained": 112,
+                "shardGained": 20.999999999999996,
+                "sigilsGained": 0,
+                "motesGained": 2,
+                "kills": 10,
+                "bossKills": 0,
+                "luminousKills": 1,
+                "ascends": 0,
+                "autoTaps": 0,
+                "empowers": 0,
+                "researchBought": 0,
+                "studiesStarted": 0,
+                "studySpeedPurchases": 1,
+                "studyMotesSpent": 60,
+                "completedStudies": [],
+                "closedStudies": [],
+                "achievements": [],
+                "retreated": false,
+                "retreats": 0,
+                "retries": 0,
+                "fastForwardedKills": 8,
+                "iterations": 2,
+                "ascendGains": [],
+                "timeline": [
+                  {
+                    "elapsedSec": 0.015000000000000013,
+                    "type": "enemyDeath",
+                    "detail": {
+                      "count": 2
+                    }
+                  },
+                  {
+                    "elapsedSec": 0.015000000000000013,
+                    "type": "studySpeed",
+                    "detail": {
+                      "id": "guardmastery",
+                      "speed": 3,
+                      "cost": 60
+                    }
+                  },
+                  {
+                    "elapsedSec": 0.1,
+                    "type": "enemyDeath",
+                    "detail": {
+                      "count": 8
+                    }
+                  }
+                ],
+                "endDepth": 11,
+                "pushDepth": 12,
+                "clockEndMs": 2000000000100
+              },
+              "active": [
+                {
+                  "id": "guardmastery",
+                  "remainingSec": 149.73000000000002,
+                  "totalDurationSec": 180,
+                  "speedMult": 3
+                }
+              ],
+              "motes": 0
+            },
+            {
+              "case": [
+                false,
+                0.01,
+                1
+              ],
+              "kill": 21,
+              "time": 0.205,
+              "purchase": {
+                "elapsedSec": 0.20499999999999996,
+                "type": "studySpeed",
+                "detail": {
+                  "id": "guardmastery",
+                  "speed": 3,
+                  "cost": 60
+                }
+              },
+              "motes": 0
+            },
+            {
+              "case": [
+                false,
+                0.01,
+                2
+              ],
+              "kill": 41,
+              "time": 0.405,
+              "purchase": {
+                "elapsedSec": 0.405,
+                "type": "studySpeed",
+                "detail": {
+                  "id": "guardmastery",
+                  "speed": 3,
+                  "cost": 60
+                }
+              },
+              "motes": 0
+            },
+            {
+              "case": [
+                false,
+                0.01,
+                5
+              ],
+              "kill": 101,
+              "time": 1.005,
+              "purchase": {
+                "elapsedSec": 1.005,
+                "type": "studySpeed",
+                "detail": {
+                  "id": "guardmastery",
+                  "speed": 3,
+                  "cost": 60
+                }
+              },
+              "motes": 0
+            },
+            {
+              "case": [
+                false,
+                0.37,
+                1
+              ],
+              "kill": 14,
+              "time": 0.135,
+              "purchase": {
+                "elapsedSec": 0.135,
+                "type": "studySpeed",
+                "detail": {
+                  "id": "guardmastery",
+                  "speed": 3,
+                  "cost": 60
+                }
+              },
+              "motes": 0
+            },
+            {
+              "case": [
+                false,
+                0.37,
+                2
+              ],
+              "kill": 34,
+              "time": 0.335,
+              "purchase": {
+                "elapsedSec": 0.33499999999999996,
+                "type": "studySpeed",
+                "detail": {
+                  "id": "guardmastery",
+                  "speed": 3,
+                  "cost": 60
+                }
+              },
+              "motes": 0
+            },
+            {
+              "case": [
+                false,
+                0.37,
+                5
+              ],
+              "kill": 94,
+              "time": 0.935,
+              "purchase": {
+                "elapsedSec": 0.935,
+                "type": "studySpeed",
+                "detail": {
+                  "id": "guardmastery",
+                  "speed": 3,
+                  "cost": 60
+                }
+              },
+              "motes": 0
+            },
+            {
+              "case": [
+                false,
+                0.95,
+                1
+              ],
+              "kill": 2,
+              "time": 0.015,
+              "purchase": {
+                "elapsedSec": 0.015000000000000013,
+                "type": "studySpeed",
+                "detail": {
+                  "id": "guardmastery",
+                  "speed": 3,
+                  "cost": 60
+                }
+              },
+              "motes": 0
+            },
+            {
+              "case": [
+                false,
+                0.95,
+                2
+              ],
+              "kill": 22,
+              "time": 0.215,
+              "purchase": {
+                "elapsedSec": 0.21499999999999997,
+                "type": "studySpeed",
+                "detail": {
+                  "id": "guardmastery",
+                  "speed": 3,
+                  "cost": 60
+                }
+              },
+              "motes": 0
+            },
+            {
+              "case": [
+                false,
+                0.95,
+                5
+              ],
+              "kill": 82,
+              "time": 0.815,
+              "purchase": {
+                "elapsedSec": 0.815,
+                "type": "studySpeed",
+                "detail": {
+                  "id": "guardmastery",
+                  "speed": 3,
+                  "cost": 60
+                }
+              },
+              "motes": 0
+            },
+            {
+              "case": [
+                true,
+                0.01,
+                1
+              ],
+              "kill": 1,
+              "time": 0.005,
+              "purchase": {
+                "elapsedSec": 0.0050000000000000044,
+                "type": "studySpeed",
+                "detail": {
+                  "id": "guardmastery",
+                  "speed": 3,
+                  "cost": 60
+                }
+              },
+              "motes": 0
+            },
+            {
+              "case": [
+                true,
+                0.01,
+                2
+              ],
+              "kill": 21,
+              "time": 0.205,
+              "purchase": {
+                "elapsedSec": 0.20499999999999996,
+                "type": "studySpeed",
+                "detail": {
+                  "id": "guardmastery",
+                  "speed": 3,
+                  "cost": 60
+                }
+              },
+              "motes": 0
+            },
+            {
+              "case": [
+                true,
+                0.01,
+                5
+              ],
+              "kill": 81,
+              "time": 0.805,
+              "purchase": {
+                "elapsedSec": 0.805,
+                "type": "studySpeed",
+                "detail": {
+                  "id": "guardmastery",
+                  "speed": 3,
+                  "cost": 60
+                }
+              },
+              "motes": 0
+            },
+            {
+              "case": [
+                true,
+                0.37,
+                1
+              ],
+              "kill": 1,
+              "time": 0.005,
+              "purchase": {
+                "elapsedSec": 0.0050000000000000044,
+                "type": "studySpeed",
+                "detail": {
+                  "id": "guardmastery",
+                  "speed": 3,
+                  "cost": 60
+                }
+              },
+              "motes": 0
+            },
+            {
+              "case": [
+                true,
+                0.37,
+                2
+              ],
+              "kill": 14,
+              "time": 0.135,
+              "purchase": {
+                "elapsedSec": 0.135,
+                "type": "studySpeed",
+                "detail": {
+                  "id": "guardmastery",
+                  "speed": 3,
+                  "cost": 60
+                }
+              },
+              "motes": 0
+            },
+            {
+              "case": [
+                true,
+                0.37,
+                5
+              ],
+              "kill": 74,
+              "time": 0.735,
+              "purchase": {
+                "elapsedSec": 0.735,
+                "type": "studySpeed",
+                "detail": {
+                  "id": "guardmastery",
+                  "speed": 3,
+                  "cost": 60
+                }
+              },
+              "motes": 0
+            },
+            {
+              "case": [
+                true,
+                0.95,
+                1
+              ],
+              "kill": 1,
+              "time": 0.005,
+              "purchase": {
+                "elapsedSec": 0.0050000000000000044,
+                "type": "studySpeed",
+                "detail": {
+                  "id": "guardmastery",
+                  "speed": 3,
+                  "cost": 60
+                }
+              },
+              "motes": 0
+            },
+            {
+              "case": [
+                true,
+                0.95,
+                2
+              ],
+              "kill": 2,
+              "time": 0.015,
+              "purchase": {
+                "elapsedSec": 0.015000000000000013,
+                "type": "studySpeed",
+                "detail": {
+                  "id": "guardmastery",
+                  "speed": 3,
+                  "cost": 60
+                }
+              },
+              "motes": 0
+            },
+            {
+              "case": [
+                true,
+                0.95,
+                5
+              ],
+              "kill": 62,
+              "time": 0.615,
+              "purchase": {
+                "elapsedSec": 0.615,
+                "type": "studySpeed",
+                "detail": {
+                  "id": "guardmastery",
+                  "speed": 3,
+                  "cost": 60
+                }
+              },
+              "motes": 0
+            },
+            {
+              "case": "tracking-reward",
+              "tracking": 0,
+              "time": 0.135,
+              "summary": {
+                "elapsedSec": 0.136,
+                "lumenGained": 156.79999999999998,
+                "shardGained": 29.399999999999995,
+                "sigilsGained": 0,
+                "motesGained": 4,
+                "kills": 14,
+                "bossKills": 0,
+                "luminousKills": 1,
+                "ascends": 0,
+                "autoTaps": 0,
+                "empowers": 0,
+                "researchBought": 0,
+                "studiesStarted": 0,
+                "studySpeedPurchases": 1,
+                "studyMotesSpent": 60,
+                "completedStudies": [],
+                "closedStudies": [],
+                "achievements": [],
+                "retreated": false,
+                "retreats": 0,
+                "retries": 0,
+                "fastForwardedKills": 13,
+                "iterations": 2,
+                "ascendGains": [],
+                "timeline": [
+                  {
+                    "elapsedSec": 0.135,
+                    "type": "enemyDeath",
+                    "detail": {
+                      "count": 14
+                    }
+                  },
+                  {
+                    "elapsedSec": 0.135,
+                    "type": "studySpeed",
+                    "detail": {
+                      "id": "guardmastery",
+                      "speed": 3,
+                      "cost": 60
+                    }
+                  }
+                ],
+                "endDepth": 11,
+                "pushDepth": 12,
+                "clockEndMs": 2000000000136
+              }
+            },
+            {
+              "case": "tracking-reward",
+              "tracking": 10,
+              "time": 0.075,
+              "summary": {
+                "elapsedSec": 0.076,
+                "lumenGained": 89.6,
+                "shardGained": 16.799999999999997,
+                "sigilsGained": 0,
+                "motesGained": 4,
+                "kills": 8,
+                "bossKills": 0,
+                "luminousKills": 1,
+                "ascends": 0,
+                "autoTaps": 0,
+                "empowers": 0,
+                "researchBought": 0,
+                "studiesStarted": 0,
+                "studySpeedPurchases": 1,
+                "studyMotesSpent": 60,
+                "completedStudies": [],
+                "closedStudies": [],
+                "achievements": [],
+                "retreated": false,
+                "retreats": 0,
+                "retries": 0,
+                "fastForwardedKills": 7,
+                "iterations": 2,
+                "ascendGains": [],
+                "timeline": [
+                  {
+                    "elapsedSec": 0.07499999999999996,
+                    "type": "enemyDeath",
+                    "detail": {
+                      "count": 8
+                    }
+                  },
+                  {
+                    "elapsedSec": 0.07499999999999996,
+                    "type": "studySpeed",
+                    "detail": {
+                      "id": "guardmastery",
+                      "speed": 3,
+                      "cost": 60
+                    }
+                  }
+                ],
+                "endDepth": 11,
+                "pushDepth": 12,
+                "clockEndMs": 2000000000076
+              }
+            },
+            {
+              "case": "collision",
+              "summary": {
+                "elapsedSec": 0.02,
+                "lumenGained": 22.4,
+                "shardGained": 4.199999999999999,
+                "sigilsGained": 0,
+                "motesGained": 2,
+                "kills": 2,
+                "bossKills": 0,
+                "luminousKills": 1,
+                "ascends": 0,
+                "autoTaps": 0,
+                "empowers": 0,
+                "researchBought": 0,
+                "studiesStarted": 1,
+                "studySpeedPurchases": 1,
+                "studyMotesSpent": 60,
+                "completedStudies": [
+                  "Measured Inquiry",
+                  "Guardian's Mastery"
+                ],
+                "closedStudies": [],
+                "achievements": [],
+                "retreated": false,
+                "retreats": 0,
+                "retries": 0,
+                "fastForwardedKills": 1,
+                "iterations": 2,
+                "ascendGains": [],
+                "timeline": [
+                  {
+                    "elapsedSec": 0.015000000000000013,
+                    "type": "enemyDeath",
+                    "detail": {
+                      "count": 2
+                    }
+                  },
+                  {
+                    "elapsedSec": 0.015000000000000013,
+                    "type": "buffExpire",
+                    "detail": null
+                  },
+                  {
+                    "elapsedSec": 0.015000000000000013,
+                    "type": "studyComplete",
+                    "detail": {
+                      "count": 2,
+                      "names": [
+                        "Measured Inquiry",
+                        "Guardian's Mastery"
+                      ]
+                    }
+                  },
+                  {
+                    "elapsedSec": 0.015000000000000013,
+                    "type": "studyStart",
+                    "detail": {
+                      "count": 1,
+                      "ids": [
+                        "guardmastery"
+                      ]
+                    }
+                  },
+                  {
+                    "elapsedSec": 0.015000000000000013,
+                    "type": "studySpeed",
+                    "detail": {
+                      "id": "guardmastery",
+                      "speed": 3,
+                      "cost": 60
+                    }
+                  }
+                ],
+                "endDepth": 11,
+                "pushDepth": 12,
+                "clockEndMs": 2000000000020
+              },
+              "state": {
+                "schemaVersion": 1,
+                "lumen": 999998942.4,
+                "shards": 999999932.2,
+                "prisms": 0,
+                "comets": 0,
+                "motes": 0,
+                "sigils": 0,
+                "depth": 11,
+                "maxDepthEver": 130,
+                "riftMode": "farm",
+                "farmDepth": 11,
+                "farmReturnDepth": 12,
+                "enemyDepth": 11,
+                "enemyHp": 21.99999999999998,
+                "enemyMaxHp": 44,
+                "enemyIsLuminous": false,
+                "spirits": {
+                  "ember": 1,
+                  "tide": 0,
+                  "stone": 0,
+                  "gale": 0,
+                  "thorn": 0,
+                  "void": 0,
+                  "aurora": 0,
+                  "titan": 0
+                },
+                "heroRarity": {
+                  "ember": 0,
+                  "tide": 0,
+                  "stone": 0,
+                  "gale": 0,
+                  "thorn": 0,
+                  "void": 0,
+                  "aurora": 0,
+                  "titan": 0
+                },
+                "heroResource": {
+                  "ember": 0.3333333333333334,
+                  "tide": 0,
+                  "stone": 0,
+                  "gale": 0,
+                  "thorn": 0,
+                  "void": 0,
+                  "aurora": 0,
+                  "titan": 0
+                },
+                "wispModules": {
+                  "ember": 0,
+                  "tide": 0,
+                  "stone": 0,
+                  "gale": 0,
+                  "thorn": 0,
+                  "void": 0,
+                  "aurora": 0,
+                  "titan": 0
+                },
+                "wispUltimate": {
+                  "ember": false,
+                  "tide": false,
+                  "stone": false,
+                  "gale": false,
+                  "thorn": false,
+                  "void": false,
+                  "aurora": false,
+                  "titan": false
+                },
+                "empowerQueue": {
+                  "ember": false,
+                  "tide": false,
+                  "stone": false,
+                  "gale": false,
+                  "thorn": false,
+                  "void": false,
+                  "aurora": false,
+                  "titan": false
+                },
+                "activeParty": [
+                  "ember"
+                ],
+                "formationPresets": {
+                  "push": [
+                    "ember"
+                  ],
+                  "farm": [
+                    "ember"
+                  ],
+                  "boss": [
+                    "ember"
+                  ]
+                },
+                "activeFormationPreset": "push",
+                "formationRebuild": null,
+                "nodes": {
+                  "starlight": 0,
+                  "steady": 0,
+                  "echo": 0,
+                  "bonds": 0,
+                  "swift": 0,
+                  "momentum": 0,
+                  "reserves": 0
+                },
+                "research": {
+                  "focus": 0,
+                  "sense": 0,
+                  "formation": 0,
+                  "resolve": 0,
+                  "charge": 0,
+                  "arcanecal": 0,
+                  "conduction": 0,
+                  "luminoustracking": 0
+                },
+                "researchQueue": {
+                  "focus": false,
+                  "sense": false,
+                  "formation": false,
+                  "resolve": false,
+                  "charge": false,
+                  "arcanecal": false,
+                  "conduction": false,
+                  "luminoustracking": false
+                },
+                "longStudyLevels": {
+                  "wispascend": 0,
+                  "guardmastery": 1,
+                  "riftattune": 0,
+                  "shardstudy": 0,
+                  "lumenstudy": 0,
+                  "formationstudy": 0,
+                  "motestudy": 0,
+                  "prismstudy": 0,
+                  "measuredinquiry": 10
+                },
+                "activeStudies": [
+                  {
+                    "id": "guardmastery",
+                    "remainingSec": 191.985,
+                    "totalDurationSec": 192,
+                    "speedMult": 3
+                  }
+                ],
+                "studyQueue": {
+                  "wispascend": false,
+                  "guardmastery": true,
+                  "riftattune": false,
+                  "shardstudy": false,
+                  "lumenstudy": false,
+                  "formationstudy": false,
+                  "motestudy": false,
+                  "prismstudy": false,
+                  "measuredinquiry": false
+                },
+                "studyUseMotes": {
+                  "wispascend": false,
+                  "guardmastery": true,
+                  "riftattune": false,
+                  "shardstudy": false,
+                  "lumenstudy": false,
+                  "formationstudy": false,
+                  "motestudy": false,
+                  "prismstudy": false,
+                  "measuredinquiry": true
+                },
+                "studySpeedTargets": {
+                  "wispascend": 1.5,
+                  "guardmastery": 3,
+                  "riftattune": 1.5,
+                  "shardstudy": 1.5,
+                  "lumenstudy": 1.5,
+                  "formationstudy": 1.5,
+                  "motestudy": 1.5,
+                  "prismstudy": 1.5,
+                  "measuredinquiry": 3
+                },
+                "achieved": {
+                  "d10": true,
+                  "d25": true,
+                  "d50": true,
+                  "d100": true,
+                  "d250": true,
+                  "tap100": true,
+                  "tap1000": true,
+                  "tap10000": true,
+                  "fullparty": true,
+                  "asc1": true,
+                  "asc5": true,
+                  "asc10": true,
+                  "all": true,
+                  "mythic": true,
+                  "idle8": true,
+                  "labmaster": true,
+                  "study1": true,
+                  "study25": true,
+                  "allstudies": true,
+                  "labqueue": true,
+                  "firstultimate": true,
+                  "modulemax": true
+                },
+                "owned": {},
+                "riftTheme": "default",
+                "buffUntil": 0,
+                "buffMult": 1,
+                "supportBuffs": null,
+                "ascendCount": 0,
+                "ascendRewardedDepth": 0,
+                "sigilResonanceUses": 0,
+                "totalTaps": 0,
+                "totalKills": 2,
+                "totalOfflineSeconds": 0,
+                "luminousAccum": 0.050000000000000044,
+                "savedLabMultiplier": 1,
+                "autoAscendEnabled": false,
+                "autoAscendTargetDepth": 16,
+                "loginStreak": 1,
+                "questDay": "2035-01-15",
+                "questIds": [],
+                "questClaimed": {},
+                "dailyQuestRefreshes": 0,
+                "dailyStats": {
+                  "taps": 0,
+                  "kills": 2,
+                  "empowers": 0,
+                  "research": 0,
+                  "bossKills": 0,
+                  "luminousKills": 1,
+                  "ascends": 0
+                },
+                "lastSeen": 2052475200000,
+                "_autoTapAccum": 0,
+                "_autoEmpowerAccum": 20.000000000000004
+              }
+            },
+            {
+              "case": "kill-ascend-complete",
+              "summary": {
+                "elapsedSec": 0.005,
+                "lumenGained": 27,
+                "shardGained": 4,
+                "sigilsGained": 0,
+                "motesGained": 3,
+                "kills": 1,
+                "bossKills": 0,
+                "luminousKills": 1,
+                "ascends": 1,
+                "autoTaps": 0,
+                "empowers": 0,
+                "researchBought": 0,
+                "studiesStarted": 0,
+                "studySpeedPurchases": 0,
+                "studyMotesSpent": 0,
+                "completedStudies": [
+                  "Guardian's Mastery"
+                ],
+                "closedStudies": [],
+                "achievements": [],
+                "retreated": false,
+                "retreats": 0,
+                "retries": 0,
+                "fastForwardedKills": 0,
+                "iterations": 1,
+                "ascendGains": [
+                  8
+                ],
+                "timeline": [
+                  {
+                    "elapsedSec": 0.005,
+                    "type": "enemyDeath",
+                    "detail": {
+                      "count": 1
+                    }
+                  },
+                  {
+                    "elapsedSec": 0.005,
+                    "type": "autoAscend",
+                    "detail": {
+                      "count": 1
+                    }
+                  },
+                  {
+                    "elapsedSec": 0.005,
+                    "type": "studyComplete",
+                    "detail": {
+                      "count": 1,
+                      "names": [
+                        "Guardian's Mastery"
+                      ]
+                    }
+                  }
+                ],
+                "endDepth": 1,
+                "pushDepth": 1,
+                "clockEndMs": 2000000000005
+              },
+              "motes": 61
+            }
+          ],
+          "liveOfflineSplit": true
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "kind": "unchanged-existing-assertions",
+      "width": 390,
+      "result": {
+        "scenario": "lab-motes-conservation",
+        "status": "pass",
+        "detail": {
+          "checks": 16735,
+          "fixtures": 826,
+          "causalControl": "old-double-round rejected; undo passes",
+          "boundaryRows": [
+            {
+              "seconds": 0.01729999,
+              "use": false,
+              "kind": "live",
+              "kills": 1,
+              "motes": 59,
+              "work": 299.98270001
+            },
+            {
+              "seconds": 0.01729999,
+              "use": false,
+              "kind": "offline",
+              "kills": 1,
+              "motes": 59,
+              "work": 299.98270001
+            },
+            {
+              "seconds": 0.01729999,
+              "use": true,
+              "kind": "live",
+              "kills": 1,
+              "motes": 59,
+              "work": 299.98270001
+            },
+            {
+              "seconds": 0.01729999,
+              "use": true,
+              "kind": "offline",
+              "kills": 1,
+              "motes": 59,
+              "work": 299.98270001
+            },
+            {
+              "seconds": 0.0173,
+              "use": false,
+              "kind": "live",
+              "kills": 2,
+              "motes": 60,
+              "work": 299.9827
+            },
+            {
+              "seconds": 0.0173,
+              "use": false,
+              "kind": "offline",
+              "kills": 2,
+              "motes": 60,
+              "work": 299.9827
+            },
+            {
+              "seconds": 0.0173,
+              "use": true,
+              "kind": "live",
+              "kills": 2,
+              "motes": 0,
+              "work": 299.9827
+            },
+            {
+              "seconds": 0.0173,
+              "use": true,
+              "kind": "offline",
+              "kills": 2,
+              "motes": 0,
+              "work": 299.9827
+            },
+            {
+              "seconds": 0.01730001,
+              "use": false,
+              "kind": "live",
+              "kills": 2,
+              "motes": 60,
+              "work": 299.98269999
+            },
+            {
+              "seconds": 0.01730001,
+              "use": false,
+              "kind": "offline",
+              "kills": 2,
+              "motes": 60,
+              "work": 299.98269999
+            },
+            {
+              "seconds": 0.01730001,
+              "use": true,
+              "kind": "live",
+              "kills": 2,
+              "motes": 0,
+              "work": 299.98269997
+            },
+            {
+              "seconds": 0.01730001,
+              "use": true,
+              "kind": "offline",
+              "kills": 2,
+              "motes": 0,
+              "work": 299.98269997
+            },
+            {
+              "seconds": 0.9,
+              "use": false,
+              "kind": "live",
+              "kills": 90,
+              "motes": 62,
+              "work": 299.1
+            },
+            {
+              "seconds": 0.9,
+              "use": false,
+              "kind": "offline",
+              "kills": 90,
+              "motes": 62,
+              "work": 299.1
+            },
+            {
+              "seconds": 0.9,
+              "use": true,
+              "kind": "live",
+              "kills": 90,
+              "motes": 2,
+              "work": 297.3346
+            },
+            {
+              "seconds": 0.9,
+              "use": true,
+              "kind": "offline",
+              "kills": 90,
+              "motes": 2,
+              "work": 297.3346
+            }
+          ],
+          "minimum": {
+            "kills": 90,
+            "luminous": 3,
+            "motes": 2,
+            "work": 297.3346
+          }
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "kind": "unchanged-existing-assertions",
+      "width": 390,
+      "result": {
+        "scenario": "lab-motes-numerical",
+        "status": "pass",
+        "detail": {
+          "checks": 340,
+          "rows": [
+            {
+              "natural": false,
+              "use": false,
+              "kind": "live",
+              "split": 0,
+              "expected": 3275345183542180,
+              "kills": 3275345183542180,
+              "hp": 7,
+              "motes": 98260355506266,
+              "work": 299,
+              "representedDamageExact": "36028797018963984",
+              "ledger": {
+                "kills": 3275345183542180,
+                "luminous": 98260355506266,
+                "lumen": 19652071101253080,
+                "shards": 3275345183542180,
+                "motes": 98260355506266,
+                "damageUnits": "7292309700590025977850314939847315830727145782563253774651567483640991779146832570797052266954773211848737111329399781668303598886704814520810211105355092048306603261558778980331037284111573453586142199218665296526245931449077930949439963867212907022890079781536522558110268979539110921368724566316863704414164675180453238272068025587859456"
+              },
+              "segments": 1
+            },
+            {
+              "natural": false,
+              "use": false,
+              "kind": "live",
+              "split": 0.5,
+              "expected": 3275345183542180,
+              "kills": 3275345183542180,
+              "hp": 7,
+              "motes": 98260355506266,
+              "work": 299,
+              "representedDamageExact": "36028797018963984",
+              "ledger": {
+                "kills": 3275345183542180,
+                "luminous": 98260355506266,
+                "lumen": 19652071101253080,
+                "shards": 3275345183542180,
+                "motes": 98260355506266,
+                "damageUnits": "7292309700590025977850314939847315830727145782563253774651567483640991779146832570797052266954773211848737111329399781668303598886704814520810211105355092048306603261558778980331037284111573453586142199218665296526245931449077930949439963867212907022890079781536522558110268979539110921368724566316863704414164675180453238272068025587859456"
+              },
+              "segments": 2
+            },
+            {
+              "natural": false,
+              "use": false,
+              "kind": "offline",
+              "split": 0,
+              "expected": 3275345183542180,
+              "kills": 3275345183542180,
+              "hp": 7,
+              "motes": 98260355506266,
+              "work": 299,
+              "representedDamageExact": "36028797018963984",
+              "ledger": {
+                "kills": 3275345183542180,
+                "luminous": 98260355506266,
+                "lumen": 13756449770877154,
+                "shards": 2292741628479526,
+                "motes": 98260355506266,
+                "damageUnits": "7292309700590025977850314939847315830727145782563253774651567483640991779146832570797052266954773211848737111329399781668303598886704814520810211105355092048306603261558778980331037284111573453586142199218665296526245931449077930949439963867212907022890079781536522558110268979539110921368724566316863704414164675180453238272068025587859456"
+              },
+              "segments": 1
+            },
+            {
+              "natural": false,
+              "use": false,
+              "kind": "offline",
+              "split": 0.5,
+              "expected": 3275345183542180,
+              "kills": 3275345183542180,
+              "hp": 7,
+              "motes": 98260355506266,
+              "work": 299,
+              "representedDamageExact": "36028797018963984",
+              "ledger": {
+                "kills": 3275345183542180,
+                "luminous": 98260355506266,
+                "lumen": 13756449770877154,
+                "shards": 2292741628479526,
+                "motes": 98260355506266,
+                "damageUnits": "7292309700590025977850314939847315830727145782563253774651567483640991779146832570797052266954773211848737111329399781668303598886704814520810211105355092048306603261558778980331037284111573453586142199218665296526245931449077930949439963867212907022890079781536522558110268979539110921368724566316863704414164675180453238272068025587859456"
+              },
+              "segments": 2
+            },
+            {
+              "natural": true,
+              "use": false,
+              "kind": "live",
+              "split": 0,
+              "expected": 3277040892359271,
+              "kills": 3277040892359271,
+              "hp": 5.029999999999999,
+              "motes": 98311226770838,
+              "work": 299.1,
+              "representedDamageExact": "36047449815951984",
+              "ledger": {
+                "kills": 3277040892359271,
+                "luminous": 98311226770779,
+                "lumen": 19662245354155624,
+                "shards": 3277040892359271,
+                "motes": 98311226770779,
+                "damageUnits": "7296085068730880994390700782572878467154700824006709735667259032801018941406106291624756640761294702535792317875883831770202133234015420332369506180578062294962962949886714435435278532018530843812727308737404132697900896715755988517333573217247432359047325059660116393551750130363617648065282657819671758183751130326323491295401414498451456"
+              },
+              "segments": 1
+            },
+            {
+              "natural": true,
+              "use": false,
+              "kind": "live",
+              "split": 0.01,
+              "expected": 3277040892359271,
+              "kills": 3277040892359271,
+              "hp": 8.78,
+              "motes": 98311226770838,
+              "work": 299.1,
+              "representedDamageExact": "36047449815951984",
+              "ledger": {
+                "kills": 3277040892359271,
+                "luminous": 98311226770779,
+                "lumen": 19662245354155628,
+                "shards": 3277040892359271,
+                "motes": 98311226770779,
+                "damageUnits": "7296085068730880235382250880158059645297150628066808299829822417268075103026013688760983260778743857684353437486666974818660142045970752620586740983852524043662713172117302229744937494894675727061823275887842853048772102442961981409805510374649812541159741375311780115514038209018231826814977850705287262485022972903800003891497385397846016"
+              },
+              "segments": 2
+            },
+            {
+              "natural": true,
+              "use": false,
+              "kind": "offline",
+              "split": 0,
+              "expected": 3277040892359271,
+              "kills": 3277040892359271,
+              "hp": 5.029999999999999,
+              "motes": 98311226770838,
+              "work": 299.1,
+              "representedDamageExact": "36047449815951984",
+              "ledger": {
+                "kills": 3277040892359271,
+                "luminous": 98311226770779,
+                "lumen": 13763571747908936,
+                "shards": 2293928624651489.5,
+                "motes": 98311226770779,
+                "damageUnits": "7296085068730880994390700782572878467154700824006709735667259032801018941406106291624756640761294702535792317875883831770202133234015420332369506180578062294962962949886714435435278532018530843812727308737404132697900896715755988517333573217247432359047325059660116393551750130363617648065282657819671758183751130326323491295401414498451456"
+              },
+              "segments": 1
+            },
+            {
+              "natural": true,
+              "use": false,
+              "kind": "offline",
+              "split": 0.01,
+              "expected": 3277040892359271,
+              "kills": 3277040892359271,
+              "hp": 8.78,
+              "motes": 98311226770838,
+              "work": 299.1,
+              "representedDamageExact": "36047449815951984",
+              "ledger": {
+                "kills": 3277040892359271,
+                "luminous": 98311226770779,
+                "lumen": 13763571747908936,
+                "shards": 2293928624651489.5,
+                "motes": 98311226770779,
+                "damageUnits": "7296085068730880235382250880158059645297150628066808299829822417268075103026013688760983260778743857684353437486666974818660142045970752620586740983852524043662713172117302229744937494894675727061823275887842853048772102442961981409805510374649812541159741375311780115514038209018231826814977850705287262485022972903800003891497385397846016"
+              },
+              "segments": 2
+            },
+            {
+              "natural": true,
+              "use": true,
+              "kind": "live",
+              "split": 0,
+              "expected": 3277040892359271,
+              "kills": 3277040892359271,
+              "hp": 2,
+              "motes": 98311226770778,
+              "work": 297.3,
+              "representedDamageExact": "36047449815951984",
+              "ledger": {
+                "kills": 3277040892359271,
+                "luminous": 98311226770779,
+                "lumen": 19662245354155628,
+                "shards": 3277040892359271,
+                "motes": 98311226770779,
+                "damageUnits": "7296085068730881607669528303724282179936863758762339446888328813317540663870525729979995522291077683000785974463180919038020743760062545589256215843030100452917647223601190342344292616893809321051041595101003313495486557488646446206394916801450422004773891029101858714987713621674258480289205212429841563183124735560592658373857789018636288"
+              },
+              "segments": 2
+            },
+            {
+              "natural": true,
+              "use": true,
+              "kind": "live",
+              "split": 0.01,
+              "expected": 3277040892359271,
+              "kills": 3277040892359271,
+              "hp": 7.1875,
+              "motes": 98311226770778,
+              "work": 297.3,
+              "representedDamageExact": "36047449815951984",
+              "ledger": {
+                "kills": 3277040892359271,
+                "luminous": 98311226770779,
+                "lumen": 19662245354155628,
+                "shards": 3277040892359271,
+                "motes": 98311226770779,
+                "damageUnits": "7296085068730880557707839272050449476367252654378809127313208161830301687444730962685109013315215680956295523258097600255054322616600755254623390654226439205285635031020170124472654182205809742878957682992443543314191725411281403040981096535857047923362733599086660197035545463813141427559616895921609677466550784459435167465123882096132096"
+              },
+              "segments": 3
+            },
+            {
+              "natural": true,
+              "use": true,
+              "kind": "offline",
+              "split": 0,
+              "expected": 3277040892359271,
+              "kills": 3277040892359271,
+              "hp": 2,
+              "motes": 98311226770778,
+              "work": 297.3,
+              "representedDamageExact": "36047449815951984",
+              "ledger": {
+                "kills": 3277040892359271,
+                "luminous": 98311226770779,
+                "lumen": 13763571747908936,
+                "shards": 2293928624651489.5,
+                "motes": 98311226770779,
+                "damageUnits": "7296085068730881607669528303724282179936863758762339446888328813317540663870525729979995522291077683000785974463180919038020743760062545589256215843030100452917647223601190342344292616893809321051041595101003313495486557488646446206394916801450422004773891029101858714987713621674258480289205212429841563183124735560592658373857789018636288"
+              },
+              "segments": 2
+            },
+            {
+              "natural": true,
+              "use": true,
+              "kind": "offline",
+              "split": 0.01,
+              "expected": 3277040892359271,
+              "kills": 3277040892359271,
+              "hp": 7.1875,
+              "motes": 98311226770778,
+              "work": 297.3,
+              "representedDamageExact": "36047449815951984",
+              "ledger": {
+                "kills": 3277040892359271,
+                "luminous": 98311226770779,
+                "lumen": 13763571747908936,
+                "shards": 2293928624651489.5,
+                "motes": 98311226770779,
+                "damageUnits": "7296085068730880557707839272050449476367252654378809127313208161830301687444730962685109013315215680956295523258097600255054322616600755254623390654226439205285635031020170124472654182205809742878957682992443543314191725411281403040981096535857047923362733599086660197035545463813141427559616895921609677466550784459435167465123882096132096"
+              },
+              "segments": 3
+            },
+            {
+              "natural": false,
+              "use": false,
+              "kind": "live",
+              "split": 0,
+              "expected": 3275345183542180,
+              "kills": 3275345183542180,
+              "hp": 7,
+              "motes": 98260355506266,
+              "work": 299,
+              "representedDamageExact": "36028797018963984",
+              "ledger": {
+                "kills": 3275345183542180,
+                "luminous": 98260355506266,
+                "lumen": 19652071101253080,
+                "shards": 3275345183542180,
+                "motes": 98260355506266,
+                "damageUnits": "7292309700590025977850314939847315830727145782563253774651567483640991779146832570797052266954773211848737111329399781668303598886704814520810211105355092048306603261558778980331037284111573453586142199218665296526245931449077930949439963867212907022890079781536522558110268979539110921368724566316863704414164675180453238272068025587859456"
+              },
+              "segments": 1
+            },
+            {
+              "natural": true,
+              "use": false,
+              "kind": "live",
+              "split": 0,
+              "expected": 3277040892359271,
+              "kills": 3277040892359271,
+              "hp": 5.029999999999999,
+              "motes": 98311226770838,
+              "work": 299.1,
+              "representedDamageExact": "36047449815951984",
+              "ledger": {
+                "kills": 3277040892359271,
+                "luminous": 98311226770779,
+                "lumen": 19662245354155624,
+                "shards": 3277040892359271,
+                "motes": 98311226770779,
+                "damageUnits": "7296085068730880994390700782572878467154700824006709735667259032801018941406106291624756640761294702535792317875883831770202133234015420332369506180578062294962962949886714435435278532018530843812727308737404132697900896715755988517333573217247432359047325059660116393551750130363617648065282657819671758183751130326323491295401414498451456"
+              },
+              "segments": 1
+            }
+          ],
+          "causalControl": "both exact old-R2 minima rejected; undo passes",
+          "limit": "represented damage per segment; original spawn/reward rounding; split HP differs when represented damage differs"
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "kind": "unchanged-existing-assertions",
+      "width": 390,
+      "result": {
+        "scenario": "lab-motes-save-reload",
+        "status": "pass",
+        "detail": {
+          "keys": [
+            "schemaVersion",
+            "studyQueue",
+            "studyUseMotes",
+            "studySpeedTargets",
+            "activeStudies",
+            "motes"
+          ],
+          "ascend": true,
+          "activeSpeed": 4,
+          "independentTarget": 3
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "kind": "unchanged-existing-assertions",
+      "width": 390,
+      "result": {
+        "scenario": "lab-motes-backup-restore",
+        "status": "pass",
+        "detail": {
+          "keys": [
+            "schemaVersion",
+            "studyQueue",
+            "studyUseMotes",
+            "studySpeedTargets",
+            "activeStudies",
+            "motes"
+          ],
+          "ascend": true,
+          "activeSpeed": 4,
+          "independentTarget": 3
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "kind": "unchanged-existing-assertions",
+      "width": 390,
+      "result": {
+        "scenario": "lab-motes-recovery",
+        "status": "pass",
+        "detail": {
+          "keys": [
+            "schemaVersion",
+            "studyQueue",
+            "studyUseMotes",
+            "studySpeedTargets",
+            "activeStudies",
+            "motes"
+          ],
+          "ascend": true,
+          "activeSpeed": 4,
+          "independentTarget": 3
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "kind": "unchanged-existing-assertions",
+      "width": 390,
+      "result": {
+        "scenario": "lab-motes-reset",
+        "status": "pass",
+        "detail": {
+          "reset": true
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "kind": "unchanged-existing-assertions",
+      "width": 320,
+      "result": {
+        "scenario": "lab-motes-ui",
+        "status": "pass",
+        "detail": {
+          "checks": 47,
+          "viewport": [
+            320,
+            844
+          ],
+          "focus": true,
+          "ariaPressed": true,
+          "quietScarcity": true,
+          "nativeControls": true
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "kind": "unchanged-existing-assertions",
+      "width": 390,
+      "result": {
+        "scenario": "lab-motes-ui",
+        "status": "pass",
+        "detail": {
+          "checks": 47,
+          "viewport": [
+            390,
+            844
+          ],
+          "focus": true,
+          "ariaPressed": true,
+          "quietScarcity": true,
+          "nativeControls": true
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "kind": "unchanged-existing-assertions",
+      "width": 430,
+      "result": {
+        "scenario": "lab-motes-ui",
+        "status": "pass",
+        "detail": {
+          "checks": 47,
+          "viewport": [
+            430,
+            844
+          ],
+          "focus": true,
+          "ariaPressed": true,
+          "quietScarcity": true,
+          "nativeControls": true
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "kind": "additional-large-text",
+      "width": 320,
+      "result": {
+        "viewport": 320,
+        "textScale": 2,
+        "motion": true,
+        "controls": [
+          {
+            "width": 173.265625,
+            "height": 44,
+            "label": "Guardian's Mastery — Use Motes ON",
+            "color": "rgb(158, 217, 177)",
+            "background": "color(srgb 0.155608 0.195922 0.264235)",
+            "font": "22px",
+            "contrast": 8.001272198252899
+          },
+          {
+            "width": 272,
+            "height": 52,
+            "label": "Guardian's Mastery — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Wisp Ascendancy — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 270,
+            "height": 52,
+            "label": "Wisp Ascendancy — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Rift Attunement — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 270,
+            "height": 52,
+            "label": "Rift Attunement — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Shard Attunement — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 270,
+            "height": 52,
+            "label": "Shard Attunement — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Lumen Wellspring — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 270,
+            "height": 52,
+            "label": "Lumen Wellspring — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Formation Insight — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 270,
+            "height": 52,
+            "label": "Formation Insight — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Luminous Sense — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 270,
+            "height": 52,
+            "label": "Luminous Sense — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Ascendant Clarity — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 270,
+            "height": 52,
+            "label": "Ascendant Clarity — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Measured Inquiry — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 270,
+            "height": 52,
+            "label": "Measured Inquiry — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          }
+        ],
+        "fit": true,
+        "focus": true,
+        "outline": {
+          "style": "solid",
+          "width": "2px",
+          "color": "rgb(189, 155, 239)"
+        },
+        "state": {
+          "schemaVersion": 1,
+          "lumen": 1000000000,
+          "shards": 1000000000,
+          "prisms": 0,
+          "comets": 0,
+          "motes": 0,
+          "sigils": 0,
+          "depth": 129,
+          "maxDepthEver": 130,
+          "riftMode": "push",
+          "farmDepth": 0,
+          "farmReturnDepth": 0,
+          "enemyDepth": 129,
+          "enemyHp": 385396513,
+          "enemyMaxHp": 385396513,
+          "enemyIsLuminous": false,
+          "spirits": {
+            "ember": 1,
+            "tide": 0,
+            "stone": 0,
+            "gale": 0,
+            "thorn": 0,
+            "void": 0,
+            "aurora": 0,
+            "titan": 0
+          },
+          "heroRarity": {
+            "ember": 0,
+            "tide": 0,
+            "stone": 0,
+            "gale": 0,
+            "thorn": 0,
+            "void": 0,
+            "aurora": 0,
+            "titan": 0
+          },
+          "heroResource": {
+            "ember": 0,
+            "tide": 0,
+            "stone": 0,
+            "gale": 0,
+            "thorn": 0,
+            "void": 0,
+            "aurora": 0,
+            "titan": 0
+          },
+          "wispModules": {
+            "ember": 0,
+            "tide": 0,
+            "stone": 0,
+            "gale": 0,
+            "thorn": 0,
+            "void": 0,
+            "aurora": 0,
+            "titan": 0
+          },
+          "wispUltimate": {
+            "ember": false,
+            "tide": false,
+            "stone": false,
+            "gale": false,
+            "thorn": false,
+            "void": false,
+            "aurora": false,
+            "titan": false
+          },
+          "empowerQueue": {
+            "ember": false,
+            "tide": false,
+            "stone": false,
+            "gale": false,
+            "thorn": false,
+            "void": false,
+            "aurora": false,
+            "titan": false
+          },
+          "activeParty": [
+            "ember"
+          ],
+          "formationPresets": {
+            "push": [
+              "ember"
+            ],
+            "farm": [
+              "ember"
+            ],
+            "boss": [
+              "ember"
+            ]
+          },
+          "activeFormationPreset": "push",
+          "formationRebuild": null,
+          "nodes": {
+            "starlight": 0,
+            "steady": 0,
+            "echo": 0,
+            "bonds": 0,
+            "swift": 0,
+            "momentum": 0,
+            "reserves": 0
+          },
+          "research": {
+            "focus": 0,
+            "sense": 0,
+            "formation": 0,
+            "resolve": 0,
+            "charge": 0,
+            "arcanecal": 0,
+            "conduction": 0,
+            "luminoustracking": 0
+          },
+          "researchQueue": {
+            "focus": false,
+            "sense": false,
+            "formation": false,
+            "resolve": false,
+            "charge": false,
+            "arcanecal": false,
+            "conduction": false,
+            "luminoustracking": false
+          },
+          "longStudyLevels": {
+            "wispascend": 0,
+            "guardmastery": 0,
+            "riftattune": 0,
+            "shardstudy": 0,
+            "lumenstudy": 0,
+            "formationstudy": 0,
+            "motestudy": 0,
+            "prismstudy": 0,
+            "measuredinquiry": 0
+          },
+          "activeStudies": [
+            {
+              "id": "guardmastery",
+              "remainingSec": 150,
+              "totalDurationSec": 150,
+              "speedMult": 1
+            }
+          ],
+          "studyQueue": {
+            "wispascend": false,
+            "guardmastery": false,
+            "riftattune": false,
+            "shardstudy": false,
+            "lumenstudy": false,
+            "formationstudy": false,
+            "motestudy": false,
+            "prismstudy": false,
+            "measuredinquiry": false
+          },
+          "studyUseMotes": {
+            "wispascend": false,
+            "guardmastery": true,
+            "riftattune": false,
+            "shardstudy": false,
+            "lumenstudy": false,
+            "formationstudy": false,
+            "motestudy": false,
+            "prismstudy": false,
+            "measuredinquiry": false
+          },
+          "studySpeedTargets": {
+            "wispascend": 1.5,
+            "guardmastery": 3,
+            "riftattune": 1.5,
+            "shardstudy": 1.5,
+            "lumenstudy": 1.5,
+            "formationstudy": 1.5,
+            "motestudy": 1.5,
+            "prismstudy": 1.5,
+            "measuredinquiry": 1.5
+          },
+          "achieved": {
+            "d10": true,
+            "d25": true,
+            "d50": true,
+            "d100": true,
+            "d250": true,
+            "tap100": true,
+            "tap1000": true,
+            "tap10000": true,
+            "fullparty": true,
+            "asc1": true,
+            "asc5": true,
+            "asc10": true,
+            "all": true,
+            "mythic": true,
+            "idle8": true,
+            "autotap": true,
+            "labmaster": true,
+            "study1": true,
+            "study25": true,
+            "allstudies": true,
+            "labqueue": true,
+            "firstultimate": true,
+            "modulemax": true
+          },
+          "owned": {},
+          "riftTheme": "default",
+          "buffUntil": 0,
+          "buffMult": 1,
+          "supportBuffs": null,
+          "ascendCount": 0,
+          "ascendRewardedDepth": 0,
+          "sigilResonanceUses": 0,
+          "totalTaps": 0,
+          "totalKills": 0,
+          "totalOfflineSeconds": 0,
+          "luminousAccum": 0,
+          "savedLabMultiplier": 1,
+          "autoAscendEnabled": false,
+          "autoAscendTargetDepth": 16,
+          "loginStreak": 1,
+          "questDay": "2035-01-15",
+          "questIds": [],
+          "questClaimed": {},
+          "dailyQuestRefreshes": 0,
+          "dailyStats": {
+            "taps": 0,
+            "kills": 0,
+            "empowers": 0,
+            "research": 0,
+            "bossKills": 0,
+            "luminousKills": 0,
+            "ascends": 0
+          },
+          "lastSeen": 2052475200000,
+          "_autoTapAccum": 0,
+          "_autoEmpowerAccum": 0
+        },
+        "errors": []
+      }
+    },
+    {
+      "kind": "additional-large-text",
+      "width": 390,
+      "result": {
+        "viewport": 390,
+        "textScale": 2,
+        "motion": true,
+        "controls": [
+          {
+            "width": 173.265625,
+            "height": 44,
+            "label": "Guardian's Mastery — Use Motes ON",
+            "color": "rgb(158, 217, 177)",
+            "background": "color(srgb 0.155608 0.195922 0.264235)",
+            "font": "22px",
+            "contrast": 8.001272198252899
+          },
+          {
+            "width": 148.734375,
+            "height": 52,
+            "label": "Guardian's Mastery — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Wisp Ascendancy — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 140.46875,
+            "height": 52,
+            "label": "Wisp Ascendancy — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Rift Attunement — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 140.46875,
+            "height": 52,
+            "label": "Rift Attunement — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Shard Attunement — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 140.46875,
+            "height": 52,
+            "label": "Shard Attunement — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Lumen Wellspring — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 140.46875,
+            "height": 52,
+            "label": "Lumen Wellspring — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Formation Insight — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 140.46875,
+            "height": 52,
+            "label": "Formation Insight — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Luminous Sense — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 140.46875,
+            "height": 52,
+            "label": "Luminous Sense — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Ascendant Clarity — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 140.46875,
+            "height": 52,
+            "label": "Ascendant Clarity — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Measured Inquiry — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 140.46875,
+            "height": 52,
+            "label": "Measured Inquiry — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          }
+        ],
+        "fit": true,
+        "focus": true,
+        "outline": {
+          "style": "solid",
+          "width": "2px",
+          "color": "rgb(189, 155, 239)"
+        },
+        "state": {
+          "schemaVersion": 1,
+          "lumen": 1000000000,
+          "shards": 1000000000,
+          "prisms": 0,
+          "comets": 0,
+          "motes": 0,
+          "sigils": 0,
+          "depth": 129,
+          "maxDepthEver": 130,
+          "riftMode": "push",
+          "farmDepth": 0,
+          "farmReturnDepth": 0,
+          "enemyDepth": 129,
+          "enemyHp": 385396513,
+          "enemyMaxHp": 385396513,
+          "enemyIsLuminous": false,
+          "spirits": {
+            "ember": 1,
+            "tide": 0,
+            "stone": 0,
+            "gale": 0,
+            "thorn": 0,
+            "void": 0,
+            "aurora": 0,
+            "titan": 0
+          },
+          "heroRarity": {
+            "ember": 0,
+            "tide": 0,
+            "stone": 0,
+            "gale": 0,
+            "thorn": 0,
+            "void": 0,
+            "aurora": 0,
+            "titan": 0
+          },
+          "heroResource": {
+            "ember": 0,
+            "tide": 0,
+            "stone": 0,
+            "gale": 0,
+            "thorn": 0,
+            "void": 0,
+            "aurora": 0,
+            "titan": 0
+          },
+          "wispModules": {
+            "ember": 0,
+            "tide": 0,
+            "stone": 0,
+            "gale": 0,
+            "thorn": 0,
+            "void": 0,
+            "aurora": 0,
+            "titan": 0
+          },
+          "wispUltimate": {
+            "ember": false,
+            "tide": false,
+            "stone": false,
+            "gale": false,
+            "thorn": false,
+            "void": false,
+            "aurora": false,
+            "titan": false
+          },
+          "empowerQueue": {
+            "ember": false,
+            "tide": false,
+            "stone": false,
+            "gale": false,
+            "thorn": false,
+            "void": false,
+            "aurora": false,
+            "titan": false
+          },
+          "activeParty": [
+            "ember"
+          ],
+          "formationPresets": {
+            "push": [
+              "ember"
+            ],
+            "farm": [
+              "ember"
+            ],
+            "boss": [
+              "ember"
+            ]
+          },
+          "activeFormationPreset": "push",
+          "formationRebuild": null,
+          "nodes": {
+            "starlight": 0,
+            "steady": 0,
+            "echo": 0,
+            "bonds": 0,
+            "swift": 0,
+            "momentum": 0,
+            "reserves": 0
+          },
+          "research": {
+            "focus": 0,
+            "sense": 0,
+            "formation": 0,
+            "resolve": 0,
+            "charge": 0,
+            "arcanecal": 0,
+            "conduction": 0,
+            "luminoustracking": 0
+          },
+          "researchQueue": {
+            "focus": false,
+            "sense": false,
+            "formation": false,
+            "resolve": false,
+            "charge": false,
+            "arcanecal": false,
+            "conduction": false,
+            "luminoustracking": false
+          },
+          "longStudyLevels": {
+            "wispascend": 0,
+            "guardmastery": 0,
+            "riftattune": 0,
+            "shardstudy": 0,
+            "lumenstudy": 0,
+            "formationstudy": 0,
+            "motestudy": 0,
+            "prismstudy": 0,
+            "measuredinquiry": 0
+          },
+          "activeStudies": [
+            {
+              "id": "guardmastery",
+              "remainingSec": 150,
+              "totalDurationSec": 150,
+              "speedMult": 1
+            }
+          ],
+          "studyQueue": {
+            "wispascend": false,
+            "guardmastery": false,
+            "riftattune": false,
+            "shardstudy": false,
+            "lumenstudy": false,
+            "formationstudy": false,
+            "motestudy": false,
+            "prismstudy": false,
+            "measuredinquiry": false
+          },
+          "studyUseMotes": {
+            "wispascend": false,
+            "guardmastery": true,
+            "riftattune": false,
+            "shardstudy": false,
+            "lumenstudy": false,
+            "formationstudy": false,
+            "motestudy": false,
+            "prismstudy": false,
+            "measuredinquiry": false
+          },
+          "studySpeedTargets": {
+            "wispascend": 1.5,
+            "guardmastery": 3,
+            "riftattune": 1.5,
+            "shardstudy": 1.5,
+            "lumenstudy": 1.5,
+            "formationstudy": 1.5,
+            "motestudy": 1.5,
+            "prismstudy": 1.5,
+            "measuredinquiry": 1.5
+          },
+          "achieved": {
+            "d10": true,
+            "d25": true,
+            "d50": true,
+            "d100": true,
+            "d250": true,
+            "tap100": true,
+            "tap1000": true,
+            "tap10000": true,
+            "fullparty": true,
+            "asc1": true,
+            "asc5": true,
+            "asc10": true,
+            "all": true,
+            "mythic": true,
+            "idle8": true,
+            "autotap": true,
+            "labmaster": true,
+            "study1": true,
+            "study25": true,
+            "allstudies": true,
+            "labqueue": true,
+            "firstultimate": true,
+            "modulemax": true
+          },
+          "owned": {},
+          "riftTheme": "default",
+          "buffUntil": 0,
+          "buffMult": 1,
+          "supportBuffs": null,
+          "ascendCount": 0,
+          "ascendRewardedDepth": 0,
+          "sigilResonanceUses": 0,
+          "totalTaps": 0,
+          "totalKills": 0,
+          "totalOfflineSeconds": 0,
+          "luminousAccum": 0,
+          "savedLabMultiplier": 1,
+          "autoAscendEnabled": false,
+          "autoAscendTargetDepth": 16,
+          "loginStreak": 1,
+          "questDay": "2035-01-15",
+          "questIds": [],
+          "questClaimed": {},
+          "dailyQuestRefreshes": 0,
+          "dailyStats": {
+            "taps": 0,
+            "kills": 0,
+            "empowers": 0,
+            "research": 0,
+            "bossKills": 0,
+            "luminousKills": 0,
+            "ascends": 0
+          },
+          "lastSeen": 2052475200000,
+          "_autoTapAccum": 0,
+          "_autoEmpowerAccum": 0
+        },
+        "errors": []
+      }
+    },
+    {
+      "kind": "additional-large-text",
+      "width": 430,
+      "result": {
+        "viewport": 430,
+        "textScale": 2,
+        "motion": true,
+        "controls": [
+          {
+            "width": 173.265625,
+            "height": 44,
+            "label": "Guardian's Mastery — Use Motes ON",
+            "color": "rgb(158, 217, 177)",
+            "background": "color(srgb 0.155608 0.195922 0.264235)",
+            "font": "22px",
+            "contrast": 8.001272198252899
+          },
+          {
+            "width": 188.734375,
+            "height": 52,
+            "label": "Guardian's Mastery — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Wisp Ascendancy — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 180.46875,
+            "height": 52,
+            "label": "Wisp Ascendancy — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Rift Attunement — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 180.46875,
+            "height": 52,
+            "label": "Rift Attunement — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Shard Attunement — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 180.46875,
+            "height": 52,
+            "label": "Shard Attunement — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Lumen Wellspring — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 180.46875,
+            "height": 52,
+            "label": "Lumen Wellspring — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Formation Insight — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 180.46875,
+            "height": 52,
+            "label": "Formation Insight — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Luminous Sense — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 180.46875,
+            "height": 52,
+            "label": "Luminous Sense — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Ascendant Clarity — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 180.46875,
+            "height": 52,
+            "label": "Ascendant Clarity — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          },
+          {
+            "width": 179.53125,
+            "height": 44,
+            "label": "Measured Inquiry — Use Motes OFF",
+            "color": "rgb(181, 180, 203)",
+            "background": "rgb(22, 25, 51)",
+            "font": "22px",
+            "contrast": 8.481463452523531
+          },
+          {
+            "width": 180.46875,
+            "height": 52,
+            "label": "Measured Inquiry — Repeat speed",
+            "color": "rgb(240, 239, 251)",
+            "background": "rgb(22, 25, 51)",
+            "font": "23.68px",
+            "contrast": 15.106561023458212
+          }
+        ],
+        "fit": true,
+        "focus": true,
+        "outline": {
+          "style": "solid",
+          "width": "2px",
+          "color": "rgb(189, 155, 239)"
+        },
+        "state": {
+          "schemaVersion": 1,
+          "lumen": 1000000000,
+          "shards": 1000000000,
+          "prisms": 0,
+          "comets": 0,
+          "motes": 0,
+          "sigils": 0,
+          "depth": 129,
+          "maxDepthEver": 130,
+          "riftMode": "push",
+          "farmDepth": 0,
+          "farmReturnDepth": 0,
+          "enemyDepth": 129,
+          "enemyHp": 385396513,
+          "enemyMaxHp": 385396513,
+          "enemyIsLuminous": false,
+          "spirits": {
+            "ember": 1,
+            "tide": 0,
+            "stone": 0,
+            "gale": 0,
+            "thorn": 0,
+            "void": 0,
+            "aurora": 0,
+            "titan": 0
+          },
+          "heroRarity": {
+            "ember": 0,
+            "tide": 0,
+            "stone": 0,
+            "gale": 0,
+            "thorn": 0,
+            "void": 0,
+            "aurora": 0,
+            "titan": 0
+          },
+          "heroResource": {
+            "ember": 0,
+            "tide": 0,
+            "stone": 0,
+            "gale": 0,
+            "thorn": 0,
+            "void": 0,
+            "aurora": 0,
+            "titan": 0
+          },
+          "wispModules": {
+            "ember": 0,
+            "tide": 0,
+            "stone": 0,
+            "gale": 0,
+            "thorn": 0,
+            "void": 0,
+            "aurora": 0,
+            "titan": 0
+          },
+          "wispUltimate": {
+            "ember": false,
+            "tide": false,
+            "stone": false,
+            "gale": false,
+            "thorn": false,
+            "void": false,
+            "aurora": false,
+            "titan": false
+          },
+          "empowerQueue": {
+            "ember": false,
+            "tide": false,
+            "stone": false,
+            "gale": false,
+            "thorn": false,
+            "void": false,
+            "aurora": false,
+            "titan": false
+          },
+          "activeParty": [
+            "ember"
+          ],
+          "formationPresets": {
+            "push": [
+              "ember"
+            ],
+            "farm": [
+              "ember"
+            ],
+            "boss": [
+              "ember"
+            ]
+          },
+          "activeFormationPreset": "push",
+          "formationRebuild": null,
+          "nodes": {
+            "starlight": 0,
+            "steady": 0,
+            "echo": 0,
+            "bonds": 0,
+            "swift": 0,
+            "momentum": 0,
+            "reserves": 0
+          },
+          "research": {
+            "focus": 0,
+            "sense": 0,
+            "formation": 0,
+            "resolve": 0,
+            "charge": 0,
+            "arcanecal": 0,
+            "conduction": 0,
+            "luminoustracking": 0
+          },
+          "researchQueue": {
+            "focus": false,
+            "sense": false,
+            "formation": false,
+            "resolve": false,
+            "charge": false,
+            "arcanecal": false,
+            "conduction": false,
+            "luminoustracking": false
+          },
+          "longStudyLevels": {
+            "wispascend": 0,
+            "guardmastery": 0,
+            "riftattune": 0,
+            "shardstudy": 0,
+            "lumenstudy": 0,
+            "formationstudy": 0,
+            "motestudy": 0,
+            "prismstudy": 0,
+            "measuredinquiry": 0
+          },
+          "activeStudies": [
+            {
+              "id": "guardmastery",
+              "remainingSec": 150,
+              "totalDurationSec": 150,
+              "speedMult": 1
+            }
+          ],
+          "studyQueue": {
+            "wispascend": false,
+            "guardmastery": false,
+            "riftattune": false,
+            "shardstudy": false,
+            "lumenstudy": false,
+            "formationstudy": false,
+            "motestudy": false,
+            "prismstudy": false,
+            "measuredinquiry": false
+          },
+          "studyUseMotes": {
+            "wispascend": false,
+            "guardmastery": true,
+            "riftattune": false,
+            "shardstudy": false,
+            "lumenstudy": false,
+            "formationstudy": false,
+            "motestudy": false,
+            "prismstudy": false,
+            "measuredinquiry": false
+          },
+          "studySpeedTargets": {
+            "wispascend": 1.5,
+            "guardmastery": 3,
+            "riftattune": 1.5,
+            "shardstudy": 1.5,
+            "lumenstudy": 1.5,
+            "formationstudy": 1.5,
+            "motestudy": 1.5,
+            "prismstudy": 1.5,
+            "measuredinquiry": 1.5
+          },
+          "achieved": {
+            "d10": true,
+            "d25": true,
+            "d50": true,
+            "d100": true,
+            "d250": true,
+            "tap100": true,
+            "tap1000": true,
+            "tap10000": true,
+            "fullparty": true,
+            "asc1": true,
+            "asc5": true,
+            "asc10": true,
+            "all": true,
+            "mythic": true,
+            "idle8": true,
+            "autotap": true,
+            "labmaster": true,
+            "study1": true,
+            "study25": true,
+            "allstudies": true,
+            "labqueue": true,
+            "firstultimate": true,
+            "modulemax": true
+          },
+          "owned": {},
+          "riftTheme": "default",
+          "buffUntil": 0,
+          "buffMult": 1,
+          "supportBuffs": null,
+          "ascendCount": 0,
+          "ascendRewardedDepth": 0,
+          "sigilResonanceUses": 0,
+          "totalTaps": 0,
+          "totalKills": 0,
+          "totalOfflineSeconds": 0,
+          "luminousAccum": 0,
+          "savedLabMultiplier": 1,
+          "autoAscendEnabled": false,
+          "autoAscendTargetDepth": 16,
+          "loginStreak": 1,
+          "questDay": "2035-01-15",
+          "questIds": [],
+          "questClaimed": {},
+          "dailyQuestRefreshes": 0,
+          "dailyStats": {
+            "taps": 0,
+            "kills": 0,
+            "empowers": 0,
+            "research": 0,
+            "bossKills": 0,
+            "luminousKills": 0,
+            "ascends": 0
+          },
+          "lastSeen": 2052475200000,
+          "_autoTapAccum": 0,
+          "_autoEmpowerAccum": 0
+        },
+        "errors": []
+      }
+    }
+  ],
+  "teardown": {
+    "code": 0,
+    "signal": null
+  }
+}
