@@ -31,6 +31,11 @@ grant. Historical handover stops are superseded by current rules and this order.
 No subagents/message tools are used.
 
 Remote baseline: b0537cb46635555ba2c2e5f3f95bc8fc276aeda5.
+Current combination includes main261b1b7 (PR77 Save Backup UI); its confirmation
+flow, source/tests and14 required CI negatives are preserved. Product SHA256
+615152699a20629edd8da16ee60b4cd5c91f905367078077f582c2ce9683306d.
+PR84 publishes this feature; earlier local evidence applies to its labeled
+baseline. Combined-source CI and focused checks are renewing before integration.
 Real Git worktree: /workspace/AUTO_ASCEND_UI_001-github;
 branch feature/auto-ascend-ui-001. Network-enabled Git restored access.
 Earlier local45a5f02/0bcce84 is historical. New B2 arithmetic, Comet Trials,
