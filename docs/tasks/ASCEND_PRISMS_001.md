@@ -21,11 +21,10 @@ are separate tasks. Preserve their integrated changes; no save migration.
 APK133/main index blob ea44431c163569548973d9e489f75345749a07ee matches feedback.
 Historical hashes/receipts remain in QA. PR46/B2 is merged; current workflow
 removes historical writer releases as global gates. No subagents/chat messages.
-Latest reconciled main:91decbc (PR85), fetched8October. Worktree:
+Latest reconciled main:14d5f3a (PR81/92), fetched8October. Worktree:
 /workspace/Lumenfall-f05-implementation; branch:feature/ascend-prisms-001-live.
 Preserves Auto-Ascend, Formation, Backup, Resonate, Lab/Wisp/Forge/Rift changes
-and all current tests/CI gates. Earlier8October evidence attests b0537cb;
-PR94 is open; latest-main motor11822/673 PASS. Remaining receipts pending.
+and all current tests/CI gates. PR94 is open. QA receipts distinguish b0537cb,91decbc and latest14d5f3a.
 Changed:47-line index patch; one behavioral module/registration/five causal
 negatives; scoped AGENTS/context/state, task/requirements/decision/QA evidence.
 
@@ -55,17 +54,17 @@ and timestamp order;reload/backup/recovery;phone/font/motion;current full CI;
 integrated verification,signed APK identity/assets and relevant native/legacy.
 Self-review is not independent review. Physical WebView60/TalkBack not attested.
 
-Historical7October passes are retained separately. At b0537cb:673cases/11,822
-assertions,695layout,permanent4,723-assertion contract+3persistence routes,
-17negatives/smoke PASS. V8 6.0:168cases/2,215assertions PASS. Full local wrapper
-failed at900s after55PASS/2offline UI timeouts; same daily retry timeout on
-unchanged main. Raw failed receipt retained. Wrapper now30min, current CI list
-preserved/derived.42historical+6fresh redundant DOM snapshots omitted after
-automatic approval rejection; original hashes and readable receipts remain.
+Historical passes/failed baseline wrapper are retained in QA. At91decbc:
+673motorcases/11,822assertions,695layout,4permanent contract/persistence
+scenarios,22required negatives/smoke and V8 6.0(168/2,215)PASS. No full
+local-wrapper pass claimed; prior offline UI timeout reproduces on unchanged
+main. Native signed142 cold restart preserves100Prisms/benchmark219/Tree17/
+Lab18; target update acceptance pending. Redundant DOM snapshots omitted
+after automatic approval rejection; original hashes/readable receipts retained.
 
 Next:finish combined-main checks;PR94 exact-head CI;merge;
 integrated checks;signed APK digest/package/version/certificate/all15assets;
 available native/legacy acceptance;save final status/evidence in GitHub.
-Remote PR/integration/build/native receipts pending. Native helpers bind actual
+PR94/current-head CI and integration/build/native receipts pending. Native helpers bind actual
 installed APK/source and restrict fixtures to a disposable emulator. Keep chat
 open until required acceptance passes; notify user honestly before archiving.
