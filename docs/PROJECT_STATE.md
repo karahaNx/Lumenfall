@@ -62,6 +62,7 @@ were recorded as integrated.
 
 | Work | Evidence/status | Next action within its own task |
 | --- | --- | --- |
+| [LAB_EXCLUSIVE_001](tasks/LAB_EXCLUSIVE_001.md) / F29 | [PR62 proposal checkpoint](https://github.com/karahaNx/Lumenfall/pull/62): 9 Labs inventoried, 7 duplicate rows in 6 effect families; exclusive study-work/reservation effects and value-preserving transition proposed. Actual CI/merge/integrated checks are saved in the PR body. No game behavior changed. | Obtain the agreed UPGRADE_IDENTITY_001 Lab effects/currencies/prices/work/unlocks/caps and migration policy. Full feature and chat remain open; proposed values/mechanics are not approved rules. |
 | WISP_UPGRADE_DISPLAY_001 / F04 | [Feature candidate](tasks/WISP_UPGRADE_DISPLAY_001.md) verified against main214d454: unfinished upgrades stay open; folding requires Mythic, authoritative Module cap and owned Ultimate. 12 mobile profiles/12,912 assertions and the normal focused harness PASS. | Publish/pass required CI, integrate, verify integrated bytes and signed APK/device acceptance. Feature remains open. |
 | FEATURE-CHAT-WORKFLOW-001 | Current docs/context-tooling cleanup; see task for publication/integration receipt. | Verify document/tooling checks and GitHub integration; no game build. |
 | OFFLINE-CATCHUP-001 | PR51/54/55/56 integrated; signed137 verified, available source/engine/emulator checks PASS. Required physical acceptance OPEN. | Run remaining affected-phone/exact WebView60/TalkBack checklist and save results in GitHub. Keep feature/chat open. |
