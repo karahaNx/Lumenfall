@@ -6006,7 +6006,7 @@ function renderResearch(){
     html += '<div class="card node-card" data-forge-card="'+node.id+'">' +
       '<div class="forge-head"><svg class="upgrade-emblem" viewBox="0 0 32 38" aria-hidden="true" focusable="false"><use href="#upgrade-forge"/></svg>' +
         '<div class="node-info"><div class="name">'+node.name+'</div>' +
-          '<div class="lvl">Level '+level+(node.levelCap===undefined?' · No level cap':' / '+node.levelCap)+'</div></div></div>' +
+          '<div class="lvl">Level '+level+(node.levelCap===undefined?'':' / '+node.levelCap)+'</div></div></div>' +
       '<div class="desc forge-description">'+node.desc+'</div>' +
       '<div class="desc" data-forge-preview></div>' +
       '<div class="forge-actions"><button class="node-queue-toggle '+(queueOn?'active':'')+'" data-queue="'+node.id+'">Queue '+(queueOn?'ON':'OFF')+'</button>' +
