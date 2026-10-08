@@ -13,7 +13,7 @@ function send(method,params={},sid=session){return new Promise((resolve,reject)=
 async function evaluate(expression){const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(r.exceptionDetails.exception?.description||r.exceptionDetails.text);return r.result.value;}
 function assert(value,message){if(!value)throw Error(message);}
 function contrast(a,b){
-  function luminance(color){const rgb=color.match(/[\d.]+/g).slice(0,3).map(Number).map(value=>{value/=255;return value<=.04045?value/12.92:Math.pow((value+.055)/1.055,2.4);});return rgb[0]*.2126+rgb[1]*.7152+rgb[2]*.0722;}
+  function luminance(color){const scale=color.startsWith('color(srgb ')?1:255;const rgb=color.match(/[\d.]+/g).slice(0,3).map(Number).map(value=>{value/=scale;return value<=.04045?value/12.92:Math.pow((value+.055)/1.055,2.4);});return rgb[0]*.2126+rgb[1]*.7152+rgb[2]*.0722;}
   const x=luminance(a),y=luminance(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);
 }
 async function screenshot(name){

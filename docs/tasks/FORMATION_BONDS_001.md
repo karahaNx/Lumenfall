@@ -1,45 +1,40 @@
 # FORMATION_BONDS_001 — eight useful Bonds
 
-Owner: this feature chat. Goal: deliver F15 in the game.
-Status: PR86 candidate; integration/APK/device acceptance pending.
+Owner: this feature chat. Goal: deliver original F15 in the game.
+Status: [PR86](https://github.com/karahaNx/Lumenfall/pull/86) candidate;
+required CI, integration, APK and device acceptance pending.
 
-## Requirements and authorization
+## Requirements and baseline
 
-[Original](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt): more than four Bonds with different bonuses.
-[Revision](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt): useful Push/Farm/Boss combos, stacking and equal investment evidence.
-[Lead decision](../recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt): autosave/preset isolation first; measure before tuning.
-The complete [request](FORMATION_BONDS_001_REQUEST.txt) is preserved.
-Latest instruction: “Finish the feature task push to github implement to game”.
-Current [AGENTS](../../AGENTS.md) and [workflow](../project/FEATURE_WORKFLOW.md)
-authorize scoped implementation, merge and signed delivery. Historical PR46/B2
-gates are superseded; PR46 is integrated. No subagents/messages/other-chat changes.
+[Original](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt): more than four Formation Bonds and different bonuses.
+[Revision](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt): useful Push/Farm/Boss combos, stacking and equal investments.
+[Lead decision](../recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt): autosave isolation before integration; measure before tuning.
+[Complete request](FORMATION_BONDS_001_REQUEST.txt) is preserved. Latest correction:
+“Finish the feature task push to github implement to game”. Current
+[AGENTS](../../AGENTS.md)/[workflow](../project/FEATURE_WORKFLOW.md) authorize scoped
+implementation, merge and signed delivery. PR46 is integrated; historical B2/
+writer gates are superseded. No subagents/messages/other-chat changes are used.
 
-## Baseline and scope
-
-Implementation baseline: b0537cb46635555ba2c2e5f3f95bc8fc276aeda5.
-Startup product SHA256: 5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c.
-Branch: feature/formation-bonds-001-implementation; private worktree:
-/workspace/Lumenfall-bonds-implementation. Original checkout and proposal
-acab2002c62aa679fa757b720327431da342dd99 remain untouched.
-Current main incorporated: e2f745cd0ce0dc9e41b06efd842062fd08d7fab4
-(PR76 autosave, PR77 Backup and PR80 Resonate clarity retained).
-[PR86](https://github.com/karahaNx/Lumenfall/pull/86) contains this feature.
-
-Actual overlaps read: PR67 52fa48db51ed6ce58704ec17c593ee68710394e0 and
-PR70 7284cf716250355e1bf68d00590f81ab96f49a3d. Use only PR67's documented
-F14/F15 contract, not its Wisp power/support duration/cap/refund/matrix changes.
-PR70 contribution display remains separate. Main merges are serialized against
-fresh main; no other candidate is edited or merged.
-Changed files: root index, targeted behavioral modules/runner/bridge/native
-checks, this task, original request and feature evidence. No native/signing edits.
+Baseline b0537cb46635555ba2c2e5f3f95bc8fc276aeda5; startup product SHA256
+5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c.
+Private branch feature/formation-bonds-001-implementation, worktree
+/workspace/Lumenfall-bonds-implementation. Original checkout and earlier proposal
+acab2002c62aa679fa757b720327431da342dd99 untouched.
+Current incorporated main e2f745cd0ce0dc9e41b06efd842062fd08d7fab4 preserves
+PR76 autosave, PR77 Backup and PR80 Resonate clarity. Recheck main before merge.
+Changed files: root index, scoped behavioral checks/bridge/runner, task and
+feature evidence. No mobile/package/signing changes.
 
 ## Design fixed before coding
 
-These are scoped design decisions from the reviewable
-[PR67 contract](https://github.com/karahaNx/Lumenfall/blob/52fa48db51ed6ce58704ec17c593ee68710394e0/docs/requirements/all-27-feedback-001/balance-contract.md),
-within the user's design request; not individually user-selected coefficients.
+Use only F14/F15 design from inspected PR67
+52fa48db51ed6ce58704ec17c593ee68710394e0
+([contract](https://github.com/karahaNx/Lumenfall/blob/52fa48db51ed6ce58704ec17c593ee68710394e0/docs/requirements/all-27-feedback-001/balance-contract.md)).
+These are scoped design decisions, not individually user-selected numbers.
+PR70 7284cf716250355e1bf68d00590f81ab96f49a3d contributes only its necessary
+Farm precision correction; neither candidate branch is edited or merged.
 
-| Combo | Bond | Effect | Choice |
+| Combo | Bond | Exact effect | Choice |
 | --- | --- | --- | --- |
 | Ember + Void | Starcaller | Passive/ability damage ×1.18 | Push |
 | Tide + Aurora | Dawnpriest | Lumen/Shards/Motes ×1.25 | Farm |
@@ -50,58 +45,49 @@ within the user's design request; not individually user-selected coefficients.
 | Stone + Gale | Quarry | Gale ability Shards ×1.20 | Shard Farm |
 | Thorn + Aurora | Harvest | Thorn ability Lumen ×1.20 | Lumen Farm |
 
-Both partners must be purchased above level zero and Fielded. Five slots;
-Bench/pending members never give power. Only named operands change.
-Dawnpriest × Quarry/Harvest = ×1.50 before one existing payout rounding.
-Support remains additive, with existing 4s/8s durations. No prices/caps/Wisp
-power/reward policy/matrix tuning. Vanguard shares live/offline/estimate/UI
-regen; Kindling shares manual/Auto-Tap. Original four effects remain.
-Balance windows are exact +20%/+25% channel bonuses and 20% regen reduction;
-other channels stay equal. Frozen purchased accounts compare all 56 five-slot
-teams at two budgets, recording all tracks/currencies/residuals. One-removal
-marginals are not summed. Evidence establishes channel utility, not universal
-optimality or full campaign balance; Wisp roles/matrix remain separate.
+Both partners must be purchased above Lv.0 and Fielded, within five slots.
+Bench/pending members grant no Bond. Only named operands change. Dawnpriest
+× Quarry/Harvest = ×1.50 before one existing rounding. Support stays additive
+and keeps4s/8s. Preserve original effects, Wisp power/tracks/prices/caps,
+deterministic purchases, fixed Motes and Comet ownership/Trials. No global
+pacing/matrix tuning, refunds or native changes; Wisp roles/matrix stay separate.
+Exact balance windows: +20%/+25% channels,20% regen reduction; other channels
+stay equal. Compare56 five-slot teams at two identical purchased-account
+budgets, recording all tracks/currencies/residuals. Do not sum overlapping
+one-removal marginals. Evidence proves channel utility, not optimal spending
+or complete campaign balance.
 
-## Dependency and preservation
+## Dependency and acceptance
 
-FORMATION_AUTOSAVE_001 integrated through PR76 while this candidate was tested.
-Its current code/tests are preserved exactly: Field/Bench saves the selected
-preset, ordered pending intent includes all five slots; at least one chosen
-member remains. Legacy empty presets retain intent and temporary Ember.
-The earlier bundled F14 proposal/marker is retired; no new save field/schema.
-Pending gives no Bond. Paid values, idempotence, primary/recovery/backup remain.
-Preserve upgrade UI, full partner/effect text, Cast/Ready/progressbar access,
-Comet Trials/ownership, deterministic chronology/purchases/Motes, WebView60,
-com.lumenfall.app and established signing.
-Changed reward timings exposed a false Farm stall. Only PR70's canonical
-crossing/remaining guard and separate whole/fraction target correction are
-used. Keep strict fractional-clock tests. Overlapping pairs each get their own
-mark/name without duplicate cards. Large text wraps; short Boss status keeps
-regen/DPS visible and full Net accessible so Formation cannot overlap boost.
+FORMATION_AUTOSAVE_001 integrated via PR76 during review. Preserve its product
+functions/tests: selected preset saves immediately; ordered pending intent
+counts toward five slots; at least one chosen member remains; legacy empty
+intent retains temporary Ember. The earlier bundled F14 marker/zero-party
+proposal is retired. No new field/schema. Preserve paid values and idempotent
+primary/recovery/backup/Ascend behavior, chronology and live/offline parity.
+New rewards exposed a false Farm stall: canonical crossing/remaining progress
+and separate whole/fraction target phase fix it without skipped elapsed time.
+Overlapping Bonds each retain marks/full accessible effects without duplicate
+Wisps. Wrapping and compact Boss status preserve short-screen geometry.
+Keep full partner text, Cast/Ready/progressbar,44px controls, focus/contrast,
+reduced motion, WebView60, com.lumenfall.app and established signing.
 
-## Acceptance and checkpoint
+[Evidence/reproduction](../qa/formation-bonds-001/README.md): require eight exact
+pairs/bonuses/rounding, all handlers/pending/five-slot boundaries, save/recovery,
+live/offline/one-second/split chronology, equal actual budgets, mobile320/390/430
+and200% text, existing regressions and required CI, then integrated signed APK.
 
-[Evidence and reproduction](../qa/formation-bonds-001/README.md): eight exact
-pairs/bonuses/rounding; pending/Bench exclusion; live/offline/one-second/split
-chronology; isolated/legacy-empty/five-slot handlers; legacy value/recovery/backup;
-equal actual investments; mobile320/390/430,200% text,44px controls, focus,
-contrast/reduced motion; existing regressions and required CI; integrated APK.
+Current product SHA256: 7e49fd411cd2eb1c630a6f56eacc1a771ee1e16fc8e71fc213c187cc0091b0ed.
+Core eight groups/six real mutations PASS; combined autosave contract/nine
+focused checks/12 mobile profiles/V8 6.0 PASS. Corrected SRGB contrast handling
+also passes12 profiles. Normal/reduced Rift checks pass three profiles each.
+Source/tooling/context/signing self-test PASS. Required CI now covers161 default
+scenarios/14 negatives; exact final head must pass. Prior CI failures and local
+transport/time-budget limits are retained; no timeout/tolerance is weakened.
+Self-review only; no independent review claimed.
 
-Core passes eight groups and catches six real mutations. Source/tooling/signing
-self-test and focused Formation/Farm/role checks pass; initial12 negatives
-caught. Main adds two Backup negatives, both caught by direct native checks.
-Combined candidate now includes161 default scenarios/14 required negatives. Prior full CI
-run37737240652 failed old overlapping-adjacency and exact-legacy assertions;
-raw logs retained. Corrected overlap checks preserve adjacency for disjoint
-primary pairs and require every membership mark/name. Old numeric policy keeps
-an exact archived counterfactual; actual new policy retains long/split checks.
-Local daily retry exceeds its60s harness budget; hosted CI passed that scenario.
-Reconciled source8a19001f: eight core groups/six mutations, nine focused
-checks, autosave contract and12 mobile profiles PASS. V8 6.0 probe PASS.
-No timeout/acceptance tolerance is weakened. Reconciliation preserves every integrated F14 function and test; only F15
-mechanics/presentation/clock hunks apply above main. No independent review claimed.
-
-Next: publish corrected current-main candidate, pass exact-head required CI,
-merge, verify integrated behavior and signed APK; save final receipts/status.
-ADB5581 unavailable. Physical Android/WebView60/TalkBack acceptance remains
-open. Keep this owner chat open until required device acceptance is recorded.
+Next: pass final CI, integrate exact reviewed bytes, verify integrated behavior
+and signed APK, save receipts and project status in GitHub. ADB5581 refuses
+connection; ADB cannot create its directory on this environment's read-only
+home. Required physical Android/exact WebView60/TalkBack acceptance remains
+open. Keep this owner chat open until necessary device acceptance is recorded.
