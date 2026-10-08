@@ -1,0 +1,58 @@
+{
+  "status": "pass",
+  "source": "/workspace/Lumenfall-WISP_UPGRADE_DISPLAY_001/index.html",
+  "existingAssertions": true,
+  "records": [
+    {
+      "scenario": "p2-02b-wisp-hierarchy",
+      "status": "pass",
+      "detail": {
+        "activeFirst": true,
+        "empowerFirst": true,
+        "stateUnchanged": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "p1-05-control-regressions",
+      "status": "pass",
+      "detail": {
+        "selectedContrast": {
+          ".mult-btn.active": 10.820790238811385,
+          ".speed-btn.active": 10.860326278711556
+        },
+        "liveStates": true,
+        "focus": true,
+        "untrustedTapGuard": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "p1-05-accessibility-contract",
+      "status": "pass",
+      "detail": {
+        "findings": []
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "restore-roundtrip",
+      "status": "pass",
+      "detail": {
+        "depth": 33,
+        "lumen": 777777,
+        "schemaVersion": 1
+      },
+      "runtimeErrors": []
+    },
+    {
+      "scenario": "recovery-from-corrupt-primary",
+      "status": "pass",
+      "detail": {
+        "recovered": true,
+        "depth": 17
+      },
+      "runtimeErrors": []
+    }
+  ]
+}
