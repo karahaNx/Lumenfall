@@ -38,10 +38,15 @@
   "nativeRealCasts": 24,
   "nativeStorage": {
     "case": "signed update preserves actual native save storage",
+    "preUpdateIdentity": {
+      "installedApkPath": "/data/app/com.lumenfall.app-vGAEcH_po_ZbEfhvywTKYw==/base.apk",
+      "installedApkSha256": "81b9be7edea971335a06f06d1894d91e75a92736738cc935fc2a920a26a02e1e",
+      "preparedSourceSha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca"
+    },
     "install": "Success\n",
-    "bytes": 172544,
-    "beforeSha256": "da2b116c85b7832a6b1675233ff797226465a5d508298ec199324b3e81e8aebe",
-    "afterSha256": "da2b116c85b7832a6b1675233ff797226465a5d508298ec199324b3e81e8aebe"
+    "bytes": 101888,
+    "beforeSha256": "40589473d4b897a6a0f4d18655981fe59d92d10fb7ffa0a6ca4eb6a7cab91cf7",
+    "afterSha256": "40589473d4b897a6a0f4d18655981fe59d92d10fb7ffa0a6ca4eb6a7cab91cf7"
   },
   "nativeFont": {
     "case": "native Android system font scale 2",
@@ -79,7 +84,7 @@
   "nativeContinuation": {
     "file": "accept-failure.json",
     "sha256": "395f0cb71bf7d75f1a2d3f95d711e2ff266465abf8656db8bcae09cd298525a1",
-    "phase": "fresh bound full update/120 states/24 casts/AX/font; only keyboard retried after isolated Android SystemUI ANR",
+    "phase": "bound120 states/24 casts/AX/font; signed update superseded by pre-attested baseline phase",
     "followup": "keyboard-followup.json",
     "followupSha256": "c33a965552e5e82920a80df8643be2af6711ef1bda5a46b15587c90f56f91b57",
     "installedArtifactReconfirmed": true
@@ -212,38 +217,204 @@
       "status": "caught",
       "expected": "prior results include installed APK/source identity",
       "artifactIdentity": {
-        "installedApkPath": "/data/app/com.lumenfall.app-6aiOxKjjbptA4d3zQE87UA==/base.apk",
+        "installedApkPath": "/data/app/com.lumenfall.app-NvAw-17JhD2wrWfVTe7rlg==/base.apk",
         "installedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
         "providedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
         "sourceSha256": "835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3"
       },
-      "message": "AssertionError [ERR_ASSERTION]: prior results include installed APK/source identity\n    at accept (/workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:70:572)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async /workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:89:314"
+      "message": "AssertionError [ERR_ASSERTION]: prior results include installed APK/source identity\n    at accept (/workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:82:1076)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async /workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:102:323"
     },
     {
       "case": "different-apk",
       "status": "caught",
       "expected": "resume uses same installed APK bytes",
       "artifactIdentity": {
-        "installedApkPath": "/data/app/com.lumenfall.app-6aiOxKjjbptA4d3zQE87UA==/base.apk",
+        "installedApkPath": "/data/app/com.lumenfall.app-NvAw-17JhD2wrWfVTe7rlg==/base.apk",
         "installedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
         "providedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
         "sourceSha256": "835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3"
       },
-      "message": "AssertionError [ERR_ASSERTION]: resume uses same installed APK bytes\n+ actual - expected\n\n+ '0000000000000000000000000000000000000000000000000000000000000000'\n- 'ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0'\n\n    at accept (/workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:70:664)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async /workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:89:314"
+      "message": "AssertionError [ERR_ASSERTION]: resume uses same installed APK bytes\n+ actual - expected\n\n+ '0000000000000000000000000000000000000000000000000000000000000000'\n- 'ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0'\n\n    at accept (/workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:82:1168)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async /workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:102:323"
     },
     {
       "case": "different-source",
       "status": "caught",
       "expected": "resume uses same source",
       "artifactIdentity": {
-        "installedApkPath": "/data/app/com.lumenfall.app-6aiOxKjjbptA4d3zQE87UA==/base.apk",
+        "installedApkPath": "/data/app/com.lumenfall.app-NvAw-17JhD2wrWfVTe7rlg==/base.apk",
         "installedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
         "providedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
         "sourceSha256": "835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3"
       },
-      "message": "AssertionError [ERR_ASSERTION]: resume uses same source\n+ actual - expected\n\n+ '0000000000000000000000000000000000000000000000000000000000000000'\n- '835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3'\n\n    at accept (/workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:70:785)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async /workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:89:314"
+      "message": "AssertionError [ERR_ASSERTION]: resume uses same source\n+ actual - expected\n\n+ '0000000000000000000000000000000000000000000000000000000000000000'\n- '835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3'\n\n    at accept (/workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:82:1289)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async /workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:102:323"
     }
   ],
   "deliveryPullRequest": 74,
-  "finalGate": "Required final-head CI and merge evidence saved in PR74 description"
+  "finalGate": "Required final-head CI and merge evidence saved in PR74 description",
+  "nativeBaselineArtifactIdentity": {
+    "installedApkPath": "/data/app/com.lumenfall.app-vGAEcH_po_ZbEfhvywTKYw==/base.apk",
+    "installedApkSha256": "81b9be7edea971335a06f06d1894d91e75a92736738cc935fc2a920a26a02e1e",
+    "providedApkSha256": "81b9be7edea971335a06f06d1894d91e75a92736738cc935fc2a920a26a02e1e",
+    "sourceSha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca"
+  },
+  "nativeUpdateEvidence": {
+    "file": "../native-baseline-bound/native-update.json",
+    "sha256": "d8b498c7e4c813feca0d780dfcba1b5c747cefc4cc3808d16c3e88655cdee155",
+    "baselineFile": "../native-baseline-bound/baseline-native.json",
+    "baselineSha256": "3321d04b5332532e4d7829df485028c445c9895e06354244411b1c378f57fc1b",
+    "targetMatchesAllOtherPhases": true
+  },
+  "preUpdateNegativeControl": {
+    "case": "actual emulator already142 instead of prepared138",
+    "status": "caught",
+    "expected": "pre-update installed APK matches prepared138",
+    "beforeSnapshotOrInstall": true,
+    "error": "AssertionError [ERR_ASSERTION]: pre-update installed APK matches prepared138\n+ actual - expected\n\n+ 'ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0'\n- '81b9be7edea971335a06f06d1894d91e75a92736738cc935fc2a920a26a02e1e'\n\n    at attestBaseline (/workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:60:83)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async accept (/workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:83:77)\n    at async /workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:102:323"
+  },
+  "followingDeliveryCI": {
+    "head": "e25fa6b808072904bf3e5a9dac4654703f7f3600",
+    "run": 37722694441,
+    "job": 113134033122,
+    "applicationSha256": "5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c",
+    "runs": {
+      "workflow_runs": [
+        {
+          "id": 37722694441,
+          "name": "Pre-merge validation",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 194,
+          "jobs_url": "https://api.github.com/repos/karahaNx/Lumenfall/actions/runs/37722694441/jobs",
+          "logs_url": "https://api.github.com/repos/karahaNx/Lumenfall/actions/runs/37722694441/logs",
+          "workflow_id": 367572756
+        }
+      ]
+    },
+    "jobs": {
+      "jobs": [
+        {
+          "id": 113134033122,
+          "name": "Lumenfall pre-merge validation",
+          "status": "completed",
+          "conclusion": "success",
+          "run_id": 37722694441,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Checkout",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Set up Node.js",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "APK identity verifier self-test",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Node tooling regression checks",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Validate game source",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Stage web assets",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Stateful behavioral regression suite",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Behavioral harness negative self-test",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Install runtime error guard in staged copy",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 10
+            },
+            {
+              "name": "Browser runtime smoke test",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 11
+            },
+            {
+              "name": "Post Set up Node.js",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 21
+            },
+            {
+              "name": "Post Checkout",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 22
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 23
+            }
+          ]
+        }
+      ]
+    },
+    "acceptance": {
+      "head": "e25fa6b808072904bf3e5a9dac4654703f7f3600",
+      "run": 37722694441,
+      "job": 113134033122,
+      "positive": [
+        "2026-10-08T03:47:25.1381752Z Behavioral QA passed: 151 deterministic scenario(s)."
+      ],
+      "negative": [
+        "2026-10-08T03:47:26.5146045Z Behavioral harness correctly caught expected failure: self-test-bad-assertion",
+        "2026-10-08T03:47:27.7269982Z Behavioral harness correctly caught expected failure: self-test-uncaught-error",
+        "2026-10-08T03:47:28.9177917Z Behavioral harness correctly caught expected failure: self-test-unhandled-rejection",
+        "2026-10-08T03:47:30.0981589Z Behavioral harness correctly caught expected failure: self-test-parity-regression",
+        "2026-10-08T03:47:31.2659503Z Behavioral harness correctly caught expected failure: self-test-chronology-regression",
+        "2026-10-08T03:47:32.4299716Z Behavioral harness correctly caught expected failure: self-test-wisp-formula-regression",
+        "2026-10-08T03:47:33.6488560Z Behavioral harness correctly caught expected failure: self-test-wisp-pacing-regression",
+        "2026-10-08T03:47:34.8487746Z Behavioral harness correctly caught expected failure: self-test-endgame-currency-regression",
+        "2026-10-08T03:47:36.0378342Z Behavioral harness correctly caught expected failure: self-test-wisp-role-regression",
+        "2026-10-08T03:47:37.2257309Z Behavioral harness correctly caught expected failure: self-test-p1-05-selected",
+        "2026-10-08T03:47:38.4164182Z Behavioral harness correctly caught expected failure: self-test-p1-05-focus-return",
+        "2026-10-08T03:47:39.6495714Z Behavioral harness correctly caught expected failure: self-test-lifecycle-duplicate"
+      ],
+      "guarded": [
+        "2026-10-08T03:27:23.3308544Z Browser smoke test passed: game initialized without uncaught runtime errors at a 390x844 mobile viewport.",
+        "2026-10-08T03:47:41.0392433Z Browser smoke test passed: game initialized without uncaught runtime errors at a 390x844 mobile viewport."
+      ],
+      "bytes": 3447029
+    },
+    "subsequentReview": "Native baseline pre-update evidence review fixed in following checkpoint; application/test/rule/workflow bytes unchanged."
+  }
 }

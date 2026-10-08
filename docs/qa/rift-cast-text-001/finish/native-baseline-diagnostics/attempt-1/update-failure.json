@@ -1,0 +1,25 @@
+{
+  "status": "fail",
+  "artifactIdentity": {
+    "installedApkPath": "/data/app/com.lumenfall.app-eG-hvcZFEHOhOzc3mtLghw==/base.apk",
+    "installedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+    "providedApkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+    "sourceSha256": "835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3"
+  },
+  "error": "AssertionError [ERR_ASSERTION]: old Wisp ownership preserved\n\n0 !== 1\n\n    at accept (/workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:80:160)\n    at async /workspace/lumenfall-rift-cast-text-001/docs/qa/rift-cast-text-001/finish/native-f13.cjs:96:323",
+  "records": [
+    {
+      "case": "signed update preserves actual native save storage",
+      "preUpdateIdentity": {
+        "installedApkPath": "/data/app/com.lumenfall.app--oVcRlWzPnpfvychrU0btA==/base.apk",
+        "installedApkSha256": "81b9be7edea971335a06f06d1894d91e75a92736738cc935fc2a920a26a02e1e",
+        "preparedSourceSha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca"
+      },
+      "install": "Success\n",
+      "bytes": 176128,
+      "beforeSha256": "74807b192b4e7313e1fcc421570ccf9e3b07d0fc69580aef0e77098a445b4294",
+      "afterSha256": "74807b192b4e7313e1fcc421570ccf9e3b07d0fc69580aef0e77098a445b4294"
+    }
+  ],
+  "runtimeErrors": []
+}

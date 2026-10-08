@@ -58,8 +58,7 @@ Native acceptance belongs to immutable142; no native143 claim.
 Automated review PRRT_kwDOUF0Vls6qK_0e correctly found missing resume binding.
 The helper now hashes actual installed APK bytes, compares the supplied artifact,
 persists source/installed identity and rejects missing/mismatched prior identities
-before importing records. Three causal identity controls PASS. Fresh bound
-138→142 update/120 states/24 casts/AX/font and a separately bound keyboard follow-up
+before importing records. Three identity controls and actual already142 rejection PASS. The pre-attested138→142 update,120 states/24 casts/AX/font and bound keyboard follow-up
 replace earlier unbound evidence. Android SystemUI's ANR dialog intercepted Tab;
 after dismissing that isolated dialog, APK/source and native input focus were
 reconfirmed and actual Tab/visible outline passed. No oracle weakened.
@@ -73,3 +72,5 @@ Earlier local browser timeout/native transport/display/segmented runs remain
 historical diagnostics. Other tasks retain their own open acceptance gates.
 
 [PR74](https://github.com/karahaNx/Lumenfall/pull/74) saves status, APK and raw receipts. Its final immutable CI/merge receipt is recorded in the PR description. Completion requires a green final-head gate, remote integration/evidence verification, stopped shared-file work and an actual app-tool archive response for only this owner. Other chats are untouched.
+
+Baseline review PRRT_kwDOUF0Vls6qLoBC: actual138 bytes are checked before snapshot/install; the combiner validates the prepared/pre-update identity. Preparation requires successful save and138 cold-launch ownership. [Update/controls](../qa/rift-cast-text-001/finish/native-baseline-bound/native-update.json) PASS; failed setup/probes are historical. CI37722694441/e25fa6b passes151/12/guarded startup; final revised-head CI/merge receipt remains in PR74.
