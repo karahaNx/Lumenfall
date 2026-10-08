@@ -2105,6 +2105,12 @@
   @keyframes cometTrailOrbit{to{transform:rotate(360deg);}}
   @media(max-width:430px){.shop-card{flex-wrap:wrap;}.shop-card>.info{flex-basis:100%;}.shop-card>button{min-height:44px;}}
   @media(prefers-reduced-motion:reduce){.comet-trail-equipped .comet-trail{animation:none!important;transform:rotate(-25deg);}}
+.legacy-upgrades { margin: 12px 0; }
+.legacy-upgrades h3 { color: var(--ink); overflow-wrap: anywhere; }
+.legacy-upgrade { display: block; overflow-wrap: anywhere; }
+#tab-forge.active,#tab-research.active,#tab-ascend.active { animation-name: upgradePanelIn; }
+#tab-forge .mult-btn { flex-basis: 3.5em; }
+@keyframes upgradePanelIn { from { opacity:0;transform:translateY(7px); } to { opacity:1;transform:none; } }
 </style>
 </head>
 <body>
@@ -2928,7 +2934,7 @@ var NODES = [
   {id:'bonds',     name:'Cheaper Bonds',       desc:'−3% Wisp recruiting cost, per level (floor 40%).',  baseCost:2, growth:1.45},
   {id:'swift',     name:'Swift Ascension',     desc:'+4% Prisms earned per Ascend, per level.', baseCost:3, growth:1.50},
   {id:'momentum',  name:'Eternal Momentum',    desc:'+6% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.', baseCost:5, growth:1.55, requiresAchievement:'asc5'},
-  {id:'reserves',  name:'Deep Reserves',       desc:'+2 hours to your offline cap, per level.', baseCost:6, growth:1.60, requiresAchievement:'d100'}
+  {id:'reserves',  name:'Deep Reserves',       desc:'Retired offline extension. Previous purchases are refunded in Prisms.', baseCost:6, growth:1.60, requiresAchievement:'d100', retired:true}
 ];
 
 // Existing slot, Deed and v0 automation contracts are independent of additions.
@@ -2942,10 +2948,28 @@ var LONG_STUDIES = [
   {id:'formationstudy',name:'Formation Insight',  desc:'+5% passive Wisp damage permanently; also raises the Wisp-powered part of your tap damage.', unlockDepth:40, baseDurationSec:320, durationGrowth:1.6, lumenBase:2200, lumenGrowth:1.8, shardBase:220, shardGrowth:1.8},
   {id:'motestudy',     name:'Luminous Sense',     desc:'+10% Motes gained from Luminous enemies, permanently.',           unlockDepth:60, baseDurationSec:380, durationGrowth:1.6, lumenBase:3200, lumenGrowth:1.8, shardBase:320, shardGrowth:1.8},
   {id:'prismstudy',    name:'Ascendant Clarity',  desc:'+5% Prisms earned per Ascend, permanently.',                      unlockDepth:90, baseDurationSec:450, durationGrowth:1.6, lumenBase:4800, lumenGrowth:1.8, shardBase:480, shardGrowth:1.8},
-  {id:'measuredinquiry', name:'Measured Inquiry', desc:'2% less work per completed level, up to 20%, for future starts of Wisp Ascendancy, Guardian’s Mastery, Rift Attunement, Shard Attunement, Lumen Wellspring, Formation Insight, Luminous Sense and Ascendant Clarity. Running Studies and Measured Inquiry itself are unchanged.', unlockDepth:60, levelCap:10, baseDurationSec:600, durationGrowth:1.6, lumenBase:30000, lumenGrowth:1.8, shardBase:1200, shardGrowth:1.8}
+  {id:'measuredinquiry', name:'Measured Inquiry', desc:'2% less work per completed level, up to 20%, for future starts of Wisp Ascendancy, Guardian’s Mastery, Shard Attunement, Lumen Wellspring and Luminous Sense. Running Studies and Measured Inquiry itself are unchanged.', unlockDepth:60, levelCap:10, baseDurationSec:600, durationGrowth:1.6, lumenBase:30000, lumenGrowth:1.8, shardBase:1200, shardGrowth:1.8}
 ];
 
 var LAB_SPEED_TIERS = [1.5, 2, 3, 4, 5, 6, 7, 8];
+// One future purchase owner per effect. Old IDs and formula operands remain:
+// purchased levels and paid Study work retain their exact original value.
+var UPGRADE_FUSIONS = {
+  forge:{focus:'Lab: Lumen Wellspring',sense:'Lab: Shard Attunement',formation:'Lab: Wisp Ascendancy',resolve:'Lab: Guardian’s Mastery'},
+  lab:{riftattune:'Tree: Echoing Rest',formationstudy:'Lab: Wisp Ascendancy',prismstudy:'Tree: Swift Ascension'},
+  tree:{starlight:'Lab: Lumen Wellspring',steady:'Lab: Guardian’s Mastery',momentum:'Lab: Wisp Ascendancy'}
+};
+RESEARCH.forEach(function(node){node.retiredTo=UPGRADE_FUSIONS.forge[node.id]||'';});
+LONG_STUDIES.forEach(function(node){node.retiredTo=UPGRADE_FUSIONS.lab[node.id]||'';});
+NODES.forEach(function(node){node.retiredTo=UPGRADE_FUSIONS.tree[node.id]||'';});
+var CURRENT_STUDY_IDS = LEGACY_STUDY_IDS.filter(function(id){return !UPGRADE_FUSIONS.lab[id];});
+function legacyUpgradeMarkup(node,effect){
+  return '<div class="card legacy-upgrade" data-legacy-upgrade="'+node.id+'"><div class="name">'+node.name+'</div><div class="desc">'+node.desc+'</div>'+effect+
+    '<div class="effect-note">Existing bonus kept. Future upgrades: '+node.retiredTo+'. No further purchases here.</div></div>';
+}
+function legacyUpgradeSection(html){
+  return html ? '<section class="legacy-upgrades" aria-label="Preserved upgrades"><h3>Preserved upgrades</h3>'+html+'</section>' : '';
+}
 function speedTierCost(mult){
   return Math.round(6 * Math.pow(mult, 2.1));
 }
@@ -2954,7 +2978,7 @@ var ACHIEVEMENTS = [
   {id:'d10',   name:'Reach Rift 10',        reward:5,  check:function(s){return s.maxDepthEver>=10;}},
   {id:'d25',   name:'Reach Rift 25',        reward:10, check:function(s){return s.maxDepthEver>=25;}},
   {id:'d50',   name:'Reach Rift 50',        reward:20, check:function(s){return s.maxDepthEver>=50;}},
-  {id:'d100',  name:'Reach Rift 100',       reward:50, unlocks:'Ascension Tree: Deep Reserves', check:function(s){return s.maxDepthEver>=100;}},
+  {id:'d100',  name:'Reach Rift 100',       reward:50, check:function(s){return s.maxDepthEver>=100;}},
   {id:'d250',  name:'Reach Rift 250',       reward:100, check:function(s){return s.maxDepthEver>=250;}},
   {id:'tap100',  name:'Strike 100 times',    reward:3,  check:function(s){return s.totalTaps>=100;}},
   {id:'tap1000', name:'Strike 1,000 times',  reward:8,  check:function(s){return s.totalTaps>=1000;}},
@@ -2970,7 +2994,7 @@ var ACHIEVEMENTS = [
   {id:'labmaster', name:'The Forge Never Sleeps', reward:30, unlocks:'Auto-Empower — spare Lumen levels up your party for you, live or while you\'re offline', check:function(s){return legacyResearchLevels(s)>=20;}},
   {id:'study1',    name:'First Discovery',     reward:15, check:function(s){return totalStudyLevels(s)>=1;}},
   {id:'study25',   name:'Devoted Scholar',     reward:50, check:function(s){return totalStudyLevels(s)>=25;}},
-  {id:'allstudies',name:'Every Path Studied',  reward:35, check:function(s){return LEGACY_STUDY_IDS.every(function(id){return (s.longStudyLevels[id]||0)>=1;});}},
+  {id:'allstudies',name:'Every Path Studied',  reward:35, check:function(s){return CURRENT_STUDY_IDS.every(function(id){return (s.longStudyLevels[id]||0)>=1;});}},
   {id:'labqueue',  name:'Endless Curiosity',   reward:40, check:function(s){return legacyResearchLevels(s)>=60;}},
   {id:'firstultimate', name:'Awakened Power',  reward:45, check:function(s){return SPIRITS.some(function(sp){return !!(s.wispUltimate && s.wispUltimate[sp.id]);});}},
   {id:'modulemax', name:'Perfect Synergy',     reward:45, unlocks:'Cosmetics: Radiant Rift aura', check:function(s){return SPIRITS.some(function(sp){return (s.wispModules[sp.id]||0)>=MODULE_MAX_LEVEL;});}}
@@ -2991,7 +3015,7 @@ function deedProgress(a,s){
     autotap:[s.ascendCount,12],
     labmaster:[researchLevels(),20],
     study1:[totalStudyLevels(s),1],study25:[totalStudyLevels(s),25],
-    allstudies:[LEGACY_STUDY_IDS.filter(function(id){return (s.longStudyLevels[id]||0)>=1;}).length,LEGACY_STUDY_IDS.length],
+    allstudies:[CURRENT_STUDY_IDS.filter(function(id){return (s.longStudyLevels[id]||0)>=1;}).length,CURRENT_STUDY_IDS.length],
     labqueue:[researchLevels(),60],
     firstultimate:[SPIRITS.some(function(sp){return !!(s.wispUltimate&&s.wispUltimate[sp.id]);})?1:0,1],
     modulemax:[Math.max.apply(null,SPIRITS.map(function(sp){return (s.wispModules&&s.wispModules[sp.id])||0;})),MODULE_MAX_LEVEL]
@@ -3023,9 +3047,9 @@ function deedPresentation(a){
     idle8:['Accumulate 8 hours offline.','offline hours'],
     autotap:['Ascend 12 times.','Ascensions'],
     labmaster:['Gain 20 total levels in the 5 original Forge upgrades.','original Forge levels',scope],
-    study1:['Complete one level in the 8 listed Research Projects.','completed Project levels',studyScope],
-    study25:['Complete 25 levels in total in the 8 listed Research Projects.','completed Project levels',studyScope],
-    allstudies:['Complete at least one level in each of the 8 listed Research Projects.','Projects completed',studyScope],
+    study1:['Complete one level in the 8 original Research Projects.','completed Project levels',studyScope+' Completed levels in preserved Projects also count.'],
+    study25:['Complete 25 levels in total in the 8 original Research Projects.','completed Project levels',studyScope+' Completed levels in preserved Projects also count.'],
+    allstudies:['Complete at least one level in each of the 5 current Research Projects.','Projects completed','Counts Wisp Ascendancy, Guardian’s Mastery, Shard Attunement, Lumen Wellspring and Luminous Sense. Measured Inquiry does not count.'],
     labqueue:['Gain 60 total levels in the 5 original Forge upgrades.','original Forge levels',scope],
     firstultimate:['Unlock one Wisp Ultimate.','Ultimate unlocked'],
     modulemax:['Raise one Wisp Module to level 20.','levels on one Module','Uses your highest single Module level. Levels on different Wisps are not added together.']
@@ -3043,7 +3067,7 @@ function nodeEarnedEffect(id){
   if(id==='steady') return '+'+earnedPercent(level*0.08)+'% tap damage';
   if(id==='swift') return '+'+earnedPercent(level*0.04)+'% Prisms per Ascend';
   if(id==='momentum') return '+'+earnedPercent(momentumMult()-1)+'% passive Wisp damage and Wisp-powered tap base';
-  if(id==='reserves') return '+'+formatNum(level*2)+' hours to the offline cap';
+  if(id==='reserves') return 'Retired · previous level '+formatNum(level)+' preserved in purchase history';
   if(id==='echo'){
     var rate=Math.min(1,0.70+level*0.05);
     return '+'+earnedPercent(rate-0.70)+' percentage points offline rate · '+earnedPercent(rate)+'% before Projects'+(rate>=1?' (node cap reached)':'');
@@ -3052,7 +3076,7 @@ function nodeEarnedEffect(id){
   return earnedPercent(discount)+'% Wisp recruiting discount · '+earnedPercent(1-discount)+'% cost'+(discount>=0.6?' (cost floor reached)':'');
 }
 function projectEarnedEffect(id){
-  if(id==='measuredinquiry') return earnedPercent(measuredInquiryReduction())+'% less work for future starts of the 8 listed Studies';
+  if(id==='measuredinquiry') return earnedPercent(measuredInquiryReduction())+'% less work for future starts of the 5 current Studies';
   var rows={
     wispascend:[longStudyPowerMult()-1,'passive Wisp damage and Wisp-powered tap base'],
     guardmastery:[longStudyTapMult()-1,'tap damage'],
@@ -3142,7 +3166,9 @@ var SAVE_KEY = 'lumenfall_save_v2';
 var RECOVERY_SAVE_KEY = 'lumenfall_save_recovery_v1';
 var RIFT_GUIDANCE_HIDDEN_KEY = 'lumenfall_rift_guidance_hidden_v1';
 var riftGuidanceHidden = false;
-var SAVE_SCHEMA_VERSION = 1;
+var SAVE_SCHEMA_VERSION = 2;
+var PRODUCTIVE_OFFLINE_CAP_SEC = 12 * 3600;
+var OFFLINE_12H_REFUND_POLICY = 'OFFLINE_12H_001:140/160:sum-ceil-6x1.6^level';
 var RESET_PENDING_KEY = 'lumenfall_reset_pending_v1';
 var TICK_MS = 100;
 var ABILITY_BASE_CYCLE_SEC = 6;
@@ -3163,7 +3189,7 @@ function freshState(){
   RESEARCH.forEach(function(r){ research[r.id] = 0; researchQueue[r.id] = false; });
   LONG_STUDIES.forEach(function(l){ longStudyLevels[l.id] = 0; studyQueue[l.id] = false; studyUseMotes[l.id] = false; studySpeedTargets[l.id] = 1.5; });
   return {
-    schemaVersion:SAVE_SCHEMA_VERSION,
+    schemaVersion:SAVE_SCHEMA_VERSION, offline12hRefund:null,
     lumen:0, shards:0, prisms:0, comets:0, motes:0, sigils:0,
     depth:1, maxDepthEver:1,
     riftMode:'push', farmDepth:0, farmReturnDepth:0,
@@ -3372,8 +3398,101 @@ function migrateSaveV0ToV1(input){
   migrated.schemaVersion = 1;
   return migrated;
 }
+// Original prices are Number integers, including prices beyond 2^53. Convert
+// their exact binary integer value to decimal without BigInt (WebView 60).
+function offlineRefundDecimalAdd(a,b){
+  var result='',carry=0,i=a.length-1,j=b.length-1;
+  while(i>=0 || j>=0 || carry){
+    var n=(i>=0?Number(a.charAt(i--)):0)+(j>=0?Number(b.charAt(j--)):0)+carry;
+    result=String(n%10)+result; carry=Math.floor(n/10);
+  }
+  return result || '0';
+}
+function offlineRefundExactInteger(value){
+  var digits=[];
+  while(value>0){digits.push(value%1024);value=Math.floor(value/1024);}
+  var result='0';
+  while(digits.length){
+    var carry=digits.pop(),next='';
+    for(var i=result.length-1;i>=0;i--){
+      var n=Number(result.charAt(i))*1024+carry;
+      next=String(n%10)+next;carry=Math.floor(n/10);
+    }
+    result=(carry?String(carry):'')+next;
+  }
+  return result;
+}
+function offline12hPrices(level){
+  var prices=[];
+  for(var i=0;i<level;i++){
+    var price=Math.ceil(6*Math.pow(1.60,i));
+    // A non-finite price could never have been purchased in the original game.
+    if(!Number.isFinite(price)) throw persistenceError('invalid-offline-refund','Offline purchase history contains a non-finite original price.');
+    prices.push(price);
+  }
+  return prices;
+}
+function offline12hPrismRefund(level,prices){
+  return (prices || offline12hPrices(level)).reduce(function(total,price){
+    return offlineRefundDecimalAdd(total,offlineRefundExactInteger(price));
+  },'0');
+}
+function normalizeOffline12hRefund(receipt){
+  if(receipt===null || receipt===undefined) return null;
+  if(!isPlainObject(receipt) || receipt.policy!==OFFLINE_12H_REFUND_POLICY ||
+      typeof receipt.offline24!=='boolean' || typeof receipt.offline48!=='boolean' ||
+      !Number.isSafeInteger(receipt.reservesLevel) || receipt.reservesLevel<0 ||
+      receipt.comets!==(receipt.offline24?140:0)+(receipt.offline48?160:0) ||
+      !Array.isArray(receipt.prismPrices) || receipt.prismPrices.length!==receipt.reservesLevel ||
+      receipt.prismPrices.some(function(price){return !Number.isFinite(price) || !Number.isInteger(price) || price<6;}) ||
+      receipt.prismsExact!==offline12hPrismRefund(receipt.reservesLevel,receipt.prismPrices) ||
+      !Array.isArray(receipt.cometsPaid) || receipt.cometsPaid.length!==2 ||
+      !Array.isArray(receipt.prismsPaid) || receipt.prismsPaid.length!==receipt.reservesLevel ||
+      receipt.cometsPaid.concat(receipt.prismsPaid).some(function(v){return typeof v!=='boolean';})){
+    throw persistenceError('invalid-offline-refund','Offline purchase refund history is invalid.');
+  }
+  return clonePersistedValue(receipt);
+}
+function settleOffline12hRefund(out){
+  var receipt=out.offline12hRefund;
+  if(!receipt) return;
+  function credit(currency,amount,paid,index){
+    if(paid[index]) return;
+    var result=out[currency]+amount;
+    // Preserve an unrepresentable deposit in its original currency. Try again
+    // on the next canonical save after spending; never round away or overpay it.
+    if(Number.isFinite(result) && result-out[currency]===amount && result-amount===out[currency]){
+      out[currency]=result;paid[index]=true;
+    }
+  }
+  credit('comets',receipt.offline24?140:0,receipt.cometsPaid,0);
+  credit('comets',receipt.offline48?160:0,receipt.cometsPaid,1);
+  // Keep the originally recorded Number prices across engines: Math.pow can
+  // differ by an ulp between WebView60-generation and newer V8 versions.
+  receipt.prismPrices.forEach(function(price,i){credit('prisms',price,receipt.prismsPaid,i);});
+}
+function offline12hRefundPending(receipt){
+  return receipt && receipt.cometsPaid.concat(receipt.prismsPaid).some(function(paid){return !paid;});
+}
+function migrateSaveV1ToV2(input){
+  var migrated=clonePersistedValue(input);
+  var owned=isPlainObject(migrated.owned)?migrated.owned:{};
+  var legacy=isPlainObject(migrated.legacyCometPurchases)?migrated.legacyCometPurchases:{};
+  var nodes=isPlainObject(migrated.nodes)?migrated.nodes:{};
+  var level=nonNegativeInt(nodes.reserves,0);
+  var a=owned.offline24===true || legacy.offline24===true;
+  var b=owned.offline48===true || legacy.offline48===true;
+  migrated.offline12hRefund={policy:OFFLINE_12H_REFUND_POLICY,offline24:a,offline48:b,
+    reservesLevel:level,comets:(a?140:0)+(b?160:0),prismPrices:offline12hPrices(level),prismsExact:offline12hPrismRefund(level),
+    cometsPaid:[false,false],prismsPaid:offline12hPrices(level).map(function(){return false;})};
+  // Keep archived ownership, raw levels, paid Lab snapshots and lastSeen.
+  // Crediting and its receipt commit together through the existing save path.
+  migrated.schemaVersion=2;
+  return migrated;
+}
 var SAVE_MIGRATIONS = {
-  0: migrateSaveV0ToV1
+  0: migrateSaveV0ToV1,
+  1: migrateSaveV1ToV2
 };
 function migratePersistedState(input){
   var migrated = clonePersistedValue(input);
@@ -3452,10 +3571,13 @@ function normalizeCurrentSave(input){
   var source = isPlainObject(input) ? input : {};
 
   out.schemaVersion = SAVE_SCHEMA_VERSION;
+  out.offline12hRefund = normalizeOffline12hRefund(source.offline12hRefund);
 
   ['lumen','shards','prisms','comets','motes','sigils'].forEach(function(key){
     out[key] = finiteNonNegative(source[key],fresh[key]);
   });
+
+  settleOffline12hRefund(out);
 
   out.depth = Math.max(1,nonNegativeInt(source.depth,1));
   out.maxDepthEver = Math.max(1,nonNegativeInt(source.maxDepthEver,out.depth));
@@ -4037,7 +4159,7 @@ function abilityCycleSeconds(level){ return ABILITY_BASE_CYCLE_SEC / fillRateMul
 function offlineRate(){ return Math.min(1, 0.70 + nodeLevel('echo')*0.05) + longStudyOfflineBonus(); }
 function prismMult(){ return (1 + nodeLevel('swift')*0.04) * longStudyPrismMult(); }
 function costReduction(){ return Math.min(0.6, nodeLevel('bonds')*0.03); }
-function offlineCapHours(){ return 12 + (state.legacyCometPurchases.offline24?12:0) + (state.legacyCometPurchases.offline48?24:0) + nodeLevel('reserves')*2; }
+function offlineCapHours(){ return PRODUCTIVE_OFFLINE_CAP_SEC / 3600; }
 function eliteChance(depth,level){ return Math.min(0.35, Math.min(0.30, 0.03 + Math.floor(depth/10)*0.02) + researchBonus('luminoustracking',level)); }
 function motesDropFor(depth){ return Math.max(1, Math.round((1 + depth/8) * longStudyMoteMult() * formationRewardMult())); }
 function sigilsFromBoss(depth){ return Math.max(1, Math.floor(depth/10)); }
@@ -4960,6 +5082,8 @@ function applyRiftTheme(){
 }
 
 function buyNode(node){
+  node=node && NODES.find(function(n){return n.id===node.id;});
+  if(!node || node.retired || node.retiredTo) return;
   var cost = nodeCost(node);
   if(state.prisms < cost) return;
   state.prisms -= cost;
@@ -5002,15 +5126,17 @@ function maxAffordableLevels(node, level, lumenBudget, shardBudget){
 }
 function researchEligibility(node){
   var level = researchLevel(node.id);
-  return {level:level,unlocked:state.maxDepthEver>=(node.unlockDepth||1),
+  return {level:level,unlocked:!node.retiredTo && state.maxDepthEver>=(node.unlockDepth||1),
     maxed:node.levelCap!==undefined && level>=node.levelCap};
 }
 function getResearchBuyPlan(node,requested){
+  node=node && RESEARCH.find(function(n){return n.id===node.id;});
+  if(!node) return {count:0,buyCount:0,cost:{lumen:0,shard:0},needed:{lumen:0,shard:0},affordable:false,reason:'unknown'};
   var e = researchEligibility(node);
   requested = requested===undefined ? labMultiplier : requested;
   var validRequest = requested==='max' || (Number.isInteger(requested) && requested>0);
   var count = 0, cost = {lumen:0,shard:0};
-  var reason = !e.unlocked ? 'locked' : e.maxed ? 'maxed' : !validRequest ? 'unavailable' : '';
+  var reason = node.retiredTo ? 'retired' : !e.unlocked ? 'locked' : e.maxed ? 'maxed' : !validRequest ? 'unavailable' : '';
   if(!reason){
     if(node.levelCap!==undefined){
       var limit = Math.min(node.levelCap-e.level,requested==='max' ? Infinity : requested);
@@ -5169,7 +5295,7 @@ function getStudyStartPlan(node){
   var unlocked=state.maxDepthEver>=(node.unlockDepth||1);
   var maxed=node.levelCap!==undefined && level>=node.levelCap;
   var valid=Number.isFinite(cost.lumen) && cost.lumen>=0 && Number.isFinite(cost.shard) && cost.shard>=0 && Number.isFinite(duration) && duration>0;
-  var reason=!unlocked ? 'locked' : maxed ? 'maxed' : findActiveStudy(node.id) ? 'active' : state.activeStudies.length>=studySlotCount() ? 'slots' : !valid ? 'unavailable' : '';
+  var reason=node.retiredTo ? 'retired' : !unlocked ? 'locked' : maxed ? 'maxed' : findActiveStudy(node.id) ? 'active' : state.activeStudies.length>=studySlotCount() ? 'slots' : !valid ? 'unavailable' : '';
   var eligible=!reason;
   if(eligible && (state.lumen<cost.lumen || state.shards<cost.shard)) reason='unaffordable';
   return {node:node,level:level,cost:cost,duration:duration,unlocked:unlocked,maxed:maxed,eligible:eligible,affordable:!reason,reason:reason};
@@ -6209,8 +6335,12 @@ function renderResearch(){
     return '<button class="mult-btn '+(active?'active':'')+'" data-mult="'+m+'">'+label+'</button>';
   }).join('') + '</div>';
 
-  var html = '';
+  var html = '',legacyHtml='';
   RESEARCH.forEach(function(node){
+    if(node.retiredTo){
+      if(researchLevel(node.id)>0) legacyHtml+=legacyUpgradeMarkup(node,'<div class="earned-effect">Level '+researchLevel(node.id)+' · '+researchEffectText(node,researchEffectPreview(node,researchLevel(node.id)))+'</div>');
+      return;
+    }
     var level = state.research[node.id];
     var queueOn = !!state.researchQueue[node.id];
     html += '<div class="card node-card" data-forge-card="'+node.id+'">' +
@@ -6231,8 +6361,8 @@ function renderResearch(){
   // Build the authoritative previews and control states off-DOM. Restoring
   // focus on empty cards would clamp the scroll area before they reach full size.
   var prepared=document.createElement('div');
-  prepared.innerHTML=multHtml + html;
-  RESEARCH.forEach(function(node){updateResearchCard(node,prepared.querySelector('[data-forge-card="'+node.id+'"]'));});
+  prepared.innerHTML='<div class="section-sub">Forge: ability charge, ability damage, cast resources and Luminous encounters.</div>'+multHtml + html+legacyUpgradeSection(legacyHtml);
+  RESEARCH.filter(function(node){return !node.retiredTo;}).forEach(function(node){updateResearchCard(node,prepared.querySelector('[data-forge-card="'+node.id+'"]'));});
   presentControlStates(prepared);
   replaceControlMarkup(root,prepared.innerHTML);
   main.scrollTop=scrollTop;
@@ -6253,7 +6383,8 @@ function renderResearch(){
     btn.addEventListener('click', function(){
       var v = btn.getAttribute('data-mult');
       labMultiplier = v==='max' ? 'max' : parseInt(v,10);
-      if(state.legacyCometPurchases.rememberbulk){ state.savedLabMultiplier = labMultiplier; }
+      state.savedLabMultiplier = labMultiplier;
+      saveState();
       renderResearch();
     });
   });
@@ -6300,9 +6431,10 @@ function renderLongStudies(){
       html += '<div class="card study-card study-running" data-running-study="'+active.id+'">' +
         '<div class="study-running-label">'+(maxed?'Finishing paid Study':index===0?'Next completion':'Running')+'</div>' +
         '<div class="name"><span>'+(node?node.name:'')+' <span style="color:var(--mote);">Lv.'+(longStudyLevel(active.id)+(maxed?0:1))+(maxed?' · Maxed':'')+'</span></span>' +
-          ' <button class="node-queue-toggle '+(queueOnActive?'active':'')+'" data-study-queue="'+active.id+'">Queue '+(queueOnActive?'ON':'OFF')+'</button>' +
+          (node && node.retiredTo?'':' <button class="node-queue-toggle '+(queueOnActive?'active':'')+'" data-study-queue="'+active.id+'">Queue '+(queueOnActive?'ON':'OFF')+'</button>') +
         '</div>' +
         (node ? projectEarnedMarkup(active.id) : '') +
+        (node && node.retiredTo?'<div class="effect-note">Last paid level: work, speed and completion bonus kept. Future upgrades: '+node.retiredTo+'.</div>':'') +
         '<div class="effect-note">'+(maxed?'Level cap already reached. Paid work finishes without another level or bonus.':
           'In progress: level '+(longStudyLevel(active.id)+1)+' · bonus earned only on completion.'+(active.id==='measuredinquiry'?' Next: '+earnedPercent(0.02*studyEffectiveLevel(node,longStudyLevel(active.id)+1))+'% less work.':''))+'</div>' +
         '<div class="study-time" data-study-text="'+active.id+'">'+studyRemainingText(active)+'</div>' +
@@ -6327,8 +6459,13 @@ function renderLongStudies(){
   }
 
   html += '<h3 class="study-choices-title" id="study-choices" tabindex="-1">'+(openSlots>0 ? 'Choose a Study to begin' : 'Study choices — no open slots')+'</h3>';
+  var legacyHtml='';
   LONG_STUDIES.forEach(function(lnode){
     if(findActiveStudy(lnode.id)) return;
+    if(lnode.retiredTo){
+      if(longStudyLevel(lnode.id)>0) legacyHtml+=legacyUpgradeMarkup(lnode,projectEarnedMarkup(lnode.id));
+      return;
+    }
     var plan=getStudyStartPlan(lnode);
     if(!plan.unlocked){
       html += '<div class="card study-card locked-node" data-state="locked" aria-disabled="true" style="margin-bottom:10px;">' +
@@ -6353,7 +6490,7 @@ function renderLongStudies(){
     '</div>';
   });
 
-  html += '<div class="section-sub">Unlocking more Studies by pushing deeper raises the slot cap. Studies progress while you’re away. Study Queue begins the next paid level. Use Motes buys the selected repeat speed for each active level, including manual starts, as soon as its full price is available. OFF keeps speed already paid for.</div>';
+  html += legacyUpgradeSection(legacyHtml)+'<div class="section-sub">Lab: permanent damage, kill rewards, Mote yield and Study work. Slot capacity rises at Rift 40, 60 and 90. Studies share the 12-hour offline limit with rewards and automation. Study Queue begins the next paid level. Use Motes buys the selected repeat speed for each active level, including manual starts, as soon as its full price is available. OFF keeps speed already paid for.</div>';
   replaceControlMarkup(els['study-list'],html);
   if(focusedInspection){
     var restoredInspection=els['study-list'].querySelector('[data-study-details="'+focusedInspection+'"]');
@@ -6457,8 +6594,13 @@ function renderAscendSummary(){
 }
 
 function renderNodes(){
-  var html = '';
+  var html = '<div class="section-sub">Tree: Ascend rewards, offline rules and Wisp recruitment.</div>',legacyHtml='';
   NODES.forEach(function(node){
+    if(node.retired) return;
+    if(node.retiredTo){
+      if(nodeLevel(node.id)>0) legacyHtml+=legacyUpgradeMarkup(node,'<div class="earned-effect" data-node-effect="'+node.id+'">Level '+nodeLevel(node.id)+' · '+nodeEarnedEffect(node.id)+'</div>');
+      return;
+    }
     if(node.requiresAchievement && !state.achieved[node.requiresAchievement]){
       var reqAch = ACHIEVEMENTS.find(function(a){ return a.id===node.requiresAchievement; });
       html += '<div class="card node-card locked-node" data-state="locked" aria-disabled="true">' +
@@ -6486,7 +6628,7 @@ function renderNodes(){
       '</button>' +
     '</div>';
   });
-  replaceControlMarkup(els['node-list'],html);
+  replaceControlMarkup(els['node-list'],html+legacyUpgradeSection(legacyHtml));
   els['node-list'].querySelectorAll('[data-node]').forEach(function(btn){
     btn.addEventListener('click', function(){
       var node = NODES.find(function(n){ return n.id===btn.getAttribute('data-node'); });
@@ -6540,7 +6682,17 @@ function renderAchievements(){
   });
   els['ach-list'].innerHTML = html;
 
-  var shopHtml = '';
+  var shopHtml = '<div class="card shop-card" data-offline-policy><div class="info">' +
+    '<div class="name">12 hours of offline progress</div>' +
+    '<div class="desc">Rewards, combat, Lab and automation share the same 12-hour limit. Offline earning rate is separate.</div>';
+  var refund=state.offline12hRefund;
+  if(refund && (refund.comets>0 || refund.prismsExact!=='0')){
+    shopHtml += '<div class="desc" data-offline-refund>Previous offline purchases: '+refund.comets+
+      ' Comets and '+refund.prismsExact.replace(/\B(?=(\d{3})+(?!\d))/g,' ')+' Prisms. '+(offline12hRefundPending(refund)?
+      'Refund value is preserved in the original currencies; remaining credit applies automatically after spending.':
+      'Refund credited once.')+' Purchase history is preserved.</div>';
+  }
+  shopHtml += '</div></div>';
   SHOP.forEach(function(item){
     var owned = !!state.owned[item.id];
     var extra = '';
@@ -6682,7 +6834,7 @@ var ENCYCLOPEDIA_MECHANICS = [
   {name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the run for Prisms. Your first reward sets a cleared-Rift benchmark; repeats at or below it earn a 20% reserve reward, while pushing beyond it adds a new-depth bonus. Permanent systems stay.'},
   {name:'Luminous Enemies', meta:'Rare encounter', desc:'Rare non-boss enemies that drop Motes. Their appearance chance rises as you push deeper.'},
   {name:'Boss Traits', meta:'Boss mechanic', desc:'Regrowth regenerates 0.9% max HP/s. Fractured Core regenerates 0.5%/s and takes +75% from Wisp ability hits only. Guardian’s Mark regenerates 0.6%/s and makes your manual taps and Auto-Tap deal x3; passive Wisp damage is unchanged by those trait bonuses.'},
-  {name:'Offline Progress', meta:'Idle system', desc:'Combat, Wisp abilities, Auto-Tap, Farm, Auto-Ascend, Long Studies and automation continue while you are away. If Auto-Empower makes you strong enough after a boss retreat, the game retries the saved Boss automatically.'}
+  {name:'Offline Progress', meta:'Idle system', desc:'Combat, Wisp abilities, Auto-Tap, Farm, Auto-Ascend, Long Studies and automation share one productive offline period of up to 12 hours. Offline earning rate is separate. If Auto-Empower makes you strong enough after a boss retreat, the game retries the saved Boss automatically.'}
 ];
 
 function renderEncyclopedia(){
@@ -7773,9 +7925,11 @@ function advanceAuthoritativeTime(elapsedSec,options){
   var firstFarmGridSec = startPhaseSec===0 ? 1 : 1-startPhaseSec;
   var farmGridRemainingSec = firstFarmGridSec;
   var farmGridCrossings = 0;
-  var targetGridPositionSec = startPhaseSec+elapsedSec;
-  var targetFarmGridCrossings = Math.floor(targetGridPositionSec);
-  var targetGridPhaseSec = targetGridPositionSec-targetFarmGridCrossings;
+  // Keep endpoint fractions separate from whole seconds (PR70 clock fix).
+  var targetGridPhaseSec = startPhaseSec+targetFractionSec;
+  var targetGridCarry = Math.floor(targetGridPhaseSec);
+  var targetFarmGridCrossings = targetWholeSec+targetGridCarry;
+  targetGridPhaseSec -= targetGridCarry;
   var targetFarmGridRemainingSec = targetGridPhaseSec===0 ? 1 : 1-targetGridPhaseSec;
 
   function advanceFarmGridClock(stepSec){
@@ -7959,8 +8113,8 @@ function advanceAuthoritativeTime(elapsedSec,options){
 
     var killsBefore = summary.kills;
     var ascendsBeforeAdvance = summary.ascends;
-    var elapsedWholeBefore = elapsedWholeSec;
-    var elapsedFractionBefore = elapsedFractionSec;
+    var gridCrossingsBefore = farmGridCrossings;
+    var gridRemainingBefore = farmGridRemainingSec;
     // Sub-nanosecond elapsed time can still carry material damage at mature
     // power. Never discard it merely because it is below a generic time
     // epsilon; only treat the simulator as stalled if floating-point
@@ -8043,7 +8197,8 @@ function advanceAuthoritativeTime(elapsedSec,options){
       });
     }
 
-    if(remaining>0 && elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && actions===0){
+    // A real grid crossing can leave the derived elapsed value rounded unchanged.
+    if(remaining>0 && farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore && actions===0){
       throw new Error('Authoritative simulation stalled without elapsed-time or state progress | '+JSON.stringify({
         elapsedInRun:elapsedInRun,
         elapsedWholeSec:elapsedWholeSec,
@@ -8350,10 +8505,8 @@ function* offlineProgressSteps(now,lastSeen,elapsedSec,effectiveSec,processingSt
     kind:'offline',visual:false,clockStartMs:lastSeen,
     offlineWindowStartMs:lastSeen,resumable:true
   });
-  // Studies keep their existing real-time semantics beyond the combat cap.
-  if(elapsedSec>effectiveSec){
-    yield* advanceStudyOnlyTime(elapsedSec-effectiveSec,lastSeen+effectiveSec*1000,sim,true);
-  }
+  // Every productive system shares this interval; consume the rest of the
+  // absence without a productive Study-only tail. Foreground replay stays live.
   state.totalOfflineSeconds += effectiveSec;
   // Input and live ticks were suspended while the offline transaction ran.
   // Replay that foreground time with the existing live policy before committing.
@@ -8544,6 +8697,7 @@ function offlineReturnMessage(offline){
     (offline.shardEarned>1 ? ' and ' + formatNum(offline.shardEarned) + ' Shards' : '') +
     (offline.sigilsEarned>0 ? ' and ' + formatNum(offline.sigilsEarned) + ' Sigils' : '') +
     (offline.motesEarned>0 ? ' and ' + formatNum(offline.motesEarned) + ' Motes' : '') + ' while you were gone.';
+  msg += ' Offline progress is limited to 12 hours for rewards, Lab and automation.';
   if(offline.ascends>0){ msg += ' They ascended ' + offline.ascends + ' time' + (offline.ascends===1?'':'s') + ' on their own!'; }
   if(offline.retreated){ msg += ' After the Boss remained an impossible wall for 5 minutes offline, they switched to Farm at Rift ' + offline.endDepth + '. Your Push point at Rift ' + offline.pushDepth + ' is still saved.'; }
   if(offline.completedStudies.length===1){ msg += ' Your Long Study "' + offline.completedStudies[0] + '" finished while you were away!'; }
@@ -8578,7 +8732,7 @@ function init(){
   cacheEls();
   try{ riftGuidanceHidden=localStorage.getItem(RIFT_GUIDANCE_HIDDEN_KEY)==='1'; }catch(e){ riftGuidanceHidden=false; }
   state = loadState();
-  if(state.legacyCometPurchases.rememberbulk && state.savedLabMultiplier!==undefined){ labMultiplier = state.savedLabMultiplier; }
+  labMultiplier = state.savedLabMultiplier;
   var dailyRolled = ensureDaily();
   restoreEnemyOrSpawn();
   setupTabs();

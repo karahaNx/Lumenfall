@@ -54,7 +54,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for scenario in self-test-bad-assertion self-test-uncaught-error self-test-unhandled-rejection self-test-parity-regression self-test-chronology-regression self-test-wisp-formula-regression self-test-wisp-pacing-regression self-test-endgame-currency-regression self-test-wisp-role-regression self-test-p1-05-selected self-test-p1-05-focus-return self-test-lifecycle-duplicate self-test-save-backup-placement self-test-save-backup-confirmation self-test-ascend-prisms-tree self-test-ascend-prisms-lab self-test-ascend-prisms-payout self-test-ascend-prisms-repeat self-test-ascend-prisms-rounding; do
+          for scenario in self-test-bad-assertion self-test-uncaught-error self-test-unhandled-rejection self-test-parity-regression self-test-chronology-regression self-test-wisp-formula-regression self-test-wisp-pacing-regression self-test-endgame-currency-regression self-test-wisp-role-regression self-test-p1-05-selected self-test-p1-05-focus-return self-test-lifecycle-duplicate self-test-save-backup-placement self-test-save-backup-confirmation self-test-upgrade-identity-buy self-test-upgrade-identity-value self-test-upgrade-identity-clock self-test-ascend-prisms-tree self-test-ascend-prisms-lab self-test-ascend-prisms-payout self-test-ascend-prisms-repeat self-test-ascend-prisms-rounding; do
             if node tests/behavioral/run.cjs --web-root mobile/www --scenario "$scenario"; then
               echo "::error::Behavioral harness negative scenario '$scenario' unexpectedly passed."
               exit 1

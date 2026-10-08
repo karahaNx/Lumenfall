@@ -21,11 +21,11 @@ are separate tasks. Preserve their integrated changes; no save migration.
 APK133/main index blob ea44431c163569548973d9e489f75345749a07ee matches feedback.
 Historical hashes/receipts remain in QA. PR46/B2 is merged; current workflow
 removes historical writer releases as global gates. No subagents/chat messages.
-Latest reconciled main:1282f0c (PR84), fetched8October. Worktree:
+Latest reconciled main:91decbc (PR85), fetched8October. Worktree:
 /workspace/Lumenfall-f05-implementation; branch:feature/ascend-prisms-001-live.
 Preserves Auto-Ascend, Formation, Backup, Resonate, Lab/Wisp/Forge/Rift changes
 and all current tests/CI gates. Earlier8October evidence attests b0537cb;
-latest-main checks must rerun. Exact hashes/results live in QA receipts.
+PR94 is open; latest-main motor11822/673 PASS. Remaining receipts pending.
 Changed:47-line index patch; one behavioral module/registration/five causal
 negatives; scoped AGENTS/context/state, task/requirements/decision/QA evidence.
 
@@ -63,7 +63,7 @@ unchanged main. Raw failed receipt retained. Wrapper now30min, current CI list
 preserved/derived.42historical+6fresh redundant DOM snapshots omitted after
 automatic approval rejection; original hashes and readable receipts remain.
 
-Next:reverify latest combined bytes;publish PR;required exact-head CI;merge;
+Next:finish combined-main checks;PR94 exact-head CI;merge;
 integrated checks;signed APK digest/package/version/certificate/all15assets;
 available native/legacy acceptance;save final status/evidence in GitHub.
 Remote PR/integration/build/native receipts pending. Native helpers bind actual

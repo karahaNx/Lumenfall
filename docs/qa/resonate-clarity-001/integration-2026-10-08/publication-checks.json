@@ -1,0 +1,32 @@
+{
+  "baseline": "31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6",
+  "sourceSha256": "f99cb0bcd46d2849977a39cf31bb0dd1a7bb8c0ca7a370f2490ad66ec67a6ec1",
+  "conclusion": "success",
+  "checks": [
+    {
+      "command": "node tests/behavioral/resonate-clarity.cjs --evidence docs/qa/resonate-clarity-001/integration-2026-10-08/latest-main-browser",
+      "exit": 0,
+      "profiles": 12,
+      "evidence": "latest-main-browser/browser-results.json"
+    },
+    {
+      "command": "node scripts/codex/check_context.cjs --task docs/tasks/RESONATE_CLARITY_001.md",
+      "exit": 0
+    },
+    {
+      "command": "node scripts/ci/validate_source.cjs",
+      "exit": 0
+    },
+    {
+      "command": "node tests/tooling/run.cjs",
+      "exit": 0
+    },
+    {
+      "command": "/workspace/resonate-tools/node-v8.3.0-linux-x64/bin/node docs/qa/resonate-clarity-001/finish-2026-10-08/v8-resonate.cjs index.html",
+      "exit": 0,
+      "node": "v8.3.0",
+      "v8": "6.0.286.52"
+    }
+  ],
+  "limitation": "Targeted F06 recheck after later main changes, not a new full-suite run or APK/native acceptance. Documentation checkpoint has no product diff versus this baseline."
+}

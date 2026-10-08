@@ -41,7 +41,7 @@ function instrumentHtml(source, fixtures) {
   const marker = '\n})();\n</script>\n<script>\nif(window.Capacitor';
   replaceOnce(marker, '\n' + read('bridge.js') + '\n' + read('wisp-upgrades-bridge.js') + marker, 'main game IIFE marker changed; test bridge could not be installed');
   const modules = ['rift-status', 'bond-text', 'layout', 'accessibility', 'accessibility-controls', 'nav-workshop', 'r3-destinations',
-    'research-duration', 'upgrade-clarity', 'feedback', 'formation', 'formation-autosave', 'forge', 'support-stacking', 'auto-ascend-target', 'buff-timing', 'measured-inquiry', 'lab-motes', 'farm-conservation', 'farm-numerical', 'wisp-upgrades', 'ascend-prisms'];
+    'research-duration', 'upgrade-clarity', 'upgrade-identity', 'feedback', 'formation', 'formation-autosave', 'forge', 'support-stacking', 'auto-ascend-target', 'buff-timing', 'measured-inquiry', 'lab-motes', 'farm-conservation', 'farm-numerical', 'wisp-upgrades', 'ascend-prisms'];
   replaceOnce('</body>', modules.map(name => '<script>' + read(name + '.js') + '</script>').join('') +
     '<script id="qa-behavior-runner">\n' + read('runner.js') + '\n</script>\n</body>', 'expected exactly one </body> marker');
   return source;
@@ -89,7 +89,7 @@ async function browserIdentity(chrome) {
 async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, options = {}) {
   const log = options.log || console.log;
   const urlFor = page => baseUrl + page + '?' + new URLSearchParams({ qaScenario: scenario, qaFixture: fixture });
-  if (scenario === 'resonate-clarity') return runNativeProcess([process.execPath, path.join(ROOT, 'resonate-clarity.cjs'), '--source', path.join(options.sourceWebRoot || path.join(ROOT, '../..'), 'index.html')], scenario, 150000, options);
+  if (scenario === 'resonate-clarity') return runNativeProcess([process.execPath, path.join(ROOT, 'resonate-clarity.cjs'), '--chrome', chrome, '--source', path.join(options.sourceWebRoot || path.join(ROOT, '../..'), 'index.html')], scenario, 150000, options);
   if (scenario === 'comet-unlocks-core') return runNativeProcess([process.execPath, path.join(ROOT, 'comet-unlocks-core.cjs')], scenario, 90000, options);
   if (scenario === 'lab-motes-offline-integration') return runNativeProcess([process.execPath, path.join(ROOT, 'lab-motes-offline.cjs')], scenario, 90000, options);
   if (['save-backup-ui', 'self-test-save-backup-placement', 'self-test-save-backup-confirmation'].includes(scenario)) {
@@ -104,6 +104,7 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
   if (['formation-autosave-native','formation-autosave-reduced-motion'].includes(scenario)) return runNativeProcess([process.execPath,path.join(ROOT,'formation-autosave.cjs'),chrome,urlFor('/index.html'),scenario],scenario,120000,options);
   if (scenario === 'raw-process-contract') return require('./process_contract.cjs').runContract(runScenario, log);
   if (scenario === 'forge-ui-process-contract') return nativeProcessContract(log);
+  if (scenario === 'loadout-memory-core' || scenario === 'loadout-memory-mobile') return runNativeProcess([process.execPath, path.join(ROOT, 'loadout-memory.cjs'), '--chrome', chrome, '--source', path.join(options.sourceWebRoot || path.join(ROOT, '../..'), 'index.html'), ...(scenario === 'loadout-memory-core' ? ['--vm-only'] : [])], scenario, 300000, options);
   let driver = null;
   if (['comet-unlocks-mobile', 'comet-unlocks-reduced-motion'].includes(scenario)) driver = 'comet-unlocks-ui.cjs';
   if (['rift-status-mobile', 'rift-status-reduced-motion'].includes(scenario) || scenario.startsWith('rift-status-stacking') || scenario.startsWith('self-test-rift-status-line')) driver = 'rift-status.cjs';
@@ -112,17 +113,21 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
   if (scenario === 'lab-motes-runtime') driver = 'farm-runtime.cjs';
   if (['lab-motes-native', 'lab-motes-reduced-motion'].includes(scenario)) driver = 'lab-motes.cjs';
   if (driver) return runNativeProcess([process.execPath, path.join(ROOT, driver), chrome, urlFor('/index.html'), scenario], scenario, driver === 'rift-status.cjs' ? 120000 : 90000, options);
+  if (scenario === 'offline-12h-ui') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-12h-ui.cjs'), chrome], scenario, 180000, options);
+  if (scenario === 'offline-12h-core') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-12h.cjs')], scenario, 300000, options);
   const profile = temporary('lumenfall-qa-' + scenario + '-');
   const params = { qaScenario: scenario, qaFixture: fixture };
   if (viewport) ['width', 'height', 'safeTop', 'safeBottom'].forEach((key, i) => { params[key] = viewport[i]; });
   const url = baseUrl + (viewport ? '/layout.html' : '/index.html') + '?' + new URLSearchParams(params);
   const command = [chrome, '--headless=new', '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage',
     '--disable-background-networking', '--disable-background-timer-throttling', '--no-first-run', '--window-size=390,844',
-    '--virtual-time-budget=1500', '--user-data-dir=' + profile, '--dump-dom', url];
-  if (['p1-05-reduced-motion', 'p2-06b-reduced-motion', 'research-duration-reduced-motion', 'inquiry-ui-reduced-motion'].includes(scenario)) command.splice(-1, 0, '--force-prefers-reduced-motion');
+    '--virtual-time-budget='+(['upgrade-identity-ui','upgrade-identity-reduced-motion'].includes(scenario)?5000:1500), '--user-data-dir=' + profile, '--dump-dom', url];
+  if (['p1-05-reduced-motion', 'p2-06b-reduced-motion', 'research-duration-reduced-motion', 'inquiry-ui-reduced-motion', 'upgrade-identity-reduced-motion'].includes(scenario)) command.splice(-1, 0, '--force-prefers-reduced-motion');
   const started = performance.now();
   let result;
-  try { result = await (options.execute || runProcess)(command, { timeout: 25000 }); }
+  const domCommand = !options.execute && process.env.LUMENFALL_QA_DOM_TRANSPORT === 'pipe'
+    ? [process.execPath, path.join(ROOT, 'browser-dom.cjs'), chrome, url, profile, command.includes('--force-prefers-reduced-motion')?'reduce':'no-preference'] : command;
+  try { result = await (options.execute || runProcess)(domCommand, { timeout: 25000 }); }
   finally { fs.rmSync(profile, { recursive: true, force: true }); }
   const dom = result.stdout || '', stderr = result.stderr || '', exitcode = result.exitcode, timedOut = result.timed_out;
   const elapsed = (performance.now() - started) / 1000;
@@ -145,7 +150,7 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
     const directory = fs.mkdtempSync(path.join(options.rawArtifactRoot, scenario + '-'));
     fs.writeFileSync(path.join(directory, 'stdout.html'), dom);
     fs.writeFileSync(path.join(directory, 'stderr.log'), stderr);
-    fs.writeFileSync(path.join(directory, 'process.json'), JSON.stringify({ command, fixture, viewport, process: processResult, qa: observation }, null, 2));
+    fs.writeFileSync(path.join(directory, 'process.json'), JSON.stringify({ command:domCommand, fixture, viewport, process: processResult, qa: observation }, null, 2));
     log('  raw artifacts: ' + directory);
   }
   if (stderr.trim()) { log('  Chromium stderr tail:'); log(stderr.slice(-4000)); }
@@ -165,6 +170,12 @@ function mutateSource(source, scenario) {
     const pair = prismMutations[scenario.slice('self-test-ascend-prisms-'.length)];
     if (!pair) throw Error('Unknown F05 negative control');
     replaceOnce(pair[0], pair[1]);
+  }
+  if (scenario === 'self-test-upgrade-identity-buy') replaceOnce("focus:'Lab: Lumen Wellspring'", "focus:''");
+  if (scenario === 'self-test-upgrade-identity-value') replaceOnce("function formationMult(){ return researchFactor('formation') * longStudyFormationMult(); }", "function formationMult(){ return researchFactor('formation'); }");
+  if (scenario === 'self-test-upgrade-identity-clock') {
+    replaceOnce('    var gridCrossingsBefore = farmGridCrossings;\n    var gridRemainingBefore = farmGridRemainingSec;', '    var elapsedWholeBefore = elapsedWholeSec;\n    var elapsedFractionBefore = elapsedFractionSec;');
+    replaceOnce('if(remaining>0 && farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore && actions===0){', 'if(remaining>0 && elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && actions===0){');
   }
   if (scenario === 'self-test-bond-text-ability') replaceOnce('Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it.', 'Heavy ability damage. Stone + Titan activate the Duskguard Bond. Its Module boosts the hit; its Ultimate doubles it.');
   if (scenario === 'self-test-bond-text-partners') replaceOnce("return SPIRITS.find(function(sp){ return sp.id===id; }).name;", "return SPIRITS.find(function(sp){ return sp.id===id; }).shortName;");
@@ -215,7 +226,7 @@ async function main(argv = process.argv.slice(2)) {
     server = await serve(stage);
     const baseUrl = 'http://127.0.0.1:' + server.address().port;
     for (const [scenario, fixture] of Object.entries(selected)) {
-      const viewports = scenario === 'lab-motes-ui' ? [[320,844,0,0],[390,844,0,0],[430,844,0,0]] : scenario.startsWith('layout-') || scenario === 'self-test-layout-collapse' ? LAYOUT_VIEWPORTS : [null];
+      const viewports = ['lab-motes-ui','upgrade-identity-ui','upgrade-identity-reduced-motion'].includes(scenario) ? [[320,844,0,0],[390,844,0,0],[430,844,0,0]] : scenario.startsWith('layout-') || scenario === 'self-test-layout-collapse' ? LAYOUT_VIEWPORTS : [null];
       for (const viewport of viewports) if (!await runScenario(chrome, baseUrl, scenario, fixture, viewport, { rawArtifactRoot, sourceWebRoot:webRoot })) failures.push(scenario + ' ' + JSON.stringify(viewport));
     }
   } finally {

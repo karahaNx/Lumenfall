@@ -45,7 +45,7 @@ async function connect(expected){
  const paused=new Promise((resolve,reject)=>{const t=setTimeout(()=>reject(Error('init breakpoint timeout')),60000);pauseResolve=p=>{clearTimeout(t);resolve(p);};});
  await send('Page.reload');const event=await paused;
  const bridge=`window.__f05Now=Date.now();Date.now=function(){return window.__f05Now;};var interval=window.setInterval;window.setInterval=function(fn,ms){return interval(function(){if(window.__f05Run)fn();},ms);};window.__f05Native={fresh:freshState,get:function(){return JSON.parse(JSON.stringify(state));},install:function(s){state=acceptPersistedState(s,'f05-native');restoreEnemyOrSpawn();renderAll();},render:renderAll,save:saveState,advance:advanceAuthoritativeTime,breakdown:function(){return ascendPrismBreakdown(progressionDepth());},enemy:enemyHpFor};`;
- const injected=await send('Debugger.evaluateOnCallFrame',{callFrameId:event.callFrames[0].callFrameId,expression:bridge,returnByValue:true});assert(!injected.exceptionDetails,'test bridge captures actual product closure');
+ const injected=await send('Debugger.evaluateOnCallFrame',{callFrameId:event.callFrames[0].callFrameId,expression:bridge,returnByValue:true});if(injected.exceptionDetails)throw Error('native test bridge: '+(injected.exceptionDetails.exception?.description||injected.exceptionDetails.text));
  await send('Debugger.removeBreakpoint',{breakpointId:bp.breakpointId});await send('Debugger.resume');await send('Debugger.disable');
  await until('(function(){["startup-skip","tut-skip","welcome-claim","daily-claim"].forEach(function(id){var e=document.getElementById(id);if(e&&e.getClientRects().length)e.click();});return !!window.__f05Native&&__f05Native.save()===true;})()','native return flows settled');
 }
