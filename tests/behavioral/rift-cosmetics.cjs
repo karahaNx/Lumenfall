@@ -15,7 +15,7 @@ const source = path.resolve(option('--source', path.join(root, 'index.html')));
 const out = path.resolve(option('--out', '/tmp/lumenfall-rift-cosmetics'));
 const baseline = args.includes('--baseline');
 const negative = args.includes('--negative');
-const chrome = option('--chrome', ['chromium', 'google-chrome', 'google-chrome-stable'].find(name => spawnSync('which', [name]).status === 0));
+const chrome = option('--chrome', ['google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser'].find(name => spawnSync('which', [name]).status === 0));
 if (!chrome) throw Error('Chromium is required');
 fs.mkdirSync(out, {recursive: true});
 const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'lumenfall-cosmetics-'));
@@ -271,7 +271,7 @@ async function run() {
   }
 }
 run().catch(error=>{failure=error.stack;}).finally(()=>{
-  const result={status:failure?'fail':'pass',baseline,negative,source,sourceSHA256:crypto.createHash('sha256').update(sourceBytes).digest('hex'),browser:spawnSync(chrome,['--version'],{encoding:'utf8'}).stdout.trim(),node:process.version,records,runtimeErrors,exitInfo,failure};
+  const result={status:failure?'fail':'pass',baseline,negative,source,sourceSHA256:crypto.createHash('sha256').update(sourceBytes).digest('hex'),browser:spawnSync(chrome,['--version'],{encoding:'utf8'}).stdout.trim(),chromeExecutable:chrome,node:process.version,records,runtimeErrors,exitInfo,failure,stderr};
   fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(result,null,2)+'\n');
   console.log(JSON.stringify({status:result.status,samples:records.length,out,failure}));
   if(failure)process.exitCode=1;

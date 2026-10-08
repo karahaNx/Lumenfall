@@ -1,6 +1,6 @@
 # RIFT_COSMETICS_001 — visible Deed cosmetics on Rift
 
-Status: **PR79 published; region regression fixed; full CI rerun and APK acceptance pending**.
+Status: **PR79; 168 focused checks pass; CI browser setup fixed, rerun pending**.
 Owner: this feature chat; isolated `/workspace/RIFT_COSMETICS_001`, branch
 `feature/rift-cosmetics-001`. No subagents or messaging tools.
 
@@ -21,7 +21,8 @@ Sources: [owner request](RIFT_COSMETICS_001_REQUIREMENTS.txt),
 Read with AGENTS, bootstrap, ownership/visual guide, PROJECT_STATE and workflow.
 Original images concern other points and are not cosmetic evidence.
 
-8 October instruction: “Finish the feature task push to github implement to game”.
+8 October: “Finish the feature task push to github implement to game”; “If theres
+not a test, then create one”. Automated browser and signed-APK tests are created.
 This authorizes implementation, GitHub publication, integration and app delivery.
 Current main's AGENTS/workflow assign delivery to the feature owner; historical
 writer/Lead freezes no longer gate this task. No new binding rules are introduced.
@@ -36,11 +37,9 @@ Original startup main `b2a1f440e8ad9fed34b37551e468224310d2a6f6`, then
 They do not verify the refreshed implementation.
 
 8 October initial live main `b0537cb46635555ba2c2e5f3f95bc8fc276aeda5`.
-Rebased again onto PR77 main `261b1b7f863f73c324f4ac04acb5bfc95101644d`;
-preserve Save Backup placement, confirmed restore and all incoming tests.
-CI37737518062 on the older base is superseded by this combined version.
-Rebased onto this baseline; both cosmetic CSS and button conflicts combine F27
-Comet decorations and F24 SVG layers. Preserve all upstream gameplay and tests.
+Current base `e2f745cd0ce0dc9e41b06efd842062fd08d7fab4`: PR77 Save Backup,
+PR76 Formation autosave and PR80 Resonate. Preserve their code and tests.
+Earlier CSS/button conflicts combined F27 decorations with F24 SVG layers.
 PR46/B2 are integrated via PR57 (`20aaae62a4b6e46f8d75775085918eaba4e8de29`).
 F27 Comet catalog is integrated via PR69; retain purchases, toggles and marks.
 Open PR67 includes overlapping cosmetic work; this isolated F24 change is based
@@ -88,8 +87,9 @@ APK package/version/asset checks and required Android/device acceptance.
 
 ## Checks and delivery checkpoint
 
-Refreshed candidate: `node tests/behavioral/rift-cosmetics.cjs --negative --out
- docs/qa/rift-cosmetics-2026-10-08/candidate` PASS, 168 records: 162 mobile
+Current combined candidate: `node tests/behavioral/rift-cosmetics.cjs --chrome
+ /usr/bin/chromium --negative --out docs/qa/rift-cosmetics-2026-10-08/formation-candidate`
+PASS, 168 records: 162 mobile
 state/theme measurements plus six region/persistence/input/negative contracts. Nine
 profiles cover normal, 130% and 200% root text; 320/390/430px; normal and reduced
 motion. Both Comet decorations remain visibly equipped with every selected theme.
@@ -101,14 +101,15 @@ Hidden-aura negative is detected. Browser Chromium151, Node24.19.
 PR79 head f0ae15b passed gameplay but CI37735266911 caught fixed regional
 palettes in 15 layout cases. Remove those overrides, retain auras and add a
 six-region contract; all three original layout scenarios now pass locally.
-Full CI reruns on the combined current-main version before integration. Signed143 native baseline passes actual cold
-launch on API27/WebView61; V8 6.0 parses both scripts and saves all six themes.
-Remaining integration/APK evidence will be recorded after delivery. This is self-review and automated verification;
-independent review is not claimed. Exact WebView60, physical Android and TalkBack
-acceptance have not yet been performed for this candidate. Feature remains open
-until required acceptance is supported. No other chat is renamed or archived.
+CI37737975796 passed all152 scenarios then timed out at browser target creation:
+the new driver preferred Ubuntu's Chromium launcher over the working Google
+Chrome used by the suite. It now uses the suite's order and records executable
+and stderr. Full required CI must pass before integration. Raw logs are in
+[checks](../qa/rift-cosmetics-2026-10-08/checks/).
+Signed143 baseline passes cold launch on isolated API27/WebView61; V8 6.0 parses
+both scripts and saves all themes. Exact WebView60 remains unverified. Official
+API26 image has WebView58 and no allowed provider, so cannot substantiate60.
+This is self-review/automation; no independent review or physical/TalkBack claim.
 
-Next: run source/context/tooling and relevant F27 regressions, publish PR, pass
-required CI, merge with current main, verify integrated behavior and signed APK,
-then save final evidence/status. Attempt available native checks; report genuine
-missing device acceptance instead of marking a local candidate complete.
+Next: pass required CI, merge PR79 against checked main, verify integrated game
+and signed APK, save final evidence/status. Keep open for missing required checks.
