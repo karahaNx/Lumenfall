@@ -9,6 +9,14 @@ commits below are observed checkpoints, not a promise that main never advances.
 
 ## Product and release evidence
 
+[LOADOUT_MEMORY_001 / F25](tasks/LOADOUT_MEMORY_001.md) integrated through
+[PR78](https://github.com/karahaNx/Lumenfall/pull/78)/9c19664: automatic Forge
+preference, no named shop, legacy value retained. CI173/17 and APK150 signed
+identity/15 assets/extracted V8/1139 checks/native input/restart/upgrade PASS.
+Corrected app-private database capture supersedes invalid shell-error hashes.
+F26 refunds remain separate; PR97 final combined CI/integration pending.
+Owner chat stays open until final acceptance/evidence are saved.
+
 [RIFT_GUIDANCE_001 / F07](tasks/RIFT_GUIDANCE_001.md): stable guidance below
 currencies with Show hints/Hide hints is being published on its isolated branch.
 Rebased onto main b0537cb with integrated F13/F27 preserved. Fresh local160
