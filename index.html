@@ -231,6 +231,7 @@
   }
   .ultimate-btn{width:100%;}
   .sigil-resonance-btn{width:100%;margin-top:6px;color:var(--sigil);}
+  .sigil-resonance-help{margin:6px 0 0;font-size:.75rem;line-height:1.5;color:var(--ink-dim);}
   .quest-actions{display:flex;align-items:center;gap:6px;flex:none;}
   .quest-refresh-btn{border-color:var(--comet);background:var(--bg-elev);color:var(--comet);}
   .node-queue-toggle{
@@ -1707,15 +1708,15 @@
   .lab-capacity-badge{position:absolute;top:2px;right:8px;min-width:16px;padding:0 3px;border:1px solid #a5e9bc;border-radius:8px;background:#18352d;color:#d4ffe5;font:700 10px/14px 'Manrope',sans-serif;pointer-events:none;}
   .lab-capacity-badge[hidden]{display:none;}
   .formation-preset-card{padding:10px;margin-bottom:10px;}
-  .formation-preset-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
+  .formation-preset-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px;}
   .formation-preset-title{font-size:.82rem;font-weight:800;}
   .formation-preset-state{font-size:11px;color:var(--ink-dim);font-weight:700;}
-  .formation-preset-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;}
-  .formation-preset-slot{display:grid;grid-template-rows:minmax(52px,auto) 44px;gap:4px;}
-  .formation-preset-btn,.formation-save-btn,.auto-empower-all{border:1px solid var(--line);border-radius:10px;background:var(--bg-elev);color:var(--ink);font:700 12px 'Manrope',sans-serif;min-width:0;}
+  .formation-preset-grid{display:flex;flex-wrap:wrap;gap:6px;}
+  .formation-preset-slot{display:grid;flex:1 1 0;min-width:min-content;}
+  .formation-preset-btn,.auto-empower-all{border:1px solid var(--line);border-radius:10px;background:var(--bg-elev);color:var(--ink);font:700 12px 'Manrope',sans-serif;min-width:44px;min-height:52px;padding:8px 4px;}
   .formation-preset-btn[aria-pressed="true"]{border-color:var(--lumen);background:color-mix(in srgb,var(--lumen) 12%,var(--bg-elev));}
-  .formation-preset-btn span{display:block;font-size:10px;line-height:13px;color:var(--ink-dim);font-weight:500;overflow:hidden;text-overflow:ellipsis;}
-  .formation-save-btn{font-size:11px;min-height:44px;}
+  .formation-preset-btn span{display:block;font-size:10px;line-height:1.4;color:var(--ink-dim);font-weight:500;}
+  #tab-spirits .active-toggle{min-width:48px;min-height:48px;}
   .auto-empower-all{width:100%;min-height:44px;margin-top:8px;}
   .study-slot-summary{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;}
   .study-slot-summary strong{display:block;font-size:15px;}
@@ -3418,11 +3419,13 @@ function normalizeSupportBuffs(raw){
 // Optional schema-v1 intent: never stores levels, resources or combat benefits.
 function normalizeFormationRebuild(raw,snapshot){
   if(!isPlainObject(raw) || !Array.isArray(raw.members)) return null;
+  var savedPreset = FORMATION_PRESET_IDS.indexOf(raw.preset)!==-1 &&
+    snapshot.formationPresets[raw.preset].join(',')===raw.members.join(',');
   var members = raw.members.filter(function(id,index){
     if(typeof id!=='string' || raw.members.indexOf(id)!==index) return false;
-    return SPIRITS.some(function(sp){return sp.id===id && snapshot.maxDepthEver>=sp.unlockDepth;});
+    return SPIRITS.some(function(sp){return sp.id===id && (savedPreset || snapshot.maxDepthEver>=sp.unlockDepth);});
   }).slice(0,5);
-  if(!members.length) return null;
+  if(!members.length && !savedPreset) return null;
   var preset = FORMATION_PRESET_IDS.indexOf(raw.preset)!==-1 &&
     snapshot.formationPresets[raw.preset].join(',')===members.join(',') ? raw.preset : '';
   return {members:members,preset:preset};
@@ -3436,11 +3439,11 @@ function reconcileFormationRebuild(snapshot){
   if(powered.length) snapshot.activeParty = powered;
   else if((snapshot.spirits.ember||0)>0) snapshot.activeParty = ['ember'];
   else snapshot.activeParty = [];
-  snapshot.activeFormationPreset = '';
-  if(powered.length===intent.members.length){
-    if(intent.preset && snapshot.formationPresets[intent.preset].join(',')===intent.members.join(',')){
-      snapshot.activeFormationPreset = intent.preset;
-    }
+  // The selected editing destination survives a partial rebuild. Only the
+  // powered projection participates in combat; never autosave this projection.
+  snapshot.activeFormationPreset = intent.preset &&
+    snapshot.formationPresets[intent.preset].join(',')===intent.members.join(',') ? intent.preset : '';
+  if(intent.members.length && powered.length===intent.members.length){
     snapshot.formationRebuild = null;
   }
   validateCometTrialParty(snapshot);
@@ -3506,12 +3509,17 @@ function normalizeCurrentSave(input){
     seenParty[id] = true;
     return true;
   }).slice(0,5);
+  var sourcePresets = isPlainObject(source.formationPresets) ? source.formationPresets : null;
+  var requestedPreset = FORMATION_PRESET_IDS.indexOf(source.activeFormationPreset)!==-1
+    ? source.activeFormationPreset
+    : (sourcePresets ? '' : 'push');
+  var selectedEmpty = requestedPreset && sourcePresets &&
+    Array.isArray(sourcePresets[requestedPreset]) && sourcePresets[requestedPreset].length===0;
   if(!out.activeParty.length){
     out.spirits.ember = Math.max(1,out.spirits.ember||0);
     out.activeParty = ['ember'];
   }
 
-  var sourcePresets = isPlainObject(source.formationPresets) ? source.formationPresets : null;
   out.formationPresets = {};
   FORMATION_PRESET_IDS.forEach(function(name){
     var raw = sourcePresets && Array.isArray(sourcePresets[name]) ? sourcePresets[name] : out.activeParty;
@@ -3522,15 +3530,12 @@ function normalizeCurrentSave(input){
       seen[id]=true;
       return true;
     }).slice(0,5);
-    out.formationPresets[name] = normalized.length ? normalized : out.activeParty.slice();
+    out.formationPresets[name] = normalized;
   });
-  var requestedPreset = FORMATION_PRESET_IDS.indexOf(source.activeFormationPreset)!==-1
-    ? source.activeFormationPreset
-    : (sourcePresets ? '' : 'push');
   out.activeFormationPreset = requestedPreset &&
-    out.activeParty.join(',')===out.formationPresets[requestedPreset].join(',') ? requestedPreset : '';
+    (selectedEmpty || out.activeParty.join(',')===out.formationPresets[requestedPreset].join(',')) ? requestedPreset : '';
 
-  out.formationRebuild = normalizeFormationRebuild(source.formationRebuild,out);
+  out.formationRebuild = normalizeFormationRebuild(selectedEmpty ? {members:[],preset:requestedPreset} : source.formationRebuild,out);
   reconcileFormationRebuild(out);
   if(!out.activeParty.length){
     // Intent can invalidate an otherwise powered but unrelated party. Apply the
@@ -4771,7 +4776,7 @@ function doTap(stageEl){
 
 function buySpirit(sp){
   if(!sp || state.maxDepthEver<sp.unlockDepth) return;
-  var rebuilding = !!state.formationRebuild;
+  var rebuilding = !!state.formationRebuild && state.formationRebuild.members.length>0;
   var cost = spiritCost(sp);
   if(state.lumen < cost) return;
   var wasZero = state.spirits[sp.id]===0;
@@ -4779,12 +4784,13 @@ function buySpirit(sp){
   state.spirits[sp.id]++;
   trackDaily('empowers');
   reconcileFormationRebuild(state);
-  if(!rebuilding && wasZero && state.activeParty.length<5 && state.activeParty.indexOf(sp.id)===-1){
-    state.activeParty.push(sp.id);
-    state.activeFormationPreset = '';
+  var members = chosenFormationMembers();
+  if(!rebuilding && wasZero && members.length<5 && members.indexOf(sp.id)===-1){
+    commitFormationMembers(members.concat(sp.id));
   }
   validateCometTrialParty(state);
   checkAchievements();
+  saveState();
   renderSpirits();
   if(wasZero){
     showToast(sp.name+' joined your roster.');
@@ -4813,21 +4819,23 @@ function buyRarity(sp){
 }
 
 function toggleActive(id){
-  var idx = state.activeParty.indexOf(id);
+  if(!SPIRITS.some(function(sp){return sp.id===id;})) return false;
+  var members = chosenFormationMembers();
+  var idx = members.indexOf(id);
   if(idx!==-1){
-    if(state.activeParty.length<=1){ showToast('You need at least one Active Wisp.'); return; }
-    state.activeParty.splice(idx,1);
+    if(members.length<=1){ showToast('You need at least one chosen Wisp.'); return false; }
+    members.splice(idx,1);
   } else {
-    if(state.spirits[id]<=0) return;
-    if(state.activeParty.length>=5){ showToast('Bench a Wisp first — max 5 Active.'); return; }
-    state.activeParty.push(id);
+    if((state.spirits[id]||0)<=0) return false;
+    if(members.length>=5){ showToast('Bench a Wisp first — max 5 Active.'); return false; }
+    members.push(id);
   }
-  state.formationRebuild = null;
-  state.activeFormationPreset = '';
+  commitFormationMembers(members);
   validateCometTrialParty(state);
   saveState();
   renderSpirits();
   updateBattleFast();
+  return true;
 }
 
 function formationPresetMembers(name){
@@ -4840,43 +4848,32 @@ function formationPresetUnavailable(name){
   return formationPresetMembers(name).filter(function(id){return (state.spirits[id]||0)<=0;});
 }
 function formationPresetIsActive(name){
-  return state.activeFormationPreset===name && state.activeParty.join(',')===formationPresetMembers(name).join(',');
+  return state.activeFormationPreset===name;
+}
+function chosenFormationMembers(){
+  if(state.formationRebuild) return state.formationRebuild.members.slice();
+  if(FORMATION_PRESET_IDS.indexOf(state.activeFormationPreset)!==-1) return formationPresetMembers(state.activeFormationPreset);
+  return state.activeParty.slice();
+}
+function commitFormationMembers(members){
+  var preset = FORMATION_PRESET_IDS.indexOf(state.activeFormationPreset)!==-1 ? state.activeFormationPreset : '';
+  if(preset) state.formationPresets[preset] = members.slice();
+  state.activeParty = members.filter(function(id){return (state.spirits[id]||0)>0;});
+  state.formationRebuild = normalizeFormationRebuild({members:members,preset:preset},state);
+  reconcileFormationRebuild(state);
 }
 function applyFormationPreset(name){
   if(FORMATION_PRESET_IDS.indexOf(name)===-1) return false;
   var members = formationPresetMembers(name);
-  var unavailable = formationPresetUnavailable(name);
-  if(!members.length || unavailable.length){
-    if(unavailable.length){
-      var missing = unavailable.map(function(id){
-        var sp=SPIRITS.find(function(item){return item.id===id;});
-        return sp ? sp.shortName : id;
-      });
-      showToast('Recruit '+missing.join(', ')+' before using this formation.');
-    } else {
-      showToast('Save at least one Active Wisp to this formation.');
-    }
-    return false;
-  }
-  state.formationRebuild = null;
-  state.activeParty = members.slice();
+  // Select the destination before projecting its members. Switching never
+  // writes the party from the preset being left into either saved preset.
   state.activeFormationPreset = name;
+  commitFormationMembers(members);
   validateCometTrialParty(state);
   saveState();
   renderSpirits();
   updateBattleFast();
-  showToast(FORMATION_PRESET_LABELS[name]+' formation active.');
-  return true;
-}
-function saveFormationPreset(name){
-  if(FORMATION_PRESET_IDS.indexOf(name)===-1 || !state.activeParty.length) return false;
-  if(!state.formationPresets) state.formationPresets={};
-  state.formationRebuild = null;
-  state.formationPresets[name] = state.activeParty.slice(0,5);
-  state.activeFormationPreset = name;
-  saveState();
-  renderSpirits();
-  showToast(FORMATION_PRESET_LABELS[name]+' formation saved.');
+  showToast(FORMATION_PRESET_LABELS[name]+' selected — formation edits save automatically.');
   return true;
 }
 function applicableAutoEmpowerIds(){
@@ -5938,7 +5935,7 @@ function renderFormationPresets(){
   var activeName=FORMATION_PRESET_IDS.find(formationPresetIsActive);
   var html='<div class="card formation-preset-card">' +
     '<div class="formation-preset-head"><div class="formation-preset-title">Current Formation · '+state.activeParty.length+'/5</div>' +
-    '<div class="formation-preset-state">'+(activeName ? FORMATION_PRESET_LABELS[activeName]+' active' : 'Custom formation')+'</div></div>' +
+    '<div class="formation-preset-state">'+(activeName ? FORMATION_PRESET_LABELS[activeName]+' · Autosave' : 'Custom formation')+'</div></div>' +
     '<div class="formation-lineup">'+state.activeParty.map(function(id){
       var sp=SPIRITS.find(function(item){return item.id===id;});
       return sp ? '<span class="formation-member">'+wispPortrait(sp)+sp.shortName+'</span>' : '';
@@ -5946,16 +5943,16 @@ function renderFormationPresets(){
     (state.formationRebuild ? '<div class="formation-rebuild-note"><strong>Rebuilding chosen Formation</strong><div>'+intendedFormationIds().map(function(id){
       var sp=SPIRITS.find(function(item){return item.id===id;});
       return sp.shortName+': '+((state.spirits[id]||0)>0 ? 'Active' : 'Pending — no power or Bonds'+(state.achieved.labmaster ? (state.empowerQueue[id]===false ? ' · Auto-Empower OFF' : ' · Auto-Empower ON') : ' · Recruit manually'));
-    }).join('<br>')+'</div>'+(!intendedFormationIds().includes('ember') && state.activeParty.includes('ember') ? '<div>Ember: temporary startup support</div>' : '')+'</div>' : '')+
-    '<div class="formation-preset-grid">';
+    }).join('<br>')+(intendedFormationIds().length ? '' : 'No saved members yet.')+'</div>'+(!intendedFormationIds().includes('ember') && state.activeParty.includes('ember') ? '<div>Ember: temporary startup support</div>' : '')+'</div>' : '')+
+    '<div class="formation-rebuild-note">'+(activeName ? 'Field, Bench and recruitment changes save to '+FORMATION_PRESET_LABELS[activeName]+'.' : 'Choose Push, Farm or Boss to save formation edits automatically.')+'</div>'+
+    '<div class="formation-preset-grid" role="group" aria-label="Formation preset">';
   FORMATION_PRESET_IDS.forEach(function(name){
     var members=formationPresetMembers(name);
     var unavailable=formationPresetUnavailable(name);
     var active=formationPresetIsActive(name);
-    var detail=unavailable.length ? 'Needs '+unavailable.length+' Wisp'+(unavailable.length===1?'':'s') : members.length+'/5 Wisps';
+    var detail=unavailable.length ? unavailable.length+' pending' : members.length+'/5 Wisps';
     html += '<div class="formation-preset-slot">' +
-      '<button class="formation-preset-btn'+(active?' active':'')+'" data-formation-preset="'+name+'" aria-pressed="'+active+'" '+(unavailable.length||!members.length?'disabled':'')+'>'+FORMATION_PRESET_LABELS[name]+'<span>'+(active?'Active · ':'')+detail+'</span></button>' +
-      '<button class="formation-save-btn" data-save-formation="'+name+'" aria-label="Save current formation as '+FORMATION_PRESET_LABELS[name]+'">Save '+FORMATION_PRESET_LABELS[name]+'</button>' +
+      '<button class="formation-preset-btn'+(active?' active':'')+'" data-formation-preset="'+name+'" aria-pressed="'+active+'">'+FORMATION_PRESET_LABELS[name]+'<span>'+(active?'Selected · ':'')+detail+'</span></button>' +
     '</div>';
   });
   html += '</div>';
@@ -5968,9 +5965,6 @@ function renderFormationPresets(){
   replaceControlMarkup(root,html);
   root.querySelectorAll('[data-formation-preset]').forEach(function(btn){
     btn.addEventListener('click',function(){applyFormationPreset(btn.getAttribute('data-formation-preset'));});
-  });
-  root.querySelectorAll('[data-save-formation]').forEach(function(btn){
-    btn.addEventListener('click',function(){saveFormationPreset(btn.getAttribute('data-save-formation'));});
   });
   var all=root.querySelector('[data-empower-all]');
   if(all) all.addEventListener('click',function(){setAutoEmpowerAll(autoEmpowerAllState().value!=='on');});
@@ -6037,6 +6031,7 @@ function renderSpirits(){
   var focusedFinalUpgrade=document.activeElement && (document.activeElement.dataset.module || document.activeElement.dataset.ultimate);
   renderFormationBonds();
   renderRosterJourney();
+  var chosenMembers = chosenFormationMembers();
   var html = '';
   // Sort a presentation-only copy; simulation and saved party order are unchanged.
   var roster=SPIRITS.slice().sort(function(a,b){
@@ -6088,9 +6083,12 @@ function renderSpirits(){
     var resonanceOwned = allUltimatesOwned();
     var resonanceUses = state.sigilResonanceUses||0;
     var resonanceDisabled = !canSigilResonate(sp);
-    var resonanceHtml = resonanceOwned && ultimateUnlocked(sp.id) ?
-      '<button class="mini-btn sigil-resonance-btn" data-sigil-resonate="'+sp.id+'" '+(resonanceDisabled?'disabled':'')+'>Resonate '+resonanceUses+'/'+SIGIL_RESONANCE_RUN_LIMIT+
-        '<span style="font-size:.6875rem;">'+costIcon('sigil')+SIGIL_RESONANCE_COST+'</span></button>' : '';
+    var resonanceHelpId = 'sigil-resonance-help-'+sp.id;
+    var resonanceHtml = ultimateUnlocked(sp.id) ?
+      (resonanceOwned ? '<button class="mini-btn sigil-resonance-btn" data-sigil-resonate="'+sp.id+'" aria-describedby="'+resonanceHelpId+'" '+(resonanceDisabled?'disabled':'')+'>Resonate — Fill ability to 100'+
+        '<span>'+SIGIL_RESONANCE_COST+' Sigils</span></button>' : '')+
+      '<p class="sigil-resonance-help" id="'+resonanceHelpId+'">Spend '+SIGIL_RESONANCE_COST+' Sigils to fill this Active Wisp\'s ability resource to 100. This is a refill, not a permanent upgrade. '+
+        'Requires all Wisp Ultimates. '+(SIGIL_RESONANCE_RUN_LIMIT-resonanceUses)+' of '+SIGIL_RESONANCE_RUN_LIMIT+' uses left this run, shared across all Wisps. Resets on Ascend.</p>' : '';
     var ultimateHtml =
       '<div class="ultimate-row">' +
         (ultimateUnlocked(sp.id) ?
@@ -6099,6 +6097,7 @@ function renderSpirits(){
       '</div>';
     var empowerOn = state.empowerQueue[sp.id]!==false;
     var pendingRebuild = intendedFormationIds().indexOf(sp.id)!==-1 && !recruited;
+    var chosen = chosenMembers.indexOf(sp.id)!==-1;
     var empowerHtml = ((recruited || pendingRebuild) && state.achieved.labmaster) ?
       ' <button class="node-queue-toggle '+(empowerOn?'active':'')+'" data-empower-queue="'+sp.id+'">Auto-Empower '+(empowerOn?'ON':'OFF')+'</button>' : '';
     html += '<div class="card hero-card rarity-'+tier+(pendingRebuild?' pending-rebuild':'')+(active?' active-wisp':'')+(ultimateUnlocked(sp.id)?' has-ultimate':'')+'" data-wisp-card="'+sp.id+'" style="--wisp-color:'+sp.color+';--rarity-color:'+RARITY_COLORS[tier]+';">' +
@@ -6108,7 +6107,7 @@ function renderSpirits(){
           '<div class="name">'+sp.name+'</div>' +
           '<div class="class-tag" style="color:'+sp.color+'">'+sp.heroClass+' &middot; '+sp.role+'</div>' +
         '</div>' +
-        (recruited ? '<button class="active-toggle '+(active?'is-active':'')+'" data-toggle="'+sp.id+'" aria-pressed="'+(active?'true':'false')+'">'+(active?'Bench':'Field')+'</button>' : '') +
+        (recruited || pendingRebuild ? '<button class="active-toggle '+(chosen?'is-active':'')+'" data-toggle="'+sp.id+'" aria-pressed="'+(chosen?'true':'false')+'">'+(chosen?'Bench':'Field')+'</button>' : '') +
       '</div>' +
       (pendingRebuild ? '<div class="formation-rebuild-note">Chosen Formation · Pending · No power or Bonds</div>' : '') +
       '<div class="hero-stats">' +
