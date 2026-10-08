@@ -1,6 +1,6 @@
 # FORGE_TEXT_001 — remove the Forge standard cap text
 
-Status: validated implementation ready for GitHub CI and integration; app acceptance pending.
+Status: integrated and signed APK published; required device acceptance remains open.
 Owner: this FORGE_TEXT_001 feature chat. Branch: `feature/forge-text-001`.
 
 ## Requirement and scope
@@ -38,7 +38,9 @@ PR46/B2 is now integrated through PR57/46. The current
 [feature workflow](../project/FEATURE_WORKFLOW.md) supersedes historical role/writer
 gates. No open PRs or queued/in-progress runs overlapped this change at startup.
 Standing authorization and the user's current request cover delivery in this scope.
-Recheck main and relevant overlapping changes before integration.
+Main/base/head and review results were checked immediately before merging PR60.
+Parallel PR59 Wisp edits were inspected for overlap; no Forge render edit or
+other chat changes were taken over. Historical writer release is not a live gate.
 
 ## Acceptance and checks
 
@@ -65,16 +67,53 @@ exact WebView60 and TalkBack acceptance must not be inferred from desktop Chrome
 
 ## Current checkpoint and next action
 
-Source/syntax gate, APK identity verifier self-test and Node tooling checks PASS.
-Ten candidate Forge/gameplay/accessibility scenarios and both native mobile/motion
-scenarios PASS; `forge-contracts` also passes on unchanged current baseline.
-All 56 card/state comparisons and twelve paired viewport profiles verify the
-targeted change. Existing 200% text overflow is documented as preserved baseline
-behavior; no unrelated layout changes or new Swift gameplay decisions are included.
-Publish the verified candidate, require full CI,
-then integrate the validated version within the user's authorized scope. Verify
-the resulting Android build and preserve receipts in this task and project status.
+[PR60](https://github.com/karahaNx/Lumenfall/pull/60) merged at
+`e189a3a8aba0c7cc377bad8980c62d75d1279189`; its entire tree equals validated
+head `5c77129de961bb1d6a6cba6a8990f8625e146acd`.
+[CI37708469018](https://github.com/karahaNx/Lumenfall/actions/runs/37708469018)
+PASS: 146 default scenarios, 12 required negatives, source/tooling and guarded
+startup. PR60 automated code/security review completed without reported findings;
+no independent human review is claimed.
 
-PR/integration/APK: pending. Required physical acceptance: not performed.
-Archive: keep this chat open until all required acceptance is documented.
+Signed **0.1.139** (build37709745605) was independently verified from that source.
+Parallel PR59 product integration `0e9b54c8d62a873bd48625f4a20ee18078e8a8f1`
+preserves all four Forge renderer/preview/plan functions byte-for-byte. A fresh
+normal Forge contract check PASS on the exact combined source.
+Verified signed **0.1.140** (build37710185974) also PASS independent package/version/
+established signer/digest, internal CRC checks for all 526 ZIP entries and
+byte comparisons for the 15 staged assets.
+APK SHA256 `c0c81462151c485b16f85dc2c0e53d258ba45c60f92a32539e9e2d6a7153696d`.
+[Combined source/APK receipt](../qa/forge-text-001/2026-10-08/combined-acceptance.json)
+and [140 release identity](../qa/forge-text-001/2026-10-08/android-140-release.json)
+preserve exact source and test hashes; earlier139 receipts remain historical.
+
+Following PR61/62/65, main641697e preserves the Forge functions; fresh contract
+and signed **0.1.141** package/signer, 526 internal CRCs and 15 source-assets PASS.
+[Post-Bond receipt](../qa/forge-text-001/2026-10-08/post-bond-acceptance.json)
+records exact source/APK hashes. Lab rows were retained during documentation rebase.
+
+After PR63/69, main `e0fd100afc8e429227acbcbde3840adc70e9bbc8` includes Rift
+wording and the accepted Comet migration. Forge preview/price/plan functions
+remain unchanged. The only renderer difference is the upstream Remember Bulk
+lookup from `state.owned` to preserved `state.legacyCometPurchases`; all other
+renderer bytes, including actual levels/caps and this F23 correction, are identical.
+Fresh Forge contracts PASS against exact HTML SHA256
+`5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c`.
+Signed **0.1.143**, build37715794487 from product commit `d95205f`, PASS independent
+package/version/established signer, 526 internal CRCs and all 15 byte-identical
+source assets. [Current integrated receipt](../qa/forge-text-001/2026-10-08/current-acceptance.json)
+records exact identities. Earlier139/140/141 receipts remain historical.
+Fresh mobile and reduced-motion Forge scenarios also PASS three existing
+profiles each on that same source, including controls, focus and scroll behavior.
+
+Source is integrated; the exact [verified APK143](../qa/forge-text-001/2026-10-08/APK/Lumenfall-0.1.143.apk)
+is archived in GitHub and ready for the remaining device checks. Required physical affected-
+phone/exact WebView60/TalkBack acceptance: NOT RUN, remains OPEN. Next: run those
+checks on the verified APK and save device/version/results in GitHub; resolve any
+introduced regression before completion. Existing 200% text overflow is documented.
+The documentation receipt's final CI/integration belongs in its PR body, linked
+from PR60. Receipt branch: `docs/forge-text-001-receipt`; only its documentation
+was rebased, preserving the parallel Wisp row. Stop this feature's shared-file
+work after that checkpoint; do not claim another chat's ownership is released.
+Archive: keep this owner chat open pending required acceptance.
 Model context identifies GPT-6; precise model variant/runtime effort is not attested.

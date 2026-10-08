@@ -1,0 +1,77 @@
+{
+  "status": "PASS available integrated source/APK checks; physical acceptance OPEN",
+  "feature": "FORGE_TEXT_001",
+  "mainCheckpoint": "e0fd100afc8e429227acbcbde3840adc70e9bbc8",
+  "productSourceCommit": "d95205f6d8059933fac74e8699854f67cb950a7e",
+  "parallelChanges": "PR63 Rift wording; PR69 Comet Trial/Rift cosmetics; subsequent delivery documentation",
+  "indexSha256": "5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c",
+  "forgeFunctionsComparison": [
+    {
+      "name": "renderResearch",
+      "sha256": "556723b6290eef1ab0def306fa96aa75e0a763346b4b0692e50d2fa667472f55",
+      "unchanged": false,
+      "change": "PR69 changes Remember Bulk ownership lookup to preserved legacyCometPurchases; all other renderer bytes identical"
+    },
+    {
+      "name": "researchPreview",
+      "sha256": "fa8f74c5f6632554efce84e5e02d79b5fcc0aa976c89e57b735c9b1a983ae296",
+      "unchanged": true,
+      "change": null
+    },
+    {
+      "name": "getResearchBuyPlan",
+      "sha256": "ef46a069e7c043d6015f332a822b30bc3137665ab002613e505c7660a398f275",
+      "unchanged": true,
+      "change": null
+    },
+    {
+      "name": "updateResearchCard",
+      "sha256": "e08fb6b5b1b8ab8a519f18c9cd45a3a6e5ca0a9f4cb277b2cb9383b47ef28374",
+      "unchanged": true,
+      "change": null
+    }
+  ],
+  "stagedSourceSha256": "5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c",
+  "forgeContracts": "PASS 3508 assertions / 336 purchase cases / four causal negatives",
+  "contractsLog": "current-forge-contracts.log.gz",
+  "apk": {
+    "version": "0.1.143",
+    "build": 37715794487,
+    "sourceCommit": "d95205f6d8059933fac74e8699854f67cb950a7e",
+    "sha256": "45d1032ae6e77362d3540db740c6cfbdc4d275f2e3f6b98f4cecb1229e3205e7",
+    "bytes": 6841573,
+    "crcEntries": 526,
+    "sourceVerifiedAssets": 15,
+    "identity": "PASS package/code143/name0.1.143/established signer",
+    "identityLog": "android-143-identity.log.gz",
+    "assetReceipt": "android-143-assets.json"
+  },
+  "deviceAcceptance": "OPEN / NOT RUN",
+  "mobile": {
+    "status": "PASS",
+    "scenarios": [
+      "forge-ui-mobile",
+      "forge-ui-reduced-motion"
+    ],
+    "profilesPerScenario": 3,
+    "logs": [
+      "current-forge-ui-mobile.log.gz",
+      "current-forge-ui-reduced-motion.log.gz"
+    ]
+  },
+  "functionHashRange": "From function declaration start through its closing brace inclusive; excludes following separator newline.",
+  "webView60Engine": {
+    "status": "pass",
+    "scenario": "offline-catchup-v8",
+    "node": "v8.3.0",
+    "v8": "6.0.286.52",
+    "batches": 1181,
+    "kills": 302400,
+    "ascends": 14400,
+    "wallMs": 15324.239258,
+    "limitation": "JS engine probe; actual Android WebView60/device acceptance remains required",
+    "sourceSha256": "5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c",
+    "sourceByteIdenticalToAPK143": true,
+    "evidence": "current-webview60-engine.json"
+  }
+}
