@@ -18,23 +18,23 @@ Original F01–F03:
 [findings](../recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/FINDINGS.txt),
 [source index](../recovery/2026-10-07/lead_context/FEEDBACK/Source_Index.txt),
 [image2](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/IMAGES/02-17354.jpg).
-Original/current orders prevail. The 8 October “Finish the feature task push to
-github implement to game” authorizes delivery. Live rules supersede historical
-writer handovers; PR46/B2 are integrated. No new binding rule/gameplay decision.
+Original/current orders prevail. The 8 October delivery order authorizes
+GitHub/main/APK work. Live rules supersede writer handovers; PR46/B2 integrated.
+No new rule/gameplay choice.
 
 Baseline b0537cb46635555ba2c2e5f3f95bc8fc276aeda5. Product PR84 merged at
 1282f0cba44a30f39b8a43331395db26600719e8. Signed APK148 contains later PR90,
 31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6. Current combined main14d5f3a was
 reassessed after upstream Loadout/Offline12h/RiftGuidance; those changes stay separate.
 
-Scope: index.html Auto UI/validated target handler; necessary focused tests and
-evidence. Native select enumerates <=1,000 options; one numeric datalist field
-handles larger histories without a target cap (<=200 suggestions plus saved).
-Legacy huge targets remain visible. Drafts commit once on validated change/Enter.
+Scope: index.html Auto UI/target handler, focused tests/evidence. Select enumerates
+<=1,000 options; one numeric datalist field supports larger histories without a
+target cap (<=200 suggestions plus saved). Legacy huge targets stay visible.
+Validated change/Enter commits once.
 Stored threshold = cleared Rift+1; selection never invokes Ascend. Unlock100,
-default, Comet Trials and existing purchased/save values are unchanged by this
-feature; no migration/reset. Its22 protected engine/save functions matched the
-integration baseline. Upstream schema2/refunds belong to OFFLINE_12H_001.
+default, Comet Trials and purchased/save values stay unchanged; no migration/reset.
+Its22 engine/save functions matched the integration baseline. Upstream schema2/
+refunds belong to OFFLINE_12H_001.
 
 ASCEND_PRISMS_001 dependency: renderAscendSummary hook/focused-scroll preservation,
 separate container before Tree; no Prism reward changes. Preserve WebView60,
@@ -56,8 +56,8 @@ native143→148 byte-identical prelaunch storage/ownership/OFF/219 PASS.
 Native controls/typing/cold save, actual Android font2 and cleared-Rift guards PASS
 on WebView61; source-bound receipts and diagnostic failures are recorded there.
 
-Available implementation/checks are delivered. This checkpoint stops the owner's
-shared-file work; own emulator/tests stopped. Next: complete the remaining
+Implementation/checks delivered; this checkpoint stops this owner's shared work.
+Own emulator/tests stopped. Next: complete the remaining
 [affected-phone/exact WebView60/TalkBack checklist](../qa/auto-ascend-ui-001/DEVICE_ACCEPTANCE.txt)
 and save actual results in GitHub. Emulator61 does not satisfy those criteria.
 Keep OPEN; archive only this owner after [completion](../project/FEATURE_WORKFLOW.md).
