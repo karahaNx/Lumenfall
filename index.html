@@ -7949,12 +7949,12 @@ function checkAffordability(){
     var level = moduleLevel(sp.id);
     if(level>=MODULE_MAX_LEVEL) return;
     var cost = moduleCost(sp, level);
-    btn.disabled = state.lumen<cost.lumen || state.shards<cost.shard;
+    btn.disabled = (state.spirits[sp.id]||0)<=0 || state.lumen<cost.lumen || state.shards<cost.shard;
   });
   els['spirit-list'].querySelectorAll('[data-ultimate]').forEach(function(btn){
     var sp = SPIRITS.find(function(s){ return s.id===btn.getAttribute('data-ultimate'); });
     if(!sp) return;
-    btn.disabled = state.sigils<ultimateSigilCost(sp);
+    btn.disabled = (state.heroRarity[sp.id]||0)<RARITY_NAMES.length-1 || state.sigils<ultimateSigilCost(sp);
   });
   els['research-list'].querySelectorAll('[data-research]').forEach(function(btn){
     var node = RESEARCH.find(function(n){ return n.id===btn.getAttribute('data-research'); });

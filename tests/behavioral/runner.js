@@ -545,6 +545,8 @@
         finish('pass',window.runForgeQa(bridge,ctx,assert,assertProtectedParity,assertSummaryParity,parityApprox));return;
       }
       switch(ctx.scenario){
+        case 'wisp-upgrade-display':
+          finish('pass',window.runWispUpgradeQa());return;
         case 'p2-07a-persistence-review':
           bridge.freeze();
           finish('pass',window.runP207PersistenceReview(bridge,ctx,assert));

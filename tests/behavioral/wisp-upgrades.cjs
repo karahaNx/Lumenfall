@@ -13,20 +13,7 @@ const source=path.resolve(option('--source',path.join(root,'index.html'))),evide
 const code=fs.readFileSync(source,'utf8'),marker='\n})();\n</script>\n<script>\nif(window.Capacitor';
 function assert(v,m){if(!v)throw Error(m);}
 assert(code.split(marker).length===2,'one game closure for test bridge');
-const bridge=`
-window.__wispQa={
- ids:SPIRITS.map(function(s){return s.id;}),
- fresh:function(){return freshState();},get:function(){return JSON.parse(JSON.stringify(state));},
- set:function(s){state=acceptPersistedState(JSON.parse(JSON.stringify(s)),'qa-wisp');restoreEnemyOrSpawn();},
- render:function(){renderSpirits();},cap:function(n){MODULE_MAX_LEVEL=n;},
- present:function(){renderHud();document.activeElement.blur();document.querySelector('[data-wisp-card="ember"]').scrollIntoView({block:'start',behavior:'instant'});document.getElementById('toast').classList.remove('show');},
- spirit:function(id){return SPIRITS.find(function(sp){return sp.id===id;});},
- moduleCost:function(id,n){return moduleCost(this.spirit(id),n);},ultimateCost:function(id){return ultimateSigilCost(this.spirit(id));},
- slots:function(){return [localStorage.getItem(SAVE_KEY),localStorage.getItem(RECOVERY_SAVE_KEY)];},
- save:function(){return saveState();},
- roundTrip:function(route){if(route==='backup'){state=decodeSaveBackup(currentSaveBackup());}else{if(route==='recovery')localStorage.setItem(SAVE_KEY,'{bad');state=loadState();}},
- prepare:function(){if(startupIntroFinish)startupIntroFinish();document.querySelectorAll('.overlay,#startup-intro').forEach(function(el){el.style.display='none';});setOverlayInert(null);overlayFocus=null;isNewGame=false;activateTab('spirits');}
-};`;
+const bridge=fs.readFileSync(path.join(__dirname,'wisp-upgrades-bridge.js'),'utf8');
 const prelude='<script>window.setInterval=function(){return 0;};window.__wispErrors=[];window.addEventListener("error",function(e){window.__wispErrors.push(e.message);});window.addEventListener("unhandledrejection",function(e){window.__wispErrors.push(String(e.reason));});</script>';
 let page=code.replace('<head>','<head>'+prelude).replace(marker,'\n'+bridge+marker).replace('</body>','<script>'+fs.readFileSync(path.join(__dirname,'wisp-upgrades.js'),'utf8')+'</script></body>');
 const existing=option('--existing',null),fixtures={};
@@ -80,8 +67,8 @@ async function run(){
     let ready=false;for(let i=0;i<100;i++){ready=await evaluate('!!window.__wispQa && !!document.querySelector("[data-wisp-progression]")');if(ready)break;await new Promise(r=>setTimeout(r,20));}assert(ready,'game initialized');
     await evaluate('document.fonts.ready');
     await evaluate('window.__wispQa.prepare();new Promise(resolve=>setTimeout(resolve,500))');
-    const result=await evaluate('window.runWispUpgradeQa()');
     if(large)await evaluate('document.documentElement.style.fontSize="32px"');
+    const result=await evaluate('window.runWispUpgradeQa()');
     const geometry=await evaluate(`(()=>{const p=document.querySelector('[data-wisp-progression="ember"]'),r=p.getBoundingClientRect();return {width:innerWidth,fit:document.documentElement.scrollWidth<=innerWidth&&p.scrollWidth<=p.clientWidth+1,controls:Array.from(p.querySelectorAll('button')).map(e=>{const r=e.getBoundingClientRect();return {w:r.width,h:r.height,disabled:e.disabled};}),title:getComputedStyle(p.querySelector('[data-wisp-details]')).color,motion:matchMedia('(prefers-reduced-motion:reduce)').matches,errors:window.__wispErrors};})()`);
     assert(geometry.fit,'progression fits '+width+' large='+large);assert(geometry.controls.every(r=>r.w>=44&&r.h>=44),'all upgrade controls >=44px: '+JSON.stringify(geometry));assert(!geometry.errors.length,'no browser runtime errors');
     if(evidence && !large && motion==='no-preference'){await evaluate('window.__wispQa.present()');fs.mkdirSync(evidence,{recursive:true});const shot=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(evidence,'wisp-'+width+'.png'),Buffer.from(shot.data,'base64'));}

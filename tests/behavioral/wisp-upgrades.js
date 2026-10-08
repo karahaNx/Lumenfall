@@ -1,4 +1,4 @@
-/* F04 acceptance against the rendered game. Injected only by wisp-upgrades.cjs. */
+/* F04 acceptance against the rendered game. Test instrumentation only. */
 window.runWispUpgradeQa = function(){
   var b=window.__wispQa, checks=0, fixtures=0;
   function ok(value,message){checks++;if(!value) throw new Error(message);}
@@ -17,7 +17,7 @@ window.runWispUpgradeQa = function(){
       [false,true].forEach(function(funded){
         var rarity=(mask&1)?5:4, module=(mask&2)?20:19, ultimate=!!(mask&4);
         b.set(seed(id,rarity,module,ultimate,funded));
-        var before=b.get(),raw=b.slots();b.render();b.render();
+        var before=b.get(),raw=b.slots();b.render();b.render();b.refresh();
         same(b.get(),before,'render preserves all gameplay data '+id+'/'+mask);
         same(b.slots(),raw,'render preserves primary and recovery '+id+'/'+mask);
         var p=progression(id),complete=mask===7;
@@ -41,7 +41,12 @@ window.runWispUpgradeQa = function(){
   ['module','rarity','ultimate'].forEach(function(action){var el=p.querySelector('[data-'+action+']');ok(visible(el)&&el.disabled,'unrecruited '+action+' visible/disabled');});
   ok(p.querySelector('[data-module]').dataset.state==='locked','Module recruit gate labelled');
   ok(p.querySelector('[data-ultimate]').textContent.includes('Mythic required'),'Ultimate rarity gate labelled');
+  s.lumen=s.shards=s.sigils=1e12;b.set(s);b.render();b.refresh();
+  ['module','rarity','ultimate'].forEach(function(action){ok(progression('tide').querySelector('[data-'+action+']').disabled,'funded unrecruited '+action+' stays disabled after affordability refresh');});
+  var lockedBefore=b.get();progression('tide').querySelector('[data-module]').click();
+  same(b.get(),lockedBefore,'locked Module click preserves old purchase prerequisite');
   s=seed('ember',0,0,false,true);b.set(s);b.render();
+  b.refresh();ok(progression('ember').querySelector('[data-ultimate]').disabled,'funded Ultimate remains Mythic-gated after affordability refresh');
   ok(progression('ember').querySelector('[data-rarity]').disabled,'Rarity level requirement does not become a fold gate');
   // The predicate follows the same Module cap used by buying, not a UI literal.
   b.cap(21);try{b.set(seed('ember',5,20,true,false));b.render();ok(progression('ember').tagName==='SECTION','authoritative cap change leaves Module unfinished');}finally{b.cap(20);}
@@ -57,7 +62,7 @@ window.runWispUpgradeQa = function(){
     var cost=action==='module'?b.moduleCost('ember',19):{sigil:b.ultimateCost('ember')};
     var btn=progression('ember').querySelector('[data-'+action+']');btn.focus();btn.click();
     var after=b.get();p=progression('ember');
-    ok(after.wispModules.ember===20 && after.wispUltimate.ember,'last '+action+' completes existing purchase');
+    ok(after.heroRarity.ember===5 && after.wispModules.ember===20 && after.wispUltimate.ember,'last '+action+' completes existing purchase');
     ok(after.lumen===before.lumen-(cost.lumen||0) && after.shards===before.shards-(cost.shard||0) && after.sigils===before.sigils-(cost.sigil||0),'existing deterministic '+action+' debit');
     ok(p.tagName==='DETAILS' && p.open,'last purchase preserves open progression');
     ok(document.activeElement===p.querySelector('summary'),'last '+action+' purchase focus goes to same Wisp summary: '+document.activeElement.outerHTML);
@@ -65,6 +70,15 @@ window.runWispUpgradeQa = function(){
     ok(!progression('ember').open,'chosen fold survives render');
     same(b.get(),frozen,'fold preserves state');same(b.slots(),slots,'fold does not save');
   });
+  s=seed('ember',4,20,false,true);s.spirits.ember=b.rarityRequirement(4);b.set(s);b.render();
+  var beforeRarity=b.get(),rarityPrice=b.rarityCost('ember',4);
+  progression('ember').querySelector('[data-rarity]').click();
+  var afterRarity=b.get();p=progression('ember');
+  ok(afterRarity.heroRarity.ember===5 && !afterRarity.wispUltimate.ember,'final Rarity purchase retains unowned Ultimate');
+  ok(afterRarity.lumen===beforeRarity.lumen-rarityPrice.lumen && afterRarity.shards===beforeRarity.shards-rarityPrice.shard,'existing deterministic final Rarity debit');
+  ok(p.tagName==='SECTION' && visible(p.querySelector('[data-ultimate]')) && !p.querySelector('[data-ultimate]').disabled,'reaching Mythic still exposes the unfinished Ultimate');
+  p.querySelector('[data-ultimate]').focus();p.querySelector('[data-ultimate]').click();
+  ok(progression('ember').tagName==='DETAILS' && progression('ember').open,'Rarity then Ultimate permits folding only at completion');
   // Old data has no new schema/ownership rewrite on any persistence path.
   ['canonical','recovery','backup'].forEach(function(route){
     [false,true].forEach(function(complete){
@@ -76,5 +90,5 @@ window.runWispUpgradeQa = function(){
     });
   });
   b.set(seed('ember',0,0,false,false));b.render();
-  return {checks:checks,fixtures:fixtures,paths:['canonical','recovery','backup'],finalPurchases:['module','ultimate'],noGameplayMigration:true};
+  return {checks:checks,fixtures:fixtures,paths:['canonical','recovery','backup'],finalPurchases:['module','ultimate','rarity'],noGameplayMigration:true};
 };
