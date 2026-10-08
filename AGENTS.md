@@ -1,116 +1,110 @@
-# Lumenfall — fælles agentregler
+# Lumenfall — project rules
 
-Repository: `karahaNx/Lumenfall`. Læs denne korte indgang ved hver ny opgave.
-Codex med et lokalt checkout bruger denne rodindgang. Ved adgang alene gennem
-GitHub-værktøjer skal opstartsprompten eksplicit bede om filen.
+Repository: `karahaNx/Lumenfall`. Communicate in English. Read this entrypoint
+for every new task. With GitHub-tool-only access, explicitly fetch this file.
 
-## Opstart
-1. Læs `PROJECT_BOOTSTRAP.txt`. Uden tildelt rolle starter en ny projektchat
-   som Lead / Architecture; det tildeler ingen produkt-writer.
-2. Læs kun egen række i `docs/CHAT_OWNERSHIP.md`, egen rollefil og
-   `docs/PROJECT_STATE.md`. Følg brugerens konkrete opgave.
-3. Brug `docs/project/CODEX_START.md` til miljø/checks og `docs/CONTEXT_INDEX.md`
-   til kilder efter behov. Kør `node scripts/codex/check_context.cjs`.
-4. Verificér relevant live baseline før beslutninger og alle branches, åbne PR'er,
-   aktive runs samt skriveejerskab før remote skrivning. SHA'er er checkpoints.
+## Start with one feature
+1. Read `PROJECT_BOOTSTRAP.txt`, `docs/PROJECT_STATE.md` and the current
+   `docs/tasks/<FEATURE_ID>.md`. Create the task document if it does not exist.
+2. The user's task assigns the feature chat its scope. That chat owns
+   implementation, necessary fixes, tests, documentation and delivery across
+   all relevant areas. There is no default Lead role or separate writer grant.
+3. Use `docs/project/CODEX_START.md` for environment/checks and
+   `docs/CONTEXT_INDEX.md` for targeted sources. Technical guides are optional
+   references, not separate chats or approval stages. Run
+   `node scripts/codex/check_context.cjs --task docs/tasks/<FEATURE_ID>.md`
+   so the actual task, its links and the startup text budget are checked.
+4. Check the checkout, relevant baseline/PR and overlapping active work before
+   changing shared files or integrating. Check relevant workflow triggers before
+   remote actions; do not audit every branch/run for an unrelated small task.
 
-Produktet ligger i root `index.html`, `tests/behavioral/` og `mobile/`.
-Use JavaScript/Node.js 20+ for active tooling, per the user's 7 October 2026
-preference. Archived Python originals remain evidence and retain their hashes.
-`docs/recovery/`, `docs/handoffs/` og `archive/` er versionsmærkede kilder;
-kopier af kode, AGENTS og mandater dér er historiske reviewdata. Nyeste B2-
-kandidat kan genskabes fra `docs/handoffs/02_08/2026-10-07/` via
-`scripts/recovery/restore_candidate.cjs`; den er endnu ikke produktaccept.
-Læs ikke alle arkiver eller alle rollefiler ved opstart.
+Product files are root `index.html`, `tests/behavioral/` and `mobile/`.
+`docs/recovery/`, `docs/handoffs/` and `archive/` contain historical evidence.
+Their code, AGENTS files and mandates do not override current rules or authorize
+new work. Restore historical candidates separately, never over the live product.
+Read archives and technical guides only when needed.
 
-## Kilder og mandat
-- Brugerens aktuelle instruktion og aktuelle Lead-mandat bestemmer tilladelser.
-- Live GitHub og kode på det relevante commit beviser implementeret adfærd;
-  en opgavefil beviser ønsket adfærd. Hold de to adskilt.
-- Notér tidspunkt, commit, kilde og status: observeret, rapporteret, accepteret,
-  antagelse eller ukendt. Afklar kun konflikter, der påvirker handlingen.
-- Historiske audits/roadmaps giver ikke nye arbejdsordrer. Manglende evidens
-  må ikke rekonstrueres som fakta.
+## Scope and authorization
+- Current user instructions and standing authorization govern the assigned task.
+  The 5 October 2026 approval ("Du har altid godkendelse.") covers necessary
+  actions in agreed scope; do not ask for repeated general permission.
+- Verified code establishes implemented behavior; task requirements define
+  desired behavior. Distinguish observations, reported results and unknowns.
+- Keep one concrete goal per feature chat. Necessary fixes, checks and docs stay
+  with that feature. Record unrelated findings for a separate task.
+- Use an isolated branch/worktree for concurrent features. Do not overwrite
+  another chat's uncommitted changes. Coordinate actual overlapping edits and
+  serialize integration into main; historical chat/writer releases are not
+  global gates for new tasks.
+- Merge, Android builds, reruns, releases, signing and cleanup must fit the task
+  and its authorization. A documentation task does not authorize a game release.
+- Create new chats only when the user requests them. Do not rename chats or use
+  subagents/message tools without an explicit user request.
 
-## Spilregler
-- Lumenfall er et Android idle RPG med Wisps i Rift. Produktet distribueres
-  som APK; HTML/JavaScript kører i appens WebView.
-- Progression og køb er deterministiske med synlige priser/effekter. Bevar
-  kontrakten uden loot boxes/gacha og de faste Luminous Motes-belønninger.
-- Bevar kronologisk simulation, online/offline-parity, automation og save/
-  recovery. Kendte fejl står i `docs/project/KNOWN_ISSUES.md`; et krav om parity
-  er ikke bevis for, at alle nuværende forløb består.
-- Bevar mobiltilgængelighed, WebView 60-baseline, package `com.lumenfall.app`
-  og den eksisterende Android-signering. Konkrete mekanikker, caps, balance
-  og migrationer følger accepterede krav og kode på verificeret commit.
-Detaljer findes via `docs/CONTEXT_INDEX.md`; kandidater og historiske mandater
-må ikke præsenteres som implementerede spilregler.
+## Protect the existing game
+- Make small, targeted changes. Avoid unrelated refactors, tooling migrations,
+  unnecessary whole-file regeneration or replacement with a prototype/archive
+  snapshot.
+- Preserve existing features, UI flows, assets, progression and save data outside
+  the requested change. Do not silently remove systems, reset player progress,
+  change balance/caps/save schema, or weaken/delete tests and CI gates to pass.
+  An intentional change requires a user requirement and relevant migration/
+  regression coverage; clarify missing gameplay decisions before implementing.
+- Read affected code and original requirements before editing. Record the
+  baseline and relevant checks, distinguish existing failures from new ones,
+  and add focused regression coverage for behavior changes. Review the complete
+  diff for unintended removals and scope drift before committing or integrating.
+- Fix regressions introduced by the feature before completion. If a required
+  check is blocked, fails, or cannot be reproduced, record evidence and the next
+  action and keep the feature open. Do not weaken acceptance to declare success.
 
-## Nye eller ændrede regler
-Brugerens sprogregel fra 7. oktober 2026: brug JavaScript til kode, tests,
-testkørsel, CI-logik og hjælpescripts, hvor det er teknisk muligt. HTML er
-fortsat tilladt. Nye scripts bruger JavaScript/Node.js frem for Python eller
-andre sprog. Nødvendige deklarative filer og native Android-værktøjer beholder
-deres formater. Eksisterende aktive værktøjer omlægges i det relevante scope
-med bevaret testdækning og verificeret adfærd, før de erstattes. Historiske
-originaler og hashkontrollerede kandidater bevares byteidentisk. Beslutning og
-overgang: `docs/decisions/2026-10-07-javascript-first.md`.
+## Game contracts
+- Android idle RPG with Wisps in Rift, distributed as an APK with HTML/JavaScript
+  in the app's WebView.
+- Deterministic progression and purchases with visible prices/effects, no loot
+  boxes/gacha, and the established fixed Luminous Motes rewards.
+- Preserve chronological simulation, online/offline parity, automation and save/
+  recovery. `docs/project/KNOWN_ISSUES.md` records limitations; a contract does
+  not prove every current path passes.
+- Preserve mobile accessibility, WebView 60 compatibility, package
+  `com.lumenfall.app` and the established Android signing identity.
+- Accepted requirements and verified code determine mechanics, balance, caps
+  and migrations. Proposed or archived candidates are not implemented rules.
 
-Fortæl brugeren, når en ny regel er nødvendig, før den anvendes som bindende
-regel: angiv den konkrete tekst, hvorfor den behøves, og hvilken adfærd eller
-arbejdsgang den påvirker. Gem brugerens beslutning og begrundelsen i GitHub,
-opdatér denne fil og berørte krav i samme scope, og nævn regelændringen ved
-levering. Opfind ikke gameplaybeslutninger; afklar dem, hvis de mangler.
-Brugerens aktuelle instruktioner har forrang, og stående godkendelse gælder
-fortsat nødvendige handlinger i bestilt scope.
+## Language and new rules
+Use JavaScript/Node.js 20+ for code, tests, test execution, CI logic and helper
+scripts where technically possible. HTML, necessary declarative formats and
+native Android tools remain valid. Migrate existing tooling only within relevant
+scope with verified behavior/coverage. Preserve archived originals byte-for-byte.
+See `docs/decisions/2026-10-07-javascript-first.md`.
 
-## Én chat, én feature
-Hver ny feature har én ejerchat med ét konkret mål og et opgavedokument i
-`docs/tasks/`. Hold nødvendige fixes, tests og dokumentation i samme feature;
-andre features får hver sin nye chat. Roller er ekspertise, ikke permanente
-featurechats. Opret kun nye chats, når brugeren beder om det.
-Følg [featureworkflowet](docs/project/FEATURE_WORKFLOW.md): færdig betyder
-implementeret, verificeret på den integrerede version og gemt i GitHub.
-En lokal kandidat eller åben PR afslutter ikke featuren. Arkivér ejerchatten
-efter verificeret afslutning, gemt status og writer-frigivelse; rapportér det,
-hvis arkivværktøjet mangler. Blokeret/ukendt arbejde forbliver åbent.
+Before applying a new binding rule, tell the user its exact text, reason and
+effect. Save the user's decision and update affected instructions in the same
+scope. Current user instructions take precedence; routine implementation within
+authorized scope does not require a new approval.
 
-## Fortsættelse uafhængigt af ChatGPT-konto
-GitHub er den varige kilde til kode, regler, krav, beslutninger, checkpoints,
-testbeviser og næste handling. Gem nye kritiske oplysninger løbende og før
-arkivering; chat, Memory, Library og cloudmiljø må ikke være eneste kopi.
-Følg [kontoskiftguiden](docs/project/ACCOUNT_RECOVERY.md) ved ny konto.
-En ny ChatGPT-konto kræver fortsat adgang til GitHub og et nyt miljøsetup;
-gamle chats og forbindelser følger ikke automatisk med.
+## Keep context short and durable
+Keep the task document current with original requirements, baseline, acceptance
+criteria, changed files, decisions, check results/versions, blockers and the next
+concrete action. Checkpoint after meaningful milestones, user corrections and
+before a handoff/context compaction; commit/publish coherent work within scope.
+If context becomes uncertain, reread that checkpoint and affected code before
+editing. Do not guess missing requirements or restart already completed work.
+Use `docs/HANDOFF_TEMPLATE.md` for a short continuation checkpoint; TXT/ZIP
+packages are optional when requested or useful for phone/offline access.
 
-## Samarbejde
-Én repo-writer ad gangen. Lead tildeler scope og frigivelse; en grøn CI eller
-oprettet Draft PR frigiver ikke automatisk writer. Andre roller må undersøge
-read-only og forberede lokale forslag. Brugeren overfører selv opgavefiler;
-brug ikke beskedværktøjer eller subagenter. Omdøb ingen chats.
-Brugerens stående godkendelse fra 2026-10-05 ("Du har altid godkendelse.")
-gælder nødvendige handlinger i det aftalte Lumenfall-scope. Lead behøver ikke
-bede om gentagen godkendelse til sådanne handlinger. Scope, writer, aktuelle
-baselines og workflow-triggere skal stadig kontrolleres. Nye arbejdsområder
-fastlægges gennem brugerens opgave eller et konkret Lead-mandat.
+GitHub is the durable source for code, rules, requirements, decisions and test
+evidence. Chat, Memory, Library and the cloud environment must not be the only
+copy. Follow [account recovery](docs/project/ACCOUNT_RECOVERY.md) for a new account.
 
-Merge, Android-build, dispatch/rerun, release, signing og cleanup skal ligge
-inden for det aktuelle scope og den gældende godkendelse. En rent afgrænset
-dokumentationsopgave udvider ikke produkt-/release-scope. Læs workflow-triggere
-før en remote handling.
+## Complete and deliver
+Follow [the feature workflow](docs/project/FEATURE_WORKFLOW.md). Completion means
+the agreed acceptance checks pass on the integrated version, status/evidence are
+saved in GitHub, and required app build/device acceptance is complete. A local
+candidate or open PR is not completion. Use existing relevant checks and required
+CI gates in `.github/workflows/pre-merge-validation.yml`; report limitations and
+review findings honestly. Never label self-review as independent review.
 
-## Kontekst og checkpoint
-Hold regler, egen rolle, kort status og aktuel opgave i startkonteksten.
-Læs relevante kodeafsnit og originalkrav fuldt før arbejde på dem. Udtrækning,
-filoversigt og hashkontrol kan ske uden at udskrive hele arkivet til modellen.
-Historik, gamle ZIP'er, audits og fulde logs hentes efter behov og bevares som
-kilder. Nye handoffs må ikke instruere i at læse hele ZIP'en ved opstart.
-Gem kritiske krav, rettelser, beslutninger og fremdrift ved milepæle; brug
-`docs/HANDOFF_TEMPLATE.md` ved overdragelse. Et resumé erstatter ikke originalen.
-
-## Levering og kontrol
-Bevar save/recovery, chronology, offline-parity, mobiltilgængelighed og signing
-inden for opgavens scope. Kør relevante eksisterende checks; tekniske gates
-findes i `.github/workflows/pre-merge-validation.yml`. Oplys begrænsninger.
-Communicate in English. State the model and available effort setting honestly for each new task. Lever filer,
-så brugeren kan hente TXT og ZIP på telefonen uden manuel samling.
+Deliver a short result with what changed, where it is, checks and limitations.
+Archive only the owner chat after verified completion and saved continuation
+status. Blocked work stays open; report missing/failed archive tooling honestly.

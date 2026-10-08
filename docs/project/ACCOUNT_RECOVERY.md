@@ -15,10 +15,11 @@ kan ikke genskabe chatbeskeder eller filer, der aldrig blev gemt der.
    Åbn projektet på `main`, eller klon det til et nyt checkout. Forbindelser,
    Codex-miljøer, Memory og gamle chats følger ikke automatisk med.
 3. Brug startprompten nedenfor. Læs aktuelle regler og status fra GitHub;
-   kontrollér live branches, PR'er og relevante releases i stedet for at antage,
+   kontrollér relevant live main, featurebranch/PR og releases i stedet for at antage,
    at gamle checkpoints stadig er aktuelle.
 4. Opsæt miljøet efter [CODEX_START.md](CODEX_START.md), og kør
-   `node scripts/codex/check_context.cjs` fra repository-roden.
+   `node scripts/codex/check_context.cjs --task docs/tasks/<FEATURE_ID>.md`
+   fra repository-roden med den konkrete opgaves sti.
 5. Vælg én feature og start dens ejerchat. Fortsæt fra opgavedokumentets
    næste handling og eksisterende acceptbeviser. Gentag ikke allerede
    implementeret arbejde, og promover ikke arkiverede kandidater til produktet.
@@ -26,18 +27,23 @@ kan ikke genskabe chatbeskeder eller filer, der aldrig blev gemt der.
 ## Startprompt til den nye konto
 
 ```text
-Fortsæt Lumenfall fra GitHub-repositoryet karahaNx/Lumenfall, branch main.
-Læs AGENTS.md og PROJECT_BOOTSTRAP.txt, kun egen række i docs/CHAT_OWNERSHIP.md,
-egen rollefil og docs/PROJECT_STATE.md. Uden anden rolletildeling: Lead.
-Use JavaScript/Node.js for active tools; keep archived originals unchanged.
-Følg docs/project/CODEX_START.md; kør node scripts/codex/check_context.cjs.
-Kontrollér live main, åbne PR'er, relevante releases og skriveejerskab.
-Læs docs/project/FEATURE_WORKFLOW.md. Én feature pr. ejerchat; arkivér efter
-verificeret integration, gemt status og writer-frigivelse. Fortæl mig, når
-en ny regel er nødvendig. Gem krav, beslutninger og testbeviser løbende i GitHub.
-Brug docs/CONTEXT_INDEX.md til målrettet opslag. Læs ikke hele arkivet.
-Brug ikke subagenter/beskedværktøjer. Communicate in English.
-Min konkrete feature/opgave: [indsæt ét mål eller en sti i docs/tasks/].
+Continue Lumenfall from karahaNx/Lumenfall, current main or the feature branch.
+Read AGENTS.md, PROJECT_BOOTSTRAP.txt, docs/PROJECT_STATE.md and the current
+docs/tasks/<FEATURE_ID>.md. You own this feature across implementation, fixes,
+tests, documentation and delivery; there is no default Lead or writer ceremony.
+Use docs/project/CODEX_START.md; run node scripts/codex/check_context.cjs
+--task docs/tasks/<FEATURE_ID>.md to validate this actual task and startup budget.
+Check the relevant baseline/PR and actual overlapping work. Use an isolated
+branch/worktree for concurrent features. Read technical guides only as needed.
+Follow docs/project/FEATURE_WORKFLOW.md. Make small changes and preserve existing
+features, save data and test gates. Checkpoint original requirements, versions,
+decisions, checks, blockers and next action in GitHub before context compaction
+or handoff. Resume from that checkpoint; do not guess or repeat completed work.
+Archive only after verified integration, relevant acceptance and saved status.
+Tell me before applying a new rule. Use JavaScript/Node.js where technically
+possible; preserve archived originals. Do not create/rename other chats or use
+subagents/message tools without my request. Communicate in English.
+My feature/task: [insert one goal or a path in docs/tasks/].
 ```
 
 Filen `PROJECT_INSTRUCTIONS.txt` kan også bruges til nye projektinstruktioner.

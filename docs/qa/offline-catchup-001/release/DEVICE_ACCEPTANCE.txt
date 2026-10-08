@@ -1,0 +1,67 @@
+HISTORICAL134 CHECKLIST: this version has a preserved native failure.
+Use ../android-137/DEVICE_ACCEPTANCE.txt for current acceptance.
+
+LUMENFALL — OFFLINE-CATCHUP-001 DEVICE ACCEPTANCE
+Release: 0.1.134 (versionCode134), com.lumenfall.app
+Build commit: 0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd
+APK: https://github.com/karahaNx/Lumenfall/releases/download/android-latest/Lumenfall.apk
+APK SHA256: 09e53527d8a968801f6457297558efcb4ffcf5b260af47f202447e57455b6f6c
+Code: https://github.com/karahaNx/Lumenfall/pull/51 (merged)
+
+The code, JavaScript migration, CI and signed APK are published and verified.
+These physical-device checks remain required by the original feature request.
+No Android device/emulator is connected to the agent's environment.
+Record results against this APK; later android-latest releases may differ.
+
+FIRST TEST ON YOUR AFFECTED PHONE
+1. Keep a separate copy of your real save backup before testing. Install the
+   APK as an UPDATE to Lumenfall; do not uninstall or clear app data. Confirm
+   the installed version is0.1.134 and that the existing progress survives.
+2. For the original failing case, use the affected save with Auto-Ascend ON,
+   Clear21 (stored target22), after at least8 actual hours closed/backgrounded.
+   If that absence already exists, update before reopening. If you restore a
+   backup first, the app resets lastSeen to the restore time; importing an old
+   timestamp does not create an8-hour test. Wait the real window afterward.
+3. Open the app. Record elapsed catch-up time and whether the screen remains
+   responsive, the normal return panel appears, Claim closes it, and live
+   combat/automation resume. Record any freeze/error/missing reward.
+4. Background/reopen repeatedly, then force-stop/relaunch. Progress must survive
+   and the completed offline reward must not appear again. Export/reload a
+   backup and verify the same completed progress.
+
+REMAINING CONTRACT MATRIX
+Use a separate test installation/save or preserve your real backup. Each row
+needs an actual elapsed offline window or documented Android QA clock control;
+desktop simulated time is not physical-device acceptance. Do not treat an
+untested row as PASS. Do not alter balance, cap or reward parameters for testing.
+
+- Auto-Ascend ON Clear20,8h; Auto-Ascend OFF,8h; confirm normal return/live play.
+- Long absence through the original save's72h combat cap; a96h absence with
+  an existing eligible Study verifies study-only progress beyond that cap.
+- Cold launch and background/resume; repeated return/Claim does not duplicate
+  progress or rewards. Include Motes, Study, automation and formation state.
+- Background during active catch-up, reopen; force-stop DURING active catch-up,
+  restart. The unfinished window retries and commits once, with no partial loss,
+  duplicate rewards, permanently busy UI or partially consumed endpoint.
+- Primary save/reload/backup and recovery after interruption remain usable.
+- Supported WebView60 device/runtime: run the long return and interruption
+  cases. A modern Android/WebView pass does not cover this baseline.
+- TalkBack enabled: catch-up return message/Claim and subsequent navigation
+  are announced, reachable and operable; focus returns sensibly after Claim.
+
+REPORT BACK
+Installed app version:
+Phone/model and Android version:
+Android System WebView provider/version:
+Signing-compatible update and existing save retained: PASS/FAIL
+Each tested case, elapsed offline window and outcome:
+Catch-up wall time, return/Claim/live play and observed responsiveness:
+Interruption/restart and no duplicate/lost progress:
+Save/reload/backup/recovery:
+WebView60 acceptance: PASS/FAIL/NOT TESTED
+TalkBack acceptance: PASS/FAIL/NOT TESTED
+Any errors or reproduction steps:
+
+The feature stays open until required acceptance is recorded in GitHub.
+Repository writes for implementation/release are released after the final
+documentation checkpoint is published. This does not release any other writer.

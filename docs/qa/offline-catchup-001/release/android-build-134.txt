@@ -1,0 +1,1135 @@
+﻿2026-10-07T13:13:35.2563852Z Current runner version: '2.337.0'
+2026-10-07T13:13:35.2590790Z ##[group]Runner Image Provisioner
+2026-10-07T13:13:35.2591698Z Hosted Compute Agent
+2026-10-07T13:13:35.2592306Z Version: 20261002.596
+2026-10-07T13:13:35.2593004Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-07T13:13:35.2593780Z Build Date: 2026-10-02T22:28:27Z
+2026-10-07T13:13:35.2594525Z Worker ID: {d070c056-90c5-4111-a239-879e744f24ef}
+2026-10-07T13:13:35.2595252Z Region: westus
+2026-10-07T13:13:35.2595784Z Cloud: Azure
+2026-10-07T13:13:35.2596356Z ##[endgroup]
+2026-10-07T13:13:35.2598228Z ##[group]Operating System
+2026-10-07T13:13:35.2598878Z Ubuntu
+2026-10-07T13:13:35.2599534Z 24.04.5
+2026-10-07T13:13:35.2600047Z LTS
+2026-10-07T13:13:35.2600601Z ##[endgroup]
+2026-10-07T13:13:35.2601213Z ##[group]Runner Image
+2026-10-07T13:13:35.2601847Z Image: ubuntu-24.04
+2026-10-07T13:13:35.2602476Z Version: 20261004.327.1
+2026-10-07T13:13:35.2603743Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-07T13:13:35.2605424Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-07T13:13:35.2606405Z ##[endgroup]
+2026-10-07T13:13:35.2607862Z ##[group]GITHUB_TOKEN Permissions
+2026-10-07T13:13:35.2609843Z Actions: write
+2026-10-07T13:13:35.2610643Z Contents: write
+2026-10-07T13:13:35.2611219Z Metadata: read
+2026-10-07T13:13:35.2611805Z ##[endgroup]
+2026-10-07T13:13:35.2614085Z Secret source: Actions
+2026-10-07T13:13:35.2615224Z Cache mode: write
+2026-10-07T13:13:35.2616289Z Prepare workflow directory
+2026-10-07T13:13:35.2978582Z Prepare all required actions
+2026-10-07T13:13:35.3031626Z Getting action download info
+2026-10-07T13:13:35.6911552Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-07T13:13:35.8037256Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-07T13:13:35.8904966Z Download action repository 'actions/setup-java@v5' (SHA:b6effb05e454b25005698d916606bdc6ffcbf961)
+2026-10-07T13:13:36.4956364Z Download action repository 'gradle/actions@v4' (SHA:ed408507eac070d1f99cc633dbcf757c94c7933a)
+2026-10-07T13:13:37.6444936Z Complete job name: build-apk
+2026-10-07T13:13:37.7670127Z ##[group]Run actions/checkout@v4
+2026-10-07T13:13:37.7671482Z with:
+2026-10-07T13:13:37.7672289Z   repository: karahaNx/Lumenfall
+2026-10-07T13:13:37.7681101Z   token: ***
+2026-10-07T13:13:37.7681883Z   ssh-strict: true
+2026-10-07T13:13:37.7682659Z   ssh-user: git
+2026-10-07T13:13:37.7683479Z   persist-credentials: true
+2026-10-07T13:13:37.7684387Z   clean: true
+2026-10-07T13:13:37.7685200Z   sparse-checkout-cone-mode: true
+2026-10-07T13:13:37.7686169Z   fetch-depth: 1
+2026-10-07T13:13:37.7686945Z   fetch-tags: false
+2026-10-07T13:13:37.7688002Z   show-progress: true
+2026-10-07T13:13:37.7688826Z   lfs: false
+2026-10-07T13:13:37.7689607Z   submodules: false
+2026-10-07T13:13:37.7690492Z   set-safe-directory: true
+2026-10-07T13:13:37.7691432Z   allow-unsafe-pr-checkout: false
+2026-10-07T13:13:37.7692760Z ##[endgroup]
+2026-10-07T13:13:37.8817193Z Syncing repository: karahaNx/Lumenfall
+2026-10-07T13:13:37.8821730Z ##[group]Getting Git version info
+2026-10-07T13:13:37.8823993Z Working directory is '/home/runner/work/Lumenfall/Lumenfall'
+2026-10-07T13:13:37.8827226Z [command]/usr/bin/git version
+2026-10-07T13:13:37.8875951Z git version 2.55.0
+2026-10-07T13:13:37.8932390Z ##[endgroup]
+2026-10-07T13:13:37.8956008Z Temporarily overriding HOME='/home/runner/work/_temp/3b020359-01b5-473e-af96-952879c3a82b' before making global git config changes
+2026-10-07T13:13:37.8961412Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-07T13:13:37.8965529Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Lumenfall/Lumenfall
+2026-10-07T13:13:37.9004333Z Deleting the contents of '/home/runner/work/Lumenfall/Lumenfall'
+2026-10-07T13:13:37.9008256Z ##[group]Initializing the repository
+2026-10-07T13:13:37.9013148Z [command]/usr/bin/git init /home/runner/work/Lumenfall/Lumenfall
+2026-10-07T13:13:37.9139075Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-07T13:13:37.9143540Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-07T13:13:37.9146696Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-07T13:13:37.9149809Z hint: call:
+2026-10-07T13:13:37.9151187Z hint:
+2026-10-07T13:13:37.9152701Z hint: 	git config --global init.defaultBranch <name>
+2026-10-07T13:13:37.9154602Z hint:
+2026-10-07T13:13:37.9156393Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-07T13:13:37.9159661Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-07T13:13:37.9162077Z hint:
+2026-10-07T13:13:37.9163393Z hint: 	git branch -m <name>
+2026-10-07T13:13:37.9165009Z hint:
+2026-10-07T13:13:37.9166981Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-07T13:13:37.9170758Z Initialized empty Git repository in /home/runner/work/Lumenfall/Lumenfall/.git/
+2026-10-07T13:13:37.9176036Z [command]/usr/bin/git remote add origin https://github.com/karahaNx/Lumenfall
+2026-10-07T13:13:37.9217834Z ##[endgroup]
+2026-10-07T13:13:37.9220233Z ##[group]Disabling automatic garbage collection
+2026-10-07T13:13:37.9222376Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-07T13:13:37.9259554Z ##[endgroup]
+2026-10-07T13:13:37.9261786Z ##[group]Setting up auth
+2026-10-07T13:13:37.9266392Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-07T13:13:37.9305525Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-07T13:13:37.9739774Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-07T13:13:37.9784614Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-07T13:13:38.0029596Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-07T13:13:38.0068971Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-07T13:13:38.0302678Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-07T13:13:38.0344479Z ##[endgroup]
+2026-10-07T13:13:38.0346033Z ##[group]Fetching the repository
+2026-10-07T13:13:38.0355008Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd:refs/remotes/origin/main
+2026-10-07T13:13:47.8209394Z From https://github.com/karahaNx/Lumenfall
+2026-10-07T13:13:47.8210117Z  * [new ref]         0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd -> origin/main
+2026-10-07T13:13:47.8213012Z ##[endgroup]
+2026-10-07T13:13:47.8213554Z ##[group]Determining the checkout info
+2026-10-07T13:13:47.8215614Z ##[endgroup]
+2026-10-07T13:13:47.8222481Z [command]/usr/bin/git sparse-checkout disable
+2026-10-07T13:13:47.8277381Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-07T13:13:47.8311148Z ##[group]Checking out the ref
+2026-10-07T13:13:47.8323936Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-07T13:13:48.1210939Z Switched to a new branch 'main'
+2026-10-07T13:13:48.1215771Z branch 'main' set up to track 'origin/main'.
+2026-10-07T13:13:48.1251600Z ##[endgroup]
+2026-10-07T13:13:48.1304656Z [command]/usr/bin/git log -1 --format=%H
+2026-10-07T13:13:48.1331503Z 0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd
+2026-10-07T13:13:48.1719722Z ##[group]Run actions/setup-node@v4
+2026-10-07T13:13:48.1720066Z with:
+2026-10-07T13:13:48.1720285Z   node-version: 20
+2026-10-07T13:13:48.1720700Z   cache: npm
+2026-10-07T13:13:48.1720961Z   cache-dependency-path: mobile/package-lock.json
+2026-10-07T13:13:48.1721291Z   always-auth: false
+2026-10-07T13:13:48.1721525Z   check-latest: false
+2026-10-07T13:13:48.1723927Z   token: ***
+2026-10-07T13:13:48.1724138Z ##[endgroup]
+2026-10-07T13:13:48.3188342Z Attempting to download 20...
+2026-10-07T13:13:48.3304924Z (node:2340) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-07T13:13:48.3306197Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-07T13:13:49.0487256Z Acquiring 20.20.2 - x64 from https://github.com/actions/node-versions/releases/download/20.20.2-23521894959/node-20.20.2-linux-x64.tar.gz
+2026-10-07T13:13:49.4679921Z Extracting ...
+2026-10-07T13:13:49.4823096Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/f40a53d3-2dd1-459c-8754-3955dabc39a8 -f /home/runner/work/_temp/1546bd5b-e933-4144-8be3-9e785a13c7c9
+2026-10-07T13:13:50.4905091Z Adding to the cache ...
+2026-10-07T13:13:52.3265986Z ##[group]Environment details
+2026-10-07T13:13:52.5604971Z node: v20.20.2
+2026-10-07T13:13:52.5605401Z npm: 10.8.2
+2026-10-07T13:13:52.5605655Z yarn: 1.22.22
+2026-10-07T13:13:52.5606212Z ##[endgroup]
+2026-10-07T13:13:52.5625982Z [command]/opt/hostedtoolcache/node/20.20.2/x64/bin/npm config get cache
+2026-10-07T13:13:52.6678209Z /home/runner/.npm
+2026-10-07T13:13:52.9510581Z Cache hit for: node-cache-Linux-x64-npm-479cd4b3756fdffb6dc102536f1164876a9699bd40c653018d14eed853eae6ca
+2026-10-07T13:13:52.9653513Z (node:2340) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-07T13:13:54.2462360Z Received 1469515 of 26635339 (5.5%), 1.4 MBs/sec
+2026-10-07T13:13:55.0165419Z Received 26635339 of 26635339 (100.0%), 14.3 MBs/sec
+2026-10-07T13:13:55.0166721Z Cache Size: ~25 MB (26635339 B)
+2026-10-07T13:13:55.0197795Z [command]/usr/bin/tar -xf /home/runner/work/_temp/e98a0590-8c73-4833-bee4-11b102ffb4cf/cache.tzst -P -C /home/runner/work/Lumenfall/Lumenfall --use-compress-program unzstd
+2026-10-07T13:13:55.1015841Z Cache restored successfully
+2026-10-07T13:13:55.1038909Z Cache restored from key: node-cache-Linux-x64-npm-479cd4b3756fdffb6dc102536f1164876a9699bd40c653018d14eed853eae6ca
+2026-10-07T13:13:55.1300348Z ##[group]Run actions/setup-java@v5
+2026-10-07T13:13:55.1300673Z with:
+2026-10-07T13:13:55.1300890Z   distribution: temurin
+2026-10-07T13:13:55.1301123Z   java-version: 17
+2026-10-07T13:13:55.1301346Z   java-package: jdk
+2026-10-07T13:13:55.1301584Z   check-latest: false
+2026-10-07T13:13:55.1301819Z   set-default: true
+2026-10-07T13:13:55.1302040Z   verify-signature: false
+2026-10-07T13:13:55.1302272Z   server-id: github
+2026-10-07T13:13:55.1302492Z   server-username: GITHUB_ACTOR
+2026-10-07T13:13:55.1302759Z   server-password: GITHUB_TOKEN
+2026-10-07T13:13:55.1303029Z   overwrite-settings: true
+2026-10-07T13:13:55.1303266Z   job-status: success
+2026-10-07T13:13:55.1305663Z   token: ***
+2026-10-07T13:13:55.1305889Z   show-download-progress: false
+2026-10-07T13:13:55.1306147Z ##[endgroup]
+2026-10-07T13:13:55.2856576Z ##[group]Installed distributions
+2026-10-07T13:13:55.2936353Z Resolved Java 17.0.20+1 from tool-cache
+2026-10-07T13:13:55.2937224Z Setting Java 17.0.20+1 as the default
+2026-10-07T13:13:55.2941955Z Creating toolchains.xml for JDK version 17 from temurin
+2026-10-07T13:13:55.3018508Z Writing to /home/runner/.m2/toolchains.xml
+2026-10-07T13:13:55.3018949Z 
+2026-10-07T13:13:55.3019214Z Java configuration:
+2026-10-07T13:13:55.3019714Z   Distribution: temurin
+2026-10-07T13:13:55.3020190Z   Version: 17.0.20+1
+2026-10-07T13:13:55.3020916Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:13:55.3021476Z 
+2026-10-07T13:13:55.3021944Z ##[endgroup]
+2026-10-07T13:13:55.3028937Z Creating settings.xml with server-id: github
+2026-10-07T13:13:55.3042218Z Writing to /home/runner/.m2/settings.xml
+2026-10-07T13:13:55.3048046Z Configured MAVEN_ARGS to include -ntp to suppress Maven transfer progress logs. Set 'show-download-progress: true' to keep the download progress output.
+2026-10-07T13:13:55.3367138Z ##[group]Run gradle/actions/setup-gradle@v4
+2026-10-07T13:13:55.3367737Z with:
+2026-10-07T13:13:55.3367982Z   cache-disabled: false
+2026-10-07T13:13:55.3368238Z   cache-read-only: false
+2026-10-07T13:13:55.3368485Z   cache-write-only: false
+2026-10-07T13:13:55.3368743Z   cache-overwrite-existing: false
+2026-10-07T13:13:55.3369018Z   cache-cleanup: on-success
+2026-10-07T13:13:55.3369314Z   gradle-home-cache-includes: caches
+notifications
+
+2026-10-07T13:13:55.3369645Z   add-job-summary: always
+2026-10-07T13:13:55.3369908Z   add-job-summary-as-pr-comment: never
+2026-10-07T13:13:55.3370202Z   dependency-graph: disabled
+2026-10-07T13:13:55.3370696Z   dependency-graph-report-dir: dependency-graph-reports
+2026-10-07T13:13:55.3371129Z   dependency-graph-continue-on-failure: true
+2026-10-07T13:13:55.3371445Z   build-scan-publish: false
+2026-10-07T13:13:55.3371703Z   validate-wrappers: true
+2026-10-07T13:13:55.3371961Z   allow-snapshot-wrappers: false
+2026-10-07T13:13:55.3372307Z   gradle-home-cache-strict-match: false
+2026-10-07T13:13:55.3372608Z   workflow-job-context: null
+2026-10-07T13:13:55.3377437Z   github-token: ***
+2026-10-07T13:13:55.3378004Z env:
+2026-10-07T13:13:55.3378507Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:13:55.3379397Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:13:55.3379960Z   MAVEN_ARGS: -ntp
+2026-10-07T13:13:55.3380190Z ##[endgroup]
+2026-10-07T13:13:55.7884365Z Merged default JDK locations into /home/runner/.m2/toolchains.xml
+2026-10-07T13:13:55.7886093Z Preparing cache for cleanup.
+2026-10-07T13:13:55.7889953Z ##[group]Restore Gradle state from cache
+2026-10-07T13:13:56.0556775Z Cache hit for restore-key: gradle-home-v1|Linux-X64|build-apk[e080f0fdc288b6f0c5023fd4b86f7a10]-d32c0043b73d8ddc9f7600022c4f7a133899652e
+2026-10-07T13:13:57.3620651Z Received 549706 of 17326922 (3.2%), 0.5 MBs/sec
+2026-10-07T13:13:57.5969573Z Received 17326922 of 17326922 (100.0%), 13.4 MBs/sec
+2026-10-07T13:13:57.5978927Z Cache Size: ~17 MB (17326922 B)
+2026-10-07T13:13:57.6008474Z [command]/usr/bin/tar -xf /home/runner/work/_temp/24c901d8-61f7-40bd-9660-aee62e78fd4c/cache.tzst -P -C /home/runner/work/Lumenfall/Lumenfall --use-compress-program unzstd
+2026-10-07T13:13:57.9080733Z Cache restored successfully
+2026-10-07T13:13:57.9093072Z Restored cache entry with key gradle-home-v1|Linux-X64|build-apk[e080f0fdc288b6f0c5023fd4b86f7a10]-0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd to /home/runner/.gradle/caches,/home/runner/.gradle/notifications,/home/runner/.gradle/.setup-gradle in 2119ms
+2026-10-07T13:13:58.1533065Z Cache hit for: gradle-groovy-dsl-v1-cc09209c8ed69f753546c2202041a172
+2026-10-07T13:13:58.1543942Z Cache hit for: gradle-dependencies-v1-a4b65b3aa6005152280ae0711b7c534b
+2026-10-07T13:13:58.1664728Z Cache hit for: gradle-instrumented-jars-v1-d58a149b657b2f2decbf1133486ae8f8
+2026-10-07T13:13:58.1670801Z Cache hit for: gradle-wrapper-zips-v1-8af2e21a804d0999b95f3c6a612aeee5
+2026-10-07T13:13:58.8639203Z Received 91672 of 91672 (100.0%), 0.2 MBs/sec
+2026-10-07T13:13:58.8642484Z Cache Size: ~0 MB (91672 B)
+2026-10-07T13:13:58.8679729Z [command]/usr/bin/tar -xf /home/runner/work/_temp/b1ecedef-45a3-45e8-8596-4b7c3cd84a07/cache.tzst -P -C /home/runner/work/Lumenfall/Lumenfall --use-compress-program unzstd
+2026-10-07T13:13:58.8857028Z Cache restored successfully
+2026-10-07T13:13:58.8866476Z Restored cache entry with key gradle-groovy-dsl-v1-cc09209c8ed69f753546c2202041a172 to /home/runner/.gradle/caches/*/groovy-dsl/*/ in 976ms
+2026-10-07T13:13:59.2425376Z Received 33239637 of 45822549 (72.5%), 31.7 MBs/sec
+2026-10-07T13:13:59.4103355Z Received 0 of 185947585 (0.0%), 0.0 MBs/sec
+2026-10-07T13:13:59.4414904Z Received 0 of 156584619 (0.0%), 0.0 MBs/sec
+2026-10-07T13:13:59.4858637Z Received 45822549 of 45822549 (100.0%), 35.1 MBs/sec
+2026-10-07T13:13:59.4861661Z Cache Size: ~44 MB (45822549 B)
+2026-10-07T13:13:59.4953935Z [command]/usr/bin/tar -xf /home/runner/work/_temp/23819793-60e5-430c-96ee-2c5b36794940/cache.tzst -P -C /home/runner/work/Lumenfall/Lumenfall --use-compress-program unzstd
+2026-10-07T13:13:59.8851867Z Cache restored successfully
+2026-10-07T13:13:59.8874434Z Restored cache entry with key gradle-instrumented-jars-v1-d58a149b657b2f2decbf1133486ae8f8 to /home/runner/.gradle/caches/jars-*/*/ in 1977ms
+2026-10-07T13:14:00.4159093Z Received 104857600 of 185947585 (56.4%), 49.9 MBs/sec
+2026-10-07T13:14:00.4415790Z Received 96468992 of 156584619 (61.6%), 46.0 MBs/sec
+2026-10-07T13:14:01.2043134Z Received 185947585 of 185947585 (100.0%), 63.4 MBs/sec
+2026-10-07T13:14:01.2046355Z Cache Size: ~177 MB (185947585 B)
+2026-10-07T13:14:01.2191614Z [command]/usr/bin/tar -xf /home/runner/work/_temp/aa222865-cef9-4eca-81fe-8c63e4d644ec/cache.tzst -P -C /home/runner/work/Lumenfall/Lumenfall --use-compress-program unzstd
+2026-10-07T13:14:01.4446440Z Received 152390315 of 156584619 (97.3%), 48.4 MBs/sec
+2026-10-07T13:14:01.4946531Z Cache restored successfully
+2026-10-07T13:14:01.5028890Z Restored cache entry with key gradle-dependencies-v1-a4b65b3aa6005152280ae0711b7c534b to /home/runner/.gradle/caches/modules-*/files-*/*/*/*/* in 3592ms
+2026-10-07T13:14:01.6153305Z Received 156584619 of 156584619 (100.0%), 47.1 MBs/sec
+2026-10-07T13:14:01.6154451Z Cache Size: ~149 MB (156584619 B)
+2026-10-07T13:14:01.6197007Z [command]/usr/bin/tar -xf /home/runner/work/_temp/310a86a3-4545-44c0-a954-51cbbdb1ffcd/cache.tzst -P -C /home/runner/work/Lumenfall/Lumenfall --use-compress-program unzstd
+2026-10-07T13:14:03.0332121Z Cache restored successfully
+2026-10-07T13:14:03.0398767Z Restored cache entry with key gradle-wrapper-zips-v1-8af2e21a804d0999b95f3c6a612aeee5 to /home/runner/.gradle/wrapper/dists/gradle-8.2.1-all/d8pvvlun5bx6sdtwqhf8y9z4b in 5130ms
+2026-10-07T13:14:03.0540719Z ##[endgroup]
+2026-10-07T13:14:03.0740347Z ##[group]All Gradle Wrapper jars are valid
+2026-10-07T13:14:03.0741251Z 
+2026-10-07T13:14:03.0741680Z ##[endgroup]
+2026-10-07T13:14:03.0930517Z ##[group]Run echo "ANDROID_HOME=$ANDROID_HOME"
+2026-10-07T13:14:03.0931034Z [36;1mecho "ANDROID_HOME=$ANDROID_HOME"[0m
+2026-10-07T13:14:03.0931394Z [36;1mtest -n "$ANDROID_HOME"[0m
+2026-10-07T13:14:03.0931711Z [36;1mtest -d "$ANDROID_HOME"[0m
+2026-10-07T13:14:03.1214394Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-07T13:14:03.1214949Z env:
+2026-10-07T13:14:03.1215450Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:03.1216246Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:03.1216860Z   MAVEN_ARGS: -ntp
+2026-10-07T13:14:03.1217259Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-07T13:14:03.1217960Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-07T13:14:03.1218438Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-07T13:14:03.1218946Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-07T13:14:03.1219605Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-07T13:14:03.1220207Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-07T13:14:03.1220609Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-07T13:14:03.1220951Z ##[endgroup]
+2026-10-07T13:14:03.1333321Z ANDROID_HOME=/usr/local/lib/android/sdk
+2026-10-07T13:14:03.1381345Z ##[group]Run set -euo pipefail
+2026-10-07T13:14:03.1381764Z [36;1mset -euo pipefail[0m
+2026-10-07T13:14:03.1382088Z [36;1mSIGNING_TAG="lumenfall-signing-v1"[0m
+2026-10-07T13:14:03.1382826Z [36;1mKEYSTORE_DIR="$RUNNER_TEMP/lumenfall-signing"[0m
+2026-10-07T13:14:03.1383413Z [36;1mKEYSTORE_FILE="$KEYSTORE_DIR/Lumenfall-debug.keystore"[0m
+2026-10-07T13:14:03.1384043Z [36;1mKEYTOOL_OUTPUT="$KEYSTORE_DIR/keytool-output.txt"[0m
+2026-10-07T13:14:03.1384562Z [36;1m[0m
+2026-10-07T13:14:03.1385007Z [36;1mmkdir -p "$KEYSTORE_DIR" "$HOME/.android"[0m
+2026-10-07T13:14:03.1385641Z [36;1m[0m
+2026-10-07T13:14:03.1386119Z [36;1mif ! gh release view "$SIGNING_TAG" >/dev/null 2>&1; then[0m
+2026-10-07T13:14:03.1387036Z [36;1m  echo "::error::Established Android signing release '$SIGNING_TAG' is missing or inaccessible. Refusing to generate replacement signing material."[0m
+2026-10-07T13:14:03.1388206Z [36;1m  exit 1[0m
+2026-10-07T13:14:03.1388574Z [36;1mfi[0m
+2026-10-07T13:14:03.1389080Z [36;1m[0m
+2026-10-07T13:14:03.1389454Z [36;1mif ! gh release download "$SIGNING_TAG" \[0m
+2026-10-07T13:14:03.1390027Z [36;1m  --pattern "Lumenfall-debug.keystore" \[0m
+2026-10-07T13:14:03.1390486Z [36;1m  --dir "$KEYSTORE_DIR" \[0m
+2026-10-07T13:14:03.1407165Z [36;1m  --clobber; then[0m
+2026-10-07T13:14:03.1408454Z [36;1m  echo "::error::Established Android signing keystore could not be downloaded. Refusing to build or publish."[0m
+2026-10-07T13:14:03.1409285Z [36;1m  exit 1[0m
+2026-10-07T13:14:03.1409541Z [36;1mfi[0m
+2026-10-07T13:14:03.1409786Z [36;1m[0m
+2026-10-07T13:14:03.1410027Z [36;1mif [ ! -s "$KEYSTORE_FILE" ]; then[0m
+2026-10-07T13:14:03.1410599Z [36;1m  echo "::error::Established Android signing keystore is missing or empty. Refusing to build or publish."[0m
+2026-10-07T13:14:03.1411141Z [36;1m  exit 1[0m
+2026-10-07T13:14:03.1411378Z [36;1mfi[0m
+2026-10-07T13:14:03.1411596Z [36;1m[0m
+2026-10-07T13:14:03.1411826Z [36;1mif ! keytool -list -v \[0m
+2026-10-07T13:14:03.1412147Z [36;1m  -keystore "$KEYSTORE_FILE" \[0m
+2026-10-07T13:14:03.1412474Z [36;1m  -storepass android \[0m
+2026-10-07T13:14:03.1412864Z [36;1m  -alias androiddebugkey >"$KEYTOOL_OUTPUT" 2>/dev/null; then[0m
+2026-10-07T13:14:03.1413657Z [36;1m  echo "::error::Established Android signing keystore is unreadable, corrupt, or invalid for the expected signing alias. Refusing to build or publish."[0m
+2026-10-07T13:14:03.1414344Z [36;1m  exit 1[0m
+2026-10-07T13:14:03.1414575Z [36;1mfi[0m
+2026-10-07T13:14:03.1414794Z [36;1m[0m
+2026-10-07T13:14:03.1415239Z [36;1mACTUAL_SIGNING_SHA256="$(awk -F'SHA256: ' '/SHA256:/{print $2; exit}' "$KEYTOOL_OUTPUT" | tr -d '\r')"[0m
+2026-10-07T13:14:03.1415770Z [36;1mrm -f "$KEYTOOL_OUTPUT"[0m
+2026-10-07T13:14:03.1416057Z [36;1m[0m
+2026-10-07T13:14:03.1416313Z [36;1mif [ -z "$ACTUAL_SIGNING_SHA256" ]; then[0m
+2026-10-07T13:14:03.1416919Z [36;1m  echo "::error::Could not determine the Android signing certificate fingerprint. Refusing to build or publish."[0m
+2026-10-07T13:14:03.1417774Z [36;1m  exit 1[0m
+2026-10-07T13:14:03.1418179Z [36;1mfi[0m
+2026-10-07T13:14:03.1418503Z [36;1m[0m
+2026-10-07T13:14:03.1418871Z [36;1mif [ "$ACTUAL_SIGNING_SHA256" != "$EXPECTED_SIGNING_SHA256" ]; then[0m
+2026-10-07T13:14:03.1419692Z [36;1m  echo "::error::Android signing certificate mismatch. Expected $EXPECTED_SIGNING_SHA256 but restored $ACTUAL_SIGNING_SHA256. Refusing to build or publish."[0m
+2026-10-07T13:14:03.1420395Z [36;1m  exit 1[0m
+2026-10-07T13:14:03.1420631Z [36;1mfi[0m
+2026-10-07T13:14:03.1420860Z [36;1m[0m
+2026-10-07T13:14:03.1421158Z [36;1mcp "$KEYSTORE_FILE" "$HOME/.android/debug.keystore"[0m
+2026-10-07T13:14:03.1421571Z [36;1mchmod 600 "$HOME/.android/debug.keystore"[0m
+2026-10-07T13:14:03.1421898Z [36;1m[0m
+2026-10-07T13:14:03.1422307Z [36;1mecho "Verified established Android signing certificate SHA256: $ACTUAL_SIGNING_SHA256"[0m
+2026-10-07T13:14:03.1486968Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-07T13:14:03.1487799Z env:
+2026-10-07T13:14:03.1488183Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:03.1488740Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:03.1489197Z   MAVEN_ARGS: -ntp
+2026-10-07T13:14:03.1489503Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-07T13:14:03.1489871Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-07T13:14:03.1490216Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-07T13:14:03.1490568Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-07T13:14:03.1491212Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-07T13:14:03.1491759Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-07T13:14:03.1492133Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-07T13:14:03.1494864Z   GH_TOKEN: ***
+2026-10-07T13:14:03.1495347Z   EXPECTED_SIGNING_SHA256: A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21
+2026-10-07T13:14:03.1495884Z ##[endgroup]
+2026-10-07T13:14:05.4213196Z Verified established Android signing certificate SHA256: A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21
+2026-10-07T13:14:05.4248893Z ##[group]Run npm ci --no-audit --no-fund
+2026-10-07T13:14:05.4249325Z [36;1mnpm ci --no-audit --no-fund[0m
+2026-10-07T13:14:05.4314931Z shell: /usr/bin/bash -e {0}
+2026-10-07T13:14:05.4315277Z env:
+2026-10-07T13:14:05.4315691Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:05.4316382Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:05.4316903Z   MAVEN_ARGS: -ntp
+2026-10-07T13:14:05.4317238Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-07T13:14:05.4317917Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-07T13:14:05.4318327Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-07T13:14:05.4318727Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-07T13:14:05.4319311Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-07T13:14:05.4319938Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-07T13:14:05.4320403Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-07T13:14:05.4320767Z ##[endgroup]
+2026-10-07T13:14:06.4852282Z npm warn deprecated prebuild-install@7.1.3: No longer maintained. Please contact the author of the relevant native addon; alternatives are available.
+2026-10-07T13:14:06.6154231Z npm warn deprecated tar@6.2.1: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+2026-10-07T13:14:06.6718575Z npm warn deprecated uuid@7.0.3: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
+2026-10-07T13:14:06.7399975Z npm warn deprecated glob@9.3.5: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+2026-10-07T13:14:07.5179583Z 
+2026-10-07T13:14:07.5180241Z added 197 packages in 2s
+2026-10-07T13:14:07.5344112Z ##[group]Run node scripts/ci/validate_source.cjs
+2026-10-07T13:14:07.5344597Z [36;1mnode scripts/ci/validate_source.cjs[0m
+2026-10-07T13:14:07.5409824Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-07T13:14:07.5410266Z env:
+2026-10-07T13:14:07.5410661Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:07.5411298Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:07.5411829Z   MAVEN_ARGS: -ntp
+2026-10-07T13:14:07.5412173Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-07T13:14:07.5412592Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-07T13:14:07.5412989Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-07T13:14:07.5413396Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-07T13:14:07.5413985Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-07T13:14:07.5414622Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-07T13:14:07.5415091Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-07T13:14:07.5415460Z ##[endgroup]
+2026-10-07T13:14:07.6484187Z QA passed: 2 scripts syntax-checked, 16 unique IDs verified, cache/state lifecycle guards present.
+2026-10-07T13:14:07.6546451Z ##[group]Run rm -rf www
+2026-10-07T13:14:07.6546782Z [36;1mrm -rf www[0m
+2026-10-07T13:14:07.6547071Z [36;1mmkdir -p www/fonts www/branding[0m
+2026-10-07T13:14:07.6547423Z [36;1mcp ../index.html www/index.html[0m
+2026-10-07T13:14:07.6548062Z [36;1mcp -r ../fonts/. www/fonts/[0m
+2026-10-07T13:14:07.6548415Z [36;1mcp -r ../branding/. www/branding/[0m
+2026-10-07T13:14:07.6611781Z shell: /usr/bin/bash -e {0}
+2026-10-07T13:14:07.6612105Z env:
+2026-10-07T13:14:07.6612496Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:07.6613117Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:07.6613609Z   MAVEN_ARGS: -ntp
+2026-10-07T13:14:07.6613930Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-07T13:14:07.6614321Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-07T13:14:07.6614690Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-07T13:14:07.6615212Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-07T13:14:07.6615767Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-07T13:14:07.6616359Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-07T13:14:07.6616762Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-07T13:14:07.6617105Z ##[endgroup]
+2026-10-07T13:14:07.6813805Z ##[group]Run set -euo pipefail
+2026-10-07T13:14:07.6814220Z [36;1mset -euo pipefail[0m
+2026-10-07T13:14:07.6814537Z [36;1m[0m
+2026-10-07T13:14:07.6815183Z [36;1mCHROME="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"[0m
+2026-10-07T13:14:07.6815919Z [36;1mif [ -z "$CHROME" ]; then[0m
+2026-10-07T13:14:07.6816348Z [36;1m  echo "No supported Chromium browser found on the runner."[0m
+2026-10-07T13:14:07.6816777Z [36;1m  exit 1[0m
+2026-10-07T13:14:07.6817033Z [36;1mfi[0m
+2026-10-07T13:14:07.6817273Z [36;1m[0m
+2026-10-07T13:14:07.6818063Z [36;1mnode scripts/serve.cjs --port 4173 --directory mobile/www >/tmp/lumenfall-http.log 2>&1 &[0m
+2026-10-07T13:14:07.6818634Z [36;1mSERVER_PID=$![0m
+2026-10-07T13:14:07.6819015Z [36;1mtrap 'kill "$SERVER_PID" >/dev/null 2>&1 || true' EXIT[0m
+2026-10-07T13:14:07.6819426Z [36;1m[0m
+2026-10-07T13:14:07.6819660Z [36;1mready=0[0m
+2026-10-07T13:14:07.6819962Z [36;1mfor _ in $(seq 1 20); do[0m
+2026-10-07T13:14:07.6820761Z [36;1m  if curl --fail --silent http://127.0.0.1:4173/index.html >/dev/null && curl --fail --silent http://127.0.0.1:4173/branding/lumenfall-mark.svg >/dev/null; then[0m
+2026-10-07T13:14:07.6821543Z [36;1m    ready=1[0m
+2026-10-07T13:14:07.6821809Z [36;1m    break[0m
+2026-10-07T13:14:07.6822068Z [36;1m  fi[0m
+2026-10-07T13:14:07.6822322Z [36;1m  sleep 0.25[0m
+2026-10-07T13:14:07.6822591Z [36;1mdone[0m
+2026-10-07T13:14:07.6822854Z [36;1mif [ "$ready" -ne 1 ]; then[0m
+2026-10-07T13:14:07.6823206Z [36;1m  cat /tmp/lumenfall-http.log[0m
+2026-10-07T13:14:07.6823561Z [36;1m  exit 1[0m
+2026-10-07T13:14:07.6823817Z [36;1mfi[0m
+2026-10-07T13:14:07.6824060Z [36;1m[0m
+2026-10-07T13:14:07.6824295Z [36;1m"$CHROME" \[0m
+2026-10-07T13:14:07.6824577Z [36;1m  --headless=new \[0m
+2026-10-07T13:14:07.6824888Z [36;1m  --no-sandbox \[0m
+2026-10-07T13:14:07.6825180Z [36;1m  --disable-gpu \[0m
+2026-10-07T13:14:07.6825493Z [36;1m  --disable-dev-shm-usage \[0m
+2026-10-07T13:14:07.6825810Z [36;1m  --window-size=390,844 \[0m
+2026-10-07T13:14:07.6826128Z [36;1m  --virtual-time-budget=1800 \[0m
+2026-10-07T13:14:07.6826451Z [36;1m  --dump-dom \[0m
+2026-10-07T13:14:07.6826752Z [36;1m  http://127.0.0.1:4173/index.html \[0m
+2026-10-07T13:14:07.6827180Z [36;1m  >/tmp/lumenfall-dom.html 2>/tmp/lumenfall-chrome.log[0m
+2026-10-07T13:14:07.6827776Z [36;1m[0m
+2026-10-07T13:14:07.6828099Z [36;1mnode scripts/ci/smoke.cjs --dom /tmp/lumenfall-dom.html[0m
+2026-10-07T13:14:07.6890050Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-07T13:14:07.6890642Z env:
+2026-10-07T13:14:07.6891033Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:07.6891651Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:07.6892271Z   MAVEN_ARGS: -ntp
+2026-10-07T13:14:07.6892770Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-07T13:14:07.6893548Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-07T13:14:07.6894247Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-07T13:14:07.6894906Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-07T13:14:07.6895772Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-07T13:14:07.6896411Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-07T13:14:07.6896839Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-07T13:14:07.6897206Z ##[endgroup]
+2026-10-07T13:14:30.0523513Z Browser smoke test passed: game initialized and rendered at a 390x844 mobile viewport.
+2026-10-07T13:14:30.0611899Z ##[group]Run npx cap add android
+2026-10-07T13:14:30.0612339Z [36;1mnpx cap add android[0m
+2026-10-07T13:14:30.0676852Z shell: /usr/bin/bash -e {0}
+2026-10-07T13:14:30.0677262Z env:
+2026-10-07T13:14:30.0677981Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:30.0678785Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:30.0679420Z   MAVEN_ARGS: -ntp
+2026-10-07T13:14:30.0679821Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-07T13:14:30.0680319Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-07T13:14:30.0680790Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-07T13:14:30.0681286Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-07T13:14:30.0681996Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-07T13:14:30.0682763Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-07T13:14:30.0683320Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-07T13:14:30.0683760Z ##[endgroup]
+2026-10-07T13:14:30.6204439Z ✔ Adding native android project in android in 36.18ms
+2026-10-07T13:14:30.6205645Z ✔ add in 36.96ms
+2026-10-07T13:14:30.6405090Z ✔ Copying web assets from www to android/app/src/main/assets/public in 7.81ms
+2026-10-07T13:14:30.6409425Z ✔ Creating capacitor.config.json in android/app/src/main/assets in 347.87μs
+2026-10-07T13:14:30.6437675Z ✔ copy android in 13.91ms
+2026-10-07T13:14:30.6472131Z ✔ Updating Android plugins in 961.05μs
+2026-10-07T13:14:30.6493575Z [info] Found 1 Capacitor plugin for android:
+2026-10-07T13:14:30.6494311Z        @capacitor/status-bar@6.0.3
+2026-10-07T13:14:30.6640019Z ✔ update android in 18.92ms
+2026-10-07T13:14:30.6655215Z ✔ Syncing Gradle in 189.60μs
+2026-10-07T13:14:30.6658363Z [success] android platform added!
+2026-10-07T13:14:30.6659378Z Follow the Developer Workflow guide to get building:
+2026-10-07T13:14:30.6660311Z https://capacitorjs.com/docs/basics/workflow
+2026-10-07T13:14:30.6951935Z ##[group]Run node scripts/ci/set_android_version.cjs
+2026-10-07T13:14:30.6952507Z [36;1mnode scripts/ci/set_android_version.cjs[0m
+2026-10-07T13:14:30.7016579Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-07T13:14:30.7017070Z env:
+2026-10-07T13:14:30.7017994Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:30.7018750Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:30.7019315Z   MAVEN_ARGS: -ntp
+2026-10-07T13:14:30.7019796Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-07T13:14:30.7020250Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-07T13:14:30.7020679Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-07T13:14:30.7021115Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-07T13:14:30.7021751Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-07T13:14:30.7022482Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-07T13:14:30.7022949Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-07T13:14:30.7023541Z   BUILD_NUMBER: 134
+2026-10-07T13:14:30.7023850Z ##[endgroup]
+2026-10-07T13:14:30.7408052Z Android versionCode=134, versionName=0.1.134
+2026-10-07T13:14:30.7471957Z ##[group]Run set -euo pipefail
+2026-10-07T13:14:30.7472376Z [36;1mset -euo pipefail[0m
+2026-10-07T13:14:30.7472701Z [36;1mmkdir -p assets[0m
+2026-10-07T13:14:30.7473002Z [36;1mnode <<'NODE'[0m
+2026-10-07T13:14:30.7473321Z [36;1mconst sharp = require('sharp');[0m
+2026-10-07T13:14:30.7473759Z [36;1mconst markPath = '../branding/lumenfall-mark.svg';[0m
+2026-10-07T13:14:30.7474217Z [36;1mconst bg = { r: 8, g: 16, b: 39, alpha: 1 };[0m
+2026-10-07T13:14:30.7474583Z [36;1m[0m
+2026-10-07T13:14:30.7474921Z [36;1masync function transparentCanvas(size, markSize) {[0m
+2026-10-07T13:14:30.7475587Z [36;1m  const mark = await sharp(markPath).resize(markSize, markSize, { fit: 'contain' }).png().toBuffer();[0m
+2026-10-07T13:14:30.7476429Z [36;1m  return sharp({ create: { width: size, height: size, channels: 4, background: { r:0,g:0,b:0,alpha:0 } } })[0m
+2026-10-07T13:14:30.7477164Z [36;1m    .composite([{ input: mark, gravity: 'center' }]).png().toBuffer();[0m
+2026-10-07T13:14:30.7478223Z [36;1m}[0m
+2026-10-07T13:14:30.7478479Z [36;1m[0m
+2026-10-07T13:14:30.7478736Z [36;1masync function main() {[0m
+2026-10-07T13:14:30.7479148Z [36;1m  const iconMark = await transparentCanvas(1024, 820);[0m
+2026-10-07T13:14:30.7479744Z [36;1m  await sharp({ create: { width: 1024, height: 1024, channels: 4, background: bg } })[0m
+2026-10-07T13:14:30.7480368Z [36;1m    .composite([{ input: iconMark }]).png().toFile('assets/icon.png');[0m
+2026-10-07T13:14:30.7480808Z [36;1m[0m
+2026-10-07T13:14:30.7481136Z [36;1m  // Adaptive foreground stays inside Android's safe zone.[0m
+2026-10-07T13:14:30.7481620Z [36;1m  const foreground = await transparentCanvas(1024, 610);[0m
+2026-10-07T13:14:30.7482151Z [36;1m  await sharp(foreground).png().toFile('assets/icon-foreground.png');[0m
+2026-10-07T13:14:30.7482592Z [36;1m[0m
+2026-10-07T13:14:30.7482993Z [36;1m  await sharp({ create: { width: 1024, height: 1024, channels: 4, background: bg } })[0m
+2026-10-07T13:14:30.7483535Z [36;1m    .png().toFile('assets/icon-background.png');[0m
+2026-10-07T13:14:30.7483899Z [36;1m[0m
+2026-10-07T13:14:30.7484255Z [36;1m  // Native splash: minimal, centered and safe across portrait crops.[0m
+2026-10-07T13:14:30.7484791Z [36;1m  const splashMark = await transparentCanvas(2732, 920);[0m
+2026-10-07T13:14:30.7485344Z [36;1m  await sharp({ create: { width: 2732, height: 2732, channels: 4, background: bg } })[0m
+2026-10-07T13:14:30.7485952Z [36;1m    .composite([{ input: splashMark }]).png().toFile('assets/splash.png');[0m
+2026-10-07T13:14:30.7486399Z [36;1m}[0m
+2026-10-07T13:14:30.7486625Z [36;1m[0m
+2026-10-07T13:14:30.7486958Z [36;1mmain().catch(err => { console.error(err); process.exit(1); });[0m
+2026-10-07T13:14:30.7487365Z [36;1mNODE[0m
+2026-10-07T13:14:30.7551257Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-07T13:14:30.7551700Z env:
+2026-10-07T13:14:30.7552090Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:30.7552708Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:30.7553187Z   MAVEN_ARGS: -ntp
+2026-10-07T13:14:30.7553507Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-07T13:14:30.7553892Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-07T13:14:30.7554260Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-07T13:14:30.7554632Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-07T13:14:30.7555169Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-07T13:14:30.7555759Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-07T13:14:30.7556159Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-07T13:14:30.7556501Z ##[endgroup]
+2026-10-07T13:14:31.7441678Z ##[group]Run npx capacitor-assets generate --android
+2026-10-07T13:14:31.7442213Z [36;1mnpx capacitor-assets generate --android[0m
+2026-10-07T13:14:31.7524117Z shell: /usr/bin/bash -e {0}
+2026-10-07T13:14:31.7524444Z env:
+2026-10-07T13:14:31.7524816Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:31.7525415Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:31.7525868Z   MAVEN_ARGS: -ntp
+2026-10-07T13:14:31.7526173Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-07T13:14:31.7526541Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-07T13:14:31.7526885Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-07T13:14:31.7527238Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-07T13:14:31.7528103Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-07T13:14:31.7528677Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-07T13:14:31.7529112Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-07T13:14:31.7529438Z ##[endgroup]
+2026-10-07T13:14:32.3861712Z [log] xml(load) at /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/AndroidManifest.xml
+2026-10-07T13:14:32.3866265Z [log] xml(load) Found root namespaces in XML file: http://schemas.android.com/apk/res/android
+2026-10-07T13:14:32.4388021Z Generating assets for android
+2026-10-07T13:14:34.0722856Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-ldpi/ic_launcher_foreground.png (6.79 KB)
+2026-10-07T13:14:34.0724781Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0726245Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0728349Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png (10.87 KB)
+2026-10-07T13:14:34.0730934Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0733468Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0736145Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png (22.3 KB)
+2026-10-07T13:14:34.0738914Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0741400Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0743673Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png (36.65 KB)
+2026-10-07T13:14:34.0745721Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0747907Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0750028Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png (70.43 KB)
+2026-10-07T13:14:34.0752069Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0754036Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0756569Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png (113.39 KB)
+2026-10-07T13:14:34.0758869Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0761113Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0763289Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-ldpi/ic_launcher_background.png (277 B)
+2026-10-07T13:14:34.0765343Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0766748Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0768229Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-mdpi/ic_launcher_background.png (350 B)
+2026-10-07T13:14:34.0769486Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0770709Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0771982Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-hdpi/ic_launcher_background.png (531 B)
+2026-10-07T13:14:34.0773220Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0774476Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0775794Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-xhdpi/ic_launcher_background.png (697 B)
+2026-10-07T13:14:34.0777104Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0778591Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0779887Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_background.png (1.02 KB)
+2026-10-07T13:14:34.0781151Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0782360Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0783683Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_background.png (1.69 KB)
+2026-10-07T13:14:34.0784964Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0786177Z CREATE android adaptive-icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0787357Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-ldpi/ic_launcher.png (916 B)
+2026-10-07T13:14:34.0788816Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-mdpi/ic_launcher.png (1.7 KB)
+2026-10-07T13:14:34.0789951Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-hdpi/ic_launcher.png (3.99 KB)
+2026-10-07T13:14:34.0791175Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png (7.07 KB)
+2026-10-07T13:14:34.0792726Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png (15.35 KB)
+2026-10-07T13:14:34.0794686Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png (26.97 KB)
+2026-10-07T13:14:34.0797961Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-ldpi/ic_launcher_round.png (2.22 KB)
+2026-10-07T13:14:34.0799457Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png (3.38 KB)
+2026-10-07T13:14:34.0800739Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png (6.39 KB)
+2026-10-07T13:14:34.0801996Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png (9.87 KB)
+2026-10-07T13:14:34.0803297Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png (19.51 KB)
+2026-10-07T13:14:34.0804644Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png (31.86 KB)
+2026-10-07T13:14:34.0805903Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable/splash.png (6.97 KB)
+2026-10-07T13:14:34.0807722Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-land-ldpi/splash.png (6.01 KB)
+2026-10-07T13:14:34.0809301Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-land-mdpi/splash.png (11.37 KB)
+2026-10-07T13:14:34.0810554Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-land-hdpi/splash.png (27.38 KB)
+2026-10-07T13:14:34.0811842Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-land-xhdpi/splash.png (59.65 KB)
+2026-10-07T13:14:34.0813123Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-land-xxhdpi/splash.png (84.92 KB)
+2026-10-07T13:14:34.0814438Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-land-xxxhdpi/splash.png (116.58 KB)
+2026-10-07T13:14:34.0815724Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-port-ldpi/splash.png (4.38 KB)
+2026-10-07T13:14:34.0817005Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-port-mdpi/splash.png (6.97 KB)
+2026-10-07T13:14:34.0818514Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-port-hdpi/splash.png (13.75 KB)
+2026-10-07T13:14:34.0819992Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-port-xhdpi/splash.png (27.93 KB)
+2026-10-07T13:14:34.0821462Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-port-xxhdpi/splash.png (43.18 KB)
+2026-10-07T13:14:34.0823006Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-port-xxxhdpi/splash.png (67.2 KB)
+2026-10-07T13:14:34.0824513Z CREATE android splash-dark /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-night/splash.png (7.12 KB)
+2026-10-07T13:14:34.0826061Z CREATE android splash-dark /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-land-night-ldpi/splash.png (7.12 KB)
+2026-10-07T13:14:34.0827364Z CREATE android splash-dark /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-land-night-mdpi/splash.png (14 KB)
+2026-10-07T13:14:34.0829847Z CREATE android splash-dark /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-land-night-hdpi/splash.png (33.63 KB)
+2026-10-07T13:14:34.0831660Z CREATE android splash-dark /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-land-night-xhdpi/splash.png (73.26 KB)
+2026-10-07T13:14:34.0833072Z CREATE android splash-dark /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-land-night-xxhdpi/splash.png (107.4 KB)
+2026-10-07T13:14:34.0834298Z CREATE android splash-dark /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-land-night-xxxhdpi/splash.png (152.47 KB)
+2026-10-07T13:14:34.0836125Z CREATE android splash-dark /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-port-night-ldpi/splash.png (5.57 KB)
+2026-10-07T13:14:34.0838209Z CREATE android splash-dark /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-port-night-mdpi/splash.png (9.21 KB)
+2026-10-07T13:14:34.0840437Z CREATE android splash-dark /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-port-night-hdpi/splash.png (20.47 KB)
+2026-10-07T13:14:34.0841671Z CREATE android splash-dark /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-port-night-xhdpi/splash.png (44.01 KB)
+2026-10-07T13:14:34.0842882Z CREATE android splash-dark /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-port-night-xxhdpi/splash.png (66.15 KB)
+2026-10-07T13:14:34.0844096Z CREATE android splash-dark /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-port-night-xxxhdpi/splash.png (104.27 KB)
+2026-10-07T13:14:34.0845276Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-ldpi/ic_launcher_foreground.png (1.25 KB)
+2026-10-07T13:14:34.0846377Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0847436Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0848847Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png (1.83 KB)
+2026-10-07T13:14:34.0849928Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0850969Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0852067Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png (3.55 KB)
+2026-10-07T13:14:34.0853179Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0854221Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0855330Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png (5.67 KB)
+2026-10-07T13:14:34.0856401Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0857435Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0858796Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png (11.36 KB)
+2026-10-07T13:14:34.0859869Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0860927Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0862045Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png (19.31 KB)
+2026-10-07T13:14:34.0863347Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0864496Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0865592Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-ldpi/ic_launcher_background.png (160 B)
+2026-10-07T13:14:34.0866650Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0867929Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0869031Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-mdpi/ic_launcher_background.png (211 B)
+2026-10-07T13:14:34.0870094Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0871127Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0872217Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-hdpi/ic_launcher_background.png (300 B)
+2026-10-07T13:14:34.0873260Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0874288Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0875420Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-xhdpi/ic_launcher_background.png (426 B)
+2026-10-07T13:14:34.0876475Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0877772Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0878974Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_background.png (835 B)
+2026-10-07T13:14:34.0880039Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0881085Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0882203Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_background.png (1.12 KB)
+2026-10-07T13:14:34.0883288Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-10-07T13:14:34.0884319Z CREATE android icon /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-10-07T13:14:34.0885465Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable/splash.png (36.44 KB)
+2026-10-07T13:14:34.0886759Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-land-ldpi/splash.png (18.32 KB)
+2026-10-07T13:14:34.0904584Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-land-mdpi/splash.png (37.12 KB)
+2026-10-07T13:14:34.0905752Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-land-hdpi/splash.png (86.56 KB)
+2026-10-07T13:14:34.0906882Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-land-xhdpi/splash.png (188.12 KB)
+2026-10-07T13:14:34.0908528Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-land-xxhdpi/splash.png (277.42 KB)
+2026-10-07T13:14:34.0909718Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-land-xxxhdpi/splash.png (387.44 KB)
+2026-10-07T13:14:34.0910964Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-port-ldpi/splash.png (18.38 KB)
+2026-10-07T13:14:34.0912061Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-port-mdpi/splash.png (36.44 KB)
+2026-10-07T13:14:34.0913156Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-port-hdpi/splash.png (85.32 KB)
+2026-10-07T13:14:34.0914244Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-port-xhdpi/splash.png (181.29 KB)
+2026-10-07T13:14:34.0915358Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-port-xxhdpi/splash.png (265.44 KB)
+2026-10-07T13:14:34.0916481Z CREATE android splash /home/runner/work/Lumenfall/Lumenfall/mobile/android/app/src/main/res/drawable-port-xxxhdpi/splash.png (370.93 KB)
+2026-10-07T13:14:34.0917034Z 
+2026-10-07T13:14:34.0917042Z 
+2026-10-07T13:14:34.0917152Z Totals:
+2026-10-07T13:14:34.0917710Z android: 123 generated, 3.47 MB total
+2026-10-07T13:14:34.1087316Z ##[group]Run npx cap sync android
+2026-10-07T13:14:34.1088229Z [36;1mnpx cap sync android[0m
+2026-10-07T13:14:34.1151951Z shell: /usr/bin/bash -e {0}
+2026-10-07T13:14:34.1152289Z env:
+2026-10-07T13:14:34.1152742Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:34.1153410Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:34.1153926Z   MAVEN_ARGS: -ntp
+2026-10-07T13:14:34.1154277Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-07T13:14:34.1154708Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-07T13:14:34.1155103Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-07T13:14:34.1155511Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-07T13:14:34.1156099Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-07T13:14:34.1156746Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-07T13:14:34.1157207Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-07T13:14:34.1157921Z ##[endgroup]
+2026-10-07T13:14:34.6662358Z ✔ Copying web assets from www to android/app/src/main/assets/public in 16.27ms
+2026-10-07T13:14:34.6675419Z ✔ Creating capacitor.config.json in android/app/src/main/assets in 1.08ms
+2026-10-07T13:14:34.6708189Z ✔ copy android in 26.80ms
+2026-10-07T13:14:34.6743604Z ✔ Updating Android plugins in 993.77μs
+2026-10-07T13:14:34.6764663Z [info] Found 1 Capacitor plugin for android:
+2026-10-07T13:14:34.6765567Z        @capacitor/status-bar@6.0.3
+2026-10-07T13:14:34.7000286Z ✔ update android in 27.77ms
+2026-10-07T13:14:34.7014136Z [info] Sync finished in 0.071s
+2026-10-07T13:14:34.7240795Z ##[group]Run set -euo pipefail
+2026-10-07T13:14:34.7241218Z [36;1mset -euo pipefail[0m
+2026-10-07T13:14:34.7241544Z [36;1mchmod +x gradlew[0m
+2026-10-07T13:14:34.7241870Z [36;1m[0m
+2026-10-07T13:14:34.7242308Z [36;1mKEYSTORE_FILE="$RUNNER_TEMP/lumenfall-signing/Lumenfall-debug.keystore"[0m
+2026-10-07T13:14:34.7242840Z [36;1mtest -s "$KEYSTORE_FILE"[0m
+2026-10-07T13:14:34.7243182Z [36;1m[0m
+2026-10-07T13:14:34.7243484Z [36;1m./gradlew assembleDebug --no-daemon \[0m
+2026-10-07T13:14:34.7244005Z [36;1m  -Pandroid.injected.signing.store.file="$KEYSTORE_FILE" \[0m
+2026-10-07T13:14:34.7244929Z [36;1m  -Pandroid.injected.signing.store.*** \[0m
+2026-10-07T13:14:34.7245451Z [36;1m  -Pandroid.injected.signing.key.alias=androiddebugkey \[0m
+2026-10-07T13:14:34.7246035Z [36;1m  -Pandroid.injected.signing.key.***
+2026-10-07T13:14:34.7310924Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-07T13:14:34.7311398Z env:
+2026-10-07T13:14:34.7311850Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:34.7312520Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:14:34.7313256Z   MAVEN_ARGS: -ntp
+2026-10-07T13:14:34.7313617Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-07T13:14:34.7314098Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-07T13:14:34.7314530Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-07T13:14:34.7314969Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-07T13:14:34.7315620Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-07T13:14:34.7316320Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-07T13:14:34.7316786Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-07T13:14:34.7317182Z ##[endgroup]
+2026-10-07T13:14:35.3878626Z To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+2026-10-07T13:14:36.9860563Z Daemon will be stopped at the end of the build 
+2026-10-07T13:14:44.6878455Z 
+2026-10-07T13:14:44.6885054Z > Configure project :app
+2026-10-07T13:14:44.6890776Z WARNING: Using flatDir should be avoided because it doesn't support any meta-data formats.
+2026-10-07T13:14:45.8903589Z 
+2026-10-07T13:14:45.8929043Z > Configure project :capacitor-cordova-android-plugins
+2026-10-07T13:14:45.8958945Z WARNING: Using flatDir should be avoided because it doesn't support any meta-data formats.
+2026-10-07T13:14:51.3861501Z 
+2026-10-07T13:14:51.3862568Z > Task :app:preBuild UP-TO-DATE
+2026-10-07T13:14:51.3866861Z > Task :app:preDebugBuild UP-TO-DATE
+2026-10-07T13:14:51.3868463Z > Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+2026-10-07T13:14:51.4902478Z > Task :capacitor-android:preBuild UP-TO-DATE
+2026-10-07T13:14:51.4920130Z > Task :capacitor-android:preDebugBuild UP-TO-DATE
+2026-10-07T13:14:51.4932565Z > Task :capacitor-cordova-android-plugins:preBuild UP-TO-DATE
+2026-10-07T13:14:51.4942940Z > Task :capacitor-cordova-android-plugins:preDebugBuild UP-TO-DATE
+2026-10-07T13:14:51.4944316Z > Task :app:javaPreCompileDebug
+2026-10-07T13:14:51.4945281Z > Task :capacitor-status-bar:preBuild UP-TO-DATE
+2026-10-07T13:14:51.4946527Z > Task :capacitor-status-bar:preDebugBuild UP-TO-DATE
+2026-10-07T13:14:51.4947973Z > Task :capacitor-android:writeDebugAarMetadata
+2026-10-07T13:14:51.4949145Z > Task :capacitor-status-bar:writeDebugAarMetadata
+2026-10-07T13:14:51.4950257Z > Task :capacitor-cordova-android-plugins:writeDebugAarMetadata
+2026-10-07T13:14:51.4951224Z > Task :app:generateDebugResValues
+2026-10-07T13:14:51.7866374Z > Task :capacitor-android:generateDebugResValues
+2026-10-07T13:14:51.7873059Z > Task :capacitor-android:generateDebugResources
+2026-10-07T13:14:51.7874346Z > Task :app:checkDebugAarMetadata
+2026-10-07T13:14:52.0869133Z > Task :capacitor-android:packageDebugResources
+2026-10-07T13:14:52.0896971Z > Task :capacitor-cordova-android-plugins:generateDebugResValues
+2026-10-07T13:14:52.0910916Z > Task :capacitor-cordova-android-plugins:generateDebugResources
+2026-10-07T13:14:52.0930884Z > Task :capacitor-cordova-android-plugins:packageDebugResources
+2026-10-07T13:14:52.0938706Z > Task :capacitor-status-bar:generateDebugResValues
+2026-10-07T13:14:52.0939878Z > Task :capacitor-status-bar:generateDebugResources
+2026-10-07T13:14:52.0940984Z > Task :capacitor-status-bar:packageDebugResources
+2026-10-07T13:14:52.1861967Z > Task :app:mapDebugSourceSetPaths
+2026-10-07T13:14:52.1874970Z > Task :app:generateDebugResources
+2026-10-07T13:14:53.0860379Z > Task :app:packageDebugResources
+2026-10-07T13:14:53.6863720Z > Task :app:createDebugCompatibleScreenManifests
+2026-10-07T13:14:53.6864682Z > Task :app:extractDeepLinksDebug
+2026-10-07T13:14:53.6865732Z > Task :capacitor-android:extractDeepLinksDebug
+2026-10-07T13:14:53.6866469Z > Task :app:mergeDebugResources
+2026-10-07T13:14:53.6867398Z > Task :capacitor-cordova-android-plugins:extractDeepLinksDebug
+2026-10-07T13:14:53.6868710Z > Task :app:parseDebugLocalResources
+2026-10-07T13:14:53.7875328Z > Task :capacitor-status-bar:extractDeepLinksDebug
+2026-10-07T13:14:53.7893482Z > Task :capacitor-status-bar:processDebugManifest
+2026-10-07T13:14:53.7895221Z > Task :capacitor-android:compileDebugLibraryResources
+2026-10-07T13:14:53.7899776Z > Task :capacitor-android:processDebugManifest
+2026-10-07T13:14:53.7937011Z > Task :capacitor-cordova-android-plugins:processDebugManifest
+2026-10-07T13:14:53.8869197Z > Task :capacitor-android:parseDebugLocalResources
+2026-10-07T13:14:53.9869175Z > Task :app:processDebugMainManifest
+2026-10-07T13:14:54.3948278Z > Task :app:processDebugManifest
+2026-10-07T13:14:54.3969994Z > Task :capacitor-cordova-android-plugins:compileDebugLibraryResources
+2026-10-07T13:14:54.3977642Z > Task :app:processDebugManifestForPackage
+2026-10-07T13:14:54.3989140Z > Task :capacitor-android:generateDebugRFile
+2026-10-07T13:14:54.3990252Z > Task :capacitor-cordova-android-plugins:parseDebugLocalResources
+2026-10-07T13:14:54.3991953Z > Task :capacitor-status-bar:compileDebugLibraryResources
+2026-10-07T13:14:54.4860250Z > Task :capacitor-android:javaPreCompileDebug
+2026-10-07T13:14:54.4870292Z > Task :capacitor-cordova-android-plugins:generateDebugRFile
+2026-10-07T13:14:54.4871720Z > Task :capacitor-cordova-android-plugins:javaPreCompileDebug
+2026-10-07T13:14:54.4872986Z > Task :capacitor-status-bar:parseDebugLocalResources
+2026-10-07T13:14:58.0871593Z Note: Some input files use unchecked or unsafe operations.
+2026-10-07T13:14:58.0872669Z Note: Recompile with -Xlint:unchecked for details.
+2026-10-07T13:14:58.0873296Z 
+2026-10-07T13:14:58.0874112Z > Task :capacitor-android:compileDebugJavaWithJavac
+2026-10-07T13:14:58.2883760Z 
+2026-10-07T13:14:58.2924486Z > Task :capacitor-status-bar:generateDebugRFile
+2026-10-07T13:14:58.3867210Z > Task :capacitor-cordova-android-plugins:compileDebugJavaWithJavac NO-SOURCE
+2026-10-07T13:14:58.3869158Z > Task :capacitor-cordova-android-plugins:bundleLibCompileToJarDebug
+2026-10-07T13:14:58.3870516Z > Task :capacitor-android:bundleLibCompileToJarDebug
+2026-10-07T13:14:58.4899429Z > Task :capacitor-status-bar:javaPreCompileDebug
+2026-10-07T13:14:58.4900402Z > Task :app:mergeDebugShaders
+2026-10-07T13:14:58.8899187Z > Task :capacitor-status-bar:compileDebugJavaWithJavac
+2026-10-07T13:14:58.8938797Z > Task :capacitor-status-bar:bundleLibCompileToJarDebug
+2026-10-07T13:14:58.8988191Z > Task :app:compileDebugShaders NO-SOURCE
+2026-10-07T13:14:58.8989118Z > Task :app:generateDebugAssets UP-TO-DATE
+2026-10-07T13:14:58.9017908Z > Task :capacitor-android:mergeDebugShaders
+2026-10-07T13:14:58.9051087Z > Task :capacitor-android:compileDebugShaders NO-SOURCE
+2026-10-07T13:14:58.9068772Z > Task :capacitor-android:generateDebugAssets UP-TO-DATE
+2026-10-07T13:14:58.9080400Z > Task :capacitor-android:packageDebugAssets
+2026-10-07T13:14:58.9111576Z > Task :capacitor-cordova-android-plugins:mergeDebugShaders
+2026-10-07T13:14:58.9148948Z > Task :capacitor-cordova-android-plugins:compileDebugShaders NO-SOURCE
+2026-10-07T13:14:58.9171646Z > Task :capacitor-cordova-android-plugins:generateDebugAssets UP-TO-DATE
+2026-10-07T13:14:58.9178238Z > Task :capacitor-cordova-android-plugins:packageDebugAssets
+2026-10-07T13:14:58.9190435Z > Task :capacitor-status-bar:mergeDebugShaders
+2026-10-07T13:14:58.9191562Z > Task :capacitor-status-bar:compileDebugShaders NO-SOURCE
+2026-10-07T13:14:58.9192815Z > Task :capacitor-status-bar:generateDebugAssets UP-TO-DATE
+2026-10-07T13:14:58.9911519Z > Task :capacitor-status-bar:packageDebugAssets
+2026-10-07T13:14:58.9938592Z > Task :app:mergeDebugAssets
+2026-10-07T13:14:58.9968740Z > Task :app:processDebugResources
+2026-10-07T13:14:59.0860937Z > Task :app:compressDebugAssets
+2026-10-07T13:14:59.2895889Z > Task :app:compileDebugJavaWithJavac
+2026-10-07T13:14:59.2929751Z > Task :capacitor-status-bar:bundleLibRuntimeToJarDebug
+2026-10-07T13:14:59.2938124Z > Task :capacitor-cordova-android-plugins:bundleLibRuntimeToJarDebug
+2026-10-07T13:14:59.2939442Z > Task :capacitor-android:bundleLibRuntimeToJarDebug
+2026-10-07T13:14:59.3879175Z > Task :app:desugarDebugFileDependencies
+2026-10-07T13:15:00.9879027Z > Task :app:dexBuilderDebug
+2026-10-07T13:15:00.9898756Z > Task :app:processDebugJavaRes NO-SOURCE
+2026-10-07T13:15:00.9928788Z > Task :capacitor-android:processDebugJavaRes NO-SOURCE
+2026-10-07T13:15:00.9946668Z > Task :capacitor-cordova-android-plugins:processDebugJavaRes NO-SOURCE
+2026-10-07T13:15:00.9948137Z > Task :capacitor-status-bar:processDebugJavaRes NO-SOURCE
+2026-10-07T13:15:01.0929152Z > Task :app:mergeDebugJniLibFolders
+2026-10-07T13:15:01.0958754Z > Task :capacitor-android:mergeDebugJniLibFolders
+2026-10-07T13:15:01.0988781Z > Task :capacitor-android:mergeDebugNativeLibs NO-SOURCE
+2026-10-07T13:15:01.1899121Z > Task :capacitor-android:copyDebugJniLibsProjectOnly
+2026-10-07T13:15:01.1928827Z > Task :capacitor-cordova-android-plugins:mergeDebugJniLibFolders
+2026-10-07T13:15:01.1958780Z > Task :capacitor-cordova-android-plugins:mergeDebugNativeLibs NO-SOURCE
+2026-10-07T13:15:01.2018782Z > Task :app:checkDebugDuplicateClasses
+2026-10-07T13:15:01.2049099Z > Task :capacitor-cordova-android-plugins:copyDebugJniLibsProjectOnly
+2026-10-07T13:15:01.7919165Z > Task :app:mergeProjectDexDebug
+2026-10-07T13:15:01.7971596Z > Task :capacitor-status-bar:mergeDebugJniLibFolders
+2026-10-07T13:15:01.7973746Z > Task :capacitor-status-bar:mergeDebugNativeLibs NO-SOURCE
+2026-10-07T13:15:01.7998739Z > Task :capacitor-status-bar:copyDebugJniLibsProjectOnly
+2026-10-07T13:15:01.9909343Z > Task :app:mergeDebugNativeLibs NO-SOURCE
+2026-10-07T13:15:01.9988989Z > Task :app:stripDebugDebugSymbols NO-SOURCE
+2026-10-07T13:15:02.0048922Z > Task :app:validateSigningDebug
+2026-10-07T13:15:02.0882048Z > Task :app:mergeDebugJavaResource
+2026-10-07T13:15:02.0969804Z > Task :app:writeDebugAppMetadata
+2026-10-07T13:15:02.1049298Z > Task :app:writeDebugSigningConfigVersions
+2026-10-07T13:15:02.1051430Z > Task :capacitor-android:stripDebugDebugSymbols NO-SOURCE
+2026-10-07T13:15:02.1098785Z > Task :capacitor-android:copyDebugJniLibsProjectAndLocalJars
+2026-10-07T13:15:02.5865490Z > Task :capacitor-android:extractDebugAnnotations
+2026-10-07T13:15:02.5899163Z > Task :capacitor-android:extractDeepLinksForAarDebug
+2026-10-07T13:15:02.6899194Z > Task :capacitor-android:mergeDebugGeneratedProguardFiles
+2026-10-07T13:15:02.6959238Z > Task :capacitor-android:mergeDebugConsumerProguardFiles
+2026-10-07T13:15:02.7008827Z > Task :capacitor-android:prepareDebugArtProfile
+2026-10-07T13:15:02.7039474Z > Task :capacitor-android:prepareLintJarForPublish
+2026-10-07T13:15:02.7041200Z > Task :capacitor-cordova-android-plugins:stripDebugDebugSymbols NO-SOURCE
+2026-10-07T13:15:02.7042500Z > Task :capacitor-android:mergeDebugJavaResource
+2026-10-07T13:15:02.7043736Z > Task :capacitor-cordova-android-plugins:copyDebugJniLibsProjectAndLocalJars
+2026-10-07T13:15:02.7939238Z > Task :capacitor-android:syncDebugLibJars
+2026-10-07T13:15:02.7968782Z > Task :capacitor-android:bundleDebugAar
+2026-10-07T13:15:02.8028723Z > Task :capacitor-android:assembleDebug
+2026-10-07T13:15:02.9869771Z > Task :capacitor-cordova-android-plugins:extractDebugAnnotations
+2026-10-07T13:15:02.9884366Z > Task :capacitor-cordova-android-plugins:extractDeepLinksForAarDebug
+2026-10-07T13:15:02.9943256Z > Task :capacitor-cordova-android-plugins:mergeDebugGeneratedProguardFiles
+2026-10-07T13:15:02.9978818Z > Task :capacitor-cordova-android-plugins:mergeDebugConsumerProguardFiles
+2026-10-07T13:15:03.0040541Z > Task :capacitor-cordova-android-plugins:prepareDebugArtProfile
+2026-10-07T13:15:03.0889328Z > Task :capacitor-cordova-android-plugins:prepareLintJarForPublish
+2026-10-07T13:15:03.0938753Z > Task :capacitor-status-bar:stripDebugDebugSymbols NO-SOURCE
+2026-10-07T13:15:03.0998720Z > Task :capacitor-cordova-android-plugins:mergeDebugJavaResource
+2026-10-07T13:15:03.1028947Z > Task :capacitor-status-bar:copyDebugJniLibsProjectAndLocalJars
+2026-10-07T13:15:03.1058565Z > Task :capacitor-cordova-android-plugins:syncDebugLibJars
+2026-10-07T13:15:03.1098545Z > Task :capacitor-cordova-android-plugins:bundleDebugAar
+2026-10-07T13:15:03.1148550Z > Task :capacitor-cordova-android-plugins:assembleDebug
+2026-10-07T13:15:03.1889028Z > Task :capacitor-status-bar:extractDebugAnnotations
+2026-10-07T13:15:03.1968829Z > Task :capacitor-status-bar:extractDeepLinksForAarDebug
+2026-10-07T13:15:03.1969802Z > Task :capacitor-status-bar:mergeDebugGeneratedProguardFiles
+2026-10-07T13:15:03.1970735Z > Task :capacitor-status-bar:mergeDebugConsumerProguardFiles
+2026-10-07T13:15:03.1971574Z > Task :capacitor-status-bar:prepareDebugArtProfile
+2026-10-07T13:15:03.1972349Z > Task :capacitor-status-bar:prepareLintJarForPublish
+2026-10-07T13:15:03.1973134Z > Task :capacitor-status-bar:mergeDebugJavaResource
+2026-10-07T13:15:03.1973892Z > Task :capacitor-status-bar:syncDebugLibJars
+2026-10-07T13:15:03.1974619Z > Task :capacitor-status-bar:bundleDebugAar
+2026-10-07T13:15:03.1975278Z > Task :capacitor-status-bar:assembleDebug
+2026-10-07T13:15:04.5860728Z > Task :app:mergeDebugGlobalSynthetics
+2026-10-07T13:15:04.6868848Z > Task :app:mergeLibDexDebug
+2026-10-07T13:15:05.0866831Z > Task :app:mergeExtDexDebug
+2026-10-07T13:15:05.7862129Z > Task :app:packageDebug
+2026-10-07T13:15:05.7863288Z > Task :app:createDebugApkListingFileRedirect
+2026-10-07T13:15:05.7864375Z > Task :app:assembleDebug
+2026-10-07T13:15:06.3879951Z gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_12-1791378880349.json
+2026-10-07T13:15:06.3882082Z 
+2026-10-07T13:15:06.3885735Z BUILD SUCCESSFUL in 31s
+2026-10-07T13:15:06.3886790Z 108 actionable tasks: 108 executed
+2026-10-07T13:15:06.7142537Z ##[group]Run cp mobile/android/app/build/outputs/apk/debug/app-debug.apk Lumenfall.apk
+2026-10-07T13:15:06.7143766Z [36;1mcp mobile/android/app/build/outputs/apk/debug/app-debug.apk Lumenfall.apk[0m
+2026-10-07T13:15:06.7144623Z [36;1mtest -s Lumenfall.apk[0m
+2026-10-07T13:15:06.7145154Z [36;1mls -lh Lumenfall.apk[0m
+2026-10-07T13:15:06.7212122Z shell: /usr/bin/bash -e {0}
+2026-10-07T13:15:06.7212448Z env:
+2026-10-07T13:15:06.7212821Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:15:06.7213401Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:15:06.7213863Z   MAVEN_ARGS: -ntp
+2026-10-07T13:15:06.7214155Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-07T13:15:06.7214512Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-07T13:15:06.7214847Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-07T13:15:06.7215184Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-07T13:15:06.7215711Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-07T13:15:06.7216248Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-07T13:15:06.7216615Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-07T13:15:06.7216935Z ##[endgroup]
+2026-10-07T13:15:06.7355790Z -rw-r--r-- 1 runner runner 6.6M Oct  7 13:15 Lumenfall.apk
+2026-10-07T13:15:06.7441410Z ##[group]Run set -euo pipefail
+2026-10-07T13:15:06.7441800Z [36;1mset -euo pipefail[0m
+2026-10-07T13:15:06.7442085Z [36;1m[0m
+2026-10-07T13:15:06.7442331Z [36;1mBUILD_TOOLS_DIR=""[0m
+2026-10-07T13:15:06.7442646Z [36;1mwhile IFS= read -r candidate; do[0m
+2026-10-07T13:15:06.7443113Z [36;1m  if [ -x "$candidate/aapt" ] && [ -x "$candidate/apksigner" ]; then[0m
+2026-10-07T13:15:06.7443557Z [36;1m    BUILD_TOOLS_DIR="$candidate"[0m
+2026-10-07T13:15:06.7443877Z [36;1m    break[0m
+2026-10-07T13:15:06.7444129Z [36;1m  fi[0m
+2026-10-07T13:15:06.7444592Z [36;1mdone < <(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d -print | sort -Vr)[0m
+2026-10-07T13:15:06.7445122Z [36;1m[0m
+2026-10-07T13:15:06.7445379Z [36;1mif [ -z "$BUILD_TOOLS_DIR" ]; then[0m
+2026-10-07T13:15:06.7445902Z [36;1m  echo "::error::Could not find Android build-tools containing both aapt and apksigner."[0m
+2026-10-07T13:15:06.7446404Z [36;1m  exit 1[0m
+2026-10-07T13:15:06.7446674Z [36;1mfi[0m
+2026-10-07T13:15:06.7446906Z [36;1m[0m
+2026-10-07T13:15:06.7447177Z [36;1mnode scripts/verify_apk_identity.cjs \[0m
+2026-10-07T13:15:06.7447818Z [36;1m  --apk Lumenfall.apk \[0m
+2026-10-07T13:15:06.7448172Z [36;1m  --aapt "$BUILD_TOOLS_DIR/aapt" \[0m
+2026-10-07T13:15:06.7448744Z [36;1m  --apksigner "$BUILD_TOOLS_DIR/apksigner" \[0m
+2026-10-07T13:15:06.7449153Z [36;1m  --expected-package "$EXPECTED_PACKAGE_ID" \[0m
+2026-10-07T13:15:06.7449577Z [36;1m  --expected-version-code "$EXPECTED_VERSION_CODE" \[0m
+2026-10-07T13:15:06.7450022Z [36;1m  --expected-version-name "$EXPECTED_VERSION_NAME" \[0m
+2026-10-07T13:15:06.7450493Z [36;1m  --expected-cert-sha256 "$EXPECTED_SIGNING_SHA256"[0m
+2026-10-07T13:15:06.7514394Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-07T13:15:06.7514846Z env:
+2026-10-07T13:15:06.7515257Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:15:06.7515921Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:15:06.7516436Z   MAVEN_ARGS: -ntp
+2026-10-07T13:15:06.7516768Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-07T13:15:06.7517210Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-07T13:15:06.7517939Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-07T13:15:06.7518381Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-07T13:15:06.7519009Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-07T13:15:06.7519727Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-07T13:15:06.7520252Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-07T13:15:06.7521896Z   EXPECTED_PACKAGE_ID: com.lumenfall.app
+2026-10-07T13:15:06.7522539Z   EXPECTED_VERSION_CODE: 134
+2026-10-07T13:15:06.7523058Z   EXPECTED_VERSION_NAME: 0.1.134
+2026-10-07T13:15:06.7523695Z   EXPECTED_SIGNING_SHA256: A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21
+2026-10-07T13:15:06.7524356Z ##[endgroup]
+2026-10-07T13:15:08.0176813Z Verified final APK identity:
+2026-10-07T13:15:08.0178982Z   packageId: com.lumenfall.app
+2026-10-07T13:15:08.0179532Z   versionCode: 134 (expected 134)
+2026-10-07T13:15:08.0179949Z   versionName: 0.1.134 (expected 0.1.134)
+2026-10-07T13:15:08.0180635Z   certificate SHA-256: A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21
+2026-10-07T13:15:08.0245462Z ##[group]Run gh api --paginate "repos/$GITHUB_REPOSITORY/actions/artifacts?per_page=100" --jq '.artifacts[].id' |
+2026-10-07T13:15:08.0246354Z [36;1mgh api --paginate "repos/$GITHUB_REPOSITORY/actions/artifacts?per_page=100" --jq '.artifacts[].id' |[0m
+2026-10-07T13:15:08.0246966Z [36;1mwhile read -r artifact_id; do[0m
+2026-10-07T13:15:08.0247298Z [36;1m  if [ -n "$artifact_id" ]; then[0m
+2026-10-07T13:15:08.0248135Z [36;1m    gh api --method DELETE "repos/$GITHUB_REPOSITORY/actions/artifacts/$artifact_id"[0m
+2026-10-07T13:15:08.0248632Z [36;1m  fi[0m
+2026-10-07T13:15:08.0248864Z [36;1mdone[0m
+2026-10-07T13:15:08.0313244Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-07T13:15:08.0313642Z env:
+2026-10-07T13:15:08.0314005Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:15:08.0314572Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:15:08.0315032Z   MAVEN_ARGS: -ntp
+2026-10-07T13:15:08.0315366Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-07T13:15:08.0315731Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-07T13:15:08.0316066Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-07T13:15:08.0316405Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-07T13:15:08.0316895Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-07T13:15:08.0317699Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-07T13:15:08.0318131Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-07T13:15:08.0320797Z   GH_TOKEN: ***
+2026-10-07T13:15:08.0321054Z ##[endgroup]
+2026-10-07T13:15:08.3804746Z ##[group]Run gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100" --jq '.[] | .assets[] | select((.name | endswith(".exe")) or (.name | endswith(".aab"))) | .id' |
+2026-10-07T13:15:08.3806023Z [36;1mgh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100" --jq '.[] | .assets[] | select((.name | endswith(".exe")) or (.name | endswith(".aab"))) | .id' |[0m
+2026-10-07T13:15:08.3807018Z [36;1mwhile read -r asset_id; do[0m
+2026-10-07T13:15:08.3807370Z [36;1m  if [ -n "$asset_id" ]; then[0m
+2026-10-07T13:15:08.3808251Z [36;1m    gh api --method DELETE "repos/$GITHUB_REPOSITORY/releases/assets/$asset_id"[0m
+2026-10-07T13:15:08.3808735Z [36;1m  fi[0m
+2026-10-07T13:15:08.3808975Z [36;1mdone[0m
+2026-10-07T13:15:08.3874060Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-07T13:15:08.3874515Z env:
+2026-10-07T13:15:08.3874918Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:15:08.3875594Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:15:08.3876112Z   MAVEN_ARGS: -ntp
+2026-10-07T13:15:08.3876447Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-07T13:15:08.3876860Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-07T13:15:08.3877262Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-07T13:15:08.3877927Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-07T13:15:08.3878520Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-07T13:15:08.3879153Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-07T13:15:08.3879580Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-07T13:15:08.3882884Z   GH_TOKEN: ***
+2026-10-07T13:15:08.3883167Z ##[endgroup]
+2026-10-07T13:15:08.8158325Z ##[group]Run git tag -f android-latest "$GITHUB_SHA"
+2026-10-07T13:15:08.8159121Z [36;1mgit tag -f android-latest "$GITHUB_SHA"[0m
+2026-10-07T13:15:08.8159851Z [36;1mgit push origin --force refs/tags/android-latest[0m
+2026-10-07T13:15:08.8160495Z [36;1m[0m
+2026-10-07T13:15:08.8161029Z [36;1mif gh release view android-latest >/dev/null 2>&1; then[0m
+2026-10-07T13:15:08.8161851Z [36;1m  gh release upload android-latest Lumenfall.apk --clobber[0m
+2026-10-07T13:15:08.8162599Z [36;1m  gh release edit android-latest \[0m
+2026-10-07T13:15:08.8163258Z [36;1m    --title "Lumenfall Android — Latest" \[0m
+2026-10-07T13:15:08.8164135Z [36;1m    --notes "Automatically built from the latest main branch. Android APK only."[0m
+2026-10-07T13:15:08.8164943Z [36;1melse[0m
+2026-10-07T13:15:08.8165481Z [36;1m  gh release create android-latest Lumenfall.apk \[0m
+2026-10-07T13:15:08.8166212Z [36;1m    --title "Lumenfall Android — Latest" \[0m
+2026-10-07T13:15:08.8167161Z [36;1m    --notes "Automatically built from the latest main branch. Android APK only."[0m
+2026-10-07T13:15:08.8168428Z [36;1mfi[0m
+2026-10-07T13:15:08.8240175Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-07T13:15:08.8240568Z env:
+2026-10-07T13:15:08.8240918Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:15:08.8241472Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-07T13:15:08.8241899Z   MAVEN_ARGS: -ntp
+2026-10-07T13:15:08.8242210Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-07T13:15:08.8242558Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-07T13:15:08.8242894Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-07T13:15:08.8243234Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-07T13:15:08.8243713Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-07T13:15:08.8244232Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-07T13:15:08.8244605Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-07T13:15:08.8247410Z   GH_TOKEN: ***
+2026-10-07T13:15:08.8247989Z ##[endgroup]
+2026-10-07T13:15:10.1305961Z To https://github.com/karahaNx/Lumenfall
+2026-10-07T13:15:10.1307189Z  + d32c004...0bcce84 android-latest -> android-latest (forced update)
+2026-10-07T13:15:12.9961943Z https://github.com/karahaNx/Lumenfall/releases/tag/android-latest
+2026-10-07T13:15:13.0138214Z Post job cleanup.
+2026-10-07T13:15:13.2640881Z In post-action step
+2026-10-07T13:15:13.2655950Z ##[group]Stopping Gradle daemons
+2026-10-07T13:15:13.2658280Z Stopping Gradle daemons for /home/runner/.gradle/wrapper/dists/gradle-8.2.1-all/d8pvvlun5bx6sdtwqhf8y9z4b/gradle-8.2.1
+2026-10-07T13:15:13.2677010Z [command]/home/runner/.gradle/wrapper/dists/gradle-8.2.1-all/d8pvvlun5bx6sdtwqhf8y9z4b/gradle-8.2.1/bin/gradle --stop
+2026-10-07T13:15:14.1386143Z No Gradle daemons are running.
+2026-10-07T13:15:14.1613759Z ##[endgroup]
+2026-10-07T13:15:14.1642975Z ##[group]Provision Gradle >= 8.11
+2026-10-07T13:15:25.2966745Z Gradle version 9.8.0 is available at /usr/bin/gradle and >= 8.11. Not installing.
+2026-10-07T13:15:25.2968221Z ##[endgroup]
+2026-10-07T13:15:25.2971767Z ##[group]Executing Gradle to clean up caches
+2026-10-07T13:15:25.2972327Z Cleaning up caches last used before 1791378835788
+2026-10-07T13:15:25.2975994Z [command]/usr/bin/gradle -g /home/runner/.gradle -I init.gradle --info --no-daemon --no-scan --build-cache -DGITHUB_DEPENDENCY_GRAPH_ENABLED=false -DGRADLE_ACTIONS_SKIP_BUILD_RESULT_CAPTURE=true noop
+2026-10-07T13:15:25.7325098Z Initialized native services in: /home/runner/.gradle/native
+2026-10-07T13:15:25.7356149Z Initialized jansi services in: /home/runner/.gradle/native
+2026-10-07T13:15:25.9723449Z The current JVM process isn't compatible with build requirement. The maximum heap size is insufficient.
+2026-10-07T13:15:25.9724155Z 
+2026-10-07T13:15:26.5729636Z To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.8.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+2026-10-07T13:15:26.6750706Z Starting process 'Gradle build daemon'. Working directory: /home/runner/.gradle/daemon/9.8.0 Command: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=java.base/java.nio.charset=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.xml/javax.xml.namespace=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED -XX:MaxMetaspaceSize=384m -XX:+HeapDumpOnOutOfMemoryError -Xms256m -Xmx512m -Dfile.encoding=UTF-8 -Duser.country -Duser.language=en -Duser.variant -cp /usr/share/gradle-9.8.0/lib/gradle-daemon-main-9.8.0.jar -javaagent:/usr/share/gradle-9.8.0/lib/agents/gradle-instrumentation-agent-9.8.0.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 9.8.0
+2026-10-07T13:15:26.6757116Z Successfully started process 'Gradle build daemon'
+2026-10-07T13:15:36.7725251Z An attempt to start the daemon took 10.158 secs.
+2026-10-07T13:15:36.7733585Z The client will now receive all logging from the daemon (pid: 3344). The daemon log file: /home/runner/.gradle/daemon/9.8.0/daemon-3344.out.log
+2026-10-07T13:15:36.7734855Z Daemon will be stopped at the end of the build 
+2026-10-07T13:15:38.7722060Z Using 4 worker leases.
+2026-10-07T13:15:38.9729609Z Operational build model parameters: {cachingModelBuilding=false, configurationCache=false, configurationCacheDisabledReason=null, configurationCacheParallelLoad=false, configurationCacheParallelStore=false, configureOnDemand=false, invalidateCoupledProjects=false, isolatedProjects=false, isolatedProjectsDiagnostics=false, isolatedProjectsDangerouslyIgnoreProblems=false, modelAsProjectDependency=false, modelBuilding=false, parallelModelBuilding=false, parallelProjectConfiguration=false, parallelProjectExecution=false, vintage=true}
+2026-10-07T13:15:40.3725725Z Received JVM installation metadata from '/usr/lib/jvm/temurin-17-jdk-amd64': {JAVA_HOME=/usr/lib/jvm/temurin-17-jdk-amd64, JAVA_VERSION=17.0.20.1, JAVA_VENDOR=Eclipse Adoptium, RUNTIME_NAME=OpenJDK Runtime Environment, RUNTIME_VERSION=17.0.20.1+1, VM_NAME=OpenJDK 64-Bit Server VM, VM_VERSION=17.0.20.1+1, VM_VENDOR=Eclipse Adoptium, OS_ARCH=amd64}
+2026-10-07T13:15:41.3729311Z Watching the file system is configured to be enabled if available
+2026-10-07T13:15:41.3730644Z Now considering [/home/runner/work/_temp/dummy-cleanup-project] as hierarchies to watch
+2026-10-07T13:15:41.3731612Z File system watching is active
+2026-10-07T13:15:42.3720738Z Caching disabled for Groovy DSL script compilation (cp_init) because:
+2026-10-07T13:15:42.3721810Z   Build cache is disabled
+2026-10-07T13:15:42.3722453Z   Not worth caching.
+2026-10-07T13:15:42.3724123Z Compiling initialization script '/home/runner/work/_temp/dummy-cleanup-project/init.gradle' using SubsetScriptTransformer.
+2026-10-07T13:15:44.3723016Z Caching disabled for Groovy DSL script compilation (init) because:
+2026-10-07T13:15:44.3724326Z   Build cache is disabled
+2026-10-07T13:15:44.3725111Z   Not worth caching.
+2026-10-07T13:15:44.3726426Z Compiling initialization script '/home/runner/work/_temp/dummy-cleanup-project/init.gradle' using BuildScriptTransformer.
+2026-10-07T13:15:45.3723491Z gradle/actions: Not capturing build results
+2026-10-07T13:15:45.6723174Z Starting Build
+2026-10-07T13:15:45.7722690Z Settings evaluated using settings file '/home/runner/work/_temp/dummy-cleanup-project/settings.gradle'.
+2026-10-07T13:15:45.8722821Z Using local directory build cache for the root build (location = /home/runner/.gradle/caches/build-cache-1, remove unused entries = older than 2026-10-07 13:13:55 UTC).
+2026-10-07T13:15:46.0729932Z Projects loaded. Root project using build file '/home/runner/work/_temp/dummy-cleanup-project/build.gradle'.
+2026-10-07T13:15:46.0734369Z Included projects: [root project 'dummy-cleanup-project']
+2026-10-07T13:15:46.5733540Z 
+2026-10-07T13:15:46.5740281Z > Configure project :
+2026-10-07T13:15:46.5742039Z Evaluating root project 'dummy-cleanup-project' using build file '/home/runner/work/_temp/dummy-cleanup-project/build.gradle'.
+2026-10-07T13:15:46.5743122Z All projects evaluated.
+2026-10-07T13:15:46.5743824Z Task name matched 'noop'
+2026-10-07T13:15:46.5744502Z Selected primary task 'noop' from project :
+2026-10-07T13:15:46.6723406Z Tasks to be executed: [task ':noop']
+2026-10-07T13:15:46.6724418Z Tasks that were excluded: []
+2026-10-07T13:15:46.6738343Z Resolve mutations for :noop (Thread[Execution worker,5,main]) started.
+2026-10-07T13:15:46.6745647Z :noop (Thread[Execution worker,5,main]) started.
+2026-10-07T13:15:46.6745974Z 
+2026-10-07T13:15:46.6746125Z > Task :noop UP-TO-DATE
+2026-10-07T13:15:46.6746508Z Skipping task ':noop' as it has no actions.
+2026-10-07T13:15:46.7719907Z 
+2026-10-07T13:15:46.7723062Z BUILD SUCCESSFUL in 21s
+2026-10-07T13:15:46.7724303Z Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.8.0/userguide/configuration_cache_enabling.html
+2026-10-07T13:15:46.7726172Z Build cache (/home/runner/.gradle/caches/build-cache-1) removing files not accessed on or after Wed Oct 07 13:13:55 UTC 2026.
+2026-10-07T13:15:46.7727610Z Build cache (/home/runner/.gradle/caches/build-cache-1) cleanup deleted 0 files/directories.
+2026-10-07T13:15:46.7729494Z Build cache (/home/runner/.gradle/caches/build-cache-1) cleaned up in 0.004 secs.
+2026-10-07T13:15:46.7730658Z jars (/home/runner/.gradle/caches/jars-9) cleanup deleted 0 files/directories.
+2026-10-07T13:15:46.7732044Z jars (/home/runner/.gradle/caches/jars-9) removing files not accessed on or after Wed Oct 07 13:13:55 UTC 2026.
+2026-10-07T13:15:46.7733782Z jars (/home/runner/.gradle/caches/jars-9) cleanup deleted 2 files/directories.
+2026-10-07T13:15:46.7735843Z jars (/home/runner/.gradle/caches/jars-9) cleaned up in 0.051 secs.
+2026-10-07T13:15:46.7743272Z groovy-dsl removing files not accessed on or after Wed Oct 07 13:13:55 UTC 2026.
+2026-10-07T13:15:46.8613955Z groovy-dsl cleanup deleted 2 files/directories.
+2026-10-07T13:15:46.8615086Z groovy-dsl cleaned up in 0.014 secs.
+2026-10-07T13:15:46.8617340Z artifact cache (/home/runner/.gradle/caches/modules-2) cleanup deleted 0 files/directories.
+2026-10-07T13:15:46.8619946Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/resources-2.1] cleanup deleted 0 files/directories.
+2026-10-07T13:15:46.8623027Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/resources-2.1] removing files not accessed on or after Wed Oct 07 13:13:55 UTC 2026.
+2026-10-07T13:15:46.8625388Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/resources-2.1] cleanup deleted 0 files/directories.
+2026-10-07T13:15:46.8628023Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/files-2.1] cleanup deleted 0 files/directories.
+2026-10-07T13:15:46.8629915Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/files-2.1] removing files not accessed on or after Wed Oct 07 13:13:55 UTC 2026.
+2026-10-07T13:15:46.8631233Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/files-2.1] cleanup deleted 0 files/directories.
+2026-10-07T13:15:46.8632451Z artifact cache (/home/runner/.gradle/caches/modules-2) [subdir: /home/runner/.gradle/caches/modules-2/metadata-2.107] cleanup deleted 0 files/directories.
+2026-10-07T13:15:46.8633409Z artifact cache (/home/runner/.gradle/caches/modules-2) cleanup deleted 0 files/directories.
+2026-10-07T13:15:46.8634116Z artifact cache (/home/runner/.gradle/caches/modules-2) cleaned up in 0.054 secs.
+2026-10-07T13:15:46.9499282Z ##[endgroup]
+2026-10-07T13:15:46.9500056Z ##[group]Caching Gradle state
+2026-10-07T13:15:49.0546378Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/Lumenfall/Lumenfall --files-from manifest.txt --use-compress-program zstdmt
+2026-10-07T13:15:49.1075972Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/Lumenfall/Lumenfall --files-from manifest.txt --use-compress-program zstdmt
+2026-10-07T13:15:49.8444674Z Sent 91876 of 91876 (100.0%), 0.2 MBs/sec
+2026-10-07T13:15:50.1477375Z Saved cache entry with key gradle-groovy-dsl-v1-3f35bc99741b5dd6e2f998e1bfba564f from /home/runner/.gradle/caches/*/groovy-dsl/*/ in 1124ms
+2026-10-07T13:15:50.8660512Z Sent 19726336 of 45821485 (43.1%), 18.8 MBs/sec
+2026-10-07T13:15:51.4074314Z Sent 45821485 of 45821485 (100.0%), 28.3 MBs/sec
+2026-10-07T13:15:51.6890348Z Saved cache entry with key gradle-instrumented-jars-v1-dce65c5f62bf28ea60a93ea69287bc86 from /home/runner/.gradle/caches/jars-*/*/ in 2697ms
+2026-10-07T13:15:51.7757762Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/Lumenfall/Lumenfall --files-from manifest.txt --use-compress-program zstdmt
+2026-10-07T13:15:53.2904306Z Sent 17327400 of 17327400 (100.0%), 16.5 MBs/sec
+2026-10-07T13:15:53.7795697Z Saved cache entry with key gradle-home-v1|Linux-X64|build-apk[e080f0fdc288b6f0c5023fd4b86f7a10]-0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd from /home/runner/.gradle/caches,/home/runner/.gradle/notifications,/home/runner/.gradle/.setup-gradle in 2014ms
+2026-10-07T13:15:53.7798994Z ##[endgroup]
+2026-10-07T13:15:53.7802079Z Generating Job Summary
+2026-10-07T13:15:53.7816390Z Completed post-action step
+2026-10-07T13:15:53.8038982Z Post job cleanup.
+2026-10-07T13:15:53.9537855Z Post job cleanup.
+2026-10-07T13:15:54.0852584Z (node:3448) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-07T13:15:54.0854232Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-07T13:15:54.0857288Z Cache hit occurred on the primary key node-cache-Linux-x64-npm-479cd4b3756fdffb6dc102536f1164876a9699bd40c653018d14eed853eae6ca, not saving cache.
+2026-10-07T13:15:54.0996574Z Post job cleanup.
+2026-10-07T13:15:54.1894395Z [command]/usr/bin/git version
+2026-10-07T13:15:54.1945109Z git version 2.55.0
+2026-10-07T13:15:54.1989359Z Temporarily overriding HOME='/home/runner/work/_temp/eacb8b26-3135-4f11-af6d-054ac537b068' before making global git config changes
+2026-10-07T13:15:54.1991704Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-07T13:15:54.1996809Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Lumenfall/Lumenfall
+2026-10-07T13:15:54.2046916Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-07T13:15:54.2091398Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-07T13:15:54.2446691Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-07T13:15:54.2476359Z http.https://github.com/.extraheader
+2026-10-07T13:15:54.2492155Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-07T13:15:54.2553837Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-07T13:15:54.2910461Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-07T13:15:54.2958232Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-07T13:15:54.3379224Z Cleaning up orphan processes
+2026-10-07T13:15:54.3708665Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4, gradle/actions/setup-gradle@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

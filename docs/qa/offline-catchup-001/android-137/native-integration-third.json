@@ -1,0 +1,166 @@
+{
+  "status": "fail",
+  "identity": {
+    "android": "8.1.0",
+    "api": 27,
+    "ua": "Mozilla/5.0 (Linux; Android 8.1.0; Android SDK built for x86_64 Build/OSM1.180201.023; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.98 Mobile Safari/537.36",
+    "page": "https://localhost/",
+    "package": [
+      "    versionCode=137 minSdk=22 targetSdk=34",
+      "    versionName=0.1.137"
+    ],
+    "sourceSha256": "6fae43e9c558f1752d580d7289e49f2a7c875f673874ff426a4b0247304ba8f2",
+    "scriptSha256": "36c9911d8913534e484f3cefeb5fc712cc48ee662144d40f1d4baf898572f81f",
+    "stylesheetSha256": "9182bda87f706a3f09b8cc9bdbcbc4488ef9abaeec7e99ffdc31a330b7865612",
+    "apkSha256": "44f0bc792ad3510f006019fba6182b5551f17c8e18d9e2fc8f6816da474148f5",
+    "viewport": {
+      "width": 400,
+      "height": 820,
+      "dpr": 0.5
+    }
+  },
+  "error": "Error: {\"code\":-32000,\"message\":\"Can only perform operation while paused.\"}\n    at ws.onmessage (/workspace/lumenfall-offline/docs/qa/offline-catchup-001/android-137/native-integration.cjs:18:855)\n    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:856:20)\n    at WebSocket.dispatchEvent (node:internal/event_target:789:26)\n    at fireEvent (node:internal/deps/undici/undici:14403:14)\n    at #onMessage (node:internal/deps/undici/undici:15726:9)\n    at Object.onMessage (node:internal/deps/undici/undici:15433:76)\n    at websocketMessageReceived (node:internal/deps/undici/undici:14407:15)\n    at node:internal/deps/undici/undici:15135:21\n    at node:internal/deps/undici/undici:14915:11\n    at afterWrite (node:internal/streams/writable:708:5)",
+  "records": [
+    {
+      "case": "native signed137 cold Clear21 600s",
+      "seconds": 600,
+      "before": {
+        "hidden": false,
+        "kills": 385146,
+        "ascends": 15142,
+        "lastSeen": 1791397128070,
+        "offline": 897320.3319999998,
+        "recoveryMatches": true,
+        "frames": 11,
+        "errors": [],
+        "primaryWrites": [],
+        "returnVisible": false,
+        "message": ""
+      },
+      "after": {
+        "hidden": false,
+        "kills": 391446,
+        "ascends": 15442,
+        "lastSeen": 1791397728070,
+        "offline": 897920.3319999998,
+        "recoveryMatches": true,
+        "frames": 49,
+        "errors": [],
+        "primaryWrites": [
+          {
+            "kills": 391446,
+            "ascends": 15442,
+            "lastSeen": 1791397728070,
+            "observedElapsedMs": 32368.235000000008
+          }
+        ],
+        "returnVisible": true,
+        "message": "You were away for 10m. Your Wisps kept the Rift lit and gathered 26.88M Lumen and 1.09M Shards and 900 Sigils and 2.56K Motes while you were gone. They ascended 300 times on their own!"
+      },
+      "wallMs": 24957
+    },
+    {
+      "case": "native137 compatible opaque dialog gradient",
+      "paint": {
+        "backgroundImage": "radial-gradient(at 100% 0%, rgba(57, 49, 75, 0.533), transparent 65%), linear-gradient(145deg, rgb(27, 41, 65), rgb(17, 26, 44))",
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "case": "unmodified native137 return geometry",
+      "geometry": {
+        "button": {
+          "x": 47,
+          "y": 456,
+          "width": 306,
+          "height": 44
+        },
+        "overlay": {
+          "x": 0,
+          "y": 0,
+          "width": 400,
+          "height": 820
+        },
+        "viewport": {
+          "width": 400,
+          "height": 820
+        },
+        "hit": true
+      }
+    },
+    {
+      "case": "native Claim/repeated return/live play",
+      "after": {
+        "hidden": false,
+        "kills": 391455,
+        "ascends": 15442,
+        "lastSeen": 1791397728070,
+        "offline": 897920.3319999998,
+        "recoveryMatches": true,
+        "frames": 113,
+        "errors": [],
+        "primaryWrites": [
+          {
+            "kills": 391446,
+            "ascends": 15442,
+            "lastSeen": 1791397728070,
+            "observedElapsedMs": 32368.235000000008
+          },
+          {
+            "kills": 391446,
+            "ascends": 15442,
+            "lastSeen": 1791397728070,
+            "observedElapsedMs": 62045.24000000001
+          },
+          {
+            "kills": 391455,
+            "ascends": 15442,
+            "lastSeen": 1791397728070,
+            "observedElapsedMs": 72003.89
+          }
+        ],
+        "returnVisible": false,
+        "message": "You were away for 10m. Your Wisps kept the Rift lit and gathered 26.88M Lumen and 1.09M Shards and 900 Sigils and 2.56K Motes while you were gone. They ascended 300 times on their own!"
+      }
+    },
+    {
+      "case": "native 600s interruption/retry",
+      "seconds": 600,
+      "before": {
+        "hidden": false,
+        "kills": 385146,
+        "ascends": 15142,
+        "lastSeen": 1791397217728,
+        "offline": 897320.3319999998,
+        "recoveryMatches": true,
+        "frames": 10,
+        "errors": [],
+        "primaryWrites": [],
+        "returnVisible": false,
+        "message": ""
+      },
+      "after": {
+        "hidden": false,
+        "kills": 391446,
+        "ascends": 15442,
+        "lastSeen": 1791397817728,
+        "offline": 897920.3319999998,
+        "recoveryMatches": true,
+        "frames": 58,
+        "errors": [],
+        "primaryWrites": [
+          {
+            "kills": 391446,
+            "ascends": 15442,
+            "lastSeen": 1791397817728,
+            "observedElapsedMs": 48324.18000000001
+          }
+        ],
+        "returnVisible": true,
+        "message": "You were away for 10m. Your Wisps kept the Rift lit and gathered 26.88M Lumen and 1.09M Shards and 900 Sigils and 2.56K Motes while you were gone. They ascended 300 times on their own!"
+      },
+      "wallMs": 42970
+    }
+  ],
+  "protocolRuntimeErrors": []
+}
