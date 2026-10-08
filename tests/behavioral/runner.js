@@ -2435,7 +2435,7 @@
           assert(refresh1.state.comets===refreshBase.comets-economy.questRefreshCost,'Quest Refresh must spend exactly its Comet cost');
           assert(refresh1.state.questIds.length===3 && refresh1.state.questIds[0]!=='q_tap_small','Quest Refresh must replace one quest without adding extra quest slots');
           assert(refresh1.state.dailyQuestRefreshes===1,'Quest Refresh count must persist deterministically');
-          assert(refresh1.state.owned.autoascend && refresh1.state.owned.offline24 && refresh1.state.owned.offline48 && refresh1.state.owned.rememberbulk,'refreshing a quest must not invalidate any finite Rest Stop purchase');
+          assert(refresh1.state.owned.autoascend && refresh1.state.legacyCometPurchases.offline24 && refresh1.state.legacyCometPurchases.offline48 && refresh1.state.legacyCometPurchases.rememberbulk,'refreshing a quest must preserve Auto-Ascend and archived legacy purchase ownership');
 
           bridge.setState(refreshBase);
           var refresh2=bridge.refreshQuest('q_tap_small');

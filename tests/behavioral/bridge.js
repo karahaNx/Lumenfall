@@ -14,7 +14,7 @@ function qaLifecycleRecord(type,detail){
 }
 // Resolve only after the real startup completion callback (including its save).
 // This is installed before DOMContentLoaded/init in the throwaway instrumented app.
-if(window.__lumenfallQaContext.scenario==='lab-motes-runtime' || window.__lumenfallQaContext.scenario==='lab-motes-native' || window.__lumenfallQaContext.scenario==='lab-motes-reduced-motion' || window.__lumenfallQaContext.scenario==='auto-ascend-target-mobile' || window.__lumenfallQaContext.scenario==='auto-ascend-target-reduced-motion' || window.__lumenfallQaContext.scenario.startsWith('forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('self-test-forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('rift-status-') || window.__lumenfallQaContext.scenario.startsWith('self-test-rift-status-')){
+if(window.__lumenfallQaContext.scenario.startsWith('comet-unlocks-') || window.__lumenfallQaContext.scenario==='lab-motes-runtime' || window.__lumenfallQaContext.scenario==='lab-motes-native' || window.__lumenfallQaContext.scenario==='lab-motes-reduced-motion' || window.__lumenfallQaContext.scenario==='auto-ascend-target-mobile' || window.__lumenfallQaContext.scenario==='auto-ascend-target-reduced-motion' || window.__lumenfallQaContext.scenario.startsWith('forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('self-test-forge-ui-') || window.__lumenfallQaContext.scenario.startsWith('rift-status-') || window.__lumenfallQaContext.scenario.startsWith('self-test-rift-status-')){
   var qaStartupResolve;
   window.__qaForgeStartup={completed:false,callbacks:0,promise:new Promise(function(resolve){qaStartupResolve=resolve;})};
   var qaOriginalPlayStartupIntro=playStartupIntro;
@@ -69,6 +69,7 @@ offlineProgressSteps = function*(){
 };
 
 window.__lumenfallQaBridge = {
+  comet: {render:renderAll,shop:renderShop,cosmetics:renderCosmetics,tab:activateTab,ascend:function(){doAscend(false);},queue:queueCometTrial,cancel:cancelCometTrial},
   offlineTest: {
     seed:function(){return JSON.parse(JSON.stringify(window.__lumenfallQaContext.fixtures['offline-catchup-device'].save));},
     failNext:function(){var original=simulationResolveTimestamp;simulationResolveTimestamp=function(){simulationResolveTimestamp=original;throw new Error('injected offline failure');};}

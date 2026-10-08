@@ -2078,6 +2078,25 @@
   .workshop-tabs .lab-capacity-badge{position:static;}
   @media(prefers-reduced-motion:reduce){nav.tabbar button,nav.tabbar .nav-icon{transition:none;}nav.tabbar .nav-feedback .nav-icon::after,nav.tabbar .nav-feedback .nav-art{animation:none;}}
 
+  .comet-trial-controls{display:grid;gap:10px;margin-top:12px;min-width:0;}
+  .comet-trial-controls label{display:grid;gap:5px;color:#ece5f8;}
+  .comet-trial-controls select,.comet-trial-controls input,.comet-trial-controls button,.comet-cosmetic button{
+    box-sizing:border-box;min-width:44px;min-height:44px;width:100%;max-width:100%;padding:10px;
+    border:1px solid #81769b;border-radius:8px;background:#18213a;color:#ece5f8;font:inherit;white-space:normal;
+  }
+  .comet-trial-controls :focus,.comet-cosmetic button:focus{outline:2px solid #ffe0b6;outline-offset:2px;}
+  .shop-card .info{min-width:0;}
+  .comet-trial-status,.comet-mark{color:#ffe0b6;overflow-wrap:break-word;font-size:12px;line-height:1.5;}
+  .comet-trial-status[hidden]{display:none;}
+  .comet-cosmetic{display:grid;gap:8px;}
+  .comet-trail{display:none;position:absolute;top:18%;right:24%;bottom:18%;left:24%;inset:18% 24%;border-radius:50%;border-top:2px solid #ffe0b6;border-bottom:1px solid #b6caff;pointer-events:none;opacity:.65;}
+  .comet-trail-equipped .comet-trail{display:block;animation:cometTrailOrbit 12s linear infinite;}
+  .comet-crest{display:none;position:absolute;bottom:10px;right:12px;width:32px;height:32px;line-height:30px;border:1px solid #ffe0b6;border-radius:50%;background:#18213a;color:#ffe0b6;font-size:22px;text-align:center;pointer-events:none;z-index:2;}
+  .comet-crest-equipped>.comet-crest{display:block;}
+  .ascend-flash.comet-crest-equipped>span::before{content:'✦ ';color:#ffe0b6;}
+  @keyframes cometTrailOrbit{to{transform:rotate(360deg);}}
+  @media(max-width:430px){.shop-card{flex-wrap:wrap;}.shop-card>.info{flex-basis:100%;}.shop-card>button{min-height:44px;}}
+  @media(prefers-reduced-motion:reduce){.comet-trail-equipped .comet-trail{animation:none!important;transform:rotate(-25deg);}}
 </style>
 </head>
 <body>
@@ -2593,7 +2612,7 @@
 </div>
 
           <div class="enemy-stage-wrap">
-            <button type="button" class="enemy-stage" id="enemy-stage" aria-label="Tap enemy to attack"><span class="enemy-name" id="enemy-name">Hollow Wisp</span><span class="guardian-label">Tap enemy to attack</span>
+            <button type="button" class="enemy-stage" id="enemy-stage" aria-label="Tap enemy to attack"><span class="comet-trail" aria-hidden="true"></span><span class="comet-crest" aria-hidden="true">✦</span><span class="enemy-name" id="enemy-name">Hollow Wisp</span><span class="guardian-label">Tap enemy to attack</span>
               <div class="enemy-glyph" id="enemy-glyph"><svg class="creature-art" viewBox="0 0 160 160" aria-hidden="true"><use href="#creature-prowler"/></svg><svg class="boss-regalia" viewBox="0 0 160 160" aria-hidden="true" fill="var(--creature-color)" stroke="var(--creature-rim)" stroke-width="1.5">
                 <g class="boss-crest boss-crest-regrowth"><path d="M18 116Q3 90 11 61 M142 116Q157 90 149 61"/><path d="M10 78Q1 70 8 60Q17 69 10 78Z M11 99Q4 90 17 84Q20 94 11 99Z M150 78Q159 70 152 60Q143 69 150 78Z M149 99Q156 90 143 84Q140 94 149 99Z" fill="var(--creature-rim)" stroke="var(--creature-eye)"/></g>
                 <g class="boss-crest boss-crest-fractured"><path d="M11 52 17 62 11 72 5 62Z M8 83 14 93 8 103 2 93Z M149 52 155 62 149 72 143 62Z M152 83 158 93 152 103 146 93Z" fill="var(--creature-color)"/><path d="M11 58V66 M8 89V97 M149 58V66 M152 89V97" stroke="var(--creature-eye)"/></g>
@@ -2609,6 +2628,7 @@
         <div id="rift-party" role="group" aria-label="Current Wisp formation"></div>
         </div>
         <div class="buff-indicator" id="buff-indicator">Boost · passive Wisps + Tap · <strong>Inactive</strong></div>
+        <div id="comet-trial-status" class="comet-trial-status" hidden></div>
         <div class="bond-summary" id="bond-summary">No Formation Bond active.</div>
         <div id="rift-bond-effects" aria-label="Formation Bond bonuses"></div>
         <div class="stat-row">
@@ -2668,7 +2688,7 @@
       </div>
       <div class="section-label">Deeds</div>
       <div class="ach-grid" id="ach-list"></div>
-      <div class="section-label">Comet Rest Stop</div>
+      <div class="section-label">Exclusive Comet Unlocks</div>
       <div id="shop-list"></div>
       <div class="section-label">Cosmetics</div>
       <div class="section-sub">Certain Deeds unlock a new aura for the Rift. Purely visual — never a power gain.</div>
@@ -3042,9 +3062,13 @@ var RIFT_THEMES = [
 
 var SHOP = [
   {id:'autoascend', name:'Auto-Ascend Ritual', desc:'Choose which Rift to defeat before automatic Ascension. Toggle it on or off anytime. Your chosen target persists across Ascensions.', cost:100},
-  {id:'offline24',  name:'Extended Rest',      desc:'Raise the offline earnings cap from 12 hours to 24 hours.', cost:140},
-  {id:'offline48',  name:'Deep Rest',          desc:'Raise the offline earnings cap by another 24 hours, stacking with Extended Rest.', cost:160},
-  {id:'rememberbulk',name:'Loadout Memory',    desc:'The Rift Forge remembers your last bulk-buy multiplier between visits, instead of resetting to 1x.', cost:50}
+  {id:'comettrials', name:'Comet Trials', desc:'Unlock Quiet Guardian and Single Star run challenges. One Trial at a time, beginning after your next Ascend. Completing each earns a permanent cosmetic mark. No power or currency bonus; starts and retries are free.', cost:140},
+  {id:'rifttrail', name:'Rift Trail', desc:'An optional starlight trail around the Rift. One trail slot, independent of your aura. Static with reduced motion. Cosmetic only.', cost:50},
+  {id:'starfallcrest', name:'Starfall Crest', desc:'An optional star emblem beside your Guardian and on Ascension. One crest slot, independent of your aura. Cosmetic only.', cost:160}
+];
+var COMET_TRIALS = [
+  {id:'quiet',name:'Quiet Guardian',rule:'No manual attacks during the run. Auto-Tap is allowed.',mark:'Quiet Guardian mark'},
+  {id:'single',name:'Single Star',rule:'Keep at most one Active Wisp throughout the run. Formation rebuild and Auto-Empower also count.',mark:'Single Star mark'}
 ];
 
 var MANIFESTO = [
@@ -3128,6 +3152,8 @@ function freshState(){
     nodes:nodes, research:research, researchQueue:researchQueue,
     longStudyLevels:longStudyLevels, activeStudies:[], studyQueue:studyQueue, studyUseMotes:studyUseMotes, studySpeedTargets:studySpeedTargets,
     achieved:achieved, owned:owned, riftTheme:'default',
+    cometTrial:null, cometTrialMarks:{}, cometTrialResult:null,
+    cometCosmetics:{trail:false,crest:false}, legacyCometPurchases:{},
     buffUntil:0, buffMult:1, supportBuffs:null,
     ascendCount:0, ascendRewardedDepth:0, sigilResonanceUses:0, totalTaps:0, totalKills:0, totalOfflineSeconds:0, luminousAccum:0,
     savedLabMultiplier:1,
@@ -3174,7 +3200,9 @@ function loginRewardFor(streak){
   return DAILY_LOGIN_REWARDS[(streak-1) % DAILY_LOGIN_REWARDS.length];
 }
 function restStopComplete(){
-  return SHOP.every(function(item){ return !!state.owned[item.id]; });
+  var legacy=state.legacyCometPurchases||{};
+  return !!state.owned.autoascend && (!!state.owned.comettrials ||
+    !!legacy.offline24 && !!legacy.offline48 && !!legacy.rememberbulk);
 }
 function maxDailyQuestCometReward(){
   return QUEST_POOL.reduce(function(max,q){ return Math.max(max,(q.reward && q.reward.comets)||0); },0);
@@ -3384,6 +3412,7 @@ function reconcileFormationRebuild(snapshot){
     }
     snapshot.formationRebuild = null;
   }
+  validateCometTrialParty(snapshot);
 }
 function intendedFormationIds(){
   return state.formationRebuild ? state.formationRebuild.members : [];
@@ -3529,6 +3558,13 @@ function normalizeCurrentSave(input){
 
   var owned = isPlainObject(source.owned) ? source.owned : {};
   SHOP.forEach(function(item){ if(owned[item.id]===true) out.owned[item.id] = true; });
+  var legacy = isPlainObject(source.legacyCometPurchases) ? source.legacyCometPurchases : {};
+  ['rememberbulk','offline24','offline48'].forEach(function(id){
+    if(legacy[id]===true || owned[id]===true) out.legacyCometPurchases[id]=true;
+  });
+  var cosmetics=isPlainObject(source.cometCosmetics) ? source.cometCosmetics : {};
+  out.cometCosmetics.trail=!!out.owned.rifttrail && cosmetics.trail===true;
+  out.cometCosmetics.crest=!!out.owned.starfallcrest && cosmetics.crest===true;
 
   var themeId = typeof source.riftTheme==='string' ? source.riftTheme : fresh.riftTheme;
   out.riftTheme = RIFT_THEMES.some(function(theme){ return theme.id===themeId; }) ? themeId : fresh.riftTheme;
@@ -3588,6 +3624,7 @@ function normalizeCurrentSave(input){
 
   out.lastSeen = finiteNonNegative(source.lastSeen,Date.now());
   if(out.lastSeen<=0) out.lastSeen = Date.now();
+  normalizeCometTrials(source,out);
   return out;
 }
 function acceptPersistedState(input,sourceName){
@@ -3974,7 +4011,7 @@ function abilityCycleSeconds(level){ return ABILITY_BASE_CYCLE_SEC / fillRateMul
 function offlineRate(){ return Math.min(1, 0.70 + nodeLevel('echo')*0.05) + longStudyOfflineBonus(); }
 function prismMult(){ return (1 + nodeLevel('swift')*0.04) * longStudyPrismMult(); }
 function costReduction(){ return Math.min(0.6, nodeLevel('bonds')*0.03); }
-function offlineCapHours(){ return 12 + (state.owned.offline24?12:0) + (state.owned.offline48?24:0) + nodeLevel('reserves')*2; }
+function offlineCapHours(){ return 12 + (state.legacyCometPurchases.offline24?12:0) + (state.legacyCometPurchases.offline48?24:0) + nodeLevel('reserves')*2; }
 function eliteChance(depth,level){ return Math.min(0.35, Math.min(0.30, 0.03 + Math.floor(depth/10)*0.02) + researchBonus('luminoustracking',level)); }
 function motesDropFor(depth){ return Math.max(1, Math.round((1 + depth/8) * longStudyMoteMult() * formationRewardMult())); }
 function sigilsFromBoss(depth){ return Math.max(1, Math.floor(depth/10)); }
@@ -4608,8 +4645,88 @@ function checkAchievements(){
 // ---------------------------------------------------------------
 // Actions
 // ---------------------------------------------------------------
+function cometTrialDefinition(id){
+  return COMET_TRIALS.find(function(trial){return trial.id===id;});
+}
+function normalizeCometTrials(source,out){
+  var marks=isPlainObject(source.cometTrialMarks) ? source.cometTrialMarks : {};
+  COMET_TRIALS.forEach(function(trial){if(marks[trial.id]===true) out.cometTrialMarks[trial.id]=true;});
+  var raw=source.cometTrial;
+  if(out.owned.comettrials && isPlainObject(raw) && cometTrialDefinition(raw.id) &&
+    Number.isInteger(raw.target) && raw.target>=15 && raw.target<out.maxDepthEver){
+    if(raw.phase==='pending') out.cometTrial={id:raw.id,target:raw.target,phase:'pending'};
+    else if(raw.phase==='active' && raw.startedAscend===out.ascendCount && out.ascendCount>0){
+      out.cometTrial={id:raw.id,target:raw.target,phase:'active',startedAscend:raw.startedAscend,
+        failed:raw.failed===true,reason:raw.reason==='manual' || raw.reason==='party' ? raw.reason : ''};
+    }
+  }
+  var result=source.cometTrialResult;
+  if(isPlainObject(result) && cometTrialDefinition(result.id) && Number.isInteger(result.target) &&
+    result.target>=15 && result.target<out.maxDepthEver &&
+    ['completed','failed','cancelled'].indexOf(result.outcome)!==-1){
+    out.cometTrialResult={id:result.id,target:result.target,outcome:result.outcome};
+  }
+  validateCometTrialParty(out);
+}
+function validateCometTrialParty(snapshot){
+  var trial=snapshot.cometTrial;
+  if(trial && trial.phase==='active' && trial.id==='single' && snapshot.activeParty.length>1){
+    trial.failed=true;trial.reason='party';
+  }
+}
+function recordCometManualAttack(){
+  var trial=state.cometTrial;
+  if(trial && trial.phase==='active' && trial.id==='quiet'){
+    trial.failed=true;trial.reason='manual';
+  }
+}
+function queueCometTrial(id,target){
+  if(!state.owned.comettrials || state.cometTrial || !cometTrialDefinition(id) ||
+    !Number.isInteger(target) || target<15 || target>=state.maxDepthEver) return false;
+  state.cometTrial={id:id,target:target,phase:'pending'};
+  saveState();renderShop();updateBattleFast();
+  return true;
+}
+function cancelCometTrial(){
+  var trial=state.cometTrial;
+  if(!trial) return false;
+  state.cometTrialResult={id:trial.id,target:trial.target,outcome:'cancelled'};
+  state.cometTrial=null;
+  saveState();renderShop();updateBattleFast();
+  return true;
+}
+function finishCometTrial(cleared){
+  var trial=state.cometTrial;
+  if(!trial || trial.phase!=='active') return;
+  validateCometTrialParty(state);
+  var success=!trial.failed && trial.startedAscend===state.ascendCount && cleared>=trial.target;
+  if(success) state.cometTrialMarks[trial.id]=true;
+  state.cometTrialResult={id:trial.id,target:trial.target,outcome:success?'completed':'failed'};
+  state.cometTrial=null;
+}
+function beginPendingCometTrial(){
+  var trial=state.cometTrial;
+  if(!trial || trial.phase!=='pending') return;
+  trial.phase='active';trial.startedAscend=state.ascendCount;trial.failed=false;trial.reason='';
+  validateCometTrialParty(state);
+}
+function cometTrialStatus(){
+  var trial=state.cometTrial;
+  if(!trial) return '';
+  var name=cometTrialDefinition(trial.id).name;
+  return name+' · Clear Rift '+trial.target+' · '+(trial.phase==='pending' ? 'Begins after next Ascend' :
+    trial.failed ? 'Failed: '+(trial.reason==='manual'?'manual attack':'more than one Active Wisp') : 'Active; finish by Ascending');
+}
+function selectCometCosmetic(slot,enabled){
+  var id=slot==='trail' ? 'rifttrail' : slot==='crest' ? 'starfallcrest' : '';
+  if(!id || !state.owned[id]) return false;
+  state.cometCosmetics[slot]=!!enabled;
+  saveState();applyRiftTheme();renderCosmetics();
+  return true;
+}
 function doTap(stageEl){
   var dmg = tapDamage();
+  recordCometManualAttack();
   state.totalTaps++;
   trackDaily('taps');
   spawnFloatNum(formatNum(dmg), stageEl,'damage');
@@ -4635,6 +4752,7 @@ function buySpirit(sp){
     state.activeParty.push(sp.id);
     state.activeFormationPreset = '';
   }
+  validateCometTrialParty(state);
   checkAchievements();
   renderSpirits();
   if(wasZero){
@@ -4675,6 +4793,7 @@ function toggleActive(id){
   }
   state.formationRebuild = null;
   state.activeFormationPreset = '';
+  validateCometTrialParty(state);
   saveState();
   renderSpirits();
   updateBattleFast();
@@ -4711,6 +4830,7 @@ function applyFormationPreset(name){
   state.formationRebuild = null;
   state.activeParty = members.slice();
   state.activeFormationPreset = name;
+  validateCometTrialParty(state);
   saveState();
   renderSpirits();
   updateBattleFast();
@@ -4789,6 +4909,8 @@ function applyRiftTheme(){
   if(!stageEl) return;
   var theme = RIFT_THEMES.find(function(t){ return t.id===state.riftTheme; }) || RIFT_THEMES[0];
   stageEl.classList.toggle('theme-radiant', theme.id==='radiant');
+  stageEl.classList.toggle('comet-trail-equipped',!!state.cometCosmetics.trail);
+  stageEl.classList.toggle('comet-crest-equipped',!!state.cometCosmetics.crest);
   if(theme.accent){ stageEl.style.setProperty('--theme-accent', theme.accent); }
   else { stageEl.style.removeProperty('--theme-accent'); }
 }
@@ -5085,8 +5207,8 @@ function autoFillStudySlots(){
 }
 
 function buyShopItem(item){
-  if(state.owned[item.id]) return;
-  if(state.comets < item.cost) return;
+  item=item && SHOP.find(function(entry){return entry.id===item.id;});
+  if(!item || state.owned[item.id] || state.comets<item.cost) return false;
   state.comets -= item.cost;
   state.owned[item.id] = true;
   if(item.id==='autoascend'){
@@ -5094,7 +5216,9 @@ function buyShopItem(item){
     state.autoAscendEnabled = true;
   }
   renderShop();
+  renderCosmetics();
   saveState();
+  return true;
 }
 
 function toggleAutoAscend(){
@@ -5147,6 +5271,7 @@ function applyAscendMutation(){
     members:state.activeParty.slice(),preset:state.activeFormationPreset
   },state);
   var cleared = progressionDepth() - 1;
+  finishCometTrial(cleared);
   var gain = ascendPrismGain(progressionDepth());
   state.prisms += gain;
   state.ascendRewardedDepth = Math.max(state.ascendRewardedDepth||0,cleared);
@@ -5172,13 +5297,14 @@ function applyAscendMutation(){
   state.activeParty = ['ember'];
   reconcileFormationRebuild(state);
   spawnEnemy();
+  beginPendingCometTrial();
   return gain;
 }
 function showAscendFlash(gain,auto){
   var old = document.querySelector('.ascend-flash');
   if(old) old.remove();
   var flash = document.createElement('div');
-  flash.className = 'ascend-flash';
+  flash.className = 'ascend-flash'+(state.cometCosmetics.crest?' comet-crest-equipped':'');
   flash.innerHTML =
     '<span>'+(auto?'AUTO ASCEND':'ASCENDED')+'</span>'+
     '<strong>+'+formatNum(gain)+' PRISMS</strong>'+
@@ -5349,17 +5475,23 @@ function replaceControlMarkup(root,html,keepAutoAscend){
   var focused=document.activeElement;
   var previous=root.contains(focused) ? focused : null;
   var keys=previous ? Array.from(previous.attributes).filter(function(a){return a.name.startsWith('data-') && a.name!=='data-state';}) : [];
-  var index=previous ? Array.from(root.querySelectorAll('button,select')).indexOf(previous) : -1;
+  var index=previous ? Array.from(root.querySelectorAll('button,select,input')).indexOf(previous) : -1;
   var stable=keepAutoAscend && root.querySelector('[data-autoascend-card]');
-  if(stable){
+  var trialCard=keepAutoAscend && previous && previous.matches('input,select') && previous.closest('[data-comet-trial-card]');
+  if(stable || trialCard){
     // Keep the real native select attached while unrelated shop cards refresh.
     var prepared=document.createElement('div');prepared.innerHTML=html;
     var children=Array.from(prepared.children),nextCard=prepared.querySelector('[data-autoascend-card]');
-    if(nextCard && children.indexOf(nextCard)===Array.from(root.children).indexOf(stable)){
-      var toggle=stable.querySelector('[data-autoascend-toggle]'),nextToggle=nextCard.querySelector('[data-autoascend-toggle]');
-      toggle.className=nextToggle.className;toggle.textContent=nextToggle.textContent;
+    var nextTrial=prepared.querySelector('[data-comet-trial-card]');
+    var keepTrial=trialCard && nextTrial && nextTrial.querySelector('[data-trial-choice]');
+    if(keepTrial) children[children.indexOf(nextTrial)]=trialCard;
+    if((nextCard && children.indexOf(nextCard)===Array.from(root.children).indexOf(stable)) || (!stable && keepTrial)){
+      if(stable){
+        var toggle=stable.querySelector('[data-autoascend-toggle]'),nextToggle=nextCard.querySelector('[data-autoascend-toggle]');
+        toggle.className=nextToggle.className;toggle.textContent=nextToggle.textContent;
+      }
       children.forEach(function(child,i){
-        if(child===nextCard) return;
+        if(child===nextCard || child===trialCard) return;
         if(root.children[i]) root.children[i].replaceWith(child);else root.appendChild(child);
       });
       while(root.children.length>children.length) root.lastElementChild.remove();
@@ -5367,7 +5499,7 @@ function replaceControlMarkup(root,html,keepAutoAscend){
   } else root.innerHTML=html;
   presentControlStates(root);
   if(previous && !previous.isConnected){
-    var buttons=Array.from(root.querySelectorAll('button,select'));
+    var buttons=Array.from(root.querySelectorAll('button,select,input'));
     var replacement=keys.length && buttons.find(function(btn){return keys.every(function(a){return btn.getAttribute(a.name)===a.value;});});
     if(replacement && !replacement.disabled) replacement.focus({preventScroll:true});
     else {
@@ -5581,6 +5713,10 @@ function renderRiftObjective(){
 }
 
 function updateBattleFast(){
+  var trialStatus=document.getElementById('comet-trial-status');
+  if(trialStatus){trialStatus.textContent=cometTrialStatus();trialStatus.hidden=!state.cometTrial;}
+  var deedTrialStatus=document.querySelector('[data-trial-live-status]');
+  if(deedTrialStatus) deedTrialStatus.textContent=cometTrialStatus();
   renderRiftMode();
   renderRiftObjective();
   renderBondSummary();
@@ -6063,7 +6199,7 @@ function renderResearch(){
     btn.addEventListener('click', function(){
       var v = btn.getAttribute('data-mult');
       labMultiplier = v==='max' ? 'max' : parseInt(v,10);
-      if(state.owned.rememberbulk){ state.savedLabMultiplier = labMultiplier; }
+      if(state.legacyCometPurchases.rememberbulk){ state.savedLabMultiplier = labMultiplier; }
       renderResearch();
     });
   });
@@ -6272,6 +6408,30 @@ function renderNodes(){
   });
 }
 
+var cometTrialChoice='quiet', cometTrialTarget=15;
+function cometTrialControls(){
+  var trial=state.cometTrial, html='<div class="comet-trial-controls">';
+  COMET_TRIALS.forEach(function(def){
+    html+='<div class="desc"><strong>'+def.name+'</strong>: '+def.rule+
+      (state.cometTrialMarks[def.id]?' · ✓ '+def.mark+' earned':' · Reward: '+def.mark)+'</div>';
+  });
+  if(trial){
+    html+='<div class="comet-trial-status" data-trial-live-status>'+cometTrialStatus()+'</div>'+
+      '<button type="button" data-trial-cancel>Cancel Trial (free)</button>';
+  } else {
+    var highest=Math.max(0,state.maxDepthEver-1), eligible=highest>=15;
+    html+='<label>Trial<select data-trial-choice>';
+    COMET_TRIALS.forEach(function(def){html+='<option value="'+def.id+'"'+(def.id===cometTrialChoice?' selected':'')+'>'+def.name+'</option>';});
+    html+='</select></label><label>Target cleared Rift<input data-trial-target type="number" inputmode="numeric" min="15" max="'+highest+'" step="1" value="'+cometTrialTarget+'" aria-describedby="comet-trial-help"></label>'+
+      '<div id="comet-trial-help" class="desc">'+(eligible?'Choose Rift 15–'+highest+'.':'Clear Rift 15 first.')+
+      ' Queue before Ascending. After the reset, obey the rule until your following Ascend. Trials never restart automatically.</div>'+
+      '<button type="button" data-trial-queue'+(!eligible?' disabled':'')+'>Queue for next Ascend (free)</button>'+
+      '<div data-trial-error class="desc" role="status"></div>';
+  }
+  var result=state.cometTrialResult;
+  if(result) html+='<div class="desc">Last Trial: '+cometTrialDefinition(result.id).name+' · Rift '+result.target+' · '+result.outcome+'.</div>';
+  return html+'</div>';
+}
 function renderAchievements(){
   var html = '';
   ACHIEVEMENTS.forEach(function(a){
@@ -6314,7 +6474,8 @@ function renderAchievements(){
         (owned ? 'Owned' : formatNum(item.cost)+' '+costIcon('comet')) +
       '</button>';
     }
-    shopHtml += '<div class="card shop-card'+(item.id==='autoascend' && owned?' auto-ascend-card':'')+'"'+(item.id==='autoascend' && owned?' data-autoascend-card':'')+'>' +
+    if(item.id==='comettrials' && owned) extra=cometTrialControls();
+    shopHtml += '<div class="card shop-card'+(item.id==='autoascend' && owned?' auto-ascend-card':'')+'"'+(item.id==='autoascend' && owned?' data-autoascend-card':'')+(item.id==='comettrials' && owned?' data-comet-trial-card':'')+'>' +
       '<div class="info"><div class="name">'+item.name+'</div><div class="desc">'+item.desc+'</div>'+extra+'</div>' +
       buttonHtml +
     '</div>';
@@ -6322,7 +6483,7 @@ function renderAchievements(){
   if(restStopComplete()){
     shopHtml += '<div class="card shop-card">' +
       '<div class="info"><div class="name">Daily Quest Refresh</div>' +
-      '<div class="desc">Rest Stop complete. Spend '+dailyQuestRefreshCost()+' Comets beside any unclaimed Daily Quest to replace it with another eligible quest. Refreshing never grants extra power or extra quest slots.</div></div>' +
+      '<div class="desc">Auto-Ascend and Comet Trials unlock Quest Refresh. Previous complete Rest Stop owners retain access. Spend '+dailyQuestRefreshCost()+' Comets beside an unclaimed Daily Quest to replace it. No extra power or quest slots.</div></div>' +
     '</div>';
   }
   replaceControlMarkup(els['shop-list'],shopHtml,true);
@@ -6332,6 +6493,20 @@ function renderAchievements(){
       buyShopItem(item);
     });
   });
+  var choice=els['shop-list'].querySelector('[data-trial-choice]');
+  var target=els['shop-list'].querySelector('[data-trial-target]');
+  if(choice){
+    choice.onchange=function(){cometTrialChoice=choice.value;};
+    target.oninput=function(){cometTrialTarget=target.value==='' ? '' : Number(target.value);};
+    els['shop-list'].querySelector('[data-trial-queue]').onclick=function(){
+      if(!queueCometTrial(choice.value,Number(target.value))){
+        target.setAttribute('aria-invalid','true');
+        els['shop-list'].querySelector('[data-trial-error]').textContent='Choose a whole cleared Rift from 15 to '+(state.maxDepthEver-1)+'.';
+      }
+    };
+  }
+  var cancel=els['shop-list'].querySelector('[data-trial-cancel]');
+  if(cancel) cancel.onclick=cancelCometTrial;
   var autoToggle = els['shop-list'].querySelector('[data-autoascend-toggle]');
   if(autoToggle){ autoToggle.onclick=toggleAutoAscend; }
   var autoTarget=els['shop-list'].querySelector('[data-autoascend-target]');
@@ -6368,9 +6543,22 @@ function renderCosmetics(){
       '<span class="theme-active-tag">'+(active?'✓ Equipped':'Equip')+'</span>' +
     '</button>';
   });
+  [{slot:'trail',id:'rifttrail'},{slot:'crest',id:'starfallcrest'}].forEach(function(item){
+    var def=SHOP.find(function(entry){return entry.id===item.id;}), owned=!!state.owned[item.id];
+    var equipped=!!state.cometCosmetics[item.slot];
+    html+='<div class="card comet-cosmetic"><div class="name">'+def.name+'</div><div class="desc">'+def.desc+'</div>'+
+      (owned ? '<button type="button" data-comet-cosmetic="'+item.slot+'" aria-pressed="'+equipped+'">'+(equipped?'✓ Equipped · Unequip':'Equip')+'</button>' :
+        '<div class="desc">Unlock in Deeds · '+def.cost+' Comets</div>')+'</div>';
+  });
+  COMET_TRIALS.forEach(function(def){
+    if(state.cometTrialMarks[def.id]) html+='<div class="card comet-mark"><span aria-hidden="true">✦</span> '+def.mark+' · Earned</div>';
+  });
   replaceControlMarkup(els['theme-list'],html);
   els['theme-list'].querySelectorAll('[data-theme-select]').forEach(function(card){
     card.addEventListener('click', function(){ selectRiftTheme(card.getAttribute('data-theme-select')); });
+  });
+  els['theme-list'].querySelectorAll('[data-comet-cosmetic]').forEach(function(button){
+    button.onclick=function(){var slot=button.getAttribute('data-comet-cosmetic');selectCometCosmetic(slot,!state.cometCosmetics[slot]);};
   });
 }
 
@@ -6379,7 +6567,7 @@ var CURRENCIES = [
   {name:'Shards', shape:'shape-hex', color:'var(--shard)', desc:'Also earned from every kill, in smaller amounts. Spend it to raise a Wisp’s Rarity tier and to fund Rift Forge upgrades and Research Lab projects.'},
   {name:'Motes', shape:'shape-pentagon', color:'var(--mote)', desc:'Dropped only by rare Luminous enemies in the Rift, always a fixed amount. Spend it to speed up your active Research Project in the Research Lab.'},
   {name:'Prisms', shape:'shape-diamond', color:'var(--prism)', desc:'Earned only by Ascending — the deeper you clear first, the more you get. Spend it on the permanent Ascension Tree.'},
-  {name:'Comets', shape:'shape-star', color:'var(--comet)', desc:'Earned from Deeds, Daily Quests and login streaks. Spend them on Rest Stop convenience; after all four purchases, they can refresh unclaimed Daily Quests without granting power.'},
+  {name:'Comets', shape:'shape-star', color:'var(--comet)', desc:'Earned from Deeds, Daily Quests and login streaks. Exclusive unlocks: Auto-Ascend, Comet Trials, Rift Trail and Starfall Crest. Auto-Ascend plus Trials unlock Quest Refresh; previous complete Rest Stop owners retain access. Trials and cosmetics grant no power or currency bonuses.'},
   {name:'Sigils', shape:'shape-octagon', color:'var(--sigil)', desc:'Dropped by Rift bosses. First unlock Mythic Wisp Ultimates; after every Ultimate is owned, spend 25 to ready one Active Wisp ability, up to 3 times per Ascension run.'}
 ];
 
@@ -6416,7 +6604,7 @@ var ENCYCLOPEDIA_MECHANICS = [
   {name:'Tap damage (Guardian Tap)', meta:'Damage from tapping the enemy', desc:'This is your damage per tap on the enemy. Tap starts at 5 damage plus 2% of your general Active-Wisp passive power, then Tap upgrades apply. Support buffs and Guardian’s Mark also multiply it. Auto-Tap uses the same hit once per second.'},
   {name:'Rarity', meta:'Wisp progression', desc:'Rarity multiplies that Wisp’s Power, so it affects passive damage plus damaging/resource abilities. Every Rarity tier owned across the roster also adds +2% general passive-party power. Rarity does not strengthen Support buffs.'},
   {name:'Modules & Ultimates', meta:'Wisp progression', desc:'Modules are role-specific: Burst/Breaker Modules boost ability damage, Shard/Lumen Utility Modules boost their ability-generated resource, and Amplifier Modules boost Motes while Active. Ultimates double damage/resource ability output; Amplifier Ultimates change the buff from +25% for 4s to +50% for 8s.'},
-  {name:'Endgame Currency Utility', meta:'Economy rule', desc:'After all eight Ultimates are owned, Sigils can ready one Active Wisp ability for 25 Sigils, at most 3 times per Ascension run. After all four Rest Stop purchases are owned, Comets can replace an unclaimed Daily Quest for at least the richest quest reward, so refreshing cannot generate extra Comets.'},
+  {name:'Endgame Currency Utility', meta:'Economy rule', desc:'After all eight Ultimates are owned, Sigils can ready one Active Wisp ability for 25 Sigils, at most 3 times per Ascension run. Auto-Ascend plus Comet Trials unlock Quest Refresh; previous complete Rest Stop owners retain access. A refresh costs at least the richest quest reward, so refreshing cannot generate extra Comets.'},
   {name:'Wisp Roles', meta:'Build label', desc:'Roles describe authoritative ability output: Burst delivers the highest raw ability coefficient; Breaker delivers heavy ability hits and the Stone + Titan Duskguard pair specializes against bosses; Amplifier buffs passive Wisp damage and your tap damage; Shard Utility and Lumen Utility add their named resource to ability casts. These are output and utility roles, not defensive combat roles.'},
   {name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the run for Prisms. Your first reward sets a cleared-Rift benchmark; repeats at or below it earn a 20% reserve reward, while pushing beyond it adds a new-depth bonus. Permanent systems stay.'},
   {name:'Luminous Enemies', meta:'Rare encounter', desc:'Rare non-boss enemies that drop Motes. Their appearance chance rises as you push deeper.'},
@@ -7864,6 +8052,8 @@ function tick(){
   if(sim.ascends>0){
     saveState();
     showAscendFlash(sim.ascendGains[sim.ascendGains.length-1]||0,true);
+    renderShop();
+    renderCosmetics();
   }
   if(sim.completedStudies.length || sim.closedStudies.length){
     saveState();
@@ -8286,7 +8476,7 @@ function init(){
   cacheEls();
   try{ riftGuidanceHidden=localStorage.getItem(RIFT_GUIDANCE_HIDDEN_KEY)==='1'; }catch(e){ riftGuidanceHidden=false; }
   state = loadState();
-  if(state.owned.rememberbulk && state.savedLabMultiplier!==undefined){ labMultiplier = state.savedLabMultiplier; }
+  if(state.legacyCometPurchases.rememberbulk && state.savedLabMultiplier!==undefined){ labMultiplier = state.savedLabMultiplier; }
   var dailyRolled = ensureDaily();
   restoreEnemyOrSpawn();
   setupTabs();

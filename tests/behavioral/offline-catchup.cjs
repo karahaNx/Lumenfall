@@ -53,8 +53,15 @@ function baselineState(actual,expected,seed,label){
   const paid=(seed.activeStudies||[]).find(study=>study.id===id);
   return [id,paid&&paid.speedMult>1?paid.speedMult:1.5];
  })),label+' remembered legacy paid tier');
- const {studyUseMotes,studySpeedTargets,...existing}=actual;
- assert.deepEqual(existing,expected,label);
+ assert.equal(actual.cometTrial,null,label+' no unsolicited Trial');
+ assert.equal(actual.cometTrialResult,null,label+' no unsolicited result');
+ assert.deepEqual(actual.cometTrialMarks,{},label+' no unsolicited marks');
+ assert.deepEqual(actual.cometCosmetics,{trail:false,crest:false},label+' new cosmetics default OFF');
+ const oldOwnership={...expected.owned},legacy={};
+ for(const id of ['rememberbulk','offline24','offline48']){if(oldOwnership[id]===true)legacy[id]=true;delete oldOwnership[id];}
+ assert.deepEqual(actual.legacyCometPurchases,legacy,label+' full legacy ownership archived');
+ const {studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,...existing}=actual;
+ assert.deepEqual(existing,{...expected,owned:oldOwnership},label);
 }
 function runAsync(seed,seconds,batch=256){
  const x=app(seed,source,seconds),before=copy(x.b.get());x.b.batch(batch);
