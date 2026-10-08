@@ -14,9 +14,7 @@ for argument in "$@"; do
 done
 command -v git >/dev/null
 command -v node >/dev/null
-command -v python3 >/dev/null
 node -e 'if(Number(process.versions.node.split(".")[0])<20) throw Error("Node.js 20+ required");'
-python3 -c 'import sys; assert sys.version_info >= (3,10), "Python 3.10+ required"'
 find_browser() {
   for browser_command in google-chrome google-chrome-stable chromium chromium-browser; do
     if command -v "$browser_command" >/dev/null 2>&1; then
@@ -51,5 +49,5 @@ if [ "$install_mobile" -eq 1 ]; then
   command -v npm >/dev/null
   npm ci --prefix mobile
 fi
-python3 scripts/codex/check_context.py
+node scripts/codex/check_context.cjs
 echo "PASS: Lumenfall web-test environment ready. Android SDK/signing are separate."

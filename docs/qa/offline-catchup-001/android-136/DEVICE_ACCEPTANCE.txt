@@ -1,0 +1,62 @@
+HISTORICAL136 CHECKLIST: this version has a preserved native failure.
+Use ../android-137/DEVICE_ACCEPTANCE.txt for current acceptance.
+
+LUMENFALL — OFFLINE-CATCHUP-001 REMAINING DEVICE ACCEPTANCE
+Release:0.1.136 (versionCode136), com.lumenfall.app
+Source:891f4a4484197702848a3cd7b1cb51b1ff645c96; PR51/54/55 merged
+APK SHA256:2c175583c546f64a7a0ae651803b94ed2c134fe86573bdb8e96edbf2eadbdab0
+APK:https://github.com/karahaNx/Lumenfall/releases/download/android-latest/Lumenfall.apk
+Immutable copy:archive/android/offline-catchup-001/Lumenfall-0.1.136.apk
+
+AVAILABLE VERIFIED CHECKS
+All133 behavioral scenarios/12 required negative controls/guarded startup pass.
+Official package/version/established certificate/v1/v2, CRC and15 asset matches
+pass. Actual extracted APK V8 6.0 matrix passes Clear21/Clear20/OFF8h,72h cap
+and96h Study beyond cap. Signed135→136 emulator update preserves actual WebView
+save storage byte-for-byte before first launch, with no uninstall/data reset.
+Native Android8.1/API27/WebView61 integration runs here; its final results and
+controls are recorded separately. These are not physical WebView60/TalkBack PASS.
+
+FIRST TEST ON THE AFFECTED PHONE
+1. Preserve a separate real save backup. Install this APK as an UPDATE, without
+   uninstalling or clearing data. Confirm0.1.136 and existing progress retained.
+2. Original failing case: Auto-Ascend ON, Clear21 (stored target22), after at
+   least8 actual hours closed/backgrounded. If already away, update before
+   reopening. Backup restore resets lastSeen; importing an old timestamp alone
+   does not establish an8h test. Otherwise wait the real window after saving.
+3. Open. Record catch-up wall time/responsiveness, normal Welcome back message,
+   Continue, subsequent combat/automation. Record freezes/errors/missing rewards.
+4. Background/reopen repeatedly and force-stop/relaunch. Completed progress must
+   survive with no repeated completed-window reward. Export/restore a backup.
+5. Enable TalkBack. Return message/Continue and subsequent navigation must be
+   announced, reachable and operable; focus must return sensibly after Continue.
+
+REMAINING CONTRACT MATRIX
+Keep each result explicit; do not label untested rows PASS. Native emulator
+long-window scope is stated in its receipt. Source/engine cap tests are separate.
+Use a separate test installation/save or retain the player's real backup.
+Document real elapsed windows or Android QA clock controls; no balance changes.
+- ON Clear20,8h; OFF,8h; normal return/live play.
+- Original72h combat cap;96h absence with eligible80h Study beyond combat cap.
+- Cold/resume/repeated return, including Motes/Study/automation/formation.
+- Background DURING catch-up, then return; force-stop DURING catch-up, then
+  restart. Entire unconsumed window retries once without partial loss/duplicates.
+- Failure/cancellation and primary/recovery/reload/backup remain usable.
+- Supported WebView60: long return/interruption checks on that runtime.
+- Physical TalkBack flow, as above.
+
+REPORT
+Installed app version:
+Phone/model, Android version, WebView provider/version:
+Signing-compatible update/existing save retained:PASS/FAIL
+Each tested case, actual elapsed window, outcome and catch-up wall time:
+Return/Continue/live play/responsiveness:
+Interruption/restart and no duplicate/lost progress:
+Save/reload/backup/recovery:
+WebView60:PASS/FAIL/NOT TESTED
+TalkBack:PASS/FAIL/NOT TESTED
+Errors/reproduction steps:
+
+The original request keeps feature/chat open until required acceptance is
+recorded in GitHub. Current feature-chat rules supersede historical writer
+ceremonies; this checkpoint does not release another chat's work.

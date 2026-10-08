@@ -1,0 +1,12 @@
+{"identity":{"android":"8.1.0","api":27,"ua":"Mozilla/5.0 (Linux; Android 8.1.0; Android SDK built for x86_64 Build/OSM1.180201.023; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.98 Mobile Safari/537.36","page":"https://localhost/","package":["    versionCode=136 minSdk=22 targetSdk=34","    versionName=0.1.136"],"sourceSha256":"64699bd6ba907f145523bb9633a36a2661b28ef3391c69b4e4216e06e378ecb8","scriptSha256":"36c9911d8913534e484f3cefeb5fc712cc48ee662144d40f1d4baf898572f81f","stylesheetSha256":"f89055830d1dba9beb084240d257d3503aca529b1656ef97981d7322d2ad1e0f","apkSha256":"2c175583c546f64a7a0ae651803b94ed2c134fe86573bdb8e96edbf2eadbdab0","viewport":{"width":400,"height":820,"dpr":0.5}}}
+START force-stop with unconsumed native save
+PASS native 600s force-stop/relaunch/retry 77215ms
+START primary-failure with unconsumed native save
+Warning: Activity not started, its current task has been brought to the front
+PASS native 600s primary failure/retry 63577ms
+PASS native recovery
+PASS native backup/restore
+START advancing-processing-clock with unconsumed native save
+WAIT native advancing processing commit 31s
+PASS native advancing processing clock
+PASS native integration subset

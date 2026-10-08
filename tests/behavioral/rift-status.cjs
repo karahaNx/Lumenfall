@@ -1,5 +1,5 @@
 /* Native input regression driver using Chrome's pipe protocol and Node built-ins.
- * No browser library/test dependency; run.py registers this in the default suite.
+ * No browser library/test dependency; run.cjs registers this in the default suite.
  */
 const {spawn}=require('node:child_process'),fs=require('node:fs'),os=require('node:os'),path=require('node:path');
 const [chrome,url,scenario]=process.argv.slice(2),profile=fs.mkdtempSync(path.join(os.tmpdir(),'lumenfall-forge-ui-'));
@@ -57,6 +57,13 @@ async function swipe(loc,width){
  for(let i=1;i<=6;i++){await send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:y+dy*i/6}]});await new Promise(r=>setTimeout(r,16));}
  await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await new Promise(r=>setTimeout(r,70));
 }
+async function settleScroll(){
+ // Observe natural kinetic scrolling before measuring/tapping a visible control.
+ // No scroll correction: the first Rift frame is still checked immediately.
+ let last=await evaluate('document.querySelector("main").scrollTop'),stable=0;
+ for(let i=0;i<60;i++){await new Promise(r=>setTimeout(r,50));const current=await evaluate('document.querySelector("main").scrollTop');stable=Math.abs(current-last)<.1?stable+1:0;last=current;if(stable>=3)return;}
+ throw Error('native touch scrolling did not settle');
+}
 async function run(){
  const negative=scenario.startsWith('self-test-rift-status-line');
  for(const [width,height,inset] of [[360,640,0],[360,640,24],[390,844,24]]){
@@ -97,10 +104,10 @@ async function run(){
     if(view==='forge'||view==='research')await touch('[data-tab="workshop"]');
     await touch(`[data-tab="${view}"]`);
     // Real touch scroll: no scrollIntoView/focus assistance to reach last control.
-    for(let i=0;i<35;i++){const loc=await evaluate(`riftStatusMobile.locate(${JSON.stringify(view)})`);if(loc.visible)break;await swipe(loc,width);}
+    for(let i=0;i<35;i++){let loc=await evaluate(`riftStatusMobile.locate(${JSON.stringify(view)})`);if(loc.visible){await settleScroll();loc=await evaluate(`riftStatusMobile.locate(${JSON.stringify(view)})`);if(loc.visible)break;}await swipe(loc,width);}
     scroll.push(await evaluate(`riftStatusMobile.last(${JSON.stringify(view)})`));
     const target=scroll[scroll.length-1];await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:target.x,y:target.y}]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await advance();
-    for(let i=0;i<35;i++){const loc=await evaluate(`riftStatusMobile.locate(${JSON.stringify(view)})`);if(loc.visible)break;await swipe(loc,width);}
+    for(let i=0;i<35;i++){let loc=await evaluate(`riftStatusMobile.locate(${JSON.stringify(view)})`);if(loc.visible){await settleScroll();loc=await evaluate(`riftStatusMobile.locate(${JSON.stringify(view)})`);if(loc.visible)break;}await swipe(loc,width);}
     await evaluate(`riftStatusMobile.last(${JSON.stringify(view)})`);
     trace({profile:name,kind,view,phase:'end',duration:(Date.now()-viewStart)/1000,swipes:swipeCount-swipesBefore});
    }

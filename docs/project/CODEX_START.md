@@ -1,19 +1,26 @@
 # Start Lumenfall i Codex
 
-Vælg `karahaNx/Lumenfall` og branch `main`. Rodens `AGENTS.md` viser opstart;
-`PROJECT_BOOTSTRAP.txt` og `docs/PROJECT_STATE.md` giver aktuel status.
-En ny projektchat behøver ikke gamle chats eller eksterne ZIP-filer for B2-
-review. Find kilder efter behov via [CONTEXT_INDEX.md](../CONTEXT_INDEX.md).
-Ny ChatGPT-konto: følg [ACCOUNT_RECOVERY.md](ACCOUNT_RECOVERY.md) og dens
-startprompt. Hver ny feature får én ejerchat efter
-[FEATURE_WORKFLOW.md](FEATURE_WORKFLOW.md); arkivér efter verificeret integration.
+Start from current `main` or the feature's branch in `karahaNx/Lumenfall`.
+Read root `AGENTS.md`, `PROJECT_BOOTSTRAP.txt`, `docs/PROJECT_STATE.md` and
+the current feature task. The user assigns scope; one owner chat handles all
+affected disciplines under [the feature workflow](FEATURE_WORKFLOW.md).
+Use isolated branches/worktrees for concurrent features and coordinate actual
+overlap/integration. Technical guidance is optional, with no default Lead role.
+Find sources through [CONTEXT_INDEX.md](../CONTEXT_INDEX.md). Record short task
+checkpoints before context compaction/handoff; do not load the entire archive.
+For a new account, use [ACCOUNT_RECOVERY.md](ACCOUNT_RECOVERY.md).
 
 ## Miljø
 
-Webkode/adfærdstests kræver **Node.js 20+**, **Python 3.10+**, **Git** og en
+Webkode/adfærdstests kræver **Node.js 20+**, **Git** og en
 Chromium-browser på PATH: `google-chrome`, `google-chrome-stable`, `chromium`
 eller `chromium-browser`. Der er ingen root package.json/npm-testkommando.
-Brug det eksisterende Python-harness.
+Brugerens [sprogregel](../decisions/2026-10-07-javascript-first.md) gør
+JavaScript/Node.js til standard for nye tests, testkørsel, CI-logik og
+hjælpescripts. HTML er fortsat tilladt. The active harness, validation,
+CI helpers and recovery tools now use Node.js and need no Python or extra
+npm packages. Migration evidence is in
+`docs/qa/offline-catchup-001/javascript-tooling/`.
 
 Hvis miljøet understøtter et setup-script, kan det sættes til:
 
@@ -32,17 +39,23 @@ bash scripts/codex/setup.sh
 ```
 
 Lokal Android-build kræver desuden JDK17 og Android SDK. Signing/publicering
-følger workflowet og eget mandat. Almindelig repoanalyse/webtests kræver ingen
+følger workflowet og opgavens scope/godkendelse. Almindelig repoanalyse/webtests kræver ingen
 signingmaterialer eller Android SDK. Repoet kan ikke læse eller bevise dine
 eksterne Codex-miljøindstillinger.
 
 ## Checks fra repository-roden
 
 ```bash
-python3 scripts/codex/check_context.py
-python3 scripts/codex/check_context.py --archives
-python3 scripts/verify_apk_identity.py --self-test
+node scripts/codex/check_context.cjs
+node scripts/codex/check_context.cjs --archives
+node scripts/codex/check_context.cjs --task docs/tasks/FEATURE_CHAT_WORKFLOW_001.md
+node scripts/verify_apk_identity.cjs --self-test
+node tests/tooling/run.cjs
 ```
+
+Use your actual feature task path with `--task` to check its existence, local
+links and the 32 KiB shared-plus-task startup budget. The plain command checks
+shared documents only and explicitly reports that the feature task was not checked.
 
 Ved produktændringer følges relevante eksisterende gates i
 `.github/workflows/pre-merge-validation.yml`. Staging og adfærdssuite:
@@ -52,7 +65,7 @@ mkdir -p mobile/www/fonts mobile/www/branding
 cp index.html mobile/www/index.html
 cp -r fonts/. mobile/www/fonts/
 cp -r branding/. mobile/www/branding/
-python3 tests/behavioral/run.py --web-root mobile/www
+node tests/behavioral/run.cjs --web-root mobile/www
 ```
 
 Læg ingen arkivkode i mobile/www. Harnesset starter selv sin lokale server/
@@ -68,7 +81,7 @@ gemt som SOURCE/AGENTS.txt; .gitattributes ligger som GITATTRIBUTES.txt.
 Begge gendannes med originale navne af restore-scriptet.
 
 ```bash
-python3 scripts/recovery/restore_candidate.py /tmp/lumenfall-b2-review --evidence /tmp/lumenfall-b2-evidence
+node scripts/recovery/restore_candidate.cjs /tmp/lumenfall-b2-review --evidence /tmp/lumenfall-b2-evidence
 ```
 
 Destinationen skal være ny eller tom. Scriptet kontrollerer alle sourcehashes
@@ -79,18 +92,23 @@ kandidat. Rodens main-kode forbliver det udgivne produkt.
 inklusive OWN_RAW.tar.xz, hvis bytes i repoet ligger i hashkontrollerede dele.
 Uden flaget gendannes kun de 96 produkt-/test-/docs-kildefiler.
 
-Efter kandidatfreeze: udsted afgrænsede Core-/QA-reviewopgaver. Brugeren
-overfører rolleopgaver; brug ikke subagenter/beskedværktøjer. Ældre Core/QA
-BLOCKED gælder tidligere bytes; worker-PASS er ikke deres accept af nye bytes.
-Dokumentér 02_07s handover før produkt-/PR46-skrivning.
+This section applies only to an explicitly assigned B2 task. Verify the restored
+candidate and reassess required persistence/runtime/regression checks on its
+exact bytes. Historical Core/QA BLOCKED applies to earlier bytes; worker-PASS is
+not independent acceptance. Check actual overlapping work before PR46/main
+integration; an unknown historical chat release is not a global permission gate.
+Do not create review chats/subagents or use message tools without a user request.
 
 ## Arkiver og adgangsgrænser
 
 Lead: `docs/recovery/2026-10-07/`. Core-originaler/reproduktion:
 `docs/handoffs/01_06/2026-10-07/`. Nyeste Gameplay: `docs/handoffs/02_08/2026-10-07/`.
 Original Gameplay-ZIP ligger også i hashkontrollerede dele i `archive/`.
-`scripts/recovery/restore_package.py` gendanner tidligere logiske Lead-pakker.
+`scripts/recovery/restore_package.cjs` gendanner tidligere logiske Lead-pakker.
 Originale bytes, receipts og historiske mandater er uændrede.
+Historical Python commands apply only to their frozen snapshots; current tools
+use Node.js. The original hash-recorded `restore_package.py` remains under
+`docs/recovery/2026-10-07/publication_originals/scripts/recovery/`.
 
 Tilgængeligt materiale fra de tre arkivgrene kan nu læses fra main. Det er
 ikke et løfte om alle tidligere chatbeskeder eller eksterne filer. Den nye

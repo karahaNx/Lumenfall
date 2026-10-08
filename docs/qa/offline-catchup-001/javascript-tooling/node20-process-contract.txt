@@ -1,0 +1,36 @@
+  raw gate control valid: expected PASS
+  raw gate control valid-layout-host-tag: expected PASS
+  raw gate control detail-is-unconstrained: expected PASS
+  raw gate control timeout-before-qa: expected FAIL
+  raw gate control timeout-partial-pass-bytes: expected FAIL
+  raw gate control timeout-partial-pass-str: expected FAIL
+  raw gate control timeout-none: expected FAIL
+  raw gate control nonzero-pass: expected FAIL
+  raw gate control qa-fail-exit-zero: expected FAIL
+  raw gate control runtime-marker: expected FAIL
+  raw gate control empty-runtime-marker: expected FAIL
+  raw gate control runtime-errors: expected FAIL
+  raw gate control missing-pre: expected FAIL
+  raw gate control missing-json: expected FAIL
+  raw gate control invalid-json: expected FAIL
+  raw gate control truncated-json: expected FAIL
+  raw gate control unclosed-result: expected FAIL
+  raw gate control duplicate-result: expected FAIL
+  raw gate control nonobject-json: expected FAIL
+  raw gate control missing-runtime-errors: expected FAIL
+  raw gate control invalid-runtime-errors: expected FAIL
+  raw gate control json-scenario-mismatch: expected FAIL
+  raw gate control tag-scenario-mismatch: expected FAIL
+  raw gate control status-mismatch: expected FAIL
+  raw gate control invalid-status: expected FAIL
+  raw gate control non-json-constant: expected FAIL
+  raw gate control missing-tag: expected FAIL
+  raw gate control script-fake-result: expected PASS
+  raw gate control comment-fake-result: expected PASS
+  raw gate control quoted-attribute-angle: expected PASS
+  raw gate control encoded-json-text: expected PASS
+  raw gate control real-bounded-partial-pass: expected FAIL (0.25s child budget; gate requests 25s)
+  raw gate control complete-artifacts/bounded-log: expected FAIL
+  causal negative false-accept: restored invalid-JSON acceptance detected; undo rejects it
+  causal negative ignored-timeout: restored partial-PASS acceptance detected; undo rejects it
+PASS raw-process-contract: 31 result controls, real timeout, artifact bounds, two causal negatives/undo

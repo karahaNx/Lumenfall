@@ -1,0 +1,69 @@
+{
+  "feature": "OFFLINE-CATCHUP-001",
+  "followup": "Replace active Python tooling with JavaScript",
+  "recorded_at": "2026-10-07T12:44:55.461Z",
+  "status": "local validated; writer publication/integration/Android/device acceptance pending",
+  "parent_fix_commit": "c04b479d30a1337470298853dcfbced2bb28f4db",
+  "product_sha256": "4a9fac11b413071f9b722e2c50e0e46839d9de26e3214b52f619c279fc5d5607",
+  "product_blob": "90e4678cb28fa833fdacbc01d1744d9465f6a356",
+  "product_unchanged": true,
+  "runtimes": {
+    "full_suite": "Node.js 24.19.0",
+    "ci_compatibility": "Node.js 20.19.5",
+    "browser": "Google Chrome 155.0.8059.39"
+  },
+  "full_suite": {
+    "exitcode": 0,
+    "scenarios": 132,
+    "viewport_expanded_pass_results": 152,
+    "failures": 0
+  },
+  "negative_controls": {
+    "required": 12,
+    "additional_translated_mutations": 5,
+    "all_caught_by_completed_gates": true
+  },
+  "process_contract": {
+    "result_controls": 31,
+    "real_timeout": true,
+    "artifacts_and_log_bounds": true,
+    "causal_mutations_and_undo": 2
+  },
+  "active_python_files": 0,
+  "active_python_workflow_or_setup_invocations": 0,
+  "extracted_browser_assertions_and_scenario_contracts_exact": true,
+  "node20": {
+    "syntax_files": 41,
+    "tooling": "pass",
+    "process_contract": "pass",
+    "browser_layout_viewports": 5
+  },
+  "archives": {
+    "integrity_checks": 1509,
+    "source_files": 96,
+    "tree": "758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef",
+    "originals_preserved": true
+  },
+  "checks": {
+    "source": "pass",
+    "smoke_with_runtime_guard": "pass",
+    "setup": "pass",
+    "apk_verifier_self_test": "pass",
+    "recovery": "pass",
+    "workflow_yaml_and_shell_syntax": "pass",
+    "signing_release_steps_preserved": true
+  },
+  "limitations": [
+    "No remote writes while prior writer status remains unknown.",
+    "No new APK or physical Android/WebView60/TalkBack acceptance.",
+    "APK verifier integration tests use fixture containers/tools, not a release APK."
+  ],
+  "receipts": {
+    "full_suite": "full-suite.txt",
+    "negatives": "negative-controls.json",
+    "extraction": "extraction.json",
+    "tooling": "tooling-node24.txt",
+    "node20": "node20-tooling.txt",
+    "workflow_review": "workflow-review.json"
+  }
+}

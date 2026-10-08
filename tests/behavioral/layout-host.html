@@ -1,0 +1,10 @@
+<!doctype html><html><body><script>
+var p=new URLSearchParams(location.search), frame=document.createElement('iframe');
+frame.style.cssText='border:0;width:'+Number(p.get('width'))+'px;height:'+Number(p.get('height'))+'px';
+frame.src='index.html?'+p.toString();document.body.appendChild(frame);
+addEventListener('message',function(e){
+  if(e.origin!==location.origin || e.source!==frame.contentWindow || !e.data.qaLayoutResult)return;
+  var result=document.getElementById('qa-result') || document.createElement('pre');result.id='qa-result';result.dataset.status=e.data.status;
+  result.textContent=e.data.qaLayoutResult;document.body.appendChild(result);
+});
+</script></body></html>

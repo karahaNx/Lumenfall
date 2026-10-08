@@ -1,0 +1,304 @@
+{
+  "repository": "karahaNx/Lumenfall",
+  "baseline": "b6a5b6f4512872c87ab81fea958abe393d5cb98e",
+  "candidate": "b62476dc461f00d2a7ea756f700f755bd763326e",
+  "candidateTree": "e177ba6955f5673460d6201b52701563cf480467",
+  "sourceSha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca",
+  "pullRequest": 57,
+  "merge": {
+    "sha": "20aaae62a4b6e46f8d75775085918eaba4e8de29",
+    "merged": true,
+    "message": "Pull Request successfully merged"
+  },
+  "mergedTree": "e177ba6955f5673460d6201b52701563cf480467",
+  "pr46": {
+    "state": "closed",
+    "merged": true,
+    "merged_at": "2026-10-07T22:12:31Z"
+  },
+  "validation": {
+    "id": 37692669340,
+    "url": "https://github.com/karahaNx/Lumenfall/actions/runs/37692669340",
+    "head": "b62476dc461f00d2a7ea756f700f755bd763326e",
+    "status": "completed",
+    "conclusion": "success",
+    "defaultScenarios": 146,
+    "requiredNegativeControls": 12,
+    "job": {
+      "id": 113036473866,
+      "name": "Lumenfall pre-merge validation",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 37692669340,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Checkout",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Set up Node.js",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "APK identity verifier self-test",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Node tooling regression checks",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Validate game source",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Stage web assets",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Stateful behavioral regression suite",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Behavioral harness negative self-test",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Install runtime error guard in staged copy",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Browser runtime smoke test",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        },
+        {
+          "name": "Post Set up Node.js",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21
+        },
+        {
+          "name": "Post Checkout",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23
+        }
+      ]
+    }
+  },
+  "acceptance": {
+    "physicalAndroid": "not performed",
+    "exactWebView60": "not performed",
+    "TalkBack": "not performed",
+    "independentReview": "not performed",
+    "status": "Integrated; signed APK published and assets verified; required device acceptance OPEN"
+  },
+  "android": {
+    "run": {
+      "id": 37694671685,
+      "head": "20aaae62a4b6e46f8d75775085918eaba4e8de29",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/karahaNx/Lumenfall/actions/runs/37694671685",
+      "runNumber": 138
+    },
+    "release": {
+      "id": 396102072,
+      "url": "https://github.com/karahaNx/Lumenfall/releases/tag/android-latest",
+      "tagSha": "20aaae62a4b6e46f8d75775085918eaba4e8de29",
+      "asset": {
+        "id": 619954273,
+        "name": "Lumenfall.apk",
+        "bytes": 6837151,
+        "digest": "sha256:81b9be7edea971335a06f06d1894d91e75a92736738cc935fc2a920a26a02e1e",
+        "url": "https://github.com/karahaNx/Lumenfall/releases/download/android-latest/Lumenfall.apk"
+      }
+    },
+    "identity": {
+      "packageId": "com.lumenfall.app",
+      "versionCode": 138,
+      "versionName": "0.1.138",
+      "certificateSha256": "A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21",
+      "verifiedBy": "Established final APK identity gate using aapt and apksigner",
+      "assetReceipt": "android-138-assets.json"
+    },
+    "assets": {
+      "status": "pass",
+      "apkBytes": 6837151,
+      "apkSha256": "81b9be7edea971335a06f06d1894d91e75a92736738cc935fc2a920a26a02e1e",
+      "crcEntries": 526,
+      "matchedAssets": 15,
+      "files": [
+        {
+          "file": "index.html",
+          "bytes": 502092,
+          "sha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca"
+        },
+        {
+          "file": "fonts/cinzel-500.woff2",
+          "bytes": 25904,
+          "sha256": "09941fb1c169c38fd414536b37690057fc01b3117a5c63dd6571186540c8f370"
+        },
+        {
+          "file": "fonts/cinzel-600.woff2",
+          "bytes": 25904,
+          "sha256": "09941fb1c169c38fd414536b37690057fc01b3117a5c63dd6571186540c8f370"
+        },
+        {
+          "file": "fonts/cinzel-700.woff2",
+          "bytes": 25904,
+          "sha256": "09941fb1c169c38fd414536b37690057fc01b3117a5c63dd6571186540c8f370"
+        },
+        {
+          "file": "fonts/fonts.css",
+          "bytes": 1482,
+          "sha256": "befd8e42d48b477c567ba3ce469ff475c12a1f8724c98258469dea11b15065d7"
+        },
+        {
+          "file": "fonts/ibm-plex-mono-400.woff2",
+          "bytes": 14708,
+          "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7"
+        },
+        {
+          "file": "fonts/ibm-plex-mono-500.woff2",
+          "bytes": 14888,
+          "sha256": "01d285447409c8a588692162439a038b8cbd7871309ee20267b0d2d91c6e8e22"
+        },
+        {
+          "file": "fonts/ibm-plex-mono-600.woff2",
+          "bytes": 15620,
+          "sha256": "0d1f0b8d0722224e32e9f28261bdc86c79115be73444ae5eceb73976a1bcdf83"
+        },
+        {
+          "file": "fonts/manrope-400.woff2",
+          "bytes": 24836,
+          "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972"
+        },
+        {
+          "file": "fonts/manrope-500.woff2",
+          "bytes": 24836,
+          "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972"
+        },
+        {
+          "file": "fonts/manrope-600.woff2",
+          "bytes": 24836,
+          "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972"
+        },
+        {
+          "file": "fonts/manrope-700.woff2",
+          "bytes": 24836,
+          "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972"
+        },
+        {
+          "file": "fonts/manrope-800.woff2",
+          "bytes": 24836,
+          "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972"
+        },
+        {
+          "file": "branding/README.md",
+          "bytes": 988,
+          "sha256": "2ec43b9b11efdf98f802942dfb09740ebdbb08bb3a1364be2bb29f1a7bc19050"
+        },
+        {
+          "file": "branding/lumenfall-mark.svg",
+          "bytes": 3933,
+          "sha256": "976398b0e662181ae6dbb3430ce74d606a9db3a3f6c451818d5fda9e0f9395e4"
+        }
+      ]
+    },
+    "assetVerificationCommand": "node docs/qa/offline-catchup-001/android-137/verify-assets.cjs /workspace/Lumenfall-0.1.138.apk docs/qa/feature-branch-integration/android-138-assets.json /workspace/lumenfall-138-index.html"
+  },
+  "localLogs": [
+    {
+      "file": "local-full-suite-first-attempt.log.gz",
+      "bytes": 85955,
+      "uncompressedBytes": 3175245,
+      "sha256": "98d39f9861ba56233590a176795d7010ee89f21feaba5206b9698311f450020c",
+      "exitCode": 1,
+      "scope": "Initial full suite: only offline-catchup-core failed its old comparison of additive fields; every other default passed."
+    },
+    {
+      "file": "local-offline-core-corrected.log.gz",
+      "bytes": 635,
+      "uncompressedBytes": 2732,
+      "sha256": "537a593f4680c24b1b97c53735a848b8a08eab91ea92e4aaa4fbc60644320b38",
+      "exitCode": 0,
+      "scope": "All original baseline state/summary assertions retained after explicit checks of new fields."
+    },
+    {
+      "file": "local-negative-controls.log.gz",
+      "bytes": 5947,
+      "uncompressedBytes": 86046,
+      "sha256": "ee10d58e19dc35c2d0eb2482e48b0d8513379bf1c76e437a3722b2b0ddaec59e",
+      "exitCode": 0,
+      "scope": "All 12 required negative controls caught as failures, no timeouts."
+    },
+    {
+      "file": "local-smoke.log.gz",
+      "bytes": 145,
+      "uncompressedBytes": 160,
+      "sha256": "264257fe2ee608bcf3d99149b9852c54f18f6a6817ecab3ed629e6e67316acd3",
+      "exitCode": 0,
+      "scope": "Guarded startup at 390x844."
+    },
+    {
+      "file": "local-lab-contracts.log.gz",
+      "bytes": 519,
+      "uncompressedBytes": 799,
+      "sha256": "cc8d226818ad80003e9d4383979b3ee704947bb428efed36f8b735fa6d908f5c",
+      "exitCode": 0,
+      "scope": "82 contract checks plus fallback/free-carry mutants."
+    }
+  ],
+  "savedLogs": [
+    {
+      "file": "ci-37692669340.log.gz",
+      "bytes": 106522,
+      "sha256": "4c72dd728c54e7ad84d75115217526c0930c4f9c471480b965defb4a483d59c7"
+    },
+    {
+      "file": "android-build-138.log.gz",
+      "bytes": 20813,
+      "sha256": "00935b27bb68b455ffb15aa01b5986c84218e91d5539c375274adc16df1e42e4"
+    }
+  ],
+  "tools": {
+    "localNode": "v24.19.0",
+    "localChrome": "155.0.8059.39",
+    "ciNode": "20.20.2",
+    "ciChrome": "154.0.8037.97"
+  }
+}

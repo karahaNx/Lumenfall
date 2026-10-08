@@ -293,6 +293,11 @@
   .study-bar-fill{height:100%;width:0%;background:linear-gradient(90deg, var(--mote), color-mix(in srgb, var(--mote) 70%, var(--comet)));transition:width .3s linear;}
   .study-time{font-size:.7rem;color:var(--ink-dim);margin-top:5px;}
   .speed-row{display:flex;flex-wrap:wrap;gap:6px;}
+  .study-motes-controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px;}
+  .study-motes-controls label{flex:1;min-width:140px;font-size:.74rem;color:var(--ink-dim);}
+  .study-motes-controls select{display:block;width:100%;min-height:44px;margin-top:4px;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--bg-elev);color:var(--ink);font:inherit;}
+  .study-motes-controls button{min-height:44px;}
+  .study-motes-controls select:focus-visible{outline:2px solid var(--mote);outline-offset:2px;}
   .speed-btn{
     flex:1;min-width:54px;padding:6px 4px;border-radius:8px;
     border:1px solid var(--line);background:var(--bg-elev);color:var(--ink);
@@ -427,7 +432,7 @@
 
   /* ---------- Modal / intro ---------- */
   .overlay{
-    position:fixed;inset:0;z-index:20;
+    position:fixed;top:0;right:0;bottom:0;left:0;z-index:20;
     background:color-mix(in srgb, var(--bg) 80%, transparent);
     backdrop-filter:blur(6px);
     display:flex;align-items:center;justify-content:center;padding:24px;
@@ -507,7 +512,7 @@
 
   /* ---------- xaribapps startup intro ---------- */
   .startup-intro{
-    position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;
+    position:fixed;top:0;right:0;bottom:0;left:0;z-index:1000;display:none;align-items:center;justify-content:center;
     overflow:hidden;isolation:isolate;cursor:pointer;background:#05050b;color:#f7f5ff;
     opacity:1;visibility:visible;transition:opacity .42s ease,visibility .42s ease;
     -webkit-tap-highlight-color:transparent;
@@ -1962,7 +1967,7 @@
   #tab-deeds .ach-card.done .name{color:#f3dfad;opacity:1;}
   #tab-deeds .shop-card{border-left-color:#8ac4b7;}
   .theme-swatch{width:40px;height:40px;border:2px solid #8791ac;box-shadow:inset 0 0 0 4px #0e1829;}
-  .settings-modal,.modal{border-color:#687089;background:radial-gradient(ellipse at 100% 0%,#39314b88,transparent 65%),linear-gradient(145deg,#1b2941,#111a2c);}
+  .settings-modal,.modal{border-color:#687089;background:radial-gradient(ellipse at 100% 0%,rgba(57,49,75,0.5333333333333333),transparent 65%),linear-gradient(145deg,#1b2941,#111a2c);}
   .settings-head{border-bottom-color:#5b6279;background:#172238;backdrop-filter:none;}
   .settings-row,.ency-card{border-color:#485775;background:linear-gradient(130deg,#25324b,#172238);}
   .settings-row-title,.ency-name{color:#f6e9d7;}
@@ -3109,12 +3114,12 @@ var COMET_QUEST_REFRESH_BASE_COST = 25;
 // State
 // ---------------------------------------------------------------
 function freshState(){
-  var spirits = {}, nodes = {}, research = {}, researchQueue = {}, heroRarity = {}, heroResource = {}, wispModules = {}, wispUltimate = {}, empowerQueue = {}, achieved = {}, owned = {}, longStudyLevels = {}, studyQueue = {};
+  var spirits = {}, nodes = {}, research = {}, researchQueue = {}, heroRarity = {}, heroResource = {}, wispModules = {}, wispUltimate = {}, empowerQueue = {}, achieved = {}, owned = {}, longStudyLevels = {}, studyQueue = {}, studyUseMotes = {}, studySpeedTargets = {};
   SPIRITS.forEach(function(sp){ spirits[sp.id] = 0; heroRarity[sp.id] = 0; heroResource[sp.id] = 0; wispModules[sp.id] = 0; wispUltimate[sp.id] = false; empowerQueue[sp.id] = true; });
   spirits['ember'] = 1;
   NODES.forEach(function(n){ nodes[n.id] = 0; });
   RESEARCH.forEach(function(r){ research[r.id] = 0; researchQueue[r.id] = false; });
-  LONG_STUDIES.forEach(function(l){ longStudyLevels[l.id] = 0; studyQueue[l.id] = false; });
+  LONG_STUDIES.forEach(function(l){ longStudyLevels[l.id] = 0; studyQueue[l.id] = false; studyUseMotes[l.id] = false; studySpeedTargets[l.id] = 1.5; });
   return {
     schemaVersion:SAVE_SCHEMA_VERSION,
     lumen:0, shards:0, prisms:0, comets:0, motes:0, sigils:0,
@@ -3125,7 +3130,7 @@ function freshState(){
     formationPresets:{push:['ember'],farm:['ember'],boss:['ember']}, activeFormationPreset:'push',
     formationRebuild:null,
     nodes:nodes, research:research, researchQueue:researchQueue,
-    longStudyLevels:longStudyLevels, activeStudies:[], studyQueue:studyQueue,
+    longStudyLevels:longStudyLevels, activeStudies:[], studyQueue:studyQueue, studyUseMotes:studyUseMotes, studySpeedTargets:studySpeedTargets,
     achieved:achieved, owned:owned, riftTheme:'default',
     buffUntil:0, buffMult:1, supportBuffs:null,
     ascendCount:0, ascendRewardedDepth:0, sigilResonanceUses:0, totalTaps:0, totalKills:0, totalOfflineSeconds:0, luminousAccum:0,
@@ -3219,6 +3224,7 @@ function trackDaily(metric, n){
   state.dailyStats[metric] = (state.dailyStats[metric]||0) + (n||1);
 }
 var pendingDailyReward = null;
+var pendingDailyRewardQueue = [];
 function ensureDaily(){
   var today = todayStr();
   if(state.questDay === today) return false;
@@ -3232,7 +3238,9 @@ function ensureDaily(){
   var reward = loginRewardFor(state.loginStreak);
   state.comets += reward.comets||0;
   if(reward.prisms) state.prisms += reward.prisms;
-  pendingDailyReward = {streak: state.loginStreak, reward: reward};
+  var presentation = {streak: state.loginStreak, reward: reward};
+  if(pendingDailyReward) pendingDailyRewardQueue.push(presentation);
+  else pendingDailyReward = presentation;
   return true;
 }
 
@@ -3241,6 +3249,10 @@ var isNewGame = false;
 var resetInProgress = false;
 var resetBootPending = false;
 var reloadInProgress = false;
+var offlineCatchup = null;
+var offlinePending = false;
+var resumeFlowBusy = false;
+var returnFlowGeneration = 0;
 
 function persistenceError(code,message){
   var error = new Error(message);
@@ -3499,13 +3511,21 @@ function normalizeCurrentSave(input){
     var speed = Number(active.speedMult);
     var validSpeed = speed===1 || LAB_SPEED_TIERS.indexOf(speed)!==-1;
     if(!Number.isFinite(remaining) || !Number.isFinite(total) || total<=0 || !validSpeed) return false;
-    active.remainingSec = Math.max(0,Math.min(total,remaining));
-    active.totalDurationSec = total;
-    active.speedMult = speed;
     seenStudies[active.id] = true;
     return true;
   }).slice(0,5).map(function(active){
-    return {id:active.id,remainingSec:active.remainingSec,totalDurationSec:active.totalDurationSec,speedMult:active.speedMult};
+    var total=Number(active.totalDurationSec);
+    return {id:active.id,remainingSec:Math.max(0,Math.min(total,Number(active.remainingSec))),totalDurationSec:total,speedMult:Number(active.speedMult)};
+  });
+
+  var useMotes = isPlainObject(source.studyUseMotes) ? source.studyUseMotes : {};
+  var speedTargets = isPlainObject(source.studySpeedTargets) ? source.studySpeedTargets : {};
+  LONG_STUDIES.forEach(function(node){
+    var validTarget=LAB_SPEED_TIERS.indexOf(speedTargets[node.id])!==-1;
+    var paid=out.activeStudies.find(function(active){return active.id===node.id;});
+    out.studySpeedTargets[node.id]=validTarget ? speedTargets[node.id] : paid && paid.speedMult>1 ? paid.speedMult : fresh.studySpeedTargets[node.id];
+    // Malformed or missing targets cannot turn an ON value into spending intent.
+    out.studyUseMotes[node.id]=validTarget && useMotes[node.id]===true;
   });
 
   var achieved = isPlainObject(source.achieved) ? source.achieved : {};
@@ -3700,20 +3720,22 @@ function loadState(){
   return freshState();
 }
 
-function saveState(){
+function saveState(clockMs){
   if(resetInProgress || reloadInProgress) return;
+  if(offlineCatchup || offlinePending) return false;
   if(persistenceBlocked) return false;
   try{
     var candidate = clonePersistedValue(state);
     candidate.schemaVersion = SAVE_SCHEMA_VERSION;
-    candidate.lastSeen = Date.now();
+    candidate.lastSeen = Number.isFinite(clockMs) ? clockMs : Date.now();
     var canonical = acceptPersistedState(candidate,'runtime');
     var serialized = JSON.stringify(canonical);
 
     localStorage.setItem(SAVE_KEY,serialized);
-    localStorage.setItem(RECOVERY_SAVE_KEY,serialized);
-
+    // Once primary storage succeeds it owns the endpoint, even if recovery
+    // storage subsequently fails. Retrying must not award this window again.
     state = canonical;
+    localStorage.setItem(RECOVERY_SAVE_KEY,serialized);
     if(resetBootPending){
       localStorage.removeItem(RESET_PENDING_KEY);
       resetBootPending = false;
@@ -3792,6 +3814,8 @@ function restoreSaveBackup(){
 
     // From this point onward the validated restored backup on disk is authoritative.
     // Block autosave/beforeunload from writing the pre-restore in-memory state over it.
+    cancelOfflineCatchup();
+    offlinePending = false;
     reloadInProgress = true;
     document.body.classList.add('app-paused');
     var settingsOverlay = document.getElementById('settings-overlay');
@@ -4508,7 +4532,9 @@ function renderAutoAscendTarget(select){
       options.appendChild(new Option('Clear Rift '+cleared,String(cleared)));
     }
     if(pinned) options.appendChild(new Option('Clear Rift '+target+' (saved target)',String(target)));
-    select.replaceChildren(options);
+    // Keep the existing select/focus; replaceChildren is absent in WebView60.
+    while(select.firstChild) select.removeChild(select.firstChild);
+    select.appendChild(options);
     select.dataset.optionsKey=key;
   }
   select.dataset.windowStart=String(start);select.dataset.windowEnd=String(end);
@@ -4999,17 +5025,24 @@ function startStudy(node){
 }
 function applySpeedTier(studyId, mult){
   var active = findActiveStudy(studyId);
-  if(!active) return;
   var node=LONG_STUDIES.find(function(n){return n.id===studyId;});
-  if(node && node.levelCap!==undefined && longStudyLevel(studyId)>=node.levelCap) return;
-  if(mult<=active.speedMult) return;
+  if(!node || !active || active.remainingSec<=SIM_EPS || state.maxDepthEver<(node.unlockDepth||1) || LAB_SPEED_TIERS.indexOf(mult)===-1) return false;
+  if(node.levelCap!==undefined && longStudyLevel(studyId)>=node.levelCap) return false;
+  if(mult<=active.speedMult) return false;
   var cost = speedTierCost(mult);
-  if(state.motes<cost) return;
+  if(state.motes<cost) return false;
   state.motes -= cost;
   active.speedMult = mult;
+  state.studySpeedTargets[studyId] = mult;
   saveState();
   renderLongStudies();
   renderHud();
+  return true;
+}
+function studyMotesPlan(node){
+  var active=findActiveStudy(node.id),target=state.studySpeedTargets[node.id];
+  if(state.studyUseMotes[node.id]!==true || LAB_SPEED_TIERS.indexOf(target)===-1 || !active || active.remainingSec<=SIM_EPS || state.maxDepthEver<(node.unlockDepth||1) || (node.levelCap!==undefined && longStudyLevel(node.id)>=node.levelCap) || active.speedMult>=target) return null;
+  return {active:active,target:target,cost:speedTierCost(target)};
 }
 // Closing paid overcap work is progress, but is never an earned completion.
 function finishStudyRecord(index){
@@ -5167,6 +5200,8 @@ function doAscend(auto){
 
 function performReset(){
   if(resetInProgress) return;
+  cancelOfflineCatchup();
+  offlinePending = false;
   resetInProgress = true;
 
   try{
@@ -5179,6 +5214,7 @@ function performReset(){
   pendingDailyReward = null;
 
   // Stop the old session from progressing visually while the reload begins.
+  pendingDailyRewardQueue = [];
   document.body.classList.add('app-paused');
   var settingsOverlay = document.getElementById('settings-overlay');
   if(settingsOverlay) settingsOverlay.style.display = 'none';
@@ -5214,7 +5250,7 @@ function controlText(node){
 }
 // Shared presentation states read existing eligibility; they never grant or deny purchases.
 function presentControlStates(root){
-  var toggles = ['empower-queue','queue','study-queue','autoascend-toggle'];
+  var toggles = ['empower-queue','queue','study-queue','study-use-motes','autoascend-toggle'];
   root.querySelectorAll('button').forEach(function(btn){
     btn.querySelectorAll('.control-state').forEach(function(label){label.remove();});
     var reason='', kind=btn.disabled?'unavailable':'available', subject='';
@@ -5228,10 +5264,10 @@ function presentControlStates(root){
     var queueAttr=toggles.find(function(attr){return btn.hasAttribute('data-'+attr);});
     if(queueAttr){
       var id=btn.getAttribute('data-'+queueAttr);
-      var on=queueAttr==='empower-queue' ? state.empowerQueue[id]!==false : queueAttr==='queue' ? !!state.researchQueue[id] : queueAttr==='study-queue' ? !!state.studyQueue[id] : !!state.autoAscendEnabled;
+      var on=queueAttr==='empower-queue' ? state.empowerQueue[id]!==false : queueAttr==='queue' ? !!state.researchQueue[id] : queueAttr==='study-queue' ? !!state.studyQueue[id] : queueAttr==='study-use-motes' ? state.studyUseMotes[id]===true : !!state.autoAscendEnabled;
       btn.setAttribute('aria-pressed',String(on));
       if(queueAttr==='queue') subject=RESEARCH.find(function(n){return n.id===id;}).name;
-      if(queueAttr==='study-queue') subject=LONG_STUDIES.find(function(n){return n.id===id;}).name;
+      if(queueAttr==='study-queue' || queueAttr==='study-use-motes') subject=LONG_STUDIES.find(function(n){return n.id===id;}).name;
       if(queueAttr==='autoascend-toggle') subject='Auto-Ascend';
     }
     if(btn.hasAttribute('data-mult')){btn.setAttribute('aria-pressed',String(btn.classList.contains('active')));subject='Forge multiplier';}
@@ -6033,6 +6069,13 @@ function renderResearch(){
   });
 }
 
+function studyMotesMarkup(node){
+  var on=state.studyUseMotes[node.id]===true,target=state.studySpeedTargets[node.id];
+  return '<div class="study-motes-controls"><button class="node-queue-toggle '+(on?'active':'')+'" data-study-use-motes="'+node.id+'">Use Motes '+(on?'ON':'OFF')+'</button>'+
+    '<label>Repeat speed<select data-study-speed-target="'+node.id+'" aria-label="'+node.name+' — Repeat speed">'+LAB_SPEED_TIERS.map(function(mult){
+      return '<option value="'+mult+'" '+(mult===target?'selected':'')+'>'+mult+'x · '+speedTierCost(mult)+' Motes per level</option>';
+    }).join('')+'</select></label></div>';
+}
 function renderLongStudies(){
   var openInspections=Array.from(els['study-list'].querySelectorAll('details[open]')).map(function(el){return el.dataset.studyInspection;});
   var focusedInspection=document.activeElement && document.activeElement.dataset.studyDetails;
@@ -6059,6 +6102,7 @@ function renderLongStudies(){
           'In progress: level '+(longStudyLevel(active.id)+1)+' · bonus earned only on completion.'+(active.id==='measuredinquiry'?' Next: '+earnedPercent(0.02*studyEffectiveLevel(node,longStudyLevel(active.id)+1))+'% less work.':''))+'</div>' +
         '<div class="study-time" data-study-text="'+active.id+'">'+studyRemainingText(active)+'</div>' +
         '<div class="study-bar-track"><div class="study-bar-fill" data-study-bar="'+active.id+'" style="width:'+pct+'%;"></div></div>' +
+        (node ? studyMotesMarkup(node) : '') +
         '<details class="study-inspection" data-study-inspection="'+active.id+'" '+(openInspections.indexOf(active.id)!==-1?'open':'')+'><summary data-study-details="'+active.id+'">'+(node?node.name:'Study')+' · Details &amp; speed</summary>' +
         (node ? '<div class="desc">'+node.desc+'</div>' : '') +
         '<div class="section-sub" style="margin:8px 0;">Spend Motes to speed this Study up:</div>' +
@@ -6100,10 +6144,11 @@ function renderLongStudies(){
         'Next: level '+(level+1)+' · bonus earned only on completion.'+(lnode.id==='measuredinquiry'?' Next: '+earnedPercent(0.02*studyEffectiveLevel(lnode,level+1))+'% less work.':''))+'</div>' +
       (plan.maxed?'':'<div class="study-meta" id="study-price-'+lnode.id+'">Takes '+fmtStudyDuration(dur)+' &middot; '+costIcon('lumen')+formatNum(cost.lumen)+' '+costIcon('shard')+formatNum(cost.shard)+'</div>') +
       '<button class="mini-btn" data-study="'+lnode.id+'" '+(plan.maxed?'':'aria-describedby="study-price-'+lnode.id+'" ')+(plan.affordable?'':'disabled')+' style="margin-top:10px;width:100%;">'+(plan.maxed?'Maxed':plan.reason==='unavailable'?'Unavailable':openSlots>0?'Begin Study':'No open slots')+'</button>' +
+      studyMotesMarkup(lnode) +
     '</div>';
   });
 
-  html += '<div class="section-sub">Unlocking more Studies by pushing deeper raises the slot cap. Studies progress while you’re away. A Study’s Lab Queue begins its next level when a slot and currency are free.</div>';
+  html += '<div class="section-sub">Unlocking more Studies by pushing deeper raises the slot cap. Studies progress while you’re away. Study Queue begins the next paid level. Use Motes buys the selected repeat speed for each active level, including manual starts, as soon as its full price is available. OFF keeps speed already paid for.</div>';
   replaceControlMarkup(els['study-list'],html);
   if(focusedInspection){
     var restoredInspection=els['study-list'].querySelector('[data-study-details="'+focusedInspection+'"]');
@@ -6132,6 +6177,21 @@ function renderLongStudies(){
       state.studyQueue[id] = !state.studyQueue[id];
       saveState();
       renderLongStudies();
+    });
+  });
+  els['study-list'].querySelectorAll('[data-study-use-motes]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var id=btn.getAttribute('data-study-use-motes');
+      state.studyUseMotes[id]=!state.studyUseMotes[id];
+      saveState();renderLongStudies();
+    });
+  });
+  els['study-list'].querySelectorAll('[data-study-speed-target]').forEach(function(select){
+    select.addEventListener('change',function(){
+      var target=Number(select.value);
+      if(LAB_SPEED_TIERS.indexOf(target)===-1) return;
+      state.studySpeedTargets[select.getAttribute('data-study-speed-target')]=target;
+      saveState();renderLongStudies();
     });
   });
 }
@@ -6486,7 +6546,7 @@ function renderSideStats(force){
   renderDaily(!!force);
 }
 
-function showDailyOverlay(info){
+function showDailyOverlay(info,onDone){
   var overlay = document.getElementById('daily-overlay');
   if(!overlay) return;
   var reward = info.reward;
@@ -6498,6 +6558,7 @@ function showDailyOverlay(info){
     closeOverlay(overlay);
     claimBtn.removeEventListener('click', handler);
     renderDaily(true);
+    if(onDone) onDone();
   }
   claimBtn.addEventListener('click', handler);
   openOverlay(overlay,handler);
@@ -6654,7 +6715,7 @@ function autoEmpowerTick(){
  *   5. Auto-Tap;
  *   6. Auto-Empower;
  *   7. queued Research purchases;
- *   8. Long Study completion, then queued Study starts;
+ *   8. Long Study completion, then queued paid starts and repeat-speed buys;
  *   9. Boss retry, then Boss retreat if the current Boss is still unwinnable.
  *
  * Window/chunk boundaries are not a separate gameplay priority. The same
@@ -6664,7 +6725,8 @@ function autoEmpowerTick(){
  * independent from the 100 ms UI tick and from offline loop chunk size.
  */
 var SIM_EPS = 1e-9;
-var SIM_EVENT_LIMIT = 250000;
+var SIM_BATCH_EVENTS = 256;
+var SIM_BATCH_MS = 8;
 
 function simulationPolicy(kind,options){
   options = options || {};
@@ -6689,7 +6751,7 @@ function simulationSummary(elapsedSec){
     elapsedSec:elapsedSec,
     lumenGained:0, shardGained:0, sigilsGained:0, motesGained:0,
     kills:0, bossKills:0, luminousKills:0, ascends:0, autoTaps:0,
-    empowers:0, researchBought:0, studiesStarted:0, completedStudies:[], closedStudies:[],
+    empowers:0, researchBought:0, studiesStarted:0, studySpeedPurchases:0, studyMotesSpent:0, completedStudies:[], closedStudies:[],
     achievements:[], retreated:false, retreats:0, retries:0,
     fastForwardedKills:0, iterations:0, ascendGains:[]
   };
@@ -6879,11 +6941,51 @@ function simulationCurrencyKillsNeeded(cost,lumenPerKill,shardPerKill){
   var shardKills = shardDeficit<=0 ? 0 : (shardPerKill>0 ? Math.max(1,Math.ceil(shardDeficit/shardPerKill-1e-12)) : Infinity);
   return Math.max(lumenKills,shardKills);
 }
+function simulationBuyStudySpeeds(summary,elapsedSec){
+  var bought=0;
+  // Shared Motes follow catalogue order, independent of active/UI ordering.
+  LONG_STUDIES.forEach(function(node){
+    var plan=studyMotesPlan(node);
+    if(!plan || state.motes<plan.cost) return;
+    state.motes-=plan.cost;
+    plan.active.speedMult=plan.target;
+    summary.studySpeedPurchases++;
+    summary.studyMotesSpent+=plan.cost;
+    simulationTimelinePush(summary,elapsedSec,'studySpeed',{id:node.id,speed:plan.target,cost:plan.cost});
+    bought++;
+  });
+  return bought;
+}
+function simulationKillsUntilStudyMotes(){
+  var depth=state.farmDepth||state.depth;
+  var reward=Math.max(1,Math.round(motesDropFor(depth)*(1+supportMoteBonus())));
+  var chance=eliteChance(depth);
+  var accum=Math.max(0,Math.min(0.999999999999,state.luminousAccum||0));
+  var first=state.enemyIsLuminous ? 1 : 0,best=Infinity;
+  LONG_STUDIES.forEach(function(node){
+    var plan=studyMotesPlan(node);
+    if(!plan) return;
+    var deficit=plan.cost-state.motes;
+    if(deficit<=0){best=0;return;}
+    // Any positive deficit needs a real Luminous reward, however small it is.
+    var luminousNeeded=Math.max(1,Math.ceil(deficit/reward));
+    if(luminousNeeded<=first){best=Math.min(best,1);return;}
+    if(chance<=0) return;
+    var crossings=luminousNeeded-first;
+    var kills=Math.max(2,Math.ceil((crossings-accum-1e-12)/chance)+1);
+    if(!Number.isSafeInteger(kills)) return;
+    // Match the actual batch/spawn crossing arithmetic, including its epsilon.
+    if(Math.floor(accum+(kills-1)*chance+1e-12)<crossings) kills++;
+    if(kills>2 && Math.floor(accum+(kills-2)*chance+1e-12)>=crossings) kills--;
+    best=Math.min(best,kills);
+  });
+  return best;
+}
 function simulationKillsUntilEconomyMutation(rewardScale){
   var depth = state.farmDepth||state.depth;
   var lumenPerKill = enemyRewardFor(depth)*rewardScale;
   var shardPerKill = shardRewardFor(depth)*rewardScale;
-  var best = Infinity;
+  var best = simulationKillsUntilStudyMotes();
 
   RESEARCH.forEach(function(node){
     if(!state.researchQueue[node.id]) return;
@@ -7024,21 +7126,62 @@ function simulationApplyFarmPassive(elapsedSec,dps,policy,summary){
   }
 
   var maxHp = state.enemyMaxHp>0 ? state.enemyMaxHp : enemyHpFor(state.depth);
-  var remainingDamage = Math.max(0,damage-state.enemyHp);
-  var additionalKills = Math.floor(remainingDamage/maxHp+1e-12);
-  // Avoid catastrophic cancellation from subtracting a huge kills*maxHp
-  // product from a similarly huge damage value. Modulo preserves the
-  // represented damage remainder directly and is compositional across the
-  // fixed Farm batching boundaries.
-  var leftover = remainingDamage%maxHp;
-  if(leftover<SIM_EPS) leftover=0;
-  if(leftover>=maxHp-SIM_EPS){
-    additionalKills++;
-    leftover=0;
+  // Decompose damage before subtracting the partially damaged enemy. This
+  // avoids both a rounded quotient/modulo counting the same boundary twice
+  // and cancellation of a small current HP from a huge damage value.
+  var remainder = damage%maxHp;
+  var kills = simulationWholeHpUnits(damage,maxHp);
+  // Retain the existing 1e-12 quotient and SIM_EPS HP boundary tolerances,
+  // applying a carry once to this shared decomposition, never twice.
+  if(remainder>=maxHp-SIM_EPS || remainder/maxHp+1e-12>=1){
+    kills++;
+    remainder=0;
   }
+  var difference = remainder-state.enemyHp;
+  var leftover;
+  if(difference>=-SIM_EPS || difference/maxHp>=-1e-12){
+    kills++;
+    leftover=Math.max(0,difference);
+  } else {
+    leftover=maxHp+ difference;
+  }
+  if(leftover<SIM_EPS) leftover=0;
 
-  simulationBatchFarmKills(1+additionalKills,policy,summary);
+  simulationBatchFarmKills(kills,policy,summary);
   if(leftover>0) state.enemyHp = Math.max(SIM_EPS,state.enemyMaxHp-leftover);
+}
+function simulationWholeHpUnits(damage,maxHp){
+  // Binary long division of the represented Numbers, using only WebView 60
+  // APIs. A rounded D/H or (D-D%H)/H cannot decide an integer boundary.
+  if(!(damage>=0) || !(maxHp>0) || !Number.isFinite(damage) || !Number.isFinite(maxHp)) return Math.floor(damage/maxHp);
+  if(damage<maxHp) return 0;
+  var view = new DataView(new ArrayBuffer(16));
+  view.setFloat64(0,damage);
+  view.setFloat64(8,maxHp);
+  var dhi=view.getUint32(0),hhi=view.getUint32(8);
+  var de=(dhi>>>20)&2047,he=(hhi>>>20)&2047;
+  var dn=((dhi&1048575)+(de?1048576:0))*4294967296+view.getUint32(4);
+  var hn=((hhi&1048575)+(he?1048576:0))*4294967296+view.getUint32(12);
+  de=de?de-1075:-1074;
+  he=he?he-1075:-1074;
+  // At most 52 shifts per subnormal; ordinary physical HP needs none.
+  while(dn<4503599627370496){dn*=2;de--;}
+  while(hn<4503599627370496){hn*=2;he--;}
+  var shift=de-he;
+  // A shift above 53 implies an unsafe quotient. Preserve the existing
+  // out-of-contract Number result; this adds no cap on supported gameplay.
+  if(shift>53) return Math.floor(damage/maxHp);
+  var quotient=0;
+  // At most 54 bits for a safe quotient, never one iteration per kill.
+  // After subtraction dn<hn<=2^53-1. Doubling is exact (an even integer
+  // below 2^54); the next subtraction has an exactly representable result
+  // below hn. Every quotient prefix is exact when the final count is safe.
+  for(var bit=shift;bit>=0;bit--){
+    quotient*=2;
+    if(dn>=hn){dn-=hn;quotient++;}
+    if(bit>0) dn*=2;
+  }
+  return quotient;
 }
 function simulationPassiveKillSeconds(dps){
   if(state.riftMode==='farm') return Infinity;
@@ -7257,6 +7400,7 @@ function simulationResolveTimestamp(nowMs,elapsedSec,policy,summary,clock){
     actions += studiesStarted;
   }
 
+  actions += simulationBuyStudySpeeds(summary,elapsedSec);
   actions += simulationRecordAchievements(summary);
 
   if(simulationMaybeRetryBoss(policy,summary)){
@@ -7273,6 +7417,9 @@ function simulationResolveTimestamp(nowMs,elapsedSec,policy,summary,clock){
   return actions;
 }
 function advanceAuthoritativeTime(elapsedSec,options){
+  // A cursor retains this scheduler's exact clock/phase across yields. Calling
+  // the synchronous facade still uses the identical event ordering.
+  function* run(){
   options = options || {};
   elapsedSec = Math.max(0,Number(elapsedSec)||0);
   var policy = simulationPolicy(options.kind||'live',options);
@@ -7420,11 +7567,17 @@ function advanceAuthoritativeTime(elapsedSec,options){
   }
   simulationResolveTimestamp(initialNowMs,0,policy,summary,simulationClockPosition());
 
+  var batchEvents = 0;
+  var batchStarted = simulationWorkNow();
   while(remaining>0){
-    summary.iterations++;
-    if(summary.iterations>SIM_EVENT_LIMIT){
-      throw new Error('Authoritative simulation event limit exceeded after '+summary.iterations+' iterations');
+    if(options.resumable && (batchEvents>=SIM_BATCH_EVENTS ||
+        (batchEvents%32===0 && simulationWorkNow()-batchStarted>=SIM_BATCH_MS))){
+      yield {elapsedSec:currentElapsedSec(),iterations:summary.iterations};
+      batchEvents = 0;
+      batchStarted = simulationWorkNow();
     }
+    batchEvents++;
+    summary.iterations++;
 
     var nowMs = simulationNowMs();
 
@@ -7584,7 +7737,7 @@ function advanceAuthoritativeTime(elapsedSec,options){
       });
     }
 
-    if(elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && actions===0){
+    if(remaining>0 && elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && actions===0){
       throw new Error('Authoritative simulation stalled without elapsed-time or state progress | '+JSON.stringify({
         elapsedInRun:elapsedInRun,
         elapsedWholeSec:elapsedWholeSec,
@@ -7605,13 +7758,31 @@ function advanceAuthoritativeTime(elapsedSec,options){
   summary.pushDepth = progressionDepth();
   summary.clockEndMs = clockStartMs + elapsedSec*1000;
   return summary;
+  }
+  var cursor = run();
+  if(options && options.resumable) return cursor;
+  var step;
+  do{ step = cursor.next(); }while(!step.done);
+  return step.value;
 }
-function advanceStudyOnlyTime(elapsedSec,clockStartMs,summary){
+function simulationWorkNow(){
+  return typeof performance!=='undefined' && performance.now ? performance.now() : Date.now();
+}
+function advanceStudyOnlyTime(elapsedSec,clockStartMs,summary,resumable){
+  function* run(){
   var remaining = Math.max(0,Number(elapsedSec)||0);
   var nowMs = Number.isFinite(clockStartMs) ? clockStartMs : Date.now();
   simulationCompleteDueStudies(summary);
   simulationStartQueuedStudies(summary);
+  simulationBuyStudySpeeds(summary,0);
+  var batchEvents = 0, batchStarted = simulationWorkNow();
   while(remaining>SIM_EPS){
+    if(resumable && (batchEvents>=SIM_BATCH_EVENTS || simulationWorkNow()-batchStarted>=SIM_BATCH_MS)){
+      yield null;
+      batchEvents = 0;
+      batchStarted = simulationWorkNow();
+    }
+    batchEvents++;
     var next = Math.min(remaining,simulationNextStudySeconds());
     if(!Number.isFinite(next)) break;
     if(next>SIM_EPS){
@@ -7620,9 +7791,16 @@ function advanceStudyOnlyTime(elapsedSec,clockStartMs,summary){
       nowMs += next*1000;
     }
     var actions = simulationCompleteDueStudies(summary)+simulationStartQueuedStudies(summary);
+    actions += simulationBuyStudySpeeds(summary,Math.max(0,Number(elapsedSec)||0)-remaining);
     if(next<=SIM_EPS && actions===0) break;
   }
   return nowMs;
+  }
+  var cursor = run();
+  if(resumable) return cursor;
+  var step;
+  do{ step = cursor.next(); }while(!step.done);
+  return step.value;
 }
 
 // Presentation observes only this tick's committed result. No event queue or
@@ -7664,6 +7842,7 @@ function presentLiveRiftResult(before,sim){
 }
 function tick(){
   if(document.hidden || resetInProgress || reloadInProgress) return;
+  if(offlineCatchup || offlinePending) return;
   var feedbackBefore = {mode:state.riftMode,maxDepth:state.maxDepthEver};
   var sim = advanceAuthoritativeTime(TICK_MS/1000,{kind:'live',visual:true,clockStartMs:Date.now()-TICK_MS});
 
@@ -7682,7 +7861,8 @@ function tick(){
   }
   if(sim.empowers>0) renderSpirits();
   if(sim.researchBought>0) renderResearch();
-  if(sim.completedStudies.length || sim.closedStudies.length || sim.studiesStarted>0) renderLongStudies();
+  if(sim.studySpeedPurchases>0) saveState();
+  if(sim.completedStudies.length || sim.closedStudies.length || sim.studiesStarted>0 || sim.studySpeedPurchases>0) renderLongStudies();
   else updateStudyProgress();
 
   if(sim.kills>0 || sim.ascends>0){
@@ -7855,42 +8035,113 @@ function simulateOfflineRun(effectiveSec,options){
   });
 }
 
-function applyOfflineProgress(){
+function offlineProcessingClock(){
+  return typeof performance!=='undefined' && performance.now ? performance.now() : 0;
+}
+function* offlineProgressSteps(now,lastSeen,elapsedSec,effectiveSec,processingStart){
+  var sim = yield* advanceAuthoritativeTime(effectiveSec,{
+    kind:'offline',visual:false,clockStartMs:lastSeen,
+    offlineWindowStartMs:lastSeen,resumable:true
+  });
+  // Studies keep their existing real-time semantics beyond the combat cap.
+  if(elapsedSec>effectiveSec){
+    yield* advanceStudyOnlyTime(elapsedSec-effectiveSec,lastSeen+effectiveSec*1000,sim,true);
+  }
+  state.totalOfflineSeconds += effectiveSec;
+  // Input and live ticks were suspended while the offline transaction ran.
+  // Replay that foreground time with the existing live policy before committing.
+  // Stop at normal live-tick granularity rather than chasing a moving clock.
+  var processedMs = 0;
+  var completedMs = Math.max(0,offlineProcessingClock()-processingStart);
+  while(completedMs-processedMs>=TICK_MS){
+    var processing = yield* advanceAuthoritativeTime((completedMs-processedMs)/1000,{
+      kind:'live',visual:false,clockStartMs:now+processedMs,resumable:true
+    });
+    ['lumenGained','shardGained','sigilsGained','motesGained','studySpeedPurchases','studyMotesSpent','ascends','kills','iterations','fastForwardedKills'].forEach(function(key){
+      sim[key] += processing[key];
+    });
+    sim.completedStudies = sim.completedStudies.concat(processing.completedStudies);
+    sim.closedStudies = sim.closedStudies.concat(processing.closedStudies);
+    processedMs = completedMs;
+    completedMs = Math.max(processedMs,offlineProcessingClock()-processingStart);
+  }
+  applyAchievementChecks();
+  // A wall-clock correction changes the save endpoint, not earned live time.
+  state.lastSeen = Date.now();
+  return {
+    elapsedSec:elapsedSec,effectiveSec:effectiveSec,
+    earned:sim.lumenGained,shardEarned:sim.shardGained,
+    sigilsEarned:sim.sigilsGained,motesEarned:sim.motesGained,
+    studySpeedPurchases:sim.studySpeedPurchases,studyMotesSpent:sim.studyMotesSpent,
+    ascends:sim.ascends,completedStudies:sim.completedStudies,
+    closedStudies:sim.closedStudies,retreated:sim.retreated,
+    endDepth:state.depth,pushDepth:progressionDepth(),
+    kills:sim.kills,iterations:sim.iterations,
+    fastForwardedKills:sim.fastForwardedKills
+  };
+}
+function cancelOfflineCatchup(){
+  var job = offlineCatchup;
+  if(!job) return;
+  clearTimeout(job.timer);
+  offlineCatchup = null;
+  offlinePending = true;
+  resumeFlowBusy = false;
+  if(job.done) job.done(null,new Error('Offline catch-up cancelled'));
+}
+function applyOfflineProgress(done){
+  if(offlineCatchup) return null;
   var now = Date.now();
   var lastSeen = state.lastSeen||now;
   var elapsedSec = Math.max(0,(now-lastSeen)/1000);
-  if(elapsedSec < 5) return null;
-
-  var capSec = offlineCapHours()*3600;
-  var effectiveSec = Math.min(elapsedSec,capSec);
-  var sim = simulateOfflineRun(effectiveSec,{clockStartMs:lastSeen});
-
-  // Long Studies are real-time progression and intentionally continue past the
-  // combat earning cap. Combat, Auto-Tap, Auto-Empower and Research do not.
-  if(elapsedSec>effectiveSec){
-    advanceStudyOnlyTime(elapsedSec-effectiveSec,lastSeen+effectiveSec*1000,sim);
+  if(elapsedSec < 5){
+    offlinePending = false;
+    if(done) done(null,null);
+    return null;
   }
+  var effectiveSec = Math.min(elapsedSec,offlineCapHours()*3600);
+  var job = {base:state,working:clonePersistedValue(state),done:done,timer:null};
+  job.cursor = offlineProgressSteps(now,lastSeen,elapsedSec,effectiveSec,offlineProcessingClock());
+  offlineCatchup = job;
+  offlinePending = true;
+  var completedResult = null;
 
-  state.totalOfflineSeconds += effectiveSec;
-  checkAchievements();
-
-  return {
-    elapsedSec:elapsedSec,
-    effectiveSec:effectiveSec,
-    earned:sim.lumenGained,
-    shardEarned:sim.shardGained,
-    sigilsEarned:sim.sigilsGained,
-    motesEarned:sim.motesGained,
-    ascends:sim.ascends,
-    completedStudies:sim.completedStudies,
-    closedStudies:sim.closedStudies,
-    retreated:sim.retreated,
-    endDepth:state.depth,
-    pushDepth:progressionDepth(),
-    kills:sim.kills,
-    iterations:sim.iterations,
-    fastForwardedKills:sim.fastForwardedKills
-  };
+  function pump(){
+    if(offlineCatchup!==job) return;
+    var step, error = null;
+    state = job.working;
+    try{ step = job.cursor.next(); }
+    catch(e){ error = e; }
+    finally{
+      job.working = state;
+      state = job.base;
+    }
+    if(!error && !step.done){
+      if(done){ job.timer = setTimeout(pump,0); return; }
+      return;
+    }
+    offlineCatchup = null;
+    if(!error){
+      state = job.working;
+      offlinePending = false;
+      if(done){
+        // No intermediate save advances lastSeen. Primary success owns the
+        // whole window; recovery-write failure must not roll it back.
+        var saved = saveState(state.lastSeen);
+        if(!saved && state===job.working){
+          state = job.base;
+          offlinePending = true;
+          error = new Error('Offline progress could not be saved');
+        }
+      }
+      if(!error) completedResult = step.value;
+    }
+    if(done) done(completedResult,error);
+    else if(error) throw error;
+  }
+  if(done){ pump(); }
+  else { while(offlineCatchup===job) pump(); }
+  return completedResult;
 }
 
 function fmtDuration(sec){
@@ -7995,7 +8246,11 @@ function offlineReturnMessage(offline){
 }
 function showReturnFlow(offline,dailyWasRolled){
   function maybeShowDaily(){
-    if(dailyWasRolled && pendingDailyReward){ showDailyOverlay(pendingDailyReward); }
+    if(pendingDailyReward){
+      var reward = pendingDailyReward;
+      pendingDailyReward = pendingDailyRewardQueue.shift() || null;
+      showDailyOverlay(reward,maybeShowDaily);
+    }
   }
 
   if(hasMeaningfulOfflineProgress(offline)){
@@ -8086,6 +8341,65 @@ function init(){
 
   var welcomeOverlay = document.getElementById('welcome-overlay');
 
+  var appHiddenAt = 0;
+  function finishReturn(offline,dailyWasRolled,error,generation){
+    if(generation!==returnFlowGeneration) return;
+    resumeFlowBusy = false;
+    document.body.classList.toggle('app-paused',document.hidden);
+    if(error){
+      if(!document.hidden) showToast('Offline progress is safe. Return again to retry, or restore a backup in Settings.');
+      return;
+    }
+    if(document.hidden) return;
+    renderAll();
+    var settingsOverlay = document.getElementById('settings-overlay');
+    if(settingsOverlay && settingsOverlay.style.display!=='none') closeSettings();
+    playStartupIntro(function(){
+      try{ if(!document.hidden && generation===returnFlowGeneration) showReturnFlow(offline,dailyWasRolled); }
+      finally{ resumeFlowBusy = false; }
+    });
+  }
+  function beginReturn(dailyWasRolled){
+    var generation = ++returnFlowGeneration;
+    resumeFlowBusy = true;
+    try{
+      applyOfflineProgress(function(offline,error){
+        if(!error && !offline) saveState();
+        finishReturn(offline,dailyWasRolled,error,generation);
+      });
+    }catch(error){
+      offlinePending = true;
+      finishReturn(null,dailyWasRolled,error,generation);
+    }
+  }
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden){
+      document.querySelectorAll('.rift-milestone,.vfx-boss-death').forEach(function(el){ el.remove(); });
+      document.querySelector('#tab-battle .stage').classList.remove('impact-victory','impact-milestone','impact-boss');
+      appHiddenAt = Date.now();
+      returnFlowGeneration++;
+      resumeFlowBusy = false;
+      cancelOfflineCatchup();
+      saveState();
+      return;
+    }
+    if(isNewGame || resumeFlowBusy || !appHiddenAt) return;
+    var awayMs = Date.now()-appHiddenAt;
+    appHiddenAt = 0;
+    if(awayMs < 1000 && !offlinePending) return;
+    beginReturn(ensureDaily());
+  });
+  // Cooperative simulation releases the event loop with a detached working
+  // state. Suspend gameplay input/autosave until that transaction settles.
+  ['pointerdown','click','keydown','change','input'].forEach(function(type){
+    document.addEventListener(type,function(e){
+      var recoveryInput = e.target.closest && (e.target.closest('#settings-overlay') || e.target.closest('#settings-btn'));
+      if(offlineCatchup || (offlinePending && !recoveryInput)){
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+    },true);
+  });
   if(isNewGame){
     playStartupIntro(function(){
       isNewGame = false;
@@ -8095,56 +8409,16 @@ function init(){
         var welcomeComets = pendingDailyReward.reward.comets||0;
         if(welcomeComets>0) showToast('Welcome gift — +'+welcomeComets+' Comets');
       }
+      pendingDailyReward = null;
+      pendingDailyRewardQueue = [];
       showRiftMilestone('FIRST GOAL','Reach Rift 3','Awaken Tide Sprite','#3aa0c9');
     });
   } else {
-
-    // Apply offline progress before any startup save can advance lastSeen.
-    var offline = applyOfflineProgress();
-    saveState();
-
-    renderAll();
-    playStartupIntro(function(){
-      showReturnFlow(offline,dailyRolled);
-    });
+    // The visibility handlers exist before the first cooperative batch.
+    beginReturn(dailyRolled);
   }
-
-  setInterval(tick, TICK_MS);
-  setInterval(function(){
-    if(!document.hidden) saveState();
-  }, 5000);
-
-  var appHiddenAt = 0;
-  var resumeFlowBusy = false;
-  document.addEventListener('visibilitychange', function(){
-    if(document.hidden){
-      // Do not resume an interrupted milestone animation/banner on return.
-      document.querySelectorAll('.rift-milestone,.vfx-boss-death').forEach(function(el){ el.remove(); });
-      document.querySelector('#tab-battle .stage').classList.remove('impact-victory','impact-milestone','impact-boss');
-      appHiddenAt = Date.now();
-      saveState();
-      return;
-    }
-
-    if(isNewGame || resumeFlowBusy || !appHiddenAt) return;
-    var awayMs = Date.now()-appHiddenAt;
-    appHiddenAt = 0;
-    if(awayMs < 1000) return;
-
-    resumeFlowBusy = true;
-    var rolledOnResume = ensureDaily();
-    var resumeOffline = applyOfflineProgress();
-    saveState();
-    renderAll();
-
-    var settingsOverlay = document.getElementById('settings-overlay');
-    if(settingsOverlay && settingsOverlay.style.display!=='none') closeSettings();
-
-    playStartupIntro(function(){
-      showReturnFlow(resumeOffline,rolledOnResume);
-      resumeFlowBusy = false;
-    });
-  });
+  setInterval(tick,TICK_MS);
+  setInterval(function(){ if(!document.hidden) saveState(); },5000);
   window.addEventListener('beforeunload', function(){
     if(!resetInProgress && !reloadInProgress) saveState();
   });
