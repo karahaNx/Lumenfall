@@ -1,0 +1,16 @@
+[
+  {
+    "scenario": "self-test-save-backup-placement",
+    "command": "node tests/behavioral/run.cjs --web-root mobile/www --scenario self-test-save-backup-placement",
+    "exitcode": 1,
+    "expected_failure_caught": true,
+    "assertion": "Backup is under Save immediately before separate Reset"
+  },
+  {
+    "scenario": "self-test-save-backup-confirmation",
+    "command": "node tests/behavioral/run.cjs --web-root mobile/www --scenario self-test-save-backup-confirmation",
+    "exitcode": 1,
+    "expected_failure_caught": true,
+    "assertion": "Restore request waits for confirmation: primary"
+  }
+]
