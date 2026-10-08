@@ -1,14 +1,14 @@
-# 02 — Gameplay / Progression
+# Gameplay and simulation guidance
 
-Ejer combat, Rift, Wisps, Bonds, økonomi, Ascension, Lab/Forge, automation og
-live/offline-simulation. Læs fælles regler, kort status og hele det aktuelle
-tekniske mandat. Brug kildeindekset til ekstra design/evidens efter behov.
+Optional reference for combat, Rift, Wisps, Bonds, economy, Ascension,
+Lab/Forge, automation and online/offline simulation. Read accepted requirements
+and affected code before editing; do not invent balance or migration decisions.
 
-Implementér kun tildelt scope på relevant baseline. Bevar aktive betalte
-arbejdssnapshots, raw ownership, autoritativ chronology og save-kontrakter,
-medmindre den konkrete opgave eksplicit ændrer dem. Formeltal alene beviser
-hverken balance eller live/offline-parity. UI skal afspejle faktisk earned effekt.
+Preserve active paid work snapshots, raw ownership, authoritative chronology
+and save contracts unless the user requirement changes them. Formula totals
+alone do not prove balance or parity. UI must reflect the actual earned effect.
+Cover relevant deterministic outcomes, offline catch-up and old-save behavior.
 
-Aflever præcis kandidat, tests, begrænsninger og filer. Ved freeze: skriv
-udtrykkeligt, at writer er frigivet, og angiv head/tree. Ingen ekstra ændringer,
-merge, Android-build eller rerun uden det tilhørende mandat.
+Keep fixes, regressions and their evidence in the feature's task. Record the
+exact candidate and limitations. Builds, merge and release follow that task's
+authorization; there is no separate Gameplay writer handoff.

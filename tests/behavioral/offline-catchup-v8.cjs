@@ -11,9 +11,9 @@ var window={addEventListener:function(){}},document={readyState:'loading',addEve
 var bridge="window.qa={set:function(s){state=acceptPersistedState(s);},get:function(){return state;},apply:applyOfflineProgress,flags:function(){return {busy:!!offlineCatchup,pending:offlinePending,resume:resumeFlowBusy};}};";
 var script=source.match(/<script>\s*([\s\S]*?)<\/script>/)[1].replace("if(document.readyState==='loading'){",bridge+"if(document.readyState==='loading'){");
 var started=process.hrtime();
-new Function('window','document','localStorage','Date','setTimeout','clearTimeout',script)(window,document,{
+new Function('window','document','localStorage','Date','setTimeout','clearTimeout','performance',script)(window,document,{
  getItem:function(k){return storage[k]||null;},setItem:function(k,v){storage[k]=v;writes++;},removeItem:function(k){delete storage[k];}
-},date,function(fn){timers.push(fn);return timers.length;},function(){});
+},date,function(fn){timers.push(fn);return timers.length;},function(){},{now:function(){return 0;}});
 window.qa.set(seed);var before=JSON.stringify(window.qa.get());
 window.qa.apply(function(r,e){result=r;error=e;});
 assert(window.qa.flags().busy);assert.equal(JSON.stringify(window.qa.get()),before);assert.equal(writes,0);

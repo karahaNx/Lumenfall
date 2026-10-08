@@ -1,5 +1,12 @@
 # LAB-MOTES-B1-001 — farm kill conservation
 
+Current integration (7 October 2026): user-authorized PR57/46 are merged;
+full 146 CI and signed APK 0.1.138 asset/signing checks pass. Required device
+acceptance and independent review remain open. See
+[the integration receipt](FEATURE_BRANCH_INTEGRATION_001.md).
+The checkpoint below is historical; its writer/release holds do not describe
+the current authorized task. Archived originals remain unchanged.
+
 Subsequent R2 review found B2 in quotient recovery at large safe counts. The
 local correction and exact represented-input proof are documented in
 `LAB_MOTES_B2_001.md`; this B1 record is historical evidence, not R2 acceptance.

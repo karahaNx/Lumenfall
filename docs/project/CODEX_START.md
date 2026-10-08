@@ -1,12 +1,14 @@
 # Start Lumenfall i Codex
 
-Vælg `karahaNx/Lumenfall` og branch `main`. Rodens `AGENTS.md` viser opstart;
-`PROJECT_BOOTSTRAP.txt` og `docs/PROJECT_STATE.md` giver aktuel status.
-En ny projektchat behøver ikke gamle chats eller eksterne ZIP-filer for B2-
-review. Find kilder efter behov via [CONTEXT_INDEX.md](../CONTEXT_INDEX.md).
-Ny ChatGPT-konto: følg [ACCOUNT_RECOVERY.md](ACCOUNT_RECOVERY.md) og dens
-startprompt. Hver ny feature får én ejerchat efter
-[FEATURE_WORKFLOW.md](FEATURE_WORKFLOW.md); arkivér efter verificeret integration.
+Start from current `main` or the feature's branch in `karahaNx/Lumenfall`.
+Read root `AGENTS.md`, `PROJECT_BOOTSTRAP.txt`, `docs/PROJECT_STATE.md` and
+the current feature task. The user assigns scope; one owner chat handles all
+affected disciplines under [the feature workflow](FEATURE_WORKFLOW.md).
+Use isolated branches/worktrees for concurrent features and coordinate actual
+overlap/integration. Technical guidance is optional, with no default Lead role.
+Find sources through [CONTEXT_INDEX.md](../CONTEXT_INDEX.md). Record short task
+checkpoints before context compaction/handoff; do not load the entire archive.
+For a new account, use [ACCOUNT_RECOVERY.md](ACCOUNT_RECOVERY.md).
 
 ## Miljø
 
@@ -37,7 +39,7 @@ bash scripts/codex/setup.sh
 ```
 
 Lokal Android-build kræver desuden JDK17 og Android SDK. Signing/publicering
-følger workflowet og eget mandat. Almindelig repoanalyse/webtests kræver ingen
+følger workflowet og opgavens scope/godkendelse. Almindelig repoanalyse/webtests kræver ingen
 signingmaterialer eller Android SDK. Repoet kan ikke læse eller bevise dine
 eksterne Codex-miljøindstillinger.
 
@@ -46,9 +48,14 @@ eksterne Codex-miljøindstillinger.
 ```bash
 node scripts/codex/check_context.cjs
 node scripts/codex/check_context.cjs --archives
+node scripts/codex/check_context.cjs --task docs/tasks/FEATURE_CHAT_WORKFLOW_001.md
 node scripts/verify_apk_identity.cjs --self-test
 node tests/tooling/run.cjs
 ```
+
+Use your actual feature task path with `--task` to check its existence, local
+links and the 32 KiB shared-plus-task startup budget. The plain command checks
+shared documents only and explicitly reports that the feature task was not checked.
 
 Ved produktændringer følges relevante eksisterende gates i
 `.github/workflows/pre-merge-validation.yml`. Staging og adfærdssuite:
@@ -85,10 +92,12 @@ kandidat. Rodens main-kode forbliver det udgivne produkt.
 inklusive OWN_RAW.tar.xz, hvis bytes i repoet ligger i hashkontrollerede dele.
 Uden flaget gendannes kun de 96 produkt-/test-/docs-kildefiler.
 
-Efter kandidatfreeze: udsted afgrænsede Core-/QA-reviewopgaver. Brugeren
-overfører rolleopgaver; brug ikke subagenter/beskedværktøjer. Ældre Core/QA
-BLOCKED gælder tidligere bytes; worker-PASS er ikke deres accept af nye bytes.
-Dokumentér 02_07s handover før produkt-/PR46-skrivning.
+This section applies only to an explicitly assigned B2 task. Verify the restored
+candidate and reassess required persistence/runtime/regression checks on its
+exact bytes. Historical Core/QA BLOCKED applies to earlier bytes; worker-PASS is
+not independent acceptance. Check actual overlapping work before PR46/main
+integration; an unknown historical chat release is not a global permission gate.
+Do not create review chats/subagents or use message tools without a user request.
 
 ## Arkiver og adgangsgrænser
 

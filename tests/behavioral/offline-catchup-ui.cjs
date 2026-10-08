@@ -38,7 +38,7 @@ function assert(v,m){if(!v)throw Error(m);}
 
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function until(expression,label,timeout=60000){
- const start=Date.now();while(Date.now()-start<timeout){if(await evaluate(expression))return;await delay(20);}throw Error(label+' timed out');
+ const start=Date.now();while(Date.now()-start<timeout){try{const errors=await evaluate('window.__lumenfallQaContext ? window.__lumenfallQaContext.errors : []');assert(errors.length===0,'runtime error during '+label+': '+JSON.stringify(errors));if(await evaluate(expression))return;}catch(e){if(!/Inspected target navigated or closed|Execution context was destroyed|Cannot find context with specified id/.test(e.message))throw e;}await delay(20);}throw Error(label+' timed out');
 }
 async function stateSummary(){return evaluate(`(()=>{const b=window.__lumenfallQaBridge,s=b.getState(),p=JSON.parse(b.rawSave());return {flags:b.getFlags(),kills:s.totalKills,ascends:s.ascendCount,lastSeen:s.lastSeen,offline:s.totalOfflineSeconds,primaryKills:p.totalKills,primaryLastSeen:p.lastSeen,recoveryMatches:b.rawSave()===b.rawRecovery(),heartbeat:window.offlineHeartbeat,errors:window.__lumenfallQaContext.errors.length};})()`);}
 async function click(id){const r=await evaluate(`(()=>{const e=document.getElementById(${JSON.stringify(id)});const r=e.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`);await send('Input.dispatchMouseEvent',{type:'mousePressed',button:'left',clickCount:1,...r});await send('Input.dispatchMouseEvent',{type:'mouseReleased',button:'left',clickCount:1,...r});}
@@ -48,7 +48,7 @@ async function run(){
  await send('Page.addScriptToEvaluateOnNewDocument',{source:`window.offlineHeartbeat={frames:0,maxGap:0,last:0};function beat(t){const h=window.offlineHeartbeat;if(h.last)h.maxGap=Math.max(h.maxGap,t-h.last);h.last=t;h.frames++;requestAnimationFrame(beat);}requestAnimationFrame(beat);`});
  await send('Page.navigate',{url});
  await until('!!window.__offlineCatchupReady','cold startup ready');
- let before=await stateSummary();records.push({case:'initial cold observation',before});assert(before.flags.offlineBusy,'cold8h uses cooperative batches');
+ let before=await stateSummary();records.push({case:'initial cold observation',before});assert(before.errors===0,'cold startup has no runtime errors');assert(before.flags.offlineBusy,'cold8h uses cooperative batches');
  assert(before.kills===before.primaryKills,'working progress detached at cold-start yield');
  await click('enemy-stage');
  assert(await evaluate('window.__lumenfallQaBridge.save()===false'),'save cannot consume incomplete cold window');
@@ -59,6 +59,15 @@ async function run(){
  assert(cold.heartbeat.frames>5,'animation/event loop progresses during long catch-up');
  assert(cold.errors===0,'cold no runtime errors');
  assert(await evaluate('document.getElementById("welcome-text").textContent.includes("14400 times")'),'normal return message shown');
+ const returnGeometry=await evaluate(`(()=>{const overlay=document.getElementById('welcome-overlay'),button=document.getElementById('welcome-claim'),r=overlay.getBoundingClientRect(),b=button.getBoundingClientRect();return {overlay:{x:r.x,y:r.y,width:r.width,height:r.height},button:{x:b.x,y:b.y,width:b.width,height:b.height},viewport:{width:innerWidth,height:innerHeight},hit:document.elementFromPoint(b.x+b.width/2,b.y+b.height/2)===button};})()`);
+ assert(returnGeometry.overlay.x===0 && returnGeometry.overlay.y===0 && returnGeometry.overlay.width===returnGeometry.viewport.width && returnGeometry.overlay.height===returnGeometry.viewport.height,'return overlay covers viewport without CSS inset: '+JSON.stringify(returnGeometry));
+ assert(returnGeometry.button.y>=0 && returnGeometry.button.y+returnGeometry.button.height<=returnGeometry.viewport.height && returnGeometry.hit,'return Continue is visible and receives real input: '+JSON.stringify(returnGeometry));
+ records.push({case:'return panel legacy positioning/input',returnGeometry});
+ if(scenario==='offline-catchup-legacy-dom'){
+  const paint=await evaluate(`(()=>{const s=getComputedStyle(document.querySelector('#welcome-overlay .modal'));return {backgroundColor:s.backgroundColor,backgroundImage:s.backgroundImage};})()`);
+  assert(paint.backgroundImage!=='none' || (paint.backgroundColor!=='transparent' && paint.backgroundColor!=='rgba(0, 0, 0, 0)'),'legacy return dialog has a painted background: '+JSON.stringify(paint));
+  records.push({case:'legacy dialog background without color-mix/alpha hex',paint});
+ }
  await click('welcome-claim');assert(await evaluate('document.getElementById("welcome-overlay").style.display==="none"'),'real click completes return flow');
  records.push({case:'cold8h',before,cold});
  // Actual production visibility handler, with controlled visibility and clock.
@@ -86,6 +95,34 @@ async function run(){
  await evaluate('(()=>{const b=window.__lumenfallQaBridge;b.dispatchVisibility(true);b.dispatchVisibility(false);})()');
  await until('!window.__lumenfallQaBridge.getFlags().offlineBusy','failure retry');const recovered=await stateSummary();assert(recovered.kills-restarted.kills===302400&&!recovered.flags.offlinePending,'failure retry finishes entire window once');assert(recovered.errors===0,'failure handled without uncaught errors');
  records.push({case:'failure/retry',failed,recovered});
+ // A cancelled/failed first return must still present its daily-rollover reward
+ // after retry, even though ensureDaily has already updated the in-memory day.
+ await until('document.getElementById("startup-intro").style.display==="none"','earlier retry intro finishes');
+ await until('document.getElementById("welcome-overlay").style.display!=="none"','earlier retry return panel');
+ await click('welcome-claim');
+ for(let presentations=0;await evaluate('document.getElementById("daily-overlay").style.display!=="none"');presentations++){
+  assert(presentations<10,'earlier daily presentations drain in finite order');await click('daily-claim');
+ }
+ await evaluate('(()=>{const b=window.__lumenfallQaBridge,d=new Date(b.clockNow());b.dispatchVisibility(true);b.setLocalClock(d.getFullYear(),d.getMonth(),d.getDate()+1,12,0,0);b.offlineTest.failNext();b.dispatchVisibility(false);})()');
+ assert((await stateSummary()).flags.offlinePending,'daily rollover failure retains window');
+ const rolledComets=await evaluate('window.__lumenfallQaBridge.getState().comets');
+ const firstStreak=await evaluate('window.__lumenfallQaBridge.getState().loginStreak');
+ await evaluate('(()=>{const b=window.__lumenfallQaBridge,d=new Date(b.clockNow());b.dispatchVisibility(true);b.setLocalClock(d.getFullYear(),d.getMonth(),d.getDate()+1,12,0,0);b.dispatchVisibility(false);})()');
+ const retryComets=await evaluate('window.__lumenfallQaBridge.getState().comets');
+ assert(retryComets>rolledComets,'next rollover awards its own existing reward');
+ await until('!window.__lumenfallQaBridge.getFlags().offlineBusy','daily rollover retry');
+ await until('document.getElementById("startup-intro").style.display==="none"','daily retry intro finishes');
+ await until('document.getElementById("welcome-overlay").style.display!=="none"','daily retry return panel');
+ await click('welcome-claim');
+ assert(await evaluate('document.getElementById("daily-overlay").style.display!=="none"'),'daily reward presented after failure retry');
+ assert(await evaluate('document.getElementById("daily-title").textContent')==='Day '+firstStreak+' streak','failed first rollover presentation survives another midnight');
+ assert(await evaluate('window.__lumenfallQaBridge.getState().comets')===retryComets,'daily reward not awarded twice');
+ await click('daily-claim');
+ assert(await evaluate('document.getElementById("daily-title").textContent')==='Day '+(firstStreak+1)+' streak','next rollover presentation follows first in order');
+ await click('daily-claim');
+ await evaluate('(()=>{const b=window.__lumenfallQaBridge;b.dispatchVisibility(true);b.advanceTime(1000);b.dispatchVisibility(false);})()');
+ assert(await evaluate('document.getElementById("daily-overlay").style.display==="none"'),'daily presentation consumed once');
+ records.push({case:'daily rollover/failure/retry across next midnight',firstStreak,comets:retryComets});
  await send('Target.disposeBrowserContext',{browserContextId:ctx.browserContextId},null);
  return {status:'pass',scenario,records};
 }

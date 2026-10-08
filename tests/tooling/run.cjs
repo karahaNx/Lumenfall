@@ -14,6 +14,7 @@ const { verifyApk } = require('../../scripts/verify_apk_identity.cjs');
 const { setVersion } = require('../../scripts/ci/set_android_version.cjs');
 const { validate } = require('../../scripts/ci/validate_source.cjs');
 const { installGuard, checkSmoke } = require('../../scripts/ci/smoke.cjs');
+const { checkStartup } = require('../../scripts/codex/check_context.cjs');
 const ROOT = path.resolve(__dirname, '../..');
 function zipPayload(payload, compressed) {
   const packed = compressed ? zlib.deflateRawSync(payload) : payload, name = Buffer.from('fixture');
@@ -27,6 +28,7 @@ function zipPayload(payload, compressed) {
 }
 async function run() {
   const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'lumenfall-node-tools-'));
+  let taskFixtures;
   let server;
   try {
     const safe = path.join(temporary, 'safe'); fs.mkdirSync(safe);
@@ -94,6 +96,21 @@ async function run() {
     fs.writeFileSync(mutated, source); installGuard(mutated);
     assert(fs.readFileSync(mutated, 'utf8').includes('id="ci-runtime-error-guard"'));
     console.log('PASS source/smoke gates: missing/duplicate IDs, syntax failure and runtime error rejection');
+    taskFixtures = fs.mkdtempSync(path.join(ROOT, 'docs/tasks/.context-check-'));
+    const featureTask = path.join(taskFixtures, 'feature.md');
+    const taskName = path.relative(ROOT, featureTask);
+    fs.writeFileSync(featureTask, '# Scoped feature\n\n[Project rules](../../../AGENTS.md)\n');
+    assert.doesNotThrow(() => checkStartup(taskName));
+    assert.throws(() => checkStartup(path.relative(ROOT, path.join(taskFixtures, 'missing.md'))), /Missing entrypoint/);
+    assert.throws(() => checkStartup('AGENTS.md'), /under docs\/tasks/);
+    assert.throws(() => checkStartup('../outside.md'), /Unsafe path/);
+    const link = path.join(taskFixtures, 'escape.md'); fs.symlinkSync(path.join(ROOT, 'AGENTS.md'), link);
+    assert.throws(() => checkStartup(path.relative(ROOT, link)), /under docs\/tasks/);
+    fs.writeFileSync(featureTask, '# Broken checkpoint\n\n[Missing original](missing.md)\n');
+    assert.throws(() => checkStartup(taskName), /Missing link/);
+    fs.writeFileSync(featureTask, '# Oversized checkpoint\n' + 'x'.repeat(32768));
+    assert.throws(() => checkStartup(taskName), /startup exceeds 32 KiB/);
+    console.log('PASS feature checkpoints: real task links/budget and missing, misplaced, traversal/symlink, broken-link and oversized task rejection');
     fs.writeFileSync(path.join(safe, 'index.html'), 'served');
     server = await serve(safe);
     const base = 'http://127.0.0.1:' + server.address().port;
@@ -104,6 +121,7 @@ async function run() {
   } finally {
     if (server) { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
     fs.rmSync(temporary, { recursive: true, force: true });
+    if (taskFixtures) fs.rmSync(taskFixtures, { recursive: true, force: true });
   }
   console.log('Node tooling checks passed.');
 }
