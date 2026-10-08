@@ -50,6 +50,8 @@ only Lab CSS. All current game features, JS harness and assets remain present.
 Main subsequently integrated PR77 Save Backup UI at
 `261b1b7f863f73c324f4ac04acb5bfc95101644d`; merged into this branch,
 with Settings controls and its additional negative CI gates preserved.
+Current main e2f745c Formation/Resonate changes are merged; renewed Lab checks
+pass on source a47cf6f (full hashes and receipts in QA current/).
 
 ## Scope and decisions
 

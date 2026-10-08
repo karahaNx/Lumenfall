@@ -1,14 +1,16 @@
 # LAB_UI_001 validation
 
-Current baseline: b0537cb46635555ba2c2e5f3f95bc8fc276aeda5.
-This evidence replaces the earlier private B2 proposal as current acceptance.
-Source, tooling and native Lab baseline checks pass. Rebased source/task/tooling
-checks, ES2017 parser and byte-level non-presentation statement comparison pass.
-The simulator, payments, save/recovery and native bridge match the fresh baseline.
+Current candidate includes main e2f745cd0ce0dc9e41b06efd842062fd08d7fab4.
+`current/` binds renewed results to product SHA256
+a47cf6f73ee8ffde913afa437c607ef97ee8095135560d3c0004f48500fa3f49.
+All 12 browser/text/motion profiles, 19 existing regressions, actual V8 6.0,
+tooling and ES2017/unchanged-authority checks pass on these bytes. Non-presentation
+game statements and the native bridge match this current main exactly.
+Ordinary full CI, integration and feature APK acceptance remain pending.
 
-[RESULTS.json](RESULTS.json) binds these scoped results to source SHA256
+[RESULTS.json](RESULTS.json) is historical candidate evidence for source SHA256
 efd89f017cf118c0febb90b4d6952b8993d3d43ce558f6312ddb682844c3c935.
-The real-browser checks pass at 320/390/430px × 100/200% root text × normal/reduced
+Its real-browser checks passed at 320/390/430px × 100/200% root text × normal/reduced
 motion (12 profiles), with keyboard/touch, focus, hidden/expanded accessibility
 tree, >=44px controls, fill-independent contrast, 0/50/99.999/100% bar text,
 long durations and exact live 60-Motes purchase. Four representative screenshots
@@ -25,7 +27,7 @@ separate integration gate. No weakened gates or skipped default scenarios.
 
 No physical Android, exact WebView60 or TalkBack acceptance is claimed yet.
 
-Latest review checkpoint: main 261b1b7 is included, product source SHA256
+Earlier review checkpoint: main 261b1b7 was included, product source SHA256
 b46079c4e107de0d46b84141de29681aae9604f9ddf13595d65f9db830900e2e.
 `final/` retains renewed source/authority, V8 6.0, all 12 browser profiles and
 19 regression receipts, plus a negative test rejecting premature 100% ARIA.
