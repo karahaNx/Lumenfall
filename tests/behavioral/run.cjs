@@ -156,7 +156,7 @@ function mutateSource(source, scenario) {
   const replaceOnce = (rule, replacement) => { assert.equal(source.split(rule).length, 2); source = source.replace(rule, () => replacement); };
   if (scenario === 'self-test-bond-text-ability') replaceOnce('Heavy ability damage. Its Module boosts the hit; its Ultimate doubles it.', 'Heavy ability damage. Stone + Titan activate the Duskguard Bond. Its Module boosts the hit; its Ultimate doubles it.');
   if (scenario === 'self-test-bond-text-partners') replaceOnce("return SPIRITS.find(function(sp){ return sp.id===id; }).name;", "return SPIRITS.find(function(sp){ return sp.id===id; }).shortName;");
-  if (scenario === 'self-test-auto-ascend-target-window') replaceOnce('var count=Math.min(200,highest-start+1);', 'var count=highest-start+1;');
+  if (scenario === 'self-test-auto-ascend-target-window') replaceOnce('Math.min(200,highest-start+1)', 'Math.min(201,highest-start+1)');
   if (scenario === 'self-test-auto-ascend-target-manual') {
     const rule = 'function doAscend(auto){';
     replaceOnce(rule, rule + '\n  if(!auto && state.owned.autoascend) state.autoAscendTargetDepth=Math.max(autoAscendTarget(),clearedProgressionRift()+1);');
