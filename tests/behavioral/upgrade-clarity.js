@@ -19,12 +19,12 @@ window.runUpgradeClarityQa=function(b,ctx,assert){
     s.research.focus=3;s.research.resolve=4;s.longStudyLevels.lumenstudy=2;
     s.longStudyLevels.guardmastery=3;s.longStudyLevels.riftattune=4;s.longStudyLevels.prismstudy=2;
     s.owned.offline24=true;s.owned.offline48=true;pureRender(s);
-    var expected={starlight:'+'+(l*10)+'% Lumen',steady:'+'+(l*8)+'% tap',swift:'+'+(l*4)+'% Prisms',momentum:'+'+(l*6)+'% passive',reserves:'+'+(l*2)+' hours',echo:'+'+Math.min(30,l*5)+' percentage points',bonds:Math.min(60,l*3)+'% Wisp recruiting discount'};
+    var expected={starlight:'+'+(l*10)+'% Lumen',steady:'+'+(l*8)+'% tap',swift:'+'+(l*4)+'% Prisms',momentum:'+'+(l*6)+'% passive',echo:'+'+Math.min(30,l*5)+' percentage points',bonds:Math.min(60,l*3)+'% Wisp recruiting discount'};
     Object.keys(expected).forEach(function(id){var el=q('[data-node-effect="'+id+'"]');if(l===0&&['starlight','steady','momentum'].includes(id)){ok(!el,'unowned retired node hidden '+id);return;}ok(el.textContent.includes(expected[id]),id+' earned/capped effect at level '+l);});
     var metrics=b.upgradeClarity.metrics();
     ok(Math.abs(metrics.offline-(Math.min(1,.7+l*.05)+.4))<1e-12,'offline production oracle');
     ok(metrics.costReduction===Math.min(.6,l*.03),'cost production floor oracle');
-    ok(metrics.offlineCap===48+l*2,'reserves excludes shop cap');
+    ok(metrics.offlineCap===12,'retired extensions cannot exceed the shared cap');
     ok(Math.abs(metrics.lumen-(1+l*.1)*1.24*1.16)<1e-10,'Lumen contribution differs from multiplicative combined factor');
     ok(q('[data-node-effect="echo"]').textContent.includes('node cap reached')===(l>=6),'node offline cap indication');
     ok(q('[data-node-effect="bonds"]').textContent.includes('cost floor reached')===(l>=20),'node recruiting floor indication');

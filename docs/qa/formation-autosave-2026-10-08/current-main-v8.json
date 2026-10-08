@@ -1,0 +1,25 @@
+{
+  "status": "pass",
+  "scenario": "formation-autosave-v8",
+  "source": "index.html",
+  "sourceSha256": "ed7e9dc56ee3d068073c9fade277a2b357561d754d13de593420c1da0b27d96d",
+  "node": "v8.3.0",
+  "v8": "6.0.286.52",
+  "inlineScripts": 2,
+  "contract": {
+    "checks": 133,
+    "presets": 3,
+    "immediateSave": true,
+    "empty": true,
+    "pending": true,
+    "idempotent": true,
+    "negativeControls": [
+      "lost-destination",
+      "projection-save",
+      "switch-overwrite"
+    ]
+  },
+  "cometTrialValidation": true,
+  "recoveredLateIntent": true,
+  "limitation": "JavaScript engine only; Android DOM, lifecycle, TalkBack and physical WebView60 acceptance remain separate"
+}

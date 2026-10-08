@@ -1,8 +1,8 @@
 # LAB_UI_001 validation
 
-Current candidate includes main31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6.
-`retired/` binds renewed results to product SHA256
-2de645b1539141d975becad9f0a8662033c3e3c069321232783e2824aeb4ce57.
+Current candidate includes main14d5f3a3a78fe8b63cfa5544efc54f41217b65a5.
+`latest/` binds renewed results to product SHA256
+792f148fb190241127f0b16f50edf94660ae86ecb72b52abaa74b6bf9cd6ac13.
 All 12 browser/text/motion profiles, 19 existing regressions, actual V8 6.0,
 tooling and ES2017/unchanged-authority checks pass on these bytes. Non-presentation
 game statements and the native bridge match this current main exactly.
@@ -13,15 +13,19 @@ here: the removed Begin button is replaced by focus on the same Study's visible
 Speed up opener, with the panel still collapsed. Real Enter input is checked at
 all 12 mobile/text/motion profiles. `current/` retains the earlier a47cf6f receipts.
 Current main's exclusive upgrade ownership, retired read-only rows, legacy paid
-work/speed/completion, Auto-Ascend placement and all168 scenarios/17 required
+work/speed/completion, Auto-Ascend placement and all173 scenarios/17 required
 negative gates are preserved. Inquiry describes the five current Studies.
 `upgrade/` retains the preceding c945832 checkpoint. Retired paid completion now
 focuses its visible preserved card when there is no Speed up opener; another
 render preserves that focus. The regression fails on c945832 and passes here.
 `source-check.cjs` uses the pinned public Acorn8.17.0 parser in `vendor/`, with
 published SHA512 package integrity/provenance and MIT license. Reproduce with
-ordinary Node20+ (no internal flags): `git show 31eccfb:index.html > /tmp/lab-base.html`
+ordinary Node20+ (no internal flags): `git show 14d5f3a:index.html > /tmp/lab-base.html`
 then `node docs/qa/LAB_UI_001/source-check.cjs /tmp/lab-base.html`.
+`retired/` retains its2de645b checkpoint. Main14d5f3a adds the accepted shared12h
+offline/refund migration, Forge bulk memory and stable Rift guidance. Preserve
+them; the only product merge conflict kept the12h footer and compact queue copy.
+Authority/native bridge match latest main; no new migration/gameplay logic here.
 
 [RESULTS.json](RESULTS.json) is historical candidate evidence for source SHA256
 efd89f017cf118c0febb90b4d6952b8993d3d43ce558f6312ddb682844c3c935.
