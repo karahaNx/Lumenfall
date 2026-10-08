@@ -1,0 +1,6 @@
+Browser identity: { "selected_path": "/usr/bin/chromium", "resolved_path": "/usr/bin/chromium", "sha256": "2c8d32d29dc6781c35ae196ea83299d507ac88fc339301abe74672feda299779", "version": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)", "version_exitcode": 0, "version_stderr": "" }
+Staged source: { "source_sha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca", "instrumented_sha256": "2bbdb20acbb938e93a4c6f55e4e8e8d16aaeba822196695a520caaae51c562b1" }
+PASS lab-motes-offline-integration
+  process: { "exitcode": 0, "timed_out": false, "stderr": "" }
+  detail: { "status": "pass", "scenario": "lab-motes-offline-integration", "records": [ { "case": "yielding", "budget": 1, "batches": 30, "purchases": 1, "spent": 60 }, { "case": "yielding", "budget": 2, "batches": 15, "purchases": 1, "spent": 60 }, { "case": "yielding", "budget": 31, "batches": 0, "purchases": 1, "spent": 60 }, { "case": "yielding", "budget": 256, "batches": 0, "purchases": 1, "spent": 60 }, { "case": "primary-failure-and-retry", "purchases": 1, "spent": 60 }, { "case": "simulation-failure-and-retry", "purchases": 1, "spent": 60 } ], "recoveryFailure": "committed primary retained", "legacy": "OFF", "processing": "paid speed retained", "tail": "existing cap and completion retained" }
+Behavioral QA passed: 1 deterministic scenario(s).

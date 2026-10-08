@@ -1,7 +1,8 @@
 # Lumenfall — current project status
 
-Updated 7 October 2026 for [FEATURE-BRANCH-INTEGRATION-001](tasks/FEATURE_BRANCH_INTEGRATION_001.md),
-preserving the integrated [feature-chat workflow](tasks/FEATURE_CHAT_WORKFLOW_001.md).
+Updated 8 October 2026 for the [LAB_EXCLUSIVE_001 proposal](tasks/LAB_EXCLUSIVE_001.md),
+preserving [FEATURE-BRANCH-INTEGRATION-001](tasks/FEATURE_BRANCH_INTEGRATION_001.md)
+and the integrated [feature-chat workflow](tasks/FEATURE_CHAT_WORKFLOW_001.md).
 Repository: `karahaNx/Lumenfall`. Verify relevant live state before acting;
 commits below are observed checkpoints, not a promise that main never advances.
 
@@ -67,6 +68,7 @@ were recorded as integrated.
 | FEATURE-BRANCH-INTEGRATION-001 / LAB-MOTES | PR57/46 merged; full 146 CI and signed 0.1.138 asset/signing verification PASS. Required device acceptance OPEN. | Complete affected-phone/exact WebView60/TalkBack acceptance and any required independent review. Keep task/chat open. |
 | B2 arithmetic integration | Number/DataView functions from archived tree `758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef` were restored separately, matched exactly and integrated through PR57 with new regression/CI coverage. | Archived stress/physical/review limitations remain distinct from current full 146 CI. |
 | FEEDBACK-REVISION-001 | 29 original points and four images preserved; not collectively implemented. | Follow dependencies in a separately assigned task. Saved next priorities: F20/F21 Echoing Rest cap 6 / Cheaper Bonds cap 20, purchase gates and old-save policy. |
+| [LAB_EXCLUSIVE_001](tasks/LAB_EXCLUSIVE_001.md) / F29 | Proposal checkpoint: 9 Labs inventoried, 7 duplicate rows in 6 effect families; exclusive study-work/reservation effects and value-preserving transition proposed. PR46/B2 already integrated. No game behavior changed. | Finish proposal integration/checks, then obtain the agreed UPGRADE_IDENTITY_001 Lab effects/currencies/prices/work/unlocks/caps and migration policy. Full feature and chat remain open; proposed values/mechanics are not approved rules. |
 
 B2 original sources/evidence: `handoffs/02_08/2026-10-07/`, index SHA256
 `7c25b0b57722bda4ad6842b173bf9a390f2fa39942ad91206675a20e779d4d9b`.

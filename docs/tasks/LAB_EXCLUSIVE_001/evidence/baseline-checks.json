@@ -1,0 +1,54 @@
+{
+  "baseline": "b2a1f440e8ad9fed34b37551e468224310d2a6f6",
+  "planned": [
+    "inquiry-chronology",
+    "inquiry-save-reload",
+    "inquiry-backup-restore",
+    "inquiry-recovery",
+    "inquiry-reset",
+    "inquiry-ui",
+    "inquiry-ui-reduced-motion",
+    "active-studies-load",
+    "chronology-study-mid-window",
+    "upgrade-effects-and-deeds",
+    "forge-effects"
+  ],
+  "results": [
+    {
+      "scenario": "inquiry-chronology",
+      "command": [
+        "python3",
+        "tests/behavioral/run.py",
+        "--web-root",
+        "/tmp/lumenfall-lab-exclusive-www",
+        "--scenario",
+        "inquiry-chronology",
+        "--raw-artifacts",
+        "/tmp/lumenfall-lab-exclusive-raw"
+      ],
+      "exit": 1,
+      "signal": null,
+      "durationMs": 25545,
+      "log": "inquiry-chronology.log",
+      "scope": "unchanged main baseline; no exclusive Lab implementation"
+    },
+    {
+      "scenario": "inquiry-save-reload",
+      "command": [
+        "python3",
+        "tests/behavioral/run.py",
+        "--web-root",
+        "/tmp/lumenfall-lab-exclusive-www",
+        "--scenario",
+        "inquiry-save-reload",
+        "--raw-artifacts",
+        "/tmp/lumenfall-lab-exclusive-raw"
+      ],
+      "exit": 1,
+      "signal": null,
+      "durationMs": 25667,
+      "log": "inquiry-save-reload.log",
+      "scope": "unchanged main baseline; no exclusive Lab implementation"
+    }
+  ]
+}
