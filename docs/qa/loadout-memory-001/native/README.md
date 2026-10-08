@@ -41,7 +41,7 @@ Motes may accrue; pure pre-gameplay migration separately proves exact wallet val
 Delayed Welcome return flow is now awaited/dismissed before real Forge input.
 Setup/transport/fixture failures are retained as failures, never PASS.
 
-Replay using task-owned API27/ADB5555:
+Full replay using task-owned API27/ADB5555 (creates native.json):
 
 ```bash
 node --experimental-websocket docs/qa/loadout-memory-001/native-memory.cjs prepare archive/android/comet-unlocks-001/Lumenfall-0.1.143.apk BASELINE_143_INDEX OUTPUT
@@ -49,5 +49,21 @@ node docs/qa/loadout-memory-001/verify-assets.cjs NEW_APK ASSET_RECEIPT EXTRACTE
 node --experimental-websocket docs/qa/loadout-memory-001/native-memory.cjs accept NEW_APK EXTRACTED_INDEX OUTPUT
 ```
 
+To reproduce the recorded split receipt from a clean OUTPUT, first run the full
+procedure above, preserve its UI receipt, then prepare the old APK again before
+the separate update. The second prepare is required because accept expects143
+to be installed. Both stages use the same supplied signed150/extracted source.
+
+```bash
+node -e "const d=process.argv[1];require('node:fs').copyFileSync(d+'/native.json',d+'/native-behavior.json');" OUTPUT
+node --experimental-websocket docs/qa/loadout-memory-001/native-memory.cjs prepare archive/android/comet-unlocks-001/Lumenfall-0.1.143.apk BASELINE_143_INDEX OUTPUT
+node --experimental-websocket docs/qa/loadout-memory-001/native-memory.cjs accept NEW_APK EXTRACTED_INDEX OUTPUT --update-only
+node docs/qa/loadout-memory-001/combine-native.cjs OUTPUT
+```
+
 --update-only repeats actual install/database/startup/legacy wallet/preference/cold
-restart without rerunning the already completed exact150 unowned UI coverage.
+restart. combine-native.cjs uses the separate validated update as the authoritative
+upgrade proof and the earlier same-APK UI records. The original historical first
+UI record was invalid; a fresh full replay's first record can be valid but is
+still excluded to keep the two stages separate. Exact timestamps/database hashes
+change on replay; APK/source identities, required assertions and provenance do not.

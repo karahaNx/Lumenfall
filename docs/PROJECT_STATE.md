@@ -14,13 +14,13 @@ PASS. Final combined CI/integration/signed APK acceptance pending.
 
 ## Product and release evidence
 
-[LOADOUT_MEMORY_001 / F25](tasks/LOADOUT_MEMORY_001.md) integrated through
-[PR78](https://github.com/karahaNx/Lumenfall/pull/78)/9c19664: automatic Forge
-preference, no named shop, legacy value retained. CI173/17 and APK150 signed
-identity/15 assets/extracted V8/1139 checks/native input/restart/upgrade PASS.
-Corrected app-private database capture supersedes invalid shell-error hashes.
-F26 refunds remain separate; PR97 final combined CI/integration pending.
-Owner chat stays open until final acceptance/evidence are saved.
+[LOADOUT_MEMORY_001 / F25](tasks/LOADOUT_MEMORY_001.md) COMPLETE through
+[PR78](https://github.com/karahaNx/Lumenfall/pull/78)/9c19664 and
+[PR97](https://github.com/karahaNx/Lumenfall/pull/97)/3f1b6fa. Automatic Forge
+preference; named purchase removed, archival value retained. Integrated CI176/17,
+fresh1139/V8 and signed APK150 identity/assets/native input/save/restart/upgrade
+PASS. [Evidence/limits](qa/loadout-memory-001/current/README.md); F26 credit separate.
+Task edits stopped; only this owner is eligible for archive.
 
 [RIFT_GUIDANCE_001 / F07](tasks/RIFT_GUIDANCE_001.md): PR81/015e2e6 integrates
 stable guidance below currencies. UI160/0px, focus/AX/state purity, Rift/navigation
