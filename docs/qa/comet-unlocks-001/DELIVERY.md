@@ -38,8 +38,10 @@ refund decisions remain separate; the catalog does not implement that transition
 - Signed [Android build143](android-143.json), run37715794487, passed source,
   browser startup, build, stable-key verification, final identity and publication.
   This Android workflow does not run the full behavioral suite. The delivery
-  [publication PR73](https://github.com/karahaNx/Lumenfall/pull/73) runs it again on unchanged integrated game/test assets and
-  records the exact final validation head/run/result in its body.
+  [post-integration CI37716370065](post-integration-ci.json) passed all151
+  defaults/12 required negatives/tooling/source/guarded startup on unchanged
+  integrated game/test assets. [Publication PR73](https://github.com/karahaNx/Lumenfall/pull/73)
+  records its final documentation validation head/run/result in its body.
 - [Published identity](published-identity.txt): package com.lumenfall.app,
   versionCode143/name0.1.143, established signing SHA256. Verified independently
   from the downloaded actual APK using aapt/apksigner.
@@ -62,9 +64,12 @@ The final validation head/run/result and delivery integration commit are saved
 in [PR73's body](https://github.com/karahaNx/Lumenfall/pull/73), which is the
 durable execution receipt for this unchanged integrated product/test tree.
 
-[Native/device checklist](DEVICE_ACCEPTANCE.txt) remains OPEN. Cloud ADB/emulator
-attempts cannot create their default Android configuration paths on the
-read-only home mount. No physical phone or hardware acceleration is attached.
+[Native/device checklist](DEVICE_ACCEPTANCE.txt) remains OPEN. Sandboxed tools
+could not create standard Android configuration. Authorized unrestricted ADB
+started, but the isolated API27 emulator failed before package services/app
+installation: first encryption metadata, then vendor mount during init.
+[Preflight receipt](native-preflight.json) and [kernel diagnostic](native-preflight.txt)
+preserve the exact limitation. No physical phone/hardware acceleration is attached.
 Exact WebView60, native update/interaction and TalkBack for this APK are unverified.
 Keep this owner chat open and record device results in GitHub before completion.
 The full F25/F26 transition remains its separate dependency. Shared-file edits

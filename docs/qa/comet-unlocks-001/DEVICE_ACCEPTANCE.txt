@@ -26,9 +26,12 @@ and V8 engine checks do not establish native WebView60 or TalkBack acceptance.
    >=44px targets, visible focus, adequate contrast and reliable native input.
    TalkBack announces named Trial controls, status/help and cosmetic selection.
 
-Cloud preflight: no attached physical phone or /dev/kvm. Installed Android tools
-and an isolated API27 image were attempted. ADB fails creating
-/home/agent/.android; emulator fails creating its jwk/registration directory.
-The home mount remains read-only even with allowed additional permissions.
+Cloud preflight: no attached physical phone or /dev/kvm. Sandboxed Android tools
+cannot create standard configuration paths under /home/agent, including the
+additional-permissions attempt. Authorized unrestricted execution then started
+ADB successfully. The isolated API27 emulator failed during storage encryption;
+clean retries stopped in kernel/init while mounting the vendor partition,
+before Android package services or app installation. See native-preflight.json
+and native-preflight.txt. Only this task's emulator instances were stopped.
 No native app installation/interaction, exact WebView60 or TalkBack PASS is
 claimed. Keep this feature/chat open until required acceptance is recorded.

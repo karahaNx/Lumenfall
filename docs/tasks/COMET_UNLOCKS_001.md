@@ -115,8 +115,10 @@ Signed143 run37715794487 and downloaded package/version/signing/526CRC/15asset
 checks passed; extracted APK11 Comet cases pass on V8 6.0.286.52.
 See the [delivery receipt](../qa/comet-unlocks-001/DELIVERY.md), exact signed APK
 and remaining native checklist. Android build checks source/smoke/identity;
-[delivery PR73](https://github.com/karahaNx/Lumenfall/pull/73) runs full CI on unchanged integrated game/test bytes
-and records its final exact head/run/result in its body. No independent review
+[post-integration CI37716370065](../qa/comet-unlocks-001/post-integration-ci.json)
+passed151 defaults/12 required negatives and all required gates on unchanged
+integrated game/test bytes. [Delivery PR73](https://github.com/karahaNx/Lumenfall/pull/73)
+records the final documentation validation head/run/result in its body. No independent review
 or native device completion claimed. Current overlapping drafts include Ascension caps (PR66), a
 broad feedback candidate (PR67) and Wisp roles (PR70). Do not absorb their scope;
 recheck main and serialize integration. Full offline retirement/refunds remain
@@ -124,7 +126,7 @@ outside the current catalog integration until the dependency decision arrives.
 
 ## Next action
 
-Publish/integrate this delivery checkpoint after full post-integration CI;
+Publish/integrate this delivery checkpoint after its final required CI;
 preserve all other owners' status. Complete the exact signed143 native/device
 checklist when device access is available. Keep this owner chat open while
 required acceptance is incomplete; F25/F26 remain separate dependencies.

@@ -14,15 +14,18 @@ merge d95205f6d8059933fac74e8699854f67cb950a7e. Comet Trials140, Rift Trail50
 and Starfall Crest160 replace the purchasable convenience/timecap rows;
 Auto-Ascend100 and old ownership/effects/currencies retain value. Full151
 pre-merge CI37713904342 passed; the latest Rift text combination was reassessed.
-[Delivery PR73](https://github.com/karahaNx/Lumenfall/pull/73) runs full CI on unchanged integrated game/test bytes
-and records its exact final result in the PR body. No independent review claimed.
+[Post-integration CI37716370065](qa/comet-unlocks-001/post-integration-ci.json)
+passed151 defaults/12 required negatives and all required gates on unchanged
+integrated game/test bytes. [Delivery PR73](https://github.com/karahaNx/Lumenfall/pull/73)
+records final document validation/integration. No independent review claimed.
 
 F27 signed APK **0.1.143**, build37715794487, package com.lumenfall.app,
 established signing identity, is published and downloaded/verified. SHA256
 `45d1032ae6e77362d3540db740c6cfbdc4d275f2e3f6b98f4cecb1229e3205e7`;
 all526 CRC entries and all15 assets match integrated source. Actual extracted
 APK11 Comet cases PASS on V8 6.0.286.52. Exact native WebView60/physical/TalkBack
-acceptance remains OPEN after blocked cloud ADB/emulator attempts. F25/F26
+acceptance remains OPEN: unrestricted ADB starts, but the isolated API27 emulator
+fails in kernel/init before app installation. F25/F26
 built-in memory/fixed12h retirement/refunds are separate dependencies.
 [143 receipt, immutable APK and remaining checks](qa/comet-unlocks-001/DELIVERY.md).
 
