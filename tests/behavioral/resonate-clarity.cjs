@@ -14,6 +14,7 @@ const chrome=option('--chrome',process.env.LUMENFALL_QA_CDP_CHROME||['chromium',
 function assert(value,message){if(!value)throw Error(message);}
 const bridge=String.raw`
 window.resonateQa={
+ initialized:function(){return !!els['toast'];},
  get:function(){return JSON.parse(JSON.stringify(state));},
  seed:function(){var s=freshState();s.maxDepthEver=250;s.sigils=100;
   s.activeParty=['ember','tide','stone'];
@@ -65,7 +66,7 @@ function send(method,params={},sid=session){return new Promise((resolve,reject)=
 async function evaluate(expression){const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(r.exceptionDetails.exception?.description||r.exceptionDetails.text);return r.result.value;}
 const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function bounded(promise,ms){let timer;try{return await Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('timeout')),ms);})]);}finally{clearTimeout(timer);}}
-async function ready(){for(let i=0;i<150;i++){if(await evaluate('!!window.resonateQa')){await evaluate('resonateQa.ready()');return;}await pause(20);}throw Error('page not ready');}
+async function ready(){for(let i=0;i<150;i++){if(await evaluate('!!window.resonateQa && resonateQa.initialized()')){await evaluate('resonateQa.ready()');return;}await pause(20);}throw Error('page not ready');}
 async function fresh(){await evaluate('resonateQa.set(resonateQa.seed());resonateQa.ready();resonateQa.open("ember")');}
 async function shot(name){if(!evidence)return;const r=await send('Page.captureScreenshot',{format:'png'});fs.mkdirSync(evidence,{recursive:true});fs.writeFileSync(path.join(evidence,name+'.png'),Buffer.from(r.data,'base64'));}
 async function key(key){const spec=key==='Space'?{key:' ',code:'Space',windowsVirtualKeyCode:32}:{key:'Enter',code:'Enter',windowsVirtualKeyCode:13};await send('Input.dispatchKeyEvent',{type:'rawKeyDown',...spec});await send('Input.dispatchKeyEvent',{type:'keyUp',...spec});}
