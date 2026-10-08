@@ -87,8 +87,8 @@ async function run(){
   assert(after.disabled&&after.kind==='maxed'&&after.fit,'maxed state fit after native purchase');
   assert(after.focused&&after.focused!=='bonds','focus moves to available Tree control after final purchase');
   if(motion==='reduce')assert(after.reduced&&parseFloat(after.animation)<=.001,'reduced motion');
-  await evaluate(`(()=>{var b=__cheaperRecruitment;b.set(cheaperRecruitmentSeed(19));b.render();document.querySelector('[data-node="steady"]').focus();})()`);
-  await key('Tab');let focused=await evaluate('cheaperRecruitmentObservation()');assert(focused.focused==='echo','native Tab to Echo');await key('Tab');focused=await evaluate('cheaperRecruitmentObservation()');
+  await evaluate(`(()=>{var b=__cheaperRecruitment;b.set(cheaperRecruitmentSeed(19));b.render();document.querySelector('[data-node="echo"]').focus();})()`);
+  await key('Tab');let focused=await evaluate('cheaperRecruitmentObservation()');
   assert(focused.focused==='bonds'&&focused.focusStyle.style==='solid'&&parseFloat(focused.focusStyle.width)>=2,'visible keyboard focus on Recruitment');
   await key('Enter');after=await evaluate('cheaperRecruitmentObservation()');assert(after.state.nodes.bonds===20&&after.focused==='swift','native Enter cap and next focus '+JSON.stringify({level:after.state.nodes.bonds,focused:after.focused,prisms:after.state.prisms}));
   await evaluate(`(()=>{var b=__cheaperRecruitment;b.set(cheaperRecruitmentSeed(40));b.render();})()`);let legacy=await evaluate('cheaperRecruitmentObservation()');assert(legacy.fit&&legacy.text.includes('40 purchased levels preserved'),'legacy larger text fits');

@@ -42,7 +42,7 @@ window.runCheaperRecruitmentContracts=function(){
   install(19);s=b.get();s.prisms=2328;b.set(s);var before=b.get(),disk=b.disk();b.buy({id:'bonds'});
   same(b.get(),before,'insufficient budget no debit');same(b.disk(),disk,'insufficient budget no save');
   [null,{}, {id:'missing'}].forEach(function(node){before=b.get();b.buy(node);same(b.get(),before,'unknown input cannot mutate');});
-  install(0);b.buy({id:'starlight'});ok(b.get().nodes.starlight===1&&b.get().prisms===999999,'other Tree upgrade unchanged');
+  install(0);b.buy({id:'echo'});ok(b.get().nodes.echo===1&&b.get().prisms===999998,'active Tree upgrade keeps original price');var retired=b.get();b.buy({id:'starlight'});same(b.get(),retired,'upstream retired Tree upgrade cannot consume refund value');
   // Existing nearest-integer recruiting prices are independent oracles.
   [0,1,19,20,21,40].forEach(function(raw){
     install(raw);b.spirits().forEach(function(sp){
