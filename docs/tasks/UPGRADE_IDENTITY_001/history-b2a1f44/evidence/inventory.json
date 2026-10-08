@@ -1,0 +1,530 @@
+{
+  "scope": "Read-only data and isolated unchanged formulas; no full-engine, migration, balance, UI or Android acceptance.",
+  "source": {
+    "sha256": "f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4",
+    "bytes": 488044
+  },
+  "counts": {
+    "lab": 9,
+    "forge": 8,
+    "tree": 7,
+    "total": 24
+  },
+  "lab": [
+    {
+      "id": "wispascend",
+      "name": "Wisp Ascendancy",
+      "desc": "+15% passive Wisp damage permanently; also raises the Wisp-powered part of your tap damage.",
+      "unlockDepth": 1,
+      "baseDurationSec": 180,
+      "durationGrowth": 1.6,
+      "lumenBase": 800,
+      "lumenGrowth": 1.8,
+      "shardBase": 80,
+      "shardGrowth": 1.8,
+      "sourceLine": 2889
+    },
+    {
+      "id": "guardmastery",
+      "name": "Guardian's Mastery",
+      "desc": "+20% tap damage, permanently.",
+      "unlockDepth": 1,
+      "baseDurationSec": 150,
+      "durationGrowth": 1.6,
+      "lumenBase": 600,
+      "lumenGrowth": 1.8,
+      "shardBase": 40,
+      "shardGrowth": 1.8,
+      "sourceLine": 2890
+    },
+    {
+      "id": "riftattune",
+      "name": "Rift Attunement",
+      "desc": "+10% offline earning rate, permanently (stacks past 100%).",
+      "unlockDepth": 1,
+      "baseDurationSec": 240,
+      "durationGrowth": 1.6,
+      "lumenBase": 500,
+      "lumenGrowth": 1.8,
+      "shardBase": 100,
+      "shardGrowth": 1.8,
+      "sourceLine": 2891
+    },
+    {
+      "id": "shardstudy",
+      "name": "Shard Attunement",
+      "desc": "+8% Shards earned per kill, permanently.",
+      "unlockDepth": 15,
+      "baseDurationSec": 200,
+      "durationGrowth": 1.6,
+      "lumenBase": 400,
+      "lumenGrowth": 1.8,
+      "shardBase": 150,
+      "shardGrowth": 1.8,
+      "sourceLine": 2892
+    },
+    {
+      "id": "lumenstudy",
+      "name": "Lumen Wellspring",
+      "desc": "+8% Lumen earned per kill, permanently.",
+      "unlockDepth": 25,
+      "baseDurationSec": 260,
+      "durationGrowth": 1.6,
+      "lumenBase": 1400,
+      "lumenGrowth": 1.8,
+      "shardBase": 120,
+      "shardGrowth": 1.8,
+      "sourceLine": 2893
+    },
+    {
+      "id": "formationstudy",
+      "name": "Formation Insight",
+      "desc": "+5% passive Wisp damage permanently; also raises the Wisp-powered part of your tap damage.",
+      "unlockDepth": 40,
+      "baseDurationSec": 320,
+      "durationGrowth": 1.6,
+      "lumenBase": 2200,
+      "lumenGrowth": 1.8,
+      "shardBase": 220,
+      "shardGrowth": 1.8,
+      "sourceLine": 2894
+    },
+    {
+      "id": "motestudy",
+      "name": "Luminous Sense",
+      "desc": "+10% Motes gained from Luminous enemies, permanently.",
+      "unlockDepth": 60,
+      "baseDurationSec": 380,
+      "durationGrowth": 1.6,
+      "lumenBase": 3200,
+      "lumenGrowth": 1.8,
+      "shardBase": 320,
+      "shardGrowth": 1.8,
+      "sourceLine": 2895
+    },
+    {
+      "id": "prismstudy",
+      "name": "Ascendant Clarity",
+      "desc": "+5% Prisms earned per Ascend, permanently.",
+      "unlockDepth": 90,
+      "baseDurationSec": 450,
+      "durationGrowth": 1.6,
+      "lumenBase": 4800,
+      "lumenGrowth": 1.8,
+      "shardBase": 480,
+      "shardGrowth": 1.8,
+      "sourceLine": 2896
+    },
+    {
+      "id": "measuredinquiry",
+      "name": "Measured Inquiry",
+      "desc": "2% less work per completed level, up to 20%, for future starts of Wisp Ascendancy, Guardian’s Mastery, Rift Attunement, Shard Attunement, Lumen Wellspring, Formation Insight, Luminous Sense and Ascendant Clarity. Running Studies and Measured Inquiry itself are unchanged.",
+      "unlockDepth": 60,
+      "levelCap": 10,
+      "baseDurationSec": 600,
+      "durationGrowth": 1.6,
+      "lumenBase": 30000,
+      "lumenGrowth": 1.8,
+      "shardBase": 1200,
+      "shardGrowth": 1.8,
+      "sourceLine": 2897
+    }
+  ],
+  "forge": [
+    {
+      "id": "focus",
+      "effectPerLevel": 0.08,
+      "name": "Battle Focus",
+      "desc": "+8% Lumen from every kill, per level.",
+      "lumenBase": 200,
+      "lumenGrowth": 1.5,
+      "shardBase": 0,
+      "shardGrowth": 1,
+      "sourceLine": 2866
+    },
+    {
+      "id": "sense",
+      "effectPerLevel": 0.08,
+      "name": "Shard Sense",
+      "desc": "+8% Shards from every kill, per level.",
+      "lumenBase": 150,
+      "lumenGrowth": 1.5,
+      "shardBase": 20,
+      "shardGrowth": 1.5,
+      "sourceLine": 2867
+    },
+    {
+      "id": "formation",
+      "effectPerLevel": 0.05,
+      "name": "Formation Training",
+      "desc": "+5% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.",
+      "lumenBase": 0,
+      "lumenGrowth": 1,
+      "shardBase": 40,
+      "shardGrowth": 1.6,
+      "sourceLine": 2868
+    },
+    {
+      "id": "resolve",
+      "effectPerLevel": 0.1,
+      "name": "Guardian's Resolve",
+      "desc": "+10% tap damage, per level.",
+      "lumenBase": 150,
+      "lumenGrowth": 1.45,
+      "shardBase": 0,
+      "shardGrowth": 1,
+      "sourceLine": 2869
+    },
+    {
+      "id": "charge",
+      "effectPerLevel": 0.08,
+      "name": "Swift Recovery",
+      "desc": "+8% faster Wisp ability charge, per level.",
+      "lumenBase": 0,
+      "lumenGrowth": 1,
+      "shardBase": 30,
+      "shardGrowth": 1.55,
+      "sourceLine": 2870
+    },
+    {
+      "id": "arcanecal",
+      "name": "Arcane Calibration",
+      "desc": "+3 percentage points to the damaging Wisp ability factor per level. Burst, Breaker, Gale and Thorn only; no passive or Tap bonus.",
+      "unlockDepth": 12,
+      "levelCap": 10,
+      "effectPerLevel": 0.03,
+      "lumenBase": 15000,
+      "lumenGrowth": 1.6,
+      "shardBase": 120,
+      "shardGrowth": 1.6,
+      "sourceLine": 2871
+    },
+    {
+      "id": "conduction",
+      "name": "Resource Conduction",
+      "desc": "+4 percentage points to the ability resource factor per level. Gale Shards and Thorn Lumen only; rounded per cast, not kill rewards.",
+      "unlockDepth": 18,
+      "levelCap": 10,
+      "effectPerLevel": 0.04,
+      "lumenBase": 90000,
+      "lumenGrowth": 1.6,
+      "shardBase": 280,
+      "shardGrowth": 1.6,
+      "sourceLine": 2872
+    },
+    {
+      "id": "luminoustracking",
+      "name": "Luminous Tracking",
+      "desc": "+0.5 percentage points Luminous chance per level for future eligible encounters; total chance at most 35%. No extra Motes per kill.",
+      "unlockDepth": 32,
+      "levelCap": 10,
+      "effectPerLevel": 0.005,
+      "lumenBase": 2500000,
+      "lumenGrowth": 1.6,
+      "shardBase": 1500,
+      "shardGrowth": 1.6,
+      "sourceLine": 2873
+    }
+  ],
+  "tree": [
+    {
+      "id": "starlight",
+      "name": "Starlight Affinity",
+      "desc": "+10% Lumen from every kill, per level.",
+      "baseCost": 1,
+      "growth": 1.35,
+      "sourceLine": 2877
+    },
+    {
+      "id": "steady",
+      "name": "Steady Hands",
+      "desc": "+8% tap damage, per level.",
+      "baseCost": 1,
+      "growth": 1.3,
+      "sourceLine": 2878
+    },
+    {
+      "id": "echo",
+      "name": "Echoing Rest",
+      "desc": "+5% offline earning rate, per level (caps at 100%).",
+      "baseCost": 2,
+      "growth": 1.4,
+      "sourceLine": 2879
+    },
+    {
+      "id": "bonds",
+      "name": "Cheaper Bonds",
+      "desc": "−3% Wisp recruiting cost, per level (floor 40%).",
+      "baseCost": 2,
+      "growth": 1.45,
+      "sourceLine": 2880
+    },
+    {
+      "id": "swift",
+      "name": "Swift Ascension",
+      "desc": "+4% Prisms earned per Ascend, per level.",
+      "baseCost": 3,
+      "growth": 1.5,
+      "sourceLine": 2881
+    },
+    {
+      "id": "momentum",
+      "name": "Eternal Momentum",
+      "desc": "+6% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.",
+      "baseCost": 5,
+      "growth": 1.55,
+      "requiresAchievement": "asc5",
+      "sourceLine": 2882
+    },
+    {
+      "id": "reserves",
+      "name": "Deep Reserves",
+      "desc": "+2 hours to your offline cap, per level.",
+      "baseCost": 6,
+      "growth": 1.6,
+      "requiresAchievement": "d100",
+      "sourceLine": 2883
+    }
+  ],
+  "boundaryShop": [
+    {
+      "id": "autoascend",
+      "name": "Auto-Ascend Ritual",
+      "desc": "Choose which Rift to defeat before automatic Ascension. Toggle it on or off anytime. Your chosen target persists across Ascensions.",
+      "cost": 100,
+      "sourceLine": 3038
+    },
+    {
+      "id": "offline24",
+      "name": "Extended Rest",
+      "desc": "Raise the offline earnings cap from 12 hours to 24 hours.",
+      "cost": 140,
+      "sourceLine": 3039
+    },
+    {
+      "id": "offline48",
+      "name": "Deep Rest",
+      "desc": "Raise the offline earnings cap by another 24 hours, stacking with Extended Rest.",
+      "cost": 160,
+      "sourceLine": 3040
+    },
+    {
+      "id": "rememberbulk",
+      "name": "Loadout Memory",
+      "desc": "The Rift Forge remembers your last bulk-buy multiplier between visits, instead of resetting to 1x.",
+      "cost": 50,
+      "sourceLine": 3041
+    }
+  ],
+  "duplicateGroups": [
+    {
+      "effect": "kill_lumen",
+      "owner": "Lab/lumenstudy",
+      "sources": [
+        "Tree/starlight",
+        "Forge/focus",
+        "Lab/lumenstudy"
+      ]
+    },
+    {
+      "effect": "kill_shards",
+      "owner": "Lab/shardstudy",
+      "sources": [
+        "Forge/sense",
+        "Lab/shardstudy"
+      ]
+    },
+    {
+      "effect": "passive_power",
+      "owner": "Lab/wispascend",
+      "sources": [
+        "Forge/formation",
+        "Lab/formationstudy",
+        "Tree/momentum",
+        "Lab/wispascend"
+      ]
+    },
+    {
+      "effect": "tap_damage",
+      "owner": "Lab/guardmastery",
+      "sources": [
+        "Tree/steady",
+        "Forge/resolve",
+        "Lab/guardmastery"
+      ]
+    },
+    {
+      "effect": "offline_rate",
+      "owner": "Tree/echo",
+      "sources": [
+        "Tree/echo",
+        "Lab/riftattune"
+      ]
+    },
+    {
+      "effect": "ascend_prisms",
+      "owner": "Tree/swift",
+      "sources": [
+        "Tree/swift",
+        "Lab/prismstudy"
+      ]
+    }
+  ],
+  "observations": [
+    {
+      "profile": {
+        "name": "fresh",
+        "n": 0,
+        "f": 0,
+        "l": 0
+      },
+      "lumenFactor": 1,
+      "shardFactor": 1,
+      "tapFactor": 1,
+      "passiveFactorsInProductionOrder": [
+        1,
+        "synergyMult (outside this probe)",
+        1,
+        1
+      ],
+      "offlineRate": 0.7,
+      "prismFactor": 1,
+      "moteYieldFactor": 1,
+      "recruitDiscount": 0,
+      "capHours": 12,
+      "futureLuminousChanceAtRift60": 0.15
+    },
+    {
+      "profile": {
+        "name": "owned-small",
+        "n": 2,
+        "f": 3,
+        "l": 4
+      },
+      "lumenFactor": 1.9641600000000001,
+      "shardFactor": 1.6368,
+      "tapFactor": 2.7144,
+      "passiveFactorsInProductionOrder": [
+        1.38,
+        "synergyMult (outside this probe)",
+        1.12,
+        1.6
+      ],
+      "offlineRate": 1.2,
+      "prismFactor": 1.296,
+      "moteYieldFactor": 1.4,
+      "recruitDiscount": 0.06,
+      "capHours": 16,
+      "futureLuminousChanceAtRift60": 0.16499999999999998
+    },
+    {
+      "profile": {
+        "name": "owned-high",
+        "n": 25,
+        "f": 100,
+        "l": 15
+      },
+      "lumenFactor": 69.30000000000001,
+      "shardFactor": 19.8,
+      "tapFactor": 132,
+      "passiveFactorsInProductionOrder": [
+        10.5,
+        "synergyMult (outside this probe)",
+        2.5,
+        3.25
+      ],
+      "offlineRate": 2.5,
+      "prismFactor": 3.5,
+      "moteYieldFactor": 2.5,
+      "recruitDiscount": 0.6,
+      "capHours": 62,
+      "futureLuminousChanceAtRift60": 0.2
+    },
+    {
+      "profile": {
+        "name": "raw-overlevels",
+        "n": 1000,
+        "f": 1000,
+        "l": 1000
+      },
+      "lumenFactor": 662661,
+      "shardFactor": 6561,
+      "tapFactor": 1644381,
+      "passiveFactorsInProductionOrder": [
+        2601,
+        "synergyMult (outside this probe)",
+        61,
+        151
+      ],
+      "offlineRate": 101,
+      "prismFactor": 2091,
+      "moteYieldFactor": 101,
+      "recruitDiscount": 0.6,
+      "capHours": 2012,
+      "futureLuminousChanceAtRift60": 0.2
+    }
+  ],
+  "speedTiers": [
+    {
+      "tier": 1.5,
+      "motes": 14
+    },
+    {
+      "tier": 2,
+      "motes": 26
+    },
+    {
+      "tier": 3,
+      "motes": 60
+    },
+    {
+      "tier": 4,
+      "motes": 110
+    },
+    {
+      "tier": 5,
+      "motes": 176
+    },
+    {
+      "tier": 6,
+      "motes": 258
+    },
+    {
+      "tier": 7,
+      "motes": 357
+    },
+    {
+      "tier": 8,
+      "motes": 473
+    }
+  ],
+  "functionLines": {
+    "finiteNonNegative": 3251,
+    "nonNegativeInt": 3255,
+    "nodeLevel": 3921,
+    "researchLevel": 3922,
+    "researchEffectiveLevel": 3923,
+    "researchBonus": 3927,
+    "researchFactor": 3931,
+    "longStudyLevel": 3935,
+    "longStudyPowerMult": 3936,
+    "longStudyTapMult": 3937,
+    "longStudyOfflineBonus": 3938,
+    "longStudyShardMult": 3939,
+    "longStudyLumenMult": 3940,
+    "longStudyFormationMult": 3941,
+    "longStudyPrismMult": 3943,
+    "longStudyMoteMult": 3942,
+    "lumenMult": 3933,
+    "shardMult": 3934,
+    "tapMult": 3944,
+    "formationMult": 3945,
+    "momentumMult": 3946,
+    "offlineRate": 3949,
+    "prismMult": 3950,
+    "costReduction": 3951,
+    "offlineCapHours": 3952,
+    "speedTierCost": 2901,
+    "eliteChance": 3953
+  }
+}
