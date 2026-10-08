@@ -47,6 +47,7 @@ function baselineSummary(actual,expected,label){
  assert.deepEqual(existing,expected,label);
 }
 function baselineState(actual,expected,seed,label){
+ assert.equal(actual.swiftRecoveryRefund,null,label+' no cap migration below10');
  const ids=Object.keys(expected.longStudyLevels);
  assert.deepEqual(actual.studyUseMotes,Object.fromEntries(ids.map(id=>[id,false])),label+' legacy OFF intent');
  assert.deepEqual(actual.studySpeedTargets,Object.fromEntries(ids.map(id=>{
@@ -60,7 +61,7 @@ function baselineState(actual,expected,seed,label){
  const oldOwnership={...expected.owned},legacy={};
  for(const id of ['rememberbulk','offline24','offline48']){if(oldOwnership[id]===true)legacy[id]=true;delete oldOwnership[id];}
  assert.deepEqual(actual.legacyCometPurchases,legacy,label+' full legacy ownership archived');
- const {studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,...existing}=actual;
+ const {swiftRecoveryRefund,studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,...existing}=actual;
  assert.deepEqual(existing,{...expected,owned:oldOwnership},label);
 }
 function runAsync(seed,seconds,batch=256){
@@ -85,11 +86,27 @@ function runAsync(seed,seconds,batch=256){
  return {x,result,committed};
 }
 const start=performance.now();
+// The immutable device backup owns Swift60. Its new rewards are independently
+// replayed in one-second calls; archived old-product parity uses Swift9 below.
+function oneSecondReference(seed,seconds){
+ const x=app(seed,source,seconds),before=copy(x.b.get());
+ for(let i=0;i<seconds;i++)x.b.advance(1,{kind:'offline',visual:false,clockStartMs:seed.lastSeen+i*1000,offlineWindowStartMs:seed.lastSeen});
+ x.b.get().totalOfflineSeconds+=seconds;x.b.get().lastSeen=seed.lastSeen+seconds*1000;x.b.save();
+ return {state:copy(x.b.get()),kills:x.b.get().totalKills-before.totalKills,ascends:x.b.get().ascendCount-before.ascendCount,prisms:x.b.get().prisms-before.prisms};
+}
+if(process.argv.includes('--generate-swift-golden')){
+ let seed=copy(original);const phases=[];
+ for(let i=0;i<4;i++){const reference=oneSecondReference(seed,28800);phases.push({kills:reference.kills,ascends:reference.ascends,prisms:reference.prisms,stateSha256:require('node:crypto').createHash('sha256').update(JSON.stringify(reference.state)).digest('hex')});seed=reference.state;}
+ console.log(JSON.stringify({sourceSha256:require('node:crypto').createHash('sha256').update(source).digest('hex'),oracle:'independent one-second advance calls, fixed whole-window start',phases},null,2));process.exit(0);
+}
 // Fails on the unchanged product through the reported production entry.
 const on=runAsync(original,28800);
-assert.equal(on.result.kills,302400);assert.equal(on.result.ascends,14400);
-assert.equal(on.committed.prisms-original.prisms,86400);
-assert.equal(on.committed.lumen,0,'Ascension reset preserves earned vs balance distinction');
+const onReference=oneSecondReference(original,28800);
+assert.equal(on.result.kills,onReference.kills);assert.equal(on.result.ascends,onReference.ascends);
+assert.equal(on.committed.prisms-original.prisms,onReference.prisms);
+compare(on.committed,onReference.state,'Swift60 capped full8h one-second reference');
+assert.equal(on.committed.lumen,onReference.state.lumen,'post-Ascend partial run balance matches one-second reference');
+assert(on.result.earned>on.committed.lumen,'Ascend resets run Lumen, not the reported earned total');
 assert.deepEqual(on.committed.formationRebuild,original.formationRebuild,'unaffordable Boss reconstruction intent persists');
 assert.deepEqual(on.committed.empowerQueue,original.empowerQueue,'purchase intent preserved');
 assert.deepEqual(on.committed.activeParty,['ember']);
@@ -102,16 +119,18 @@ assert.deepEqual(narrow.result,on.result,'changing work budget changes no reward
 const clear20=copy(original);clear20.autoAscendTargetDepth=21;
 const c20=runAsync(clear20,28800);
 const off=copy(original);off.autoAscendEnabled=false;
-const disabled=runAsync(off,28800);assert.equal(disabled.result.kills,773);assert.equal(disabled.result.ascends,0);
-assert.equal(disabled.committed.spirits.titan,144);
-const cap=runAsync(original,72*3600);assert.equal(cap.result.kills,2721600);assert.equal(cap.result.ascends,129600);
+const disabled=runAsync(off,28800),offReference=oneSecondReference(off,28800);assert.equal(disabled.result.kills,offReference.kills);assert.equal(disabled.result.ascends,0);
+compare(disabled.committed,offReference.state,'Swift60 capped OFF full8h reference');
+const cap=runAsync(original,72*3600),capReference=oneSecondReference(original,72*3600);assert.equal(cap.result.kills,capReference.kills);assert.equal(cap.result.ascends,capReference.ascends);
+compare(cap.committed,capReference.state,'Swift60 capped full72h one-second reference');
 const beyond=copy(original);beyond.activeStudies=[{id:'guardmastery',remainingSec:80*3600,totalDurationSec:80*3600,speedMult:1}];beyond.studyQueue={};
 const long=runAsync(beyond,96*3600);assert.equal(long.result.effectiveSec,72*3600);
 assert(long.result.completedStudies.includes("Guardian's Mastery"),'study completes beyond combat cap');
 assert.equal(long.result.kills,cap.result.kills,'beyond-cap time earns no extra combat');
 // Preserve old numerical policy against the unchanged scheduler for short windows
 // and chronological research/Motes/automation boundaries.
-for(const seed of [original,clear20,off]){
+for(const raw of [original,clear20,off]){
+ const seed=copy(raw);seed.research.charge=9;
  for(const seconds of [60,300,3600]){
   const old=app(seed,baseline,seconds),next=app(seed,source,seconds);
   const a=old.b.advance(seconds,{kind:'offline',visual:false,clockStartMs:seed.lastSeen});
@@ -119,7 +138,7 @@ for(const seed of [original,clear20,off]){
   baselineSummary(b,a,'unchanged baseline summary '+seconds);baselineState(next.b.get(),old.b.get(),seed,'unchanged baseline state '+seconds);
  }
 }
-const all=copy(original);all.research.focus=0;Object.keys(all.empowerQueue).forEach(k=>all.empowerQueue[k]=true);
+const all=copy(original);all.research.charge=9;all.research.focus=0;Object.keys(all.empowerQueue).forEach(k=>all.empowerQueue[k]=true);
 all.researchQueue.focus=true;all.studyQueue.riftattune=true;
 for(const kind of ['live','offline']){
  const whole=app(all),split=app(all),old=app(all,baseline),options={kind,visual:false,clockStartMs:all.lastSeen};

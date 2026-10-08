@@ -183,3 +183,5 @@ JavaScript is the active-tooling standard; see
 `decisions/2026-10-07-javascript-first.md`. P2-04/native, P2-05/release-hardening
 and A40 remain recorded as deferred/retired. Earlier status:
 `project/PROJECT_STATE_2026-10-05_HISTORICAL.md`.
+
+Swift Recovery F19 (`SWIFT_RECOVERY_CAP_001`): scoped cap10/minimum10/3s and exact legacy Shard compensation candidate prepared on main b0537cb; core12 groups/mobile12 profiles/V8 6.0 pass. Full Swift60 offline regression, CI/integration, signed APK and native acceptance pending. Task: `docs/tasks/SWIFT_RECOVERY_CAP_001.md`. PR67 overlaps; preserve this cap/refund contract during later bundle integration.

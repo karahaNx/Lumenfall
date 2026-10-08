@@ -1,0 +1,284 @@
+{
+  "commit": "dfe27e53d047ec634becc7b5ead9ef43e54e5728",
+  "tree": "bb09d99479125fdc5461bf86f8c89c2996f437bc",
+  "sourceSha256": "15147300375f61199d09a7a5bc0f78e7112333eb178398cd100591b9343e8ee6",
+  "harness": "tests/behavioral/run.cjs",
+  "harnessSha256": "bd28ccc8b37d932fcc98b7f2168c32a4f9a342a35d5afaa8d8b22fe1d2fc10cc",
+  "transport": "supplemental Chromium CDP adapter; CLI timeout evidence retained separately",
+  "adapterSha256": "c36951937c5f4d998900b32aec0d6f4bc881151fd009dbe9056540ba848ce967",
+  "scope": "baseline only; no product candidate, migration or Android acceptance",
+  "startedAt": "2026-10-08T06:09:33.249Z",
+  "results": [
+    {
+      "name": "context",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "scripts/codex/check_context.cjs"
+      ],
+      "startedAt": "2026-10-08T06:09:33.250Z",
+      "finishedAt": "2026-10-08T06:09:33.298Z",
+      "expectedFailure": false,
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "passed": true
+    },
+    {
+      "name": "formula-probe",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "docs/qa/swift-recovery-cap-001/baseline-probe.cjs"
+      ],
+      "startedAt": "2026-10-08T06:09:33.299Z",
+      "finishedAt": "2026-10-08T06:09:33.336Z",
+      "expectedFailure": false,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "passed": false
+    },
+    {
+      "name": "forge-contracts",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "forge-contracts",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/implementation-regression/failed-processes"
+      ],
+      "startedAt": "2026-10-08T06:09:33.336Z",
+      "finishedAt": "2026-10-08T06:09:35.648Z",
+      "expectedFailure": false,
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "passed": true
+    },
+    {
+      "name": "forge-effects",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "forge-effects",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/implementation-regression/failed-processes"
+      ],
+      "startedAt": "2026-10-08T06:09:35.648Z",
+      "finishedAt": "2026-10-08T06:09:36.902Z",
+      "expectedFailure": false,
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "passed": true
+    },
+    {
+      "name": "forge-chronology",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "forge-chronology",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/implementation-regression/failed-processes"
+      ],
+      "startedAt": "2026-10-08T06:09:36.902Z",
+      "finishedAt": "2026-10-08T06:09:38.094Z",
+      "expectedFailure": false,
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "passed": true
+    },
+    {
+      "name": "forge-save-reload",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "forge-save-reload",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/implementation-regression/failed-processes"
+      ],
+      "startedAt": "2026-10-08T06:09:38.094Z",
+      "finishedAt": "2026-10-08T06:09:39.587Z",
+      "expectedFailure": false,
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "passed": true
+    },
+    {
+      "name": "forge-backup-restore",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "forge-backup-restore",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/implementation-regression/failed-processes"
+      ],
+      "startedAt": "2026-10-08T06:09:39.587Z",
+      "finishedAt": "2026-10-08T06:09:40.991Z",
+      "expectedFailure": false,
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "passed": true
+    },
+    {
+      "name": "forge-recovery",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "forge-recovery",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/implementation-regression/failed-processes"
+      ],
+      "startedAt": "2026-10-08T06:09:40.992Z",
+      "finishedAt": "2026-10-08T06:09:42.443Z",
+      "expectedFailure": false,
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "passed": true
+    },
+    {
+      "name": "support-stacking",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "support-stacking",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/implementation-regression/failed-processes"
+      ],
+      "startedAt": "2026-10-08T06:09:42.444Z",
+      "finishedAt": "2026-10-08T06:09:43.769Z",
+      "expectedFailure": false,
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "passed": true
+    },
+    {
+      "name": "buff-timing",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "buff-timing",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/implementation-regression/failed-processes"
+      ],
+      "startedAt": "2026-10-08T06:09:43.770Z",
+      "finishedAt": "2026-10-08T06:09:44.993Z",
+      "expectedFailure": false,
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "passed": true
+    },
+    {
+      "name": "buff-save-reload",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "buff-save-reload",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/implementation-regression/failed-processes"
+      ],
+      "startedAt": "2026-10-08T06:09:44.993Z",
+      "finishedAt": "2026-10-08T06:09:46.585Z",
+      "expectedFailure": false,
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "passed": true
+    },
+    {
+      "name": "self-test-bad-assertion",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "self-test-bad-assertion",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/implementation-regression/negative-processes"
+      ],
+      "startedAt": "2026-10-08T06:09:46.585Z",
+      "finishedAt": "2026-10-08T06:09:47.778Z",
+      "expectedFailure": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "passed": true
+    },
+    {
+      "name": "self-test-chronology-regression",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "self-test-chronology-regression",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/implementation-regression/negative-processes"
+      ],
+      "startedAt": "2026-10-08T06:09:47.778Z",
+      "finishedAt": "2026-10-08T06:09:49.164Z",
+      "expectedFailure": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "passed": true
+    },
+    {
+      "name": "self-test-parity-regression",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        ".",
+        "--scenario",
+        "self-test-parity-regression",
+        "--raw-artifacts",
+        "/workspace/Lumenfall-swift-recovery/docs/qa/swift-recovery-cap-001/implementation-regression/negative-processes"
+      ],
+      "startedAt": "2026-10-08T06:09:49.164Z",
+      "finishedAt": "2026-10-08T06:09:50.510Z",
+      "expectedFailure": true,
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "passed": true
+    }
+  ],
+  "finishedAt": "2026-10-08T06:09:50.510Z",
+  "sourceUnchanged": true,
+  "harnessUnchanged": true
+}

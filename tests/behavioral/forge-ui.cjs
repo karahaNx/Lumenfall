@@ -44,6 +44,7 @@ async function key(key){const spec=key==='Space'?{key:' ',code:'Space',windowsVi
 async function touch(selector){const r=await evaluate(`forgeUi.measure(${JSON.stringify(selector)})`);assert(r.visible&&r.hit,'touch target visible before action');await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:r.x,y:r.y}]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});}
 async function shot(name){if(!process.env.LUMENFALL_QA_EVIDENCE_DIR)return;const r=await send('Page.captureScreenshot',{format:'png'});fs.mkdirSync(process.env.LUMENFALL_QA_EVIDENCE_DIR,{recursive:true});fs.writeFileSync(path.join(process.env.LUMENFALL_QA_EVIDENCE_DIR,name+'.png'),Buffer.from(r.data,'base64'));}
 async function run(){
+ if(scenario.startsWith('swift-recovery-'))return runSwift();
  for(const [width,height,inset] of [[360,640,0],[360,640,24],[390,844,24]]){
   const motion=scenario.includes('reduced')?'reduce':'no-preference',name=`${width}x${height}-safe${inset}-${motion}`;
   const ctx=await send('Target.createBrowserContext',{},null),tab=await send('Target.createTarget',{url:'about:blank',browserContextId:ctx.browserContextId},null);session=(await send('Target.attachToTarget',{targetId:tab.targetId,flatten:true},null)).sessionId;
@@ -90,6 +91,43 @@ async function run(){
   const navigation=await evaluate('forgeUi.checkRift()');
   records.push({profile:name,startup,bulk,before,toggles,tickEvidence,purchases,bulkStates,affordability,navigation});
   await send('Target.disposeBrowserContext',{browserContextId:ctx.browserContextId},null);
+ }
+ return {status:'pass',scenario,records};
+}
+function contrast(a,b){
+ function luminance(color){const rgb=color.match(/[\d.]+/g).slice(0,3).map(Number).map(x=>{x/=255;return x<=0.04045?x/12.92:Math.pow((x+0.055)/1.055,2.4);});return 0.2126*rgb[0]+0.7152*rgb[1]+0.0722*rgb[2];}
+ const x=luminance(a),y=luminance(b);return (Math.max(x,y)+0.05)/(Math.min(x,y)+0.05);
+}
+async function runSwift(){
+ const motion=scenario.includes('reduced')?'reduce':'no-preference';
+ for(const width of [320,390,430])for(const textScale of [1,2]){
+  const ctx=await send('Target.createBrowserContext',{},null),tab=await send('Target.createTarget',{url:'about:blank',browserContextId:ctx.browserContextId},null);session=(await send('Target.attachToTarget',{targetId:tab.targetId,flatten:true},null)).sessionId;
+  await send('Emulation.setDeviceMetricsOverride',{width,height:844,deviceScaleFactor:1,mobile:true});await send('Emulation.setTouchEmulationEnabled',{enabled:true});await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:motion}]});await send('Page.enable');await send('Page.navigate',{url});
+  for(let i=0;i<150&&!await evaluate('!!window.__forgeUiReady');i++)await new Promise(r=>setTimeout(r,20));
+  assert(await evaluate('!!window.__forgeUiReady'),'Swift UI page ready');await evaluate('window.__qaForgeStartup.promise');await evaluate('document.fonts.ready.then(()=>true)');
+  await evaluate(`(()=>{const b=window.__lumenfallQaBridge;b.uiMeasurementPause(true);const s=b.freshStateSnapshot();s.research.charge=9;s.maxDepthEver=101;s.shards=1e12;s.lumen=1e12;s.questDay=b.currentDay();s.loginStreak=1;b.setState(s);b.renderLayout();document.querySelector('[data-tab="forge"]').click();})()`);
+  await evaluate(fs.readFileSync(path.join(__dirname,'forge-ui.js'),'utf8'));
+  await evaluate(`forgeUi.prepare('[data-mult="5"]',true)`);await key('Space');
+  if(textScale===2)await evaluate(`(()=>{const rules=[];for(const e of document.querySelectorAll('#tab-forge *')){const c=getComputedStyle(e);if(Array.from(e.childNodes).some(n=>n.nodeType===3&&n.textContent.trim())){const selector=e.matches('[data-mult]')?'[data-mult="'+e.dataset.mult+'"]':e.matches('[data-research]')?'[data-research="'+e.dataset.research+'"]':e.matches('[data-queue]')?'[data-queue="'+e.dataset.queue+'"]':'.'+Array.from(e.classList).join('.');if(selector!=='.')rules.push('#tab-forge '+selector+'{font-size:'+parseFloat(c.fontSize)*2+'px!important;line-height:1.2!important;}');}}const style=document.createElement('style');style.textContent=rules.join('');document.head.appendChild(style);})()`);
+  const before=await evaluate(`(()=>{const b=window.__lumenfallQaBridge,card=document.querySelector('[data-forge-card="charge"]');return {state:b.getState(),preview:b.forge.preview('charge',5),text:card.textContent};})()`);
+  assert(before.preview.plan.buyCount===1&&before.text.includes('Purchase impact: 1 level(s)'),'cap-limited UI preview');
+  await evaluate(`forgeUi.prepare('[data-queue="charge"]',true)`);await key('Tab');await new Promise(r=>setTimeout(r,350));
+  const geometry=await evaluate(`(()=>{const card=document.querySelector('[data-forge-card="charge"]');return {overflow:card.scrollWidth>card.clientWidth,controls:Array.from(card.querySelectorAll('button')).map(e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e);return {width:r.width,height:r.height,color:s.color,background:s.backgroundColor,gradient:s.backgroundImage,outline:s.outlineStyle,outlineWidth:parseFloat(s.outlineWidth),outlineColor:s.outlineColor,text:e.textContent};}),bulk:Array.from(document.querySelectorAll('#tab-forge [data-mult]')).map(e=>{const r=e.getBoundingClientRect();return {width:r.width,height:r.height};})};})()`);
+  assert(!geometry.overflow,'Swift card fits '+width+' text '+textScale);
+  assert(geometry.controls.concat(geometry.bulk).every(c=>c.width>=44&&c.height>=44),'44px controls '+JSON.stringify(geometry));
+  const buy=geometry.controls[1];assert(buy.outline!=='none'&&buy.outlineWidth>=2,'visible keyboard focus '+JSON.stringify(geometry));
+  const backgrounds=(buy.gradient.match(/(?:rgba?\([^)]*\)|color\(srgb [^)]*\))/g)||[buy.background]).map(bg=>bg.startsWith('color(srgb')?'rgb('+bg.match(/[\d.]+/g).slice(0,3).map(v=>Number(v)*255).join(',')+')':bg);
+  assert(backgrounds.every(bg=>contrast(buy.color,bg)>=4.5),'buy text contrast');assert(backgrounds.every(bg=>contrast(buy.outlineColor,bg)>=3),'focus contrast');assert(contrast(geometry.controls[0].color,geometry.controls[0].background)>=4.5,'Queue text contrast');
+  await key('Space');
+  const after=await evaluate(`(()=>{const b=window.__lumenfallQaBridge;return {state:b.getState(),text:document.querySelector('[data-forge-card="charge"]').textContent,disabled:document.querySelector('[data-research="charge"]').disabled,focus:document.activeElement.dataset.queue};})()`);
+  assert(after.state.research.charge===10&&after.state.shards===before.state.shards-before.preview.plan.cost.shard,'native keyboard buys exactly preview');
+  assert(after.disabled&&after.text.includes('Next: Maxed')&&after.focus==='charge','cap and same-card focus fallback');
+  await key('Space');const queued=await evaluate('window.__lumenfallQaBridge.getState()');assert(queued.researchQueue.charge&&queued.shards===after.state.shards,'cap Queue intent without spend');
+  await evaluate('document.activeElement.blur()');await touch('[data-queue="charge"]');const touched=await evaluate('window.__lumenfallQaBridge.getState()');assert(!touched.researchQueue.charge&&touched.shards===queued.shards,'native touch Queue');
+  const legacy=await evaluate(`(()=>{const b=window.__lumenfallQaBridge,s=b.getState();s.research.charge=100;b.setState(s);b.renderLayout();const card=document.querySelector('[data-forge-card="charge"]'),before=JSON.stringify(b.getState());b.forge.buy('charge','max');b.forge.queue();return {text:card.textContent,disabled:card.querySelector('[data-research]').disabled,pure:JSON.stringify(b.getState())===before,overflow:card.scrollWidth>card.clientWidth,transition:getComputedStyle(document.querySelector('.rift-charge>span')).transitionDuration};})()`);
+  assert(legacy.text.includes('Level 10 / 10 (100 historical)')&&legacy.text.includes('refunded in Shards')&&legacy.disabled&&legacy.pure&&!legacy.overflow,'legacy effective cap/history/refund UI');
+  if(motion==='reduce')assert(parseFloat(legacy.transition)<=0.000001,'reduced-motion charge bar '+legacy.transition);
+  await shot('swift-'+width+'-text'+textScale+'-'+motion);records.push({width,textScale,motion,geometry,purchase:{count:1,cost:before.preview.plan.cost.shard},legacy});await send('Target.disposeBrowserContext',{browserContextId:ctx.browserContextId},null);
  }
  return {status:'pass',scenario,records};
 }
