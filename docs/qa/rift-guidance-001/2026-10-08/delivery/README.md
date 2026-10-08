@@ -90,7 +90,11 @@ and software ADB swipes with no moves. Native hardware events solve the test
 input problem; actual down/move/up and scroll are now mandatory.
 Earlier local Save reload timeout matched untouched main; remote gates pass.
 Historical candidate receipts keep their original source identity and do not
-accept later bytes. MANIFEST_FINAL.json hashes the final evidence payload.
+accept later bytes. MANIFEST_FINAL.json hashes the final evidence payload, including this README,
+summary-final.json, context-final.txt and admin-tool-status.json; only its own
+self-referential digest is excluded. Review P2 findings are fixed: reproducible
+same-boundary APK/Lab region comparison with both hashes, and complete final
+delivery metadata coverage. Earlier receipt extraction boundaries remain explicit.
 
 ## Sources, ownership and closure
 

@@ -1,5 +1,5 @@
 {
-  "scope": "Final exact-source UI/native/APK evidence payloads; historical checkpoints retain their own manifests.",
+  "scope": "Final exact-source UI/native/APK payloads and all delivery records, including README/summary/context/admin status. Manifest excludes itself; historical checkpoints keep their original manifests. Shared project status is outside this payload scope.",
   "payloads": {
     "../../../../../archive/android/rift-guidance-001/Lumenfall-0.1.151.apk": {
       "bytes": 6847241,
@@ -442,8 +442,8 @@
       "sha256": "e47b880a7065752dde7c9062686ab2b22c4377aa14f81916ba177f27d18a3fab"
     },
     "../after-lab/README.md": {
-      "bytes": 758,
-      "sha256": "3114cc9d0ff3b36c08b1f416ca7252ec98bcbb24e7878577d3d5a5d90d3b09ab"
+      "bytes": 1075,
+      "sha256": "32c2348ba942a7d43556c9899113987b8f90e6c4c22df22a3384ff860948a28e"
     },
     "../after-lab/contract/results.json": {
       "bytes": 19252,
@@ -534,8 +534,8 @@
       "sha256": "48ef24dc368b396bf14a22c873192fff92b9670afc25f2575bead34a936ec5c9"
     },
     "../after-lab/source-preservation.json": {
-      "bytes": 1472,
-      "sha256": "68670dd64b181c0bf157fa70056e68f640fdb398c7570207d64053f001c11d25"
+      "bytes": 3077,
+      "sha256": "6f1a2612761ed6afc2e326ea253560c11b6135fe94d7836ccc81dc5c90037016"
     },
     "../after-lab/source.txt": {
       "bytes": 99,
@@ -604,6 +604,90 @@
     "cold-start-fix.txt": {
       "bytes": 140,
       "sha256": "3f3365da3a1bd34e361f260a154a7934f26059a2b6be30411265a8d339f9f2d4"
+    },
+    "README.md": {
+      "bytes": 7753,
+      "sha256": "a5a4dcdfaa8e683295f1e16c1fae2bd961af80fae472b67eac0c4a8307fdc93a"
+    },
+    "admin-tool-status.json": {
+      "bytes": 417,
+      "sha256": "458aa07c3abc0cf81ef890625e9f1253d41212626bf88a81952f2f37c0a43389"
+    },
+    "baseline-save-diagnostic/lab-motes-save-reload-vz3XBm/process.json": {
+      "bytes": 924,
+      "sha256": "facdcbc0c1bdaba2838b92c0ff8c21e785fdf474d84200b00a2533f6415a24b6"
+    },
+    "baseline-save-diagnostic/lab-motes-save-reload-vz3XBm/stderr.log": {
+      "bytes": 4396,
+      "sha256": "909729e69f8be2e76ad012be4070f298997356064e7145a3aaa274ebdd3f595b"
+    },
+    "baseline-save-diagnostic/lab-motes-save-reload-vz3XBm/stderr.log.gz": {
+      "bytes": 518,
+      "sha256": "b886ee09648db82eb78167fff7b8e76450be5bfc885dcf768f501ab3b44b3900"
+    },
+    "baseline-save-diagnostic/lab-motes-save-reload-vz3XBm/stdout.html": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "baseline-save-diagnostic.txt": {
+      "bytes": 5089,
+      "sha256": "dcc52d8d1faaea095879f6c9da6f25cc0096b04ea2514d509c21651db99e95ad"
+    },
+    "candidate-identity.json": {
+      "bytes": 974,
+      "sha256": "0313cdffe9ed72f75daebf9577d6974b21345104a8ee5d96c8eda6d6bdc1c906"
+    },
+    "candidate-summary.json": {
+      "bytes": 691,
+      "sha256": "2b9d3fcf6e38aa7dc8aa86ac59c8a33cc44bc6a01d8989b252b946365f490f8e"
+    },
+    "ci-37739007243-cancelled.log.gz": {
+      "bytes": 95524,
+      "sha256": "b5a66adbacca025b53df509a8b24810e0702615c318bf78e30234565610c75b5"
+    },
+    "context-final.txt": {
+      "bytes": 132,
+      "sha256": "15015228d717aed3b4c43d3b61362ed4f3cd115894c6381ebe8eacbd34e453e8"
+    },
+    "local-save-diagnostic/lab-motes-save-reload-oW6DVY/process.json": {
+      "bytes": 923,
+      "sha256": "6b2c914ec543849192aa58a59fc32b5f8946bdb344ffea834f74352e385ad7ba"
+    },
+    "local-save-diagnostic/lab-motes-save-reload-oW6DVY/stderr.log": {
+      "bytes": 4396,
+      "sha256": "7c9f502f6a34d2ac3307ac9f289be0c80e5f93482264d6cd33984f6c6c78e822"
+    },
+    "local-save-diagnostic/lab-motes-save-reload-oW6DVY/stderr.log.gz": {
+      "bytes": 522,
+      "sha256": "557b37d56998e054fe28e4bd077530554c688334aff2909d26a66917454438fb"
+    },
+    "local-save-diagnostic/lab-motes-save-reload-oW6DVY/stdout.html": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "local-save-diagnostic.txt": {
+      "bytes": 5085,
+      "sha256": "bad0a7c394577c65d2fd03298cf6d113b60f35d49889f92013ad28afccbec5c2"
+    },
+    "previous-save-backup-candidate-identity.json": {
+      "bytes": 974,
+      "sha256": "5d3169a7db79d8fef5e98c5e83b46874a1ec3ec57c9776946911eef1434fc4d0"
+    },
+    "previous-save-backup-candidate-summary.json": {
+      "bytes": 542,
+      "sha256": "4ea63c7e17637d6afeef701109770e741a8402b33396f373aa065e042194da5b"
+    },
+    "save-diagnostic-disposition.json": {
+      "bytes": 703,
+      "sha256": "c8e5e4bf13fc4bfc37bd3fa0b677008ed22ce0137a9a4830777c57bf76b55e10"
+    },
+    "summary-final.json": {
+      "bytes": 3539,
+      "sha256": "0cf4476543b48e5cdfaa6f625189bc51e3f38bc77fcbd08c276c72237795f89d"
+    },
+    "../source-preservation.cjs": {
+      "bytes": 2364,
+      "sha256": "34d6d9d38a3dd1bef1c08c9568d2402e13f034a61826d755b2db34ef8e2b9d58"
     }
   }
 }
