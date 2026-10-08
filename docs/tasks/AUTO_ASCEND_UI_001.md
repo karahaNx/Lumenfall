@@ -31,10 +31,10 @@ grant. Historical handover stops are superseded by current rules and this order.
 No subagents/message tools are used.
 
 Remote baseline: b0537cb46635555ba2c2e5f3f95bc8fc276aeda5.
-Current combination includes main4ff0ae3 (PR76 Formation autosave and PR77/87
-Save Backup UI/receipt). Both product changes and all existing CI cases are
-preserved. Source SHA256
-6482a85c7bf12a2421f49e050332a87decf8272418f490d604ff8cfd5e9cf482.
+Current combination includes maine2f745c (PR76 Formation autosave, PR77/87
+Save Backup UI/receipt and PR80 Resonate clarity). Their product changes and all
+existing CI cases are preserved. Source SHA256
+2398a7506358f9c2ee1d4390314032d878f2e0a8e866f62ba03c0280ee7e3bc0.
 PR84 CI37737148141 passed on prior source61515269 (153 default scenarios and14
 required negatives). Main advanced afterward; merge conflicts in status/default
 scenario registration retain both features. Renew CI and focused checks before
@@ -98,7 +98,7 @@ Required GitHub CI must pass unchanged.
 
 ## Next action
 
-Push the main4ff0ae3 combination, renew CI/focused checks, recheck main and integrate. Renew
+Push the maine2f745c combination, renew CI/focused checks, recheck main and integrate. Renew
 checks on integrated bytes; observe signed APK publication and verify identity/
 assets. Complete available native checks and save supported status here and in
 PROJECT_STATE. Missing required device acceptance stays OPEN. Stop this feature's
