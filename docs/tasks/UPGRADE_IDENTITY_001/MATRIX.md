@@ -35,9 +35,11 @@ remain authoritative. Closed rows retain their original raw data and operands.
 | Tree bonds | recruit/Empower discount `min(.6,.03k)` | P2 ×1.45 | Retain here; effective purchase-cap PR66 separate |
 | Tree swift | Ascend Prism factor `1+.04k` | P3 ×1.50 | Retain here |
 | Tree momentum | passive Wisp factor `1+.06k` | P5 ×1.55; Ascend5 Deed | Close; Lab wispascend |
-| Tree reserves | offline cap `+2k` hours | P6 ×1.60; Rift100 Deed | Retain pending separate F26 transition |
+| Tree reserves | historical offline cap `+2k` hours | P6 ×1.60; Rift100 Deed | F29 retained; subsequently retired/refunded by F26/PR85 |
 
-Ten buying tracks close; fourteen remain. Ability cast resources, kill resources,
+Ten duplicate buying tracks close; fourteen remained at PR90. Integrated F26/PR85
+then retires Deep Reserves: current buying tracks are Lab6/Forge4/Tree3.
+Ability cast resources, kill resources,
 Mote yield and encounter chance act on distinct events. Arcane Calibration does
 not affect passive/Tap; Conduction does not affect kill rewards; Tracking never
 rerolls the current enemy and does not increase Motes per enemy. Existing fixed
@@ -47,7 +49,9 @@ The existing later/more expensive exclusive Forge unlocks remain unchanged.
 ## Exact value preservation
 
 No level conversion, currency refund, destination-level credit, schema bump or
-extra purchased benefit. All 24 IDs stay in fresh/canonical saves. Ownership is
+extra purchased benefit in F29. F26 separately refunds retired offline-hour
+purchases in their original currencies through its schema2 idempotent receipt;
+historical levels remain. All 24 IDs stay in fresh/canonical saves. Ownership is
 the existing raw fields, not a new ledger that could apply the value twice.
 Closed fields still contribute through the original formulas in the same order:
 
@@ -99,8 +103,14 @@ Lab PR62 Shared Apparatus/Staged Research and Forge PR64 Impact Reservoir,
 Conduit Remainder/Luminous Anchor were proposals needing their own prices,
 limits/reset rules. They are not implemented or assumed approved by this matrix.
 Tree PR66 caps and PR67/70 gameplay work remain separate. No unrelated branch
-is merged, overwritten or archived. F18/F19 support/charge tuning, F26 offline
-cap/refunds and F28 full economy pacing remain their own acceptance goals.
+is overwritten or archived. F18/F19 support/charge tuning and F28 full economy
+pacing remain their own acceptance goals. Main14d5f3a includes F26/PR85: a shared
+12-hour productive offline window (including Lab), no Study-only tail, retired
+Deep Reserves and exact historical Prisms/Comets refunds. Its migration is
+idempotent and preserves pending credit when immediate Number credit would lose
+value. This supersedes the historical hours recipe, not F29's preserved damage,
+currency-yield or offline-rate operands. F25/PR78 now remembers Forge/Lab bulk
+choices without a Comet purchase; Workshop spending currencies stay unchanged.
 
 The closed-queue Farm regression requires the two small clock corrections from
 PR70 head7284cf716250355e1bf68d00590f81ab96f49a3d: canonical-grid progress

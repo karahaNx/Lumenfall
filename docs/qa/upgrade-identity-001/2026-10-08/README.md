@@ -16,13 +16,19 @@ Required native/device acceptance remains OPEN; owner chat stays open.
 | Android release | [build/release](build-release.json), [raw build log](build-37742868726.txt.gz), [identity](apk148-identity.txt), [CRC/assets](apk148-assets.json): package com.lumenfall.app/version148/established signer/release digest/526 entries/all15 assets PASS. |
 | Actual extracted APK engine | [legacy results](apk148-v8/results.json): V8 6.0.287.53 parses both scripts, PASS129 value/closed-handler/backup/paid-work checks; original26-Mote speed intent on three closed paid Studies pays78 once. Full8h offline entry PASS302400 kills/14400 Ascends. |
 | Actual extracted APK desktop behavior | [19 scoped scenarios/23 runs](apk148-focused/results.json), compressed raw logs alongside it; mobile320/390/430, normal/200% text and normal/reduced motion included. |
-| Required combined CI | The final delivery PR body records its exact head/run/outcome. Combined source and test bytes equal integration31eccfb;168 defaults/17 required negatives apply. |
+| Required combined CI | The final delivery PR93 body records its exact head/run/outcome. Delivery rebases onto main14d5f3a and preserves subsequent F07/F25/F26/F14 changes; source31eccfb/APK148 receipts below remain historical and immutable. |
 
 Integrated/actual APK index SHA256:
 `f99cb0bcd46d2849977a39cf31bb0dd1a7bb8c0ca7a370f2490ad66ec67a6ec1`.
 APK SHA256:
 `cef6c291a4f91a3921bdc3b2d2e6f772906d39560f995fcaedf420ccd9972657`.
 Self-review/automated checks only; no independent review is claimed.
+
+The delivery baseline14d5f3a includes F26's shared12-hour productive window and
+Deep Reserves retirement/refund, plus F25 bulk-memory and F07 guidance changes.
+The current matrix records these dependencies. APK148 proves PR90's release;
+it is an immutable historical version rather than a claim about the moving
+android-latest asset. Later-source checks use the current tests and source hash.
 
 ## Replay
 
