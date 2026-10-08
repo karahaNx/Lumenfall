@@ -1941,6 +1941,8 @@
   #tab-forge .forge-actions .buy-btn{flex:1;min-width:0;flex-direction:row;flex-wrap:wrap;justify-content:center;gap:2px 10px;}
   .forge-actions .buy-btn .label,.forge-actions .buy-btn .control-state{flex-basis:100%;text-align:center;}
   .forge-actions .buy-btn .cost{font-size:12px;}
+  /* Swift keyboard focus also works in WebView60, without :focus-visible. */
+  #tab-forge [data-forge-card="charge"] button:focus{outline:2px solid var(--prism);outline-offset:2px;}
   .upgrade-emblem{width:32px;height:38px;flex:none;color:var(--chapter);}
   #tab-forge [data-forge-preview]{white-space:pre-line;overflow-wrap:anywhere;font-size:12px;line-height:1.45;margin-top:8px;padding:8px 10px;border:1px solid #3e4a61;border-radius:8px;background:#0e192b;}
   #tab-forge .node-info>.name{color:#ffe0b6;}
@@ -7783,9 +7785,11 @@ function advanceAuthoritativeTime(elapsedSec,options){
   var firstFarmGridSec = startPhaseSec===0 ? 1 : 1-startPhaseSec;
   var farmGridRemainingSec = firstFarmGridSec;
   var farmGridCrossings = 0;
-  var targetGridPositionSec = startPhaseSec+elapsedSec;
-  var targetFarmGridCrossings = Math.floor(targetGridPositionSec);
-  var targetGridPhaseSec = targetGridPositionSec-targetFarmGridCrossings;
+  // Preserve the endpoint fraction independently of the window's whole seconds.
+  // The same fractional start must finish identically in whole/split calls.
+  var targetGridPhaseSec = startPhaseSec+targetFractionSec;
+  var targetFarmGridCrossings = targetWholeSec+Math.floor(targetGridPhaseSec);
+  targetGridPhaseSec -= Math.floor(targetGridPhaseSec);
   var targetFarmGridRemainingSec = targetGridPhaseSec===0 ? 1 : 1-targetGridPhaseSec;
 
   function advanceFarmGridClock(stepSec){
@@ -7969,8 +7973,8 @@ function advanceAuthoritativeTime(elapsedSec,options){
 
     var killsBefore = summary.kills;
     var ascendsBeforeAdvance = summary.ascends;
-    var elapsedWholeBefore = elapsedWholeSec;
-    var elapsedFractionBefore = elapsedFractionSec;
+    var gridCrossingsBefore = farmGridCrossings;
+    var gridRemainingBefore = farmGridRemainingSec;
     // Sub-nanosecond elapsed time can still carry material damage at mature
     // power. Never discard it merely because it is below a generic time
     // epsilon; only treat the simulator as stalled if floating-point
@@ -8053,7 +8057,9 @@ function advanceAuthoritativeTime(elapsedSec,options){
       });
     }
 
-    if(remaining>0 && elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore && actions===0){
+    // A real tiny crossing can round to unchanged derived elapsed time.
+    // Judge progress using the authoritative grid, retaining all elapsed damage.
+    if(remaining>0 && farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore && actions===0){
       throw new Error('Authoritative simulation stalled without elapsed-time or state progress | '+JSON.stringify({
         elapsedInRun:elapsedInRun,
         elapsedWholeSec:elapsedWholeSec,

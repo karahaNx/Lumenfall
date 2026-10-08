@@ -8,8 +8,17 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const root=path.resolve(__dirname,'../..');
 const sourceArg=process.argv.indexOf('--source');
 const source=fs.readFileSync(sourceArg<0?path.join(root,'index.html'):process.argv[sourceArg+1],'utf8');
-const baseline=fs.readFileSync(path.join(root,'docs/recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/main-index.html'),'utf8');
+const baselineOriginal=fs.readFileSync(path.join(root,'docs/recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/main-index.html'),'utf8');
+let baseline=baselineOriginal;
 assert.equal(require('node:crypto').createHash('sha1').update('blob '+Buffer.byteLength(baseline)+'\0'+baseline).digest('hex'),'ea44431c163569548973d9e489f75345749a07ee','original product oracle blob');
+// Keep complete exact legacy comparisons. The reference changes only the two
+// clock corrections required by the capped cadence; no balance/save formulas.
+function clockOracleReplace(old,next){assert.equal(baseline.split(old).length,2,'one clock-only oracle anchor');baseline=baseline.replace(old,next);}
+clockOracleReplace('var targetGridPositionSec = startPhaseSec+elapsedSec;\n  var targetFarmGridCrossings = Math.floor(targetGridPositionSec);\n  var targetGridPhaseSec = targetGridPositionSec-targetFarmGridCrossings;',
+ 'var targetGridPhaseSec = startPhaseSec+targetFractionSec;\n  var targetFarmGridCrossings = targetWholeSec+Math.floor(targetGridPhaseSec);\n  targetGridPhaseSec -= Math.floor(targetGridPhaseSec);');
+clockOracleReplace('var elapsedWholeBefore = elapsedWholeSec;','var gridCrossingsBefore = farmGridCrossings;');
+clockOracleReplace('var elapsedFractionBefore = elapsedFractionSec;','var gridRemainingBefore = farmGridRemainingSec;');
+clockOracleReplace('elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore','farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore');
 const original=JSON.parse(fs.readFileSync(path.join(root,'docs/qa/offline-autoascend-2026-10-07/device_backup.json'),'utf8'));
 const copy=x=>JSON.parse(JSON.stringify(x)),records=[];
 function app(seed,html=source,seconds=0){
@@ -126,11 +135,12 @@ compare(cap.committed,capReference.state,'Swift60 capped full72h one-second refe
 const beyond=copy(original);beyond.activeStudies=[{id:'guardmastery',remainingSec:80*3600,totalDurationSec:80*3600,speedMult:1}];beyond.studyQueue={};
 const long=runAsync(beyond,96*3600);assert.equal(long.result.effectiveSec,72*3600);
 assert(long.result.completedStudies.includes("Guardian's Mastery"),'study completes beyond combat cap');
-assert.equal(long.result.kills,cap.result.kills,'beyond-cap time earns no extra combat');
+const samePaidWork=runAsync(beyond,72*3600);
+assert.equal(long.result.kills,samePaidWork.result.kills,'beyond-cap time earns no extra combat with the same paid work');
 // Preserve old numerical policy against the unchanged scheduler for short windows
 // and chronological research/Motes/automation boundaries.
 for(const raw of [original,clear20,off]){
- const seed=copy(raw);seed.research.charge=9;
+ const seed=copy(raw);seed.research.charge=9;seed.researchQueue.charge=false;
  for(const seconds of [60,300,3600]){
   const old=app(seed,baseline,seconds),next=app(seed,source,seconds);
   const a=old.b.advance(seconds,{kind:'offline',visual:false,clockStartMs:seed.lastSeen});
@@ -138,7 +148,7 @@ for(const raw of [original,clear20,off]){
   baselineSummary(b,a,'unchanged baseline summary '+seconds);baselineState(next.b.get(),old.b.get(),seed,'unchanged baseline state '+seconds);
  }
 }
-const all=copy(original);all.research.charge=9;all.research.focus=0;Object.keys(all.empowerQueue).forEach(k=>all.empowerQueue[k]=true);
+const all=copy(original);all.research.charge=9;all.researchQueue.charge=false;all.research.focus=0;Object.keys(all.empowerQueue).forEach(k=>all.empowerQueue[k]=true);
 all.researchQueue.focus=true;all.studyQueue.riftattune=true;
 for(const kind of ['live','offline']){
  const whole=app(all),split=app(all),old=app(all,baseline),options={kind,visual:false,clockStartMs:all.lastSeen};

@@ -9,6 +9,7 @@ const mutant=process.env.SWIFT_QA_MUTANT;
 if(mutant==='cap')html=html.replace("effectPerLevel:0.08, levelCap:10","effectPerLevel:0.08, levelCap:11");
 if(mutant==='floor')html=html.replace('Math.max(ABILITY_MIN_CYCLE_SEC,ABILITY_BASE_CYCLE_SEC / researchFactor(\'charge\',level))','ABILITY_BASE_CYCLE_SEC / (1+0.08*(level===undefined?researchLevel(\'charge\'):level))');
 if(mutant==='refund')html=html.replace('  normalizeSwiftRecoveryRefund(source,out);','');
+if(mutant==='clock')html=html.replace('var gridCrossingsBefore = farmGridCrossings;','var elapsedWholeBefore = elapsedWholeSec;').replace('var gridRemainingBefore = farmGridRemainingSec;','var elapsedFractionBefore = elapsedFractionSec;').replace('farmGridCrossings===gridCrossingsBefore && farmGridRemainingSec===gridRemainingBefore','elapsedWholeSec===elapsedWholeBefore && elapsedFractionSec===elapsedFractionBefore');
 function app(){
   let now=2000000000000,failPrimary=false,failRecovery=false;const storage=new Map(),writes=[];
   const document={readyState:'loading',hidden:false,addEventListener(){},getElementById:()=>null};
@@ -25,7 +26,7 @@ function app(){
       plan:function(n){return getResearchBuyPlan(this.node(),n);},preview:function(n){return researchPreview(this.node(),n);},
       buy:function(n,node){labMultiplier=n;buyResearch(node||this.node());},queue:autoLabQueueTick,
       cycle:abilityCycleSeconds,fill:fillRateMult,next:simulationNextAbilitySeconds,
-      advance:advanceAuthoritativeTime,ascend:applyAscendMutation,save:saveState,load:loadState,
+      restore:restoreEnemyOrSpawn,advance:advanceAuthoritativeTime,ascend:applyAscendMutation,save:saveState,load:loadState,
       backup:currentSaveBackup,decode:decodeSaveBackup,
       spend:typeof spendShards==='function'?spendShards:null,can:typeof canSpendShards==='function'?canSpendShards:null,hex:typeof shardBudgetHex==='function'?shardBudgetHex:null,add:typeof shardHexAdd==='function'?shardHexAdd:null,subtract:typeof shardHexSubtract==='function'?shardHexSubtract:null,
       rarity:function(){buyRarity(SPIRITS[0]);},module:function(){buyModule(SPIRITS[0]);},
@@ -138,6 +139,16 @@ test('whole/split live/offline charge and cast chronology match at legacy overle
 test('support implementation remains independent and approved duration/cycle contract has bounded uptime',()=>{
   const b=app().b;b.set(seed(b,10));assert.equal(b.profile({id:'tide'}).durationMs,4000);
   for(const level of [0,5,10]){close(1/b.cycle(level),(1+0.08*level)/6,'approved normal uptime');close(1.5/b.cycle(level),1.5*(1+0.08*level)/6,'approved Ultimate uptime');assert(1.5/b.cycle(level)<=0.45);}
+});
+test('capped Farm cadence crosses tiny clock boundaries and retains whole/split parity',()=>{
+  const b=app().b,fixtures=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures.json'),'utf8'));
+  function parity(a,c,key){if(typeof a==='number'){assert(Math.abs(a-c)<=Math.max(1e-6,Math.max(Math.abs(a),Math.abs(c))*1e-12),key+' '+a+' vs '+c);return;}if(a&&typeof a==='object'){assert.deepEqual(Object.keys(a),Object.keys(c),key);for(const k of Object.keys(a))parity(a[k],c[k],key+'.'+k);return;}assert.deepEqual(a,c,key);}
+  for(const fixture of ['parity-medium-farm','parity-long-high-power'])for(const clock of [2000000000000,2000000000123]){
+    const s=fixtures[fixture].save;b.set(copy(s));b.restore();let error=null;
+    try{b.advance(60,{kind:'offline',clockStartMs:clock,offlineWindowStartMs:clock});}catch(e){error=e;}
+    assert.equal(error,null,'capped Farm grid advances without discarding tiny elapsed steps');const whole=copy(b.get());b.set(copy(s));b.restore();
+    for(let i=0;i<6;i++)b.advance(10,{kind:'offline',clockStartMs:clock+i*10000,offlineWindowStartMs:clock});parity(b.get(),whole,'capped whole/split '+fixture);
+  }
 });
 }
 console.log(JSON.stringify({status:'pass',source,sourceSha256:crypto.createHash('sha256').update(html).digest('hex'),cases:records.length,records,node:process.version,v8:process.versions.v8},null,2));

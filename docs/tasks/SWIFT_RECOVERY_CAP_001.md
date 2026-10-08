@@ -1,6 +1,6 @@
 # SWIFT_RECOVERY_CAP_001 — bounded ability recovery
 
-Status: implementation in progress; not integrated or released complete.
+Status: [PR88](https://github.com/karahaNx/Lumenfall/pull/88), acceptance in progress.
 Owner: this Swift Recovery feature chat. Branch `feature/swift-recovery-cap-001`,
 private checkout `/workspace/Lumenfall-swift-recovery`. No subagents/messages.
 
@@ -24,7 +24,8 @@ PR46/B2 is merged via PR57 `20aaae62a4b6e46f8d75775085918eaba4e8de29`.
 Current AGENTS/FEATURE_WORKFLOW replace historical Lead/writer permission gates;
 this feature owns implementation and delivery. Current open PR67 overlaps Swift
 and saves; its 27-feature bundle is not main and is not imported as a product.
-PR70 concerns Wisp roles; PR66 concerns Tree caps. Keep those objectives separate.
+Main merged locally: `261b1b7f863f73c324f4ac04acb5bfc95101644d`.
+PR70 overlaps two necessary Farm clock fixes; no Wisp roles imported. PR66 is Tree.
 Historical local preparation is preserved in
 [the frozen checkpoint](../qa/swift-recovery-cap-001/preparation-task-2026-10-07.md)
 and its existing evidence directories; those passes are not current acceptance.
@@ -60,8 +61,8 @@ It supplies the missing F18/F19 design dependency; no guessed balance numbers.
   refunds on top of later money. Ascend retains Shards/receipt; Reset clears all.
   All existing Shard spending paths consume the same available value.
 - PR67 integration must preserve this migration/credit contract and reconcile its
-  overlapping compensation implementation, avoiding a second refund. No unrelated
-  Tree, offline, Wisp power, Comet, support or eight-Bond changes are included here.
+  overlapping compensation implementation, avoiding a second refund. The capped cadence required two Farm clock fixes (also in PR70): retain endpoint
+  fractions and detect progress on the authoritative grid. No tolerance is widened.
 
 ## Acceptance and preservation
 
@@ -83,15 +84,14 @@ other four uncapped legacy upgrades and all other Forge mechanics remain require
 
 ## Checks and next action
 
-Focused core:12 groups,110 purchase boundary/budget cases pass on Node24.19.0.
-Includes independent BigInt accounting oracle only in Node tests, actual cast
-chronology/live/offline, save/recovery/backup and storage failure. Source syntax
-validation passes. Baseline context check exposed startup-budget overflow in the
-old proposal; this shorter task replaces it while preserving the original checkpoint.
-Mobile12 profiles pass (320/390/430px, doubled text, normal/reduced motion). V8 6.0 runs unchanged product and passes exact refund/debit checks. Full-suite diagnostics caught stale Swift60 offline goldens; one-second8h/72h reference and current-source CI are pending. Integrated checks, APK and native acceptance are pending.
-No independent review, physical device/TalkBack pass or completion is claimed.
+Core:13 groups/110 purchase cases pass; four causal mutants catch cap, floor,
+refund and clock regressions. Independent one-second8h/72h offline replay passes.
+Clock-only archived reference retains exact unaffected state comparisons. V8 6.0
+refund/debit oracle and modern mobile12 profiles are checked. Full suite/required
+negatives are running; old failed diagnostics stay preserved. See
+[implementation evidence](../qa/swift-recovery-cap-001/implementation/README.md).
+No independent review or physical/TalkBack result is claimed.
 
-Next: finish native browser/mobile coverage and negative controls, run required
-regression gates, publish a scoped PR, integrate after successful CI, verify the
-signed release and persist exact receipts/remaining acceptance. Keep this chat
-open until required acceptance is complete; archive only this owner afterwards.
+Next: complete current-head CI, integrate PR88, verify signed APK/native save
+update and integrated behavior, persist receipts and status. Archive only this
+owner after completion; keep open if required acceptance is missing.
