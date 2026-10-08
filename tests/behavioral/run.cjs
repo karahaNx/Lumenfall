@@ -41,7 +41,7 @@ function instrumentHtml(source, fixtures) {
   const marker = '\n})();\n</script>\n<script>\nif(window.Capacitor';
   replaceOnce(marker, '\n' + read('bridge.js') + '\n' + read('wisp-upgrades-bridge.js') + marker, 'main game IIFE marker changed; test bridge could not be installed');
   const modules = ['rift-status', 'bond-text', 'layout', 'accessibility', 'accessibility-controls', 'nav-workshop', 'r3-destinations',
-    'research-duration', 'upgrade-clarity', 'upgrade-identity', 'feedback', 'formation', 'formation-autosave', 'forge', 'support-stacking', 'auto-ascend-target', 'buff-timing', 'measured-inquiry', 'lab-motes', 'farm-conservation', 'farm-numerical', 'wisp-upgrades'];
+    'research-duration', 'upgrade-clarity', 'upgrade-identity', 'tree-purchases', 'feedback', 'formation', 'formation-autosave', 'forge', 'support-stacking', 'auto-ascend-target', 'buff-timing', 'measured-inquiry', 'lab-motes', 'farm-conservation', 'farm-numerical', 'wisp-upgrades'];
   replaceOnce('</body>', modules.map(name => '<script>' + read(name + '.js') + '</script>').join('') +
     '<script id="qa-behavior-runner">\n' + read('runner.js') + '\n</script>\n</body>', 'expected exactly one </body> marker');
   return source;
@@ -125,8 +125,8 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
   const url = baseUrl + (viewport ? '/layout.html' : '/index.html') + '?' + new URLSearchParams(params);
   const command = [chrome, '--headless=new', '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage',
     '--disable-background-networking', '--disable-background-timer-throttling', '--no-first-run', '--window-size=390,844',
-    '--virtual-time-budget='+(['upgrade-identity-ui','upgrade-identity-reduced-motion'].includes(scenario)?5000:1500), '--user-data-dir=' + profile, '--dump-dom', url];
-  if (['p1-05-reduced-motion', 'p2-06b-reduced-motion', 'research-duration-reduced-motion', 'inquiry-ui-reduced-motion', 'upgrade-identity-reduced-motion'].includes(scenario)) command.splice(-1, 0, '--force-prefers-reduced-motion');
+    '--virtual-time-budget='+(['upgrade-identity-ui','upgrade-identity-reduced-motion', 'tree-purchase-ui-reduced-motion'].includes(scenario)?5000:1500), '--user-data-dir=' + profile, '--dump-dom', url];
+  if (['p1-05-reduced-motion', 'p2-06b-reduced-motion', 'research-duration-reduced-motion', 'inquiry-ui-reduced-motion', 'upgrade-identity-reduced-motion', 'tree-purchase-ui-reduced-motion'].includes(scenario)) command.splice(-1, 0, '--force-prefers-reduced-motion');
   const started = performance.now();
   let result;
   const domCommand = !options.execute && process.env.LUMENFALL_QA_DOM_TRANSPORT === 'pipe'
@@ -141,7 +141,7 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
     && observation.runtime_error_count === 0);
   if (passed) {
     log('PASS ' + scenario + (viewport ? ' ' + JSON.stringify(viewport) : ''));
-    if (viewport || ['upgrade-effects-and-deeds', 'parity-long-high-power', 'parity-medium-farm'].includes(scenario) ||
+    if (viewport || ['upgrade-effects-and-deeds', 'tree-purchase-contract', 'parity-long-high-power', 'parity-medium-farm'].includes(scenario) ||
         ['auto-ascend-target-', 'chronology-', 'p1-05-', 'p2-07a-', 'forge-', 'buff-', 'support-', 'inquiry-', 'lab-motes-'].some(prefix => scenario.startsWith(prefix))) log('  detail: ' + reportJson(payload?.detail ?? null));
     return true;
   }
@@ -218,7 +218,7 @@ async function main(argv = process.argv.slice(2)) {
     server = await serve(stage);
     const baseUrl = 'http://127.0.0.1:' + server.address().port;
     for (const [scenario, fixture] of Object.entries(selected)) {
-      const viewports = ['lab-motes-ui','upgrade-identity-ui','upgrade-identity-reduced-motion'].includes(scenario) ? [[320,844,0,0],[390,844,0,0],[430,844,0,0]] : scenario.startsWith('layout-') || scenario === 'self-test-layout-collapse' ? LAYOUT_VIEWPORTS : [null];
+      const viewports = (['lab-motes-ui','upgrade-identity-ui','upgrade-identity-reduced-motion'].includes(scenario) || scenario.startsWith('tree-purchase-ui')) ? [[320,844,0,0],[390,844,0,0],[430,844,0,0]] : scenario.startsWith('layout-') || scenario === 'self-test-layout-collapse' ? LAYOUT_VIEWPORTS : [null];
       for (const viewport of viewports) if (!await runScenario(chrome, baseUrl, scenario, fixture, viewport, { rawArtifactRoot, sourceWebRoot:webRoot })) failures.push(scenario + ' ' + JSON.stringify(viewport));
     }
   } finally {
