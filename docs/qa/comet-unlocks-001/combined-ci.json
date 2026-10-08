@@ -1,0 +1,95 @@
+{
+  "run_id": 37713904342,
+  "url": "https://github.com/karahaNx/Lumenfall/actions/runs/37713904342",
+  "head": "a7a5bc3e182aba32ec6f26e57ac9ff56dc4b3c9b",
+  "source_sha256": "ca38d7634afdaebc0861e6f21dfad6d807fb054d39cb5eab3eca07a6c02b0ecd",
+  "default_scenarios": 151,
+  "required_negative_controls": 12,
+  "jobs": [
+    {
+      "id": 113105875246,
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Checkout",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Set up Node.js",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "APK identity verifier self-test",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Node tooling regression checks",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Validate game source",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Stage web assets",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Stateful behavioral regression suite",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Behavioral harness negative self-test",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install runtime error guard in staged copy",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Browser runtime smoke test",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Set up Node.js",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Checkout",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "integration": {
+    "pr": 69,
+    "commit": "d95205f6d8059933fac74e8699854f67cb950a7e",
+    "tree": "28c52a315396850e3464c7475dfa7777325f5ceb",
+    "source_sha256": "5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c",
+    "reassessed_main": "fe52747a02fd008ebcedf2f1e78950ef5c8ae363",
+    "note": "After full candidate CI, latest main added Rift Cast/Ready display changes. Local combination passed gameplay/save, V8 and6 supplementary mobile profiles; full tree equals actual integration. Android run37715794487 passed source/smoke/build/signing/publication; it does not run the full behavioral suite. The delivery PR runs that suite on unchanged integrated game/test bytes."
+  }
+}
