@@ -1,0 +1,343 @@
+{
+  "nativeBrowser": "/usr/bin/chromium",
+  "started": "2026-10-07T13:57:50.056Z",
+  "base": "977a11c802d1c138ba3516d2f69d0fe4bd668e98",
+  "sourceSha256": "2eda7ffd83e95d2a114403706f488d8c58723726d81314c873fb1393e793bc1b",
+  "checks": [
+    {
+      "name": "context",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "scripts/codex/check_context.cjs"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 0.044
+    },
+    {
+      "name": "tooling",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/tooling/run.cjs"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 0.526
+    },
+    {
+      "name": "apk-identity-self-test",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "scripts/verify_apk_identity.cjs",
+        "--self-test"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 0.039
+    },
+    {
+      "name": "source",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "scripts/ci/validate_source.cjs"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 0.109
+    },
+    {
+      "name": "behavioral-suite",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--raw-artifacts",
+        "/workspace/formation-autosave-evidence/rebased-final/suite-raw"
+      ],
+      "exit": 1,
+      "signal": null,
+      "expired": false,
+      "seconds": 714.054
+    },
+    {
+      "name": "self-test-bad-assertion",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "self-test-bad-assertion",
+        "--raw-artifacts",
+        "/workspace/formation-autosave-evidence/rebased-final/negative-raw"
+      ],
+      "exit": 1,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.455,
+      "expectedExit": 1,
+      "expectedFailure": true
+    },
+    {
+      "name": "self-test-uncaught-error",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "self-test-uncaught-error",
+        "--raw-artifacts",
+        "/workspace/formation-autosave-evidence/rebased-final/negative-raw"
+      ],
+      "exit": 1,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.417,
+      "expectedExit": 1,
+      "expectedFailure": true
+    },
+    {
+      "name": "self-test-unhandled-rejection",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "self-test-unhandled-rejection",
+        "--raw-artifacts",
+        "/workspace/formation-autosave-evidence/rebased-final/negative-raw"
+      ],
+      "exit": 1,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.481,
+      "expectedExit": 1,
+      "expectedFailure": true
+    },
+    {
+      "name": "self-test-parity-regression",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "self-test-parity-regression",
+        "--raw-artifacts",
+        "/workspace/formation-autosave-evidence/rebased-final/negative-raw"
+      ],
+      "exit": 1,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.482,
+      "expectedExit": 1,
+      "expectedFailure": true
+    },
+    {
+      "name": "self-test-chronology-regression",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "self-test-chronology-regression",
+        "--raw-artifacts",
+        "/workspace/formation-autosave-evidence/rebased-final/negative-raw"
+      ],
+      "exit": 1,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.447,
+      "expectedExit": 1,
+      "expectedFailure": true
+    },
+    {
+      "name": "self-test-wisp-formula-regression",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "self-test-wisp-formula-regression",
+        "--raw-artifacts",
+        "/workspace/formation-autosave-evidence/rebased-final/negative-raw"
+      ],
+      "exit": 1,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.405,
+      "expectedExit": 1,
+      "expectedFailure": true
+    },
+    {
+      "name": "self-test-wisp-pacing-regression",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "self-test-wisp-pacing-regression",
+        "--raw-artifacts",
+        "/workspace/formation-autosave-evidence/rebased-final/negative-raw"
+      ],
+      "exit": 1,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.406,
+      "expectedExit": 1,
+      "expectedFailure": true
+    },
+    {
+      "name": "self-test-endgame-currency-regression",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "self-test-endgame-currency-regression",
+        "--raw-artifacts",
+        "/workspace/formation-autosave-evidence/rebased-final/negative-raw"
+      ],
+      "exit": 1,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.436,
+      "expectedExit": 1,
+      "expectedFailure": true
+    },
+    {
+      "name": "self-test-wisp-role-regression",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "self-test-wisp-role-regression",
+        "--raw-artifacts",
+        "/workspace/formation-autosave-evidence/rebased-final/negative-raw"
+      ],
+      "exit": 1,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.504,
+      "expectedExit": 1,
+      "expectedFailure": true
+    },
+    {
+      "name": "self-test-p1-05-selected",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "self-test-p1-05-selected",
+        "--raw-artifacts",
+        "/workspace/formation-autosave-evidence/rebased-final/negative-raw"
+      ],
+      "exit": 1,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.447,
+      "expectedExit": 1,
+      "expectedFailure": true
+    },
+    {
+      "name": "self-test-p1-05-focus-return",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "self-test-p1-05-focus-return",
+        "--raw-artifacts",
+        "/workspace/formation-autosave-evidence/rebased-final/negative-raw"
+      ],
+      "exit": 1,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.395,
+      "expectedExit": 1,
+      "expectedFailure": true
+    },
+    {
+      "name": "self-test-lifecycle-duplicate",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/Lumenfall-formation-autosave/mobile/www",
+        "--scenario",
+        "self-test-lifecycle-duplicate",
+        "--raw-artifacts",
+        "/workspace/formation-autosave-evidence/rebased-final/negative-raw"
+      ],
+      "exit": 1,
+      "signal": null,
+      "expired": false,
+      "seconds": 1.442,
+      "expectedExit": 1,
+      "expectedFailure": true
+    },
+    {
+      "name": "runtime-guard",
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "argv": [
+        "scripts/ci/smoke.cjs",
+        "--install-guard",
+        "/workspace/Lumenfall-formation-autosave/mobile/www/index.html"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 0.036
+    },
+    {
+      "name": "runtime-smoke",
+      "command": "google-chrome",
+      "argv": [
+        "--headless=new",
+        "--no-sandbox",
+        "--disable-gpu",
+        "--disable-dev-shm-usage",
+        "--user-data-dir=/workspace/formation-autosave-evidence/rebased-final/smoke-profile",
+        "--window-size=390,844",
+        "--virtual-time-budget=1800",
+        "--dump-dom",
+        "http://127.0.0.1:42733/index.html"
+      ],
+      "exit": 0,
+      "signal": null,
+      "expired": false,
+      "seconds": 0.954
+    },
+    {
+      "name": "runtime-smoke-assertions",
+      "exit": 0,
+      "checks": {
+        "guard": true,
+        "noUncaught": true,
+        "noRejection": true,
+        "zone": true,
+        "riftLock": true,
+        "enemy": true,
+        "hud": true
+      }
+    }
+  ],
+  "finished": "2026-10-07T14:10:03.175Z",
+  "passed": false
+}
