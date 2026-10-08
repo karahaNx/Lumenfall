@@ -13,9 +13,9 @@ requires unchanged Workshop currencies. On 2026-10-08 the user instructed:
 
 Private checkout /workspace/Lumenfall-upgrade-identity-001, branch
 feature/upgrade-identity-001, product baseline main
-b0537cb46635555ba2c2e5f3f95bc8fc276aeda5. Rebased onto current main
-261b1b7f863f73c324f4ac04acb5bfc95101644d (PR77 Backup UI) before publication.
-Both new test registrations/required negatives are retained. Earlier proposal was rebased;
+b0537cb46635555ba2c2e5f3f95bc8fc276aeda5. Rebased through261b1b7 (PR77 Backup UI) onto main
+4ff0ae3025a6e57ba3332280f3db6f65bf5ddf4b (Formation Autosave/Backup receipt).
+Both test registrations and all17 required negatives are retained. Earlier proposal was rebased;
 [historical proposal](UPGRADE_IDENTITY_001/PROPOSAL_2026-10-07.txt) and old checks
 remain historical. PR46/B2 is integrated via PR57, not a current gate. Live rules
 assign implementation/delivery to this chat. No subagents/message tools used.
