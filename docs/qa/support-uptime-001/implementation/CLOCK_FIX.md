@@ -30,3 +30,17 @@ kills/Ascends remain. Raw failures: clock-diagnostic-raw.tar.gz.
 
 Next: latest-main candidate merge, focused/full CI, main integration, signed APK
 and native old-save update. No completion claim before those pass.
+
+Combined source55676982 includes main3f1b6fa/Lab UI. Strict economy2998,
+motor/V8 and168 cosmetics samples pass. CI315 passes the new cosmetics gate;
+its complete gameplay result is superseded by the following fixture correction.
+
+Lab12h cap checks isolate offlineProcessingClock=0 so real CPU processing replay
+does not count as capped absence. Production foreground replay remains and
+passes its separate core checks. The exact Study-only comparison consumes the
+observed represented interval journal using the independent Study-only engine,
+including sub-epsilon intervals. Full10s conservation is asserted; all exact
+work/snapshot/spending comparisons and causal controls remain. No product
+Study-only tail, reward changes, tolerance increase or persistent state added.
+The previous broad Support-only cadence alternative failed strict parity and
+was not adopted. Full local Lab regression now passes.

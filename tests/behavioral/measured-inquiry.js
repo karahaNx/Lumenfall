@@ -117,10 +117,11 @@ window.runInquiryQa=function(b,ctx,assert,assertProtectedParity,assertSummaryPar
     ok(active('guardmastery').totalDurationSec===216,'new start uses completed Inquiry5 and target level1');
     same(active('wispascend'),{id:'wispascend',remainingSec:48,totalDurationSec:180,speedMult:2},'existing work snapshot untouched except elapsed progress');
     function chronology(kind,chunk){install(simultaneous);return b.simulate(10,kind,chunk,2000000000000);}
-    var live=chronology('live',10),offline=chronology('offline',10),split=chronology('live',.1);
+    var workTrace=t.traceWork(function(){return chronology('live',10);}),live=workTrace.result,offline=chronology('offline',10),split=chronology('live',.1);
+    ok(workTrace.intervals.every(function(dt){return dt>0;}) && Math.abs(workTrace.intervals.reduce(function(n,dt){return n+dt;},0)-10)<1e-12,'Study reference consumes the full represented 10s');
     assertProtectedParity(live.state,offline.state,'Inquiry live/offline');assertSummaryParity(live.summary,offline.summary,'Inquiry live/offline');
     assertProtectedParity(live.state,split.state,'Inquiry chunk/resume');assertSummaryParity(live.summary,split.summary,'Inquiry chunk/resume');
-    install(simultaneous);var tail=t.tail(10);same(tail.state.longStudyLevels,live.state.longStudyLevels,'study-only earned parity');same(sort(tail.state.activeStudies),sort(live.state.activeStudies),'study-only snapshots/work parity');same([tail.state.lumen,tail.state.shards],[live.state.lumen,live.state.shards],'study-only spend parity');
+    install(simultaneous);var tail=t.clockTail(workTrace.intervals);same(tail.state.longStudyLevels,live.state.longStudyLevels,'study-only earned parity');same(sort(tail.state.activeStudies),sort(live.state.activeStudies),'study-only snapshots/work parity');same([tail.state.lumen,tail.state.shards],[live.state.lumen,live.state.shards],'study-only spend parity');
     var events=offline.timeline||offline.summary.timeline||[];
     var full=seed();full.longStudyLevels.measuredinquiry=13;
     full.activeStudies=[{id:'measuredinquiry',remainingSec:43201,totalDurationSec:43201,speedMult:1},{id:'guardmastery',remainingSec:43202,totalDurationSec:43202,speedMult:1}];install(full);b.setLastSeen(b.clockNow()-43203*1000);

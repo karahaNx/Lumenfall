@@ -86,6 +86,7 @@ window.__lumenfallQaBridge = {
     failNext:function(){var original=simulationResolveTimestamp;simulationResolveTimestamp=function(){simulationResolveTimestamp=original;throw new Error('injected offline failure');};}
   },
   labMotes: {
+    fixedOfflineWindow: function(){var original=offlineProcessingClock;offlineProcessingClock=function(){return 0;};try{return applyOfflineProgress();}finally{offlineProcessingClock=original;}},
     withHp: function(hp,fn){var original=enemyHpFor;enemyHpFor=function(){return hp;};try{return fn();}finally{enemyHpFor=original;}},
     naturalDps: function(){return simulationPassiveDps(2000000000000);},
     numericCosts: function(){return {titan:spiritCost(SPIRITS.find(function(s){return s.id==='titan';})),formation:researchCostForLevels(RESEARCH.find(function(s){return s.id==='formation';}),state.research.formation,1),momentum:nodeCost(NODES.find(function(s){return s.id==='momentum';})),formationStudy:studyCost(LONG_STUDIES.find(function(s){return s.id==='formationstudy';}),state.longStudyLevels.formationstudy),wispAscend:studyCost(LONG_STUDIES.find(function(s){return s.id==='wispascend';}),state.longStudyLevels.wispascend)};},
@@ -183,6 +184,10 @@ window.__lumenfallQaBridge = {
     queued: function(){var summary=simulationSummary(0);simulationStartQueuedStudies(summary);return summary;},
     tail: function(seconds){var summary=simulationSummary(seconds);advanceStudyOnlyTime(seconds,2000000000000,summary);return {state:JSON.parse(JSON.stringify(state)),summary:summary};},
     due: function(){var summary=simulationSummary(0);return {handled:simulationCompleteDueStudies(summary),summary:summary};},
+    // The represented intervals are inputs to a separate Study-only engine.
+    // Preserve tiny intervals rather than its historical epsilon time discard.
+    traceWork: function(fn){var original=simulationAdvanceStudyProgress,intervals=[];simulationAdvanceStudyProgress=function(dt){intervals.push(dt);return original(dt);};try{return {result:fn(),intervals:intervals};}finally{simulationAdvanceStudyProgress=original;}},
+    clockTail: function(intervals){var summary=simulationSummary(intervals.reduce(function(n,dt){return n+dt;},0)),elapsed=0;var advance=eval('('+advanceStudyOnlyTime.toString().replace('remaining>SIM_EPS','remaining>0').replace('next>SIM_EPS','next>0').replace('next<=SIM_EPS','next<=0')+')');intervals.forEach(function(dt){advance(dt,2000000000000+elapsed*1000,summary);elapsed+=dt;});return {state:JSON.parse(JSON.stringify(state)),summary:summary};},
     oldComplete: function(seconds){return advanceActiveStudies(seconds);},
     boundary: function(){return simulationKillsUntilEconomyMutation(1);},
     cost: function(id,k){return studyCost(LONG_STUDIES.find(function(n){return n.id===id;}),k);},

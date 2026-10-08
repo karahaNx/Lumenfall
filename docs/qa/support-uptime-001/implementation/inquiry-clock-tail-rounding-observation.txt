@@ -1,0 +1,54 @@
+Browser identity: { "selected_path": "/tmp/lumenfall-support-browser-bin/google-chrome", "resolved_path": "/tmp/lumenfall-support-chrome155/opt/google/chrome/chrome", "sha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58", "version": "Google Chrome 155.0.8059.39 unknown", "version_exitcode": 0, "version_stderr": "" }
+Staged source: { "source_sha256": "55676982dfbc5c0169adb6ea86fab8412c615f78af9103a08deb3cead05a0324", "instrumented_sha256": "503d91f9c98913f654345024c9e565c6f2ae363d71660fc6c71d56da041e7eea" }
+FAIL inquiry-chronology
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 0.8578757, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "inquiry-chronology", "json_status": "fail", "json_scenario": "inquiry-chronology", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /workspace/Lumenfall-SUPPORT_UPTIME_001/docs/qa/support-uptime-001/implementation/raw-failures/inquiry-chronology-5fTCDC
+  Chromium stderr tail:
+08/094802.228215:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[66726:66754:1008/094802.228213:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 66805: Read-only file system (30)
+[66726:66742:1008/094802.228271:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[66726:66726:1008/094802.228745:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[66726:66726:1008/094802.229021:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[66726:66742:1008/094802.229114:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[66726:66754:1008/094802.236565:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 66817: Read-only file system (30)
+[66726:66754:1008/094802.238182:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 66819: Read-only file system (30)
+[66726:66742:1008/094802.250828:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[66726:66726:1008/094802.253017:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[66726:66742:1008/094802.253134:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[66726:66726:1008/094802.253208:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[66726:66742:1008/094802.253263:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[66726:66726:1008/094802.258877:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[66726:66726:1008/094802.268819:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[66726:66726:1008/094802.268859:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[66726:66742:1008/094802.268935:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[66726:66726:1008/094802.281849:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[66726:66742:1008/094802.282029:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[66726:66726:1008/094802.296101:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[66726:66754:1008/094802.312549:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 66844: Read-only file system (30)
+[66726:66754:1008/094802.315670:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 66847: Read-only file system (30)
+
+  stdout tail:
+r){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+
+</script>
+
+
+<pre id="qa-result" data-status="fail" data-scenario="inquiry-chronology">{
+  "scenario": "inquiry-chronology",
+  "status": "fail",
+  "detail": {
+    "message": "study-only snapshots/work parity {\"tail\":[{\"id\":\"guardmastery\",\"remainingSec\":207.0000000000005,\"totalDurationSec\":216,\"speedMult\":1},{\"id\":\"wispascend\",\"remainingSec\":29.999999999999755,\"totalDurationSec\":180,\"speedMult\":2}],\"live\":[{\"id\":\"guardmastery\",\"remainingSec\":207.0000000000005,\"totalDurationSec\":216,\"speedMult\":1},{\"id\":\"wispascend\",\"remainingSec\":29.99999999999977,\"totalDurationSec\":180,\"speedMult\":2}]}",
+    "stack": "Error: study-only snapshots/work parity {\"tail\":[{\"id\":\"guardmastery\",\"remainingSec\":207.0000000000005,\"totalDurationSec\":216,\"speedMult\":1},{\"id\":\"wispascend\",\"remainingSec\":29.999999999999755,\"totalDurationSec\":180,\"speedMult\":2}],\"live\":[{\"id\":\"guardmastery\",\"remainingSec\":207.0000000000005,\"totalDurationSec\":216,\"speedMult\":1},{\"id\":\"wispascend\",\"remainingSec\":29.99999999999977,\"totalDurationSec\":180,\"speedMult\":2}]}\n    at assert (http://127.0.0.1:44631/index.html?qaScenario=inquiry-chronology&amp;qaFixture=fresh:13900:61)\n    at ok (http://127.0.0.1:44631/index.html?qaScenario=inquiry-chronology&amp;qaFixture=fresh:13275:29)\n    at same (http://127.0.0.1:44631/index.html?qaScenario=inquiry-chronology&amp;qaFixture=fresh:13276:24)\n    at window.runInquiryQa (http://127.0.0.1:44631/index.html?qaScenario=inquiry-chronology&amp;qaFixture=fresh:13384:139)\n    at HTMLDocument.run (http://127.0.0.1:44631/index.html?qaScenario=inquiry-chronology&amp;qaFixture=fresh:14431:30)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+
+Behavioral QA failed: inquiry-chronology null
