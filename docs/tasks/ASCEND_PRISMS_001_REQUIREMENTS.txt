@@ -1,0 +1,111 @@
+LUMENFALL — F05 source request and user decisions
+Date: 2026-10-07. Owner chat: 01a11671-0a13-755b-9b2b-83cb96f6a044.
+Source: the current owner chat. User text below is preserved verbatim.
+This local checkpoint is not a GitHub publication or integration receipt.
+
+ORIGINAL CURRENT REQUEST
+
+LUMENFALL — NY FEATURECHAT: ASCEND / PRISM-BELØNNING (F05)
+
+Repository: karahaNx/Lumenfall. Start fra aktuel main i Lumenfall-projektet.
+Anbefalet model: GPT-6.1 Sol. Effort: Ekstra høj.
+Dette er en modelanbefaling, ikke en attestering af den kørte model.
+
+Min opgave til denne chat:
+Undersøg og håndtér mit tidligere rapporterede Ascend-problem: ved f.eks.
+Rift 20 ser belønningen ud til at blive på fem Prisms, selv efter upgrades
+som lover ekstra Prisms. Gør beregningen forståelig, og verificér at Ascend-
+preview og faktisk udbetaling bruger samme regler. Følg ét featuremål pr. chat.
+
+OPSTART
+Læs AGENTS.md og PROJECT_BOOTSTRAP.txt, egen Lead-række i
+docs/CHAT_OWNERSHIP.md, docs/agents/00_LEAD.md, docs/PROJECT_STATE.md og
+docs/project/FEATURE_WORKFLOW.md. Brug docs/CONTEXT_INDEX.md efter behov.
+Kontrollér live main, relevant PR og skriveejerskab. Nye scripts skal bruge
+JavaScript, hvor teknisk muligt. Den stående godkendelse i AGENTS gælder.
+
+ORIGINALKRAV OG BESLUTNINGER
+Alle stier nedenfor er i repositoryet:
+1. docs/recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt
+2. docs/recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt
+   Læs F05 og relevante afhængigheder samt afsnit om save/review.
+3. docs/recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/FINDINGS.txt
+   Læs Prism-fundet og reproduktionsgrænsen.
+4. docs/recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/formula_probe.cjs
+   og formula_probe_results.json.
+5. docs/recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt
+
+GitHub-indgang til originalen:
+https://github.com/karahaNx/Lumenfall/blob/main/docs/recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt
+
+VERIFICERET UDGANGSPUNKT, 7. OKTOBER 2026
+Live main index.html havde Git blob ea44431c163569548973d9e489f75345749a07ee
+ved opslag kl. 14:53 København. Det matchede det lokale produkt og det
+tidligere feedback-snapshot. Kontrollér igen ved chatstart.
+Bonusser er til stede i prismMult og ascendFullPrismGainForCleared.
+Den tidligere isolerede prøve på cleared Rift 20 gav 8 ved første Ascend
+og 1 ved gentagelse uden bonus; Swift Ascension level 1 gav 9 / 1.
+Heltalsafrunding og repeat/benchmark kan skjule små bonusser. Dette beviser
+ikke brugerens fem-Prism-case og er ikke fuldmotor- eller deviceaccept.
+
+FØRSTE KONKRETE ARBEJDE
+- Opret ét docs/tasks/ASCEND_PRISMS_001.md ved et koordineret docs-checkpoint
+  med mål, kilder, baseline, ejer, acceptkriterier og fund.
+- Reproducér ved samme faktisk cleared Rift, benchmark, Swift Ascension-
+  level og completed Prism-Lab-level: uden bonus, Tree, Lab og begge.
+- Verificér first/repeat/new-depth og afrundingsgrænser i den faktiske motor;
+  sammenlign preview/payout, manuel/auto og live/offline.
+- Forklar grundbelønning, bonusser, repeatregel, afrunding og belønning nu
+  med tekst spilleren kan forstå.
+- Hvis det konkrete fem-Prism-eksempel kræver en bestemt save eller levels,
+  registrér de manglende oplysninger og fortsæt den uafhængige undersøgelse.
+  En anden save må ikke præsenteres som reproduktion af dette eksempel.
+- Bevar dokumenterede økonomi-/save-regler. Nye afrundings- eller repeat-
+  regler kræver en konkret designbeslutning; et automatisk +1 pr. køb er
+  ikke den accepterede løsning.
+
+AFHÆNGIGHEDER
+PR46 / LAB-MOTES er stadig open/Draft ved denne aflevering. Den eksisterende
+registrering sætter B2-review/integration og writer-handover før nye produkt-
+ændringer. Fortsæt undersøgelse og lokale forslag imens; tjek aktuelle
+dependencies, og koordiner det konkrete produktscope før skrivning.
+Auto-Ascend-kontrollens flytning er F01–F03 og får sin egen senere chat.
+Offline-eventbudgetfejlen har sit eget mandat og er ikke dette F05-mål.
+
+AFSLUTNING
+Følg FEATURE_WORKFLOW: relevant implementering, verificeret integration,
+gemte beslutninger/beviser i GitHub, nødvendige APK/devicechecks og writer-
+frigivelse før ejerchatten arkiveres. Rapportér uafklarede forhold præcist.
+
+USER FOLLOW-UP: REPORTED STATE
+
+Question:
+For dit konkrete fem-Prism-eksempel: hvilken APK-version brugte du, var Rift 20 faktisk clearet, hvor langt havde du tidligere fået Ascend-belønning, og hvilke levels havde Swift Ascension og den færdiggjorte Lab “Ascendant Clarity”? Skriv det, du ved; undersøgelsen fortsætter uden resten.
+
+Answer:
+Version 133. My max rift is 220 without clearing the boss. Before when i did manual ascend, it will be very fast at +50 prism at around 20-30 rifts. 
+I remember having around 90% in the forge about prisms earned and around 70% in the ascension tree saying prisms earned at ascension
+
+USER FOLLOW-UP: CHECK WRITER
+
+Question:
+Opgavekortet ASCEND_PRISMS_001.md er nu forberedt lokalt. AGENTS.md kræver “Én repo-writer ad gangen”, og PROJECT_STATE siger stadig, at 02_07/B2-frigivelsen er ukendt. Er den tidligere writer frigivet, og er et F05-docs-checkpoint nu koordineret med den separate PR51-chat? Produktændringer vil fortsat afvente B2-gaten.
+
+Answer:
+prøv at tjekke writer. Vi skal have det her ascend_prisms fikset
+
+USER FOLLOW-UP: EXPLICIT ECONOMY DESIGN APPROVAL
+
+Question:
+Jeg har testet denne konkrete nye regel: “Beregn ny-dybde-bonussen fra forskellen mellem de uafrundede dybdekurver med aktuelle Tree/Lab-bonusser, og rund den op én gang. Bevar første belønning, 20%-repeat, minimum 1 og loftet på fuld belønning.” Den fjerner faldet 2→1 ved Swift-køb; i 673 prøver ændrer den kun ny-dybde-belønninger med 0 eller +1. Dine 5 ved repeat forbliver 5. Godkender du reglen? Jeg spørger, fordi din F05-bestilling kræver en konkret designbeslutning til nye afrundingsregler.
+
+Answer:
+Godkend den nye ny-dybde-regel
+
+
+FOLLOW-UP — 8 October 2026 (verbatim)
+Finish the task push to github
+
+
+FOLLOW-UP — 8 October 2026 (verbatim)
+Tell me if this chats finished, then i'll archive it.

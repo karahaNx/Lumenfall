@@ -2166,6 +2166,18 @@
           return;
         }
 
+        case 'ascend-prisms-contract':
+        case 'self-test-ascend-prisms-tree':
+        case 'self-test-ascend-prisms-lab':
+        case 'self-test-ascend-prisms-payout':
+        case 'self-test-ascend-prisms-repeat':
+        case 'self-test-ascend-prisms-rounding':
+          finish('pass',window.runAscendPrismsContract(bridge,ctx,assert));return;
+        case 'ascend-prisms-save-reload':
+        case 'ascend-prisms-backup-restore':
+        case 'ascend-prisms-recovery':
+          window.runAscendPrismsPersistence(bridge,ctx,assert,phase,nextPhase,backupCode,finish);return;
+
         case 'p2-ascend-integrity': {
           function ascendState(cleared,benchmark,autoEnabled){
             var a = cloneJson(state());

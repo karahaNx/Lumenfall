@@ -7,6 +7,11 @@ preserving other features' recorded status and the integrated
 Repository: `karahaNx/Lumenfall`. Verify relevant live state before acting;
 commits below are observed checkpoints, not a promise that main never advances.
 
+F05 [ASCEND_PRISMS_001](tasks/ASCEND_PRISMS_001.md): approved rounding fix and
+calculation text in PR94. CI286 PASS177/203/22; newer Tree integration checks
+PASS. Final combined CI/integration/signed APK acceptance pending.
+[Evidence and report limits](qa/ascend-prisms-001/README.md).
+
 ## Product and release evidence
 
 [LOADOUT_MEMORY_001 / F25](tasks/LOADOUT_MEMORY_001.md) integrated through

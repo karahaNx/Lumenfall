@@ -319,6 +319,11 @@
   .ab-keep .ab-head{color:var(--good);}
   .ab-col ul{margin:0;padding-left:15px;font-size:.71rem;color:var(--ink-dim);line-height:1.6;}
   .prism-preview{font-family:'IBM Plex Mono',monospace;font-size:1.6rem;font-weight:600;color:var(--prism);}
+  .prism-calculation{width:100%;text-align:left;font-size:.8rem;color:var(--ink-dim);line-height:1.5;overflow-wrap:break-word;}
+  .prism-calculation dl{margin:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:5px 10px;}
+  .prism-calculation dt,.prism-calculation dd{margin:0;}
+  .prism-calculation dd{text-align:right;color:var(--ink);}
+  .prism-calculation p{margin:10px 0 0;}
   .big-btn{
     width:100%;padding:12px;border-radius:12px;border:none;cursor:pointer;
     font-weight:700;font-size:.92rem;letter-spacing:.01em;
@@ -2767,6 +2772,7 @@
         <div class="prism-preview mono" id="prism-preview">+0 Prisms</div>
         <button class="big-btn" id="ascend-btn">Ascend</button>
         <div class="lock-note" id="ascend-note"></div>
+        <div class="prism-calculation" id="prism-calculation" aria-label="Prism reward calculation"></div>
       </div>
       <div id="auto-ascend-controls"></div>
       <div class="section-label">Ascension Tree</div>
@@ -5505,6 +5511,13 @@ function ascendFullPrismGainForCleared(cleared){
   cleared = Math.max(0,Math.floor(cleared||0));
   return cleared>=15 ? Math.max(1,Math.floor(2*Math.sqrt(cleared)*prismMult())) : 0;
 }
+// Approved F05 policy: round the unrounded new-depth difference up once.
+// Rationalize sqrt(c)-sqrt(b) to preserve small positive depth increments.
+function ascendProgressPrismBonusForCleared(cleared,benchmark){
+  if(cleared<=benchmark) return 0;
+  var rawDifference = 2*((cleared-benchmark)/(Math.sqrt(cleared)+Math.sqrt(benchmark)));
+  return Math.ceil(rawDifference*prismMult());
+}
 function ascendPrismBreakdown(depth){
   var cleared = Math.max(0,(depth===undefined ? progressionDepth() : depth)-1);
   var full = ascendFullPrismGainForCleared(cleared);
@@ -5522,8 +5535,7 @@ function ascendPrismBreakdown(depth){
   // rewarded cleared Rift adds only the newly unlocked part of the same Prism
   // curve. No new currency/layer is introduced.
   var reserve = Math.max(1,Math.floor(full*ASCEND_REPEAT_REWARD_RATE));
-  var benchmarkFull = ascendFullPrismGainForCleared(benchmark);
-  var progressBonus = cleared>benchmark ? Math.max(0,full-benchmarkFull) : 0;
+  var progressBonus = ascendProgressPrismBonusForCleared(cleared,benchmark);
   var gain = Math.max(1,Math.min(full,reserve+progressBonus));
   return {
     gain:gain,
@@ -6697,6 +6709,30 @@ function renderLongStudies(){
   });
 }
 
+// Display approximations are marked; the canonical breakdown determines payout.
+function prismCalculationText(breakdown){
+  var tree=1+nodeLevel('swift')*0.04,lab=longStudyPrismMult();
+  var base=2*Math.sqrt(breakdown.cleared),raw=base*prismMult();
+  function approximate(value){return 'about '+value.toFixed(3);}
+  var rows=[['Cleared Rift',String(breakdown.cleared)],
+    ['Depth reward before bonuses',approximate(base)],
+    ['Swift Ascension',nodeLevel('swift')+' levels · +'+(nodeLevel('swift')*4)+'%'],
+    ['Ascendant Clarity',longStudyLevel('prismstudy')+' completed levels · +'+(longStudyLevel('prismstudy')*5)+'%'],
+    ['Combined bonus',approximate(tree*lab)+'×']];
+  if(breakdown.full>0){
+    rows.push(['With bonuses, before rounding',approximate(raw)]);
+    rows.push(['Full depth reward',String(breakdown.full)+' Prisms']);
+    if(breakdown.benchmark>0){
+      rows.push(['Best rewarded clear','Rift '+breakdown.benchmark]);
+      rows.push(['20% repeat reward',String(breakdown.reserve)+' Prisms']);
+      if(breakdown.cleared>breakdown.benchmark) rows.push(['New-depth bonus',String(breakdown.progressBonus)+' Prisms']);
+    }
+  }
+  rows.push(['You receive now',String(breakdown.gain)+' Prisms']);
+  return '<dl>'+rows.map(function(row){return '<dt>'+row[0]+'</dt><dd>'+row[1]+'</dd>';}).join('')+'</dl>'+
+    '<p>Tree and completed Lab bonuses multiply together before the full reward is rounded down. Repeats round 20% of that whole reward down again. A small upgrade may keep the same whole-Prism reward. Lab work in progress adds its bonus when it finishes.</p>'+
+    (breakdown.cleared>breakdown.benchmark && breakdown.benchmark>0 ? '<p>The new-depth bonus uses the difference between the depth curves before rounding, with your current Tree and Lab bonuses. That difference is rounded up once; the total cannot exceed the full depth reward.</p>' : '');
+}
 function renderAscendSummary(){
   var autoRoot=els['auto-ascend-controls'];
   var editingAuto=autoRoot && autoRoot.contains(document.activeElement);
@@ -6706,10 +6742,11 @@ function renderAscendSummary(){
   var eligible = ascendEligible();
   var breakdown = ascendPrismBreakdown(progressionDepth());
   var gain = eligible ? breakdown.gain : 0;
+  document.getElementById('prism-calculation').innerHTML = prismCalculationText(breakdown);
   els['prism-preview'].textContent = '+' + formatNum(gain) + ' Prisms';
   els['ascend-btn'].disabled = !eligible;
   els['ascend-btn'].setAttribute('data-state',eligible?'available':'locked');
-  els['ascend-btn'].setAttribute('aria-describedby','ascend-note');
+  els['ascend-btn'].setAttribute('aria-describedby','ascend-note prism-calculation');
   var ascendTab = document.querySelector('.tab-btn[data-tab="ascend"]');
   if(ascendTab) ascendTab.classList.toggle('has-attention',eligible);
   if(!eligible){
@@ -6717,9 +6754,9 @@ function renderAscendSummary(){
   } else if(breakdown.benchmark<=0){
     els['ascend-note'].textContent = 'First reward benchmark — this Ascend receives the full depth reward.';
   } else if(cleared>breakdown.benchmark){
-    els['ascend-note'].textContent = 'New progress: '+formatNum(breakdown.reserve)+' reserve + '+formatNum(breakdown.progressBonus)+' depth bonus. Benchmark becomes cleared Rift '+cleared+'.';
+    els['ascend-note'].textContent = 'New progress: '+formatNum(breakdown.reserve)+' repeat reward + '+formatNum(breakdown.progressBonus)+' new-depth bonus, up to '+formatNum(breakdown.full)+' Prisms. Best rewarded clear becomes Rift '+cleared+'.';
   } else {
-    els['ascend-note'].textContent = 'Repeat reward: 20% reserve. Push beyond cleared Rift '+breakdown.benchmark+' to add a depth bonus.';
+    els['ascend-note'].textContent = 'Repeat reward: 20% of your full reward, rounded down (at least 1 Prism). Clear beyond Rift '+breakdown.benchmark+' to add a new-depth bonus.';
   }
   renderAutoAscendControls();
   // Changed reward text may wrap while a native picker is open. Flush that

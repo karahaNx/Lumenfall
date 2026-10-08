@@ -38,6 +38,7 @@ function instrumentHtml(source, fixtures) {
   }
   const prelude = read('prelude.js').replace('__QA_FIXTURES_JSON__', () => JSON.stringify(fixtures));
   replaceOnce('<head>', '<head>\n<script id="qa-behavior-prelude">\n' + prelude + '\n</script>', 'expected exactly one <head> marker');
+  replaceOnce('</body>', '<script>' + read('ascend-prisms.js') + '</script>\n</body>', 'F05 module body marker');
   const marker = '\n})();\n</script>\n<script>\nif(window.Capacitor';
   replaceOnce(marker, '\n' + read('bridge.js') + '\n' + read('wisp-upgrades-bridge.js') + marker, 'main game IIFE marker changed; test bridge could not be installed');
   const modules = ['rift-status', 'bond-text', 'layout', 'accessibility', 'accessibility-controls', 'nav-workshop', 'r3-destinations',
@@ -140,6 +141,7 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
   const passed = (!timedOut && exitcode === 0 && observation.valid
     && observation.qa_status === 'pass' && observation.runtime_markers.length === 0
     && observation.runtime_error_count === 0);
+  if (passed && scenario.startsWith('ascend-prisms-')) log('  detail: ' + reportJson(payload?.detail ?? null));
   if (passed) {
     log('PASS ' + scenario + (viewport ? ' ' + JSON.stringify(viewport) : ''));
     if (viewport || ['upgrade-effects-and-deeds', 'tree-purchase-contract', 'parity-long-high-power', 'parity-medium-farm'].includes(scenario) ||
@@ -193,6 +195,18 @@ function mutateSource(source, scenario) {
     source = source.slice(0, save) + '      saveState();\n' + source.slice(save);
   }
   if (scenario === 'self-test-forge-ui-bulk') for (const rule of ['  #tab-forge .mult-row{gap:4px;}\n', '  #tab-forge .mult-btn{min-width:44px;min-height:44px;}\n']) replaceOnce(rule, '');
+  const prismMutations = {
+    'tree': ["(1 + nodeLevel('swift')*0.04) * longStudyPrismMult()", "1 * longStudyPrismMult()"],
+    'lab': ["function longStudyPrismMult(){ return 1 + longStudyLevel('prismstudy')*0.05; }", "function longStudyPrismMult(){ return 1; }"],
+    'payout': ["  state.prisms += gain;", "  state.prisms += gain + 1;"],
+    'repeat': ["var ASCEND_REPEAT_REWARD_RATE = 0.20;", "var ASCEND_REPEAT_REWARD_RATE = 0.25;"],
+    'rounding': ["  var progressBonus = ascendProgressPrismBonusForCleared(cleared,benchmark);", "  var progressBonus = cleared>benchmark ? Math.max(0,full-ascendFullPrismGainForCleared(benchmark)) : 0;"]
+  };
+  if (typeof scenario === 'string' && scenario.startsWith('self-test-ascend-prisms-')) {
+    const pair = prismMutations[scenario.slice('self-test-ascend-prisms-'.length)];
+    if (!pair) throw Error('Unknown F05 negative control');
+    replaceOnce(pair[0], pair[1]);
+  }
   return source;
 }
 async function main(argv = process.argv.slice(2)) {

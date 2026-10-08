@@ -1,0 +1,75 @@
+{
+  "startedAt": "2026-10-07T13:41:36.321Z",
+  "sourceSha256": "830f9c828ee9d91ca2f0e36c16064fc3f0c9cef01e9336c90427296f72ab8afa",
+  "node": "24.19.0",
+  "scope": "local candidate; no remote CI, merge or Android/device acceptance",
+  "steps": [
+    {
+      "name": "apk-verifier-self-test",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/scripts/verify_apk_identity.cjs",
+        "--self-test"
+      ],
+      "start": "2026-10-07T13:41:36.331Z",
+      "exitcode": 0,
+      "timedOut": false,
+      "signal": null,
+      "expected": "success",
+      "passed": true,
+      "stdoutSha256": "8c67c44d8a17280bf18a0284c7b39b7ab6cf05925c738022c1c41abd2a1ef83f",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "tooling",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/tests/tooling/run.cjs"
+      ],
+      "start": "2026-10-07T13:41:36.386Z",
+      "exitcode": 0,
+      "timedOut": false,
+      "signal": null,
+      "expected": "success",
+      "passed": true,
+      "stdoutSha256": "2cac89d2a517d6406f9f7bd2549bddaf5c28e69afc18cb1ba450c5f09023ac3f",
+      "stderrSha256": "5d8a1d9919e8f37b9478a67a140430ea6bb2b858f0fcc5a82216e0d897ca035a"
+    },
+    {
+      "name": "source",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/scripts/ci/validate_source.cjs"
+      ],
+      "start": "2026-10-07T13:41:36.991Z",
+      "exitcode": 0,
+      "timedOut": false,
+      "signal": null,
+      "expected": "success",
+      "passed": true,
+      "stdoutSha256": "554c0938eec03dd8c8db111b0fcc9c537dd5b879531a874c492090a357d941e6",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "behavioral",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-f05-validation-vCil18",
+        "--raw-artifacts",
+        "/tmp/lumenfall-f05-validation/failures"
+      ],
+      "start": "2026-10-07T13:41:37.126Z",
+      "exitcode": 1,
+      "timedOut": false,
+      "signal": null,
+      "expected": "success",
+      "passed": false,
+      "stdoutSha256": "a75fdcab6ac9b7cea862ef0448090748836b4464a031a0eefa6e9339cd91a987",
+      "stderrSha256": "74b7e8912a502ccd4dc076ba189edcae536047b964a390ea25a74c480cec3910"
+    }
+  ],
+  "status": "fail",
+  "error": "Error: behavioral failed; see retained stdout/stderr in /tmp/lumenfall-f05-validation\n    at step (/workspace/Lumenfall-f05-implementation/docs/qa/ascend-prisms-001/validate.cjs:21:20)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async /workspace/Lumenfall-f05-implementation/docs/qa/ascend-prisms-001/validate.cjs:33:5"
+}

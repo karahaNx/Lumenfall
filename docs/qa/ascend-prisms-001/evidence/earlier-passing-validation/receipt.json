@@ -1,0 +1,492 @@
+{
+  "startedAt": "2026-10-07T13:44:03.821Z",
+  "sourceSha256": "830f9c828ee9d91ca2f0e36c16064fc3f0c9cef01e9336c90427296f72ab8afa",
+  "node": "24.19.0",
+  "scope": "local candidate; no remote CI, merge or Android/device acceptance",
+  "steps": [
+    {
+      "name": "apk-verifier-self-test",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/scripts/verify_apk_identity.cjs",
+        "--self-test"
+      ],
+      "start": "2026-10-07T13:44:03.826Z",
+      "exitcode": 0,
+      "timedOut": false,
+      "signal": null,
+      "expected": "success",
+      "passed": true,
+      "stdoutSha256": "8c67c44d8a17280bf18a0284c7b39b7ab6cf05925c738022c1c41abd2a1ef83f",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "tooling",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/tests/tooling/run.cjs"
+      ],
+      "start": "2026-10-07T13:44:03.876Z",
+      "exitcode": 0,
+      "timedOut": false,
+      "signal": null,
+      "expected": "success",
+      "passed": true,
+      "stdoutSha256": "3f47eefbdc4536d24000f77e50ba3e56a26ccfede3dc1fe132960b1625dad84e",
+      "stderrSha256": "c9b541f8886b2ebbac7a7fc8c72f5407a91464c18d1608f935d4dcd3dee57068"
+    },
+    {
+      "name": "source",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/scripts/ci/validate_source.cjs"
+      ],
+      "start": "2026-10-07T13:44:04.465Z",
+      "exitcode": 0,
+      "timedOut": false,
+      "signal": null,
+      "expected": "success",
+      "passed": true,
+      "stdoutSha256": "554c0938eec03dd8c8db111b0fcc9c537dd5b879531a874c492090a357d941e6",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "behavioral",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-f05-validation-nWUMCi",
+        "--raw-artifacts",
+        "/tmp/lumenfall-f05-validation-final/failures"
+      ],
+      "start": "2026-10-07T13:44:04.593Z",
+      "exitcode": 0,
+      "timedOut": false,
+      "signal": null,
+      "expected": "success",
+      "passed": true,
+      "stdoutSha256": "dc02000044d79618d68580c94b8af2353d609ace38727c6e08119c398f7c3aaa",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "negative-bad-assertion",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-f05-validation-nWUMCi",
+        "--scenario",
+        "self-test-bad-assertion",
+        "--raw-artifacts",
+        "/tmp/lumenfall-f05-validation-final/negative-raw"
+      ],
+      "start": "2026-10-07T13:54:36.420Z",
+      "exitcode": 1,
+      "timedOut": false,
+      "signal": null,
+      "expected": "intended QA failure",
+      "passed": true,
+      "stdoutSha256": "e0c4b4db6f10fbedf8384086460a30b48a6574c1f17c6810ed1f27a44c6d276b",
+      "stderrSha256": "8add72208acd1f179a651b50b5d0036259d2de34b2271baf9f9ff6e43c358f18"
+    },
+    {
+      "name": "negative-uncaught-error",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-f05-validation-nWUMCi",
+        "--scenario",
+        "self-test-uncaught-error",
+        "--raw-artifacts",
+        "/tmp/lumenfall-f05-validation-final/negative-raw"
+      ],
+      "start": "2026-10-07T13:54:37.789Z",
+      "exitcode": 1,
+      "timedOut": false,
+      "signal": null,
+      "expected": "intended QA failure",
+      "passed": true,
+      "stdoutSha256": "093aa37067fa6aacef7bafd16d3e0083072417b048ce41b94af3c5117580c361",
+      "stderrSha256": "0d84507dc464c63990e6417adebbd3879a07ed6e32e1dc26dd4ae936a67d74e0"
+    },
+    {
+      "name": "negative-unhandled-rejection",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-f05-validation-nWUMCi",
+        "--scenario",
+        "self-test-unhandled-rejection",
+        "--raw-artifacts",
+        "/tmp/lumenfall-f05-validation-final/negative-raw"
+      ],
+      "start": "2026-10-07T13:54:39.118Z",
+      "exitcode": 1,
+      "timedOut": false,
+      "signal": null,
+      "expected": "intended QA failure",
+      "passed": true,
+      "stdoutSha256": "d6a38fc6dbcd8bcfa5e1583545ffbd003d79c456b0552d22f9dedae8a48eaf82",
+      "stderrSha256": "704ea7767e4145100462487f43fc83636f7d64e0e7be87781314d6840a949213"
+    },
+    {
+      "name": "negative-parity-regression",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-f05-validation-nWUMCi",
+        "--scenario",
+        "self-test-parity-regression",
+        "--raw-artifacts",
+        "/tmp/lumenfall-f05-validation-final/negative-raw"
+      ],
+      "start": "2026-10-07T13:54:40.404Z",
+      "exitcode": 1,
+      "timedOut": false,
+      "signal": null,
+      "expected": "intended QA failure",
+      "passed": true,
+      "stdoutSha256": "bcd2a28d397263c99ba4e1e8d67a87968a798d4a34c2357c500a3a93efd243c4",
+      "stderrSha256": "89dff0ca6023f77215ce5d4c5b905df850b227fc05e388ac0edf9959aa35d67b"
+    },
+    {
+      "name": "negative-chronology-regression",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-f05-validation-nWUMCi",
+        "--scenario",
+        "self-test-chronology-regression",
+        "--raw-artifacts",
+        "/tmp/lumenfall-f05-validation-final/negative-raw"
+      ],
+      "start": "2026-10-07T13:54:41.687Z",
+      "exitcode": 1,
+      "timedOut": false,
+      "signal": null,
+      "expected": "intended QA failure",
+      "passed": true,
+      "stdoutSha256": "fc723857f1206906760d7b3c0459697abb0e043f5eed11f8e83daafa15a36579",
+      "stderrSha256": "dec302a12cfb668b2bc5d87a50712ff0f8f55d608de487722b1223e4de2e6c5f"
+    },
+    {
+      "name": "negative-wisp-formula-regression",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-f05-validation-nWUMCi",
+        "--scenario",
+        "self-test-wisp-formula-regression",
+        "--raw-artifacts",
+        "/tmp/lumenfall-f05-validation-final/negative-raw"
+      ],
+      "start": "2026-10-07T13:54:42.972Z",
+      "exitcode": 1,
+      "timedOut": false,
+      "signal": null,
+      "expected": "intended QA failure",
+      "passed": true,
+      "stdoutSha256": "6ba52979ab79da042391bb79857568751baf9521fff607e24d7f928ffb2e76d3",
+      "stderrSha256": "99d387aac3ec02cf9069a50fdd1430934069b5a206fba0f54c330a6c8cbdc5ba"
+    },
+    {
+      "name": "negative-wisp-pacing-regression",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-f05-validation-nWUMCi",
+        "--scenario",
+        "self-test-wisp-pacing-regression",
+        "--raw-artifacts",
+        "/tmp/lumenfall-f05-validation-final/negative-raw"
+      ],
+      "start": "2026-10-07T13:54:44.249Z",
+      "exitcode": 1,
+      "timedOut": false,
+      "signal": null,
+      "expected": "intended QA failure",
+      "passed": true,
+      "stdoutSha256": "172368cf2162d101463b527e208e3fb4e57003122c71b8e6757713ade7f44ce4",
+      "stderrSha256": "3bcc99eb51d2134234ed0bd2b39935482e528418c95f96291f89b28c5c6134df"
+    },
+    {
+      "name": "negative-endgame-currency-regression",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-f05-validation-nWUMCi",
+        "--scenario",
+        "self-test-endgame-currency-regression",
+        "--raw-artifacts",
+        "/tmp/lumenfall-f05-validation-final/negative-raw"
+      ],
+      "start": "2026-10-07T13:54:45.556Z",
+      "exitcode": 1,
+      "timedOut": false,
+      "signal": null,
+      "expected": "intended QA failure",
+      "passed": true,
+      "stdoutSha256": "a085b17e742b730e5d8068b63a0384cb1b02b0d90359c1f4bad226fd432b1a98",
+      "stderrSha256": "e295bfafd8029d2992eea0d5dce6421589664ea557bcc9c3e44f8e6a26e28d9c"
+    },
+    {
+      "name": "negative-wisp-role-regression",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-f05-validation-nWUMCi",
+        "--scenario",
+        "self-test-wisp-role-regression",
+        "--raw-artifacts",
+        "/tmp/lumenfall-f05-validation-final/negative-raw"
+      ],
+      "start": "2026-10-07T13:54:46.801Z",
+      "exitcode": 1,
+      "timedOut": false,
+      "signal": null,
+      "expected": "intended QA failure",
+      "passed": true,
+      "stdoutSha256": "3d40267b1968a2138ecf2591f989791c4902d39f12a01228e38a45b1117f9f65",
+      "stderrSha256": "c799c014ef7de3a3c8cca21adb612d968d17e270604316356560ae27d1cb10e0"
+    },
+    {
+      "name": "negative-p1-05-selected",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-f05-validation-nWUMCi",
+        "--scenario",
+        "self-test-p1-05-selected",
+        "--raw-artifacts",
+        "/tmp/lumenfall-f05-validation-final/negative-raw"
+      ],
+      "start": "2026-10-07T13:54:48.123Z",
+      "exitcode": 1,
+      "timedOut": false,
+      "signal": null,
+      "expected": "intended QA failure",
+      "passed": true,
+      "stdoutSha256": "4ed2f4f57753910b8437d92237beb59753678b0c38dee8b7fdd92557d9d902b3",
+      "stderrSha256": "34ac375e44f322cab0e2a9cf2a0dee833ccd7e7ae60e7d8442f11b61eb8e02ac"
+    },
+    {
+      "name": "negative-p1-05-focus-return",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-f05-validation-nWUMCi",
+        "--scenario",
+        "self-test-p1-05-focus-return",
+        "--raw-artifacts",
+        "/tmp/lumenfall-f05-validation-final/negative-raw"
+      ],
+      "start": "2026-10-07T13:54:49.569Z",
+      "exitcode": 1,
+      "timedOut": false,
+      "signal": null,
+      "expected": "intended QA failure",
+      "passed": true,
+      "stdoutSha256": "5d8470138238369f35a3731f5b2e28cd351f2049be93a0318f7067d349e5c421",
+      "stderrSha256": "606938bf18194c3d97204ae4997294b7290332ac521bb1623748f4b6a9a26938"
+    },
+    {
+      "name": "negative-lifecycle-duplicate",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-f05-validation-nWUMCi",
+        "--scenario",
+        "self-test-lifecycle-duplicate",
+        "--raw-artifacts",
+        "/tmp/lumenfall-f05-validation-final/negative-raw"
+      ],
+      "start": "2026-10-07T13:54:51.748Z",
+      "exitcode": 1,
+      "timedOut": false,
+      "signal": null,
+      "expected": "intended QA failure",
+      "passed": true,
+      "stdoutSha256": "92b213aba35c4a66996d91fc3abfb05a8b0e40613ff2fbe92db128d62d3a681f",
+      "stderrSha256": "b54d88c6c5b2f90c94e47c9f15b0aebfe9596a3460d928e9a131a60d26b8863b"
+    },
+    {
+      "name": "negative-ascend-prisms-tree",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-f05-validation-nWUMCi",
+        "--scenario",
+        "self-test-ascend-prisms-tree",
+        "--raw-artifacts",
+        "/tmp/lumenfall-f05-validation-final/negative-raw"
+      ],
+      "start": "2026-10-07T13:54:53.098Z",
+      "exitcode": 1,
+      "timedOut": false,
+      "signal": null,
+      "expected": "intended QA failure",
+      "passed": true,
+      "stdoutSha256": "4887636be5f4d9e7d28f1a08c7cc19f40aff6dd3658595c58d02f948c4711855",
+      "stderrSha256": "fe5c0e14664835499ddc22b43e34e69cf1a037f7752796239aa848f38d7f7555"
+    },
+    {
+      "name": "negative-ascend-prisms-lab",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-f05-validation-nWUMCi",
+        "--scenario",
+        "self-test-ascend-prisms-lab",
+        "--raw-artifacts",
+        "/tmp/lumenfall-f05-validation-final/negative-raw"
+      ],
+      "start": "2026-10-07T13:54:55.271Z",
+      "exitcode": 1,
+      "timedOut": false,
+      "signal": null,
+      "expected": "intended QA failure",
+      "passed": true,
+      "stdoutSha256": "013e6243b38df0996d40c9bd3d580745c914814db5438d176a6774ea84003a61",
+      "stderrSha256": "343ccd7fd390946f41a2ab73d8d0f0c8d109fedc8ff07b9b12be4d8e4eced30e"
+    },
+    {
+      "name": "negative-ascend-prisms-payout",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-f05-validation-nWUMCi",
+        "--scenario",
+        "self-test-ascend-prisms-payout",
+        "--raw-artifacts",
+        "/tmp/lumenfall-f05-validation-final/negative-raw"
+      ],
+      "start": "2026-10-07T13:54:57.485Z",
+      "exitcode": 1,
+      "timedOut": false,
+      "signal": null,
+      "expected": "intended QA failure",
+      "passed": true,
+      "stdoutSha256": "7374b91765559d31bfe148cb5bb2479f64ecb3d403ee980c164aa47262f5363c",
+      "stderrSha256": "22aa663373d18b4d665381c7d671e11c237333fa3a02f51455a7bcde456b6a73"
+    },
+    {
+      "name": "negative-ascend-prisms-repeat",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-f05-validation-nWUMCi",
+        "--scenario",
+        "self-test-ascend-prisms-repeat",
+        "--raw-artifacts",
+        "/tmp/lumenfall-f05-validation-final/negative-raw"
+      ],
+      "start": "2026-10-07T13:54:59.461Z",
+      "exitcode": 1,
+      "timedOut": false,
+      "signal": null,
+      "expected": "intended QA failure",
+      "passed": true,
+      "stdoutSha256": "225c2202a9b48bdd417f1c35ed82d43759d44d629788b34305e6699a29a3f87a",
+      "stderrSha256": "8d3d6b2f8ded564f1fbf5cc31debac383493a65256f1abb1cd961bed6e0d71c1"
+    },
+    {
+      "name": "negative-ascend-prisms-rounding",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/tests/behavioral/run.cjs",
+        "--web-root",
+        "/tmp/lumenfall-f05-validation-nWUMCi",
+        "--scenario",
+        "self-test-ascend-prisms-rounding",
+        "--raw-artifacts",
+        "/tmp/lumenfall-f05-validation-final/negative-raw"
+      ],
+      "start": "2026-10-07T13:55:01.172Z",
+      "exitcode": 1,
+      "timedOut": false,
+      "signal": null,
+      "expected": "intended QA failure",
+      "passed": true,
+      "stdoutSha256": "d95e4ae2cc178d07f13011a3efb5f4585bb75c66aaff092ccf6c20944a358b88",
+      "stderrSha256": "ead16cecd6c7f11d75e2b077a1537f8a15b66148e46e8873a018ef5a1ed25208"
+    },
+    {
+      "name": "smoke-install",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/scripts/ci/smoke.cjs",
+        "--install-guard",
+        "/tmp/lumenfall-f05-validation-nWUMCi/index.html"
+      ],
+      "start": "2026-10-07T13:55:02.998Z",
+      "exitcode": 0,
+      "timedOut": false,
+      "signal": null,
+      "expected": "success",
+      "passed": true,
+      "stdoutSha256": "c584b0d43d88f1a0b67fdf3746220d88c014cd5100c1bfef5a9fccaf16290509",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "smoke-browser",
+      "command": [
+        "/tmp/lumenfall-f05-chrome/opt/google/chrome/chrome",
+        "--headless=new",
+        "--no-sandbox",
+        "--disable-gpu",
+        "--disable-dev-shm-usage",
+        "--user-data-dir=/tmp/lumenfall-f05-validation-nWUMCi/chrome-profile",
+        "--window-size=390,844",
+        "--virtual-time-budget=1800",
+        "--dump-dom",
+        "http://127.0.0.1:35273/index.html"
+      ],
+      "start": "2026-10-07T13:55:03.062Z",
+      "exitcode": 0,
+      "timedOut": false,
+      "signal": null,
+      "expected": "success",
+      "passed": true,
+      "stdoutSha256": "9d823e905746f1677910197170de5c586e6ddf33e4e9719b991a81cdf31e9952",
+      "stderrSha256": "da12190e6cb12c6a94965dce08403c3d601159da1a78e22ae410c5b45765a61a"
+    },
+    {
+      "name": "smoke-check",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "/workspace/Lumenfall-f05-implementation/scripts/ci/smoke.cjs",
+        "--dom",
+        "/tmp/lumenfall-f05-validation-final/smoke-browser-stdout.txt",
+        "--chrome-log",
+        "/tmp/lumenfall-f05-validation-final/smoke-browser-stderr.txt",
+        "--require-guard"
+      ],
+      "start": "2026-10-07T13:55:04.027Z",
+      "exitcode": 0,
+      "timedOut": false,
+      "signal": null,
+      "expected": "success",
+      "passed": true,
+      "stdoutSha256": "64383ec9f0dd55aa115978be53c50214e4d4fbe9a4e950262f7452b0eb1ecb6a",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "finishedAt": "2026-10-07T13:55:04.071Z",
+  "status": "pass"
+}
