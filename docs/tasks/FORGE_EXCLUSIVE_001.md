@@ -1,6 +1,6 @@
 # FORGE_EXCLUSIVE_001 — Exclusive Forge upgrades
 
-Status: **inventory and proposal prepared; publication in progress; gameplay implementation blocked on the agreed matrix**. Original point F29. This owner chat remains open. A published proposal does not complete the app feature.
+Status: **inventory and proposals complete and published; gameplay implementation blocked on the agreed matrix**. Original point F29. This owner chat remains open. A published proposal does not complete the app feature.
 
 ## Goal, requirements and ownership
 
@@ -67,4 +67,4 @@ Full feature acceptance remains pending: agreed matrix implemented; deterministi
 
 ## Next action
 
-Independent: publish and integrate this verified documentation checkpoint with required CI, then save integration verification in GitHub. Dependent: obtain the concrete agreed matrix; implement only its Forge rows and migration, complete integrated app acceptance and record evidence. Keep this feature/chat open while those requirements are missing. No other task is claimed complete or archived.
+Checkpoint delivery: [PR64](https://github.com/karahaNx/Lumenfall/pull/64) records the exact validated head, required CI, merge identity and integrated checks in its final delivery receipt. Follow that receipt when resuming; an open PR is not integrated acceptance. Dependent: obtain the concrete agreed matrix; implement only its Forge rows and migration, complete integrated app acceptance and record evidence. Keep this feature/chat open while those requirements are missing. No other task is claimed complete or archived.
