@@ -4,6 +4,7 @@ window.cheaperRecruitmentSeed=function(level){
   var b=window.__cheaperRecruitment,s=b.fresh();
   s.nodes.bonds=level;s.prisms=1000000;s.maxDepthEver=100;
   s.questDay=b.today();s.achieved.asc5=true;s.achieved.d100=true;
+  s=b.canonical(s);s.prisms=1000000;s.refundCredits.prisms=[];
   return s;
 };
 window.runCheaperRecruitmentContracts=function(){
@@ -26,7 +27,7 @@ window.runCheaperRecruitmentContracts=function(){
     ok(card.querySelector('.lvl').textContent.includes('20 / 20'),'effective level capped');
     if(level>20)ok(card.querySelector('.lvl').textContent.includes(level.toLocaleString('en-US')+' purchased levels preserved'),'legacy raw count visible');
     var effect=card.querySelector('[data-node-effect]').textContent;
-    ok(effect.includes('60% Wisp recruiting discount')&&effect.includes('40% of normal price'),'cap earned effect');
+    ok(effect.includes('60% Wisp recruiting discount (also Empower)')&&effect.includes('40% of normal price'),'cap earned effect');
   });
   install(0);var total=0;
   for(var level=0;level<20;level++){
@@ -81,13 +82,13 @@ window.runCheaperRecruitmentContracts=function(){
     if(typeof live[key]==='number'){ok(Math.abs(live[key]-offline[key])<1e-8&&Math.abs(live[key]-split[key])<1e-8,'live/offline/split '+key);}
     else same(live[key],offline[key],'live/offline '+key);
   });
-  return {checks:checks,purchaseCap:20,finalPrice:2329,pricesThroughCap:total,legacyLevels:[21,40,2000],migration:'none; refund pending design and Core review'};
+  return {checks:checks,purchaseCap:20,finalPrice:2329,pricesThroughCap:total,legacyLevels:[21,40,2000],migration:'one-time original-curve Prism restitution; raw levels retained'};
 };
 window.cheaperRecruitmentObservation=function(){
   var b=window.__cheaperRecruitment,button=document.querySelector('[data-node="bonds"]'),card=button.closest('.node-card'),rect=button.getBoundingClientRect();
   function rgb(c){return c.match(/[\d.]+/g).slice(0,3).map(Number);}
   function lum(c){return rgb(c).reduce(function(sum,v,i){v/=255;return sum+[.2126,.7152,.0722][i]*(v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4));},0);}
   var bg=getComputedStyle(card).backgroundColor;
-  var contrasts=Array.from(card.querySelectorAll('.name,.desc,.lvl,.earned-effect,.earned-effect strong')).map(function(el){var a=lum(getComputedStyle(el).color),c=lum(bg);return (Math.max(a,c)+.05)/(Math.min(a,c)+.05);});
+  var contrasts=Array.from(card.querySelectorAll('.name,.desc,.lvl,.earned-effect,.earned-effect strong,.effect-note')).map(function(el){var a=lum(getComputedStyle(el).color),c=lum(bg);return (Math.max(a,c)+.05)/(Math.min(a,c)+.05);});
   return {state:b.get(),disabled:button.disabled,kind:button.dataset.state,focused:document.activeElement.dataset.node,focusStyle:{width:getComputedStyle(document.activeElement).outlineWidth,style:getComputedStyle(document.activeElement).outlineStyle},text:card.textContent,rect:{x:rect.x,y:rect.y,width:rect.width,height:rect.height},fit:document.documentElement.scrollWidth<=innerWidth+1&&card.scrollWidth<=card.clientWidth+1,contrasts:contrasts,reduced:matchMedia('(prefers-reduced-motion: reduce)').matches,animation:getComputedStyle(document.querySelector('#tab-ascend')).animationDuration};
 };

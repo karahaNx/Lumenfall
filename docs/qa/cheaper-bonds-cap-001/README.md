@@ -1,6 +1,8 @@
 # CHEAPER_BONDS_CAP_001 evidence
 
-Local candidate only. Owner/task: `docs/tasks/CHEAPER_BONDS_CAP_001.md`.
+Historical 7 October cap-only candidate. Current implementation/acceptance is
+tracked by `docs/tasks/CHEAPER_BONDS_CAP_001.md` and the `finish/` evidence.
+The hashes and acceptance limits below belong to the historical candidate.
 Baseline: `0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd`.
 Final HTML SHA256: `fc0d985d5a23c111b7e5c4dc7fbf67a2117081d7b3769bfd32a85e6142017de8`.
 

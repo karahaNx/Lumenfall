@@ -1,5 +1,5 @@
-/* Standalone JavaScript F21 runner; existing Python regression harness remains
- * byte-identical. CDP lifecycle follows the repository's native-input drivers. */
+/* Standalone JavaScript F21 runner. CDP lifecycle follows the repository's
+ * native-input drivers; production has no QA bridge. */
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),http=require('node:http');
 const {spawn,execFileSync}=require('node:child_process'),{createHash}=require('node:crypto');
 const root=path.resolve(__dirname,'../..'),args=process.argv.slice(2);
@@ -10,7 +10,10 @@ const mutation=option('--mutation','none');
 if(mutation==='handler')source=source.replace('if(!node || nodeAtCap(node)) return;','if(!node) return;');
 if(mutation==='ui')source=source.replace('var maxed = nodeAtCap(node);','var maxed = false;');
 if(mutation==='raw')source=source.replace('out.nodes[node.id] = nonNegativeInt(nodes[node.id],fresh.nodes[node.id]);','out.nodes[node.id] = Math.min(20,nonNegativeInt(nodes[node.id],fresh.nodes[node.id]));');
-if(!['none','handler','ui','raw'].includes(mutation))throw Error('unknown mutation');
+if(mutation==='refund')source=source.replace('if(hasReceipt || raw<=20) return;','if(raw<=20) return;');
+if(mutation==='credit')source=source.replace('var sum=exactPrismArithmetic(out.prisms,amount);','var sum=out.prisms+amount;');
+if(mutation==='free-credit')source=source.replace('left=exactPrismArithmetic(entry.amount,-take)','left=entry.amount-take');
+if(!['none','handler','ui','raw','refund','credit','free-credit'].includes(mutation))throw Error('unknown mutation');
 const bridge=`
 window.__cheaperRecruitment={
  fresh:function(){return freshState();},today:todayStr,
@@ -22,6 +25,11 @@ window.__cheaperRecruitment={
  recruitCost:function(id){return spiritCost(SPIRITS.find(function(s){return s.id===id;}));},
  disk:function(){return {primary:localStorage.getItem(SAVE_KEY),recovery:localStorage.getItem(RECOVERY_SAVE_KEY)};},
  backup:currentSaveBackup,decode:decodeSaveBackup,
+ encode:encodeSaveBackup,payment:prismPurchasePlan,
+ flags:function(){return {reload:reloadInProgress,offlinePending:offlinePending,offlineBusy:!!offlineCatchup,persistence:persistenceStatus()};},
+ allowSave:function(){reloadInProgress=false;},
+ legacyDisk:function(s){reloadInProgress=true;localStorage.setItem(SAVE_KEY,JSON.stringify(s));localStorage.setItem(RECOVERY_SAVE_KEY,JSON.stringify(s));},
+ fault:function(key){window.__f21FailKey=key;if(!window.__f21OriginalSet){window.__f21OriginalSet=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){if(k===window.__f21FailKey)throw Error('F21 injected storage failure');return window.__f21OriginalSet.call(this,k,v);};}},
  simulate:function(sec,kind,clock){return advanceAuthoritativeTime(sec,{kind:kind,visual:false,clockStartMs:clock,offlineWindowStartMs:2000000000000});},
  ascend:function(){doAscend(false);},
  corruptPrimary:function(){reloadInProgress=true;localStorage.setItem(SAVE_KEY,'broken');},
@@ -33,7 +41,7 @@ localStorage.setItem(STARTUP_INTRO_KEY,String(Date.now()));
 const marker="if(document.readyState==='loading'){";
 if(source.split(marker).length!==2)throw Error('unique production bootstrap marker required');
 const prelude=`<script>window.__f21Errors=[];window.addEventListener('error',function(e){__f21Errors.push(e.message);});window.addEventListener('unhandledrejection',function(e){__f21Errors.push(String(e.reason));});var qaSetInterval=window.setInterval;window.setInterval=function(fn,ms){return qaSetInterval(function(){if(window.__f21RunIntervals)fn();},ms);};</script>`;
-source=source.replace('<head>','<head>'+prelude).replace(marker,bridge+'\n'+marker).replace('</body>','<script>'+fs.readFileSync(path.join(__dirname,'cheaper-recruitment.js'),'utf8')+'</script></body>');
+source=source.replace('<head>','<head>'+prelude).replace(marker,bridge+'\n'+marker).replace('</body>','<script>'+fs.readFileSync(path.join(__dirname,'cheaper-recruitment.js'),'utf8')+'\n'+fs.readFileSync(path.join(__dirname,'cheaper-refund.js'),'utf8')+'</script></body>');
 const sourceSha256=createHash('sha256').update(fs.readFileSync(sourcePath)).digest('hex'),records=[];
 const server=http.createServer((req,res)=>{
  if(req.url==='/index.html'){res.setHeader('Content-Type','text/html');res.end(source);return;}
@@ -61,6 +69,7 @@ async function run(){
  for(const pipe of [browser.stdio[3],browser.stdio[4]])pipe.on('error',e=>{for(const p of pending.values()){clearTimeout(p.timer);p.reject(e);}pending.clear();});
  const tab=await send('Target.createTarget',{url:'about:blank'},null);session=(await send('Target.attachToTarget',{targetId:tab.targetId,flatten:true},null)).sessionId;
  await send('Page.enable');await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});await navigate(url);
+ records.push({kind:'refund-contracts',result:await evaluate('runCheaperRefundContracts()')});
  records.push({kind:'contracts',result:await evaluate('runCheaperRecruitmentContracts()')});
  for(const width of [320,390,430])for(const fontPercent of [100,200])for(const motion of ['no-preference','reduce']){
   await send('Emulation.setDeviceMetricsOverride',{width,height:844,deviceScaleFactor:1,mobile:true});
@@ -102,6 +111,34 @@ async function run(){
   await evaluate(`(()=>{var b=__cheaperRecruitment,s=b.get();s.depth=s.enemyDepth=16;b.set(s);b.ascend();})()`);s=await evaluate('__cheaperRecruitment.get()');assert(s.nodes.bonds===level,'Ascend keeps raw permanent levels');
   records.push({kind:'persistence',level,reload:true,corruptPrimaryRecovery:true,repeatedRestore:2,ascend:true});
  }
+ // First launch of an actual old disk save; repeat reload/recovery/old restore
+ // replace complete compensated snapshots, never adding a refund to live money.
+ for(const level of [21,40,2000]){
+  const old=await evaluate(`cheaperLegacySeed(${level},1000000)`),expected=await evaluate(`__cheaperRecruitment.canonical(${JSON.stringify(old)})`);
+  const sameRefund=s=>JSON.stringify(s.feedbackMigration)===JSON.stringify(expected.feedbackMigration)&&JSON.stringify(s.refundCredits)===JSON.stringify(expected.refundCredits)&&s.prisms===expected.prisms&&s.nodes.bonds===level;
+  await evaluate(`__cheaperRecruitment.legacyDisk(${JSON.stringify(old)})`);await navigate(url);
+  let s=await evaluate('__cheaperRecruitment.get()');assert(sameRefund(s),'old first-launch wallet and receipt '+level);
+  await navigate(url);s=await evaluate('__cheaperRecruitment.get()');assert(sameRefund(s),'migration reload once '+level);
+  await evaluate('__cheaperRecruitment.corruptPrimary()');await navigate(url);s=await evaluate('__cheaperRecruitment.get()');assert(sameRefund(s),'migration recovery once '+level);
+  const oldBackup=await evaluate(`__cheaperRecruitment.encode(${JSON.stringify(old)})`);
+  for(let n=0;n<2;n++){
+   await evaluate(`(()=>{var b=__cheaperRecruitment;b.set(cheaperRecruitmentSeed(0));b.save();b.restore(${JSON.stringify(oldBackup)});})()`);
+   await new Promise(r=>setTimeout(r,250));await ready();s=await evaluate('__cheaperRecruitment.get()');assert(sameRefund(s),'old restore replaces complete refunded snapshot '+level+'/'+n);
+  }
+  await evaluate(`(()=>{var b=__cheaperRecruitment,s=b.get();s.depth=s.enemyDepth=16;b.set(s);b.ascend();})()`);s=await evaluate('__cheaperRecruitment.get()');assert(sameRefund({...s,prisms:expected.prisms}),'Ascend preserves refund receipt/credits '+level);
+  records.push({kind:'migration-persistence',level,oldFirstLaunch:true,reload:true,recovery:true,oldRestoreRepetitions:2,ascend:true});
+ }
+ const oldBackup=await evaluate('__cheaperRecruitment.encode(cheaperLegacySeed(21,0))');
+ await evaluate('(()=>{var b=__cheaperRecruitment;b.set(cheaperRecruitmentSeed(0));b.save();})()');
+ const beforeRollback=await evaluate('__cheaperRecruitment.disk()');
+ await evaluate(`(()=>{var b=__cheaperRecruitment;b.fault('lumenfall_save_v2');b.restore(${JSON.stringify(oldBackup)});b.fault('');})()`);
+ assert(JSON.stringify(await evaluate('__cheaperRecruitment.disk()'))===JSON.stringify(beforeRollback),'restore primary failure rolls back wallet and receipt together');
+ await navigate(url);let rolledBack=await evaluate('__cheaperRecruitment.get()');assert(rolledBack.nodes.bonds===0&&rolledBack.prisms===1000000,'failed restore never credits live wallet');
+ await evaluate(`(()=>{var b=__cheaperRecruitment,old=cheaperLegacySeed(21,0);b.legacyDisk(old);b.allowSave();b.set(old);b.fault('lumenfall_save_recovery_v1');b.save();b.fault('');})()`);
+ let partial=await evaluate('__cheaperRecruitment.disk()');assert(JSON.parse(partial.primary).prisms===3376&&!!JSON.parse(partial.primary).feedbackMigration.receipts['node.bonds'],'successful primary owns complete compensation '+JSON.stringify({prisms:JSON.parse(partial.primary).prisms,flags:await evaluate('__cheaperRecruitment.flags()')}));
+ assert(!JSON.parse(partial.recovery).feedbackMigration,'failed recovery retains whole old snapshot');
+ await evaluate('__cheaperRecruitment.corruptPrimary()');await navigate(url);rolledBack=await evaluate('__cheaperRecruitment.get()');assert(rolledBack.prisms===3376,'old recovery compensates from its own original wallet once');
+ records.push({kind:'migration-write-failure',restoreRollback:true,primaryAuthoritative:true,oldRecoveryNoDuplicate:true});
  const errors=await evaluate('__f21Errors');assert(!errors.length,'no browser runtime errors '+JSON.stringify(errors));
 }
 (async()=>{
