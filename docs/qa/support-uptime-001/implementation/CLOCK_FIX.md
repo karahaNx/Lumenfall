@@ -44,6 +44,12 @@ the last work/speed snapshot. They reset on changed work, speed, clock or Study
 object and never enter saves. The original strict Inquiry Study-only oracle now
 passes; the temporary interval-journal QA workaround is removed. No reward
 changes, tolerance increase, productive Study-only tail or persistent state added.
+The independent frozen reference uses a separate live-work ledger and canonical
+whole/phase integrals for this precision correction. Full exact state/summary
+comparisons remain; source59cbadb32 offline core PASS. The pre-fix source fails
+the same exact15s assertion in study-clock-causal.json. Frozen originals unchanged.
+The standalone historical helper's accidentally removed functions were restored;
+current acceptance runs tests/behavioral/offline-catchup.cjs, not that old helper.
 The previous broad Support-only cadence alternative failed strict parity and
 was not adopted. Source59cbadb32: exact Lab offline integration, original Inquiry
 chronology/contracts, Lab chronology/contracts/save/recovery/UI, Swift, stacking,
