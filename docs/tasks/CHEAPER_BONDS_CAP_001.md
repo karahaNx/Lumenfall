@@ -29,7 +29,8 @@ Domain/save review is performed here; no independent Core/QA approval is claimed
 
 ## Baseline, isolation and overlap
 
-- Current main observed 8 October: `b0537cb46635555ba2c2e5f3f95bc8fc276aeda5`.
+- Current main rechecked 8 October: `261b1b7f863f73c324f4ac04acb5bfc95101644d`.
+  PR77 Save Backup merged cleanly at e6cfa70; F21 tests use its visible confirmation.
   Private branch `feature/cheaper-bonds-cap-001`, worktree
   `/workspace/CHEAPER_BONDS_CAP_001`; clean original checkout untouched.
 - Original local freeze9342dbd on main0bcce84 is preserved in Git history and the
@@ -41,8 +42,7 @@ Domain/save review is performed here; no independent Core/QA approval is claimed
   adds Echo/Bonds purchase plans within TREE_EXCLUSIVE_001. Open Draft
   [PR67](https://github.com/karahaNx/Lumenfall/pull/67), head52fa48db, proposes
   broad feedback and original-currency refunds. Neither branch is edited here;
-  neither is merged as part of this single feature. Latest30 runs had no active
-  run at preflight. Recheck actual overlap/main immediately before integration.
+  neither is merged as part of this single feature. Initial preflight had no active run; current PR89 CI is running. Recheck actual overlap/main immediately before integration.
 - The F21 receipt uses PR67's `feedbackMigration.receipts['node.bonds']` and
   `refundCredits.prisms` shapes to prevent duplicate compensation. Later PR67
   integration must preserve these fields and exact arithmetic/credit checks.
@@ -84,10 +84,10 @@ checks and four causal mutations; existing gates/assertions are unchanged.
 ## Next concrete action and completion
 
 Finish current-source focused/refund/mobile tests, baseline existing checks and
-complete diff review; publish the isolated branch and PR. Obtain required CI,
+complete diff review; push the current combined source to PR89. Obtain required CI,
 address findings, recheck main/overlap and integrate serially. Recheck integrated
 bytes, verify the resulting signed APK and relevant Android acceptance; save
 task/PROJECT_STATE/evidence in GitHub and stop shared-file work.
 
-PR/integration/APK: pending. Archive status: **open**. An open PR or local pass
+PR: [89](https://github.com/karahaNx/Lumenfall/pull/89), published. Integration/APK: pending. Archive status: **open**. An open PR or local pass
 is not a finished feature. Archive only this owner chat after verified completion.

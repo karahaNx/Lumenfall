@@ -1,48 +1,48 @@
 {
   "status": "PASS",
-  "observedAt": "2026-10-08T06:23:12.600Z",
+  "observedAt": "2026-10-08T06:44:00.367Z",
   "results": [
     {
       "mutation": "handler",
       "expected": "cap prevents direct/repeated debit",
       "status": "CAUGHT",
       "exit": 1,
-      "sourceSha256": "acd4e1df28c81dc6562d572716bcb063be6297bbb638ec825cda94d0905acece"
+      "sourceSha256": "149e3bdc27a1888cecda8e9e8499685cd125abd41185be892cecf87060af5376"
     },
     {
       "mutation": "refund",
       "expected": "refund receipt prevents a second credit",
       "status": "CAUGHT",
       "exit": 1,
-      "sourceSha256": "acd4e1df28c81dc6562d572716bcb063be6297bbb638ec825cda94d0905acece"
+      "sourceSha256": "149e3bdc27a1888cecda8e9e8499685cd125abd41185be892cecf87060af5376"
     },
     {
       "mutation": "credit",
       "expected": "all finite original purchase value retained",
       "status": "CAUGHT",
       "exit": 1,
-      "sourceSha256": "acd4e1df28c81dc6562d572716bcb063be6297bbb638ec825cda94d0905acece"
+      "sourceSha256": "149e3bdc27a1888cecda8e9e8499685cd125abd41185be892cecf87060af5376"
     },
     {
       "mutation": "free-credit",
       "expected": "unrepresentable credit subtraction cannot buy a free level",
       "status": "CAUGHT",
       "exit": 1,
-      "sourceSha256": "acd4e1df28c81dc6562d572716bcb063be6297bbb638ec825cda94d0905acece"
+      "sourceSha256": "149e3bdc27a1888cecda8e9e8499685cd125abd41185be892cecf87060af5376"
     },
     {
       "mutation": "ui",
       "expected": "UI maxed even with affordable wallet",
       "status": "CAUGHT",
       "exit": 1,
-      "sourceSha256": "acd4e1df28c81dc6562d572716bcb063be6297bbb638ec825cda94d0905acece"
+      "sourceSha256": "149e3bdc27a1888cecda8e9e8499685cd125abd41185be892cecf87060af5376"
     },
     {
       "mutation": "raw",
       "expected": "all finite original purchase value retained",
       "status": "CAUGHT",
       "exit": 1,
-      "sourceSha256": "acd4e1df28c81dc6562d572716bcb063be6297bbb638ec825cda94d0905acece"
+      "sourceSha256": "149e3bdc27a1888cecda8e9e8499685cd125abd41185be892cecf87060af5376"
     }
   ]
 }

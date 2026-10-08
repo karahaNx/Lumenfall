@@ -33,7 +33,7 @@ window.__cheaperRecruitment={
  simulate:function(sec,kind,clock){return advanceAuthoritativeTime(sec,{kind:kind,visual:false,clockStartMs:clock,offlineWindowStartMs:2000000000000});},
  ascend:function(){doAscend(false);},
  corruptPrimary:function(){reloadInProgress=true;localStorage.setItem(SAVE_KEY,'broken');},
- restore:function(code){document.getElementById('save-backup-code').value=code;restoreSaveBackup();}
+ restore:function(code){document.getElementById('settings-btn').click();document.getElementById('save-backup-btn').click();document.getElementById('save-backup-code').value=code;document.getElementById('restore-save-backup').click();var confirm=document.getElementById('save-restore-confirm-btn');if(!confirm.getClientRects().length)throw Error('F21 real restore confirmation required');confirm.click();}
 };
 if(!localStorage.getItem(SAVE_KEY)){var qaSeed=freshState();qaSeed.questDay=todayStr();localStorage.setItem(SAVE_KEY,JSON.stringify(qaSeed));}
 localStorage.setItem(STARTUP_INTRO_KEY,String(Date.now()));
