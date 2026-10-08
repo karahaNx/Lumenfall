@@ -1,0 +1,682 @@
+{
+  "feature": "TREE_EXCLUSIVE_001",
+  "scope": "Observed read-only baseline; not design acceptance or migration implementation.",
+  "productSha256": "f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4",
+  "counts": {
+    "tree": 7,
+    "forge": 8,
+    "lab": 9
+  },
+  "treeOverlapIds": [
+    "starlight",
+    "steady",
+    "echo",
+    "swift",
+    "momentum"
+  ],
+  "caveat": "Equal operands can have distinct caps/rounding; this groups effects, not equal final outputs.",
+  "rows": [
+    {
+      "family": "tree",
+      "id": "starlight",
+      "name": "Starlight Affinity",
+      "effect": "kill-lumen",
+      "description": "+10% Lumen from every kill, per level.",
+      "sourceLine": 2877,
+      "unlock": "baseline",
+      "configuredLevelCap": null,
+      "effectCapFromProductionOperand": null,
+      "currency": [
+        "Prisms"
+      ],
+      "price": {
+        "rounding": "ceil per single purchase",
+        "base": 1,
+        "growth": 1.35
+      },
+      "firstThreeSinglePrices": [
+        1,
+        2,
+        2
+      ],
+      "sameOperand": [
+        "forge/focus",
+        "lab/lumenstudy"
+      ]
+    },
+    {
+      "family": "tree",
+      "id": "steady",
+      "name": "Steady Hands",
+      "effect": "tap-damage",
+      "description": "+8% tap damage, per level.",
+      "sourceLine": 2878,
+      "unlock": "baseline",
+      "configuredLevelCap": null,
+      "effectCapFromProductionOperand": null,
+      "currency": [
+        "Prisms"
+      ],
+      "price": {
+        "rounding": "ceil per single purchase",
+        "base": 1,
+        "growth": 1.3
+      },
+      "firstThreeSinglePrices": [
+        1,
+        2,
+        2
+      ],
+      "sameOperand": [
+        "forge/resolve",
+        "lab/guardmastery"
+      ]
+    },
+    {
+      "family": "tree",
+      "id": "echo",
+      "name": "Echoing Rest",
+      "effect": "offline-rate",
+      "description": "+5% offline earning rate, per level (caps at 100%).",
+      "sourceLine": 2879,
+      "unlock": "baseline",
+      "configuredLevelCap": null,
+      "effectCapFromProductionOperand": 6,
+      "currency": [
+        "Prisms"
+      ],
+      "price": {
+        "rounding": "ceil per single purchase",
+        "base": 2,
+        "growth": 1.4
+      },
+      "firstThreeSinglePrices": [
+        2,
+        3,
+        4
+      ],
+      "sameOperand": [
+        "lab/riftattune"
+      ]
+    },
+    {
+      "family": "tree",
+      "id": "bonds",
+      "name": "Cheaper Bonds",
+      "effect": "wisp-recruit-and-empower-price",
+      "description": "−3% Wisp recruiting cost, per level (floor 40%).",
+      "sourceLine": 2880,
+      "unlock": "baseline",
+      "configuredLevelCap": null,
+      "effectCapFromProductionOperand": 20,
+      "currency": [
+        "Prisms"
+      ],
+      "price": {
+        "rounding": "ceil per single purchase",
+        "base": 2,
+        "growth": 1.45
+      },
+      "firstThreeSinglePrices": [
+        2,
+        3,
+        5
+      ],
+      "sameOperand": []
+    },
+    {
+      "family": "tree",
+      "id": "swift",
+      "name": "Swift Ascension",
+      "effect": "ascend-prisms",
+      "description": "+4% Prisms earned per Ascend, per level.",
+      "sourceLine": 2881,
+      "unlock": "baseline",
+      "configuredLevelCap": null,
+      "effectCapFromProductionOperand": null,
+      "currency": [
+        "Prisms"
+      ],
+      "price": {
+        "rounding": "ceil per single purchase",
+        "base": 3,
+        "growth": 1.5
+      },
+      "firstThreeSinglePrices": [
+        3,
+        5,
+        7
+      ],
+      "sameOperand": [
+        "lab/prismstudy"
+      ]
+    },
+    {
+      "family": "tree",
+      "id": "momentum",
+      "name": "Eternal Momentum",
+      "effect": "passive-and-tap-base",
+      "description": "+6% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.",
+      "sourceLine": 2882,
+      "unlock": "asc5",
+      "configuredLevelCap": null,
+      "effectCapFromProductionOperand": null,
+      "currency": [
+        "Prisms"
+      ],
+      "price": {
+        "rounding": "ceil per single purchase",
+        "base": 5,
+        "growth": 1.55
+      },
+      "firstThreeSinglePrices": [
+        5,
+        8,
+        13
+      ],
+      "sameOperand": [
+        "forge/formation",
+        "lab/wispascend",
+        "lab/formationstudy"
+      ]
+    },
+    {
+      "family": "tree",
+      "id": "reserves",
+      "name": "Deep Reserves",
+      "effect": "offline-hours",
+      "description": "+2 hours to your offline cap, per level.",
+      "sourceLine": 2883,
+      "unlock": "d100",
+      "configuredLevelCap": null,
+      "effectCapFromProductionOperand": null,
+      "currency": [
+        "Prisms"
+      ],
+      "price": {
+        "rounding": "ceil per single purchase",
+        "base": 6,
+        "growth": 1.6
+      },
+      "firstThreeSinglePrices": [
+        6,
+        10,
+        16
+      ],
+      "sameOperand": []
+    },
+    {
+      "family": "forge",
+      "id": "focus",
+      "name": "Battle Focus",
+      "effect": "kill-lumen",
+      "description": "+8% Lumen from every kill, per level.",
+      "sourceLine": 2866,
+      "unlock": "baseline",
+      "configuredLevelCap": null,
+      "effectCapFromProductionOperand": null,
+      "currency": [
+        "Lumen"
+      ],
+      "price": {
+        "rounding": "ceil of geometric sum per bulk transaction",
+        "lumenBase": 200,
+        "lumenGrowth": 1.5,
+        "shardBase": 0,
+        "shardGrowth": 1
+      },
+      "sameOperand": [
+        "tree/starlight",
+        "lab/lumenstudy"
+      ]
+    },
+    {
+      "family": "forge",
+      "id": "sense",
+      "name": "Shard Sense",
+      "effect": "kill-shards",
+      "description": "+8% Shards from every kill, per level.",
+      "sourceLine": 2867,
+      "unlock": "baseline",
+      "configuredLevelCap": null,
+      "effectCapFromProductionOperand": null,
+      "currency": [
+        "Lumen",
+        "Shards"
+      ],
+      "price": {
+        "rounding": "ceil of geometric sum per bulk transaction",
+        "lumenBase": 150,
+        "lumenGrowth": 1.5,
+        "shardBase": 20,
+        "shardGrowth": 1.5
+      },
+      "sameOperand": [
+        "lab/shardstudy"
+      ]
+    },
+    {
+      "family": "forge",
+      "id": "formation",
+      "name": "Formation Training",
+      "effect": "passive-and-tap-base",
+      "description": "+5% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.",
+      "sourceLine": 2868,
+      "unlock": "baseline",
+      "configuredLevelCap": null,
+      "effectCapFromProductionOperand": null,
+      "currency": [
+        "Shards"
+      ],
+      "price": {
+        "rounding": "ceil of geometric sum per bulk transaction",
+        "lumenBase": 0,
+        "lumenGrowth": 1,
+        "shardBase": 40,
+        "shardGrowth": 1.6
+      },
+      "sameOperand": [
+        "tree/momentum",
+        "lab/wispascend",
+        "lab/formationstudy"
+      ]
+    },
+    {
+      "family": "forge",
+      "id": "resolve",
+      "name": "Guardian's Resolve",
+      "effect": "tap-damage",
+      "description": "+10% tap damage, per level.",
+      "sourceLine": 2869,
+      "unlock": "baseline",
+      "configuredLevelCap": null,
+      "effectCapFromProductionOperand": null,
+      "currency": [
+        "Lumen"
+      ],
+      "price": {
+        "rounding": "ceil of geometric sum per bulk transaction",
+        "lumenBase": 150,
+        "lumenGrowth": 1.45,
+        "shardBase": 0,
+        "shardGrowth": 1
+      },
+      "sameOperand": [
+        "tree/steady",
+        "lab/guardmastery"
+      ]
+    },
+    {
+      "family": "forge",
+      "id": "charge",
+      "name": "Swift Recovery",
+      "effect": "ability-cycle",
+      "description": "+8% faster Wisp ability charge, per level.",
+      "sourceLine": 2870,
+      "unlock": "baseline",
+      "configuredLevelCap": null,
+      "effectCapFromProductionOperand": null,
+      "currency": [
+        "Shards"
+      ],
+      "price": {
+        "rounding": "ceil of geometric sum per bulk transaction",
+        "lumenBase": 0,
+        "lumenGrowth": 1,
+        "shardBase": 30,
+        "shardGrowth": 1.55
+      },
+      "sameOperand": []
+    },
+    {
+      "family": "forge",
+      "id": "arcanecal",
+      "name": "Arcane Calibration",
+      "effect": "ability-damage-factor",
+      "description": "+3 percentage points to the damaging Wisp ability factor per level. Burst, Breaker, Gale and Thorn only; no passive or Tap bonus.",
+      "sourceLine": 2871,
+      "unlock": "maxDepthEver >= 12",
+      "configuredLevelCap": 10,
+      "effectCapFromProductionOperand": 10,
+      "currency": [
+        "Lumen",
+        "Shards"
+      ],
+      "price": {
+        "rounding": "ceil of geometric sum per bulk transaction",
+        "lumenBase": 15000,
+        "lumenGrowth": 1.6,
+        "shardBase": 120,
+        "shardGrowth": 1.6
+      },
+      "sameOperand": []
+    },
+    {
+      "family": "forge",
+      "id": "conduction",
+      "name": "Resource Conduction",
+      "effect": "ability-resource-factor",
+      "description": "+4 percentage points to the ability resource factor per level. Gale Shards and Thorn Lumen only; rounded per cast, not kill rewards.",
+      "sourceLine": 2872,
+      "unlock": "maxDepthEver >= 18",
+      "configuredLevelCap": 10,
+      "effectCapFromProductionOperand": 10,
+      "currency": [
+        "Lumen",
+        "Shards"
+      ],
+      "price": {
+        "rounding": "ceil of geometric sum per bulk transaction",
+        "lumenBase": 90000,
+        "lumenGrowth": 1.6,
+        "shardBase": 280,
+        "shardGrowth": 1.6
+      },
+      "sameOperand": []
+    },
+    {
+      "family": "forge",
+      "id": "luminoustracking",
+      "name": "Luminous Tracking",
+      "effect": "luminous-encounter-chance",
+      "description": "+0.5 percentage points Luminous chance per level for future eligible encounters; total chance at most 35%. No extra Motes per kill.",
+      "sourceLine": 2873,
+      "unlock": "maxDepthEver >= 32",
+      "configuredLevelCap": 10,
+      "effectCapFromProductionOperand": 10,
+      "currency": [
+        "Lumen",
+        "Shards"
+      ],
+      "price": {
+        "rounding": "ceil of geometric sum per bulk transaction",
+        "lumenBase": 2500000,
+        "lumenGrowth": 1.6,
+        "shardBase": 1500,
+        "shardGrowth": 1.6
+      },
+      "sameOperand": []
+    },
+    {
+      "family": "lab",
+      "id": "wispascend",
+      "name": "Wisp Ascendancy",
+      "effect": "passive-and-tap-base",
+      "description": "+15% passive Wisp damage permanently; also raises the Wisp-powered part of your tap damage.",
+      "sourceLine": 2889,
+      "unlock": "maxDepthEver >= 1",
+      "configuredLevelCap": null,
+      "effectCapFromProductionOperand": null,
+      "currency": [
+        "Lumen",
+        "Shards"
+      ],
+      "price": {
+        "rounding": "round per study start",
+        "lumenBase": 800,
+        "lumenGrowth": 1.8,
+        "shardBase": 80,
+        "shardGrowth": 1.8
+      },
+      "work": {
+        "baseDurationSec": 180,
+        "growth": 1.6,
+        "measuredInquiryApplies": true,
+        "note": "Stored paid active snapshots stay authoritative; Motes speed-up is separate."
+      },
+      "sameOperand": [
+        "tree/momentum",
+        "forge/formation",
+        "lab/formationstudy"
+      ]
+    },
+    {
+      "family": "lab",
+      "id": "guardmastery",
+      "name": "Guardian's Mastery",
+      "effect": "tap-damage",
+      "description": "+20% tap damage, permanently.",
+      "sourceLine": 2890,
+      "unlock": "maxDepthEver >= 1",
+      "configuredLevelCap": null,
+      "effectCapFromProductionOperand": null,
+      "currency": [
+        "Lumen",
+        "Shards"
+      ],
+      "price": {
+        "rounding": "round per study start",
+        "lumenBase": 600,
+        "lumenGrowth": 1.8,
+        "shardBase": 40,
+        "shardGrowth": 1.8
+      },
+      "work": {
+        "baseDurationSec": 150,
+        "growth": 1.6,
+        "measuredInquiryApplies": true,
+        "note": "Stored paid active snapshots stay authoritative; Motes speed-up is separate."
+      },
+      "sameOperand": [
+        "tree/steady",
+        "forge/resolve"
+      ]
+    },
+    {
+      "family": "lab",
+      "id": "riftattune",
+      "name": "Rift Attunement",
+      "effect": "offline-rate",
+      "description": "+10% offline earning rate, permanently (stacks past 100%).",
+      "sourceLine": 2891,
+      "unlock": "maxDepthEver >= 1",
+      "configuredLevelCap": null,
+      "effectCapFromProductionOperand": null,
+      "currency": [
+        "Lumen",
+        "Shards"
+      ],
+      "price": {
+        "rounding": "round per study start",
+        "lumenBase": 500,
+        "lumenGrowth": 1.8,
+        "shardBase": 100,
+        "shardGrowth": 1.8
+      },
+      "work": {
+        "baseDurationSec": 240,
+        "growth": 1.6,
+        "measuredInquiryApplies": true,
+        "note": "Stored paid active snapshots stay authoritative; Motes speed-up is separate."
+      },
+      "sameOperand": [
+        "tree/echo"
+      ]
+    },
+    {
+      "family": "lab",
+      "id": "shardstudy",
+      "name": "Shard Attunement",
+      "effect": "kill-shards",
+      "description": "+8% Shards earned per kill, permanently.",
+      "sourceLine": 2892,
+      "unlock": "maxDepthEver >= 15",
+      "configuredLevelCap": null,
+      "effectCapFromProductionOperand": null,
+      "currency": [
+        "Lumen",
+        "Shards"
+      ],
+      "price": {
+        "rounding": "round per study start",
+        "lumenBase": 400,
+        "lumenGrowth": 1.8,
+        "shardBase": 150,
+        "shardGrowth": 1.8
+      },
+      "work": {
+        "baseDurationSec": 200,
+        "growth": 1.6,
+        "measuredInquiryApplies": true,
+        "note": "Stored paid active snapshots stay authoritative; Motes speed-up is separate."
+      },
+      "sameOperand": [
+        "forge/sense"
+      ]
+    },
+    {
+      "family": "lab",
+      "id": "lumenstudy",
+      "name": "Lumen Wellspring",
+      "effect": "kill-lumen",
+      "description": "+8% Lumen earned per kill, permanently.",
+      "sourceLine": 2893,
+      "unlock": "maxDepthEver >= 25",
+      "configuredLevelCap": null,
+      "effectCapFromProductionOperand": null,
+      "currency": [
+        "Lumen",
+        "Shards"
+      ],
+      "price": {
+        "rounding": "round per study start",
+        "lumenBase": 1400,
+        "lumenGrowth": 1.8,
+        "shardBase": 120,
+        "shardGrowth": 1.8
+      },
+      "work": {
+        "baseDurationSec": 260,
+        "growth": 1.6,
+        "measuredInquiryApplies": true,
+        "note": "Stored paid active snapshots stay authoritative; Motes speed-up is separate."
+      },
+      "sameOperand": [
+        "tree/starlight",
+        "forge/focus"
+      ]
+    },
+    {
+      "family": "lab",
+      "id": "formationstudy",
+      "name": "Formation Insight",
+      "effect": "passive-and-tap-base",
+      "description": "+5% passive Wisp damage permanently; also raises the Wisp-powered part of your tap damage.",
+      "sourceLine": 2894,
+      "unlock": "maxDepthEver >= 40",
+      "configuredLevelCap": null,
+      "effectCapFromProductionOperand": null,
+      "currency": [
+        "Lumen",
+        "Shards"
+      ],
+      "price": {
+        "rounding": "round per study start",
+        "lumenBase": 2200,
+        "lumenGrowth": 1.8,
+        "shardBase": 220,
+        "shardGrowth": 1.8
+      },
+      "work": {
+        "baseDurationSec": 320,
+        "growth": 1.6,
+        "measuredInquiryApplies": true,
+        "note": "Stored paid active snapshots stay authoritative; Motes speed-up is separate."
+      },
+      "sameOperand": [
+        "tree/momentum",
+        "forge/formation",
+        "lab/wispascend"
+      ]
+    },
+    {
+      "family": "lab",
+      "id": "motestudy",
+      "name": "Luminous Sense",
+      "effect": "luminous-motes-per-kill",
+      "description": "+10% Motes gained from Luminous enemies, permanently.",
+      "sourceLine": 2895,
+      "unlock": "maxDepthEver >= 60",
+      "configuredLevelCap": null,
+      "effectCapFromProductionOperand": null,
+      "currency": [
+        "Lumen",
+        "Shards"
+      ],
+      "price": {
+        "rounding": "round per study start",
+        "lumenBase": 3200,
+        "lumenGrowth": 1.8,
+        "shardBase": 320,
+        "shardGrowth": 1.8
+      },
+      "work": {
+        "baseDurationSec": 380,
+        "growth": 1.6,
+        "measuredInquiryApplies": true,
+        "note": "Stored paid active snapshots stay authoritative; Motes speed-up is separate."
+      },
+      "sameOperand": []
+    },
+    {
+      "family": "lab",
+      "id": "prismstudy",
+      "name": "Ascendant Clarity",
+      "effect": "ascend-prisms",
+      "description": "+5% Prisms earned per Ascend, permanently.",
+      "sourceLine": 2896,
+      "unlock": "maxDepthEver >= 90",
+      "configuredLevelCap": null,
+      "effectCapFromProductionOperand": null,
+      "currency": [
+        "Lumen",
+        "Shards"
+      ],
+      "price": {
+        "rounding": "round per study start",
+        "lumenBase": 4800,
+        "lumenGrowth": 1.8,
+        "shardBase": 480,
+        "shardGrowth": 1.8
+      },
+      "work": {
+        "baseDurationSec": 450,
+        "growth": 1.6,
+        "measuredInquiryApplies": true,
+        "note": "Stored paid active snapshots stay authoritative; Motes speed-up is separate."
+      },
+      "sameOperand": [
+        "tree/swift"
+      ]
+    },
+    {
+      "family": "lab",
+      "id": "measuredinquiry",
+      "name": "Measured Inquiry",
+      "effect": "future-study-work",
+      "description": "2% less work per completed level, up to 20%, for future starts of Wisp Ascendancy, Guardian’s Mastery, Rift Attunement, Shard Attunement, Lumen Wellspring, Formation Insight, Luminous Sense and Ascendant Clarity. Running Studies and Measured Inquiry itself are unchanged.",
+      "sourceLine": 2897,
+      "unlock": "maxDepthEver >= 60",
+      "configuredLevelCap": 10,
+      "effectCapFromProductionOperand": 10,
+      "currency": [
+        "Lumen",
+        "Shards"
+      ],
+      "price": {
+        "rounding": "round per study start",
+        "lumenBase": 30000,
+        "lumenGrowth": 1.8,
+        "shardBase": 1200,
+        "shardGrowth": 1.8
+      },
+      "work": {
+        "baseDurationSec": 600,
+        "growth": 1.6,
+        "measuredInquiryApplies": false,
+        "note": "Stored paid active snapshots stay authoritative; Motes speed-up is separate."
+      },
+      "sameOperand": []
+    }
+  ]
+}

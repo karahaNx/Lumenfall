@@ -1,0 +1,157 @@
+{
+  "scope": "Baseline diagnostics only; no feature implementation, UI/device or migration acceptance.",
+  "baselineCommit": "b2a1f440e8ad9fed34b37551e468224310d2a6f6",
+  "sourceSha256": "f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4",
+  "node": "v24.19.0",
+  "stage": "/tmp/tree-exclusive-baseline-CYvijk",
+  "results": [
+    {
+      "scenario": "upgrade-effects-and-deeds",
+      "startedAt": "2026-10-07T13:17:44.634Z",
+      "finishedAt": "2026-10-07T13:18:10.335Z",
+      "command": [
+        "python3",
+        "tests/behavioral/run.py",
+        "--web-root",
+        "/tmp/tree-exclusive-baseline-CYvijk",
+        "--scenario",
+        "upgrade-effects-and-deeds",
+        "--raw-artifacts",
+        "/tmp/tree-exclusive-baseline-CYvijk/raw/upgrade-effects-and-deeds"
+      ],
+      "exitCode": 1,
+      "signal": null,
+      "expected": "0",
+      "checkSatisfied": false,
+      "output": "upgrade-effects-and-deeds.txt",
+      "raw": "/tmp/tree-exclusive-baseline-CYvijk/raw/upgrade-effects-and-deeds"
+    },
+    {
+      "scenario": "p2-ascend-integrity",
+      "startedAt": "2026-10-07T13:17:44.638Z",
+      "finishedAt": "2026-10-07T13:18:10.026Z",
+      "command": [
+        "python3",
+        "tests/behavioral/run.py",
+        "--web-root",
+        "/tmp/tree-exclusive-baseline-CYvijk",
+        "--scenario",
+        "p2-ascend-integrity",
+        "--raw-artifacts",
+        "/tmp/tree-exclusive-baseline-CYvijk/raw/p2-ascend-integrity"
+      ],
+      "exitCode": 1,
+      "signal": null,
+      "expected": "0",
+      "checkSatisfied": false,
+      "output": "p2-ascend-integrity.txt",
+      "raw": "/tmp/tree-exclusive-baseline-CYvijk/raw/p2-ascend-integrity"
+    },
+    {
+      "scenario": "parity-auto-ascend",
+      "startedAt": "2026-10-07T13:17:44.640Z",
+      "finishedAt": "2026-10-07T13:18:10.187Z",
+      "command": [
+        "python3",
+        "tests/behavioral/run.py",
+        "--web-root",
+        "/tmp/tree-exclusive-baseline-CYvijk",
+        "--scenario",
+        "parity-auto-ascend",
+        "--raw-artifacts",
+        "/tmp/tree-exclusive-baseline-CYvijk/raw/parity-auto-ascend"
+      ],
+      "exitCode": 1,
+      "signal": null,
+      "expected": "0",
+      "checkSatisfied": false,
+      "output": "parity-auto-ascend.txt",
+      "raw": "/tmp/tree-exclusive-baseline-CYvijk/raw/parity-auto-ascend"
+    },
+    {
+      "scenario": "chronology-auto-ascend-mid-window",
+      "startedAt": "2026-10-07T13:18:10.027Z",
+      "finishedAt": "2026-10-07T13:18:35.192Z",
+      "command": [
+        "python3",
+        "tests/behavioral/run.py",
+        "--web-root",
+        "/tmp/tree-exclusive-baseline-CYvijk",
+        "--scenario",
+        "chronology-auto-ascend-mid-window",
+        "--raw-artifacts",
+        "/tmp/tree-exclusive-baseline-CYvijk/raw/chronology-auto-ascend-mid-window"
+      ],
+      "exitCode": 1,
+      "signal": null,
+      "expected": "0",
+      "checkSatisfied": false,
+      "output": "chronology-auto-ascend-mid-window.txt",
+      "raw": "/tmp/tree-exclusive-baseline-CYvijk/raw/chronology-auto-ascend-mid-window"
+    },
+    {
+      "scenario": "restore-roundtrip",
+      "startedAt": "2026-10-07T13:18:10.187Z",
+      "finishedAt": "2026-10-07T13:18:35.543Z",
+      "command": [
+        "python3",
+        "tests/behavioral/run.py",
+        "--web-root",
+        "/tmp/tree-exclusive-baseline-CYvijk",
+        "--scenario",
+        "restore-roundtrip",
+        "--raw-artifacts",
+        "/tmp/tree-exclusive-baseline-CYvijk/raw/restore-roundtrip"
+      ],
+      "exitCode": 1,
+      "signal": null,
+      "expected": "0",
+      "checkSatisfied": false,
+      "output": "restore-roundtrip.txt",
+      "raw": "/tmp/tree-exclusive-baseline-CYvijk/raw/restore-roundtrip"
+    },
+    {
+      "scenario": "recovery-offline-once",
+      "startedAt": "2026-10-07T13:18:10.335Z",
+      "finishedAt": "2026-10-07T13:18:35.627Z",
+      "command": [
+        "python3",
+        "tests/behavioral/run.py",
+        "--web-root",
+        "/tmp/tree-exclusive-baseline-CYvijk",
+        "--scenario",
+        "recovery-offline-once",
+        "--raw-artifacts",
+        "/tmp/tree-exclusive-baseline-CYvijk/raw/recovery-offline-once"
+      ],
+      "exitCode": 1,
+      "signal": null,
+      "expected": "0",
+      "checkSatisfied": false,
+      "output": "recovery-offline-once.txt",
+      "raw": "/tmp/tree-exclusive-baseline-CYvijk/raw/recovery-offline-once"
+    },
+    {
+      "scenario": "self-test-parity-regression",
+      "startedAt": "2026-10-07T13:18:35.192Z",
+      "finishedAt": "2026-10-07T13:19:00.403Z",
+      "command": [
+        "python3",
+        "tests/behavioral/run.py",
+        "--web-root",
+        "/tmp/tree-exclusive-baseline-CYvijk",
+        "--scenario",
+        "self-test-parity-regression",
+        "--raw-artifacts",
+        "/tmp/tree-exclusive-baseline-CYvijk/raw/self-test-parity-regression"
+      ],
+      "exitCode": 1,
+      "signal": null,
+      "expected": "nonzero with deliberately regressed parity",
+      "checkSatisfied": false,
+      "output": "self-test-parity-regression.txt",
+      "raw": "/tmp/tree-exclusive-baseline-CYvijk/raw/self-test-parity-regression",
+      "reason": "No valid completed QA record: infrastructure timeout cannot count as caught negative."
+    }
+  ]
+}
