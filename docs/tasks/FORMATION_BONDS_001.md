@@ -82,8 +82,9 @@ Current product SHA256: 4d131993079d7932c696314be761321b350af42d0f2ead294b357d28
 Core eight groups/six real mutations PASS; combined autosave contract/nine
 focused checks/12 mobile profiles/V8 6.0 PASS. Corrected SRGB contrast handling
 also passes12 profiles. Normal/reduced Rift checks pass three profiles each.
-Source/tooling/context/signing self-test PASS on labeled earlier bytes. Combined CI now covers170 defaults/17 negatives; final head must pass.
-Prior CI254 passed every F15/Rift case; Resonate Chromium startup timed out.
+Matrix combination: core/V8/nine focused/12 mobile and Resonate checks PASS. Combined CI now covers170 defaults/17 negatives; final head must pass.
+CI254 passed all F15/Rift cases; Resonate Chromium startup timed out.
+Harness now uses the selected browser and awaits actual init before DOM access.
 Actual equal-budget live Boss160 clears with Vanguard at1002s; highest-net
 non-Vanguard remains walled after1288s, matching whole/one-second simulation. Prior CI failures and local
 transport/time-budget limits are retained; no timeout/tolerance is weakened.
