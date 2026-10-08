@@ -9,13 +9,14 @@ commits below are observed checkpoints, not a promise that main never advances.
 
 ## Product and release evidence
 
-[RIFT_GUIDANCE_001 / F07](tasks/RIFT_GUIDANCE_001.md): stable guidance below
-currencies with Show hints/Hide hints is being published on its isolated branch.
-Rebased onto main b0537cb with integrated F13/F27 preserved. Fresh local160
-measurements/0px shift, focus/AX/reload/save purity and Rift/navigation/F13 checks
-PASS; required PR CI, main integration and signed APK/native acceptance pending.
-[8 October evidence](qa/rift-guidance-001/2026-10-08/README.md). This owner chat
-remains open until required acceptance is saved.
+[RIFT_GUIDANCE_001 / F07](tasks/RIFT_GUIDANCE_001.md): PR81/015e2e6 integrates
+stable guidance below currencies. UI160/0px, focus/AX/state purity, Rift/navigation
+and V8 6.0 PASS. Signed0.1.151 identity/assets and actual143→151 Android update,
+four-width touch/large-text/keyboard/reload acceptance PASS. Later Tree/cosmetics
+source checks pass. [PR98](https://github.com/karahaNx/Lumenfall/pull/98) saves the
+[completion receipt](qa/rift-guidance-001/2026-10-08/delivery/README.md); completion
+on main requires its final mandatory CI/merge. No physical/TalkBack/FPS claim;
+archive only this owner after merge, or report unavailable app tooling.
 
 F13 delivery added 8 October 2026: [RIFT_CAST_TEXT_001](tasks/RIFT_CAST_TEXT_001.md)
 is complete via PR63/ab46c0c. Full CI151 scenarios/12 required negatives, integrated

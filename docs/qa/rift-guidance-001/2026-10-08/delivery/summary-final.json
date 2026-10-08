@@ -1,0 +1,75 @@
+{
+  "status": "acceptance passed; final PR98 CI and normal merge required for closure",
+  "productPR": 81,
+  "productIntegration": "015e2e667afac1b4d3cf0bfebf535add3600ab01",
+  "deliveryPR": 98,
+  "currentMain": "06b28d5e80269dc5c8a609540bc75e27c842da4b",
+  "currentSourceSha256": "c1e23bb552666ecc0067a755c0ad30e13aee1827bf6371919d96003a88919a4b",
+  "currentSourceAcceptance": {
+    "status": "pass",
+    "main": "06b28d5e80269dc5c8a609540bc75e27c842da4b",
+    "sourceSha256": "c1e23bb552666ecc0067a755c0ad30e13aee1827bf6371919d96003a88919a4b",
+    "profiles": 16,
+    "observations": 160,
+    "maxToggleDeltaPx": 0,
+    "minTapHeightPx": 121,
+    "minContrast": 8.296634318529971,
+    "themes": 96,
+    "cometCosmetics": 48,
+    "visibleTrials": 16,
+    "touchScrolls": 80,
+    "riftChecks": 1618,
+    "navigationChecks": 255,
+    "cosmeticsGateSamples": 168,
+    "cosmeticsNegativeChecks": "pass"
+  },
+  "archivedAPK": {
+    "versionCode": 151,
+    "versionName": "0.1.151",
+    "package": "com.lumenfall.app",
+    "sha256": "cc4c6d45720659ff81fe11c6eb858407b09f46a9abeea593714d3840c018c238",
+    "sourceSha256": "852f32974f52d757406ac8a54b668969a2e0667e7acdd85192d63dbdc31ad262",
+    "build": 37746908017,
+    "crcEntries": 526,
+    "matchedSourceAssets": 15
+  },
+  "native": {
+    "status": "pass",
+    "ua": "Mozilla/5.0 (Linux; Android 8.1.0; Android SDK built for x86 Build/OSM1.180201.023; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.98 Mobile Safari/537.36",
+    "records": 29,
+    "geometryCases": 16,
+    "hardwareSwipes": 4,
+    "storageBytes": 125952,
+    "storageBefore": "64b3c5936bec6a6f5113540bac5491c69a1be3bc26895ce301e79436002aac74",
+    "storageAfter": "64b3c5936bec6a6f5113540bac5491c69a1be3bc26895ce301e79436002aac74",
+    "font": {
+      "root": "32px",
+      "toggle": "28px",
+      "viewport": 430
+    },
+    "runtimeErrors": [],
+    "cleanup": "../native61/cleanup.json"
+  },
+  "capturedCI": {
+    "status": "success",
+    "run": 37752425389,
+    "job": 113228648241,
+    "head": "43e03d821484932faca6ae748bf6dcecd56da2f4",
+    "testedSourceSha256": "45ae4c62bd37aed28bfd2b77147bffcbda1a9b6a699c4a3107e0fd1a4feccd02",
+    "defaultScenarios": 176,
+    "requiredNegativeGates": 17,
+    "guardedSmoke": "pass",
+    "rawLog": "ci-37752425389.log.gz",
+    "scope": "Tree integration before F24; final documentation head requires its own mandatory cosmetics and full CI checks."
+  },
+  "closureGuard": "Final PR98 head must pass current required cosmetics/default/negative/smoke gates before merge. No gate changes in this delivery PR.",
+  "limits": [
+    "Task-owned Android8.1/API27 software emulator; no performance/physical/TalkBack claim.",
+    "Exact product source attested; only measurement clock/root-text/long-hint fixtures are injected through DevTools.",
+    "Actual installed legacy WebView identity is recorded; separate V8 6.0 probe covers Chrome60 JS generation."
+  ],
+  "sharedCheckout": {
+    "head": "67c3e99c24587f6c13fc65cfd27f8dcb8e289602",
+    "untouched": true
+  }
+}

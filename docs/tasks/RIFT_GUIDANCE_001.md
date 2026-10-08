@@ -1,67 +1,61 @@
 # RIFT_GUIDANCE_001 — Stable Rift Guidance / F07
 
-Status: integrated; final CI/native acceptance and delivery receipts pending.
-Owner: this Stable Rift Guidance chat. Private checkout
-`/workspace/Lumenfall-rift-guidance-001`; shared checkout untouched.
+Status: acceptance receipt; complete on main after PR98 merges with required CI PASS.
+Owner: this Stable Rift Guidance chat; private /workspace/Lumenfall-rift-guidance-001.
+Branches: feature/rift-guidance-001 and docs/rift-guidance-001-delivery.
+Shared checkout remains untouched.
 
-## Goal and sources
+## Goal and originals
 
-Guidance below currencies with Show hints/Hide hints. Currencies, combat, Boss
-HP and Guardian Tap keep their bounds through toggle, long hints and large text;
-hidden hints cannot take focus or screen-reader access.
+Guidance directly below currencies with Show hints/Hide hints. Currencies,
+combat, Boss HP and Guardian Tap keep their bounds through toggle, long hints
+and large text. Hidden hints cannot take focus or screen-reader access.
 
 > På rift skærmen, når man fjerner rift guideline så rykker hele billedet sig, det skal være fast. Du kan sætte rift guidance boksen lige under currencies og have det som notifikation, hvor man kan vælge show hints hide hints.
 
 [Original](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt),
-[F07/dependencies/save](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt),
-[decisions](../recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt),
-[findings](../recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/FINDINGS.txt),
-[source index](../recovery/2026-10-07/lead_context/FEEDBACK/Source_Index.txt).
-Originals prevail; none of their images shows Rift.
-8 October: “Finish the feature task push to github, implement to game” authorizes
-scoped publication/integration/release under the current feature workflow.
+[F07/dependencies/save](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt).
+Decision/evidence paths are in the receipt. Originals prevail. The 8 October instruction “Finish the feature task push to
+github, implement to game” authorizes scoped integration/release.
 
 ## Baseline, scope and decisions
 
 7 October freeze7c5ecf6 on0bcce84; [historical task](../qa/rift-guidance-001/2026-10-08/previous-task-2026-10-07.md).
-8 October baselineb0537cb; PR46/B2, F13 Cast removal and F27 cosmetics integrated.
-Merged newer Save Backup, Formation autosave, Resonate, Auto-Ascend, upgrade
-identity, Forge memory and12h offline/refund changes without replacing them.
+8 October refreshb0537cb; PR46/B2, F13 Cast removal and F27 integrated.
 [PR81](https://github.com/karahaNx/Lumenfall/pull/81), head db6ba6241ccf3d7ec74bd2a1b677c19f387514d6,
-merged as015e2e667afac1b4d3cf0bfebf535add3600ab01. Source SHA256
-852f32974f52d757406ac8a54b668969a2e0667e7acdd85192d63dbdc31ad262.
+merged as015e2e667afac1b4d3cf0bfebf535add3600ab01. Later main product changes are preserved; F13/F27/F24 interaction is checked.
+Other feature goals remain separate.
 
-Fixed46px slot, persistent44px native toggle; full wrapped title/detail in a
-bounded44px scrolling region. Keep preference key/Settings sync and return focus
-to the toggle when hiding focused content. No F07 balance/save migration, purchase,
-chronology, bulk/queue, reward/Mote, package or signing changes. Preserve WebView60.
-Product: index.html; tests: rift-guidance.cjs, rift-status.js/cjs, run.cjs and
-scenarios.json. Other changes are this task's documents/evidence/APK.
-No new rules, subagents/messages or other-chat changes.
+Fixed46px slot with persistent44px native toggle; wrapped full title/detail
+scrolls inside44px. Keep preference key/Settings sync, return focus on hiding
+focused content; hidden hints leave focus/AX. Preserve gameplay/save/value/rewards,
+chronology, bulk/queue, package and signing; no F07 migration.
+WebView60 stays supported. No new rules, subagents/messages or other-chat changes.
+Product: index.html; tests/behavioral guidance/status/runner/scenarios. Other
+edits are this task's evidence, status and archived APK.
 
-## Acceptance and evidence
+## Acceptance and receipts
 
-Required:320/360/390/430px,100/200% text, normal/long hints, both motion settings,
+Required:320/360/390/430px,100/200% text, normal/long hints, both motion settings;
 Fresh/dense/Boss/conditional Boss/Farm; >=44px controls, contrast, focus/AX,
-scroll/reload/Settings/state purity; six themes, F27 cosmetics/Trial, existing
-Rift/navigation, required CI, signed APK and native update/layout acceptance.
+scroll/reload/Settings/state purity, themes/F27 cosmetics/Trial, existing contracts,
+required CI, signed APK and native update/layout acceptance.
 
-Integrated local matrix/contract/V8/source/tooling PASS; detailed counts and exact
-bytes in [delivery](../qa/rift-guidance-001/2026-10-08/delivery/README.md).
-PR81 CI37744052638 PASS:169 defaults/17 negative gates/smoke; it predates F25/F26.
-Final documentation PR must check the integrated game with all current gates.
-Automated review P1 fixed: exact nav-spirits stop plus prevented-Tab negative;
-thread resolved. No independent review claim or weakened acceptance.
+[Final receipt](../qa/rift-guidance-001/2026-10-08/delivery/README.md): full identities,
+commands, failures, later source checks and limits.
+Matrix160/0px, themes/Comet/Trial, touch/focus, contrast, Rift/navigation and
+V8 6.0 PASS; exact counts in receipt.
+CI37752425389 accepts Tree45ae4c62:176 defaults/17 negative gates/smoke.
+Final PR98 CI also requires the new cosmetics gate on06b28d5/c1e23bb5.
+Review P1 fixed with exact nav-spirits stop and prevented-Tab negative; resolved.
 
-Build37746908017 produced signed0.1.151 from015e2e6. Package/certificate,
-526 ZIP CRCs and15 exact-source assets PASS. Actual143→151 signed Android update
-preserved125952 WebView-storage bytes; initial ownership/Wisp levels/old preference
-PASS. Native320px normal/200% toggles, focus/AX PASS. ADB timed swipes emitted
-no moves; the hardware touchscreen diagnostic scrolls28px with real touch moves.
-Full native acceptance is rerunning; preserved failures remain diagnostic evidence.
-Native API27/WebView61 software emulator plus V8 6.0; no physical/TalkBack/FPS claim.
-Baseline-matched local Save reload timeout is documented; remote gate remains required.
+Signed0.1.151/build37746908017 from015e2e6: package/certificate,526 ZIP CRCs,
+15 exact assets and actual143→151 storage/ownership/preference preservation PASS.
+Native Android8.1/WebView61 geometry/touch/focus/AX, Tab/reload and OS200% font
+PASS; no runtime errors.
+Emulator stopped, font restored, data retained. No physical/TalkBack/FPS or
+independent human review claim; no native acceptance of a newer APK is inferred.
 
-Next: complete native checks, save immutable APK/final receipts, pass and merge
-documentation CI, stop this task's shared-file work, then archive only this owner.
-Required acceptance failures keep the task open.
+Next: merge PR98 after final required CI, stop shared-file work and archive only
+this owner. App calls timed out; confirm archive response or report manual archival.
+Missing required acceptance keeps the task open.
