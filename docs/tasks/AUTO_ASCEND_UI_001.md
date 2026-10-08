@@ -31,15 +31,17 @@ grant. Historical handover stops are superseded by current rules and this order.
 No subagents/message tools are used.
 
 Remote baseline: b0537cb46635555ba2c2e5f3f95bc8fc276aeda5.
-Current combination includes main261b1b7 (PR77 Save Backup UI); its confirmation
-flow, source/tests and14 required CI negatives are preserved. Product SHA256
-615152699a20629edd8da16ee60b4cd5c91f905367078077f582c2ce9683306d.
-PR84 publishes this feature; earlier local evidence applies to its labeled
-baseline. Combined-source CI and focused checks are renewing before integration.
+Current combination includes main4ff0ae3 (PR76 Formation autosave and PR77/87
+Save Backup UI/receipt). Both product changes and all existing CI cases are
+preserved. Source SHA256
+6482a85c7bf12a2421f49e050332a87decf8272418f490d604ff8cfd5e9cf482.
+PR84 CI37737148141 passed on prior source61515269 (153 default scenarios and14
+required negatives). Main advanced afterward; merge conflicts in status/default
+scenario registration retain both features. Renew CI and focused checks before
+integration. Earlier evidence applies only to its labeled source.
 Real Git worktree: /workspace/AUTO_ASCEND_UI_001-github;
 branch feature/auto-ascend-ui-001. Network-enabled Git restored access.
-Earlier local45a5f02/0bcce84 is historical. New B2 arithmetic, Comet Trials,
-Wisp/Bond/Forge/Rift text and offline fixes are preserved.
+Earlier local45a5f02/0bcce84 is historical; existing game features are preserved.
 PR46 is merged; B2 integrated through PR57. Its historical stress/device limits
 are separate from this UI task. Open PR66/67/70 overlap index.html; none is
 incorporated or accepted here. Recheck main before serialized integration.
@@ -96,7 +98,7 @@ Required GitHub CI must pass unchanged.
 
 ## Next action
 
-Publish candidate/evidence, pass required CI, recheck main and integrate. Renew
+Push the main4ff0ae3 combination, renew CI/focused checks, recheck main and integrate. Renew
 checks on integrated bytes; observe signed APK publication and verify identity/
 assets. Complete available native checks and save supported status here and in
 PROJECT_STATE. Missing required device acceptance stays OPEN. Stop this feature's
