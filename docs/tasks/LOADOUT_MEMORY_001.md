@@ -1,6 +1,6 @@
 # LOADOUT_MEMORY_001 / F25 — automatic Forge bulk preference
 
-Status: integrated; final combined CI and APK150 native acceptance pending.
+Status: integrated; delivery PR97 CI/native acceptance pending.
 Owner: this feature chat; no subagents/message tools. Runtime model/effort is not
 verifiably exposed; startup recommendation is not an execution receipt.
 
@@ -18,10 +18,8 @@ Read [revision/dependencies](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_F
 [decisions](../recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt),
 [findings](../recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/FINDINGS.txt) and
 [source index](../recovery/2026-10-07/lead_context/FEEDBACK/Source_Index.txt).
-Original/user correction outrank proposals. Current live AGENTS/bootstrap,
-PROJECT_STATE, CHAT_OWNERSHIP, 02_GAMEPLAY, CONTEXT_INDEX, CODEX_START and
-FEATURE_WORKFLOW were read. Current standing scope authorization supersedes
-historical Lead/writer holds. No new binding rule.
+Original/user correction outrank proposals. Live startup/workflow/ownership/gameplay rules read; standing scope approval
+supersedes historical writer holds. No new rule.
 
 ## Baseline, scope and integration
 
@@ -47,8 +45,7 @@ owns both caps: expected150 wallet425=125+300, unchanged17 Prisms/20 pre-gamepla
 Motes, preference25 and archive. F26 credit must occur once.
 
 Changed index.html, focused test/default registrations, task/decision/QA.
-Necessary Resonate driver fix forwards selected browser, changing no assertion
-or Resonate behavior. Preserve Formation, Backup, Auto-Ascend and Upgrade Identity.
+Resonate launcher forwards the selected browser; assertions/behavior unchanged.
 
 ## Acceptance and checks
 
@@ -65,25 +62,22 @@ Evidence in [current QA](../qa/loadout-memory-001/current/README.md) and
 [native QA](../qa/loadout-memory-001/native/README.md). Baseline fails unowned25x
 cold start; causal mutants catch purchase debit, lost ownership, old init gate
 and missing immediate save. Missing staged fonts/old staged gate also rejected.
-Current integrated checks1139/six profiles,45x44px minimum, contrast7.49:1;
-22 scoped cases, ES2017 and437 V8 6.0.286.52 production contracts PASS.
-Stock local Chromium151 dump-DOM timeout retained as FAIL; existing CDP transport
-runs unchanged assertions. Browser interval fixtures do not prove native timing.
+1139 checks/six profiles,45x44px minimum, contrast7.49:1;22 scoped cases,
+ES2017/437 V8 6.0 contracts PASS. Stock local dump-DOM timeout is FAIL;
+unchanged assertions pass via CDP. Browser fixtures do not prove native timing.
 
 CI37743551318 PASS170 defaults/17 required negatives/all gates on e1115f6;
 [receipt](../qa/loadout-memory-001/current/final-ci.json) and full compressed log
-retained. Earlier browser/source/assets findings fixed/resolved; superseded
-startup/fixture failures remain distinct. Self-review is not independent review.
-Old20b8b2e/1133/refund proposal never accepts current product.
+retained. Review findings resolved; superseded failures retained. Self-review only;
+old20b8b2e/refund proposal never accepts current product.
 
 Signed APK150 published; identity/CRC/all15 source assets and extracted V8 checks
 PASS. Exact143 native cold restart/database/archive/value/preference PASS on
 task-owned Android8.1/API27/WebView61.0.3163.98. Native150 upgrade underway:
-database bytes before/after install, F26 refund once, all choices/two slots,
-screen changes/real restart, geometry, actual Android taps/Space/focus/AX.
+database/credit once/choices/slots/screens/restart/geometry/taps/Space/focus/AX.
 Advancing farm may earn documented Motes; pure normalization checks exact wallet
 before gameplay. No physical/TalkBack/exact native WebView60 run claimed.
-Node20 native replay requires --experimental-websocket; recorded runtimeNode24.
+Replay: Node20 --experimental-websocket; actual runtimeNode24.
 
 Next: complete150 native/combined CI, save final task/PROJECT_STATE/APK receipts
 in GitHub, stop shared edits, then archive only this owner if all acceptance passes.
