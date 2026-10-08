@@ -5,6 +5,18 @@ main0e9b54c (PR59/60). Product code checkpoint f329600; subsequent commits
 update test expectations and measurement timing only. Required CI must pass
 on the final candidate, and integrated app acceptance remains outstanding.
 
+Pre-merge [run37711556550](https://github.com/karahaNx/Lumenfall/actions/runs/37711556550)
+completed successfully on efb5bc97ff1cb58d63342dfc42319579510c1ebb:
+all150 default scenarios, required negative self-tests, tooling, source,
+identity-verifier self-test and startup smoke. Job113098635562 reports all
+steps success. Retrieved logs explicitly show all three Comet scenarios PASS;
+the API log response was truncated, so the complete raw log is not claimed.
+
+Combined main20efc396 (Bond text and proposal receipts) preserves all incoming
+tests and both encyclopedia changes. Focused core and source/context checks
+passed after conflict resolution; the full combined CI run is required before
+integration.
+
 Available local checks (Node24.19.0): source syntax, APK identity verifier
 self-test, actual feature context gate, tooling and 11 focused production
 gameplay/save cases PASS. Existing long-offline regression PASS before the

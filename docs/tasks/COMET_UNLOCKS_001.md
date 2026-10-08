@@ -1,6 +1,7 @@
 # COMET_UNLOCKS_001 — exclusive Comet unlocks
 
-Status: **candidate pushed in draft PR69; CI/integration/acceptance pending**.
+Status: **catalog candidate passed full CI; combined-main CI, integration and
+required device acceptance pending**.
 Owner: this COMET_UNLOCKS_001 featurechat. No subagents or message tools.
 
 ## One goal and authorization
@@ -35,6 +36,12 @@ Rebased onto subsequent live main `0e9b54c8d62a873bd48625f4a20ee18078e8a8f1`
 after PR59/60 (Wisp display and Forge text) landed. The only conflict was
 scenario registration; retain both Wisp and Comet checks. Product candidate
 `f3296003c71346ff589d67234ff89bb19f739ecc` is based on this integration.
+
+Combined subsequent main `20efc396a5307560bafa4b2e7d4c9f11bf2b35b4`
+(Bond text and Lab/Forge proposal receipts). The encyclopedia conflict keeps
+both the new Comet utility description and the integrated Bond role wording.
+Preserve all incoming tests and documentation; no other owner's files are
+edited for this feature.
 
 Read live AGENTS, bootstrap, ownership, Gameplay, PROJECT_STATE and workflow.
 Preserve chronology, Lab paid snapshots, Forge bulk/queues, formation intent,
@@ -90,6 +97,11 @@ Evidence: [11 focused cases](../qa/comet-unlocks-001/implementation-core.json),
 tooling required the allowed unsandboxed run for executable subprocess fixtures.
 APK verifier self-test passed. The long-offline result predates the PR59/60
 rebase; full CI must recheck the combined candidate.
+Full pre-merge CI [run37711556550](https://github.com/karahaNx/Lumenfall/actions/runs/37711556550)
+passed on `efb5bc97ff1cb58d63342dfc42319579510c1ebb`: all150 default scenarios,
+required negative controls, tooling, identity self-test and browser smoke.
+Product source SHA256 `7771f36a0b111c5dd229a686783c125a404c2992fd081064ac2f1a106303c4d6`.
+This precedes the latest Bond combination; rerun all gates on the combined head.
 The [implementation evidence](../qa/comet-unlocks-001/IMPLEMENTATION.md) records
 12 supplementary mobile/text/motion profiles and their strict limitations.
 
@@ -99,10 +111,12 @@ task/request/design and evidence. GitHub: [PR69](https://github.com/karahaNx/Lum
 attached to this chat. No main integration, APK/device completion or independent
 review claimed. Current overlapping drafts include Ascension caps (PR66), a
 broad feedback candidate (PR67) and Wisp roles (PR70). Do not absorb their scope;
-recheck main and serialize integration. Scope question remains pending.
+recheck main and serialize integration. Full offline retirement/refunds remain
+outside the current catalog integration until the dependency decision arrives.
 
 ## Next action
 
-Save final supplementary UI evidence; resolve pending legacy scope.
-Run required CI on the rebased candidate, review full diff, integrate serially and
-verify signed app. Keep the chat open until required acceptance is complete.
+Push the combined candidate and run required CI. Review the full diff, integrate
+serially, verify integrated checks and the signed published APK, then save a
+delivery receipt in this task and PROJECT_STATE. Keep the chat open while
+required device acceptance or the wider F25/F26 transition remains incomplete.
