@@ -1,152 +1,109 @@
 # RIFT_CAST_TEXT_001 — remove repeated Rift ability status
 
-Status: **local candidate; unfinished feature**. Prepared on 7 October 2026.
-No remote branch, PR, integration, Android build, release or writer release has
-been performed by this owner chat. GitHub publication awaits a coordinated
-writer checkpoint. This chat remains open.
+Status: **implementation prepared; integration and Android acceptance pending**.
+Owner: this user-created feature chat. One goal: remove repeated visible
+Cast/ability status on compact Rift Wisp cards while preserving ability names
+and required programmatic status. This chat remains open until delivery.
 
-## Goal and authoritative request
+## Original requirements and continuation
 
-Remove repeated visible Cast/ability status from Rift Wisp cards whose resource
-bar already represents ability progress. Preserve the ability name and necessary
-programmatic status.
-
-Original F13 sentence:
+Original F13:
 
 > På rift skærmen skal cast teksten for wisp ability fjernes, der findes progress bar som allerede viser dette.
 
-Sources read:
+The [original feature order](RIFT_CAST_TEXT_001_REQUEST.txt) is preserved verbatim.
+On 8 October 2026 the user instructed: **“Finish the task”**. Current
+[feature workflow](../project/FEATURE_WORKFLOW.md) and the
+[accepted workflow replacement](../decisions/2026-10-07-feature-chat-workflow.md)
+authorize this owner to complete implementation, checks, GitHub integration and
+release within this scope. Historical Lead/writer handover gates are superseded;
+no new general approval or separate role chat is required.
 
-- [This feature's original order](RIFT_CAST_TEXT_001_REQUEST.txt).
-- [Full user original](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt).
-- [F13, dependencies and save/verification requirements](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt), sections A, F13, C and E.
-- [Lead decisions](../recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt).
-- [Findings](../recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/FINDINGS.txt) and [source/image index](../recovery/2026-10-07/lead_context/FEEDBACK/Source_Index.txt).
+Authoritative sources read: [full original](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt),
+[F13/dependencies/save requirements](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt),
+[registered decisions](../recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt),
+[findings](../recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/FINDINGS.txt) and
+[image/source index](../recovery/2026-10-07/lead_context/FEEDBACK/Source_Index.txt).
+Original requirements take precedence over suggestions. The supplied screenshots
+show other screens; none directly establishes F13 behavior or an APK/save identity.
 
-The four original screenshots cover Auto-Ascend, Lab and Formation upgrades;
-none is a direct F13 screenshot. Their APK/save identities remain unknown.
-This proposal uses the verified production rendering as its F13 baseline.
+## Baseline and isolation
 
-## Owner, writer and baseline
+- Checkout: `/workspace/lumenfall-rift-cast-text-001`, branch
+  `feature/rift-cast-text-001`. The original `/workspace/Lumenfall` remains untouched.
+- Current live-main baseline: `214d45411ce2fb420f0e4b372063811a967679b1`.
+  Rebased candidate: `689390aa205fcdf6da3467117fe046ae5c378e68` before the
+  continuation documentation checkpoint. Product source SHA256:
+  `3f201d135b89ceb6f0c518d0094284130f958ee98e6bf20d6821b72a284205be`.
+- Startup rules, project state, ownership, Visuals guidance and workflow were
+  read from current main. No subagents, message tools or chat renaming are used.
+- PR46/B2 is now integrated through PR57, commit
+  `20aaae62a4b6e46f8d75775085918eaba4e8de29`. APK 0.1.138 is the current release.
+  At continuation startup there are no open PRs or observed unmerged
+  Guidance/Cosmetics patches. Their render selectors/classes remain intact.
+  Main integration is serialized and its current head is rechecked before merge.
+- Earlier preparation baselines `b2a1f440e8ad9fed34b37551e468224310d2a6f6`
+  and `0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd`, and product/test checkpoint
+  `1edc0c8d935279542fab8a1b8dd3852adff1d7a9`, are historical. Their evidence
+  remains in [the QA directory](../qa/rift-cast-text-001/README.md).
 
-- Owner: the current user-created RIFT_CAST_TEXT_001 feature chat; role 03
-  UI / Visuals / Branding. No historical chat number is reassigned.
-- Recommended model/effort: GPT-6.1 Sol / High. Actual specific runtime model
-  and effort are not attestable from the session; the recommendation is not an
-  execution receipt.
-- Private checkout: `/workspace/lumenfall-rift-cast-text-001`; branch
-  `feature/rift-cast-text-001`. The original `/workspace/Lumenfall` checkout was
-  only read. No subagents, message tools or chat renaming were used.
-- Initial live-main baseline: `b2a1f440e8ad9fed34b37551e468224310d2a6f6`;
-  initial index SHA256 `f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4`.
-- At 13:22:51 UTC / 15:22:51 Copenhagen, live main advanced to
-  `0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd`, integrating offline catch-up and
-  Node tooling. The private candidate was rebased, current rules reread, and
-  relevant checks rerun with the Node harness. Earlier evidence is historical.
-- Validated product/test commit after rebase:
-  `1edc0c8d935279542fab8a1b8dd3852adff1d7a9`. Later documentation checkpoints
-  do not change these validated product/test bytes. See the evidence identity
-  for exact source hashes and timestamps.
-- Writer: **no shared repository writer allocation**. AGENTS and the Lead
-  feedback registration require B2 review/handover and scoped coordination.
-  Standing approval is retained; no new general approval is requested.
+## Scope and decisions
 
-## Scope and implementation decisions
+Only `renderRiftParty()` in root `index.html` changes product behavior:
 
-The only product change is in `renderRiftParty()` in root `index.html`:
+- Powered cards display no repeated `CAST` or `Ready`. Unpowered `Lv 0` remains.
+- The existing bar retains its Wisp/ability-name `aria-label`, range, actual
+  charge and timing. `aria-valuetext` exposes `Casting;` or `Ready;` when relevant,
+  without a live region. Casting status expires with the existing cosmetic marker.
+- Existing portraits, passive power, Bond grouping, fill, cast/attack classes,
+  VFX, Formation ability names and reduced-motion behavior remain intact.
+  Compact cards had no separate visible ability name; their accessible name stays.
 
-1. Powered cards no longer display `CAST` or `Ready` as repeated visible text.
-   Unpowered `Lv 0` remains a useful level/Empower indication.
-2. The existing bar keeps its ability-name `aria-label`, percentage range,
-   real charge value and seconds-to-next-ability calculation. `aria-valuetext`
-   adds `Casting;` or `Ready;` for the corresponding state. No live region is
-   introduced; status expires with the existing cosmetic cast marker.
-3. Wisp portraits, passive power, Bond grouping, bar fill, cast/attack classes,
-   VFX and reduced-motion behavior are retained. Ability names elsewhere,
-   including Formation, are retained. The baseline does not show a separate
-   visible ability name on the compact Rift cards; its existing accessible
-   ability name is preserved.
+Existing Rift assertions cover the changed contract and all eight actual casts.
+A 0.00001 percentage-point tolerance addresses fractional CSS width serialization
+in those newly inspected cast states, without changing gameplay expectations.
+The new focused browser check uses JavaScript/Node and temporary served-copy
+instrumentation; production has no QA bridge.
 
-Existing Rift assertions are adapted to F13 and now inspect all eight real
-Wisp casts. A `0.00001` percentage-point tolerance is limited to CSS width
-serialization of fractional charge; no gameplay numeric tolerance changes.
-The focused browser driver is JavaScript and uses Node built-ins.
+No balance, rewards, currencies, deterministic purchases, bulk/queue limits,
+chronology, simulation, offline policy, save schema, migration, CSS/assets,
+Android package, signing or workflows are changed. Existing owned values and
+Luminous Motes rewards stay intact. This presentation-only change needs no migration.
+WebView 60 compatibility and package `com.lumenfall.app` remain supported.
 
-No balance, currency, rewards, buying handlers, bulk/Max gates, queue rules,
-save schema, owned data, migration, simulation, offline policy, Android package,
-signing, assets, CSS or workflows are changed relative to the revised baseline.
-No new gameplay number or project rule is introduced. There is no save/value
-migration requirement for this presentation-only delta.
+## Acceptance and evidence
 
-## Dependencies and coordination
+Required feature acceptance:
 
-- PR46 was read live at startup: open/Draft, unmerged, head
-  `3cdebc236e9ee5081a4bca4e323b11f43aa0d46d`. The live discussion returned no
-  comments. Its green R2 CI does not accept the newer B2 bytes.
-- Latest archived B2 tree `758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef`, index
-  SHA256 `7c25b0b57722bda4ad6842b173bf9a390f2fa39942ad91206675a20e779d4d9b`,
-  remains a worker candidate requiring new Core/QA reviews and documented
-  02_07 writer handover. Its freeze/identity were read, not edited.
-- `renderRiftParty()` was identical on the initial main baseline and frozen B2.
-  The later offline integration leaves the F13 function unchanged. The patch
-  must still be checked against the eventual coordinated integration bytes.
-- Guidance owns its placement/toggle objective; Cosmetics owns visual effects.
-  This candidate preserves their selectors, classes and render calls. Lead
-  should compare their actual patches at integration. No acceptance or contact
-  with those owner chats is claimed. The user transfers this handoff.
-- The unrelated offline feature is inherited from the new main baseline; its
-  changes are absent from the F13 patch. Its release/device acceptance is not
-  asserted here. Package `com.lumenfall.app` and signing remain baseline bytes.
+1. Powered uncharged/charging/ready/casting cards have no repeated visible status;
+   unpowered cards keep `Lv 0`.
+2. Ability names, charge, timing and programmatic ready/casting/unpowered status
+   are preserved; cast expiry, eight real cast identities and observer-only
+   rendering remain correct.
+3. Affected mobile widths, large text, 44px controls, keyboard focus, contrast and
+   reduced motion are checked, with baseline differences distinguished.
+4. Relevant existing save/recovery, live/offline and chronology checks pass;
+   required unmodified CI passes before integration.
+5. The integrated source is verified in the signed APK with package/version/cert,
+   bundled assets, native Rift behavior and in-place save-preserving update checks.
+6. Supported final status/evidence is saved in this task and PROJECT_STATE before
+   archiving only this owner chat.
 
-## Acceptance and verification
+On the current baseline, the focused browser matrix passes 12 profiles / 384
+state observations. The default local dump-DOM contract run timed out without
+any completed QA result; it is a diagnostic, not a pass. Existing assertions are
+also replayed through the documented local CDP transport; normal CI remains required.
 
-Local acceptance targets:
+At 200% compact Wisp text, five-member names overflow on both baseline and
+candidate. This unchanged layout limitation is recorded for separate Visuals
+work; F13 does not claim full large-text layout acceptance or include a broader
+layout change. Browser text doubling is distinct from Android system font scaling.
+Exact physical WebView60/TalkBack acceptance is not implied by modern Chromium
+or a native emulator; device/runtime identities and limitations must be recorded.
 
-- No visible Cast/Ready/countdown duplication on charging, ready and casting
-  powered cards; `Lv 0` remains on the unpowered renderer state.
-- Ability name, actual progress, ready/casting/unpowered state and charge timing
-  remain accessible. Cast state clears after its existing deadline.
-- All eight real Wisp casts retain their VFX identity and reduced-motion rules.
-- Repeated rendering/navigation leaves state unchanged and matches the same
-  controlled ticks without observers.
-- Relevant mobile widths, native keyboard focus, 44px targets, contrast,
-  reduced motion, save/recovery and chronology are checked.
+## Next action
 
-Evidence and exact replay commands:
-[docs/qa/rift-cast-text-001/README.md](../qa/rift-cast-text-001/README.md).
-
-The focused F13 matrix checks 320/390/430px at 844px height, normal/reduced
-motion and 100%/200% Wisp name/power text. **Large-text overflow is observed**
-in the five-member compact party at 200%; comparison with unmodified revised
-main shows identical overflow geometry. It is a pre-existing accessibility
-limitation, not full large-text acceptance. Android system font scaling and
-TalkBack are not represented by this browser font-size probe. It remains for
-Lead/Visuals coordination and device acceptance; no broader layout fix is
-included in F13.
-
-Final local results: F13 passes in 12 profiles (384 ability-state observations);
-12 existing scoped Node scenarios pass; both F13 negative controls are caught.
-Source validation, ES2017 syntax, context and APK-identity verifier self-test pass.
-These are candidate checks, not integrated F13 or device acceptance. Results,
-source hashes and replay commands are recorded in the evidence identity/summary.
-Early dump-DOM timeout and local transport-adapter failures are diagnostics,
-not passes. CDP reruns retain the existing served instrumentation/assertions;
-they do not establish default CI-harness or physical Android acceptance.
-
-## Next action and completion gate
-
-Lead receives the TXT/ZIP handoff, resolves PR46/B2 candidate review and writer
-handover, coordinates Guidance/Cosmetics, and allocates a scoped GitHub writer
-checkpoint for this patch/task/evidence. Recheck live branches, open PRs,
-active runs and workflow triggers before any remote writing. Do not overwrite
-current shared PROJECT_STATE from this private checkout.
-
-After coordinated integration, rerun the relevant checks on its actual commit,
-resolve required large-text acceptance, build/publish the required APK through
-the existing workflow, verify package/version/signing and perform necessary
-Android/WebView60/TalkBack/device checks. Save the integration/release evidence,
-update this task and shared PROJECT_STATE during that writer scope, and record
-writer release. Only then archive this owner chat under FEATURE_WORKFLOW.
-
-Missing acceptance: GitHub checkpoint, integrated F13 behavior, required review,
-large-text/device acceptance, new APK/signing/device receipts and writer release.
+Complete current-baseline checks and self-review, publish this feature PR, require
+normal CI, serialize integration, verify the resulting signed APK/native behavior,
+then save the delivery receipt and shared state. Independent review is not claimed.
+Missing required acceptance keeps this chat open.

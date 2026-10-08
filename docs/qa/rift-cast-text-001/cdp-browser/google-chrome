@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Local transport adapter for the unchanged Python harness. Real Chromium,
+// Local transport adapter for the unchanged behavioral harness. Real Chromium,
 // same served test document/assertions; wait for its result over CDP rather
 // than Chromium's dump-dom/virtual-time command. Never used by the product.
 const {spawn}=require('node:child_process');

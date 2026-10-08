@@ -1,9 +1,14 @@
-# Local RIFT_CAST_TEXT_001 evidence
+# RIFT_CAST_TEXT_001 evidence
 
-Candidate only. Base main: `0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd`.
+The root evidence files below are **historical local preparation**, 7 October
+2026. They do not attest to current main or the final delivered APK.
+Historical base main: `0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd`.
 Product/test checkpoint: `1edc0c8d935279542fab8a1b8dd3852adff1d7a9`.
-The [task](../../tasks/RIFT_CAST_TEXT_001.md) records writer dependencies and
-missing integration/APK/device acceptance.
+The [task](../../tasks/RIFT_CAST_TEXT_001.md) records current continuation,
+integration and APK/device acceptance. The continuation uses current project
+rules; the historical writer dependencies below are superseded.
+
+Current continuation: [finish/README.md](finish/README.md).
 
 `identity.json` records the exact source/test hashes, baseline, browser and
 observation time. `matrix-summary.json`, `existing-checks.json` and
