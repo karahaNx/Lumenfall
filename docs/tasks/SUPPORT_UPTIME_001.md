@@ -23,7 +23,7 @@ were asked asynchronously and remain pending; do not infer the preselected answe
 
 Separate clone /workspace/Lumenfall-SUPPORT_UPTIME_001; branch
 feature/support-uptime-001. Live main b0537cb46635555ba2c2e5f3f95bc8fc276aeda5
-was fetched on8 October and merged locally as3dc1964. Product SHA256
+was the initial8 October baseline (merge3dc1964). Fresh main261b1b7 (PR77 Backup UI) was merged locally without conflicts; preserve that feature. Initial product SHA256
 5c4b3dacfed70a25c4aed45496e84af7ae8efe310eed43ec002988e854d7091c.
 Current AGENTS/workflow assigns implementation and delivery to this feature chat;
 historical writer/Lead freezes no longer impose a global gate. PR46/B2 is integrated.
