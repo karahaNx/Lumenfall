@@ -60,7 +60,8 @@ Signed APK0.1.148/build37742868726: package/signing/release digest/526 CRC/all15
 assets PASS; actual extracted V8 6.0 PASS129 checks plus8h302400 kills/14400
 Ascends. Immutable148 proves31eccfb; later moving releases are separate versions.
 Delivery PR93 body records current combined CI head/run/outcome.
+Combined APK151: identity/assets,19 scoped scenarios/23 runs and V8129+8h PASS.
 
 Next: [required native/device checks](../qa/upgrade-identity-001/2026-10-08/DEVICE_ACCEPTANCE.txt)
-on immutable148, saving observed results in GitHub. No phone/USB/ADB/emulator
+on immutable151, saving observed results in GitHub. No phone/USB/ADB/emulator
 runtime here; affected-phone/exact WebView60/TalkBack OPEN. Keep task/chat open.

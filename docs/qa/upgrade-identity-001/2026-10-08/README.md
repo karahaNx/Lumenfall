@@ -17,6 +17,8 @@ Required native/device acceptance remains OPEN; owner chat stays open.
 | Actual extracted APK engine | [legacy results](apk148-v8/results.json): V8 6.0.287.53 parses both scripts, PASS129 value/closed-handler/backup/paid-work checks; original26-Mote speed intent on three closed paid Studies pays78 once. Full8h offline entry PASS302400 kills/14400 Ascends. |
 | Actual extracted APK desktop behavior | [19 scoped scenarios/23 runs](apk148-focused/results.json), compressed raw logs alongside it; mobile320/390/430, normal/200% text and normal/reduced motion included. |
 | Required combined CI | The final delivery PR93 body records its exact head/run/outcome. Delivery rebases onto main14d5f3a and preserves subsequent F07/F25/F26/F14 changes; source31eccfb/APK148 receipts below remain historical and immutable. |
+| Current combined source | [main14 focused](main14-focused/results.json):19 scenarios/23 runs PASS on852f3297. |
+| Combined signed APK151 | [build/release](build151-release.json), [identity](apk151-identity.txt), [assets](apk151-assets.json): version151/signing/release digest/526 CRC/all15 assets PASS. [Actual extracted desktop](apk151-focused/results.json):19 scenarios/23 runs PASS; [Resonate](apk151-resonate.txt) PASS. [V8 6.0](apk151-v8/results.json):129 checks,13 tracks,8h302400 kills/14400 Ascends PASS. |
 
 Integrated/actual APK index SHA256:
 `f99cb0bcd46d2849977a39cf31bb0dd1a7bb8c0ca7a370f2490ad66ec67a6ec1`.
@@ -29,6 +31,10 @@ Deep Reserves retirement/refund, plus F25 bulk-memory and F07 guidance changes.
 The current matrix records these dependencies. APK148 proves PR90's release;
 it is an immutable historical version rather than a claim about the moving
 android-latest asset. Later-source checks use the current tests and source hash.
+Combined APK151 SHA256 is `cc4c6d45720659ff81fe11c6eb858407b09f46a9abeea593714d3840c018c238`;
+its index SHA256 is `852f32974f52d757406ac8a54b668969a2e0667e7acdd85192d63dbdc31ad262`.
+All15 assets equal build source015e2e6 and delivery baseline14d5f3a. Both signed
+binaries are archived; use151 for current combined native acceptance.
 
 ## Replay
 
@@ -46,6 +52,9 @@ node scripts/codex/check_context.cjs --task docs/tasks/UPGRADE_IDENTITY_001.md
 ```
 
 Use historical source31eccfb for `SOURCE_ROOT` (detached checkout if main advances).
+For APK151 use source015e2e6/14d5f3a, its recorded digest and151 paths; append
+`13` to the legacy orchestrator command. Default14 remains the148 contract.
+[Count controls](legacy-track-controls.txt) verify148 and reject wrong14 on151.
 The verifier requires the external release digest and exact source match. The
 [old144 APK control](old-apk-negative.txt) is rejected for mismatched index.html.
 [Device checklist](DEVICE_ACCEPTANCE.txt) covers actual signed update/storage,
