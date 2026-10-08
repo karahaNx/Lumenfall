@@ -5640,10 +5640,6 @@ function presentControlStates(root){
       var studyNode=LONG_STUDIES.find(function(n){return n.id===btn.getAttribute('data-study');});
       if(studyNode) subject=studyNode.name;
     }
-    if(btn.hasAttribute('data-node')){
-      var treeNode=NODES.find(function(n){return n.id===btn.getAttribute('data-node');});
-      if(treeNode) subject=treeNode.name;
-    }
     var queueAttr=toggles.find(function(attr){return btn.hasAttribute('data-'+attr);});
     if(queueAttr){
       var id=btn.getAttribute('data-'+queueAttr);
