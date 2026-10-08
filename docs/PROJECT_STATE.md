@@ -8,6 +8,24 @@ commits below are observed checkpoints, not a promise that main never advances.
 
 ## Product and release evidence
 
+[COMET_UNLOCKS_001 / F27](tasks/COMET_UNLOCKS_001.md) catalog is integrated
+through [PR69](https://github.com/karahaNx/Lumenfall/pull/69),
+merge d95205f6d8059933fac74e8699854f67cb950a7e. Comet Trials140, Rift Trail50
+and Starfall Crest160 replace the purchasable convenience/timecap rows;
+Auto-Ascend100 and old ownership/effects/currencies retain value. Full151
+pre-merge CI37713904342 passed; the latest Rift text combination was reassessed.
+The delivery publication PR runs full CI on unchanged integrated game/test bytes
+and records its exact final result in the PR body. No independent review claimed.
+
+F27 signed APK **0.1.143**, build37715794487, package com.lumenfall.app,
+established signing identity, is published and downloaded/verified. SHA256
+`45d1032ae6e77362d3540db740c6cfbdc4d275f2e3f6b98f4cecb1229e3205e7`;
+all526 CRC entries and all15 assets match integrated source. Actual extracted
+APK11 Comet cases PASS on V8 6.0.286.52. Exact native WebView60/physical/TalkBack
+acceptance remains OPEN after blocked cloud ADB/emulator attempts. F25/F26
+built-in memory/fixed12h retirement/refunds are separate dependencies.
+[143 receipt, immutable APK and remaining checks](qa/comet-unlocks-001/DELIVERY.md).
+
 [WISP_UPGRADE_DISPLAY_001 / F04](tasks/WISP_UPGRADE_DISPLAY_001.md) is implemented
 through PR59, merge0e9b54c8d62a873bd48625f4a20ee18078e8a8f1. Unfinished Wisp
 upgrades stay open without a fold control; folding requires Mythic rarity,
@@ -81,6 +99,7 @@ were recorded as integrated.
 
 | Work | Evidence/status | Next action within its own task |
 | --- | --- | --- |
+| [COMET_UNLOCKS_001](tasks/COMET_UNLOCKS_001.md) / F27 | PR69/main integrated; full151 pre-merge CI and signed143 package/signing/assets/extracted-engine checks PASS. New catalogue140/50/160; legacy value/effects retained. Delivery publication PR records final integrated-source CI. Required native acceptance OPEN. | Complete exact signed143 native update/interaction, physical WebView60 and TalkBack checklist. Keep feature/chat open; F25/F26 retirement/refunds stay separate. |
 | [LAB_EXCLUSIVE_001](tasks/LAB_EXCLUSIVE_001.md) / F29 | [PR62 proposal checkpoint](https://github.com/karahaNx/Lumenfall/pull/62): 9 Labs inventoried, 7 duplicate rows in 6 effect families; exclusive study-work/reservation effects and value-preserving transition proposed. Actual CI/merge/integrated checks are saved in the PR body. No game behavior changed. | Obtain the agreed UPGRADE_IDENTITY_001 Lab effects/currencies/prices/work/unlocks/caps and migration policy. Full feature and chat remain open; proposed values/mechanics are not approved rules. |
 | WISP_UPGRADE_DISPLAY_001 / F04 | [Integrated PR59 and signed140](tasks/WISP_UPGRADE_DISPLAY_001.md); required CI147 scenarios/12 negatives and integrated12 mobile profiles/12,912 assertions PASS. Signed138→140 native save preservation PASS. | Complete and save affected-phone/exact WebView60/TalkBack acceptance. Available implementation/delivery is published; feature/chat remains open. |
 | FEATURE-CHAT-WORKFLOW-001 | Current docs/context-tooling cleanup; see task for publication/integration receipt. | Verify document/tooling checks and GitHub integration; no game build. |
