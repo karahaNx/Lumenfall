@@ -405,7 +405,7 @@
   .man-card .body{font-size:.78rem;color:var(--ink-dim);line-height:1.45;}
   .fine-print{font-size:.7rem;color:var(--ink-dim);line-height:1.5;margin-top:14px;padding:0 2px;}
   .reset-btn{
-    margin-top:14px;width:100%;padding:11px;border-radius:12px;
+    margin-top:14px;width:100%;min-height:44px;padding:11px;border-radius:12px;
     border:1px solid var(--danger);background:transparent;color:var(--danger);
     font-weight:700;font-size:.82rem;cursor:pointer;
   }
@@ -2729,19 +2729,19 @@
             </div>
             <span class="rift-guidance-value" aria-hidden="true">Shown</span>
           </button>
-          <button class="settings-row" id="save-backup-btn">
-            <div class="settings-row-main">
-              <div class="settings-row-title">Save Backup</div>
-              <div class="settings-row-sub">Copy or restore your progress before reinstalling or changing device.</div>
-            </div>
-            <span class="settings-chevron">›</span>
-          </button>
         </div>
 
         <div class="settings-section-title">Fair Play</div>
         <div class="manifesto settings-about" id="manifesto"></div>
 
         <div class="settings-section-title">Save</div>
+        <button type="button" class="settings-row" id="save-backup-btn">
+          <div class="settings-row-main">
+            <div class="settings-row-title">Save Backup</div>
+            <div class="settings-row-sub">Copy or restore your progress before reinstalling or changing device.</div>
+          </div>
+          <span class="settings-chevron">›</span>
+        </button>
         <div id="reset-row">
           <button class="reset-btn" id="reset-btn">Reset Save</button>
         </div>
@@ -2760,11 +2760,18 @@
       </div>
 
       <div id="settings-backup" style="display:none;">
-        <div class="save-backup-note">Keep this code somewhere safe. Restoring replaces the current save. The restore starts from now, so an old backup cannot create extra offline time.</div>
-        <textarea class="save-backup-textarea" id="save-backup-code" aria-label="Save backup code" spellcheck="false"></textarea>
-        <div class="save-backup-actions">
-          <button id="copy-save-backup">Copy Current Save</button>
-          <button class="restore" id="restore-save-backup">Restore Pasted Save</button>
+        <div class="save-backup-note" id="save-backup-note">Keep this code somewhere safe. Restoring replaces the current save. The restore starts from now, so an old backup cannot create extra offline time.</div>
+        <textarea class="save-backup-textarea" id="save-backup-code" aria-label="Save backup code" aria-describedby="save-backup-note" spellcheck="false"></textarea>
+        <div class="save-backup-actions" id="save-backup-actions">
+          <button type="button" id="copy-save-backup">Copy Current Save</button>
+          <button type="button" class="restore" id="restore-save-backup">Restore Pasted Save</button>
+        </div>
+        <div id="save-restore-confirm" role="group" aria-labelledby="save-restore-warning" style="display:none;">
+          <p class="save-backup-note" id="save-restore-warning">Replace your current progress with this backup? Your current save will be overwritten.</p>
+          <div class="save-backup-actions">
+            <button type="button" id="save-restore-cancel">Cancel</button>
+            <button type="button" class="restore" id="save-restore-confirm-btn">Yes, replace current save</button>
+          </div>
         </div>
       </div>
     </div>
@@ -6777,7 +6784,36 @@ function showDailyOverlay(info,onDone){
 // ---------------------------------------------------------------
 // Tabs
 // ---------------------------------------------------------------
+var settingsView = 'home';
+var pendingSaveRestoreCode = null;
+function cancelSaveRestore(){
+  pendingSaveRestoreCode = null;
+  document.getElementById('save-restore-confirm').style.display = 'none';
+  document.getElementById('save-backup-actions').style.display = 'flex';
+  document.getElementById('save-backup-code').disabled = false;
+}
+function requestSaveRestore(){
+  var textarea = document.getElementById('save-backup-code');
+  try{ decodeSaveBackup(textarea.value); }
+  catch(e){ showToast('That backup code is not valid or supported.'); return; }
+  pendingSaveRestoreCode = textarea.value;
+  textarea.disabled = true;
+  document.getElementById('save-backup-actions').style.display = 'none';
+  document.getElementById('save-restore-confirm').style.display = 'block';
+  document.getElementById('save-restore-cancel').focus();
+}
+function confirmSaveRestore(){
+  var code = pendingSaveRestoreCode;
+  cancelSaveRestore();
+  if(code===null) return;
+  document.getElementById('save-backup-code').value = code;
+  restoreSaveBackup();
+  if(!reloadInProgress) document.getElementById('restore-save-backup').focus();
+}
 function showSettingsView(view){
+  var previousView = settingsView;
+  settingsView = view;
+  cancelSaveRestore();
   var home = document.getElementById('settings-home');
   var encyclopedia = document.getElementById('settings-encyclopedia');
   var backup = document.getElementById('settings-backup');
@@ -6792,7 +6828,7 @@ function showSettingsView(view){
   if(view==='encyclopedia') renderEncyclopedia();
   if(view==='backup') document.getElementById('save-backup-code').value = currentSaveBackup();
   if(document.getElementById('settings-overlay').style.display!=='none'){
-    (isHome ? document.getElementById('encyclopedia-btn') : back).focus();
+    (isHome ? document.getElementById(previousView==='backup' ? 'save-backup-btn' : 'encyclopedia-btn') : back).focus();
   }
 }
 function openSettings(){
@@ -6800,6 +6836,7 @@ function openSettings(){
   openOverlay(document.getElementById('settings-overlay'),closeSettings,document.getElementById('settings-btn'));
 }
 function closeSettings(){
+  cancelSaveRestore();
   closeOverlay(document.getElementById('settings-overlay'));
   document.getElementById('reset-confirm-row').style.display = 'none';
   document.getElementById('reset-row').style.display = 'block';
@@ -8527,7 +8564,12 @@ function init(){
   document.getElementById('encyclopedia-btn').addEventListener('click', function(){ showSettingsView('encyclopedia'); });
   document.getElementById('save-backup-btn').addEventListener('click', function(){ showSettingsView('backup'); });
   document.getElementById('copy-save-backup').addEventListener('click', copyCurrentSaveBackup);
-  document.getElementById('restore-save-backup').addEventListener('click', restoreSaveBackup);
+  document.getElementById('restore-save-backup').addEventListener('click', requestSaveRestore);
+  document.getElementById('save-restore-cancel').addEventListener('click', function(){
+    cancelSaveRestore();
+    document.getElementById('restore-save-backup').focus();
+  });
+  document.getElementById('save-restore-confirm-btn').addEventListener('click', confirmSaveRestore);
   document.getElementById('settings-overlay').addEventListener('click', function(e){ if(e.target===this) closeSettings(); });
   document.getElementById('howtoplay-btn').addEventListener('click', function(){ closeSettings(); showTutorial(); });
   document.getElementById('reset-btn').addEventListener('click', function(){
