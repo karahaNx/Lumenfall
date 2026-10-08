@@ -1,0 +1,676 @@
+{
+  "status": "pass",
+  "driverSha256": "849f6be3ea8f4cb93a325c687afb2f84c685fd456bd01bccf88e6480c6dec902",
+  "identity": {
+    "package": [
+      "versionCode=148 minSdk=22 targetSdk=34",
+      "versionName=0.1.148"
+    ],
+    "installedApkSha256": "cef6c291a4f91a3921bdc3b2d2e6f772906d39560f995fcaedf420ccd9972657",
+    "sourceSha256": "f99cb0bcd46d2849977a39cf31bb0dd1a7bb8c0ca7a370f2490ad66ec67a6ec1",
+    "android": "8.1.0",
+    "api": "27",
+    "ua": "Mozilla/5.0 (Linux; Android 8.1.0; Android SDK built for x86 Build/OSM1.180201.023; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.98 Mobile Safari/537.36",
+    "page": "https://localhost/"
+  },
+  "records": [
+    {
+      "case": "143 to feature APK in-place storage preservation",
+      "install": "Success\n",
+      "beforeSha256": "d25ff06724b29893a06ecad476d0e81c9794ced6330490fb15b670d2d7306db3",
+      "afterSha256": "d25ff06724b29893a06ecad476d0e81c9794ced6330490fb15b670d2d7306db3",
+      "bytes": 103936
+    },
+    {
+      "case": "actual native select/toggle 320",
+      "metrics": {
+        "width": 320,
+        "controls": [
+          {
+            "width": 270,
+            "height": 48,
+            "text": "219"
+          },
+          {
+            "width": 270,
+            "height": 48,
+            "text": "OFF"
+          }
+        ]
+      },
+      "outline": "solid"
+    },
+    {
+      "case": "actual native select/toggle 390",
+      "metrics": {
+        "width": 390,
+        "controls": [
+          {
+            "width": 282,
+            "height": 48,
+            "text": "219"
+          },
+          {
+            "width": 76,
+            "height": 48,
+            "text": "OFF"
+          }
+        ]
+      },
+      "outline": "solid"
+    },
+    {
+      "case": "actual Android picker chooses 218",
+      "tap": {
+        "box": {
+          "x": 157,
+          "y": 386,
+          "width": 390
+        },
+        "bounds": [
+          0,
+          24,
+          390,
+          796
+        ],
+        "x": 157,
+        "y": 410,
+        "beforeFocus": "  mCurrentFocus=Window{29270f4 u0 com.lumenfall.app/com.lumenfall.app.MainActivity}"
+      },
+      "popupFocus": "  mCurrentFocus=Window{fbd0197 u0 com.lumenfall.app/com.lumenfall.app.MainActivity}",
+      "touch": {
+        "value": "218",
+        "screenshotSha256": "081658a9fb6e44b76451823c8ead7b003e66eb59b05b86511d2be9d10c253883",
+        "observedScreenshot": "native-select-218-observed.png",
+        "observedScreenshotSha256": "125b4f158e1154aea0cfa6695512972c7eaa59e0b90f335acf0e6d269ca298b5",
+        "x": 195,
+        "y": 683
+      }
+    },
+    {
+      "case": "actual Android picker chooses 219",
+      "tap": {
+        "box": {
+          "x": 157,
+          "y": 386,
+          "width": 390
+        },
+        "bounds": [
+          0,
+          24,
+          390,
+          796
+        ],
+        "x": 157,
+        "y": 410,
+        "beforeFocus": "  mCurrentFocus=Window{29270f4 u0 com.lumenfall.app/com.lumenfall.app.MainActivity}"
+      },
+      "popupFocus": "  mCurrentFocus=Window{d0b8cfa u0 com.lumenfall.app/com.lumenfall.app.MainActivity}",
+      "touch": {
+        "value": "219",
+        "screenshotSha256": "90c83b4c9552cd67c0ff186c7cedbcc6212429ff68d7c3b1e36ccef62350778f",
+        "observedScreenshot": "native-select-219-observed.png",
+        "observedScreenshotSha256": "838547fcbf4bbaaa177c9a5fd6a736fc355d59d32405bfad3c41f6abea9b6923",
+        "x": 195,
+        "y": 748
+      }
+    },
+    {
+      "case": "actual native select/toggle 430",
+      "metrics": {
+        "width": 430,
+        "controls": [
+          {
+            "width": 322,
+            "height": 48,
+            "text": "219"
+          },
+          {
+            "width": 76,
+            "height": 48,
+            "text": "OFF"
+          }
+        ]
+      },
+      "outline": "solid"
+    },
+    {
+      "case": "actual Android input commits9999 without toggling",
+      "enabled": true,
+      "tap": {
+        "box": {
+          "x": 177,
+          "y": 386,
+          "width": 430
+        },
+        "bounds": [
+          0,
+          24,
+          430,
+          796
+        ],
+        "x": 177,
+        "y": 410,
+        "beforeFocus": "  mCurrentFocus=Window{29270f4 u0 com.lumenfall.app/com.lumenfall.app.MainActivity}"
+      },
+      "value": "9999"
+    },
+    {
+      "case": "actual Android input commits9999 without toggling",
+      "enabled": false,
+      "tap": {
+        "box": {
+          "x": 177,
+          "y": 386,
+          "width": 430
+        },
+        "bounds": [
+          0,
+          24,
+          430,
+          796
+        ],
+        "x": 177,
+        "y": 410,
+        "beforeFocus": "  mCurrentFocus=Window{29270f4 u0 com.lumenfall.app/com.lumenfall.app.MainActivity}"
+      },
+      "value": "9999"
+    },
+    {
+      "case": "native accessible target label",
+      "nodes": [
+        {
+          "nodeId": "22",
+          "ignored": false,
+          "role": {
+            "type": "internalRole",
+            "value": "GenericContainer"
+          },
+          "name": {
+            "type": "computedString",
+            "value": "",
+            "sources": [
+              {
+                "type": "relatedElement",
+                "attribute": "aria-labelledby"
+              },
+              {
+                "type": "attribute",
+                "attribute": "aria-label"
+              },
+              {
+                "type": "attribute",
+                "attribute": "title"
+              }
+            ]
+          },
+          "properties": [],
+          "childIds": [
+            "24"
+          ],
+          "backendDOMNodeId": 144
+        },
+        {
+          "nodeId": "1",
+          "ignored": false,
+          "role": {
+            "type": "role",
+            "value": "combobox"
+          },
+          "name": {
+            "type": "computedString",
+            "value": "Auto-Ascend after clearing",
+            "sources": [
+              {
+                "type": "relatedElement",
+                "attribute": "aria-labelledby"
+              },
+              {
+                "type": "attribute",
+                "attribute": "aria-label"
+              },
+              {
+                "type": "relatedElement",
+                "value": {
+                  "type": "computedString",
+                  "value": "Auto-Ascend after clearing"
+                },
+                "nativeSource": "labelwrapped",
+                "nativeSourceValue": {
+                  "type": "nodeList",
+                  "relatedNodes": [
+                    {
+                      "backendDOMNodeId": 136,
+                      "text": "Auto-Ascend after clearing"
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "placeholder",
+                "attribute": "placeholder",
+                "superseded": true
+              },
+              {
+                "type": "placeholder",
+                "attribute": "aria-placeholder",
+                "superseded": true
+              },
+              {
+                "type": "attribute",
+                "attribute": "title",
+                "superseded": true
+              }
+            ]
+          },
+          "description": {
+            "type": "computedString",
+            "value": "ON: Ascend after defeating the chosen Rift. OFF: keep pushing. Your target stays saved across Ascensions."
+          },
+          "value": {
+            "type": "string",
+            "value": "9999"
+          },
+          "properties": [
+            {
+              "name": "invalid",
+              "value": {
+                "type": "token",
+                "value": "false"
+              }
+            },
+            {
+              "name": "required",
+              "value": {
+                "type": "boolean",
+                "value": false
+              }
+            },
+            {
+              "name": "describedby",
+              "value": {
+                "type": "idrefList",
+                "value": "auto-ascend-target-help auto-ascend-target-error",
+                "relatedNodes": [
+                  {
+                    "backendDOMNodeId": 133,
+                    "idref": "auto-ascend-target-help"
+                  },
+                  {
+                    "backendDOMNodeId": 135,
+                    "idref": "auto-ascend-target-error"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "labelledby",
+              "value": {
+                "type": "nodeList",
+                "relatedNodes": [
+                  {
+                    "backendDOMNodeId": 136,
+                    "text": "Auto-Ascend after clearing"
+                  }
+                ]
+              }
+            }
+          ],
+          "childIds": [
+            "22"
+          ],
+          "backendDOMNodeId": 141
+        },
+        {
+          "nodeId": "17",
+          "ignored": false,
+          "role": {
+            "type": "role",
+            "value": "text"
+          },
+          "name": {
+            "type": "computedString",
+            "value": "Auto-Ascend after clearing",
+            "sources": [
+              {
+                "type": "contents",
+                "value": {
+                  "type": "computedString",
+                  "value": "Auto-Ascend after clearing"
+                }
+              }
+            ]
+          },
+          "properties": [],
+          "childIds": [],
+          "backendDOMNodeId": 139
+        },
+        {
+          "nodeId": "5",
+          "ignored": false,
+          "role": {
+            "type": "internalRole",
+            "value": "Label"
+          },
+          "name": {
+            "type": "computedString",
+            "value": "",
+            "sources": [
+              {
+                "type": "relatedElement",
+                "attribute": "aria-labelledby"
+              },
+              {
+                "type": "attribute",
+                "attribute": "aria-label"
+              },
+              {
+                "type": "attribute",
+                "attribute": "title"
+              }
+            ]
+          },
+          "properties": [],
+          "childIds": [
+            "17",
+            "1",
+            "1"
+          ],
+          "backendDOMNodeId": 136
+        },
+        {
+          "nodeId": "8",
+          "ignored": false,
+          "role": {
+            "type": "internalRole",
+            "value": "GenericContainer"
+          },
+          "name": {
+            "type": "computedString",
+            "value": "",
+            "sources": [
+              {
+                "type": "relatedElement",
+                "attribute": "aria-labelledby"
+              },
+              {
+                "type": "attribute",
+                "attribute": "aria-label"
+              },
+              {
+                "type": "attribute",
+                "attribute": "title"
+              }
+            ]
+          },
+          "properties": [],
+          "childIds": [
+            "25",
+            "5",
+            "26",
+            "15",
+            "16"
+          ],
+          "backendDOMNodeId": 124
+        },
+        {
+          "nodeId": "9",
+          "ignored": false,
+          "role": {
+            "type": "role",
+            "value": "region"
+          },
+          "name": {
+            "type": "computedString",
+            "value": "Ascend",
+            "sources": [
+              {
+                "type": "relatedElement",
+                "value": {
+                  "type": "computedString",
+                  "value": "Ascend"
+                },
+                "attribute": "aria-labelledby",
+                "attributeValue": {
+                  "type": "idrefList",
+                  "value": "nav-ascend",
+                  "relatedNodes": [
+                    {
+                      "backendDOMNodeId": 145,
+                      "idref": "nav-ascend",
+                      "text": "Ascend"
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "attribute",
+                "attribute": "aria-label",
+                "superseded": true
+              },
+              {
+                "type": "attribute",
+                "attribute": "title",
+                "superseded": true
+              }
+            ]
+          },
+          "properties": [
+            {
+              "name": "labelledby",
+              "value": {
+                "type": "nodeList",
+                "relatedNodes": [
+                  {
+                    "backendDOMNodeId": 145,
+                    "idref": "nav-ascend",
+                    "text": "Ascend"
+                  }
+                ]
+              }
+            }
+          ],
+          "childIds": [
+            "30",
+            "8",
+            "33",
+            "36"
+          ],
+          "backendDOMNodeId": 85
+        },
+        {
+          "nodeId": "10",
+          "ignored": false,
+          "role": {
+            "type": "role",
+            "value": "main"
+          },
+          "name": {
+            "type": "computedString",
+            "value": "",
+            "sources": [
+              {
+                "type": "relatedElement",
+                "attribute": "aria-labelledby"
+              },
+              {
+                "type": "attribute",
+                "attribute": "aria-label"
+              },
+              {
+                "type": "attribute",
+                "attribute": "title"
+              }
+            ]
+          },
+          "properties": [],
+          "childIds": [
+            "9"
+          ],
+          "backendDOMNodeId": 103
+        },
+        {
+          "nodeId": "11",
+          "ignored": false,
+          "role": {
+            "type": "internalRole",
+            "value": "GenericContainer"
+          },
+          "name": {
+            "type": "computedString",
+            "value": "",
+            "sources": [
+              {
+                "type": "relatedElement",
+                "attribute": "aria-labelledby"
+              },
+              {
+                "type": "attribute",
+                "attribute": "aria-label"
+              },
+              {
+                "type": "attribute",
+                "attribute": "title"
+              }
+            ]
+          },
+          "properties": [],
+          "childIds": [
+            "29",
+            "10"
+          ],
+          "backendDOMNodeId": 48
+        },
+        {
+          "nodeId": "14",
+          "ignored": false,
+          "role": {
+            "type": "internalRole",
+            "value": "WebArea"
+          },
+          "name": {
+            "type": "computedString",
+            "value": "Lumenfall",
+            "sources": [
+              {
+                "type": "relatedElement",
+                "attribute": "aria-labelledby"
+              },
+              {
+                "type": "attribute",
+                "attribute": "aria-label"
+              },
+              {
+                "type": "attribute",
+                "attribute": "aria-label",
+                "superseded": true
+              },
+              {
+                "type": "relatedElement",
+                "value": {
+                  "type": "computedString",
+                  "value": "Lumenfall"
+                },
+                "nativeSource": "title",
+                "nativeSourceValue": {
+                  "type": "nodeList",
+                  "relatedNodes": [
+                    {
+                      "backendDOMNodeId": 146,
+                      "text": "Lumenfall"
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "attribute",
+                "attribute": "title",
+                "superseded": true
+              }
+            ]
+          },
+          "properties": [
+            {
+              "name": "labelledby",
+              "value": {
+                "type": "nodeList",
+                "relatedNodes": [
+                  {
+                    "backendDOMNodeId": 146,
+                    "text": "Lumenfall"
+                  }
+                ]
+              }
+            }
+          ],
+          "childIds": [
+            "11",
+            "766"
+          ],
+          "backendDOMNodeId": 47
+        }
+      ]
+    },
+    {
+      "case": "native cold target persistence",
+      "target": 10000,
+      "enabled": false
+    },
+    {
+      "case": "continued native core receipt",
+      "driverSha256": "c23455b5776206993ae0122f3922865cdfef408a6892ca3f1d778bdbe431c1e0"
+    },
+    {
+      "case": "native cleared-Rift guard OFF Push clear",
+      "ascends": 0,
+      "kills": 1,
+      "depth": 220,
+      "target": 220
+    },
+    {
+      "case": "native cleared-Rift guard ON unbeaten Push",
+      "ascends": 0,
+      "kills": 0,
+      "depth": 219,
+      "target": 220
+    },
+    {
+      "case": "native cleared-Rift guard ON Farm clear",
+      "ascends": 0,
+      "kills": 1,
+      "depth": 219,
+      "target": 220
+    },
+    {
+      "case": "native cleared-Rift guard ON Push clear",
+      "ascends": 1,
+      "kills": 1,
+      "depth": 1,
+      "target": 220
+    },
+    {
+      "case": "Android system font scale2",
+      "setting": "2.0",
+      "viewport": 430,
+      "controls": [
+        {
+          "width": 314.671875,
+          "height": 70,
+          "font": "32px"
+        },
+        {
+          "width": 83.328125,
+          "height": 73,
+          "font": "35.2px"
+        }
+      ]
+    }
+  ],
+  "runtimeErrors": [],
+  "limitations": [
+    "Isolated API27 software emulator; actual WebView61, not physical or exact60.",
+    "Native accessibility tree is not TalkBack.",
+    "Actual Android system font setting is distinct from browser200% root text.",
+    "WebView61 lacks prefers-reduced-motion; modern reduced-motion coverage and physical/device checklist remain separate."
+  ]
+}

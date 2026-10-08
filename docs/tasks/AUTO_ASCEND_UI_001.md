@@ -1,11 +1,12 @@
 # AUTO_ASCEND_UI_001 — Auto-Ascend on Ascend
 
-Status: integrated; signed APK148 verified; required native/device acceptance OPEN.
-Owner: this feature chat. No subagents/message tools or independent human review.
+Status: integrated and APK148 delivered; required device acceptance OPEN.
+Owner: this feature chat; isolated /workspace/AUTO_ASCEND_UI_001-github,
+docs/auto-ascend-ui-001-delivery. No subagents/message tools or human review.
 
-Keep unlock in Deeds; put one Rift dropdown and separate clear ON/OFF on Ascend.
-Remove Earlier/Later/Find. All valid targets, including Rift 219+, stay reachable.
-Choosing a target preserves ON/OFF. Keep the cleared-Rift trigger and persistence.
+One goal: keep unlock in Deeds; move operation to Ascend with one Rift dropdown
+and separate clear ON/OFF. Remove Earlier/Later/Find; retain every valid target,
+including219+. Choosing a target preserves ON/OFF, cleared-Rift trigger and save.
 
 Original F01–F03:
 > Auto ascend skal bare have mulighed ligesom billede 2, ikk som det første billede. Hvor der er earlier later find. On off skal være meget tydeligere.
@@ -17,58 +18,46 @@ Original F01–F03:
 [findings](../recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/FINDINGS.txt),
 [source index](../recovery/2026-10-07/lead_context/FEEDBACK/Source_Index.txt),
 [image2](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/IMAGES/02-17354.jpg).
-Original/current orders take precedence over suggestions.
+Original/current orders prevail. The 8 October “Finish the feature task push to
+github implement to game” authorizes delivery. Live rules supersede historical
+writer handovers; PR46/B2 are integrated. No new binding rule/gameplay decision.
 
-The 8 October order “Finish the feature task push to github implement to game”
-authorizes publication, integration and app delivery. Current AGENTS/workflow
-assign one feature owner without a separate writer grant. PR46/B2 are integrated;
-historical handover stops are superseded. No new binding rule or gameplay choice.
+Baseline b0537cb46635555ba2c2e5f3f95bc8fc276aeda5. Product PR84 merged at
+1282f0cba44a30f39b8a43331395db26600719e8. Signed APK148 contains later PR90,
+31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6. Current combined main14d5f3a was
+reassessed after upstream Loadout/Offline12h/RiftGuidance; those changes stay separate.
 
-Baseline b0537cb46635555ba2c2e5f3f95bc8fc276aeda5; isolated branch/worktree
-feature/auto-ascend-ui-001, /workspace/AUTO_ASCEND_UI_001-github. PR84 merged at
-1282f0cba44a30f39b8a43331395db26600719e8 after preserving Formation autosave,
-Save Backup and Resonate. Subsequent PR90 supplied APK148 at
-31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6; source SHA256
-f99cb0bcd46d2849977a39cf31bb0dd1a7bb8c0ca7a370f2490ad66ec67a6ec1.
-APK147 build was superseded by148; no APK147 acceptance claimed.
+Scope: index.html Auto UI/validated target handler; necessary focused tests and
+evidence. Native select enumerates <=1,000 options; one numeric datalist field
+handles larger histories without a target cap (<=200 suggestions plus saved).
+Legacy huge targets remain visible. Drafts commit once on validated change/Enter.
+Stored threshold = cleared Rift+1; selection never invokes Ascend. Unlock100,
+default, Comet Trials and existing purchased/save values are unchanged by this
+feature; no migration/reset. Its22 protected engine/save functions matched the
+integration baseline. Upstream schema2/refunds belong to OFFLINE_12H_001.
 
-Product scope: index.html Auto-Ascend UI/target handler only; necessary target,
-accessibility/bridge/scoped tests and evidence. One native select has every target
-for <=1,000 options. Larger histories use one numeric datalist field accepting
-any valid integer, with <=200 suggestions plus saved target. Presentation limits
-create no gameplay cap. Huge legacy saved targets stay visible until replacement.
-Typing is a draft; validated change/Enter saves once. Render/focus/scroll stay
-stable. Unlock cost/default, Comet Trials and schema1 remain; no migration/reset.
-The stored threshold is chosen cleared Rift +1. Target choice never calls Ascend.
-The 22 protected functions match the feature's integration baseline byte-for-byte;
-later PR90 engine/purchase changes belong to that feature, not this UI change.
+ASCEND_PRISMS_001 dependency: renderAscendSummary hook/focused-scroll preservation,
+separate container before Tree; no Prism reward changes. Preserve WebView60,
+com.lumenfall.app/signing, deterministic purchases and fixed Luminous Motes rewards.
 
-ASCEND_PRISMS_001 dependency: one renderAscendSummary hook and focused-scroll
-preservation; separate container before Tree. Prism calculation/payout unchanged
-by this feature. Reassess actual overlap on later main; do not incorporate or
-claim another chat's work. Preserve WebView60, com.lumenfall.app, signing,
-deterministic purchases, fixed Luminous Motes rewards and existing save value.
+Acceptance/results: Deeds unlock/shortcut, one picker, separate ON/OFF, high
+targets, stable focus/scroll, one-save handlers, actual cleared-Push trigger,
+Farm/unbeaten/OFF guards, manual/auto Ascend, chronology/live/offline and
+reload/recovery/backup PASS. Required CI37740305483 passed160 scenarios/14
+negatives/runtime smoke on exact integrated PR84 bytes. APK148 and main14d5f3a:
+23 focused positives/five causal negatives,20 UI profiles (320/360/390/430px,
+160%/200% text,44px/focus/contrast/motion) and54 V8 6.0.286.52 assertions PASS.
+Local CDP is not default CI equivalence. Automated review completed without
+comments; no independent human review claimed.
 
-Acceptance: Deeds unlock/shortcut, one Ascend picker, separate ON/OFF, all valid
-high targets, observer renders, one-save handlers, cleared Push/Farm guards,
-manual/auto Ascend, reload/recovery/backup/chronology/live/offline: focused PASS.
-320/360/390/430px, 160%/200% text, >=44px, contrast/focus/reduced-motion: PASS.
-[Evidence/commands/versions](../qa/auto-ascend-ui-001/finish-2026-10-08/README.md) includes labeled
-raw results. Node24.19 / Chromium151: 23 positive cases and five causal negatives;
-20 UI profiles. V8 6.0.286.52: 54 handler assertions. Local CDP adapter is not
-default dump-dom/virtual-time CI equivalence. CI37740305483: 160 scenarios,
-14 required negatives and runtime smoke PASS on exact PR84 integration bytes.
-GitHub automated reviews reported completed; no review comments observed.
+[Delivery/evidence/commands](../qa/auto-ascend-ui-001/finish-2026-10-08/README.md)
+records exact APK/source hashes, established signing,15 assets/526 CRCs and
+native143→148 byte-identical prelaunch storage/ownership/OFF/219 PASS.
+Native controls/typing/cold save, actual Android font2 and cleared-Rift guards PASS
+on WebView61; source-bound receipts and diagnostic failures are recorded there.
 
-Signed APK148: package/version/certificate and all15 assets/526 ZIP CRCs PASS.
-Native143→148 update: actual installed/source identity, byte-identical prelaunch
-storage and retained ownership/OFF/Rift219 PASS. Interaction checks are ongoing;
-initial stale-object observer and unsupported legacy frame-eval attempts are
-preserved separately. Remaining [device acceptance](../qa/auto-ascend-ui-001/DEVICE_ACCEPTANCE.txt)
-requires affected-phone/exact WebView60/TalkBack; emulator61 is separate evidence.
-
-Next: finish native interactions, save APK/evidence/task/status in GitHub, pass
-required CI for the combined delivery source and integrate the receipt. Stop this
-feature's shared-file work; keep it OPEN until required device results pass.
-Archive only this owner after [completion criteria](../project/FEATURE_WORKFLOW.md).
-
+Available implementation/checks are delivered. This checkpoint stops the owner's
+shared-file work; own emulator/tests stopped. Next: complete the remaining
+[affected-phone/exact WebView60/TalkBack checklist](../qa/auto-ascend-ui-001/DEVICE_ACCEPTANCE.txt)
+and save actual results in GitHub. Emulator61 does not satisfy those criteria.
+Keep OPEN; archive only this owner after [completion](../project/FEATURE_WORKFLOW.md).

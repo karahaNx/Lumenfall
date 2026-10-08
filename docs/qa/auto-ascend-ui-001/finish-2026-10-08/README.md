@@ -1,50 +1,95 @@
-# AUTO_ASCEND_UI_001 — integrated delivery checkpoint
+# AUTO_ASCEND_UI_001 — integrated delivery
 
-PR84 merged at1282f0c. Its unchanged required CI37740305483 passed all160
-scenarios,14 negative controls and guarded browser smoke on source2398a750.
-The branch and integrated game/test/tooling bytes match; the integrated28
-focused cases and mobile checks were renewed. GitHub automated code/security
-review reported completion without review comments; no human review claimed.
+Deeds retains the Auto-Ascend unlock. Ascend now has one Rift picker and a
+separate ON/OFF button; Earlier/Later/Find are removed. Choosing a target retains
+ON/OFF, existing save values and the cleared-Push-Rift trigger. Every valid target,
+including Rift 219 and large histories, remains reachable. Presentation limits
+do not create a gameplay cap. See the [task](../../../tasks/AUTO_ASCEND_UI_001.md)
+for original requirements, scope and the shared Ascend-render dependency.
 
-The following main integration, PR90, superseded build147. Signed APK148 from
-build37742868726/job113197564966 contains commit31eccfb and sourcef99cb0bc.
-The original Auto-Ascend feature does not own PR90's upgrade/clock changes.
-On the APK148 source,23 positive cases/five causal negatives,20 mobile/text/
-motion profiles and54 V8 6.0.286.52 handler assertions PASS. Node24.19.0 and
-Chromium151.0.7922.173 ran locally; required CI used Chrome154.0.8037.57.
+[PR84](https://github.com/karahaNx/Lumenfall/pull/84) merged at
+1282f0cba44a30f39b8a43331395db26600719e8. Required CI
+[37740305483](https://github.com/karahaNx/Lumenfall/actions/runs/37740305483)
+passed 160 scenarios, 14 required negative controls, tooling/source/identity gates
+and guarded browser smoke. Product, tests and tooling match the tested PR head
+73c321d083565a8c639daa03781003222c49f475; integrated focused checks were renewed.
+Automated GitHub review completed without comments; no human review is claimed.
 
-[Immutable APK148](APK/Lumenfall-0.1.148.apk): SHA256
-cef6c291a4f91a3921bdc3b2d2e6f772906d39560f995fcaedf420ccd9972657.
-Package com.lumenfall.app, version0.1.148/code148 and established certificate
+Signed [APK 0.1.148](APK/Lumenfall-0.1.148.apk) was built by
+[37742868726](https://github.com/karahaNx/Lumenfall/actions/runs/37742868726),
+job 113197564966, from later main31eccfbad40622f65cf3d34d268f0d7ef3c6a4a6.
+Source SHA256: f99cb0bcd46d2849977a39cf31bb0dd1a7bb8c0ca7a370f2490ad66ec67a6ec1.
+APK SHA256: cef6c291a4f91a3921bdc3b2d2e6f772906d39560f995fcaedf420ccd9972657.
+Package com.lumenfall.app, versionName0.1.148/versionCode148 and established signer
 A9:1C:BF:34:27:D2:CE:B1:CD:BE:07:E5:22:5F:17:D4:71:B1:82:9E:52:F7:AB:66:49:7E:75:49:75:AD:3E:21
-are verified. All15 assets match exact Git source and all526 ZIP entry CRCs pass.
+PASS. All 15 game/font/branding assets match that exact commit; all 526 ZIP CRCs
+PASS. Build147 was superseded; no APK147 acceptance is claimed. Later releases
+may supersede148; this immutable binary and its evidence remain version-bound.
 
-Native update143→148 PASS: installed APK and loaded product source match the
-verified bytes; actual WebView storage is byte-identical before first launch;
-ownership, OFF and Rift219 persist. Native controls are still being checked.
-Early observer failures are test-driver limitations: saveState replaces its
-canonical object, so every observation now obtains the current closure handle.
-Legacy frame-eval cannot access all variables. UiAutomator cannot export this
-emulator's active hierarchy; native picker selection uses Android keys and
-actual popup-focus evidence. No product asset/handler is replaced for these checks.
+On APK148's extracted source: 23 focused positive cases/five causal negatives,
+20 mobile/text/motion profiles and 54 V8 6.0.286.52 target assertions PASS.
+The same Auto-Ascend checks were renewed on combined main
+14d5f3a3a78fe8b63cfa5544efc54f41217b65a5, source SHA256
+852f32974f52d757406ac8a54b668969a2e0667e7acdd85192d63dbdc31ad262,
+after upstream Loadout memory, Offline12h/schema2/refunds, Rift Guidance and
+Formation receipts. No full combined-game CI result is inferred from focused
+checks. This feature does not own those upstream changes. Tooling passes outside
+the sandbox; its earlier sandbox subprocess failure is retained.
 
-The saved logs are gzip-compressed exact output. Earlier prefixes retain their
-source labels; formation-combined is6482a85c, resonate-combined/integrated is
-2398a750, and apk148 isf99cb0bc. The initial local source receipt in the parent
-folder remains historical. See checkpoint.json and native-update.json for
-supported identity/phase facts. The final interaction record is pending.
+UI coverage includes 320/360/390/430px, normal/160%/200% text, >=44px controls,
+focus, contrast, picker identity/scroll and reduced motion. Gameplay covers
+handler boundaries, high/legacy targets, clear/OFF/Farm/unbeaten guards, manual/
+automatic Ascend, chronology, live/offline, lifecycle and save/recovery/backup.
+Local Node24.19.0/Chromium151.0.7922.173 execute the existing assertions through
+CDP; this does not establish default dump-dom/virtual-time CI equivalence.
+Required PR84 CI used Chrome154.0.8037.57. V8 uses Node8.3.0/6.0.286.52.
 
-Commands (repository root):
+Native signed143→148 update PASS: actual installed APK and loaded product script
+match verified bytes. Prelaunch WebView save storage is byte-identical (103936
+bytes, SHA256 d25ff06724b29893a06ecad476d0e81c9794ced6330490fb15b670d2d7306db3);
+ownership, OFF and Rift219 remain. Actual Android Tab/Space ON/OFF, widths320/
+390/430 with 48px controls/focus, touch picker218/219, typing9999 while ON and OFF,
+accessible target label, identical primary/recovery and cold persistence PASS.
+[native-controls.json](native/native-controls.json) records completed assertions.
+[Continued native acceptance](native/native-acceptance.json) PASS: actual Android
+system font scale2 gives 70/73px controls and 32/35.2px fonts. Genuine cleared219
+triggers exactly one Ascend only for ON/Push; OFF, unbeaten and Farm produce zero.
+Target and ON/OFF remain intact. Runtime exceptions in the acceptance driver: zero.
+An additional [actual large-font screen](native/native-system-font2-controls.png)
+and [visible bounds](native/native-system-font2-controls.json) show the controls
+in view after normal native gameplay; its initialization retry is retained. The final receipt
+includes the source-bound core driver and continued driver hashes.
+
+The isolated Android8.1/API27 software emulator uses actual WebView61.0.3163.98.
+Native picker taps are based on viewed, painted Android screenshots; touch JSON
+retains request/observed-image hashes and actual coordinates. The initial shots
+precede popup paint. No DOM change substitutes for Android selection/input.
+The observer refreshes the actual canonical state handle because product saves
+replace that object. Diagnostic failures and the font-relaunch timeout remain
+in [native history](native-history/README.md); finish mode binds the already
+asserted controls to the same APK/source and runs the remaining cases.
+
+Raw logs are preserved as gzip bytes. Prefixes retain their source labels:
+formation-combined=6482a85c, resonate-combined/integrated=2398a750,
+apk148=f99cb0bc, main14d5=852f3297. The parent manifest and receipt remain frozen
+historical evidence. checkpoint.json and this folder's MANIFEST.json describe
+supported final facts and hashes. No independent human review is claimed.
+
+Commands from the repository root:
 
     node tests/behavioral/run-auto-ascend-ui.cjs --evidence-dir OUT --pipe-browser-dir ADAPTER
     node tests/behavioral/run.cjs --web-root mobile/www --scenario auto-ascend-target-mobile
     node tests/behavioral/run.cjs --web-root mobile/www --scenario auto-ascend-target-reduced-motion
     node docs/qa/auto-ascend-ui-001/verify-apk-assets.cjs APK EXTRACTED COMMIT
     node docs/qa/auto-ascend-ui-001/native-auto.cjs accept APK EXTRACTED/index.html OUT 148
+    node docs/qa/auto-ascend-ui-001/native-auto.cjs finish APK EXTRACTED/index.html OUT 148
 
-The local CDP adapter executes existing assertions and does not prove default
-dump-dom/virtual-time CI equivalence. Native mode requires the isolated API27
-emulator and a prepared signed143 baseline; resume binds the existing update
-receipt and repeats controls without reinstalling or resetting the application.
-Emulator61 is separate from [required affected-phone/WebView60/TalkBack](../DEVICE_ACCEPTANCE.txt).
-Keep the feature/chat OPEN until required acceptance is saved.
+Native accept requires the prepared signed143 baseline. Resume binds the completed
+update receipt; finish also validates the completed core cases, without reinstalling
+or resetting the app. Fixtures are confined to the asserted isolated emulator.
+
+Required [affected-phone/exact WebView60/TalkBack acceptance](../DEVICE_ACCEPTANCE.txt)
+remains OPEN. A native AX tree is not TalkBack. Android system font scale is not
+browser root200% text. WebView60/61 lack prefers-reduced-motion; modern coverage
+and the physical checklist stay separate. Keep this feature/chat OPEN until the
+remaining required observations are saved; no archive is authorized by a partial pass.

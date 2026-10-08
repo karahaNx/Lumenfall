@@ -1,6 +1,6 @@
 {
   "feature": "AUTO_ASCEND_UI_001",
-  "status": "integrated; native controls/device acceptance in progress",
+  "status": "integrated and signed APK148 delivered; native61 PASS; required physical/exact60/TalkBack OPEN",
   "pr": 84,
   "integration": "1282f0cba44a30f39b8a43331395db26600719e8",
   "featureCi": {
@@ -27,12 +27,26 @@
     "ui148": "20 normal/reduced-motion profiles pass",
     "v8": "54 handler assertions on V8 6.0.286.52 pass",
     "nativeUpdate": "signed143 to148 byte-identical prelaunch storage, ownership/OFF/219 pass",
-    "nativeInteractions": "in progress"
+    "nativeInteractions": "source-bound actual Android320/390/430 keyboard/touch218/219/input9999 ON/OFF/AX label/save/recovery/cold PASS",
+    "nativeFontAndGuards": "continued actual Android font scale2 and OFF/Push/Farm/unbeaten/cleared219 triggers PASS; zero runtime errors"
   },
   "limits": [
     "No independent human review",
     "Local CDP transport is not default CI equivalence",
     "Native API27/WebView61 is not affected-phone/exact60/TalkBack"
   ],
-  "next": "Finish native controls, save final supported evidence/status, publish the feature checkpoint. Required affected-phone/exact60/TalkBack stays OPEN."
+  "next": "Complete required affected-phone/exact WebView60/TalkBack acceptance on the immutable signed APK and save observed results in GitHub. Keep feature/chat OPEN until it passes.",
+  "mainReassessment": {
+    "commit": "14d5f3a3a78fe8b63cfa5544efc54f41217b65a5",
+    "sourceSha256": "852f32974f52d757406ac8a54b668969a2e0667e7acdd85192d63dbdc31ad262",
+    "scopedCases": 28,
+    "positiveCases": 23,
+    "causalNegatives": 5,
+    "mobileProfiles": 20,
+    "v8Assertions": 54,
+    "tooling": "unrestricted pass; sandbox subprocess failure preserved",
+    "scope": "Auto-Ascend reassessed after upstream Loadout/Offline12h/RiftGuidance/Formation receipts; no full combined suite claim"
+  },
+  "nativeReceipt": "native/native-acceptance.json",
+  "sharedWork": "Only this owner's documentation checkpoint remains to publish; native test processes completed and own emulator session55774 stopped (shell exit138). No other owner's work/release is claimed."
 }
