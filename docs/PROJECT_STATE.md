@@ -1,7 +1,9 @@
 # Lumenfall — current project status
 
-Updated 8 October 2026 for [BOND_TEXT_001](tasks/BOND_TEXT_001.md),
-preserving the integrated [feature-chat workflow](tasks/FEATURE_CHAT_WORKFLOW_001.md).
+Updated 8 October 2026 for [BOND_TEXT_001](tasks/BOND_TEXT_001.md), preserving
+[WISP_UPGRADE_DISPLAY_001](tasks/WISP_UPGRADE_DISPLAY_001.md),
+preserving other features' recorded status and the integrated
+[feature-chat workflow](tasks/FEATURE_CHAT_WORKFLOW_001.md).
 Repository: `karahaNx/Lumenfall`. Verify relevant live state before acting;
 commits below are observed checkpoints, not a promise that main never advances.
 
@@ -26,6 +28,24 @@ exact WebView60/TalkBack acceptance remains OPEN; owner chat stays open.
 [Android evidence](qa/BOND_TEXT_001/android/README.md) and
 [immutable141 APK](../archive/android/bond-text-001/README.md). Later releases
 may supersede this observed artifact; check live identity for new delivery.
+
+[WISP_UPGRADE_DISPLAY_001 / F04](tasks/WISP_UPGRADE_DISPLAY_001.md) is implemented
+through PR59, merge0e9b54c8d62a873bd48625f4a20ee18078e8a8f1. Unfinished Wisp
+upgrades stay open without a fold control; folding requires Mythic rarity,
+the authoritative Module cap and an owned Ultimate. Empower/Resonate and
+affordability do not determine completion. Required CI37708308439 PASS147 default
+scenarios and12 negative controls; integrated normal F04,12 mobile profiles/12,912
+assertions and relevant existing checks PASS. PR60 Forge wording is preserved.
+
+F04 verified signed APK **0.1.140**, build37710185974, package com.lumenfall.app,
+established signing identity; SHA256
+`c0c81462151c485b16f85dc2c0e53d258ba45c60f92a32539e9e2d6a7153696d`.
+APK CRC and all15 bundled assets match integrated source. Actual signed138→140
+emulator update preserves WebView save storage byte-for-byte.
+Native signed140 final Module purchase/open/focus/Enter/touch folding and save
+purity checks PASS on Android8.1/WebView61. Required physical
+affected-phone/exact WebView60/TalkBack acceptance remains OPEN; this feature/chat
+stays open. [140 receipt, immutable APK and evidence](qa/wisp-upgrade-display-001/delivery-2026-10-08/README.md).
 
 [FEATURE-BRANCH-INTEGRATION-001](tasks/FEATURE_BRANCH_INTEGRATION_001.md) integrates
 repeat paid Lab Study speeds and the exact Number/DataView B2 farm correction
@@ -84,7 +104,7 @@ were recorded as integrated.
 | --- | --- | --- |
 | [BOND_TEXT_001 / F16](tasks/BOND_TEXT_001.md) | PR61 integrated; CI148/12 and fresh integrated checks PASS. Signed0.1.141 identity/assets, V8 6.0 helper, native WebView69 presentation and signed update/save-value checks PASS. | Complete [physical affected-phone/WebView60/TalkBack acceptance](qa/BOND_TEXT_001/android/DEVICE_ACCEPTANCE.txt) and save observations in GitHub. Keep owner chat open. |
 | [LAB_EXCLUSIVE_001](tasks/LAB_EXCLUSIVE_001.md) / F29 | [PR62 proposal checkpoint](https://github.com/karahaNx/Lumenfall/pull/62): 9 Labs inventoried, 7 duplicate rows in 6 effect families; exclusive study-work/reservation effects and value-preserving transition proposed. Actual CI/merge/integrated checks are saved in the PR body. No game behavior changed. | Obtain the agreed UPGRADE_IDENTITY_001 Lab effects/currencies/prices/work/unlocks/caps and migration policy. Full feature and chat remain open; proposed values/mechanics are not approved rules. |
-| WISP_UPGRADE_DISPLAY_001 / F04 | [Feature candidate](tasks/WISP_UPGRADE_DISPLAY_001.md) verified against main214d454: unfinished upgrades stay open; folding requires Mythic, authoritative Module cap and owned Ultimate. 12 mobile profiles/12,912 assertions and the normal focused harness PASS. | Publish/pass required CI, integrate, verify integrated bytes and signed APK/device acceptance. Feature remains open. |
+| WISP_UPGRADE_DISPLAY_001 / F04 | [Integrated PR59 and signed140](tasks/WISP_UPGRADE_DISPLAY_001.md); required CI147 scenarios/12 negatives and integrated12 mobile profiles/12,912 assertions PASS. Signed138→140 native save preservation PASS. | Complete and save affected-phone/exact WebView60/TalkBack acceptance. Available implementation/delivery is published; feature/chat remains open. |
 | FEATURE-CHAT-WORKFLOW-001 | Current docs/context-tooling cleanup; see task for publication/integration receipt. | Verify document/tooling checks and GitHub integration; no game build. |
 | OFFLINE-CATCHUP-001 | PR51/54/55/56 integrated; signed137 verified, available source/engine/emulator checks PASS. Required physical acceptance OPEN. | Run remaining affected-phone/exact WebView60/TalkBack checklist and save results in GitHub. Keep feature/chat open. |
 | FEATURE-BRANCH-INTEGRATION-001 / LAB-MOTES | PR57/46 merged; full 146 CI and signed 0.1.138 asset/signing verification PASS. Required device acceptance OPEN. | Complete affected-phone/exact WebView60/TalkBack acceptance and any required independent review. Keep task/chat open. |

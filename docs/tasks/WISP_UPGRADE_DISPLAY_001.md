@@ -1,8 +1,9 @@
 # WISP_UPGRADE_DISPLAY_001 — unfinished Wisp upgrades stay open
 
-Status: **candidate verified; publishing and integration in progress**. Required
-GitHub CI, integrated verification, signed APK and native/device acceptance are
-pending. A local candidate or open PR does not complete this app feature.
+Status: **integrated and published in signed APK0.1.140; physical acceptance open**.
+PR59 is merged, required CI is green and integrated F04 checks pass. Required
+physical/exact WebView60/TalkBack acceptance is unperformed, so the feature/chat
+remains open. This is implemented game code and a signed release.
 
 ## One goal and original requirements
 
@@ -82,9 +83,9 @@ local candidate; it is not acceptance of the current game.
 - PASS: ordinary run.cjs --scenario wisp-upgrade-display on official Chrome155;
   current F04 plus11 relevant existing scenarios also pass through CDP/active assertions.
 - PASS: source validation and Node tooling regression checks. Required full GitHub
-  gates remain pending until their actual completion is observed.
+  CI37708308439 passes147 default scenarios, all12 required negatives and guarded startup.
 - Historical: heading contrast estimate >=5.46:1 and ES2017 parsing passed;
-  physical/exact WebView60/TalkBack and new APK are not claimed by desktop checks.
+  physical/exact WebView60/TalkBack is not claimed by desktop checks.
 
 Node24.19.0, Chromium151.0.7922.173 (CDP), official Chrome155.0.8059.39 (normal CLI).
 Debian Chromium151 dump-dom still times out on this environment; use the installed
@@ -93,14 +94,60 @@ Checks pause periodic callbacks only during immediate throwaway UI measurements;
 normal existing lifecycle/gameplay assertions retain their production test harness.
 Only self-review/automated checks are performed, not independent review.
 
-## Checkpoint and next action
+## Integration, APK and remaining acceptance
 
-PR/integration/APK: pending. Shared original checkout is untouched. Chat remains
-open until relevant integration/app acceptance and saved status are complete.
+[PR59](https://github.com/karahaNx/Lumenfall/pull/59) merged at
+0e9b54c8d62a873bd48625f4a20ee18078e8a8f1; full tree aafad1b738a188f429405eae856e750c468d2a89
+equals the locally reviewed merge preview. It preserves PR60's unrelated Forge
+text change. Integrated source SHA256:
+a64747dcec3c26c0b5dea3f2e5c1bac521de557e38547b1195b5a3660234b0df.
 
-Next: publish this branch/task/evidence, pass unchanged required CI, verify the
-full diff/current main and merge with expected head. Verify F04 on integrated
-bytes; observe the triggered signed Android build and verify release digest,
-bundled assets/package/version/signer. Run available native/legacy checks, save
-remaining required device limitations in this task and PROJECT_STATE, and archive
-only after all necessary acceptance is complete.
+[Required CI37708308439](https://github.com/karahaNx/Lumenfall/actions/runs/37708308439)
+passes147 defaults, all12 required negative controls, source/tooling/identity gates
+and guarded smoke on head3c1c99bf96c9f6e0602a996ce2798d5ba972e0ce. Full decoded
+CI text is saved compressed in the current evidence folder. On integrated0e9b54c,
+the normal F04 harness, 12 mobile profiles/12,912 assertions, five existing
+Wisp/accessibility/recovery checks and Forge contracts3,508 assertions PASS.
+No blanket rerun of all147 on the post-merge Forge wording is claimed; its
+unrelated text delta is retained and the affected checks were reassessed.
+
+Main advanced again to210005d when PR61 Bond presentation merged during final
+receipt publication. The non-fast-forward push was rejected without overwriting
+that work; the receipt rebased cleanly. Normal F04 and all12 mobile profiles/
+12,912 assertions PASS on that source, SHA256
+1e0d51370b5b62f313dad6953f9b26bb7d7a1a886785dbccc6dfaac379779981.
+Signed140 and native receipts below remain tied to0e9b54c, not later APKs.
+
+[Android build37710185974](https://github.com/karahaNx/Lumenfall/actions/runs/37710185974)
+passes on the integration commit and publishes signed0.1.140, versionCode140,
+package com.lumenfall.app and the established certificate. A fresh downloaded
+APK passes aapt/apksigner, every container CRC and all15 bundled asset byte checks.
+APK SHA256 matches GitHub release digest:
+c0c81462151c485b16f85dc2c0e53d258ba45c60f92a32539e9e2d6a7153696d.
+An immutable [signed APK copy](../../archive/android/wisp-upgrade-display-001/Lumenfall-0.1.140.apk)
+is preserved because android-latest can be replaced by later builds.
+
+Actual signed138 to140 emulator installation succeeds and preserves native
+WebView Local Storage tar bytes exactly before launch. The emulator is Android8.1
+/API27/WebView61.0.3163.98 using software CPU emulation, not a physical phone.
+Actual signed140 native Wisp UI PASS: incomplete Module19 remains visible without
+a fold, final Module native tap reaches the existing cap20 and retains open/focus,
+native Enter/tap folds/opens, and folding changes neither save slot. At least44px
+controls/no page overflow/no observed interaction errors. Exact bundled product
+JS/CSS matches source; synthetic emulator save/timestamps and held interval
+callbacks during immediate measurement are documented. Prior adapter scrolling/
+input timing failures and the successful rerun are preserved; no product fix was
+needed. This is WebView61 emulator evidence, not physical/exact60/TalkBack.
+Host platform-tools failed on read-only /home/agent/.android; the scoped direct
+protocol adapter refuses authenticated devices and mutations require ro.kernel.qemu=1.
+
+Remaining: affected-phone/exact native WebView60/TalkBack acceptance. A device
+availability question was sent to the user after APK publication; no answer or
+physical results are assumed. Self-review/automation is not independent review.
+The available implementation, CI, integrated checks, signed140 and native checks
+are delivered. This final scoped GitHub checkpoint saves receipt/task/PROJECT_STATE,
+raw evidence and an immutable signed140 APK; shared-file work stops after its
+publication. Next required action: run the linked physical
+acceptance checklist on the affected phone/exact WebView60/TalkBack and save results
+in GitHub. Keep this owner chat open until that required acceptance passes; do not
+archive another chat. No generic approval is needed again.
