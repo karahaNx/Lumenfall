@@ -1,0 +1,72 @@
+Browser identity: { "selected_path": "/tmp/formation-tools/google-chrome", "resolved_path": "/tmp/formation-chrome/opt/google/chrome/chrome", "sha256": "9bfb381296dffe75f3419d07b6cc64525105ed117d1453a4ef3b291cb97d2b58", "version": "Google Chrome 155.0.8059.39 unknown", "version_exitcode": 0, "version_stderr": "" }
+Staged source: { "source_sha256": "2eda7ffd83e95d2a114403706f488d8c58723726d81314c873fb1393e793bc1b", "instrumented_sha256": "f0657670b9080d8b3f34249c5e2bac4b10b3c5fa6183749510148ceeb300848d" }
+FAIL self-test-parity-regression
+  process: { "exitcode": 0, "timed_out": false, "elapsed_sec": 0.881853937, "timeout_sec": 25 }
+  observed QA: { "qa_count": 1, "qa_status": "fail", "qa_scenario": "self-test-parity-regression", "json_status": "fail", "json_scenario": "self-test-parity-regression", "runtime_markers": [], "runtime_error_count": 0, "json_error": null, "valid": true }
+  raw artifacts: /workspace/formation-autosave-evidence/verified-final/negative-raw/self-test-parity-regression-AcHbjN
+  Chromium stderr tail:
+00:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[95687:95698:1007/142145.221703:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[95687:95687:1007/142145.221777:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[95687:95687:1007/142145.222976:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[95687:95698:1007/142145.223149:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[95687:95709:1007/142145.225220:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 95764: Read-only file system (30)
+[95687:95709:1007/142145.229546:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 95766: Read-only file system (30)
+[95687:95709:1007/142145.231276:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 95768: Read-only file system (30)
+[95687:95687:1007/142145.232634:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[95687:95698:1007/142145.232995:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[95687:95687:1007/142145.233014:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[95687:95698:1007/142145.233029:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[95687:95698:1007/142145.233074:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[95687:95687:1007/142145.235872:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[95687:95687:1007/142145.244576:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[95687:95687:1007/142145.244614:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[95687:95698:1007/142145.244684:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[95687:95687:1007/142145.250101:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[95687:95698:1007/142145.250167:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[95687:95687:1007/142145.261432:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[95687:95709:1007/142145.280339:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 95798: Read-only file system (30)
+[95687:95709:1007/142145.313664:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:312] Failed to adjust OOM score of renderer with pid 95810: Read-only file system (30)
+
+  stdout tail:
+nded Sigil use / Comet anti-arbitrage guard was not detected'
+          );
+          finish('pass',{unexpected:'endgame currency regression was not detected'});
+          return;
+        }
+
+        case 'self-test-wisp-role-regression': {
+          var staleRoles=bridge.wispRoleContract();
+          assert(
+            staleRoles.some(function(entry){return entry.role==='Tank' || entry.abilityType==='tank';}),
+            'intentional Wisp role regression: stale Tank semantics were not detected'
+          );
+          finish('pass',{unexpected:'Wisp role regression was not detected'});
+          return;
+        }
+
+        default:
+          throw new Error('unknown scenario '+ctx.scenario);
+      }
+    }catch(error){
+      finish('fail',{message:error && error.message ? error.message : String(error), stack:error && error.stack ? error.stack : null});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+</script>
+
+
+<pre id="qa-result" data-status="fail" data-scenario="self-test-parity-regression">{
+  "scenario": "self-test-parity-regression",
+  "status": "fail",
+  "detail": {
+    "message": "intentional parity regression totalKills must match exactly (expected 42, got 43)",
+    "stack": "Error: intentional parity regression totalKills must match exactly (expected 42, got 43)\n    at assert (http://127.0.0.1:42369/index.html?qaScenario=self-test-parity-regression&amp;qaFixture=parity-early-simple:12014:61)\n    at http://127.0.0.1:42369/index.html?qaScenario=self-test-parity-regression&amp;qaFixture=parity-early-simple:12047:7\n    at Array.forEach (&lt;anonymous&gt;)\n    at assertProtectedParity (http://127.0.0.1:42369/index.html?qaScenario=self-test-parity-regression&amp;qaFixture=parity-early-simple:12046:7)\n    at HTMLDocument.run (http://127.0.0.1:42369/index.html?qaScenario=self-test-parity-regression&amp;qaFixture=parity-early-simple:14469:11)"
+  },
+  "runtimeErrors": []
+}</pre></body></html>
+
+Behavioral QA failed: self-test-parity-regression null
