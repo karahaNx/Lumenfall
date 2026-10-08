@@ -1,7 +1,7 @@
 # LOADOUT_MEMORY_001 / F25 — automatic Forge preference
 
-Status: COMPLETE — integrated, accepted and delivery saved.
-Owner: this chat. No agents/messages/model claim.
+Status: complete on merge of this final evidence checkpoint; checks PASS.
+Owner: this chat; no agents/messages.
 
 Original [F25](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt):
 “Loadout memory fra deeds skal fjernes, det skal bare være indbygget i spillet.”
@@ -10,7 +10,7 @@ unreleased game. Automatic Forge preference; no named shop/refund/new field.
 Sources/checks: [QA](../qa/loadout-memory-001/current/README.md). Live rules read; approval applies.
 
 Baseline b0537cb46635555ba2c2e5f3f95bc8fc276aeda5. Private
-/workspace/Lumenfall-LOADOUT_MEMORY_001-live; feature/loadout-memory-001-delivery.
+/workspace/Lumenfall-LOADOUT_MEMORY_001-live; feature/loadout-memory-001-final-evidence.
 PR46/B2 integrated via PR57. [PR78](https://github.com/karahaNx/Lumenfall/pull/78)
 merged9c19664; [PR97](https://github.com/karahaNx/Lumenfall/pull/97)
 merged3f1b6faf9f253e6dfe8a3bf408e7f7a9891ca52d. Preserve F14/F26/F27/Tree/Rift/Lab; original checkout/archive intact.
@@ -40,5 +40,5 @@ separate F26 credit once. Old capture INVALID/retained; artifact/source/capture 
 Real Motes/pure wallet checks PASS. No phone/TalkBack/exact WebView60 claim.
 Split replay corrected.
 
-Next: shared edits stopped; archive only this owner. No F25 acceptance blocker.
-Later unrelated releases/feature acceptance retain their own scope.
+Next: merge final checkpoint, stop edits, archive only this owner.
+Later unrelated releases/acceptance remain separate.
