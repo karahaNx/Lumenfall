@@ -139,15 +139,15 @@ window.runInquiryQa=function(b,ctx,assert,assertProtectedParity,assertSummaryPar
     ok(button.disabled===(k>=10)&&button.getAttribute('aria-label').includes('Measured Inquiry'),'actual native disabled and accessible label '+k);
     if(k>=10)ok(button.dataset.state==='maxed'&&!button.getAttribute('aria-label').includes('Need'),'cap accessible state has no affordability claim');
     if(k>=10){ok(!card.querySelector('.study-meta')&&!/Next: level (11|14)/.test(card.textContent),'no cap next price or fake nextlevel');ok(card.textContent.includes('Queue ON retained; no new starts.'),'cap retained queue status');}
-    else ok(card.textContent.includes('Next: level '+(k+1))&&card.textContent.includes((k*2+2)+'% less work'),'pending next distinct from earned');
-    if(k===13)ok(earned.textContent.includes('Preserved; effect capped at level 10'),'overcap ownership explained');
+    else ok(card.textContent.includes('Next Lv.'+(k+1))&&card.textContent.includes('On completion: '+(k*2+2)+'% less work'),'pending next distinct from earned');
+    if(k===13)ok(earned.textContent.includes('Saved purchases preserved; effect capped.'),'overcap ownership explained');
     var before=b.getState(),raw=b.rawSave();b.renderLayout();b.refreshAffordability();same(b.getState(),before,'render/affordability pure');ok(b.rawSave()===raw,'render cannot save/complete');
     ok(q('#tab-research').scrollWidth<=q('#tab-research').clientWidth,'Lab no horizontal overflow '+k);
   });
   var locked=seed();locked.maxDepthEver=59;install(locked);q('[data-tab="research"]').click();ok(!q('[data-study="measuredinquiry"]')&&q('#study-list').textContent.includes('Unlocks at Rift 60'),'locked60 visible without purchase');
   var running=seed();running.longStudyLevels.measuredinquiry=5;running.activeStudies=[{id:'measuredinquiry',remainingSec:0,totalDurationSec:6291,speedMult:1}];install(running);
-  var before=b.getState();ok(q('[data-study-text="measuredinquiry"]').textContent==='Finishing…','due UI remains pending');b.renderLayout();same(b.getState(),before,'Finishing render cannot earn');
-  ok(q('[data-running-study="measuredinquiry"]').textContent.includes('10% less work')&&q('[data-running-study="measuredinquiry"]').textContent.includes('Next: 12% less work'),'earned/pending distinction');
+  var before=b.getState();ok(q('[data-study-text="measuredinquiry"]').textContent==='Finishing… · 1x','due UI remains pending');b.renderLayout();same(b.getState(),before,'Finishing render cannot earn');
+  ok(q('[data-running-study="measuredinquiry"]').textContent.includes('10% less work')&&q('[data-running-study="measuredinquiry"]').textContent.includes('On completion: 12% less work'),'earned/pending distinction');
   running.longStudyLevels.measuredinquiry=13;running.activeStudies[0].remainingSec=50;install(running);var over=q('[data-running-study="measuredinquiry"]');
   ok(!over.textContent.includes('level 14')&&!over.textContent.includes('Lv.14')&&over.textContent.includes('without another level or bonus'),'neutral overcap paid-record presentation');
   ok(Array.from(over.querySelectorAll('[data-speed-study]')).every(function(el){return el.disabled;}),'no new paid acceleration for maxed record');

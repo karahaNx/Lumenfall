@@ -9,6 +9,14 @@ commits below are observed checkpoints, not a promise that main never advances.
 
 ## Product and release evidence
 
+[LOADOUT_MEMORY_001 / F25](tasks/LOADOUT_MEMORY_001.md) integrated through
+[PR78](https://github.com/karahaNx/Lumenfall/pull/78)/9c19664: automatic Forge
+preference, no named shop, legacy value retained. CI173/17 and APK150 signed
+identity/15 assets/extracted V8/1139 checks/native input/restart/upgrade PASS.
+Corrected app-private database capture supersedes invalid shell-error hashes.
+F26 refunds remain separate; PR97 final combined CI/integration pending.
+Owner chat stays open until final acceptance/evidence are saved.
+
 [RIFT_GUIDANCE_001 / F07](tasks/RIFT_GUIDANCE_001.md): stable guidance below
 currencies with Show hints/Hide hints is being published on its isolated branch.
 Rebased onto main b0537cb with integrated F13/F27 preserved. Fresh local160
@@ -167,7 +175,7 @@ were recorded as integrated.
 
 | Work | Evidence/status | Next action within its own task |
 | --- | --- | --- |
-| [SUPPORT_UPTIME_001 / F18](tasks/SUPPORT_UPTIME_001.md) | Candidate normal1s/Ultimate1.5s/Swift10; pair≤50/70/90%. Value-preserving refund and short-buff chronology pass local motor, strict parity and legacy checks. [PR82](https://github.com/karahaNx/Lumenfall/pull/82). | Final combined CI, main integration, signed APK/native update acceptance pending. Owner OPEN. |
+| [SUPPORT_UPTIME_001 / F18](tasks/SUPPORT_UPTIME_001.md) | Candidate1s/1.5s/Swift10; refund/strict parity/legacy/mobile PASS. [PR82](https://github.com/karahaNx/Lumenfall/pull/82). | Final CI/integration/signed APK/native acceptance pending. Owner OPEN. |
 | [OFFLINE_12H_001 / F26](tasks/OFFLINE_12H_001.md) | PR85 integrated; common12h and original-currency refund ledger. Signed150 identity/15 assets PASS; native144→150 migration/save slots PASS. [Evidence](qa/offline-12h-001/README.md). | Finish native cap/UI/focus checks and combined integrated CI; save final status. Owner chat OPEN. |
 | [RESONATE_CLARITY_001 / F06](tasks/RESONATE_CLARITY_001.md) | PR80/main e2f745c implemented; signed APK146 package/signing/15 assets/extracted-browser/V8 checks PASS. Full159 scenarios/14 negatives PASS on exact APK146 source; fresh integrated UI/economy/save/recovery PASS. | Complete [physical WebView60/native large-text/TalkBack acceptance](qa/resonate-clarity-001/integration-2026-10-08/DEVICE_ACCEPTANCE.txt). Game update delivered; feature/chat OPEN. |
 | [AUTO_ASCEND_UI_001 / F01–F03](tasks/AUTO_ASCEND_UI_001.md) | Deeds unlock retained; one Rift dropdown and separate ON/OFF moved to Ascend. Candidate checks PASS:23 scoped positives/five negatives,20 mobile/text/motion profiles and54 V8 6.0 handler assertions. [Evidence](qa/auto-ascend-ui-001/README.md). | Publish/pass required CI/integrate; verify signed APK and required native/device acceptance. Feature/chat OPEN. |
