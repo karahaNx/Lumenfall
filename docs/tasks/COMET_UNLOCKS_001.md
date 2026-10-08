@@ -1,6 +1,6 @@
 # COMET_UNLOCKS_001 — exclusive Comet unlocks
 
-Status: **implementation in progress; not integrated or complete**.
+Status: **candidate pushed in draft PR69; CI/integration/acceptance pending**.
 Owner: this COMET_UNLOCKS_001 featurechat. No subagents or message tools.
 
 ## One goal and authorization
@@ -30,6 +30,11 @@ Live main baseline `214d45411ce2fb420f0e4b372063811a967679b1`, tree
 Rebased proposal `460474b9f440089e6f0017506a22f01c5eef19a0`.
 PR46/B2 integrated via `20aaae62a4b6e46f8d75775085918eaba4e8de29`;
 no open PRs at startup. Existing signed release 0.1.138.
+
+Rebased onto subsequent live main `0e9b54c8d62a873bd48625f4a20ee18078e8a8f1`
+after PR59/60 (Wisp display and Forge text) landed. The only conflict was
+scenario registration; retain both Wisp and Comet checks. Product candidate
+`f3296003c71346ff589d67234ff89bb19f739ecc` is based on this integration.
 
 Read live AGENTS, bootstrap, ownership, Gameplay, PROJECT_STATE and workflow.
 Preserve chronology, Lab paid snapshots, Forge bulk/queues, formation intent,
@@ -70,15 +75,31 @@ acceptance keeps the feature open if unavailable.
 Baseline `p2-endgame-currency-utility`: Chromium 151.0.7922.173 timed out with
 zero QA assertions. `about:blank` also times out in this environment, including
 the allowed unsandboxed attempt. This is not a game assertion failure or PASS.
-Raw evidence currently `/workspace/comet-implementation-checks/`; copy durable
-evidence at the test checkpoint. Source syntax validation PASS. Other checks
-and new focused coverage are in progress.
+Root cause established with a tiny HTML probe: browser navigation returns
+`net::ERR_BLOCKED_BY_ADMINISTRATOR`. No policy changes or gate bypasses.
+Supplementary in-memory HTML preview (embedded local fonts, storage shim)
+checks native input, focus, geometry and text scaling; it does not establish
+real browser storage, HTTP startup, Android or WebView60 acceptance.
 
-Changes so far: `index.html`, this task, historical design copy. No remote
-product writes yet. No APK/device completion or independent review claimed.
+Evidence: [11 focused cases](../qa/comet-unlocks-001/implementation-core.json),
+[existing long-offline regression](../qa/comet-unlocks-001/implementation-offline-core.json),
+[source](../qa/comet-unlocks-001/implementation-source.log),
+[context](../qa/comet-unlocks-001/implementation-context.log),
+[tooling](../qa/comet-unlocks-001/implementation-tooling.log). These passed;
+tooling required the allowed unsandboxed run for executable subprocess fixtures.
+APK verifier self-test passed. The long-offline result predates the PR59/60
+rebase; full CI must recheck the combined candidate.
+
+Changes: `index.html`, focused core/native UI checks and their registration,
+explicit additive-save assertions in the existing offline/endgame checks,
+task/request/design and evidence. GitHub: [PR69](https://github.com/karahaNx/Lumenfall/pull/69),
+attached to this chat. No main integration, APK/device completion or independent
+review claimed. Current overlapping drafts include Ascension caps (PR66), a
+broad feedback candidate (PR67) and Wisp roles (PR70). Do not absorb their scope;
+recheck main and serialize integration. Scope question remains pending.
 
 ## Next action
 
-Finish focused gameplay/save and UI coverage; resolve pending legacy scope.
-Publish candidate, run required CI, review full diff, integrate serially and
+Save final supplementary UI evidence; resolve pending legacy scope.
+Run required CI on the rebased candidate, review full diff, integrate serially and
 verify signed app. Keep the chat open until required acceptance is complete.
