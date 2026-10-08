@@ -30,7 +30,14 @@ function app(seed,html=source,seconds=0){
  const bridge=`window.qa={set:s=>state=acceptPersistedState(s),get:()=>state,apply:applyOfflineProgress,advance:advanceAuthoritativeTime,study:advanceStudyOnlyTime,summary:simulationSummary,load:loadState,backup:currentSaveBackup,decode:decodeSaveBackup,save:saveState,cancel:typeof cancelOfflineCatchup==='function'?cancelOfflineCatchup:()=>{},flags:()=>({busy:typeof offlineCatchup!=='undefined'&&!!offlineCatchup,pending:typeof offlinePending!=='undefined'&&offlinePending,resume:typeof resumeFlowBusy!=='undefined'&&resumeFlowBusy}),batch:n=>{if(typeof SIM_BATCH_EVENTS!=='undefined')SIM_BATCH_EVENTS=n;},fault:()=>{simulationResolveTimestamp=function(){throw Error('injected simulation failure');};}};`;
  const script=html.match(/<script>\s*([\s\S]*?)<\/script>/)[1].replace("if(document.readyState==='loading'){",bridge+"if(document.readyState==='loading'){");
  new Function('window','document','localStorage','Date','setTimeout','clearTimeout','performance',script)(window,document,localStorage,date,(fn)=>{queue.push({id:++seq,fn});return seq;},id=>{const i=queue.findIndex(x=>x.id===id);if(i>=0)queue.splice(i,1);},{now:()=>monotonic});
- const b=window.qa;b.set(copy(seed));
+ const b=window.qa,initial=copy(seed);
+ // Independent transition oracle: this device history has finite safe-integer
+ // prices. Preserve frozen scheduling and apply the approved refund to its input.
+ if(html===baseline && !(seed.feedbackMigration && seed.feedbackMigration.receipts['forge.charge'])){
+   let refund=0n;for(let k=10;k<seed.research.charge;k++)refund+=BigInt(Math.ceil(30*1.55**k));
+   assert(refund<BigInt(Number.MAX_SAFE_INTEGER),'device refund exact safe integer');initial.shards+=Number(refund);
+ }
+ b.set(initial);
  return {b,storage,writes,queue,clock:v=>now=v,monotonic:v=>monotonic=v,failPrimary:v=>primaryFail=v,failRecovery:v=>recoveryFail=v,
   drain(){let batches=0;while(queue.length){queue.shift().fn();batches++;assert(batches<100000,'bounded number of work batches');}return batches;}};
 }
@@ -65,13 +72,20 @@ function baselineState(actual,expected,seed,label){
  const oldOwnership={...expected.owned},legacy={};
  for(const id of ['rememberbulk','offline24','offline48']){if(oldOwnership[id]===true)legacy[id]=true;delete oldOwnership[id];}
  assert.deepEqual(actual.legacyCometPurchases,legacy,label+' full legacy ownership archived');
- const {studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,...existing}=actual;
+ const amounts=[];for(let k=10;k<seed.research.charge;k++)amounts.push(Math.ceil(30*1.55**k));
+ assert.deepEqual(actual.feedbackMigration.receipts['forge.charge'],{from:10,to:seed.research.charge,unpricedFrom:0,amounts:{shards:amounts}},label+' exact one-time refund receipt');
+ assert(/^[0-9]+$/.test(actual.exactRefundCredits.shards),label+' exact credit persisted');
+ // Frozen scheduler uses one Number wallet. Compare total spendable value while
+ // the independent BigInt migration gate proves every compensated integer.
+ approx(actual.shards+Number(actual.exactRefundCredits.shards),expected.shards,label+' spendable Shards');
+ const {shards,feedbackMigration,exactRefundCredits,studyUseMotes,studySpeedTargets,cometTrial,cometTrialResult,cometTrialMarks,cometCosmetics,legacyCometPurchases,...existing}=actual;
  // F14 changes only the selected destination during a matching partial rebuild.
  const intent=expected.formationRebuild;
  const selected=intent&&intent.preset&&expected.formationPresets[intent.preset]&&
    expected.formationPresets[intent.preset].join(',')===intent.members.join(',')
    ? intent.preset : expected.activeFormationPreset;
- assert.deepEqual(existing,{...expected,owned:oldOwnership,activeFormationPreset:selected},label);
+ const {shards:oldShards,...oldState}=expected;
+ assert.deepEqual(existing,{...oldState,owned:oldOwnership,activeFormationPreset:selected},label);
 }
 function runAsync(seed,seconds,batch=256){
  const x=app(seed,source,seconds),before=copy(x.b.get());x.b.batch(batch);
@@ -99,9 +113,9 @@ const start=performance.now();
 const on=runAsync(original,28800);
 // Literal totals independently reproduced with the frozen scheduler in900s
 // windows, including the same original60-level save and unchanged price/rewards.
-assert.equal(on.result.kills,277629);assert.equal(on.result.ascends,13220);
-assert.equal(on.committed.prisms-original.prisms,79320);
-approx(on.committed.lumen,9000,'partial final run keeps only its remaining Lumen');
+assert.equal(on.result.kills,277929);assert.equal(on.result.ascends,13234);
+assert.equal(on.committed.prisms-original.prisms,79404);
+approx(on.committed.lumen,33235.2,'partial final run keeps only its remaining Lumen');
 assert(on.result.earned>on.committed.lumen,'Ascension reset preserves earned vs balance distinction');
 assert.deepEqual(on.committed.formationRebuild,original.formationRebuild,'unaffordable Boss reconstruction intent persists');
 assert.deepEqual(on.committed.empowerQueue,original.empowerQueue,'purchase intent preserved');
@@ -115,10 +129,10 @@ assert.deepEqual(narrow.result,on.result,'changing work budget changes no reward
 const clear20=copy(original);clear20.autoAscendTargetDepth=21;
 const c20=runAsync(clear20,28800);
 const off=copy(original);off.autoAscendEnabled=false;
-const disabled=runAsync(off,28800);assert.equal(disabled.result.kills,756);assert.equal(disabled.result.ascends,0);
+const disabled=runAsync(off,28800);assert.equal(disabled.result.kills,758);assert.equal(disabled.result.ascends,0);
 assert.equal(disabled.committed.spirits.titan,144);
-const cap=runAsync(original,72*3600);assert.equal(cap.result.kills,2502168);assert.equal(cap.result.ascends,119150);
-assert.equal(cap.committed.prisms-original.prisms,714900,'unchanged six-Prism Ascend reward');
+const cap=runAsync(original,72*3600);assert.equal(cap.result.kills,2504820);assert.equal(cap.result.ascends,119277);
+assert.equal(cap.committed.prisms-original.prisms,715662,'unchanged six-Prism Ascend reward');
 const beyond=copy(original);beyond.activeStudies=[{id:'guardmastery',remainingSec:80*3600,totalDurationSec:80*3600,speedMult:1}];beyond.studyQueue={};
 const long=runAsync(beyond,96*3600);assert.equal(long.result.effectiveSec,72*3600);
 assert(long.result.completedStudies.includes("Guardian's Mastery"),'study completes beyond combat cap');

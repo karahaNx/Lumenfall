@@ -1,47 +1,11 @@
-# Purchase-value choices still pending
+# Implemented purchase-value policy
 
-The two asynchronous questions in this chat have not received answers. The
-approved timing contract is implemented and published; no proposed answer is
-treated as a submitted answer. This document is a reviewable save-transition
-proposal, not an implemented migration or release approval.
+The user delegated the remaining choices with “Do what makes sense” after ordering completion and game delivery. Exact instructions are in USER_CONTINUATION.txt.
 
-## Tide/Aurora Ultimates
+Keep Tide/Aurora Ultimate ownership, rarity/history, additive +50% strength and earned deadlines. Future casts use1.5s. No Sigil refund: the purchased Ultimate remains owned and retains its improved duration/strength over the normal1s/+25% cast.
 
-Keep Ultimate ownership, rarity, paid history, additive strength and already-earned
-buff expiry. Future casts follow the approved1.5s duration. The question is whether
-that retained ownership should receive no Sigil refund, or whether the reduced
-future duration needs additional compensation before release. If compensation is
-chosen, record its exact rule before changing currency balances. Do not reset or
-resell an owned Ultimate.
+Keep historical Swift levels while enforcing effective/purchase cap10. Refund original individually rounded prices once: sum(ceil(30 * 1.55^k), k=10..L-1), restricted to finite original prices. Legacy saves have no bulk purchase receipts; this is reconstructed individual-curve compensation, not audited exact spending. Level11/25/60 credits2402/3122089/14343675624911 Shards.
 
-## Swift above10
+A receipt in feedbackMigration.receipts['forge.charge'] uses PR67's namespace. Refunds enter the Number wallet only when both operands are preserved exactly; otherwise exactRefundCredits.shards stores a decimal integer. Every Shard handler, preview, Max/queue and economy boundary can spend it. Small prices debit exact credits; larger purchases preserve credits when ordinary wallet spending suffices. Fractional earned Shards remain. Repeated canonicalization/reload/recovery does not refund again. Restoring an older complete backup replaces the snapshot before migration. Reset starts a fresh history; Ascend keeps Shards/receipts. No global cross-snapshot refund accumulator exists.
 
-Proposed: keep raw historical levels, apply cap10 to effects/purchases, and credit
-the original individually rounded Shard curve above10 once. For historical levelL,
-the nominal refund is `sum(ceil(30 * 1.55^k), k=10..L-1)`, restricted to the original
-finite representable purchase range. Measured nominal examples:
-
-| Stored level | Nominal Shard credit |
-|---|---:|
-|11|2,402|
-|25|3,122,089|
-|60|14,343,675,624,911|
-
-Legacy saves do not record whether purchases used single-level or bulk rounding.
-This is reconstructed individual-curve compensation, not a claim of exact audited
-historical spending. Preserve an idempotent receipt and any small credit that would
-round away beside a large Number wallet; credited value must remain spendable.
-Primary/recovery/backup canonical reload must retain it. Restoring a complete old
-snapshot must not add a refund to balances retained from a different snapshot.
-
-PR67's task and balance contract report approval for original-currency overcap
-refunds and use the same individual-curve policy. That is reported coordination
-evidence; this chat's pending answers are not inferred from it. After approval,
-reconcile the receipt namespace with that dependency to avoid duplicate credits.
-
-Required transition checks: levels0/9/10/11/25/60/100; direct/bulk/Max/queue gates;
-no value loss beside large wallets; repeated normalize/load/save/recovery/backup
-restore; malformed/extreme history; live/offline purchases and exact debit; old
-Ultimates/earned deadlines; signed in-place native update and cold/resume recovery.
-Run required CI again after any product/save transition change. Until then, keep
-PR82 draft and the feature open; no main integration or APK release is claimed.
+PR67 remains an unmerged broad candidate. Its later integration must preserve exactRefundCredits and the shared receipt, and use compatible spending helpers; do not replace this with its earlier lossy Number-only ledger. No other caps, refunds or retirements are implemented here. Native old143→new signed APK acceptance and required CI remain necessary.
