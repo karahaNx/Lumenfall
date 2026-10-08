@@ -1,6 +1,9 @@
 const fs=require('node:fs'),path=require('node:path'),{spawnSync}=require('node:child_process');
 const repo=process.argv[2] || '/workspace/Lumenfall-FORGE_EXCLUSIVE_001';
-const out=path.join(__dirname,'EVIDENCE');
+const outArg=process.argv.indexOf('--output-dir');
+if(outArg!==-1 && (!process.argv[outArg+1] || process.argv[outArg+1].startsWith('--'))) throw Error('--output-dir requires a directory');
+const out=outArg===-1?path.join(__dirname,'EVIDENCE'):path.resolve(process.argv[outArg+1]);
+fs.mkdirSync(out,{recursive:true});
 const cdp=process.argv.includes('--cdp');
 const uiOnly=process.argv.includes('--ui-only');
 const prefix=uiOnly?'current-ui-':'current-';

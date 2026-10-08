@@ -8,7 +8,8 @@ const source = fs.readFileSync(sourcePath, 'utf8');
 const sha256 = crypto.createHash('sha256').update(source).digest('hex');
 const baselines = {
   f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4:'ea44431c163569548973d9e489f75345749a07ee',
-  '4a9fac11b413071f9b722e2c50e0e46839d9de26e3214b52f619c279fc5d5607':'90e4678cb28fa833fdacbc01d1744d9465f6a356'
+  '4a9fac11b413071f9b722e2c50e0e46839d9de26e3214b52f619c279fc5d5607':'90e4678cb28fa833fdacbc01d1744d9465f6a356',
+  '6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca':'b0bff3729e1fd0047c13d3e3acb74212722a6824'
 };
 if (!baselines[sha256]) throw Error('Different product bytes: re-review annotations before using this inventory');
 const families = {

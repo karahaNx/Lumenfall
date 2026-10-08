@@ -1,333 +1,70 @@
-# FORGE_EXCLUSIVE_001 — Eksklusive Forge-upgrades
+# FORGE_EXCLUSIVE_001 — Exclusive Forge upgrades
 
-Status: **lokalt inventar og designforslag; produktimplementation afventer**.
-Originalpunkt: F29. Ét mål: implementér senere Forge-delen af den fælles,
-accepterede effekt/currency-matrix, så nye Forge-køb har egne mekanikker,
-senere unlocks og større investering med tydelige caps, stacking og bevaret
-værdi af gamle køb. Denne kandidat ændrer kun dokumentation/analyseværktøj.
+Status: **inventory and proposal prepared; publication in progress; gameplay implementation blocked on the agreed matrix**. Original point F29. This owner chat remains open. A published proposal does not complete the app feature.
 
-**Current checkpoint (English, following the updated live AGENTS rule):** the
-isolated branch was rebased onto integrated main
-`0bcce84d0b5c3c47daa2b16235311f48b1ab0bfd`, tree
-`6e18e8485111a7a5bfa2d5854ed6b9c4735282c2`, during preparation. PR51 is observed
-merged at this commit. Its offline/tooling changes belong to that other feature;
-this Forge proposal changes none of them. Current index blob is
-`90e4678cb28fa833fdacbc01d1744d9465f6a356`, SHA256
-`4a9fac11b413071f9b722e2c50e0e46839d9de26e3214b52f619c279fc5d5607`.
-The older `b2a1f44` statements below identify the starting observation, not
-current product identity. Catalogue, price examples, stacking and all 21
-reviewed Forge/save consumer functions are byte-equivalent across these
-baselines; see `EVIDENCE/baseline-delta.json`. Broader save timing and simulation
-changed upstream and therefore received new baseline checks. The updated
-Node.js tools replace the earlier Python commands for continuation.
+## Goal, requirements and ownership
 
-The Danish proposal below was drafted from the user's Danish task before the
-live English communication-rule update; the final checkpoint and handoff use
-English. No new language or gameplay rule is introduced by this feature.
+One goal: give new Forge purchases their own mechanics, greater investment and later unlocks through the agreed cross-system matrix, with explicit prices, caps, stacking and preservation of old purchase value.
 
-## Ejer, mandat og baseline
-
-- Ejerchat: den brugerbestilte featurechat **LUMENFALL — Eksklusive Forge-upgrades**,
-  Feature-ID `FORGE_EXCLUSIVE_001`; rolle 02 Gameplay / Progression. Appens
-  opaque chat-ID er ikke eksponeret i denne session; intet ID er opfundet.
-- Separat checkout: `/workspace/Lumenfall-FORGE_EXCLUSIVE_001`.
-  Lokal featurebranch: `feature/FORGE_EXCLUSIVE_001`.
-  `/workspace/Lumenfall` er ikke redigeret; kun read-only remote-fetch i dets Git-database.
-- Live main ved opstart 7. oktober 2026: `b2a1f440e8ad9fed34b37551e468224310d2a6f6`,
-  tree `60bb2fce00d0c230a4dd3fd9b61fd7992fb94d60`.
-  Produktbytes matcher fortsat `1ddc246eb62782a61ec5c486cd5f51ea170bb338`.
-  `index.html` blob `ea44431c163569548973d9e489f75345749a07ee`, SHA256
-  `f896459f4f113b4173f8d1d1875f32cca9e3e4ae6f7416c6aca9be208f2537b4`.
-  Tidsstemplede live- og checkreceipts leveres med TXT/ZIP.
-- PR46 observeret open/Draft, ikke merged, på R2
-  `3cdebc236e9ee5081a4bca4e323b11f43aa0d46d`.
-  Ny B2: tree `758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef`,
-  index SHA256 `7c25b0b57722bda4ad6842b173bf9a390f2fa39942ad91206675a20e779d4d9b`.
-  Worker-PASS er rapporteret. Nye scoped Core-/QA-reviews og fysisk Android
-  mangler ifølge aktuel status; de genudføres ikke af denne Forge-chat.
-- Writer: kun isoleret lokal forberedelse er bestilt her. Ingen tildeling af
-  fælles repo-/remote-/produkt-writer er observeret. 02_08s eget kandidatstop er
-  dokumenteret; 02_07s senere handover er ukendt. Standing approval bevares;
-  den manglende handling er konkret Lead-koordinering, ikke ny generel tilladelse.
-- Stop: lokal kandidat fryses til Lead, uden push, PR-mutation, merge, build,
-  dispatch/rerun, release, signingændring eller påstand om andres writer-frigivelse.
-- Modelanbefaling: GPT-6.1 Sol / Ekstra høj, som i brugerbestillingen.
-  Sessionens systemidentitet er GPT-6-baseret Codex. Den konkrete variant og
-  faktisk kørt effort er ikke eksponeret og attesteres ikke som anbefalingen.
-
-## Originalkrav og kilder
-
-Autoritativ original: [USER_REQUIREMENTS_2026-10-07.txt](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt).
-Relevant ordlyd:
+The complete [user mandate](FORGE_EXCLUSIVE_001/USER_REQUEST.txt) orders inventory/proposals first and Forge implementation later, depending on UPGRADE_IDENTITY_001. The continuation instruction is “Finish the task”. Neither supplies the missing numerical design. The [original requirements](../recovery/2026-10-07/lead_context/FEEDBACK/ORIGINAL/USER_REQUIREMENTS_2026-10-07.txt) take precedence over suggestions:
 
 > Vi har også et andet problem at man har de samme upgrades flere steder, bare med en anden currency. Der skal være nogle upgrades der er eksklusive for den bestemte currency, at lab har nogle specielle upgrades der tager lidt længere tid at få, men bruger bestemt currency, at forge har nogle upgrades ingen andre har men koster mere og sværere at unlocke. Det samme med ascension tree, den skal have sin helt helt egen eksklusive opgraderinger.
 
-F29, F18/F19, F23/F25 og gammel-save-afsnittene i
-[TASK_FEEDBACK_REVISION_001.txt](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt)
-er læst sammen med den fulde original. Originalen går forud for TASK-forslag.
-Leadens konkrete beslutninger findes i
-[FEEDBACK_REGISTERED_001.txt](../recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt).
-[FINDINGS.txt](../recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/FINDINGS.txt)
-beskriver scoped formelfund; probe genkørt her, uden at gøre den til fuldmotoraccept.
-[Source_Index.txt](../recovery/2026-10-07/lead_context/FEEDBACK/Source_Index.txt)
-viser fire billeder af Auto-Ascend, Lab og Wisps. Ingen af dem er en Forge-
-designreference eller har kendt APK/save-identitet; de bruges ikke som Forgeaccept.
+Read F29, F18/F19, F23/F25 and save/dependency sections of [TASK_FEEDBACK_REVISION_001](../recovery/2026-10-07/lead_context/FEEDBACK/TASK_FEEDBACK_REVISION_001.txt), concrete historical [registered decisions](../recovery/2026-10-07/lead_context/DECISIONS/FEEDBACK_REGISTERED_001.txt), [findings](../recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/FINDINGS.txt) and [source index](../recovery/2026-10-07/lead_context/FEEDBACK/Source_Index.txt). The four supplied images show Auto-Ascend/Lab/Wisps, not Forge acceptance. [Earlier Forge/Lab decisions](../decisions/2026-10-04-forge-lab.txt) preserve old purchases and park Opening Focus; this proposal does not revive it.
 
-Aktuelle AGENTS, bootstrap, egen rolletabel/række, 02_GAMEPLAY, PROJECT_STATE,
-FEATURE_WORKFLOW, CONTEXT_INDEX, CODEX_START og JavaScript-beslutningen er læst
-fra den verificerede live-main-baseline. Historisk
-[Forge/Lab-beslutning](../decisions/2026-10-04-forge-lab.txt) bevarer gamle køb og
-parkerer Opening Focus. Den mekanik genindføres ikke gennem et nyt navn.
+Owner: this user-assigned FORGE_EXCLUSIVE_001 feature chat; opaque app chat identity is not exposed. Checkout: /workspace/Lumenfall-FORGE_EXCLUSIVE_001, branch feature/FORGE_EXCLUSIVE_001. No subagents, message tools or other chat renames. Current [AGENTS](../../AGENTS.md), bootstrap, ownership/gameplay guides, project state and [workflow](../project/FEATURE_WORKFLOW.md) were read from live main. Current rules replace historical Lead/writer ceremonies with isolated work and serialized integration within standing authorization. No new binding rule is introduced.
 
-## Observeret inventar
+## Baseline and scope
 
-[inventory.cjs](FORGE_EXCLUSIVE_001/inventory.cjs) udtrækker uændrede kataloger,
-priser og udvalgte effektfunktioner fra den fastlåste `index.html`. Resultatet
-har alle **24** nuværende rækker: **8 Forge, 9 Lab, 7 Tree**. Familieklassifikation
-er en annotation fra kodereview; pris og catalogue-data eksekveres fra source.
-Genereret `inventory.json` er med i evidenspakken. Ingen nye tal udledes til balance.
+Continuation main: 214d45411ce2fb420f0e4b372063811a967679b1; tree 1048bc22972a2b650eba73186db35bc0402ded04. Product index.html blob b0bff3729e1fd0047c13d3e3acb74212722a6824; SHA256 6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca. The isolated proposal was rebased onto this baseline. The other checkout is untouched.
 
-Forge hedder `RESEARCH` / `state.research` i koden. Lab er `LONG_STUDIES` /
-`longStudyLevels`. Navneforvekslingen må ikke føre til at Forge-kø ændrer Lab-
-arbejde. Forge er øjeblikkelige permanente køb; aktive Lab-snapshots er separat.
+PR46/B2 is now merged through PR57 at 20aaae62a4b6e46f8d75775085918eaba4e8de29. Signed 0.1.138, CI146 and remaining physical/review limits belong to that task. No open PR was observed at continuation startup; later PR59 (Wisp display) and PR60 (Forge text) appeared. Their product edits and any other project-state rows remain owned by those tasks; no overlapping product edit is made here. No agreed UPGRADE_IDENTITY_001 task or Forge matrix was found on main; check again before implementation/integration.
 
-Alle nuværende Forge-køb betaler Lumen og/eller Shards; Forge er **ikke** allerede
-et rent Shard-system. Tabellen viser prisbase × growth^k før den aktuelle
-geometriske beregning/afrunding. `k` er rå købt level, og unlock bruger
-`maxDepthEver`, også efter Ascend. Uden angivet unlock bruges 1.
+Current changes are confined to this task, its evidence/diagnostic directory and its project-state row. No game, save, CI, mobile, signing or release changes. The [historical detailed draft](FORGE_EXCLUSIVE_001/PROPOSAL_2026-10-07.md) is optional evidence; its old PR46/writer gates are superseded. Frozen earlier evidence is retained under this task directory.
 
-| Forge-ID / navn | Valuta og nuværende prisbase/growth | Unlock / købcap | Faktisk effekt og forhold til matrix |
+## Verified inventory and proposed direction
+
+The read-only [inventory tool](FORGE_EXCLUSIVE_001/inventory.cjs) extracts 24 catalogue rows: 8 Forge, 9 Lab, 7 Tree. Forge is RESEARCH/state.research; Lab is LONG_STUDIES/longStudyLevels. Current price bases below grow geometrically from stored level k. Forge rounds the whole geometric bulk sum upward, rather than summing rounded singles. Unlocks use maxDepthEver.
+
+| Forge ID | Current currency base / growth | Unlock / cap | Observed effect or overlap |
 | --- | --- | --- | --- |
-| `focus` Battle Focus | Lumen 200 / 1.50 | 1 / ingen | `1+.08k` Lumen pr. kill; direkte familie med Tree `starlight` og Lab `lumenstudy`. Omformes/udfases efter fælles beslutning. |
-| `sense` Shard Sense | Lumen 150 + Shards 20 / begge 1.50 | 1 / ingen | `1+.08k` Shards pr. kill; direkte familie med Lab `shardstudy`. Omformes/udfases efter fælles beslutning. |
-| `formation` Formation Training | Shards 40 / 1.60 | 1 / ingen | `1+.05k` passiv holdskade og Wisp-delen af Tap; samme familie som Tree `momentum`, Lab `wispascend`/`formationstudy`. |
-| `resolve` Guardian's Resolve | Lumen 150 / 1.45 | 1 / ingen | `1+.10k` Guardian Tap inklusive Auto-Tap; samme familie som Tree `steady` og Lab `guardmastery`. |
-| `charge` Swift Recovery | Shards 30 / 1.55 | 1 / ingen | Cycle `6/(1+.08k)` sekunder. Ingen direkte Lab/Tree-dublet, men Swift-cap og Tide/Aurora-uptime er åbne dependencies. |
-| `arcanecal` Arcane Calibration | Lumen 15000 + Shards 120 / begge 1.60 | 12 / 10 | `1+.03min(k,10)` på damaging Wisp abilities; hverken passive, Tap eller supportstyrke. Bevar som mulig Forge-identitet. |
-| `conduction` Resource Conduction | Lumen 90000 + Shards 280 / begge 1.60 | 18 / 10 | `1+.04min(k,10)` på Gale/Thorn ability-resourcer før afrunding pr. cast; ingen killreward- eller damagebonus. Bevar som mulig Forge-identitet. |
-| `luminoustracking` Luminous Tracking | Lumen 2500000 + Shards 1500 / begge 1.60 | 32 / 10 | +.005 pr. effektiv level til fremtidige eligible encounters, total chance højst .35. Deterministisk accumulator, ikke tilfældig loot. Ingen ekstra Motes pr. kill. |
+| focus | Lumen 200 / 1.50 | 1 / none | Kill-Lumen: 1+.08k; overlaps Tree starlight and Lab lumenstudy. |
+| sense | Lumen 150 + Shards 20 / 1.50 | 1 / none | Kill-Shards: 1+.08k; overlaps Lab shardstudy. |
+| formation | Shards 40 / 1.60 | 1 / none | Party passive and Wisp portion of Tap: 1+.05k; overlaps Tree momentum and Lab wispascend/formationstudy. |
+| resolve | Lumen 150 / 1.45 | 1 / none | Tap/Auto-Tap: 1+.10k; overlaps Tree steady and Lab guardmastery. |
+| charge | Shards 30 / 1.55 | 1 / none | Ability cycle 6/(1+.08k); coordinate Swift-cap and support uptime. |
+| arcanecal | Lumen 15000 + Shards 120 / 1.60 | 12 / 10 | Damaging abilities: +.03 to their factor per effective level. |
+| conduction | Lumen 90000 + Shards 280 / 1.60 | 18 / 10 | Gale Shards/Thorn Lumen: +.04 to resource factor before per-cast rounding. |
+| luminoustracking | Lumen 2500000 + Shards 1500 / 1.60 | 32 / 10 | +.005 future eligible Luminous chance per effective level; total cap .35; no extra Motes per kill. |
 
-Moduler/Ultimates påvirker også individuelle abilities. De er tilgrænsende
-Wisp-progression, mens de tre nyere Forge-rækker påvirker særskilte globale
-operander. At kalde dem kandidater til Forge-identitet giver ikke nye effekt-
-eller prisbeslutninger. Matrixejeren skal behandle også denne tilgrænsning.
+Independent sources multiply: one level in Forge/Tree/Lab kill-Lumen gives 1.28304; Forge/Lab kill-Shards 1.1664; Forge/Tree/Lab Tap 1.4256. The last three Forge rows already address distinct operands and are candidates to retain. Forge currently uses Lumen and/or Shards, so a Shards-only identity would require an explicit currency decision.
 
-### Modparter og samlede dubletfamilier
+Proposals for review, **not agreed mechanics**:
 
-| Operand | Eksisterende købsrækker og valuta | Observeret stacking / ejergrænse |
-| --- | --- | --- |
-| Kill-Lumen | Forge `focus` Lumen; Tree `starlight` Prisms; Lab `lumenstudy` Lumen+Shards+tid | `(1+.10s)*(1+.08f)*(1+.08l)` før rewardafrunding. |
-| Kill-Shards | Forge `sense` Lumen+Shards; Lab `shardstudy` Lumen+Shards+tid | `(1+.08s)*(1+.08l)` før rewardafrunding. |
-| Passiv holdpower / Wisp-del af Tap | Forge `formation` Shards; Tree `momentum` Prisms; Lab `wispascend` og `formationstudy` Lumen+Shards+tid | Fire separate faktorer multipliceres sammen med collection synergy og relevante Bonds. Ingen af disse giver ability damage. |
-| Tap | Forge `resolve` Lumen; Tree `steady` Prisms; Lab `guardmastery` Lumen+Shards+tid | `(1+.08s)*(1+.10r)*(1+.20g)` på hele Tap-formlen; support/bossfaktor anvendes derefter. |
-| Offline-rate | Tree `echo` Prisms; Lab `riftattune` Lumen+Shards+tid | `min(1,.70+.05e)+.10l`. Tree-effektloft 6; købgate mangler på baseline. Anden ejerchat ændrer dette. |
-| Ascend-Prisms | Tree `swift` Prisms; Lab `prismstudy` Lumen+Shards+tid | `(1+.04s)*(1+.05l)` før first/repeat-heltalsregler. Anden ejerchat. |
-
-Øvrige ikke-overlappende katalogrækker: Tree `bonds` (Prisms, recruit-rabat med
-effektloft 20), `reserves` (Prisms, offline-hours); Lab `motestudy` (Lumen+Shards+tid,
-Motes pr. Luminous-kill), `measuredinquiry` (Lumen+Shards+tid, mindre fremtidigt
-legacy-study-work). Alle rækker, priser, caps/unlocks og Lab-work er bevaret i
-inventaret; Forge-chatten tildeler ikke deres fremtidige effekter eller valuta.
-
-### Stacking og priser, som overgang skal bevare
-
-Ved ét level i hver relevant Lumen-kilde er faktoren **1.28304**, ikke 1.26.
-For Shards er den **1.1664**; for Tap **1.4256**. Forge `formation` og Lab
-`formationstudy` alene giver **1.1025**. Disse er egen isoleret eksekvering af
-uændrede funktioner, ikke balanceaccept. En one-to-one leveloverførsel eller
-sammenlægning af procenttal bevarer derfor ikke automatisk eksisterende effekt.
-
-Nuværende Forge-bulkpris er `ceil(geometricSum(...))` for de faktisk købte levels.
-Den er ikke summen af individuelt afrundede enkeltkøb. Observeret eksempel:
-Arcane Calibration første to Shard-levels koster bulk **313**, men separate køb
-**312**. Guardian's Resolve første enkeltkøbs beregnede Lumenpris er **151**
-med nuværende floating-point-beregning, selv om cataloguebasis er 150.
-Disse forhold dokumenteres; denne feature retter ikke afrunding eller priser
-ved siden af den fremtidige matrix. Raw levels alene beviser ikke historisk
-betalt beløb eller købsvej, og Lumen blev nulstillet ved Ascend.
-
-## Egne forslag til senere, dyrere unlocks
-
-Følgende er **designforslag**, ikke accepterede mekanikker eller tal. Foreslået
-Forge-identitet er ændringer af Wisp-ability-output og deterministiske encounter-
-mekanikker. Lab/Tree skal reservere andre operander i `UPGRADE_IDENTITY_001`.
-Nye normale købsrækker bør ikke blot tilføje endnu en global damage/killrewardfaktor.
-
-| Arbejdsnavn / foreslået ID | Eksklusiv mekanik | Senere unlock og dyrere investering | Cap/stacking, som skal besluttes |
+| Candidate | Exclusive mechanic | Suggested later prerequisite | Missing decisions |
 | --- | --- | --- | --- |
-| **Impact Reservoir** / `impactreservoir` | Gem en begrænset del af frisk overkill fra en damaging Wisp ability til samme Wisps næste damaging cast. Ingen trigger fra Tap/passive, ingen killrewardbonus. Tømning genbankes ikke og må ikke skabe gratis cast/killkæder på samme timestamp. | Efter Arcane Calibration er færdig og en særskilt senere Rift-milepæl. Betaling primært Shards; større målt Shard-commitment/upgrade-wait end den forudsatte eksisterende Forge-investering. Præcis milestone, valuta og curve er åbne. | Finite upgradecap og bankcap, genbrugsandel, udløb, håndtering af Wisp-skift/Ascend og præcis faktorplacering. Arcane/Module/Ultimate/Bond/bossfaktor må ikke anvendes dobbelt ved lagring/frigivelse. |
-| **Conduit Remainder** / `conduitremainder` | Bær afrundingsrest fra Gale-Shards og Thorn-Lumen mellem faktiske casts i separate registre, så gentagne små rå rewards kan blive til synlige hele enheder. Ingen killbonus, ingen garanteret +1 pr. cast. | Efter Resource Conduction er færdig plus senere Rift-milepæl. Selvstændigt dyrt Shard-unlock; behøver ikke en endeløs levelcurve, når købet giver en regelændring. | Vælg endelig afrundingsregel, scope for nye/eksisterende Conduction-køb, reset/persistence og cap på købsrækkerne. Nuværende `Math.round` kan runde op; en restmodel kan både hæve og sænke enkelte payouts. Kandidaten må derfor ikke erklæres en gratis forbedring uden gammel-save-/økonomivurdering. |
-| **Luminous Anchor** / `luminousanchor` | Hold et allerede deterministisk optjent Luminous encounter til en valgt, gyldig non-Boss-udløsning. Flytter tidspunkt, giver ingen ny chance og ingen ekstra Motes pr. encounter. Ingen køb/rerender må roll'e accumulator eller nuværende enemy om. | Efter Luminous Tracking er færdig plus senere Rift-milepæl. Selvstændig stor Shard-investering; dyrere end det forudsatte nuværende unlock måles i faktisk farmingtid. | Finite opbevaring og købcap, præcis release-betingelse, auto/offline-intent og forbrug før spawn. Valg af Rift kan ændre rewardøkonomi trods uændret rewardformel; mål det. Kan afvises, hvis complexity/økonomi ikke begrunder valget. |
+| Impact Reservoir | Bounded fresh ability overkill carried to that Wisp’s next damaging cast; stored damage cannot bank itself. | Completed Arcane Calibration plus a later milestone. | Fraction, capacity, level cap, prices, unlock, factor order, resets and save semantics. |
+| Conduit Remainder | Gale/Thorn fractional ability-resource carry between actual casts. | Completed Resource Conduction plus a later milestone. | Prices/cap/unlock and payout policy: replacing current Math.round can reduce old rewards. |
+| Luminous Anchor | Defer an already-earned deterministic Luminous encounter to an eligible non-boss spawn. | Completed Luminous Tracking plus a later milestone. | Prices/cap/unlock, release choice, accumulator/Ascend/offline rules; deferral to deeper depth can increase rewards. |
 
-Anbefalet første designvurdering: Impact Reservoir; det giver en ny mekanik
-uden nye currency-belønninger. Conduit Remainder kræver særlig afrundingsaccept.
-Luminous Anchor er en valgfri tredje kandidat med højere scheduler/UI-risiko.
-Ingen af dem er Opening Focus eller endnu en charge-/support-uptime-bonus.
+No new gameplay number is selected. Opening Focus stays parked. Coordinate the matrix with Swift-cap, Loadout Memory and Forge text so no candidate duplicates their behavior.
 
-"Senere" og "dyrere" konkretiseres ved prerequisites og målbare investerings-
-vinduer; der er ikke valgt fiktive Rift-, pris- eller captal. Lead skal fastlægge
-for hver valgt række: `unlockDepth`, andre prerequisites, valuta, basepris,
-growth/enkeltpris, købcap, effekt-/bankcap, stacking, reset/persistence og
-early/mid/late investeringsvinduer. Uden de felter er rækken **ikke kodeklar**.
-Hvis matrixen vælger omformning af eksisterende IDs i stedet for nye IDs, skal
-hver gammel ID have sin egen ownership-/værdikontrakt før nogen ændring.
+## Old purchase value and dependencies
 
-## Dependencies og konkrete beslutninger før kode
+Recommended migration for review: retain old raw ownership and its current combined effect as explicit legacy value; close new duplicate purchases; add separately owned exclusive rows. This avoids currency minting on restore. The matrix must explicitly accept grandfathered effects. Transfer/refund alternatives require a precise historical-cost and restore policy: bulk rounding differs from singles, raw levels do not prove actual spend, and a marker alone does not prevent repeated imports of an unmigrated backup.
 
-1. **PR46/B2**: kandidat-review og dokumenteret writer-handover før nye
-   produktændringer. Forge ændrer ikke den aritmetiske PR. Fremtidig kandidat
-   baseres på den accepterede integrationsversion og gennemgår nyt scopecheck.
-2. **UPGRADE_IDENTITY_001**: fælles matrix med endelige effekter/valutaer,
-   håndtering af alle fire Forge-dubletfamilier og valg af nye unlocks. Et
-   accepteret opgavedokument er ikke fundet i `docs/tasks/` på observeret main.
-   Det siger intet om ikke-publicerede forslag i andre chats.
-3. **Swift-cap/F18/F19**: max raw købbar level, effektivt cap, positiv minimum
-   cycle og tidlige/mellem/sene support-uptime-mål mangler. Ultimate-support
-   varer nu 8s mod 6s grundcycle; chargecap alene løser ikke permanent support.
-   Forge bruger senere den aftalte capkontrakt; denne chat fastsætter den ikke.
-4. **Loadout Memory/F25**: `owned.rememberbulk`, pris 50 Comets,
-   `savedLabMultiplier`, renderhandler og bootgate findes på baseline. Baseline-
-   memory og gammel Comet-købsværdi løses af egen ejerchat; Forge UI-tests skal
-   afstemmes med dens ændring. Det er separat fra Formation-autosave/F14.
-5. **Forge-tekst/F23**: ingen "No level cap"-tekst i slut-UI, men reelle caps,
-   priser og effekter skal vises. Textchat og Forge-chat bruger samme godkendte
-   cataloguedata/preview; undgå samtidige rettelser i `renderResearch`.
-6. **Progression/F28 og Core-save**: Lead vælger målbare upgrade-wait/ROI-vinduer
-   og gammel-save-politik før pris- eller effektkodning. Scoped Core-review før
-   migration; nye bank-/rest-/encountertilstande kræver chronology/recoverydesign.
+Removing a RESEARCH ID currently drops that ownership during normalization. Preserve/explicitly migrate known IDs, over-cap raw levels and their bounded effective levels. Legacy Forge levels count toward existing 20/60-level Lab deeds; do not revoke earned unlocks or grant Comet twice. Preserve Lab active/queued paid work, repeat speed snapshots, queue controls and chronology. Coordinate changed save readers with Loadout Memory. Swift’s cap alone cannot solve support uptime: an 8-second support duration already exceeds its base 6-second cycle.
 
-Disse valg ligger i brugerens bestilte scope og kræver ingen ny generel
-godkendelse. De er konkrete design- og handoverbeslutninger, som skal gemmes
-af Lead ved koordineret checkpoint. Der indføres ingen ny bindende repo-regel her.
+Required design input: agreed Forge rows of UPGRADE_IDENTITY_001, covering effect operands/units, currency/base/growth/rounding, unlock, cap, stacking order, bulk/queue eligibility and old-purchase migration. An asynchronous clarification requests those rows or explicit design delegation. The missing matrix is a design dependency, not a general permission/writer blocker.
 
-## Værdibevarelse — anbefalet beslutningsgrundlag
+## Checks and acceptance
 
-**Observeret savekontrakt:** schema 1 bevarer alle kendte Forge raw levels,
-også over cap. Effekt bruger det eksisterende cap, mens køb afvises over cap.
-v0 `labQueueOn` migreres kun til de oprindelige fem Forge-køvalg; nye IDs default
-0/OFF. `normalizeCurrentSave` genopbygger `research` fra `RESEARCH`; fjernes en
-ID fra kataloget uden særskilt retention, forsvinder den ved næste save/load.
-Canonical save, recovery og backup går gennem `acceptPersistedState`.
+Historical evidence: nine existing Forge scenarios passed on 0bcce84, and the intentional bad-assertion control exited 1. Those are earlier baseline checks, not evidence of new gameplay or current integration. See [evidence README](FORGE_EXCLUSIVE_001/README.md). [Continuation receipt](FORGE_EXCLUSIVE_001/EVIDENCE/CONTINUATION/CHECKS.json): nine current-baseline Forge scenarios PASS, expected bad-assertion exit 1 confirmed by the actual intentional harness assertion; Node24.19.0/Chromium151.0.7922.173. Task-aware context, source validation, Node tooling and four local-script syntax checks PASS. All 24 rows/prices/stacking are unchanged; 20/21 consumer hashes match. The normalization delta is upstream paid Lab preferences/input-copy handling. Raw logs and a hash manifest are saved separately. Required PR CI remains unchanged and is pending. Complete self-review found only scoped docs/diagnostics and the added project-state row; no independent review is claimed.
 
-Anbefaling til Lead: behold gamle IDs og rå købslevels i en eksplicit,
-versionsmærket legacy-post, og bevar deres eksisterende effekt som en synlig
-read-only arv, mens nye dubletkøb lukkes. Ingen ekstra currency mintes. Det
-undgår at påstå et historisk betalt beløb, som ikke findes i save. Om en sådan
-arv passer i den fælles identitetsmatrix skal **besluttes**, ikke antages.
-Alternativet er eksplicit effekt-/værditransfer eller refund med en fastlagt
-costpolitik og målt effektbevarelse; rå levels kan ikke blindt veksles 1:1.
+Acceptance for this proposal checkpoint: all catalogue rows/overlaps inventoried; exclusive candidates and unresolved numbers/value policy explicit; original requirements/owner/baseline/current dependencies saved; task-aware startup check and relevant existing checks pass; complete scoped diff reviewed; checkpoint integrated and verified on main. No APK is needed for documentation-only delivery.
 
-En valgt overgang skal mindst bevare:
+Full feature acceptance remains pending: agreed matrix implemented; deterministic handler/bulk/queue boundaries and previews; cap/unlock/stacking contracts; chronology and live/offline parity; idempotent old-save/recovery/backup migration preserving purchase value and paid Lab snapshots; relevant existing and focused regression checks on integrated code. UI checks include relevant 320/360/390/430px widths, large text, 44px controls, keyboard focus/contrast/reduced motion. Preserve WebView60, com.lumenfall.app, signing and fixed documented Luminous Motes rewards. Required APK and affected-device acceptance must pass before feature completion/archive. Modern Chromium baseline results do not satisfy those requirements.
 
-- Originale raw levels, købsflags og eksplicitte queue-intents, før deprecated
-  IDs fjernes fra normalizerens katalog. Nye registre default 0/OFF uden at
-  genbruge v0-globalqueue for alle nye upgrades.
-- Gamle samtidige faktorers kombinerede effekt eller en godkendt synlig
-  kompensation; én migration må ikke både beholde fuld effekt og tildele samme
-  købsværdi igen. Swift-overlevels behandles efter cap-ejerens aftale.
-- Deeds `labmaster` og `labqueue` tæller netop de oprindelige fem Forge-IDs
-  ved 20/60 raw levels. Earned Deeds og deres Comets må ikke tilbagekaldes eller
-  reudbetales; fjernede køb må ikke gøre gamle counters uforståelige.
-- Aktive Lab `remainingSec`, `totalDurationSec` og `speedMult` og senere B2-
-  payment-snapshots. Forge-restrukturering må ikke reprissætte disse.
-- Nuværende enemy/HP/`luminousAccum`, ability resource og relevant cast-time
-  state under canonical/recovery/backup; ingen migration reroller kampen.
+## Next action
 
-Idempotens: gentag load/save/restore uden ny kredit eller dobbelt legacyfaktor.
-Et flag inde i en migreret save beskytter ikke alene mod gentagen import af
-samme **umigrerede** backup, hvis en migration mint'er refunderet valuta.
-Ved refund skal Core vælge en mekanisme, hvis forbrugte kompensationsbeviser
-ikke spoles tilbage ved backupimport, og definere reset-/recoveryadfærd. En
-non-minting legacy/effektmodel undgår netop dette nye refundloop. Ingen sikker
-downgrade til gammel APK loves; schemaændring/versionsgate afgøres af Core.
-
-## Fremtidige acceptkriterier
-
-- Fælles accepteret matrix er versioneret med alle Forge-rækkers ID, egen effekt,
-  valuta/pris, unlock, cap, stacking, migration og rationale. Fire dubletfamilier
-  får en eksplicit disposition. Egen funktion opfyldes også efter gamle køb.
-- Direkte handler, single, alle tilladte bulkvalg/Max og queue bruger samme
-  autoritative plan. Test lige under/på/over unlock og cap, én manglende valuta,
-  partial affordability, legacy-overlevels og nonfinite/høje budgets. Ingen
-  debit uden en relevant effekt efter den aftalte præcise effektkontrakt.
-- Nuværende capped Forge-priser er afrundet geometrisk **total** for faktisk
-  count; ændres pris-/roundingmodel, er det en eksplicit matrixbeslutning.
-  Queue har eksisterende guard 20 køb pr. `autoLabQueueTick`; ændres guards eller
-  scheduler-total, kræves en konkret begrundelse og ny chronologyaccept.
-- Faktiske køb gælder kun fra korrekt timestamp. Whole/split og live/offline
-  med aktive/konkurrerende køer matcher ved resource-, kill-, cast-, study- og
-  Ascend-grænser. Ingen ability factor lækker til Tap/passive/killrewards;
-  rest/bank-release må ikke duplikere tidligere kredit eller skade.
-- For Luminous: spawn-only, eligible non-Boss, eksisterende enemy uændret,
-  accumulator/carry samme i batching. Dokumenterede Motes-belønninger bevares;
-  chance-, timing-, module- og rewardfaktorer vises separat.
-- Canonical save, recovery, backupimport/-eksport, restart, Ascend og repeat
-  restore bevarer raw ownership/værdi. Test v0, v1, missing IDs, explicit queues,
-  cap-overlevels, aktiv Lab, partially damaged enemy og migrering mere end én gang.
-- UI viser actual purchase count/debit/earned effekt. Test 320/390/430px,
-  stor tekst, mindst 44px køb/queue/bulk/valg, fokus efter unlock/max, kontrast,
-  skærmlæsersemantik og reduced motion. Nye mekanikker kræver egne tydelige
-  kontrol-/previewtekster koordineret med tekstchatten.
-- Scoped Core-/QA-review på frozen bytes; relevante eksisterende gates består.
-  Efter integration genverificeres adfærd på main og relevante APK/devicechecks
-  udføres med WebView 60, `com.lumenfall.app` og eksisterende signing bevaret.
-- GitHub-checkpoint, PROJECT_STATE-delta, integrationscommit, APK/evidens og
-  writer-frigivelse er gemt. Først derefter arkiveres **denne** ejerchat.
-
-## Kontrol og status i denne lokale fase
-
-- `python3 scripts/codex/check_context.py`: **PASS**, 21 entrypoints og 24
-  lokale Markdown-links på baselinen. Eksisterende Python-værktøj køres som
-  dokumenteret; nye analyse-/kørselsscripts her er JavaScript. Harnessomlægning
-  og CI-ændring hører ikke til denne Forge-forberedelse.
-- `node .../inventory.cjs index.html`: kataloget udtrukket med verificeret
-  sourcehash; 8/9/7 rækker og seks tværgående effektfamilier dokumenteret.
-- Eksisterende `formula_probe.cjs` genkørt mod denne `index.html`:
-  resultatet matcher `formula_probe_results.json` **byteidentisk**.
-- The candidate leaves product, existing tests, mobile, workflows and signing
-  byte-identical to its updated baseline `0bcce84`. New analysis uses Node.js.
-- Current context check: `node scripts/codex/check_context.cjs` **PASS**;
-  21 entrypoints, 24 local Markdown links. Current formula probe also matches
-  the preserved original result byte-for-byte. The 24-row inventory and
-  21 consumer-function hashes were refreshed after rebase.
-- Browser results use Chromium 151.0.7922.173. The ordinary `--dump-dom`
-  transport timed out without a completed QA result, including a trivial
-  data-page smoke; these failures are preserved as diagnostics. A local
-  JavaScript CDP transport adapter runs the existing harness assertions and
-  result parser unchanged. It waits through the persistence tests' reloads;
-  it creates no QA results or game assertions. The native UI tests use the
-  repository's original driver with the real Chromium executable.
-- Current Node harness: `forge-contracts`, `forge-effects`, `forge-chronology`,
-  `forge-baseline`, `forge-save-reload`, `forge-backup-restore`, `forge-recovery`
-  **PASS via that adapter**. The intentional `self-test-bad-assertion` is
-  correctly rejected with its actual original QA assertion and exit 1.
-  `forge-ui-mobile` and `forge-ui-reduced-motion` **PASS with the original
-  native driver and real Chromium**, on the updated baseline. Nine positive
-  scenarios and one correctly detected negative are recorded in the summary.
-- Earlier adapter attempts failed during a reload or forwarding the native
-  pipe descriptors. They are transport diagnostics, not hidden game PASSes;
-  complete attempt outputs are retained in the handoff. This is targeted
-  baseline verification, not ordinary full CI, new-feature acceptance, Android
-  WebView60/TalkBack/device acceptance, or a measured balance result.
-- Existing native UI coverage is 360x640 (with/without safe inset) and
-  390x844 with reduced-motion variation. New feature acceptance still needs
-  the requested 320/390/430px, larger text, contrast and new-control checks.
-- Integrations-PR/commit: **ingen**. Ny APK/deviceaccept: **ingen**.
-  Ingen produkt-writer er taget eller frigivet her. Ejerchatten forbliver åben.
-
-## Næste handling og Lead-checkpoint
-
-Overfør denne lokale TXT/ZIP til Lead gennem brugerens normale filhandover.
-Lead lukker først kandidat-review/handovergaten og indarbejder Forge-forslaget i
-`UPGRADE_IDENTITY_001`. Derefter vælger Lead konkret matrixrækker, talfelter og
-værdi-/savekontrakt, samt et docs-/produkt-writer-checkpoint med præcis baseline.
-Ved det koordinerede checkpoint kan task/analyse/evidenspatch gemmes i GitHub.
-Genverificér da live main, alle branches, åbne PR'er, aktive runs og writer;
-denne lokale receipt tildeler ikke remote ejerskab.
-
-Foreslået PROJECT_STATE-delta til Lead: FORGE_EXCLUSIVE_001 har lokalt 24-rækkers
-inventar, fire Forge-dubletfamilier og tre ikke-accepterede mekanikforslag.
-Afventer PR46/B2, fælles matrix, Swift-/Memory-/tekstkoordination,
-gammel-save-design og writer-checkpoint. Ingen implementeret produktadfærd,
-remote PR, APK eller deviceaccept. Delta er en afleveringsfil; den fælles
-PROJECT_STATE er ikke ændret af denne chat.
+Independent: publish and integrate this verified documentation checkpoint with required CI, then save integration verification in GitHub. Dependent: obtain the concrete agreed matrix; implement only its Forge rows and migration, complete integrated app acceptance and record evidence. Keep this feature/chat open while those requirements are missing. No other task is claimed complete or archived.

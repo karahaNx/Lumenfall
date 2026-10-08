@@ -67,6 +67,7 @@ were recorded as integrated.
 | FEATURE-BRANCH-INTEGRATION-001 / LAB-MOTES | PR57/46 merged; full 146 CI and signed 0.1.138 asset/signing verification PASS. Required device acceptance OPEN. | Complete affected-phone/exact WebView60/TalkBack acceptance and any required independent review. Keep task/chat open. |
 | B2 arithmetic integration | Number/DataView functions from archived tree `758d9a3f5baee9fd49a5acfaa0e11d13e746b7ef` were restored separately, matched exactly and integrated through PR57 with new regression/CI coverage. | Archived stress/physical/review limitations remain distinct from current full 146 CI. |
 | FEEDBACK-REVISION-001 | 29 original points and four images preserved; not collectively implemented. | Follow dependencies in a separately assigned task. Saved next priorities: F20/F21 Echoing Rest cap 6 / Cheaper Bonds cap 20, purchase gates and old-save policy. |
+| FORGE_EXCLUSIVE_001 | [Task/proposal](tasks/FORGE_EXCLUSIVE_001.md): 24 catalogue rows inventoried, four Forge duplicate families identified and three exclusive mechanic candidates proposed. Documentation checkpoint in progress; gameplay not implemented. | Publish/verify checkpoint; obtain agreed UPGRADE_IDENTITY_001 Forge rows, including prices/caps/stacking and old-purchase value policy, before implementation. Keep feature/chat open. |
 
 B2 original sources/evidence: `handoffs/02_08/2026-10-07/`, index SHA256
 `7c25b0b57722bda4ad6842b173bf9a390f2fa39942ad91206675a20e779d4d9b`.

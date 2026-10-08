@@ -1,0 +1,967 @@
+{
+  "scope": "Observed baseline catalogue and isolated prices/effects; proposals and migration are not implemented",
+  "sourcePath": "index.html",
+  "sha256": "6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca",
+  "gitBlob": "b0bff3729e1fd0047c13d3e3acb74212722a6824",
+  "counts": {
+    "Forge": 8,
+    "Tree": 7,
+    "Lab": 9
+  },
+  "rows": [
+    {
+      "system": "Forge",
+      "id": "focus",
+      "name": "Battle Focus",
+      "description": "+8% Lumen from every kill, per level.",
+      "effectFamily": "kill-lumen",
+      "currencies": [
+        "Lumen"
+      ],
+      "unlock": {
+        "maxDepthEver": 1
+      },
+      "purchaseLevelCap": null,
+      "effectPerLevel": 0.08,
+      "price": {
+        "lumen": {
+          "base": 200,
+          "growth": 1.5
+        },
+        "shards": {
+          "base": 0,
+          "growth": 1
+        },
+        "rounding": "ceil of geometric sum for actual bought levels"
+      },
+      "work": null,
+      "source": {
+        "path": "index.html",
+        "line": 2871
+      }
+    },
+    {
+      "system": "Forge",
+      "id": "sense",
+      "name": "Shard Sense",
+      "description": "+8% Shards from every kill, per level.",
+      "effectFamily": "kill-shards",
+      "currencies": [
+        "Lumen",
+        "Shards"
+      ],
+      "unlock": {
+        "maxDepthEver": 1
+      },
+      "purchaseLevelCap": null,
+      "effectPerLevel": 0.08,
+      "price": {
+        "lumen": {
+          "base": 150,
+          "growth": 1.5
+        },
+        "shards": {
+          "base": 20,
+          "growth": 1.5
+        },
+        "rounding": "ceil of geometric sum for actual bought levels"
+      },
+      "work": null,
+      "source": {
+        "path": "index.html",
+        "line": 2872
+      }
+    },
+    {
+      "system": "Forge",
+      "id": "formation",
+      "name": "Formation Training",
+      "description": "+5% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.",
+      "effectFamily": "passive-party",
+      "currencies": [
+        "Shards"
+      ],
+      "unlock": {
+        "maxDepthEver": 1
+      },
+      "purchaseLevelCap": null,
+      "effectPerLevel": 0.05,
+      "price": {
+        "lumen": {
+          "base": 0,
+          "growth": 1
+        },
+        "shards": {
+          "base": 40,
+          "growth": 1.6
+        },
+        "rounding": "ceil of geometric sum for actual bought levels"
+      },
+      "work": null,
+      "source": {
+        "path": "index.html",
+        "line": 2873
+      }
+    },
+    {
+      "system": "Forge",
+      "id": "resolve",
+      "name": "Guardian's Resolve",
+      "description": "+10% tap damage, per level.",
+      "effectFamily": "guardian-tap",
+      "currencies": [
+        "Lumen"
+      ],
+      "unlock": {
+        "maxDepthEver": 1
+      },
+      "purchaseLevelCap": null,
+      "effectPerLevel": 0.1,
+      "price": {
+        "lumen": {
+          "base": 150,
+          "growth": 1.45
+        },
+        "shards": {
+          "base": 0,
+          "growth": 1
+        },
+        "rounding": "ceil of geometric sum for actual bought levels"
+      },
+      "work": null,
+      "source": {
+        "path": "index.html",
+        "line": 2874
+      }
+    },
+    {
+      "system": "Forge",
+      "id": "charge",
+      "name": "Swift Recovery",
+      "description": "+8% faster Wisp ability charge, per level.",
+      "effectFamily": "ability-cycle",
+      "currencies": [
+        "Shards"
+      ],
+      "unlock": {
+        "maxDepthEver": 1
+      },
+      "purchaseLevelCap": null,
+      "effectPerLevel": 0.08,
+      "price": {
+        "lumen": {
+          "base": 0,
+          "growth": 1
+        },
+        "shards": {
+          "base": 30,
+          "growth": 1.55
+        },
+        "rounding": "ceil of geometric sum for actual bought levels"
+      },
+      "work": null,
+      "source": {
+        "path": "index.html",
+        "line": 2875
+      }
+    },
+    {
+      "system": "Forge",
+      "id": "arcanecal",
+      "name": "Arcane Calibration",
+      "description": "+3 percentage points to the damaging Wisp ability factor per level. Burst, Breaker, Gale and Thorn only; no passive or Tap bonus.",
+      "effectFamily": "damaging-ability-factor",
+      "currencies": [
+        "Lumen",
+        "Shards"
+      ],
+      "unlock": {
+        "maxDepthEver": 12
+      },
+      "purchaseLevelCap": 10,
+      "effectPerLevel": 0.03,
+      "price": {
+        "lumen": {
+          "base": 15000,
+          "growth": 1.6
+        },
+        "shards": {
+          "base": 120,
+          "growth": 1.6
+        },
+        "rounding": "ceil of geometric sum for actual bought levels"
+      },
+      "work": null,
+      "source": {
+        "path": "index.html",
+        "line": 2876
+      }
+    },
+    {
+      "system": "Forge",
+      "id": "conduction",
+      "name": "Resource Conduction",
+      "description": "+4 percentage points to the ability resource factor per level. Gale Shards and Thorn Lumen only; rounded per cast, not kill rewards.",
+      "effectFamily": "ability-resource-factor",
+      "currencies": [
+        "Lumen",
+        "Shards"
+      ],
+      "unlock": {
+        "maxDepthEver": 18
+      },
+      "purchaseLevelCap": 10,
+      "effectPerLevel": 0.04,
+      "price": {
+        "lumen": {
+          "base": 90000,
+          "growth": 1.6
+        },
+        "shards": {
+          "base": 280,
+          "growth": 1.6
+        },
+        "rounding": "ceil of geometric sum for actual bought levels"
+      },
+      "work": null,
+      "source": {
+        "path": "index.html",
+        "line": 2877
+      }
+    },
+    {
+      "system": "Forge",
+      "id": "luminoustracking",
+      "name": "Luminous Tracking",
+      "description": "+0.5 percentage points Luminous chance per level for future eligible encounters; total chance at most 35%. No extra Motes per kill.",
+      "effectFamily": "luminous-encounter-frequency",
+      "currencies": [
+        "Lumen",
+        "Shards"
+      ],
+      "unlock": {
+        "maxDepthEver": 32
+      },
+      "purchaseLevelCap": 10,
+      "effectPerLevel": 0.005,
+      "price": {
+        "lumen": {
+          "base": 2500000,
+          "growth": 1.6
+        },
+        "shards": {
+          "base": 1500,
+          "growth": 1.6
+        },
+        "rounding": "ceil of geometric sum for actual bought levels"
+      },
+      "work": null,
+      "source": {
+        "path": "index.html",
+        "line": 2878
+      }
+    },
+    {
+      "system": "Tree",
+      "id": "starlight",
+      "name": "Starlight Affinity",
+      "description": "+10% Lumen from every kill, per level.",
+      "effectFamily": "kill-lumen",
+      "currencies": [
+        "Prisms"
+      ],
+      "unlock": {
+        "maxDepthEver": 1
+      },
+      "purchaseLevelCap": null,
+      "effectPerLevel": null,
+      "price": {
+        "prisms": {
+          "base": 1,
+          "growth": 1.35,
+          "rounding": "ceil"
+        }
+      },
+      "work": null,
+      "source": {
+        "path": "index.html",
+        "line": 2882
+      }
+    },
+    {
+      "system": "Tree",
+      "id": "steady",
+      "name": "Steady Hands",
+      "description": "+8% tap damage, per level.",
+      "effectFamily": "guardian-tap",
+      "currencies": [
+        "Prisms"
+      ],
+      "unlock": {
+        "maxDepthEver": 1
+      },
+      "purchaseLevelCap": null,
+      "effectPerLevel": null,
+      "price": {
+        "prisms": {
+          "base": 1,
+          "growth": 1.3,
+          "rounding": "ceil"
+        }
+      },
+      "work": null,
+      "source": {
+        "path": "index.html",
+        "line": 2883
+      }
+    },
+    {
+      "system": "Tree",
+      "id": "echo",
+      "name": "Echoing Rest",
+      "description": "+5% offline earning rate, per level (caps at 100%).",
+      "effectFamily": "offline-rate",
+      "currencies": [
+        "Prisms"
+      ],
+      "unlock": {
+        "maxDepthEver": 1
+      },
+      "purchaseLevelCap": null,
+      "effectPerLevel": null,
+      "price": {
+        "prisms": {
+          "base": 2,
+          "growth": 1.4,
+          "rounding": "ceil"
+        }
+      },
+      "work": null,
+      "source": {
+        "path": "index.html",
+        "line": 2884
+      }
+    },
+    {
+      "system": "Tree",
+      "id": "bonds",
+      "name": "Cheaper Bonds",
+      "description": "−3% Wisp recruiting cost, per level (floor 40%).",
+      "effectFamily": "recruit-discount",
+      "currencies": [
+        "Prisms"
+      ],
+      "unlock": {
+        "maxDepthEver": 1
+      },
+      "purchaseLevelCap": null,
+      "effectPerLevel": null,
+      "price": {
+        "prisms": {
+          "base": 2,
+          "growth": 1.45,
+          "rounding": "ceil"
+        }
+      },
+      "work": null,
+      "source": {
+        "path": "index.html",
+        "line": 2885
+      }
+    },
+    {
+      "system": "Tree",
+      "id": "swift",
+      "name": "Swift Ascension",
+      "description": "+4% Prisms earned per Ascend, per level.",
+      "effectFamily": "ascend-prisms",
+      "currencies": [
+        "Prisms"
+      ],
+      "unlock": {
+        "maxDepthEver": 1
+      },
+      "purchaseLevelCap": null,
+      "effectPerLevel": null,
+      "price": {
+        "prisms": {
+          "base": 3,
+          "growth": 1.5,
+          "rounding": "ceil"
+        }
+      },
+      "work": null,
+      "source": {
+        "path": "index.html",
+        "line": 2886
+      }
+    },
+    {
+      "system": "Tree",
+      "id": "momentum",
+      "name": "Eternal Momentum",
+      "description": "+6% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.",
+      "effectFamily": "passive-party",
+      "currencies": [
+        "Prisms"
+      ],
+      "unlock": {
+        "achievement": "asc5"
+      },
+      "purchaseLevelCap": null,
+      "effectPerLevel": null,
+      "price": {
+        "prisms": {
+          "base": 5,
+          "growth": 1.55,
+          "rounding": "ceil"
+        }
+      },
+      "work": null,
+      "source": {
+        "path": "index.html",
+        "line": 2887
+      }
+    },
+    {
+      "system": "Tree",
+      "id": "reserves",
+      "name": "Deep Reserves",
+      "description": "+2 hours to your offline cap, per level.",
+      "effectFamily": "offline-hours",
+      "currencies": [
+        "Prisms"
+      ],
+      "unlock": {
+        "achievement": "d100"
+      },
+      "purchaseLevelCap": null,
+      "effectPerLevel": null,
+      "price": {
+        "prisms": {
+          "base": 6,
+          "growth": 1.6,
+          "rounding": "ceil"
+        }
+      },
+      "work": null,
+      "source": {
+        "path": "index.html",
+        "line": 2888
+      }
+    },
+    {
+      "system": "Lab",
+      "id": "wispascend",
+      "name": "Wisp Ascendancy",
+      "description": "+15% passive Wisp damage permanently; also raises the Wisp-powered part of your tap damage.",
+      "effectFamily": "passive-party",
+      "currencies": [
+        "Lumen",
+        "Shards"
+      ],
+      "unlock": {
+        "maxDepthEver": 1
+      },
+      "purchaseLevelCap": null,
+      "effectPerLevel": null,
+      "price": {
+        "lumen": {
+          "base": 800,
+          "growth": 1.8
+        },
+        "shards": {
+          "base": 80,
+          "growth": 1.8
+        },
+        "rounding": "Math.round per paid start"
+      },
+      "work": {
+        "baseSeconds": 180,
+        "growth": 1.6
+      },
+      "source": {
+        "path": "index.html",
+        "line": 2894
+      }
+    },
+    {
+      "system": "Lab",
+      "id": "guardmastery",
+      "name": "Guardian's Mastery",
+      "description": "+20% tap damage, permanently.",
+      "effectFamily": "guardian-tap",
+      "currencies": [
+        "Lumen",
+        "Shards"
+      ],
+      "unlock": {
+        "maxDepthEver": 1
+      },
+      "purchaseLevelCap": null,
+      "effectPerLevel": null,
+      "price": {
+        "lumen": {
+          "base": 600,
+          "growth": 1.8
+        },
+        "shards": {
+          "base": 40,
+          "growth": 1.8
+        },
+        "rounding": "Math.round per paid start"
+      },
+      "work": {
+        "baseSeconds": 150,
+        "growth": 1.6
+      },
+      "source": {
+        "path": "index.html",
+        "line": 2895
+      }
+    },
+    {
+      "system": "Lab",
+      "id": "riftattune",
+      "name": "Rift Attunement",
+      "description": "+10% offline earning rate, permanently (stacks past 100%).",
+      "effectFamily": "offline-rate",
+      "currencies": [
+        "Lumen",
+        "Shards"
+      ],
+      "unlock": {
+        "maxDepthEver": 1
+      },
+      "purchaseLevelCap": null,
+      "effectPerLevel": null,
+      "price": {
+        "lumen": {
+          "base": 500,
+          "growth": 1.8
+        },
+        "shards": {
+          "base": 100,
+          "growth": 1.8
+        },
+        "rounding": "Math.round per paid start"
+      },
+      "work": {
+        "baseSeconds": 240,
+        "growth": 1.6
+      },
+      "source": {
+        "path": "index.html",
+        "line": 2896
+      }
+    },
+    {
+      "system": "Lab",
+      "id": "shardstudy",
+      "name": "Shard Attunement",
+      "description": "+8% Shards earned per kill, permanently.",
+      "effectFamily": "kill-shards",
+      "currencies": [
+        "Lumen",
+        "Shards"
+      ],
+      "unlock": {
+        "maxDepthEver": 15
+      },
+      "purchaseLevelCap": null,
+      "effectPerLevel": null,
+      "price": {
+        "lumen": {
+          "base": 400,
+          "growth": 1.8
+        },
+        "shards": {
+          "base": 150,
+          "growth": 1.8
+        },
+        "rounding": "Math.round per paid start"
+      },
+      "work": {
+        "baseSeconds": 200,
+        "growth": 1.6
+      },
+      "source": {
+        "path": "index.html",
+        "line": 2897
+      }
+    },
+    {
+      "system": "Lab",
+      "id": "lumenstudy",
+      "name": "Lumen Wellspring",
+      "description": "+8% Lumen earned per kill, permanently.",
+      "effectFamily": "kill-lumen",
+      "currencies": [
+        "Lumen",
+        "Shards"
+      ],
+      "unlock": {
+        "maxDepthEver": 25
+      },
+      "purchaseLevelCap": null,
+      "effectPerLevel": null,
+      "price": {
+        "lumen": {
+          "base": 1400,
+          "growth": 1.8
+        },
+        "shards": {
+          "base": 120,
+          "growth": 1.8
+        },
+        "rounding": "Math.round per paid start"
+      },
+      "work": {
+        "baseSeconds": 260,
+        "growth": 1.6
+      },
+      "source": {
+        "path": "index.html",
+        "line": 2898
+      }
+    },
+    {
+      "system": "Lab",
+      "id": "formationstudy",
+      "name": "Formation Insight",
+      "description": "+5% passive Wisp damage permanently; also raises the Wisp-powered part of your tap damage.",
+      "effectFamily": "passive-party",
+      "currencies": [
+        "Lumen",
+        "Shards"
+      ],
+      "unlock": {
+        "maxDepthEver": 40
+      },
+      "purchaseLevelCap": null,
+      "effectPerLevel": null,
+      "price": {
+        "lumen": {
+          "base": 2200,
+          "growth": 1.8
+        },
+        "shards": {
+          "base": 220,
+          "growth": 1.8
+        },
+        "rounding": "Math.round per paid start"
+      },
+      "work": {
+        "baseSeconds": 320,
+        "growth": 1.6
+      },
+      "source": {
+        "path": "index.html",
+        "line": 2899
+      }
+    },
+    {
+      "system": "Lab",
+      "id": "motestudy",
+      "name": "Luminous Sense",
+      "description": "+10% Motes gained from Luminous enemies, permanently.",
+      "effectFamily": "motes-per-luminous-kill",
+      "currencies": [
+        "Lumen",
+        "Shards"
+      ],
+      "unlock": {
+        "maxDepthEver": 60
+      },
+      "purchaseLevelCap": null,
+      "effectPerLevel": null,
+      "price": {
+        "lumen": {
+          "base": 3200,
+          "growth": 1.8
+        },
+        "shards": {
+          "base": 320,
+          "growth": 1.8
+        },
+        "rounding": "Math.round per paid start"
+      },
+      "work": {
+        "baseSeconds": 380,
+        "growth": 1.6
+      },
+      "source": {
+        "path": "index.html",
+        "line": 2900
+      }
+    },
+    {
+      "system": "Lab",
+      "id": "prismstudy",
+      "name": "Ascendant Clarity",
+      "description": "+5% Prisms earned per Ascend, permanently.",
+      "effectFamily": "ascend-prisms",
+      "currencies": [
+        "Lumen",
+        "Shards"
+      ],
+      "unlock": {
+        "maxDepthEver": 90
+      },
+      "purchaseLevelCap": null,
+      "effectPerLevel": null,
+      "price": {
+        "lumen": {
+          "base": 4800,
+          "growth": 1.8
+        },
+        "shards": {
+          "base": 480,
+          "growth": 1.8
+        },
+        "rounding": "Math.round per paid start"
+      },
+      "work": {
+        "baseSeconds": 450,
+        "growth": 1.6
+      },
+      "source": {
+        "path": "index.html",
+        "line": 2901
+      }
+    },
+    {
+      "system": "Lab",
+      "id": "measuredinquiry",
+      "name": "Measured Inquiry",
+      "description": "2% less work per completed level, up to 20%, for future starts of Wisp Ascendancy, Guardian’s Mastery, Rift Attunement, Shard Attunement, Lumen Wellspring, Formation Insight, Luminous Sense and Ascendant Clarity. Running Studies and Measured Inquiry itself are unchanged.",
+      "effectFamily": "future-study-work",
+      "currencies": [
+        "Lumen",
+        "Shards"
+      ],
+      "unlock": {
+        "maxDepthEver": 60
+      },
+      "purchaseLevelCap": 10,
+      "effectPerLevel": null,
+      "price": {
+        "lumen": {
+          "base": 30000,
+          "growth": 1.8
+        },
+        "shards": {
+          "base": 1200,
+          "growth": 1.8
+        },
+        "rounding": "Math.round per paid start"
+      },
+      "work": {
+        "baseSeconds": 600,
+        "growth": 1.6
+      },
+      "source": {
+        "path": "index.html",
+        "line": 2902
+      }
+    }
+  ],
+  "overlaps": {
+    "kill-lumen": [
+      "Forge:focus",
+      "Tree:starlight",
+      "Lab:lumenstudy"
+    ],
+    "kill-shards": [
+      "Forge:sense",
+      "Lab:shardstudy"
+    ],
+    "passive-party": [
+      "Forge:formation",
+      "Tree:momentum",
+      "Lab:wispascend",
+      "Lab:formationstudy"
+    ],
+    "guardian-tap": [
+      "Forge:resolve",
+      "Tree:steady",
+      "Lab:guardmastery"
+    ],
+    "offline-rate": [
+      "Tree:echo",
+      "Lab:riftattune"
+    ],
+    "ascend-prisms": [
+      "Tree:swift",
+      "Lab:prismstudy"
+    ]
+  },
+  "sourcePriceExamples": [
+    {
+      "id": "focus",
+      "firstLevel": {
+        "lumen": 200,
+        "shard": 0
+      },
+      "levelsZeroThroughNine": {
+        "lumen": 22667,
+        "shard": 0
+      },
+      "nextAtStoredLevelNine": {
+        "lumen": 7689,
+        "shard": 0
+      },
+      "separateFirstTwo": 0,
+      "bulkFirstTwo": 0
+    },
+    {
+      "id": "sense",
+      "firstLevel": {
+        "lumen": 150,
+        "shard": 20
+      },
+      "levelsZeroThroughNine": {
+        "lumen": 17000,
+        "shard": 2267
+      },
+      "nextAtStoredLevelNine": {
+        "lumen": 5767,
+        "shard": 769
+      },
+      "separateFirstTwo": 50,
+      "bulkFirstTwo": 50
+    },
+    {
+      "id": "formation",
+      "firstLevel": {
+        "lumen": 0,
+        "shard": 40
+      },
+      "levelsZeroThroughNine": {
+        "lumen": 0,
+        "shard": 7264
+      },
+      "nextAtStoredLevelNine": {
+        "lumen": 0,
+        "shard": 2749
+      },
+      "separateFirstTwo": 104,
+      "bulkFirstTwo": 105
+    },
+    {
+      "id": "resolve",
+      "firstLevel": {
+        "lumen": 151,
+        "shard": 0
+      },
+      "levelsZeroThroughNine": {
+        "lumen": 13362,
+        "shard": 0
+      },
+      "nextAtStoredLevelNine": {
+        "lumen": 4251,
+        "shard": 0
+      },
+      "separateFirstTwo": 0,
+      "bulkFirstTwo": 0
+    },
+    {
+      "id": "charge",
+      "firstLevel": {
+        "lumen": 0,
+        "shard": 30
+      },
+      "levelsZeroThroughNine": {
+        "lumen": 0,
+        "shard": 4312
+      },
+      "nextAtStoredLevelNine": {
+        "lumen": 0,
+        "shard": 1550
+      },
+      "separateFirstTwo": 77,
+      "bulkFirstTwo": 77
+    },
+    {
+      "id": "arcanecal",
+      "firstLevel": {
+        "lumen": 15000,
+        "shard": 120
+      },
+      "levelsZeroThroughNine": {
+        "lumen": 2723780,
+        "shard": 21791
+      },
+      "nextAtStoredLevelNine": {
+        "lumen": 1030793,
+        "shard": 8247
+      },
+      "separateFirstTwo": 312,
+      "bulkFirstTwo": 313
+    },
+    {
+      "id": "conduction",
+      "firstLevel": {
+        "lumen": 90000,
+        "shard": 280
+      },
+      "levelsZeroThroughNine": {
+        "lumen": 16342675,
+        "shard": 50844
+      },
+      "nextAtStoredLevelNine": {
+        "lumen": 6184753,
+        "shard": 19242
+      },
+      "separateFirstTwo": 729,
+      "bulkFirstTwo": 729
+    },
+    {
+      "id": "luminoustracking",
+      "firstLevel": {
+        "lumen": 2500000,
+        "shard": 1500
+      },
+      "levelsZeroThroughNine": {
+        "lumen": 453963179,
+        "shard": 272378
+      },
+      "nextAtStoredLevelNine": {
+        "lumen": 171798692,
+        "shard": 103080
+      },
+      "separateFirstTwo": 3900,
+      "bulkFirstTwo": 3901
+    }
+  ],
+  "stackingProbe": {
+    "scope": "Actual unchanged functions with isolated state; not full-motor acceptance",
+    "lumen": 1.2830400000000002,
+    "shards": 1.1664,
+    "tap": 1.4256000000000002,
+    "formation": 1.1025
+  },
+  "consumerHashes": {
+    "researchEligibility": "07501d31fc7e025ad7be6e0db27693ef68b026858e2df68d4616a2482116c8b0",
+    "getResearchBuyPlan": "ef46a069e7c043d6015f332a822b30bc3137665ab002613e505c7660a398f275",
+    "researchCostForLevels": "a75f1e2929601b38703510c5c68986ddb3aa256c3a36c131e65a0b80e0845130",
+    "buyResearch": "b07f2bd2e34484ba9bc59ad16caa94a2d0a2b7de935436973eb256b6c0d9b1bd",
+    "autoLabQueueTick": "72ca1016e8ad0c648fb7751def6ae34d315d1e994e4bde7021989048d36ca05c",
+    "researchEffectiveLevel": "5bc86b85cfa0fb013f52268dc3f5de09d510c2b457a9c92251225edb90facba4",
+    "researchBonus": "1f11e7f377756d2c792f104a94f4f8db08e1448052b64977996c8a74218f40db",
+    "researchFactor": "136869d63020c2528ac816cbd8d38bfbf7f62da1bcae940e32888a9d40dc4e73",
+    "lumenMult": "931532d2ec36e56843c53145197a9e16d3cc73743ead17f3ae9d50ceef8aab64",
+    "shardMult": "9488b0b9426039ba10cc76d8670148eeda613352e8ecbbbf7988ae361b36f125",
+    "tapMult": "26f38a301c75690c747d7017a3700df621155c884ef9f3a5f530d4b884045df4",
+    "passiveGlobalPowerMult": "8a895b40fd82863c0a05203a04786642285e19f4a4db00b38470ef205c5df801",
+    "abilityRawBurst": "781bf1f0847071d13d7506fc303c80dc34572721c600929d05f3453e1066a8ad",
+    "abilityRewardRaw": "662a1fe7a3aa5a4afa0c7bf1a764661d69974e5ba7557535c2aa7fc42f422c7d",
+    "abilityRewardPerCast": "cf7d75e94aee7fd4bd0946ba245079170ef7e3aafd5a140d5c486f400a8b27d5",
+    "eliteChance": "58e81a2ef9cdb82130841fe8671d9695946deb62c1c06cdf67c1d24cabae8b23",
+    "motesDropFor": "b8407e00ca584d3813b44195d9dd928db3dd50544960a833acaffc5a77b189fe",
+    "researchEffectPreview": "73831ef9564cf1319c77b3e37d47cb4e0983a1e5f44750efcdd428a48980bd58",
+    "normalizeCurrentSave": "18ef05996c7fd298cc71b5e2571009b384acf91c984dae927a8f4c63765f1ade",
+    "migrateSaveV0ToV1": "92f5c126499560a9423924dd35fc3ef76a50e676fe94c48168550bad922d5950",
+    "legacyResearchLevels": "1e8495c534b8d8948ce409eb30d4d0976c92ccf2082072632535b905f54a828a"
+  }
+}
