@@ -30,7 +30,7 @@ window.runCheaperRecruitmentContracts=function(){
     ok(effect.includes('60% Wisp recruiting discount (also Empower)')&&effect.includes('40% of normal price'),'cap earned effect');
     ok(effect.includes('before whole-Lumen rounding')&&card.textContent.includes('normal price before whole-Lumen rounding'),'floor wording qualifies existing integer rounding');
   });
-  install(0);var total=0;
+  install(0);var forged=b.get();b.direct({id:'bonds',baseCost:0,growth:1});same(b.get(),forged,'upstream canonical Tree contract rejects forged node');var total=0;
   for(var level=0;level<20;level++){
     var price=Math.ceil(2*Math.pow(1.45,level)),before=b.get();total+=price;
     b.buy({id:'bonds',levelCap:0,baseCost:0,growth:1});

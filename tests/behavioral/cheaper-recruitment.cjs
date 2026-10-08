@@ -7,8 +7,8 @@ function option(name,fallback){const i=args.indexOf(name);return i<0?fallback:ar
 const sourcePath=path.resolve(option('--source',path.join(root,'index.html'))),output=path.resolve(option('--output',path.join(os.tmpdir(),'cheaper-recruitment-results.json')));
 let source=fs.readFileSync(sourcePath,'utf8');
 const mutation=option('--mutation','none');
-if(mutation==='handler')source=source.replace('if(!node || nodeAtCap(node)) return;','if(!node) return;');
-if(mutation==='ui')source=source.replace('var maxed = nodeAtCap(node);','var maxed = false;');
+if(mutation==='handler')source=source.replace("if(node.levelCap!==undefined && level>=node.levelCap) return {affordable:false,reason:'cap',level:level};","if(node.id!=='bonds' && node.levelCap!==undefined && level>=node.levelCap) return {affordable:false,reason:'cap',level:level};");
+if(mutation==='ui')source=source.replace("if(plan.reason==='cap')",'if(false)').replace("var capped = plan.reason==='cap';",'var capped = false;');
 if(mutation==='raw')source=source.replace('out.nodes[node.id] = nonNegativeInt(nodes[node.id],fresh.nodes[node.id]);','out.nodes[node.id] = Math.min(20,nonNegativeInt(nodes[node.id],fresh.nodes[node.id]));');
 if(mutation==='refund')source=source.replace('if(hasReceipt || raw<=20) return;','if(raw<=20) return;');
 if(mutation==='credit')source=source.replace('var sum=exactPrismArithmetic(out.prisms,amount);','var sum=out.prisms+amount;');
@@ -24,7 +24,7 @@ window.__cheaperRecruitment={
  get:function(){return JSON.parse(JSON.stringify(state));},
  set:function(s){state=acceptPersistedState(JSON.parse(JSON.stringify(s)),'f21-qa');restoreEnemyOrSpawn();},
  canonical:function(s){return acceptPersistedState(s,'f21-qa');},
- render:renderAll,buy:buyNode,save:saveState,discount:costReduction,
+ render:renderAll,buy:function(node){return buyNode(node && NODES.find(function(n){return n.id===node.id;}));},direct:buyNode,save:saveState,discount:costReduction,
  spirits:function(){return SPIRITS.map(function(s){return {id:s.id,baseCost:s.baseCost};});},
  recruitCost:function(id){return spiritCost(SPIRITS.find(function(s){return s.id===id;}));},
  disk:function(){return {primary:localStorage.getItem(SAVE_KEY),recovery:localStorage.getItem(RECOVERY_SAVE_KEY)};},

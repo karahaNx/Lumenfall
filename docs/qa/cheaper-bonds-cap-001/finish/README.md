@@ -1,24 +1,26 @@
 # F21 implementation and verification
 
 Current source SHA256:
-`3f4df7318ce83cc5bf77f845f9d36b79948a2189c1b5a18f447b542b4bade6f7`.
-Baseline main:14d5f3a3a78fe8b63cfa5544efc54f41217b65a5.
+`81fcc46101661755d334183f72c2ceca18784878a9744232cc9be8da5301a7bb`.
+Baseline main:ac0d28e589bd1caef4b9c70f2383a8b3ee384acd.
 [Task](../../../tasks/CHEAPER_BONDS_CAP_001.md) · [Design/review](DESIGN.md).
 Self-review and automated PR review are distinguished; no independent Core/QA claim.
 
 | Check | Current evidence |
 | --- | --- |
-| Cap/price/effect/chronology | [candidate.json](candidate.json):388 assertions PASS |
+| Cap/price/effect/chronology | [candidate.json](candidate.json):389 assertions PASS |
 | Exact old value and idempotence | Same report:145 assertions with independent BigInt conservation PASS |
 | Mobile |12 profiles:320/390/430px ×100%/200% ×normal/reduced motion;44px controls, real touch/Tab/Enter/focus, wrapping, contrast>=9.09:1 PASS |
 | Save/recovery/restore | Old21/40/2000 first launch/reload/recovery, two actual confirmed Settings restores, wrong-positive-receipt recovery, paid Labs/Ascend, primary rollback and recovery-write failure PASS |
 | Causal controls | [negative-feature.json](negative-feature.json):10 mutations caught at intended assertions, exit1/valid FAIL/clean browser teardown |
 | Completed refund boundaries |100 canonical raw2000 boundaries:zero repeated price calculations; changed receipt still rejected; measured time in candidate.json |
 | Legacy engine | [cap-v8-6.0.json](cap-v8-6.0.json):Node8.3.0/V8 6.0.286.52,400 blocked purchases, original refunds and exact payments PASS |
-| Existing clarity | [clarity-current.txt](clarity-current.txt):926 assertions PASS on current upstream upgrade ownership |
+| Existing clarity | [tree-ui-clarity-current.txt](tree-ui-clarity-current.txt):926 assertions PASS on current upstream upgrade ownership |
+| Shared Tree plan | [tree-current.txt](tree-current.txt):155 contract checks PASS; canonical catalog identity/unlock/retirement/Echo-cap guards preserved |
+| Tree mobile | [tree-ui-current.txt](tree-ui-current.txt), [tree-ui-reduced-current.txt](tree-ui-reduced-current.txt):693 checks at320/390/430px and100%/200%, contrast>=5.50:1 PASS |
 | Required full CI/integration/APK | [PR89](https://github.com/karahaNx/Lumenfall/pull/89):final run/integration/APK acceptance pending |
 
-CI retains existing173 scenarios,17 harness negative controls, source/tooling/APK
+CI retains existing176 scenarios,17 harness negative controls, source/tooling/APK
 verifier and guarded browser startup. F21 adds focused regression and8 causal
 controls:handler/refund/credit/free-credit/wallet/receipt/cache/credit-record. UI/raw controls
 are also saved locally. A startup failure never counts as a passing defect control.
@@ -66,5 +68,7 @@ first), respects the selected-browser environment/explicit option, records actua
 executable/version and includes startup stderr. A local launcher collision
 control puts a working google-chrome symlink and a failing chromium executable
 on PATH; all533 assertions/25 groups and10 specific defect controls still pass.
-Final required CI must run again on this runner correction; product bytes stay
-at the current recorded hash.
+Final required CI must run again on the combined PR66/main source. The shared
+getNodeBuyPlan retains all upstream guards and adds the exact Prism payment plan.
+QA clicks resolve real catalog nodes; a forged catalog object is separately
+rejected. Native QA resolves the same nodes without modifying APK product bytes.

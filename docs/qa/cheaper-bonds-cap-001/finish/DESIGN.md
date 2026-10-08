@@ -85,3 +85,13 @@ Main14d5f3a (Rift guidance and Formation delivery) merges cleanly. Current533
 focused assertions,10 causal controls,926 clarity and V8 6.0 pass on the combined
 source. The earlier full offline16-record check used c54856a source before the
 credit-record/Rift changes; final required full CI verifies the current bytes.
+
+Mainac0d28e includes PR66 Tree identity/cap/UI and PR95/96 acceptance records.
+Its getNodeBuyPlan remains the shared handler/UI planner, preserving actual
+catalog-object identity, unlock/retired nodes, finite cost, increment and Echo6
+guards. Exact Prism wallet/credit payment is added to that plan; all buys use
+its canonical level and payment. QA resolves real catalog nodes, separately
+checks forged-object refusal, and retains all original Tree state assertions
+with the explicit additive F21 history expectation. Current534 focused checks,
+10 causal controls,155 Tree contract checks,693 Tree mobile checks,926 clarity
+and V8 6.0 pass on81fcc461 source. Full required176-scenario CI remains pending.

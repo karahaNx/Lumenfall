@@ -45,4 +45,15 @@ assert.equal(window.qa.getState().cometTrial.reason,'party');
 assert.equal(window.qa.rawSave(),window.qa.rawRecovery(),'Trial failure immediately persists to primary/recovery');
 var recovered=window.qa.freshStateSnapshot();recovered.formationPresets.boss=['void','titan'];recovered.activeFormationPreset='boss';recovered.formationRebuild={members:['void','titan'],preset:'boss'};
 var canonical=window.qa.formationTest.canonical(recovered);assert.deepStrictEqual(canonical.formationPresets.boss,['void','titan'],'known saved late-game members retained even below their unlock depth');assert.deepStrictEqual(canonical.formationRebuild,{members:['void','titan'],preset:'boss'});assert.deepStrictEqual(canonical.activeParty,['ember']);assert.deepStrictEqual(window.qa.formationTest.canonical(canonical),canonical,'recovered late intent is idempotent');
-console.log(JSON.stringify({status:'pass',scenario:'formation-autosave-v8',source:file,sourceSha256:crypto.createHash('sha256').update(source).digest('hex'),node:process.version,v8:process.versions.v8,inlineScripts:scripts.length,contract:result,cometTrialValidation:true,recoveredLateIntent:true,limitation:'JavaScript engine only; Android DOM, lifecycle, TalkBack and physical WebView60 acceptance remain separate'},null,2));
+var oldSchemaFormation=null;
+if(window.qa.freshStateSnapshot().schemaVersion===2){
+ var old=window.qa.freshStateSnapshot();old.schemaVersion=1;delete old.offline12hRefund;
+ old.formationPresets={push:['ember'],farm:[],boss:['void','titan']};old.activeFormationPreset='boss';old.formationRebuild={members:['void','titan'],preset:'boss'};
+ old.wispModules.titan=4;old.heroRarity.void=5;old.wispUltimate.void=true;old.owned.autoascend=true;
+ // Arbitrary QA currency sentinels, not gameplay prices or rewards.
+ var paid={lumen:17,shards:23,comets:31,motes:37,sigils:41};Object.keys(paid).forEach(function(k){old[k]=paid[k];});
+ var migrated=window.qa.formationTest.canonical(old);assert.equal(migrated.schemaVersion,2);assert.deepStrictEqual(migrated.formationPresets,old.formationPresets);assert.deepStrictEqual(migrated.formationRebuild,old.formationRebuild);assert.equal(migrated.activeFormationPreset,'boss');assert.deepStrictEqual(migrated.activeParty,['ember']);
+ assert.equal(migrated.wispModules.titan,4);assert.equal(migrated.heroRarity.void,5);assert.equal(migrated.wispUltimate.void,true);assert.equal(migrated.owned.autoascend,true);Object.keys(paid).forEach(function(k){assert.equal(migrated[k],paid[k]);});assert.deepStrictEqual(window.qa.formationTest.canonical(migrated),migrated);
+ oldSchemaFormation={from:1,to:2,intentAndEmpty:true,paidWispValueAndCurrencies:true,idempotent:true};
+}
+console.log(JSON.stringify({status:'pass',scenario:'formation-autosave-v8',source:file,sourceSha256:crypto.createHash('sha256').update(source).digest('hex'),node:process.version,v8:process.versions.v8,inlineScripts:scripts.length,contract:result,cometTrialValidation:true,recoveredLateIntent:true,oldSchemaFormation:oldSchemaFormation,limitation:'JavaScript engine only; Android DOM, lifecycle, TalkBack and physical WebView60 acceptance remain separate'},null,2));

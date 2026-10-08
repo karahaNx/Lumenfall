@@ -2008,6 +2008,7 @@
   #tab-ascend .node-card.locked-node{border-left-color:#566077;}
   #tab-ascend .node-card.locked-node>.shape{filter:saturate(0);opacity:.6;}
   #tab-ascend .node-info .name{color:#ebddff;}
+  #tab-ascend .node-info{min-width:0;overflow-wrap:break-word;overflow-wrap:anywhere;}
   #tab-ascend .node-info .desc{line-height:1.55;margin:5px 0;}
   #tab-ascend .node-info .lvl{display:inline-block;padding:3px 7px;border-radius:5px;border:1px solid #65547b;background:#171c33;}
   #tab-deeds .quest-reward,.ach-card .reward{padding:3px 7px;border:1px solid #426b69;border-radius:6px;background:#142e36;}
@@ -2934,7 +2935,7 @@ var RESEARCH = [
 var NODES = [
   {id:'starlight', name:'Starlight Affinity', desc:'+10% Lumen from every kill, per level.', baseCost:1, growth:1.35},
   {id:'steady',    name:'Steady Hands',        desc:'+8% tap damage, per level.',              baseCost:1, growth:1.30},
-  {id:'echo',      name:'Echoing Rest',        desc:'+5% offline earning rate, per level (caps at 100%).', baseCost:2, growth:1.40},
+  {id:'echo',      name:'Echoing Rest',        desc:'+5 percentage points offline earning rate per level, up to 100% before Projects (6 levels).', baseCost:2, growth:1.40, levelCap:6},
   {id:'bonds',     name:'Cheaper Recruitment', desc:'3 percentage points more discount per level, up to 60%. Wisp recruiting and Empower cost at least 40% of the normal price before whole-Lumen rounding. Level cap: 20.', levelCap:20, baseCost:2, growth:1.45},
   {id:'swift',     name:'Swift Ascension',     desc:'+4% Prisms earned per Ascend, per level.', baseCost:3, growth:1.50},
   {id:'momentum',  name:'Eternal Momentum',    desc:'+6% passive Wisp damage per level; also raises the Wisp-powered part of your tap damage.', baseCost:5, growth:1.55, requiresAchievement:'asc5'},
@@ -4233,7 +4234,6 @@ function enterPushMode(){
 }
 
 function nodeLevel(id){ return state.nodes[id]||0; }
-function nodeAtCap(node){ return node.levelCap!==undefined && nodeLevel(node.id)>=node.levelCap; }
 function researchLevel(id){ return state.research[id]||0; }
 function researchEffectiveLevel(node,level){
   level = nonNegativeInt(level,0);
@@ -5187,20 +5187,29 @@ function applyRiftTheme(){
 }
 
 function buyNode(node){
-  // Resolve current metadata so a stale caller cannot bypass the purchase cap.
-  node = node && NODES.find(function(n){ return n.id===node.id; });
-  if(!node || nodeAtCap(node)) return;
-  if(node.retired || node.retiredTo) return;
-  var cost = nodeCost(node);
-  var payment=prismPurchasePlan(cost);
-  if(!payment) return;
-  state.prisms=payment.prisms;
-  state.refundCredits.prisms=payment.credits;
-  state.nodes[node.id]++;
+  var plan = getNodeBuyPlan(node);
+  if(!plan.affordable) return false;
+  state.prisms = plan.payment.prisms;
+  state.refundCredits.prisms = plan.payment.credits;
+  state.nodes[node.id] = plan.level + 1;
   saveState();
   renderNodes();
   renderAscendSummary();
   updateBattleFast();
+  return true;
+}
+
+function getNodeBuyPlan(node){
+  if(NODES.indexOf(node)<0) return {affordable:false,reason:'invalid'};
+  var level=nodeLevel(node.id);
+  if(node.retired || node.retiredTo) return {affordable:false,reason:'retired',level:level};
+  if(node.requiresAchievement && !state.achieved[node.requiresAchievement]) return {affordable:false,reason:'locked',level:level};
+  if(node.levelCap!==undefined && level>=node.levelCap) return {affordable:false,reason:'cap',level:level};
+  var cost=nodeCost(node);
+  if(!Number.isFinite(cost) || cost<1 || level+1===level || !Number.isFinite(state.prisms)) return {affordable:false,reason:'unavailable',level:level,cost:cost};
+  var payment=prismPurchasePlan(cost);
+  var reason=payment ? 'available' : state.prisms+prismRefundCreditTotal()>=cost ? 'unavailable' : 'unaffordable';
+  return {affordable:!!payment,reason:reason,level:level,cost:cost,payment:payment};
 }
 
 var labMultiplier = 1;
@@ -5718,8 +5727,13 @@ function presentControlStates(root){
       if(btn.hasAttribute('data-research')){var node=RESEARCH.find(function(n){return n.id===btn.getAttribute('data-research');});subject=node.name;var plan=getResearchBuyPlan(node);cost=plan.needed;
         if(plan.maxed){kind='maxed';reason='Maxed';}
         else if(!plan.unlocked){kind='locked';reason='Reach Rift '+node.unlockDepth;}}
-      if(btn.hasAttribute('data-node')){var node=NODES.find(function(n){return n.id===btn.getAttribute('data-node');});subject=node.name;
-        if(nodeAtCap(node)){kind='maxed';reason='Maxed';}else cost.prism=nodeCost(node);}
+      if(btn.hasAttribute('data-node')){
+        var node=NODES.find(function(n){return n.id===btn.getAttribute('data-node');});subject=node.name;
+        var plan=getNodeBuyPlan(node);
+        if(plan.reason==='cap'){kind='maxed';reason='Maxed';}
+        else if(plan.reason==='unavailable'){kind='unavailable';reason='Unavailable';}
+        else cost.prism=plan.cost;
+      }
       if(btn.hasAttribute('data-study')){
         var node=LONG_STUDIES.find(function(n){return n.id===btn.getAttribute('data-study');});subject=node.name;
         var plan=getStudyStartPlan(node);
@@ -6696,11 +6710,13 @@ function renderNodes(){
       '</div>';
       return;
     }
-    var level = state.nodes[node.id];
-    var maxed = nodeAtCap(node);
-    var cost = maxed ? 0 : nodeCost(node);
-    var levelText = 'Level '+(node.levelCap===undefined ? level : Math.min(level,node.levelCap))+(node.levelCap===undefined ? '' : ' / '+node.levelCap);
-    if(node.levelCap!==undefined && level>node.levelCap) levelText += ' · '+level.toLocaleString('en-US')+' purchased levels preserved';
+    var plan = getNodeBuyPlan(node);
+    var level = plan.level;
+    var capped = plan.reason==='cap';
+    var unavailable = plan.reason==='unavailable';
+    var priced = Number.isFinite(plan.cost);
+    var levelText = 'Level '+level+(node.levelCap!==undefined?' · Cap '+node.levelCap:'')+(node.levelCap!==undefined && level>node.levelCap?' · Saved level preserved':'');
+    if(node.id==='bonds'){levelText='Level '+Math.min(level,20)+' / 20';if(level>20)levelText+=' · '+level.toLocaleString('en-US')+' purchased levels preserved';}
     html += '<div class="card node-card">' +
       '<span class="shape shape-diamond" style="width:30px;height:30px;background:var(--prism);"></span>' +
       '<div class="node-info" style="flex:1;">' +
@@ -6709,11 +6725,11 @@ function renderNodes(){
         '<div class="lvl" style="color:var(--prism);">'+levelText+'</div>' +
         '<div class="earned-effect" data-node-effect="'+node.id+'"><strong>Current node contribution:</strong> '+nodeEarnedEffect(node.id)+'</div>' +
         '<div class="effect-note">From this node only; other upgrades contribute separately.</div>' +
-        (node.id==='bonds' && state.feedbackMigration.receipts['node.bonds'] ? '<div class="effect-note">Historical levels kept; '+(state.feedbackMigration.receipts['node.bonds'].unpricedFrom ? 'refunds cover purchases with available prices.' : 'purchases above level 20 refunded in Prisms.')+'</div>' : '') +
+        (node.id==='bonds' && state.feedbackMigration.receipts['node.bonds'] ? '<div class="effect-note">Saved level preserved; '+(state.feedbackMigration.receipts['node.bonds'].unpricedFrom ? 'refunds cover purchases with available prices.' : 'purchases above level 20 refunded in Prisms.')+'</div>' : '') +
         (node.id==='bonds' && prismRefundCreditTotal()>0 ? '<div class="effect-note">Remaining Prism refund credit: '+(Number.isFinite(prismRefundCreditTotal()) ? formatNum(prismRefundCreditTotal()) : 'above display range')+'. Available for Tree purchases.</div>' : '') +
       '</div>' +
-      '<button class="buy-btn" data-node="'+node.id+'" '+(maxed || !prismPurchasePlan(cost)?'disabled':'')+' style="min-width:78px;">' +
-        (maxed ? '<span class="label">Maxed</span>' : '<span class="cost mono">'+costIcon('prism')+formatNum(cost)+'</span><span class="label">Prisms</span>') +
+      '<button class="buy-btn" data-node="'+node.id+'" '+(plan.affordable?'':'disabled')+' aria-label="'+(capped?node.name+' maximum level reached':unavailable?node.name+' price unavailable':'Buy '+node.name+' level '+(level+1)+' for '+formatNum(plan.cost)+' Prisms')+'" style="min-width:78px;">' +
+        (capped?'<span class="label">Maxed</span>':unavailable&&!priced?'<span class="label">Unavailable</span>':'<span class="cost mono">'+costIcon('prism')+formatNum(plan.cost)+'</span><span class="label">'+(unavailable?'Unavailable':'Prisms')+'</span>') +
       '</button>' +
     '</div>';
   });
