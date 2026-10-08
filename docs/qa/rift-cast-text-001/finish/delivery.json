@@ -261,7 +261,7 @@
     "file": "../native-baseline-bound/native-update.json",
     "sha256": "d8b498c7e4c813feca0d780dfcba1b5c747cefc4cc3808d16c3e88655cdee155",
     "baselineFile": "../native-baseline-bound/baseline-native.json",
-    "baselineSha256": "3321d04b5332532e4d7829df485028c445c9895e06354244411b1c378f57fc1b",
+    "baselineSha256": "1111256b5157142ee2a66df7fa2e4b2055478fc8f1106e9e5284b656067ec031",
     "targetMatchesAllOtherPhases": true
   },
   "preUpdateNegativeControl": {
@@ -416,5 +416,127 @@
       "bytes": 3447029
     },
     "subsequentReview": "Native baseline pre-update evidence review fixed in following checkpoint; application/test/rule/workflow bytes unchanged."
+  },
+  "nativeBaselineColdEvidence": {
+    "origin": "Structured fields recovered from retained successful cold-launch equality assertions; only asserted selected-Wisp levels recorded.",
+    "originalReceipt": "baseline-native-before-cold-fields.json",
+    "originalReceiptSha256": "3321d04b5332532e4d7829df485028c445c9895e06354244411b1c378f57fc1b",
+    "log": "baseline-prepare.log",
+    "logSha256": "27d0c6322eafcf11b38d0b0ef92671f2de2a1fa7ac916b28b6124016c0e2126a",
+    "assertion": "for each prepared activeParty Wisp, cold.spirits[id] === prepared.spirits[id] after real138 force-stop/relaunch",
+    "selectedWisps": [
+      "ember",
+      "tide",
+      "stone",
+      "void",
+      "aurora"
+    ]
+  },
+  "receiptReplayControls": [
+    {
+      "case": "missing-cold-flag",
+      "status": "caught",
+      "expected": "prepared138 cold launch verified"
+    },
+    {
+      "case": "missing-cold-ownership",
+      "status": "caught",
+      "expected": "recorded baseline cold ownership"
+    },
+    {
+      "case": "different-cold-ownership",
+      "status": "caught",
+      "expected": "prepared138 cold ownership tide"
+    },
+    {
+      "case": "current source root for historical142",
+      "status": "caught",
+      "expected": "byte-identical released asset: index.html"
+    }
+  ],
+  "assetReplay": {
+    "status": "pass",
+    "sourceRoot": "/workspace/rift-cast-text-001-evidence/finish/historical-apk142-source",
+    "apkBytes": 6837507,
+    "apkSha256": "ec361d641cd5c5dff62322cc90e85bfff6d42d0f5f0877630469f97c451756a0",
+    "crcEntries": 526,
+    "matchedAssets": 15,
+    "files": [
+      {
+        "file": "index.html",
+        "bytes": 503539,
+        "sha256": "835e1f19c4d51025a41583786c52d8b6ff09ab11cf4afcfec4a49146f40734b3"
+      },
+      {
+        "file": "fonts/cinzel-500.woff2",
+        "bytes": 25904,
+        "sha256": "09941fb1c169c38fd414536b37690057fc01b3117a5c63dd6571186540c8f370"
+      },
+      {
+        "file": "fonts/cinzel-600.woff2",
+        "bytes": 25904,
+        "sha256": "09941fb1c169c38fd414536b37690057fc01b3117a5c63dd6571186540c8f370"
+      },
+      {
+        "file": "fonts/cinzel-700.woff2",
+        "bytes": 25904,
+        "sha256": "09941fb1c169c38fd414536b37690057fc01b3117a5c63dd6571186540c8f370"
+      },
+      {
+        "file": "fonts/fonts.css",
+        "bytes": 1482,
+        "sha256": "befd8e42d48b477c567ba3ce469ff475c12a1f8724c98258469dea11b15065d7"
+      },
+      {
+        "file": "fonts/ibm-plex-mono-400.woff2",
+        "bytes": 14708,
+        "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7"
+      },
+      {
+        "file": "fonts/ibm-plex-mono-500.woff2",
+        "bytes": 14888,
+        "sha256": "01d285447409c8a588692162439a038b8cbd7871309ee20267b0d2d91c6e8e22"
+      },
+      {
+        "file": "fonts/ibm-plex-mono-600.woff2",
+        "bytes": 15620,
+        "sha256": "0d1f0b8d0722224e32e9f28261bdc86c79115be73444ae5eceb73976a1bcdf83"
+      },
+      {
+        "file": "fonts/manrope-400.woff2",
+        "bytes": 24836,
+        "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972"
+      },
+      {
+        "file": "fonts/manrope-500.woff2",
+        "bytes": 24836,
+        "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972"
+      },
+      {
+        "file": "fonts/manrope-600.woff2",
+        "bytes": 24836,
+        "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972"
+      },
+      {
+        "file": "fonts/manrope-700.woff2",
+        "bytes": 24836,
+        "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972"
+      },
+      {
+        "file": "fonts/manrope-800.woff2",
+        "bytes": 24836,
+        "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972"
+      },
+      {
+        "file": "branding/README.md",
+        "bytes": 988,
+        "sha256": "2ec43b9b11efdf98f802942dfb09740ebdbb08bb3a1364be2bb29f1a7bc19050"
+      },
+      {
+        "file": "branding/lumenfall-mark.svg",
+        "bytes": 3933,
+        "sha256": "976398b0e662181ae6dbb3430ce74d606a9db3a3f6c451818d5fda9e0f9395e4"
+      }
+    ]
   }
 }

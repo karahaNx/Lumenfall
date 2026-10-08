@@ -59,3 +59,14 @@ Review disposition: installed APK and source hashes are recorded and compared be
 Baseline review PRRT_kwDOUF0Vls6qLoBC addressed: the producer validates the known138 baseline and hashes actual installed APK bytes before snapshot/install. The combiner validates baseline identity and the recorded pre-update APK against it. [Pre-attested update](native-baseline-bound/native-update.json), [prepared baseline](native-baseline-bound/baseline-native.json), [cold-launch/prepare log](native-baseline-bound/baseline-prepare.log), [update log](native-baseline-bound/native-update.log), [actual already142 negative](native-baseline-bound/pre-update-negative-control.json) and [rerun identity controls](native-baseline-bound/binding-negative-controls.json) PASS. Target142 bytes/source equal all state/keyboard phases.
 
 The baseline-diagnostics attempts are superseded QA setup/probe failures. Preparation now completes normal startup, requires a successful product save and verifies the fixture on a real138 cold launch before update. No product/save behavior changes or weaker oracle. [CI37722694441](ci-37722694441-receipt.json) passes151/12/guarded startup on e25fa6b; the final revised-head gate remains required and is recorded in PR74.
+
+Cold-field review PRRT_kwDOUF0Vls6qMU7L addressed: producer and combiner require coldLaunchVerified and compare every recorded selected-Wisp level with the prepared save. The baseline process ran the cold assertions before structured-field serialization was added; its retained PASS log already establishes the five equality results. The original flagless receipt is preserved in native-baseline-bound/baseline-native-before-cold-fields.json; [coldEvidence](native-baseline-bound/baseline-native.json) records original/log hashes and the explicit reconstruction. Unobserved values were not added. Three missing/mismatched cold-result controls PASS. Future prepare runs serialize direct cold observations.
+
+Asset-replay review PRRT_kwDOUF0Vls6qMU7P addressed: the verifier requires an explicit source root. [Historical-source replay](asset-replay.json) matches every CRC and all15 assets against integration ab46c0c; current-main source is rejected. [Replay controls](receipt-replay-controls.json). From a clone containing integration history:
+
+```bash
+node docs/qa/rift-cast-text-001/finish/materialize-apk142-source.cjs /tmp/f13-142-source
+node docs/qa/rift-cast-text-001/finish/verify-assets.cjs archive/android/rift-cast-text-001/Lumenfall-0.1.142.apk /tmp/f13-142-assets.json /tmp/f13-142-index.html /tmp/f13-142-source
+```
+
+The source destination must be empty. Native replay uses the newly extracted142 index, the original signed138 baseline/index and isolated emulator; current-main index is a different historical artifact.

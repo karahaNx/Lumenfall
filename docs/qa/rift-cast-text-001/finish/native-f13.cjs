@@ -52,7 +52,7 @@ async function attestInstalledArtifact(){
  artifactIdentity={...installed,providedApkSha256:providedSha256,sourceSha256:sha(fs.readFileSync(index))};return artifactIdentity;
 }
 function validatePreparedBaseline(baseline){
- assert.equal(baseline.status,"prepared");
+ assert.equal(baseline.status,"prepared");assert.equal(baseline.coldLaunchVerified,true,"prepared138 cold launch verified");assert(baseline.coldOwnership&&baseline.coldOwnership.spirits,"recorded baseline cold ownership");for(const id of baseline.saved.activeParty)assert.equal(baseline.coldOwnership.spirits[id],baseline.saved.spirits[id],"prepared138 cold ownership "+id);
  assert(baseline.artifactIdentity,'prepared baseline contains actual installed identity');assert(baseline.identity.package.some(x=>x.includes('versionName=0.1.138')),'prepared baseline version138');assert.equal(baseline.artifactIdentity.installedApkSha256,'81b9be7edea971335a06f06d1894d91e75a92736738cc935fc2a920a26a02e1e','expected immutable signed138 baseline');
  assert.equal(baseline.artifactIdentity.sourceSha256,'6572650f2ab7523ec02bc09bdd999029316bf6104bfbbff8482d3fca60d4c1ca','expected baseline138 source');assert.equal(baseline.artifactIdentity.providedApkSha256,baseline.artifactIdentity.installedApkSha256,'prepared actual138 equals provided baseline');
 }
