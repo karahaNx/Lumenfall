@@ -36,6 +36,17 @@ Formation receipts. No full combined-game CI result is inferred from focused
 checks. This feature does not own those upstream changes. Tooling passes outside
 the sandbox; its earlier sandbox subprocess failure is retained.
 
+The subsequent Tree purchase integration PR66/main
+ac0d28e589bd1caef4b9c70f2383a8b3ee384acd changes the shared Ascend Tree.
+On source45ae4c62bd37aed28bfd2b77147bffcbda1a9b6a699c4a3107e0fd1a4feccd02,
+the same28 focused cases/20 UI profiles/54 V8 assertions and source validation
+were renewed PASS. Prefix main-ac0 preserves exact raw results. APK148 native
+evidence still belongs to its frozen source; the Tree contract is upstream.
+
+Native select enumerates <=1,000 values; larger histories use one numeric datalist
+with <=200 suggestions plus the saved target. Drafts validate/commit once. These
+UI limits impose no target cap and preserve huge legacy saved values.
+
 UI coverage includes 320/360/390/430px, normal/160%/200% text, >=44px controls,
 focus, contrast, picker identity/scroll and reduced motion. Gameplay covers
 handler boundaries, high/legacy targets, clear/OFF/Farm/unbeaten guards, manual/
