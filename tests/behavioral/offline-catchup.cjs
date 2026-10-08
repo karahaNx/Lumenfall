@@ -44,7 +44,10 @@ function baselineSummary(actual,expected,label){
  assert.equal(actual.studySpeedPurchases,0,label+' no legacy repeat purchases');
  assert.equal(actual.studyMotesSpent,0,label+' no legacy repeat spending');
  const {studySpeedPurchases,studyMotesSpent,...existing}=actual;
- assert.deepEqual(existing,expected,label);
+ // The corrected fractional endpoint can require one final clock segment;
+ // every gameplay/economy counter remains exact and iteration growth bounded.
+ assert(Number.isInteger(existing.iterations)&&Math.abs(existing.iterations-expected.iterations)<=1,label+' at most one corrected endpoint segment');
+ assert.deepEqual({...existing,iterations:expected.iterations},expected,label+' gameplay summary exact');
 }
 function baselineState(actual,expected,seed,label){
  const ids=Object.keys(expected.longStudyLevels);
@@ -54,7 +57,25 @@ function baselineState(actual,expected,seed,label){
   return [id,paid&&paid.speedMult>1?paid.speedMult:1.5];
  })),label+' remembered legacy paid tier');
  const {studyUseMotes,studySpeedTargets,...existing}=actual;
- assert.deepEqual(existing,expected,label);
+ // The WISP_ROLES_001 endpoint-phase correction deliberately avoids the old
+ // whole-plus-fraction cancellation. Preserve discrete economy/ownership and
+ // snapshot metadata exactly; use the existing continuous parity contract
+ // only for clocks, remaining work, HP and ability charge.
+ const checked=copy(existing);
+ for(const key of ['_autoTapAccum','_autoEmpowerAccum','enemyHp']){
+  approx(checked[key],expected[key],label+'.'+key);checked[key]=expected[key];
+ }
+ assert.deepEqual(Object.keys(checked.heroResource),Object.keys(expected.heroResource),label+' charge keys');
+ for(const id of Object.keys(checked.heroResource)){
+  approx(checked.heroResource[id],expected.heroResource[id],label+'.heroResource.'+id);
+  checked.heroResource[id]=expected.heroResource[id];
+ }
+ assert.equal(checked.activeStudies.length,expected.activeStudies.length,label+' paid work count');
+ checked.activeStudies.forEach((study,i)=>{
+  approx(study.remainingSec,expected.activeStudies[i].remainingSec,label+'.activeStudies.'+i+'.remainingSec');
+  study.remainingSec=expected.activeStudies[i].remainingSec;
+ });
+ assert.deepEqual(checked,expected,label+' discrete economy, ownership and paid metadata exact');
 }
 function runAsync(seed,seconds,batch=256){
  const x=app(seed,source,seconds),before=copy(x.b.get());x.b.batch(batch);

@@ -11,6 +11,12 @@ Baseline main214d454 product SHA256
 Original backup hash and honest post-Ascend limitations are in the task/report.
 All new source/check scripts are JavaScript; only the owner checkout changed.
 
+[Draft PR70](https://github.com/karahaNx/Lumenfall/pull/70) is published.
+First head a2f1dd440e005d29fc79c1f1096d30da3115fe21. No integration/release.
+[Final contribution measurement](contribution-final.json.gz) and [calibration](veteran-proposal-final.json.gz)
+include all1008 team comparisons and successful finite replays. Calibration is
+a hypothetical curve, never an accepted product mechanic.
+
 Focused checks on the local candidate (Node24.19.0, Chrome155.0.8059.39):
 
 - [Core](wisp-core-clock-final.log.gz):3,249 assertions, all56 five-Wisp teams,
@@ -39,6 +45,15 @@ Clock evidence:
   into the fractional calculation. No elapsed interval or damage is discarded.
 - [Old guard mutation](wisp-stall-negative.log.gz):the focused check rejects
   the old guard with the intended6s/1.1102230246251565e-16 stall.
+
+The archived exact offline-state oracle [initial correction failure](wisp-offline-clock-final.log.gz)
+detects ~3e-12 changed continuous values. The [next diagnostic](wisp-offline-standard-oracle.log.gz)
+detects one extra endpoint iteration with identical gameplay summary. The
+updated oracle checks only clocks/HP/charge/remaining work at the established
+continuous tolerance; economy, levels, purchases, snapshots and counters stay
+exact, with iteration difference bounded to one endpoint segment. This is an
+intentional arithmetic correction, not a balance or payout change. Its full
+passing replay and all required gates remain pending until recorded.
 
 Reproduce from root:
 

@@ -1,6 +1,6 @@
 # WISP_ROLES_001 — visible value from every Wisp
 
-Status: **implementation in progress; balance decision and acceptance pending**.
+Status: **draft PR70 published; balance decision and acceptance pending**.
 Owner: this feature chat. One goal: expose damage/support/Bond/resource value
 without double counting and give early damage Wisps a lasting reason to field.
 No subagents, message tools, other chat changes or unrelated features.
@@ -71,9 +71,10 @@ Auto-Ascend22, MaxDepth220, full permanent Wisp tracks. Its presets support
 controlled comparisons but do not prove the reported active late-game share.
 Actual powered mid/late-game backups remain unavailable.
 
-Overlap observed: PR59 unfinished Wisp folding, PR60 Forge wording, PR61 Bond
-wording, PR63 Cast text; their isolated candidates remain separate. Recheck
-live main and preserve their changes before serial integration.
+Overlap observed: PR59 Wisp folding and PR60 Forge wording are now integrated
+into main0e9b54c; the branch already includes PR60 and must incorporate PR59
+before integration. PR61 Bond wording/PR63 Cast text remain separate. Recheck
+live main and preserve concurrent changes before serial integration.
 
 ## Acceptance and checks
 
@@ -102,6 +103,17 @@ reduced-motion PASS, required tooling PASS. Long-offline checks PASS before the
 target-phase correction; their new run and full CI/native/device remain pending.
 See [implementation evidence](../qa/wisp-roles-001/IMPLEMENTATION.md).
 No independent review or device acceptance is claimed.
+
+Publication: [draft PR70](https://github.com/karahaNx/Lumenfall/pull/70), first
+published head a2f1dd440e005d29fc79c1f1096d30da3115fe21, based on e189a3a.
+No CI run/check was observed for that head as of publication recheck; the
+local full149-scenario suite is running. No merge or APK release for this task.
+The existing offline test's archived exact-state oracle observes ~3e-12 clock/
+HP/charge differences and one extra final segment after the intentional phase
+correction. Its updated checks retain exact economy/counters/ownership/paid
+metadata, standard tolerance only for continuous fields, and at most one
+additional endpoint segment. Full replay of that updated oracle is pending;
+negative before/after HP evidence remains strict. No gate is removed/skipped.
 
 Next: obtain the concrete balance decision; finish/test that mechanic; validate
 UI and all CI, publish the feature PR, serialize integration, verify the signed
