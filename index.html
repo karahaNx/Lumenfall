@@ -231,6 +231,7 @@
   }
   .ultimate-btn{width:100%;}
   .sigil-resonance-btn{width:100%;margin-top:6px;color:var(--sigil);}
+  .sigil-resonance-help{margin:6px 0 0;font-size:.75rem;line-height:1.5;color:var(--ink-dim);}
   .quest-actions{display:flex;align-items:center;gap:6px;flex:none;}
   .quest-refresh-btn{border-color:var(--comet);background:var(--bg-elev);color:var(--comet);}
   .node-queue-toggle{
@@ -6162,9 +6163,12 @@ function renderSpirits(){
     var resonanceOwned = allUltimatesOwned();
     var resonanceUses = state.sigilResonanceUses||0;
     var resonanceDisabled = !canSigilResonate(sp);
-    var resonanceHtml = resonanceOwned && ultimateUnlocked(sp.id) ?
-      '<button class="mini-btn sigil-resonance-btn" data-sigil-resonate="'+sp.id+'" '+(resonanceDisabled?'disabled':'')+'>Resonate '+resonanceUses+'/'+SIGIL_RESONANCE_RUN_LIMIT+
-        '<span style="font-size:.6875rem;">'+costIcon('sigil')+SIGIL_RESONANCE_COST+'</span></button>' : '';
+    var resonanceHelpId = 'sigil-resonance-help-'+sp.id;
+    var resonanceHtml = ultimateUnlocked(sp.id) ?
+      (resonanceOwned ? '<button class="mini-btn sigil-resonance-btn" data-sigil-resonate="'+sp.id+'" aria-describedby="'+resonanceHelpId+'" '+(resonanceDisabled?'disabled':'')+'>Resonate — Fill ability to 100'+
+        '<span>'+SIGIL_RESONANCE_COST+' Sigils</span></button>' : '')+
+      '<p class="sigil-resonance-help" id="'+resonanceHelpId+'">Spend '+SIGIL_RESONANCE_COST+' Sigils to fill this Active Wisp\'s ability resource to 100. This is a refill, not a permanent upgrade. '+
+        'Requires all Wisp Ultimates. '+(SIGIL_RESONANCE_RUN_LIMIT-resonanceUses)+' of '+SIGIL_RESONANCE_RUN_LIMIT+' uses left this run, shared across all Wisps. Resets on Ascend.</p>' : '';
     var ultimateHtml =
       '<div class="ultimate-row">' +
         (ultimateUnlocked(sp.id) ?
