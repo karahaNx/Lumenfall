@@ -15,7 +15,9 @@ const source = path.resolve(option('--source', path.join(root, 'index.html')));
 const out = path.resolve(option('--out', '/tmp/lumenfall-rift-cosmetics'));
 const baseline = args.includes('--baseline');
 const negative = args.includes('--negative');
-const chrome = option('--chrome', ['google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser'].find(name => spawnSync('which', [name]).status === 0));
+// Chrome's shell launcher redirects descriptors used by remote-debugging-pipe.
+// Use its installed ELF directly, matching the other CDP drivers' override.
+const chrome = option('--chrome', process.env.LUMENFALL_QA_CDP_CHROME || (fs.existsSync('/opt/google/chrome/chrome') ? '/opt/google/chrome/chrome' : ['google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser'].find(name => spawnSync('which', [name]).status === 0)));
 if (!chrome) throw Error('Chromium is required');
 fs.mkdirSync(out, {recursive: true});
 const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'lumenfall-cosmetics-'));
