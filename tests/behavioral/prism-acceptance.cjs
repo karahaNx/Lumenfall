@@ -13,7 +13,7 @@ window.prismQa={
  initialized:function(){return !!els['toast'];},get:function(){return JSON.parse(JSON.stringify(state));},
  seed:function(c,b,t,l){var s=freshState();s.depth=c+1;s.maxDepthEver=Math.max(250,c+1,b+1);s.ascendRewardedDepth=b;
  s.nodes.swift=t;s.longStudyLevels.prismstudy=l;s.prisms=1000;s.owned.autoascend=true;s.autoAscendEnabled=false;
- s.autoAscendTargetDepth=200;s.questDay=currentDay();s.lastSeen=Date.now();s.spirits.ember=1;s.activeParty=['ember'];
+ s.autoAscendTargetDepth=200;s.questDay=todayStr();s.lastSeen=Date.now();s.spirits.ember=1;s.activeParty=['ember'];
  SPIRITS.forEach(function(sp){s.empowerQueue[sp.id]=false;});return s;},
  set:function(s){state=acceptPersistedState(s);renderAll();},refresh:renderAscendSummary,tab:activateTab,
  ready:function(){if(startupIntroFinish)startupIntroFinish();document.querySelectorAll('.overlay,#startup-intro').forEach(function(e){e.style.display='none';});

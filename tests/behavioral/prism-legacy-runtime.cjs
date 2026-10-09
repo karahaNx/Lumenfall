@@ -12,7 +12,7 @@ var window={addEventListener:function(){},matchMedia:function(){return {matches:
 var document={readyState:'loading',hidden:false,addEventListener:function(){},getElementById:function(){return null;},body:{classList:{add:function(){}}}};
 var localStorage={getItem:function(k){return storage[k]||null;},setItem:function(k,v){storage[k]=v;writes++;},removeItem:function(k){delete storage[k];}};
 var hooks='renderAll=renderHud=renderAchievements=renderShop=renderSpirits=renderSideStats=renderDaily=updateBattleFast=renderCosmetics=renderNodes=renderAscendSummary=renderResearch=renderLongStudies=showAscendFlash=showToast=spawnFloatNum=emitCombatVfx=function(){};'+
- 'window.qa={fresh:freshState,set:function(s){state=acceptPersistedState(s);},get:function(){return state;},preview:ascendPrismBreakdown,manual:function(){doAscend(false);},save:saveState,accept:acceptPersistedState,encode:encodeSaveBackup,decode:decodeSaveBackup,day:currentDay};';
+ 'window.qa={fresh:freshState,set:function(s){state=acceptPersistedState(s);},get:function(){return state;},preview:ascendPrismBreakdown,manual:function(){doAscend(false);},save:saveState,accept:acceptPersistedState,encode:encodeSaveBackup,decode:decodeSaveBackup,day:todayStr};';
 var scripts=[],match,re=/<script>\s*([\s\S]*?)<\/script>/g;while((match=re.exec(source))){scripts.push(match[1]);new Function(match[1]);}
 var marker="if(document.readyState==='loading'){";eq(scripts[0].split(marker).length,2,'hook exactly once');
 new Function('window','document','localStorage','setTimeout','clearTimeout','performance',scripts[0].replace(marker,hooks+marker))(window,document,localStorage,function(){return 0;},function(){},{now:function(){return 0;}});
