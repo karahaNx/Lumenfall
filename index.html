@@ -4135,6 +4135,22 @@ function costIcon(kind){
   return '<span class="shape '+m.shape+' cost-icon" role="img" aria-label="'+m.name+'" style="background:'+m.color+'"></span>';
 }
 
+// Presentation only: each displayed currency reads its own wallet, not button.disabled.
+function purchasePriceColor(kind,amount){
+  var key={lumen:'lumen',shard:'shards',prism:'prisms',comet:'comets'}[kind];
+  return key && Number.isFinite(amount) && state[key]<amount ? 'var(--danger)' : 'var(--ink)';
+}
+function purchasePriceMarkup(kind,amount,classes,numberFirst){
+  return '<span'+(classes?' class="'+classes+'"':'')+' data-price-currency="'+kind+'" data-price-amount="'+amount+'" style="color:'+purchasePriceColor(kind,amount)+'">'+
+    (numberFirst?formatNum(amount)+' '+costIcon(kind):costIcon(kind)+formatNum(amount))+'</span>';
+}
+function updatePurchasePriceColors(root){
+  root.querySelectorAll('[data-price-currency]').forEach(function(el){
+    var color=purchasePriceColor(el.getAttribute('data-price-currency'),Number(el.getAttribute('data-price-amount')));
+    if(el.style.color!==color) el.style.color=color;
+  });
+}
+
 function isBoss(depth){ return depth>0 && depth%10===0; }
 
 var BOSS_TRAITS = [
@@ -5319,8 +5335,8 @@ function updateResearchCard(node,card){
   if(preview.textContent!==text) preview.textContent=text;
   var label=p.reason==='locked'?'Reach Rift '+node.unlockDepth:p.maxed?'Maxed':p.buyCount?'Upgrade ×'+p.buyCount:'Upgrade';
   var displayed=p.buyCount?p.cost:p.needed;
-  var html=(node.lumenBase && Number.isFinite(displayed.lumen)?'<span class="cost mono">'+costIcon('lumen')+formatNum(displayed.lumen)+'</span>':'')+
-    (node.shardBase && Number.isFinite(displayed.shard)?'<span class="cost mono">'+costIcon('shard')+formatNum(displayed.shard)+'</span>':'')+'<span class="label">'+label+'</span>';
+  var html=(node.lumenBase && Number.isFinite(displayed.lumen)?purchasePriceMarkup('lumen',displayed.lumen,'cost mono'):'')+
+    (node.shardBase && Number.isFinite(displayed.shard)?purchasePriceMarkup('shard',displayed.shard,'cost mono'):'')+'<span class="label">'+label+'</span>';
   if(btn.dataset.planHtml!==html){btn.innerHTML=html;btn.dataset.planHtml=html;}
   btn.disabled=!p.affordable;
 }
@@ -6599,7 +6615,7 @@ function renderResearch(){
   // Build the authoritative previews and control states off-DOM. Restoring
   // focus on empty cards would clamp the scroll area before they reach full size.
   var prepared=document.createElement('div');
-  prepared.innerHTML='<div class="section-sub">Forge: ability charge, ability damage, cast resources and Luminous encounters.</div>'+multHtml + html+legacyUpgradeSection(legacyHtml);
+  prepared.innerHTML='<div class="section-sub">Forge: ability charge, ability damage, cast resources and Luminous encounters.</div>'+multHtml + html;
   RESEARCH.filter(function(node){return !node.retiredTo;}).forEach(function(node){updateResearchCard(node,prepared.querySelector('[data-forge-card="'+node.id+'"]'));});
   presentControlStates(prepared);
   replaceControlMarkup(root,prepared.innerHTML);
@@ -6735,13 +6751,13 @@ function renderLongStudies(){
       projectEarnedMarkup(lnode.id) +
       '<div class="effect-note">'+(plan.maxed?'Effect cap reached. Queue '+(queueOn?'ON':'OFF')+' retained; no new starts.':
         'On completion: '+projectEarnedEffect(lnode.id,level+1)+'.')+'</div>' +
-      (plan.maxed?'':'<div class="study-meta" id="study-price-'+lnode.id+'">Takes '+fmtStudyDuration(dur)+' &middot; '+costIcon('lumen')+formatNum(cost.lumen)+' '+costIcon('shard')+formatNum(cost.shard)+'</div>') +
+      (plan.maxed?'':'<div class="study-meta" id="study-price-'+lnode.id+'">Takes '+fmtStudyDuration(dur)+' &middot; '+purchasePriceMarkup('lumen',cost.lumen)+' '+purchasePriceMarkup('shard',cost.shard)+'</div>') +
       '<button class="mini-btn" data-study="'+lnode.id+'" '+(plan.maxed?'':'aria-describedby="study-price-'+lnode.id+'" ')+(plan.affordable?'':'disabled')+' style="margin-top:10px;width:100%;">'+(plan.maxed?'Maxed':plan.reason==='unavailable'?'Unavailable':openSlots>0?'Begin Study':'No open slots')+'</button>' +
       studySpeedMarkup(lnode,null,plan.maxed) +
     '</div>';
   });
 
-  html += legacyUpgradeSection(legacyHtml)+'<div class="section-sub">Lab: permanent damage, kill rewards, Mote yield and Study work. Slot capacity rises at Rift 40, 60 and 90. Studies share the 12-hour offline limit with rewards and automation. Study Queue begins its next paid level when a slot and currency are free.</div>';
+  html += '<div class="section-sub">Lab: permanent damage, kill rewards, Mote yield and Study work. Slot capacity rises at Rift 40, 60 and 90. Studies share the 12-hour offline limit with rewards and automation. Study Queue begins its next paid level when a slot and currency are free.</div>';
   replaceControlMarkup(els['study-list'],html);
   // Beginning removes its button; keep focus on this Study's visible card action.
   if(focusedBegin && findActiveStudy(focusedBegin)){
@@ -6916,11 +6932,11 @@ function renderNodes(){
         '<div class="effect-note">From this node only; other upgrades contribute separately.</div>' +
       '</div>' +
       '<button class="buy-btn" data-node="'+node.id+'" '+(plan.affordable?'':'disabled')+' aria-label="'+(capped?node.name+' maximum level reached':unavailable?node.name+' price unavailable':'Buy '+node.name+' level '+(level+1)+' for '+formatNum(plan.cost)+' Prisms')+'" style="min-width:78px;">' +
-        (capped?'<span class="label">Maxed</span>':unavailable&&!priced?'<span class="label">Unavailable</span>':'<span class="cost mono">'+costIcon('prism')+formatNum(plan.cost)+'</span><span class="label">'+(unavailable?'Unavailable':'Prisms')+'</span>') +
+        (capped?'<span class="label">Maxed</span>':unavailable&&!priced?'<span class="label">Unavailable</span>':purchasePriceMarkup('prism',plan.cost,'cost mono')+'<span class="label">'+(unavailable?'Unavailable':'Prisms')+'</span>') +
       '</button>' +
     '</div>';
   });
-  replaceControlMarkup(els['node-list'],html+legacyUpgradeSection(legacyHtml));
+  replaceControlMarkup(els['node-list'],html);
   els['node-list'].querySelectorAll('[data-node]').forEach(function(btn){
     btn.addEventListener('click', function(){
       var node = NODES.find(function(n){ return n.id===btn.getAttribute('data-node'); });
@@ -6994,7 +7010,7 @@ function renderAchievements(){
       buttonHtml = '<button type="button" data-autoascend-open>Open Ascend</button>';
     } else {
       buttonHtml = '<button data-shop="'+item.id+'" class="'+(owned?'owned':'')+'" '+((owned||state.comets<item.cost)?'disabled':'')+'>' +
-        (owned ? 'Owned' : formatNum(item.cost)+' '+costIcon('comet')) +
+        (owned ? 'Owned' : purchasePriceMarkup('comet',item.cost,'',true)) +
       '</button>';
     }
     if(item.id==='comettrials' && owned) extra=cometTrialControls();
@@ -8723,7 +8739,18 @@ function checkAffordability(){
     var maxed=node && node.levelCap!==undefined && longStudyLevel(active.id)>=node.levelCap;
     btn.disabled = acquired || maxed || active.remainingSec<=SIM_EPS || state.motes<speedTierCost(mult);
   });
-  ['spirit-list','research-list','study-list','node-list','shop-list'].forEach(function(id){presentControlStates(els[id]);});
+  els['node-list'].querySelectorAll('[data-node]').forEach(function(btn){
+    var node=NODES.find(function(n){return n.id===btn.getAttribute('data-node');});
+    if(node) btn.disabled=!getNodeBuyPlan(node).affordable;
+  });
+  els['shop-list'].querySelectorAll('[data-shop]').forEach(function(btn){
+    var item=SHOP.find(function(n){return n.id===btn.getAttribute('data-shop');});
+    if(item) btn.disabled=!!state.owned[item.id] || state.comets<item.cost;
+  });
+  ['spirit-list','research-list','study-list','node-list','shop-list'].forEach(function(id){
+    updatePurchasePriceColors(els[id]);
+    presentControlStates(els[id]);
+  });
   renderAutoAscendControls();
 }
 

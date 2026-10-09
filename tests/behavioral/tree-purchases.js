@@ -64,7 +64,7 @@ window.runTreePurchaseQa=function(b,ctx,assert){
       same(b.treePurchases.canonical(canonical),canonical,'retired transition is idempotent '+id);
       same(b.treePurchases.roundtrip(canonical),canonical,'backup preserves retired value '+id);
       var row=document.querySelector('[data-legacy-upgrade="'+id+'"]');
-      ok(level?row&&row.textContent.includes('Existing bonus kept.'):!row,'preserved contribution shown only when owned '+id);
+      ok(!row,'retired contribution stays out of the shop while raw value survives '+id);
     });
   });
 

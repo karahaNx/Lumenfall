@@ -99,14 +99,14 @@ window.runUpgradeIdentityQa=async function(b,ctx,assert,parity,summaryParity){
       await new Promise(function(resolve){setTimeout(resolve,300);});
       var root=document.querySelector('#tab-'+tab),main=document.querySelector('main');
       ok(root.scrollWidth<=root.clientWidth,'no horizontal overflow '+tab+' '+text+' '+JSON.stringify(Array.from(root.querySelectorAll('*')).filter(function(el){return el.getBoundingClientRect().right>root.getBoundingClientRect().right+1;}).slice(0,8).map(function(el){return {tag:el.tagName,cls:el.className,width:el.getBoundingClientRect().width,text:el.textContent.slice(0,30)};})));
-      var legacy=root.querySelectorAll('[data-legacy-upgrade]');ok(legacy.length===(tab==='forge'?4:tab==='research'?2:3),'owned archive visible '+tab);
-      legacy.forEach(function(card){
-        ok(!card.querySelector('button'),'legacy is read-only '+card.dataset.legacyUpgrade);ok(card.textContent.includes('Future upgrades:'),'visible new owner '+card.dataset.legacyUpgrade);
+      var legacy=root.querySelectorAll('[data-legacy-upgrade]');ok(legacy.length===0,'retired read-only shop entries removed '+tab);
+      ['focus','sense','formation','resolve'].forEach(function(id){ok(!root.querySelector('[data-research="'+id+'"],[data-queue="'+id+'"]'),'retired Forge controls remain absent '+id);});
+      root.querySelectorAll('.node-card,.study-card').forEach(function(card){
         // Current card gradient is at most8% chapter color over #1b2740.
         // Test the bright endpoint rather than assuming a transparent background.
         var probe=document.createElement('span');probe.style.color='var(--chapter)';card.appendChild(probe);var chapter=rgb(getComputedStyle(probe).color);probe.remove();
         var bg=chapter.map(function(n,i){return .08*n+.92*[27,39,64][i];}),background=luminance(bg);
-        card.querySelectorAll('.name,.desc,.effect-note,.earned-effect').forEach(function(el){var foreground=luminance(rgb(getComputedStyle(el).color)),ratio=(Math.max(foreground,background)+.05)/(Math.min(foreground,background)+.05);minContrast=Math.min(minContrast,ratio);ok(ratio>=4.5,'legacy text contrast '+tab+' '+el.className+' '+ratio);});
+        card.querySelectorAll('.name,.desc,.effect-note,.earned-effect').forEach(function(el){var foreground=luminance(rgb(getComputedStyle(el).color)),ratio=(Math.max(foreground,background)+.05)/(Math.min(foreground,background)+.05);minContrast=Math.min(minContrast,ratio);ok(ratio>=4.5,'retained upgrade text contrast '+tab+' '+el.className+' '+ratio);});
       });
       var controls=Array.from(root.querySelectorAll('button')).filter(function(el){return el.getClientRects().length&&getComputedStyle(el).visibility!=='hidden';});
       controls.forEach(function(el){var r=el.getBoundingClientRect();ok(r.width>=44&&r.height>=44,'44px '+tab+' '+el.outerHTML.slice(0,120)+' '+r.width+'x'+r.height);});
@@ -117,7 +117,7 @@ window.runUpgradeIdentityQa=async function(b,ctx,assert,parity,summaryParity){
     }
   }
   ok(matchMedia('(prefers-reduced-motion: reduce)').matches===(ctx.scenario==='upgrade-identity-reduced-motion'),'requested reduced-motion');
-  return {checks:checks,records:records,minLegacyTextContrast:minContrast};
+  return {checks:checks,records:records,minRetainedTextContrast:minContrast};
 };
 window.runUpgradeIdentityPersistence=function(b,ctx,assert,phase,nextPhase,backupCode,finish){
   if(phase()===0){
