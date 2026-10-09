@@ -18,3 +18,15 @@ Status: implementation NOT STARTED. No APK or release claimed.
 main `67373faa531f0bb791c883210ee623320861e380`.
 Earlier PR90 intentionally retired duplicate shop entries but preserved historical bonuses. This new user direction supersedes that presentation/catalog choice, not the paid-value preservation contract.
 Previous PR67/#82/#88/#89/#70 contain partially overlapping draft or unmerged changes: cherry-pick only reviewed compatible logic, never merge wholesale.
+
+
+## Prism Ascension reward investigation — user report 2026-10-09
+User reports Rift 20 Ascension shows only approximately 5–6 Prisms even after buying Prism-earning upgrades. Reproduce with actual saves if available; do not assume the reported number is a proven bug.
+
+Observed current implementation: `ascendFullPrismGainForCleared` floors `2*sqrt(cleared)*prismMult()`; `prismMult()` combines Swift Ascension +4% per level and completed Ascendant Clarity +5% per level multiplicatively. Repeat Ascension uses `floor(full*0.20)` (minimum one), plus rounded new-depth increment, then caps at `full`. Current depth argument counts *cleared* Rift as `progressionDepth()-1`; distinguish displayed Rift 20 from cleared Rift 20 and prior rewarded benchmark.
+
+Required diagnosis/tests:
+- New-save first Ascend at cleared Rifts 15, 19, 20, 30, 50; repeated same-depth Ascend; new-depth progression after benchmark; live/manual/Auto-Ascend/offline parity.
+- Compare zero Swift/Clarity, Swift-only, Clarity-only, combined levels, including rounding thresholds; confirm purchased levels survive saves, resets and backups and their bonuses apply exactly once.
+- Verify UI breakdown and actual credited Prisms match the same canonical calculation; no hidden cap suppressing upgraded rewards unexpectedly.
+- Propose and implement a revised curve only after measuring balance impact on Tree purchase pacing and preserving old earned Prisms and purchase value. Never silently replace the 20% repeat policy or inflate economy without tested design rationale.
