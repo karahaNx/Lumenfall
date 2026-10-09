@@ -1,0 +1,57 @@
+name: Prism integration failure recheck
+on:
+  push:
+    branches: ['feature/prism-earning-001']
+    paths: ['.github/workflows/prism-integration-recheck.yml']
+permissions:
+  contents: read
+jobs:
+  recheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Record exact source and run all affected real scenarios twice
+        run: |
+          mkdir -p integration-recheck
+          git rev-parse HEAD > integration-recheck/head.txt
+          git ls-tree HEAD index.html tests/behavioral/upgrade-identity.js tests/behavioral/rift-guidance.cjs tests/behavioral/bridge.js > integration-recheck/blobs.txt
+          node <<'JS'
+          const fs=require('node:fs'),path=require('node:path'),cp=require('node:child_process'),crypto=require('node:crypto');
+          const out='integration-recheck';
+          for(const p of ['index.html','tests/behavioral/rift-guidance.cjs','tests/behavioral/upgrade-identity.js','tests/behavioral/bridge.js','tests/behavioral/scenarios.json']){
+            const b=fs.readFileSync(p);console.log(p,crypto.createHash('sha256').update(b).digest('hex'),b.length);
+          }
+          fs.mkdirSync('mobile/www',{recursive:true});fs.copyFileSync('index.html','mobile/www/index.html');
+          for(const p of ['fonts','branding'])fs.cpSync(p,path.join('mobile/www',p),{recursive:true});
+          const scenarios=Object.keys(require('./tests/behavioral/scenarios.json').SCENARIOS).filter(n=>n==='rift-guidance-mobile'||n.startsWith('upgrade-identity-'));
+          if(!scenarios.includes('rift-guidance-mobile')||!scenarios.some(n=>n.includes('contract')))throw Error('Required real scenario absent');
+          fs.writeFileSync(out+'/selected.json',JSON.stringify(scenarios,null,2));
+          const records=[];
+          for(let iteration=1;iteration<=2;iteration++)for(const name of scenarios){
+            const dir=path.join(out,iteration+'-'+name);fs.mkdirSync(dir,{recursive:true});
+            const r=cp.spawnSync(process.execPath,['tests/behavioral/run.cjs','--web-root','mobile/www','--scenario',name,'--raw-artifacts',dir],{encoding:'utf8',timeout:330000,maxBuffer:64*1024*1024});
+            fs.writeFileSync(dir+'/stdout.log',r.stdout||'');fs.writeFileSync(dir+'/stderr.log',r.stderr||'');
+            const row={iteration,name,status:r.status,signal:r.signal,error:r.error&&r.error.message};records.push(row);console.log(JSON.stringify(row));
+          }
+          const result={head:process.env.GITHUB_SHA,sourceSha256:crypto.createHash('sha256').update(fs.readFileSync('index.html')).digest('hex'),records,status:records.every(r=>r.status===0)?'pass':'fail'};
+          fs.writeFileSync(out+'/result.json',JSON.stringify(result,null,2));if(result.status!=='pass')process.exitCode=1;
+          JS
+      - name: Preserve exact replay files and raw failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-recheck-${{ github.run_id }}
+          retention-days: 14
+          path: |
+            integration-recheck/
+            index.html
+            tests/behavioral/upgrade-identity.js
+            tests/behavioral/rift-guidance.cjs
+            tests/behavioral/bridge.js
+            tests/behavioral/scenarios.json
