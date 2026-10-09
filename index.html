@@ -6895,7 +6895,7 @@ function renderAchievements(){
       buttonHtml = '<button type="button" data-autoascend-open>Open Ascend</button>';
     } else {
       buttonHtml = '<button data-shop="'+item.id+'" class="'+(owned?'owned':'')+'" '+((owned||state.comets<item.cost)?'disabled':'')+'>' +
-        (owned ? 'Owned' : formatNum(item.cost)+' '+costIcon('comet')) +
+        (owned ? 'Owned' : '<span style="color:'+(state.comets<item.cost?'var(--danger)':'var(--ink)')+'">'+formatNum(item.cost)+' '+costIcon('comet')+'</span>') +
       '</button>';
     }
     if(item.id==='comettrials' && owned) extra=cometTrialControls();
