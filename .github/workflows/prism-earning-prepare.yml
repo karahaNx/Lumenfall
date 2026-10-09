@@ -8,6 +8,8 @@ on:
       - 'scripts/dev/prepare-prism-earning.cjs'
       - 'scripts/dev/prism-earning-engine.js'
       - 'tests/behavioral/prism-earning.cjs'
+      - 'docs/tasks/PRISM_EARNING_001.md'
+      - 'docs/qa/prism-earning-001/**'
 
 permissions:
   contents: write
@@ -42,6 +44,7 @@ jobs:
         run: |
           set -euo pipefail
           node scripts/ci/validate_source.cjs | tee prism-validation/source.txt
+          wc -c AGENTS.md PROJECT_BOOTSTRAP.txt docs/PROJECT_STATE.md docs/tasks/PRISM_EARNING_001.md | tee prism-validation/startup-sizes.txt
           node scripts/codex/check_context.cjs --task docs/tasks/PRISM_EARNING_001.md | tee prism-validation/context.txt
       - name: Test exact candidate functions and causal defects
         shell: bash
