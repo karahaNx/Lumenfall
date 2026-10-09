@@ -69,7 +69,7 @@ window.runAscendPrismsContract=function(b,ctx,assert){
   b.uiMeasurementPause(true);
   // The regression: buying Swift level 1 at cleared16/benchmark15 used to pay 2 -> 1.
   check(16,15,0,0);check(16,15,1,0);check(16,15,0,1);
-  ok(records[0].reward===2&&records[1].reward===2&&records[2].reward===2,'bonus purchases retain the 2-Prism new-depth reward');
+  ok(records[0].reward===2&&records[1].reward===2&&records[2].reward===3,'new-depth floor retained; completed Lab reaches the protected-bonus threshold');
   [14,15,20,21,25,30,100].forEach(function(c){
     [0,c,15,219].forEach(function(benchmark){
       [[0,0],[1,0],[0,1],[1,1],[9,5],[10,10],[17,18],[18,18]].forEach(function(v){check(c,benchmark,v[0],v[1]);});
