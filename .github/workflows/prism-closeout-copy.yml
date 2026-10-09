@@ -1,0 +1,34 @@
+name: Correct Prism introduction on isolated branch
+on:
+  push:
+    branches: ['feature/prism-earning-001']
+    paths: ['.github/workflows/prism-closeout-copy.yml']
+permissions:
+  contents: write
+jobs:
+  patch:
+    if: github.repository == 'karahaNx/Lumenfall' && github.ref == 'refs/heads/feature/prism-earning-001'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Apply hash-bound text correction and verify unchanged reward behavior
+        run: |
+          set -euo pipefail
+          node scripts/dev/prism-closeout-copy.cjs
+          git diff --check
+          node scripts/ci/validate_source.cjs
+          node tests/behavioral/prism-earning.cjs
+          node tests/behavioral/prism-earning-state.cjs
+      - name: Commit scoped correction only to its development branch
+        run: |
+          set -euo pipefail
+          test "$(git ls-remote origin refs/heads/feature/prism-earning-001 | cut -f1)" = "$GITHUB_SHA"
+          git add -- index.html tests/behavioral/prism-acceptance.cjs
+          git -c user.name='Lumenfall development validation' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Explain protected upgrade bonuses in the Ascend introduction'
+          git push origin HEAD:refs/heads/feature/prism-earning-001
