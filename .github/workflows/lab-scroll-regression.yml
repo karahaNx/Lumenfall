@@ -7,7 +7,7 @@ permissions:
 jobs:
   regression:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 65
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -23,8 +23,10 @@ jobs:
       - name: Reproduce original native Rift and Lab layout regression
         run: |
           set -euo pipefail
+          mkdir -p lab-scroll-evidence
+          export LUMENFALL_QA_TRACE=1
           for scenario in rift-status-stacking-mobile rift-status-stacking-reduced-motion rift-status-reduced-motion; do
-            node tests/behavioral/run.cjs --web-root mobile/www --scenario "$scenario"
+            node tests/behavioral/run.cjs --web-root mobile/www --scenario "$scenario" --raw-artifacts lab-scroll-evidence/"$scenario"
           done
       - name: Full stateful behavioral suite
         run: node tests/behavioral/run.cjs --web-root mobile/www
@@ -35,3 +37,14 @@ jobs:
             if node tests/behavioral/run.cjs --web-root mobile/www --scenario "$scenario"; then echo "Negative control unexpectedly passed: $scenario";exit 1;fi
           done
           node scripts/ci/smoke.cjs --install-guard mobile/www/index.html
+      - name: Save focused regression traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab-scroll-regression-${{ github.run_id }}
+          retention-days: 7
+          path: |
+            lab-scroll-evidence/
+            tests/behavioral/rift-status.cjs
+            tests/behavioral/rift-status.js
+            tests/behavioral/run.cjs
