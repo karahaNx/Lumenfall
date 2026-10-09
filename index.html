@@ -6500,7 +6500,7 @@ function renderResearch(){
   // Build the authoritative previews and control states off-DOM. Restoring
   // focus on empty cards would clamp the scroll area before they reach full size.
   var prepared=document.createElement('div');
-  prepared.innerHTML='<div class="section-sub">Forge: ability charge, ability damage, cast resources and Luminous encounters.</div>'+multHtml + html+legacyUpgradeSection(legacyHtml);
+  prepared.innerHTML='<div class="section-sub">Forge: ability charge, ability damage, cast resources and Luminous encounters.</div>'+multHtml + html+'';
   RESEARCH.filter(function(node){return !node.retiredTo;}).forEach(function(node){updateResearchCard(node,prepared.querySelector('[data-forge-card="'+node.id+'"]'));});
   presentControlStates(prepared);
   replaceControlMarkup(root,prepared.innerHTML);
@@ -6642,7 +6642,7 @@ function renderLongStudies(){
     '</div>';
   });
 
-  html += legacyUpgradeSection(legacyHtml)+'<div class="section-sub">Lab: permanent damage, kill rewards, Mote yield and Study work. Slot capacity rises at Rift 40, 60 and 90. Studies share the 12-hour offline limit with rewards and automation. Study Queue begins its next paid level when a slot and currency are free.</div>';
+  html += ''+'<div class="section-sub">Lab: permanent damage, kill rewards, Mote yield and Study work. Slot capacity rises at Rift 40, 60 and 90. Studies share the 12-hour offline limit with rewards and automation. Study Queue begins its next paid level when a slot and currency are free.</div>';
   replaceControlMarkup(els['study-list'],html);
   // Beginning removes its button; keep focus on this Study's visible card action.
   if(focusedBegin && findActiveStudy(focusedBegin)){
@@ -6821,7 +6821,7 @@ function renderNodes(){
       '</button>' +
     '</div>';
   });
-  replaceControlMarkup(els['node-list'],html+legacyUpgradeSection(legacyHtml));
+  replaceControlMarkup(els['node-list'],html+'');
   els['node-list'].querySelectorAll('[data-node]').forEach(function(btn){
     btn.addEventListener('click', function(){
       var node = NODES.find(function(n){ return n.id===btn.getAttribute('data-node'); });
