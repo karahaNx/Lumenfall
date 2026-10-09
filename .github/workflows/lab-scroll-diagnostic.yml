@@ -2,7 +2,7 @@ name: Lab research scroll diagnostic
 on:
   push:
     branches: ['feature/lab-expansion-001']
-    paths: ['.github/workflows/lab-scroll-diagnostic.yml']
+    paths: ['.github/workflows/lab-scroll-diagnostic.yml', 'tests/behavioral/rift-status.cjs']
 permissions:
   contents: read
 jobs:

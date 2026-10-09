@@ -52,10 +52,22 @@ async function swipe(loc,width){
  // fractions left most of the usable surface unused on the taller profiles.
  const {delta,area}=loc,span=area.bottom-area.top-48;
  assert(span>48,'native swipe has a usable scroll surface');
- const x=width/2,y=delta<0?area.bottom-24:area.top+24,dy=Math.sign(delta)*Math.min(span,Math.max(48,Math.abs(delta)));
+ // A reverse gesture beginning only 24px below main's top can land on a
+ // button/inspection surface after a collapsed Lab speed panel. Use the
+ // interior of the actual scroll viewport for both directions, and keep the
+ // entire touch gesture inside main. Never scroll programmatically.
+ const x=width/2,upward=delta>0;
+ const y=upward ? area.top+Math.min(120,Math.floor(span/3)) : area.bottom-24;
+ const room=upward ? area.bottom-24-y : y-(area.top+24);
+ const dy=(upward?1:-1)*Math.min(room,Math.max(48,Math.abs(delta)));
+ assert(room>=48&&Math.abs(dy)>=48,'native reverse scroll has a usable interior gesture');
+ const observing=!!process.env.LUMENFALL_QA_TRACE;
+ const before=observing?await evaluate('document.querySelector("main").scrollTop'):null;
+ const touched=observing?await evaluate('(()=>{var e=document.elementFromPoint('+x+','+y+');return e?e.tagName+"."+e.className:"none";})()'):null;
  await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
  for(let i=1;i<=6;i++){await send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:y+dy*i/6}]});await new Promise(r=>setTimeout(r,16));}
  await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await new Promise(r=>setTimeout(r,70));
+ if(observing)trace({phase:'native-swipe',count:swipeCount,delta,y,dy,before,after:await evaluate('document.querySelector("main").scrollTop'),touched});
 }
 async function settleScroll(){
  // Observe natural kinetic scrolling before measuring/tapping a visible control.
