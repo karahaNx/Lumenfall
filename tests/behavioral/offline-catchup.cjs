@@ -65,6 +65,14 @@ function baselineSummary(actual,expected,label){
  assert.deepEqual(existing,expected,label);
 }
 function baselineState(actual,expected,seed,label){
+ // Additive Lab fields are independently required to be zero/OFF on this old save.
+ // Remove only those verified defaults before the unchanged full historical oracle.
+ actual=copy(actual);
+ const newIds=['labcapacity','procurement','catalysis','focusprotocol','fieldnotes','curriculum','bossledger','luminousdistill','sigilcartography','rarityappraisal','modulefabrication','ultimateanalysis','resonantefficiency','adaptivegrowth'];
+ for(const [field,value] of [['longStudyLevels',0],['studyQueue',false],['studyUseMotes',false],['studySpeedTargets',1.5]])for(const id of newIds){
+  assert.equal(actual[field][id],value,label+' exact unpurchased Lab default '+field+'.'+id);
+  delete actual[field][id];
+ }
  const ids=Object.keys(expected.longStudyLevels);
  assert.deepEqual(actual.studyUseMotes,Object.fromEntries(ids.map(id=>[id,false])),label+' legacy OFF intent');
  assert.deepEqual(actual.studySpeedTargets,Object.fromEntries(ids.map(id=>{
