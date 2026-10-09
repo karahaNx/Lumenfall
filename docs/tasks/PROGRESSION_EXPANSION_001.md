@@ -30,3 +30,26 @@ Required diagnosis/tests:
 - Compare zero Swift/Clarity, Swift-only, Clarity-only, combined levels, including rounding thresholds; confirm purchased levels survive saves, resets and backups and their bonuses apply exactly once.
 - Verify UI breakdown and actual credited Prisms match the same canonical calculation; no hidden cap suppressing upgraded rewards unexpectedly.
 - Propose and implement a revised curve only after measuring balance impact on Tree purchase pacing and preserving old earned Prisms and purchase value. Never silently replace the 20% repeat policy or inflate economy without tested design rationale.
+
+
+## Mandatory deep debugging and release gates — user instruction
+No merge, signed APK release or "fixed" claim until exhaustive reproducible evidence exists. Preserve original failures, source SHA, seed, fixture and logs. Include positive and causal-negative controls that demonstrably fail if the fix is reverted.
+
+Prism-specific matrix:
+- Actual cleared-depth vs displayed Rift off-by-one at 14/15/19/20/21/29/30/49/50/100 and every floor/ceil threshold.
+- First/repeat/new-record Ascends, benchmark below/equal/above clear, large/invalid saved benchmark and exact reward credit.
+- Swift levels 0/1/5/10/20; Clarity completed levels 0/1/5/10/20; pending/running paid Studies do not grant early effect; combined stacking, monotonicity and no unintended cap.
+- Numerical rounding boundaries, finite/safe integer behavior and old WebView60 JavaScript compatibility; independent mathematical oracle versus actual game engine.
+- Manual vs Auto-Ascend and live vs offline chronology; partial farm/push and resumed offline processing; UI preview = authoritative payout = save/recovery = restored backup.
+- Multiple consecutive Ascends, repeated load/import, interrupted write, recovery slot fallback, historical schema migrations and malformed records.
+- Economy/pacing analysis across representative early/mid/endgame saves, compare actual upgrade ROI and Prism costs; do not tune solely for Rift20.
+
+Progression redesign matrix:
+- For every new Lab/Forge/Tree/Comet row: unique effect and owner, currency, unlock, costs/growth/caps, zero/one/max/max+1, single/bulk/queue, affordability, rollback and exact debit, persistence and Ascend retention.
+- Legacy paid levels and ongoing Studies, no duplicate grants/refunds, idempotent migration and compatibility with prior released APK save formats.
+- Red only on insufficient currency cost, normal otherwise, no shortage text; verify each individual currency independently, at 320/390/430px, 200% text, touch/keyboard/focus/contrast and reduced motion.
+- Retired Comet purchases and previously earned Deeds require explicit migration/entitlement mapping; Auto-Ascend must not regress.
+- Full behavioral suite, all negative controls, source/tooling/context checks, browser startup, required GitHub PR CI, then signed APK identity/version/assets, installed upgrade and old-save verification.
+- Separate emulator, exact WebView60, physical device and TalkBack evidence; never imply one proves another.
+
+Log each failed test with root cause, exact correction and rerun. Do not weaken an assertion or skip a gate merely to achieve green CI.
