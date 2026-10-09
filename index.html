@@ -6817,7 +6817,7 @@ function renderNodes(){
         '<div class="effect-note">From this node only; other upgrades contribute separately.</div>' +
       '</div>' +
       '<button class="buy-btn" data-node="'+node.id+'" '+(plan.affordable?'':'disabled')+' aria-label="'+(capped?node.name+' maximum level reached':unavailable?node.name+' price unavailable':'Buy '+node.name+' level '+(level+1)+' for '+formatNum(plan.cost)+' Prisms')+'" style="min-width:78px;">' +
-        (capped?'<span class="label">Maxed</span>':unavailable&&!priced?'<span class="label">Unavailable</span>':'<span class="cost mono">'+costIcon('prism')+formatNum(plan.cost)+'</span><span class="label">'+(unavailable?'Unavailable':'Prisms')+'</span>') +
+        (capped?'<span class="label">Maxed</span>':unavailable&&!priced?'<span class="label">Unavailable</span>':'<span class="cost mono" style="color:'+(state.prisms<plan.cost?'var(--danger)':'var(--ink)')+'">'+costIcon('prism')+formatNum(plan.cost)+'</span><span class="label">'+(unavailable?'Unavailable':'Prisms')+'</span>') +
       '</button>' +
     '</div>';
   });
