@@ -51,15 +51,18 @@ jobs:
         run: |
           set -euo pipefail
           node tests/behavioral/prism-earning.cjs --source index.html | tee prism-validation/numerical.json
-      - name: Commit only to the isolated development branch
+      - name: Commit only product changes to the isolated development branch
         shell: bash
         run: |
           set -euo pipefail
           test "$GITHUB_REF" = 'refs/heads/feature/prism-earning-001'
           remote="$(git ls-remote origin refs/heads/feature/prism-earning-001 | cut -f1)"
           test "$remote" = "$GITHUB_SHA"
-          rm scripts/dev/prepare-prism-earning.cjs scripts/dev/prism-earning-engine.js .github/workflows/prism-earning-prepare.yml
-          git add -- index.html AGENTS.md tests/behavioral/ascend-prisms.js tests/behavioral/run.cjs .github/workflows/pre-merge-validation.yml scripts/dev/prepare-prism-earning.cjs scripts/dev/prism-earning-engine.js .github/workflows/prism-earning-prepare.yml
+          # This bot has no workflow-write permission. The connected user API
+          # will add the numerical CI gate and remove this bootstrap afterward.
+          git restore --source=HEAD -- .github/workflows/pre-merge-validation.yml
+          rm scripts/dev/prepare-prism-earning.cjs scripts/dev/prism-earning-engine.js
+          git add -- index.html AGENTS.md tests/behavioral/ascend-prisms.js tests/behavioral/run.cjs scripts/dev/prepare-prism-earning.cjs scripts/dev/prism-earning-engine.js
           git diff --cached --check
           git -c user.name='Lumenfall development validation' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Implement protected Prism earnings and exact rounding with regression coverage'
           git push origin HEAD:refs/heads/feature/prism-earning-001
