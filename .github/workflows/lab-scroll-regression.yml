@@ -1,0 +1,37 @@
+name: Lab scroll regression validation
+on:
+  push:
+    branches: ['fix/lab-scroll-regression-104']
+permissions:
+  contents: read
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate source and preparation
+        run: |
+          node scripts/ci/validate_source.cjs
+          mkdir -p mobile/www/fonts mobile/www/branding
+          cp index.html mobile/www/index.html
+          cp -r fonts/. mobile/www/fonts/
+          cp -r branding/. mobile/www/branding/
+      - name: Reproduce original native Rift and Lab layout regression
+        run: |
+          set -euo pipefail
+          for scenario in rift-status-stacking-mobile rift-status-stacking-reduced-motion rift-status-reduced-motion; do
+            node tests/behavioral/run.cjs --web-root mobile/www --scenario "$scenario"
+          done
+      - name: Full stateful behavioral suite
+        run: node tests/behavioral/run.cjs --web-root mobile/www
+      - name: All required negative controls and guarded startup
+        run: |
+          set -euo pipefail
+          for scenario in self-test-bad-assertion self-test-uncaught-error self-test-unhandled-rejection self-test-parity-regression self-test-chronology-regression self-test-wisp-formula-regression self-test-wisp-pacing-regression self-test-endgame-currency-regression self-test-wisp-role-regression self-test-p1-05-selected self-test-p1-05-focus-return self-test-lifecycle-duplicate self-test-save-backup-placement self-test-save-backup-confirmation self-test-upgrade-identity-buy self-test-upgrade-identity-value self-test-upgrade-identity-clock self-test-ascend-prisms-tree self-test-ascend-prisms-lab self-test-ascend-prisms-payout self-test-ascend-prisms-repeat self-test-ascend-prisms-rounding; do
+            if node tests/behavioral/run.cjs --web-root mobile/www --scenario "$scenario"; then echo "Negative control unexpectedly passed: $scenario";exit 1;fi
+          done
+          node scripts/ci/smoke.cjs --install-guard mobile/www/index.html
