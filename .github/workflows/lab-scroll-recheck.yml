@@ -1,0 +1,85 @@
+name: Lab native scroll regression
+on:
+  push:
+    branches: ['fix/lab-scroll-104']
+    paths: ['.github/workflows/lab-scroll-recheck.yml']
+permissions:
+  contents: write
+jobs:
+  recheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Capture baseline gesture behavior and prepare bounded precision gestures
+        run: |
+          mkdir -p lab-scroll-evidence mobile/www
+          cp index.html mobile/www/index.html
+          cp -r fonts branding mobile/www/
+          node <<'JS'
+          const fs=require('node:fs'),cp=require('node:child_process'),crypto=require('node:crypto'),assert=require('node:assert/strict');
+          const hash=s=>crypto.createHash('sha256').update(s).digest('hex');
+          const file='tests/behavioral/rift-status.cjs',original=fs.readFileSync(file,'utf8');
+          assert.equal(hash(original),'df5a0157ede31767f7bdaf6b59d28c1cecefa5b9c3981669d6c7247069809ab1');
+          assert.equal(hash(fs.readFileSync('index.html')),'498e92acfb799ce814d1035c8a58c9b47b1e586f48e08d4d9dcad4673bfef1d4');
+          fs.writeFileSync('lab-scroll-evidence/original-driver.cjs',original);
+          const env={...process.env,LUMENFALL_QA_TRACE:'1'};
+          const r=cp.spawnSync(process.execPath,['tests/behavioral/run.cjs','--web-root','mobile/www','--scenario','rift-status-stacking-reduced-motion','--raw-artifacts','lab-scroll-evidence/baseline'],{env,encoding:'utf8',timeout:145000,maxBuffer:64*1024*1024});
+          fs.writeFileSync('lab-scroll-evidence/baseline.log',r.stdout||'');fs.writeFileSync('lab-scroll-evidence/baseline-stderr.log',r.stderr||'');
+          fs.writeFileSync('lab-scroll-evidence/baseline.json',JSON.stringify({status:r.status,error:r.error&&r.error.message,signal:r.signal}));
+          let s=original;
+          function one(a,b){assert.equal(s.split(a).length,2,'exact driver patch');s=s.replace(a,()=>b);}
+          one(" const x=width/2,y=delta<0?area.bottom-24:area.top+24,dy=Math.sign(delta)*Math.min(span,Math.max(48,Math.abs(delta)));",` // Long lists can leave the last enabled control well above the list bottom.
+           // Near the target, drag gently and hold before release to prevent a fling
+           // past it. Far away retain the full native gesture. Never set scrollTop.
+           const precise=Math.abs(delta)<=span*1.5;
+           const distance=precise?Math.min(span,Math.max(18,Math.abs(delta)*0.75)):span;
+           const x=width/2,y=delta<0?area.bottom-24:area.top+24,dy=Math.sign(delta)*distance;
+           const steps=precise?8:6;
+           trace({phase:'swipe',delta,precise,distance,area});`);
+          one(" for(let i=1;i<=6;i++){await send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:y+dy*i/6}]});await new Promise(r=>setTimeout(r,16));}"," for(let i=1;i<=steps;i++){await send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:y+dy*i/steps}]});await new Promise(r=>setTimeout(r,precise?24:16));}\n if(precise)await new Promise(r=>setTimeout(r,180));");
+          one(" await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await new Promise(r=>setTimeout(r,70));"," await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});\n await settleScroll();");
+          fs.writeFileSync(file,s);fs.writeFileSync('lab-scroll-evidence/source-sha256.txt',hash(fs.readFileSync('index.html'))+'\n');
+          fs.writeFileSync('lab-scroll-evidence/driver-sha256.txt',hash(s)+'\n');
+          JS
+          git diff --check
+          git diff -- tests/behavioral/rift-status.cjs > lab-scroll-evidence/driver.patch
+      - name: Require all existing native scroll assertions on corrected gestures
+        run: |
+          node <<'JS'
+          const fs=require('node:fs'),cp=require('node:child_process');
+          const names=['rift-status-stacking-reduced-motion','rift-status-stacking-mobile','rift-status-reduced-motion','rift-status-mobile'];
+          const records=[];
+          for(const name of names){
+            const t=Date.now(),dir='lab-scroll-evidence/'+name;fs.mkdirSync(dir,{recursive:true});
+            const r=cp.spawnSync(process.execPath,['tests/behavioral/run.cjs','--web-root','mobile/www','--scenario',name,'--raw-artifacts',dir],{env:{...process.env,LUMENFALL_QA_TRACE:'1',LUMENFALL_QA_EVIDENCE_DIR:dir},encoding:'utf8',timeout:145000,maxBuffer:64*1024*1024});
+            fs.writeFileSync(dir+'/stdout.log',r.stdout||'');fs.writeFileSync(dir+'/stderr.log',r.stderr||'');
+            const row={name,status:r.status,signal:r.signal,error:r.error&&r.error.message,ms:Date.now()-t};records.push(row);console.log(JSON.stringify(row));
+          }
+          fs.writeFileSync('lab-scroll-evidence/result.json',JSON.stringify(records,null,2));
+          if(records.some(r=>r.status!==0))process.exitCode=1;
+          JS
+      - name: Save tested driver on isolated branch only
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = refs/heads/fix/lab-scroll-104
+          test "$(git ls-remote origin refs/heads/fix/lab-scroll-104 | cut -f1)" = "$GITHUB_SHA"
+          git add -- tests/behavioral/rift-status.cjs
+          git -c user.name='Lumenfall validation' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Use settled precise native gestures for expanded Lab scroll acceptance'
+          git push origin HEAD:refs/heads/fix/lab-scroll-104
+          git rev-parse HEAD > lab-scroll-evidence/tested-commit.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lab-scroll-${{ github.run_id }}
+          retention-days: 14
+          path: |
+            lab-scroll-evidence/
+            tests/behavioral/rift-status.cjs
+            tests/behavioral/rift-status.js
+            index.html
