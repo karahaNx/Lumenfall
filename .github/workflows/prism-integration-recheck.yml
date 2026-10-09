@@ -8,7 +8,7 @@ permissions:
 jobs:
   recheck:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
@@ -16,21 +16,22 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Record exact source and run all affected real scenarios twice
+      - name: Reproduce full-suite failures on exact checked-out bytes
         run: |
           mkdir -p integration-recheck
           git rev-parse HEAD > integration-recheck/head.txt
-          git ls-tree HEAD index.html tests/behavioral/upgrade-identity.js tests/behavioral/rift-guidance.cjs tests/behavioral/bridge.js > integration-recheck/blobs.txt
+          git ls-tree -r HEAD index.html tests/behavioral scripts/ci scripts/lib > integration-recheck/blobs.txt
           node <<'JS'
           const fs=require('node:fs'),path=require('node:path'),cp=require('node:child_process'),crypto=require('node:crypto');
-          const out='integration-recheck';
-          for(const p of ['index.html','tests/behavioral/rift-guidance.cjs','tests/behavioral/upgrade-identity.js','tests/behavioral/bridge.js','tests/behavioral/scenarios.json']){
-            const b=fs.readFileSync(p);console.log(p,crypto.createHash('sha256').update(b).digest('hex'),b.length);
-          }
+          const out='integration-recheck',sha=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+          const files=['index.html','tests/behavioral/run.cjs','tests/behavioral/runner.js','tests/behavioral/upgrade-clarity.js','tests/behavioral/tree-purchases.js','tests/behavioral/upgrade-identity.js','tests/behavioral/bridge.js','tests/behavioral/scenarios.json'];
+          fs.writeFileSync(out+'/source-manifest.json',JSON.stringify(Object.fromEntries(files.map(p=>[p,sha(p)])),null,2));
           fs.mkdirSync('mobile/www',{recursive:true});fs.copyFileSync('index.html','mobile/www/index.html');
           for(const p of ['fonts','branding'])fs.cpSync(p,path.join('mobile/www',p),{recursive:true});
-          const scenarios=Object.keys(require('./tests/behavioral/scenarios.json').SCENARIOS).filter(n=>n==='rift-guidance-mobile'||n.startsWith('upgrade-identity-'));
-          if(!scenarios.includes('rift-guidance-mobile')||!scenarios.some(n=>n.includes('contract')))throw Error('Required real scenario absent');
+          const available=Object.keys(require('./tests/behavioral/scenarios.json').SCENARIOS);
+          const required=['p2-02a-core-qol','upgrade-effects-and-deeds','tree-purchase-ui','tree-purchase-ui-reduced-motion','upgrade-identity-ui','upgrade-identity-reduced-motion'];
+          for(const n of required)if(!available.includes(n))throw Error('Required real scenario absent: '+n);
+          const scenarios=[...new Set([...required,...available.filter(n=>n==='rift-guidance-mobile'||n.startsWith('upgrade-identity-'))])];
           fs.writeFileSync(out+'/selected.json',JSON.stringify(scenarios,null,2));
           const records=[];
           for(let iteration=1;iteration<=2;iteration++)for(const name of scenarios){
@@ -38,8 +39,9 @@ jobs:
             const r=cp.spawnSync(process.execPath,['tests/behavioral/run.cjs','--web-root','mobile/www','--scenario',name,'--raw-artifacts',dir],{encoding:'utf8',timeout:330000,maxBuffer:64*1024*1024});
             fs.writeFileSync(dir+'/stdout.log',r.stdout||'');fs.writeFileSync(dir+'/stderr.log',r.stderr||'');
             const row={iteration,name,status:r.status,signal:r.signal,error:r.error&&r.error.message};records.push(row);console.log(JSON.stringify(row));
+            if(r.status!==0)console.log((r.stdout||'').slice(-16000)+'\n'+(r.stderr||'').slice(-3000));
           }
-          const result={head:process.env.GITHUB_SHA,sourceSha256:crypto.createHash('sha256').update(fs.readFileSync('index.html')).digest('hex'),records,status:records.every(r=>r.status===0)?'pass':'fail'};
+          const result={head:process.env.GITHUB_SHA,sourceSha256:sha('index.html'),records,status:records.every(r=>r.status===0)?'pass':'fail'};
           fs.writeFileSync(out+'/result.json',JSON.stringify(result,null,2));if(result.status!=='pass')process.exitCode=1;
           JS
       - name: Preserve exact replay files and raw failures
@@ -51,7 +53,11 @@ jobs:
           path: |
             integration-recheck/
             index.html
-            tests/behavioral/upgrade-identity.js
-            tests/behavioral/rift-guidance.cjs
-            tests/behavioral/bridge.js
-            tests/behavioral/scenarios.json
+            tests/behavioral/
+            scripts/lib/
+            scripts/ci/
+            scripts/serve.cjs
+            fonts/
+            branding/
+            docs/qa/offline-autoascend-2026-10-07/device_backup.json
+            docs/recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/main-index.html
