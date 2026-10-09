@@ -1,0 +1,68 @@
+name: Lab test adapter verification
+on:
+  push:
+    branches: ['feature/lab-expansion-001']
+    paths: ['.github/workflows/lab-test-adapters.yml']
+permissions:
+  contents: write
+jobs:
+  adapters:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Apply exact test-only corrections
+        run: |
+          mkdir -p lab-adapters
+          node <<'JS'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),crypto=require('node:crypto'),cp=require('node:child_process');
+          const hash=s=>crypto.createHash('sha256').update(s).digest('hex');
+          function one(s,a,b){assert.equal(s.split(a).length,2,a);return s.replace(a,()=>b);}
+          const ui='tests/behavioral/lab-expansion-ui.cjs',offline='tests/behavioral/offline-catchup.cjs';
+          let u=fs.readFileSync(ui,'utf8'),o=fs.readFileSync(offline,'utf8');
+          assert.equal(hash(u),'af65421d72fa247a3a1f5ae35506eccab75dae0eaac41b8997ab8f7b30e7918f');assert.equal(hash(o),'b0ef93a9c3087a8c0cf07fdcf222a1b87742b9e2aa97c00dca766eda80d7930a');
+          u=one(u,"await send('Page.reload');await ready();","await ev('window.prismQa=null');await send('Page.reload');await ready();");
+          o=one(o,'function baselineState(actual,expected,seed,label){',`function baselineState(actual,expected,seed,label){
+           // Additive Lab fields are independently required to be zero/OFF on this old save.
+           // Remove only those verified defaults before the unchanged full historical oracle.
+           actual=copy(actual);
+           const newIds=['labcapacity','procurement','catalysis','focusprotocol','fieldnotes','curriculum','bossledger','luminousdistill','sigilcartography','rarityappraisal','modulefabrication','ultimateanalysis','resonantefficiency','adaptivegrowth'];
+           for(const [field,value] of [['longStudyLevels',0],['studyQueue',false],['studyUseMotes',false],['studySpeedTargets',1.5]])for(const id of newIds){
+            assert.equal(actual[field][id],value,label+' exact unpurchased Lab default '+field+'.'+id);
+            delete actual[field][id];
+           }`);
+          assert.equal(hash(u),'70e61e93a83bd4a340ae4e707a45067a9f36434d7bdd6da78c5f62a57084b179');assert.equal(hash(o),'ca974685ca0330e4a18f6b55ea7867c2eb55e7778869b32710e99a4b319c52b9');
+          fs.writeFileSync(ui,u);fs.writeFileSync(offline,o);console.log('Verified test-only replacement digests; product unchanged.');
+          JS
+          git diff --check
+          node tests/behavioral/lab-expansion.cjs index.html --negative > lab-adapters/core.json
+      - name: Commit exact test fixes without changing game
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = refs/heads/feature/lab-expansion-001
+          test "$(git ls-remote origin refs/heads/feature/lab-expansion-001 | cut -f1)" = "$GITHUB_SHA"
+          git add -- tests/behavioral/lab-expansion-ui.cjs tests/behavioral/offline-catchup.cjs
+          git -c user.name='Lumenfall development validation' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Wait for new browser document and assert all additive unpurchased Lab defaults'
+          git push origin HEAD:refs/heads/feature/lab-expansion-001
+          git rev-parse HEAD > lab-adapters/commit.txt
+      - name: Recheck real browser purchases and saves
+        run: node tests/behavioral/lab-expansion-ui.cjs index.html lab-adapters/mobile
+      - name: Full historical offline comparison with explicit new zero defaults
+        if: always()
+        run: |
+          set -euo pipefail
+          node tests/behavioral/offline-catchup.cjs | tee lab-adapters/offline.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lab-adapters-${{ github.run_id }}
+          retention-days: 14
+          path: |
+            lab-adapters/
+            tests/behavioral/lab-expansion-ui.cjs
+            tests/behavioral/offline-catchup.cjs
