@@ -2767,7 +2767,7 @@
     <section class="tab-panel" id="tab-ascend">
       <div class="card ascend-summary">
         <header class="chapter-head"><div class="chapter-copy"><span class="chapter-kicker">A stronger beginning</span><h2>Ascend the Rift</h2></div><svg class="chapter-art" viewBox="0 0 180 110" aria-hidden="true" focusable="false" style="color:var(--chapter)"><use href="#chapter-ascend"/><g class="scene-sparks" fill="currentColor"><path d="m60 21 2 4 4 2-4 2-2 4-2-4-4-2 4-2Z"/><circle cx="150" cy="24" r="1.5"/><circle cx="163" cy="74" r="1"/><circle cx="53" cy="67" r="1.5"/></g></svg></header>
-        <div style="font-size:.8rem;color:var(--ink-dim);width:100%;text-align:left;">Your first Ascend sets a Prism reward benchmark. Repeating at the same depth earns a 20% reserve reward; pushing beyond the benchmark adds the newly earned depth bonus. Ascending still resets the current run while permanent progression stays.</div>
+        <div style="font-size:.8rem;color:var(--ink-dim);width:100%;text-align:left;">Each Ascend earns Prisms. Repeat runs keep 20% of the base reward plus the full earned upgrade bonus. Clearing beyond your best rewarded Rift adds a new-depth bonus. The current run resets; permanent progression stays.</div>
         <div class="ascend-breakdown">
           <div class="ab-col ab-reset"><div class="ab-head">Resets</div><ul><li>Rift depth</li><li>Wisp levels</li><li>Current Lumen</li></ul></div>
           <div class="ab-col ab-keep"><div class="ab-head">Keeps</div><ul><li>Wisp Rarity, Modules &amp; Ultimates</li><li>Rift Forge upgrades</li><li>Research Lab progress</li><li>Prisms &amp; this tree</li><li>Comets, Motes, Sigils &amp; Deeds</li></ul></div>
@@ -4135,6 +4135,22 @@ function costIcon(kind){
   return '<span class="shape '+m.shape+' cost-icon" role="img" aria-label="'+m.name+'" style="background:'+m.color+'"></span>';
 }
 
+// Presentation only: each displayed currency reads its own wallet, not button.disabled.
+function purchasePriceColor(kind,amount){
+  var key={lumen:'lumen',shard:'shards',prism:'prisms',comet:'comets'}[kind];
+  return key && Number.isFinite(amount) && state[key]<amount ? 'var(--danger)' : 'var(--ink)';
+}
+function purchasePriceMarkup(kind,amount,classes,numberFirst){
+  return '<span'+(classes?' class="'+classes+'"':'')+' data-price-currency="'+kind+'" data-price-amount="'+amount+'" style="color:'+purchasePriceColor(kind,amount)+'">'+
+    (numberFirst?formatNum(amount)+' '+costIcon(kind):costIcon(kind)+formatNum(amount))+'</span>';
+}
+function updatePurchasePriceColors(root){
+  root.querySelectorAll('[data-price-currency]').forEach(function(el){
+    var color=purchasePriceColor(el.getAttribute('data-price-currency'),Number(el.getAttribute('data-price-amount')));
+    if(el.style.color!==color) el.style.color=color;
+  });
+}
+
 function isBoss(depth){ return depth>0 && depth%10===0; }
 
 var BOSS_TRAITS = [
@@ -5319,8 +5335,8 @@ function updateResearchCard(node,card){
   if(preview.textContent!==text) preview.textContent=text;
   var label=p.reason==='locked'?'Reach Rift '+node.unlockDepth:p.maxed?'Maxed':p.buyCount?'Upgrade ×'+p.buyCount:'Upgrade';
   var displayed=p.buyCount?p.cost:p.needed;
-  var html=(node.lumenBase && Number.isFinite(displayed.lumen)?'<span class="cost mono" style="color:'+(state.lumen<displayed.lumen?'var(--danger)':'var(--ink)')+'">'+costIcon('lumen')+formatNum(displayed.lumen)+'</span>':'')+
-    (node.shardBase && Number.isFinite(displayed.shard)?'<span class="cost mono" style="color:'+(state.shards<displayed.shard?'var(--danger)':'var(--ink)')+'">'+costIcon('shard')+formatNum(displayed.shard)+'</span>':'')+'<span class="label">'+label+'</span>';
+  var html=(node.lumenBase && Number.isFinite(displayed.lumen)?purchasePriceMarkup('lumen',displayed.lumen,'cost mono'):'')+
+    (node.shardBase && Number.isFinite(displayed.shard)?purchasePriceMarkup('shard',displayed.shard,'cost mono'):'')+'<span class="label">'+label+'</span>';
   if(btn.dataset.planHtml!==html){btn.innerHTML=html;btn.dataset.planHtml=html;}
   btn.disabled=!p.affordable;
 }
@@ -5518,16 +5534,121 @@ function toggleAutoAscend(){
   if(state.autoAscendEnabled) checkAutoAscend();
 }
 
+// PRISM_EARNING_001: exact integer threshold checks on the WebView 60 runtime.
+// Base-32768 limbs keep every multiply/carry below 2^31. No runtime BigInt.
+function prismIntegerWords(value){
+  var words=[];
+  do {words.push(value%32768);value=Math.floor(value/32768);} while(value>0);
+  return words;
+}
+function prismMultiplyWords(a,b){
+  var out=[],i,j;
+  for(i=0;i<a.length+b.length;i++) out.push(0);
+  for(i=0;i<a.length;i++){
+    var carry=0;
+    for(j=0;j<b.length;j++){
+      var part=out[i+j]+a[i]*b[j]+carry;
+      out[i+j]=part%32768;carry=Math.floor(part/32768);
+    }
+    out[i+b.length]=carry;
+  }
+  while(out.length>1 && out[out.length-1]===0) out.pop();
+  return out;
+}
+function prismCompareWords(a,b){
+  if(a.length!==b.length) return a.length<b.length?-1:1;
+  for(var i=a.length-1;i>=0;i--) if(a[i]!==b[i]) return a[i]<b[i]?-1:1;
+  return 0;
+}
+function prismAddWords(a,b){
+  var out=[],carry=0;
+  for(var i=0;i<Math.max(a.length,b.length)||carry;i++){
+    var n=(a[i]||0)+(b[i]||0)+carry;out.push(n%32768);carry=Math.floor(n/32768);
+  }
+  return out;
+}
+function prismSubtractWords(a,b){
+  var out=[],borrow=0;
+  for(var i=0;i<a.length;i++){
+    var n=a[i]-(b[i]||0)-borrow;borrow=n<0?1:0;out.push(n+borrow*32768);
+  }
+  while(out.length>1 && out[out.length-1]===0) out.pop();
+  return out;
+}
+function prismDepthDifferenceCeil(cleared,benchmark,numerator,approximate){
+  var candidate=Math.ceil(approximate);
+  if(!Number.isSafeInteger(cleared)||!Number.isSafeInteger(benchmark)||benchmark<0||
+      !Number.isSafeInteger(numerator)||numerator<0||!Number.isSafeInteger(candidate)||candidate<0) return candidate;
+  var c=prismIntegerWords(cleared),b=prismIntegerWords(benchmark),p=prismIntegerWords(numerator);
+  var pp=prismMultiplyWords(p,p),denominator=prismIntegerWords(250000);
+  var upper=prismMultiplyWords(prismIntegerWords(4),prismMultiplyWords(pp,prismAddWords(c,b)));
+  var right=prismMultiplyWords(prismIntegerWords(64),
+    prismMultiplyWords(prismMultiplyWords(pp,pp),prismMultiplyWords(c,b)));
+  function covers(value){
+    var n=prismIntegerWords(value),square=prismMultiplyWords(prismMultiplyWords(n,n),denominator);
+    if(prismCompareWords(square,upper)>=0) return true;
+    var rest=prismSubtractWords(upper,square);
+    return prismCompareWords(prismMultiplyWords(rest,rest),right)<=0;
+  }
+  // Sign-check before squaring prevents false roots in the difference test.
+  if(covers(candidate) && (candidate===0 || !covers(candidate-1))) return candidate;
+  if(!covers(Number.MAX_SAFE_INTEGER)) return candidate;
+  var low=0,high=Number.MAX_SAFE_INTEGER;
+  while(low<high){
+    var middle=low+Math.floor((high-low)/2);
+    if(covers(middle)) high=middle;else low=middle+1;
+  }
+  return low;
+}
+function prismBonusNumerator(){
+  // +4% Tree and +5% completed Lab compose as (25+t)(20+l)/500.
+  var tree = nodeLevel('swift');
+  var lab = longStudyLevel('prismstudy');
+  return (25+tree)*(20+lab);
+}
+function prismCurveFloor(cleared,numerator,approximate){
+  var candidate=Math.floor(approximate);
+  // Keep the legacy Number fallback outside the safe-integer contract.
+  // This is not a new gameplay cap or a claim of exact oversized currencies.
+  if(!Number.isSafeInteger(cleared) || cleared<0 || !Number.isSafeInteger(numerator) || numerator<0 ||
+      !Number.isSafeInteger(prismBonusNumerator()) || !Number.isSafeInteger(candidate) || candidate<0) return candidate;
+  var p=prismIntegerWords(numerator),denominator=prismIntegerWords(250000);
+  var target=prismMultiplyWords(prismIntegerWords(4),
+    prismMultiplyWords(prismIntegerWords(cleared),prismMultiplyWords(p,p)));
+  function compare(value){
+    var n=prismIntegerWords(value);
+    return prismCompareWords(prismMultiplyWords(prismMultiplyWords(n,n),denominator),target);
+  }
+  // n <= 2*sqrt(c)*p/500 iff n^2*500^2 <= 4*c*p^2.
+  // Exact comparisons, not an arbitrary epsilon, decide integer boundaries.
+  if(compare(candidate)<=0 && compare(candidate+1)>0) return candidate;
+  if(compare(Number.MAX_SAFE_INTEGER+1)<=0) return candidate;
+  var low=0,high=Number.MAX_SAFE_INTEGER;
+  while(low<high){
+    var middle=low+Math.ceil((high-low)/2);
+    if(compare(middle)<=0) low=middle;else high=middle-1;
+  }
+  return low;
+}
 function ascendFullPrismGainForCleared(cleared){
   cleared = Math.max(0,Math.floor(cleared||0));
-  return cleared>=15 ? Math.max(1,Math.floor(2*Math.sqrt(cleared)*prismMult())) : 0;
+  return cleared>=15 ? Math.max(1,prismCurveFloor(cleared,prismBonusNumerator(),2*Math.sqrt(cleared)*prismMult())) : 0;
+}
+function ascendRepeatPrismGainForCleared(cleared){
+  cleared = Math.max(0,Math.floor(cleared||0));
+  if(cleared<15) return 0;
+  // Discount the unupgraded base, never the earned upgrade portion.
+  // 20% of base + 100% of the combined upgrade bonus, rounded down once.
+  var numerator=prismBonusNumerator()-500*(1-ASCEND_REPEAT_REWARD_RATE);
+  var factor=ASCEND_REPEAT_REWARD_RATE+Math.max(0,prismMult()-1);
+  return Math.max(1,prismCurveFloor(cleared,numerator,2*Math.sqrt(cleared)*factor));
 }
 // Approved F05 policy: round the unrounded new-depth difference up once.
 // Rationalize sqrt(c)-sqrt(b) to preserve small positive depth increments.
 function ascendProgressPrismBonusForCleared(cleared,benchmark){
   if(cleared<=benchmark) return 0;
   var rawDifference = 2*((cleared-benchmark)/(Math.sqrt(cleared)+Math.sqrt(benchmark)));
-  return Math.ceil(rawDifference*prismMult());
+  return prismDepthDifferenceCeil(cleared,benchmark,prismBonusNumerator(),rawDifference*prismMult());
 }
 function ascendPrismBreakdown(depth){
   var cleared = Math.max(0,(depth===undefined ? progressionDepth() : depth)-1);
@@ -5539,13 +5660,7 @@ function ascendPrismBreakdown(depth){
   if(benchmark<=0){
     return {gain:full,full:full,reserve:0,progressBonus:full,cleared:cleared,benchmark:0};
   }
-
-  // A wall must remain a viable prestige path, but repeating the same shallow
-  // reset cannot keep paying the full curve forever. Repeats retain 20% of the
-  // current full reward (minimum 1 Prism). Pushing beyond the best previously
-  // rewarded cleared Rift adds only the newly unlocked part of the same Prism
-  // curve. No new currency/layer is introduced.
-  var reserve = Math.max(1,Math.floor(full*ASCEND_REPEAT_REWARD_RATE));
+  var reserve = ascendRepeatPrismGainForCleared(cleared);
   var progressBonus = ascendProgressPrismBonusForCleared(cleared,benchmark);
   var gain = Math.max(1,Math.min(full,reserve+progressBonus));
   return {
@@ -6500,7 +6615,7 @@ function renderResearch(){
   // Build the authoritative previews and control states off-DOM. Restoring
   // focus on empty cards would clamp the scroll area before they reach full size.
   var prepared=document.createElement('div');
-  prepared.innerHTML='<div class="section-sub">Forge: ability charge, ability damage, cast resources and Luminous encounters.</div>'+multHtml + html+'';
+  prepared.innerHTML='<div class="section-sub">Forge: ability charge, ability damage, cast resources and Luminous encounters.</div>'+multHtml + html;
   RESEARCH.filter(function(node){return !node.retiredTo;}).forEach(function(node){updateResearchCard(node,prepared.querySelector('[data-forge-card="'+node.id+'"]'));});
   presentControlStates(prepared);
   replaceControlMarkup(root,prepared.innerHTML);
@@ -6574,6 +6689,7 @@ function closeStudySpeed(id){
   if(opener) opener.focus();
 }
 function renderLongStudies(){
+  var focusedStudyChoices=document.activeElement && document.activeElement.id==='study-choices';
   var focusedCard=document.activeElement && document.activeElement.closest('[data-running-study],[data-study-card]');
   var focusedStudy=focusedCard && (focusedCard.getAttribute('data-running-study') || focusedCard.getAttribute('data-study-card'));
   var focusedLegacy=document.activeElement && document.activeElement.getAttribute('data-legacy-upgrade');
@@ -6636,14 +6752,18 @@ function renderLongStudies(){
       projectEarnedMarkup(lnode.id) +
       '<div class="effect-note">'+(plan.maxed?'Effect cap reached. Queue '+(queueOn?'ON':'OFF')+' retained; no new starts.':
         'On completion: '+projectEarnedEffect(lnode.id,level+1)+'.')+'</div>' +
-      (plan.maxed?'':'<div class="study-meta" id="study-price-'+lnode.id+'">Takes '+fmtStudyDuration(dur)+' &middot; '+'<span style="color:'+(state.lumen<cost.lumen?'var(--danger)':'var(--ink)')+'">'+costIcon('lumen')+formatNum(cost.lumen)+'</span> <span style="color:'+(state.shards<cost.shard?'var(--danger)':'var(--ink)')+'">'+costIcon('shard')+formatNum(cost.shard)+'</span>'+'</div>') +
+      (plan.maxed?'':'<div class="study-meta" id="study-price-'+lnode.id+'">Takes '+fmtStudyDuration(dur)+' &middot; '+purchasePriceMarkup('lumen',cost.lumen)+' '+purchasePriceMarkup('shard',cost.shard)+'</div>') +
       '<button class="mini-btn" data-study="'+lnode.id+'" '+(plan.maxed?'':'aria-describedby="study-price-'+lnode.id+'" ')+(plan.affordable?'':'disabled')+' style="margin-top:10px;width:100%;">'+(plan.maxed?'Maxed':plan.reason==='unavailable'?'Unavailable':openSlots>0?'Begin Study':'No open slots')+'</button>' +
       studySpeedMarkup(lnode,null,plan.maxed) +
     '</div>';
   });
 
-  html += ''+'<div class="section-sub">Lab: permanent damage, kill rewards, Mote yield and Study work. Slot capacity rises at Rift 40, 60 and 90. Studies share the 12-hour offline limit with rewards and automation. Study Queue begins its next paid level when a slot and currency are free.</div>';
+  html += '<div class="section-sub">Lab: permanent damage, kill rewards, Mote yield and Study work. Slot capacity rises at Rift 40, 60 and 90. Studies share the 12-hour offline limit with rewards and automation. Study Queue begins its next paid level when a slot and currency are free.</div>';
   replaceControlMarkup(els['study-list'],html);
+  if(focusedStudyChoices){
+    var choicesFocus=document.getElementById('study-choices');
+    if(choicesFocus) choicesFocus.focus({preventScroll:true});
+  }
   // Beginning removes its button; keep focus on this Study's visible card action.
   if(focusedBegin && findActiveStudy(focusedBegin)){
     var beganOpener=els['study-list'].querySelector('[data-study-details="'+focusedBegin+'"]');
@@ -6743,13 +6863,13 @@ function prismCalculationText(breakdown){
     rows.push(['Full depth reward',String(breakdown.full)+' Prisms']);
     if(breakdown.benchmark>0){
       rows.push(['Best rewarded clear','Rift '+breakdown.benchmark]);
-      rows.push(['20% repeat reward',String(breakdown.reserve)+' Prisms']);
+      rows.push(['Repeat reward (base + earned bonus)',String(breakdown.reserve)+' Prisms']);
       if(breakdown.cleared>breakdown.benchmark) rows.push(['New-depth bonus',String(breakdown.progressBonus)+' Prisms']);
     }
   }
   rows.push(['You receive now',String(breakdown.gain)+' Prisms']);
   return '<dl>'+rows.map(function(row){return '<dt>'+row[0]+'</dt><dd>'+row[1]+'</dd>';}).join('')+'</dl>'+
-    '<p>Tree and completed Lab bonuses multiply together before the full reward is rounded down. Repeats round 20% of that whole reward down again. A small upgrade may keep the same whole-Prism reward. Lab work in progress adds its bonus when it finishes.</p>'+
+    '<p>Tree and completed Lab bonuses multiply together. Repeats keep 20% of the unupgraded base plus the full earned upgrade bonus, rounded down once. Exact integer comparisons prevent floating-point errors at whole-Prism boundaries. Small upgrades can still share a whole-Prism value. Paid Lab work adds its bonus only when completed.</p>'+
     (breakdown.cleared>breakdown.benchmark && breakdown.benchmark>0 ? '<p>The new-depth bonus uses the difference between the depth curves before rounding, with your current Tree and Lab bonuses. That difference is rounded up once; the total cannot exceed the full depth reward.</p>' : '');
 }
 function renderAscendSummary(){
@@ -6775,7 +6895,7 @@ function renderAscendSummary(){
   } else if(cleared>breakdown.benchmark){
     els['ascend-note'].textContent = 'New progress: '+formatNum(breakdown.reserve)+' repeat reward + '+formatNum(breakdown.progressBonus)+' new-depth bonus, up to '+formatNum(breakdown.full)+' Prisms. Best rewarded clear becomes Rift '+cleared+'.';
   } else {
-    els['ascend-note'].textContent = 'Repeat reward: 20% of your full reward, rounded down (at least 1 Prism). Clear beyond Rift '+breakdown.benchmark+' to add a new-depth bonus.';
+    els['ascend-note'].textContent = 'Repeat reward: 20% of base plus the full earned upgrade bonus, rounded down once (at least 1 Prism). Clear beyond Rift '+breakdown.benchmark+' to add a new-depth bonus.';
   }
   renderAutoAscendControls();
   // Changed reward text may wrap while a native picker is open. Flush that
@@ -6817,11 +6937,11 @@ function renderNodes(){
         '<div class="effect-note">From this node only; other upgrades contribute separately.</div>' +
       '</div>' +
       '<button class="buy-btn" data-node="'+node.id+'" '+(plan.affordable?'':'disabled')+' aria-label="'+(capped?node.name+' maximum level reached':unavailable?node.name+' price unavailable':'Buy '+node.name+' level '+(level+1)+' for '+formatNum(plan.cost)+' Prisms')+'" style="min-width:78px;">' +
-        (capped?'<span class="label">Maxed</span>':unavailable&&!priced?'<span class="label">Unavailable</span>':'<span class="cost mono" style="color:'+(state.prisms<plan.cost?'var(--danger)':'var(--ink)')+'">'+costIcon('prism')+formatNum(plan.cost)+'</span><span class="label">'+(unavailable?'Unavailable':'Prisms')+'</span>') +
+        (capped?'<span class="label">Maxed</span>':unavailable&&!priced?'<span class="label">Unavailable</span>':purchasePriceMarkup('prism',plan.cost,'cost mono')+'<span class="label">'+(unavailable?'Unavailable':'Prisms')+'</span>') +
       '</button>' +
     '</div>';
   });
-  replaceControlMarkup(els['node-list'],html+'');
+  replaceControlMarkup(els['node-list'],html);
   els['node-list'].querySelectorAll('[data-node]').forEach(function(btn){
     btn.addEventListener('click', function(){
       var node = NODES.find(function(n){ return n.id===btn.getAttribute('data-node'); });
@@ -6895,7 +7015,7 @@ function renderAchievements(){
       buttonHtml = '<button type="button" data-autoascend-open>Open Ascend</button>';
     } else {
       buttonHtml = '<button data-shop="'+item.id+'" class="'+(owned?'owned':'')+'" '+((owned||state.comets<item.cost)?'disabled':'')+'>' +
-        (owned ? 'Owned' : '<span style="color:'+(state.comets<item.cost?'var(--danger)':'var(--ink)')+'">'+formatNum(item.cost)+' '+costIcon('comet')+'</span>') +
+        (owned ? 'Owned' : purchasePriceMarkup('comet',item.cost,'',true)) +
       '</button>';
     }
     if(item.id==='comettrials' && owned) extra=cometTrialControls();
@@ -7026,7 +7146,7 @@ var ENCYCLOPEDIA_MECHANICS = [
   {name:'Modules & Ultimates', meta:'Wisp progression', desc:'Modules are role-specific: Burst/Breaker Modules boost ability damage, Shard/Lumen Utility Modules boost their ability-generated resource, and Amplifier Modules boost Motes while Active. Ultimates double damage/resource ability output; Amplifier Ultimates change the buff from +25% for 4s to +50% for 8s.'},
   {name:'Endgame Currency Utility', meta:'Economy rule', desc:'After all eight Ultimates are owned, Sigils can ready one Active Wisp ability for 25 Sigils, at most 3 times per Ascension run. Auto-Ascend plus Comet Trials unlock Quest Refresh; previous complete Rest Stop owners retain access. A refresh costs at least the richest quest reward, so refreshing cannot generate extra Comets.'},
   {name:'Wisp Roles', meta:'Build label', desc:'Roles describe authoritative ability output: Burst delivers the highest raw ability coefficient; Breaker delivers heavy ability hits; Amplifier buffs passive Wisp damage and your tap damage; Shard Utility and Lumen Utility add their named resource to ability casts. These are output and utility roles, not defensive combat roles.'},
-  {name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the run for Prisms. Your first reward sets a cleared-Rift benchmark; repeats at or below it earn a 20% reserve reward, while pushing beyond it adds a new-depth bonus. Permanent systems stay.'},
+  {name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the run for Prisms. Repeats keep 20% of the unupgraded base plus the full earned upgrade bonus, rounded down once. Clearing beyond your best rewarded Rift adds a new-depth bonus. Permanent systems stay.'},
   {name:'Luminous Enemies', meta:'Rare encounter', desc:'Rare non-boss enemies that drop Motes. Their appearance chance rises as you push deeper.'},
   {name:'Boss Traits', meta:'Boss mechanic', desc:'Regrowth regenerates 0.9% max HP/s. Fractured Core regenerates 0.5%/s and takes +75% from Wisp ability hits only. Guardian’s Mark regenerates 0.6%/s and makes your manual taps and Auto-Tap deal x3; passive Wisp damage is unchanged by those trait bonuses.'},
   {name:'Offline Progress', meta:'Idle system', desc:'Combat, Wisp abilities, Auto-Tap, Farm, Auto-Ascend, Long Studies and automation share one productive offline period of up to 12 hours. Offline earning rate is separate. If Auto-Empower makes you strong enough after a boss retreat, the game retries the saved Boss automatically.'}
@@ -8624,7 +8744,18 @@ function checkAffordability(){
     var maxed=node && node.levelCap!==undefined && longStudyLevel(active.id)>=node.levelCap;
     btn.disabled = acquired || maxed || active.remainingSec<=SIM_EPS || state.motes<speedTierCost(mult);
   });
-  ['spirit-list','research-list','study-list','node-list','shop-list'].forEach(function(id){presentControlStates(els[id]);});
+  els['node-list'].querySelectorAll('[data-node]').forEach(function(btn){
+    var node=NODES.find(function(n){return n.id===btn.getAttribute('data-node');});
+    if(node) btn.disabled=!getNodeBuyPlan(node).affordable;
+  });
+  els['shop-list'].querySelectorAll('[data-shop]').forEach(function(btn){
+    var item=SHOP.find(function(n){return n.id===btn.getAttribute('data-shop');});
+    if(item) btn.disabled=!!state.owned[item.id] || state.comets<item.cost;
+  });
+  ['spirit-list','research-list','study-list','node-list','shop-list'].forEach(function(id){
+    updatePurchasePriceColors(els[id]);
+    presentControlStates(els[id]);
+  });
   renderAutoAscendControls();
 }
 

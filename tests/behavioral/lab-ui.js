@@ -94,8 +94,14 @@ window.runLabUiQa = function(b,ctx,assert){
     ok(document.activeElement===target,'retired focus fixture actually focused '+control);
     b.inquiry.tail(.1);b.renderLayout();
     ok(b.getState().longStudyLevels.riftattune===3&&!b.getState().activeStudies.length,'retired paid work earns its last level');
-    ok(document.activeElement.dataset.legacyUpgrade==='riftattune'&&document.activeElement.getClientRects().length,'retired completion focuses preserved card from '+control);
-    b.renderLayout();ok(document.activeElement.dataset.legacyUpgrade==='riftattune','preserved card focus survives rendering');
+    ok(!q('[data-legacy-upgrade="riftattune"]'),'completed legacy card stays out of the shop');
+    ok(document.activeElement.id==='study-choices'&&document.activeElement.getClientRects().length,'retired completion focuses visible choices heading from '+control);
+    var settled=JSON.stringify(b.getState()),primary=b.rawSave(),recovery=b.rawRecovery();
+    b.renderLayout();ok(document.activeElement.id==='study-choices'&&document.activeElement.isConnected,'choices heading focus survives rendering');
+    ok(JSON.stringify(b.getState())===settled&&b.rawSave()===primary&&b.rawRecovery()===recovery,'focus restoration never changes paid values or saves');
+    b.inquiry.tail(.1);b.renderLayout();
+    ok(b.getState().longStudyLevels.riftattune===3&&!b.getState().activeStudies.length,'retired completion cannot grant twice');
+    ok(document.activeElement.id==='study-choices','choices heading remains focused after subsequent updates');
   });
   close();install(seed());fit();
   return {checks:checks,progress:records};

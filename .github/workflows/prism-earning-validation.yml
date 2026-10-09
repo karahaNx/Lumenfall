@@ -1,0 +1,59 @@
+name: Prism feature validation
+
+on:
+  pull_request:
+    branches: [main, 'feature/progression-expansion-2026-10-09']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lumenfall-prism-feature-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  prism-feature:
+    if: github.head_ref == 'feature/prism-earning-001'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Verify source and actual task context
+        run: |
+          set -euo pipefail
+          mkdir -p prism-feature-validation
+          node scripts/ci/validate_source.cjs | tee prism-feature-validation/source.txt
+          node scripts/codex/check_context.cjs --task docs/tasks/PRISM_EARNING_001.md | tee prism-feature-validation/context.txt
+          mkdir -p mobile/www/fonts mobile/www/branding
+          cp index.html mobile/www/index.html
+          cp -r fonts/. mobile/www/fonts/
+          cp -r branding/. mobile/www/branding/
+      - name: Exact numerical and actual state transactions
+        run: |
+          set -euo pipefail
+          node tests/behavioral/prism-earning.cjs | tee prism-feature-validation/numerical.json
+          node tests/behavioral/prism-earning-state.cjs | tee prism-feature-validation/state.json
+      - name: Actual browser payouts, persistence and causal failures
+        if: always()
+        run: node tests/behavioral/prism-earning-focused.cjs mobile/www prism-feature-validation/browser
+      - name: Full offline chronology and frozen-policy isolation
+        if: always()
+        run: |
+          set -euo pipefail
+          node tests/behavioral/offline-catchup.cjs | tee prism-feature-validation/offline.json
+      - name: Preserve version-bound raw evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prism-feature-${{ github.run_id }}
+          retention-days: 7
+          path: |
+            prism-feature-validation/
+            index.html
+            tests/behavioral/prism-earning*.cjs
+            tests/behavioral/offline-catchup.cjs
+            docs/recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/main-index.html
+            docs/qa/offline-autoascend-2026-10-07/device_backup.json
