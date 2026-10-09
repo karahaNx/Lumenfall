@@ -1,0 +1,80 @@
+name: Isolated Prism Lab focus repair
+on:
+  push:
+    branches: ['fix/prism-lab-closeout']
+    paths: ['.github/workflows/prism-focus-repair.yml']
+permissions:
+  contents: write
+jobs:
+  repair:
+    if: github.repository == 'karahaNx/Lumenfall' && github.ref == 'refs/heads/fix/prism-lab-closeout'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Prove the missing focus preservation, then validate its correction
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p focus-repair
+          node <<'JS'
+          const fs=require('node:fs'),path=require('node:path'),cp=require('node:child_process'),crypto=require('node:crypto'),assert=require('node:assert/strict');
+          const sha=s=>crypto.createHash('sha256').update(s).digest('hex');
+          let source=fs.readFileSync('index.html','utf8');
+          assert.equal(sha(source),'d4ac7160103da236623164445791478ff42a94d03dbf548aff11cde25f952f0a','pinned product baseline');
+          function replaceOnce(text,from,to){assert.equal(text.split(from).length,2,'one exact patch marker: '+from.slice(0,80));return text.replace(from,()=>to);}
+          const testPath='tests/behavioral/lab-ui.js';let test=fs.readFileSync(testPath,'utf8');
+          assert.equal(cp.execFileSync('git',['hash-object',testPath],{encoding:'utf8'}).trim(),'5be8af9fa2f7c0105610b4b8550b8444a9538503','pinned existing Lab test');
+          const old="    ok(document.activeElement.dataset.legacyUpgrade==='riftattune'&&document.activeElement.getClientRects().length,'retired completion focuses preserved card from '+control);\n    b.renderLayout();ok(document.activeElement.dataset.legacyUpgrade==='riftattune','preserved card focus survives rendering');";
+          const replacement="    ok(!q('[data-legacy-upgrade=\"riftattune\"]'),'completed legacy card stays out of the shop');\n    ok(document.activeElement.id==='study-choices'&&document.activeElement.getClientRects().length,'retired completion focuses visible choices heading from '+control);\n    var settled=JSON.stringify(b.getState()),primary=b.rawSave(),recovery=b.rawRecovery();\n    b.renderLayout();ok(document.activeElement.id==='study-choices'&&document.activeElement.isConnected,'choices heading focus survives rendering');\n    ok(JSON.stringify(b.getState())===settled&&b.rawSave()===primary&&b.rawRecovery()===recovery,'focus restoration never changes paid values or saves');\n    b.inquiry.tail(.1);b.renderLayout();\n    ok(b.getState().longStudyLevels.riftattune===3&&!b.getState().activeStudies.length,'retired completion cannot grant twice');\n    ok(document.activeElement.id==='study-choices','choices heading remains focused after subsequent updates');";
+          test=replaceOnce(test,old,replacement);fs.writeFileSync(testPath,test);
+          fs.mkdirSync('mobile/www',{recursive:true});for(const p of ['fonts','branding'])fs.cpSync(p,path.join('mobile/www',p),{recursive:true});
+          fs.writeFileSync('mobile/www/index.html',source);
+          function run(name,command,expected=0){const dir=path.join('focus-repair',name);fs.mkdirSync(dir,{recursive:true});const r=cp.spawnSync(process.execPath,command,{encoding:'utf8',timeout:210000,maxBuffer:64*1024*1024});fs.writeFileSync(path.join(dir,'stdout.log'),r.stdout||'');fs.writeFileSync(path.join(dir,'stderr.log'),r.stderr||'');fs.writeFileSync(path.join(dir,'process.json'),JSON.stringify({status:r.status,signal:r.signal,error:r.error&&r.error.message}));console.log(name+': '+r.status);assert.equal(r.status,expected,name+' exit; inspect raw evidence');return r;}
+          run('before',['tests/behavioral/run.cjs','--web-root','mobile/www','--scenario','lab-motes-ui','--raw-artifacts','focus-repair/before/raw'],1);
+          const {rawQaObservation}=require('./tests/behavioral/raw-result.cjs');
+          function walk(dir){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)]);}
+          const oldResults=walk('focus-repair/before/raw').filter(p=>p.endsWith('stdout.html')).map(p=>rawQaObservation(fs.readFileSync(p,'utf8'),'lab-motes-ui'));
+          assert.equal(oldResults.length,3,'three actual mobile baseline failures');
+          for(const r of oldResults){assert(r.observation.valid&&r.observation.qa_status==='fail'&&r.observation.runtime_error_count===0&&r.observation.runtime_markers.length===0,'completed in-page baseline assertion, not transport/runtime failure');assert(JSON.stringify(r.payload).includes('choices heading focus survives rendering'),'baseline fails specifically on lost heading focus');}
+          source=replaceOnce(source,'function renderLongStudies(){\n',"function renderLongStudies(){\n  var focusedStudyChoices=document.activeElement && document.activeElement.id==='study-choices';\n");
+          source=replaceOnce(source,"  replaceControlMarkup(els['study-list'],html);\n","  replaceControlMarkup(els['study-list'],html);\n  if(focusedStudyChoices){\n    var choicesFocus=document.getElementById('study-choices');\n    if(choicesFocus) choicesFocus.focus({preventScroll:true});\n  }\n");
+          const oldCopy='After clearing at least 15 Rifts, restart the run for Prisms. Your first reward sets a cleared-Rift benchmark; repeats at or below it earn a 20% reserve reward, while pushing beyond it adds a new-depth bonus. Permanent systems stay.';
+          const newCopy='After clearing at least 15 Rifts, restart the run for Prisms. Repeats keep 20% of the unupgraded base plus the full earned upgrade bonus, rounded down once. Clearing beyond your best rewarded Rift adds a new-depth bonus. Permanent systems stay.';
+          source=replaceOnce(source,oldCopy,newCopy);fs.writeFileSync('index.html',source);fs.writeFileSync('mobile/www/index.html',source);
+          const numericalPath='tests/behavioral/prism-earning.cjs';let numerical=fs.readFileSync(numericalPath,'utf8');
+          numerical=replaceOnce(numerical,"const source=fs.readFileSync(sourcePath,'utf8');\n","const source=fs.readFileSync(sourcePath,'utf8');\nassert(source.includes("+JSON.stringify("{name:'Ascend', meta:'Permanent progression', desc:'"+newCopy+"'}")+"),'Encyclopedia Ascend summary matches the protected repeat-bonus rule');\n");
+          fs.writeFileSync(numericalPath,numerical);
+          run('source',['scripts/ci/validate_source.cjs']);run('numerical',['tests/behavioral/prism-earning.cjs']);
+          for(const name of ['lab-motes-ui','lab-motes-native','lab-motes-reduced-motion','upgrade-effects-and-deeds'])run(name,['tests/behavioral/run.cjs','--web-root','mobile/www','--scenario',name,'--raw-artifacts','focus-repair/'+name+'/raw']);
+          fs.writeFileSync('focus-repair/receipt.json',JSON.stringify({status:'pass',baselineSha256:'d4ac7160103da236623164445791478ff42a94d03dbf548aff11cde25f952f0a',sourceSha256:sha(source),beforeFailures:oldResults.length,causalFailure:'choices heading focus survives rendering',tests:['lab-motes-ui at three widths','lab-motes-native','lab-motes-reduced-motion','upgrade-effects-and-deeds','numerical and Encyclopedia copy guard'],scope:'five-line presentation focus preservation and corrected Encyclopedia description; purchased levels, rewards, chronology and saves unchanged'},null,2));
+          JS
+      - name: Commit tested files only to the isolated repair branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = 'refs/heads/fix/prism-lab-closeout'
+          remote="$(git ls-remote origin refs/heads/fix/prism-lab-closeout | cut -f1)"
+          test "$remote" = "$GITHUB_SHA"
+          git add -- index.html tests/behavioral/lab-ui.js tests/behavioral/prism-earning.cjs
+          git diff --cached --check
+          git -c user.name='Lumenfall development validation' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Preserve Lab completion focus after legacy-card retirement and align Prism help'
+          git push origin HEAD:refs/heads/fix/prism-lab-closeout
+          git rev-parse HEAD > focus-repair/commit.txt
+          git ls-tree HEAD index.html tests/behavioral/lab-ui.js tests/behavioral/prism-earning.cjs > focus-repair/blobs.txt
+      - name: Preserve baseline failures, correction and replay evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prism-focus-repair-${{ github.run_id }}
+          retention-days: 14
+          path: |
+            focus-repair/
+            index.html
+            tests/behavioral/lab-ui.js
+            tests/behavioral/prism-earning.cjs
