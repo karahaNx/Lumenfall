@@ -5518,16 +5518,121 @@ function toggleAutoAscend(){
   if(state.autoAscendEnabled) checkAutoAscend();
 }
 
+// PRISM_EARNING_001: exact integer threshold checks on the WebView 60 runtime.
+// Base-32768 limbs keep every multiply/carry below 2^31. No runtime BigInt.
+function prismIntegerWords(value){
+  var words=[];
+  do {words.push(value%32768);value=Math.floor(value/32768);} while(value>0);
+  return words;
+}
+function prismMultiplyWords(a,b){
+  var out=[],i,j;
+  for(i=0;i<a.length+b.length;i++) out.push(0);
+  for(i=0;i<a.length;i++){
+    var carry=0;
+    for(j=0;j<b.length;j++){
+      var part=out[i+j]+a[i]*b[j]+carry;
+      out[i+j]=part%32768;carry=Math.floor(part/32768);
+    }
+    out[i+b.length]=carry;
+  }
+  while(out.length>1 && out[out.length-1]===0) out.pop();
+  return out;
+}
+function prismCompareWords(a,b){
+  if(a.length!==b.length) return a.length<b.length?-1:1;
+  for(var i=a.length-1;i>=0;i--) if(a[i]!==b[i]) return a[i]<b[i]?-1:1;
+  return 0;
+}
+function prismAddWords(a,b){
+  var out=[],carry=0;
+  for(var i=0;i<Math.max(a.length,b.length)||carry;i++){
+    var n=(a[i]||0)+(b[i]||0)+carry;out.push(n%32768);carry=Math.floor(n/32768);
+  }
+  return out;
+}
+function prismSubtractWords(a,b){
+  var out=[],borrow=0;
+  for(var i=0;i<a.length;i++){
+    var n=a[i]-(b[i]||0)-borrow;borrow=n<0?1:0;out.push(n+borrow*32768);
+  }
+  while(out.length>1 && out[out.length-1]===0) out.pop();
+  return out;
+}
+function prismDepthDifferenceCeil(cleared,benchmark,numerator,approximate){
+  var candidate=Math.ceil(approximate);
+  if(!Number.isSafeInteger(cleared)||!Number.isSafeInteger(benchmark)||benchmark<0||
+      !Number.isSafeInteger(numerator)||numerator<0||!Number.isSafeInteger(candidate)||candidate<0) return candidate;
+  var c=prismIntegerWords(cleared),b=prismIntegerWords(benchmark),p=prismIntegerWords(numerator);
+  var pp=prismMultiplyWords(p,p),denominator=prismIntegerWords(250000);
+  var upper=prismMultiplyWords(prismIntegerWords(4),prismMultiplyWords(pp,prismAddWords(c,b)));
+  var right=prismMultiplyWords(prismIntegerWords(64),
+    prismMultiplyWords(prismMultiplyWords(pp,pp),prismMultiplyWords(c,b)));
+  function covers(value){
+    var n=prismIntegerWords(value),square=prismMultiplyWords(prismMultiplyWords(n,n),denominator);
+    if(prismCompareWords(square,upper)>=0) return true;
+    var rest=prismSubtractWords(upper,square);
+    return prismCompareWords(prismMultiplyWords(rest,rest),right)<=0;
+  }
+  // Sign-check before squaring prevents false roots in the difference test.
+  if(covers(candidate) && (candidate===0 || !covers(candidate-1))) return candidate;
+  if(!covers(Number.MAX_SAFE_INTEGER)) return candidate;
+  var low=0,high=Number.MAX_SAFE_INTEGER;
+  while(low<high){
+    var middle=low+Math.floor((high-low)/2);
+    if(covers(middle)) high=middle;else low=middle+1;
+  }
+  return low;
+}
+function prismBonusNumerator(){
+  // +4% Tree and +5% completed Lab compose as (25+t)(20+l)/500.
+  var tree = nodeLevel('swift');
+  var lab = longStudyLevel('prismstudy');
+  return (25+tree)*(20+lab);
+}
+function prismCurveFloor(cleared,numerator,approximate){
+  var candidate=Math.floor(approximate);
+  // Keep the legacy Number fallback outside the safe-integer contract.
+  // This is not a new gameplay cap or a claim of exact oversized currencies.
+  if(!Number.isSafeInteger(cleared) || cleared<0 || !Number.isSafeInteger(numerator) || numerator<0 ||
+      !Number.isSafeInteger(prismBonusNumerator()) || !Number.isSafeInteger(candidate) || candidate<0) return candidate;
+  var p=prismIntegerWords(numerator),denominator=prismIntegerWords(250000);
+  var target=prismMultiplyWords(prismIntegerWords(4),
+    prismMultiplyWords(prismIntegerWords(cleared),prismMultiplyWords(p,p)));
+  function compare(value){
+    var n=prismIntegerWords(value);
+    return prismCompareWords(prismMultiplyWords(prismMultiplyWords(n,n),denominator),target);
+  }
+  // n <= 2*sqrt(c)*p/500 iff n^2*500^2 <= 4*c*p^2.
+  // Exact comparisons, not an arbitrary epsilon, decide integer boundaries.
+  if(compare(candidate)<=0 && compare(candidate+1)>0) return candidate;
+  if(compare(Number.MAX_SAFE_INTEGER+1)<=0) return candidate;
+  var low=0,high=Number.MAX_SAFE_INTEGER;
+  while(low<high){
+    var middle=low+Math.ceil((high-low)/2);
+    if(compare(middle)<=0) low=middle;else high=middle-1;
+  }
+  return low;
+}
 function ascendFullPrismGainForCleared(cleared){
   cleared = Math.max(0,Math.floor(cleared||0));
-  return cleared>=15 ? Math.max(1,Math.floor(2*Math.sqrt(cleared)*prismMult())) : 0;
+  return cleared>=15 ? Math.max(1,prismCurveFloor(cleared,prismBonusNumerator(),2*Math.sqrt(cleared)*prismMult())) : 0;
+}
+function ascendRepeatPrismGainForCleared(cleared){
+  cleared = Math.max(0,Math.floor(cleared||0));
+  if(cleared<15) return 0;
+  // Discount the unupgraded base, never the earned upgrade portion.
+  // 20% of base + 100% of the combined upgrade bonus, rounded down once.
+  var numerator=prismBonusNumerator()-500*(1-ASCEND_REPEAT_REWARD_RATE);
+  var factor=ASCEND_REPEAT_REWARD_RATE+Math.max(0,prismMult()-1);
+  return Math.max(1,prismCurveFloor(cleared,numerator,2*Math.sqrt(cleared)*factor));
 }
 // Approved F05 policy: round the unrounded new-depth difference up once.
 // Rationalize sqrt(c)-sqrt(b) to preserve small positive depth increments.
 function ascendProgressPrismBonusForCleared(cleared,benchmark){
   if(cleared<=benchmark) return 0;
   var rawDifference = 2*((cleared-benchmark)/(Math.sqrt(cleared)+Math.sqrt(benchmark)));
-  return Math.ceil(rawDifference*prismMult());
+  return prismDepthDifferenceCeil(cleared,benchmark,prismBonusNumerator(),rawDifference*prismMult());
 }
 function ascendPrismBreakdown(depth){
   var cleared = Math.max(0,(depth===undefined ? progressionDepth() : depth)-1);
@@ -5539,13 +5644,7 @@ function ascendPrismBreakdown(depth){
   if(benchmark<=0){
     return {gain:full,full:full,reserve:0,progressBonus:full,cleared:cleared,benchmark:0};
   }
-
-  // A wall must remain a viable prestige path, but repeating the same shallow
-  // reset cannot keep paying the full curve forever. Repeats retain 20% of the
-  // current full reward (minimum 1 Prism). Pushing beyond the best previously
-  // rewarded cleared Rift adds only the newly unlocked part of the same Prism
-  // curve. No new currency/layer is introduced.
-  var reserve = Math.max(1,Math.floor(full*ASCEND_REPEAT_REWARD_RATE));
+  var reserve = ascendRepeatPrismGainForCleared(cleared);
   var progressBonus = ascendProgressPrismBonusForCleared(cleared,benchmark);
   var gain = Math.max(1,Math.min(full,reserve+progressBonus));
   return {
@@ -6743,13 +6842,13 @@ function prismCalculationText(breakdown){
     rows.push(['Full depth reward',String(breakdown.full)+' Prisms']);
     if(breakdown.benchmark>0){
       rows.push(['Best rewarded clear','Rift '+breakdown.benchmark]);
-      rows.push(['20% repeat reward',String(breakdown.reserve)+' Prisms']);
+      rows.push(['Repeat reward (base + earned bonus)',String(breakdown.reserve)+' Prisms']);
       if(breakdown.cleared>breakdown.benchmark) rows.push(['New-depth bonus',String(breakdown.progressBonus)+' Prisms']);
     }
   }
   rows.push(['You receive now',String(breakdown.gain)+' Prisms']);
   return '<dl>'+rows.map(function(row){return '<dt>'+row[0]+'</dt><dd>'+row[1]+'</dd>';}).join('')+'</dl>'+
-    '<p>Tree and completed Lab bonuses multiply together before the full reward is rounded down. Repeats round 20% of that whole reward down again. A small upgrade may keep the same whole-Prism reward. Lab work in progress adds its bonus when it finishes.</p>'+
+    '<p>Tree and completed Lab bonuses multiply together. Repeats keep 20% of the unupgraded base plus the full earned upgrade bonus, rounded down once. Exact integer comparisons prevent floating-point errors at whole-Prism boundaries. Small upgrades can still share a whole-Prism value. Paid Lab work adds its bonus only when completed.</p>'+
     (breakdown.cleared>breakdown.benchmark && breakdown.benchmark>0 ? '<p>The new-depth bonus uses the difference between the depth curves before rounding, with your current Tree and Lab bonuses. That difference is rounded up once; the total cannot exceed the full depth reward.</p>' : '');
 }
 function renderAscendSummary(){
@@ -6775,7 +6874,7 @@ function renderAscendSummary(){
   } else if(cleared>breakdown.benchmark){
     els['ascend-note'].textContent = 'New progress: '+formatNum(breakdown.reserve)+' repeat reward + '+formatNum(breakdown.progressBonus)+' new-depth bonus, up to '+formatNum(breakdown.full)+' Prisms. Best rewarded clear becomes Rift '+cleared+'.';
   } else {
-    els['ascend-note'].textContent = 'Repeat reward: 20% of your full reward, rounded down (at least 1 Prism). Clear beyond Rift '+breakdown.benchmark+' to add a new-depth bonus.';
+    els['ascend-note'].textContent = 'Repeat reward: 20% of base plus the full earned upgrade bonus, rounded down once (at least 1 Prism). Clear beyond Rift '+breakdown.benchmark+' to add a new-depth bonus.';
   }
   renderAutoAscendControls();
   // Changed reward text may wrap while a native picker is open. Flush that

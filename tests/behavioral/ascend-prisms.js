@@ -1,3 +1,18 @@
+// Independent modern-browser QA oracle; not part of the production APK.
+function prismEarningOracle(c,benchmark,tree,lab){
+  function root(n){if(n<2n)return n;var x=1n<<BigInt(Math.ceil(n.toString(2).length/2));for(;;){var y=(x+n/x)/2n;if(y>=x)return x;x=y;}}
+  var p=(25n+BigInt(tree))*(20n+BigInt(lab));
+  function curve(q){return c<15?0:Math.max(1,Number(root(4n*BigInt(c)*q*q)/500n));}
+  var full=curve(p),reserve=benchmark>0&&full>0?curve(p-400n):0,progress=0;
+  if(benchmark<=0)progress=full;
+  else if(c>benchmark){
+    var pp=p*p,upper=4n*pp*(BigInt(c)+BigInt(benchmark)),right=64n*pp*pp*BigInt(c)*BigInt(benchmark);
+    function covers(k){var remainder=upper-k*k*250000n;return remainder<=0n||remainder*remainder<=right;}
+    var k=BigInt(Math.max(0,Math.ceil(2*(Math.sqrt(c)-Math.sqrt(benchmark))*Number(p)/500)));
+    while(!covers(k))k++;while(k>0n&&covers(k-1n))k--;progress=Number(k);
+  }
+  return {full:full,reserve:reserve,progressBonus:progress,gain:full===0?0:benchmark<=0?full:Math.min(full,reserve+progress)};
+}
 /* F05: independent reward oracle, actual DOM/payouts and persistence routes. */
 window.ascendPrismsSeed=function(b,c,benchmark,tree,lab){
   var s=b.freshStateSnapshot();
@@ -14,13 +29,7 @@ window.runAscendPrismsContract=function(b,ctx,assert){
   var checks=0,records=[],clock=b.clockNow();
   function ok(v,m){checks++;assert(v,m);}
   function same(a,c,m){ok(JSON.stringify(a)===JSON.stringify(c),m);}
-  function expected(c,benchmark,tree,lab){
-    // Direct curve subtraction is independent of the product's rationalized form.
-    var mult=(1+tree*0.04)*(1+lab*0.05),full=c<15?0:Math.floor(2*Math.sqrt(c)*mult);
-    var reserve=benchmark>0&&full>0?Math.max(1,Math.floor(full*0.2)):0;
-    var progress=benchmark<=0?full:c>benchmark?Math.ceil((2*Math.sqrt(c)-2*Math.sqrt(benchmark))*mult):0;
-    return {full:full,reserve:reserve,progressBonus:progress,gain:full===0?0:benchmark<=0?full:Math.min(full,reserve+progress)};
-  }
+  function expected(c,benchmark,tree,lab){return prismEarningOracle(c,benchmark,tree,lab);}
   function check(c,benchmark,tree,lab,farm){
     var s=window.ascendPrismsSeed(b,c,benchmark,tree,lab),want=expected(c,benchmark,tree,lab);
     if(farm){s.riftMode='farm';s.depth=19;s.farmDepth=19;s.farmReturnDepth=c+1;s.enemyDepth=19;s.enemyHp=s.enemyMaxHp=b.enemyHpFor(19);}
@@ -61,14 +70,14 @@ window.runAscendPrismsContract=function(b,ctx,assert){
   // The regression: buying Swift level 1 at cleared16/benchmark15 used to pay 2 -> 1.
   check(16,15,0,0);check(16,15,1,0);check(16,15,0,1);
   ok(records[0].reward===2&&records[1].reward===2&&records[2].reward===2,'bonus purchases retain the 2-Prism new-depth reward');
-  [14,15,20,21,30,100].forEach(function(c){
+  [14,15,20,21,25,30,100].forEach(function(c){
     [0,c,15,219].forEach(function(benchmark){
-      [[0,0],[1,0],[0,1],[1,1],[17,18],[18,18]].forEach(function(v){check(c,benchmark,v[0],v[1]);});
+      [[0,0],[1,0],[0,1],[1,1],[9,5],[10,10],[17,18],[18,18]].forEach(function(v){check(c,benchmark,v[0],v[1]);});
     });
   });
   [[0,0],[1,0],[0,1],[1,1],[17,18]].forEach(function(v){check(20,219,v[0],v[1],true);});
-  // Explicit thresholds keep the original first/repeat contract, including 5 -> 6.
-  [[17,18,5],[18,18,5],[18,19,5],[18,20,6],[44,0,4],[45,0,5],[58,0,5],[59,0,6]].forEach(function(v){
+  // Explicit thresholds cover the new protected-bonus repeat contract.
+  [[17,18,21],[18,18,22],[18,19,22],[18,20,23],[44,0,17],[45,0,17],[58,0,22],[59,0,22],[0,0,1],[1,0,2],[4,0,3],[7,0,4],[9,0,5],[12,0,6]].forEach(function(v){
     check(20,219,v[0],v[1]);ok(records[records.length-1].reward===v[2],'independent whole-Prism repeat threshold');
   });
   // No reward decrease through a bounded range of actual canonical calculations.
@@ -106,19 +115,19 @@ window.runAscendPrismsContract=function(b,ctx,assert){
     s.autoAscendEnabled=true;s.autoAscendTargetDepth=21;s.enemyHp=1;s.spirits.ember=50;
     b.setState(s);ok(!b.ascendEligibility().autoReady,'uncleared target does not auto Ascend');
     var kill=b.simulateTimeline(1,kind,clock);
-    ok(kill.summary.ascends===1&&kill.summary.ascendGains[0]===5,'actual boss clear pays 5 once '+kind);
+    ok(kill.summary.ascends===1&&kill.summary.ascendGains[0]===21,'actual boss clear pays 21 once '+kind);
     // Completion contributes only at the actual completion boundary.
     s=window.ascendPrismsSeed(b,20,219,0,2);
     s.activeStudies=[{id:'prismstudy',remainingSec:1,totalDurationSec:2,speedMult:1}];b.setState(s);
-    b.simulateTimeline(0.5,kind,clock);ok(b.getState().longStudyLevels.prismstudy===2&&b.ascendBreakdown().gain===1,'pending Lab bonus excluded '+kind);
-    b.simulateTimeline(0.5,kind,clock+500);ok(b.getState().longStudyLevels.prismstudy===3&&b.ascendBreakdown().gain===2,'completed Lab bonus included '+kind);
+    b.simulateTimeline(0.5,kind,clock);ok(b.getState().longStudyLevels.prismstudy===2&&b.ascendBreakdown().gain===2,'pending Lab bonus excluded '+kind);
+    b.simulateTimeline(0.5,kind,clock+500);ok(b.getState().longStudyLevels.prismstudy===3&&b.ascendBreakdown().gain===3,'completed Lab bonus included '+kind);
     s.activeStudies[0].remainingSec=0;s.autoAscendEnabled=true;b.setState(s);
     var simultaneous=b.simulateTimeline(0.001,kind,clock);
-    ok(simultaneous.summary.ascendGains[0]===1&&simultaneous.state.longStudyLevels.prismstudy===3,'existing auto-before-due-completion order '+kind);
+    ok(simultaneous.summary.ascendGains[0]===2&&simultaneous.state.longStudyLevels.prismstudy===3,'existing auto-before-due-completion order '+kind);
   });
   var legacy=window.ascendPrismsSeed(b,20,0,17,18);delete legacy.ascendRewardedDepth;
   b.setState(legacy);ok(b.getState().ascendRewardedDepth===0&&b.ascendBreakdown().gain===28,'missing legacy benchmark retains first full reward');
-  return {checks:checks,records:records,policy:'approved new-depth-ceil; original first/repeat/minimum/full cap',scope:'synthetic browser states; not the user save or Android acceptance'};
+  return {checks:checks,records:records,policy:'protected repeat bonus; exact integer boundaries; first/minimum/full cap retained',scope:'synthetic browser states; not the user save or Android acceptance'};
 };
 window.runAscendPrismsPersistence=function(b,ctx,assert,phase,nextPhase,backupCode,finish){
   var key='ascend-prisms-persist-'+ctx.scenario;
@@ -135,8 +144,8 @@ window.runAscendPrismsPersistence=function(b,ctx,assert,phase,nextPhase,backupCo
   });
   assert(b.rawSave()===b.rawRecovery(),'restored primary/recovery agree');
   b.uiMeasurementPause(true);b.renderLayout();
-  assert(document.getElementById('prism-preview').textContent==='+5 Prisms','restored preview uses saved completed bonuses and benchmark');
-  var payout=b.ascendManual();assert(payout.gain===5,'restored actual payout equals preview');
+  assert(document.getElementById('prism-preview').textContent==='+21 Prisms','restored preview uses saved completed bonuses and benchmark');
+  var payout=b.ascendManual();assert(payout.gain===21,'restored actual payout equals preview');
   assert(payout.after.benchmark===219,'shallower repeat preserves best rewarded clear');
   finish('pass',{route:ctx.scenario,reward:payout.gain,benchmark:payout.after.benchmark,tree:s.nodes.swift,completedLab:s.longStudyLevels.prismstudy,schema:s.schemaVersion});
 };
