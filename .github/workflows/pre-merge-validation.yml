@@ -49,6 +49,9 @@ jobs:
       - name: Rift cosmetics selection, persistence and mobile acceptance
         run: node tests/behavioral/rift-cosmetics.cjs --source mobile/www/index.html --negative
 
+      - name: Exact Prism earning numerical and causal regression
+        run: node tests/behavioral/prism-earning.cjs --source mobile/www/index.html
+
       - name: Stateful behavioral regression suite
         shell: bash
         run: node tests/behavioral/run.cjs --web-root mobile/www
