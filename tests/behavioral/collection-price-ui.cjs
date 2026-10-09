@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
-// Reuse the already accepted real Chromium transport, replacing only its QA scenario.
-// The generated driver is temporary test-only code; the production file is not changed.
+// Reuse the accepted real Chromium transport; replace only its QA scenario.
+// The temporary generated driver is never part of the production APK.
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto');
 const {spawnSync}=require('node:child_process');
 const sourcePath=path.resolve(process.argv[2]||'index.html'),evidence=path.resolve(process.argv[3]||'collection-price-evidence');
@@ -27,6 +27,8 @@ const cases=String.raw`
   ];
   for(const spec of specs){
    await ev('prismQa.set(prismQa.collectionSeed());prismQa.ready();prismQa.tab('+JSON.stringify(spec.tab)+')');
+   // Observe actual entry-animation completion before strict 44px geometry checks.
+   await ev('Promise.all(document.getElementById('+JSON.stringify('tab-'+spec.tab)+').getAnimations().map(function(a){return a.finished;})).then(function(){return true;})');
    const wantedNames={lumen:'Lumen',shard:'Shards',prism:'Prisms',comet:'Comets'},walletKeys={lumen:'lumen',shard:'shards',prism:'prisms',comet:'comets'};
    async function observe(values,label){
     await ev('prismQa.wallets('+JSON.stringify(values)+')');const before=await ev('JSON.stringify(prismQa.get())');
@@ -63,7 +65,6 @@ const cases=String.raw`
    for(const kind of Object.keys(spec.prices))ok(saved[0][walletKeys[kind]]===after[walletKeys[kind]],'paid wallet saved '+kind);
    if(spec.id==='autoascend')ok(after.autoAscendEnabled===true&&after.autoAscendTargetDepth>=16,'Auto-Ascend unlock behavior retained');
   }
-  // Insufficient-funds coloring is independent of other denial reasons.
   await ev("prismQa.set(prismQa.collectionSeed());prismQa.ready();prismQa.wallets({prisms:1e16});prismQa.refreshCosts()");
   ok(await ev("document.querySelector('[data-node=\"swift\"]').disabled"),'unrepresentable debit still refused');
   ok(await ev("document.querySelector('[data-node=\"swift\"] .cost').style.color==='var(--ink)'"),'sufficient wallet stays white despite other purchase guard');
