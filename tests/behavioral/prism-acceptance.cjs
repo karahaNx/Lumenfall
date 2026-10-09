@@ -8,6 +8,8 @@ const root=path.resolve(__dirname,'../..'),sourcePath=path.resolve(process.argv[
 const evidence=path.resolve(process.argv[3]||'prism-acceptance-evidence'),source=fs.readFileSync(sourcePath,'utf8');
 const chrome=process.env.LUMENFALL_QA_CDP_CHROME||['google-chrome','google-chrome-stable','chromium','chromium-browser'].find(x=>spawnSync('which',[x]).status===0);
 const {reward}=require('./prism-earning-reference.cjs');
+assert(source.includes("Each Ascend earns Prisms. Repeat runs keep 20% of the base reward plus the full earned upgrade bonus. Clearing beyond your best rewarded Rift adds a new-depth bonus. The current run resets; permanent progression stays."),'intro must explain full earned bonus');
+assert(!source.includes("Your first Ascend sets a Prism reward benchmark. Repeating at the same depth earns a 20% reserve reward; pushing beyond the benchmark adds the newly earned depth bonus. Ascending still resets the current run while permanent progression stays."),'obsolete full-reward penalty text must not remain');
 const bridge=String.raw`
 window.prismQa={
  initialized:function(){return !!els['toast'];},get:function(){return JSON.parse(JSON.stringify(state));},
