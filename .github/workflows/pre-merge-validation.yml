@@ -60,7 +60,12 @@ jobs:
 
       - name: Stateful behavioral regression suite
         shell: bash
-        run: node tests/behavioral/run.cjs --web-root mobile/www
+        run: |
+          set -euo pipefail
+          mkdir -p validation-evidence
+          git rev-parse HEAD > validation-evidence/commit.txt
+          sha256sum index.html > validation-evidence/source-sha256.txt
+          node tests/behavioral/run.cjs --web-root mobile/www --raw-artifacts validation-evidence/raw 2>&1 | tee validation-evidence/behavioral.log
 
       - name: Behavioral harness negative self-test
         shell: bash
@@ -119,3 +124,16 @@ jobs:
             >/tmp/lumenfall-dom.html 2>/tmp/lumenfall-chrome.log
 
           node scripts/ci/smoke.cjs --dom /tmp/lumenfall-dom.html --chrome-log /tmp/lumenfall-chrome.log --require-guard
+
+      - name: Preserve full regression evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pre-merge-evidence-${{ github.run_id }}
+          retention-days: 14
+          path: |
+            validation-evidence/
+            /tmp/lumenfall-collection-price/
+            /tmp/lumenfall-dom.html
+            /tmp/lumenfall-chrome.log
+            /tmp/lumenfall-http.log

@@ -2,7 +2,7 @@ name: Prism integration failure recheck
 on:
   push:
     branches: ['feature/prism-earning-001']
-    paths: ['.github/workflows/prism-integration-recheck.yml']
+    paths: ['.github/workflows/prism-integration-recheck.yml', 'tests/behavioral/upgrade-clarity.js']
 permissions:
   contents: read
 jobs:
@@ -29,7 +29,7 @@ jobs:
           fs.mkdirSync('mobile/www',{recursive:true});fs.copyFileSync('index.html','mobile/www/index.html');
           for(const p of ['fonts','branding'])fs.cpSync(p,path.join('mobile/www',p),{recursive:true});
           const available=Object.keys(require('./tests/behavioral/scenarios.json').SCENARIOS);
-          const required=['p2-02a-core-qol','upgrade-effects-and-deeds','tree-purchase-ui','tree-purchase-ui-reduced-motion','upgrade-identity-ui','upgrade-identity-reduced-motion'];
+          const required=['upgrade-effects-and-deeds','p2-02a-core-qol','tree-purchase-ui','tree-purchase-ui-reduced-motion','upgrade-identity-ui','upgrade-identity-reduced-motion'];
           for(const n of required)if(!available.includes(n))throw Error('Required real scenario absent: '+n);
           const scenarios=[...new Set([...required,...available.filter(n=>n==='rift-guidance-mobile'||n.startsWith('upgrade-identity-'))])];
           fs.writeFileSync(out+'/selected.json',JSON.stringify(scenarios,null,2));
