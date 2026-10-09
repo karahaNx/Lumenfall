@@ -1,0 +1,50 @@
+name: Lab development workspace
+on:
+  push:
+    branches: ['feature/lab-expansion-001']
+    paths: ['.github/workflows/lab-workspace.yml']
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - name: Record pinned development identity
+        run: |
+          git rev-parse HEAD > lab-workspace-head.txt
+          git ls-tree -r HEAD > lab-workspace-tree.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lab-workspace-${{ github.run_id }}
+          retention-days: 3
+          include-hidden-files: true
+          path: |
+            index.html
+            AGENTS.md
+            PROJECT_BOOTSTRAP.txt
+            PROJECT_INSTRUCTIONS.txt
+            README.md
+            .gitignore
+            .github/workflows/
+            tests/
+            scripts/
+            fonts/
+            branding/
+            docs/tasks/
+            docs/project/
+            docs/agents/
+            docs/decisions/
+            docs/PROJECT_STATE.md
+            docs/CHAT_OWNERSHIP.md
+            docs/CONTEXT_INDEX.md
+            docs/HANDOFF_TEMPLATE.md
+            docs/qa/prism-earning-001/
+            docs/qa/progression-expansion-001/
+            docs/qa/offline-autoascend-2026-10-07/device_backup.json
+            docs/recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/main-index.html
+            lab-workspace-head.txt
+            lab-workspace-tree.txt
