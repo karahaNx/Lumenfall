@@ -5319,8 +5319,8 @@ function updateResearchCard(node,card){
   if(preview.textContent!==text) preview.textContent=text;
   var label=p.reason==='locked'?'Reach Rift '+node.unlockDepth:p.maxed?'Maxed':p.buyCount?'Upgrade ×'+p.buyCount:'Upgrade';
   var displayed=p.buyCount?p.cost:p.needed;
-  var html=(node.lumenBase && Number.isFinite(displayed.lumen)?'<span class="cost mono">'+costIcon('lumen')+formatNum(displayed.lumen)+'</span>':'')+
-    (node.shardBase && Number.isFinite(displayed.shard)?'<span class="cost mono">'+costIcon('shard')+formatNum(displayed.shard)+'</span>':'')+'<span class="label">'+label+'</span>';
+  var html=(node.lumenBase && Number.isFinite(displayed.lumen)?'<span class="cost mono" style="color:'+(state.lumen<displayed.lumen?'var(--danger)':'var(--ink)')+'">'+costIcon('lumen')+formatNum(displayed.lumen)+'</span>':'')+
+    (node.shardBase && Number.isFinite(displayed.shard)?'<span class="cost mono" style="color:'+(state.shards<displayed.shard?'var(--danger)':'var(--ink)')+'">'+costIcon('shard')+formatNum(displayed.shard)+'</span>':'')+'<span class="label">'+label+'</span>';
   if(btn.dataset.planHtml!==html){btn.innerHTML=html;btn.dataset.planHtml=html;}
   btn.disabled=!p.affordable;
 }
