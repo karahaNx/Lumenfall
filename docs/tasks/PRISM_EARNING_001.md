@@ -1,19 +1,19 @@
 # PRISM_EARNING_001 — improvement 01
 
-Prism implementation on `feature/prism-earning-001`; baseline main67373faa.
-User mandate: improve returns, preserve paid value, one improvement at a time,
-ONE final APK. Integrate only into PR102 development, never directly into main.
+User mandate: protect purchased value; one improvement at a time; ONE final APK.
+Target PR103 into PR102 development only. Keep main67373faa and release unchanged.
 
-[Policy and proof](../qa/prism-earning-001/DESIGN.md).
-[Closeout, ROI, raw evidence and remaining limits](../qa/prism-earning-001/CLOSEOUT.md).
-Repeat:20% base plus full earned bonus, rounded once. Exact boundary arithmetic;
-first/new-depth/full-cap policies and saved purchase values remain. Static intro
-now agrees with the new rule. No wallet/schema/price/scheduler/Android changes.
+[Policy](../qa/prism-earning-001/DESIGN.md),
+[mobile, old-engine and ROI](../qa/prism-earning-001/CLOSEOUT.md),
+[collection integration](../qa/prism-earning-001/INTEGRATION.md),
+[earlier debug](../qa/prism-earning-001/RECOVERY_DEBUG.md),
+[Lab focus repair and exact evidence](../qa/prism-earning-001/LAB_FOCUS_REPAIR.md).
 
-Head859de734 full CI37916978016 and focused37916977961 PASS. Same reward code:
-341654 numeric,3506 state,6651 browser checks. Closeout37925122359 PASS:12 mobile
-profiles/468 checks,V8 6.0/3277 checks,180 ROI rows. Old helper failures preserved.
-Intro copy corrected by65a6b060; final combined-source rerun remains required.
-Next: verify development integration and its existing UI changes with full gates.
-Physical Android/TalkBack/final APK remain untested; do not claim whole-economy
-balance. PR102 expansion beyond task01 is not implemented by this checkpoint.
+Repeat:20% base plus full earned bonus, rounded once. Exact boundaries; paid
+levels, active work, Auto-Ascend, save schema, prices and scheduler retained.
+Collection colors refresh per wallet; obsolete read-only cards remain hidden.
+Full a5783524 CI failed Lab focus; the isolated994040ee repair passed its causal
+before/after checks and is now copied by exact blobs into this candidate.
+Next: require full combined CI, negatives and guarded startup before integration.
+Physical Android/native WebView60/TalkBack/final APK remain untested. Late-price
+ROI and Lab/Forge/Tree/Comet expansions are subsequent work, not complete here.
