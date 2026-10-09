@@ -5,6 +5,7 @@ const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/st
 const args=process.argv.slice(2),at=args.indexOf('--source');
 const sourcePath=at<0?'index.html':args[at+1];assert(sourcePath,'--source requires a path');
 const source=fs.readFileSync(sourcePath,'utf8');
+assert(source.includes("{name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the run for Prisms. Repeats keep 20% of the unupgraded base plus the full earned upgrade bonus, rounded down once. Clearing beyond your best rewarded Rift adds a new-depth bonus. Permanent systems stay.'}"),'Encyclopedia Ascend summary matches the protected repeat-bonus rule');
 function single(name){const m=source.match(new RegExp('function '+name+'\\([^\\n]*\\}'));assert(m,'missing production function '+name);return m[0];}
 const start=source.indexOf('// PRISM_EARNING_001:'),end=source.indexOf('function ascendPrismGain(',start);
 assert(start>=0 && end>start,'candidate reward functions are not installed');
