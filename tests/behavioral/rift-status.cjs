@@ -66,7 +66,9 @@ async function swipe(loc,width){
  const touched=observing?await evaluate('(()=>{var e=document.elementFromPoint('+x+','+y+');return e?e.tagName+"."+e.className:"none";})()'):null;
  await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
  for(let i=1;i<=6;i++){await send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:y+dy*i/6}]});await new Promise(r=>setTimeout(r,16));}
- await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await new Promise(r=>setTimeout(r,70));
+ await new Promise(r=>setTimeout(r,120)); // Let the native drag finish before release to reduce inertial overshoot.
+ await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+ await settleScroll(); // Native momentum must settle before choosing the next gesture.
  if(observing)trace({phase:'native-swipe',count:swipeCount,delta,y,dy,before,after:await evaluate('document.querySelector("main").scrollTop'),touched});
 }
 async function settleScroll(){
