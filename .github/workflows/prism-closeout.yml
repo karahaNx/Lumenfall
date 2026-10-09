@@ -1,0 +1,52 @@
+name: Prism mobile engine and economy acceptance
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: lumenfall-prism-closeout-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  closeout:
+    if: github.head_ref == 'feature/prism-earning-001'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Source and independent economy matrix
+        run: |
+          set -euo pipefail
+          mkdir -p prism-closeout
+          node scripts/ci/validate_source.cjs | tee prism-closeout/source.txt
+          node scripts/codex/check_context.cjs --task docs/tasks/PRISM_EARNING_001.md | tee prism-closeout/context.txt
+          node tests/behavioral/prism-closeout-data.cjs index.html prism-closeout | tee prism-closeout/economy-summary.json
+      - name: Verify and execute actual V8 6.0 runtime
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/prism-node8
+          cd /tmp/prism-node8
+          curl -fL --retry 2 https://nodejs.org/dist/v8.3.0/SHASUMS256.txt -o SHASUMS256.txt
+          curl -fL --retry 2 https://nodejs.org/dist/v8.3.0/node-v8.3.0-linux-x64.tar.xz -o node-v8.3.0-linux-x64.tar.xz
+          grep ' node-v8.3.0-linux-x64.tar.xz$' SHASUMS256.txt | sha256sum -c -
+          tar -xf node-v8.3.0-linux-x64.tar.xz
+          cd "$GITHUB_WORKSPACE"
+          /tmp/prism-node8/node-v8.3.0-linux-x64/bin/node tests/behavioral/prism-legacy-runtime.cjs index.html prism-closeout/legacy-cases.json | tee prism-closeout/v8.json
+      - name: Mobile 320 390 430 large text motion input and focus
+        if: always()
+        run: node tests/behavioral/prism-acceptance.cjs index.html prism-closeout/mobile
+      - name: Preserve exact candidate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prism-closeout-${{ github.run_id }}
+          retention-days: 14
+          path: |
+            prism-closeout/
+            tests/behavioral/prism-acceptance.cjs
+            tests/behavioral/prism-closeout-data.cjs
+            tests/behavioral/prism-legacy-runtime.cjs
