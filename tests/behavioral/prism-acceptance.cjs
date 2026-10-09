@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 'use strict';
-// Actual Chromium layout/input. Freeze timers, not purchase or payout functions.
+// Actual Chromium layout/input. Freeze timers, not purchase/payout functions.
 // Browser evidence is not Android/WebView/TalkBack acceptance.
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),http=require('node:http');
 const {spawn,spawnSync}=require('node:child_process'),assert=require('node:assert/strict'),crypto=require('node:crypto');
@@ -20,7 +20,7 @@ window.prismQa={
  document.querySelector('.shell').inert=false;isNewGame=false;els['toast'].classList.remove('show');activateTab('ascend');},
  breakdown:ascendPrismBreakdown,keys:function(){return [SAVE_KEY,RECOVERY_SAVE_KEY];}
 };`;
-const prelude=`<script>window.__prismErrors=[];window.addEventListener('error',function(e){__prismErrors.push(e.message);});window.addEventListener('unhandledrejection',function(e){__prismErrors.push(String(e.reason));});window.setInterval=function(){return 0;};window.requestAnimationFrame=function(){return 0;};localStorage.setItem('lumenfall_startup_intro_last',String(Date.now()));</script>`;
+const prelude=`<script>window.__prismErrors=[];window.__prismInput=[];['keydown','keyup','click'].forEach(function(type){document.addEventListener(type,function(e){__prismInput.push({type:type,key:e.key,target:e.target.outerHTML&&e.target.outerHTML.slice(0,200),trusted:e.isTrusted});},true);});window.addEventListener('error',function(e){__prismErrors.push(e.message);});window.addEventListener('unhandledrejection',function(e){__prismErrors.push(String(e.reason));});window.setInterval=function(){return 0;};window.requestAnimationFrame=function(){return 0;};localStorage.setItem('lumenfall_startup_intro_last',String(Date.now()));</script>`;
 const marker='\n})();\n</script>\n<script>\nif(window.Capacitor';assert.equal(source.split(marker).length,2);
 const html=source.replace('<head>','<head>'+prelude).replace(marker,'\n'+bridge+marker);
 const server=http.createServer((req,res)=>{const name=decodeURIComponent(new URL(req.url,'http://localhost').pathname);
@@ -37,7 +37,11 @@ const pause=ms=>new Promise(r=>setTimeout(r,ms));
 async function ready(){const deadline=Date.now()+10000;while(Date.now()<deadline){if(await ev('!!window.prismQa&&prismQa.initialized()')){await ev('prismQa.ready()');return;}await pause(30);}throw Error('Game initialization deadline');}
 async function point(selector){return ev(`(function(){var e=document.querySelector(${JSON.stringify(selector)});if(!e)throw Error('missing input');e.scrollIntoView({block:'center'});var r=e.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2,h=document.elementFromPoint(x,y);if(!h||!(h===e||e.contains(h)))throw Error('input obscured: '+e.outerHTML);if(r.width<44||r.height<44)throw Error('input below44px');return {x:x,y:y};})()`);}
 async function tap(selector){const p=await point(selector);await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:p.x,y:p.y}]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await pause(50);}
-async function key(key,code,n){await send('Input.dispatchKeyEvent',{type:'rawKeyDown',key,code,windowsVirtualKeyCode:n});await send('Input.dispatchKeyEvent',{type:'keyUp',key,code,windowsVirtualKeyCode:n});}
+async function key(key,code,n){
+ // Enter must include its text/keypress event; rawKeyDown is for non-text keys.
+ await send('Input.dispatchKeyEvent',{type:key==='Enter'?'keyDown':'rawKeyDown',key,code,windowsVirtualKeyCode:n,...(key==='Enter'?{text:'\r',unmodifiedText:'\r'}:{})});
+ await send('Input.dispatchKeyEvent',{type:'keyUp',key,code,windowsVirtualKeyCode:n});
+}
 async function shot(name){const s=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(evidence,name+'.png'),Buffer.from(s.data,'base64'));}
 async function run(){
  assert(chrome,'supported Chromium required');fs.mkdirSync(evidence,{recursive:true});
@@ -52,7 +56,9 @@ async function run(){
   session=(await send('Target.attachToTarget',{targetId:tab.targetId,flatten:true},null)).sessionId;
   await send('Emulation.setDeviceMetricsOverride',{width,height:844,deviceScaleFactor:1,mobile:true});await send('Emulation.setTouchEmulationEnabled',{enabled:true});
   await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:motion}]});await send('Page.enable');
-  await send('Page.navigate',{url:'http://127.0.0.1:'+server.address().port+'/index.html'});await ready();await ev('document.fonts.ready.then(()=>true)');
+  await send('Page.navigate',{url:'http://127.0.0.1:'+server.address().port+'/index.html'});await ready();
+  // Wait for the real 430ms intro completion before replacing the test fixture.
+  await pause(500);await ready();await ev('document.fonts.ready.then(()=>true)');
   await ev(`document.documentElement.style.fontSize=${JSON.stringify(16*scale+'px')}`);
   const samples=[];
   for(const [c,b,t,l] of [[14,0,0,0],[20,0,7,0],[20,89,7,0],[119,89,7,0],[25,0,10,10],[1000000,1000000,100,100]]){
@@ -72,12 +78,12 @@ async function run(){
   await tap('#ascend-btn');ok(await ev('prismQa.get().prisms')===1004,'real touch awards four Prisms once');ok(await ev('prismQa.get().ascendCount')===1,'one Ascend');
   ok(await ev("prismQa.keys().map(function(k){return JSON.parse(localStorage.getItem(k)).prisms;}).every(function(v){return v===1004;})"),'actual input persists both wallets');
   const ax=await send('Accessibility.getFullAXTree');ok(ax.nodes.some(n=>!n.ignored&&n.name&&/Auto-Ascend/.test(n.name.value)),'Auto-Ascend exposed to accessibility tree');
-  ok((await ev('window.__prismErrors')).length===0,'no runtime errors');records.push({width,scale,motion,samples,input:'native CDP touch and keyboard; payout and two-slot save verified'});
+  ok((await ev('window.__prismErrors')).length===0,'no runtime errors');records.push({width,scale,motion,samples,input:await ev('window.__prismInput')});
   await send('Target.disposeBrowserContext',{browserContextId:context.browserContextId},null);
  }
 }
 (async()=>{const result={status:'fail',sourceSha256:crypto.createHash('sha256').update(source).digest('hex'),node:process.version,browser:chrome,profiles:records};
- try{await run();result.status='pass';}catch(e){result.error=e.stack;try{if(session)await shot('failure');}catch(_){} }
+ try{await run();result.status='pass';}catch(e){result.error=e.stack;try{if(session){await shot('failure');result.input=await ev('window.__prismInput');}}catch(_){} }
  try{if(browser){if(!closed)await send('Browser.close',{},null);let timer;const exit=await Promise.race([completion,new Promise((_,j)=>{timer=setTimeout(()=>{browser.kill('SIGKILL');j(Error('browser teardown deadline'));},5000);})]).finally(()=>clearTimeout(timer));assert.equal(exit.code,0);result.exit=exit;fs.rmSync(profile,{recursive:true,force:true,maxRetries:3,retryDelay:100});}}catch(e){result.status='fail';result.teardown=e.message;}
  server.closeAllConnections();await new Promise(r=>server.close(r));result.checks=checks;result.stderr=stderr;fs.mkdirSync(evidence,{recursive:true});fs.writeFileSync(path.join(evidence,'receipt.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));if(result.status!=='pass')process.exitCode=1;
 })();
