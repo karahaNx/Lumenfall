@@ -16,6 +16,8 @@ window.runUpgradeIdentityQa=async function(b,ctx,assert,parity,summaryParity){
   function install(s){b.setState(s);b.renderLayout();return b.getState();}
   b.resetFeedback();
   var closedForge=['focus','sense','formation','resolve'],closedLab=['riftattune','formationstudy','prismstudy'],closedTree=['starlight','steady','momentum'];
+  var originalForge=['focus','sense','formation','resolve','charge','arcanecal','conduction','luminoustracking'];
+  var addedForge=['cauterize','fracturekey','guardianseal','spillway','sustainedchannel','tapconduit','guardiancadence','relay','resonantedge','victorycharge','amplifiertrim','dualchannel','overflowconduit','resonancecells','resonancecascade','resonancereclaim'];
   if(ctx.scenario==='upgrade-identity-contracts'){
     var s=seed();s.activeStudies=[];install(s);
     closedForge.forEach(function(id){
@@ -31,7 +33,7 @@ window.runUpgradeIdentityQa=async function(b,ctx,assert,parity,summaryParity){
     before=b.getState();ok(!t.autoFill()&&t.queued().studiesStarted===0,'both closed Study queue entrypoints inert');same(b.getState(),before,'closed queued Studies spend nothing');
     closedTree.forEach(function(id){var before=b.getState();u.buyNode(id);same(b.getState(),before,'closed Tree cannot spend '+id);ok(!document.querySelector('[data-node="'+id+'"]'),'closed Tree has no purchase '+id);});
     [0,1,6,20,31].forEach(function(k){
-      var s=seed();Object.keys(s.research).forEach(function(id){s.research[id]=k;});Object.keys(s.longStudyLevels).forEach(function(id){s.longStudyLevels[id]=k;});Object.keys(s.nodes).forEach(function(id){s.nodes[id]=k;});
+      var s=seed();originalForge.forEach(function(id){s.research[id]=k;});addedForge.forEach(function(id){ok(s.research[id]===0&&s.researchQueue[id]===false,'new Forge defaults do not contaminate historical factor oracle '+id);});Object.keys(s.longStudyLevels).forEach(function(id){s.longStudyLevels[id]=k;});Object.keys(s.nodes).forEach(function(id){s.nodes[id]=k;});
       install(s);var m=u.metrics();
       near(m.lumen,(1+k*.1)*(1+k*.08)*(1+k*.08),'exact old Lumen stacking '+k);
       near(m.shards,(1+k*.08)*(1+k*.08),'exact old Shard stacking '+k);
@@ -44,13 +46,13 @@ window.runUpgradeIdentityQa=async function(b,ctx,assert,parity,summaryParity){
       ['research','longStudyLevels','nodes'].forEach(function(key){same(canonical[key],b.getState()[key],'no clamping/conversion '+key+' '+k);});
     });
     install(seed());
-    same(f.nodes().filter(function(n){return !n.retiredTo;}).map(function(n){return [n.id,n.lumenBase,n.shardBase,n.lumenGrowth,n.shardGrowth];}),
+    same(f.nodes().filter(function(n){return ['charge','arcanecal','conduction','luminoustracking'].indexOf(n.id)!==-1;}).map(function(n){return [n.id,n.lumenBase,n.shardBase,n.lumenGrowth,n.shardGrowth];}),
       [['charge',0,30,1,1.55],['arcanecal',15000,120,1.6,1.6],['conduction',90000,280,1.6,1.6],['luminoustracking',2500000,1500,1.6,1.6]],'retained Forge recipes/prices');
-    same(t.nodes().filter(function(n){return !n.retiredTo;}).map(function(n){return [n.id,n.lumenBase,n.shardBase,n.baseDurationSec];}),
+    same(t.nodes().filter(function(n){return !n.retiredTo&&!n.labGroup;}).map(function(n){return [n.id,n.lumenBase,n.shardBase,n.baseDurationSec];}),
       [['wispascend',800,80,180],['guardmastery',600,40,150],['shardstudy',400,150,200],['lumenstudy',1400,120,260],['motestudy',3200,320,380],['measuredinquiry',30000,1200,600]],'retained Lab prices/work');
     same(u.nodes().filter(function(n){return !n.retiredTo&&!n.retired;}).map(function(n){return [n.id,n.baseCost,n.growth];}),[['echo',2,1.4],['bonds',2,1.45],['swift',3,1.5]],'retained Prism prices after F26 hours retirement');
     [0,5,10,13].forEach(function(level){var s=seed();s.activeStudies=[];s.longStudyLevels.measuredinquiry=level;install(s);
-      t.nodes().filter(function(n){return !n.retiredTo&&n.id!=='measuredinquiry';}).forEach(function(n){near(t.duration(n.id,5),Math.round(Math.round(n.baseDurationSec*Math.pow(1.6,5))*(1-.02*Math.min(10,level))),'bought Inquiry discount preserved '+n.id+' '+level);});
+      t.nodes().filter(function(n){return !n.retiredTo&&!n.labGroup&&n.id!=='measuredinquiry';}).forEach(function(n){near(t.duration(n.id,5),Math.round(Math.round(n.baseDurationSec*Math.pow(1.6,5))*(1-.02*Math.min(10,level))),'bought Inquiry discount preserved '+n.id+' '+level);});
     });
     [1,39,40,59,60,89,90].forEach(function(depth){var s=seed();s.maxDepthEver=depth;s.depth=1;s.enemyDepth=1;s.enemyMaxHp=b.enemyHpFor(1);s.enemyHp=s.enemyMaxHp;install(s);ok(b.riftStatus.slots()===(depth<40?2:depth<60?3:depth<90?4:5),'historical slot milestones '+depth);});
     var fresh=b.freshStateSnapshot();fresh.maxDepthEver=101;['wispascend','guardmastery','shardstudy','lumenstudy','motestudy'].forEach(function(id){fresh.longStudyLevels[id]=1;});install(fresh);
@@ -58,7 +60,9 @@ window.runUpgradeIdentityQa=async function(b,ctx,assert,parity,summaryParity){
     f.achievements();var earned=b.getState();f.achievements();same(b.getState(),earned,'Deed reward only once');
     fresh=b.freshStateSnapshot();fresh.research.charge=60;install(fresh);['labmaster','labqueue'].forEach(function(id){ok(f.deeds().items.find(function(d){return d.id===id;}).eligible,'fresh original Forge threshold reachable '+id);});
     ok(f.deeds().total===683,'one-time Comet reward pool unchanged');
-    return {checks:checks,closedTracks:10,activeTracks:13,exactOldFactors:true,currenciesUnchanged:true,idempotent:true,freshDeeds:true};
+    ok(t.nodes().filter(function(n){return !n.retiredTo;}).length===20,'twenty independently purchasable Lab tracks');
+    ok(f.nodes().filter(function(n){return !n.retiredTo;}).length===20,'twenty independently purchasable Forge tracks');
+    return {checks:checks,closedTracks:10,activeTracks:43,exactOldFactors:true,currenciesUnchanged:true,idempotent:true,freshDeeds:true};
   }
   if(ctx.scenario==='upgrade-identity-farm-clock'){
     var s=JSON.parse(JSON.stringify(ctx.fixtures['parity-medium-farm'].save)),clocks=[2000000000000,2000000000371];
@@ -99,14 +103,14 @@ window.runUpgradeIdentityQa=async function(b,ctx,assert,parity,summaryParity){
       await new Promise(function(resolve){setTimeout(resolve,300);});
       var root=document.querySelector('#tab-'+tab),main=document.querySelector('main');
       ok(root.scrollWidth<=root.clientWidth,'no horizontal overflow '+tab+' '+text+' '+JSON.stringify(Array.from(root.querySelectorAll('*')).filter(function(el){return el.getBoundingClientRect().right>root.getBoundingClientRect().right+1;}).slice(0,8).map(function(el){return {tag:el.tagName,cls:el.className,width:el.getBoundingClientRect().width,text:el.textContent.slice(0,30)};})));
-      var legacy=root.querySelectorAll('[data-legacy-upgrade]');ok(legacy.length===(tab==='forge'?4:tab==='research'?2:3),'owned archive visible '+tab);
-      legacy.forEach(function(card){
-        ok(!card.querySelector('button'),'legacy is read-only '+card.dataset.legacyUpgrade);ok(card.textContent.includes('Future upgrades:'),'visible new owner '+card.dataset.legacyUpgrade);
+      var legacy=root.querySelectorAll('[data-legacy-upgrade]');ok(legacy.length===0,'retired read-only shop entries removed '+tab);
+      ['focus','sense','formation','resolve'].forEach(function(id){ok(!root.querySelector('[data-research="'+id+'"],[data-queue="'+id+'"]'),'retired Forge controls remain absent '+id);});
+      root.querySelectorAll('.node-card,.study-card').forEach(function(card){
         // Current card gradient is at most8% chapter color over #1b2740.
         // Test the bright endpoint rather than assuming a transparent background.
         var probe=document.createElement('span');probe.style.color='var(--chapter)';card.appendChild(probe);var chapter=rgb(getComputedStyle(probe).color);probe.remove();
         var bg=chapter.map(function(n,i){return .08*n+.92*[27,39,64][i];}),background=luminance(bg);
-        card.querySelectorAll('.name,.desc,.effect-note,.earned-effect').forEach(function(el){var foreground=luminance(rgb(getComputedStyle(el).color)),ratio=(Math.max(foreground,background)+.05)/(Math.min(foreground,background)+.05);minContrast=Math.min(minContrast,ratio);ok(ratio>=4.5,'legacy text contrast '+tab+' '+el.className+' '+ratio);});
+        card.querySelectorAll('.name,.desc,.effect-note,.earned-effect').forEach(function(el){var foreground=luminance(rgb(getComputedStyle(el).color)),ratio=(Math.max(foreground,background)+.05)/(Math.min(foreground,background)+.05);minContrast=Math.min(minContrast,ratio);ok(ratio>=4.5,'retained upgrade text contrast '+tab+' '+el.className+' '+ratio);});
       });
       var controls=Array.from(root.querySelectorAll('button')).filter(function(el){return el.getClientRects().length&&getComputedStyle(el).visibility!=='hidden';});
       controls.forEach(function(el){var r=el.getBoundingClientRect();ok(r.width>=44&&r.height>=44,'44px '+tab+' '+el.outerHTML.slice(0,120)+' '+r.width+'x'+r.height);});
@@ -117,7 +121,7 @@ window.runUpgradeIdentityQa=async function(b,ctx,assert,parity,summaryParity){
     }
   }
   ok(matchMedia('(prefers-reduced-motion: reduce)').matches===(ctx.scenario==='upgrade-identity-reduced-motion'),'requested reduced-motion');
-  return {checks:checks,records:records,minLegacyTextContrast:minContrast};
+  return {checks:checks,records:records,minRetainedTextContrast:minContrast};
 };
 window.runUpgradeIdentityPersistence=function(b,ctx,assert,phase,nextPhase,backupCode,finish){
   if(phase()===0){

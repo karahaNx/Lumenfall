@@ -387,7 +387,7 @@ window.__lumenfallQaBridge = {
         originals.reconcile(s);
       };
       if(mutation==='timer'){
-        var source=String(originals.advance),guard='if(state.ascendCount===ascendsBeforePassive){';
+        var source=String(originals.advance),guard='if(ascendRunToken===runBeforePassive){';
         assert(source.indexOf(guard)!==-1,'timer mutation anchor');
         advanceAuthoritativeTime=eval('('+source.replace(guard,'if(true){')+')');
       }
@@ -482,10 +482,10 @@ window.__lumenfallQaBridge = {
     }
   },
   feedbackTick: function(enabled){
-    var presenter=presentLiveRiftResult;
+    var presenter=presentLiveRiftResult,previousReload=reloadInProgress;
     if(enabled===false) presentLiveRiftResult=function(){};
     reloadInProgress=false;
-    try { tick(); } finally { presentLiveRiftResult=presenter; reloadInProgress=true; }
+    try { tick(); } finally { presentLiveRiftResult=presenter; reloadInProgress=previousReload; }
     return JSON.parse(JSON.stringify(state));
   },
   resetFeedback: function(){

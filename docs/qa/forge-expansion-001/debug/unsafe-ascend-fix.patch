@@ -1,0 +1,46 @@
+--- a/index.html
++++ b/index.html
+@@ -3815,0 +3816,3 @@
++// Transient identity for synchronous run-boundary guards. Saved lifetime
++// counts can exceed integer precision; never rewrite them to identify a run.
++var ascendRunToken = {};
+@@ -5345 +5348 @@
+-  var spill=allowSpill===false ? 0 : forgeSpillDamage(amount,state.enemyHp),run=state.ascendCount;
++  var spill=allowSpill===false ? 0 : forgeSpillDamage(amount,state.enemyHp),run=ascendRunToken;
+@@ -5349 +5352 @@
+-    if(spill>0 && state.ascendCount===run && !isBoss(state.depth)) dealDamage(spill,false);
++    if(spill>0 && ascendRunToken===run && !isBoss(state.depth)) dealDamage(spill,false);
+@@ -6370,0 +6374 @@
++  ascendRunToken = {};
+@@ -6456 +6460 @@
+-  var depth=state.depth,run=state.ascendCount;
++  var depth=state.depth,run=ascendRunToken;
+@@ -6465,2 +6469,2 @@
+-  if(!killed && hit>0 && isBoss(depth) && state.depth===depth && state.ascendCount===run && sp.abilityType!=='support') forgeGiveCharge(sp.id,2*forgeLevel('sustainedchannel'));
+-  if(sp.abilityType==='support' && state.ascendCount===run) forgeRelayCharge(2*forgeLevel('relay'));
++  if(!killed && hit>0 && isBoss(depth) && state.depth===depth && ascendRunToken===run && sp.abilityType!=='support') forgeGiveCharge(sp.id,2*forgeLevel('sustainedchannel'));
++  if(sp.abilityType==='support' && ascendRunToken===run) forgeRelayCharge(2*forgeLevel('relay'));
+@@ -8714 +8718 @@
+-  var spill=allowSpill===false ? 0 : forgeSpillDamage(amount,state.enemyHp),run=state.ascendCount;
++  var spill=allowSpill===false ? 0 : forgeSpillDamage(amount,state.enemyHp),run=ascendRunToken;
+@@ -8718 +8722 @@
+-    if(spill>0 && state.ascendCount===run && !isBoss(state.depth)) simulationDealDiscreteDamage(spill,policy,summary,false);
++    if(spill>0 && ascendRunToken===run && !isBoss(state.depth)) simulationDealDiscreteDamage(spill,policy,summary,false);
+@@ -8724 +8728 @@
+-  var depth=state.depth,run=state.ascendCount;
++  var depth=state.depth,run=ascendRunToken;
+@@ -8744 +8748 @@
+-  if(!killed && hit>0 && isBoss(depth) && state.depth===depth && state.ascendCount===run && sp.abilityType!=='support') forgeGiveCharge(sp.id,2*forgeLevel('sustainedchannel'));
++  if(!killed && hit>0 && isBoss(depth) && state.depth===depth && ascendRunToken===run && sp.abilityType!=='support') forgeGiveCharge(sp.id,2*forgeLevel('sustainedchannel'));
+@@ -8753 +8757 @@
+-    var run=state.ascendCount,relay=sp.abilityType==='support' ? 2*forgeLevel('relay') : 0;
++    var run=ascendRunToken,relay=sp.abilityType==='support' ? 2*forgeLevel('relay') : 0;
+@@ -8759 +8763 @@
+-  pendingRelay.forEach(function(grant){if(grant.run===state.ascendCount) forgeRelayCharge(grant.amount);});
++  pendingRelay.forEach(function(grant){if(grant.run===ascendRunToken) forgeRelayCharge(grant.amount);});
+@@ -9175 +9179 @@
+-      var ascendsBeforePassive = state.ascendCount;
++      var runBeforePassive = ascendRunToken;
+@@ -9180 +9184 @@
+-      if(state.ascendCount===ascendsBeforePassive){
++      if(ascendRunToken===runBeforePassive){

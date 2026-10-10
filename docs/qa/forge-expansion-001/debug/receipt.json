@@ -1,0 +1,132 @@
+{
+  "status": "pass",
+  "sourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+  "node": "v24.19.0",
+  "checks": 3134,
+  "calibrationCases": 26,
+  "boundCases": 128,
+  "savedSupportCases": 4,
+  "counterCases": 4,
+  "timerPrecisionCases": 10,
+  "negativeControls": [
+    {
+      "name": "ignore-initial-burst-budget",
+      "caught": "near-ready original cast kills the boss after the offline grace\n\n0 !== 1\n"
+    },
+    {
+      "name": "omit-paid-saved-support-source",
+      "caught": "saved-Tide-and-future-Aurora: original gameplay stays below the promised upper bound"
+    },
+    {
+      "name": "omit-nonlethal-refund-from-hud-reference",
+      "caught": "canonical-120-swift0: HUD cast rate ember error 0.1660156249999999 exceeds 0.001; profile=0.2779947916666667, actual=0.3333333333333333"
+    },
+    {
+      "name": "assume-exact-support-deadline-uptime",
+      "caught": "Support deadline quantization cannot overstate the analytical lower bound"
+    },
+    {
+      "name": "assume-every-fifth-cadence-in-lower-bound",
+      "caught": "stalled cadence cannot overstate guaranteed lower damage"
+    },
+    {
+      "name": "assume-every-fifth-cadence-in-upper-bound",
+      "caught": "stalled cadence original gameplay stays below the promised upper bound"
+    },
+    {
+      "name": "ignore-unsafe-counter-transition-in-hud",
+      "caught": "Cadence HUD models the actual sixty-tap counter transition"
+    }
+  ],
+  "elapsedMs": 17393,
+  "inputsUnchangedBeforeDuringAfterExecution": true,
+  "sourceReconstruction": {
+    "beforeSourceSha256": "dfd3dbc41e1c298ec2f02f9bb4a2133683c397e92cacd2f664f8cb30d04bee1a",
+    "boundsAndHudFixedSourceSha256": "f57126fd414cd6bcf51a5177409d9699f69cf6bca619eaf283d9a5fae290d468",
+    "finalSourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+    "patch": "bounds-hud-fix.patch",
+    "patchSha256": "43a5173fc0672e6a46fc96bdb2c614763fdb9d1e3c9829774e7ba13f40195746",
+    "followedByPatch": "unsafe-ascend-fix.patch",
+    "verifiedReverseChain": [
+      "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+      "f57126fd414cd6bcf51a5177409d9699f69cf6bca619eaf283d9a5fae290d468",
+      "dfd3dbc41e1c298ec2f02f9bb4a2133683c397e92cacd2f664f8cb30d04bee1a"
+    ],
+    "verifiedForwardChain": [
+      "dfd3dbc41e1c298ec2f02f9bb4a2133683c397e92cacd2f664f8cb30d04bee1a",
+      "f57126fd414cd6bcf51a5177409d9699f69cf6bca619eaf283d9a5fae290d468",
+      "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac"
+    ],
+    "reconstructedBeforeObservedDps": 1519799.993444882,
+    "reconstructedBeforeHpGain": 21.330758929252625,
+    "reconstructedBeforeAssessmentMatchesRawReceipt": true,
+    "reproduce": "In an isolated directory, reverse-apply unsafe-ascend-fix.patch to final index.html; verify f571 digest. Reverse-apply bounds-hud-fix.patch; verify dfd3 digest. Run bounds-repro.cjs with that explicit source path. Both patches are ordinary unified diffs targeting index.html."
+  },
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 601518,
+      "sha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac"
+    },
+    {
+      "path": "tests/behavioral/forge-expansion-harness.cjs",
+      "bytes": 10916,
+      "sha256": "185feb9242a3c8b5fac48871be20f61a119e2881e78191ecd832d12da16d9724"
+    },
+    {
+      "path": "tests/behavioral/forge-expansion-calibration.cjs",
+      "bytes": 26059,
+      "sha256": "ea5787eb14d63237c3cbe4687914c67935703cf81d1c176042c4473c40bad3f4"
+    },
+    {
+      "path": "docs/qa/forge-expansion-001/debug/README.md",
+      "bytes": 7928,
+      "sha256": "b13d5faaa271b6abdeb30ebb22ff34525a88310fd36a56525ecbd70f43d6140b"
+    },
+    {
+      "path": "docs/qa/forge-expansion-001/debug/bounds-repro.cjs",
+      "bytes": 2834,
+      "sha256": "41626a84aa03d06d4797c052e166293d0fb84ff98daa23df069542ec5c9d06df"
+    },
+    {
+      "path": "docs/qa/forge-expansion-001/debug/support-clock-before.json",
+      "bytes": 8263,
+      "sha256": "ca356bb226d7f8dc73ef03968f65547df621c3965220db32880a5df150dc76db"
+    },
+    {
+      "path": "docs/qa/forge-expansion-001/debug/cadence-counter-before.json",
+      "bytes": 38354,
+      "sha256": "a8759b120c8f291076626c63b6f9332b5c85e8366e8747411d1ab6aea79b2fd3"
+    },
+    {
+      "path": "docs/qa/forge-expansion-001/debug/hud-counter-transition-before.json",
+      "bytes": 2241,
+      "sha256": "9b859ec6dbea91b569487db2dd69693d934d8de6b1a037a297dc7427a26f3927"
+    },
+    {
+      "path": "docs/qa/forge-expansion-001/debug/bounds-repro-after.json",
+      "bytes": 48792,
+      "sha256": "f23eddac28c028bdb5f9939461c13821b574435d125f995a9f4899a9d212feb6"
+    },
+    {
+      "path": "docs/qa/forge-expansion-001/debug/bounds-hud-fix.patch",
+      "bytes": 3449,
+      "sha256": "43a5173fc0672e6a46fc96bdb2c614763fdb9d1e3c9829774e7ba13f40195746"
+    },
+    {
+      "path": "docs/qa/forge-expansion-001/debug/bounds-source-identity.json",
+      "bytes": 1411,
+      "sha256": "ca2d903432eb46aabb743b67fc1b7d20472cfddecccfe02a3090aed33a919861"
+    },
+    {
+      "path": "docs/qa/forge-expansion-001/debug/calibration.json",
+      "bytes": 57284,
+      "sha256": "ee41c7d1c8988d12421fd82c092baa1cbbf85edd854f3abc120bca03c6275fe3"
+    },
+    {
+      "path": "docs/qa/forge-expansion-001/candidate/calibration.json",
+      "bytes": 57284,
+      "sha256": "ee41c7d1c8988d12421fd82c092baa1cbbf85edd854f3abc120bca03c6275fe3"
+    }
+  ]
+}

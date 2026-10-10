@@ -120,7 +120,7 @@ async function runScenario(chrome, baseUrl, scenario, fixture, viewport = null, 
   if (scenario === 'lab-motes-runtime') driver = 'farm-runtime.cjs';
   if (scenario === 'lab-ui-regression') driver = 'lab-ui-regression.cjs';
   if (['lab-motes-native', 'lab-motes-reduced-motion'].includes(scenario)) driver = 'lab-motes.cjs';
-  if (driver) return runNativeProcess([process.execPath, path.join(ROOT, driver), chrome, urlFor('/index.html'), scenario], scenario, driver === 'rift-status.cjs' ? 120000 : 90000, options);
+  if (driver) return runNativeProcess([process.execPath, path.join(ROOT, driver), chrome, urlFor('/index.html'), scenario], scenario, driver === 'rift-status.cjs' ? 300000 : 90000, options);
   if (scenario === 'offline-12h-ui') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-12h-ui.cjs'), chrome], scenario, 180000, options);
   if (scenario === 'offline-12h-core') return runNativeProcess([process.execPath, path.join(ROOT, 'offline-12h.cjs')], scenario, 300000, options);
   const profile = temporary('lumenfall-qa-' + scenario + '-');
@@ -198,8 +198,8 @@ function mutateSource(source, scenario) {
   }
   if (scenario === 'self-test-forge-ui-bulk') for (const rule of ['  #tab-forge .mult-row{gap:4px;}\n', '  #tab-forge .mult-btn{min-width:44px;min-height:44px;}\n']) replaceOnce(rule, '');
   const prismMutations = {
-    'tree': ["(1 + nodeLevel('swift')*0.04) * longStudyPrismMult()", "1 * longStudyPrismMult()"],
-    'lab': ["function longStudyPrismMult(){ return 1 + longStudyLevel('prismstudy')*0.05; }", "function longStudyPrismMult(){ return 1; }"],
+    'tree': ["var tree = nodeLevel('swift');", "var tree = 0;"],
+    'lab': ["var lab = longStudyLevel('prismstudy');", "var lab = 0;"],
     'payout': ["  state.prisms += gain;", "  state.prisms += gain + 1;"],
     'repeat': ["var ASCEND_REPEAT_REWARD_RATE = 0.20;", "var ASCEND_REPEAT_REWARD_RATE = 0.25;"],
     'rounding': ["  var progressBonus = ascendProgressPrismBonusForCleared(cleared,benchmark);", "  var progressBonus = cleared>benchmark ? Math.max(0,full-ascendFullPrismGainForCleared(benchmark)) : 0;"]

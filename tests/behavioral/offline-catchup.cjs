@@ -6,6 +6,7 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{performance}=require('node:perf_hooks');
 const root=path.resolve(__dirname,'../..');
+const {reward:prismRewardOracle,legacyPolicy:legacyPrismPolicy}=require('./prism-earning-reference.cjs');
 const sourceArg=process.argv.indexOf('--source');
 const source=fs.readFileSync(sourceArg<0?path.join(root,'index.html'):process.argv[sourceArg+1],'utf8');
 const baseline=fs.readFileSync(path.join(root,'docs/recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/main-index.html'),'utf8');
@@ -64,6 +65,19 @@ function baselineSummary(actual,expected,label){
  assert.deepEqual(existing,expected,label);
 }
 function baselineState(actual,expected,seed,label){
+ // Additive Lab fields are independently required to be zero/OFF on this old save.
+ // Remove only those verified defaults before the unchanged full historical oracle.
+ actual=copy(actual);
+ const newForgeIds=['cauterize','fracturekey','guardianseal','spillway','sustainedchannel','tapconduit','guardiancadence','relay','resonantedge','victorycharge','amplifiertrim','dualchannel','overflowconduit','resonancecells','resonancecascade','resonancereclaim'];
+ for(const [field,value] of [['research',0],['researchQueue',false]])for(const id of newForgeIds){
+  assert.equal(actual[field][id],value,label+' exact unpurchased Forge default '+field+'.'+id);
+  delete actual[field][id];
+ }
+ const newIds=['labcapacity','procurement','catalysis','focusprotocol','fieldnotes','curriculum','bossledger','luminousdistill','sigilcartography','rarityappraisal','modulefabrication','ultimateanalysis','resonantefficiency','adaptivegrowth'];
+ for(const [field,value] of [['longStudyLevels',0],['studyQueue',false],['studyUseMotes',false],['studySpeedTargets',1.5]])for(const id of newIds){
+  assert.equal(actual[field][id],value,label+' exact unpurchased Lab default '+field+'.'+id);
+  delete actual[field][id];
+ }
  const ids=Object.keys(expected.longStudyLevels);
  assert.deepEqual(actual.studyUseMotes,Object.fromEntries(ids.map(id=>[id,false])),label+' legacy OFF intent');
  assert.deepEqual(actual.studySpeedTargets,Object.fromEntries(ids.map(id=>{
@@ -113,7 +127,17 @@ const start=performance.now();
 // Fails on the unchanged product through the reported production entry.
 const on=runAsync(original,28800);
 assert.equal(on.result.kills,302400);assert.equal(on.result.ascends,14400);
-assert.equal(on.committed.prisms-original.prisms,86400+2810);
+const perAscend=prismRewardOracle(original.autoAscendTargetDepth-1,original.ascendRewardedDepth,original.nodes.swift,original.longStudyLevels.prismstudy);
+assert.equal(on.committed.nodes.swift,original.nodes.swift,'fixed Tree investment in long reward fixture');
+assert.equal(on.committed.longStudyLevels.prismstudy,original.longStudyLevels.prismstudy,'fixed completed Clarity in long reward fixture');
+assert.equal(on.committed.prisms-original.prisms,perAscend*14400+2810,'independent new-policy reward plus existing refund');
+// Retain the original exact reward assertion on an explicitly labelled old-
+// reward counterfactual. Every other state field must match the real new game.
+const oldRewardSource=legacyPrismPolicy(source,baseline);
+const oldRewardRun=app(original,oldRewardSource,28800);oldRewardRun.b.apply();
+assert.equal(oldRewardRun.b.get().prisms-original.prisms,86400+2810,'historical policy control remains exact');
+assert.deepEqual({...oldRewardRun.b.get(),prisms:on.committed.prisms},on.committed,'only Prism balance differs under old reward policy');
+records.push({case:'Prism policy isolation',perAscend,newPrisms:on.committed.prisms-original.prisms,legacyPrisms:oldRewardRun.b.get().prisms-original.prisms});
 assert.equal(on.committed.lumen,0,'Ascension reset preserves earned vs balance distinction');
 assert.deepEqual(on.committed.formationRebuild,original.formationRebuild,'unaffordable Boss reconstruction intent persists');
 assert.deepEqual(on.committed.empowerQueue,original.empowerQueue,'purchase intent preserved');
@@ -140,7 +164,9 @@ assert.equal(long.result.kills,cap.result.kills,'beyond-cap time earns no extra 
 // sides. UPGRADE_IDENTITY tests separately exercise old ON intent and paid work.
 // New F15 operands are intentional. Preserve the upstream exact legacy oracle
 // as a four-Bond counterfactual; actual eight-Bond long/split checks stay intact.
-const legacyBondSource=source.replace('function bondActive(bondId){',
+// Preserve the legacy four-Bond AND legacy Prism policy for the frozen
+// scheduler oracle. Actual eight-Bond/new-Prism full-window tests above remain.
+const legacyBondSource=oldRewardSource.replace('function bondActive(bondId){',
  "function bondActive(bondId){\n  if(['kindling','vanguard','quarry','harvest'].indexOf(bondId)!==-1) return false;");
 assert.notEqual(legacyBondSource,source,'legacy Bond control anchor');
 for(const rawSeed of [original,clear20,off]){

@@ -26,7 +26,10 @@ window.runP105ControlQa = function(bridge,ctx,assert){
   var poor=bridge.getState();poor.lumen=0;poor.shards=0;bridge.setState(poor);bridge.renderLayout();
   var purchase=q('[data-research="charge"]');
   assert(purchase.disabled && purchase.dataset.state==='unaffordable' && purchase.querySelector('.label').textContent==='Upgrade' && !/Need|Cannot afford/i.test(purchase.textContent+' '+purchase.getAttribute('aria-label')),'silent resource shortage retains native disabled and Upgrade label');
-  var rich=bridge.getState();rich.lumen=1e100;rich.shards=1e100;bridge.setState(rich);bridge.refreshAffordability();
+  // Fund the selected bulk quote exactly; a huge wallet can round a small debit to zero.
+  var rich=bridge.getState(),price=bridge.forge.plan('charge').needed;
+  rich.lumen=price.lumen;rich.shards=price.shard;bridge.setState(rich);bridge.refreshAffordability();
+  var affordabilityFunding={multiplier:q('#tab-forge [data-mult].active').dataset.mult,price:price,wallet:{lumen:rich.lumen,shards:rich.shards}};
   assert(!purchase.disabled && purchase.dataset.state==='available' && !/Need/.test(purchase.textContent),'live affordability clears stale reason');
   bridge.setState(poor);bridge.refreshAffordability();
   assert(purchase.disabled && purchase.dataset.state==='unaffordable','live affordability restores shortage state');
@@ -118,5 +121,5 @@ window.runP105ControlQa = function(bridge,ctx,assert){
   q('#enemy-stage').dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}));
   assert(bridge.getState().totalTaps===taps,'untrusted Guardian events cannot deal damage');
   bridge.setState(original);bridge.renderLayout();
-  return {selectedContrast:contrastResults,liveStates:true,focus:true,untrustedTapGuard:true};
+  return {selectedContrast:contrastResults,liveStates:true,focus:true,untrustedTapGuard:true,affordabilityFunding:affordabilityFunding};
 };

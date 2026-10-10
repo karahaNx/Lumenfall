@@ -12,9 +12,11 @@ window.runR3DestinationsQa = function(b,ctx,assert){
   function same(a,c,m){ok(JSON.stringify(a)===JSON.stringify(c),m);}
   function go(name){q('[data-tab="'+name+'"]').click();}
   var catalogue=b.r3.catalogues(),seed=window.seedR3(b,ctx);
+  ok(!b.getFlags().reloadInProgress,'timer-only test pause leaves production persistence enabled');
   b.setState(seed);b.renderLayout();
-  same(catalogue.upgrades,['focus','sense','formation','resolve','charge','arcanecal','conduction','luminoustracking'],'five original direct upgrades followed by three Forge v1 additions');
-  same(catalogue.projects,['wispascend','guardmastery','riftattune','shardstudy','lumenstudy','formationstudy','motestudy','prismstudy','measuredinquiry'],'eight original timed projects plus Measured Inquiry');
+  var addedForge=['cauterize','fracturekey','guardianseal','spillway','sustainedchannel','tapconduit','guardiancadence','relay','resonantedge','victorycharge','amplifiertrim','dualchannel','overflowconduit','resonancecells','resonancecascade','resonancereclaim'];
+  same(catalogue.upgrades,['focus','sense','formation','resolve','charge','arcanecal','conduction','luminoustracking'].concat(addedForge),'eight retained direct upgrades followed by sixteen Forge additions');
+  same(catalogue.projects,['wispascend','guardmastery','riftattune','shardstudy','lumenstudy','formationstudy','motestudy','prismstudy','measuredinquiry','labcapacity','procurement','catalysis','focusprotocol','fieldnotes','curriculum','bossledger','luminousdistill','sigilcartography','rarityappraisal','modulefabrication','ultimateanalysis','resonantefficiency','adaptivegrowth'],'nine retained IDs plus fourteen distinct timed expansion projects');
   var nav=Array.from(document.querySelectorAll('nav.tabbar .tab-btn'));
   same(nav.map(function(n){return n.dataset.tab;}),['spirits','workshop','battle','ascend','deeds'],'five ordered main destinations');
   ok(!q('[data-lab-view],.lab-tabs,[id^="lab-panel-"]'),'obsolete subnavigation removed entirely');
@@ -61,6 +63,7 @@ window.runR3DestinationsQa = function(b,ctx,assert){
     return b.getState();
   }
   same(ticks(true),ticks(false),'navigation leaves exact state unchanged over equal live ticks');
+  ok(!b.getFlags().reloadInProgress,'explicit feedback ticks restore the prior save-enabled flag');
   b.setState(seed);b.renderLayout();go('forge');
   catalogue.upgrades.forEach(function(id){ok(!b.getState().researchQueue[id],'upgrade Queue defaults OFF '+id);});
   catalogue.projects.forEach(function(id){ok(!b.getState().studyQueue[id],'project Queue defaults OFF '+id);});
@@ -80,7 +83,7 @@ window.runR3DestinationsQa = function(b,ctx,assert){
     same(after.activeStudies,prior.activeStudies,'direct upgrade never creates timed project');
   });
   ['50','100'].forEach(function(mult){
-    var funded=JSON.parse(JSON.stringify(seed));funded.lumen=1e24;funded.shards=1e24;
+    var funded=JSON.parse(JSON.stringify(seed)),exact=b.forge.cost('charge',funded.research.charge,Number(mult));funded.lumen=exact.lumen;funded.shards=exact.shard;
     b.setState(funded);b.renderLayout();go('forge');q('[data-mult="'+mult+'"]').click();
     var plan=b.r3.plan('charge'),prior=b.getState();
     ok(plan.affordable && plan.buyCount===Number(mult),'funded large bulk available '+mult);
@@ -88,7 +91,7 @@ window.runR3DestinationsQa = function(b,ctx,assert){
     ok(after.research.charge===prior.research.charge+Number(mult) && after.lumen===prior.lumen-plan.cost.lumen && after.shards===prior.shards-plan.cost.shard,'funded large bulk exact purchase '+mult);
   });
   b.setState(seed);b.renderLayout();go('forge');
-  ['charge','arcanecal','conduction','luminoustracking'].forEach(function(id){
+  ['charge','arcanecal','conduction','luminoustracking'].concat(addedForge).forEach(function(id){
     q('[data-queue="'+id+'"]').click();ok(b.getState().researchQueue[id]===true,'individual Forge queue ON');
     q('[data-queue="'+id+'"]').click();ok(b.getState().researchQueue[id]===false,'individual Forge queue OFF');
   });

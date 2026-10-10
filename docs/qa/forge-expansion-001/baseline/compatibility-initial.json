@@ -1,0 +1,93 @@
+{
+  "sourceSha256": "dfd3dbc41e1c298ec2f02f9bb4a2133683c397e92cacd2f664f8cb30d04bee1a",
+  "harness": {
+    "prelude.js": "f8c2ccd4f01587d07b52c07d6d6d8756c144e94a4f1998e2807054add33f7bdb",
+    "bridge.js": "1997185b14d90a1f03413558811335948aa9751b6797943479a88f6fca4c0460",
+    "runner.js": "0fd30cee20407ebf51a8b25fb589545c20f2612c68f0f68fdab72ff26a341ab1",
+    "forge.js": "0a8799898096ce1b3307c13c320e92e0c80ff851cc016a657b7f606b23fa0387",
+    "r3-destinations.js": "1fbac7358a44a8f511e6f17b0f6d56d75e76e8ba85e31f65464dc37c2b07829c",
+    "upgrade-identity.js": "15c1e7f4a9829b4190f2ea6c4cc2d9fa585fc5b8b74164f5fee043a1328cc6a6",
+    "upgrade-clarity.js": "ada9467943284db320598f87a4f82d6b40c4c3e5e9781b1fa4416854ec62589f"
+  },
+  "controlChange": "Forge and R3 scenario timers pause through existing prelude interval wrapper; production reload flag remains false so real saveState is exercised. feedbackTick restores the previous flag. No save mock or product transaction change.",
+  "rows": [
+    {
+      "scenario": "forge-contracts",
+      "exit": 0,
+      "elapsedMs": 2984,
+      "log": "/workspace/scratch/0848c4e4f365/test-environment/forge-compat-second/forge-contracts.log"
+    },
+    {
+      "scenario": "r3-destinations",
+      "exit": 0,
+      "elapsedMs": 3830,
+      "log": "/workspace/scratch/0848c4e4f365/test-environment/forge-compat-second/r3-destinations.log"
+    },
+    {
+      "scenario": "upgrade-identity-contracts",
+      "exit": 0,
+      "elapsedMs": 1423,
+      "log": "/workspace/scratch/0848c4e4f365/test-environment/forge-compat-second/upgrade-identity-contracts.log"
+    },
+    {
+      "scenario": "upgrade-effects-and-deeds",
+      "exit": 0,
+      "elapsedMs": 1441,
+      "log": "/workspace/scratch/0848c4e4f365/test-environment/forge-compat-second/upgrade-effects-and-deeds.log"
+    },
+    {
+      "scenario": "legacy-load",
+      "exit": 0,
+      "elapsedMs": 1197,
+      "log": "/workspace/scratch/0848c4e4f365/test-environment/forge-compat-second/legacy-load.log"
+    },
+    {
+      "scenario": "forge-save-reload",
+      "exit": 0,
+      "elapsedMs": 1407,
+      "log": "/workspace/scratch/0848c4e4f365/test-environment/forge-compat-second/forge-save-reload.log"
+    },
+    {
+      "scenario": "forge-backup-restore",
+      "exit": 0,
+      "elapsedMs": 1502,
+      "log": "/workspace/scratch/0848c4e4f365/test-environment/forge-compat-second/forge-backup-restore.log"
+    },
+    {
+      "scenario": "forge-recovery",
+      "exit": 0,
+      "elapsedMs": 1641,
+      "log": "/workspace/scratch/0848c4e4f365/test-environment/forge-compat-second/forge-recovery.log"
+    },
+    {
+      "scenario": "forge-baseline",
+      "exit": 0,
+      "elapsedMs": 1302,
+      "log": "/workspace/scratch/0848c4e4f365/test-environment/forge-compat-second/forge-baseline.log"
+    },
+    {
+      "scenario": "forge-effects",
+      "exit": 0,
+      "elapsedMs": 1390,
+      "log": "/workspace/scratch/0848c4e4f365/test-environment/forge-compat-second/forge-effects.log"
+    },
+    {
+      "scenario": "forge-chronology",
+      "exit": 0,
+      "elapsedMs": 1171,
+      "log": "/workspace/scratch/0848c4e4f365/test-environment/forge-compat-second/forge-chronology.log"
+    },
+    {
+      "scenario": "forge-balance",
+      "exit": 0,
+      "elapsedMs": 3401,
+      "log": "/workspace/scratch/0848c4e4f365/test-environment/forge-compat-second/forge-balance.log"
+    },
+    {
+      "scenario": "r3-save-reload",
+      "exit": 0,
+      "elapsedMs": 2481,
+      "log": "/workspace/scratch/0848c4e4f365/test-environment/forge-compat-second/r3-save-reload.log"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+name: Research Lab expansion validation
+on:
+  pull_request:
+    branches: [main, 'feature/progression-expansion-2026-10-09']
+permissions:
+  contents: read
+concurrency:
+  group: lumenfall-lab-expansion-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  lab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Exact source identity and task context
+        run: |
+          set -euo pipefail
+          mkdir -p lab-validation
+          git rev-parse HEAD > lab-validation/commit.txt
+          sha256sum index.html > lab-validation/source-sha256.txt
+          node scripts/ci/validate_source.cjs | tee lab-validation/source.txt
+          node scripts/codex/check_context.cjs --task docs/tasks/LAB_EXPANSION_001.md | tee lab-validation/context.txt
+      - name: Complete-game Lab effects purchases save and causal controls
+        run: |
+          set -euo pipefail
+          node tests/behavioral/lab-expansion.cjs index.html --negative | tee lab-validation/core.json
+          node tests/behavioral/lab-expansion-boundary.cjs index.html --negative | tee lab-validation/boundary.json
+          node tests/behavioral/lab-expansion-stress.cjs index.html | tee lab-validation/boundary-stress.json
+          node tests/behavioral/prism-earning-state.cjs index.html | tee lab-validation/prism-state.json
+      - name: Actual mobile touch keyboard seven-slot persistence and currency colors
+        if: always()
+        run: node tests/behavioral/lab-expansion-ui.cjs index.html lab-validation/mobile
+      - name: Execute full product on actual V8 6.0
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/lab-node8
+          cd /tmp/lab-node8
+          curl -fL --retry 2 https://nodejs.org/dist/v8.3.0/SHASUMS256.txt -o SHASUMS256.txt
+          curl -fL --retry 2 https://nodejs.org/dist/v8.3.0/node-v8.3.0-linux-x64.tar.xz -o node-v8.3.0-linux-x64.tar.xz
+          grep ' node-v8.3.0-linux-x64.tar.xz$' SHASUMS256.txt | sha256sum -c -
+          tar -xf node-v8.3.0-linux-x64.tar.xz
+          cd "$GITHUB_WORKSPACE"
+          /tmp/lab-node8/node-v8.3.0-linux-x64/bin/node tests/behavioral/lab-expansion-legacy.cjs index.html | tee lab-validation/v8.json
+      - name: Preserve full source-bound evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab-expansion-${{ github.run_id }}
+          retention-days: 14
+          path: |
+            lab-validation/
+            tests/behavioral/lab-expansion*.cjs
+            docs/qa/lab-expansion-001/

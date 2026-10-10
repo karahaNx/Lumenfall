@@ -20,12 +20,23 @@ window.runUpgradeClarityQa=function(b,ctx,assert){
     s.longStudyLevels.guardmastery=3;s.longStudyLevels.riftattune=4;s.longStudyLevels.prismstudy=2;
     s.owned.offline24=true;s.owned.offline48=true;pureRender(s);
     var expected={starlight:'+'+(l*10)+'% Lumen',steady:'+'+(l*8)+'% tap',swift:'+'+(l*4)+'% Prisms',momentum:'+'+(l*6)+'% passive',echo:'+'+Math.min(30,l*5)+' percentage points',bonds:Math.min(60,l*3)+'% Wisp recruiting discount'};
-    Object.keys(expected).forEach(function(id){var el=q('[data-node-effect="'+id+'"]');if(l===0&&['starlight','steady','momentum'].includes(id)){ok(!el,'unowned retired node hidden '+id);return;}ok(el.textContent.includes(expected[id]),id+' earned/capped effect at level '+l);});
+    var nodeEffects=b.upgradeClarity.effects().nodes;
+    Object.keys(expected).forEach(function(id){
+      var el=q('[data-node-effect="'+id+'"]');
+      var earned=nodeEffects.find(function(item){return item.id===id;});
+      ok(earned && earned.text.includes(expected[id]),id+' authoritative earned/capped effect at level '+l);
+      if(['starlight','steady','momentum'].includes(id)){
+        ok(!el && !q('[data-legacy-upgrade="'+id+'"]'),'retired node stays out of shop '+id+' '+l);
+        ok(b.getState().nodes[id]===l,'hidden node paid levels retained '+id+' '+l);
+      } else ok(el && el.textContent.includes(expected[id]),id+' visible earned/capped effect at level '+l);
+    });
     var metrics=b.upgradeClarity.metrics();
     ok(Math.abs(metrics.offline-(Math.min(1,.7+l*.05)+.4))<1e-12,'offline production oracle');
     ok(metrics.costReduction===Math.min(.6,l*.03),'cost production floor oracle');
     ok(metrics.offlineCap===12,'retired extensions cannot exceed the shared cap');
     ok(Math.abs(metrics.lumen-(1+l*.1)*1.24*1.16)<1e-10,'Lumen contribution differs from multiplicative combined factor');
+    ok(Math.abs(metrics.tap-(1+l*.08)*1.4*1.6)<1e-10,'hidden Steady Hands still contributes actual paid Tap factor');
+    ok(Math.abs(metrics.momentum-(1+l*.06))<1e-10,'hidden Eternal Momentum still contributes actual paid factor');
     ok(q('[data-node-effect="echo"]').textContent.includes('node cap reached')===(l>=6),'node offline cap indication');
     ok(q('[data-node-effect="bonds"]').textContent.includes('cost floor reached')===(l>=20),'node recruiting floor indication');
   });
@@ -35,12 +46,24 @@ window.runUpgradeClarityQa=function(b,ctx,assert){
     // Active next level is not an earned level, even at zero remaining work.
     s.activeStudies=[{id:'guardmastery',remainingSec:0,totalDurationSec:150,speedMult:1}];pureRender(s);
     Object.keys(projectRates).forEach(function(id){
-      if(l===0&&['riftattune','formationstudy','prismstudy'].includes(id)){ok(!q('[data-project-effect="'+id+'"]'),'unowned retired Study hidden '+id);return;}
-      var text=q('[data-project-effect="'+id+'"]').textContent;
+      var el=q('[data-project-effect="'+id+'"]');
+      if(['riftattune','formationstudy','prismstudy'].includes(id)){
+        ok(!el && !q('[data-legacy-upgrade="'+id+'"]'),'retired Study stays out of shop '+id+' '+l);
+        ok(b.getState().longStudyLevels[id]===l,'hidden paid Study levels retained '+id+' '+l);
+        var effect=b.upgradeClarity.effects().projects.find(function(item){return item.id===id;});
+        ok(effect && effect.text.includes('+'+(l*projectRates[id])+(id==='riftattune'?' percentage points':'%')),'hidden Study authoritative earned effect '+id+' '+l);
+        return;
+      }
+      ok(!!el,'current Study exposes earned effect '+id);
+      var text=el.textContent;
       ok(text.startsWith('Earned: ')&&!text.includes('Completed level'),'earned effect without a second level on '+id);
       ok(text.includes('+'+(l*projectRates[id])+(id==='riftattune'?' percentage points':'%')),'actual earned '+id+' rate at '+l);
       ok(text.includes('+0')===(l===0),'zero completion is no earned bonus '+id);
     });
+    var current=b.upgradeIdentity.metrics();
+    ok(Math.abs(current.offline-(.7+l*.1))<1e-10,'hidden Rift Attunement retains actual offline factor');
+    ok(Math.abs(current.formation-(1+l*.05))<1e-10,'hidden Formation Insight retains actual formation factor');
+    ok(Math.abs(current.prisms-(1+l*.05))<1e-10,'hidden Clarity retains actual Prism factor');
     ok(q('[data-running-study="guardmastery"]').textContent.includes('On completion: +'+((l+1)*20)+'%'),'pending effect labelled');
     ok(q('[data-study-text="guardmastery"]').textContent==='Finishing… · 1x','zero pending does not complete');
   });
@@ -60,7 +83,7 @@ window.runUpgradeClarityQa=function(b,ctx,assert){
     [false,true].forEach(function(at){
       var s=b.freshStateSnapshot(),value;
       if(setters[id]){var c=setters[id];s[c[0]]=c[1]-(at?0:1);}
-      else if(id==='labmaster'||id==='labqueue'){s.research.focus=(id==='labmaster'?20:60)-(at?0:1);s.research.arcanecal=10;s.research.conduction=10;s.research.luminoustracking=10;}
+      else if(id==='labmaster'||id==='labqueue'){s.research.focus=(id==='labmaster'?20:60)-(at?0:1);s.research.arcanecal=10;s.research.conduction=10;s.research.luminoustracking=10;['cauterize','fracturekey','guardianseal','spillway','sustainedchannel','tapconduit','guardiancadence','relay','resonantedge','victorycharge','amplifiertrim','dualchannel','overflowconduit','resonancecells','resonancecascade','resonancereclaim'].forEach(function(key){s.research[key]=100;});}
       else if(id==='modulemax'){s.wispModules.ember=at?20:19;s.wispModules.tide=1;}
       else if(id==='study1'||id==='study25')s.longStudyLevels.guardmastery=(id==='study1'?1:25)-(at?0:1);
       else if(id==='fullparty'){s.maxDepthEver=101;s.activeParty=Object.keys(s.spirits).slice(0,at?5:4);s.activeParty.forEach(function(k){s.spirits[k]=1;});}

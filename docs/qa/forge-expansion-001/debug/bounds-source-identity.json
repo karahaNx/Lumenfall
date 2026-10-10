@@ -1,0 +1,22 @@
+{
+  "beforeSourceSha256": "dfd3dbc41e1c298ec2f02f9bb4a2133683c397e92cacd2f664f8cb30d04bee1a",
+  "boundsAndHudFixedSourceSha256": "f57126fd414cd6bcf51a5177409d9699f69cf6bca619eaf283d9a5fae290d468",
+  "finalSourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+  "patch": "bounds-hud-fix.patch",
+  "patchSha256": "43a5173fc0672e6a46fc96bdb2c614763fdb9d1e3c9829774e7ba13f40195746",
+  "followedByPatch": "unsafe-ascend-fix.patch",
+  "verifiedReverseChain": [
+    "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+    "f57126fd414cd6bcf51a5177409d9699f69cf6bca619eaf283d9a5fae290d468",
+    "dfd3dbc41e1c298ec2f02f9bb4a2133683c397e92cacd2f664f8cb30d04bee1a"
+  ],
+  "verifiedForwardChain": [
+    "dfd3dbc41e1c298ec2f02f9bb4a2133683c397e92cacd2f664f8cb30d04bee1a",
+    "f57126fd414cd6bcf51a5177409d9699f69cf6bca619eaf283d9a5fae290d468",
+    "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac"
+  ],
+  "reconstructedBeforeObservedDps": 1519799.993444882,
+  "reconstructedBeforeHpGain": 21.330758929252625,
+  "reconstructedBeforeAssessmentMatchesRawReceipt": true,
+  "reproduce": "In an isolated directory, reverse-apply unsafe-ascend-fix.patch to final index.html; verify f571 digest. Reverse-apply bounds-hud-fix.patch; verify dfd3 digest. Run bounds-repro.cjs with that explicit source path. Both patches are ordinary unified diffs targeting index.html."
+}

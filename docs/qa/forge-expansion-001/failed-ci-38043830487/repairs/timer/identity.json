@@ -1,0 +1,15 @@
+{
+  "head": "03b78ce1d13ad1a04670315bad05174c406935ab",
+  "sourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+  "bridgeBeforeSha256": "1997185b14d90a1f03413558811335948aa9751b6797943479a88f6fca4c0460",
+  "bridgeAfterSha256": "3a7e96895d982f005ed075334c5159b8a5e00c138475f1bc4e34b1790e978c3c",
+  "formationOracleSha256": "3464976af2dd02c8cc8dfc95510a6c7a2f347209ea355b5bd62f568e513b444e",
+  "node": "v24.19.0",
+  "webRoot": "/workspace/scratch/0848c4e4f365/forge-closeout/repair-timer/web",
+  "scenarios": [
+    "p2-07a-timer-boundary",
+    "p2-07a-chronology",
+    "p2-07a-farm-retention"
+  ],
+  "reason": "Negative timer mutant searched for the retired ascendCount guard. Use the actual transient run-token guard; keep anchor assertion, if(true) mutation, all positive/negative oracles and restore unchanged."
+}

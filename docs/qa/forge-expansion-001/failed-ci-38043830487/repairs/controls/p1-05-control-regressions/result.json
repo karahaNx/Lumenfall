@@ -1,0 +1,52 @@
+{
+  "scenario": "p1-05-control-regressions",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+    "tests/behavioral/run.cjs",
+    "--web-root",
+    "/workspace/scratch/0848c4e4f365/forge-closeout/repair-controls/final/web",
+    "--scenario",
+    "p1-05-control-regressions",
+    "--raw-artifacts",
+    "/workspace/scratch/0848c4e4f365/forge-closeout/repair-controls/final/p1-05-control-regressions/raw"
+  ],
+  "cwd": "/workspace/scratch/0848c4e4f365/Lumenfall-forge",
+  "exitcode": 0,
+  "signal": null,
+  "error": null,
+  "elapsedMs": 2124,
+  "expectedExit": 0,
+  "stdout": {
+    "bytes": 962,
+    "sha256": "41c39b9e1db4c308aa025dfe2c2856dec2feee3897a7c89b4f66287f2a5bf426"
+  },
+  "stderr": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "staged": {
+    "source_sha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+    "instrumented_sha256": "27628063f42c54ddd15d3e409d786beb64729547b3cd8d536e78896fafb7bbfe"
+  },
+  "detail": {
+    "selectedContrast": {
+      ".mult-btn.active": 10.820790238811385,
+      ".speed-btn.active": 10.860326278711556
+    },
+    "liveStates": true,
+    "focus": true,
+    "untrustedTapGuard": true,
+    "affordabilityFunding": {
+      "multiplier": "5",
+      "price": {
+        "lumen": 0,
+        "shard": 481114
+      },
+      "wallet": {
+        "lumen": 0,
+        "shards": 481114
+      }
+    }
+  },
+  "accepted": true
+}
