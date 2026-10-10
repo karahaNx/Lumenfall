@@ -1,0 +1,15 @@
+{
+  "sourceSha256": "331a371fd697be2c4e712e249ab95b7098f7d77cf4e1994e2f72317ac0fef2fb",
+  "sourceBytes": 618074,
+  "kind": "read-only confirmed control-path mismatch",
+  "witness": {
+    "lumen": 1e+30,
+    "ember": 1,
+    "quotedLumen": 11,
+    "initialRender": "getSpiritBuyPlan.affordable=false; disabled",
+    "periodicRefresh": "state.lumen < spiritCost(sp) === false; re-enabled",
+    "purchase": "exact-debit handler still rejects"
+  },
+  "actualBrowserRun": false,
+  "correction": "Use authoritative getSpiritBuyPlan for refresh, presentation and recruitment ready hint; mobile regression required."
+}

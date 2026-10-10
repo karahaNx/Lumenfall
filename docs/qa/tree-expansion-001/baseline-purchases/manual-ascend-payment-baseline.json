@@ -1,0 +1,161 @@
+{
+  "kind": "baseline-manual-Ascend-primary-write-failure",
+  "commit": "2d01049393e3bb45a90d80e07af52ae0484b0ec5",
+  "sourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+  "harnessSha256": "185feb9242a3c8b5fac48871be20f61a119e2881e78191ecd832d12da16d9724",
+  "reproducerSha256": "e4f88b3d6727e07f2093ca754e319b64eb990234b5d7aca1a5be41cf59849c41",
+  "node": "24.19.0",
+  "v8": "13.6.233.17-node.51",
+  "clock": 2000000000000,
+  "sourceSelection": "git show 2d01049393e3bb45a90d80e07af52ae0484b0ec5:index.html",
+  "records": [
+    {
+      "fault": "none",
+      "before": {
+        "prisms": 23,
+        "lumen": 1000,
+        "ascendCount": 3,
+        "ascendRewardedDepth": 25,
+        "depth": 51,
+        "ember": 20,
+        "motes": 10000
+      },
+      "quote": {
+        "gain": 7,
+        "full": 14,
+        "reserve": 2,
+        "progressBonus": 5,
+        "cleared": 50,
+        "benchmark": 25
+      },
+      "returned": "undefined",
+      "after": {
+        "prisms": 30,
+        "lumen": 0,
+        "ascendCount": 4,
+        "ascendRewardedDepth": 50,
+        "depth": 1,
+        "ember": 1,
+        "motes": 10000
+      },
+      "primary": {
+        "prisms": 30,
+        "lumen": 0,
+        "ascendCount": 4,
+        "ascendRewardedDepth": 50,
+        "depth": 1,
+        "ember": 1,
+        "motes": 10000
+      },
+      "recovery": {
+        "prisms": 30,
+        "lumen": 0,
+        "ascendCount": 4,
+        "ascendRewardedDepth": 50,
+        "depth": 1,
+        "ember": 1,
+        "motes": 10000
+      },
+      "primaryFailureRolledBack": true
+    },
+    {
+      "fault": "primary",
+      "before": {
+        "prisms": 23,
+        "lumen": 1000,
+        "ascendCount": 3,
+        "ascendRewardedDepth": 25,
+        "depth": 51,
+        "ember": 20,
+        "motes": 10000
+      },
+      "quote": {
+        "gain": 7,
+        "full": 14,
+        "reserve": 2,
+        "progressBonus": 5,
+        "cleared": 50,
+        "benchmark": 25
+      },
+      "returned": "undefined",
+      "after": {
+        "prisms": 30,
+        "lumen": 0,
+        "ascendCount": 4,
+        "ascendRewardedDepth": 50,
+        "depth": 1,
+        "ember": 1,
+        "motes": 10000
+      },
+      "primary": {
+        "prisms": 23,
+        "lumen": 1000,
+        "ascendCount": 3,
+        "ascendRewardedDepth": 25,
+        "depth": 51,
+        "ember": 20,
+        "motes": 10000
+      },
+      "recovery": {
+        "prisms": 23,
+        "lumen": 1000,
+        "ascendCount": 3,
+        "ascendRewardedDepth": 25,
+        "depth": 51,
+        "ember": 20,
+        "motes": 10000
+      },
+      "primaryFailureRolledBack": false
+    },
+    {
+      "fault": "recovery",
+      "before": {
+        "prisms": 23,
+        "lumen": 1000,
+        "ascendCount": 3,
+        "ascendRewardedDepth": 25,
+        "depth": 51,
+        "ember": 20,
+        "motes": 10000
+      },
+      "quote": {
+        "gain": 7,
+        "full": 14,
+        "reserve": 2,
+        "progressBonus": 5,
+        "cleared": 50,
+        "benchmark": 25
+      },
+      "returned": "undefined",
+      "after": {
+        "prisms": 30,
+        "lumen": 0,
+        "ascendCount": 4,
+        "ascendRewardedDepth": 50,
+        "depth": 1,
+        "ember": 1,
+        "motes": 10000
+      },
+      "primary": {
+        "prisms": 30,
+        "lumen": 0,
+        "ascendCount": 4,
+        "ascendRewardedDepth": 50,
+        "depth": 1,
+        "ember": 1,
+        "motes": 10000
+      },
+      "recovery": {
+        "prisms": 23,
+        "lumen": 1000,
+        "ascendCount": 3,
+        "ascendRewardedDepth": 25,
+        "depth": 51,
+        "ember": 20,
+        "motes": 10000
+      },
+      "primaryFailureRolledBack": true
+    }
+  ],
+  "scope": "Actual unchanged manual Ascend, primary/recovery storage, and complete game IIFE; synthetic fixture and storage fault only."
+}

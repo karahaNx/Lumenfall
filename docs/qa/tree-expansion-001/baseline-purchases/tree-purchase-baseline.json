@@ -1,0 +1,1170 @@
+{
+  "kind": "baseline-read-only-tree-purchase-audit",
+  "commit": "2d01049393e3bb45a90d80e07af52ae0484b0ec5",
+  "sourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+  "harnessSha256": "185feb9242a3c8b5fac48871be20f61a119e2881e78191ecd832d12da16d9724",
+  "reproducerSha256": "b7a5979fe58f74deaf14c53c7d970ae953eb9d34ce4d955db1a66585a9a3a455",
+  "node": "24.19.0",
+  "v8": "13.6.233.17-node.51",
+  "clockMode": "fixed synthetic epoch",
+  "clock": 2000000000000,
+  "primaryFailureLeaks": [
+    "echo",
+    "bonds",
+    "swift"
+  ],
+  "records": [
+    {
+      "id": "echo",
+      "fault": "none",
+      "before": {
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "plan": {
+        "affordable": true,
+        "reason": "available",
+        "level": 0,
+        "cost": 2
+      },
+      "returned": true,
+      "after": {
+        "prisms": 18,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 1,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "factors": {
+        "offline": 0.75,
+        "costReduction": 0,
+        "prism": 1
+      },
+      "primaryBefore": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "primaryAfter": {
+        "sha256": "b6f26ab7471f518854520f0d5621324accec16ebcb0243d625919e918c2abb49",
+        "prisms": 18,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 1,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "recoveryBefore": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "recoveryAfter": {
+        "sha256": "b6f26ab7471f518854520f0d5621324accec16ebcb0243d625919e918c2abb49",
+        "prisms": 18,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 1,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "reloaded": {
+        "prisms": 18,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 1,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "primaryFailureRolledBack": true
+    },
+    {
+      "id": "echo",
+      "fault": "primary",
+      "before": {
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "plan": {
+        "affordable": true,
+        "reason": "available",
+        "level": 0,
+        "cost": 2
+      },
+      "returned": true,
+      "after": {
+        "prisms": 18,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 1,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "factors": {
+        "offline": 0.75,
+        "costReduction": 0,
+        "prism": 1
+      },
+      "primaryBefore": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "primaryAfter": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "recoveryBefore": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "recoveryAfter": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "reloaded": {
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "primaryFailureRolledBack": false,
+      "retryPlan": {
+        "affordable": true,
+        "reason": "available",
+        "level": 1,
+        "cost": 3
+      },
+      "retryReturned": true,
+      "retryState": {
+        "prisms": 15,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 2,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "retryPersisted": {
+        "sha256": "32b68a07526ea5302c4e2fc103157feed89158f168e5542356048bd4dcda4697",
+        "prisms": 15,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 2,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      }
+    },
+    {
+      "id": "echo",
+      "fault": "recovery",
+      "before": {
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "plan": {
+        "affordable": true,
+        "reason": "available",
+        "level": 0,
+        "cost": 2
+      },
+      "returned": true,
+      "after": {
+        "prisms": 18,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 1,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "factors": {
+        "offline": 0.75,
+        "costReduction": 0,
+        "prism": 1
+      },
+      "primaryBefore": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "primaryAfter": {
+        "sha256": "b6f26ab7471f518854520f0d5621324accec16ebcb0243d625919e918c2abb49",
+        "prisms": 18,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 1,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "recoveryBefore": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "recoveryAfter": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "reloaded": {
+        "prisms": 18,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 1,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "primaryFailureRolledBack": true
+    },
+    {
+      "id": "bonds",
+      "fault": "none",
+      "before": {
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "plan": {
+        "affordable": true,
+        "reason": "available",
+        "level": 0,
+        "cost": 2
+      },
+      "returned": true,
+      "after": {
+        "prisms": 18,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 1,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "factors": {
+        "offline": 0.7,
+        "costReduction": 0.03,
+        "prism": 1
+      },
+      "primaryBefore": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "primaryAfter": {
+        "sha256": "5c42ee240fe2f1224af4d2978253ac766da86bcd553d5b5eda84352f153e8d55",
+        "prisms": 18,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 1,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "recoveryBefore": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "recoveryAfter": {
+        "sha256": "5c42ee240fe2f1224af4d2978253ac766da86bcd553d5b5eda84352f153e8d55",
+        "prisms": 18,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 1,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "reloaded": {
+        "prisms": 18,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 1,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "primaryFailureRolledBack": true
+    },
+    {
+      "id": "bonds",
+      "fault": "primary",
+      "before": {
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "plan": {
+        "affordable": true,
+        "reason": "available",
+        "level": 0,
+        "cost": 2
+      },
+      "returned": true,
+      "after": {
+        "prisms": 18,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 1,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "factors": {
+        "offline": 0.7,
+        "costReduction": 0.03,
+        "prism": 1
+      },
+      "primaryBefore": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "primaryAfter": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "recoveryBefore": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "recoveryAfter": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "reloaded": {
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "primaryFailureRolledBack": false,
+      "retryPlan": {
+        "affordable": true,
+        "reason": "available",
+        "level": 1,
+        "cost": 3
+      },
+      "retryReturned": true,
+      "retryState": {
+        "prisms": 15,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 2,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "retryPersisted": {
+        "sha256": "79dc7636af27930742f87948fe72cf44994c9b4135d09378c5bb9ddaa23a4d37",
+        "prisms": 15,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 2,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      }
+    },
+    {
+      "id": "bonds",
+      "fault": "recovery",
+      "before": {
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "plan": {
+        "affordable": true,
+        "reason": "available",
+        "level": 0,
+        "cost": 2
+      },
+      "returned": true,
+      "after": {
+        "prisms": 18,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 1,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "factors": {
+        "offline": 0.7,
+        "costReduction": 0.03,
+        "prism": 1
+      },
+      "primaryBefore": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "primaryAfter": {
+        "sha256": "5c42ee240fe2f1224af4d2978253ac766da86bcd553d5b5eda84352f153e8d55",
+        "prisms": 18,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 1,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "recoveryBefore": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "recoveryAfter": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "reloaded": {
+        "prisms": 18,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 1,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "primaryFailureRolledBack": true
+    },
+    {
+      "id": "swift",
+      "fault": "none",
+      "before": {
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "plan": {
+        "affordable": true,
+        "reason": "available",
+        "level": 0,
+        "cost": 3
+      },
+      "returned": true,
+      "after": {
+        "prisms": 17,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 1,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "factors": {
+        "offline": 0.7,
+        "costReduction": 0,
+        "prism": 1.04
+      },
+      "primaryBefore": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "primaryAfter": {
+        "sha256": "c8957f7703fbb61f8e9d35dce329ae57c96c6b2e674197731b99e5a84e829576",
+        "prisms": 17,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 1,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "recoveryBefore": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "recoveryAfter": {
+        "sha256": "c8957f7703fbb61f8e9d35dce329ae57c96c6b2e674197731b99e5a84e829576",
+        "prisms": 17,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 1,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "reloaded": {
+        "prisms": 17,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 1,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "primaryFailureRolledBack": true
+    },
+    {
+      "id": "swift",
+      "fault": "primary",
+      "before": {
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "plan": {
+        "affordable": true,
+        "reason": "available",
+        "level": 0,
+        "cost": 3
+      },
+      "returned": true,
+      "after": {
+        "prisms": 17,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 1,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "factors": {
+        "offline": 0.7,
+        "costReduction": 0,
+        "prism": 1.04
+      },
+      "primaryBefore": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "primaryAfter": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "recoveryBefore": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "recoveryAfter": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "reloaded": {
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "primaryFailureRolledBack": false,
+      "retryPlan": {
+        "affordable": true,
+        "reason": "available",
+        "level": 1,
+        "cost": 5
+      },
+      "retryReturned": true,
+      "retryState": {
+        "prisms": 12,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 2,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "retryPersisted": {
+        "sha256": "2dc280a829da70e42e1a930b09a49906c5c2defdbd903a8931831ae6f4edf45f",
+        "prisms": 12,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 2,
+          "momentum": 0,
+          "reserves": 0
+        }
+      }
+    },
+    {
+      "id": "swift",
+      "fault": "recovery",
+      "before": {
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "plan": {
+        "affordable": true,
+        "reason": "available",
+        "level": 0,
+        "cost": 3
+      },
+      "returned": true,
+      "after": {
+        "prisms": 17,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 1,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "factors": {
+        "offline": 0.7,
+        "costReduction": 0,
+        "prism": 1.04
+      },
+      "primaryBefore": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "primaryAfter": {
+        "sha256": "c8957f7703fbb61f8e9d35dce329ae57c96c6b2e674197731b99e5a84e829576",
+        "prisms": 17,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 1,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "recoveryBefore": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "recoveryAfter": {
+        "sha256": "9e194b260712392375f7bd4663bcd4fffdd860814e2ab6fcedf308dc9fa2d7cf",
+        "prisms": 20,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "reloaded": {
+        "prisms": 17,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 1,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "primaryFailureRolledBack": true
+    }
+  ],
+  "hugeWallet": [
+    {
+      "id": "swift",
+      "wallet": 10000000000000000,
+      "plan": {
+        "affordable": false,
+        "reason": "unavailable",
+        "level": 0,
+        "cost": 3
+      },
+      "returned": false,
+      "before": {
+        "prisms": 10000000000000000,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "after": {
+        "prisms": 10000000000000000,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "debit": 0
+    },
+    {
+      "id": "swift",
+      "wallet": 1e+30,
+      "plan": {
+        "affordable": false,
+        "reason": "unavailable",
+        "level": 0,
+        "cost": 3
+      },
+      "returned": false,
+      "before": {
+        "prisms": 1e+30,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "after": {
+        "prisms": 1e+30,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "debit": 0
+    },
+    {
+      "id": "echo",
+      "wallet": 10000000000000000,
+      "plan": {
+        "affordable": true,
+        "reason": "available",
+        "level": 0,
+        "cost": 2
+      },
+      "returned": true,
+      "before": {
+        "prisms": 10000000000000000,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 0,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "after": {
+        "prisms": 9999999999999998,
+        "nodes": {
+          "starlight": 0,
+          "steady": 0,
+          "echo": 1,
+          "bonds": 0,
+          "swift": 0,
+          "momentum": 0,
+          "reserves": 0
+        }
+      },
+      "debit": 2
+    }
+  ],
+  "scope": "Actual Tree handlers and save/recovery/reload; controlled presentation/storage faults. No browser/native claim; all seeds synthetic."
+}

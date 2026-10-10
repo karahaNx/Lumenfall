@@ -1,0 +1,23 @@
+--- loaded-offline-economy.cjs
++++ final-economy.cjs
+@@ -230,7 +230,7 @@
+   } finally {undo();}
+ }
+ function rewards(source,a) {
+-  const x=app(source),q=x.q;let previews=0,purchases=0;const records=[];
++  const x=app(source),q=x.q;let previews=0,purchases=0,walletCases=0;const records=[];
+   for(const cleared of [14,15,24,25,26,49,50,51,74,75,99,100,119,250,1000])
+     for(const benchmark of [0,Math.max(0,cleared-1),cleared,cleared+25])
+       for(const [swift,clarity] of [[0,0],[10,10],[50,20]])for(const rank of [0,1,5,6]) {
+@@ -270,9 +270,10 @@
+     a.eq(q.get().motes,moteWallet+motes,'Dust follows actual represented Prism credit '+route);
+     if(route!=='manual')a.eq(result.motesGained,(moteWallet+motes)-moteWallet,'simulation reports represented Mote difference '+route);
+     if(wallet===1e30)a.eq(motes,0,'zero represented Prism credit grants no new currency');
++    walletCases++;
+   }
+   rewardCase(source,a);
+-  return {previews,actualPayouts:purchases+16,records};
++  return {previews,actualPayouts:purchases+walletCases+2,records};
+ }
+ 
+ function usefulBundle(cleared,swift,clarity,owned) {

@@ -12,9 +12,10 @@ Combined-source validation receipt: PR103 and PR102.
 
 02: [Lab](LAB_EXPANSION_001.md), PR104 integrated at5bcd1c86 after full/focused
 CI and verified equal-tree merge. Twenty active tracks; post-merge checks pass.
-03: [Forge](FORGE_EXPANSION_001.md), isolated implementation from that merge.
-04 Tree: pending; at least20 meaningful exclusive tracks, explicit existing
-currency prices/unlocks/caps, safe paid-value retention. Carry late Swift ROI.
+03: [Forge](FORGE_EXPANSION_001.md), PR105 integrated at2d010493; required
+CI, equal-tree merge and fresh post-merge checks PASS.
+04: [Tree](TREE_EXPANSION_001.md), twenty-track candidate in debugging;
+explicit prices/unlocks/caps, paid-value retention and measured late Swift ROI.
 05 Comets/Deeds: not yet redesigned; replace Trials/Trail/Crest with one-time
 abilities plus multi-level upgrades; preserve paid value and Auto-Ascend.
 06 UI/final integration: missing costs red, affordable costs normal, no deficits;

@@ -1,0 +1,267 @@
+{
+  "status": "pass",
+  "auditUtcClockTool": "2026-10-10 20:24:13 UTC",
+  "clockToolObservations": [
+    "2026-10-10 20:18:37 UTC",
+    "2026-10-10 20:20:03 UTC",
+    "2026-10-10 20:21:21 UTC",
+    "2026-10-10 20:21:48 UTC",
+    "2026-10-10 20:22:30 UTC",
+    "2026-10-10 20:24:13 UTC"
+  ],
+  "sourceSha256": "4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef",
+  "baselineCheckoutCommit": "2d01049393e3bb45a90d80e07af52ae0484b0ec5",
+  "baselineCheckoutTree": "dd9e503000291554af6e93c294d99d475a09612f",
+  "candidateWasUncommitted": true,
+  "fixtureSha256": "ab43604db1b5bce8b9990506f989676dfb0009cdcf2e514a8ccee9da166c8753",
+  "runtimeObserved": {
+    "version": "v24.19.0",
+    "v8": "13.6.233.17-node.51",
+    "execPath": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node"
+  },
+  "economy": {
+    "command": [
+      "node",
+      "tests/behavioral/tree-expansion-economy.cjs",
+      "index.html",
+      "--negative"
+    ],
+    "checks": 16802,
+    "negativeControls": 6,
+    "exitCode": 0,
+    "seconds": 3.1430573420002474,
+    "startedUtc": "2026-10-10T20:21:48.816283+00:00",
+    "finishedUtc": "2026-10-10T20:21:51.960649+00:00",
+    "testSha256": "3b3717f48dd4183f3ef8a70085f5c21460da75e909e020c7b473c251ff66d60a",
+    "charterRows": 243,
+    "gentleExactRows": 3117,
+    "gentleLegacyRows": 1824,
+    "gentleOversizedRows": 363,
+    "prismPreviewCases": 720,
+    "actualPayoutCalls": 39,
+    "actualMatureReinvestment": [
+      {
+        "target": 21,
+        "charter": false,
+        "ascends": 1541,
+        "spent": 29865,
+        "remainingPrisms": 12
+      },
+      {
+        "target": 21,
+        "charter": true,
+        "ascends": 62,
+        "spent": 1470,
+        "remainingPrisms": 0
+      },
+      {
+        "target": 50,
+        "charter": true,
+        "ascends": 247,
+        "spent": 7560,
+        "remainingPrisms": 24
+      }
+    ]
+  },
+  "offline": {
+    "command": [
+      "node",
+      "tests/behavioral/tree-expansion-offline.cjs",
+      "index.html",
+      "--negative"
+    ],
+    "checks": 7691,
+    "negativeControls": 4,
+    "exitCode": 0,
+    "seconds": 72.51945815199724,
+    "startedUtc": "2026-10-10T20:19:14.148136+00:00",
+    "finishedUtc": "2026-10-10T20:20:26.668578+00:00",
+    "testSha256": "48713a8ed9e4703179a901521ce42889148b5d4f80dedb858ffddf7a22d7aa71",
+    "endingPassiveCases": 14,
+    "sixPartyTwoSupportCases": 4,
+    "wallGraceCases": [
+      {
+        "rank": 0,
+        "graceSeconds": 300,
+        "retreats": 1,
+        "farmDepth": 119
+      },
+      {
+        "rank": 1,
+        "graceSeconds": 240,
+        "retreats": 1,
+        "farmDepth": 119
+      },
+      {
+        "rank": 4,
+        "graceSeconds": 60,
+        "retreats": 1,
+        "farmDepth": 119
+      }
+    ],
+    "eightHourRuns": [
+      {
+        "id": "live-unsplit",
+        "seconds": 28800,
+        "ascends": 161,
+        "kills": 19962,
+        "actualPrisms": 1804,
+        "frontierPrisms": 15,
+        "ascendMotes": 6,
+        "callbacks": 0,
+        "yields": 0,
+        "stateSha256": "d287794c6c0b9e1810fade0d0557b50ca52f3c1e9abe9a7e9091e8feb4ec7e26",
+        "sourceSha256": "4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef"
+      },
+      {
+        "id": "live-split",
+        "seconds": 28800,
+        "ascends": 161,
+        "kills": 19962,
+        "actualPrisms": 1804,
+        "frontierPrisms": 15,
+        "ascendMotes": 6,
+        "callbacks": 0,
+        "yields": 0,
+        "stateSha256": "bd187f737ba73975fdb11b5e30c6e0a061fffea7d0850b4e095fb906e31398a2",
+        "sourceSha256": "4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef"
+      },
+      {
+        "id": "offline-unsplit",
+        "seconds": 28800,
+        "ascends": 161,
+        "kills": 19962,
+        "actualPrisms": 1804,
+        "frontierPrisms": 15,
+        "ascendMotes": 6,
+        "callbacks": 0,
+        "yields": 0,
+        "stateSha256": "3772a4c555b0c41be1ebfb152649916bc9d5f92deb72ae3e98fc77211db0af4f",
+        "sourceSha256": "4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef"
+      },
+      {
+        "id": "offline-split",
+        "seconds": 28800,
+        "ascends": 161,
+        "kills": 19962,
+        "actualPrisms": 1804,
+        "frontierPrisms": 15,
+        "ascendMotes": 6,
+        "callbacks": 0,
+        "yields": 420,
+        "stateSha256": "2c13325dddccf9a57ed74cc3129eab17fa50b3a4104139c5e480cfb8d5095c57",
+        "sourceSha256": "4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef"
+      },
+      {
+        "id": "offline-transaction-256",
+        "seconds": 28800,
+        "ascends": 161,
+        "kills": 19962,
+        "actualPrisms": 1804,
+        "frontierPrisms": 15,
+        "ascendMotes": 6,
+        "callbacks": 421,
+        "yields": 0,
+        "stateSha256": "04ca1c2ab4aaa32a8e2d09348dd06cc65ee4dc87083cbb4eb7d07948b72218be",
+        "sourceSha256": "4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef"
+      },
+      {
+        "id": "offline-transaction-31",
+        "seconds": 28800,
+        "ascends": 161,
+        "kills": 19962,
+        "actualPrisms": 1804,
+        "frontierPrisms": 15,
+        "ascendMotes": 6,
+        "callbacks": 3478,
+        "yields": 0,
+        "stateSha256": "04ca1c2ab4aaa32a8e2d09348dd06cc65ee4dc87083cbb4eb7d07948b72218be",
+        "sourceSha256": "da42ac6cb4d10e36aad39d506d034ff44b983e1a143cdf877ae5904e8b78a7e4"
+      }
+    ],
+    "faults": [
+      {
+        "failure": "none",
+        "ascends": 1,
+        "kills": 111,
+        "stateSha256": "872fd687e207e99e5311bccaf97d5eb75fce440f2e91b0a083b7f58a7c689b27"
+      },
+      {
+        "failure": "primary",
+        "ascends": 1,
+        "kills": 111,
+        "stateSha256": "872fd687e207e99e5311bccaf97d5eb75fce440f2e91b0a083b7f58a7c689b27"
+      },
+      {
+        "failure": "recovery",
+        "ascends": 1,
+        "kills": 111,
+        "stateSha256": "872fd687e207e99e5311bccaf97d5eb75fce440f2e91b0a083b7f58a7c689b27"
+      }
+    ],
+    "runtimeProvenance": "The initial offline runner retained command/source/test hashes and timestamps, not executable-version fields. Runtime identity was observed in the adjacent final economy invocation in the same environment; exact-candidate CI remains required."
+  },
+  "dependencies": {
+    "loadedOfflineHarness": {
+      "path": "dependency-history/tree-expansion-harness-15fdf3e8.cjs",
+      "bytes": 13742,
+      "sha256": "15fdf3e852b907b19967d484968583ebe3e6c3474f23a5b7559f2b2610de88c5",
+      "provenance": "Reconstructed by harness owner from exactly three additive post-load hooks; hash checked against the pre-addition5243/27 core receipt."
+    },
+    "loadedOfflineEconomy": {
+      "path": "dependency-history/tree-expansion-economy-loaded-offline.cjs",
+      "bytes": 28239,
+      "sha256": "f434cf0309e77f77acb14498b0d42a62fe3c2e77d65caf7cbb7360cb8b4674b4",
+      "provenance": "Reverse the single post-load reporting-counter edit. Reversing the earlier one-line valid Support-seed correction additionally reproduces the independently captured a0f39c99 economy pass testhash. Imported offline helper behavior is unchanged."
+    },
+    "finalHarnessSha256": "bcf080ce494ee1a2df450241dbd6a087fb6880239c3d2e711d1d2116f4ce3463",
+    "finalEconomySha256": "3b3717f48dd4183f3ef8a70085f5c21460da75e909e020c7b473c251ff66d60a",
+    "finalOfflineSha256": "48713a8ed9e4703179a901521ce42889148b5d4f80dedb858ffddf7a22d7aa71"
+  },
+  "finalFileIdentity": {
+    "index.html": {
+      "bytes": 618571,
+      "sha256": "4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef"
+    },
+    "tests/behavioral/tree-expansion-economy.cjs": {
+      "bytes": 28283,
+      "sha256": "3b3717f48dd4183f3ef8a70085f5c21460da75e909e020c7b473c251ff66d60a"
+    },
+    "tests/behavioral/tree-expansion-offline.cjs": {
+      "bytes": 24517,
+      "sha256": "48713a8ed9e4703179a901521ce42889148b5d4f80dedb858ffddf7a22d7aa71"
+    },
+    "tests/behavioral/tree-expansion-harness.cjs": {
+      "bytes": 14440,
+      "sha256": "bcf080ce494ee1a2df450241dbd6a087fb6880239c3d2e711d1d2116f4ce3463"
+    },
+    "tests/behavioral/forge-expansion-calibration.cjs": {
+      "bytes": 26059,
+      "sha256": "ea5787eb14d63237c3cbe4687914c67935703cf81d1c176042c4473c40bad3f4"
+    },
+    "tests/behavioral/forge-expansion-harness.cjs": {
+      "bytes": 10916,
+      "sha256": "185feb9242a3c8b5fac48871be20f61a119e2881e78191ecd832d12da16d9724"
+    },
+    "tests/behavioral/prism-earning-reference.cjs": {
+      "bytes": 1956,
+      "sha256": "46d0ce1b498f6a7f37d87d6e5954e717292a6db86f39e2093853164435b51be2"
+    },
+    "tests/behavioral/fixtures.json": {
+      "bytes": 84610,
+      "sha256": "ab43604db1b5bce8b9990506f989676dfb0009cdcf2e514a8ccee9da166c8753"
+    }
+  },
+  "failureHistory": [
+    {
+      "path": "failures/economy-negative-label",
+      "cause": "Actual negative correctly removed paid ownership; assertion-label expectation was wrong. Split missing-effect and missing-ownership controls; no product change."
+    },
+    {
+      "path": "failures/offline-support-seed",
+      "cause": "Invalid stored Support strength without its paid Forge entitlement normalized away. Funded valid source and added explicit normalization preconditions; no product change."
+    }
+  ],
+  "noSecondOfflineRun": "Lead explicitly directed no repeat solely for three unused additive harness hooks and the imported economy reporting-counter correction. Exact loaded dependency snapshots and diffs retained; final files must run in candidate CI.",
+  "scope": "Full actual production IIFE, source-bound local Node evidence. No full product HTML, private saves, APK, remote writes or merge claim."
+}

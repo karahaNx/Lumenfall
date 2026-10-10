@@ -1,0 +1,138 @@
+{
+  "status": "baseline-measurements-pass; product-acceptance-not-claimed",
+  "commit": "2d01049393e3bb45a90d80e07af52ae0484b0ec5",
+  "tree": "dd9e503000291554af6e93c294d99d475a09612f",
+  "branch": "feature/tree-expansion-001",
+  "source": {
+    "file": "index.html",
+    "bytes": 601518,
+    "sha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac"
+  },
+  "fixtures": {
+    "file": "tests/behavioral/fixtures.json",
+    "sha256": "ab43604db1b5bce8b9990506f989676dfb0009cdcf2e514a8ccee9da166c8753"
+  },
+  "node": {
+    "executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+    "version": "v24.19.0",
+    "v8": "13.6.233.17-node.51"
+  },
+  "clock": {
+    "tool": "clock.curr_time",
+    "start": {
+      "current_time": "2026-10-10 19:46:53 UTC"
+    },
+    "observationsCompleted": {
+      "current_time": "2026-10-10 19:57:49 UTC"
+    },
+    "packageRecorded": {
+      "current_time": "2026-10-10 20:01:54 UTC"
+    }
+  },
+  "baselineResults": [
+    {
+      "id": "prism-state",
+      "exitCode": 0,
+      "checks": 3506,
+      "sourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+      "stdout": {
+        "file": "prism-state.stdout.json",
+        "bytes": 449,
+        "sha256": "174c81080a88b19c12435ef02a7afb81b7c37f17d5308ac9cf905a70930aece5"
+      },
+      "stderr": {
+        "file": "prism-state.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "prism-roi",
+      "exitCode": 0,
+      "checks": 540,
+      "sourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+      "stdout": {
+        "file": "prism-roi.stdout.json",
+        "bytes": 1487,
+        "sha256": "0415c2eb1283c365e911275b192cf578bc3530556edfb9849cc5019d307da331"
+      },
+      "stderr": {
+        "file": "prism-roi.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "measurement": {
+    "status": "pass",
+    "checks": 1744,
+    "sourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+    "rows": {
+      "oldPrices": 109,
+      "wispCosts": 448,
+      "effects": 36,
+      "actualKills": 36,
+      "snapshots": 4,
+      "counterfactuals": 960,
+      "reinvestment": 25
+    },
+    "legacyPriceRationalMismatches": 0,
+    "wispRationalMismatches": [
+      {
+        "id": "titan",
+        "unlockDepth": 32,
+        "baseCost": 2200000,
+        "bondsRaw": 0,
+        "wispLevel": 100,
+        "actualLumenCost": 446958323302,
+        "independentRationalRound": 446958323303,
+        "difference": -1
+      }
+    ]
+  },
+  "selectedDesign": {
+    "status": "selected-by-parent-design; implementation-not-yet-validated",
+    "id": "swiftcharter",
+    "levelCap": 1,
+    "prismPrice": 200,
+    "unlock": {
+      "maxDepthEver": 100,
+      "swift": 10
+    },
+    "ownedFuturePrice": {
+      "fromCurrentSwiftLevel": 10,
+      "formula": "60 + 6 * (currentSwift - 10)",
+      "equivalentFormula": "6 * currentSwift"
+    },
+    "unchanged": "Unowned charter and currentSwift<10 retain the literal original ceil(3*1.5^currentSwift) path; every old level, bonus and historical payment remains.",
+    "rewardKernel": "Unchanged by Charter. Separate Frontier node must be zero when comparing this baseline.",
+    "numericEvidence": "economy-measurements.json#modelRows(model=linearAfter10)",
+    "matureFixture": "mature-high-power",
+    "matureOverrides": {
+      "startSwift": 6,
+      "canonicalPrisms": 452,
+      "cleared": 94,
+      "repeatBenchmark": 94,
+      "completedClarity": 1,
+      "maxDepthEver": 120
+    },
+    "forecast": "Independent fixed-repeat reinvestment arithmetic; no elapsed-time or unlock-time claim."
+  },
+  "knownProductIssues": [
+    {
+      "source": "../audit-code/tree-purchase-baseline.json",
+      "sha256": "6bd517642136c7616c2cc2305fcd8961a3aba1bbe37bc5805b2f2201fc23897a",
+      "issue": "Existing Tree manual primary-failure mutations leak; primary-committed/recovery-failed endpoint must remain committed."
+    }
+  ],
+  "measurementFailure": {
+    "directory": "failures/seed-normalization",
+    "classification": "invalid independent measurement seed; corrected by a legitimate active Tide formation and explicit seed-state assertions"
+  },
+  "concurrentWork": {
+    "atObservationEnd": "Tree source/test bytes still tracked and unmodified; only coordinated workflow edits were visible.",
+    "atPackageRecording": "Root began Tree product implementation; current live product SHA296f3f56ea0cc1850b7ce1b0785f5002657223567c29f8697b8f6c0d3f934bb8 is not the tested baseline. No results are relabelled to it.",
+    "fixturesUnchanged": true
+  },
+  "scope": "Read-only source-bound baseline, with later authorized new-QA evidence copy. No complete HTML or private save, no APK, no remote actions, and no full browser regression."
+}

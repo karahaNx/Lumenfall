@@ -1,0 +1,9 @@
+{
+  "status": "measurement-seed-error",
+  "sourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+  "case": "Ember level0, Bonds0, otherwise empty roster",
+  "observedQuote": 11,
+  "naiveExpectedQuote": 10,
+  "cause": "Canonical empty-party recovery raises Ember to level1. Independent formula was incorrectly given requested level0 instead of a preserved valid state.",
+  "correction": "Give Tide level1 and a matching active formation for this Ember0 quote, then assert every requested Wisp level survives canonical acceptance before comparing exact math."
+}

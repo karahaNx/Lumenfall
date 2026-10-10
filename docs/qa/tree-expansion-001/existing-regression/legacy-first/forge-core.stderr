@@ -1,0 +1,24 @@
+node:internal/assert/utils:77
+    throw err;
+    ^
+
+AssertionError [ERR_ASSERTION]: negative unsafe-count-as-passive-run-identity failed an unrelated assertion: negative targets observed run guard if(ascendRunToken===runBeforePassive){
+    at reject (/workspace/scratch/0848c4e4f365/Lumenfall-tree/tests/behavioral/forge-expansion.cjs:631:17)
+    at negativeCases (/workspace/scratch/0848c4e4f365/Lumenfall-tree/tests/behavioral/forge-expansion.cjs:643:3)
+    at verify (/workspace/scratch/0848c4e4f365/Lumenfall-tree/tests/behavioral/forge-expansion.cjs:668:35)
+    at Object.<anonymous> (/workspace/scratch/0848c4e4f365/Lumenfall-tree/tests/behavioral/forge-expansion.cjs:673:16)
+    at Module._compile (node:internal/modules/cjs/loader:1872:14)
+    at Object..js (node:internal/modules/cjs/loader:2003:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

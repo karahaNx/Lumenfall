@@ -1,0 +1,30 @@
+{
+  "reviewedBaseline": "2d01049393e3bb45a90d80e07af52ae0484b0ec5",
+  "findingsSourceSha256": "331a371fd697be2c4e712e249ab95b7098f7d77cf4e1994e2f72317ac0fef2fb",
+  "correctedSourceSha256": "4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef",
+  "findings": [
+    {
+      "functions": [
+        "checkAffordability",
+        "presentControlStates",
+        "renderRosterJourney"
+      ],
+      "finding": "Old Wisp affordability callers still used numeric wallet comparison after the handler gained exact-debit eligibility. This re-enabled an unavailable huge-wallet purchase and advertised availability incorrectly.",
+      "resolution": "Root changed the three callers to use getSpiritBuyPlan; read-only source confirmation performed. Browser validation belongs to the mobile suite."
+    },
+    {
+      "functions": [
+        "checkAutoAscend",
+        "defeatEnemy"
+      ],
+      "finding": "The manual kill path ignored a failed staged doAscend result and skipped the normal post-kill achievement/render tail.",
+      "resolution": "Root returns the actual doAscend result. The added actual manual-tap regression and ignored-return causal mutant passed."
+    }
+  ],
+  "otherReviewConclusion": "No additional concrete regression identified in normalization of old raw paid values/snapshots, manual purchase/reset transaction ownership, or Formation/recruitment replacement paths.",
+  "fixtureCorrection": {
+    "raw": "review-final.stdout.json",
+    "cause": "The added fixture first calculated five percent as division by20. The approved percentage multiplication produces 91.55000000000001 for this wallet, while division gives91.55. The test now uses the independent explicit5% multiplication contract and still compares the wallet exactly; no tolerance was added."
+  },
+  "limitations": "Bounded source review and core regression only. No new broad tests, browser execution or native Android validation performed."
+}

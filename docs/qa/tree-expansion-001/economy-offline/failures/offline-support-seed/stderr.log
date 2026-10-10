@@ -1,0 +1,24 @@
+node:internal/assert/utils:77
+    throw err;
+    ^
+
+AssertionError [ERR_ASSERTION]: preserved two-Support overlap uses original strengths: actual=1.7 expected=1.8
+    at Object.near (/workspace/scratch/0848c4e4f365/Lumenfall-tree/tests/behavioral/tree-expansion-economy.cjs:34:7)
+    at supportDeadlines (/workspace/scratch/0848c4e4f365/Lumenfall-tree/tests/behavioral/tree-expansion-offline.cjs:96:5)
+    at verify (/workspace/scratch/0848c4e4f365/Lumenfall-tree/tests/behavioral/tree-expansion-offline.cjs:297:19)
+    at Object.<anonymous> (/workspace/scratch/0848c4e4f365/Lumenfall-tree/tests/behavioral/tree-expansion-offline.cjs:306:148)
+    at Module._compile (node:internal/modules/cjs/loader:1872:14)
+    at Object..js (node:internal/modules/cjs/loader:2003:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

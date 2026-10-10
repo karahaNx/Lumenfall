@@ -1,0 +1,318 @@
+{
+  "status": "PASS",
+  "checks": 5267,
+  "cases": [
+    {
+      "name": "catalogue",
+      "checks": 2855
+    },
+    {
+      "name": "node-storage-faults",
+      "checks": 280
+    },
+    {
+      "name": "node-huge-debit",
+      "checks": 2
+    },
+    {
+      "name": "delayed-F26-refund",
+      "checks": 32
+    },
+    {
+      "name": "legacy-and-defaults",
+      "checks": 82
+    },
+    {
+      "name": "swiftcharter",
+      "checks": 105
+    },
+    {
+      "name": "veteranrecruits",
+      "checks": 56
+    },
+    {
+      "name": "gentlegrowth",
+      "checks": 300
+    },
+    {
+      "name": "empower-storage-faults",
+      "checks": 30
+    },
+    {
+      "name": "empower-huge-debit",
+      "checks": 4
+    },
+    {
+      "name": "formationseat",
+      "checks": 35
+    },
+    {
+      "name": "benchmentor",
+      "checks": 80
+    },
+    {
+      "name": "empowerbatch",
+      "checks": 39
+    },
+    {
+      "name": "recruitreserve",
+      "checks": 52
+    },
+    {
+      "name": "invitations",
+      "checks": 172
+    },
+    {
+      "name": "transition-lumenmemory",
+      "checks": 20
+    },
+    {
+      "name": "transition-veteranrecruits",
+      "checks": 20
+    },
+    {
+      "name": "transition-rosterrecall",
+      "checks": 33
+    },
+    {
+      "name": "transition-chargememory",
+      "checks": 60
+    },
+    {
+      "name": "transition-supportmemory",
+      "checks": 21
+    },
+    {
+      "name": "transition-phasememory",
+      "checks": 15
+    },
+    {
+      "name": "transition-riftstep",
+      "checks": 28
+    },
+    {
+      "name": "carry-edges",
+      "checks": 8
+    },
+    {
+      "name": "frontier",
+      "checks": 464
+    },
+    {
+      "name": "frontier-repeat",
+      "checks": 5
+    },
+    {
+      "name": "stardust",
+      "checks": 50
+    },
+    {
+      "name": "wallwisdom",
+      "checks": 25
+    },
+    {
+      "name": "all-paid-actual-Ascends",
+      "checks": 208
+    },
+    {
+      "name": "manual-Ascend-storage-fault",
+      "checks": 97
+    },
+    {
+      "name": "manual-kill-Auto-Ascend-failure",
+      "checks": 24
+    },
+    {
+      "name": "no-transition-replay",
+      "checks": 14
+    },
+    {
+      "name": "single-trial",
+      "checks": 18
+    },
+    {
+      "name": "offline-paid-transaction",
+      "checks": 33
+    }
+  ],
+  "negativeCount": 28,
+  "negative": [
+    {
+      "name": "drop-swiftcharter",
+      "status": "killed",
+      "checksBeforeFailure": 46,
+      "assertion": "negative drop-swiftcharter: Charter affects only future level10+ price 1/10\n\n173 !== 60\n"
+    },
+    {
+      "name": "drop-veteranrecruits",
+      "status": "killed",
+      "checksBeforeFailure": 15,
+      "assertion": "negative drop-veteranrecruits: one paid recruitment grants starting levels\n\n1 !== 2\n"
+    },
+    {
+      "name": "drop-gentlegrowth",
+      "status": "killed",
+      "checksBeforeFailure": 107,
+      "assertion": "negative drop-gentlegrowth: independent literal/rational Empower price 1/26/0\n\n240 !== 238\n"
+    },
+    {
+      "name": "drop-formationseat",
+      "status": "killed",
+      "checksBeforeFailure": 11,
+      "assertion": "negative drop-formationseat: actual sixth Field button eligibility\n\nfalse !== true\n"
+    },
+    {
+      "name": "drop-benchmentor",
+      "status": "killed",
+      "checksBeforeFailure": 29,
+      "assertion": "negative drop-benchmentor: paid action count independent of levels\n\n0 !== 9\n"
+    },
+    {
+      "name": "drop-empowerbatch",
+      "status": "killed",
+      "checksBeforeFailure": 14,
+      "assertion": "negative drop-empowerbatch: up to purchased throughput in one real timer event\n\n1 !== 2\n"
+    },
+    {
+      "name": "drop-recruitreserve",
+      "status": "killed",
+      "checksBeforeFailure": 18,
+      "assertion": "negative drop-recruitreserve: affordable next remembered recruit has priority\n\n0 !== 1\n"
+    },
+    {
+      "name": "drop-invitations",
+      "status": "killed",
+      "checksBeforeFailure": 47,
+      "assertion": "negative drop-invitations: earlier future recruitment depth tide/1\n\n3 !== 2\n"
+    },
+    {
+      "name": "drop-frontier",
+      "status": "killed",
+      "checksBeforeFailure": 153,
+      "assertion": "negative drop-frontier: canonical independent base plus new Frontier term 1/25/0\n+ actual - expected\n\n  {\n    benchmark: 0,\n    cleared: 25,\n-   frontier: 1,\n    full: 14,\n+   gain: 14,\n-   gain: 15,\n    progressBonus: 14,\n    reserve: 0\n  }\n"
+    },
+    {
+      "name": "drop-stardust",
+      "status": "killed",
+      "checksBeforeFailure": 15,
+      "assertion": "negative drop-stardust: Dust from final actually credited Prism gain, with per-run cap\n\n10000 !== 10002\n"
+    },
+    {
+      "name": "drop-wallwisdom",
+      "status": "killed",
+      "checksBeforeFailure": 9,
+      "assertion": "negative drop-wallwisdom: genuine wall retreats at purchased grace\n\n0 !== 1\n"
+    },
+    {
+      "name": "drop-lumenmemory",
+      "status": "killed",
+      "checksBeforeFailure": 10,
+      "assertion": "negative drop-lumenmemory: exact owned Lumen carry\n\n0 !== 617.25\n"
+    },
+    {
+      "name": "drop-rosterrecall",
+      "status": "killed",
+      "checksBeforeFailure": 11,
+      "assertion": "negative drop-rosterrecall: first paid additional remembered members recalled\n+ actual - expected\n\n+ []\n- [\n-   'tide'\n- ]\n"
+    },
+    {
+      "name": "drop-chargememory",
+      "status": "killed",
+      "checksBeforeFailure": 20,
+      "assertion": "negative drop-chargememory: each actual charge retained ember; 0 vs 1.45"
+    },
+    {
+      "name": "drop-supportmemory",
+      "status": "killed",
+      "checksBeforeFailure": 12,
+      "assertion": "negative drop-supportmemory: Support source snapshots retained exactly\n+ actual - expected\n\n+ null\n- {\n-   sources: {\n-     aurora: {\n-       mult: 1.5,\n-       until: 2000000002500\n-     },\n-     tide: {\n-       mult: 1.25,\n-       until: 2000000004000\n-     }\n-   },\n-   version: 1\n- }\n"
+    },
+    {
+      "name": "drop-phasememory",
+      "status": "killed",
+      "checksBeforeFailure": 10,
+      "assertion": "negative drop-phasememory: only existing unlocked timer phase carried\n+ actual - expected\n\n  [\n+   0,\n+   0\n-   375.125,\n-   847.5\n  ]\n"
+    },
+    {
+      "name": "drop-riftstep",
+      "status": "killed",
+      "checksBeforeFailure": 12,
+      "assertion": "negative drop-riftstep: new run enemy starts at purchased Rift\n+ actual - expected\n\n  [\n+   1,\n+   1\n-   2,\n-   2\n  ]\n"
+    },
+    {
+      "name": "wrong-price",
+      "status": "killed",
+      "checksBeforeFailure": 71,
+      "assertion": "negative wrong-price: independent price lumenmemory/0\n\n9 !== 8\n"
+    },
+    {
+      "name": "ignore-unlock",
+      "status": "killed",
+      "checksBeforeFailure": 62,
+      "assertion": "negative ignore-unlock: one Rift below unlock swiftcharter\n+ actual - expected\n\n+ 'available'\n- 'locked'\n"
+    },
+    {
+      "name": "free-Tree-huge-wallet",
+      "status": "killed",
+      "checksBeforeFailure": 1,
+      "assertion": "negative free-Tree-huge-wallet: unrepresentable Tree price refused\n\ntrue !== false\n"
+    },
+    {
+      "name": "free-Wisp-huge-wallet",
+      "status": "killed",
+      "checksBeforeFailure": 1,
+      "assertion": "negative free-Wisp-huge-wallet: unrepresentable manual Wisp price refused\n\ntrue !== false\n"
+    },
+    {
+      "name": "Tree-primary-leak",
+      "status": "killed",
+      "checksBeforeFailure": 3,
+      "assertion": "negative Tree-primary-leak: primary rollback restores complete Tree state echo\n+ actual - expected\n... Skipped lines\n\n  {\n    _autoEmpowerAccum: 0,\n    _autoTapAccum: 0,\n    achieved: {},\n    activeFormationPreset: 'push',\n...\n      chargememory: 0,\n+     echo: 1,\n-     echo: 0,\n      empowerbatch: 0,\n      formationseat: 0,\n      frontier: 0,\n      gentlegrowth: 0,\n      invitations: 0,\n...\n    owned: {},\n+   prisms: 9998,\n-   prisms: 10000,\n    questClaimed: {},\n    questDay: '2026-10-10',\n    questIds: [],\n    research: {\n      amplifiertrim: 0,\n"
+    },
+    {
+      "name": "Wisp-primary-leak",
+      "status": "killed",
+      "checksBeforeFailure": 2,
+      "assertion": "negative Wisp-primary-leak: manual Empower rolls back recruitment, training and Formation\n+ actual - expected\n... Skipped lines\n\n  {\n    _autoEmpowerAccum: 0,\n    _autoTapAccum: 0,\n+   achieved: {\n+     d100: true,\n+     d10: true,\n+     d250: true,\n+     d25: true,\n+     d50: true\n+   },\n-   achieved: {},\n    activeFormationPreset: '',\n    activeParty: [\n      'tide'\n    ],\n    activeStudies: [],\n...\n    cometTrialResult: null,\n+   comets: 300,\n-   comets: 115,\n    dailyQuestRefreshes: 0,\n    dailyStats: {\n      ascends: 0,\n      bossKills: 0,\n+     empowers: 1,\n-     empowers: 0,\n      kills: 0,\n      luminousKills: 0,\n      research: 0,\n      taps: 0\n    },\n...\n    },\n+   lumen: 999999999989,\n-   lumen: 1000000000000,\n    luminousAccum: 0,\n    maxDepthEver: 250,\n    motes: 10000,\n    nodes: {\n      benchmentor: 5,\n...\n      aurora: 0,\n+     ember: 2,\n-     ember: 1,\n      gale: 0,\n+     stone: 7,\n-     stone: 2,\n      thorn: 0,\n      tide: 2,\n      titan: 0,\n      void: 0\n    },\n...\n    totalTaps: 0,\n+   treeTrainingProgress: 0,\n-   treeTrainingProgress: 9,\n    wispModules: {\n      aurora: 0,\n      ember: 0,\n      gale: 0,\n      stone: 0,\n"
+    },
+    {
+      "name": "Ascend-primary-leak",
+      "status": "killed",
+      "checksBeforeFailure": 2,
+      "assertion": "negative Ascend-primary-leak: manual Ascend rolls back complete reset and awards\n+ actual - expected\n... Skipped lines\n\n  {\n    _autoEmpowerAccum: 847.5,\n    _autoTapAccum: 375.125,\n    achieved: {\n+     allstudies: true,\n+     asc1: true,\n      autotap: true,\n+     d100: true,\n+     d10: true,\n+     d250: true,\n+     d25: true,\n+     d50: true,\n+     firstultimate: true,\n+     fullparty: true,\n      labmaster: true,\n+     modulemax: true,\n+     mythic: true,\n+     study1: true,\n+     study25: true\n    },\n    activeFormationPreset: 'push',\n    activeParty: [\n      'ember',\n      'tide',\n...\n      'thorn',\n-     'void'\n    ],\n    activeStudies: [\n      {\n        id: 'wispascend',\n        remainingSec: 1800,\n...\n    ],\n+   ascendCount: 4,\n+   ascendRewardedDepth: 50,\n-   ascendCount: 3,\n-   ascendRewardedDepth: 25,\n    autoAscendEnabled: false,\n    autoAscendTargetDepth: 51,\n    buffMult: 1.7,\n    buffUntil: 2000000003000,\n    cometCosmetics: {\n...\n    cometTrialResult: null,\n+   comets: 552,\n-   comets: 115,\n    dailyQuestRefreshes: 0,\n    dailyStats: {\n+     ascends: 1,\n-     ascends: 0,\n      bossKills: 0,\n      empowers: 0,\n      kills: 0,\n      luminousKills: 0,\n      research: 0,\n      taps: 0\n    },\n+   depth: 6,\n-   depth: 51,\n    empowerQueue: {\n      aurora: false,\n      ember: false,\n      gale: false,\n      stone: false,\n...\n    },\n+   enemyDepth: 6,\n+   enemyHp: 23,\n-   enemyDepth: 51,\n-   enemyHp: 1000000000000000,\n    enemyIsLuminous: false,\n+   enemyMaxHp: 23,\n-   enemyMaxHp: 1000000000000000,\n    farmDepth: 0,\n    farmReturnDepth: 0,\n    formationPresets: {\n      boss: [\n        'titan',\n...\n    },\n+   formationRebuild: {\n+     members: [\n+       'ember',\n+       'tide',\n+       'stone',\n+       'gale',\n+       'thorn',\n+       'void'\n+     ],\n+     preset: 'push'\n+   },\n-   formationRebuild: null,\n    heroRarity: {\n      aurora: 5,\n      ember: 5,\n      gale: 5,\n      stone: 5,\n...\n    },\n+   lumen: 3086.25,\n+   luminousAccum: 0.08,\n-   lumen: 12345,\n-   luminousAccum: 0,\n    maxDepthEver: 250,\n+   motes: 10010,\n-   motes: 10000,\n    nodes: {\n      benchmentor: 5,\n      bonds: 28,\n      chargememory: 5,\n      echo: 10,\n...\n    },\n+   prisms: 10046,\n-   prisms: 10000,\n    questClaimed: {},\n    questDay: '2026-10-10',\n    questIds: [],\n    research: {\n      amplifiertrim: 5,\n...\n    shards: 1000000000000,\n+   sigilResonanceUses: 0,\n-   sigilResonanceUses: 3,\n    sigils: 10000,\n    spirits: {\n+     aurora: 0,\n+     ember: 6,\n+     gale: 6,\n+     stone: 6,\n+     thorn: 6,\n+     tide: 6,\n+     titan: 0,\n+     void: 0\n-     aurora: 26,\n-     ember: 20,\n-     gale: 23,\n-     stone: 22,\n-     thorn: 24,\n-     tide: 21,\n-     titan: 27,\n-     void: 25\n    },\n    studyQueue: {\n      adaptivegrowth: false,\n      bossledger: true,\n      catalysis: true,\n...\n    totalTaps: 0,\n+   treeTrainingProgress: 0,\n-   treeTrainingProgress: 7,\n    wispModules: {\n      aurora: 20,\n      ember: 20,\n      gale: 20,\n      stone: 20,\n"
+    },
+    {
+      "name": "Ascend-rollback-token",
+      "status": "killed",
+      "checksBeforeFailure": 3,
+      "assertion": "negative Ascend-rollback-token: manual Ascend restores original transient run identity"
+    },
+    {
+      "name": "ignored-Auto-Ascend-result",
+      "status": "killed",
+      "checksBeforeFailure": 3,
+      "assertion": "negative ignored-Auto-Ascend-result: failed Auto-Ascend must execute the normal post-kill achievement tail\n+ actual - expected\n\n+ undefined\n- true\n"
+    },
+    {
+      "name": "lost-paid-Ascend",
+      "status": "killed",
+      "checksBeforeFailure": 32,
+      "assertion": "negative lost-paid-Ascend: manual all paid data and intent survive nodes\n+ actual - expected\n... Skipped lines\n\n  {\n    benchmentor: 5,\n    bonds: 28,\n    chargememory: 5,\n    echo: 10,\n...\n    invitations: 3,\n+   lumenmemory: 0,\n-   lumenmemory: 5,\n    momentum: 11,\n    phasememory: 1,\n    recruitreserve: 5,\n    reserves: 0,\n    riftstep: 5,\n"
+    },
+    {
+      "name": "double-Frontier",
+      "status": "killed",
+      "checksBeforeFailure": 5,
+      "assertion": "negative double-Frontier: repeated record has no Frontier award\n\n10064 !== 10049\n"
+    }
+  ],
+  "activePurchaseTypes": 20,
+  "newPurchaseTypes": 17,
+  "priceOracle": "independent fixed integer Prism ladders; independent BigInt rational moderate Empower cases",
+  "scope": "Complete production game IIFE, original purchases/save/backup and manual/live/offline mutation paths. Tree supports single purchases only; no Tree bulk or queue acceptance. Long offline/numerical/mobile/actual V8 run in separate suites. Native Android integration untested.",
+  "sourceSha256": "4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef",
+  "harnessSha256": "bcf080ce494ee1a2df450241dbd6a087fb6880239c3d2e711d1d2116f4ce3463",
+  "testSha256": "43c0c8bf9931411bd8af4e9a2ef591521d29e050cfc9a929b94f2fbf3f78d441",
+  "node": "24.19.0",
+  "v8": "13.6.233.17-node.51"
+}

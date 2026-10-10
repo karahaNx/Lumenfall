@@ -1,0 +1,132 @@
+{
+  "kind": "baseline-Empower-payment-audit",
+  "commit": "2d01049393e3bb45a90d80e07af52ae0484b0ec5",
+  "sourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+  "harnessSha256": "185feb9242a3c8b5fac48871be20f61a119e2881e78191ecd832d12da16d9724",
+  "reproducerSha256": "2c6d865049ea2b960117205433d4be50f2d0cbb5b104daff6006f89a34eae095",
+  "node": "24.19.0",
+  "v8": "13.6.233.17-node.51",
+  "records": [
+    {
+      "kind": "manual",
+      "wallet": 100,
+      "fault": false,
+      "cost": 11,
+      "returned": "undefined",
+      "before": {
+        "lumen": 100,
+        "ember": 1
+      },
+      "after": {
+        "lumen": 89,
+        "ember": 2
+      },
+      "representedDebit": 11,
+      "primary": {
+        "lumen": 89,
+        "ember": 2
+      },
+      "recovery": {
+        "lumen": 89,
+        "ember": 2
+      }
+    },
+    {
+      "kind": "automatic",
+      "wallet": 100,
+      "fault": false,
+      "cost": 11,
+      "returned": true,
+      "before": {
+        "lumen": 100,
+        "ember": 1
+      },
+      "after": {
+        "lumen": 89,
+        "ember": 2
+      },
+      "representedDebit": 11,
+      "primary": {
+        "lumen": 100,
+        "ember": 1
+      },
+      "recovery": {
+        "lumen": 100,
+        "ember": 1
+      }
+    },
+    {
+      "kind": "manual",
+      "wallet": 1e+30,
+      "fault": false,
+      "cost": 11,
+      "returned": "undefined",
+      "before": {
+        "lumen": 1e+30,
+        "ember": 1
+      },
+      "after": {
+        "lumen": 1e+30,
+        "ember": 2
+      },
+      "representedDebit": 0,
+      "primary": {
+        "lumen": 1e+30,
+        "ember": 2
+      },
+      "recovery": {
+        "lumen": 1e+30,
+        "ember": 2
+      }
+    },
+    {
+      "kind": "automatic",
+      "wallet": 1e+30,
+      "fault": false,
+      "cost": 11,
+      "returned": true,
+      "before": {
+        "lumen": 1e+30,
+        "ember": 1
+      },
+      "after": {
+        "lumen": 1e+30,
+        "ember": 2
+      },
+      "representedDebit": 0,
+      "primary": {
+        "lumen": 1e+30,
+        "ember": 1
+      },
+      "recovery": {
+        "lumen": 1e+30,
+        "ember": 1
+      }
+    },
+    {
+      "kind": "manual",
+      "wallet": 100,
+      "fault": true,
+      "cost": 11,
+      "returned": "undefined",
+      "before": {
+        "lumen": 100,
+        "ember": 1
+      },
+      "after": {
+        "lumen": 89,
+        "ember": 2
+      },
+      "representedDebit": 11,
+      "primary": {
+        "lumen": 100,
+        "ember": 1
+      },
+      "recovery": {
+        "lumen": 100,
+        "ember": 1
+      }
+    }
+  ],
+  "scope": "Actual manual and in-memory Auto-Empower handlers; automatic path correctly does not save each purchase. Synthetic states only; no browser/native claim."
+}

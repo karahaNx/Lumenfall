@@ -1,0 +1,10 @@
+{
+  "status": "FAIL",
+  "sourceSha256": "4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef",
+  "error": {
+    "name": "AssertionError",
+    "code": "ERR_ASSERTION",
+    "message": "manual-kill-Auto-Ascend-failure: retry carries only its actual event-time wallet\n+ actual - expected\n\n+ 91.55000000000001\n- 91.55\n       ^\n",
+    "stack": "AssertionError [ERR_ASSERTION]: manual-kill-Auto-Ascend-failure: retry carries only its actual event-time wallet\n+ actual - expected\n\n+ 91.55000000000001\n- 91.55\n       ^\n\n    at Object.eq (/workspace/scratch/0848c4e4f365/Lumenfall-tree/tests/behavioral/tree-expansion-core.cjs:45:54)\n    at manualKillAutoFailure (/workspace/scratch/0848c4e4f365/Lumenfall-tree/tests/behavioral/tree-expansion-core.cjs:626:7)\n    at run (/workspace/scratch/0848c4e4f365/Lumenfall-tree/tests/behavioral/tree-expansion-core.cjs:691:56)\n    at Object.<anonymous> (/workspace/scratch/0848c4e4f365/Lumenfall-tree/tests/behavioral/tree-expansion-core.cjs:714:16)\n    at Module._compile (node:internal/modules/cjs/loader:1872:14)\n    at Object..js (node:internal/modules/cjs/loader:2003:10)\n    at Module.load (node:internal/modules/cjs/loader:1594:32)\n    at Module._load (node:internal/modules/cjs/loader:1396:12)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)"
+  }
+}
