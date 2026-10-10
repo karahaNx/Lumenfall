@@ -1,0 +1,326 @@
+{
+  "status": "pass",
+  "auditedAtUtc": "2026-10-10 11:08:45 UTC",
+  "clockSource": "clock.curr_time",
+  "runId": 38047024763,
+  "runUrl": "https://github.com/karahaNx/Lumenfall/actions/runs/38047024763",
+  "attempt": 1,
+  "jobId": 114198499082,
+  "headSha": "979ed4a3cb1e106456f86efacc114c89e825a88b",
+  "baseSha": "5bcd1c861af51511ca3d5c4a07d9d61e72fdff03",
+  "syntheticCommit": "8e0e4911e6821242369e8a1877a40068bab23a10",
+  "treeSha": "dd9e503000291554af6e93c294d99d475a09612f",
+  "sourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+  "sourceBytes": 601518,
+  "sourceIdentityVerified": true,
+  "allJobStepsSucceeded": true,
+  "jobStepCount": 11,
+  "artifact": {
+    "id": 11668255951,
+    "name": "lab-expansion-38047024763",
+    "bytes": 5192547,
+    "apiDigest": "sha256:baa94ce212b184182b5be18c0d2f659758198a6d8cb467249675863aebd936c2",
+    "computedDigest": "sha256:baa94ce212b184182b5be18c0d2f659758198a6d8cb467249675863aebd936c2",
+    "digestMatches": true,
+    "zipCrcIntegrity": true,
+    "entries": 58
+  },
+  "results": {
+    "core": {
+      "status": "pass",
+      "checks": 2456,
+      "projects": 14,
+      "negativeControlsCaught": 10,
+      "negativeNames": [
+        "lost-capacity",
+        "free-start",
+        "early-level",
+        "lost-seventh-paid-record",
+        "ascend-drops-paid-slots",
+        "ascend-drops-earned-capacity",
+        "double-notes",
+        "no-procurement",
+        "missed-luminous-purchase",
+        "erased-old-value"
+      ]
+    },
+    "boundary": {
+      "status": "pass",
+      "checks": 2344,
+      "cases": 388,
+      "negativeControlsCaught": 5,
+      "negativeNames": [
+        "wallet-before-luminous-bonus",
+        "unverified-one-kill-estimate",
+        "imaginary-first-luminous-kill",
+        "unverified-upper-bound",
+        "unsafe-normal-estimate-skips-safe-buy"
+      ]
+    },
+    "stress": {
+      "status": "pass",
+      "cases": 2182,
+      "seed": 104,
+      "unavailableAtPrediction": 0,
+      "mismatchCount": 0
+    },
+    "prismState": {
+      "status": "pass",
+      "checks": 3506,
+      "payoutCases": 180,
+      "routes": 8
+    },
+    "mobile": {
+      "status": "pass",
+      "checks": 6420,
+      "profiles": 12,
+      "screenshots": 24,
+      "node": "v20.20.2",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "profileTuples": [
+        "320/1/no-preference",
+        "320/1/reduce",
+        "320/2/no-preference",
+        "320/2/reduce",
+        "390/1/no-preference",
+        "390/1/reduce",
+        "390/2/no-preference",
+        "390/2/reduce",
+        "430/1/no-preference",
+        "430/1/reduce",
+        "430/2/no-preference",
+        "430/2/reduce"
+      ]
+    },
+    "v8": {
+      "status": "pass",
+      "checks": 580,
+      "node": "v8.3.0",
+      "v8": "6.0.286.52",
+      "scriptsParsed": 2,
+      "writes": 84,
+      "officialArchiveChecksumVerified": true
+    },
+    "sourceGate": "QA passed: 2 scripts syntax-checked, 16 unique IDs verified, cache/state lifecycle guards present.",
+    "contextGate": "PASS: 29 entrypoints, 90 local Markdown links, shared startup 31136 bytes; startup with docs/tasks/LAB_EXPANSION_001.md 32570 bytes"
+  },
+  "artifactTests": [
+    {
+      "name": "lab-expansion-boundary.cjs",
+      "bytes": 9803,
+      "sha256": "4ba37b0b37723a37accb3051d82861a87fc101ae24dfdb231e2accaf2f73484d",
+      "matchesPublishedCommit": true
+    },
+    {
+      "name": "lab-expansion-harness.cjs",
+      "bytes": 5153,
+      "sha256": "5221a2c2125077edabca1d2577a616d0e8cd0514c0c18c53ff321d9eaff4f659",
+      "matchesPublishedCommit": true
+    },
+    {
+      "name": "lab-expansion-legacy.cjs",
+      "bytes": 5372,
+      "sha256": "a683bf60b0993cdb4ce40687005d778e5f26c777f093a8633524694b88285078",
+      "matchesPublishedCommit": true
+    },
+    {
+      "name": "lab-expansion-stress.cjs",
+      "bytes": 4269,
+      "sha256": "00022e87f3c7fd4d5d4c748faa64156e78cda35504eec3362f31145ab36a14a8",
+      "matchesPublishedCommit": true
+    },
+    {
+      "name": "lab-expansion-ui.cjs",
+      "bytes": 11710,
+      "sha256": "70e61e93a83bd4a340ae4e707a45067a9f36434d7bdd6da78c5f62a57084b179",
+      "matchesPublishedCommit": true
+    },
+    {
+      "name": "lab-expansion.cjs",
+      "bytes": 27320,
+      "sha256": "1efa11715a25c17efff19fb3a903b5a474004e12bf11fd4a448b08e6fecf0d72",
+      "matchesPublishedCommit": true
+    }
+  ],
+  "screenshotFiles": [
+    {
+      "path": "lab-validation/mobile/lab-adaptivegrowth-320-1-no-preference.png",
+      "bytes": 192195,
+      "sha256": "5570317d76f88dd01ed8020c9290c576bef12af052b408dab94aa4c673f5573f",
+      "width": 320,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-adaptivegrowth-320-1-reduce.png",
+      "bytes": 192195,
+      "sha256": "5570317d76f88dd01ed8020c9290c576bef12af052b408dab94aa4c673f5573f",
+      "width": 320,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-adaptivegrowth-320-2-no-preference.png",
+      "bytes": 152341,
+      "sha256": "a89bb9d81c43ef3f0b4177ba5c33887109295f28598ea50416b2804e7d84d738",
+      "width": 320,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-adaptivegrowth-320-2-reduce.png",
+      "bytes": 152341,
+      "sha256": "a89bb9d81c43ef3f0b4177ba5c33887109295f28598ea50416b2804e7d84d738",
+      "width": 320,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-adaptivegrowth-390-1-no-preference.png",
+      "bytes": 207101,
+      "sha256": "86eac2a807e904659d8a6c1b1ca8571b65a9bd2486b8335f8497d612201affe1",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-adaptivegrowth-390-1-reduce.png",
+      "bytes": 207101,
+      "sha256": "86eac2a807e904659d8a6c1b1ca8571b65a9bd2486b8335f8497d612201affe1",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-adaptivegrowth-390-2-no-preference.png",
+      "bytes": 181004,
+      "sha256": "e5490686e6c58f63b351baa7d9aa605f35d21eebf57bf93c50175151a9f809f6",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-adaptivegrowth-390-2-reduce.png",
+      "bytes": 181004,
+      "sha256": "e5490686e6c58f63b351baa7d9aa605f35d21eebf57bf93c50175151a9f809f6",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-adaptivegrowth-430-1-no-preference.png",
+      "bytes": 216215,
+      "sha256": "3cdec196c610d639b0403adcf5104263b36451d4a248ad520c06cf9edc45f5de",
+      "width": 430,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-adaptivegrowth-430-1-reduce.png",
+      "bytes": 216215,
+      "sha256": "3cdec196c610d639b0403adcf5104263b36451d4a248ad520c06cf9edc45f5de",
+      "width": 430,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-adaptivegrowth-430-2-no-preference.png",
+      "bytes": 206474,
+      "sha256": "0f22900da3b5e4c12d1c05193d248700c6d8530d4ef59017b1b69b06cf7060c7",
+      "width": 430,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-adaptivegrowth-430-2-reduce.png",
+      "bytes": 206474,
+      "sha256": "0f22900da3b5e4c12d1c05193d248700c6d8530d4ef59017b1b69b06cf7060c7",
+      "width": 430,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-curriculum-320-1-no-preference.png",
+      "bytes": 211303,
+      "sha256": "a073e44c1bd2f99a2aa2c9eebbd8b6e0a1f8072421386812b77db2224ff2ae46",
+      "width": 320,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-curriculum-320-1-reduce.png",
+      "bytes": 211303,
+      "sha256": "a073e44c1bd2f99a2aa2c9eebbd8b6e0a1f8072421386812b77db2224ff2ae46",
+      "width": 320,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-curriculum-320-2-no-preference.png",
+      "bytes": 174001,
+      "sha256": "f06046636ab8de313d36cb6dc39fbe4281d3145b572826fd8f102171bc087bb4",
+      "width": 320,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-curriculum-320-2-reduce.png",
+      "bytes": 174001,
+      "sha256": "f06046636ab8de313d36cb6dc39fbe4281d3145b572826fd8f102171bc087bb4",
+      "width": 320,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-curriculum-390-1-no-preference.png",
+      "bytes": 238448,
+      "sha256": "e765833ef4309c4ddaa373296a81687c77c68ccf7875e8d032c1049ac371986f",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-curriculum-390-1-reduce.png",
+      "bytes": 238448,
+      "sha256": "e765833ef4309c4ddaa373296a81687c77c68ccf7875e8d032c1049ac371986f",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-curriculum-390-2-no-preference.png",
+      "bytes": 219766,
+      "sha256": "2144718ef59550e69c015bb5e0a19a8a1cdd752f68b48dd572cffbc531cafadf",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-curriculum-430-1-no-preference.png",
+      "bytes": 248411,
+      "sha256": "1a247c4d6189be451a4f504f62117ae3b54ff2c68ef3c2b813f0bd1a9be372a8",
+      "width": 430,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-curriculum-390-2-reduce.png",
+      "bytes": 219766,
+      "sha256": "2144718ef59550e69c015bb5e0a19a8a1cdd752f68b48dd572cffbc531cafadf",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-curriculum-430-1-reduce.png",
+      "bytes": 248411,
+      "sha256": "1a247c4d6189be451a4f504f62117ae3b54ff2c68ef3c2b813f0bd1a9be372a8",
+      "width": 430,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-curriculum-430-2-no-preference.png",
+      "bytes": 244249,
+      "sha256": "f17178a49d213d0debdf7c39496dd97312c8dc336c6579b2c1cac5c21d6247c9",
+      "width": 430,
+      "height": 844
+    },
+    {
+      "path": "lab-validation/mobile/lab-curriculum-430-2-reduce.png",
+      "bytes": 244249,
+      "sha256": "f17178a49d213d0debdf7c39496dd97312c8dc336c6579b2c1cac5c21d6247c9",
+      "width": 430,
+      "height": 844
+    }
+  ],
+  "jobLog": {
+    "path": "job-114198499082.log",
+    "bytes": 43932,
+    "sha256": "09e56deb2b9c5fdab94686b667737bbbac6e54045ab4a393248f6e21502269cd",
+    "provenance": "Exact UTF-8 bytes of the decoded GitHub job-log tool content; no appended newline"
+  },
+  "evidenceDirectory": "/workspace/scratch/0848c4e4f365/forge-closeout/repaired-ci/lab",
+  "scope": "Read-only GitHub CI audit. No tests, reruns, repository/PR changes or Android builds. Browser CSS root-font scaling is not native WebView textZoom/TalkBack acceptance."
+}

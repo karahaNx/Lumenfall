@@ -1,0 +1,39 @@
+{
+  "status": "pass",
+  "checkedAtUtc": "2026-10-10T11:52:08Z",
+  "checker": "Root independently compared every stored and decompressed payload against the three original frozen manifests, then repeated on the copied destinations.",
+  "packages": {
+    "full": {
+      "status": "pass",
+      "manifestSha256": "ea13e4518f616f9ddaff64629a44b1391d023f755d8f88bb3b1d82d9b2c4d41d",
+      "payloadFiles": 107,
+      "originalBytes": 26775155,
+      "storedBytes": 14405796,
+      "gzipFiles": 20
+    },
+    "lab": {
+      "status": "pass",
+      "manifestSha256": "fe10ba07879ef71d26996b2aeb822877e5600cd982355cb49499df62a8d9b950",
+      "payloadFiles": 44,
+      "originalBytes": 5114280,
+      "storedBytes": 5079009,
+      "gzipFiles": 1
+    },
+    "forge": {
+      "status": "pass",
+      "manifestSha256": "f1037de90637b56f3eb0237c56d465497979608ef23741ffe4f1624b7fb765c1",
+      "payloadFiles": 42,
+      "originalBytes": 6410043,
+      "storedBytes": 5100121,
+      "gzipFiles": 2
+    }
+  },
+  "postmerge": {
+    "labStatus": "pass",
+    "labChecks": 8306,
+    "forgeStatus": "pass",
+    "forgeAssertions": 9291,
+    "v8Checks": 2452,
+    "rawBytesVerified": true
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "schema": "lumenfall-postmerge-forge-acceptance-v1",
+  "status": "pass",
+  "clock": {
+    "source": "clock.curr_time",
+    "started": {
+      "current_time": "2026-10-10 11:46:14 UTC"
+    },
+    "completed": {
+      "current_time": "2026-10-10 11:46:30 UTC"
+    }
+  },
+  "commit": "2d01049393e3bb45a90d80e07af52ae0484b0ec5",
+  "parents": [
+    "5bcd1c861af51511ca3d5c4a07d9d61e72fdff03",
+    "979ed4a3cb1e106456f86efacc114c89e825a88b"
+  ],
+  "tree": "dd9e503000291554af6e93c294d99d475a09612f",
+  "sourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+  "cwd": "/workspace/scratch/0848c4e4f365/Lumenfall-forge",
+  "committedInputsMatch": true,
+  "checkoutCleanAndUnchanged": true,
+  "tests": [
+    {
+      "name": "core",
+      "command": "node tests/behavioral/forge-expansion.cjs index.html --negative",
+      "executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "args": [
+        "tests/behavioral/forge-expansion.cjs",
+        "index.html",
+        "--negative"
+      ],
+      "cwd": "/workspace/scratch/0848c4e4f365/Lumenfall-forge",
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 1218.289576,
+      "stdout": "core.json",
+      "stderr": "core.stderr.txt",
+      "node": "24.19.0",
+      "v8": "13.6.233.17-node.51",
+      "status": "pass",
+      "assertions": 9291,
+      "negativeControls": 25,
+      "priceCurrencyCases": 598,
+      "purchases": 448
+    },
+    {
+      "name": "v8",
+      "command": "/tmp/lumenfall-node830/bin/node tests/behavioral/forge-expansion-legacy.cjs index.html",
+      "executable": "/tmp/lumenfall-node830/bin/node",
+      "args": [
+        "tests/behavioral/forge-expansion-legacy.cjs",
+        "index.html"
+      ],
+      "cwd": "/workspace/scratch/0848c4e4f365/Lumenfall-forge",
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 1194.442373,
+      "stdout": "v8.json",
+      "stderr": "v8.stderr.txt",
+      "node": "8.3.0",
+      "v8": "6.0.286.52",
+      "status": "pass",
+      "checks": 2452,
+      "scriptsParsed": 2
+    }
+  ],
+  "scope": {
+    "testsExecuted": 2,
+    "bothInlineScriptsSyntaxChecked": true,
+    "gameIifeExecuted": true,
+    "nativeIntegrationScriptExecuted": false,
+    "nativeAndroid": "untested",
+    "nativeWebViewTextZoom": "untested",
+    "apkBuildSigningPublication": "not performed"
+  },
+  "rawFiles": [
+    {
+      "path": "clock-utc.json",
+      "bytes": 168,
+      "sha256": "c51401a8427c0ff5cc3fd78025f2f5473ea4fd87d50f27f07df9e3298139a672"
+    },
+    {
+      "path": "commands.json",
+      "bytes": 710,
+      "sha256": "e4d855f5caea9ecc321b7d27265fd67529ff2c3c3b5c746be19748454d2ea287"
+    },
+    {
+      "path": "commit.txt",
+      "bytes": 41,
+      "sha256": "ddd6cffd55109851ee18cd2f15cc4be98c3ddd60f382f3cd6308a122857f8a2b"
+    },
+    {
+      "path": "core.execution.json",
+      "bytes": 464,
+      "sha256": "c28bc484a4bba468742b3c977f7011a80737b1f67f4e045080a24780db8c3ba8"
+    },
+    {
+      "path": "core.json",
+      "bytes": 3772,
+      "sha256": "34f5c2194dc31368e4833d97e3cdb5a6bcaf5013af1443cc48de3827eee0b9fe"
+    },
+    {
+      "path": "core.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "executions.json",
+      "bytes": 964,
+      "sha256": "3507dfb34ce01db990083ce832a401393dc5e47952db26fc3f7b782f79d58188"
+    },
+    {
+      "path": "identity-after.json",
+      "bytes": 889,
+      "sha256": "77a9d48c8bcc77c6030dbfbefb141b9bbc01ef56995866c54066b9b6b9f2850f"
+    },
+    {
+      "path": "identity-before.json",
+      "bytes": 3970,
+      "sha256": "a507a4bd9c1cab75c2c61e9ddd12b56418c8bcb06b8492df5b5884455b10c3ce"
+    },
+    {
+      "path": "source-sha256.txt",
+      "bytes": 498,
+      "sha256": "0ed0e502f3e73f3cebea91a45bd250f232731e5e299ac56cd921ed327ed9eafe"
+    },
+    {
+      "path": "v8.execution.json",
+      "bytes": 433,
+      "sha256": "b14bb5ef0bebf5593365aa99901353681a334afb910be042eec5e62edf5abd5e"
+    },
+    {
+      "path": "v8.json",
+      "bytes": 906,
+      "sha256": "5350234f5b7d026d02b50e2a44fc2a0e4dfec04c714dd54fad23c3afa46f1d0b"
+    },
+    {
+      "path": "v8.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

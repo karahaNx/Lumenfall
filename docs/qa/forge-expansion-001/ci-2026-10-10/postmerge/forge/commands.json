@@ -1,0 +1,23 @@
+[
+  {
+    "name": "core",
+    "executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+    "args": [
+      "tests/behavioral/forge-expansion.cjs",
+      "index.html",
+      "--negative"
+    ],
+    "command": "node tests/behavioral/forge-expansion.cjs index.html --negative",
+    "cwd": "/workspace/scratch/0848c4e4f365/Lumenfall-forge"
+  },
+  {
+    "name": "v8",
+    "executable": "/tmp/lumenfall-node830/bin/node",
+    "args": [
+      "tests/behavioral/forge-expansion-legacy.cjs",
+      "index.html"
+    ],
+    "command": "/tmp/lumenfall-node830/bin/node tests/behavioral/forge-expansion-legacy.cjs index.html",
+    "cwd": "/workspace/scratch/0848c4e4f365/Lumenfall-forge"
+  }
+]

@@ -1,0 +1,118 @@
+{
+  "verifiedAt": "2026-10-10T11:44:55Z",
+  "clockSource": "clock__curr_time UTC supplied to final audit",
+  "ciEvidenceAccepted": true,
+  "runId": 38047024745,
+  "jobId": 114198498968,
+  "artifactId": 11668434322,
+  "head": "979ed4a3cb1e106456f86efacc114c89e825a88b",
+  "base": "5bcd1c861af51511ca3d5c4a07d9d61e72fdff03",
+  "syntheticMerge": "8e0e4911e6821242369e8a1877a40068bab23a10",
+  "tree": "dd9e503000291554af6e93c294d99d475a09612f",
+  "sourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+  "artifactZipSha256": "91b901f1799e03e1297ed7ef7aa91c68d90232ad5af4b0e21f4a03f9be7b2a6e",
+  "artifactBytes": 14494600,
+  "rawBehavioralLog": {
+    "bytes": 10378834,
+    "sha256": "1b2aa9d95f37aa213d3b78a9912fefe58d5b8d3ccf2fda773da06eedaad51f02"
+  },
+  "scenarios": 182,
+  "passRows": 212,
+  "failRows": 0,
+  "samePassInventoryAsAcceptedLab": true,
+  "negativeSelfTests": {
+    "count": 22,
+    "names": [
+      "self-test-bad-assertion",
+      "self-test-uncaught-error",
+      "self-test-unhandled-rejection",
+      "self-test-parity-regression",
+      "self-test-chronology-regression",
+      "self-test-wisp-formula-regression",
+      "self-test-wisp-pacing-regression",
+      "self-test-endgame-currency-regression",
+      "self-test-wisp-role-regression",
+      "self-test-p1-05-selected",
+      "self-test-p1-05-focus-return",
+      "self-test-lifecycle-duplicate",
+      "self-test-save-backup-placement",
+      "self-test-save-backup-confirmation",
+      "self-test-upgrade-identity-buy",
+      "self-test-upgrade-identity-value",
+      "self-test-upgrade-identity-clock",
+      "self-test-ascend-prisms-tree",
+      "self-test-ascend-prisms-lab",
+      "self-test-ascend-prisms-payout",
+      "self-test-ascend-prisms-repeat",
+      "self-test-ascend-prisms-rounding"
+    ],
+    "workflowBlob": "5cddd8599a23ba2fb823b75f471df3e16e721e86",
+    "step": {
+      "name": "Behavioral harness negative self-test",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 12,
+      "started_at": "2026-10-10T11:39:12Z",
+      "completed_at": "2026-10-10T11:39:43Z"
+    },
+    "perScenarioRawLogsAvailable": false,
+    "observedCaughtMessages": null,
+    "evidence": "Exact reviewed strict 22-negative loop plus GitHub completed/success step; per-negative traces absent from artifact."
+  },
+  "smoke": {
+    "verifiedAt": "2026-10-10T11:41:24Z",
+    "method": "Read-only observation of the archived completed CI DOM; no new game/browser execution",
+    "artifactId": 11668434322,
+    "domArtifactPath": "tmp/lumenfall-dom.html",
+    "originalBytes": 719531,
+    "originalSha256": "d6a4468ea906d916507ead1b1bf96b4727cb3ffad2d5142609373b2512d48efd",
+    "checks": {
+      "runtimeGuardInstalled": true,
+      "noUncaughtRuntimeError": true,
+      "noUnhandledRejection": true,
+      "riftZoneRendered": true,
+      "riftScrollLocked": true,
+      "enemyRendered": true,
+      "initialLumenHudRendered": true
+    },
+    "fullDomIncludedInDurablePackage": false
+  },
+  "targetedCases": [
+    {
+      "name": "p1-05-control-regressions",
+      "status": "PASS"
+    },
+    {
+      "name": "p2-07a-timer-boundary",
+      "status": "PASS"
+    },
+    {
+      "name": "rift-status-stacking-mobile",
+      "status": "PASS"
+    },
+    {
+      "name": "rift-status-stacking-reduced-motion",
+      "status": "PASS"
+    },
+    {
+      "name": "rift-status-reduced-motion",
+      "status": "PASS"
+    }
+  ],
+  "reviews": [],
+  "reviewThreads": [],
+  "requestedReviewers": [],
+  "requestedTeams": [],
+  "prAtApiRead": {
+    "observedAt": "2026-10-10T11:40:51Z",
+    "draft": true,
+    "mergeable": true,
+    "mergeableState": "clean",
+    "state": "open"
+  },
+  "main": "67373faa531f0bb791c883210ee623320861e380",
+  "limitations": [
+    "Per-negative job log unavailable; exact workflow strict-loop execution verified through successful GitHub step."
+  ],
+  "scope": "Read-only CI artifact acceptance. This audit performs no merge, remote write, rerun, product change or APK action."
+}

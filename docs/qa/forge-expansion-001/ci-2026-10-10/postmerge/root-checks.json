@@ -1,0 +1,60 @@
+{
+  "status": "pass",
+  "observedAtUtc": "2026-10-10 11:50:29 UTC",
+  "commit": "2d01049393e3bb45a90d80e07af52ae0484b0ec5",
+  "cwd": "/workspace/scratch/0848c4e4f365/Lumenfall-forge",
+  "checks": [
+    {
+      "name": "source",
+      "command": "node scripts/ci/validate_source.cjs index.html",
+      "chunk_id": "e9ad9b",
+      "wall_time_seconds": 0.299628133,
+      "exit_code": 0,
+      "original_token_count": 25,
+      "output": "QA passed: 2 scripts syntax-checked, 16 unique IDs verified, cache/state lifecycle guards present.\n"
+    },
+    {
+      "name": "forge-context",
+      "command": "node scripts/codex/check_context.cjs --task docs/tasks/FORGE_EXPANSION_001.md",
+      "chunk_id": "c444f8",
+      "wall_time_seconds": 0.247886045,
+      "exit_code": 0,
+      "original_token_count": 34,
+      "output": "PASS: 29 entrypoints, 91 local Markdown links, shared startup 31136 bytes; startup with docs/tasks/FORGE_EXPANSION_001.md 32591 bytes\n"
+    },
+    {
+      "name": "progression-context",
+      "command": "node scripts/codex/check_context.cjs --task docs/tasks/PROGRESSION_EXPANSION_001.md",
+      "chunk_id": "a0c042",
+      "wall_time_seconds": 0.225400559,
+      "exit_code": 0,
+      "original_token_count": 35,
+      "output": "PASS: 29 entrypoints, 93 local Markdown links, shared startup 31136 bytes; startup with docs/tasks/PROGRESSION_EXPANSION_001.md 32601 bytes\n"
+    },
+    {
+      "name": "protected-identity",
+      "command": "git diff --exit-code 67373faa531f0bb791c883210ee623320861e380 HEAD -- tests/behavioral/fixtures.json mobile .github/workflows/build-android.yml scripts/verify_apk_identity.cjs fonts branding",
+      "chunk_id": "5004d9",
+      "wall_time_seconds": 0.00002037,
+      "exit_code": 0,
+      "original_token_count": 0,
+      "output": ""
+    },
+    {
+      "name": "node",
+      "command": "node --version",
+      "chunk_id": "f00919",
+      "wall_time_seconds": 0.000025858,
+      "exit_code": 0,
+      "original_token_count": 3,
+      "output": "v24.19.0\n"
+    }
+  ],
+  "localCheckoutCorrection": {
+    "initialFailure": "Missing link in docs/tasks/FORGE_EXPANSION_001.md: ../qa/forge-expansion-001/DESIGN.md",
+    "cause": "The sparse checkout omitted a tracked documentation directory after switching to the actual merge.",
+    "resolution": "git sparse-checkout add docs/qa/forge-expansion-001",
+    "sourceChanged": false,
+    "repeatedForgeContext": "pass"
+  }
+}

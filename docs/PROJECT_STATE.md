@@ -1,11 +1,11 @@
 # Lumenfall — current project status
 
-10 October development: [progression expansion](tasks/PROGRESSION_EXPANSION_001.md)
-retains the main/APK hold. PR104 Lab merged into PR102's development branch at
-5bcd1c86 after required CI; separate Forge work follows. Earlier feature/release
-checkpoints below remain historical, including [BOND_TEXT_001](tasks/BOND_TEXT_001.md),
-[WISP_UPGRADE_DISPLAY_001](tasks/WISP_UPGRADE_DISPLAY_001.md) and the
-[feature-chat workflow](tasks/FEATURE_CHAT_WORKFLOW_001.md).
+[Development](tasks/PROGRESSION_EXPANSION_001.md): PR104 Lab merged at 5bcd1c86;
+PR105 Forge merged at 2d01049393e3bb45a90d80e07af52ae0484b0ec5 into PR102; required CI/post-merge PASS.
+Next: Tree. Main/APK hold remains. Historical feature/release checkpoints follow:
+[BOND_TEXT_001](tasks/BOND_TEXT_001.md),
+[WISP_UPGRADE_DISPLAY_001](tasks/WISP_UPGRADE_DISPLAY_001.md),
+[workflow](tasks/FEATURE_CHAT_WORKFLOW_001.md).
 Repository: `karahaNx/Lumenfall`. Verify relevant live state before acting;
 commits below are observed checkpoints, not a promise that main never advances.
 

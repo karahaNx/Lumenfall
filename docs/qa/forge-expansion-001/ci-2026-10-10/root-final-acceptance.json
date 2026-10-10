@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "status": "pass",
+  "scope": "Research Lab and Rift Forge development integration; main and final Android release held.",
+  "repository": "karahaNx/Lumenfall",
+  "auditedAtUtc": "2026-10-10 11:52:58 UTC",
+  "timeSource": "clock__curr_time",
+  "acceptedHead": "979ed4a3cb1e106456f86efacc114c89e825a88b",
+  "implementationCommit": "03b78ce1d13ad1a04670315bad05174c406935ab",
+  "integratedCommit": "2d01049393e3bb45a90d80e07af52ae0484b0ec5",
+  "integrationDestination": "feature/progression-expansion-2026-10-09",
+  "parents": [
+    "5bcd1c861af51511ca3d5c4a07d9d61e72fdff03",
+    "979ed4a3cb1e106456f86efacc114c89e825a88b"
+  ],
+  "syntheticMerge": "8e0e4911e6821242369e8a1877a40068bab23a10",
+  "acceptedAndIntegratedTree": "dd9e503000291554af6e93c294d99d475a09612f",
+  "entireTreeAndParentsMatch": true,
+  "productSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+  "frozenFixturesSha256": "ab43604db1b5bce8b9990506f989676dfb0009cdcf2e514a8ccee9da166c8753",
+  "unchangedMain": "67373faa531f0bb791c883210ee623320861e380",
+  "lab": {
+    "pr": 104,
+    "acceptedHead": "bda356647c8dfbc9f5b56527896868b1287b796e",
+    "merge": "5bcd1c861af51511ca3d5c4a07d9d61e72fdff03",
+    "fullRun": 38039208483,
+    "focusedRun": 38039208491,
+    "status": "success",
+    "evidence": "../../lab-expansion-001/DEBUG_2026-10-10.md"
+  },
+  "ci": [
+    {
+      "name": "Full pre-merge",
+      "runId": 38047024745,
+      "jobId": 114198498968,
+      "status": "completed",
+      "conclusion": "success",
+      "attempt": 1,
+      "artifactId": 11668434322,
+      "artifactBytes": 14494600,
+      "artifactSha256": "91b901f1799e03e1297ed7ef7aa91c68d90232ad5af4b0e21f4a03f9be7b2a6e",
+      "scenarios": 182,
+      "passRows": 212,
+      "failRows": 0,
+      "requiredNegatives": 22,
+      "rawEvidence": "final/full",
+      "rootAudit": "root-api/full-raw-audit.json"
+    },
+    {
+      "name": "Lab",
+      "runId": 38047024763,
+      "jobId": 114198499082,
+      "status": "completed",
+      "conclusion": "success",
+      "attempt": 1,
+      "artifactId": 11668255951,
+      "artifactBytes": 5192547,
+      "artifactSha256": "baa94ce212b184182b5be18c0d2f659758198a6d8cb467249675863aebd936c2",
+      "rawEvidence": "final/lab"
+    },
+    {
+      "name": "Forge",
+      "runId": 38047024764,
+      "jobId": 114198498978,
+      "status": "completed",
+      "conclusion": "success",
+      "attempt": 1,
+      "artifactId": 11668081599,
+      "artifactBytes": 5733378,
+      "artifactSha256": "d2c3f24ccde124b5f282d48f4d09932e3a313965501d00134cb496b38b0f0f02",
+      "rawEvidence": "final/forge"
+    }
+  ],
+  "rawAcceptance": {
+    "allThreeArtifactsDownloaded": true,
+    "apiDigestsAndSizesMatch": true,
+    "crcPassed": true,
+    "sourceAndArchivedTestBytesMatch": true,
+    "rootAllStoredAndDecodedHashesVerified": true,
+    "fullPassInventoryEqualsAcceptedLab": true,
+    "twoRepairedScenariosPassed": true,
+    "threeHistoricalScrollScenariosPassed": true,
+    "manifests": "root-package-verification.json"
+  },
+  "postmerge": {
+    "status": "pass",
+    "commands": 5,
+    "labCoreChecks": 2456,
+    "labBoundaryChecks": 2344,
+    "prismChecks": 3506,
+    "forgeCoreAssertions": 9291,
+    "forgeV8Checks": 2452,
+    "totalChecks": 20049,
+    "negativeControlsCaught": 40,
+    "allExitZero": true,
+    "allStderrEmpty": true,
+    "sourceContextAndProtectedIdentity": "postmerge/root-checks.json",
+    "labReceipt": "postmerge/lab/postmerge-acceptance.json",
+    "forgeReceipt": "postmerge/forge/postmerge-acceptance.json"
+  },
+  "firstFailedForgeRun": {
+    "runId": 38043830487,
+    "status": "failure",
+    "passRows": 210,
+    "failRows": 2,
+    "repairCommit": "979ed4a3cb1e106456f86efacc114c89e825a88b",
+    "productChangedByRepair": false,
+    "assertionsRetained": true,
+    "evidence": "../failed-ci-38043830487/README.md"
+  },
+  "automaticCollectionChecks": {
+    "observedAtUtc": "2026-10-10 11:50:30 UTC",
+    "statusOnly": true,
+    "full": {
+      "runId": 38049484284,
+      "status": "in_progress",
+      "conclusion": null
+    },
+    "lab": {
+      "runId": 38049484492,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    "forge": {
+      "runId": 38049484322,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    "evidence": "root-api/automatic-collection-runs.json",
+    "note": "Additional checks on draft PR102. They do not replace the accepted exact-source candidate CI; no raw artifact audit is claimed for these runs."
+  },
+  "limitations": [
+    "One final complete Actions job-log request returned Transport closed. The 22 mandatory negative controls are evidenced by the immutable strict-loop workflow and successful completed step, not 22 individually downloaded caught-message traces.",
+    "Actual Node 8.3.0 / V8 6.0.286.52 syntax-checks both inline scripts and executes the complete game IIFE with controlled presentation, timers and storage. The native integration script is not executed.",
+    "Mobile tests use Chromium, 320/390/430px, CSS root font16/32px and both motion preferences. Root scaling doubles rem-relative text; fixed-px text may remain unchanged.",
+    "Physical Android, native WebView60/textZoom, OS font scaling, TalkBack and installed signed-app upgrades remain untested.",
+    "Peer-agent review is not human GitHub approval. The authorized owner accepted development integration after all required gates."
+  ],
+  "preservation": {
+    "originalPaidValues": true,
+    "originalForgeIdsAndPrices": true,
+    "retiredBenefits": true,
+    "rawOvercaps": true,
+    "newKeysDefaultZero": true,
+    "newQueuesDefaultOff": true,
+    "saveSchemaUnchanged": true,
+    "autoAscendCovered": true,
+    "noCompletePrivateSaveIntroduced": true,
+    "syntheticNewEvidenceOnly": true,
+    "androidIdentityFilesUnchanged": true
+  },
+  "holds": {
+    "pr102Draft": true,
+    "mainUnchanged": true,
+    "apkBuild": false,
+    "apkSigning": false,
+    "apkPublication": false,
+    "releasePublication": false
+  },
+  "evidenceScope": "Separate documentation/evidence branch based on the actual development merge; no product, test, workflow, package or signing modifications.",
+  "next": "Ascension Tree, separately; then Comet shop/Deeds and combined UI/native Android acceptance before one final signed APK. Tree not started in this task."
+}

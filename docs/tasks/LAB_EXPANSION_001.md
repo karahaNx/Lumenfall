@@ -17,5 +17,6 @@ Head bda35664 passed full CI38039208483 (182 scenarios/22 negatives) and
 Lab CI38039208491. PR104 merged only into development at5bcd1c86; actual tree
 49fcd913 equals the validated combined tree. Post-merge core/boundary/Prism/
 V8/source/context PASS. Final CI and raw log are in the linked QA directory.
-Next: separate FORGE_EXPANSION_001. Physical Android/WebView60/TalkBack and
-final APK acceptance remain open; this is a development integration receipt.
+Lab CI38047024763 PASS. After PR105 merge 2d01049393e3bb45a90d80e07af52ae0484b0ec5,
+core/boundary/Prism post-merge PASS. Next: Tree. Physical Android/WebView60/
+TalkBack and final APK acceptance remain open.

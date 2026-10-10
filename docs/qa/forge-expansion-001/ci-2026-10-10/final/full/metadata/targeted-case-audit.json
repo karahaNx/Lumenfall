@@ -1,0 +1,206 @@
+{
+  "verifiedAt": "2026-10-10T11:44:15Z",
+  "clockSource": "clock__curr_time UTC supplied to audit",
+  "method": "Read-only parsing/assertion of archived CI observations; no game/browser execution",
+  "runId": 38047024745,
+  "artifactId": 11668434322,
+  "head": "979ed4a3cb1e106456f86efacc114c89e825a88b",
+  "syntheticMerge": "8e0e4911e6821242369e8a1877a40068bab23a10",
+  "sourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+  "behavioralLog": {
+    "bytes": 10378834,
+    "sha256": "1b2aa9d95f37aa213d3b78a9912fefe58d5b8d3ccf2fda773da06eedaad51f02"
+  },
+  "accepted": true,
+  "caseCount": 5,
+  "cases": [
+    {
+      "name": "p1-05-control-regressions",
+      "status": "PASS",
+      "process": null,
+      "observations": {
+        "selectedContrast": {
+          ".mult-btn.active": 10.820790238811385,
+          ".speed-btn.active": 10.860326278711556
+        },
+        "liveStates": true,
+        "focus": true,
+        "untrustedTapGuard": true,
+        "affordabilityFunding": {
+          "multiplier": "5",
+          "price": {
+            "lumen": 0,
+            "shard": 481114
+          },
+          "wallet": {
+            "lumen": 0,
+            "shards": 481114
+          }
+        }
+      },
+      "provenance": {
+        "byteOffset": 10269846,
+        "byteLength": 344,
+        "sha256": "dfce5726fc370f281510dd0803156c3a428b56634f468494f4f529a90b1c0f72"
+      }
+    },
+    {
+      "name": "p2-07a-timer-boundary",
+      "status": "PASS",
+      "process": null,
+      "observations": {
+        "boundarySec": 0.25,
+        "offsetSec": 0.0001,
+        "results": [
+          {
+            "kind": "live",
+            "before": true,
+            "exact": true,
+            "after": true,
+            "splits": 3,
+            "study": true,
+            "normal": true
+          },
+          {
+            "kind": "offline",
+            "before": true,
+            "exact": true,
+            "after": true,
+            "splits": 3,
+            "study": true,
+            "normal": true
+          }
+        ],
+        "negativeOldAccrual": true
+      },
+      "provenance": {
+        "byteOffset": 10271387,
+        "byteLength": 348,
+        "sha256": "495089a691efec5f9ef07a55b2a3c9dfbb7390d327366cf340d7a3a047de0974"
+      }
+    },
+    {
+      "name": "rift-status-stacking-mobile",
+      "status": "PASS",
+      "process": {
+        "exitcode": 0,
+        "timed_out": false,
+        "stderr": ""
+      },
+      "profiles": [
+        "360x640-safe0-no-preference",
+        "360x640-safe24-no-preference",
+        "390x844-safe24-no-preference"
+      ],
+      "teardown": {
+        "pendingBeforeClose": 0,
+        "events": [
+          {
+            "event": "browser-close",
+            "code": 0,
+            "signal": null,
+            "pending": 0
+          },
+          {
+            "event": "profile-removed",
+            "browserClosed": true
+          }
+        ],
+        "browser": {
+          "code": 0,
+          "signal": null
+        },
+        "pendingAfterClose": 0,
+        "profileRemoved": true
+      },
+      "provenance": {
+        "byteOffset": 9774721,
+        "byteLength": 24849,
+        "sha256": "e2b7f368217fbe1d4d3b425434366eb9520178eeff627dc6b10bc8d1ed36c6f0"
+      }
+    },
+    {
+      "name": "rift-status-stacking-reduced-motion",
+      "status": "PASS",
+      "process": {
+        "exitcode": 0,
+        "timed_out": false,
+        "stderr": ""
+      },
+      "profiles": [
+        "360x640-safe0-reduce",
+        "360x640-safe24-reduce",
+        "390x844-safe24-reduce"
+      ],
+      "teardown": {
+        "pendingBeforeClose": 0,
+        "events": [
+          {
+            "event": "browser-close",
+            "code": 0,
+            "signal": null,
+            "pending": 0
+          },
+          {
+            "event": "profile-removed",
+            "browserClosed": true
+          }
+        ],
+        "browser": {
+          "code": 0,
+          "signal": null
+        },
+        "pendingAfterClose": 0,
+        "profileRemoved": true
+      },
+      "provenance": {
+        "byteOffset": 9799570,
+        "byteLength": 24669,
+        "sha256": "a0af065ead54916b531d9dd5381cde630be2ba06b06ce38948149c74c0a5dfe4"
+      }
+    },
+    {
+      "name": "rift-status-reduced-motion",
+      "status": "PASS",
+      "process": {
+        "exitcode": 0,
+        "timed_out": false,
+        "stderr": ""
+      },
+      "profiles": [
+        "360x640-safe0-reduce",
+        "360x640-safe24-reduce",
+        "390x844-safe24-reduce"
+      ],
+      "teardown": {
+        "pendingBeforeClose": 0,
+        "events": [
+          {
+            "event": "browser-close",
+            "code": 0,
+            "signal": null,
+            "pending": 0
+          },
+          {
+            "event": "profile-removed",
+            "browserClosed": true
+          }
+        ],
+        "browser": {
+          "code": 0,
+          "signal": null
+        },
+        "pendingAfterClose": 0,
+        "profileRemoved": true
+      },
+      "provenance": {
+        "byteOffset": 9853191,
+        "byteLength": 25408,
+        "sha256": "d56e0c6f6a79f39f733b37c9dc6ecbbc5675a67ac082465d94d4f7f5e298415d"
+      }
+    }
+  ],
+  "limitations": [
+    "Successful legacy DOM scenarios retain PASS/detail observations in behavioral.log, not separate stdout DOM/process files."
+  ]
+}

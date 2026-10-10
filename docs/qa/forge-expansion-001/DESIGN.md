@@ -153,7 +153,7 @@ Causal negatives must reach gameplay assertions, not merely fail initialization.
 
 Keep frozen old fixtures and reward oracles; assert new fields0/OFF before
 projecting them out for old whole-state comparisons. Run the full182-scenario
-suite and its22 negative controls, focused Lab/Prism/Forge suites, V8.6,
+suite and its22 negative controls, focused Lab/Prism/Forge suites, actual V8 6.0 (Node 8.3.0),
 source/tooling/task context and guarded startup. Actual browser acceptance uses
 320/390/430px × CSS root font16/32px × both motion modes: all twenty cards, native
 Current/Next/Purchase impact, separate currency colors, touch/keyboard44px,

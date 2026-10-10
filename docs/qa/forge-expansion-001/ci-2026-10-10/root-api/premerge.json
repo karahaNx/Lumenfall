@@ -1,0 +1,135 @@
+{
+  "observedAtUtc": "2026-10-10 11:43:28 UTC",
+  "pr105": {
+    "url": "https://github.com/karahaNx/Lumenfall/pull/105",
+    "number": 105,
+    "state": "open",
+    "merged": false,
+    "mergeable": true,
+    "draft": true,
+    "body": "## Current checkpoint — corrected head in required CI\n\nHead [`979ed4a3`](https://github.com/karahaNx/Lumenfall/commit/979ed4a3cb1e106456f86efacc114c89e825a88b) repairs two stale test contracts found by the first full Forge run. The product and frozen save fixtures are byte-identical to `03b78ce1`. All original assertions remain. This PR stays draft until all required workflows and raw artifacts are verified.\n\n## Why this change is needed\n\nRift Forge has four active tracks. This separate development feature adds sixteen distinct mechanics, bringing the active catalogue to twenty, with explicit prices, unlocks and caps. Debugging also reproduced free purchases at very large represented wallets and old-run effects crossing Auto-Ascend when a retained lifetime counter no longer increments exactly.\n\n## What changes\n\n- Five groups: Core, Boss craft, Rhythm, Resources and Resonance. New mechanics cover boss regeneration/traits, bounded overkill, conditional charge, Support pulses/buffs, cast-resource conversion and Resonate capacity/refills.\n- All original IDs, paid levels, old price paths and retained benefits remain. Missing additions normalize to level 0 / queue OFF; raw overcaps are retained with bounded new effects. Lab work, seven-slot capacity, purchases, progression, Auto-Ascend and save format are preserved.\n- New finite prices are exact rational geometric totals rounded up once. The independent oracle covers every valid start/count/currency combination.\n- Forge and Resonate require exact represented debits. Manual primary-write failure rolls back the staged mutation; a committed primary endpoint remains authoritative after recovery-write failure. Queued purchases retain the existing owning offline transaction.\n- Actual run boundaries use a transient object identity. Saved large counters remain untouched; Spillway, Relay and passive time cannot leak across a real Ascend.\n- A cached charge reference supplies HUD estimates. Separate conservative bounds preserve Push/Farm intent in uncertain fights, including saved Support deadline precision, pending burst and unsafe tap ordinals.\n- Twenty-card previews show native current/next/purchase effects and independent currency colors. Touch, keyboard, paid reloads and the actual last row retain focus and scroll.\n\n## Reproduced defects\n\n1. A wallet of `1e30` could grant Forge levels or Resonate charge with a represented debit of zero.\n2. Failed manual primary writes left paid memory mutations behind.\n3. Applying the generic floating helper to new inputs misrounded 16 of 598 currency totals by one unit.\n4. Rounded saved Support deadlines invalidated a theoretical guaranteed lower DPS bound; the supposedly winning boss actually healed.\n5. Retained unsafe tap ordinals invalidated one-in-five Cadence bounds and a first HUD approximation.\n6. `ascendCount=1e30` could remain unchanged across a real Auto-Ascend, letting old Spillway damage and Relay charge into the new run. The new enemy incorrectly had 10.5625/11 HP; the fixed source retains 11/11 and zero charge.\n\nBefore/after synthetic receipts, portable reproducers and byte-verifiable source reconstruction patches are committed under `docs/qa/forge-expansion-001/`. No complete private user save is added.\n\n## Local verification — exact product source\n\n| Gate | Result |\n|---|---|\n| Forge core | PASS: 9,291 assertions, 25 causal negatives, 598 independent currency prices, 448 real funded purchases |\n| Charge calibration and boss bounds | PASS: 3,134 assertions, 7 causal negatives, 26 long profiles, 128 finite-window bounds |\n| Actual Forge mobile | PASS: 25,524 assertions, 12 profiles, 24 screenshots; runtime errors 0 |\n| Actual Node 8.3.0 / V8 6.0.286.52 | PASS: 2,452 assertions; both complete scripts parsed; unsafe-counter Auto-Ascend included |\n| Unchanged Luminous Tracking mobile | PASS: both original scenarios, three original viewport/safe-inset profiles each |\n| Lab core/boundary/stress | PASS: 2,456 / 2,344 / 2,182, with all required causal controls |\n| Prism saved-state / real Ascends | PASS: 3,506 assertions, 180 payouts |\n| Lab on actual V8 6.0 | PASS: 580 assertions |\n| Source, tooling, identity-verifier self-test, task context, whitespace | PASS |\n\nMobile profiles use 320/390/430px, CSS root font 16/32px and both motion modes. Root-font scaling doubles rem-relative text; fixed-px text may remain unchanged. Physical Android, native WebView textZoom/60, TalkBack and signed saved-app update acceptance remain open for the later combined release.\n\n## Full-CI failure and repair\n\n[First full run 38043830487](https://github.com/karahaNx/Lumenfall/actions/runs/38043830487) failed with 210 PASS rows and two FAIL rows: the accessibility fixture used an unrepresentable `1e100` debit, and the timer mutant still searched for the replaced lifetime-counter guard. Both Chrome processes exited 0 without timeout or runtime errors; their QA assertions failed. The subsequent 22-negative and guarded-smoke gates were skipped, so that run is not accepted.\n\nThe corrected accessibility fixture funds the actual selected x5 quote of 481,114 Shards and preserves poor → funded → poor and all UI assertions. The timer mutant now targets `ascendRunToken===runBeforePassive`; it still removes the guard, is caught by the original reset-resource oracle, and restores the function. Positive UI, its two intended negative controls, timer boundaries, chronology and farm retention passed locally on the repaired bytes. Source, Node tooling, context and whitespace checks passed.\n\n[Immutable failure and repair evidence](https://github.com/karahaNx/Lumenfall/tree/979ed4a3cb1e106456f86efacc114c89e825a88b/docs/qa/forge-expansion-001/failed-ci-38043830487) includes the complete lossless raw log, two exact failure results, ZIP/API provenance and local repair receipts. Artifact 11667664409 is 14,963,060 bytes, SHA-256 `712da10b46a6a3e869df3eb8d290db782879887540c0d170818db898c1d14774`.\n\n## Mandatory GitHub acceptance — PENDING on corrected head\n\n| Workflow | Run | Status at this checkpoint |\n|---|---|---|\n| Full pre-merge validation | [38047024745](https://github.com/karahaNx/Lumenfall/actions/runs/38047024745) | In progress; requires 182 scenarios / 212 PASS rows, 22 expected negatives and all other gates |\n| Research Lab expansion validation | [38047024763](https://github.com/karahaNx/Lumenfall/actions/runs/38047024763) | SUCCESS; all 11 steps and raw artifact verified on corrected head: 2,456 core / 2,344 boundary / 2,182 stress / 3,506 Prism / 6,420 mobile / 580 actual V8 checks |\n| Rift Forge expansion validation | [38047024764](https://github.com/karahaNx/Lumenfall/actions/runs/38047024764) | SUCCESS; all 13 steps and raw artifact verified on corrected head: 9,291 core / 3,134 calibration / 25,524 mobile / 2,452 actual V8 checks; all 17 offline scenarios pass |\n\nFocused raw-artifact audit is complete. Lab artifact **11668255951**: 5,192,547 bytes, SHA-256 `baa94ce212b184182b5be18c0d2f659758198a6d8cb467249675863aebd936c2`. Forge artifact **11668081599**: 5,733,378 bytes, SHA-256 `d2c3f24ccde124b5f282d48f4d09932e3a313965501d00134cb496b38b0f0f02`. Both match GitHub's size and digest, pass ZIP CRC, and record the exact combined commit/source below. All six archived Lab tests and all five Forge tests match head `979ed4a3`. The 8-hour Forge scenario completed 302,400 kills and 14,400 actual Auto-Ascends; live/offline purchase-boundary records agree. Full pre-merge validation remains open.\n\nThe separate Prism-only runs are branch-filtered skips, not acceptance passes. Required Prism checks run inside the full and Lab workflows. The earlier focused Lab/Forge successes tested `03b78ce1`; fresh corrected-head verification is required here.\n\n## Verified source and integration boundary\n\n- Head: `979ed4a3cb1e106456f86efacc114c89e825a88b`.\n- Base: `5bcd1c861af51511ca3d5c4a07d9d61e72fdff03` on `feature/progression-expansion-2026-10-09` behind draft PR102.\n- GitHub synthetic merge: `8e0e4911e6821242369e8a1877a40068bab23a10`, with exactly those two parents.\n- Reviewed and synthetic tree: `dd9e503000291554af6e93c294d99d475a09612f`.\n- Product SHA-256: `05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac`.\n- Frozen fixture SHA-256: `ab43604db1b5bce8b9990506f989676dfb0009cdcf2e514a8ccee9da166c8753`.\n- Main remains `67373faa531f0bb791c883210ee623320861e380`.\n\nDevelopment integration follows only after successful required CI, raw-artifact audit and actual merge-tree verification. PR102 remains draft. No main merge, APK build, signing or publication. Agent code review is not a human GitHub approval. Final workflow artifact digests and integration identity will be recorded after verification.\n",
+    "title": "Rift Forge: twenty active upgrades, exact purchases and safe Auto-Ascend",
+    "base": "feature/progression-expansion-2026-10-09",
+    "base_sha": "5bcd1c861af51511ca3d5c4a07d9d61e72fdff03",
+    "head": "feature/forge-expansion-001",
+    "head_sha": "979ed4a3cb1e106456f86efacc114c89e825a88b",
+    "head_repo_id": 1348277654,
+    "head_repo_full_name": "karahaNx/Lumenfall",
+    "merge_commit_sha": "8e0e4911e6821242369e8a1877a40068bab23a10",
+    "user": {
+      "login": "karahaNx",
+      "name": "karahaNx",
+      "email": null,
+      "avatar_url": "https://avatars.githubusercontent.com/u/63508146?v=4",
+      "id": 63508146
+    },
+    "requested_reviewers": null,
+    "requested_team_reviewers": null,
+    "diff": null,
+    "comments": null,
+    "created_at": "2026-10-10T10:07:49Z",
+    "updated_at": "2026-10-10T11:18:18Z",
+    "closed_at": null,
+    "merged_at": null,
+    "commits": 2,
+    "changed_files": 114,
+    "additions": 54129,
+    "deletions": 154,
+    "display_url": "https://github.com/karahaNx/Lumenfall/pull/105",
+    "display_title": "Rift Forge: twenty active upgrades, exact purchases and safe Auto-Ascend"
+  },
+  "pr102": {
+    "url": "https://github.com/karahaNx/Lumenfall/pull/102",
+    "number": 102,
+    "state": "open",
+    "merged": false,
+    "mergeable": true,
+    "draft": true,
+    "body": "## Development collection — final release HOLD\n\nCurrent development head: **5bcd1c861af51511ca3d5c4a07d9d61e72fdff03**.\nMain remains **67373faa531f0bb791c883210ee623320861e380**.\n\n**Keep PR102 draft. Do not merge into main, build/sign an APK, or publish a release yet.** The current user authorizes sequential development integration after required validation; the combined release remains held.\n\n## Integrated improvements\n\n| Improvement | Integration | Verified acceptance |\n| --- | --- | --- |\n| 01 — Prism earning and currency presentation | [PR103](https://github.com/karahaNx/Lumenfall/pull/103), `b46d148f3425d31789b38d53218eb66cfff0bf3b` | [Full CI37952681170](https://github.com/karahaNx/Lumenfall/actions/runs/37952681170): 182 scenarios, 212 PASS rows, 22 required negatives; focused Prism/mobile/old-V8 checks and equal-tree integration verified |\n| 02 — Research Lab, twenty active projects | [PR104](https://github.com/karahaNx/Lumenfall/pull/104), `5bcd1c861af51511ca3d5c4a07d9d61e72fdff03` | [Full CI38039208483](https://github.com/karahaNx/Lumenfall/actions/runs/38039208483) and [Lab CI38039208491](https://github.com/karahaNx/Lumenfall/actions/runs/38039208491) succeeded; exact combined tree and post-integration checks verified |\n\nThe Lab merge tree is `49fcd913b8e2ee9051f3717071d782c7f3b33091`; it exactly equals the tested combined tree. Fourteen new timed projects plus six existing active projects supply twenty active tracks. Retired paid Studies, work, seven-slot capacity, speed choices, saves, progression and real manual/live/offline Auto-Ascend retention are covered. PR104 records the reproduced boundary/no-op-test failures, their fixes, exact source, artifact digests and acceptance limits.\n\nPrism retains protected upgrade returns and exact rounding, consistent Ascend help and independent red-only insufficient-currency prices. Hidden legacy paid values, work and save formats remain. PR103 preserves its full historical acceptance and artifact identities; those are not substituted for newer combined-source verification.\n\n## Current isolated candidate — Rift Forge PR105\n\n[PR105](https://github.com/karahaNx/Lumenfall/pull/105), branch `feature/forge-expansion-001`, targets this development branch. Corrected head:\n**979ed4a3cb1e106456f86efacc114c89e825a88b**.\n\nIt adds sixteen distinct Forge mechanics to the four active tracks, preserves old IDs/paid benefits and original price paths, and corrects exact-debit, transaction rollback and real-run boundary defects. The first full Forge run found two stale test contracts; repair commit `979ed4a3` preserves every assertion and leaves product/frozen fixtures byte-identical to implementation `03b78ce1`. The failed run is retained as failure history, not acceptance.\n\n| Required workflow on corrected head | Current verified status |\n| --- | --- |\n| [Full pre-merge38047024745](https://github.com/karahaNx/Lumenfall/actions/runs/38047024745) | In progress; full raw-artifact acceptance is pending |\n| [Lab38047024763](https://github.com/karahaNx/Lumenfall/actions/runs/38047024763) | SUCCESS; all 11 steps and raw artifact verified |\n| [Forge38047024764](https://github.com/karahaNx/Lumenfall/actions/runs/38047024764) | SUCCESS; all 13 steps and raw artifact verified, including 17 offline scenarios |\n\nThe tested synthetic merge is `8e0e4911e6821242369e8a1877a40068bab23a10`,\ntree `dd9e503000291554af6e93c294d99d475a09612f`, product SHA256\n`05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac`.\nThe exact required CI, raw artifacts and actual merge tree must be verified before integration. PR105 contains detailed test counts, artifact digests, source identities and failure evidence.\n\n## Remaining approved sequence\n\n1. Complete Forge's full CI, inspect the raw artifact, integrate only into this development branch and verify the actual integrated version.\n2. Ascension Tree: at least twenty meaningful exclusive progression upgrades with explicit currency prices, unlocks and caps; address the measured poor late-game Swift return without losing historical paid value. This is the next separate improvement after Forge.\n3. Comet shop/Deeds: one-time abilities plus permanent multi-level upgrades; replace Comet Trials/Rift Trail/Starfall Crest with a deliberate, once-only paid-value migration/refund; preserve Auto-Ascend and earned Deeds.\n4. Shared affordability and large-text UI review, then full combined save/economy/offline/accessibility/native Android acceptance and **one** final signed, versioned APK through the established package/signing flow.\n\nPhysical Android, native WebView60/textZoom, OS font scaling, TalkBack and installed-update/final signed APK acceptance remain open for this collection. Browser root-font scaling and actual V8 6.0 execution are distinct evidence. No whole-campaign balance or human GitHub approval is inferred.\n\nRequirements: `docs/tasks/PROGRESSION_EXPANSION_001.md` and `docs/qa/progression-expansion-001/ORIGINAL_MANDATE.md`. GitHub PR receipts record the current integration state; older embedded release checkpoints remain historical.\n",
+    "title": "Progression expansion: Lab, Forge, Tree, Comet redesign and affordability UI",
+    "base": "main",
+    "base_sha": "67373faa531f0bb791c883210ee623320861e380",
+    "head": "feature/progression-expansion-2026-10-09",
+    "head_sha": "5bcd1c861af51511ca3d5c4a07d9d61e72fdff03",
+    "head_repo_id": 1348277654,
+    "head_repo_full_name": "karahaNx/Lumenfall",
+    "merge_commit_sha": "8cd46ec97c1893072986f4cbd9bd4d9a003a005f",
+    "user": {
+      "login": "karahaNx",
+      "name": "karahaNx",
+      "email": null,
+      "avatar_url": "https://avatars.githubusercontent.com/u/63508146?v=4",
+      "id": 63508146
+    },
+    "requested_reviewers": null,
+    "requested_team_reviewers": null,
+    "diff": null,
+    "comments": null,
+    "created_at": "2026-10-09T05:52:33Z",
+    "updated_at": "2026-10-10T11:26:23Z",
+    "closed_at": null,
+    "merged_at": null,
+    "commits": 53,
+    "changed_files": 53,
+    "additions": 5157,
+    "deletions": 110,
+    "display_url": "https://github.com/karahaNx/Lumenfall/pull/102",
+    "display_title": "Progression expansion: Lab, Forge, Tree, Comet redesign and affordability UI"
+  },
+  "main": {
+    "ref": "refs/heads/main",
+    "node_id": "REF_kwDOUF0Vlq9yZWZzL2hlYWRzL21haW4",
+    "url": "https://api.github.com/repos/karahaNx/Lumenfall/git/refs/heads/main",
+    "object": {
+      "sha": "67373faa531f0bb791c883210ee623320861e380",
+      "type": "commit",
+      "url": "https://api.github.com/repos/karahaNx/Lumenfall/git/commits/67373faa531f0bb791c883210ee623320861e380"
+    }
+  },
+  "synthetic": {
+    "sha": "8e0e4911e6821242369e8a1877a40068bab23a10",
+    "node_id": "C_kwDOUF0VltoAKDhlMGU0OTExZTY4MjEyNDIzNjllOGExODc3YTQwMDY4YmFiMjNhMTA",
+    "url": "https://api.github.com/repos/karahaNx/Lumenfall/git/commits/8e0e4911e6821242369e8a1877a40068bab23a10",
+    "html_url": "https://github.com/karahaNx/Lumenfall/commit/8e0e4911e6821242369e8a1877a40068bab23a10",
+    "author": {
+      "name": "xarib",
+      "email": "63508146+karahaNx@users.noreply.github.com",
+      "date": "2026-10-10T11:02:51Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2026-10-10T11:02:51Z"
+    },
+    "tree": {
+      "sha": "dd9e503000291554af6e93c294d99d475a09612f",
+      "url": "https://api.github.com/repos/karahaNx/Lumenfall/git/trees/dd9e503000291554af6e93c294d99d475a09612f"
+    },
+    "message": "Merge 979ed4a3cb1e106456f86efacc114c89e825a88b into 5bcd1c861af51511ca3d5c4a07d9d61e72fdff03",
+    "parents": [
+      {
+        "sha": "5bcd1c861af51511ca3d5c4a07d9d61e72fdff03",
+        "url": "https://api.github.com/repos/karahaNx/Lumenfall/git/commits/5bcd1c861af51511ca3d5c4a07d9d61e72fdff03",
+        "html_url": "https://github.com/karahaNx/Lumenfall/commit/5bcd1c861af51511ca3d5c4a07d9d61e72fdff03"
+      },
+      {
+        "sha": "979ed4a3cb1e106456f86efacc114c89e825a88b",
+        "url": "https://api.github.com/repos/karahaNx/Lumenfall/git/commits/979ed4a3cb1e106456f86efacc114c89e825a88b",
+        "html_url": "https://github.com/karahaNx/Lumenfall/commit/979ed4a3cb1e106456f86efacc114c89e825a88b"
+      }
+    ],
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqyhtbCRC1aQ7uu5UhlAAAU+oQAEI7KHJmzB+SHNSbE8gr3VH0\nGl3krWBqhM+LSJgoUhRRd8jAk3t528zn3PFTMen37DS8KY2ctFXxKsG2M7ZEfyxj\n3+vI1p7yMnxCkfn0oOnLQpCHtBNLHu+TaKLRlmBiX3y/PM7JnEoS7vC74aqmRurA\nU8b2cJp66NgoGRiYBKKUxJA2BM1JDrMBbsqFm8ZnXkxRI/VYH4OGk6wsC2ISK45Z\nKWTYaCnhAxa7eJ44lps4PhgZoQ7HUfEEqhhnxZxveHsTovvAP4LI/SnNRpzbfz8j\nk3KfRe+MCG5jUPPSh4+1Q94QwNg6dp4fHm8gjjpeY1H/XPPsy2nDtHXuFGoeabfK\nBpVRuQhjljHvYJqID59SJHcUDHt3NrHuFGB9EI+J0YTNZ/5nbULZXPx31yWJAJXt\nIcr133J01PWHy3X4sgPteNncpjCAAUiPJs5Cc8oB9a/2pX/PCloyAuGoYQFt7jE3\nEWnSMh03s1atWFzeURvRt81caKZHZCgj0AkYhYEqu7wJYzZnIjOjsHTk0ayzjGfJ\n5uEi5+c0NdYBoPxGrL3/Se2IxNKNvHXi2AeQ2805Sbs4XDBTFNlyMjZwzFZPNyLo\nXNBA/spZnDUC1I5GaCz10IlKMnXDNLTUNh2xVHiaa6OtCsNKK6Cgho/C1+kIoneT\nKYFRGHCoTrB0FYKINx3F\n=dceE\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree dd9e503000291554af6e93c294d99d475a09612f\nparent 5bcd1c861af51511ca3d5c4a07d9d61e72fdff03\nparent 979ed4a3cb1e106456f86efacc114c89e825a88b\nauthor xarib <63508146+karahaNx@users.noreply.github.com> 1791630171 +0000\ncommitter GitHub <noreply@github.com> 1791630171 +0000\n\nMerge 979ed4a3cb1e106456f86efacc114c89e825a88b into 5bcd1c861af51511ca3d5c4a07d9d61e72fdff03\n",
+      "verified_at": "2026-10-10T11:02:52Z"
+    }
+  },
+  "reviews": {
+    "reviews": []
+  },
+  "threads": {
+    "review_threads": []
+  }
+}
