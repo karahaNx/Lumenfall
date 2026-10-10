@@ -1,0 +1,113 @@
+{
+  "auditedAt": "2026-10-10T10:56:29Z",
+  "clockSource": "clock__curr_time supplied as UTC",
+  "accepted": false,
+  "status": "FAILED",
+  "runId": 38043830487,
+  "jobId": 114189237108,
+  "artifactId": 11667664409,
+  "head": "03b78ce1d13ad1a04670315bad05174c406935ab",
+  "base": "5bcd1c861af51511ca3d5c4a07d9d61e72fdff03",
+  "syntheticMerge": "9e99a7d6d8ac89f4f557b2144b7e8cb6f64b6ff9",
+  "tree": "118b0fcd905b3234d62d391cc5b0108c250a3bc0",
+  "sourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+  "zipBytes": 14963060,
+  "zipSha256": "712da10b46a6a3e869df3eb8d290db782879887540c0d170818db898c1d14774",
+  "behavioralLogBytes": 10392585,
+  "behavioralLogSha256": "315d14a48de6992d234e90444a9a246c87106564b1092e7055e2e35fc357e672",
+  "passRows": 210,
+  "failRows": 2,
+  "allExpandedRowsMatchAccepted182ScenarioInventory": true,
+  "failures": [
+    {
+      "scenario": "p1-05-control-regressions",
+      "assertion": "live affordability clears stale reason",
+      "process": {
+        "exitcode": 0,
+        "timed_out": false,
+        "elapsed_sec": 1.514314763000235,
+        "timeout_sec": 25
+      },
+      "qa": {
+        "qa_count": 1,
+        "qa_status": "fail",
+        "qa_scenario": "p1-05-control-regressions",
+        "json_status": "fail",
+        "json_scenario": "p1-05-control-regressions",
+        "runtime_markers": [],
+        "runtime_error_count": 0,
+        "json_error": null,
+        "valid": true
+      },
+      "detail": {
+        "message": "live affordability clears stale reason",
+        "stack": "Error: live affordability clears stale reason\n    at assert (http://127.0.0.1:35945/index.html?qaScenario=p1-05-control-regressions&qaFixture=accessibility-mixed-states:14849:61)\n    at window.runP105ControlQa (http://127.0.0.1:35945/index.html?qaScenario=p1-05-control-regressions&qaFixture=accessibility-mixed-states:12298:3)\n    at HTMLDocument.run (http://127.0.0.1:35945/index.html?qaScenario=p1-05-control-regressions&qaFixture=accessibility-mixed-states:16578:32)"
+      },
+      "runtimeErrors": [],
+      "provenance": {
+        "originalArtifactPath": "home/runner/work/Lumenfall/Lumenfall/validation-evidence/raw/p1-05-control-regressions-KxLyY2/stdout.html",
+        "originalBytes": 1437336,
+        "originalSha256": "4a782683e041ac4add695c625d8bef15c4f31a40a576518d2535778bea406d26",
+        "selectedElement": "pre#qa-result",
+        "originalByteOffset": 1436650,
+        "originalByteLength": 665,
+        "escapedFragmentSha256": "088620d3950e75ef2a96762e299d7ce14f49f4a4514b94a7d01415d0fecc9153",
+        "decodedJsonBytes": 653,
+        "decodedJsonSha256": "2919538c7f7508394c51960fd2c87b2076b65da6c341147be986ce4f9ba411a6",
+        "transformation": "Extract exact text content byte range; decode HTML entities once; no game code executed; raw escaped fragment is preserved.",
+        "originalFullHtmlPreservedInScratchZip": true,
+        "fullHtmlOmittedFromDurableEvidence": true
+      }
+    },
+    {
+      "scenario": "p2-07a-timer-boundary",
+      "assertion": "timer mutation anchor",
+      "process": {
+        "exitcode": 0,
+        "timed_out": false,
+        "elapsed_sec": 1.1367413800000212,
+        "timeout_sec": 25
+      },
+      "qa": {
+        "qa_count": 1,
+        "qa_status": "fail",
+        "qa_scenario": "p2-07a-timer-boundary",
+        "json_status": "fail",
+        "json_scenario": "p2-07a-timer-boundary",
+        "runtime_markers": [],
+        "runtime_error_count": 0,
+        "json_error": null,
+        "valid": true
+      },
+      "detail": {
+        "message": "timer mutation anchor",
+        "stack": "Error: timer mutation anchor\n    at assert (http://127.0.0.1:35945/index.html?qaScenario=p2-07a-timer-boundary&qaFixture=fresh:14849:61)\n    at Object.audit (http://127.0.0.1:35945/index.html?qaScenario=p2-07a-timer-boundary&qaFixture=fresh:10555:9)\n    at window.runP207TimerReview (http://127.0.0.1:35945/index.html?qaScenario=p2-07a-timer-boundary&qaFixture=fresh:13510:16)\n    at HTMLDocument.run (http://127.0.0.1:35945/index.html?qaScenario=p2-07a-timer-boundary&qaFixture=fresh:15789:32)"
+      },
+      "runtimeErrors": [],
+      "provenance": {
+        "originalArtifactPath": "home/runner/work/Lumenfall/Lumenfall/validation-evidence/raw/p2-07a-timer-boundary-RvvhCl/stdout.html",
+        "originalBytes": 1343506,
+        "originalSha256": "51bc68bb9f8ec208aab447c2aee6f673bcbb0180877c3cbccf59f9c4c77641b9",
+        "selectedElement": "pre#qa-result",
+        "originalByteOffset": 1342812,
+        "originalByteLength": 673,
+        "escapedFragmentSha256": "9982099d5dc77c8a5012d415020f9c5e8ce9736cd69f41f0440db9954e3e1c1f",
+        "decodedJsonBytes": 657,
+        "decodedJsonSha256": "842762c4d73ee5484c05fbabecc7852570ec1b2019de8a57f23af8acb495de71",
+        "transformation": "Extract exact text content byte range; decode HTML entities once; no game code executed; raw escaped fragment is preserved.",
+        "originalFullHtmlPreservedInScratchZip": true,
+        "fullHtmlOmittedFromDurableEvidence": true
+      }
+    }
+  ],
+  "mandatoryGates": {
+    "stateful": "failure",
+    "negativeSelfTests": "skipped",
+    "negativeSelfTestsRequired": 22,
+    "runtimeGuard": "skipped",
+    "browserSmoke": "skipped"
+  },
+  "completeJobLogAvailable": false,
+  "jobLogLimitation": "Both one active and one completed request returned connector Transport closed; no repeated attempts.",
+  "conclusion": "This run does not satisfy pre-merge acceptance and does not authorize integration."
+}

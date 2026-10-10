@@ -387,7 +387,7 @@ window.__lumenfallQaBridge = {
         originals.reconcile(s);
       };
       if(mutation==='timer'){
-        var source=String(originals.advance),guard='if(state.ascendCount===ascendsBeforePassive){';
+        var source=String(originals.advance),guard='if(ascendRunToken===runBeforePassive){';
         assert(source.indexOf(guard)!==-1,'timer mutation anchor');
         advanceAuthoritativeTime=eval('('+source.replace(guard,'if(true){')+')');
       }

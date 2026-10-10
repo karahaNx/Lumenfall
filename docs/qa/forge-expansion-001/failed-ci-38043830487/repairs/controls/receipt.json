@@ -1,0 +1,270 @@
+{
+  "startedAt": "2026-10-10T10:59:04.065Z",
+  "head": "03b78ce1d13ad1a04670315bad05174c406935ab",
+  "sourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+  "node": {
+    "executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+    "version": "v24.19.0",
+    "v8": "13.6.233.17-node.51"
+  },
+  "browser": {
+    "path": "/tmp/lumenfall-test-bin/google-chrome",
+    "resolved": "/workspace/scratch/c0c23f4097e9/b2_qa_runtime/chrome-headless-shell-linux64/chrome-headless-shell",
+    "version": "Google Chrome for Testing 153.0.8010.0"
+  },
+  "repairedFile": "tests/behavioral/accessibility-controls.js",
+  "repairedFileSha256": "f892dc67759700bdb96429184ec4e31ac17d0f805f4a908430e98c72da148c28",
+  "harnessSha256": {
+    "accessibility-controls.js": "f892dc67759700bdb96429184ec4e31ac17d0f805f4a908430e98c72da148c28",
+    "accessibility.js": "a5c48c5cb8e6fde5c7af45738efd08b80756f6304481a7e8f684780bcf31998c",
+    "runner.js": "0fd30cee20407ebf51a8b25fb589545c20f2612c68f0f68fdab72ff26a341ab1",
+    "prelude.js": "f8c2ccd4f01587d07b52c07d6d6d8756c144e94a4f1998e2807054add33f7bdb",
+    "bridge.js": "3a7e96895d982f005ed075334c5159b8a5e00c138475f1bc4e34b1790e978c3c",
+    "run.cjs": "3e52c9a021f650ea9d52fcc55aa6e7ad50ce4bd467848f69e0aa81bfffd1ec81",
+    "fixtures.json": "ab43604db1b5bce8b9990506f989676dfb0009cdcf2e514a8ccee9da166c8753",
+    "raw-result.cjs": "5ccb3939a1386aac32eee5803fd732198dbf73f354d21bc0f1c8459da478c25b"
+  },
+  "scope": "Existing p1-05-control-regressions and its existing selected/focus negative controls only; no full suite or product edits.",
+  "results": [
+    {
+      "scenario": "p1-05-control-regressions",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/scratch/0848c4e4f365/forge-closeout/repair-controls/final/web",
+        "--scenario",
+        "p1-05-control-regressions",
+        "--raw-artifacts",
+        "/workspace/scratch/0848c4e4f365/forge-closeout/repair-controls/final/p1-05-control-regressions/raw"
+      ],
+      "cwd": "/workspace/scratch/0848c4e4f365/Lumenfall-forge",
+      "exitcode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 2124,
+      "expectedExit": 0,
+      "stdout": {
+        "bytes": 962,
+        "sha256": "41c39b9e1db4c308aa025dfe2c2856dec2feee3897a7c89b4f66287f2a5bf426"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "staged": {
+        "source_sha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+        "instrumented_sha256": "27628063f42c54ddd15d3e409d786beb64729547b3cd8d536e78896fafb7bbfe"
+      },
+      "detail": {
+        "selectedContrast": {
+          ".mult-btn.active": 10.820790238811385,
+          ".speed-btn.active": 10.860326278711556
+        },
+        "liveStates": true,
+        "focus": true,
+        "untrustedTapGuard": true,
+        "affordabilityFunding": {
+          "multiplier": "5",
+          "price": {
+            "lumen": 0,
+            "shard": 481114
+          },
+          "wallet": {
+            "lumen": 0,
+            "shards": 481114
+          }
+        }
+      },
+      "accepted": true
+    },
+    {
+      "scenario": "self-test-p1-05-selected",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/scratch/0848c4e4f365/forge-closeout/repair-controls/final/web",
+        "--scenario",
+        "self-test-p1-05-selected",
+        "--raw-artifacts",
+        "/workspace/scratch/0848c4e4f365/forge-closeout/repair-controls/final/self-test-p1-05-selected/raw"
+      ],
+      "cwd": "/workspace/scratch/0848c4e4f365/Lumenfall-forge",
+      "exitcode": 1,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 2392,
+      "expectedExit": 1,
+      "stdout": {
+        "bytes": 5498,
+        "sha256": "9279f67e0a97f6147b189887b0d6d54691c40aab58fad2f96618eeb05dd6e78e"
+      },
+      "stderr": {
+        "bytes": 52,
+        "sha256": "34ac375e44f322cab0e2a9cf2a0dee833ccd7e7ae60e7d8442f11b61eb8e02ac"
+      },
+      "staged": {
+        "source_sha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+        "instrumented_sha256": "27628063f42c54ddd15d3e409d786beb64729547b3cd8d536e78896fafb7bbfe"
+      },
+      "browserProcess": {
+        "command": [
+          "/tmp/lumenfall-test-bin/google-chrome",
+          "--headless=new",
+          "--no-sandbox",
+          "--disable-gpu",
+          "--disable-dev-shm-usage",
+          "--disable-background-networking",
+          "--disable-background-timer-throttling",
+          "--no-first-run",
+          "--window-size=390,844",
+          "--virtual-time-budget=1500",
+          "--user-data-dir=/tmp/lumenfall-qa-self-test-p1-05-selected-UhnE2h",
+          "--dump-dom",
+          "http://127.0.0.1:45521/index.html?qaScenario=self-test-p1-05-selected&qaFixture=accessibility-mixed-states"
+        ],
+        "fixture": "accessibility-mixed-states",
+        "viewport": null,
+        "process": {
+          "exitcode": 0,
+          "timed_out": false,
+          "elapsed_sec": 1.311309497,
+          "timeout_sec": 25
+        },
+        "qa": {
+          "qa_count": 1,
+          "qa_status": "fail",
+          "qa_scenario": "self-test-p1-05-selected",
+          "json_status": "fail",
+          "json_scenario": "self-test-p1-05-selected",
+          "runtime_markers": [],
+          "runtime_error_count": 0,
+          "json_error": null,
+          "valid": true
+        }
+      },
+      "qa": {
+        "observation": {
+          "qa_count": 1,
+          "qa_status": "fail",
+          "qa_scenario": "self-test-p1-05-selected",
+          "json_status": "fail",
+          "json_scenario": "self-test-p1-05-selected",
+          "runtime_markers": [],
+          "runtime_error_count": 0,
+          "json_error": null,
+          "valid": true
+        },
+        "payload": {
+          "scenario": "self-test-p1-05-selected",
+          "status": "fail",
+          "detail": {
+            "message": "intentional selected semantics regression",
+            "stack": "Error: intentional selected semantics regression\n    at assert (http://127.0.0.1:45521/index.html?qaScenario=self-test-p1-05-selected&qaFixture=accessibility-mixed-states:14852:61)\n    at Object.negativeSelected (http://127.0.0.1:45521/index.html?qaScenario=self-test-p1-05-selected&qaFixture=accessibility-mixed-states:12248:5)\n    at HTMLDocument.run (http://127.0.0.1:45521/index.html?qaScenario=self-test-p1-05-selected&qaFixture=accessibility-mixed-states:16592:38)"
+          },
+          "runtimeErrors": []
+        }
+      },
+      "expectedMessage": "intentional selected semantics regression",
+      "accepted": true
+    },
+    {
+      "scenario": "self-test-p1-05-focus-return",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "tests/behavioral/run.cjs",
+        "--web-root",
+        "/workspace/scratch/0848c4e4f365/forge-closeout/repair-controls/final/web",
+        "--scenario",
+        "self-test-p1-05-focus-return",
+        "--raw-artifacts",
+        "/workspace/scratch/0848c4e4f365/forge-closeout/repair-controls/final/self-test-p1-05-focus-return/raw"
+      ],
+      "cwd": "/workspace/scratch/0848c4e4f365/Lumenfall-forge",
+      "exitcode": 1,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 2447,
+      "expectedExit": 1,
+      "stdout": {
+        "bytes": 5686,
+        "sha256": "2230e4d2b27bf0d6eda6954629e1f407de5ce49faa3ef5a4d26f72c4c85a71ea"
+      },
+      "stderr": {
+        "bytes": 56,
+        "sha256": "606938bf18194c3d97204ae4997294b7290332ac521bb1623748f4b6a9a26938"
+      },
+      "staged": {
+        "source_sha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+        "instrumented_sha256": "27628063f42c54ddd15d3e409d786beb64729547b3cd8d536e78896fafb7bbfe"
+      },
+      "browserProcess": {
+        "command": [
+          "/tmp/lumenfall-test-bin/google-chrome",
+          "--headless=new",
+          "--no-sandbox",
+          "--disable-gpu",
+          "--disable-dev-shm-usage",
+          "--disable-background-networking",
+          "--disable-background-timer-throttling",
+          "--no-first-run",
+          "--window-size=390,844",
+          "--virtual-time-budget=1500",
+          "--user-data-dir=/tmp/lumenfall-qa-self-test-p1-05-focus-return-fkhfuE",
+          "--dump-dom",
+          "http://127.0.0.1:44515/index.html?qaScenario=self-test-p1-05-focus-return&qaFixture=accessibility-mixed-states"
+        ],
+        "fixture": "accessibility-mixed-states",
+        "viewport": null,
+        "process": {
+          "exitcode": 0,
+          "timed_out": false,
+          "elapsed_sec": 1.606165734,
+          "timeout_sec": 25
+        },
+        "qa": {
+          "qa_count": 1,
+          "qa_status": "fail",
+          "qa_scenario": "self-test-p1-05-focus-return",
+          "json_status": "fail",
+          "json_scenario": "self-test-p1-05-focus-return",
+          "runtime_markers": [],
+          "runtime_error_count": 0,
+          "json_error": null,
+          "valid": true
+        }
+      },
+      "qa": {
+        "observation": {
+          "qa_count": 1,
+          "qa_status": "fail",
+          "qa_scenario": "self-test-p1-05-focus-return",
+          "json_status": "fail",
+          "json_scenario": "self-test-p1-05-focus-return",
+          "runtime_markers": [],
+          "runtime_error_count": 0,
+          "json_error": null,
+          "valid": true
+        },
+        "payload": {
+          "scenario": "self-test-p1-05-focus-return",
+          "status": "fail",
+          "detail": {
+            "message": "intentional overlay focus-return regression",
+            "stack": "Error: intentional overlay focus-return regression\n    at assert (http://127.0.0.1:44515/index.html?qaScenario=self-test-p1-05-focus-return&qaFixture=accessibility-mixed-states:14852:61)\n    at Object.negativeFocusReturn (http://127.0.0.1:44515/index.html?qaScenario=self-test-p1-05-focus-return&qaFixture=accessibility-mixed-states:12257:5)\n    at HTMLDocument.run (http://127.0.0.1:44515/index.html?qaScenario=self-test-p1-05-focus-return&qaFixture=accessibility-mixed-states:16597:38)"
+          },
+          "runtimeErrors": []
+        }
+      },
+      "expectedMessage": "intentional overlay focus-return regression",
+      "accepted": true
+    }
+  ],
+  "sourceUnchanged": true,
+  "repairedFileUnchanged": true,
+  "harnessUnchanged": true,
+  "sameInstrumentedBytes": true,
+  "accepted": true,
+  "finishedAt": "2026-10-10T10:59:11.145Z"
+}
