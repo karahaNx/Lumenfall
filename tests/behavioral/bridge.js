@@ -563,7 +563,9 @@ window.__lumenfallQaBridge = {
   ascendEligibility: function(){ return {eligible:ascendEligible(),cleared:clearedProgressionRift(),autoReady:autoAscendReady(),autoClearedTarget:autoAscendClearedTarget()}; },
   ascendManual: function(){
     var before = {prisms:state.prisms,ascendCount:state.ascendCount,benchmark:state.ascendRewardedDepth||0};
-    doAscend(false);
+    var previousReload = reloadInProgress;
+    reloadInProgress = false;
+    try { doAscend(false); } finally { reloadInProgress = previousReload; }
     return {
       before:before,
       after:{

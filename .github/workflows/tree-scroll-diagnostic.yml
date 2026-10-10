@@ -1,0 +1,82 @@
+name: Tree scroll and Prism adapter diagnostic
+
+on:
+  push:
+    branches: ['diagnostic/tree-scroll-106']
+
+permissions:
+  contents: read
+
+# No PR trigger or shared concurrency group: required PR106/Full runs continue.
+jobs:
+  diagnostic:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/diagnostic/tree-scroll-106'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Bind exact source tests fixture and ordered parents
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p tree-scroll-diagnostic
+          git rev-parse HEAD > tree-scroll-diagnostic/commit.txt
+          git rev-parse 'HEAD^{tree}' > tree-scroll-diagnostic/tree.txt
+          git show -s --format=%P HEAD > tree-scroll-diagnostic/parents.txt
+          git ls-tree -r HEAD index.html .github/workflows tests/behavioral scripts fonts branding docs/qa/offline-autoascend-2026-10-07/device_backup.json > tree-scroll-diagnostic/source-blobs.txt
+          sha256sum index.html tests/behavioral/bridge.js tests/behavioral/tree-expansion-mobile.cjs tests/behavioral/fixtures.json > tree-scroll-diagnostic/source-sha256.txt
+          cp .github/workflows/tree-scroll-diagnostic.yml tree-scroll-diagnostic/workflow.yml
+          node <<'JS'
+          const fs=require('node:fs'),cp=require('node:child_process'),crypto=require('node:crypto'),assert=require('node:assert/strict');
+          const git=(...args)=>cp.execFileSync('git',args,{encoding:'utf8'}).trim(),sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const paths=git('ls-files','index.html','.github/workflows','tests/behavioral','scripts','fonts','branding','docs/qa/offline-autoascend-2026-10-07/device_backup.json').split('\n');
+          const inputs=paths.map(path=>{const b=fs.readFileSync(path);return {path,bytes:b.length,sha256:sha(b),blob:git('hash-object',path)};});
+          const identity={purpose:'Diagnostic only; does not replace required PR acceptance.',head:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),orderedParents:git('show','-s','--format=%P','HEAD').split(' '),ref:process.env.GITHUB_REF,event:process.env.GITHUB_EVENT_NAME,runId:process.env.GITHUB_RUN_ID,runAttempt:process.env.GITHUB_RUN_ATTEMPT,node:process.version,inputs};
+          fs.writeFileSync('tree-scroll-diagnostic/identity.json',JSON.stringify(identity,null,2)+'\n');
+          assert.equal(identity.head,process.env.GITHUB_SHA);assert.equal(identity.ref,'refs/heads/diagnostic/tree-scroll-106');assert.equal(identity.event,'push');
+          assert.deepEqual(identity.orderedParents,['3c931a26bbcf7b009dee03e7411ed41faeb971f8']);
+          const pinned={'index.html':'17d4ff66cc960f80200bbc7a640947d87bf1c8e2c216eea181761f036df5f806','tests/behavioral/bridge.js':'8568cfb994b0a6c4c1c2bded8f2946a6489b18591992e58d534f483f5cb287c1','tests/behavioral/tree-expansion-mobile.cjs':'a2a90c83100daca4f7c770f48f681d55cb63ca75463d85385a3c9703ed89f4df','tests/behavioral/fixtures.json':'ab43604db1b5bce8b9990506f989676dfb0009cdcf2e514a8ccee9da166c8753'};
+          for(const [path,expected] of Object.entries(pinned))assert.equal(inputs.find(row=>row.path===path).sha256,expected,'exact diagnostic input '+path);
+          JS
+          node scripts/codex/check_context.cjs --task docs/tasks/TREE_EXPANSION_001.md 2>&1 | tee tree-scroll-diagnostic/context.log
+          mkdir -p mobile/www/fonts mobile/www/branding
+          cp index.html mobile/www/index.html
+          cp -r fonts/. mobile/www/fonts/
+          cp -r branding/. mobile/www/branding/
+          cmp index.html mobile/www/index.html
+      - name: Complete actual Tree mobile matrix and summary guard control
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p tree-scroll-diagnostic
+          trap 'tree_mobile_exit=$?; printf "%s\n" "$tree_mobile_exit" > tree-scroll-diagnostic/tree-mobile-exit.txt' EXIT
+          node tests/behavioral/tree-expansion-mobile.cjs index.html tree-scroll-diagnostic/mobile 2>&1 | tee tree-scroll-diagnostic/mobile.log
+      - name: Actual focused Prism positives and five causal controls
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p tree-scroll-diagnostic
+          trap 'prism_browser_exit=$?; printf "%s\n" "$prism_browser_exit" > tree-scroll-diagnostic/prism-browser-exit.txt' EXIT
+          node tests/behavioral/prism-earning-focused.cjs mobile/www tree-scroll-diagnostic/prism/browser 2>&1 | tee tree-scroll-diagnostic/prism-browser.log
+      - name: Preserve raw diagnostic evidence and exact input bytes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tree-scroll-diagnostic-${{ github.run_id }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            tree-scroll-diagnostic/
+            index.html
+            tests/behavioral/
+            scripts/
+            fonts/
+            branding/

@@ -7759,7 +7759,9 @@ function prismCalculationText(breakdown){
 function renderAscendSummary(){
   var autoRoot=els['auto-ascend-controls'];
   var editingAuto=autoRoot && autoRoot.contains(document.activeElement);
-  var main=editingAuto ? document.querySelector('main') : null;
+  var treeRoot=els['node-list'];
+  var editingTree=treeRoot && treeRoot.contains(document.activeElement);
+  var main=editingAuto || editingTree ? document.querySelector('main') : null;
   var scroll=main ? main.scrollTop : 0;
   var cleared = clearedProgressionRift();
   var eligible = ascendEligible();
@@ -7785,8 +7787,8 @@ function renderAscendSummary(){
   var dust=eligible ? treeAscendMotesForWallet(gain,state.prisms) : 0;
   if(dust) els['ascend-note'].textContent+=' Ascension Dust adds '+formatNum(dust)+' Motes.';
   renderAutoAscendControls();
-  // Changed reward text may wrap while a native picker is open. Flush that
-  // layout before restoring the player's scroll, without replacing/focusing it.
+  // Reward text can grow above an active Tree purchase or native picker.
+  // Flush that layout before restoring the player's scroll without refocusing.
   if(main){main.getBoundingClientRect();main.scrollTop=scroll;}
 }
 

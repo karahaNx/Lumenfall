@@ -12,7 +12,7 @@ const transportHash=crypto.createHash('sha256').update(driver).digest('hex');
 const selfHash=crypto.createHash('sha256').update(fs.readFileSync(__filename)).digest('hex');
 function one(from,to){assert.equal(driver.split(from).length,2,'one Tree transport extension: '+from.slice(0,60));driver=driver.replace(from,()=>to);}
 one('window.requestAnimationFrame=function(){return 0;};','');
-one('let checks=0;','let checks=0;const treeMigrationDiagnostics=[];');
+one('let checks=0;','let checks=0;const treeMigrationDiagnostics=[],treeFundedDiagnostics=[],treeSummaryScrollControls=[];');
 one('window.__prismInput=[];',String.raw`window.__prismInput=[];window.__treeWrites=[];var originalTreeStorageSet=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){var result=originalTreeStorageSet.call(this,k,v);window.__treeWrites.push(k);return result;};`);
 const hook='breakdown:ascendPrismBreakdown,keys:function(){return [SAVE_KEY,RECOVERY_SAVE_KEY];}';
 one(hook,String.raw`
@@ -37,8 +37,19 @@ one(hook,String.raw`
  treeRoundtrip:function(){return acceptPersistedState(decodeSaveBackup(encodeSaveBackup(state)));},
  treeSpirits:function(){return SPIRITS.map(function(s){return {id:s.id,unlockDepth:s.unlockDepth};});},
  treeCapacity:function(){return treeFormationCapacity(state);},
+ treeSummaryScrollControl:function(){
+  if(this.treeSummaryOriginal)throw Error('summary scroll control already installed');
+  var original=renderAscendSummary,text=Function.prototype.toString.call(original),anchor='editingAuto || editingTree';
+  if(text.split(anchor).length!==2)throw Error('one exact Tree summary scroll guard required');
+  var mutated=text.replace(anchor,'editingAuto');
+  renderAscendSummary=eval('('+mutated+')');this.treeSummaryOriginal=original;
+  return {original:text,mutated:Function.prototype.toString.call(renderAscendSummary)};},
+ treeSummaryScrollRestore:function(){
+  if(!this.treeSummaryOriginal)throw Error('summary scroll control is not installed');
+  renderAscendSummary=this.treeSummaryOriginal;delete this.treeSummaryOriginal;
+  return Function.prototype.toString.call(renderAscendSummary);},
  `+hook);
-one("const result={status:'fail',sourceSha256:","const result={status:'fail',migrationDiagnostics:treeMigrationDiagnostics,treeTestSha256:"+JSON.stringify(selfHash)+",transportSha256:"+JSON.stringify(transportHash)+",sourceSha256:");
+one("const result={status:'fail',sourceSha256:","const result={status:'fail',migrationDiagnostics:treeMigrationDiagnostics,fundedPurchaseDiagnostics:treeFundedDiagnostics,summaryScrollControls:treeSummaryScrollControls,treeTestSha256:"+JSON.stringify(selfHash)+",transportSha256:"+JSON.stringify(transportHash)+",sourceSha256:");
 one("await shot('failure');result.input=await ev('window.__prismInput');",String.raw`await shot('failure');result.input=await ev('window.__prismInput');result.syntheticStorage=await ev("['lumenfall_save_v2','lumenfall_save_recovery_v1'].map(function(k){return {key:k,raw:localStorage.getItem(k)};})");result.syntheticLoadedState=await ev('window.prismQa?prismQa.get():null');result.syntheticSeedObservation=await ev('window.__treeLegacySeedObservation||null');fs.writeFileSync(path.join(evidence,'failure-dom.html'),await ev('document.documentElement.outerHTML'));result.failureDom='failure-dom.html';`);
 // Independent frozen DESIGN rows: id, displayed name, unlock, cap, price ladder.
 const specs=[
@@ -93,7 +104,7 @@ const cases='  const specs='+JSON.stringify(specs)+';\n'+String.raw`
   }
   async function install(s,tab){await ev('prismQa.treeSet('+JSON.stringify(s)+','+JSON.stringify(tab||'ascend')+')');await ev('Promise.all(document.getElementById('+JSON.stringify('tab-'+(tab||'ascend'))+').getAnimations().map(function(a){return a.finished;})).then(function(){return true;})');}
   async function frames(){await ev('new Promise(function(r){requestAnimationFrame(function(){requestAnimationFrame(r);});})');}
-  async function measure(selector){return ev('('+function(selector){var e=document.querySelector(selector);if(!e)throw Error('missing control '+selector);var r=e.getBoundingClientRect(),m=document.querySelector('main'),v=m.getBoundingClientRect(),n=document.querySelector('nav.tabbar').getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2,h=document.elementFromPoint(x,y),a=document.activeElement;return {scroll:m.scrollTop,x:x,y:y,width:r.width,height:r.height,visible:r.top>=Math.max(0,v.top)-.5&&r.bottom<=Math.min(v.bottom,n.top,innerHeight)+.5&&r.left>=v.left-.5&&r.right<=v.right+.5,hit:!!h&&(h===e||e.contains(h)),focus:a&&{node:a.dataset.node,toggle:a.dataset.toggle,preset:a.dataset.formationPreset,insideTree:!!a.closest('#node-list')},disabled:e.disabled};}.toString()+')('+JSON.stringify(selector)+')');}
+  async function measure(selector){return ev('('+function(selector){var e=document.querySelector(selector);if(!e)throw Error('missing control '+selector);var r=e.getBoundingClientRect(),m=document.querySelector('main'),v=m.getBoundingClientRect(),n=document.querySelector('nav.tabbar').getBoundingClientRect(),summary=document.querySelector('.ascend-summary').getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2,h=document.elementFromPoint(x,y),a=document.activeElement;return {scroll:m.scrollTop,x:x,y:y,top:r.top,bottom:r.bottom,width:r.width,height:r.height,mainTop:v.top,mainBottom:v.bottom,scrollHeight:m.scrollHeight,clientHeight:m.clientHeight,summaryHeight:summary.height,summaryTop:summary.top,summaryBottom:summary.bottom,treeTop:document.getElementById('node-list').getBoundingClientRect().top,visible:r.top>=Math.max(0,v.top)-.5&&r.bottom<=Math.min(v.bottom,n.top,innerHeight)+.5&&r.left>=v.left-.5&&r.right<=v.right+.5,hit:!!h&&(h===e||e.contains(h)),focus:a&&{node:a.dataset.node,toggle:a.dataset.toggle,preset:a.dataset.formationPreset,insideTree:!!a.closest('#node-list')},disabled:e.disabled};}.toString()+')('+JSON.stringify(selector)+')');}
   function visible(m,label){ok(m.width>=44&&m.height>=44,'44px '+label);ok(m.visible&&m.hit,'visible actual hit target '+label+' '+JSON.stringify(m));}
   async function prepare(selector,focus){await point(selector);if(focus)await ev('document.querySelector('+JSON.stringify(selector)+').focus({preventScroll:true})');var m=await measure(selector);visible(m,selector);return m;}
   async function touchHere(selector){var m=await measure(selector);visible(m,'touch '+selector);await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:m.x,y:m.y}]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});}
@@ -149,10 +160,62 @@ const cases='  const specs='+JSON.stringify(specs)+';\n'+String.raw`
    const rendered=await ev('document.querySelector('+JSON.stringify(sel('data-node-effect',id))+').textContent');for(const piece of effect(id,level+1))ok(rendered.includes(piece),'purchase immediately changes effect '+id);
    // A separate funded purchase keeps the same enabled control, so focus/scroll
    // checks do not depend on the product's disabled-control fallback policy.
-   if(r[3]===null||level+2<r[3]){const f=copy(paid);f.prisms=100000;await install(f);const m=await prepare(button,true);await key('Enter','Enter',13);const now=await measure(button);visible(now,'funded post-purchase '+id);ok(now.focus.node===id&&now.scroll===m.scroll,'funded purchase retains native focus/exact scroll '+id);await frames();const settled=await measure(button);ok(settled.focus.node===id&&settled.scroll===m.scroll,'focus/scroll stable after native frames '+id);inputSamples.push({id,before:m,immediate:now,settled});}
+   if(r[3]===null||level+2<r[3]){
+    const f=copy(paid);f.prisms=100000;await install(f);const m=await prepare(button,true);
+    const diagnostic={width,scale,motion,id,before:m,immediate:null,settled:null};treeFundedDiagnostics.push(diagnostic);inputSamples.push(diagnostic);
+    await key('Enter','Enter',13);const now=await measure(button);diagnostic.immediate=now;
+    await frames();const settled=await measure(button);diagnostic.settled=settled;
+    // Preserve both observations before an assertion can abort the profile.
+    // The immediate check still reads its original pre-frame snapshot.
+    visible(now,'funded post-purchase '+id);
+    ok(now.focus.node===id&&now.scroll===m.scroll,'funded purchase retains native focus/exact scroll '+id);
+    ok(settled.focus.node===id&&settled.scroll===m.scroll,'focus/scroll stable after native frames '+id);
+   }
    paid=copy(after);paid.prisms=100000;samples.push({id,levelBefore:level,levelAfter:level+1,cost});
   }
   await install(paid);const last=catalog[catalog.length-1];await prepare(sel('data-node',last),false);await shot('tree-last-'+width+'-'+scale+'-'+motion);await fit('#node-list','all purchased');
+  // One causal browser control restores the former summary guard only. The
+  // production function retains its real closure, purchase, render and saves.
+  if(width===320&&scale===1&&motion==='no-preference'){
+   const digest=value=>crypto.createHash('sha256').update(typeof value==='string'?value:JSON.stringify(value)).digest('hex');
+   const prior=await ev('prismQa.get()'),priorSlots=await ev('prismQa.keys().map(function(key){return {key:key,raw:localStorage.getItem(key)};})');
+   const control={id:'summary-tree-focus-scroll',width,scale,motion,status:'started',mutation:{from:'editingAuto || editingTree',to:'editingAuto'},positiveStateSha256:digest(prior),positiveSlotsSha256:digest(priorSlots),before:null,immediate:null,settled:null};treeSummaryScrollControls.push(control);
+   let installed=false;
+   try{
+    const s=copy(seed);s.nodes.frontier=0;s.prisms=100000;await install(s);
+    const mutation=await ev('prismQa.treeSummaryScrollControl()');installed=true;
+    control.originalFunctionSha256=digest(mutation.original);control.mutatedFunctionSha256=digest(mutation.mutated);
+    ok(mutation.original.split(control.mutation.from).length===2&&mutation.mutated===mutation.original.replace(control.mutation.from,control.mutation.to),'one exact original summary guard mutation');
+    const button=sel('data-node','frontier');control.before=await prepare(button,true);
+    control.stateBefore=await ev('prismQa.get()');const writes=await ev('window.__treeWrites.length'),inputStart=await ev('window.__prismInput.length');
+    control.runtimeErrorsBefore=await ev('window.__prismErrors');
+    await key('Enter','Enter',13);control.immediate=await measure(button);await frames();control.settled=await measure(button);
+    control.stateAfter=await ev('prismQa.get()');control.writeKeys=await ev('window.__treeWrites.slice('+writes+')');control.input=await ev('window.__prismInput.slice('+inputStart+')');control.runtimeErrorsAfter=await ev('window.__prismErrors');
+    const slots=await ev('prismQa.keys().map(function(key){return {key:key,raw:localStorage.getItem(key)};})');
+    control.slots=slots.map(slot=>({key:slot.key,bytes:Buffer.byteLength(slot.raw||''),sha256:digest(slot.raw||''),state:slot.raw&&JSON.parse(slot.raw)}));
+    const now=control.immediate,settled=control.settled,m=control.before,id='frontier';
+    control.comparison={immediateFocus:now.focus.node===id,immediateExactScroll:now.scroll===m.scroll,settledFocus:settled.focus.node===id,settledExactScroll:settled.scroll===m.scroll};
+    control.screenshot='tree-summary-scroll-negative-'+width+'-'+scale+'-'+motion+'.png';await shot(control.screenshot.slice(0,-4));
+    ok(control.stateBefore.nodes.frontier===0&&control.stateBefore.prisms===100000&&control.stateAfter.nodes.frontier===1&&control.stateAfter.prisms===99980,'summary control performs actual Frontier zero-to-one for20');
+    same(control.writeKeys,await ev('prismQa.keys()'),'summary control real purchase writes primary/recovery once');
+    ok(control.slots.every(slot=>slot.state.nodes.frontier===1&&slot.state.prisms===99980),'summary control both saved endpoints match exact debit');
+    ok(control.input.some(e=>e.trusted&&e.type==='keydown'&&e.key==='Enter')&&control.input.some(e=>e.trusted&&e.type==='click'),'summary control actual trusted Enter and click');
+    ok(control.runtimeErrorsBefore.length===0&&control.runtimeErrorsAfter.length===0,'summary control has no runtime errors');
+    visible(now,'funded post-purchase '+id);visible(settled,'settled summary control '+id);
+    ok(control.comparison.immediateFocus&&control.comparison.settledFocus,'summary control retains the real focused Frontier button');
+    const message='funded purchase retains native focus/exact scroll '+id;
+    try{ok(now.focus.node===id&&now.scroll===m.scroll,message);}catch(error){if(!(error instanceof assert.AssertionError)||error.message!==message)throw error;control.caught={name:error.name,message:error.message};}
+    ok(!!control.caught&&!control.comparison.immediateExactScroll,'original strict scroll assertion catches missing Tree guard');
+    control.status='caught';
+   }catch(error){control.status='fail';control.error=error.stack;throw error;}
+   finally{
+    if(installed){const restored=await ev('prismQa.treeSummaryScrollRestore()');control.restoredFunctionSha256=digest(restored);ok(control.restoredFunctionSha256===control.originalFunctionSha256,'summary control restores exact original function');}
+    await install(prior);await ev('('+function(slots){slots.forEach(function(slot){if(slot.raw===null)localStorage.removeItem(slot.key);else localStorage.setItem(slot.key,slot.raw);});}.toString()+')('+JSON.stringify(priorSlots)+')');
+    control.restoredStateSha256=digest(await ev('prismQa.get()'));control.restoredSlotsSha256=digest(await ev('prismQa.keys().map(function(key){return {key:key,raw:localStorage.getItem(key)};})'));
+    ok(control.restoredStateSha256===control.positiveStateSha256&&control.restoredSlotsSha256===control.positiveSlotsSha256,'summary control restores all twenty positive purchases and original raw slots');
+    if(control.status==='caught')control.status='pass';
+   }
+  }
   // The actual Ascend calculation displays Dust from represented Prism credit.
   // The huge-wallet case must display zero even though the nominal gain is >20.
   for(const wallet of [100000,1e30]){
