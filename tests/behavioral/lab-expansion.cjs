@@ -2,6 +2,7 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto');
 const {app,seed,clone,P,R}=require('./lab-expansion-harness.cjs');
+const {reward:prismReward}=require('./prism-earning-reference.cjs');
 const sourcePath=process.argv[2]||path.join(__dirname,'../../index.html'),source=fs.readFileSync(sourcePath,'utf8');
 function verify(html){
  let checks=0;const eq=(a,b,m)=>{checks++;assert.deepEqual(a,b,m);},ok=(v,m)=>{checks++;assert(v,m);};
@@ -43,11 +44,13 @@ function verify(html){
  {
   const s=seed(q);ids.forEach(id=>{delete s.longStudyLevels[id];delete s.studyQueue[id];delete s.studyUseMotes[id];delete s.studySpeedTargets[id];});
   s.nodes.echo=10;s.nodes.swift=7;s.research.charge=28;s.longStudyLevels.riftattune=4;s.longStudyLevels.formationstudy=5;s.longStudyLevels.prismstudy=6;
-  s.owned={autoascend:true,comettrials:true,rifttrail:true,starfallcrest:true};s.activeStudies=[{id:'riftattune',remainingSec:13.25,totalDurationSec:200,speedMult:3}];q.set(s);
+  s.owned={autoascend:true,comettrials:true,rifttrail:true,starfallcrest:true};s.activeStudies=[{id:'riftattune',remainingSec:13.25,totalDurationSec:200,speedMult:3}];
+  s.depth=21;s.enemyDepth=21;s.enemyHp=s.enemyMaxHp=1e20;q.set(s);
   ids.forEach(id=>{eq(q.get().longStudyLevels[id],0,'missing earned level starts at0');eq(q.get().studyQueue[id],false,'no inferred queue');eq(q.get().studyUseMotes[id],false,'no inferred Mote spend');});
   for(const k of ['lumen','shards','motes','prisms','sigils','comets','nodes','research','owned','activeStudies'])eq(q.get()[k],s[k],'old value preserved '+k);
   const stable=clone(q.get());q.set(stable);eq(q.get(),stable,'idempotent canonicalization');q.save();eq(app(html,x.storage).q.get(),stable,'old saved state retained with defaults');
-  q.ascend();for(const k of ['nodes','research','longStudyLevels','owned','activeStudies'])eq(q.get()[k],stable[k],'Ascend retains paid '+k);
+  q.ascend();eq(q.get().ascendCount,stable.ascendCount+1,'old-save manual Ascend actually executes');eq(q.get().depth,1,'old-save manual Ascend resets depth');eq(q.get().lumen,0,'old-save manual Ascend resets run Lumen');eq(q.get().prisms,stable.prisms+prismReward(20,stable.ascendRewardedDepth,stable.nodes.swift,stable.longStudyLevels.prismstudy),'old-save manual Ascend credits independent Prism oracle');
+  for(const k of ['nodes','research','longStudyLevels','owned','activeStudies'])eq(q.get()[k],stable[k],'Ascend retains paid '+k);
  }
  // Extra slots are explicitly purchased, never an accident of catalog length.
  for(const depth of [1,14,15,25,39,40,59,60,89,90,250])for(const levels of [0,1,2,1000000]){
@@ -57,6 +60,68 @@ function verify(html){
   const s=seed(q);s.longStudyLevels.labcapacity=2;q.set(s);
   const seven=['wispascend','guardmastery','shardstudy','lumenstudy','motestudy','procurement','catalysis'];seven.forEach(id=>eq(q.start(id),true,'fills earned seventh slot'));
   eq(q.start('bossledger'),false,'eighth slot rejected');const active=clone(q.get().activeStudies);q.save();eq(app(html,x.storage).q.get().activeStudies,active,'all seven paid records survive cold load');eq(q.accept(q.decode(q.export())).activeStudies,active,'all seven survive import');
+ }
+ // Actual Ascend routes with every expansion acquired and seven paid snapshots.
+ // Pending old Prism work is deliberately present: only its completed level may
+ // affect the payout. Queue/Mote intent must survive without a new free tier.
+ function paidAscendState(r,automatic,cleared=20){
+  const s=seed(r);s.depth=cleared+1;s.enemyDepth=s.depth;s.enemyHp=s.enemyMaxHp=100;
+  s.ascendCount=2;s.ascendRewardedDepth=40;s.sigilResonanceUses=3;
+  s.autoAscendEnabled=automatic;s.autoAscendTargetDepth=cleared+1;
+  s.owned={autoascend:true,comettrials:true,rifttrail:true,starfallcrest:true};
+  s.nodes.echo=10;s.nodes.swift=7;s.research.charge=28;
+  s.longStudyLevels.wispascend=3;s.longStudyLevels.riftattune=4;s.longStudyLevels.formationstudy=5;s.longStudyLevels.prismstudy=6;
+  ids.forEach(id=>s.longStudyLevels[id]=id==='labcapacity'?2:1);
+  s.activeStudies=['wispascend','prismstudy','procurement','catalysis','fieldnotes','focusprotocol','bossledger'].map((id,i)=>{
+   const speed=[1.5,2,3,4,5,6,8][i];s.studyQueue[id]=true;s.studyUseMotes[id]=true;s.studySpeedTargets[id]=speed;
+   return {id,remainingSec:1800+i*60,totalDurationSec:2700+i*60,speedMult:speed};
+  });
+  s.spirits.ember=100;s.activeParty=['ember'];return s;
+ }
+ const paidFields=['nodes','research','longStudyLevels','owned','studyQueue','studyUseMotes','studySpeedTargets','activeStudies'];
+ function assertActualAscend(r,before,cleared,label){
+  const after=r.get();eq(after.ascendCount,before.ascendCount+1,label+' actual Ascend count');
+  eq(after.depth,1,label+' run depth resets');eq(after.enemyDepth,1,label+' enemy resets');eq(after.lumen,0,label+' run Lumen resets');eq(after.sigilResonanceUses,0,label+' in-run Resonate uses reset');
+  eq(after.prisms,before.prisms+prismReward(cleared,before.ascendRewardedDepth,before.nodes.swift,before.longStudyLevels.prismstudy),label+' independent completed-only Prism payout');
+  eq(after.ascendRewardedDepth,Math.max(cleared,before.ascendRewardedDepth),label+' rewarded-depth benchmark');
+  eq(after.spirits.ember,1,label+' Ember restarts at level one');ok(Object.keys(after.spirits).every(id=>id==='ember'||after.spirits[id]===0),label+' other run levels reset');
+  for(const field of paidFields)eq(after[field],before[field],label+' preserves '+field);
+  eq(after.autoAscendEnabled,before.autoAscendEnabled,label+' Auto-Ascend ON/OFF intent');eq(after.autoAscendTargetDepth,before.autoAscendTargetDepth,label+' Auto-Ascend target');eq(r.slots(),7,label+' earned seventh slot retained');
+ }
+ for(const route of ['manual','live','offline']){
+  const y=app(html),r=y.q,s=paidAscendState(r,route!=='manual');
+  if(route!=='manual'){s.depth=20;s.enemyDepth=20;}
+  r.set(s);
+  if(route!=='manual'){
+   const notCleared=r.advance(0,{kind:route,clockStartMs:s.lastSeen});eq(notCleared.ascends,0,route+' target boss must really be cleared');eq(r.get().depth,20,route+' target boss remains before kill');
+   // A zero-HP endpoint enters the same authoritative kill path used after damage.
+   r.get().enemyHp=0;
+  }
+  const before=clone(r.get());eq(before.activeStudies.length,7,route+' starts with seven paid records');
+  eq(r.preview(21).gain,prismReward(20,before.ascendRewardedDepth,before.nodes.swift,before.longStudyLevels.prismstudy),route+' pending Prism Study gives no early payout');
+  if(route==='manual')r.ascend();else{
+   const sum=r.advance(0,{kind:route,clockStartMs:s.lastSeen});eq(sum.kills,1,route+' actual target-boss death');eq(sum.ascends,1,route+' kill triggers one Auto-Ascend');eq(sum.ascendGains,[prismReward(20,before.ascendRewardedDepth,before.nodes.swift,before.longStudyLevels.prismstudy)],route+' Auto-Ascend summary payout');eq(sum.studiesStarted,0,route+' no extra Study start');eq(sum.studySpeedPurchases,0,route+' paid speed is not bought again');
+  }
+  assertActualAscend(r,before,20,route);
+  eq(r.save(),true,route+' successful post-Ascend save');const accepted=clone(r.get());eq(y.storage.get(P),y.storage.get(R),route+' both post-Ascend slots agree');eq(app(html,y.storage).q.get(),accepted,route+' cold reload retains all paid value');
+  const restore=app(html);restore.area.value=r.export();restore.q.restore();restore.drain();eq(restore.reloads(),1,route+' actual backup restore reloads');eq(app(html,restore.storage).q.get(),accepted,route+' actual backup restore keeps seven records and intents');
+  y.storage.set(P,'broken');const recovery=app(html,y.storage);eq(recovery.q.get(),accepted,route+' primary corruption recovers seven paid records');eq(recovery.storage.get(P),recovery.storage.get(R),route+' recovery repairs primary without another payout');
+ }
+ // Yielded offline Auto-Ascend commits once, or rolls every paid record/intent
+ // back on primary failure. The 60-second window advances work without finishing
+ // it; earned levels and already-paid durations/speeds must remain unchanged.
+ for(const failure of ['none','primary','recovery']){
+  const y=app(html),r=y.q,s=paidAscendState(r,true,120);r.set(s);r.save();const before=clone(r.get());
+  y.clock(s.lastSeen+60000);y.fail(failure==='primary',failure==='recovery');let error,result;r.offline((v,e)=>{result=v;error=e;});y.drain();
+  if(failure==='primary'){
+   ok(error,'seven-slot offline primary failure reported');eq(r.get(),before,'failed offline Ascend rolls back every field');y.fail(false,false);r.offline((v,e)=>{result=v;error=e;});y.drain();
+  }
+  checks++;assert.ifError(error);eq(result.ascends,1,'seven-slot offline transaction actually Ascends');eq(r.get().ascendCount,before.ascendCount+1,'seven-slot offline Ascend count');ok(r.get().depth<before.depth,'offline run resets before further progress');eq(r.get().sigilResonanceUses,0,'offline Ascend resets Resonate use count');
+  eq(r.get().prisms,before.prisms+prismReward(120,before.ascendRewardedDepth,before.nodes.swift,before.longStudyLevels.prismstudy),'seven-slot offline exact payout once');eq(r.get().ascendRewardedDepth,120,'offline rewarded benchmark');
+  for(const field of paidFields.filter(field=>field!=='activeStudies'))eq(r.get()[field],before[field],'offline preserves paid '+field);
+  eq(r.get().autoAscendEnabled,true,'offline preserves Auto-Ascend enabled');eq(r.get().autoAscendTargetDepth,121,'offline preserves Auto-Ascend target');eq(r.get().activeStudies.length,7,'offline preserves all seven paid records');eq(r.slots(),7,'offline preserves earned capacity');
+  r.get().activeStudies.forEach((active,i)=>{const old=before.activeStudies[i];eq([active.id,active.totalDurationSec,active.speedMult],[old.id,old.totalDurationSec,old.speedMult],'offline keeps purchased identity/work/speed');near(active.remainingSec,old.remainingSec-60*old.speedMult,'offline advances only elapsed paid work');ok(active.remainingSec>0,'offline pending work grants no early level');});
+  const accepted=clone(r.get());eq(r.offline(),null,'seven-slot offline return window consumed');eq(r.get(),accepted,'repeat offline call adds no payout or work');y.fail(false,false);eq(r.save(),true,'offline accepted state saved to both slots');eq(app(html,y.storage).q.get(),r.get(),'offline cold reload keeps payout and all seven studies');
  }
  // Discounts are exact for whole prices, including safe-integer boundaries.
  for(const v of [1,14,26,99,100,101,473,1200,8999,100000000001,Number.MAX_SAFE_INTEGER-1,Number.MAX_SAFE_INTEGER])for(let p=0;p<=20;p+=2)eq(q.discount(v,p),Math.max(1,discount(v,p)),'independent integer discount '+v+'/'+p);
@@ -145,9 +210,11 @@ if(process.argv.includes('--negative')){
   ['free-start','state.lumen-=plan.cost.lumen;','state.lumen-=0;'],
   ['early-level','state.activeStudies.push({id:plan.node.id,','state.longStudyLevels[plan.node.id]++;state.activeStudies.push({id:plan.node.id,'],
   ['lost-seventh-paid-record','}).slice(0,5+Math.min(2,out.longStudyLevels.labcapacity||0)).map(function(active){','}).slice(0,5).map(function(active){'],
+  ['ascend-drops-paid-slots','  state.sigilResonanceUses = 0;\n  state._autoTapAccum = 0;','  state.activeStudies=state.activeStudies.slice(0,5);\n  state.sigilResonanceUses = 0;\n  state._autoTapAccum = 0;'],
+  ['ascend-drops-earned-capacity','  state.sigilResonanceUses = 0;\n  state._autoTapAccum = 0;','  state.longStudyLevels.labcapacity=0;\n  state.sigilResonanceUses = 0;\n  state._autoTapAccum = 0;'],
   ['double-notes','if(moteBonus) state.motes+=moteBonus;','if(moteBonus) state.motes+=2*moteBonus;'],
   ['no-procurement',"var discount=node.id==='procurement'?0:2*labExpansionLevel('procurement');",'var discount=0;'],
-  ['missed-luminous-purchase',"if(!labExpansionLevel('luminousdistill') || upper<=1 || !Number.isSafeInteger(upper)) return upper;",'return upper;'],
+  ['missed-luminous-purchase',"if(!labExpansionLevel('luminousdistill') || upper<=0 || !Number.isFinite(upper)) return upper;",'return upper;'],
   ['erased-old-value','out.research[node.id] = nonNegativeInt(research[node.id],fresh.research[node.id]);',"out.research[node.id] = node.id==='charge'?0:nonNegativeInt(research[node.id],fresh.research[node.id]);"]
  ];
  for(const [name,a,b] of pairs){assert.equal(source.split(a).length,2,'causal anchor '+name);let caught;try{verify(source.replace(a,b));}catch(e){if(e instanceof assert.AssertionError)caught=e.message;else throw e;}assert(caught,'mutation must fail an assertion: '+name);negatives.push({name,caught});}

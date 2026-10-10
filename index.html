@@ -8023,18 +8023,30 @@ function simulationKillsUntilStudyMotes(){
 // The original fast boundary is unchanged when this research is not owned.
 function simulationLabCurrencyKillsNeeded(cost,lumenPerKill,shardPerKill,rewardScale){
   var upper=simulationCurrencyKillsNeeded(cost,lumenPerKill,shardPerKill);
-  if(!labExpansionLevel('luminousdistill') || upper<=1 || !Number.isSafeInteger(upper)) return upper;
+  if(!labExpansionLevel('luminousdistill') || upper<=0 || !Number.isFinite(upper)) return upper;
   var depth=state.farmDepth||state.depth;
   var extraLumen=(enemyRewardFor(depth,true)-enemyRewardFor(depth))*rewardScale;
   var extraShard=(shardRewardFor(depth,true)-shardRewardFor(depth))*rewardScale;
-  if(!extraLumen && !extraShard) return upper;
   var accum=Math.max(0,Math.min(0.999999999999,state.luminousAccum||0)),chance=eliteChance(depth);
   function enough(count){
-    var luminous=(state.enemyIsLuminous?1:0)+Math.floor(accum+(count-1)*chance+1e-12);
-    return state.lumen+lumenPerKill*count+extraLumen*luminous>=cost.lumen &&
-      state.shards+shardPerKill*count+extraShard*luminous>=cost.shard;
+    var luminous=state.enemyIsLuminous?1:0;
+    if(count>1) luminous+=Math.floor(accum+(count-1)*chance+1e-12);
+    // Match the actual batch credit: wallet + (normal gain + Luminous gain).
+    // Adding the wallet first can round a fractional offline balance below the
+    // price and postpone an already-affordable queued purchase by one kill.
+    return state.lumen+(lumenPerKill*count+extraLumen*luminous)>=cost.lumen &&
+      state.shards+(shardPerKill*count+extraShard*luminous)>=cost.shard;
   }
-  var low=1,high=upper;
+  var low=1,high=Math.min(Number.MAX_SAFE_INTEGER,upper);
+  // The legacy deficit estimate contains an epsilon and is only a hint. First
+  // establish a genuinely affordable upper bound, including a one-kill hint.
+  // Doubling is bounded by the largest exactly representable integer count.
+  while(!enough(high)){
+    // If no safe count can pay, preserve the legacy large-count estimate.
+    // An unsafe normal estimate must still allow an earlier safe Luminous buy.
+    if(high===Number.MAX_SAFE_INTEGER) return Math.max(upper,Number.MAX_SAFE_INTEGER+1);
+    high=Math.min(Number.MAX_SAFE_INTEGER,Math.max(high+1,high*2));
+  }
   while(low<high){var middle=low+Math.floor((high-low)/2);if(enough(middle)) high=middle;else low=middle+1;}
   return low;
 }

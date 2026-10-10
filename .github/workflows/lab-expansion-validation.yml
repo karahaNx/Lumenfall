@@ -28,6 +28,8 @@ jobs:
         run: |
           set -euo pipefail
           node tests/behavioral/lab-expansion.cjs index.html --negative | tee lab-validation/core.json
+          node tests/behavioral/lab-expansion-boundary.cjs index.html --negative | tee lab-validation/boundary.json
+          node tests/behavioral/lab-expansion-stress.cjs index.html | tee lab-validation/boundary-stress.json
           node tests/behavioral/prism-earning-state.cjs index.html | tee lab-validation/prism-state.json
       - name: Actual mobile touch keyboard seven-slot persistence and currency colors
         if: always()
