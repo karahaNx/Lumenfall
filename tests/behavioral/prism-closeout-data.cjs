@@ -7,7 +7,12 @@ const html=fs.readFileSync(sourcePath,'utf8'),single=n=>{const m=html.match(new 
 const {reward}=require('./prism-earning-reference.cjs');
 const start=html.indexOf('// PRISM_EARNING_001:'),end=html.indexOf('function ascendPrismGain(',start);assert(start>=0&&end>start);
 const cost=html.match(/function nodeCost\(node\)\{[\s\S]*?\n\}/)[0];
-const nodes=html.slice(html.indexOf('var NODES = ['),html.indexOf('\n];',html.indexOf('var NODES = ['))+3);
+// Keep the real catalog and its zero-owned Tree dependencies in this isolated
+// legacy-price probe. Missing new keys remain zero through production treeLevel.
+const nodesStart=html.indexOf('var NODES = ['),nodesEnd=html.indexOf('function treeFormationCapacity(',nodesStart);
+const numericStart=html.indexOf('function finiteNonNegative('),numericEnd=html.indexOf('function boundedInt(',numericStart);
+assert(nodesStart>=0&&nodesEnd>nodesStart&&numericStart>=0&&numericEnd>numericStart,'complete actual Tree dependency spans');
+const nodes=html.slice(numericStart,numericEnd)+'\n'+html.slice(nodesStart,nodesEnd);
 const ctx={state:null,ASCEND_REPEAT_REWARD_RATE:0.20};vm.createContext(ctx);
 vm.runInContext(['nodeLevel','longStudyLevel','longStudyPrismMult','prismMult'].map(single).join('\n')+'\n'+nodes+'\n'+cost+'\n'+html.slice(start,end),ctx);
 function set(c,b,t,l){ctx.state={depth:c+1,nodes:{swift:t},longStudyLevels:{prismstudy:l},ascendRewardedDepth:b};}

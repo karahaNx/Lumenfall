@@ -1,0 +1,283 @@
+{
+  "status": "diagnosed-and-syntax-checked",
+  "headSha": "0c539c528d3b950a786d0ea377fcfc59499f1a3a",
+  "sourceSha256": "4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef",
+  "sourceBytes": 618571,
+  "originalTest": {
+    "bytes": 14930,
+    "sha256": "15c1e7f4a9829b4190f2ea6c4cc2d9fa585fc5b8b74164f5fee043a1328cc6a6"
+  },
+  "repairedTest": {
+    "bytes": 15572,
+    "sha256": "a92845db4043185d4de465b849dbebf9e58f5bfe68f551f80924e23fde05b9e5"
+  },
+  "harnessSha256": "bcf080ce494ee1a2df450241dbd6a087fb6880239c3d2e711d1d2116f4ce3463",
+  "generatorSha256": "3e52c9a021f650ea9d52fcc55aa6e7ad50ce4bd467848f69e0aa81bfffd1ec81",
+  "fixtureSha256": "ab43604db1b5bce8b9990506f989676dfb0009cdcf2e514a8ccee9da166c8753",
+  "node": {
+    "version": "v24.19.0",
+    "v8": "13.6.233.17-node.51",
+    "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node"
+  },
+  "originalFailure": {
+    "label": "retained Prism prices after F26 hours retirement",
+    "expected": [
+      [
+        "echo",
+        2,
+        1.4
+      ],
+      [
+        "bonds",
+        2,
+        1.45
+      ],
+      [
+        "swift",
+        3,
+        1.5
+      ]
+    ],
+    "actual": [
+      [
+        "echo",
+        2,
+        1.4
+      ],
+      [
+        "bonds",
+        2,
+        1.45
+      ],
+      [
+        "swift",
+        3,
+        1.5
+      ],
+      [
+        "swiftcharter",
+        null,
+        null
+      ],
+      [
+        "lumenmemory",
+        null,
+        null
+      ],
+      [
+        "veteranrecruits",
+        null,
+        null
+      ],
+      [
+        "rosterrecall",
+        null,
+        null
+      ],
+      [
+        "chargememory",
+        null,
+        null
+      ],
+      [
+        "supportmemory",
+        null,
+        null
+      ],
+      [
+        "phasememory",
+        null,
+        null
+      ],
+      [
+        "riftstep",
+        null,
+        null
+      ],
+      [
+        "frontier",
+        null,
+        null
+      ],
+      [
+        "stardust",
+        null,
+        null
+      ],
+      [
+        "gentlegrowth",
+        null,
+        null
+      ],
+      [
+        "formationseat",
+        null,
+        null
+      ],
+      [
+        "benchmentor",
+        null,
+        null
+      ],
+      [
+        "empowerbatch",
+        null,
+        null
+      ],
+      [
+        "wallwisdom",
+        null,
+        null
+      ],
+      [
+        "invitations",
+        null,
+        null
+      ],
+      [
+        "recruitreserve",
+        null,
+        null
+      ]
+    ],
+    "expectedRows": 3,
+    "actualRows": 20,
+    "message": "retained Prism prices after F26 hours retirement\n+ actual - expected\n\n+ '[[\"echo\",2,1.4],[\"bonds\",2,1.45],[\"swift\",3,1.5],[\"swiftcharter\",null,null],[\"lumenmemory\",null,null],[\"veteranrecruits\",null,null],[\"rosterrecall\",null,null],[\"chargememory\",null,null],[\"supportmemory\",null,null],[\"phasememory\",null,null],[\"riftstep\",null,null],[\"frontier\",null,null],[\"stardust\",null,null],[\"gentlegrowth\",null,null],[\"formationseat\",null,null],[\"benchmentor\",null,null],[\"empowerbatch\",null,null],[\"wallwisdom\",null,null],[\"invitations\",null,null],[\"recruitreserve\",null,null]]'\n- '[[\"echo\",2,1.4],[\"bonds\",2,1.45],[\"swift\",3,1.5]]'\n"
+  },
+  "retainedSubset": {
+    "expected": [
+      [
+        "echo",
+        2,
+        1.4
+      ],
+      [
+        "bonds",
+        2,
+        1.45
+      ],
+      [
+        "swift",
+        3,
+        1.5
+      ]
+    ],
+    "actual": [
+      [
+        "echo",
+        2,
+        1.4
+      ],
+      [
+        "bonds",
+        2,
+        1.45
+      ],
+      [
+        "swift",
+        3,
+        1.5
+      ]
+    ],
+    "exact": true
+  },
+  "activeTreeTracks": 20,
+  "historicalMatrixFixture": [
+    {
+      "oldLevel": 0,
+      "assignedOldIds": [
+        "starlight",
+        "steady",
+        "echo",
+        "bonds",
+        "swift",
+        "momentum",
+        "reserves"
+      ],
+      "newIdsRequiredZero": 17
+    },
+    {
+      "oldLevel": 1,
+      "assignedOldIds": [
+        "starlight",
+        "steady",
+        "echo",
+        "bonds",
+        "swift",
+        "momentum",
+        "reserves"
+      ],
+      "newIdsRequiredZero": 17
+    },
+    {
+      "oldLevel": 6,
+      "assignedOldIds": [
+        "starlight",
+        "steady",
+        "echo",
+        "bonds",
+        "swift",
+        "momentum",
+        "reserves"
+      ],
+      "newIdsRequiredZero": 17
+    },
+    {
+      "oldLevel": 20,
+      "assignedOldIds": [
+        "starlight",
+        "steady",
+        "echo",
+        "bonds",
+        "swift",
+        "momentum",
+        "reserves"
+      ],
+      "newIdsRequiredZero": 17
+    },
+    {
+      "oldLevel": 31,
+      "assignedOldIds": [
+        "starlight",
+        "steady",
+        "echo",
+        "bonds",
+        "swift",
+        "momentum",
+        "reserves"
+      ],
+      "newIdsRequiredZero": 17
+    }
+  ],
+  "syntax": [
+    {
+      "variant": "unchanged",
+      "scriptsParsed": 29,
+      "generatedBytes": 1244331,
+      "generatedSha256": "8c0b3fa345ba8e827728009f59155bc619b4c359ef64418103a7472b037dfd40",
+      "generatedHtmlStored": false
+    },
+    {
+      "variant": "self-test-upgrade-identity-buy",
+      "scriptsParsed": 29,
+      "generatedBytes": 1244310,
+      "generatedSha256": "8ce35d7a72ab3d2b45c87e4a2b0e4502c3d510f1ed9e5492220a754a4c779bde",
+      "generatedHtmlStored": false
+    },
+    {
+      "variant": "self-test-upgrade-identity-value",
+      "scriptsParsed": 29,
+      "generatedBytes": 1244304,
+      "generatedSha256": "3bee2e365ce8129121f358830ad530a02fd3ad962fb8872ad5e153b833dfd751",
+      "generatedHtmlStored": false
+    },
+    {
+      "variant": "self-test-upgrade-identity-clock",
+      "scriptsParsed": 29,
+      "generatedBytes": 1244325,
+      "generatedSha256": "d66524a3f28fca4a41ecb58bafcaf127be800d36eae489ba7c7c2c08dc8c963b",
+      "generatedHtmlStored": false
+    }
+  ],
+  "scope": "Full production IIFE catalogue and fresh defaults; generated base/three identity-mutant scripts compile only. No browser invocation, historical multiplier execution or22-negative PASS claim. Required full browser regression and all mandatory negatives remain pending."
+}

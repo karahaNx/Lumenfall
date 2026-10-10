@@ -1,0 +1,49 @@
+{
+  "kind": "unaltered-baseline-purchase-witnesses",
+  "commit": "2d01049393e3bb45a90d80e07af52ae0484b0ec5",
+  "sourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+  "scope": "Previously captured actual baseline handlers with synthetic saves and injected storage write faults. No new execution. Tree primary-save rollback and manual/automatic Empower exact-payment failures are original failures; the 40-Prism Bonds debit plus 16-Prism delayed F26 refund is an expected separate ledger settlement.",
+  "commands": [
+    "node tree-purchase-repro.cjs /path/to/unchanged-baseline-checkout",
+    "node tree-refund-repro.cjs /path/to/unchanged-baseline-checkout",
+    "node empower-payment-repro.cjs /path/to/unchanged-baseline-checkout"
+  ],
+  "records": [
+    {
+      "path": "tree-purchase-repro.cjs",
+      "originalPath": "/workspace/scratch/0848c4e4f365/tree-work/audit-code/tree-purchase-repro.cjs",
+      "bytes": 4449,
+      "sha256": "b7a5979fe58f74deaf14c53c7d970ae953eb9d34ce4d955db1a66585a9a3a455"
+    },
+    {
+      "path": "tree-purchase-baseline.json",
+      "originalPath": "/workspace/scratch/0848c4e4f365/tree-work/audit-code/tree-purchase-baseline.json",
+      "bytes": 26807,
+      "sha256": "6bd517642136c7616c2cc2305fcd8961a3aba1bbe37bc5805b2f2201fc23897a"
+    },
+    {
+      "path": "tree-refund-repro.cjs",
+      "originalPath": "/workspace/scratch/0848c4e4f365/tree-work/audit-code/tree-refund-repro.cjs",
+      "bytes": 2732,
+      "sha256": "67ab6e9332a6f1c3e5f0c302ddd7693894aace1605238e197de4e04708c0fe0e"
+    },
+    {
+      "path": "tree-refund-baseline.json",
+      "originalPath": "/workspace/scratch/0848c4e4f365/tree-work/audit-code/tree-refund-baseline.json",
+      "bytes": 9791,
+      "sha256": "807f29509715310c8fb7a03ad7e62ea9242f695b9c751ce829562571c7ebe57f"
+    },
+    {
+      "path": "empower-payment-repro.cjs",
+      "originalPath": "/workspace/scratch/0848c4e4f365/tree-work/audit-code/empower-payment-repro.cjs",
+      "bytes": 2523,
+      "sha256": "2c6d865049ea2b960117205433d4be50f2d0cbb5b104daff6006f89a34eae095"
+    },
+    {
+      "path": "empower-payment-baseline.json",
+      "originalPath": "/workspace/scratch/0848c4e4f365/tree-work/audit-code/empower-payment-baseline.json",
+      "bytes": 2768,
+      "sha256": "6355a219889e5ae74fef8220c8654734b43f977814ec1d708b440aebc8dbb819"
+    }
+  ]
+}

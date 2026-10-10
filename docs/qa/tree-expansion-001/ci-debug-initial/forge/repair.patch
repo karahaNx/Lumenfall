@@ -1,0 +1,48 @@
+diff --git a/tests/behavioral/offline-catchup.cjs b/tests/behavioral/offline-catchup.cjs
+index beb8ce7..1fe0266 100644
+--- a/tests/behavioral/offline-catchup.cjs
++++ b/tests/behavioral/offline-catchup.cjs
+@@ -6,11 +6,28 @@
+ 'use strict';
+ const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{performance}=require('node:perf_hooks');
+ const root=path.resolve(__dirname,'../..');
+-const {reward:prismRewardOracle,legacyPolicy:legacyPrismPolicy}=require('./prism-earning-reference.cjs');
++const {reward:prismRewardOracle}=require('./prism-earning-reference.cjs');
+ const sourceArg=process.argv.indexOf('--source');
+ const source=fs.readFileSync(sourceArg<0?path.join(root,'index.html'):process.argv[sourceArg+1],'utf8');
+ const baseline=fs.readFileSync(path.join(root,'docs/recovery/2026-10-07/lead_context/FEEDBACK/EVIDENCE/main-index.html'),'utf8');
+ assert.equal(require('node:crypto').createHash('sha1').update('blob '+Buffer.byteLength(baseline)+'\0'+baseline).digest('hex'),'ea44431c163569548973d9e489f75345749a07ee','original product oracle blob');
++// Replace only the two historical reward bodies. A span between named functions
++// also erased later Tree helpers that the unchanged Ascend path still calls.
++function legacyPrismPolicy(current,frozen){
++ function body(html,name){
++  const pattern=new RegExp('^function '+name+'\\([^\\n]*\\)\\{\\n([\\s\\S]*?)^\\}','gm');
++  const matches=Array.from(html.matchAll(pattern));
++  assert.equal(matches.length,1,'unique reward function '+name);
++  const match=matches[0],header=match[0].slice(0,match[0].indexOf('\n')+1);
++  return {header,text:match[1],start:match.index+header.length};
++ }
++ for(const name of ['ascendFullPrismGainForCleared','ascendPrismBreakdown']){
++  const actual=body(current,name),original=body(frozen,name);
++  assert.equal(actual.header,original.header,'unchanged reward signature '+name);
++  current=current.slice(0,actual.start)+original.text+current.slice(actual.start+actual.text.length);
++ }
++ return current;
++}
+ // PR70's independently prepared clock correction is a necessary dependency:
+ // closing old queues exposes a canonical-grid stall. Keep the immutable old
+ // engine as the reference, applying ONLY its two clock corrections. The complete
+@@ -68,6 +85,13 @@ function baselineState(actual,expected,seed,label){
+  // Additive Lab fields are independently required to be zero/OFF on this old save.
+  // Remove only those verified defaults before the unchanged full historical oracle.
+  actual=copy(actual);
++ const newTreeIds=['swiftcharter','lumenmemory','veteranrecruits','rosterrecall','chargememory','supportmemory','phasememory','riftstep','frontier','stardust','gentlegrowth','formationseat','benchmentor','empowerbatch','wallwisdom','invitations','recruitreserve'];
++ for(const id of newTreeIds){
++  assert.equal(actual.nodes[id],0,label+' exact unpurchased Tree default nodes.'+id);
++  delete actual.nodes[id];
++ }
++ assert.equal(actual.treeTrainingProgress,0,label+' exact unpurchased Tree training default');
++ delete actual.treeTrainingProgress;
+  const newForgeIds=['cauterize','fracturekey','guardianseal','spillway','sustainedchannel','tapconduit','guardiancadence','relay','resonantedge','victorycharge','amplifiertrim','dualchannel','overflowconduit','resonancecells','resonancecascade','resonancereclaim'];
+  for(const [field,value] of [['research',0],['researchQueue',false]])for(const id of newForgeIds){
+   assert.equal(actual[field][id],value,label+' exact unpurchased Forge default '+field+'.'+id);

@@ -1,0 +1,41 @@
+diff --git a/tests/behavioral/upgrade-identity.js b/tests/behavioral/upgrade-identity.js
+index a4a8cdf..9f1e54f 100644
+--- a/tests/behavioral/upgrade-identity.js
++++ b/tests/behavioral/upgrade-identity.js
+@@ -18,6 +18,8 @@ window.runUpgradeIdentityQa=async function(b,ctx,assert,parity,summaryParity){
+   var closedForge=['focus','sense','formation','resolve'],closedLab=['riftattune','formationstudy','prismstudy'],closedTree=['starlight','steady','momentum'];
+   var originalForge=['focus','sense','formation','resolve','charge','arcanecal','conduction','luminoustracking'];
+   var addedForge=['cauterize','fracturekey','guardianseal','spillway','sustainedchannel','tapconduit','guardiancadence','relay','resonantedge','victorycharge','amplifiertrim','dualchannel','overflowconduit','resonancecells','resonancecascade','resonancereclaim'];
++  var originalTree=['starlight','steady','echo','bonds','swift','momentum','reserves'];
++  var addedTree=['swiftcharter','lumenmemory','veteranrecruits','rosterrecall','chargememory','supportmemory','phasememory','riftstep','frontier','stardust','gentlegrowth','formationseat','benchmentor','empowerbatch','wallwisdom','invitations','recruitreserve'];
+   if(ctx.scenario==='upgrade-identity-contracts'){
+     var s=seed();s.activeStudies=[];install(s);
+     closedForge.forEach(function(id){
+@@ -33,7 +35,7 @@ window.runUpgradeIdentityQa=async function(b,ctx,assert,parity,summaryParity){
+     before=b.getState();ok(!t.autoFill()&&t.queued().studiesStarted===0,'both closed Study queue entrypoints inert');same(b.getState(),before,'closed queued Studies spend nothing');
+     closedTree.forEach(function(id){var before=b.getState();u.buyNode(id);same(b.getState(),before,'closed Tree cannot spend '+id);ok(!document.querySelector('[data-node="'+id+'"]'),'closed Tree has no purchase '+id);});
+     [0,1,6,20,31].forEach(function(k){
+-      var s=seed();originalForge.forEach(function(id){s.research[id]=k;});addedForge.forEach(function(id){ok(s.research[id]===0&&s.researchQueue[id]===false,'new Forge defaults do not contaminate historical factor oracle '+id);});Object.keys(s.longStudyLevels).forEach(function(id){s.longStudyLevels[id]=k;});Object.keys(s.nodes).forEach(function(id){s.nodes[id]=k;});
++      var s=seed();originalForge.forEach(function(id){s.research[id]=k;});addedForge.forEach(function(id){ok(s.research[id]===0&&s.researchQueue[id]===false,'new Forge defaults do not contaminate historical factor oracle '+id);});Object.keys(s.longStudyLevels).forEach(function(id){s.longStudyLevels[id]=k;});originalTree.forEach(function(id){s.nodes[id]=k;});addedTree.forEach(function(id){ok(s.nodes[id]===0,'new Tree defaults do not contaminate historical factor oracle '+id);});
+       install(s);var m=u.metrics();
+       near(m.lumen,(1+k*.1)*(1+k*.08)*(1+k*.08),'exact old Lumen stacking '+k);
+       near(m.shards,(1+k*.08)*(1+k*.08),'exact old Shard stacking '+k);
+@@ -50,7 +52,7 @@ window.runUpgradeIdentityQa=async function(b,ctx,assert,parity,summaryParity){
+       [['charge',0,30,1,1.55],['arcanecal',15000,120,1.6,1.6],['conduction',90000,280,1.6,1.6],['luminoustracking',2500000,1500,1.6,1.6]],'retained Forge recipes/prices');
+     same(t.nodes().filter(function(n){return !n.retiredTo&&!n.labGroup;}).map(function(n){return [n.id,n.lumenBase,n.shardBase,n.baseDurationSec];}),
+       [['wispascend',800,80,180],['guardmastery',600,40,150],['shardstudy',400,150,200],['lumenstudy',1400,120,260],['motestudy',3200,320,380],['measuredinquiry',30000,1200,600]],'retained Lab prices/work');
+-    same(u.nodes().filter(function(n){return !n.retiredTo&&!n.retired;}).map(function(n){return [n.id,n.baseCost,n.growth];}),[['echo',2,1.4],['bonds',2,1.45],['swift',3,1.5]],'retained Prism prices after F26 hours retirement');
++    same(u.nodes().filter(function(n){return !n.retiredTo&&!n.retired&&['echo','bonds','swift'].indexOf(n.id)!==-1;}).map(function(n){return [n.id,n.baseCost,n.growth];}),[['echo',2,1.4],['bonds',2,1.45],['swift',3,1.5]],'retained Prism prices after F26 hours retirement');
+     [0,5,10,13].forEach(function(level){var s=seed();s.activeStudies=[];s.longStudyLevels.measuredinquiry=level;install(s);
+       t.nodes().filter(function(n){return !n.retiredTo&&!n.labGroup&&n.id!=='measuredinquiry';}).forEach(function(n){near(t.duration(n.id,5),Math.round(Math.round(n.baseDurationSec*Math.pow(1.6,5))*(1-.02*Math.min(10,level))),'bought Inquiry discount preserved '+n.id+' '+level);});
+     });
+@@ -62,7 +64,8 @@ window.runUpgradeIdentityQa=async function(b,ctx,assert,parity,summaryParity){
+     ok(f.deeds().total===683,'one-time Comet reward pool unchanged');
+     ok(t.nodes().filter(function(n){return !n.retiredTo;}).length===20,'twenty independently purchasable Lab tracks');
+     ok(f.nodes().filter(function(n){return !n.retiredTo;}).length===20,'twenty independently purchasable Forge tracks');
+-    return {checks:checks,closedTracks:10,activeTracks:43,exactOldFactors:true,currenciesUnchanged:true,idempotent:true,freshDeeds:true};
++    ok(u.nodes().filter(function(n){return !n.retiredTo&&!n.retired;}).length===20,'twenty independently purchasable Tree tracks');
++    return {checks:checks,closedTracks:10,activeTracks:60,exactOldFactors:true,currenciesUnchanged:true,idempotent:true,freshDeeds:true};
+   }
+   if(ctx.scenario==='upgrade-identity-farm-clock'){
+     var s=JSON.parse(JSON.stringify(ctx.fixtures['parity-medium-farm'].save)),clocks=[2000000000000,2000000000371];

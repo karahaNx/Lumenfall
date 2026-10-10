@@ -1,0 +1,19 @@
+diff --git a/tests/behavioral/prism-earning.cjs b/tests/behavioral/prism-earning.cjs
+index c3db731..56917a5 100644
+--- a/tests/behavioral/prism-earning.cjs
++++ b/tests/behavioral/prism-earning.cjs
+@@ -10,7 +10,13 @@ function single(name){const m=source.match(new RegExp('function '+name+'\\([^\\n
+ const start=source.indexOf('// PRISM_EARNING_001:'),end=source.indexOf('function ascendPrismGain(',start);
+ assert(start>=0 && end>start,'candidate reward functions are not installed');
+ const block=source.slice(start,end),helpers=['nodeLevel','longStudyLevel','longStudyPrismMult','prismMult'].map(single).join('\n');
+-function engine(code=block){const c={ASCEND_REPEAT_REWARD_RATE:0.20,BigInt:undefined,state:null};vm.createContext(c);vm.runInContext(helpers+'\nfunction progressionDepth(){return state.riftMode===\'farm\'?state.farmReturnDepth:state.depth;}\n'+code,c,{timeout:2000});return c;}
++// The canonical breakdown now calls Frontier Record. Load its real catalog and
++// level normalizers; old Prism fixtures omit new IDs, so production defaults to 0.
++const treeStart=source.indexOf('var NODES = ['),treeEnd=source.indexOf('function treeFormationCapacity(',treeStart);
++const numberStart=source.indexOf('function finiteNonNegative('),numberEnd=source.indexOf('function boundedInt(',numberStart);
++assert(treeStart>=0&&treeEnd>treeStart&&numberStart>=0&&numberEnd>numberStart,'production Tree dependencies are installed');
++const treeHelpers=source.slice(numberStart,numberEnd)+'\n'+source.slice(treeStart,treeEnd);
++function engine(code=block){const c={ASCEND_REPEAT_REWARD_RATE:0.20,BigInt:undefined,state:null};vm.createContext(c);vm.runInContext(helpers+'\n'+treeHelpers+'\nfunction progressionDepth(){return state.riftMode===\'farm\'?state.farmReturnDepth:state.depth;}\n'+code,c,{timeout:2000});return c;}
+ function sqrt(n){if(n<2n)return n;let x=1n<<BigInt(Math.ceil(n.toString(2).length/2));for(;;){const y=(x+n/x)/2n;if(y>=x)return x;x=y;}}
+ function numerator(t,l){return (25n+BigInt(t))*(20n+BigInt(l));}
+ function floorCurve(c,t,l,repeat){if(c<15)return 0;let p=numerator(t,l)-(repeat?400n:0n);return Math.max(1,Number(sqrt(4n*BigInt(c)*p*p)/500n));}

@@ -1,0 +1,28 @@
+{
+  "status": "selected-by-parent-design; implementation-not-yet-validated",
+  "id": "swiftcharter",
+  "levelCap": 1,
+  "prismPrice": 200,
+  "unlock": {
+    "maxDepthEver": 100,
+    "swift": 10
+  },
+  "ownedFuturePrice": {
+    "fromCurrentSwiftLevel": 10,
+    "formula": "60 + 6 * (currentSwift - 10)",
+    "equivalentFormula": "6 * currentSwift"
+  },
+  "unchanged": "Unowned charter and currentSwift<10 retain the literal original ceil(3*1.5^currentSwift) path; every old level, bonus and historical payment remains.",
+  "rewardKernel": "Unchanged by Charter. Separate Frontier node must be zero when comparing this baseline.",
+  "numericEvidence": "economy-measurements.json#modelRows(model=linearAfter10)",
+  "matureFixture": "mature-high-power",
+  "matureOverrides": {
+    "startSwift": 6,
+    "canonicalPrisms": 452,
+    "cleared": 94,
+    "repeatBenchmark": 94,
+    "completedClarity": 1,
+    "maxDepthEver": 120
+  },
+  "forecast": "Independent fixed-repeat reinvestment arithmetic; no elapsed-time or unlock-time claim."
+}

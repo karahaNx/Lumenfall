@@ -1,0 +1,33 @@
+{
+  "observedAt": "2026-10-10 20:37:09 UTC",
+  "sourceOfTruth": "GitHub API before the coordinated test-only repair",
+  "main": "67373faa531f0bb791c883210ee623320861e380",
+  "developmentPR": 102,
+  "developmentDraft": true,
+  "developmentHead": "2d01049393e3bb45a90d80e07af52ae0484b0ec5",
+  "treePR": 106,
+  "treeDraft": true,
+  "treeHead": "0c539c528d3b950a786d0ea377fcfc59499f1a3a",
+  "syntheticMerge": "3a65d44e1bb0fadc35e98ced5e0e99b7840bc7ac",
+  "completeTree": "da50c4eead313efee2ad9683e43e5a0cb2ccc71f",
+  "productSha256": "4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef",
+  "frozenFixtureSha256": "ab43604db1b5bce8b9990506f989676dfb0009cdcf2e514a8ccee9da166c8753",
+  "checks": {
+    "validateSource": "PASS: 2 scripts syntax-checked, 16 unique IDs, cache/state lifecycle guards",
+    "context": {
+      "pass": true,
+      "entrypoints": 29,
+      "localMarkdownLinks": 91,
+      "sharedStartupBytes": 31131,
+      "taskStartupBytes": 32404
+    },
+    "scopedCodeDiffCheck": "PASS; raw historical evidence excluded from formatting policy"
+  },
+  "changedProductSinceCandidate": false,
+  "requiredNext": "Publish adapter/setup repair on PR106 and accept every mandatory Full/Lab/Forge/Tree gate and raw artifacts before development integration.",
+  "releaseHold": {
+    "main": true,
+    "apk": true,
+    "nativeAcceptanceOpen": true
+  }
+}

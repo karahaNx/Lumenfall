@@ -1,0 +1,32 @@
+{
+  "count": 22,
+  "names": [
+    "self-test-bad-assertion",
+    "self-test-uncaught-error",
+    "self-test-unhandled-rejection",
+    "self-test-parity-regression",
+    "self-test-chronology-regression",
+    "self-test-wisp-formula-regression",
+    "self-test-wisp-pacing-regression",
+    "self-test-endgame-currency-regression",
+    "self-test-wisp-role-regression",
+    "self-test-p1-05-selected",
+    "self-test-p1-05-focus-return",
+    "self-test-lifecycle-duplicate",
+    "self-test-save-backup-placement",
+    "self-test-save-backup-confirmation",
+    "self-test-upgrade-identity-buy",
+    "self-test-upgrade-identity-value",
+    "self-test-upgrade-identity-clock",
+    "self-test-ascend-prisms-tree",
+    "self-test-ascend-prisms-lab",
+    "self-test-ascend-prisms-payout",
+    "self-test-ascend-prisms-repeat",
+    "self-test-ascend-prisms-rounding"
+  ],
+  "baselineWorkflowBlob": "5cddd8599a23ba2fb823b75f471df3e16e721e86",
+  "newLocalWorkflowBlob": "4c67564c7d30a51f618eb76f286cc34a4bf4f6d0",
+  "rawLog": "validation-evidence/negative-self-tests.log",
+  "rawProcessRoot": "validation-evidence/negative-raw",
+  "rule": "Every original negative remains mandatory and must fail for its declared injected defect. No unexpected success, unrelated missing mutation anchor, transport failure or timeout can stand in for that defect. Deliberately injected runtime-error tests retain their original distinct contract."
+}

@@ -22,7 +22,7 @@ function app(seed){
       ascend:applyAscendMutation,tap:()=>doTap({classList:{add(){},remove(){}}}),
       toggle:toggleActive,preset:applyFormationPreset,rebuild:()=>reconcileFormationRebuild(state),
       autoEmpower:autoEmpowerTick,
-      recruit:id=>buySpirit(SPIRITS.find(s=>s.id===id)),equip:selectCometCosmetic,
+      recruit:id=>buySpirit(SPIRITS.find(s=>s.id===id)),recruitCost:id=>spiritCost(SPIRITS.find(s=>s.id===id)),equip:selectCometCosmetic,
       advance:advanceAuthoritativeTime,offline:applyOfflineProgress,save:saveState,load:loadState,
       backup:currentSaveBackup,decode:decodeSaveBackup,refresh:refreshDailyQuest,gate:restStopComplete,
       cap:offlineCapHours,catalog:()=>SHOP,summary:simulationSummary};
@@ -83,21 +83,51 @@ test('early Ascend fails, manual attacks fail permanently for the run',()=>{
 });
 test('Single Star sees recruit, toggle, preset and reconstruction without changing them',()=>{
   for(const action of ['recruit','toggle','preset','rebuild']){
-    const a=trial('single'),s=a.b.get();s.spirits.void=1;s.lumen=1e20;
-    if(action==='recruit'){s.spirits.void=0;a.b.recruit('void');}
+    const a=trial('single');let s=a.b.get();s.spirits.void=1;s.lumen=1e20;
+    if(action==='recruit'){
+      s.spirits.void=0;
+      assert(Object.values(s.nodes).every(level=>level===0),'manual recruitment has zero Tree ownership');
+      assert.equal(a.b.recruitCost('void'),70000,'independent original Void recruitment price');
+      // Preserve the old oversized wallet as a rejection boundary: 70,000 is
+      // not exactly debitable from 1e20, so it cannot prove a funded purchase.
+      const oversized=copy(s),saved=Array.from(a.storage),writes=a.writes.length;
+      assert.equal(a.b.recruit('void'),false,'inexact manual payment refused');
+      assert.deepEqual(a.b.get(),oversized,'refused manual payment preserves complete state and Trial');
+      assert.deepEqual(Array.from(a.storage),saved,'refused manual payment preserves saved slots');
+      assert.equal(a.writes.length,writes,'refused manual payment performs no save writes');
+      s.lumen=70000;
+      const funded=s.lumen;
+      assert.equal(a.b.recruit('void'),true,'exactly funded manual recruitment succeeds');
+      s=a.b.get(); // A committed staged purchase installs the canonical state.
+      assert.equal(funded-s.lumen,70000,'exact manual Lumen debit');
+      assert.equal(s.lumen,0,'exact-wallet manual purchase leaves zero Lumen');
+      assert.equal(s.spirits.void,1,'manual payment recruits exactly one original level');
+    }
     if(action==='toggle')a.b.toggle('void');
     if(action==='preset'){s.formationPresets.boss=['ember','void'];assert(a.b.preset('boss'));}
     if(action==='rebuild'){s.formationRebuild={members:['ember','void'],preset:''};a.b.rebuild();}
+    s=a.b.get();
     assert.equal(s.activeParty.length,2,action+' party intent remains');assert.equal(s.cometTrial.reason,'party',action);
     a.b.toggle('void');clear(a);assert.equal(a.b.get().cometTrialResult.outcome,'failed',action+' latch persists');
   }
   const a=trial('single');clear(a);assert.deepEqual(a.b.get().cometTrialMarks,{single:true});
 });
 test('Auto-Empower reconstruction latches Single Star failure at the purchase boundary',()=>{
-  const a=trial('single'),s=a.b.get();s.achieved.labmaster=true;s.lumen=1e20;
+  const a=trial('single');let s=a.b.get();s.achieved.labmaster=true;s.lumen=1e20;
   Object.keys(s.empowerQueue).forEach(id=>s.empowerQueue[id]=false);s.empowerQueue.void=true;
   s.spirits.void=0;s.formationRebuild={members:['ember','void'],preset:''};
-  assert(a.b.autoEmpower());assert.deepEqual(s.activeParty,['ember','void']);
+  assert(Object.values(s.nodes).every(level=>level===0),'automatic recruitment has zero Tree ownership');
+  assert.equal(a.b.recruitCost('void'),70000,'independent automatic Void recruitment price');
+  const oversized=copy(s),saved=Array.from(a.storage),writes=a.writes.length;
+  assert.equal(a.b.autoEmpower(),false,'inexact automatic payment refused');
+  assert.deepEqual(a.b.get(),oversized,'refused automatic payment preserves complete state and Trial');
+  assert.deepEqual(Array.from(a.storage),saved,'refused automatic payment preserves saved slots');
+  assert.equal(a.writes.length,writes,'refused automatic payment performs no save writes');
+  s.lumen=70000;const funded=s.lumen;
+  assert(a.b.autoEmpower());s=a.b.get();
+  assert.equal(funded-s.lumen,70000,'exact automatic Lumen debit');
+  assert.equal(s.lumen,0,'exact-wallet automatic purchase leaves zero Lumen');
+  assert.deepEqual(s.activeParty,['ember','void']);
   assert.equal(s.cometTrial.reason,'party');assert.equal(s.spirits.void,1);
   clear(a);assert.equal(a.b.get().cometTrialResult.outcome,'failed');
 });

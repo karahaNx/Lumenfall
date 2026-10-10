@@ -1,0 +1,257 @@
+{
+  "auditedAt": "2026-10-10T20:31:25Z",
+  "clockSource": "clock__curr_time",
+  "accepted": false,
+  "runId": 38083769079,
+  "jobId": 114305874535,
+  "runAttempt": 1,
+  "runConclusion": "failure",
+  "jobConclusion": "failure",
+  "head": "0c539c528d3b950a786d0ea377fcfc59499f1a3a",
+  "base": "2d01049393e3bb45a90d80e07af52ae0484b0ec5",
+  "syntheticMerge": "3a65d44e1bb0fadc35e98ced5e0e99b7840bc7ac",
+  "tree": "da50c4eead313efee2ad9683e43e5a0cb2ccc71f",
+  "expectedSourceSha256": "4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef",
+  "identityEvidence": "GitHub run API + synthetic commit API parents/tree + raw Checkout git log SHA; source byte hash recorded independently by exact local reproduction. The skipped CI stateful step never wrote source-sha256.txt.",
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 1
+    },
+    {
+      "name": "Checkout",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 2
+    },
+    {
+      "name": "Set up Node.js",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 3
+    },
+    {
+      "name": "APK identity verifier self-test",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 4
+    },
+    {
+      "name": "Node tooling regression checks",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 5
+    },
+    {
+      "name": "Validate game source",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 6
+    },
+    {
+      "name": "Stage web assets",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 7
+    },
+    {
+      "name": "Rift cosmetics selection, persistence and mobile acceptance",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 8
+    },
+    {
+      "name": "Exact Prism earning numerical and causal regression",
+      "status": "completed",
+      "conclusion": "failure",
+      "number": 9
+    },
+    {
+      "name": "Development currency UI and retained-value acceptance",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 10
+    },
+    {
+      "name": "Stateful behavioral regression suite",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 11
+    },
+    {
+      "name": "Behavioral harness negative self-test",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 12
+    },
+    {
+      "name": "Install runtime error guard in staged copy",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 13
+    },
+    {
+      "name": "Browser runtime smoke test",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 14
+    },
+    {
+      "name": "Preserve full regression evidence",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 15
+    },
+    {
+      "name": "Post Set up Node.js",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 29
+    },
+    {
+      "name": "Post Checkout",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 30
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 31
+    }
+  ],
+  "artifact": {
+    "count": 0,
+    "zipIntegrity": "not applicable: no ZIP produced",
+    "reason": "Upload action reported no files found; earlier required gates did not create its configured evidence paths."
+  },
+  "failure": {
+    "step": 9,
+    "name": "Exact Prism earning numerical and causal regression",
+    "command": "node tests/behavioral/prism-earning.cjs --source mobile/www/index.html",
+    "exitCode": 1,
+    "kind": "ReferenceError",
+    "message": "treeLevel is not defined",
+    "stack": [
+      "treeFrontierBonus",
+      "treeAppendFrontier",
+      "ascendPrismBreakdown",
+      "tests/behavioral/prism-earning.cjs:30:90"
+    ],
+    "classification": "Adapter dependency omission; the full production Tree level helper was absent from this isolated Prism VM. The independent payout assertions were not reached.",
+    "ciNode": "v20.20.2"
+  },
+  "statefulRegression": {
+    "status": "skipped",
+    "scenarios": null,
+    "passRows": null,
+    "failRows": null,
+    "rawRecords": 0
+  },
+  "originalCausalNegatives": {
+    "status": "skipped",
+    "expectedNames": [
+      "self-test-bad-assertion",
+      "self-test-uncaught-error",
+      "self-test-unhandled-rejection",
+      "self-test-parity-regression",
+      "self-test-chronology-regression",
+      "self-test-wisp-formula-regression",
+      "self-test-wisp-pacing-regression",
+      "self-test-endgame-currency-regression",
+      "self-test-wisp-role-regression",
+      "self-test-p1-05-selected",
+      "self-test-p1-05-focus-return",
+      "self-test-lifecycle-duplicate",
+      "self-test-save-backup-placement",
+      "self-test-save-backup-confirmation",
+      "self-test-upgrade-identity-buy",
+      "self-test-upgrade-identity-value",
+      "self-test-upgrade-identity-clock",
+      "self-test-ascend-prisms-tree",
+      "self-test-ascend-prisms-lab",
+      "self-test-ascend-prisms-payout",
+      "self-test-ascend-prisms-repeat",
+      "self-test-ascend-prisms-rounding"
+    ],
+    "expectedCount": 22,
+    "actualCaught": 0,
+    "rawRecords": 0
+  },
+  "currency": "skipped",
+  "runtimeGuard": "skipped",
+  "browserSmoke": "skipped",
+  "nativeAndroid": "untested",
+  "localFailure": {
+    "auditUtc": "2026-10-10T20:29:29Z",
+    "clockSource": "clock__curr_time",
+    "started": "2026-10-10T20:29:45.937Z",
+    "finished": "2026-10-10T20:29:52.977Z",
+    "command": "node tests/behavioral/prism-earning.cjs --source index.html",
+    "cwd": "/workspace/scratch/0848c4e4f365/Lumenfall-tree",
+    "executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+    "node": "v24.19.0",
+    "v8": "13.6.233.17-node.51",
+    "commit": "0c539c528d3b950a786d0ea377fcfc59499f1a3a",
+    "sourceSha256": "4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef",
+    "testSha256": "4d7a85f2a6de36eb11f46e0eb0ea8d9ffc849f63c89b3aa4f90509ad4a5357f1",
+    "exitCode": 1,
+    "signal": null,
+    "error": null,
+    "stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "bytes": 840,
+      "sha256": "fc23e40452466bd8f4e4237e01dc4bdd161cd7101e306e5488f566b65535667a"
+    },
+    "classification": "FAIL before first payout assertion: isolated extracted context lacks treeLevel dependency of treeFrontierBonus",
+    "productAssertionsWeakened": false
+  },
+  "localRepair": {
+    "auditUtc": "2026-10-10T20:30:34Z",
+    "clockSource": "clock__curr_time",
+    "started": "2026-10-10T20:30:49.430Z",
+    "finished": "2026-10-10T20:30:59.458Z",
+    "command": "node tests/behavioral/prism-earning.cjs --source index.html",
+    "cwd": "/workspace/scratch/0848c4e4f365/Lumenfall-tree",
+    "executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+    "node": "v24.19.0",
+    "v8": "13.6.233.17-node.51",
+    "baseCommit": "0c539c528d3b950a786d0ea377fcfc59499f1a3a",
+    "sourceSha256": "4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef",
+    "testSha256": "26d75f5d303febb56dda2c67c24ae7371f84c8e32cc0be2ac24bf4cb7186236f",
+    "exitCode": 0,
+    "signal": null,
+    "error": null,
+    "stdout": {
+      "bytes": 1086,
+      "sha256": "d9177deea0048157a60cbe43a2f9bdc4c485fa98a3734c1e5c5d4b64db514b3f"
+    },
+    "stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "result": {
+      "status": "pass",
+      "assertions": 341654,
+      "formulaCases": 277916,
+      "payoutCases": 3780,
+      "negativeControls": [
+        "old-repeat-penalizes-bonus",
+        "drop-tree",
+        "drop-completed-lab",
+        "floating-full-floor",
+        "floating-progress-ceil",
+        "displayed-vs-cleared-rift",
+        "count-bonus-twice"
+      ]
+    }
+  },
+  "repairScope": "Only tests/behavioral/prism-earning.cjs: actual Tree catalog/index/level helper and original numeric normalizers added to the extracted VM. Independent reward oracle, original state corpus and all seven causal controls remain unchanged.",
+  "requiredNextAction": "Publish coordinated repairs and complete all required CI gates on the new exact head; no integration based on this failed run."
+}

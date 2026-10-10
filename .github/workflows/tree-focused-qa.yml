@@ -1,0 +1,99 @@
+name: Ascension Tree focused validation
+
+on:
+  pull_request:
+    branches: [main, 'feature/progression-expansion-2026-10-09']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lumenfall-tree-focused-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  tree:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Exact source identity and task context
+        run: |
+          set -euo pipefail
+          mkdir -p tree-validation
+          git rev-parse HEAD > tree-validation/commit.txt
+          git rev-parse 'HEAD^{tree}' > tree-validation/tree.txt
+          git show -s --format=%P HEAD > tree-validation/parents.txt
+          sha256sum index.html tests/behavioral/fixtures.json > tree-validation/source-sha256.txt
+          git ls-tree -r HEAD .github/workflows tests/behavioral scripts/ci scripts/lib > tree-validation/source-blobs.txt
+          node scripts/ci/validate_source.cjs 2>&1 | tee tree-validation/source.txt
+          node scripts/codex/check_context.cjs --task docs/tasks/TREE_EXPANSION_001.md 2>&1 | tee tree-validation/context.txt
+          mkdir -p mobile/www/fonts mobile/www/branding
+          cp index.html mobile/www/index.html
+          cp -r fonts/. mobile/www/fonts/
+          cp -r branding/. mobile/www/branding/
+      # These Tree test entry points are delivered by TREE_EXPANSION_001.
+      # Missing tests must fail the job; no optional execution or skip fallback.
+      - name: Tree prices real effects purchases saves and causal controls
+        run: |
+          set -euo pipefail
+          node tests/behavioral/tree-expansion-core.cjs index.html --negative 2>&1 | tee tree-validation/core.json
+      - name: Tree offline chronology and Auto-Ascend preservation
+        run: |
+          set -euo pipefail
+          node tests/behavioral/tree-expansion-offline.cjs index.html --negative 2>&1 | tee tree-validation/offline.json
+      - name: Tree independent investment and earned-benefit economy
+        run: |
+          set -euo pipefail
+          node tests/behavioral/tree-expansion-economy.cjs index.html --negative 2>&1 | tee tree-validation/economy.json
+      - name: Swift actual purchase ROI and independent Prism matrix
+        run: |
+          set -euo pipefail
+          node tests/behavioral/prism-earning-state.cjs index.html 2>&1 | tee tree-validation/prism-state.json
+          node tests/behavioral/prism-closeout-data.cjs index.html tree-validation/prism 2>&1 | tee tree-validation/prism-economy-summary.json
+      - name: Actual browser Prism payouts persistence and causal failures
+        run: |
+          set -euo pipefail
+          node tests/behavioral/prism-earning-focused.cjs mobile/www tree-validation/prism/browser 2>&1 | tee tree-validation/prism-browser.log
+      - name: Actual Tree mobile input focus prices and all tracks
+        if: always()
+        run: |
+          set -euo pipefail
+          node tests/behavioral/tree-expansion-mobile.cjs index.html tree-validation/mobile 2>&1 | tee tree-validation/mobile.log
+      - name: Prism mobile payout and Auto-Ascend UI acceptance
+        if: always()
+        run: |
+          set -euo pipefail
+          node tests/behavioral/prism-acceptance.cjs index.html tree-validation/prism/mobile 2>&1 | tee tree-validation/prism-mobile.log
+      - name: Complete Tree and Prism execution on actual V8 6.0
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/tree-node8
+          cd /tmp/tree-node8
+          curl -fL --retry 2 https://nodejs.org/dist/v8.3.0/SHASUMS256.txt -o SHASUMS256.txt
+          curl -fL --retry 2 https://nodejs.org/dist/v8.3.0/node-v8.3.0-linux-x64.tar.xz -o node-v8.3.0-linux-x64.tar.xz
+          grep ' node-v8.3.0-linux-x64.tar.xz$' SHASUMS256.txt | sha256sum -c -
+          tar -xf node-v8.3.0-linux-x64.tar.xz
+          cd "$GITHUB_WORKSPACE"
+          /tmp/tree-node8/node-v8.3.0-linux-x64/bin/node tests/behavioral/tree-expansion-v8.cjs index.html 2>&1 | tee tree-validation/v8.json
+          /tmp/tree-node8/node-v8.3.0-linux-x64/bin/node tests/behavioral/prism-legacy-runtime.cjs index.html tree-validation/prism/legacy-cases.json 2>&1 | tee tree-validation/prism-v8.json
+      - name: Preserve exact candidate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tree-focused-${{ github.run_id }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            tree-validation/
+            tests/behavioral/tree-expansion-*.cjs
+            tests/behavioral/prism-closeout-data.cjs
+            tests/behavioral/prism-earning-focused.cjs
+            tests/behavioral/prism-earning-state.cjs
+            tests/behavioral/prism-earning-reference.cjs
+            tests/behavioral/prism-acceptance.cjs
+            tests/behavioral/prism-legacy-runtime.cjs

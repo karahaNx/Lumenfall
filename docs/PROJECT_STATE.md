@@ -1,8 +1,8 @@
 # Lumenfall — current project status
 
-10 October development: [progression expansion](tasks/PROGRESSION_EXPANSION_001.md)
-retains the main/APK hold. PR104 Lab merged into PR102's development branch at
-5bcd1c86 after required CI; separate Forge work follows. Earlier feature/release
+10 October: PR104 Lab and PR105 Forge passed required CI and merged into PR102
+development at2d010493. [Tree expansion](tasks/TREE_EXPANSION_001.md) is now in
+debugging. PR102 remains draft; main/APK hold persists. Earlier feature/release
 checkpoints below remain historical, including [BOND_TEXT_001](tasks/BOND_TEXT_001.md),
 [WISP_UPGRADE_DISPLAY_001](tasks/WISP_UPGRADE_DISPLAY_001.md) and the
 [feature-chat workflow](tasks/FEATURE_CHAT_WORKFLOW_001.md).

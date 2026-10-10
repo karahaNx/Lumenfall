@@ -1,0 +1,498 @@
+{
+  "status": "pass",
+  "auditedAt": "2026-10-10T20:43:13Z",
+  "scope": "State-only complete-IIFE reproduction; actual browser UI assertions remain mandatory and unexecuted locally.",
+  "sourceSha256": "4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef",
+  "testSha256": "879a7a0ab5c71dbf398694ed76dd036fe44351f44294643a58002ab3a903df42",
+  "bridgeSha256": "3a7e96895d982f005ed075334c5159b8a5e00c138475f1bc4e34b1790e978c3c",
+  "harnessSha256": "bcf080ce494ee1a2df450241dbd6a087fb6880239c3d2e711d1d2116f4ce3463",
+  "scriptSha256": "f5b4f080f23ace53f4cf2421c85fb72d0e8b8a45325d86851b52c4447662eb44",
+  "fixturePrefixSha256": "790daa676bcbd59c928a9338b3ce295297545c163a13caef5757dd9e3fedaaf0",
+  "fixtureBlockSha256": "82fdbf400b274594f110525c85afe8961b7ea0809bfac2d9ad7985af5da02d96",
+  "node": "v24.19.0",
+  "v8": "13.6.233.17-node.51",
+  "checks": 20,
+  "mode": "corrected-representable-wallet",
+  "independentPrices": {
+    "ember": 10,
+    "tide": 60,
+    "stone": 360,
+    "gale": 2100,
+    "thorn": 12000,
+    "void": 70000,
+    "aurora": 400000,
+    "titan": 2200000
+  },
+  "allEightPriceSum": 2684530,
+  "originalUiAssertionPreserved": true,
+  "worst": {
+    "text": "Starcaller · Dawnpriest · Kindling · Vanguard",
+    "ids": [
+      "ember",
+      "void",
+      "tide",
+      "aurora",
+      "stone"
+    ],
+    "bonds": [
+      {
+        "id": "starcaller",
+        "name": "Starcaller Bond",
+        "ids": [
+          "ember",
+          "void"
+        ],
+        "effect": "+18% passive & ability damage",
+        "riftEffect": "Passive/ability +18%",
+        "tag": "Push"
+      },
+      {
+        "id": "dawnpriest",
+        "name": "Dawnpriest Bond",
+        "ids": [
+          "tide",
+          "aurora"
+        ],
+        "effect": "+25% Lumen, Shards & Motes",
+        "riftEffect": "Lumen/Shards/Motes +25%",
+        "tag": "Farm"
+      },
+      {
+        "id": "kindling",
+        "name": "Kindling Bond",
+        "ids": [
+          "ember",
+          "tide"
+        ],
+        "effect": "+25% Guardian Tap damage",
+        "riftEffect": "Tap +25%",
+        "tag": "Push"
+      },
+      {
+        "id": "vanguard",
+        "name": "Vanguard Bond",
+        "ids": [
+          "ember",
+          "stone"
+        ],
+        "effect": "20% less Boss regeneration",
+        "riftEffect": "Boss regen −20%",
+        "tag": "Boss"
+      }
+    ]
+  },
+  "initial": {
+    "lumen": 0,
+    "spirits": {
+      "ember": 2,
+      "tide": 2,
+      "stone": 2,
+      "gale": 0,
+      "thorn": 0,
+      "void": 2,
+      "aurora": 2,
+      "titan": 0
+    },
+    "activeParty": [
+      "ember",
+      "void",
+      "tide",
+      "aurora",
+      "stone"
+    ],
+    "formationRebuild": null
+  },
+  "ascend": {
+    "before": {
+      "prisms": 0,
+      "ascendCount": 0,
+      "benchmark": 0
+    },
+    "after": {
+      "prisms": 20,
+      "ascendCount": 1,
+      "benchmark": 100,
+      "depth": 1
+    },
+    "gain": 20
+  },
+  "pending": {
+    "lumen": 0,
+    "spirits": {
+      "ember": 1,
+      "tide": 0,
+      "stone": 0,
+      "gale": 0,
+      "thorn": 0,
+      "void": 0,
+      "aurora": 0,
+      "titan": 0
+    },
+    "activeParty": [
+      "ember"
+    ],
+    "formationRebuild": {
+      "members": [
+        "ember",
+        "void",
+        "tide",
+        "aurora",
+        "stone"
+      ],
+      "preset": ""
+    }
+  },
+  "purchases": [
+    {
+      "id": "void",
+      "quote": 70000,
+      "plan": {
+        "affordable": true,
+        "reason": "available",
+        "level": 0,
+        "levels": 1,
+        "cost": 70000,
+        "wasZero": true
+      },
+      "before": {
+        "lumen": 3000000,
+        "spirits": {
+          "ember": 1,
+          "tide": 0,
+          "stone": 0,
+          "gale": 0,
+          "thorn": 0,
+          "void": 0,
+          "aurora": 0,
+          "titan": 0
+        },
+        "activeParty": [
+          "ember"
+        ],
+        "formationRebuild": {
+          "members": [
+            "ember",
+            "void",
+            "tide",
+            "aurora",
+            "stone"
+          ],
+          "preset": ""
+        }
+      },
+      "after": {
+        "lumen": 2930000,
+        "spirits": {
+          "ember": 1,
+          "tide": 0,
+          "stone": 0,
+          "gale": 0,
+          "thorn": 0,
+          "void": 1,
+          "aurora": 0,
+          "titan": 0
+        },
+        "activeParty": [
+          "ember",
+          "void"
+        ],
+        "formationRebuild": {
+          "members": [
+            "ember",
+            "void",
+            "tide",
+            "aurora",
+            "stone"
+          ],
+          "preset": ""
+        }
+      },
+      "representedDebit": 70000,
+      "returnedUndefined": true,
+      "stateUnchanged": false,
+      "storageUnchanged": false,
+      "storageWrites": 2
+    },
+    {
+      "id": "tide",
+      "quote": 60,
+      "plan": {
+        "affordable": true,
+        "reason": "available",
+        "level": 0,
+        "levels": 1,
+        "cost": 60,
+        "wasZero": true
+      },
+      "before": {
+        "lumen": 2930000,
+        "spirits": {
+          "ember": 1,
+          "tide": 0,
+          "stone": 0,
+          "gale": 0,
+          "thorn": 0,
+          "void": 1,
+          "aurora": 0,
+          "titan": 0
+        },
+        "activeParty": [
+          "ember",
+          "void"
+        ],
+        "formationRebuild": {
+          "members": [
+            "ember",
+            "void",
+            "tide",
+            "aurora",
+            "stone"
+          ],
+          "preset": ""
+        }
+      },
+      "after": {
+        "lumen": 2929940,
+        "spirits": {
+          "ember": 1,
+          "tide": 1,
+          "stone": 0,
+          "gale": 0,
+          "thorn": 0,
+          "void": 1,
+          "aurora": 0,
+          "titan": 0
+        },
+        "activeParty": [
+          "ember",
+          "void",
+          "tide"
+        ],
+        "formationRebuild": {
+          "members": [
+            "ember",
+            "void",
+            "tide",
+            "aurora",
+            "stone"
+          ],
+          "preset": ""
+        }
+      },
+      "representedDebit": 60,
+      "returnedUndefined": true,
+      "stateUnchanged": false,
+      "storageUnchanged": false,
+      "storageWrites": 2
+    },
+    {
+      "id": "aurora",
+      "quote": 400000,
+      "plan": {
+        "affordable": true,
+        "reason": "available",
+        "level": 0,
+        "levels": 1,
+        "cost": 400000,
+        "wasZero": true
+      },
+      "before": {
+        "lumen": 2929940,
+        "spirits": {
+          "ember": 1,
+          "tide": 1,
+          "stone": 0,
+          "gale": 0,
+          "thorn": 0,
+          "void": 1,
+          "aurora": 0,
+          "titan": 0
+        },
+        "activeParty": [
+          "ember",
+          "void",
+          "tide"
+        ],
+        "formationRebuild": {
+          "members": [
+            "ember",
+            "void",
+            "tide",
+            "aurora",
+            "stone"
+          ],
+          "preset": ""
+        }
+      },
+      "after": {
+        "lumen": 2529940,
+        "spirits": {
+          "ember": 1,
+          "tide": 1,
+          "stone": 0,
+          "gale": 0,
+          "thorn": 0,
+          "void": 1,
+          "aurora": 1,
+          "titan": 0
+        },
+        "activeParty": [
+          "ember",
+          "void",
+          "tide",
+          "aurora"
+        ],
+        "formationRebuild": {
+          "members": [
+            "ember",
+            "void",
+            "tide",
+            "aurora",
+            "stone"
+          ],
+          "preset": ""
+        }
+      },
+      "representedDebit": 400000,
+      "returnedUndefined": true,
+      "stateUnchanged": false,
+      "storageUnchanged": false,
+      "storageWrites": 2
+    },
+    {
+      "id": "stone",
+      "quote": 360,
+      "plan": {
+        "affordable": true,
+        "reason": "available",
+        "level": 0,
+        "levels": 1,
+        "cost": 360,
+        "wasZero": true
+      },
+      "before": {
+        "lumen": 2529940,
+        "spirits": {
+          "ember": 1,
+          "tide": 1,
+          "stone": 0,
+          "gale": 0,
+          "thorn": 0,
+          "void": 1,
+          "aurora": 1,
+          "titan": 0
+        },
+        "activeParty": [
+          "ember",
+          "void",
+          "tide",
+          "aurora"
+        ],
+        "formationRebuild": {
+          "members": [
+            "ember",
+            "void",
+            "tide",
+            "aurora",
+            "stone"
+          ],
+          "preset": ""
+        }
+      },
+      "after": {
+        "lumen": 2529580,
+        "spirits": {
+          "ember": 1,
+          "tide": 1,
+          "stone": 1,
+          "gale": 0,
+          "thorn": 0,
+          "void": 1,
+          "aurora": 1,
+          "titan": 0
+        },
+        "activeParty": [
+          "ember",
+          "void",
+          "tide",
+          "aurora",
+          "stone"
+        ],
+        "formationRebuild": null
+      },
+      "representedDebit": 360,
+      "returnedUndefined": true,
+      "stateUnchanged": false,
+      "storageUnchanged": false,
+      "storageWrites": 2
+    }
+  ],
+  "final": {
+    "lumen": 2529580,
+    "spirits": {
+      "ember": 1,
+      "tide": 1,
+      "stone": 1,
+      "gale": 0,
+      "thorn": 0,
+      "void": 1,
+      "aurora": 1,
+      "titan": 0
+    },
+    "activeParty": [
+      "ember",
+      "void",
+      "tide",
+      "aurora",
+      "stone"
+    ],
+    "formationRebuild": null
+  },
+  "actualBonds": [
+    {
+      "id": "starcaller",
+      "name": "Starcaller Bond",
+      "ids": [
+        "ember",
+        "void"
+      ],
+      "effect": "+18% passive & ability damage",
+      "riftEffect": "Passive/ability +18%",
+      "tag": "Push"
+    },
+    {
+      "id": "dawnpriest",
+      "name": "Dawnpriest Bond",
+      "ids": [
+        "tide",
+        "aurora"
+      ],
+      "effect": "+25% Lumen, Shards & Motes",
+      "riftEffect": "Lumen/Shards/Motes +25%",
+      "tag": "Farm"
+    },
+    {
+      "id": "kindling",
+      "name": "Kindling Bond",
+      "ids": [
+        "ember",
+        "tide"
+      ],
+      "effect": "+25% Guardian Tap damage",
+      "riftEffect": "Tap +25%",
+      "tag": "Push"
+    },
+    {
+      "id": "vanguard",
+      "name": "Vanguard Bond",
+      "ids": [
+        "ember",
+        "stone"
+      ],
+      "effect": "20% less Boss regeneration",
+      "riftEffect": "Boss regen −20%",
+      "tag": "Boss"
+    }
+  ],
+  "reconstructionPredicate": true
+}

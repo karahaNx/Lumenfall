@@ -1,6 +1,6 @@
 # FORGE_EXPANSION_001 — twenty active Forge upgrades
 
-Status: local candidate verified; required CI/integration pending. No release.
+Status: PR105 integrated at2d010493; required CI/post-merge PASS. No release.
 Owner: current continuation chat. Branch: feature/forge-expansion-001.
 Baseline:5bcd1c861af51511ca3d5c4a07d9d61e72fdff03, the verified PR104 Lab merge
 into PR102's development branch. Main67373faa and APK publication remain held.
@@ -20,4 +20,5 @@ Require independent price/effect/persistence/Ascend oracles, causal negatives,
 live/offline chronology, conservative boss policy, 12 actual mobile profiles,
 V8.6 execution, context/source/tooling and full required CI before integration.
 [Debug/test receipt](../qa/forge-expansion-001/DEBUG_2026-10-10.md).
-Next: required exact-source CI, then development integration. Keep PR102 draft.
+[Final immutable CI/merge evidence](https://github.com/karahaNx/Lumenfall/blob/f3235667d3e07e00185a34c82cfea88a8c2fd889/docs/qa/forge-expansion-001/ci-2026-10-10/README.md).
+Next: Tree as a separate improvement. Keep PR102 draft; native acceptance pending.

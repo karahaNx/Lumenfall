@@ -1,0 +1,180 @@
+{
+  "status": "pass",
+  "observedAtUtc": "2026-10-10 20:39:10 UTC",
+  "clockSource": "clock.curr_time",
+  "command": "node tests/behavioral/offline-catchup.cjs --source index.html",
+  "cwd": "/workspace/scratch/0848c4e4f365/Lumenfall-tree",
+  "headSha": "0c539c528d3b950a786d0ea377fcfc59499f1a3a",
+  "sourceSha256": "4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef",
+  "test": {
+    "bytes": 22354,
+    "sha256": "694850f3fd284636eed83bade7a18dcf2148abc97a437ffa8b20555d3a0b2f84"
+  },
+  "fixture": {
+    "bytes": 84610,
+    "sha256": "ab43604db1b5bce8b9990506f989676dfb0009cdcf2e514a8ccee9da166c8753"
+  },
+  "independentRewardReference": {
+    "bytes": 1956,
+    "sha256": "46d0ce1b498f6a7f37d87d6e5954e717292a6db86f39e2093853164435b51be2"
+  },
+  "sourceTestFixtureReferenceUnchangedThroughoutRun": true,
+  "node": {
+    "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+    "version": "v24.19.0",
+    "v8": "13.6.233.17-node.51"
+  },
+  "startedUtc": "2026-10-10T20:33:07.854Z",
+  "endedUtc": "2026-10-10T20:38:09.084Z",
+  "exitCode": 0,
+  "stderrBytes": 0,
+  "testWallMs": 301082.879004,
+  "processWallMs": 301230.022209,
+  "records": 17,
+  "clear21EightHours": [
+    {
+      "case": "ON Clear21",
+      "seconds": 28800,
+      "batch": 256,
+      "batches": 1181,
+      "kills": 302400,
+      "ascends": 14400,
+      "iterations": 302401,
+      "earned": 1290055679.9983335
+    },
+    {
+      "case": "ON Clear21",
+      "seconds": 28800,
+      "batch": 31,
+      "batches": 9754,
+      "kills": 302400,
+      "ascends": 14400,
+      "iterations": 302401,
+      "earned": 1290055679.9983335
+    }
+  ],
+  "prismPolicyIsolation": {
+    "case": "Prism policy isolation",
+    "perAscend": 23,
+    "newPrisms": 334010,
+    "legacyPrisms": 89210
+  },
+  "otherCases": [
+    {
+      "case": "ON Clear20",
+      "seconds": 28800,
+      "batch": 256,
+      "batches": 1140,
+      "kills": 291959,
+      "ascends": 14597,
+      "iterations": 291961,
+      "earned": 1232991914.398166
+    },
+    {
+      "case": "OFF",
+      "seconds": 28800,
+      "batch": 256,
+      "batches": 414,
+      "kills": 773,
+      "ascends": 0,
+      "iterations": 106128,
+      "earned": 351609164909646.25
+    },
+    {
+      "case": "ON Clear21",
+      "seconds": 259200,
+      "batch": 256,
+      "batches": 1771,
+      "kills": 453600,
+      "ascends": 21600,
+      "iterations": 453601,
+      "earned": 1935083519.9986768
+    },
+    {
+      "case": "ON Clear21",
+      "seconds": 345600,
+      "batch": 256,
+      "batches": 1771,
+      "kills": 453600,
+      "ascends": 21600,
+      "iterations": 453600,
+      "earned": 1935083519.9986768
+    },
+    {
+      "case": "boundaries live",
+      "kills": 56047,
+      "motes": 22789,
+      "empowers": 2669,
+      "research": 47,
+      "studies": [
+        "Guardian's Mastery"
+      ]
+    },
+    {
+      "case": "boundaries offline",
+      "kills": 56047,
+      "motes": 22789,
+      "empowers": 2669,
+      "research": 47,
+      "studies": [
+        "Guardian's Mastery"
+      ]
+    },
+    {
+      "case": "cancel",
+      "callbacks": 1,
+      "error": "Offline catch-up cancelled",
+      "pending": true
+    },
+    {
+      "case": "simulation",
+      "callbacks": 1,
+      "error": "injected simulation failure",
+      "pending": true
+    },
+    {
+      "case": "primary",
+      "callbacks": 1,
+      "error": "Offline progress could not be saved",
+      "pending": true
+    },
+    {
+      "case": "recovery",
+      "callbacks": 1,
+      "error": null,
+      "pending": false
+    },
+    {
+      "case": "processing time 28800",
+      "kills": 303030,
+      "lastSeen": 1791390424477
+    },
+    {
+      "case": "processing time 259200",
+      "kills": 454230,
+      "lastSeen": 1791620824477
+    },
+    {
+      "case": "wall-clock jump -604800000",
+      "kills": 303030,
+      "lastSeen": 1790785624477
+    },
+    {
+      "case": "wall-clock jump 604800000",
+      "kills": 303030,
+      "lastSeen": 1791995224477
+    }
+  ],
+  "outputHashes": {
+    "stdout.json": {
+      "bytes": 2854,
+      "sha256": "c8f08952ac998d338917d88db096248d93990d8e6fc0d573e86314212d1ea881"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "coverage": "All original assertions executed: complete frozen state/summary, exact live/offline/split and256/31 yielding, common12h cap, study work, current/historical Prism rewards, cancellation/simulation/primary/recovery failures and retries, backup/reload, processing time and wall-clock jumps. New17 Tree nodes and training must each equal0 before only those additions are projected from historical comparison.",
+  "interpretation": "Local repaired test pass. Initial Forge CI38083768789 remains failed on original test bytes; mandatory CI must pass on the published repair before integration."
+}

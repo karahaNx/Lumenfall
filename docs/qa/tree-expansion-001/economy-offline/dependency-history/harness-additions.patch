@@ -1,0 +1,33 @@
+--- loaded-15fdf3e8.cjs
++++ final-bcf080ce.cjs
+@@ -66,7 +66,7 @@
+     offlineRate:offlineRate,offlineCap:offlineCapHours,policy:simulationPolicy,
+     save:saveState,export:currentSaveBackup,encode:encodeSaveBackup,decode:decodeSaveBackup,restore:restoreSaveBackup,
+     ascend:function(){return doAscend(false);},runToken:function(){return ascendRunToken;},advance:advanceAuthoritativeTime,offline:applyOfflineProgress,
+-    autoReady:autoAscendReady,queueTrial:queueCometTrial,cancelTrial:cancelCometTrial,
++    autoReady:autoAscendReady,checkAuto:function(){return checkAutoAscend();},queueTrial:queueCometTrial,cancelTrial:cancelCometTrial,
+     spawn:spawnEnemy,manualKill:defeatEnemy,
+     kill:function(kind){var summary=simulationSummary(0);simulationDefeatEnemy(simulationPolicy(kind||'live'),summary);return summary;},
+     cast:function(id,kind,at){var summary=simulationSummary(0);simulationTriggerAbility(qaSpirit(id),state.spirits[id],at===undefined?Date.now():at,simulationPolicy(kind||'live'),summary);return summary;},
+@@ -104,6 +104,9 @@
+     loseRollbackToken:function(){
+       var old=doAscend;doAscend=function(){var result=old.apply(this,arguments);if(result===false)ascendRunToken={};return result;};return function(){doAscend=old;};
+     },
++    ignoreAutoAscendResult:function(){
++      var old=checkAutoAscend;checkAutoAscend=function(){if(!autoAscendReady())return false;doAscend(true);return true;};return function(){checkAutoAscend=old;};
++    },
+     corruptPrice:function(){
+       var old=nodeCost;nodeCost=function(node){var result=old.apply(this,arguments);return node.id==='lumenmemory' && state.nodes[node.id]===0?result+1:result;};return function(){nodeCost=old;};
+     },
+@@ -111,6 +114,11 @@
+       var old=applyAscendMutation;
+       applyAscendMutation=function(){var before=JSON.parse(JSON.stringify(state)),gain=old.apply(this,arguments);observer({before:before,after:JSON.parse(JSON.stringify(state)),gain:gain});return gain;};
+       return function(){applyAscendMutation=old;};
++    },
++    observeAutoChecks:function(observer){
++      var old=checkAutoAscend;
++      checkAutoAscend=function(){var run=ascendRunToken,beforeDepth=state.depth,beforeCount=state.ascendCount,result=old.apply(this,arguments);observer({result:result,beforeDepth:beforeDepth,afterDepth:state.depth,beforeCount:beforeCount,afterCount:state.ascendCount,sameRun:run===ascendRunToken});return result;};
++      return function(){checkAutoAscend=old;};
+     },
+     observeSpawns:function(observer){
+       var old=spawnEnemy;spawnEnemy=function(){var result=old.apply(this,arguments);observer({depth:state.depth,enemyDepth:state.enemyDepth});return result;};return function(){spawnEnemy=old;};

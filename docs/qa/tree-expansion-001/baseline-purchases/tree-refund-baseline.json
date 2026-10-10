@@ -1,0 +1,420 @@
+{
+  "kind": "baseline-tree-delayed-F26-refund-interaction",
+  "commit": "2d01049393e3bb45a90d80e07af52ae0484b0ec5",
+  "sourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+  "harnessSha256": "185feb9242a3c8b5fac48871be20f61a119e2881e78191ecd832d12da16d9724",
+  "reproducerSha256": "67ab6e9332a6f1c3e5f0c302ddd7693894aace1605238e197de4e04708c0fe0e",
+  "node": "24.19.0",
+  "v8": "13.6.233.17-node.51",
+  "records": [
+    {
+      "fault": "none",
+      "before": {
+        "prisms": 18014398509481984,
+        "bonds": 8,
+        "reserves": 2,
+        "refund": {
+          "policy": "OFFLINE_12H_001:140/160:sum-ceil-6x1.6^level",
+          "offline24": false,
+          "offline48": false,
+          "reservesLevel": 2,
+          "comets": 0,
+          "prismPrices": [
+            6,
+            10
+          ],
+          "prismsExact": "16",
+          "cometsPaid": [
+            true,
+            true
+          ],
+          "prismsPaid": [
+            false,
+            false
+          ]
+        }
+      },
+      "plan": {
+        "affordable": true,
+        "reason": "available",
+        "level": 8,
+        "cost": 40
+      },
+      "returned": true,
+      "after": {
+        "prisms": 18014398509481960,
+        "bonds": 9,
+        "reserves": 2,
+        "refund": {
+          "policy": "OFFLINE_12H_001:140/160:sum-ceil-6x1.6^level",
+          "offline24": false,
+          "offline48": false,
+          "reservesLevel": 2,
+          "comets": 0,
+          "prismPrices": [
+            6,
+            10
+          ],
+          "prismsExact": "16",
+          "cometsPaid": [
+            true,
+            true
+          ],
+          "prismsPaid": [
+            true,
+            true
+          ]
+        }
+      },
+      "primary": {
+        "prisms": 18014398509481960,
+        "bonds": 9,
+        "reserves": 2,
+        "refund": {
+          "policy": "OFFLINE_12H_001:140/160:sum-ceil-6x1.6^level",
+          "offline24": false,
+          "offline48": false,
+          "reservesLevel": 2,
+          "comets": 0,
+          "prismPrices": [
+            6,
+            10
+          ],
+          "prismsExact": "16",
+          "cometsPaid": [
+            true,
+            true
+          ],
+          "prismsPaid": [
+            true,
+            true
+          ]
+        }
+      },
+      "recovery": {
+        "prisms": 18014398509481960,
+        "bonds": 9,
+        "reserves": 2,
+        "refund": {
+          "policy": "OFFLINE_12H_001:140/160:sum-ceil-6x1.6^level",
+          "offline24": false,
+          "offline48": false,
+          "reservesLevel": 2,
+          "comets": 0,
+          "prismPrices": [
+            6,
+            10
+          ],
+          "prismsExact": "16",
+          "cometsPaid": [
+            true,
+            true
+          ],
+          "prismsPaid": [
+            true,
+            true
+          ]
+        }
+      },
+      "reload": {
+        "prisms": 18014398509481960,
+        "bonds": 9,
+        "reserves": 2,
+        "refund": {
+          "policy": "OFFLINE_12H_001:140/160:sum-ceil-6x1.6^level",
+          "offline24": false,
+          "offline48": false,
+          "reservesLevel": 2,
+          "comets": 0,
+          "prismPrices": [
+            6,
+            10
+          ],
+          "prismsExact": "16",
+          "cometsPaid": [
+            true,
+            true
+          ],
+          "prismsPaid": [
+            true,
+            true
+          ]
+        }
+      },
+      "netWalletChange": -24
+    },
+    {
+      "fault": "primary",
+      "before": {
+        "prisms": 18014398509481984,
+        "bonds": 8,
+        "reserves": 2,
+        "refund": {
+          "policy": "OFFLINE_12H_001:140/160:sum-ceil-6x1.6^level",
+          "offline24": false,
+          "offline48": false,
+          "reservesLevel": 2,
+          "comets": 0,
+          "prismPrices": [
+            6,
+            10
+          ],
+          "prismsExact": "16",
+          "cometsPaid": [
+            true,
+            true
+          ],
+          "prismsPaid": [
+            false,
+            false
+          ]
+        }
+      },
+      "plan": {
+        "affordable": true,
+        "reason": "available",
+        "level": 8,
+        "cost": 40
+      },
+      "returned": true,
+      "after": {
+        "prisms": 18014398509481944,
+        "bonds": 9,
+        "reserves": 2,
+        "refund": {
+          "policy": "OFFLINE_12H_001:140/160:sum-ceil-6x1.6^level",
+          "offline24": false,
+          "offline48": false,
+          "reservesLevel": 2,
+          "comets": 0,
+          "prismPrices": [
+            6,
+            10
+          ],
+          "prismsExact": "16",
+          "cometsPaid": [
+            true,
+            true
+          ],
+          "prismsPaid": [
+            false,
+            false
+          ]
+        }
+      },
+      "primary": {
+        "prisms": 18014398509481984,
+        "bonds": 8,
+        "reserves": 2,
+        "refund": {
+          "policy": "OFFLINE_12H_001:140/160:sum-ceil-6x1.6^level",
+          "offline24": false,
+          "offline48": false,
+          "reservesLevel": 2,
+          "comets": 0,
+          "prismPrices": [
+            6,
+            10
+          ],
+          "prismsExact": "16",
+          "cometsPaid": [
+            true,
+            true
+          ],
+          "prismsPaid": [
+            false,
+            false
+          ]
+        }
+      },
+      "recovery": {
+        "prisms": 18014398509481984,
+        "bonds": 8,
+        "reserves": 2,
+        "refund": {
+          "policy": "OFFLINE_12H_001:140/160:sum-ceil-6x1.6^level",
+          "offline24": false,
+          "offline48": false,
+          "reservesLevel": 2,
+          "comets": 0,
+          "prismPrices": [
+            6,
+            10
+          ],
+          "prismsExact": "16",
+          "cometsPaid": [
+            true,
+            true
+          ],
+          "prismsPaid": [
+            false,
+            false
+          ]
+        }
+      },
+      "reload": {
+        "prisms": 18014398509481984,
+        "bonds": 8,
+        "reserves": 2,
+        "refund": {
+          "policy": "OFFLINE_12H_001:140/160:sum-ceil-6x1.6^level",
+          "offline24": false,
+          "offline48": false,
+          "reservesLevel": 2,
+          "comets": 0,
+          "prismPrices": [
+            6,
+            10
+          ],
+          "prismsExact": "16",
+          "cometsPaid": [
+            true,
+            true
+          ],
+          "prismsPaid": [
+            false,
+            false
+          ]
+        }
+      },
+      "netWalletChange": -40
+    },
+    {
+      "fault": "recovery",
+      "before": {
+        "prisms": 18014398509481984,
+        "bonds": 8,
+        "reserves": 2,
+        "refund": {
+          "policy": "OFFLINE_12H_001:140/160:sum-ceil-6x1.6^level",
+          "offline24": false,
+          "offline48": false,
+          "reservesLevel": 2,
+          "comets": 0,
+          "prismPrices": [
+            6,
+            10
+          ],
+          "prismsExact": "16",
+          "cometsPaid": [
+            true,
+            true
+          ],
+          "prismsPaid": [
+            false,
+            false
+          ]
+        }
+      },
+      "plan": {
+        "affordable": true,
+        "reason": "available",
+        "level": 8,
+        "cost": 40
+      },
+      "returned": true,
+      "after": {
+        "prisms": 18014398509481960,
+        "bonds": 9,
+        "reserves": 2,
+        "refund": {
+          "policy": "OFFLINE_12H_001:140/160:sum-ceil-6x1.6^level",
+          "offline24": false,
+          "offline48": false,
+          "reservesLevel": 2,
+          "comets": 0,
+          "prismPrices": [
+            6,
+            10
+          ],
+          "prismsExact": "16",
+          "cometsPaid": [
+            true,
+            true
+          ],
+          "prismsPaid": [
+            true,
+            true
+          ]
+        }
+      },
+      "primary": {
+        "prisms": 18014398509481960,
+        "bonds": 9,
+        "reserves": 2,
+        "refund": {
+          "policy": "OFFLINE_12H_001:140/160:sum-ceil-6x1.6^level",
+          "offline24": false,
+          "offline48": false,
+          "reservesLevel": 2,
+          "comets": 0,
+          "prismPrices": [
+            6,
+            10
+          ],
+          "prismsExact": "16",
+          "cometsPaid": [
+            true,
+            true
+          ],
+          "prismsPaid": [
+            true,
+            true
+          ]
+        }
+      },
+      "recovery": {
+        "prisms": 18014398509481984,
+        "bonds": 8,
+        "reserves": 2,
+        "refund": {
+          "policy": "OFFLINE_12H_001:140/160:sum-ceil-6x1.6^level",
+          "offline24": false,
+          "offline48": false,
+          "reservesLevel": 2,
+          "comets": 0,
+          "prismPrices": [
+            6,
+            10
+          ],
+          "prismsExact": "16",
+          "cometsPaid": [
+            true,
+            true
+          ],
+          "prismsPaid": [
+            false,
+            false
+          ]
+        }
+      },
+      "reload": {
+        "prisms": 18014398509481960,
+        "bonds": 9,
+        "reserves": 2,
+        "refund": {
+          "policy": "OFFLINE_12H_001:140/160:sum-ceil-6x1.6^level",
+          "offline24": false,
+          "offline48": false,
+          "reservesLevel": 2,
+          "comets": 0,
+          "prismPrices": [
+            6,
+            10
+          ],
+          "prismsExact": "16",
+          "cometsPaid": [
+            true,
+            true
+          ],
+          "prismsPaid": [
+            true,
+            true
+          ]
+        }
+      },
+      "netWalletChange": -24
+    }
+  ],
+  "scope": "Actual unchanged Tree/save/F26 code, controlled synthetic storage faults. Successful 40-Prism debit unlocks two old refunds totaling16; expected net wallet change is -24."
+}

@@ -1,0 +1,107 @@
+{
+  "sourceSha256": "b4343619242620a196651aafa6959abe37df875be8deefd6db3140f49c645c51",
+  "fixtureSha256": "ab43604db1b5bce8b9990506f989676dfb0009cdcf2e514a8ccee9da166c8753",
+  "runtime": "v24.19.0",
+  "v8": "13.6.233.17-node.51",
+  "runs": [
+    {
+      "id": "lab-boundary",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "tests/behavioral/lab-expansion-boundary.cjs",
+        "index.html",
+        "--negative"
+      ],
+      "scriptSha256": "4ba37b0b37723a37accb3051d82861a87fc101ae24dfdb231e2accaf2f73484d",
+      "exit": 0,
+      "signal": null,
+      "durationMs": 1062
+    },
+    {
+      "id": "lab-core",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "tests/behavioral/lab-expansion.cjs",
+        "index.html",
+        "--negative"
+      ],
+      "scriptSha256": "1efa11715a25c17efff19fb3a903b5a474004e12bf11fd4a448b08e6fecf0d72",
+      "exit": 1,
+      "signal": null,
+      "durationMs": 1146
+    },
+    {
+      "id": "lab-stress",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "tests/behavioral/lab-expansion-stress.cjs",
+        "index.html"
+      ],
+      "scriptSha256": "00022e87f3c7fd4d5d4c748faa64156e78cda35504eec3362f31145ab36a14a8",
+      "exit": 0,
+      "signal": null,
+      "durationMs": 1602
+    },
+    {
+      "id": "forge-core",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "tests/behavioral/forge-expansion.cjs",
+        "index.html",
+        "--negative"
+      ],
+      "scriptSha256": "64fc2471bac4b8ba2efd9adaa79c92e4091aa9f5c16a632096556bc539bd0e89",
+      "exit": 1,
+      "signal": null,
+      "durationMs": 2139
+    },
+    {
+      "id": "prism-state",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "tests/behavioral/prism-earning-state.cjs",
+        "index.html"
+      ],
+      "scriptSha256": "bbaa33852a9d90f5829df61d6b6be9326f769046a676fe2e4b94800273aa044e",
+      "exit": 0,
+      "signal": null,
+      "durationMs": 2456
+    },
+    {
+      "id": "identity-selftest",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "scripts/verify_apk_identity.cjs",
+        "--self-test"
+      ],
+      "scriptSha256": "f2b4a1439d4fd0a4311b9bb6bfb34586b52691fe7be90c13d8feb327e61841c3",
+      "exit": 0,
+      "signal": null,
+      "durationMs": 87
+    },
+    {
+      "id": "tooling",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "tests/tooling/run.cjs"
+      ],
+      "scriptSha256": "5b51f143c48881570d2b8cca2d474c4c7fe4f44bfb727acb5401dbb8925a7bf2",
+      "exit": 0,
+      "signal": null,
+      "durationMs": 1143
+    },
+    {
+      "id": "forge-calibration",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "tests/behavioral/forge-expansion-calibration.cjs",
+        "index.html",
+        "--negative"
+      ],
+      "scriptSha256": "ea5787eb14d63237c3cbe4687914c67935703cf81d1c176042c4473c40bad3f4",
+      "exit": 0,
+      "signal": null,
+      "durationMs": 18641
+    }
+  ]
+}

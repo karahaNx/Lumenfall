@@ -1,0 +1,98 @@
+{
+  "verifiedAt": "2026-10-10T20:20:22Z",
+  "clockSource": "clock__curr_time UTC supplied by caller",
+  "status": "pass",
+  "checks": 84,
+  "node": "v24.19.0",
+  "yamlParser": "PyYAML 6.0.3",
+  "yamlMode": "BaseLoader preserves the GitHub on key; structural assertions compare scalar strings",
+  "scope": "YAML parse, structural assertions, bash syntax and isolated mock negative-step contract only. No gameplay/browser/CI run.",
+  "baseline": "2d01049393e3bb45a90d80e07af52ae0484b0ec5",
+  "files": [
+    {
+      "path": ".github/workflows/pre-merge-validation.yml",
+      "sha256": "f0218e6b818970a8bacdf0f43431c89c94b8a7a85343be29b79bc1b99b23e818",
+      "gitBlob": "4c67564c7d30a51f618eb76f286cc34a4bf4f6d0"
+    },
+    {
+      "path": ".github/workflows/tree-focused-qa.yml",
+      "sha256": "4d8778abab15f004fdddb8a3580976d131767ef381515b50a6449f81be25e554",
+      "gitBlob": "9740959a724547d1cefed6952762a15da2e09fab"
+    }
+  ],
+  "negativeNames": [
+    "self-test-bad-assertion",
+    "self-test-uncaught-error",
+    "self-test-unhandled-rejection",
+    "self-test-parity-regression",
+    "self-test-chronology-regression",
+    "self-test-wisp-formula-regression",
+    "self-test-wisp-pacing-regression",
+    "self-test-endgame-currency-regression",
+    "self-test-wisp-role-regression",
+    "self-test-p1-05-selected",
+    "self-test-p1-05-focus-return",
+    "self-test-lifecycle-duplicate",
+    "self-test-save-backup-placement",
+    "self-test-save-backup-confirmation",
+    "self-test-upgrade-identity-buy",
+    "self-test-upgrade-identity-value",
+    "self-test-upgrade-identity-clock",
+    "self-test-ascend-prisms-tree",
+    "self-test-ascend-prisms-lab",
+    "self-test-ascend-prisms-payout",
+    "self-test-ascend-prisms-repeat",
+    "self-test-ascend-prisms-rounding"
+  ],
+  "mocks": [
+    {
+      "mode": "all-expected-failures",
+      "mockOnly": true,
+      "exitcode": 0,
+      "signal": null,
+      "caught": 22,
+      "stdoutSha256": "0a3108a37bcbacabb2b37320398e5fb8d67d1bed1f79e2726d4234452bb235c0",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "mode": "unexpected-success",
+      "mockOnly": true,
+      "exitcode": 1,
+      "signal": null,
+      "caught": 10,
+      "stdoutSha256": "1e53a7aaa4dc2999c827dc1fe784941e42195927d433f13ac37b66fae9d3c06d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "mode": "evidence-sink-failure",
+      "mockOnly": true,
+      "exitcode": 1,
+      "signal": null,
+      "caught": 0,
+      "stdoutSha256": "0a3108a37bcbacabb2b37320398e5fb8d67d1bed1f79e2726d4234452bb235c0",
+      "stderrSha256": "3cec2ae8ed04d2a1d29b8e90bd6ffb8b9ee40cc01500775d931cca4d0e4afd19"
+    }
+  ],
+  "treeEntryPoints": [
+    {
+      "path": "tests/behavioral/tree-expansion-core.cjs",
+      "exists": true
+    },
+    {
+      "path": "tests/behavioral/tree-expansion-offline.cjs",
+      "exists": true
+    },
+    {
+      "path": "tests/behavioral/tree-expansion-economy.cjs",
+      "exists": true
+    },
+    {
+      "path": "tests/behavioral/tree-expansion-mobile.cjs",
+      "exists": true
+    },
+    {
+      "path": "tests/behavioral/tree-expansion-v8.cjs",
+      "exists": true
+    }
+  ]
+}
