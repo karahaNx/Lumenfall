@@ -3048,6 +3048,259 @@ var LONG_STUDIES = [
   {id:'measuredinquiry', name:'Measured Inquiry', desc:'2% less work per completed level, up to 20%, for future starts of Wisp Ascendancy, Guardian’s Mastery, Shard Attunement, Lumen Wellspring and Luminous Sense. Running Studies and Measured Inquiry itself are unchanged.', unlockDepth:60, levelCap:10, baseDurationSec:600, durationGrowth:1.6, lumenBase:30000, lumenGrowth:1.8, shardBase:1200, shardGrowth:1.8}
 ];
 
+// LAB_EXPANSION_001: fourteen research tracks, separate from the original Deed
+// and Measured Inquiry target sets. No old ID, paid level or work is converted.
+var LAB_EXPANSION = [
+  {
+    "id": "labcapacity",
+    "name": "Expanded Apparatus",
+    "labGroup": "Laboratory",
+    "unlockDepth": 40,
+    "levelCap": 2,
+    "baseDurationSec": 1800,
+    "durationGrowth": 2,
+    "lumenBase": 20000,
+    "lumenGrowth": 2,
+    "shardBase": 2000,
+    "shardGrowth": 2,
+    "desc": "One extra concurrent Study slot per completed level, up to two extra. Existing slots and already-paid work stay."
+  },
+  {
+    "id": "procurement",
+    "name": "Research Procurement",
+    "labGroup": "Laboratory",
+    "unlockDepth": 25,
+    "levelCap": 10,
+    "baseDurationSec": 900,
+    "durationGrowth": 1.45,
+    "lumenBase": 12000,
+    "lumenGrowth": 1.55,
+    "shardBase": 600,
+    "shardGrowth": 1.55,
+    "desc": "2% lower Lumen and Shard prices per level for future Lab starts, up to 20%. Does not discount Research Procurement itself or refund running work."
+  },
+  {
+    "id": "catalysis",
+    "name": "Mote Catalysis",
+    "labGroup": "Laboratory",
+    "unlockDepth": 60,
+    "levelCap": 10,
+    "baseDurationSec": 1200,
+    "durationGrowth": 1.45,
+    "lumenBase": 40000,
+    "lumenGrowth": 1.55,
+    "shardBase": 1500,
+    "shardGrowth": 1.55,
+    "desc": "2% lower Mote prices per level for future Lab speed purchases, up to 20%. Paid speed is retained; each new Study level still pays its selected tier."
+  },
+  {
+    "id": "focusprotocol",
+    "name": "Focused Apparatus",
+    "labGroup": "Laboratory",
+    "unlockDepth": 40,
+    "levelCap": 5,
+    "baseDurationSec": 1200,
+    "durationGrowth": 1.5,
+    "lumenBase": 20000,
+    "lumenGrowth": 1.6,
+    "shardBase": 800,
+    "shardGrowth": 1.6,
+    "desc": "At the start of another Study, each unused slot saves 1% work per level, up to 30%. Work is then fixed: filling those slots later cannot change paid work. Does not shorten this project."
+  },
+  {
+    "id": "fieldnotes",
+    "name": "Field Notes",
+    "labGroup": "Laboratory",
+    "unlockDepth": 15,
+    "levelCap": 10,
+    "baseDurationSec": 600,
+    "durationGrowth": 1.45,
+    "lumenBase": 6000,
+    "lumenGrowth": 1.55,
+    "shardBase": 300,
+    "shardGrowth": 1.55,
+    "desc": "Each earned completion of another Study grants 2 Motes per completed Field Notes level. No reward from this project, rendering, loading or closing over-cap paid work."
+  },
+  {
+    "id": "curriculum",
+    "name": "Balanced Curriculum",
+    "labGroup": "Laboratory",
+    "unlockDepth": 60,
+    "levelCap": 3,
+    "baseDurationSec": 1500,
+    "durationGrowth": 1.6,
+    "lumenBase": 60000,
+    "lumenGrowth": 1.75,
+    "shardBase": 2000,
+    "shardGrowth": 1.75,
+    "desc": "Each different expansion project with an earned level saves 1% future work per Curriculum level, counting at most ten subjects. Maximum 30%; this project and running work are unchanged."
+  },
+  {
+    "id": "bossledger",
+    "name": "Boss Survey",
+    "labGroup": "Expedition",
+    "unlockDepth": 20,
+    "levelCap": 10,
+    "baseDurationSec": 720,
+    "durationGrowth": 1.45,
+    "lumenBase": 14000,
+    "lumenGrowth": 1.55,
+    "shardBase": 500,
+    "shardGrowth": 1.55,
+    "desc": "5% more Lumen and Shards from boss kills per level, up to 50%. Does not change ordinary kills, Sigils, Motes or ability rewards."
+  },
+  {
+    "id": "luminousdistill",
+    "name": "Luminous Distillation",
+    "labGroup": "Expedition",
+    "unlockDepth": 35,
+    "levelCap": 10,
+    "baseDurationSec": 960,
+    "durationGrowth": 1.45,
+    "lumenBase": 25000,
+    "lumenGrowth": 1.55,
+    "shardBase": 800,
+    "shardGrowth": 1.55,
+    "desc": "10% more Lumen and Shards from Luminous kills per level, up to 100%. Does not change encounter chance, Motes, bosses or ability rewards."
+  },
+  {
+    "id": "sigilcartography",
+    "name": "Sigil Cartography",
+    "labGroup": "Expedition",
+    "unlockDepth": 60,
+    "levelCap": 5,
+    "baseDurationSec": 1500,
+    "durationGrowth": 1.6,
+    "lumenBase": 80000,
+    "lumenGrowth": 1.7,
+    "shardBase": 3000,
+    "shardGrowth": 1.7,
+    "desc": "One additional Sigil per boss kill per completed level, up to five. No Sigils from ordinary enemies or ability casts."
+  },
+  {
+    "id": "rarityappraisal",
+    "name": "Rarity Appraisal",
+    "labGroup": "Refinement",
+    "unlockDepth": 15,
+    "levelCap": 10,
+    "baseDurationSec": 600,
+    "durationGrowth": 1.45,
+    "lumenBase": 8000,
+    "lumenGrowth": 1.55,
+    "shardBase": 500,
+    "shardGrowth": 1.55,
+    "desc": "2% fewer Shards for future Wisp Rarity upgrades per level, up to 20%. Lumen prices, earned tiers and their effects are unchanged."
+  },
+  {
+    "id": "modulefabrication",
+    "name": "Module Fabrication",
+    "labGroup": "Refinement",
+    "unlockDepth": 30,
+    "levelCap": 10,
+    "baseDurationSec": 900,
+    "durationGrowth": 1.45,
+    "lumenBase": 20000,
+    "lumenGrowth": 1.55,
+    "shardBase": 1000,
+    "shardGrowth": 1.55,
+    "desc": "2% lower Lumen and Shard prices for future Wisp Module upgrades per level, up to 20%. Existing Module levels and effects are unchanged."
+  },
+  {
+    "id": "ultimateanalysis",
+    "name": "Ultimate Analysis",
+    "labGroup": "Refinement",
+    "unlockDepth": 70,
+    "levelCap": 10,
+    "baseDurationSec": 1200,
+    "durationGrowth": 1.45,
+    "lumenBase": 100000,
+    "lumenGrowth": 1.6,
+    "shardBase": 4000,
+    "shardGrowth": 1.6,
+    "desc": "2% fewer Sigils for future Wisp Ultimate unlocks per level, up to 20%. Mythic requirement and Ultimate effects are unchanged."
+  },
+  {
+    "id": "resonantefficiency",
+    "name": "Resonance Efficiency",
+    "labGroup": "Refinement",
+    "unlockDepth": 50,
+    "levelCap": 5,
+    "baseDurationSec": 1000,
+    "durationGrowth": 1.5,
+    "lumenBase": 30000,
+    "lumenGrowth": 1.6,
+    "shardBase": 1200,
+    "shardGrowth": 1.6,
+    "desc": "Each completed level reduces an in-run Resonate refill by 2 Sigils, from 25 down to 15. Unlock conditions, refill amount and run limit are unchanged."
+  },
+  {
+    "id": "adaptivegrowth",
+    "name": "Adaptive Growth",
+    "labGroup": "Refinement",
+    "unlockDepth": 45,
+    "levelCap": 5,
+    "baseDurationSec": 1000,
+    "durationGrowth": 1.5,
+    "lumenBase": 30000,
+    "lumenGrowth": 1.6,
+    "shardBase": 1600,
+    "shardGrowth": 1.6,
+    "desc": "Each completed level reduces the Wisp level required for a future Rarity upgrade by one, up to five fewer levels. Never below level one; prices and Rarity bonuses are separate."
+  }
+];
+var LAB_EXPANSION_IDS = LAB_EXPANSION.map(function(node){return node.id;});
+var LAB_EXPANSION_CAPS = {};
+LAB_EXPANSION.forEach(function(node){LAB_EXPANSION_CAPS[node.id]=node.levelCap;LONG_STUDIES.push(node);});
+function labExpansionLevel(id){
+  var raw=state && state.longStudyLevels ? state.longStudyLevels[id] : 0;
+  return Math.min(LAB_EXPANSION_CAPS[id]||0,Math.max(0,Math.floor(raw||0)));
+}
+// Whole-currency prices round up. Split quotient/remainder avoids a rounded
+// v*percent product at safe-integer boundaries. Oversized legacy values retain
+// the Number fallback; no new gameplay cap or retroactive refund is introduced.
+function labDiscountCost(value,percent){
+  if(!percent || !value) return value;
+  if(Number.isSafeInteger(value) && value>=0)
+    return Math.max(1,value-(Math.floor(value/100)*percent+Math.floor((value%100)*percent/100)));
+  return Math.max(1,Math.ceil(value*(100-percent)/100));
+}
+function labCanPay(wallet,amount){
+  return Number.isFinite(wallet) && Number.isFinite(amount) && amount>=0 && wallet>=amount && wallet-(wallet-amount)===amount;
+}
+function labCurriculumSubjects(){
+  return Math.min(10,LAB_EXPANSION_IDS.filter(function(id){return id!=='curriculum' && labExpansionLevel(id)>0;}).length);
+}
+function labFutureWorkFactor(node){
+  var emptyAfterStart=Math.max(0,studySlotCount()-state.activeStudies.length-1);
+  var focus=node.id==='focusprotocol'?0:Math.min(30,emptyAfterStart*labExpansionLevel('focusprotocol'));
+  var breadth=node.id==='curriculum'?0:labCurriculumSubjects()*labExpansionLevel('curriculum');
+  return ((100-focus)/100)*((100-breadth)/100);
+}
+function labExpansionEffect(id,raw){
+  var level=Math.min(LAB_EXPANSION_CAPS[id],Math.max(0,Math.floor(raw||0)));
+  if(id==='labcapacity') return '+'+level+' concurrent Study slots (up to 2 extra)';
+  if(id==='procurement') return (2*level)+'% lower future Lab Lumen and Shard costs; excludes itself';
+  if(id==='catalysis') return (2*level)+'% lower Mote prices for future Lab speed purchases';
+  if(id==='focusprotocol') return level+'% less future work per unused slot after start, up to 30%; excludes itself';
+  if(id==='fieldnotes') return '+'+(2*level)+' Motes on each other earned Study completion';
+  if(id==='curriculum') return level+'% less future work per completed expansion subject, up to ten subjects; excludes itself';
+  if(id==='bossledger') return '+'+(5*level)+'% Lumen and Shards from bosses only';
+  if(id==='luminousdistill') return '+'+(10*level)+'% Lumen and Shards from Luminous kills only';
+  if(id==='sigilcartography') return '+'+level+' Sigils per boss kill';
+  if(id==='rarityappraisal') return (2*level)+'% lower Shard prices for future Rarity upgrades';
+  if(id==='modulefabrication') return (2*level)+'% lower Lumen and Shard prices for future Module upgrades';
+  if(id==='ultimateanalysis') return (2*level)+'% lower Sigil prices for future Ultimate unlocks';
+  if(id==='resonantefficiency') return (25-2*level)+' Sigils per in-run Resonate refill';
+  return level+' fewer Wisp levels required for a Rarity upgrade, never below level 1';
+}
+function labEncounterReward(value,depth,luminous){
+  var percent=isBoss(depth)?5*labExpansionLevel('bossledger'):luminous===true?10*labExpansionLevel('luminousdistill'):0;
+  if(!percent) return value;
+  var bonus=Number.isSafeInteger(value) && value>=0 ?
+    Math.floor(value/100)*percent+Math.floor(((value%100)*percent+50)/100):Math.round(value*percent/100);
+  return value+bonus;
+}
+
 var LAB_SPEED_TIERS = [1.5, 2, 3, 4, 5, 6, 7, 8];
 // One future purchase owner per effect. Old IDs and formula operands remain:
 // purchased levels and paid Study work retain their exact original value.
@@ -3068,7 +3321,7 @@ function legacyUpgradeSection(html){
   return html ? '<section class="legacy-upgrades" aria-label="Preserved upgrades"><h3>Preserved upgrades</h3>'+html+'</section>' : '';
 }
 function speedTierCost(mult){
-  return Math.round(6 * Math.pow(mult, 2.1));
+  return labDiscountCost(Math.round(6 * Math.pow(mult, 2.1)),2*labExpansionLevel('catalysis'));
 }
 
 var ACHIEVEMENTS = [
@@ -3146,7 +3399,7 @@ function deedPresentation(a){
     labmaster:['Gain 20 total levels in the 5 original Forge upgrades.','original Forge levels',scope],
     study1:['Complete one level in the 8 original Research Projects.','completed Project levels',studyScope+' Completed levels in preserved Projects also count.'],
     study25:['Complete 25 levels in total in the 8 original Research Projects.','completed Project levels',studyScope+' Completed levels in preserved Projects also count.'],
-    allstudies:['Complete at least one level in each of the 5 current Research Projects.','Projects completed','Counts Wisp Ascendancy, Guardian’s Mastery, Shard Attunement, Lumen Wellspring and Luminous Sense. Measured Inquiry does not count.'],
+    allstudies:['Complete at least one level in each of the 5 foundation Research Projects.','Projects completed','Counts Wisp Ascendancy, Guardian’s Mastery, Shard Attunement, Lumen Wellspring and Luminous Sense. Measured Inquiry does not count.'],
     labqueue:['Gain 60 total levels in the 5 original Forge upgrades.','original Forge levels',scope],
     firstultimate:['Unlock one Wisp Ultimate.','Ultimate unlocked'],
     modulemax:['Raise one Wisp Module to level 20.','levels on one Module','Uses your highest single Module level. Levels on different Wisps are not added together.']
@@ -3174,7 +3427,8 @@ function nodeEarnedEffect(id){
 }
 function projectEarnedEffect(id,level){
   if(level===undefined) level=longStudyLevel(id);
-  if(id==='measuredinquiry') return earnedPercent(0.02*studyEffectiveLevel(LONG_STUDIES.find(function(n){return n.id===id;}),level))+'% less work for future starts of the '+CURRENT_STUDY_IDS.length+' current Studies; running work and Measured Inquiry are unchanged';
+  if(LAB_EXPANSION_CAPS[id]) return labExpansionEffect(id,level);
+  if(id==='measuredinquiry') return earnedPercent(0.02*studyEffectiveLevel(LONG_STUDIES.find(function(n){return n.id===id;}),level))+'% less work for future starts of the '+CURRENT_STUDY_IDS.length+' foundation Studies; running work and Measured Inquiry are unchanged';
   var rows={
     wispascend:[level*0.15,'passive Wisp damage and Wisp-powered tap base'],
     guardmastery:[level*0.20,'tap damage'],
@@ -3784,7 +4038,7 @@ function normalizeCurrentSave(input){
     if(!Number.isFinite(remaining) || !Number.isFinite(total) || total<=0 || !validSpeed) return false;
     seenStudies[active.id] = true;
     return true;
-  }).slice(0,5).map(function(active){
+  }).slice(0,5+Math.min(2,out.longStudyLevels.labcapacity||0)).map(function(active){
     var total=Number(active.totalDurationSec);
     return {id:active.id,remainingSec:Math.max(0,Math.min(total,Number(active.remainingSec))),totalDurationSec:total,speedMult:Number(active.speedMult)};
   });
@@ -4137,7 +4391,7 @@ function costIcon(kind){
 
 // Presentation only: each displayed currency reads its own wallet, not button.disabled.
 function purchasePriceColor(kind,amount){
-  var key={lumen:'lumen',shard:'shards',prism:'prisms',comet:'comets'}[kind];
+  var key={lumen:'lumen',shard:'shards',prism:'prisms',comet:'comets',mote:'motes',sigil:'sigils'}[kind];
   return key && Number.isFinite(amount) && state[key]<amount ? 'var(--danger)' : 'var(--ink)';
 }
 function purchasePriceMarkup(kind,amount,classes,numberFirst){
@@ -4276,7 +4530,7 @@ function costReduction(){ return Math.min(0.6, nodeLevel('bonds')*0.03); }
 function offlineCapHours(){ return PRODUCTIVE_OFFLINE_CAP_SEC / 3600; }
 function eliteChance(depth,level){ return Math.min(0.35, Math.min(0.30, 0.03 + Math.floor(depth/10)*0.02) + researchBonus('luminoustracking',level)); }
 function motesDropFor(depth){ return Math.max(1, Math.round((1 + depth/8) * longStudyMoteMult() * formationRewardMult())); }
-function sigilsFromBoss(depth){ return Math.max(1, Math.floor(depth/10)); }
+function sigilsFromBoss(depth){ return Math.max(1, Math.floor(depth/10)) + labExpansionLevel('sigilcartography'); }
 
 function moduleLevel(id){ return (state.wispModules && state.wispModules[id]) || 0; }
 function moduleMult(id){ return 1 + moduleLevel(id)*0.05; }
@@ -4286,8 +4540,8 @@ function modulePacingMult(level){
 function moduleCost(sp, level){
   var pacing = modulePacingMult(level);
   return {
-    lumen: Math.round(sp.baseCost*4 * Math.pow(1.35, level) * pacing),
-    shard: Math.round(sp.baseCost*0.4 * Math.pow(1.35, level) * pacing)
+    lumen: labDiscountCost(Math.round(sp.baseCost*4 * Math.pow(1.35, level) * pacing),2*labExpansionLevel('modulefabrication')),
+    shard: labDiscountCost(Math.round(sp.baseCost*0.4 * Math.pow(1.35, level) * pacing),2*labExpansionLevel('modulefabrication'))
   };
 }
 function supportMoteBonus(){
@@ -4305,7 +4559,8 @@ function wispUpgradesMaxed(id){
   return (state.heroRarity[id]||0)>=RARITY_NAMES.length-1 &&
     moduleLevel(id)>=MODULE_MAX_LEVEL && ultimateUnlocked(id);
 }
-function ultimateSigilCost(sp){ return Math.round(5 + sp.unlockDepth*2); }
+function ultimateSigilCost(sp){ return labDiscountCost(Math.round(5 + sp.unlockDepth*2),2*labExpansionLevel('ultimateanalysis')); }
+function sigilResonanceCost(){ return SIGIL_RESONANCE_COST-2*labExpansionLevel('resonantefficiency'); }
 function totalUltimateSigilCost(){
   return SPIRITS.reduce(function(sum,sp){ return sum+ultimateSigilCost(sp); },0);
 }
@@ -4317,11 +4572,11 @@ function canSigilResonate(sp){
   if((state.spirits[sp.id]||0)<=0 || state.activeParty.indexOf(sp.id)===-1) return false;
   if((state.heroResource[sp.id]||0)>=100) return false;
   if((state.sigilResonanceUses||0)>=SIGIL_RESONANCE_RUN_LIMIT) return false;
-  return state.sigils>=SIGIL_RESONANCE_COST;
+  return state.sigils>=sigilResonanceCost();
 }
 function useSigilResonance(sp){
   if(!canSigilResonate(sp)) return false;
-  state.sigils-=SIGIL_RESONANCE_COST;
+  state.sigils-=sigilResonanceCost();
   state.sigilResonanceUses=(state.sigilResonanceUses||0)+1;
   state.heroResource[sp.id]=100;
   saveState();
@@ -4449,12 +4704,12 @@ function nodeCost(node){
  * remain valid even if they exceed a new current-run level requirement.
  */
 function rarityReq(tier){
-  return RARITY_LEVEL_REQUIREMENTS[Math.max(0,Math.min(RARITY_LEVEL_REQUIREMENTS.length-1,tier))];
+  return Math.max(1,RARITY_LEVEL_REQUIREMENTS[Math.max(0,Math.min(RARITY_LEVEL_REQUIREMENTS.length-1,tier))]-labExpansionLevel('adaptivegrowth'));
 }
 function rarityCost(sp, tier){
   tier = Math.max(0,Math.min(RARITY_SHARD_COSTS.length-1,tier));
   return {
-    shard: RARITY_SHARD_COSTS[tier],
+    shard: labDiscountCost(RARITY_SHARD_COSTS[tier],2*labExpansionLevel('rarityappraisal')),
     lumen: Math.round(sp.baseCost*RARITY_LUMEN_BASE_MULTS[tier])
   };
 }
@@ -4593,11 +4848,11 @@ function abilityResourceRates(){
 function enemyHpFor(depth){
   return Math.round(10 * Math.pow(1.145, depth) * (isBoss(depth)?6:1));
 }
-function enemyRewardFor(depth){
-  return Math.round(5 * Math.pow(1.11, depth) * (isBoss(depth)?8:1) * lumenMult() * formationRewardMult());
+function enemyRewardFor(depth,luminous){
+  return labEncounterReward(Math.round(5 * Math.pow(1.11, depth) * (isBoss(depth)?8:1) * lumenMult() * formationRewardMult()),depth,luminous);
 }
-function shardRewardFor(depth){
-  return Math.round(1 * Math.pow(1.09, depth) * (isBoss(depth)?5:1) * shardMult() * formationRewardMult());
+function shardRewardFor(depth,luminous){
+  return labEncounterReward(Math.round(1 * Math.pow(1.09, depth) * (isBoss(depth)?5:1) * shardMult() * formationRewardMult()),depth,luminous);
 }
 function enemyNameFor(depth){
   var adj = ENEMY_ADJ[depth % ENEMY_ADJ.length];
@@ -4743,8 +4998,8 @@ function dealDamage(amount){
 function defeatEnemy(){
   var defeatedDepth = state.depth;
   var previousMax = state.maxDepthEver;
-  var reward = enemyRewardFor(state.depth);
-  var shardGain = shardRewardFor(state.depth);
+  var reward = enemyRewardFor(state.depth,state.enemyIsLuminous);
+  var shardGain = shardRewardFor(state.depth,state.enemyIsLuminous);
   var wasLuminous = state.enemyIsLuminous;
   var wasBoss = isBoss(state.depth);
   var defeatedName = enemyNameFor(state.depth);
@@ -5388,12 +5643,15 @@ function measuredInquiryReduction(){
 }
 function studyDuration(node, level){
   var work=Math.round(node.baseDurationSec * Math.pow(node.durationGrowth, level));
-  return LEGACY_STUDY_IDS.indexOf(node.id)===-1 ? work : Math.round(work*(1-measuredInquiryReduction()));
+  work=LEGACY_STUDY_IDS.indexOf(node.id)===-1 ? work : Math.round(work*(1-measuredInquiryReduction()));
+  var factor=labFutureWorkFactor(node);
+  return factor===1 ? work : Math.max(1,Math.round(work*factor));
 }
 function studyCost(node, level){
+  var discount=node.id==='procurement'?0:2*labExpansionLevel('procurement');
   return {
-    lumen: Math.round(node.lumenBase * Math.pow(node.lumenGrowth, level)),
-    shard: Math.round(node.shardBase * Math.pow(node.shardGrowth, level))
+    lumen: labDiscountCost(Math.round(node.lumenBase * Math.pow(node.lumenGrowth, level)),discount),
+    shard: labDiscountCost(Math.round(node.shardBase * Math.pow(node.shardGrowth, level)),discount)
   };
 }
 function unlockedLongStudies(){
@@ -5401,11 +5659,8 @@ function unlockedLongStudies(){
 }
 function studySlotCount(){
   var n = unlockedLongStudies().filter(function(node){return LEGACY_STUDY_IDS.indexOf(node.id)!==-1;}).length;
-  if(n<=2) return 1;
-  if(n<=5) return 2;
-  if(n===6) return 3;
-  if(n===7) return 4;
-  return 5;
+  var base=n<=2?1:n<=5?2:n===6?3:n===7?4:5;
+  return base+labExpansionLevel('labcapacity');
 }
 function renderLabCapacityBadge(){
   var badge=els['lab-capacity-badge'];
@@ -5433,6 +5688,7 @@ function getStudyStartPlan(node){
   var reason=node.retiredTo ? 'retired' : !unlocked ? 'locked' : maxed ? 'maxed' : findActiveStudy(node.id) ? 'active' : state.activeStudies.length>=studySlotCount() ? 'slots' : !valid ? 'unavailable' : '';
   var eligible=!reason;
   if(eligible && (state.lumen<cost.lumen || state.shards<cost.shard)) reason='unaffordable';
+  else if(eligible && (!labCanPay(state.lumen,cost.lumen) || !labCanPay(state.shards,cost.shard))){reason='unavailable';eligible=false;}
   return {node:node,level:level,cost:cost,duration:duration,unlocked:unlocked,maxed:maxed,eligible:eligible,affordable:!reason,reason:reason};
 }
 function commitStudyStart(node){
@@ -5457,7 +5713,7 @@ function applySpeedTier(studyId, mult){
   if(node.levelCap!==undefined && longStudyLevel(studyId)>=node.levelCap) return false;
   if(mult<=active.speedMult) return false;
   var cost = speedTierCost(mult);
-  if(state.motes<cost) return false;
+  if(!labCanPay(state.motes,cost)) return false;
   state.motes -= cost;
   active.speedMult = mult;
   state.studySpeedTargets[studyId] = mult;
@@ -5469,7 +5725,9 @@ function applySpeedTier(studyId, mult){
 function studyMotesPlan(node){
   var active=findActiveStudy(node.id),target=state.studySpeedTargets[node.id];
   if(state.studyUseMotes[node.id]!==true || LAB_SPEED_TIERS.indexOf(target)===-1 || !active || active.remainingSec<=SIM_EPS || state.maxDepthEver<(node.unlockDepth||1) || (node.levelCap!==undefined && longStudyLevel(node.id)>=node.levelCap) || active.speedMult>=target) return null;
-  return {active:active,target:target,cost:speedTierCost(target)};
+  var cost=speedTierCost(target);
+  if(state.motes>=cost && !labCanPay(state.motes,cost)) return null;
+  return {active:active,target:target,cost:cost};
 }
 // Closing paid overcap work is progress, but is never an earned completion.
 function finishStudyRecord(index){
@@ -5477,9 +5735,11 @@ function finishStudyRecord(index){
   var node=LONG_STUDIES.find(function(n){return n.id===active.id;});
   var level=longStudyLevel(active.id);
   var earned=!!node && (node.levelCap===undefined || level<node.levelCap);
+  var moteBonus=earned && active.id!=='fieldnotes' ? 2*labExpansionLevel('fieldnotes') : 0;
   if(earned) state.longStudyLevels[active.id]=level+1;
+  if(moteBonus) state.motes+=moteBonus;
   state.activeStudies.splice(index,1);
-  return {earned:earned,name:node ? node.name : active.id};
+  return {earned:earned,name:node ? node.name : active.id,moteBonus:moteBonus};
 }
 function advanceActiveStudies(elapsedSec){
   var completed = [];
@@ -5841,7 +6101,7 @@ function presentControlStates(root){
         if((state.heroRarity[sp.id]||0)<RARITY_NAMES.length-1){kind='locked';reason='Mythic required';}
       }
       if(btn.hasAttribute('data-sigil-resonate')){
-        cost.sigil=SIGIL_RESONANCE_COST;
+        cost.sigil=sigilResonanceCost();
         if((state.sigilResonanceUses||0)>=SIGIL_RESONANCE_RUN_LIMIT){kind='unavailable';reason='Run limit reached';}
         else if((state.spirits[sp.id]||0)<=0 || state.activeParty.indexOf(sp.id)===-1){kind='unavailable';reason='Field this Wisp first';}
         else if((state.heroResource[sp.id]||0)>=100){kind='unavailable';reason='Ability already ready';}
@@ -6487,8 +6747,8 @@ function renderSpirits(){
     var resonanceHelpId = 'sigil-resonance-help-'+sp.id;
     var resonanceHtml = ultimateUnlocked(sp.id) ?
       (resonanceOwned ? '<button class="mini-btn sigil-resonance-btn" data-sigil-resonate="'+sp.id+'" aria-describedby="'+resonanceHelpId+'" '+(resonanceDisabled?'disabled':'')+'>Resonate — Fill ability to 100'+
-        '<span>'+SIGIL_RESONANCE_COST+' Sigils</span></button>' : '')+
-      '<p class="sigil-resonance-help" id="'+resonanceHelpId+'">Spend '+SIGIL_RESONANCE_COST+' Sigils to fill this Active Wisp\'s ability resource to 100. This is a refill, not a permanent upgrade. '+
+        '<span>'+sigilResonanceCost()+' Sigils</span></button>' : '')+
+      '<p class="sigil-resonance-help" id="'+resonanceHelpId+'">Spend '+sigilResonanceCost()+' Sigils to fill this Active Wisp\'s ability resource to 100. This is a refill, not a permanent upgrade. '+
         'Requires all Wisp Ultimates. '+(SIGIL_RESONANCE_RUN_LIMIT-resonanceUses)+' of '+SIGIL_RESONANCE_RUN_LIMIT+' uses left this run, shared across all Wisps. Resets on Ascend.</p>' : '';
     var ultimateHtml =
       '<div class="ultimate-row">' +
@@ -6676,7 +6936,7 @@ function studySpeedMarkup(node,active,maxed){
     (active?'<div class="speed-row">'+LAB_SPEED_TIERS.map(function(mult){
       var current=active.speedMult===mult,acquired=active.speedMult>=mult;
       return '<button class="speed-btn '+(current?'active':'')+'" data-speed="'+mult+'" data-speed-study="'+node.id+'" '+((acquired||state.motes<speedTierCost(mult)||maxed||active.remainingSec<=SIM_EPS)?'disabled':'')+'>'+mult+'x'+
-        '<span class="speed-cost">'+costIcon('mote')+formatNum(speedTierCost(mult))+'</span>'+(current?'Current':acquired?'Covered':maxed?'Unavailable':'')+'</button>';
+        purchasePriceMarkup('mote',speedTierCost(mult),'speed-cost')+(current?'Current':acquired?'Covered':maxed?'Unavailable':'')+'</button>';
     }).join('')+'</div>':'')+
     studyMotesMarkup(node)+
     '<p class="effect-note">Study Queue starts the next paid level at 1x. Queue speed up pays the full selected price for each active level when Motes are available, including offline. While waiting, work continues at its paid speed. OFF keeps speed already paid for.</p>'+
@@ -6728,17 +6988,19 @@ function renderLongStudies(){
   }
 
   html += '<h3 class="study-choices-title" id="study-choices" tabindex="-1">'+(openSlots>0 ? 'Choose a Study to begin' : 'Study choices — no open slots')+'</h3>';
-  var legacyHtml='';
+  var legacyHtml='',lastStudyGroup='';
   LONG_STUDIES.forEach(function(lnode){
     if(findActiveStudy(lnode.id)) return;
     if(lnode.retiredTo){
       if(longStudyLevel(lnode.id)>0) legacyHtml+=legacyUpgradeMarkup(lnode,projectEarnedMarkup(lnode.id));
       return;
     }
+    var group=lnode.labGroup||'Foundations';
+    if(group!==lastStudyGroup){html+='<h4 class="study-choices-title" data-study-group="'+group+'">'+group+'</h4>';lastStudyGroup=group;}
     var plan=getStudyStartPlan(lnode);
     if(!plan.unlocked){
       html += '<div class="card study-card locked-node" data-state="locked" aria-disabled="true" style="margin-bottom:10px;">' +
-        '<div class="name">???</div>' +
+        '<div class="name">'+(lnode.labGroup?lnode.name:'???')+'</div>' +
         '<div class="desc lock-note">Unlocks at Rift '+lnode.unlockDepth+'</div>' +
       '</div>';
       return;
@@ -6749,6 +7011,7 @@ function renderLongStudies(){
       '<div class="name">'+lnode.name+' <span style="color:var(--mote);">'+(plan.maxed?'Lv.'+level+' · Maxed':'Next Lv.'+(level+1))+'</span>' +
         ' <button class="node-queue-toggle '+(queueOn?'active':'')+'" data-study-queue="'+lnode.id+'">Queue '+(queueOn?'ON':'OFF')+'</button>' +
       '</div>' +
+      (lnode.labGroup?'<div class="desc">'+lnode.desc+'</div><div class="effect-note">Level '+level+' / '+lnode.levelCap+'</div>':'')+
       projectEarnedMarkup(lnode.id) +
       '<div class="effect-note">'+(plan.maxed?'Effect cap reached. Queue '+(queueOn?'ON':'OFF')+' retained; no new starts.':
         'On completion: '+projectEarnedEffect(lnode.id,level+1)+'.')+'</div>' +
@@ -6758,7 +7021,7 @@ function renderLongStudies(){
     '</div>';
   });
 
-  html += '<div class="section-sub">Lab: permanent damage, kill rewards, Mote yield and Study work. Slot capacity rises at Rift 40, 60 and 90. Studies share the 12-hour offline limit with rewards and automation. Study Queue begins its next paid level when a slot and currency are free.</div>';
+  html += '<div class="section-sub">Lab: 20 research tracks across Foundations, Laboratory, Expedition and Refinement. Lumen and Shards fund starts; Motes buy speed. Base slots rise at Rift 40, 60 and 90; Expanded Apparatus adds up to two. Studies share the 12-hour offline limit with rewards and automation. Study Queue begins its next paid level when a slot and currency are free.</div>';
   replaceControlMarkup(els['study-list'],html);
   if(focusedStudyChoices){
     var choicesFocus=document.getElementById('study-choices');
@@ -7144,7 +7407,7 @@ var ENCYCLOPEDIA_MECHANICS = [
   {name:'Tap damage (Guardian Tap)', meta:'Damage from tapping the enemy', desc:'This is your damage per tap on the enemy. Tap starts at 5 damage plus 2% of your general Active-Wisp passive power, then Tap upgrades apply. Support buffs and Guardian’s Mark also multiply it. Auto-Tap uses the same hit once per second.'},
   {name:'Rarity', meta:'Wisp progression', desc:'Rarity multiplies that Wisp’s Power, so it affects passive damage plus damaging/resource abilities. Every Rarity tier owned across the roster also adds +2% general passive-party power. Rarity does not strengthen Support buffs.'},
   {name:'Modules & Ultimates', meta:'Wisp progression', desc:'Modules are role-specific: Burst/Breaker Modules boost ability damage, Shard/Lumen Utility Modules boost their ability-generated resource, and Amplifier Modules boost Motes while Active. Ultimates double damage/resource ability output; Amplifier Ultimates change the buff from +25% for 4s to +50% for 8s.'},
-  {name:'Endgame Currency Utility', meta:'Economy rule', desc:'After all eight Ultimates are owned, Sigils can ready one Active Wisp ability for 25 Sigils, at most 3 times per Ascension run. Auto-Ascend plus Comet Trials unlock Quest Refresh; previous complete Rest Stop owners retain access. A refresh costs at least the richest quest reward, so refreshing cannot generate extra Comets.'},
+  {name:'Endgame Currency Utility', meta:'Economy rule', desc:'After all eight Ultimates are owned, Sigils can ready one Active Wisp ability for 25 Sigils before Lab discounts, at most 3 times per Ascension run. Resonance Efficiency can reduce the price to 15 Sigils; it does not change the refill or run limit. Auto-Ascend plus Comet Trials unlock Quest Refresh; previous complete Rest Stop owners retain access. A refresh costs at least the richest quest reward, so refreshing cannot generate extra Comets.'},
   {name:'Wisp Roles', meta:'Build label', desc:'Roles describe authoritative ability output: Burst delivers the highest raw ability coefficient; Breaker delivers heavy ability hits; Amplifier buffs passive Wisp damage and your tap damage; Shard Utility and Lumen Utility add their named resource to ability casts. These are output and utility roles, not defensive combat roles.'},
   {name:'Ascend', meta:'Permanent progression', desc:'After clearing at least 15 Rifts, restart the run for Prisms. Repeats keep 20% of the unupgraded base plus the full earned upgrade bonus, rounded down once. Clearing beyond your best rewarded Rift adds a new-depth bonus. Permanent systems stay.'},
   {name:'Luminous Enemies', meta:'Rare encounter', desc:'Rare non-boss enemies that drop Motes. Their appearance chance rises as you push deeper.'},
@@ -7663,7 +7926,7 @@ function simulationCompleteDueStudies(summary){
     var active = state.activeStudies[i];
     if(active.remainingSec>SIM_EPS) continue;
     var result=finishStudyRecord(i);
-    if(result.earned){summary.completedStudies.push(result.name);earned++;}
+    if(result.earned){summary.completedStudies.push(result.name);summary.motesGained+=result.moteBonus||0;earned++;}
     else summary.closedStudies.push(result.name);
     handled++;
   }
@@ -7755,6 +8018,38 @@ function simulationKillsUntilStudyMotes(){
   });
   return best;
 }
+// Luminous material research can make a queued purchase affordable earlier.
+// Search the same monotone normal/Luminous batch rewards used by actual Farm.
+// The original fast boundary is unchanged when this research is not owned.
+function simulationLabCurrencyKillsNeeded(cost,lumenPerKill,shardPerKill,rewardScale){
+  var upper=simulationCurrencyKillsNeeded(cost,lumenPerKill,shardPerKill);
+  if(!labExpansionLevel('luminousdistill') || upper<=0 || !Number.isFinite(upper)) return upper;
+  var depth=state.farmDepth||state.depth;
+  var extraLumen=(enemyRewardFor(depth,true)-enemyRewardFor(depth))*rewardScale;
+  var extraShard=(shardRewardFor(depth,true)-shardRewardFor(depth))*rewardScale;
+  var accum=Math.max(0,Math.min(0.999999999999,state.luminousAccum||0)),chance=eliteChance(depth);
+  function enough(count){
+    var luminous=state.enemyIsLuminous?1:0;
+    if(count>1) luminous+=Math.floor(accum+(count-1)*chance+1e-12);
+    // Match the actual batch credit: wallet + (normal gain + Luminous gain).
+    // Adding the wallet first can round a fractional offline balance below the
+    // price and postpone an already-affordable queued purchase by one kill.
+    return state.lumen+(lumenPerKill*count+extraLumen*luminous)>=cost.lumen &&
+      state.shards+(shardPerKill*count+extraShard*luminous)>=cost.shard;
+  }
+  var low=1,high=Math.min(Number.MAX_SAFE_INTEGER,upper);
+  // The legacy deficit estimate contains an epsilon and is only a hint. First
+  // establish a genuinely affordable upper bound, including a one-kill hint.
+  // Doubling is bounded by the largest exactly representable integer count.
+  while(!enough(high)){
+    // If no safe count can pay, preserve the legacy large-count estimate.
+    // An unsafe normal estimate must still allow an earlier safe Luminous buy.
+    if(high===Number.MAX_SAFE_INTEGER) return Math.max(upper,Number.MAX_SAFE_INTEGER+1);
+    high=Math.min(Number.MAX_SAFE_INTEGER,Math.max(high+1,high*2));
+  }
+  while(low<high){var middle=low+Math.floor((high-low)/2);if(enough(middle)) high=middle;else low=middle+1;}
+  return low;
+}
 function simulationKillsUntilEconomyMutation(rewardScale){
   var depth = state.farmDepth||state.depth;
   var lumenPerKill = enemyRewardFor(depth)*rewardScale;
@@ -7766,7 +8061,7 @@ function simulationKillsUntilEconomyMutation(rewardScale){
     var eligibility = researchEligibility(node);
     if(!eligibility.unlocked || eligibility.maxed) return;
     var cost = researchCostForLevels(node,state.research[node.id],1);
-    best = Math.min(best,simulationCurrencyKillsNeeded(cost,lumenPerKill,shardPerKill));
+    best = Math.min(best,simulationLabCurrencyKillsNeeded(cost,lumenPerKill,shardPerKill,rewardScale));
   });
 
   if(state.activeStudies.length<studySlotCount()){
@@ -7774,7 +8069,7 @@ function simulationKillsUntilEconomyMutation(rewardScale){
       if(!state.studyQueue[node.id]) return;
       var plan=getStudyStartPlan(node);
       if(!plan.eligible) return;
-      best = Math.min(best,simulationCurrencyKillsNeeded(plan.cost,lumenPerKill,shardPerKill));
+      best = Math.min(best,simulationLabCurrencyKillsNeeded(plan.cost,lumenPerKill,shardPerKill,rewardScale));
     });
   }
   return best;
@@ -7802,8 +8097,8 @@ function simulationDefeatEnemy(policy,summary){
   var wasBoss = isBoss(depth);
   var wasLuminous = !!state.enemyIsLuminous;
   var rewardScale = simulationRewardScale(policy);
-  var lumenGain = enemyRewardFor(depth)*rewardScale;
-  var shardGain = shardRewardFor(depth)*rewardScale;
+  var lumenGain = enemyRewardFor(depth,wasLuminous)*rewardScale;
+  var shardGain = shardRewardFor(depth,wasLuminous)*rewardScale;
 
   gainLumen(lumenGain);
   state.shards += shardGain;
@@ -7854,6 +8149,10 @@ function simulationBatchFarmKills(count,policy,summary){
 
   if(count>1){
     luminousKills += Math.floor(startAccum+(count-1)*chance+1e-12);
+  }
+  if(luminousKills && labExpansionLevel('luminousdistill')){
+    lumenGain+=(enemyRewardFor(depth,true)-enemyRewardFor(depth))*rewardScale*luminousKills;
+    shardGain+=(shardRewardFor(depth,true)-shardRewardFor(depth))*rewardScale*luminousKills;
   }
 
   var afterSpawns = startAccum+count*chance;
@@ -8638,7 +8937,7 @@ function tick(){
     renderAchievements();
     renderNodes();
   }
-  if(sim.empowers>0) renderSpirits();
+  if(sim.empowers>0 || sim.completedStudies.length>0) renderSpirits();
   if(sim.researchBought>0) renderResearch();
   if(sim.studySpeedPurchases>0) saveState();
   if(sim.completedStudies.length || sim.closedStudies.length || sim.studiesStarted>0 || sim.studySpeedPurchases>0) renderLongStudies();

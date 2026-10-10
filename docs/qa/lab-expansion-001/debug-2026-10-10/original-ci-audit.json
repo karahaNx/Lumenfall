@@ -1,0 +1,934 @@
+{
+  "auditStatus": "Read-only GitHub workflow and artifact audit; no repository mutations or reruns performed.",
+  "head": "14ffbeb447f7a5ddc05e96c333b539d0f8a985f4",
+  "testedCommit": "1c91fbb82db581a1185cbcc4bceb2a64581dbb25",
+  "labTestedCommit": "1c91fbb82db581a1185cbcc4bceb2a64581dbb25",
+  "sourceSha256": "498e92acfb799ce814d1035c8a58c9b47b1e586f48e08d4d9dcad4673bfef1d4",
+  "labSourceSha256": "498e92acfb799ce814d1035c8a58c9b47b1e586f48e08d4d9dcad4673bfef1d4",
+  "preMerge": {
+    "runId": 38005987252,
+    "jobId": 114074842845,
+    "status": "completed",
+    "conclusion": "success",
+    "finalSummary": "Behavioral QA passed: 182 deterministic scenario(s).",
+    "deterministicScenarioCount": 182,
+    "passRows": 212,
+    "failRows": [],
+    "allPassRows": [
+      "PASS resonate-clarity",
+      "PASS upgrade-identity-contracts",
+      "PASS upgrade-identity-chronology",
+      "PASS upgrade-identity-farm-clock",
+      "PASS upgrade-identity-save-reload",
+      "PASS upgrade-identity-backup-restore",
+      "PASS upgrade-identity-recovery",
+      "PASS upgrade-identity-ui [320,844,0,0]",
+      "PASS upgrade-identity-ui [390,844,0,0]",
+      "PASS upgrade-identity-ui [430,844,0,0]",
+      "PASS upgrade-identity-reduced-motion [320,844,0,0]",
+      "PASS upgrade-identity-reduced-motion [390,844,0,0]",
+      "PASS upgrade-identity-reduced-motion [430,844,0,0]",
+      "PASS wisp-upgrade-display",
+      "PASS comet-unlocks-core",
+      "PASS comet-unlocks-mobile",
+      "PASS comet-unlocks-reduced-motion",
+      "PASS lab-motes-offline-integration",
+      "PASS lab-motes-numerical",
+      "PASS lab-motes-runtime",
+      "PASS lab-motes-conservation",
+      "PASS lab-motes-contracts",
+      "PASS lab-motes-chronology",
+      "PASS lab-motes-ui [320,844,0,0]",
+      "PASS lab-motes-ui [390,844,0,0]",
+      "PASS lab-motes-ui [430,844,0,0]",
+      "PASS lab-motes-native",
+      "PASS lab-motes-reduced-motion",
+      "PASS lab-motes-save-reload",
+      "PASS lab-motes-backup-restore",
+      "PASS lab-motes-recovery",
+      "PASS lab-motes-reset",
+      "PASS save-backup-ui",
+      "PASS offline-catchup-core",
+      "PASS offline-12h-core",
+      "PASS offline-12h-ui",
+      "PASS offline-catchup-ui",
+      "PASS offline-catchup-legacy-dom",
+      "PASS nav-workshop-contract",
+      "PASS inquiry-contracts",
+      "PASS inquiry-chronology",
+      "PASS inquiry-ui",
+      "PASS inquiry-ui-reduced-motion",
+      "PASS inquiry-save-reload",
+      "PASS inquiry-backup-restore",
+      "PASS inquiry-recovery",
+      "PASS inquiry-reset",
+      "PASS raw-process-contract: 31 result controls, real timeout, artifact bounds, two causal negatives/undo",
+      "PASS support-stacking",
+      "PASS auto-ascend-target-contract",
+      "PASS auto-ascend-target-legacy16",
+      "PASS auto-ascend-target-legacy44",
+      "PASS auto-ascend-target-legacy56",
+      "PASS auto-ascend-target-legacy130",
+      "PASS auto-ascend-target-recovery",
+      "PASS auto-ascend-target-resume",
+      "PASS auto-ascend-target-reset",
+      "PASS auto-ascend-target-manual-reload",
+      "PASS auto-ascend-target-cold-resume",
+      "PASS auto-ascend-target-mobile",
+      "PASS auto-ascend-target-reduced-motion",
+      "PASS rift-status-stacking-mobile",
+      "PASS rift-status-stacking-reduced-motion",
+      "PASS support-save-reload",
+      "PASS support-backup-restore",
+      "PASS support-recovery",
+      "PASS support-resume",
+      "PASS support-recovery-resume",
+      "PASS support-visibility-resume",
+      "PASS support-reset",
+      "PASS upgrade-effects-and-deeds",
+      "PASS tree-purchase-contract",
+      "PASS tree-purchase-ui [320,844,0,0]",
+      "PASS tree-purchase-ui [390,844,0,0]",
+      "PASS tree-purchase-ui [430,844,0,0]",
+      "PASS tree-purchase-ui-reduced-motion [320,844,0,0]",
+      "PASS tree-purchase-ui-reduced-motion [390,844,0,0]",
+      "PASS tree-purchase-ui-reduced-motion [430,844,0,0]",
+      "PASS rift-status-contract",
+      "PASS bond-text-contract",
+      "PASS rift-status-mobile",
+      "PASS rift-guidance-mobile",
+      "PASS rift-status-reduced-motion",
+      "PASS forge-ui-process-contract",
+      "PASS forge-ui-mobile",
+      "PASS forge-ui-reduced-motion",
+      "PASS buff-timing",
+      "PASS buff-save-reload",
+      "PASS forge-contracts",
+      "PASS forge-effects",
+      "PASS forge-chronology",
+      "PASS forge-save-reload",
+      "PASS loadout-memory-core",
+      "PASS loadout-memory-mobile",
+      "PASS forge-backup-restore",
+      "PASS forge-recovery",
+      "PASS forge-baseline",
+      "PASS forge-balance",
+      "PASS r3-destinations",
+      "PASS r3-save-reload",
+      "PASS research-duration",
+      "PASS research-duration-reduced-motion",
+      "PASS p2-07a-persistence-review",
+      "PASS p2-07a-persist-save-reload",
+      "PASS p2-07a-persist-backup-restore",
+      "PASS p2-07a-persist-recovery",
+      "PASS p2-07a-persist-reset",
+      "PASS p2-07a-formation-reconstruction",
+      "PASS p2-07a-save-reload",
+      "PASS p2-07a-backup-restore",
+      "PASS p2-07a-recovery",
+      "PASS p2-07a-chronology",
+      "PASS layout-p2-07a-reconstruction [360,800,0,0]",
+      "PASS layout-p2-07a-reconstruction [360,780,0,0]",
+      "PASS layout-p2-07a-reconstruction [390,844,0,0]",
+      "PASS layout-p2-07a-reconstruction [412,915,0,0]",
+      "PASS layout-p2-07a-reconstruction [360,640,24,24]",
+      "PASS p2-06b-live-feedback",
+      "PASS p2-06b-reduced-motion",
+      "PASS layout-fresh [360,800,0,0]",
+      "PASS layout-fresh [360,780,0,0]",
+      "PASS layout-fresh [390,844,0,0]",
+      "PASS layout-fresh [412,915,0,0]",
+      "PASS layout-fresh [360,640,24,24]",
+      "PASS layout-dense [360,800,0,0]",
+      "PASS layout-dense [360,780,0,0]",
+      "PASS layout-dense [390,844,0,0]",
+      "PASS layout-dense [412,915,0,0]",
+      "PASS layout-dense [360,640,24,24]",
+      "PASS layout-boss [360,800,0,0]",
+      "PASS layout-boss [360,780,0,0]",
+      "PASS layout-boss [390,844,0,0]",
+      "PASS layout-boss [412,915,0,0]",
+      "PASS layout-boss [360,640,24,24]",
+      "PASS layout-accessibility-states [360,800,0,0]",
+      "PASS layout-accessibility-states [360,780,0,0]",
+      "PASS layout-accessibility-states [390,844,0,0]",
+      "PASS layout-accessibility-states [412,915,0,0]",
+      "PASS layout-accessibility-states [360,640,24,24]",
+      "PASS p1-05-accessibility-baseline",
+      "PASS p1-05-accessibility-contract",
+      "PASS p1-05-control-regressions",
+      "PASS p1-05-reduced-motion",
+      "PASS fresh-load",
+      "PASS midgame-load",
+      "PASS mature-load",
+      "PASS legacy-load",
+      "PASS corrupted-load",
+      "PASS malformed-daily-load",
+      "PASS farm-load",
+      "PASS farm-roundtrip",
+      "PASS enemy-normal-reload",
+      "PASS enemy-boss-reload",
+      "PASS active-studies-load",
+      "PASS auto-ascend-load",
+      "PASS reset-roundtrip",
+      "PASS restore-roundtrip",
+      "PASS malformed-backup-rejection",
+      "PASS recovery-from-corrupt-primary",
+      "PASS unsupported-future-load",
+      "PASS legacy-backup-restore",
+      "PASS future-backup-rejection",
+      "PASS recovery-offline-once",
+      "PASS save-failure-warning",
+      "PASS parity-short",
+      "PASS parity-medium-farm",
+      "PASS p2-07a-farm-retention",
+      "PASS p2-07a-timer-boundary",
+      "PASS parity-long-high-power",
+      "PASS parity-boss-short",
+      "PASS parity-boss-retry",
+      "PASS parity-auto-ascend",
+      "PASS chronology-research-mid-window",
+      "PASS chronology-study-mid-window",
+      "PASS chronology-auto-empower-mid-window",
+      "PASS chronology-auto-ascend-mid-window",
+      "PASS chronology-boss-retry",
+      "PASS chronology-simultaneous-order",
+      "PASS lifecycle-background-resume",
+      "PASS lifecycle-repeated-resume",
+      "PASS lifecycle-cold-restart",
+      "PASS lifecycle-partial-enemy",
+      "PASS lifecycle-boss-background-short",
+      "PASS lifecycle-boss-retry",
+      "PASS lifecycle-auto-ascend",
+      "PASS p2-ascend-integrity",
+      "PASS p2-03b-auto-ascend-integrity",
+      "PASS p2-wisp-progression-pacing",
+      "PASS p2-endgame-currency-utility",
+      "PASS p2-03a-wisp-role-integrity",
+      "PASS p2-03a-wisp-role-integrity-mature",
+      "PASS p2-03a-wisp-role-integrity-endgame",
+      "PASS p2-02a-core-qol",
+      "PASS p2-02b-wisp-hierarchy",
+      "PASS p2-02b-lab-hierarchy",
+      "PASS lifecycle-long-study",
+      "PASS lifecycle-lab-queue",
+      "PASS lifecycle-daily-rollover",
+      "PASS wisp-formula-contract",
+      "PASS formation-bonds-core",
+      "PASS formation-bonds-mobile",
+      "PASS auto-ascend-target-backup-restore",
+      "PASS formation-autosave-contract",
+      "PASS formation-autosave-native",
+      "PASS formation-autosave-reduced-motion",
+      "PASS formation-autosave-save-reload",
+      "PASS formation-autosave-backup-restore",
+      "PASS formation-autosave-recovery",
+      "PASS ascend-prisms-contract",
+      "PASS ascend-prisms-save-reload",
+      "PASS ascend-prisms-backup-restore",
+      "PASS ascend-prisms-recovery"
+    ],
+    "formerScrollFailures": [
+      {
+        "scenario": "rift-status-stacking-mobile",
+        "process": {
+          "exitcode": 0,
+          "timed_out": false,
+          "stderr": ""
+        },
+        "status": "pass",
+        "profiles": [
+          {
+            "profile": "360x640-safe0-no-preference",
+            "researchControls": [
+              {
+                "state": "fresh",
+                "view": "research",
+                "text": "Speed up",
+                "x": 60.0234375,
+                "y": 531.90625,
+                "scroll": 527
+              },
+              {
+                "state": "dense",
+                "view": "research",
+                "text": "Speed up",
+                "x": 60.0234375,
+                "y": 531.84375,
+                "scroll": 7805
+              },
+              {
+                "state": "boss",
+                "view": "research",
+                "text": "Close speed up",
+                "x": 78.2734375,
+                "y": 531.84375,
+                "scroll": 7805
+              }
+            ]
+          },
+          {
+            "profile": "360x640-safe24-no-preference",
+            "researchControls": [
+              {
+                "state": "fresh",
+                "view": "research",
+                "text": "Speed up",
+                "x": 60.0234375,
+                "y": 507.90625,
+                "scroll": 575
+              },
+              {
+                "state": "dense",
+                "view": "research",
+                "text": "Speed up",
+                "x": 60.0234375,
+                "y": 507.84375,
+                "scroll": 7853
+              },
+              {
+                "state": "boss",
+                "view": "research",
+                "text": "Close speed up",
+                "x": 78.2734375,
+                "y": 507.84375,
+                "scroll": 7853
+              }
+            ]
+          },
+          {
+            "profile": "390x844-safe24-no-preference",
+            "researchControls": [
+              {
+                "state": "fresh",
+                "view": "research",
+                "text": "Speed up",
+                "x": 63.0234375,
+                "y": 731.90625,
+                "scroll": 409
+              },
+              {
+                "state": "dense",
+                "view": "research",
+                "text": "Speed up",
+                "x": 63.0234375,
+                "y": 706.375,
+                "scroll": 7437
+              },
+              {
+                "state": "boss",
+                "view": "research",
+                "text": "Close speed up",
+                "x": 81.2734375,
+                "y": 706.375,
+                "scroll": 7437
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "scenario": "rift-status-stacking-reduced-motion",
+        "process": {
+          "exitcode": 0,
+          "timed_out": false,
+          "stderr": ""
+        },
+        "status": "pass",
+        "profiles": [
+          {
+            "profile": "360x640-safe0-reduce",
+            "researchControls": [
+              {
+                "state": "fresh",
+                "view": "research",
+                "text": "Speed up",
+                "x": 60.0234375,
+                "y": 531.90625,
+                "scroll": 527
+              },
+              {
+                "state": "dense",
+                "view": "research",
+                "text": "Speed up",
+                "x": 60.0234375,
+                "y": 531.84375,
+                "scroll": 7805
+              },
+              {
+                "state": "boss",
+                "view": "research",
+                "text": "Close speed up",
+                "x": 78.2734375,
+                "y": 531.84375,
+                "scroll": 7805
+              }
+            ]
+          },
+          {
+            "profile": "360x640-safe24-reduce",
+            "researchControls": [
+              {
+                "state": "fresh",
+                "view": "research",
+                "text": "Speed up",
+                "x": 60.0234375,
+                "y": 507.90625,
+                "scroll": 575
+              },
+              {
+                "state": "dense",
+                "view": "research",
+                "text": "Speed up",
+                "x": 60.0234375,
+                "y": 507.84375,
+                "scroll": 7853
+              },
+              {
+                "state": "boss",
+                "view": "research",
+                "text": "Close speed up",
+                "x": 78.2734375,
+                "y": 507.84375,
+                "scroll": 7853
+              }
+            ]
+          },
+          {
+            "profile": "390x844-safe24-reduce",
+            "researchControls": [
+              {
+                "state": "fresh",
+                "view": "research",
+                "text": "Speed up",
+                "x": 63.0234375,
+                "y": 705.90625,
+                "scroll": 435
+              },
+              {
+                "state": "dense",
+                "view": "research",
+                "text": "Speed up",
+                "x": 63.0234375,
+                "y": 705.375,
+                "scroll": 7438
+              },
+              {
+                "state": "boss",
+                "view": "research",
+                "text": "Close speed up",
+                "x": 81.2734375,
+                "y": 705.375,
+                "scroll": 7438
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "scenario": "rift-status-reduced-motion",
+        "process": {
+          "exitcode": 0,
+          "timed_out": false,
+          "stderr": ""
+        },
+        "status": "pass",
+        "profiles": [
+          {
+            "profile": "360x640-safe0-reduce",
+            "researchControls": [
+              {
+                "state": "fresh",
+                "view": "research",
+                "text": "Speed up",
+                "x": 60.0234375,
+                "y": 531.90625,
+                "scroll": 527
+              },
+              {
+                "state": "dense",
+                "view": "research",
+                "text": "Speed up",
+                "x": 60.0234375,
+                "y": 531.84375,
+                "scroll": 7805
+              },
+              {
+                "state": "boss",
+                "view": "research",
+                "text": "Close speed up",
+                "x": 78.2734375,
+                "y": 531.84375,
+                "scroll": 7805
+              }
+            ]
+          },
+          {
+            "profile": "360x640-safe24-reduce",
+            "researchControls": [
+              {
+                "state": "fresh",
+                "view": "research",
+                "text": "Speed up",
+                "x": 60.0234375,
+                "y": 507.90625,
+                "scroll": 575
+              },
+              {
+                "state": "dense",
+                "view": "research",
+                "text": "Speed up",
+                "x": 60.0234375,
+                "y": 507.84375,
+                "scroll": 7853
+              },
+              {
+                "state": "boss",
+                "view": "research",
+                "text": "Close speed up",
+                "x": 78.2734375,
+                "y": 507.84375,
+                "scroll": 7853
+              }
+            ]
+          },
+          {
+            "profile": "390x844-safe24-reduce",
+            "researchControls": [
+              {
+                "state": "fresh",
+                "view": "research",
+                "text": "Speed up",
+                "x": 63.0234375,
+                "y": 705.90625,
+                "scroll": 435
+              },
+              {
+                "state": "dense",
+                "view": "research",
+                "text": "Speed up",
+                "x": 63.0234375,
+                "y": 705.375,
+                "scroll": 7438
+              },
+              {
+                "state": "boss",
+                "view": "research",
+                "text": "Close speed up",
+                "x": 81.2734375,
+                "y": 705.375,
+                "scroll": 7438
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "negativeSelfTest": {
+      "count": 22,
+      "names": [
+        "self-test-bad-assertion",
+        "self-test-uncaught-error",
+        "self-test-unhandled-rejection",
+        "self-test-parity-regression",
+        "self-test-chronology-regression",
+        "self-test-wisp-formula-regression",
+        "self-test-wisp-pacing-regression",
+        "self-test-endgame-currency-regression",
+        "self-test-wisp-role-regression",
+        "self-test-p1-05-selected",
+        "self-test-p1-05-focus-return",
+        "self-test-lifecycle-duplicate",
+        "self-test-save-backup-placement",
+        "self-test-save-backup-confirmation",
+        "self-test-upgrade-identity-buy",
+        "self-test-upgrade-identity-value",
+        "self-test-upgrade-identity-clock",
+        "self-test-ascend-prisms-tree",
+        "self-test-ascend-prisms-lab",
+        "self-test-ascend-prisms-payout",
+        "self-test-ascend-prisms-repeat",
+        "self-test-ascend-prisms-rounding"
+      ],
+      "evidence": "GitHub workflow job step success plus audited current workflow bounded loop requiring each invocation to exit nonzero. Direct per-negative job logs unavailable: MCP Transport closed. This is step-level execution proof, not inspected per-negative traces."
+    },
+    "prismNumerical": {
+      "status": "success",
+      "evidence": "Step 9 Exact Prism earning numerical and causal regression passed. Exact numerical check count not captured in artifact."
+    }
+  },
+  "lab": {
+    "runId": 38005987321,
+    "jobId": 114074777796,
+    "core": {
+      "status": "pass",
+      "sourceSha256": "498e92acfb799ce814d1035c8a58c9b47b1e586f48e08d4d9dcad4673bfef1d4",
+      "checks": 2220,
+      "projects": 14,
+      "projectCases": [
+        {
+          "id": "labcapacity",
+          "cap": 2,
+          "unlock": 40,
+          "base": {
+            "lumen": 20000,
+            "shard": 2000
+          },
+          "work": 1800
+        },
+        {
+          "id": "procurement",
+          "cap": 10,
+          "unlock": 25,
+          "base": {
+            "lumen": 12000,
+            "shard": 600
+          },
+          "work": 900
+        },
+        {
+          "id": "catalysis",
+          "cap": 10,
+          "unlock": 60,
+          "base": {
+            "lumen": 40000,
+            "shard": 1500
+          },
+          "work": 1200
+        },
+        {
+          "id": "focusprotocol",
+          "cap": 5,
+          "unlock": 40,
+          "base": {
+            "lumen": 20000,
+            "shard": 800
+          },
+          "work": 1200
+        },
+        {
+          "id": "fieldnotes",
+          "cap": 10,
+          "unlock": 15,
+          "base": {
+            "lumen": 6000,
+            "shard": 300
+          },
+          "work": 600
+        },
+        {
+          "id": "curriculum",
+          "cap": 3,
+          "unlock": 60,
+          "base": {
+            "lumen": 60000,
+            "shard": 2000
+          },
+          "work": 1500
+        },
+        {
+          "id": "bossledger",
+          "cap": 10,
+          "unlock": 20,
+          "base": {
+            "lumen": 14000,
+            "shard": 500
+          },
+          "work": 720
+        },
+        {
+          "id": "luminousdistill",
+          "cap": 10,
+          "unlock": 35,
+          "base": {
+            "lumen": 25000,
+            "shard": 800
+          },
+          "work": 960
+        },
+        {
+          "id": "sigilcartography",
+          "cap": 5,
+          "unlock": 60,
+          "base": {
+            "lumen": 80000,
+            "shard": 3000
+          },
+          "work": 1500
+        },
+        {
+          "id": "rarityappraisal",
+          "cap": 10,
+          "unlock": 15,
+          "base": {
+            "lumen": 8000,
+            "shard": 500
+          },
+          "work": 600
+        },
+        {
+          "id": "modulefabrication",
+          "cap": 10,
+          "unlock": 30,
+          "base": {
+            "lumen": 20000,
+            "shard": 1000
+          },
+          "work": 900
+        },
+        {
+          "id": "ultimateanalysis",
+          "cap": 10,
+          "unlock": 70,
+          "base": {
+            "lumen": 100000,
+            "shard": 4000
+          },
+          "work": 1200
+        },
+        {
+          "id": "resonantefficiency",
+          "cap": 5,
+          "unlock": 50,
+          "base": {
+            "lumen": 30000,
+            "shard": 1200
+          },
+          "work": 1000
+        },
+        {
+          "id": "adaptivegrowth",
+          "cap": 5,
+          "unlock": 45,
+          "base": {
+            "lumen": 30000,
+            "shard": 1600
+          },
+          "work": 1000
+        }
+      ],
+      "scope": "complete production logic; presentation stubbed, browser and native Android are separate",
+      "negativeControls": [
+        {
+          "name": "lost-capacity",
+          "caught": "capacity curve\n\n2 !== 3\n"
+        },
+        {
+          "name": "free-start",
+          "caught": "exact Lumen debit\n\n20000 !== 0\n"
+        },
+        {
+          "name": "early-level",
+          "caught": "no early bonus\n\n1 !== 0\n"
+        },
+        {
+          "name": "lost-seventh-paid-record",
+          "caught": "eighth slot rejected\n\ntrue !== false\n"
+        },
+        {
+          "name": "double-notes",
+          "caught": "earned completion Motes\n\n10012 !== 10006\n"
+        },
+        {
+          "name": "no-procurement",
+          "caught": "future prices reduced20%\n+ actual - expected\n\n  {\n+   lumen: 600,\n+   shard: 40\n-   lumen: 480,\n-   shard: 32\n  }"
+        },
+        {
+          "name": "missed-luminous-purchase",
+          "caught": "first affordable kill counts Luminous material rewards\n\n2 !== 1\n"
+        },
+        {
+          "name": "erased-old-value",
+          "caught": "old value preserved research\n+ actual - expected ... Lines skipped\n\n  {\n    arcanecal: 0,\n+   charge: 0,\n-   charge: 28,\n    conduction: 0,\n...\n    resolve: 0,\n    sense: 0\n  }"
+        }
+      ]
+    },
+    "ui": {
+      "status": "pass",
+      "sourceSha256": "498e92acfb799ce814d1035c8a58c9b47b1e586f48e08d4d9dcad4673bfef1d4",
+      "node": "v20.20.2",
+      "browser": "google-chrome",
+      "checks": 6420,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "profiles": [
+        {
+          "width": 320,
+          "scale": 1,
+          "motion": "no-preference",
+          "projects": 14
+        },
+        {
+          "width": 320,
+          "scale": 1,
+          "motion": "reduce",
+          "projects": 14
+        },
+        {
+          "width": 320,
+          "scale": 2,
+          "motion": "no-preference",
+          "projects": 14
+        },
+        {
+          "width": 320,
+          "scale": 2,
+          "motion": "reduce",
+          "projects": 14
+        },
+        {
+          "width": 390,
+          "scale": 1,
+          "motion": "no-preference",
+          "projects": 14
+        },
+        {
+          "width": 390,
+          "scale": 1,
+          "motion": "reduce",
+          "projects": 14
+        },
+        {
+          "width": 390,
+          "scale": 2,
+          "motion": "no-preference",
+          "projects": 14
+        },
+        {
+          "width": 390,
+          "scale": 2,
+          "motion": "reduce",
+          "projects": 14
+        },
+        {
+          "width": 430,
+          "scale": 1,
+          "motion": "no-preference",
+          "projects": 14
+        },
+        {
+          "width": 430,
+          "scale": 1,
+          "motion": "reduce",
+          "projects": 14
+        },
+        {
+          "width": 430,
+          "scale": 2,
+          "motion": "no-preference",
+          "projects": 14
+        },
+        {
+          "width": 430,
+          "scale": 2,
+          "motion": "reduce",
+          "projects": 14
+        }
+      ]
+    },
+    "v8": {
+      "status": "pass",
+      "sourceSha256": "498e92acfb799ce814d1035c8a58c9b47b1e586f48e08d4d9dcad4673bfef1d4",
+      "node": "v8.3.0",
+      "v8": "6.0.286.52",
+      "checks": 569,
+      "scriptsParsed": 2,
+      "writes": 84,
+      "scope": "actual V8 6.0 complete-source purchase/completion/storage logic; not Android/browser layout"
+    },
+    "prismState": {
+      "status": "pass",
+      "source_sha256": "498e92acfb799ce814d1035c8a58c9b47b1e586f48e08d4d9dcad4673bfef1d4",
+      "checks": 3506,
+      "payoutCases": 180,
+      "routes": [
+        "actual manual handler",
+        "live/offline authoritative auto",
+        "cold load",
+        "actual backup restore",
+        "primary corruption/recovery",
+        "failed write/retry",
+        "real Swift purchase",
+        "atomic offline failure/rollback/retry"
+      ],
+      "scope": "full game logic with DOM presentation stubbed; not browser layout or Android acceptance"
+    }
+  },
+  "currency": {
+    "sourceSha256": "498e92acfb799ce814d1035c8a58c9b47b1e586f48e08d4d9dcad4673bfef1d4",
+    "results": [
+      {
+        "name": "normal",
+        "accepted": true,
+        "exitcode": 0,
+        "checks": 4224,
+        "sourceSha256": "498e92acfb799ce814d1035c8a58c9b47b1e586f48e08d4d9dcad4673bfef1d4",
+        "profiles": 12,
+        "error": null
+      },
+      {
+        "name": "stale-refresh",
+        "accepted": true,
+        "exitcode": 1,
+        "checks": 114,
+        "sourceSha256": "e0c478446101f6d4e5bf3581a1ab7afb1f67eb349489e5e85d94a09834d38fa2",
+        "profiles": 0,
+        "error": "AssertionError [ERR_ASSERTION]: wallet color {\"tab\":\"research\",\"label\":\"becomes affordable without rerender\",\"kind\":\"lumen\",\"want\":\"rgb(240, 239, 251)\",\"got\":\"rgb(255, 123, 146)\"}\n    at ok (/home/runner/work/Lumenfall/Lumenfall/tests/behavioral/.collection-price-generated-2523.cjs:40:27)\n    at observe (/home/runner/work/Lumenfall/Lumenfall/tests/behavioral/.collection-price-generated-2523.cjs:97:6)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async run (/home/runner/work/Lumenfall/Lumenfall/tests/behavioral/.collection-price-generated-2523.cjs:105:47)\n    at async /home/runner/work/Lumenfall/Lumenfall/tests/behavioral/.collection-price-generated-2523.cjs:127:6"
+      },
+      {
+        "name": "all-white",
+        "accepted": true,
+        "exitcode": 1,
+        "checks": 4,
+        "sourceSha256": "5acf4795a36c36e20b4de6f020a53550b29266a756bdc7d045353807f6a2cc23",
+        "profiles": 0,
+        "error": "AssertionError [ERR_ASSERTION]: wallet color {\"tab\":\"forge\",\"label\":\"initial insufficient\",\"kind\":\"lumen\",\"want\":\"rgb(255, 123, 146)\",\"got\":\"rgb(240, 239, 251)\"}\n    at ok (/home/runner/work/Lumenfall/Lumenfall/tests/behavioral/.collection-price-generated-2523.cjs:40:27)\n    at observe (/home/runner/work/Lumenfall/Lumenfall/tests/behavioral/.collection-price-generated-2523.cjs:97:6)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async run (/home/runner/work/Lumenfall/Lumenfall/tests/behavioral/.collection-price-generated-2523.cjs:105:4)\n    at async /home/runner/work/Lumenfall/Lumenfall/tests/behavioral/.collection-price-generated-2523.cjs:127:6"
+      },
+      {
+        "name": "retired-card-returns",
+        "accepted": true,
+        "exitcode": 1,
+        "checks": 2,
+        "sourceSha256": "3b5e692153c963e48c80d94fe3ab812508cad176e38a2b73cfffbf3607f26843",
+        "profiles": 0,
+        "error": "AssertionError [ERR_ASSERTION]: legacy shop cards must remain absent\n    at ok (/home/runner/work/Lumenfall/Lumenfall/tests/behavioral/.collection-price-generated-2523.cjs:40:27)\n    at observe (/home/runner/work/Lumenfall/Lumenfall/tests/behavioral/.collection-price-generated-2523.cjs:94:5)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async run (/home/runner/work/Lumenfall/Lumenfall/tests/behavioral/.collection-price-generated-2523.cjs:105:4)\n    at async /home/runner/work/Lumenfall/Lumenfall/tests/behavioral/.collection-price-generated-2523.cjs:127:6"
+      }
+    ]
+  },
+  "isolatedScroll": {
+    "runId": 38005188010,
+    "jobId": 114072228769,
+    "status": "completed",
+    "conclusion": "success",
+    "sha": "b55770526f813aa9c1e58ba382daecc30ffcaafb",
+    "artifactLimitation": "ZIP contains only three test source files, no focused/full output traces despite artifact name. Focused/full/negative success confirmed by GitHub job-step results; detailed current-head native records are preserved in pre-merge artifact."
+  },
+  "artifactVerification": [
+    {
+      "id": 11652845412,
+      "name": "pre-merge-evidence-38005987252",
+      "bytes": 14470060,
+      "sha256": "ba82e71f373f894448b68adf2a9ff06e896d8185b2ab92504d80513c80e86353"
+    },
+    {
+      "id": 11651132687,
+      "name": "lab-expansion-38005987321",
+      "bytes": 5006588,
+      "sha256": "f841e37dfe3f9fd9d08b44a53dad555c223faa42e0dee0a15acd797cc6e5efc6"
+    },
+    {
+      "id": 11652511937,
+      "name": "lab-scroll-regression-38005188010",
+      "bytes": 27059,
+      "sha256": "9c19a854fa0ba33ff4fa0483d7be0c019bca71e30347a31c282567c45c2c1ffd"
+    }
+  ],
+  "limitations": [
+    "Separate Prism workflows 38005987313 and 38005987341 were skipped on Lab head; do not label them green. Required Prism numerical and transaction tests ran inside successful pre-merge/Lab workflows.",
+    "Physical Android, native WebView60, TalkBack, and signed APK acceptance are not established by these browser/V8 workflows.",
+    "All observed runs were finished; no in-progress workflow is treated as pass.",
+    "No full private player save was used by this audit."
+  ]
+}

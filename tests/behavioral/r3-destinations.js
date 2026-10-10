@@ -14,7 +14,7 @@ window.runR3DestinationsQa = function(b,ctx,assert){
   var catalogue=b.r3.catalogues(),seed=window.seedR3(b,ctx);
   b.setState(seed);b.renderLayout();
   same(catalogue.upgrades,['focus','sense','formation','resolve','charge','arcanecal','conduction','luminoustracking'],'five original direct upgrades followed by three Forge v1 additions');
-  same(catalogue.projects,['wispascend','guardmastery','riftattune','shardstudy','lumenstudy','formationstudy','motestudy','prismstudy','measuredinquiry'],'eight original timed projects plus Measured Inquiry');
+  same(catalogue.projects,['wispascend','guardmastery','riftattune','shardstudy','lumenstudy','formationstudy','motestudy','prismstudy','measuredinquiry','labcapacity','procurement','catalysis','focusprotocol','fieldnotes','curriculum','bossledger','luminousdistill','sigilcartography','rarityappraisal','modulefabrication','ultimateanalysis','resonantefficiency','adaptivegrowth'],'nine retained IDs plus fourteen distinct timed expansion projects');
   var nav=Array.from(document.querySelectorAll('nav.tabbar .tab-btn'));
   same(nav.map(function(n){return n.dataset.tab;}),['spirits','workshop','battle','ascend','deeds'],'five ordered main destinations');
   ok(!q('[data-lab-view],.lab-tabs,[id^="lab-panel-"]'),'obsolete subnavigation removed entirely');

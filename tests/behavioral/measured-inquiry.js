@@ -27,7 +27,8 @@ window.runInquiryQa=function(b,ctx,assert,assertProtectedParity,assertSummaryPar
   b.resetFeedback();
   if(ctx.scenario==='inquiry-contracts'){
     var nodes=t.nodes(),ids=nodes.map(function(n){return n.id;});
-    same(ids,window.inquiryOriginals.concat('measuredinquiry'),'exact nine-study catalogue');
+    same(nodes.filter(function(n){return !n.labGroup;}).map(function(n){return n.id;}),window.inquiryOriginals.concat('measuredinquiry'),'original nine-study catalogue remains intact');
+    ok(ids.length===23&&nodes.filter(function(n){return n.labGroup;}).length===14,'fourteen additive expansion projects, no original removed');
     same(t.originals(),window.inquiryOriginals,'frozen original target IDs');
     var fresh=b.freshStateSnapshot();ok(fresh.longStudyLevels.measuredinquiry===0&&!fresh.studyQueue.measuredinquiry,'fresh0/OFF');
     var current=seed();delete current.longStudyLevels.measuredinquiry;delete current.studyQueue.measuredinquiry;
@@ -45,7 +46,7 @@ window.runInquiryQa=function(b,ctx,assert,assertProtectedParity,assertSummaryPar
     same(paid,{lumen:13351752,shard:534070},'exact cap commitment');ok(work===108951,'exact cap work commitment');
     [0,5,10,13].forEach(function(inquiry){
       var s=seed();s.longStudyLevels.measuredinquiry=inquiry;install(s);
-      nodes.filter(function(n){return n.id!=='measuredinquiry';}).forEach(function(n){
+      nodes.filter(function(n){return !n.labGroup&&n.id!=='measuredinquiry';}).forEach(function(n){
         [0,5,10].forEach(function(k){
           var nominal=Math.round(n.baseDurationSec*Math.pow(1.6,k));
           ok(t.duration(n.id,k)===Math.round(nominal*(1-.02*Math.min(inquiry,10))),'nested rounding '+n.id+' '+k+'/'+inquiry);

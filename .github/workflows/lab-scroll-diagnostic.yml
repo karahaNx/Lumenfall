@@ -1,0 +1,46 @@
+name: Lab research scroll diagnostic
+on:
+  push:
+    branches: ['feature/lab-expansion-001']
+    paths: ['.github/workflows/lab-scroll-diagnostic.yml', 'tests/behavioral/rift-status.cjs']
+permissions:
+  contents: read
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Verify source and reproduce native touch scroll
+        shell: bash
+        run: |
+          set -uo pipefail
+          mkdir -p lab-scroll-diagnostic mobile/www/fonts mobile/www/branding
+          git rev-parse HEAD > lab-scroll-diagnostic/commit.txt
+          sha256sum index.html > lab-scroll-diagnostic/source-sha256.txt
+          cp index.html mobile/www/index.html
+          cp -r fonts/. mobile/www/fonts/
+          cp -r branding/. mobile/www/branding/
+          export LUMENFALL_QA_TRACE=1
+          node tests/behavioral/run.cjs --web-root mobile/www --scenario rift-status-stacking-reduced-motion --raw-artifacts lab-scroll-diagnostic/raw >lab-scroll-diagnostic/driver.log 2>&1
+          exit_code=$?
+          grep -E '^(FAIL |PASS |Behavioral QA failed)' lab-scroll-diagnostic/driver.log || true
+          echo $exit_code > lab-scroll-diagnostic/exit-code.txt
+          exit $exit_code
+      - name: Export exact browser inputs and diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab-scroll-diagnostic-${{ github.run_id }}
+          retention-days: 7
+          path: |
+            lab-scroll-diagnostic/
+            index.html
+            tests/behavioral/
+            scripts/
+            fonts/
+            branding/
+            mobile/www/
