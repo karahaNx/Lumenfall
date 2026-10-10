@@ -114,13 +114,24 @@ const cases='  const specs='+JSON.stringify(specs)+';\n'+String.raw`
   async function frames(){await ev('new Promise(function(r){requestAnimationFrame(function(){requestAnimationFrame(r);});})');}
   async function measure(selector){return ev('('+function(selector){var e=document.querySelector(selector);if(!e)throw Error('missing control '+selector);var r=e.getBoundingClientRect(),m=document.querySelector('main'),v=m.getBoundingClientRect(),n=document.querySelector('nav.tabbar').getBoundingClientRect(),summary=document.querySelector('.ascend-summary').getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2,h=document.elementFromPoint(x,y),a=document.activeElement;return {scroll:m.scrollTop,x:x,y:y,top:r.top,bottom:r.bottom,width:r.width,height:r.height,mainTop:v.top,mainBottom:v.bottom,scrollHeight:m.scrollHeight,clientHeight:m.clientHeight,summaryHeight:summary.height,summaryTop:summary.top,summaryBottom:summary.bottom,treeTop:document.getElementById('node-list').getBoundingClientRect().top,visible:r.top>=Math.max(0,v.top)-.5&&r.bottom<=Math.min(v.bottom,n.top,innerHeight)+.5&&r.left>=v.left-.5&&r.right<=v.right+.5,hit:!!h&&(h===e||e.contains(h)),focus:a&&{node:a.dataset.node,toggle:a.dataset.toggle,preset:a.dataset.formationPreset,insideTree:!!a.closest('#node-list')},disabled:e.disabled};}.toString()+')('+JSON.stringify(selector)+')');}
   function visible(m,label){ok(m.width>=44&&m.height>=44,'44px '+label);ok(m.visible&&m.hit,'visible actual hit target '+label+' '+JSON.stringify(m));}
-  function viewport(before,after,focusKey,focusId,label){
+  // Derive the required scroll from the real post-layout coordinates. At a
+  // native boundary only the unavoidable displacement may remain visible.
+  function viewportBounds(before,after){
+   const targetScroll=after.scroll+after.top-before.top,maxScroll=after.scrollHeight-after.clientHeight;
+   const nearestFeasible=Math.max(0,Math.min(maxScroll,targetScroll)),bound=targetScroll<0?'minimum':targetScroll>maxScroll?'maximum':'none';
+   return {targetScroll,maxScroll,nearestFeasible,bound,unavoidableTopDisplacement:targetScroll-nearestFeasible,actualScroll:after.scroll,actualTopDisplacement:after.top-before.top};
+  }
+  function viewport(before,after,focusKey,focusId,label,allowBoundary=false){
    ok(after.focus&&after.focus[focusKey]===focusId,'native focus '+label);
    ok(!after.disabled,'enabled control '+label);
-   ok(Math.abs(after.top-before.top)<=1,'viewport top stable '+label);
+   const bounds=viewportBounds(before,after);
+   if(allowBoundary&&bounds.bound!=='none'){
+    ok(Math.abs(after.scroll-bounds.nearestFeasible)<=1,'nearest native scroll bound '+label);
+    ok(Math.abs(bounds.actualTopDisplacement-bounds.unavoidableTopDisplacement)<=1,'only unavoidable viewport displacement '+label);
+   }else ok(Math.abs(after.top-before.top)<=1,'viewport top stable '+label);
    visible(after,label);
   }
-  function stableAction(record,focusKey,focusId,label){viewport(record.before,record.immediate,focusKey,focusId,label+' immediate');viewport(record.before,record.settled,focusKey,focusId,label+' settled');}
+  function stableAction(record,focusKey,focusId,label,allowBoundary=false){viewport(record.before,record.immediate,focusKey,focusId,label+' immediate',allowBoundary);viewport(record.before,record.settled,focusKey,focusId,label+' settled',allowBoundary);}
   async function prepare(selector,focus){await point(selector);if(focus)await ev('document.querySelector('+JSON.stringify(selector)+').focus({preventScroll:true})');var m=await measure(selector);visible(m,selector);return m;}
   async function touchHere(selector){var m=await measure(selector);visible(m,'touch '+selector);await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:m.x,y:m.y}]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});}
   async function observeInput(record,selector,action,prepareInput=true){
@@ -132,6 +143,7 @@ const cases='  const specs='+JSON.stringify(specs)+';\n'+String.raw`
    record.stateAfter=await ev('prismQa.get()');record.writeKeys=await ev('window.__treeWrites.slice('+writes+')');
    record.input=await ev('window.__prismInput.slice('+inputStart+')');record.runtimeErrorsAfter=await ev('window.__prismErrors');
    record.deltas={immediateTop:record.immediate.top-record.before.top,settledTop:record.settled.top-record.before.top,immediateScroll:record.immediate.scroll-record.before.scroll,settledScroll:record.settled.scroll-record.before.scroll};
+   record.viewportBounds={immediate:viewportBounds(record.before,record.immediate),settled:viewportBounds(record.before,record.settled)};
    return record;
   }
   async function formationInput(id,selector,action,prepareInput=true){
@@ -162,6 +174,7 @@ const cases='  const specs='+JSON.stringify(specs)+';\n'+String.raw`
      row.slots=slots.map(slot=>({key:slot.key,bytes:Buffer.byteLength(slot.raw||''),sha256:digest(slot.raw||''),state:slot.raw&&JSON.parse(slot.raw)}));
      row.screenshot='tree-'+kind+'-viewport-'+mode+'-'+width+'-'+scale+'-'+motion+'.png';await shot(row.screenshot.slice(0,-4));
      ok(row.overflowAnchorBefore==='none'&&row.overflowAnchorAfter==='none','browser anchoring disabled for '+row.id);
+     for(const phase of ['immediate','settled'])ok(row.viewportBounds[phase].bound==='none','causal viewport target is physically feasible '+row.id+' '+phase);
      await verifyState(row);
      same(row.writeKeys,await ev('prismQa.keys()'),'one real primary/recovery pair '+row.id);
      ok(row.input.some(e=>e.trusted&&e.type==='keydown'&&e.key==='Enter')&&row.input.some(e=>e.trusted&&e.type==='click'),'actual trusted Enter/click '+row.id);
@@ -251,6 +264,7 @@ const cases='  const specs='+JSON.stringify(specs)+';\n'+String.raw`
     // Preserve both observations before an assertion can abort the profile.
     // The immediate check still reads its original pre-frame snapshot.
     diagnostic.deltas={immediateTop:now.top-m.top,settledTop:settled.top-m.top,immediateScroll:now.scroll-m.scroll,settledScroll:settled.scroll-m.scroll};
+    diagnostic.viewportBounds={immediate:viewportBounds(m,now),settled:viewportBounds(m,settled)};
     stableAction(diagnostic,'node',id,'funded purchase '+id);
    }
    paid=copy(after);paid.prisms=100000;samples.push({id,levelBefore:level,levelAfter:level+1,cost});
@@ -305,26 +319,26 @@ const cases='  const specs='+JSON.stringify(specs)+';\n'+String.raw`
   const field=sel('data-toggle','aurora');
   const sixth=await formationInput('field-sixth',field,()=>key('Enter','Enter',13)),six=sixth.stateAfter;
   same(six.activeParty,firstFive.concat('aurora'),'actual keyboard fields sixth');same(six.formationPresets.push,six.activeParty,'six-member autosaved intent');same(six.spirits,formation.spirits,'Field never recruits or empowers');
-  same(sixth.writeKeys,await ev('prismQa.keys()'),'sixth Field saves one actual primary/recovery pair');stableAction(sixth,'toggle','aurora','sixth Field');
+  same(sixth.writeKeys,await ev('prismQa.keys()'),'sixth Field saves one actual primary/recovery pair');stableAction(sixth,'toggle','aurora','sixth Field',true);
   ok(await ev("document.querySelector('#formation-presets').textContent.includes('6/6')"),'six of six visible');
   ok(await ev("document.querySelector('#formation-capacity').textContent")==='6','Formation header agrees with paid six-slot capacity');
   for(const name of ['push','farm','boss']){const count=six.formationPresets[name].length;ok(await ev('document.querySelector('+JSON.stringify('[data-formation-preset="'+name+'"]')+').textContent.includes('+JSON.stringify(count+'/6 Wisps')+')'),'each preset count agrees with saved members and six-slot capacity '+name);}
   ok(await ev("document.querySelector('.formation-help .section-sub').textContent.includes('6 Wisps')"),'Formation guidance uses owned capacity');
   const seventh=await formationInput('six-capacity-refusal',sel('data-toggle','void'),()=>touchHere(sel('data-toggle','void')));
-  same(seventh.stateAfter.activeParty,six.activeParty,'seventh member refused without changing six');same(seventh.stateAfter,seventh.stateBefore,'six-capacity refusal preserves entire synthetic state');same(seventh.writeKeys,[],'six-capacity refusal never writes a save');stableAction(seventh,'toggle','void','six-capacity refusal');
+  same(seventh.stateAfter.activeParty,six.activeParty,'seventh member refused without changing six');same(seventh.stateAfter,seventh.stateBefore,'six-capacity refusal preserves entire synthetic state');same(seventh.writeKeys,[],'six-capacity refusal never writes a save');stableAction(seventh,'toggle','void','six-capacity refusal',true);
   const bench=await formationInput('bench-sixth',field,()=>key(' ','Space',32));
-  ok(bench.stateAfter.activeParty.length===5,'keyboard benches sixth');same(bench.writeKeys,await ev('prismQa.keys()'),'Bench saves once');stableAction(bench,'toggle','aurora','bench sixth');
+  ok(bench.stateAfter.activeParty.length===5,'keyboard benches sixth');same(bench.writeKeys,await ev('prismQa.keys()'),'Bench saves once');stableAction(bench,'toggle','aurora','bench sixth',true);
   // The next touch uses the still-focused post-Bench control directly, without
   // scrollIntoView or a focus repair between the two real actions.
   const refield=await formationInput('re-field-sixth',field,()=>touchHere(field),false);
-  same(refield.stateAfter.activeParty,six.activeParty,'native touch restores sixth once');same(refield.writeKeys,await ev('prismQa.keys()'),'re-Field saves once');stableAction(refield,'toggle','aurora','re-field sixth');
+  same(refield.stateAfter.activeParty,six.activeParty,'native touch restores sixth once');same(refield.writeKeys,await ev('prismQa.keys()'),'re-Field saves once');stableAction(refield,'toggle','aurora','re-field sixth',true);
   const farm=await formationInput('preset-farm','[data-formation-preset="farm"]',()=>touchHere('[data-formation-preset="farm"]'));
-  ok(farm.stateAfter.activeParty.length===5,'real preset switches to five');same(farm.writeKeys,await ev('prismQa.keys()'),'Farm selection saves once');stableAction(farm,'preset','farm','Farm preset');
+  ok(farm.stateAfter.activeParty.length===5,'real preset switches to five');same(farm.writeKeys,await ev('prismQa.keys()'),'Farm selection saves once');stableAction(farm,'preset','farm','Farm preset',true);
   const push=await formationInput('preset-push','[data-formation-preset="push"]',()=>key('Enter','Enter',13));
-  same(push.stateAfter.activeParty,six.activeParty,'keyboard preset restores all six');same(push.writeKeys,await ev('prismQa.keys()'),'Push selection saves once');stableAction(push,'preset','push','Push preset');
+  same(push.stateAfter.activeParty,six.activeParty,'keyboard preset restores all six');same(push.writeKeys,await ev('prismQa.keys()'),'Push selection saves once');stableAction(push,'preset','push','Push preset',true);
   const solo=copy(formation);solo.activeParty=['ember'];solo.formationPresets={push:['ember'],farm:['ember'],boss:['ember']};await install(solo,'spirits');
   const lastWisp=await formationInput('last-wisp-refusal',sel('data-toggle','ember'),()=>key('Enter','Enter',13));
-  same(lastWisp.stateAfter.activeParty,['ember'],'actual last-Wisp Bench is refused');same(lastWisp.stateAfter,lastWisp.stateBefore,'last-Wisp refusal preserves entire synthetic state');same(lastWisp.writeKeys,[],'last-Wisp refusal never writes a save');stableAction(lastWisp,'toggle','ember','last-Wisp refusal');
+  same(lastWisp.stateAfter.activeParty,['ember'],'actual last-Wisp Bench is refused');same(lastWisp.stateAfter,lastWisp.stateBefore,'last-Wisp refusal preserves entire synthetic state');same(lastWisp.writeKeys,[],'last-Wisp refusal never writes a save');stableAction(lastWisp,'toggle','ember','last-Wisp refusal',true);
   await install(push.stateAfter,'spirits');
   for(const row of formationSamples){
    for(const name of ['spirits','nodes','research','longStudyLevels','activeStudies','owned','heroRarity','wispModules','wispUltimate','autoAscendEnabled','autoAscendTargetDepth','lumen','shards','motes','sigils','comets','prisms','treeTrainingProgress'])same(row.stateAfter[name],row.stateBefore[name],'Formation input preserves '+name+' '+row.id);

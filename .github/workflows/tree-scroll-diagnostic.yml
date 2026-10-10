@@ -40,8 +40,8 @@ jobs:
           const identity={purpose:'Diagnostic only; does not replace required PR acceptance.',head:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),orderedParents:git('show','-s','--format=%P','HEAD').split(' '),ref:process.env.GITHUB_REF,event:process.env.GITHUB_EVENT_NAME,runId:process.env.GITHUB_RUN_ID,runAttempt:process.env.GITHUB_RUN_ATTEMPT,node:process.version,inputs};
           fs.writeFileSync('tree-scroll-diagnostic/identity.json',JSON.stringify(identity,null,2)+'\n');
           assert.equal(identity.head,process.env.GITHUB_SHA);assert.equal(identity.ref,'refs/heads/diagnostic/tree-scroll-106');assert.equal(identity.event,'push');
-          assert.deepEqual(identity.orderedParents,['2bce799cd224ddeffb6c1ff83ad5f19991ad1444']);
-          const pinned={'index.html':'ccef4db42c2d2d5f91c68c0fa7c150bfa8115983249d276925c68613268846e3','tests/behavioral/bridge.js':'8568cfb994b0a6c4c1c2bded8f2946a6489b18591992e58d534f483f5cb287c1','tests/behavioral/tree-expansion-mobile.cjs':'22bf25b1200ebd149503ad779d283f07e2f2795620fc96b71a13493d4557a61f','tests/behavioral/fixtures.json':'ab43604db1b5bce8b9990506f989676dfb0009cdcf2e514a8ccee9da166c8753'};
+          assert.deepEqual(identity.orderedParents,['b7eaca0b671d2c8350eb47bc1ba6f2c020b4177c']);
+          const pinned={'index.html':'ccef4db42c2d2d5f91c68c0fa7c150bfa8115983249d276925c68613268846e3','tests/behavioral/bridge.js':'8568cfb994b0a6c4c1c2bded8f2946a6489b18591992e58d534f483f5cb287c1','tests/behavioral/tree-expansion-mobile.cjs':'a8d8fa1d7a0b09ef0cbce0013bb168ef2a8ef36996f10c5fb58c2dc76dbaa6b1','tests/behavioral/fixtures.json':'ab43604db1b5bce8b9990506f989676dfb0009cdcf2e514a8ccee9da166c8753'};
           for(const [path,expected] of Object.entries(pinned))assert.equal(inputs.find(row=>row.path===path).sha256,expected,'exact diagnostic input '+path);
           JS
           node scripts/codex/check_context.cjs --task docs/tasks/TREE_EXPANSION_001.md 2>&1 | tee tree-scroll-diagnostic/context.log
@@ -58,6 +58,29 @@ jobs:
           mkdir -p tree-scroll-diagnostic
           trap 'tree_mobile_exit=$?; printf "%s\n" "$tree_mobile_exit" > tree-scroll-diagnostic/tree-mobile-exit.txt' EXIT
           node tests/behavioral/tree-expansion-mobile.cjs index.html tree-scroll-diagnostic/mobile 2>&1 | tee tree-scroll-diagnostic/mobile.log
+      - name: All thirteen original failed Full browser attempts
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'JS'
+          const fs=require('node:fs'),path=require('node:path'),cp=require('node:child_process'),crypto=require('node:crypto'),assert=require('node:assert/strict');
+          const root='tree-scroll-diagnostic/full-failed-rerun',hash=b=>crypto.createHash('sha256').update(b).digest('hex');fs.mkdirSync(root,{recursive:true});
+          const cases=['inquiry-save-reload','inquiry-backup-restore','inquiry-recovery','support-stacking','rift-status-contract','p2-07a-formation-reconstruction','p2-07a-chronology','layout-p2-07a-reconstruction','ascend-prisms-contract'];
+          const rows=[];
+          for(const scenario of cases){
+            const dir=path.join(root,scenario);fs.mkdirSync(dir,{recursive:true});
+            const args=['tests/behavioral/run.cjs','--web-root','mobile/www','--scenario',scenario,'--raw-artifacts',path.join(dir,'raw')];
+            const begin=Date.now(),result=cp.spawnSync(process.execPath,args,{timeout:180000,maxBuffer:32*1024*1024});
+            const stdout=result.stdout||Buffer.alloc(0),stderr=result.stderr||Buffer.alloc(0);fs.writeFileSync(path.join(dir,'stdout.log'),stdout);fs.writeFileSync(path.join(dir,'stderr.log'),stderr);
+            const text=stdout.toString('utf8'),attempts=text.split('\n').filter(line=>line.startsWith('PASS '+scenario)).length,expected=scenario.startsWith('layout-')?5:1;
+            const row={scenario,command:[process.execPath,...args],exitCode:result.status,signal:result.signal,error:result.error?String(result.error):null,elapsedMs:Date.now()-begin,expectedAttempts:expected,passedAttempts:attempts,sourceSha256:hash(fs.readFileSync('index.html')),bridgeSha256:hash(fs.readFileSync('tests/behavioral/bridge.js')),stdout:{bytes:stdout.length,sha256:hash(stdout)},stderr:{bytes:stderr.length,sha256:hash(stderr)}};
+            row.pass=row.exitCode===0&&!row.signal&&!row.error&&attempts===expected&&text.includes('Behavioral QA passed: 1 deterministic scenario(s).');
+            fs.writeFileSync(path.join(dir,'process.json'),JSON.stringify(row,null,2)+'\n');rows.push(row);console.log(JSON.stringify({scenario,pass:row.pass,attempts,expected,exitCode:row.exitCode}));
+          }
+          const receipt={scope:'All original failed Full38085086718 attempts only; required complete PR regression remains mandatory.',node:process.version,v8:process.versions.v8,rows,expectedAttempts:13,passedAttempts:rows.reduce((n,r)=>n+r.passedAttempts,0),pass:rows.length===9&&rows.every(r=>r.pass)};
+          fs.writeFileSync(path.join(root,'receipt.json'),JSON.stringify(receipt,null,2)+'\n');assert.equal(receipt.passedAttempts,13);assert.equal(receipt.pass,true);
+          JS
       - name: Actual focused Prism positives and five causal controls
         if: always()
         shell: bash
