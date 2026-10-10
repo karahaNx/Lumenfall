@@ -1,0 +1,142 @@
+name: Pre-merge validation
+
+on:
+  pull_request:
+    branches: [main, 'feature/progression-expansion-2026-10-09']
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lumenfall-pre-merge-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validation:
+    name: Lumenfall pre-merge validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: APK identity verifier self-test
+        run: node scripts/verify_apk_identity.cjs --self-test
+
+      - name: Node tooling regression checks
+        run: node tests/tooling/run.cjs
+
+      - name: Validate game source
+        shell: bash
+        run: |
+          node scripts/ci/validate_source.cjs
+
+      - name: Stage web assets
+        shell: bash
+        run: |
+          rm -rf mobile/www
+          mkdir -p mobile/www/fonts mobile/www/branding
+          cp index.html mobile/www/index.html
+          cp -r fonts/. mobile/www/fonts/
+          cp -r branding/. mobile/www/branding/
+
+      - name: Rift cosmetics selection, persistence and mobile acceptance
+        run: node tests/behavioral/rift-cosmetics.cjs --source mobile/www/index.html --negative
+
+      - name: Exact Prism earning numerical and causal regression
+        run: node tests/behavioral/prism-earning.cjs --source mobile/www/index.html
+
+      - name: Development currency UI and retained-value acceptance
+        run: |
+          node scripts/codex/check_context.cjs --task docs/tasks/PRISM_EARNING_001.md
+          node scripts/codex/check_context.cjs --task docs/tasks/PROGRESSION_EXPANSION_001.md
+          node tests/behavioral/collection-price-ui.cjs index.html /tmp/lumenfall-collection-price --negative
+
+      - name: Stateful behavioral regression suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p validation-evidence
+          git rev-parse HEAD > validation-evidence/commit.txt
+          sha256sum index.html > validation-evidence/source-sha256.txt
+          node tests/behavioral/run.cjs --web-root mobile/www --raw-artifacts validation-evidence/raw 2>&1 | tee validation-evidence/behavioral.log
+
+      - name: Behavioral harness negative self-test
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p validation-evidence
+          {
+            for scenario in self-test-bad-assertion self-test-uncaught-error self-test-unhandled-rejection self-test-parity-regression self-test-chronology-regression self-test-wisp-formula-regression self-test-wisp-pacing-regression self-test-endgame-currency-regression self-test-wisp-role-regression self-test-p1-05-selected self-test-p1-05-focus-return self-test-lifecycle-duplicate self-test-save-backup-placement self-test-save-backup-confirmation self-test-upgrade-identity-buy self-test-upgrade-identity-value self-test-upgrade-identity-clock self-test-ascend-prisms-tree self-test-ascend-prisms-lab self-test-ascend-prisms-payout self-test-ascend-prisms-repeat self-test-ascend-prisms-rounding; do
+              if node tests/behavioral/run.cjs --web-root mobile/www --scenario "$scenario" --raw-artifacts validation-evidence/negative-raw; then
+                echo "::error::Behavioral harness negative scenario '$scenario' unexpectedly passed."
+                exit 1
+              fi
+              echo "Behavioral harness correctly caught expected failure: $scenario"
+            done
+          } 2>&1 | tee validation-evidence/negative-self-tests.log
+
+      - name: Install runtime error guard in staged copy
+        shell: bash
+        run: |
+          node scripts/ci/smoke.cjs --install-guard mobile/www/index.html
+
+      - name: Browser runtime smoke test
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          CHROME="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME" ]; then
+            echo "No supported Chromium browser found on the runner."
+            exit 1
+          fi
+
+          node scripts/serve.cjs --port 4173 --directory mobile/www >/tmp/lumenfall-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" >/dev/null 2>&1 || true' EXIT
+
+          ready=0
+          for _ in $(seq 1 20); do
+            if curl --fail --silent http://127.0.0.1:4173/index.html >/dev/null && curl --fail --silent http://127.0.0.1:4173/branding/lumenfall-mark.svg >/dev/null; then
+              ready=1
+              break
+            fi
+            sleep 0.25
+          done
+          if [ "$ready" -ne 1 ]; then
+            cat /tmp/lumenfall-http.log
+            exit 1
+          fi
+
+          "$CHROME" \
+            --headless=new \
+            --no-sandbox \
+            --disable-gpu \
+            --disable-dev-shm-usage \
+            --window-size=390,844 \
+            --virtual-time-budget=1800 \
+            --dump-dom \
+            http://127.0.0.1:4173/index.html \
+            >/tmp/lumenfall-dom.html 2>/tmp/lumenfall-chrome.log
+
+          node scripts/ci/smoke.cjs --dom /tmp/lumenfall-dom.html --chrome-log /tmp/lumenfall-chrome.log --require-guard
+
+      - name: Preserve full regression evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pre-merge-evidence-${{ github.run_id }}
+          retention-days: 14
+          path: |
+            validation-evidence/
+            /tmp/lumenfall-collection-price/
+            /tmp/lumenfall-dom.html
+            /tmp/lumenfall-chrome.log
+            /tmp/lumenfall-http.log

@@ -1,0 +1,110 @@
+{
+  "status": "fixture-repair-ready",
+  "observedAtUtc": "2026-10-10 20:44:25 UTC",
+  "clockSource": "clock.curr_time",
+  "headSha": "0c539c528d3b950a786d0ea377fcfc59499f1a3a",
+  "sourceSha256": "4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef",
+  "fixtureSha256": "ab43604db1b5bce8b9990506f989676dfb0009cdcf2e514a8ccee9da166c8753",
+  "originalTest": {
+    "bytes": 14930,
+    "sha256": "15c1e7f4a9829b4190f2ea6c4cc2d9fa585fc5b8b74164f5fee043a1328cc6a6"
+  },
+  "repairedTest": {
+    "bytes": 15572,
+    "sha256": "a92845db4043185d4de465b849dbebf9e58f5bfe68f551f80924e23fde05b9e5"
+  },
+  "originalMismatch": {
+    "expectedRows": 3,
+    "actualRows": 20,
+    "label": "retained Prism prices after F26 hours retirement"
+  },
+  "retainedPrices": {
+    "expected": [
+      [
+        "echo",
+        2,
+        1.4
+      ],
+      [
+        "bonds",
+        2,
+        1.45
+      ],
+      [
+        "swift",
+        3,
+        1.5
+      ]
+    ],
+    "actual": [
+      [
+        "echo",
+        2,
+        1.4
+      ],
+      [
+        "bonds",
+        2,
+        1.45
+      ],
+      [
+        "swift",
+        3,
+        1.5
+      ]
+    ],
+    "exact": true
+  },
+  "activeTreeTracks": 20,
+  "reportedCombinedActiveTracks": 60,
+  "historicalMatrix": {
+    "originalIdsAssigned": 7,
+    "newIdsRequiredZero": 17,
+    "levels": [
+      0,
+      1,
+      6,
+      20,
+      31
+    ],
+    "oldMetricAndRawValueAssertionBlockByteIdentical": true
+  },
+  "negativeMutationHooksUnchanged": true,
+  "generatedSyntax": [
+    {
+      "variant": "unchanged",
+      "scriptsParsed": 29,
+      "generatedBytes": 1244331,
+      "generatedSha256": "8c0b3fa345ba8e827728009f59155bc619b4c359ef64418103a7472b037dfd40",
+      "generatedHtmlStored": false
+    },
+    {
+      "variant": "self-test-upgrade-identity-buy",
+      "scriptsParsed": 29,
+      "generatedBytes": 1244310,
+      "generatedSha256": "8ce35d7a72ab3d2b45c87e4a2b0e4502c3d510f1ed9e5492220a754a4c779bde",
+      "generatedHtmlStored": false
+    },
+    {
+      "variant": "self-test-upgrade-identity-value",
+      "scriptsParsed": 29,
+      "generatedBytes": 1244304,
+      "generatedSha256": "3bee2e365ce8129121f358830ad530a02fd3ad962fb8872ad5e153b833dfd751",
+      "generatedHtmlStored": false
+    },
+    {
+      "variant": "self-test-upgrade-identity-clock",
+      "scriptsParsed": 29,
+      "generatedBytes": 1244325,
+      "generatedSha256": "d66524a3f28fca4a41ecb58bafcaf127be800d36eae489ba7c7c2c08dc8c963b",
+      "generatedHtmlStored": false
+    }
+  ],
+  "probeExit": 0,
+  "browserExecuted": false,
+  "fullBrowserAnd22MandatoryNegatives": "required on published candidate; not claimed here",
+  "patch": {
+    "bytes": 5471,
+    "sha256": "1b436decbaa6babc8da2e7dc113701114a4288d7327987567796aacbdc3705ff"
+  }
+}

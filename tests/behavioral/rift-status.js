@@ -142,8 +142,18 @@ window.runRiftStatusQa=async function(b,ctx,assert){
     s=seed();s.activeParty=worst.ids;s.activeParty.forEach(id=>s.spirits[id]=2);install(s);b.ascendManual();b.renderLayout();
     ok(!!b.getState().formationRebuild && !b.riftStatus.active().length,'pending intent is not active Bonds');
     ok(q('#bond-summary').textContent==='No Formation Bond active.','Ascension neutral actual Formation');
-    var rebuilt=b.getState();rebuilt.lumen=1e20;b.setState(rebuilt);
-    worst.ids.forEach(id=>{if(!b.getState().spirits[id])b.formationTest.buy(id);});b.renderLayout();
+    var rebuilt=b.getState();
+    // Independent level-zero prices for this fresh, Bonds-0 fixture. All eight
+    // sum to 2,684,530; a 3,000,000 wallet funds any chosen five and every debit
+    // remains an exactly represented integer, unlike the former 1e20 wallet.
+    var recruitPrices={ember:10,tide:60,stone:360,gale:2100,thorn:12000,void:70000,aurora:400000,titan:2200000};
+    rebuilt.lumen=3000000;b.setState(rebuilt);
+    worst.ids.forEach(id=>{if(!b.getState().spirits[id]){
+      var before=b.getState(),price=recruitPrices[id];b.formationTest.buy(id);var after=b.getState();
+      ok(after.spirits[id]===1&&after.lumen===before.lumen-price&&before.lumen-after.lumen===price,'reconstruction recruits one paid level with the exact independent debit: '+id);
+      ok(after.activeParty.includes(id),'paid intended member joins the actual Formation: '+id);
+    }});b.renderLayout();
+    same(b.getState().activeParty,worst.ids,'legitimate reconstruction preserves intended member order');
     ok(!b.getState().formationRebuild&&q('#bond-summary').textContent===worst.text,'legitimate reconstruction restores actual Bonds');
     // Formation observers use committed levels/resources and the actual charge upgrade.
     s=seed();s.activeParty=worst.ids;s.activeParty.forEach((id,i)=>{s.spirits[id]=2;s.heroResource[id]=i*20;});install(s);

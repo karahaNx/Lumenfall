@@ -1,0 +1,433 @@
+{
+  "status": "FAILED",
+  "accepted": false,
+  "identity": {
+    "run": 38083768940,
+    "job": 114305874246,
+    "artifact": 11681523118,
+    "head": "0c539c528d3b950a786d0ea377fcfc59499f1a3a",
+    "base": "2d01049393e3bb45a90d80e07af52ae0484b0ec5",
+    "merge": "3a65d44e1bb0fadc35e98ced5e0e99b7840bc7ac",
+    "tree": "da50c4eead313efee2ad9683e43e5a0cb2ccc71f",
+    "source": "4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef",
+    "fixture": "ab43604db1b5bce8b9990506f989676dfb0009cdcf2e514a8ccee9da166c8753"
+  },
+  "runConclusion": "failure",
+  "jobConclusion": "failure",
+  "artifact": {
+    "id": 11681523118,
+    "bytes": 3368615,
+    "sha256": "b31a7502ef3a6e69248581693df82870c03ba153ad55255672b71da44d280064",
+    "apiDigestMatches": true,
+    "crcVerified": true
+  },
+  "publishedScriptsVerified": 12,
+  "passed": {
+    "core": {
+      "checks": 5267,
+      "negativeControls": 28
+    },
+    "offline": {
+      "checks": 7691,
+      "negativeControls": 4,
+      "boundaries": 14,
+      "longRunCount": 6,
+      "sixPartyBounds": 4
+    },
+    "economy": {
+      "checks": 16802,
+      "negativeControls": 6
+    },
+    "prismState": {
+      "checks": 3506,
+      "payoutCases": 180
+    },
+    "treeV8": {
+      "checks": 2862,
+      "priceCases": 94,
+      "faultCases": 34
+    },
+    "prismMobile": {
+      "checks": 468,
+      "profiles": 12,
+      "screenshots": 12
+    }
+  },
+  "failures": [
+    {
+      "step": 8,
+      "test": "prism-closeout-data.cjs",
+      "error": "ReferenceError: treeLevel is not defined",
+      "cause": "Selective legacy adapter omitted new production helper dependencies; local exact command reproduced."
+    },
+    {
+      "step": 10,
+      "test": "tree-expansion-mobile.cjs",
+      "error": "raw old paid level retained starlight",
+      "checks": 2,
+      "profiles": 0,
+      "browserExitCode": 0,
+      "cause": "Raw legacy fixture was written before reload in a different in-memory state; the real outgoing beforeunload autosave replaced it. Fixture setup requires document-start seeding; no product save-loss defect established."
+    },
+    {
+      "step": 12,
+      "test": "prism-legacy-runtime.cjs",
+      "error": "ENOENT tree-validation/prism/legacy-cases.json",
+      "cause": "Dependent case generation stopped at step8. Tree V8 itself passed."
+    }
+  ],
+  "skipped": [
+    {
+      "step": 9,
+      "name": "Actual browser Prism payouts persistence and causal failures"
+    }
+  ],
+  "limitations": [
+    "This failed run does not satisfy integration gates.",
+    "parents.txt is blank in the shallow CI checkout; both synthetic parents are independently verified through GitHub Git-commit API.",
+    "The initial mobile receipt did not record raw storage; the approved repaired driver adds synthetic seed/load/storage diagnostics.",
+    "Visual inspection covered the actual Tree failure screenshot/DOM and two existing Prism200% screenshots; new Tree all-row browser acceptance was never reached.",
+    "No native Android/APK/WebView60/device acceptance claimed."
+  ],
+  "screenshots": [
+    {
+      "path": "tree-validation/mobile/failure.png",
+      "bytes": 169585,
+      "sha256": "d999dc8082cbd4d5d2af88de631df261f8299a90eeb32cfaed77e6d241e62387",
+      "width": 320,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-320-1-no-preference.png",
+      "bytes": 211093,
+      "sha256": "cac83e697092b98cf11ca384399c0de1ac9be3af268da9d4e92506d696117daa",
+      "width": 320,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-320-1-reduce.png",
+      "bytes": 211457,
+      "sha256": "78248bbc663f4c58d8c0faa3f5d036a9e23e4987febdcca19a1f89c2bf9adf82",
+      "width": 320,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-320-2-no-preference.png",
+      "bytes": 224139,
+      "sha256": "cdc6a044a80cb78e6ace11ace94b55b65c2faf1ce636702006733b22030ee12b",
+      "width": 320,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-320-2-reduce.png",
+      "bytes": 224497,
+      "sha256": "438cc986ee38d58812e2da7deb8b4aaba1c3053a3bcc99dc4300949d41c65420",
+      "width": 320,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-390-1-no-preference.png",
+      "bytes": 245876,
+      "sha256": "a322da18a05ddea1de41fdd182a80a7bc7a4da0e049c858ade05e66f83d9800f",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-390-1-reduce.png",
+      "bytes": 246275,
+      "sha256": "80c3f34b88b00a3475c6ed0c4fb6d626d9a2f76b6e349ffb913d370c51e0b671",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-390-2-no-preference.png",
+      "bytes": 255674,
+      "sha256": "9f58b63feb969c8f00fcdbce674725e8b41db89a1032b26424a01ac399edcbd2",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-390-2-reduce.png",
+      "bytes": 256055,
+      "sha256": "3922b21d06f28179daa459c4207abc6f076291cddf75ff2c4314039deb6a48e3",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-430-1-no-preference.png",
+      "bytes": 258408,
+      "sha256": "e79df06d278dbe6811d213cb0083cb9b70041e62b49b24524ee8b72ecea6fd1f",
+      "width": 430,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-430-1-reduce.png",
+      "bytes": 258848,
+      "sha256": "21494529f0ac64479b363f74f6ea6cb40db778d6994666c054a45e6d2a9bd9d8",
+      "width": 430,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-430-2-no-preference.png",
+      "bytes": 268412,
+      "sha256": "29d7b389262125af1387e526ffc397028a2a282d884a509f584860b149ff6fef",
+      "width": 430,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-430-2-reduce.png",
+      "bytes": 268847,
+      "sha256": "5d2fda730551945b96b9f5d38fd91704b982cf27fd82eb526530882f655483b5",
+      "width": 430,
+      "height": 844
+    }
+  ],
+  "files": [
+    {
+      "path": "tests/behavioral/prism-acceptance.cjs",
+      "bytes": 13167,
+      "sha256": "8009b22eb4d4551f4aef2c3f0db82507e595d8f434db000327cb95805291d6dd"
+    },
+    {
+      "path": "tests/behavioral/prism-closeout-data.cjs",
+      "bytes": 3354,
+      "sha256": "389acd5814d79bc12c2175627af76e777a417f7f02211c209ad22a6e1f291e81"
+    },
+    {
+      "path": "tests/behavioral/prism-earning-focused.cjs",
+      "bytes": 3603,
+      "sha256": "7a5de7d99703f80255d125fc369f8ca1c9bfc8b89ef9f00eafb99255b555b41f"
+    },
+    {
+      "path": "tests/behavioral/prism-earning-reference.cjs",
+      "bytes": 1956,
+      "sha256": "46d0ce1b498f6a7f37d87d6e5954e717292a6db86f39e2093853164435b51be2"
+    },
+    {
+      "path": "tests/behavioral/prism-earning-state.cjs",
+      "bytes": 8465,
+      "sha256": "bbaa33852a9d90f5829df61d6b6be9326f769046a676fe2e4b94800273aa044e"
+    },
+    {
+      "path": "tests/behavioral/prism-legacy-runtime.cjs",
+      "bytes": 3282,
+      "sha256": "b3cc6e5fe8c02f52f3e4d7180bb38bde85ffd10cfbc0640169959168534a9484"
+    },
+    {
+      "path": "tests/behavioral/tree-expansion-core.cjs",
+      "bytes": 54294,
+      "sha256": "43c0c8bf9931411bd8af4e9a2ef591521d29e050cfc9a929b94f2fbf3f78d441"
+    },
+    {
+      "path": "tests/behavioral/tree-expansion-economy.cjs",
+      "bytes": 28283,
+      "sha256": "3b3717f48dd4183f3ef8a70085f5c21460da75e909e020c7b473c251ff66d60a"
+    },
+    {
+      "path": "tests/behavioral/tree-expansion-harness.cjs",
+      "bytes": 14440,
+      "sha256": "bcf080ce494ee1a2df450241dbd6a087fb6880239c3d2e711d1d2116f4ce3463"
+    },
+    {
+      "path": "tests/behavioral/tree-expansion-mobile.cjs",
+      "bytes": 28777,
+      "sha256": "62d3dce957a920e998ffd4adb62747d795ef67cea1de671a45850035167fc42b"
+    },
+    {
+      "path": "tests/behavioral/tree-expansion-offline.cjs",
+      "bytes": 24517,
+      "sha256": "48713a8ed9e4703179a901521ce42889148b5d4f80dedb858ffddf7a22d7aa71"
+    },
+    {
+      "path": "tests/behavioral/tree-expansion-v8.cjs",
+      "bytes": 24937,
+      "sha256": "7ed1f234a07f846fb52b99cb7df02542fe49e621864089e4927354587225fcf4"
+    },
+    {
+      "path": "tree-validation/commit.txt",
+      "bytes": 41,
+      "sha256": "edf49dc3413b967a8ac4588dd7b5cff3106c4fce943d58f9af90dc81aa1f3c90"
+    },
+    {
+      "path": "tree-validation/context.txt",
+      "bytes": 133,
+      "sha256": "c2fa068a175c205b2fc23e1a700c22a53af81bf184504c0b9689aaf0d9a524f0"
+    },
+    {
+      "path": "tree-validation/core.json",
+      "bytes": 12449,
+      "sha256": "9bd9fe4783920562d356f194ed2a24d11a70ff7600575bf635e40f87cc018ecd"
+    },
+    {
+      "path": "tree-validation/economy.json",
+      "bytes": 30008,
+      "sha256": "f9db838047ba9ca136be76bd9f6aea67e2eccab6b7430bffcdd6a66af2b29e7e"
+    },
+    {
+      "path": "tree-validation/mobile/failure-dom.html",
+      "bytes": 748650,
+      "sha256": "d3b6aeda5a42e0dfd1a9dfb2ac57a8bee3e946f12b91320a57cb9094409ec640"
+    },
+    {
+      "path": "tree-validation/mobile/failure.png",
+      "bytes": 169585,
+      "sha256": "d999dc8082cbd4d5d2af88de631df261f8299a90eeb32cfaed77e6d241e62387",
+      "width": 320,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/mobile/receipt.json",
+      "bytes": 4987,
+      "sha256": "527268048e90cd2073a825200a91cdd156dbe84fbb27fd24dab2b32c7f28dcd2"
+    },
+    {
+      "path": "tree-validation/mobile.log",
+      "bytes": 5726,
+      "sha256": "272041250c4626025bf23b209e8344af9c0b9b55db9e8d8b0cde19bb4419209e"
+    },
+    {
+      "path": "tree-validation/offline.json",
+      "bytes": 14816,
+      "sha256": "2c4e18873479f81563b437242a26c14dc1f52470a443bf367b1d848f4bccfb2b"
+    },
+    {
+      "path": "tree-validation/parents.txt",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-320-1-no-preference.png",
+      "bytes": 211093,
+      "sha256": "cac83e697092b98cf11ca384399c0de1ac9be3af268da9d4e92506d696117daa",
+      "width": 320,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-320-1-reduce.png",
+      "bytes": 211457,
+      "sha256": "78248bbc663f4c58d8c0faa3f5d036a9e23e4987febdcca19a1f89c2bf9adf82",
+      "width": 320,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-320-2-no-preference.png",
+      "bytes": 224139,
+      "sha256": "cdc6a044a80cb78e6ace11ace94b55b65c2faf1ce636702006733b22030ee12b",
+      "width": 320,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-320-2-reduce.png",
+      "bytes": 224497,
+      "sha256": "438cc986ee38d58812e2da7deb8b4aaba1c3053a3bcc99dc4300949d41c65420",
+      "width": 320,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-390-1-no-preference.png",
+      "bytes": 245876,
+      "sha256": "a322da18a05ddea1de41fdd182a80a7bc7a4da0e049c858ade05e66f83d9800f",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-390-1-reduce.png",
+      "bytes": 246275,
+      "sha256": "80c3f34b88b00a3475c6ed0c4fb6d626d9a2f76b6e349ffb913d370c51e0b671",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-390-2-no-preference.png",
+      "bytes": 255674,
+      "sha256": "9f58b63feb969c8f00fcdbce674725e8b41db89a1032b26424a01ac399edcbd2",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-390-2-reduce.png",
+      "bytes": 256055,
+      "sha256": "3922b21d06f28179daa459c4207abc6f076291cddf75ff2c4314039deb6a48e3",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-430-1-no-preference.png",
+      "bytes": 258408,
+      "sha256": "e79df06d278dbe6811d213cb0083cb9b70041e62b49b24524ee8b72ecea6fd1f",
+      "width": 430,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-430-1-reduce.png",
+      "bytes": 258848,
+      "sha256": "21494529f0ac64479b363f74f6ea6cb40db778d6994666c054a45e6d2a9bd9d8",
+      "width": 430,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-430-2-no-preference.png",
+      "bytes": 268412,
+      "sha256": "29d7b389262125af1387e526ffc397028a2a282d884a509f584860b149ff6fef",
+      "width": 430,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/prism-430-2-reduce.png",
+      "bytes": 268847,
+      "sha256": "5d2fda730551945b96b9f5d38fd91704b982cf27fd82eb526530882f655483b5",
+      "width": 430,
+      "height": 844
+    },
+    {
+      "path": "tree-validation/prism/mobile/receipt.json",
+      "bytes": 47048,
+      "sha256": "a4b3c5819eff2f14cd4acf21085c21a7bdc746e455e8875cf4d060c127bf16a6"
+    },
+    {
+      "path": "tree-validation/prism-economy-summary.json",
+      "bytes": 889,
+      "sha256": "ec2824f5dc158cc730ed125d12bf3c2233a78f398c076cbdaf3ca759bd17ab3b"
+    },
+    {
+      "path": "tree-validation/prism-mobile.log",
+      "bytes": 33917,
+      "sha256": "d4a5455ea5b9027ce695ba645d7c6fa4d2656156fe84b1f4a3eca0e316e7d0fb"
+    },
+    {
+      "path": "tree-validation/prism-state.json",
+      "bytes": 449,
+      "sha256": "a10c94f5e583f586dda809d8cd7742889f6d48e9087d8edf521800ae4ab7b5b5"
+    },
+    {
+      "path": "tree-validation/prism-v8.json",
+      "bytes": 712,
+      "sha256": "e2aa4460f93090d3b2c06d343274ed2c12b4ec09d26712632d0d1c674770df39"
+    },
+    {
+      "path": "tree-validation/source-blobs.txt",
+      "bytes": 9598,
+      "sha256": "f0d33bf3eada44f1409303eb24a12fcc9efd94eec3f2080204027430b5c8e043"
+    },
+    {
+      "path": "tree-validation/source-sha256.txt",
+      "bytes": 174,
+      "sha256": "0cd0391f4b837fc563055f4d61185f654d40f6d9854df4903619f2c180b43b69"
+    },
+    {
+      "path": "tree-validation/source.txt",
+      "bytes": 99,
+      "sha256": "554c0938eec03dd8c8db111b0fcc9c537dd5b879531a874c492090a357d941e6"
+    },
+    {
+      "path": "tree-validation/tree.txt",
+      "bytes": 41,
+      "sha256": "300005fd2f835ed03339ef09e9bddb1cdd6f0345d79d4c1123ed3256a3d215a1"
+    },
+    {
+      "path": "tree-validation/v8.json",
+      "bytes": 905,
+      "sha256": "c19f97a4810a000aa0ac82a301ab4a3ac7af50e6c29ffebbdc0115a4e8b3a3bf"
+    }
+  ]
+}

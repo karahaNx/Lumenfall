@@ -1,7 +1,8 @@
 # Tree expansion — debugging checkpoint
 
-This is an incomplete development candidate, not accepted integration or a
-release. The current user authorizes sequential work behind draft PR102 and
+This is an incomplete development candidate in draft PR106, not accepted
+integration or a release. [First CI failures and adapter repairs](ci-debug-initial/README.md)
+remain mandatory before integration. The current user authorizes sequential work behind draft PR102 and
 explicitly holds main and APK work. [Design](DESIGN.md) freezes all20 active
 tracks, prices, unlocks, caps and transition rules.
 
@@ -51,7 +52,7 @@ Node runtime:24.19.0, V8:13.6.233.17-node.51.
 | `4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef` | All eight existing commands pass again; Tree core5,267/28, offline7,691/4 and actual V8 6.0 checks2,862 PASS | Includes actual failed-Auto-Ascend post-kill Deed/return/rollback/retry coverage. Mandatory full/browser CI remains pending. |
 
 The all-eight existing rerun includes Lab core2,456/10 negatives, boundary2,344/5,
-stress2,182, Prism state3,506, Forge core9,291/25, Forge calibration3,134/7,
+stress2,182, Prism state3,506, Forge core9,308/25, Forge calibration3,134/7,
 tooling and APK-identity **self-test only**. No APK was built.
 
 Independent economy coverage includes3,117 new rational Empower quotes,1,824

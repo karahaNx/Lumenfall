@@ -1,0 +1,245 @@
+{
+  "observedAtUtc": "2026-10-10 20:38:05 UTC",
+  "headSha": "0c539c528d3b950a786d0ea377fcfc59499f1a3a",
+  "syntheticCommit": "3a65d44e1bb0fadc35e98ced5e0e99b7840bc7ac",
+  "treeSha": "da50c4eead313efee2ad9683e43e5a0cb2ccc71f",
+  "sourceSha256": "4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef",
+  "fixtureSha256": "ab43604db1b5bce8b9990506f989676dfb0009cdcf2e514a8ccee9da166c8753",
+  "lab": {
+    "status": "pass",
+    "runId": 38083768886,
+    "jobId": 114305874057,
+    "steps": 11,
+    "artifact": {
+      "id": 11681353399,
+      "name": "lab-expansion-38083768886",
+      "bytes": 5192506,
+      "apiDigest": "sha256:264c0363a871e2a0409d1a5f88bb73327997325ba246d3bd26382aa921f9f89b",
+      "computedDigest": "sha256:264c0363a871e2a0409d1a5f88bb73327997325ba246d3bd26382aa921f9f89b",
+      "digestMatches": true,
+      "zipCrcIntegrity": true,
+      "entries": 58
+    },
+    "results": {
+      "core": {
+        "status": "pass",
+        "checks": 2456,
+        "projects": 14,
+        "negativeControlsCaught": 10,
+        "negativeNames": [
+          "lost-capacity",
+          "free-start",
+          "early-level",
+          "lost-seventh-paid-record",
+          "ascend-drops-paid-slots",
+          "ascend-drops-earned-capacity",
+          "double-notes",
+          "no-procurement",
+          "missed-luminous-purchase",
+          "erased-old-value"
+        ]
+      },
+      "boundary": {
+        "status": "pass",
+        "checks": 2344,
+        "cases": 388,
+        "negativeControlsCaught": 5,
+        "negativeNames": [
+          "wallet-before-luminous-bonus",
+          "unverified-one-kill-estimate",
+          "imaginary-first-luminous-kill",
+          "unverified-upper-bound",
+          "unsafe-normal-estimate-skips-safe-buy"
+        ]
+      },
+      "stress": {
+        "status": "pass",
+        "cases": 2182,
+        "seed": 104,
+        "unavailableAtPrediction": 0,
+        "mismatchCount": 0
+      },
+      "prismState": {
+        "status": "pass",
+        "checks": 3506,
+        "payoutCases": 180,
+        "routes": 8
+      },
+      "mobile": {
+        "status": "pass",
+        "checks": 6420,
+        "profiles": 12,
+        "screenshots": 24,
+        "node": "v20.20.2",
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "profileTuples": [
+          "320/1/no-preference",
+          "320/1/reduce",
+          "320/2/no-preference",
+          "320/2/reduce",
+          "390/1/no-preference",
+          "390/1/reduce",
+          "390/2/no-preference",
+          "390/2/reduce",
+          "430/1/no-preference",
+          "430/1/reduce",
+          "430/2/no-preference",
+          "430/2/reduce"
+        ]
+      },
+      "v8": {
+        "status": "pass",
+        "checks": 580,
+        "node": "v8.3.0",
+        "v8": "6.0.286.52",
+        "scriptsParsed": 2,
+        "writes": 84,
+        "officialArchiveChecksumVerified": true
+      },
+      "sourceGate": "QA passed: 2 scripts syntax-checked, 16 unique IDs verified, cache/state lifecycle guards present.",
+      "contextGate": "PASS: 29 entrypoints, 90 local Markdown links, shared startup 31131 bytes; startup with docs/tasks/LAB_EXPANSION_001.md 32565 bytes"
+    },
+    "auditReceipt": {
+      "bytes": 10765,
+      "sha256": "0606515267b249af1b45810d28e5c5e450ba80c967b83874b2d98df90e3031ea"
+    }
+  },
+  "forge": {
+    "status": "failure",
+    "runId": 38083768789,
+    "jobId": 114305873968,
+    "steps": {
+      "total": 13,
+      "success": 11,
+      "failure": [
+        {
+          "name": "Eight-hour Auto-Ascend capped windows and frozen offline oracle",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 7,
+          "started_at": "2026-10-10T20:27:18Z",
+          "completed_at": "2026-10-10T20:27:27Z"
+        }
+      ],
+      "skipped": [
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 19,
+          "started_at": "2026-10-10T20:29:32Z",
+          "completed_at": "2026-10-10T20:29:32Z"
+        }
+      ]
+    },
+    "artifact": {
+      "id": 11681473146,
+      "name": "forge-expansion-38083768789",
+      "bytes": 5733108,
+      "apiDigest": "sha256:d6c4a477b42085b485c9dc75ad7ea3cc66b13bc3dd8421aeb9066b132c80c662",
+      "computedDigest": "sha256:d6c4a477b42085b485c9dc75ad7ea3cc66b13bc3dd8421aeb9066b132c80c662",
+      "crcIntegrity": true,
+      "entries": 124
+    },
+    "results": {
+      "core": {
+        "status": "pass",
+        "assertions": 9308,
+        "priceCases": 598,
+        "purchases": 448,
+        "negativeControls": 25,
+        "negativeNames": [
+          "disabled-effect-cauterize",
+          "disabled-effect-fracturekey",
+          "disabled-effect-guardianseal",
+          "disabled-effect-spillway",
+          "disabled-effect-sustainedchannel",
+          "disabled-effect-tapconduit",
+          "disabled-effect-guardiancadence",
+          "disabled-effect-relay",
+          "disabled-effect-resonantedge",
+          "disabled-effect-victorycharge",
+          "disabled-effect-amplifiertrim",
+          "disabled-effect-dualchannel",
+          "disabled-effect-overflowconduit",
+          "disabled-effect-resonancecells",
+          "disabled-effect-resonancecascade",
+          "disabled-effect-resonancereclaim",
+          "one-unit-price-drift",
+          "inexact-wallet-free-purchase",
+          "primary-mutation-leak-forge",
+          "primary-mutation-leak-resonate",
+          "paid-relay-lost-on-real-ascend",
+          "finite-burst-false-wall",
+          "unsafe-counter-normal-cadence-average",
+          "unsafe-count-as-forge-run-identity",
+          "unsafe-count-as-passive-run-identity"
+        ]
+      },
+      "calibration": {
+        "status": "pass",
+        "checks": 3134,
+        "cases": 26,
+        "negativeControls": 7,
+        "negativeNames": [
+          "ignore-initial-burst-budget",
+          "omit-paid-saved-support-source",
+          "omit-nonlethal-refund-from-hud-reference",
+          "assume-exact-support-deadline-uptime",
+          "assume-every-fifth-cadence-in-lower-bound",
+          "assume-every-fifth-cadence-in-upper-bound",
+          "ignore-unsafe-counter-transition-in-hud"
+        ]
+      },
+      "offline": {
+        "status": "failure",
+        "stdoutBytes": 0,
+        "error": "ReferenceError: treeAscendMotesForWallet is not defined",
+        "command": "node tests/behavioral/offline-catchup.cjs --source index.html",
+        "testSha256": "012ab16388abfe92578ce64cfbcc968a2ca7307be915753ce6bea99b5810ffc5",
+        "cause": "Historical reward counterfactual replaced the whole span before ascendPrismGain, deleting new Tree helpers; actual applyAscendMutation still calls treeAscendMotesForWallet. Local exact reproduction preserved separately."
+      },
+      "mobile": {
+        "status": "pass",
+        "checks": 25524,
+        "profiles": 12,
+        "screenshots": 24,
+        "node": "v20.20.2",
+        "exit": {
+          "code": 0,
+          "signal": null
+        }
+      },
+      "v8": {
+        "status": "pass",
+        "checks": 2452,
+        "node": "v8.3.0",
+        "v8": "6.0.286.52",
+        "purchases": 48,
+        "effectCases": 64,
+        "storageFaultCases": 51,
+        "unsafeAscendRunCases": 2,
+        "officialArchiveChecksumVerified": true
+      },
+      "sourceGate": "QA passed: 2 scripts syntax-checked, 16 unique IDs verified, cache/state lifecycle guards present.",
+      "contextGate": "PASS: 29 entrypoints, 91 local Markdown links, shared startup 31131 bytes; startup with docs/tasks/FORGE_EXPANSION_001.md 32762 bytes"
+    },
+    "auditReceipt": {
+      "bytes": 11824,
+      "sha256": "b17b41cf99c16f2d49480085c2ff0b91143c03d988f9448a7c667fdcb1e9b9f1"
+    }
+  },
+  "archivedTestsAllMatchPublishedHead": true,
+  "visualReview": {
+    "screenshots": [
+      "lab-validation/mobile/lab-adaptivegrowth-320-2-no-preference.png",
+      "forge-validation/mobile/forge-last-cap-320-2-no-preference.png"
+    ],
+    "finding": "Visible final-row controls and focus rings fit the 320px viewport; no control clipping observed in these two reviewed frames.",
+    "limits": "Scale2 is CSS root font16→32px; px-sized text may remain unchanged. This is not native WebView textZoom, TalkBack or physical-device acceptance."
+  },
+  "scope": "Current CI receipts only; complete raw artifacts and 48 PNGs retained in scratch. Failed CI is not relabelled by local repair."
+}

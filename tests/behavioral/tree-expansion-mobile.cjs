@@ -12,6 +12,7 @@ const transportHash=crypto.createHash('sha256').update(driver).digest('hex');
 const selfHash=crypto.createHash('sha256').update(fs.readFileSync(__filename)).digest('hex');
 function one(from,to){assert.equal(driver.split(from).length,2,'one Tree transport extension: '+from.slice(0,60));driver=driver.replace(from,()=>to);}
 one('window.requestAnimationFrame=function(){return 0;};','');
+one('let checks=0;','let checks=0;const treeMigrationDiagnostics=[];');
 one('window.__prismInput=[];',String.raw`window.__prismInput=[];window.__treeWrites=[];var originalTreeStorageSet=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){var result=originalTreeStorageSet.call(this,k,v);window.__treeWrites.push(k);return result;};`);
 const hook='breakdown:ascendPrismBreakdown,keys:function(){return [SAVE_KEY,RECOVERY_SAVE_KEY];}';
 one(hook,String.raw`
@@ -37,8 +38,8 @@ one(hook,String.raw`
  treeSpirits:function(){return SPIRITS.map(function(s){return {id:s.id,unlockDepth:s.unlockDepth};});},
  treeCapacity:function(){return treeFormationCapacity(state);},
  `+hook);
-one("const result={status:'fail',sourceSha256:","const result={status:'fail',treeTestSha256:"+JSON.stringify(selfHash)+",transportSha256:"+JSON.stringify(transportHash)+",sourceSha256:");
-one("await shot('failure');result.input=await ev('window.__prismInput');","await shot('failure');result.input=await ev('window.__prismInput');fs.writeFileSync(path.join(evidence,'failure-dom.html'),await ev('document.documentElement.outerHTML'));result.failureDom='failure-dom.html';");
+one("const result={status:'fail',sourceSha256:","const result={status:'fail',migrationDiagnostics:treeMigrationDiagnostics,treeTestSha256:"+JSON.stringify(selfHash)+",transportSha256:"+JSON.stringify(transportHash)+",sourceSha256:");
+one("await shot('failure');result.input=await ev('window.__prismInput');",String.raw`await shot('failure');result.input=await ev('window.__prismInput');result.syntheticStorage=await ev("['lumenfall_save_v2','lumenfall_save_recovery_v1'].map(function(k){return {key:k,raw:localStorage.getItem(k)};})");result.syntheticLoadedState=await ev('window.prismQa?prismQa.get():null');result.syntheticSeedObservation=await ev('window.__treeLegacySeedObservation||null');fs.writeFileSync(path.join(evidence,'failure-dom.html'),await ev('document.documentElement.outerHTML'));result.failureDom='failure-dom.html';`);
 // Independent frozen DESIGN rows: id, displayed name, unlock, cap, price ladder.
 const specs=[
  ['echo','Echoing Rest',1,6,[2,3,4,6,8,11]],
@@ -101,15 +102,22 @@ const cases='  const specs='+JSON.stringify(specs)+';\n'+String.raw`
   // Actual schema1 cold load, not a normalized test fixture passed as migration.
   const old=copy(seed);old.schemaVersion=1;delete old.offline12hRefund;delete old.treeTrainingProgress;added.forEach(id=>delete old.nodes[id]);
   old.nodes.echo=9;old.nodes.bonds=25;old.nodes.swift=12;old.nodes.reserves=3;old.prisms=100;old.comets=7;old.owned.offline24=true;old.owned.offline48=true;
-  await ev('prismQa.keys().forEach(function(k){localStorage.setItem(k,'+JSON.stringify(JSON.stringify(old))+');});window.prismQa=null');
-  await send('Page.reload');await ready();await ev('document.documentElement.style.fontSize='+JSON.stringify(16*scale+'px'));await ev("prismQa.tab('ascend')");await frames();
-  const migrated=await ev('prismQa.get()');ok(migrated.schemaVersion===2,'actual load migrates schema1');
+  const legacyRaw=JSON.stringify(old),legacySeedSha256=crypto.createHash('sha256').update(legacyRaw).digest('hex');
+  const migrationDiagnostic={synthetic:true,width,scale,motion,seedSha256:legacySeedSha256,seed:{schemaVersion:old.schemaVersion,nodes:old.nodes,prisms:old.prisms,comets:old.comets},loaded:null};treeMigrationDiagnostics.push(migrationDiagnostic);
+  // The outgoing real beforeunload autosave must run normally. Install the raw
+  // legacy fixture only at the next document start, before the game loads it.
+  const legacyBootstrap=await send('Page.addScriptToEvaluateOnNewDocument',{source:'('+function(raw,sha){var keys=['lumenfall_save_v2','lumenfall_save_recovery_v1'];keys.forEach(function(k){localStorage.setItem(k,raw);});var s=JSON.parse(raw);window.__treeLegacySeedObservation={synthetic:true,sha256:sha,schemaVersion:s.schemaVersion,prisms:s.prisms,comets:s.comets,nodes:s.nodes,slotsMatch:keys.every(function(k){return localStorage.getItem(k)===raw;})};}.toString()+')('+JSON.stringify(legacyRaw)+','+JSON.stringify(legacySeedSha256)+')'});
+  await ev('window.prismQa=null');await send('Page.reload');await ready();
+  await send('Page.removeScriptToEvaluateOnNewDocument',{identifier:legacyBootstrap.identifier});
+  const legacySeedObservation=await ev('window.__treeLegacySeedObservation');migrationDiagnostic.beforeLoad=legacySeedObservation;ok(legacySeedObservation&&legacySeedObservation.slotsMatch&&legacySeedObservation.sha256===legacySeedSha256,'raw legacy slots installed before actual load');
+  await ev('document.documentElement.style.fontSize='+JSON.stringify(16*scale+'px'));await ev("prismQa.tab('ascend')");await frames();
+  const migrated=await ev('prismQa.get()');migrationDiagnostic.loaded={schemaVersion:migrated.schemaVersion,nodes:migrated.nodes,prisms:migrated.prisms,comets:migrated.comets};ok(migrated.schemaVersion===2,'actual load migrates schema1');
   for(const id of ['starlight','steady','echo','bonds','swift','momentum','reserves'])ok(migrated.nodes[id]===old.nodes[id],'raw old paid level retained '+id);
   ok(added.every(id=>migrated.nodes[id]===0)&&migrated.treeTrainingProgress===0,'all missing new levels/counter start at zero');
   ok(migrated.prisms===132&&migrated.comets===307,'F26 prices 6+10+16 and two old hours refund once');
   for(const field of ['research','longStudyLevels','activeStudies','heroRarity','wispModules','wispUltimate','autoAscendEnabled','autoAscendTargetDepth'])same(migrated[field],old[field],'paid migration retains '+field);
   same(await ev('prismQa.treeRoundtrip()'),migrated,'actual backup codec does not replay migration');
-  await ev('prismQa.treeSave()');const migrationSaved=await ev('prismQa.get()');await send('Page.reload');await ready();
+  await ev('prismQa.treeSave()');const migrationSaved=await ev('prismQa.get()');await ev('window.prismQa=null');await send('Page.reload');await ready();
   ok(await ev('prismQa.get().prisms')===132&&await ev('prismQa.get().comets')===307,'second actual load never repeats F26 refund');
   await ev('document.documentElement.style.fontSize='+JSON.stringify(16*scale+'px'));
   await install(seed);
@@ -196,7 +204,7 @@ const cases='  const specs='+JSON.stringify(specs)+';\n'+String.raw`
   ok(added.every(id=>cold.nodes[id]===1),'all seventeen actual new purchases survive reload');ok(cold.activeParty.length===6,'six-slot snapshot survives cold load');
   const zero=copy(formation);zero.nodes.formationseat=0;zero.activeParty=six.activeParty;zero.formationPresets.push=six.activeParty;await install(zero,'spirits');ok(await ev('prismQa.get().activeParty.length')===5&&await ev('prismQa.treeCapacity()')===5,'zero-new capacity remains five');
   await install(committed);const ax=await send('Accessibility.getFullAXTree');for(const r of specs)ok(ax.nodes.some(n=>!n.ignored&&n.name&&n.name.value.includes(r[1])),'named Tree row exposed to AX '+r[0]);
-  ok((await ev('window.__prismErrors')).length===0,'no browser runtime errors');records.push({width,scale,motion,nativeAnimationFrames:true,catalog,samples,effectSamples,locks,inputSamples,dustSamples,unavailableEmpower,sixMembers:six.activeParty,legacyMigration:{schema:migrated.schemaVersion,prisms:migrated.prisms,comets:migrated.comets,newDefaultZero:added.length},input});
+  ok((await ev('window.__prismErrors')).length===0,'no browser runtime errors');records.push({width,scale,motion,nativeAnimationFrames:true,catalog,samples,effectSamples,locks,inputSamples,dustSamples,unavailableEmpower,sixMembers:six.activeParty,legacyMigration:{seed:legacySeedObservation,schema:migrated.schemaVersion,prisms:migrated.prisms,comets:migrated.comets,nodes:migrated.nodes,newDefaultZero:added.length},input});
 `;
 // Capture the purchase/formation input epoch before the final actual reload.
 // No focus or scroll repair runs after user input.

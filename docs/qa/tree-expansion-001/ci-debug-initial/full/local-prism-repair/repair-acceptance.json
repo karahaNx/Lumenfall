@@ -1,0 +1,40 @@
+{
+  "auditUtc": "2026-10-10T20:30:34Z",
+  "clockSource": "clock__curr_time",
+  "started": "2026-10-10T20:30:49.430Z",
+  "finished": "2026-10-10T20:30:59.458Z",
+  "command": "node tests/behavioral/prism-earning.cjs --source index.html",
+  "cwd": "/workspace/scratch/0848c4e4f365/Lumenfall-tree",
+  "executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+  "node": "v24.19.0",
+  "v8": "13.6.233.17-node.51",
+  "baseCommit": "0c539c528d3b950a786d0ea377fcfc59499f1a3a",
+  "sourceSha256": "4e4707afca6672ea46aad03ebd05cd7341ad61d7316a9636fed6172dbfed96ef",
+  "testSha256": "26d75f5d303febb56dda2c67c24ae7371f84c8e32cc0be2ac24bf4cb7186236f",
+  "exitCode": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "bytes": 1086,
+    "sha256": "d9177deea0048157a60cbe43a2f9bdc4c485fa98a3734c1e5c5d4b64db514b3f"
+  },
+  "stderr": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "result": {
+    "status": "pass",
+    "assertions": 341654,
+    "formulaCases": 277916,
+    "payoutCases": 3780,
+    "negativeControls": [
+      "old-repeat-penalizes-bonus",
+      "drop-tree",
+      "drop-completed-lab",
+      "floating-full-floor",
+      "floating-progress-ceil",
+      "displayed-vs-cleared-rift",
+      "count-bonus-twice"
+    ]
+  }
+}
