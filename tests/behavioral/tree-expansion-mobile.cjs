@@ -12,7 +12,7 @@ const transportHash=crypto.createHash('sha256').update(driver).digest('hex');
 const selfHash=crypto.createHash('sha256').update(fs.readFileSync(__filename)).digest('hex');
 function one(from,to){assert.equal(driver.split(from).length,2,'one Tree transport extension: '+from.slice(0,60));driver=driver.replace(from,()=>to);}
 one('window.requestAnimationFrame=function(){return 0;};','');
-one('let checks=0;','let checks=0;const treeMigrationDiagnostics=[],treeFundedDiagnostics=[],treeSummaryScrollControls=[];');
+one('let checks=0;','let checks=0;const treeMigrationDiagnostics=[],treeFundedDiagnostics=[],treeFormationDiagnostics=[],treeViewportControls=[];');
 one('window.__prismInput=[];',String.raw`window.__prismInput=[];window.__treeWrites=[];var originalTreeStorageSet=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){var result=originalTreeStorageSet.call(this,k,v);window.__treeWrites.push(k);return result;};`);
 const hook='breakdown:ascendPrismBreakdown,keys:function(){return [SAVE_KEY,RECOVERY_SAVE_KEY];}';
 one(hook,String.raw`
@@ -37,19 +37,26 @@ one(hook,String.raw`
  treeRoundtrip:function(){return acceptPersistedState(decodeSaveBackup(encodeSaveBackup(state)));},
  treeSpirits:function(){return SPIRITS.map(function(s){return {id:s.id,unlockDepth:s.unlockDepth};});},
  treeCapacity:function(){return treeFormationCapacity(state);},
- treeSummaryScrollControl:function(){
-  if(this.treeSummaryOriginal)throw Error('summary scroll control already installed');
-  var original=renderAscendSummary,text=Function.prototype.toString.call(original),anchor='editingAuto || editingTree';
-  if(text.split(anchor).length!==2)throw Error('one exact Tree summary scroll guard required');
-  var mutated=text.replace(anchor,'editingAuto');
-  renderAscendSummary=eval('('+mutated+')');this.treeSummaryOriginal=original;
-  return {original:text,mutated:Function.prototype.toString.call(renderAscendSummary)};},
- treeSummaryScrollRestore:function(){
-  if(!this.treeSummaryOriginal)throw Error('summary scroll control is not installed');
-  renderAscendSummary=this.treeSummaryOriginal;delete this.treeSummaryOriginal;
-  return Function.prototype.toString.call(renderAscendSummary);},
+ treeViewportFunction:function(kind){
+  if(kind!=='summary'&&kind!=='formation')throw Error('unknown viewport function');
+  return Function.prototype.toString.call(kind==='summary'?renderAscendSummary:renderSpirits);},
+ treeViewportMutation:function(kind){
+  if(this.treeViewportOriginal)throw Error('viewport control already installed');
+  if(kind!=='summary'&&kind!=='formation')throw Error('unknown viewport mutation');
+  var original=kind==='summary'?renderAscendSummary:renderSpirits,text=Function.prototype.toString.call(original);
+  var anchor=kind==='summary'?'restoreControlViewport(treeViewport);':'restoreControlViewport(spiritViewport);';
+  var replacement='/* QA negative: '+kind+' viewport restoration disabled. */';
+  if(text.split(anchor).length!==2)throw Error('one exact viewport restoration call required');
+  var mutated=text.replace(anchor,replacement),fn=eval('('+mutated+')');
+  if(kind==='summary')renderAscendSummary=fn;else renderSpirits=fn;
+  this.treeViewportOriginal={kind:kind,fn:original};
+  return {original:text,mutated:Function.prototype.toString.call(fn),from:anchor,to:replacement};},
+ treeViewportRestore:function(){
+  var original=this.treeViewportOriginal;if(!original)throw Error('viewport control is not installed');
+  if(original.kind==='summary')renderAscendSummary=original.fn;else renderSpirits=original.fn;
+  delete this.treeViewportOriginal;return Function.prototype.toString.call(original.fn);},
  `+hook);
-one("const result={status:'fail',sourceSha256:","const result={status:'fail',migrationDiagnostics:treeMigrationDiagnostics,fundedPurchaseDiagnostics:treeFundedDiagnostics,summaryScrollControls:treeSummaryScrollControls,treeTestSha256:"+JSON.stringify(selfHash)+",transportSha256:"+JSON.stringify(transportHash)+",sourceSha256:");
+one("const result={status:'fail',sourceSha256:","const result={status:'fail',migrationDiagnostics:treeMigrationDiagnostics,fundedPurchaseDiagnostics:treeFundedDiagnostics,formationDiagnostics:treeFormationDiagnostics,viewportControls:treeViewportControls,treeTestSha256:"+JSON.stringify(selfHash)+",transportSha256:"+JSON.stringify(transportHash)+",sourceSha256:");
 one("await shot('failure');result.input=await ev('window.__prismInput');",String.raw`await shot('failure');result.input=await ev('window.__prismInput');result.syntheticStorage=await ev("['lumenfall_save_v2','lumenfall_save_recovery_v1'].map(function(k){return {key:k,raw:localStorage.getItem(k)};})");result.syntheticLoadedState=await ev('window.prismQa?prismQa.get():null');result.syntheticSeedObservation=await ev('window.__treeLegacySeedObservation||null');fs.writeFileSync(path.join(evidence,'failure-dom.html'),await ev('document.documentElement.outerHTML'));result.failureDom='failure-dom.html';`);
 // Independent frozen DESIGN rows: id, displayed name, unlock, cap, price ladder.
 const specs=[
@@ -78,7 +85,8 @@ const start=driver.indexOf('  const samples=[];'),end=driver.indexOf("  await se
 assert(start>0&&end>start,'one mobile profile body');
 const cases='  const specs='+JSON.stringify(specs)+';\n'+String.raw`
   const copy=x=>JSON.parse(JSON.stringify(x)),sel=(a,id)=>'['+a+'="'+id+'"]',same=(a,b,m)=>ok(JSON.stringify(a)===JSON.stringify(b),m);
-  const samples=[],effectSamples=[],locks=[],inputSamples=[],dustSamples=[],ids=specs.map(x=>x[0]),added=ids.slice(3);
+  const digest=value=>crypto.createHash('sha256').update(typeof value==='string'?value:JSON.stringify(value)).digest('hex');
+  const samples=[],effectSamples=[],locks=[],inputSamples=[],formationSamples=[],dustSamples=[],ids=specs.map(x=>x[0]),added=ids.slice(3);
   function price(row,level){if(row[0]==='bonds')return Math.ceil(2*Math.pow(1.45,level));if(row[0]==='swift')return Math.ceil(3*Math.pow(1.5,level));return row[4][level];}
   function effect(id,raw){var r=specs.find(x=>x[0]===id),l=r[3]===null?raw:Math.min(raw,r[3]);
    if(id==='echo')return ['+'+(5*l)+' percentage points offline rate',(70+5*l)+'% before Projects'];
@@ -106,8 +114,83 @@ const cases='  const specs='+JSON.stringify(specs)+';\n'+String.raw`
   async function frames(){await ev('new Promise(function(r){requestAnimationFrame(function(){requestAnimationFrame(r);});})');}
   async function measure(selector){return ev('('+function(selector){var e=document.querySelector(selector);if(!e)throw Error('missing control '+selector);var r=e.getBoundingClientRect(),m=document.querySelector('main'),v=m.getBoundingClientRect(),n=document.querySelector('nav.tabbar').getBoundingClientRect(),summary=document.querySelector('.ascend-summary').getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2,h=document.elementFromPoint(x,y),a=document.activeElement;return {scroll:m.scrollTop,x:x,y:y,top:r.top,bottom:r.bottom,width:r.width,height:r.height,mainTop:v.top,mainBottom:v.bottom,scrollHeight:m.scrollHeight,clientHeight:m.clientHeight,summaryHeight:summary.height,summaryTop:summary.top,summaryBottom:summary.bottom,treeTop:document.getElementById('node-list').getBoundingClientRect().top,visible:r.top>=Math.max(0,v.top)-.5&&r.bottom<=Math.min(v.bottom,n.top,innerHeight)+.5&&r.left>=v.left-.5&&r.right<=v.right+.5,hit:!!h&&(h===e||e.contains(h)),focus:a&&{node:a.dataset.node,toggle:a.dataset.toggle,preset:a.dataset.formationPreset,insideTree:!!a.closest('#node-list')},disabled:e.disabled};}.toString()+')('+JSON.stringify(selector)+')');}
   function visible(m,label){ok(m.width>=44&&m.height>=44,'44px '+label);ok(m.visible&&m.hit,'visible actual hit target '+label+' '+JSON.stringify(m));}
+  function viewport(before,after,focusKey,focusId,label){
+   ok(after.focus&&after.focus[focusKey]===focusId,'native focus '+label);
+   ok(!after.disabled,'enabled control '+label);
+   ok(Math.abs(after.top-before.top)<=1,'viewport top stable '+label);
+   visible(after,label);
+  }
+  function stableAction(record,focusKey,focusId,label){viewport(record.before,record.immediate,focusKey,focusId,label+' immediate');viewport(record.before,record.settled,focusKey,focusId,label+' settled');}
   async function prepare(selector,focus){await point(selector);if(focus)await ev('document.querySelector('+JSON.stringify(selector)+').focus({preventScroll:true})');var m=await measure(selector);visible(m,selector);return m;}
   async function touchHere(selector){var m=await measure(selector);visible(m,'touch '+selector);await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:m.x,y:m.y}]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});}
+  async function observeInput(record,selector,action,prepareInput=true){
+   record.before=prepareInput?await prepare(selector,true):await measure(selector);visible(record.before,'before '+record.id);
+   record.stateBefore=await ev('prismQa.get()');record.runtimeErrorsBefore=await ev('window.__prismErrors');
+   const writes=await ev('window.__treeWrites.length'),inputStart=await ev('window.__prismInput.length');
+   await action();record.immediate=await measure(selector);await frames();record.settled=await measure(selector);
+   // Persist every geometry epoch before state, focus or visibility assertions.
+   record.stateAfter=await ev('prismQa.get()');record.writeKeys=await ev('window.__treeWrites.slice('+writes+')');
+   record.input=await ev('window.__prismInput.slice('+inputStart+')');record.runtimeErrorsAfter=await ev('window.__prismErrors');
+   record.deltas={immediateTop:record.immediate.top-record.before.top,settledTop:record.settled.top-record.before.top,immediateScroll:record.immediate.scroll-record.before.scroll,settledScroll:record.settled.scroll-record.before.scroll};
+   return record;
+  }
+  async function formationInput(id,selector,action,prepareInput=true){
+   const record={id,width,scale,motion,nativeAnimationFrames:true,before:null,immediate:null,settled:null};
+   treeFormationDiagnostics.push(record);formationSamples.push(record);
+   await observeInput(record,selector,action,prepareInput);return record;
+  }
+  async function viewportControl(kind,fixture,tab,selector,focusKey,focusId,verifyState){
+   const prior=await ev('prismQa.get()'),priorSlots=await ev('prismQa.keys().map(function(key){return {key:key,raw:localStorage.getItem(key)};})');
+   const priorStyle=await ev("(function(){var s=document.querySelector('main').style;return {value:s.getPropertyValue('overflow-anchor'),priority:s.getPropertyPriority('overflow-anchor')};})()");
+   const priorTab=await ev("document.querySelector('.tab-panel.active').id.slice(4)");
+   const control={id:kind==='summary'?'frontier-summary-viewport':'formation-reorder-viewport',width,scale,motion,status:'started',overflowAnchor:'none',seedSha256:digest(fixture),positiveStateSha256:digest(prior),positiveSlotsSha256:digest(priorSlots),runs:{}};
+   treeViewportControls.push(control);let mutated=false;
+   try{
+    const original=await ev('prismQa.treeViewportFunction('+JSON.stringify(kind)+')');control.originalFunctionSha256=digest(original);
+    for(const mode of ['positive','mutated']){
+     await install(fixture,tab);
+     const row={id:control.id+'-'+mode,width,scale,motion,nativeAnimationFrames:true,before:null,immediate:null,settled:null};control.runs[mode]=row;
+     row.overflowAnchorBefore=await ev("document.querySelector('main').style.overflowAnchor='none';getComputedStyle(document.querySelector('main')).overflowAnchor");
+     if(mode==='mutated'){
+      const mutation=await ev('prismQa.treeViewportMutation('+JSON.stringify(kind)+')');mutated=true;
+      control.mutation={from:mutation.from,to:mutation.to};control.mutatedFunctionSha256=digest(mutation.mutated);
+      ok(mutation.original===original&&mutation.original.split(mutation.from).length===2&&mutation.mutated===mutation.original.replace(mutation.from,mutation.to),'one exact '+kind+' viewport restore mutation');
+     }
+     await observeInput(row,selector,()=>key('Enter','Enter',13));
+     row.overflowAnchorAfter=await ev("getComputedStyle(document.querySelector('main')).overflowAnchor");
+     const slots=await ev('prismQa.keys().map(function(key){return {key:key,raw:localStorage.getItem(key)};})');
+     row.slots=slots.map(slot=>({key:slot.key,bytes:Buffer.byteLength(slot.raw||''),sha256:digest(slot.raw||''),state:slot.raw&&JSON.parse(slot.raw)}));
+     row.screenshot='tree-'+kind+'-viewport-'+mode+'-'+width+'-'+scale+'-'+motion+'.png';await shot(row.screenshot.slice(0,-4));
+     ok(row.overflowAnchorBefore==='none'&&row.overflowAnchorAfter==='none','browser anchoring disabled for '+row.id);
+     await verifyState(row);
+     same(row.writeKeys,await ev('prismQa.keys()'),'one real primary/recovery pair '+row.id);
+     ok(row.input.some(e=>e.trusted&&e.type==='keydown'&&e.key==='Enter')&&row.input.some(e=>e.trusted&&e.type==='click'),'actual trusted Enter/click '+row.id);
+     ok(row.runtimeErrorsBefore.length===0&&row.runtimeErrorsAfter.length===0,'no runtime errors '+row.id);
+     if(mode==='positive')stableAction(row,focusKey,focusId,row.id);
+     else{
+      same(row.stateBefore,control.runs.positive.stateBefore,'identical original fixture before both '+kind+' inputs');
+      row.caught=[];
+      for(const phase of ['immediate','settled']){
+       const message='viewport top stable '+row.id+' '+phase;
+       try{viewport(row.before,row[phase],focusKey,focusId,row.id+' '+phase);}catch(error){if(!(error instanceof assert.AssertionError)||error.message!==message)throw error;row.caught.push({phase,name:error.name,message:error.message});}
+       ok(Math.abs(row[phase].top-row.before.top)>1,'actual viewport displacement exceeds rounding '+row.id+' '+phase);
+      }
+      ok(row.caught.length===2,'both native epochs detect disabled '+kind+' restoration');
+     }
+    }
+    control.status='caught';
+   }catch(error){control.status='fail';control.error=error.stack;throw error;}
+   finally{
+    if(mutated){const restored=await ev('prismQa.treeViewportRestore()');control.restoredFunctionSha256=digest(restored);ok(control.restoredFunctionSha256===control.originalFunctionSha256,'restore exact original '+kind+' function');}
+    // Fixture cleanup occurs after all observations; it never repairs a tested
+    // input's focus or scroll before the immediate/settled assertions.
+    await ev('('+function(style){var s=document.querySelector('main').style;if(style.value)s.setProperty('overflow-anchor',style.value,style.priority);else s.removeProperty('overflow-anchor');}.toString()+')('+JSON.stringify(priorStyle)+')');
+    await install(prior,priorTab);await ev('('+function(slots){slots.forEach(function(slot){if(slot.raw===null)localStorage.removeItem(slot.key);else localStorage.setItem(slot.key,slot.raw);});}.toString()+')('+JSON.stringify(priorSlots)+')');
+    control.restoredStateSha256=digest(await ev('prismQa.get()'));control.restoredSlotsSha256=digest(await ev('prismQa.keys().map(function(key){return {key:key,raw:localStorage.getItem(key)};})'));
+    ok(control.restoredStateSha256===control.positiveStateSha256&&control.restoredSlotsSha256===control.positiveSlotsSha256,'restore paid state and raw slots after '+kind+' control');
+    if(control.status==='caught')control.status='pass';
+   }
+  }
   async function fit(scope,label){var result=await ev('('+function(scope){var root=document.querySelector(scope),bad=[];root.querySelectorAll('[data-tree-node],.node-info,.name,.desc,.lvl,.earned-effect,.effect-note,[data-price-currency],.formation-preset-card,.formation-member,.formation-help .section-sub').forEach(function(e){if(!e.getClientRects().length)return;var r=e.getBoundingClientRect();if(r.left<-.5||r.right>innerWidth+1||e.scrollWidth>e.clientWidth+1)bad.push({id:e.dataset.treeNode,cls:e.className,text:e.textContent.slice(0,90),left:r.left,right:r.right,scroll:e.scrollWidth,client:e.clientWidth});});return {bad:bad,overflow:root.scrollWidth>root.clientWidth+1};}.toString()+')('+JSON.stringify(scope)+')');ok(!result.overflow&&!result.bad.length,'fit '+label+' '+JSON.stringify({width,scale,motion,result}));}
   const seed=await ev('prismQa.treeSeed()');let paid=copy(seed);
   // Actual schema1 cold load, not a normalized test fixture passed as migration.
@@ -149,7 +232,7 @@ const cases='  const specs='+JSON.stringify(specs)+';\n'+String.raw`
    const plan=await ev('prismQa.treePlan('+JSON.stringify(id)+')');ok(plan.level===level&&plan.cost===cost&&plan.affordable,'independent first real quote '+id);
    const text=await ev('document.querySelector('+JSON.stringify(card)+').textContent');ok(text.includes(r[1])&&text.includes('Level '+level),'visible name and paid level '+id);if(r[3]!==null)ok(text.includes('Cap '+r[3]),'explicit cap '+id);
    async function wallet(amount,label){await ev('prismQa.treeWallet('+amount+');prismQa.treeRefresh()');const m=await ev('('+function(card){var e=document.querySelector(card),p=e.querySelector('[data-price-currency="prism"]'),b=e.querySelector('[data-node]'),probe=document.createElement('span');document.body.appendChild(probe);probe.style.color='var(--danger)';var red=getComputedStyle(probe).color;probe.style.color='var(--ink)';var ink=getComputedStyle(probe).color;probe.remove();return {count:e.querySelectorAll('[data-price-currency]').length,amount:Number(p.dataset.priceAmount),color:getComputedStyle(p).color,red:red,ink:ink,disabled:b.disabled,text:b.textContent,warning:e.querySelectorAll('.control-state').length};}.toString()+')('+JSON.stringify(card)+')');ok(m.count===1&&m.amount===cost,'one exact Prisms quote '+id+'/'+label);ok(m.color===(amount<cost?m.red:m.ink),'red only when unaffordable '+id+'/'+label);ok(m.disabled===(amount<cost),'live eligibility '+id+'/'+label);ok(m.warning===0&&!/need|short|missing|deficit|not enough/i.test(m.text),'no shortage UI '+id+'/'+label);return m;}
-   await wallet(cost-1,'one short');await wallet(cost,'exact');const focused=await prepare(button,true);await ev('prismQa.treeRefresh()');const refresh=await measure(button);ok(refresh.focus.node===id&&refresh.scroll===focused.scroll,'affordability retains focus and exact scroll '+id);
+   await wallet(cost-1,'one short');await wallet(cost,'exact');const focused=await prepare(button,true);await ev('prismQa.treeRefresh()');const refresh=await measure(button);await frames();const refreshSettled=await measure(button);ok(refresh.focus.node===id&&refresh.scroll===focused.scroll,'unchanged-layout affordability retains focus and exact scroll '+id);ok(refreshSettled.scroll===focused.scroll,'unchanged-layout affordability exact scroll after native frames '+id);viewport(focused,refresh,'node',id,'affordability '+id+' immediate');viewport(focused,refreshSettled,'node',id,'affordability '+id+' settled');
    const before=await ev('prismQa.get()'),writes=await ev('window.__treeWrites.length');
    if(i%3===0)await touchHere(button);else await key(i%3===1?'Enter':' ',i%3===1?'Enter':'Space',i%3===1?13:32);
    await frames();const after=await ev('prismQa.get()');ok(after.nodes[id]===level+1&&after.prisms===0,'one trusted exact purchase '+id);
@@ -158,63 +241,31 @@ const cases='  const specs='+JSON.stringify(specs)+';\n'+String.raw`
    ok(await ev('window.__treeWrites.slice('+writes+').filter(function(k){return prismQa.keys().indexOf(k)!==-1;}).length')===2,'one primary/recovery save '+id);
    ok(await ev('prismQa.keys().every(function(k){var s=JSON.parse(localStorage.getItem(k));return s.nodes['+JSON.stringify(id)+']==='+Number(level+1)+'&&s.prisms===0;})'),'both slots contain exact real endpoint '+id);
    const rendered=await ev('document.querySelector('+JSON.stringify(sel('data-node-effect',id))+').textContent');for(const piece of effect(id,level+1))ok(rendered.includes(piece),'purchase immediately changes effect '+id);
-   // A separate funded purchase keeps the same enabled control, so focus/scroll
+   // A separate funded purchase keeps the same enabled control, so viewport
    // checks do not depend on the product's disabled-control fallback policy.
    if(r[3]===null||level+2<r[3]){
     const f=copy(paid);f.prisms=100000;await install(f);const m=await prepare(button,true);
-    const diagnostic={width,scale,motion,id,before:m,immediate:null,settled:null};treeFundedDiagnostics.push(diagnostic);inputSamples.push(diagnostic);
+    const diagnostic={width,scale,motion,id,nativeAnimationFrames:true,before:m,immediate:null,settled:null};treeFundedDiagnostics.push(diagnostic);inputSamples.push(diagnostic);
     await key('Enter','Enter',13);const now=await measure(button);diagnostic.immediate=now;
     await frames();const settled=await measure(button);diagnostic.settled=settled;
     // Preserve both observations before an assertion can abort the profile.
     // The immediate check still reads its original pre-frame snapshot.
-    visible(now,'funded post-purchase '+id);
-    ok(now.focus.node===id&&now.scroll===m.scroll,'funded purchase retains native focus/exact scroll '+id);
-    ok(settled.focus.node===id&&settled.scroll===m.scroll,'focus/scroll stable after native frames '+id);
+    diagnostic.deltas={immediateTop:now.top-m.top,settledTop:settled.top-m.top,immediateScroll:now.scroll-m.scroll,settledScroll:settled.scroll-m.scroll};
+    stableAction(diagnostic,'node',id,'funded purchase '+id);
    }
    paid=copy(after);paid.prisms=100000;samples.push({id,levelBefore:level,levelAfter:level+1,cost});
   }
   await install(paid);const last=catalog[catalog.length-1];await prepare(sel('data-node',last),false);await shot('tree-last-'+width+'-'+scale+'-'+motion);await fit('#node-list','all purchased');
-  // One causal browser control restores the former summary guard only. The
-  // production function retains its real closure, purchase, render and saves.
+  // Browser anchoring is disabled in both halves. Only the real summary's
+  // viewport restore call is removed; its closure, purchase and saves remain.
   if(width===320&&scale===1&&motion==='no-preference'){
-   const digest=value=>crypto.createHash('sha256').update(typeof value==='string'?value:JSON.stringify(value)).digest('hex');
-   const prior=await ev('prismQa.get()'),priorSlots=await ev('prismQa.keys().map(function(key){return {key:key,raw:localStorage.getItem(key)};})');
-   const control={id:'summary-tree-focus-scroll',width,scale,motion,status:'started',mutation:{from:'editingAuto || editingTree',to:'editingAuto'},positiveStateSha256:digest(prior),positiveSlotsSha256:digest(priorSlots),before:null,immediate:null,settled:null};treeSummaryScrollControls.push(control);
-   let installed=false;
-   try{
-    const s=copy(seed);s.nodes.frontier=0;s.prisms=100000;await install(s);
-    const mutation=await ev('prismQa.treeSummaryScrollControl()');installed=true;
-    control.originalFunctionSha256=digest(mutation.original);control.mutatedFunctionSha256=digest(mutation.mutated);
-    ok(mutation.original.split(control.mutation.from).length===2&&mutation.mutated===mutation.original.replace(control.mutation.from,control.mutation.to),'one exact original summary guard mutation');
-    const button=sel('data-node','frontier');control.before=await prepare(button,true);
-    control.stateBefore=await ev('prismQa.get()');const writes=await ev('window.__treeWrites.length'),inputStart=await ev('window.__prismInput.length');
-    control.runtimeErrorsBefore=await ev('window.__prismErrors');
-    await key('Enter','Enter',13);control.immediate=await measure(button);await frames();control.settled=await measure(button);
-    control.stateAfter=await ev('prismQa.get()');control.writeKeys=await ev('window.__treeWrites.slice('+writes+')');control.input=await ev('window.__prismInput.slice('+inputStart+')');control.runtimeErrorsAfter=await ev('window.__prismErrors');
-    const slots=await ev('prismQa.keys().map(function(key){return {key:key,raw:localStorage.getItem(key)};})');
-    control.slots=slots.map(slot=>({key:slot.key,bytes:Buffer.byteLength(slot.raw||''),sha256:digest(slot.raw||''),state:slot.raw&&JSON.parse(slot.raw)}));
-    const now=control.immediate,settled=control.settled,m=control.before,id='frontier';
-    control.comparison={immediateFocus:now.focus.node===id,immediateExactScroll:now.scroll===m.scroll,settledFocus:settled.focus.node===id,settledExactScroll:settled.scroll===m.scroll};
-    control.screenshot='tree-summary-scroll-negative-'+width+'-'+scale+'-'+motion+'.png';await shot(control.screenshot.slice(0,-4));
-    ok(control.stateBefore.nodes.frontier===0&&control.stateBefore.prisms===100000&&control.stateAfter.nodes.frontier===1&&control.stateAfter.prisms===99980,'summary control performs actual Frontier zero-to-one for20');
-    same(control.writeKeys,await ev('prismQa.keys()'),'summary control real purchase writes primary/recovery once');
-    ok(control.slots.every(slot=>slot.state.nodes.frontier===1&&slot.state.prisms===99980),'summary control both saved endpoints match exact debit');
-    ok(control.input.some(e=>e.trusted&&e.type==='keydown'&&e.key==='Enter')&&control.input.some(e=>e.trusted&&e.type==='click'),'summary control actual trusted Enter and click');
-    ok(control.runtimeErrorsBefore.length===0&&control.runtimeErrorsAfter.length===0,'summary control has no runtime errors');
-    visible(now,'funded post-purchase '+id);visible(settled,'settled summary control '+id);
-    ok(control.comparison.immediateFocus&&control.comparison.settledFocus,'summary control retains the real focused Frontier button');
-    const message='funded purchase retains native focus/exact scroll '+id;
-    try{ok(now.focus.node===id&&now.scroll===m.scroll,message);}catch(error){if(!(error instanceof assert.AssertionError)||error.message!==message)throw error;control.caught={name:error.name,message:error.message};}
-    ok(!!control.caught&&!control.comparison.immediateExactScroll,'original strict scroll assertion catches missing Tree guard');
-    control.status='caught';
-   }catch(error){control.status='fail';control.error=error.stack;throw error;}
-   finally{
-    if(installed){const restored=await ev('prismQa.treeSummaryScrollRestore()');control.restoredFunctionSha256=digest(restored);ok(control.restoredFunctionSha256===control.originalFunctionSha256,'summary control restores exact original function');}
-    await install(prior);await ev('('+function(slots){slots.forEach(function(slot){if(slot.raw===null)localStorage.removeItem(slot.key);else localStorage.setItem(slot.key,slot.raw);});}.toString()+')('+JSON.stringify(priorSlots)+')');
-    control.restoredStateSha256=digest(await ev('prismQa.get()'));control.restoredSlotsSha256=digest(await ev('prismQa.keys().map(function(key){return {key:key,raw:localStorage.getItem(key)};})'));
-    ok(control.restoredStateSha256===control.positiveStateSha256&&control.restoredSlotsSha256===control.positiveSlotsSha256,'summary control restores all twenty positive purchases and original raw slots');
-    if(control.status==='caught')control.status='pass';
-   }
+   const s=copy(seed);s.nodes.frontier=0;s.prisms=100000;
+   await viewportControl('summary',s,'ascend',sel('data-node','frontier'),'node','frontier',async row=>{
+    ok(row.stateBefore.nodes.frontier===0&&row.stateBefore.prisms===100000&&row.stateAfter.nodes.frontier===1&&row.stateAfter.prisms===99980,'actual Frontier zero-to-one for20 '+row.id);
+    const expectedNodes=copy(row.stateBefore.nodes);expectedNodes.frontier=1;same(row.stateAfter.nodes,expectedNodes,'only Frontier node changes '+row.id);
+    for(const field of ['research','longStudyLevels','activeStudies','owned','heroRarity','wispModules','wispUltimate','spirits','activeParty','formationPresets','autoAscendEnabled','autoAscendTargetDepth','lumen','shards','motes','sigils','comets','treeTrainingProgress'])same(row.stateAfter[field],row.stateBefore[field],'summary control preserves '+field+' '+row.id);
+    ok(row.slots.every(slot=>slot.state.nodes.frontier===1&&slot.state.prisms===99980),'both saved endpoints contain exact Frontier debit '+row.id);
+   });
   }
   // The actual Ascend calculation displays Dust from represented Prism credit.
   // The huge-wallet case must display zero even though the nominal gain is >20.
@@ -251,15 +302,42 @@ const cases='  const specs='+JSON.stringify(specs)+';\n'+String.raw`
   ['ember','tide','stone','gale','thorn','void','aurora','titan'].forEach(id=>formation.spirits[id]=10);
   formation.activeParty=firstFive.slice();formation.formationPresets={push:firstFive.slice(),farm:firstFive.slice(),boss:firstFive.slice()};formation.activeFormationPreset='push';formation.formationRebuild=null;
   await install(formation,'spirits');ok(await ev('prismQa.treeCapacity()')===6,'paid sixth capacity');
-  const field=sel('data-toggle','aurora');const fm=await prepare(field,true);await key('Enter','Enter',13);const six=await ev('prismQa.get()');same(six.activeParty,firstFive.concat('aurora'),'actual keyboard fields sixth');same(six.formationPresets.push,six.activeParty,'six-member autosaved intent');same(six.spirits,formation.spirits,'Field never recruits or empowers');
-  const fmAfter=await measure(field);visible(fmAfter,'sixth field after render');ok(fmAfter.focus.toggle==='aurora'&&fmAfter.scroll===fm.scroll,'sixth field focus and exact scroll');
+  const field=sel('data-toggle','aurora');
+  const sixth=await formationInput('field-sixth',field,()=>key('Enter','Enter',13)),six=sixth.stateAfter;
+  same(six.activeParty,firstFive.concat('aurora'),'actual keyboard fields sixth');same(six.formationPresets.push,six.activeParty,'six-member autosaved intent');same(six.spirits,formation.spirits,'Field never recruits or empowers');
+  same(sixth.writeKeys,await ev('prismQa.keys()'),'sixth Field saves one actual primary/recovery pair');stableAction(sixth,'toggle','aurora','sixth Field');
   ok(await ev("document.querySelector('#formation-presets').textContent.includes('6/6')"),'six of six visible');
   ok(await ev("document.querySelector('#formation-capacity').textContent")==='6','Formation header agrees with paid six-slot capacity');
   for(const name of ['push','farm','boss']){const count=six.formationPresets[name].length;ok(await ev('document.querySelector('+JSON.stringify('[data-formation-preset="'+name+'"]')+').textContent.includes('+JSON.stringify(count+'/6 Wisps')+')'),'each preset count agrees with saved members and six-slot capacity '+name);}
   ok(await ev("document.querySelector('.formation-help .section-sub').textContent.includes('6 Wisps')"),'Formation guidance uses owned capacity');
-  await prepare(sel('data-toggle','void'),false);await touchHere(sel('data-toggle','void'));same((await ev('prismQa.get()')).activeParty,six.activeParty,'seventh member refused without changing six');
-  await prepare(field,true);await key(' ','Space',32);ok(await ev('prismQa.get().activeParty.length')===5,'keyboard benches sixth');await touchHere(field);same((await ev('prismQa.get()')).activeParty,six.activeParty,'native touch restores sixth once');
-  await tap('[data-formation-preset="farm"]');ok(await ev('prismQa.get().activeParty.length')===5,'real preset switches to five');await prepare('[data-formation-preset="push"]',true);await key('Enter','Enter',13);same((await ev('prismQa.get()')).activeParty,six.activeParty,'keyboard preset restores all six');
+  const seventh=await formationInput('six-capacity-refusal',sel('data-toggle','void'),()=>touchHere(sel('data-toggle','void')));
+  same(seventh.stateAfter.activeParty,six.activeParty,'seventh member refused without changing six');same(seventh.stateAfter,seventh.stateBefore,'six-capacity refusal preserves entire synthetic state');same(seventh.writeKeys,[],'six-capacity refusal never writes a save');stableAction(seventh,'toggle','void','six-capacity refusal');
+  const bench=await formationInput('bench-sixth',field,()=>key(' ','Space',32));
+  ok(bench.stateAfter.activeParty.length===5,'keyboard benches sixth');same(bench.writeKeys,await ev('prismQa.keys()'),'Bench saves once');stableAction(bench,'toggle','aurora','bench sixth');
+  // The next touch uses the still-focused post-Bench control directly, without
+  // scrollIntoView or a focus repair between the two real actions.
+  const refield=await formationInput('re-field-sixth',field,()=>touchHere(field),false);
+  same(refield.stateAfter.activeParty,six.activeParty,'native touch restores sixth once');same(refield.writeKeys,await ev('prismQa.keys()'),'re-Field saves once');stableAction(refield,'toggle','aurora','re-field sixth');
+  const farm=await formationInput('preset-farm','[data-formation-preset="farm"]',()=>touchHere('[data-formation-preset="farm"]'));
+  ok(farm.stateAfter.activeParty.length===5,'real preset switches to five');same(farm.writeKeys,await ev('prismQa.keys()'),'Farm selection saves once');stableAction(farm,'preset','farm','Farm preset');
+  const push=await formationInput('preset-push','[data-formation-preset="push"]',()=>key('Enter','Enter',13));
+  same(push.stateAfter.activeParty,six.activeParty,'keyboard preset restores all six');same(push.writeKeys,await ev('prismQa.keys()'),'Push selection saves once');stableAction(push,'preset','push','Push preset');
+  const solo=copy(formation);solo.activeParty=['ember'];solo.formationPresets={push:['ember'],farm:['ember'],boss:['ember']};await install(solo,'spirits');
+  const lastWisp=await formationInput('last-wisp-refusal',sel('data-toggle','ember'),()=>key('Enter','Enter',13));
+  same(lastWisp.stateAfter.activeParty,['ember'],'actual last-Wisp Bench is refused');same(lastWisp.stateAfter,lastWisp.stateBefore,'last-Wisp refusal preserves entire synthetic state');same(lastWisp.writeKeys,[],'last-Wisp refusal never writes a save');stableAction(lastWisp,'toggle','ember','last-Wisp refusal');
+  await install(push.stateAfter,'spirits');
+  for(const row of formationSamples){
+   for(const name of ['spirits','nodes','research','longStudyLevels','activeStudies','owned','heroRarity','wispModules','wispUltimate','autoAscendEnabled','autoAscendTargetDepth','lumen','shards','motes','sigils','comets','prisms','treeTrainingProgress'])same(row.stateAfter[name],row.stateBefore[name],'Formation input preserves '+name+' '+row.id);
+   ok(row.input.some(e=>e.trusted&&e.type==='click'),'actual trusted Formation click '+row.id);ok(!row.runtimeErrorsBefore.length&&!row.runtimeErrorsAfter.length,'no runtime error during '+row.id);
+  }
+  if(width===320&&scale===1&&motion==='no-preference'){
+   await viewportControl('formation',formation,'spirits',field,'toggle','aurora',async row=>{
+    same(row.stateBefore.activeParty,firstFive,'Formation control begins with five '+row.id);same(row.stateAfter.activeParty,firstFive.concat('aurora'),'actual control fields Aurora as sixth '+row.id);same(row.stateAfter.formationPresets.push,row.stateAfter.activeParty,'control autosaves six-member intent '+row.id);
+    for(const name of ['farm','boss'])same(row.stateAfter.formationPresets[name],row.stateBefore.formationPresets[name],'control preserves other preset '+name+' '+row.id);
+    for(const name of ['spirits','nodes','research','longStudyLevels','activeStudies','owned','heroRarity','wispModules','wispUltimate','autoAscendEnabled','autoAscendTargetDepth','lumen','shards','motes','sigils','comets','prisms','treeTrainingProgress'])same(row.stateAfter[name],row.stateBefore[name],'Formation control preserves '+name+' '+row.id);
+    ok(row.slots.every(slot=>JSON.stringify(slot.state.activeParty)===JSON.stringify(firstFive.concat('aurora'))&&JSON.stringify(slot.state.formationPresets.push)===JSON.stringify(firstFive.concat('aurora'))&&slot.state.lumen===row.stateBefore.lumen&&slot.state.prisms===row.stateBefore.prisms),'both slots contain sixth member without an economic mutation '+row.id);
+   });
+  }
   await fit('#tab-spirits','six-member Formation');await prepare('[data-formation-preset="push"]',true);await shot('tree-six-'+width+'-'+scale+'-'+motion);
   const input=await ev('window.__prismInput');ok(input.some(e=>e.trusted&&e.type==='click')&&input.some(e=>e.trusted&&e.key==='Enter')&&input.some(e=>e.trusted&&e.key===' '),'trusted touch Enter and Space evidence');
   await ev('prismQa.treeSave()');const committed=await ev('prismQa.get()');await ev('window.prismQa=null');await send('Page.reload');await ready();await ev('document.documentElement.style.fontSize='+JSON.stringify(16*scale+'px'));await ev("prismQa.tab('spirits')");
@@ -267,7 +345,7 @@ const cases='  const specs='+JSON.stringify(specs)+';\n'+String.raw`
   ok(added.every(id=>cold.nodes[id]===1),'all seventeen actual new purchases survive reload');ok(cold.activeParty.length===6,'six-slot snapshot survives cold load');
   const zero=copy(formation);zero.nodes.formationseat=0;zero.activeParty=six.activeParty;zero.formationPresets.push=six.activeParty;await install(zero,'spirits');ok(await ev('prismQa.get().activeParty.length')===5&&await ev('prismQa.treeCapacity()')===5,'zero-new capacity remains five');
   await install(committed);const ax=await send('Accessibility.getFullAXTree');for(const r of specs)ok(ax.nodes.some(n=>!n.ignored&&n.name&&n.name.value.includes(r[1])),'named Tree row exposed to AX '+r[0]);
-  ok((await ev('window.__prismErrors')).length===0,'no browser runtime errors');records.push({width,scale,motion,nativeAnimationFrames:true,catalog,samples,effectSamples,locks,inputSamples,dustSamples,unavailableEmpower,sixMembers:six.activeParty,legacyMigration:{seed:legacySeedObservation,schema:migrated.schemaVersion,prisms:migrated.prisms,comets:migrated.comets,nodes:migrated.nodes,newDefaultZero:added.length},input});
+  ok((await ev('window.__prismErrors')).length===0,'no browser runtime errors');records.push({width,scale,motion,nativeAnimationFrames:true,catalog,samples,effectSamples,locks,inputSamples,formationSamples,dustSamples,unavailableEmpower,sixMembers:six.activeParty,legacyMigration:{seed:legacySeedObservation,schema:migrated.schemaVersion,prisms:migrated.prisms,comets:migrated.comets,nodes:migrated.nodes,newDefaultZero:added.length},input});
 `;
 // Capture the purchase/formation input epoch before the final actual reload.
 // No focus or scroll repair runs after user input.

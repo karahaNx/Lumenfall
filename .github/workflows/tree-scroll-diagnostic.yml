@@ -40,8 +40,8 @@ jobs:
           const identity={purpose:'Diagnostic only; does not replace required PR acceptance.',head:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),orderedParents:git('show','-s','--format=%P','HEAD').split(' '),ref:process.env.GITHUB_REF,event:process.env.GITHUB_EVENT_NAME,runId:process.env.GITHUB_RUN_ID,runAttempt:process.env.GITHUB_RUN_ATTEMPT,node:process.version,inputs};
           fs.writeFileSync('tree-scroll-diagnostic/identity.json',JSON.stringify(identity,null,2)+'\n');
           assert.equal(identity.head,process.env.GITHUB_SHA);assert.equal(identity.ref,'refs/heads/diagnostic/tree-scroll-106');assert.equal(identity.event,'push');
-          assert.deepEqual(identity.orderedParents,['3c931a26bbcf7b009dee03e7411ed41faeb971f8']);
-          const pinned={'index.html':'17d4ff66cc960f80200bbc7a640947d87bf1c8e2c216eea181761f036df5f806','tests/behavioral/bridge.js':'8568cfb994b0a6c4c1c2bded8f2946a6489b18591992e58d534f483f5cb287c1','tests/behavioral/tree-expansion-mobile.cjs':'a2a90c83100daca4f7c770f48f681d55cb63ca75463d85385a3c9703ed89f4df','tests/behavioral/fixtures.json':'ab43604db1b5bce8b9990506f989676dfb0009cdcf2e514a8ccee9da166c8753'};
+          assert.deepEqual(identity.orderedParents,['2bce799cd224ddeffb6c1ff83ad5f19991ad1444']);
+          const pinned={'index.html':'ccef4db42c2d2d5f91c68c0fa7c150bfa8115983249d276925c68613268846e3','tests/behavioral/bridge.js':'8568cfb994b0a6c4c1c2bded8f2946a6489b18591992e58d534f483f5cb287c1','tests/behavioral/tree-expansion-mobile.cjs':'22bf25b1200ebd149503ad779d283f07e2f2795620fc96b71a13493d4557a61f','tests/behavioral/fixtures.json':'ab43604db1b5bce8b9990506f989676dfb0009cdcf2e514a8ccee9da166c8753'};
           for(const [path,expected] of Object.entries(pinned))assert.equal(inputs.find(row=>row.path===path).sha256,expected,'exact diagnostic input '+path);
           JS
           node scripts/codex/check_context.cjs --task docs/tasks/TREE_EXPANSION_001.md 2>&1 | tee tree-scroll-diagnostic/context.log
@@ -50,7 +50,7 @@ jobs:
           cp -r fonts/. mobile/www/fonts/
           cp -r branding/. mobile/www/branding/
           cmp index.html mobile/www/index.html
-      - name: Complete actual Tree mobile matrix and summary guard control
+      - name: Complete actual Tree mobile matrix and viewport guard controls
         if: always()
         shell: bash
         run: |

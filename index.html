@@ -6765,6 +6765,26 @@ function presentControlStates(root){
 }
 
 // Live UI updates must not strand keyboard focus on a detached button.
+// Preserve the visible control's position when content above it grows or its
+// Wisp changes groups. A fixed scrollTop would move it with that content.
+function captureControlViewport(root){
+  var focused=document.activeElement;
+  if(!root || !focused || !root.contains(focused)) return null;
+  var main=document.querySelector('main');
+  if(!main) return null;
+  var rect=focused.getBoundingClientRect(),view=main.getBoundingClientRect();
+  if(!rect.width || !rect.height || rect.bottom<=view.top || rect.top>=view.bottom) return null;
+  return {root:root,main:main,top:rect.top};
+}
+function restoreControlViewport(snapshot){
+  if(!snapshot) return;
+  var focused=document.activeElement;
+  if(!focused || !snapshot.root.contains(focused)) return;
+  var rect=focused.getBoundingClientRect();
+  if(!rect.width || !rect.height) return;
+  // Measuring flushes layout and any browser anchoring before the correction.
+  snapshot.main.scrollTop+=rect.top-snapshot.top;
+}
 function replaceControlMarkup(root,html,keepAutoAscend){
   var focused=document.activeElement;
   var previous=root.contains(focused) ? focused : null;
@@ -7301,6 +7321,7 @@ function pulseWispCard(id,tone){
 }
 
 function renderSpirits(){
+  var spiritViewport=captureControlViewport(document.getElementById('tab-spirits'));
   var openProgression=Array.from(els['spirit-list'].querySelectorAll('[data-wisp-progression]')).filter(function(el){
     return el.tagName!=='DETAILS' || el.open;
   }).map(function(el){return el.dataset.wispProgression;});
@@ -7455,6 +7476,7 @@ function renderSpirits(){
       renderSpirits();
     });
   });
+  restoreControlViewport(spiritViewport);
 }
 
 function renderResearch(){
@@ -7759,9 +7781,8 @@ function prismCalculationText(breakdown){
 function renderAscendSummary(){
   var autoRoot=els['auto-ascend-controls'];
   var editingAuto=autoRoot && autoRoot.contains(document.activeElement);
-  var treeRoot=els['node-list'];
-  var editingTree=treeRoot && treeRoot.contains(document.activeElement);
-  var main=editingAuto || editingTree ? document.querySelector('main') : null;
+  var treeViewport=captureControlViewport(els['node-list']);
+  var main=editingAuto ? document.querySelector('main') : null;
   var scroll=main ? main.scrollTop : 0;
   var cleared = clearedProgressionRift();
   var eligible = ascendEligible();
@@ -7787,12 +7808,13 @@ function renderAscendSummary(){
   var dust=eligible ? treeAscendMotesForWallet(gain,state.prisms) : 0;
   if(dust) els['ascend-note'].textContent+=' Ascension Dust adds '+formatNum(dust)+' Motes.';
   renderAutoAscendControls();
-  // Reward text can grow above an active Tree purchase or native picker.
-  // Flush that layout before restoring the player's scroll without refocusing.
+  // Keep the native Auto-Ascend picker attached and its existing scroll guard.
   if(main){main.getBoundingClientRect();main.scrollTop=scroll;}
+  restoreControlViewport(treeViewport);
 }
 
 function renderNodes(){
+  var nodeViewport=captureControlViewport(els['node-list']);
   var html = '<div class="section-sub">20 Tree paths: Ascend rewards, new beginnings, recruitment and automation.</div>',legacyHtml='';
   NODES.forEach(function(node){
     if(node.retired) return;
@@ -7841,6 +7863,7 @@ function renderNodes(){
       buyNode(node);
     });
   });
+  restoreControlViewport(nodeViewport);
 }
 
 var cometTrialChoice='quiet', cometTrialTarget=15;
