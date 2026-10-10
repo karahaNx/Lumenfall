@@ -83,7 +83,7 @@ window.runUpgradeClarityQa=function(b,ctx,assert){
     [false,true].forEach(function(at){
       var s=b.freshStateSnapshot(),value;
       if(setters[id]){var c=setters[id];s[c[0]]=c[1]-(at?0:1);}
-      else if(id==='labmaster'||id==='labqueue'){s.research.focus=(id==='labmaster'?20:60)-(at?0:1);s.research.arcanecal=10;s.research.conduction=10;s.research.luminoustracking=10;}
+      else if(id==='labmaster'||id==='labqueue'){s.research.focus=(id==='labmaster'?20:60)-(at?0:1);s.research.arcanecal=10;s.research.conduction=10;s.research.luminoustracking=10;['cauterize','fracturekey','guardianseal','spillway','sustainedchannel','tapconduit','guardiancadence','relay','resonantedge','victorycharge','amplifiertrim','dualchannel','overflowconduit','resonancecells','resonancecascade','resonancereclaim'].forEach(function(key){s.research[key]=100;});}
       else if(id==='modulemax'){s.wispModules.ember=at?20:19;s.wispModules.tide=1;}
       else if(id==='study1'||id==='study25')s.longStudyLevels.guardmastery=(id==='study1'?1:25)-(at?0:1);
       else if(id==='fullparty'){s.maxDepthEver=101;s.activeParty=Object.keys(s.spirits).slice(0,at?5:4);s.activeParty.forEach(function(k){s.spirits[k]=1;});}

@@ -1,0 +1,239 @@
+{
+  "status": "pass",
+  "sourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+  "baseHead": "5bcd1c861af51511ca3d5c4a07d9d61e72fdff03",
+  "browser": {
+    "selected": "/tmp/lumenfall-test-bin/google-chrome",
+    "resolved": "/workspace/scratch/c0c23f4097e9/b2_qa_runtime/chrome-headless-shell-linux64/chrome-headless-shell",
+    "version": "Google Chrome for Testing 153.0.8010.0",
+    "sha256": "1346545781835e04ece3434a16d656ad5cbe60a6a179a43dff43f79a21f9a4ad"
+  },
+  "legacyRuntime": {
+    "path": "/tmp/lumenfall-node830/bin/node",
+    "node": "v8.3.0",
+    "v8": "6.0.286.52"
+  },
+  "mobile": {
+    "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/receipt.json",
+    "bytes": 800338,
+    "sha256": "9dd1741d05792cd31b6267c7227ce9fc242397a35e4961e6852dad59c198f7ae",
+    "checks": 25524,
+    "profiles": 12,
+    "screenshots": 24,
+    "screenshotBytes": 4708012,
+    "nativeAnimationFrames": true,
+    "independentNativeEffectRows": 16,
+    "textScale": {
+      "method": "CSS document.documentElement.style.fontSize",
+      "profile1Px": 16,
+      "profile2Px": 32,
+      "scope": "rem-relative text doubles; fixed-px text may remain unchanged",
+      "nativeWebViewTextZoom": false,
+      "talkBack": false
+    }
+  },
+  "v8": {
+    "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/v8.json",
+    "bytes": 1054,
+    "sha256": "79f8a115a4d9c6e7f6cc78035fa3402dabc192f62a5f287817a5e8f54e67c574",
+    "checks": 2452
+  },
+  "retainedMobile": {
+    "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/retained-mobile/receipt.json",
+    "bytes": 959,
+    "sha256": "c9522b9400327f11c7d407fe8b3c4d11a8494cb917dcdf1a8bca8c54b976e202"
+  },
+  "scopedCompatibility": {
+    "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-compat-second/receipt.json",
+    "bytes": 3585,
+    "sha256": "907ff64c90fa1fc73e44fb480dbe4b79ef153d0509f96e9b7739cc6394dd2dc5"
+  },
+  "frozenOffline": {
+    "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-offline-oracle-receipt.json",
+    "bytes": 3293,
+    "sha256": "524828079672f8bc3e65831a90585033af93940fc0a8c85e33c3c4f7d985b08b"
+  },
+  "unsafeNegative": {
+    "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-unsafe-ascend-negative-v8.json",
+    "bytes": 1035,
+    "sha256": "3cda6ca2576aa297abc704e1f395d552428614649bdaaa7e97f29aeb1831bf9f"
+  },
+  "visualReview": [
+    "forge-last-cap-320-2-no-preference.png",
+    "forge-last-before-390-2-reduce.png"
+  ],
+  "ownedFiles": [
+    {
+      "path": "/workspace/scratch/0848c4e4f365/Lumenfall-forge/tests/behavioral/forge.js",
+      "bytes": 28053,
+      "sha256": "0a8799898096ce1b3307c13c320e92e0c80ff851cc016a657b7f606b23fa0387"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/Lumenfall-forge/tests/behavioral/r3-destinations.js",
+      "bytes": 11943,
+      "sha256": "1fbac7358a44a8f511e6f17b0f6d56d75e76e8ba85e31f65464dc37c2b07829c"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/Lumenfall-forge/tests/behavioral/upgrade-identity.js",
+      "bytes": 14930,
+      "sha256": "15c1e7f4a9829b4190f2ea6c4cc2d9fa585fc5b8b74164f5fee043a1328cc6a6"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/Lumenfall-forge/tests/behavioral/offline-catchup.cjs",
+      "bytes": 20915,
+      "sha256": "012ab16388abfe92578ce64cfbcc968a2ca7307be915753ce6bea99b5810ffc5"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/Lumenfall-forge/tests/behavioral/runner.js",
+      "bytes": 158493,
+      "sha256": "0fd30cee20407ebf51a8b25fb589545c20f2612c68f0f68fdab72ff26a341ab1"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/Lumenfall-forge/tests/behavioral/upgrade-clarity.js",
+      "bytes": 10441,
+      "sha256": "ada9467943284db320598f87a4f82d6b40c4c3e5e9781b1fa4416854ec62589f"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/Lumenfall-forge/tests/behavioral/prelude.js",
+      "bytes": 8792,
+      "sha256": "f8c2ccd4f01587d07b52c07d6d6d8756c144e94a4f1998e2807054add33f7bdb"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/Lumenfall-forge/tests/behavioral/bridge.js",
+      "bytes": 52328,
+      "sha256": "1997185b14d90a1f03413558811335948aa9751b6797943479a88f6fca4c0460"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/Lumenfall-forge/tests/behavioral/forge-expansion-ui.cjs",
+      "bytes": 23212,
+      "sha256": "72311ef88c417e89ab70321a12119279d598392456343c25d4102e2c6e0aca7b"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/Lumenfall-forge/tests/behavioral/forge-expansion-legacy.cjs",
+      "bytes": 22552,
+      "sha256": "5f97700df5f19f535cb84de75b2b39fe9826cc9672184d1493afb274297630e0"
+    }
+  ],
+  "screens": [
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-before-320-1-no-preference.png",
+      "bytes": 181287,
+      "sha256": "05ea9bcef610d6823ec8e8bc339c95a1d1f72c6fec2b5ed3319c942f069ae8e8"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-before-320-1-reduce.png",
+      "bytes": 181514,
+      "sha256": "60ea6491ecf35eb0c3c3a70aae43645f96f9f7f9491ecf8335ba2b05cd23f239"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-before-320-2-no-preference.png",
+      "bytes": 178956,
+      "sha256": "f0a2e9ddfdbb89e88b565701636c28de49eabbe1e125dd25cefeadfadbc78655"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-before-320-2-reduce.png",
+      "bytes": 179007,
+      "sha256": "cc4a3319a5d40491db89c2384bbe92f5d28d931826940d1be539b316fe3d45ff"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-before-390-1-no-preference.png",
+      "bytes": 201752,
+      "sha256": "62fb4c9936c58e37c0879988454eb0dd3b55f90329fb5cd8b8709c41995c0339"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-before-390-1-reduce.png",
+      "bytes": 201889,
+      "sha256": "511d923fd566c4081d21c5e0a32f22c359bc46ab439c5996e221ad45483a4850"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-before-390-2-no-preference.png",
+      "bytes": 203717,
+      "sha256": "de50fe5690b7dce0dc5c5057dd58c46f8c2a80960843994035f5d4401ef2ed92"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-before-390-2-reduce.png",
+      "bytes": 204016,
+      "sha256": "b6d70b9c482a916ac686203d5c9da3d8d3f4c5c0b08078029e3f439d494a3e58"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-before-430-1-no-preference.png",
+      "bytes": 210675,
+      "sha256": "83668e3062c64583b576b08d53aaf332c917228f6e44e1ed89dabedcb5bb6428"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-before-430-1-reduce.png",
+      "bytes": 210993,
+      "sha256": "3df2702f54f058eacacc2235f296633f1cfb5d742f56d518c70b857458aacd4e"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-before-430-2-no-preference.png",
+      "bytes": 222237,
+      "sha256": "abc32f292a798c32a7cd11b49e361e2ee3238124884b96e16e1a9d5c9eee94e8"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-before-430-2-reduce.png",
+      "bytes": 222283,
+      "sha256": "9e7b3475c6906a3e58bee2686e2643d86e842902cd506d60da734157d8ebd621"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-cap-320-1-no-preference.png",
+      "bytes": 172707,
+      "sha256": "775019d26e92ab6afc5406fc854513eda365d55757011543066d6f9e81726cbe"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-cap-320-1-reduce.png",
+      "bytes": 172822,
+      "sha256": "13a281635233919a928f69676380801a34289f907032b70472dbe0bb380df9dd"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-cap-320-2-no-preference.png",
+      "bytes": 173224,
+      "sha256": "6cd6807a0002aca14a412a2bbb208c5418499ce596294a4941f8393acd066ffb"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-cap-320-2-reduce.png",
+      "bytes": 173004,
+      "sha256": "830d2983d50be1aadceca3471a1812cd50b9ac31eba696fd788eb06c865903e6"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-cap-390-1-no-preference.png",
+      "bytes": 192835,
+      "sha256": "82480d33cb14cff549e1bc5d73a6efa040a7e95f9b9389c91f338e7e208a9313"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-cap-390-1-reduce.png",
+      "bytes": 192961,
+      "sha256": "86f07f94695516174303a77edfad4f3e6f6b4581f36b2846f16f3df35563d2b4"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-cap-390-2-no-preference.png",
+      "bytes": 204470,
+      "sha256": "a209d8bb1de4b78f96b44b159ffd1047a37ed6d5615cc4591f1ab679c15a1efa"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-cap-390-2-reduce.png",
+      "bytes": 204411,
+      "sha256": "07e8c46d359ca446b2d3747b54341a37b4cad27af9d40262894fea14bd43dcab"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-cap-430-1-no-preference.png",
+      "bytes": 199912,
+      "sha256": "f075981fa23c4088397b8c32954d60e80d12de32450184d283c0104043c3105a"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-cap-430-1-reduce.png",
+      "bytes": 199985,
+      "sha256": "1a437f3e3cdbd6bc56f9f92ff53a67fc6a139efe9a92e84bae3c71cc5b32ce49"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-cap-430-2-no-preference.png",
+      "bytes": 211793,
+      "sha256": "3ba9c03e941d0a1c54313584b754ff8e8b461297d631c313134ae32dc120f7b2"
+    },
+    {
+      "path": "/workspace/scratch/0848c4e4f365/test-environment/forge-final-05742431/mobile/forge-last-cap-430-2-reduce.png",
+      "bytes": 211562,
+      "sha256": "0f927dd2db1e63c5bb899369dd501635de372e22d4fd135575680c52afda0676"
+    }
+  ]
+}

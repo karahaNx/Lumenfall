@@ -1,0 +1,63 @@
+name: Rift Forge expansion validation
+on:
+  pull_request:
+    branches: [main, 'feature/progression-expansion-2026-10-09']
+permissions:
+  contents: read
+concurrency:
+  group: lumenfall-forge-expansion-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  forge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Exact source identity and task context
+        run: |
+          set -euo pipefail
+          mkdir -p forge-validation
+          git rev-parse HEAD > forge-validation/commit.txt
+          sha256sum index.html tests/behavioral/fixtures.json > forge-validation/source-sha256.txt
+          node scripts/ci/validate_source.cjs | tee forge-validation/source.txt
+          node scripts/codex/check_context.cjs --task docs/tasks/FORGE_EXPANSION_001.md | tee forge-validation/context.txt
+      - name: Exact prices real effects transactions Ascends and causal controls
+        run: |
+          set -euo pipefail
+          node tests/behavioral/forge-expansion.cjs index.html --negative | tee forge-validation/core.json
+      - name: Authoritative charge calibration and conservative boss bounds
+        run: |
+          set -euo pipefail
+          node tests/behavioral/forge-expansion-calibration.cjs index.html --negative | tee forge-validation/calibration.json
+      - name: Eight-hour Auto-Ascend capped windows and frozen offline oracle
+        run: |
+          set -euo pipefail
+          node tests/behavioral/offline-catchup.cjs --source index.html | tee forge-validation/offline.json
+      - name: Actual mobile prices input focus and twenty-card acceptance
+        if: always()
+        run: node tests/behavioral/forge-expansion-ui.cjs index.html forge-validation/mobile
+      - name: Complete product on actual V8 6.0
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/forge-node8
+          cd /tmp/forge-node8
+          curl -fL --retry 2 https://nodejs.org/dist/v8.3.0/SHASUMS256.txt -o SHASUMS256.txt
+          curl -fL --retry 2 https://nodejs.org/dist/v8.3.0/node-v8.3.0-linux-x64.tar.xz -o node-v8.3.0-linux-x64.tar.xz
+          grep ' node-v8.3.0-linux-x64.tar.xz$' SHASUMS256.txt | sha256sum -c -
+          tar -xf node-v8.3.0-linux-x64.tar.xz
+          cd "$GITHUB_WORKSPACE"
+          /tmp/forge-node8/node-v8.3.0-linux-x64/bin/node tests/behavioral/forge-expansion-legacy.cjs index.html | tee forge-validation/v8.json
+      - name: Preserve complete source-bound evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: forge-expansion-${{ github.run_id }}
+          retention-days: 14
+          path: |
+            forge-validation/
+            tests/behavioral/forge-expansion*.cjs
+            docs/qa/forge-expansion-001/

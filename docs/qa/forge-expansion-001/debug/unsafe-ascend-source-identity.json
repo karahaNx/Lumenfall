@@ -1,0 +1,6 @@
+{
+  "beforeSourceSha256": "f57126fd414cd6bcf51a5177409d9699f69cf6bca619eaf283d9a5fae290d468",
+  "fixedSourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+  "patch": "unsafe-ascend-fix.patch",
+  "reproduce": "Reverse-apply the patch to the fixed index.html in an isolated checkout, verify before SHA-256, then run unsafe-ascend-repro.cjs against it. The fixed source must instead retain full Rift1 HP and zero charge."
+}

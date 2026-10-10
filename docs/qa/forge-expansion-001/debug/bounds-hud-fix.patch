@@ -1,0 +1,64 @@
+--- a/index.html
++++ b/index.html
+@@ -5033,7 +5033,7 @@
+   var regen=maxHp*bossRegenRate(depth),f=(100/ABILITY_BASE_CYCLE_SEC)*fillRateMult();
+   var threshold=100-1e-7,tapRate=1000/(1000-1e-7),auto=!!state.achieved.autotap;
+   var tap=auto ? 2*forgeLevel('tapconduit') : 0,relay=2*forgeLevel('relay'),refund=2*forgeLevel('sustainedchannel');
+-  var ids=poweredActiveIds(),members=[],supportA=0,supportRate=0,lowerBuff=1,upperSources={tide:1,aurora:1};
++  var ids=poweredActiveIds(),members=[],supportA=0,supportRate=0,upperSources={tide:1,aurora:1};
+   var saved=state.supportBuffs && state.supportBuffs.sources;
+   ['tide','aurora'].forEach(function(id){if(saved && saved[id]) upperSources[id]=Math.max(1,saved[id].mult);});
+   ids.forEach(function(id,i){
+@@ -5043,7 +5043,6 @@
+       m.a=(100+q)/threshold;m.upper=(f+q*tapRate)/threshold;m.lower=f/100;
+       supportA+=m.a;supportRate+=m.upper;
+       var profile=supportAbilityProfile(sp);
+-      lowerBuff+=(profile.strength-1)*Math.min(1,profile.durationMs/1000*f/100);
+       upperSources[id]=Math.max(upperSources[id]||1,profile.strength);
+     }
+     members.push(m);
+@@ -5051,7 +5050,10 @@
+   // A strong saved Tide plus a future Aurora can exceed either complete
+   // current/future stack. Bound each source separately before adding them.
+   var upperBuff=Math.max(state.buffMult||1,1+(upperSources.tide-1)+(upperSources.aurora-1));
+-  var passive=passiveWispDpsAt(depth),lower=passive*lowerBuff,upper=passive*upperBuff,burst=0;
++  // Saved epoch deadlines can shorten realized Support uptime by a clock
++  // quantum. Only unbuffed passive damage is guaranteed in the lower bound;
++  // Support remains in the HUD estimate and the conservative upper bound.
++  var passive=passiveWispDpsAt(depth),lower=passive,upper=passive*upperBuff,burst=0;
+   members.forEach(function(m){
+     if(!m.support){
+       m.a=(100+m.q+relay*supportA)/(threshold-refund);
+@@ -5063,8 +5065,11 @@
+   });
+   if(auto){
+     var base=guardianTapDamageAt(depth,1,0),cadence=0.10*forgeLevel('guardiancadence');
+-    lower+=base*(1+cadence/5);
+-    upper+=base*upperBuff*(1+cadence/5)*tapRate;
++    // Lifetime ordinals remain intact, including old values beyond safe
++    // integer precision. A stalled ordinal can grant Cadence on every tap or
++    // none; its usual one-in-five average cannot prove a controller bound.
++    lower+=base;
++    upper+=base*upperBuff*(1+cadence)*tapRate;
+     burst+=base*upperBuff*(1+cadence);
+   }
+   var result={verdict:'uncertain',lowerDps:lower,upperDps:upper,burstBudget:burst,regen:regen,maxHp:maxHp,hp:hp};
+@@ -5152,7 +5157,17 @@
+ function automatedGuardianDps(depth){
+   if(!state.achieved.autotap) return 0;
+   var cadence=forgeLevel('guardiancadence');
+-  if(cadence) return guardianTapDamageAt(depth,averageSupportBuffMult(depth),0)*(1+0.10*cadence/5);
++  if(cadence){
++    var frequency=1/5;
++    if(!Number.isSafeInteger(state.totalTaps+60)){
++      // One minute of actual counter arithmetic also covers the transition
++      // into a stalled saved ordinal. Never rewrite the retained counter.
++      var ordinal=state.totalTaps,hits=0;
++      for(var i=0;i<60;i++){ordinal++;if(ordinal>0 && ordinal%5===0) hits++;}
++      frequency=hits/60;
++    }
++    return guardianTapDamageAt(depth,averageSupportBuffMult(depth),0)*(1+0.10*cadence*frequency);
++  }
+   return guardianTapDamageAt(depth, averageSupportBuffMult(depth));
+ }
+ function sustainedCombatDps(depth){

@@ -1,0 +1,36 @@
+{
+  "reviewer": "subagent /root/lab_code_review",
+  "reviewType": "Subagent code review, not human approval",
+  "scope": "Complete index.html product diff and Forge core behavioral regression coverage",
+  "source": {
+    "path": "index.html",
+    "sha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac"
+  },
+  "tests": [
+    {
+      "path": "tests/behavioral/forge-expansion.cjs",
+      "sha256": "64fc2471bac4b8ba2efd9adaa79c92e4091aa9f5c16a632096556bc539bd0e89"
+    },
+    {
+      "path": "tests/behavioral/forge-expansion-harness.cjs",
+      "sha256": "185feb9242a3c8b5fac48871be20f61a119e2881e78191ecd832d12da16d9724"
+    }
+  ],
+  "execution": {
+    "command": "node tests/behavioral/forge-expansion.cjs --negative",
+    "exitCode": 0,
+    "assertions": 9291,
+    "negativeControls": 25,
+    "result": "docs/qa/forge-expansion-001/candidate/core.json",
+    "provenance": "The completed run's full JSON stdout was transcribed from the retained tool output into core.json during handoff. No additional test run was performed. Frozen source and test hashes were read at handoff."
+  },
+  "conclusion": "No remaining concrete blocking correctness, save-retention, chronology or event-order defect identified on the reviewed source. Mandatory CI and publication decisions remain with the root task.",
+  "resolvedFinding": {
+    "issue": "A retained ascendCount of 1e30 stagnates under ++, allowing old count-based run guards to leak Spillway damage, Relay charge and passive-interval charge across an actual Ascend.",
+    "fix": "Root introduced a transient object run token; the saved counter is preserved. Actual reset, offline failure/retry, and two causal old-guard mutants are covered.",
+    "before": "docs/qa/forge-expansion-001/debug/unsafe-ascend-before.json",
+    "after": "docs/qa/forge-expansion-001/debug/unsafe-ascend-after.json",
+    "reproduction": "docs/qa/forge-expansion-001/debug/unsafe-ascend-repro.cjs"
+  },
+  "mutationsByReviewer": "Only assigned test files and explicitly authorized evidence files. No product edits, commits, staging or GitHub mutations."
+}

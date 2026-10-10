@@ -482,10 +482,10 @@ window.__lumenfallQaBridge = {
     }
   },
   feedbackTick: function(enabled){
-    var presenter=presentLiveRiftResult;
+    var presenter=presentLiveRiftResult,previousReload=reloadInProgress;
     if(enabled===false) presentLiveRiftResult=function(){};
     reloadInProgress=false;
-    try { tick(); } finally { presentLiveRiftResult=presenter; reloadInProgress=true; }
+    try { tick(); } finally { presentLiveRiftResult=presenter; reloadInProgress=previousReload; }
     return JSON.parse(JSON.stringify(state));
   },
   resetFeedback: function(){
