@@ -3024,6 +3024,150 @@ var RESEARCH = [
   {id:'luminoustracking', name:'Luminous Tracking', desc:'+0.5 percentage points Luminous chance per level for future eligible encounters; total chance at most 35%. No extra Motes per kill.', unlockDepth:32, levelCap:10, effectPerLevel:0.005, lumenBase:2500000, lumenGrowth:1.60, shardBase:1500, shardGrowth:1.60}
 ];
 
+// FORGE_EXPANSION_001: additive IDs; original prices and paid values stay.
+var FORGE_EXPANSION = [
+  {"id":"cauterize","name":"Cauterize","forgeGroup":"Boss craft","desc":"Each level reduces boss regeneration by 2%, up to 20%. Multiplies with the Vanguard Bond.","unlockDepth":20,"levelCap":10,"effectPerLevel":0.02,"lumenBase":36000,"lumenGrowth":1.65,"shardBase":2500,"shardGrowth":1.65},
+  {"id":"fracturekey","name":"Fracture Key","forgeGroup":"Boss craft","desc":"Each level adds 0.025 to the Fractured Core boss ability multiplier, from 1.75 up to 2. Other enemies are unchanged.","unlockDepth":30,"levelCap":10,"effectPerLevel":0.025,"lumenBase":103000,"lumenGrowth":1.65,"shardBase":6000,"shardGrowth":1.65},
+  {"id":"guardianseal","name":"Guardian Seal","forgeGroup":"Boss craft","desc":"Each level adds 0.10 to Guardian’s Mark tap damage, from 3 times up to 3.5 times. Applies to manual and Auto-Tap hits.","unlockDepth":40,"levelCap":5,"effectPerLevel":0.1,"lumenBase":293000,"lumenGrowth":1.7,"shardBase":14500,"shardGrowth":1.7},
+  {"id":"spillway","name":"Rift Spillway","forgeGroup":"Boss craft","desc":"Carry 4% of tap or ability overkill per level into the immediately following non-boss. Overkill is bounded by the original hit; never chains or crosses Ascend.","unlockDepth":60,"levelCap":5,"effectPerLevel":0.04,"lumenBase":2361000,"lumenGrowth":1.7,"shardBase":80500,"shardGrowth":1.7},
+  {"id":"sustainedchannel","name":"Sustained Channel","forgeGroup":"Boss craft","desc":"After a damaging non-Support ability leaves the same boss alive, return 2 charge per level to its caster, up to 10.","unlockDepth":70,"levelCap":5,"effectPerLevel":2,"lumenBase":6703000,"lumenGrowth":1.75,"shardBase":191000,"shardGrowth":1.75},
+  {"id":"tapconduit","name":"Tap Conduit","forgeGroup":"Rhythm","desc":"Each manual or Auto-Tap hit gives 2 charge per level to the first powered Active Wisp, up to 10. Charge stops at 100.","unlockDepth":25,"levelCap":5,"effectPerLevel":2,"lumenBase":61000,"lumenGrowth":1.65,"shardBase":4000,"shardGrowth":1.65},
+  {"id":"guardiancadence","name":"Guardian Cadence","forgeGroup":"Rhythm","desc":"Every fifth lifetime tap deals 10% extra damage per level, up to 50%. Manual and Auto-Tap share the same count, including across Ascend.","unlockDepth":35,"levelCap":5,"effectPerLevel":0.1,"lumenBase":174000,"lumenGrowth":1.7,"shardBase":9500,"shardGrowth":1.7},
+  {"id":"relay","name":"Resonance Relay","forgeGroup":"Rhythm","desc":"Support casts give 2 charge per level to each powered non-Support Active Wisp, after ready abilities have fired. Charge stops at 100.","unlockDepth":45,"levelCap":5,"effectPerLevel":2,"lumenBase":493000,"lumenGrowth":1.7,"shardBase":22000,"shardGrowth":1.7},
+  {"id":"resonantedge","name":"Resonant Edge","forgeGroup":"Rhythm","desc":"Support casts also strike for 10% of their own Wisp Power per level. Ability factors apply; Ultimate doubles the hit. Support buffs and its Mote Module do not boost this hit.","unlockDepth":50,"levelCap":5,"effectPerLevel":0.1,"lumenBase":831000,"lumenGrowth":1.7,"shardBase":34000,"shardGrowth":1.7},
+  {"id":"victorycharge","name":"Victory Charge","forgeGroup":"Rhythm","desc":"Each boss kill gives 4 charge per level to every powered Active Wisp, up to 20. An ensuing Auto-Ascend clears this old-run charge.","unlockDepth":55,"levelCap":5,"effectPerLevel":4,"lumenBase":1401000,"lumenGrowth":1.7,"shardBase":52500,"shardGrowth":1.7},
+  {"id":"amplifiertrim","name":"Amplifier Trim","forgeGroup":"Rhythm","desc":"Future Support casts gain 1 percentage point of buff strength per level, up to 5. Their durations and already-cast buffs stay unchanged.","unlockDepth":60,"levelCap":5,"effectPerLevel":0.01,"lumenBase":2361000,"lumenGrowth":1.7,"shardBase":80500,"shardGrowth":1.7},
+  {"id":"dualchannel","name":"Dual Channel","forgeGroup":"Resources","desc":"Gale also gives Lumen equal to 20% of its native Shards per level; Thorn also gives Shards equal to 2% of its native Lumen per level. Each extra payout rounds down; no repeated conversion.","unlockDepth":55,"levelCap":5,"effectPerLevel":0.2,"lumenBase":1401000,"lumenGrowth":1.7,"shardBase":52500,"shardGrowth":1.7},
+  {"id":"overflowconduit","name":"Overflow Conduit","forgeGroup":"Resources","desc":"Gale and Thorn gain up to 2% extra native cast resources per level from their original hit’s overkill. The reward fraction cannot exceed overkill divided by that hit; rounds down.","unlockDepth":65,"levelCap":5,"effectPerLevel":0.02,"lumenBase":3978000,"lumenGrowth":1.75,"shardBase":124000,"shardGrowth":1.75},
+  {"id":"resonancecells","name":"Resonance Cells","forgeGroup":"Resonance","desc":"Each level adds one shared Resonate use per Ascension run, from 3 up to 5. Buying capacity keeps already-spent uses.","unlockDepth":80,"levelCap":2,"effectPerLevel":1,"lumenBase":19032000,"lumenGrowth":2.5,"shardBase":452500,"shardGrowth":2.5},
+  {"id":"resonancecascade","name":"Resonance Cascade","forgeGroup":"Resonance","desc":"A paid Resonate refill also gives 2 charge per level to each other powered Active Wisp, up to 10. The selected Wisp still fills to 100.","unlockDepth":90,"levelCap":5,"effectPerLevel":2,"lumenBase":54040000,"lumenGrowth":1.8,"shardBase":1071500,"shardGrowth":1.8},
+  {"id":"resonancereclaim","name":"Resonance Reclaim","forgeGroup":"Resonance","desc":"Each boss kill restores up to one already-spent Resonate use per level, up to 3. Cannot store extra uses beyond the current run capacity.","unlockDepth":100,"levelCap":3,"effectPerLevel":1,"lumenBase":153442000,"lumenGrowth":2.0,"shardBase":2536500,"shardGrowth":2.0}
+];
+RESEARCH = RESEARCH.concat(FORGE_EXPANSION);
+var FORGE_BY_ID = {};
+FORGE_EXPANSION.forEach(function(node){FORGE_BY_ID[node.id]=node;});
+// Exact ceil of the rational geometric TOTAL, indexed by start/count-1.
+// Finite capped ledger: independent tests recompute all 598 currency values.
+var FORGE_PRICES = {
+  cauterize:[
+    [[36000,2500],[95400,6625],[193410,13432],[355127,24662],[621959,43192],[1062232,73767],[1788683,124215],[2987327,207454],[4965089,344798],[8228396,571417]],
+    [[59400,4125],[157410,10932],[319127,22162],[585959,40692],[1026232,71267],[1752683,121715],[2951327,204954],[4929089,342298],[8192396,568917]],
+    [[98010,6807],[259727,18037],[526559,36567],[966832,67142],[1693283,117590],[2891927,200829],[4869689,338173],[8132996,564792]],
+    [[161717,11231],[428549,29761],[868822,60335],[1595273,110783],[2793917,194022],[4771679,331367],[8034986,557986]],
+    [[266833,18531],[707106,49105],[1433557,99553],[2632200,182792],[4609962,320137],[7873270,546755]],
+    [[440274,30575],[1166724,81023],[2365368,164262],[4343130,301607],[7606438,528225]],
+    [[726451,50448],[1925095,133688],[3902857,271032],[7166165,497651]],
+    [[1198644,83240],[3176406,220584],[6439714,447203]],
+    [[1977763,137345],[5241070,363964]],
+    [[3263308,226619]]
+  ],
+  fracturekey:[
+    [[103000,6000],[272950,15900],[553368,32235],[1016057,59188],[1779494,103660],[3039164,177039],[5117620,298114],[8547073,497888],[14205670,827515],[23542356,1371400]],
+    [[169950,9900],[450368,26235],[913057,53188],[1676494,97660],[2936164,171039],[5014620,292114],[8444073,491888],[14102670,821515],[23439356,1365400]],
+    [[280418,16335],[743107,43288],[1506544,87760],[2766214,161139],[4844670,282214],[8274123,481988],[13932720,811615],[23269406,1355500]],
+    [[462689,26953],[1226126,71425],[2485796,144804],[4564253,265879],[7993706,465653],[13652303,795280],[22988988,1339165]],
+    [[763437,44473],[2023108,117851],[4101564,238927],[7531017,438700],[13189614,768327],[22526299,1312212]],
+    [[1259671,73379],[3338127,194454],[6767580,394228],[12426177,723855],[21762863,1267740]],
+    [[2078457,121076],[5507910,320850],[11166507,650477],[20503192,1194361]],
+    [[3429453,199774],[9088051,529401],[18424736,1073286]],
+    [[5658598,329628],[14995283,873512]],
+    [[9336686,543885]]
+  ],
+  guardianseal:[
+    [[293000,14500],[791100,39150],[1637870,81055],[3077379,152294],[5524545,273399]],
+    [[498100,24650],[1344870,66555],[2784379,137794],[5231545,258899]],
+    [[846770,41905],[2286279,113144],[4733445,234249]],
+    [[1439509,71239],[3886675,192344]],
+    [[2447166,121106]]
+  ],
+  spillway:[
+    [[2361000,80500],[6374700,217350],[13197990,449995],[24797583,845492],[44516892,1517836]],
+    [[4013700,136850],[10836990,369495],[22436583,764992],[42155892,1437336]],
+    [[6823290,232645],[18422883,628142],[38142192,1300486]],
+    [[11599593,395497],[31318902,1067841]],
+    [[19719309,672345]]
+  ],
+  sustainedchannel:[
+    [[6703000,191000],[18433250,525250],[38961188,1110188],[74885079,2133829],[137751887,3925200]],
+    [[11730250,334250],[32258188,919188],[68182079,1942829],[131048887,3734200]],
+    [[20527938,584938],[56451829,1608579],[119318637,3399950]],
+    [[35923891,1023641],[98790700,2815012]],
+    [[62866809,1791372]]
+  ],
+  tapconduit:[
+    [[61000,4000],[161650,10600],[327723,21490],[601743,39459],[1053875,69107]],
+    [[100650,6600],[266723,17490],[540743,35459],[992875,65107]],
+    [[166073,10890],[440093,28859],[892225,58507]],
+    [[274020,17969],[726153,47617]],
+    [[452133,29649]]
+  ],
+  guardiancadence:[
+    [[174000,9500],[469800,25650],[972660,53105],[1827522,99779],[3280788,179124]],
+    [[295800,16150],[798660,43605],[1653522,90279],[3106788,169624]],
+    [[502860,27455],[1357722,74129],[2810988,153474]],
+    [[854862,46674],[2308128,126019]],
+    [[1453266,79345]]
+  ],
+  relay:[
+    [[493000,22000],[1331100,59400],[2755870,122980],[5177979,231066],[9295565,414813]],
+    [[838100,37400],[2262870,100980],[4684979,209066],[8802565,392813]],
+    [[1424770,63580],[3846879,171666],[7964465,355413]],
+    [[2422109,108086],[6539695,291833]],
+    [[4117586,183747]]
+  ],
+  resonantedge:[
+    [[831000,34000],[2243700,91800],[4645290,190060],[8727993,357102],[15668589,641074]],
+    [[1412700,57800],[3814290,156060],[7896993,323102],[14837589,607074]],
+    [[2401590,98260],[6484293,265302],[13424889,549274]],
+    [[4082703,167042],[11023299,451014]],
+    [[6940596,283972]]
+  ],
+  victorycharge:[
+    [[1401000,52500],[3782700,141750],[7831590,293475],[14714703,551408],[26415996,989893]],
+    [[2381700,89250],[6430590,240975],[13313703,498908],[25014996,937393]],
+    [[4048890,151725],[10932003,409658],[22633296,848143]],
+    [[6883113,257933],[18584406,696418]],
+    [[11701293,438486]]
+  ],
+  amplifiertrim:[
+    [[2361000,80500],[6374700,217350],[13197990,449995],[24797583,845492],[44516892,1517836]],
+    [[4013700,136850],[10836990,369495],[22436583,764992],[42155892,1437336]],
+    [[6823290,232645],[18422883,628142],[38142192,1300486]],
+    [[11599593,395497],[31318902,1067841]],
+    [[19719309,672345]]
+  ],
+  dualchannel:[
+    [[1401000,52500],[3782700,141750],[7831590,293475],[14714703,551408],[26415996,989893]],
+    [[2381700,89250],[6430590,240975],[13313703,498908],[25014996,937393]],
+    [[4048890,151725],[10932003,409658],[22633296,848143]],
+    [[6883113,257933],[18584406,696418]],
+    [[11701293,438486]]
+  ],
+  overflowconduit:[
+    [[3978000,124000],[10939500,341000],[23122125,720750],[44441719,1385313],[81751008,2548297]],
+    [[6961500,217000],[19144125,596750],[40463719,1261313],[77773008,2424297]],
+    [[12182625,379750],[33502219,1044313],[70811508,2207297]],
+    [[21319594,664563],[58628883,1827547]],
+    [[37309290,1162985]]
+  ],
+  resonancecells:[
+    [[19032000,452500],[66612000,1583750]],
+    [[47580000,1131250]]
+  ],
+  resonancecascade:[
+    [[54040000,1071500],[151312000,3000200],[326401600,6471860],[641562880,12720848],[1208853184,23969027]],
+    [[97272000,1928700],[272361600,5400360],[587522880,11649348],[1154813184,22897527]],
+    [[175089600,3471660],[490250880,9720648],[1057541184,20968827]],
+    [[315161280,6248988],[882451584,17497167]],
+    [[567290304,11248179]]
+  ],
+  resonancereclaim:[
+    [[153442000,2536500],[460326000,7609500],[1074094000,17755500]],
+    [[306884000,5073000],[920652000,15219000]],
+    [[613768000,10146000]]
+  ]
+};
+
 var NODES = [
   {id:'starlight', name:'Starlight Affinity', desc:'+10% Lumen from every kill, per level.', baseCost:1, growth:1.35},
   {id:'steady',    name:'Steady Hands',        desc:'+8% tap damage, per level.',              baseCost:1, growth:1.30},
@@ -3669,6 +3813,9 @@ function ensureDaily(){
 }
 
 var state = null;
+// Transient identity for synchronous run-boundary guards. Saved lifetime
+// counts can exceed integer precision; never rewrite them to identify a run.
+var ascendRunToken = {};
 var isNewGame = false;
 var resetInProgress = false;
 var resetBootPending = false;
@@ -3865,14 +4012,17 @@ function migratePersistedState(input){
 }
 // Schema-v1 additive, cast-time records. Do not prune by wall time here:
 // an expired-now record may still contribute during lastSeen offline catch-up.
-function normalizeSupportBuffs(raw){
+function normalizeSupportBuffs(raw,research){
   if(!isPlainObject(raw) || raw.version!==1 || !isPlainObject(raw.sources)) return null;
   var sources = {};
   ['tide','aurora'].forEach(function(id){
     var entry = raw.sources[id];
     if(!isPlainObject(entry)) return;
     if(!Number.isFinite(entry.until) || entry.until<=0) return;
-    if(entry.mult!==1.25 && entry.mult!==1.5) return;
+    var valid=entry.mult===1.25 || entry.mult===1.5;
+    var trim=Math.min(5,nonNegativeInt(research && research.amplifiertrim,0));
+    for(var k=1;k<=trim && !valid;k++) valid=entry.mult===1.25+0.01*k || entry.mult===1.5+0.01*k;
+    if(!valid) return;
     sources[id] = {until:entry.until,mult:entry.mult};
   });
   return {version:1,sources:sources};
@@ -4071,9 +4221,9 @@ function normalizeCurrentSave(input){
 
   out.buffUntil = finiteNonNegative(source.buffUntil,fresh.buffUntil);
   out.buffMult = Math.max(1,finiteNonNegative(source.buffMult,fresh.buffMult));
-  out.supportBuffs = normalizeSupportBuffs(source.supportBuffs);
+  out.supportBuffs = normalizeSupportBuffs(source.supportBuffs,out.research);
   out.ascendCount = nonNegativeInt(source.ascendCount,fresh.ascendCount);
-  out.sigilResonanceUses = boundedInt(source.sigilResonanceUses,fresh.sigilResonanceUses,0,SIGIL_RESONANCE_RUN_LIMIT);
+  out.sigilResonanceUses = boundedInt(source.sigilResonanceUses,fresh.sigilResonanceUses,0,sigilResonanceLimit(out));
   // Schema v1 remains compatible: older saves simply have no reward benchmark
   // and receive one final full first reward before future repeats diminish.
   out.ascendRewardedDepth = Math.min(
@@ -4419,14 +4569,17 @@ function bossTraitFor(depth){
 }
 function bossRegenRate(depth){
   var trait = bossTraitFor(depth);
-  return trait ? trait.regen * (bondActive('vanguard') ? 0.8 : 1) : 0;
+  var base=trait ? trait.regen * (bondActive('vanguard') ? 0.8 : 1) : 0;
+  return forgeLevel('cauterize') ? base*(1-0.02*forgeLevel('cauterize')) : base;
 }
 function bossAbilityDamageMult(depth){
   var trait = bossTraitFor(depth);
+  if(trait && trait.id==='fractured' && forgeLevel('fracturekey')) return trait.abilityMult+0.025*forgeLevel('fracturekey');
   return trait ? trait.abilityMult : 1;
 }
 function bossTapDamageMult(depth){
   var trait = bossTraitFor(depth);
+  if(trait && trait.id==='guardian' && forgeLevel('guardianseal')) return trait.tapMult+0.10*forgeLevel('guardianseal');
   return trait ? trait.tapMult : 1;
 }
 
@@ -4495,6 +4648,66 @@ function enterPushMode(){
   renderAll();
   saveState();
 }
+
+function forgeLevel(id,snapshot){
+  var node=FORGE_BY_ID[id],s=snapshot || state;
+  return node ? Math.min(node.levelCap,nonNegativeInt(s.research && s.research[id],0)) : 0;
+}
+function forgeExactDebit(wallet,cost){
+  return Number.isFinite(wallet) && Number.isFinite(cost) && cost>=0 && wallet>=cost && wallet-(wallet-cost)===cost;
+}
+function forgeCommitPaidMutation(apply){
+  var base=state;
+  state=clonePersistedValue(base);
+  apply();
+  var working=state,saved=saveState();
+  // saveState replaces state only after primary storage owns the endpoint.
+  if(!saved && state===working){state=base;return false;}
+  return true;
+}
+function forgeGiveCharge(id,amount){
+  if(amount<=0 || (state.spirits[id]||0)<=0 || state.activeParty.indexOf(id)===-1) return;
+  state.heroResource[id]=Math.min(100,(state.heroResource[id]||0)+amount);
+}
+function forgeTapCharge(){
+  var amount=2*forgeLevel('tapconduit');
+  if(!amount) return;
+  var ids=poweredActiveIds();
+  if(ids.length) forgeGiveCharge(ids[0],amount);
+}
+function forgeRelayCharge(amount){
+  if(!amount) return;
+  state.activeParty.forEach(function(id){
+    var sp=SPIRITS.find(function(s){return s.id===id;});
+    if(sp && sp.abilityType!=='support') forgeGiveCharge(id,amount);
+  });
+}
+function forgeBossVictory(){
+  var amount=4*forgeLevel('victorycharge');
+  if(amount) state.activeParty.forEach(function(id){forgeGiveCharge(id,amount);});
+  var reclaimed=forgeLevel('resonancereclaim');
+  if(reclaimed) state.sigilResonanceUses=Math.max(0,(state.sigilResonanceUses||0)-reclaimed);
+}
+function forgeSpillDamage(hit,hp){
+  var level=forgeLevel('spillway');
+  if(!level || !Number.isFinite(hit) || hit<=0) return 0;
+  return 0.04*level*Math.min(hit,Math.max(0,hit-Math.max(0,hp)));
+}
+function forgeAbilityRewards(sp,level,hit,hp){
+  var rewards=abilityRewardPerCast(sp,level),overflow=forgeLevel('overflowconduit');
+  if(!overflow || !Number.isFinite(hit) || hit<=hp || hit<=0) return rewards;
+  var native=abilityRewardRaw(sp,level),fraction=Math.min(0.02*overflow,(hit-Math.max(0,hp))/hit);
+  if(sp.abilityType==='ranged') rewards.shards+=Math.floor(Math.round(native.shards)*fraction);
+  if(sp.abilityType==='druid') rewards.lumen+=Math.floor(Math.round(native.lumen)*fraction);
+  return rewards;
+}
+function forgeHasChargeGrants(){
+  return !!(forgeLevel('tapconduit') || forgeLevel('relay') || forgeLevel('sustainedchannel') || forgeLevel('victorycharge') || forgeLevel('resonancecascade'));
+}
+function forgeBossPolicyActive(){
+  return ['cauterize','fracturekey','guardianseal','sustainedchannel','tapconduit','guardiancadence','relay','resonantedge','victorycharge','amplifiertrim','resonancecascade'].some(function(id){return forgeLevel(id)>0;});
+}
+function sigilResonanceLimit(snapshot){return SIGIL_RESONANCE_RUN_LIMIT+forgeLevel('resonancecells',snapshot);}
 
 function nodeLevel(id){ return state.nodes[id]||0; }
 function researchLevel(id){ return state.research[id]||0; }
@@ -4571,15 +4784,18 @@ function canSigilResonate(sp){
   if(!sp || !allUltimatesOwned() || !ultimateUnlocked(sp.id)) return false;
   if((state.spirits[sp.id]||0)<=0 || state.activeParty.indexOf(sp.id)===-1) return false;
   if((state.heroResource[sp.id]||0)>=100) return false;
-  if((state.sigilResonanceUses||0)>=SIGIL_RESONANCE_RUN_LIMIT) return false;
-  return state.sigils>=sigilResonanceCost();
+  if((state.sigilResonanceUses||0)>=sigilResonanceLimit()) return false;
+  return forgeExactDebit(state.sigils,sigilResonanceCost());
 }
 function useSigilResonance(sp){
   if(!canSigilResonate(sp)) return false;
-  state.sigils-=sigilResonanceCost();
-  state.sigilResonanceUses=(state.sigilResonanceUses||0)+1;
-  state.heroResource[sp.id]=100;
-  saveState();
+  if(!forgeCommitPaidMutation(function(){
+    state.sigils-=sigilResonanceCost();
+    state.sigilResonanceUses=(state.sigilResonanceUses||0)+1;
+    state.heroResource[sp.id]=100;
+    var cascade=2*forgeLevel('resonancecascade');
+    if(cascade) state.activeParty.forEach(function(id){if(id!==sp.id) forgeGiveCharge(id,cascade);});
+  })) return false;
   renderSpirits();
   renderHud();
   showToast(sp.name+' resonates — '+sp.abilityName+' is ready.');
@@ -4731,8 +4947,11 @@ function chipEffectivePower(id){
 function guardianTapBaseDamage(){
   return 5 + effectivePartyPower()*0.02;
 }
-function guardianTapDamageAt(depth, partyBuffMult){
-  return guardianTapBaseDamage() * tapMult() * (partyBuffMult||1) * bossTapDamageMult(depth) * (bondActive('kindling') ? 1.25 : 1);
+function guardianTapDamageAt(depth,partyBuffMult,ordinal){
+  var damage=guardianTapBaseDamage() * tapMult() * (partyBuffMult||1) * bossTapDamageMult(depth) * (bondActive('kindling') ? 1.25 : 1);
+  var cadence=forgeLevel('guardiancadence');
+  if(cadence && (ordinal===undefined ? state.totalTaps+1 : ordinal)>0 && (ordinal===undefined ? state.totalTaps+1 : ordinal)%5===0) damage*=1+0.10*cadence;
+  return damage;
 }
 function tapDamage(){
   return guardianTapDamageAt(state.depth, simulationBuffMult(Date.now()));
@@ -4747,11 +4966,126 @@ function idleDps(){
 function supportAbilityProfile(sp){
   var ultimate = !!(sp && ultimateUnlocked(sp.id));
   return {
-    strength:ultimate ? 1.5 : 1.25,
+    strength:(ultimate ? 1.5 : 1.25)+0.01*forgeLevel('amplifiertrim'),
     durationMs:ultimate ? 8000 : 4000
   };
 }
-function averageSupportBuffMult(){
+// Reference estimate only. Actual combat continues through the authoritative
+// scheduler; automatic boss decisions use the conservative bounds below.
+var forgeProfileCache={key:null,value:null};
+function forgeChargeProfile(depth){
+  depth=depth===undefined ? state.depth : depth;
+  var auto=!!state.achieved.autotap,tap=auto ? 2*forgeLevel('tapconduit') : 0;
+  var relay=2*forgeLevel('relay'),refund=isBoss(depth) ? 2*forgeLevel('sustainedchannel') : 0;
+  if(!tap && !relay && !refund) return null;
+  var cycle=abilityCycleSeconds(),ids=poweredActiveIds();
+  if(!Number.isFinite(cycle) || cycle<=0 || !ids.length) return null;
+  var members=ids.map(function(id){
+    var sp=SPIRITS.find(function(x){return x.id===id;}),support=sp.abilityType==='support';
+    var profile=support ? supportAbilityProfile(sp) : {strength:1,durationMs:0};
+    return {id:id,support:support,strength:profile.strength,duration:profile.durationMs/1000/cycle};
+  });
+  var key=[cycle,auto,tap,relay,refund].join('|')+'|'+members.map(function(m){return [m.id,m.support,m.strength,m.duration].join(':');}).join('|');
+  if(forgeProfileCache.key===key) return forgeProfileCache.value;
+  var charge=ids.map(function(){return 0;}),until=ids.map(function(){return 0;}),counts=ids.map(function(){return 0;});
+  var u=0,warm=64,measure=256,end=warm+measure,nextTap=auto ? 1/cycle : Infinity,taps=0,events=0,integral=0;
+  function castPass(){
+    var fired=false,pending=0;
+    members.forEach(function(m,i){
+      if(charge[i]<100-1e-7) return;
+      fired=true;charge[i]=0;
+      if(u>warm+1e-9) counts[i]++;
+      if(m.support){until[i]=u+m.duration;pending+=relay;} else charge[i]=refund;
+    });
+    if(pending) members.forEach(function(m,i){if(!m.support) charge[i]=Math.min(100,charge[i]+pending);});
+    return fired;
+  }
+  while(u<end-1e-9){
+    if(++events>12000){forgeProfileCache={key:key,value:null};return null;}
+    var dt=end-u;
+    if(u<warm-1e-9) dt=Math.min(dt,warm-u);
+    dt=Math.min(dt,Math.max(0,nextTap-u));
+    charge.forEach(function(value){dt=Math.min(dt,Math.max(0,(100-value)/100));});
+    until.forEach(function(value){if(value>u+1e-9) dt=Math.min(dt,value-u);});
+    var buff=1;
+    members.forEach(function(m,i){if(m.support && until[i]>u+1e-9) buff+=m.strength-1;});
+    integral+=buff*Math.max(0,u+dt-Math.max(u,warm));
+    u+=dt;
+    charge=charge.map(function(value){return Math.min(100,value+100*dt);});
+    castPass();
+    if(auto && u>=nextTap-1e-8){
+      taps++;nextTap=(taps+1)/cycle;
+      if(tap) charge[0]=Math.min(100,charge[0]+tap);
+    }
+    // Mirrors the next existing zero-time ability pass, after Auto-Tap. No
+    // purchase/Study phases are inserted or reordered in the real scheduler.
+    var zeroPasses=0;
+    while(castPass()){
+      if(++zeroPasses>5){forgeProfileCache={key:key,value:null};return null;}
+    }
+  }
+  var rates={};members.forEach(function(m,i){rates[m.id]=counts[i]/(measure*cycle);});
+  var result=Object.freeze({rates:Object.freeze(rates),supportMult:integral/measure,eventCount:events,cycleSeconds:cycle,warmCycles:warm,measuredCycles:measure});
+  forgeProfileCache={key:key,value:result};
+  return result;
+}
+function forgeBossAssessment(depth,hp){
+  var current=state.depth===depth && state.enemyDepth===depth;
+  var maxHp=current ? state.enemyMaxHp : enemyHpFor(depth);
+  hp=hp===undefined ? (current ? state.enemyHp : maxHp) : hp;
+  var regen=maxHp*bossRegenRate(depth),f=(100/ABILITY_BASE_CYCLE_SEC)*fillRateMult();
+  var threshold=100-1e-7,tapRate=1000/(1000-1e-7),auto=!!state.achieved.autotap;
+  var tap=auto ? 2*forgeLevel('tapconduit') : 0,relay=2*forgeLevel('relay'),refund=2*forgeLevel('sustainedchannel');
+  var ids=poweredActiveIds(),members=[],supportA=0,supportRate=0,upperSources={tide:1,aurora:1};
+  var saved=state.supportBuffs && state.supportBuffs.sources;
+  ['tide','aurora'].forEach(function(id){if(saved && saved[id]) upperSources[id]=Math.max(1,saved[id].mult);});
+  ids.forEach(function(id,i){
+    var sp=SPIRITS.find(function(x){return x.id===id;}),support=sp.abilityType==='support',q=i===0 ? tap : 0;
+    var m={sp:sp,support:support,q:q};
+    if(support){
+      m.a=(100+q)/threshold;m.upper=(f+q*tapRate)/threshold;m.lower=f/100;
+      supportA+=m.a;supportRate+=m.upper;
+      var profile=supportAbilityProfile(sp);
+      upperSources[id]=Math.max(upperSources[id]||1,profile.strength);
+    }
+    members.push(m);
+  });
+  // A strong saved Tide plus a future Aurora can exceed either complete
+  // current/future stack. Bound each source separately before adding them.
+  var upperBuff=Math.max(state.buffMult||1,1+(upperSources.tide-1)+(upperSources.aurora-1));
+  // Saved epoch deadlines can shorten realized Support uptime by a clock
+  // quantum. Only unbuffed passive damage is guaranteed in the lower bound;
+  // Support remains in the HUD estimate and the conservative upper bound.
+  var passive=passiveWispDpsAt(depth),lower=passive,upper=passive*upperBuff,burst=0;
+  members.forEach(function(m){
+    if(!m.support){
+      m.a=(100+m.q+relay*supportA)/(threshold-refund);
+      m.upper=(f+m.q*tapRate+relay*supportRate)/(threshold-refund);
+      m.lower=f/(100-refund);
+    }
+    var damage=abilityBurstDamage(m.sp,depth);
+    lower+=damage*m.lower;upper+=damage*m.upper;burst+=damage*m.a;
+  });
+  if(auto){
+    var base=guardianTapDamageAt(depth,1,0),cadence=0.10*forgeLevel('guardiancadence');
+    // Lifetime ordinals remain intact, including old values beyond safe
+    // integer precision. A stalled ordinal can grant Cadence on every tap or
+    // none; its usual one-in-five average cannot prove a controller bound.
+    lower+=base;
+    upper+=base*upperBuff*(1+cadence)*tapRate;
+    burst+=base*upperBuff*(1+cadence);
+  }
+  var result={verdict:'uncertain',lowerDps:lower,upperDps:upper,burstBudget:burst,regen:regen,maxHp:maxHp,hp:hp};
+  if(!isBoss(depth) || ![f,lower,upper,burst,regen,maxHp,hp].every(function(n){return Number.isFinite(n) && n>=0;})) return result;
+  var slack=Math.max(1,lower,upper,regen)*1e-9,hpSlack=Math.max(1,hp,burst)*1e-9;
+  if(lower>regen+slack) result.verdict='sustained';
+  else if(upper+slack<=regen && hp>burst+hpSlack) result.verdict='wall';
+  return result;
+}
+
+function averageSupportBuffMult(depth){
+  var estimate=forgeChargeProfile(depth);
+  if(estimate) return estimate.supportMult;
   var cycle = abilityCycleSeconds();
   var total = 1;
   state.activeParty.forEach(function(id){
@@ -4768,6 +5102,7 @@ function abilityDamageCoefficient(sp){
   if(sp.abilityType==='breaker') return 4;
   if(sp.abilityType==='dps') return 5;
   if(sp.abilityType==='ranged' || sp.abilityType==='druid') return 3;
+  if(sp.abilityType==='support') return 0.10*forgeLevel('resonantedge');
   return 0;
 }
 function abilityDamageModuleMult(sp){
@@ -4795,32 +5130,48 @@ function abilityRewardRaw(sp,level,conductionLevel){
 }
 function abilityRewardPerCast(sp,level,conductionLevel){
   var raw = abilityRewardRaw(sp,level,conductionLevel);
-  return {lumen:Math.round(raw.lumen),shards:Math.round(raw.shards)};
+  var result={lumen:Math.round(raw.lumen),shards:Math.round(raw.shards)},level=forgeLevel('dualchannel');
+  if(level && sp.abilityType==='ranged') result.lumen+=Math.floor(result.shards*(0.20*level));
+  if(level && sp.abilityType==='druid') result.shards+=Math.floor(result.lumen*(0.02*level));
+  return result;
 }
 function ultimateEffectText(sp){
   if(!sp) return 'Ultimate unlocked';
-  if(sp.abilityType==='support') return 'Support buff becomes +50% for 8s';
+  if(sp.abilityType==='support') return 'Support buff becomes +'+(50+forgeLevel('amplifiertrim'))+'% for 8s'+(forgeLevel('resonantedge')?'; Resonant Edge hit ×2':'');
   if(sp.abilityType==='ranged') return 'Ability damage and Shards ×2';
   if(sp.abilityType==='druid') return 'Ability damage and Lumen ×2';
   return 'Ability damage ×2';
 }
 function averageAbilityDps(depth){
+  var estimate=forgeChargeProfile(depth);
   var cycle = abilityCycleSeconds();
   if(cycle<=0) return 0;
   var total = 0;
   state.activeParty.forEach(function(id){
     var sp = SPIRITS.find(function(s){ return s.id===id; });
     if(!sp || (state.spirits[id]||0)<=0) return;
-    total += abilityBurstDamage(sp, depth) / cycle;
+    total += estimate ? abilityBurstDamage(sp,depth)*(estimate.rates[id]||0) : abilityBurstDamage(sp, depth) / cycle;
   });
   return total;
 }
 function sustainedWispDps(depth){
-  return passiveWispDpsAt(depth) * averageSupportBuffMult() + averageAbilityDps(depth);
+  return passiveWispDpsAt(depth) * averageSupportBuffMult(depth) + averageAbilityDps(depth);
 }
 function automatedGuardianDps(depth){
   if(!state.achieved.autotap) return 0;
-  return guardianTapDamageAt(depth, averageSupportBuffMult());
+  var cadence=forgeLevel('guardiancadence');
+  if(cadence){
+    var frequency=1/5;
+    if(!Number.isSafeInteger(state.totalTaps+60)){
+      // One minute of actual counter arithmetic also covers the transition
+      // into a stalled saved ordinal. Never rewrite the retained counter.
+      var ordinal=state.totalTaps,hits=0;
+      for(var i=0;i<60;i++){ordinal++;if(ordinal>0 && ordinal%5===0) hits++;}
+      frequency=hits/60;
+    }
+    return guardianTapDamageAt(depth,averageSupportBuffMult(depth),0)*(1+0.10*cadence*frequency);
+  }
+  return guardianTapDamageAt(depth, averageSupportBuffMult(depth));
 }
 function sustainedCombatDps(depth){
   return sustainedWispDps(depth) + automatedGuardianDps(depth);
@@ -4832,6 +5183,8 @@ function estimatedBossKillSeconds(depth){
   return netDps>0 ? maxHp/netDps : Infinity;
 }
 function abilityResourceRates(){
+  var estimate=forgeChargeProfile(state.depth);
+  var rounded=!!estimate || forgeLevel('dualchannel')>0 || forgeLevel('overflowconduit')>0;
   var cycle = abilityCycleSeconds();
   var rates = {lumen:0, shards:0};
   if(cycle<=0) return rates;
@@ -4839,9 +5192,10 @@ function abilityResourceRates(){
     var sp = SPIRITS.find(function(s){ return s.id===id; });
     var level = state.spirits[id]||0;
     if(!sp || level<=0) return;
-    var rewards = abilityRewardRaw(sp,level);
-    rates.lumen += rewards.lumen/cycle;
-    rates.shards += rewards.shards/cycle;
+    var rewards=rounded ? abilityRewardPerCast(sp,level) : abilityRewardRaw(sp,level);
+    var rate=estimate ? (estimate.rates[id]||0) : 1/cycle;
+    rates.lumen += estimate || rounded ? rewards.lumen*rate : rewards.lumen/cycle;
+    rates.shards += estimate || rounded ? rewards.shards*rate : rewards.shards/cycle;
   });
   return rates;
 }
@@ -4990,11 +5344,16 @@ function announceDepthMilestone(depth,previousMax){
   }
 }
 
-function dealDamage(amount){
+function dealDamage(amount,allowSpill){
+  var spill=allowSpill===false ? 0 : forgeSpillDamage(amount,state.enemyHp),run=ascendRunToken;
   state.enemyHp -= amount;
-  if(state.enemyHp <= 0){ defeatEnemy(); }
+  if(state.enemyHp<=0){
+    defeatEnemy();
+    if(spill>0 && ascendRunToken===run && !isBoss(state.depth)) dealDamage(spill,false);
+    return true;
+  }
+  return false;
 }
-
 function defeatEnemy(){
   var defeatedDepth = state.depth;
   var previousMax = state.maxDepthEver;
@@ -5024,6 +5383,7 @@ function defeatEnemy(){
     state.sigils += sigilGain;
     spawnFloatNum('+'+formatNum(sigilGain)+' Sigils', els['enemy-stage'],'sigil');
     trackDaily('bossKills');
+    forgeBossVictory();
     if(navigator.vibrate) navigator.vibrate(22);
   }
 
@@ -5272,6 +5632,7 @@ function doTap(stageEl){
   recordCometManualAttack();
   state.totalTaps++;
   trackDaily('taps');
+  forgeTapCharge();
   spawnFloatNum(formatNum(dmg), stageEl,'damage');
   emitCombatVfx('tap',riftZoneFor(state.depth).accent);
   stageEl.classList.add('hit');
@@ -5493,6 +5854,12 @@ function geometricSum(base, growth, startLevel, count){
   return base * Math.pow(growth, startLevel) * (Math.pow(growth, count)-1) / (growth-1);
 }
 function researchCostForLevels(node, level, count){
+  if(FORGE_PRICES[node.id]){
+    if(count===0) return {lumen:0,shard:0};
+    var row=Number.isInteger(level) && level>=0 && FORGE_PRICES[node.id][level];
+    var price=Number.isInteger(count) && count>0 && row && row[count-1];
+    return price ? {lumen:price[0],shard:price[1]} : {lumen:Infinity,shard:Infinity};
+  }
   return {
     lumen: Math.ceil(geometricSum(node.lumenBase, node.lumenGrowth, level, count)),
     shard: Math.ceil(geometricSum(node.shardBase, node.shardGrowth, level, count))
@@ -5522,33 +5889,99 @@ function researchEligibility(node){
 function getResearchBuyPlan(node,requested){
   node=node && RESEARCH.find(function(n){return n.id===node.id;});
   if(!node) return {count:0,buyCount:0,cost:{lumen:0,shard:0},needed:{lumen:0,shard:0},affordable:false,reason:'unknown'};
-  var e = researchEligibility(node);
-  requested = requested===undefined ? labMultiplier : requested;
-  var validRequest = requested==='max' || (Number.isInteger(requested) && requested>0);
-  var count = 0, cost = {lumen:0,shard:0};
-  var reason = node.retiredTo ? 'retired' : !e.unlocked ? 'locked' : e.maxed ? 'maxed' : !validRequest ? 'unavailable' : '';
+  var e=researchEligibility(node);
+  requested=requested===undefined ? labMultiplier : requested;
+  var validRequest=requested==='max' || (Number.isInteger(requested) && requested>0);
+  var count=0,cost={lumen:0,shard:0},unavailable=false;
+  var reason=node.retiredTo ? 'retired' : !e.unlocked ? 'locked' : e.maxed ? 'maxed' : !validRequest ? 'unavailable' : '';
+  function eligible(n,c){
+    return e.level+n-e.level===n && forgeExactDebit(state.lumen,c.lumen) && forgeExactDebit(state.shards,c.shard);
+  }
   if(!reason){
     if(node.levelCap!==undefined){
-      var limit = Math.min(node.levelCap-e.level,requested==='max' ? Infinity : requested);
-      // At most ten candidates for this catalogue; price is the rounded total
-      // geometric sum, never a sum of individually rounded level prices.
-      while(count<limit){
-        var next = researchCostForLevels(node,e.level,count+1);
-        if(!Number.isFinite(next.lumen) || !Number.isFinite(next.shard) || next.lumen>state.lumen || next.shard>state.shards) break;
-        count++;cost=next;
+      var limit=Math.min(node.levelCap-e.level,requested==='max' ? Infinity : requested);
+      for(var attempt=1;attempt<=limit;attempt++){
+        var next=researchCostForLevels(node,e.level,attempt);
+        if(!Number.isFinite(next.lumen) || !Number.isFinite(next.shard)){unavailable=true;break;}
+        if(next.lumen>state.lumen || next.shard>state.shards) break;
+        // Exact representability is not monotone in count; a larger total may
+        // be exactly payable even when an earlier rounded total is not.
+        if(eligible(attempt,next)){count=attempt;cost=next;} else unavailable=true;
       }
     } else {
-      var n = requested==='max' ? maxAffordableLevels(node,e.level,state.lumen,state.shards) : requested;
-      var candidate = researchCostForLevels(node,e.level,n);
-      if(n>0 && Number.isFinite(candidate.lumen) && Number.isFinite(candidate.shard) && candidate.lumen<=state.lumen && candidate.shard<=state.shards){count=n;cost=candidate;}
+      var n=requested==='max' ? maxAffordableLevels(node,e.level,state.lumen,state.shards) : requested;
+      while(n>0){
+        var candidate=researchCostForLevels(node,e.level,n);
+        if(!Number.isFinite(candidate.lumen) || !Number.isFinite(candidate.shard)){unavailable=true;break;}
+        if(candidate.lumen>state.lumen || candidate.shard>state.shards) break;
+        if(eligible(n,candidate)){count=n;cost=candidate;break;}
+        unavailable=true;
+        if(requested!=='max') break;
+        n--;
+      }
     }
-    if(!count) reason='unaffordable';
+    if(!count) reason=unavailable ? 'unavailable' : 'unaffordable';
   }
-  var needed = reason==='unaffordable' ? researchCostForLevels(node,e.level,node.levelCap!==undefined || requested==='max' ? 1 : requested) : cost;
+  var quote=(reason==='unaffordable' || reason==='unavailable' && validRequest || reason==='locked' && node.forgeGroup);
+  var needed=quote ? researchCostForLevels(node,e.level,node.levelCap!==undefined || requested==='max' ? 1 : requested) : cost;
   return {count:count,buyCount:count,cost:cost,needed:needed,affordable:count>0,reason:reason,level:e.level,unlocked:e.unlocked,maxed:e.maxed};
 }
+function forgeEffectText(id,level){
+  function n(value){return Number(value.toFixed(4)).toString();}
+  if(id==='cauterize') return 'Boss regeneration ×'+n(1-0.02*level)+' ('+n(2*level)+'% less)';
+  if(id==='fracturekey') return 'Fractured Core ability damage ×'+n(1.75+0.025*level);
+  if(id==='guardianseal') return 'Guardian’s Mark tap damage ×'+n(3+0.10*level);
+  if(id==='spillway') return n(4*level)+'% of bounded tap/ability overkill to one following non-boss';
+  if(id==='sustainedchannel') return n(2*level)+' charge after a nonlethal non-Support boss ability';
+  if(id==='tapconduit') return n(2*level)+' charge to the first powered Active Wisp per tap';
+  if(id==='guardiancadence') return '+'+n(10*level)+'% damage every fifth lifetime tap';
+  if(id==='relay') return n(2*level)+' charge to each powered non-Support Active after a Support cast';
+  if(id==='resonantedge') return 'Support hit: '+n(0.10*level)+' × Wisp Power before ability factors';
+  if(id==='victorycharge') return n(4*level)+' charge to each powered Active per boss kill';
+  if(id==='amplifiertrim') return 'Future Support buff: +'+n(25+level)+'%; +'+n(50+level)+'% with Ultimate';
+  if(id==='dualchannel') return 'Gale extra Lumen: floor(native Shards × '+n(0.20*level)+'); Thorn extra Shards: floor(native Lumen × '+n(0.02*level)+')';
+  if(id==='overflowconduit') return 'Up to '+n(2*level)+'% extra native cast resource from original-hit overkill';
+  if(id==='resonancecells') return n(SIGIL_RESONANCE_RUN_LIMIT+level)+' shared Resonate uses per run';
+  if(id==='resonancecascade') return n(2*level)+' charge to each other powered Active per Resonate';
+  if(id==='resonancereclaim') return 'Restore up to '+n(level)+' spent Resonate use(s) per boss kill';
+  return '';
+}
+function forgeDescription(node){
+  if(node.id==='arcanecal' && forgeLevel('resonantedge')) return '+3 percentage points to the damaging Wisp ability factor per level, including owned Resonant Edge Support hits. No passive or Tap bonus.';
+  return node.desc;
+}
+function forgeAbilityDescription(sp){
+  if(sp.abilityType!=='support' || !forgeLevel('amplifiertrim') && !forgeLevel('resonantedge') && !forgeLevel('relay')) return ABILITY_DESC[sp.abilityType];
+  var trim=forgeLevel('amplifiertrim');
+  var text='Boosts passive Wisp damage and Guardian Tap by +'+(25+trim)+'% for 4s. Ultimate: +'+(50+trim)+'% for 8s.';
+  if(forgeLevel('resonantedge')) text+=' Also hits for '+Number((0.10*forgeLevel('resonantedge')).toFixed(2))+' × Wisp Power before ability factors; Ultimate doubles the hit.';
+  if(forgeLevel('relay')) text+=' Casts relay '+(2*forgeLevel('relay'))+' charge to powered non-Support Active Wisps.';
+  return text;
+}
+function forgeResonanceBonusText(){
+  var text='';
+  if(forgeLevel('resonancecascade')) text+=' Also adds '+(2*forgeLevel('resonancecascade'))+' charge to each other powered Active Wisp.';
+  if(forgeLevel('resonancereclaim')) text+=' Each boss kill restores up to '+forgeLevel('resonancereclaim')+' spent use(s).';
+  return text;
+}
+function forgeSigilDescription(){
+  return 'Dropped by Rift bosses. First unlock Mythic Wisp Ultimates; after every Ultimate is owned, spend '+sigilResonanceCost()+' Sigils to ready one powered Active Wisp ability. '+sigilResonanceLimit()+' shared uses per Ascension run.'+forgeResonanceBonusText();
+}
+function forgeCurrencyDescription(c){
+  return c.name==='Sigils' ? forgeSigilDescription() : c.desc;
+}
+function forgeMechanicDescription(m){
+  if(m.name==='Endgame Currency Utility') return forgeSigilDescription()+' Auto-Ascend plus Comet Trials unlock Quest Refresh; previous complete Rest Stop owners retain access. A refresh costs at least the richest quest reward, so refreshing cannot generate extra Comets.';
+  if(m.name==='Wisp Power' && forgeLevel('amplifiertrim')) return m.desc+' Owned Amplifier Trim increases future Support cast strength separately.';
+  if(m.name==='Modules & Ultimates' && (forgeLevel('amplifiertrim') || forgeLevel('resonantedge'))) return 'Base abilities: '+m.desc+' Owned Amplifier Trim adds '+forgeLevel('amplifiertrim')+' percentage points to future Support strength; owned Resonant Edge adds a Support hit that its Ultimate also doubles.';
+  if(m.name==='Boss Traits' && (forgeLevel('cauterize') || forgeLevel('fracturekey') || forgeLevel('guardianseal'))) return 'Base traits before Forge: '+m.desc+' Current Forge: '+forgeEffectText('cauterize',forgeLevel('cauterize'))+'; '+forgeEffectText('fracturekey',forgeLevel('fracturekey'))+'; '+forgeEffectText('guardianseal',forgeLevel('guardianseal'))+'.';
+  if(m.name==='Offline Progress' && forgeBossPolicyActive()) return m.desc+' A timing-sensitive fight keeps your current Push or Farm choice until the new combat effects give a clear outcome.';
+  return m.desc;
+}
+
 function researchEffectPreview(node,level){
   var value = {factor:researchFactor(node.id,level),bonus:researchBonus(node.id,level)};
+  if(node.forgeGroup) value.level=researchEffectiveLevel(node,level);
   if(node.id==='charge'){value.cycle=abilityCycleSeconds(level);}
   if(node.id==='conduction'){
     value.casts={};
@@ -5567,18 +6000,19 @@ function researchPreview(node,requested){
     purchase:researchEffectPreview(node,level+plan.buyCount)};
 }
 function researchEffectText(node,value){
+  if(node.forgeGroup) return forgeEffectText(node.id,value.level);
   function decimal(n){return Number(n.toFixed(4)).toString();}
   if(node.id==='luminoustracking') return '+'+decimal(value.bonus*100)+' percentage points; '+
     (value.boss ? 'Boss Rift '+value.depth+': never Luminous' : 'future eligible Rift '+value.depth+' encounter: '+decimal(value.chance*100)+'%');
   var text='×'+decimal(value.factor)+' source factor';
-  if(node.id==='charge') text+=' fill; '+decimal(value.cycle)+'s ability cycle';
+  if(node.id==='charge') text+=' fill; '+decimal(value.cycle)+(forgeHasChargeGrants()?'s natural ability cycle before charge grants':'s ability cycle');
   if(node.id==='conduction') text+='; per cast at current Wisp levels: Gale '+value.casts.gale.shards.toLocaleString('en-US')+' Shards, Thorn '+value.casts.thorn.lumen.toLocaleString('en-US')+' Lumen';
   return text;
 }
 function researchPreviewText(node,preview){
   var p=preview.plan;
   var impact=p.buyCount ? researchEffectText(node,preview.purchase) : 'No purchase (0 levels)';
-  if(p.buyCount && node.id!=='luminoustracking') impact+='; +'+Number(((preview.purchase.factor/preview.current.factor-1)*100).toFixed(2))+'% relative source improvement';
+  if(p.buyCount && node.id!=='luminoustracking' && !node.forgeGroup) impact+='; +'+Number(((preview.purchase.factor/preview.current.factor-1)*100).toFixed(2))+'% relative source improvement';
   if(p.buyCount && node.id==='conduction') impact+='; actual extra per cast: Gale +'+(preview.purchase.casts.gale.shards-preview.current.casts.gale.shards).toLocaleString('en-US')+' Shards, Thorn +'+(preview.purchase.casts.thorn.lumen-preview.current.casts.thorn.lumen).toLocaleString('en-US')+' Lumen';
   return 'Current: '+researchEffectText(node,preview.current)+'\nNext: '+(preview.next?researchEffectText(node,preview.next)+' (preview only)':'Maxed')+
     '\nPurchase impact: '+p.buyCount+' level(s) · '+impact+
@@ -5588,7 +6022,7 @@ function updateResearchCard(node,card){
   var model=researchPreview(node),p=model.plan,btn=card.querySelector('[data-research]');
   var preview=card.querySelector('[data-forge-preview]'),text=researchPreviewText(node,model);
   if(preview.textContent!==text) preview.textContent=text;
-  var label=p.reason==='locked'?'Reach Rift '+node.unlockDepth:p.maxed?'Maxed':p.buyCount?'Upgrade ×'+p.buyCount:'Upgrade';
+  var label=p.reason==='locked'?'Reach Rift '+node.unlockDepth:p.maxed?'Maxed':p.reason==='unavailable'?'Unavailable':p.buyCount?'Upgrade ×'+p.buyCount:'Upgrade';
   var displayed=p.buyCount?p.cost:p.needed;
   var html=(node.lumenBase && Number.isFinite(displayed.lumen)?purchasePriceMarkup('lumen',displayed.lumen,'cost mono'):'')+
     (node.shardBase && Number.isFinite(displayed.shard)?purchasePriceMarkup('shard',displayed.shard,'cost mono'):'')+'<span class="label">'+label+'</span>';
@@ -5597,18 +6031,19 @@ function updateResearchCard(node,card){
 }
 
 function buyResearch(node){
-  var plan = getResearchBuyPlan(node);
-  if(!plan.affordable || plan.buyCount<1) return;
-  state.lumen -= plan.cost.lumen;
-  state.shards -= plan.cost.shard;
-  state.research[node.id] += plan.buyCount;
-  trackDaily('research', plan.buyCount);
-  saveState();
+  var plan=getResearchBuyPlan(node);
+  if(!plan.affordable || plan.buyCount<1) return false;
+  if(!forgeCommitPaidMutation(function(){
+    state.lumen -= plan.cost.lumen;
+    state.shards -= plan.cost.shard;
+    state.research[node.id] += plan.buyCount;
+    trackDaily('research',plan.buyCount);
+  })) return false;
   renderResearch();
   updateBattleFast();
   renderSideStats();
+  return true;
 }
-
 function autoLabQueueTick(){
   var boughtAny = false;
   for(var guard=0; guard<20; guard++){
@@ -5936,6 +6371,7 @@ function ascendPrismGain(depth){
   return ascendPrismBreakdown(depth).gain;
 }
 function applyAscendMutation(){
+  ascendRunToken = {};
   // Capture before reset/temporary party mutation; repeated Ascension keeps intent.
   state.formationRebuild = normalizeFormationRebuild(state.formationRebuild || {
     members:state.activeParty.slice(),preset:state.activeFormationPreset
@@ -6020,20 +6456,19 @@ function performReset(){
   },80);
 }
 
-function triggerAbility(sp, level){
-  var burst = abilityRawBurst(sp,level);
-  var rewards = abilityRewardPerCast(sp,level);
-  if(rewards.shards>0) state.shards += rewards.shards;
+function triggerAbility(sp,level){
+  var depth=state.depth,run=ascendRunToken;
+  var hit=abilityRawBurst(sp,level)*formationContextDamageMult(depth)*bossAbilityDamageMult(depth);
+  var rewards=forgeAbilityRewards(sp,level,hit,state.enemyHp);
+  if(rewards.shards>0) state.shards+=rewards.shards;
   if(rewards.lumen>0) gainLumen(rewards.lumen);
-  if(sp.abilityType==='support'){
-    applySupportCast(sp,Date.now());
-  }
+  if(sp.abilityType==='support') applySupportCast(sp,Date.now());
   emitCombatVfx(sp.abilityType==='support' ? 'support' : 'ability',sp.color,sp.id);
   flashBattleStage(sp.abilityType==='support' ? 'support' : 'ability');
-  if(burst>0) dealDamage(burst * formationContextDamageMult(state.depth) * bossAbilityDamageMult(state.depth));
+  var killed=hit>0 && dealDamage(hit);
+  if(!killed && hit>0 && isBoss(depth) && state.depth===depth && ascendRunToken===run && sp.abilityType!=='support') forgeGiveCharge(sp.id,2*forgeLevel('sustainedchannel'));
+  if(sp.abilityType==='support' && ascendRunToken===run) forgeRelayCharge(2*forgeLevel('relay'));
 }
-
-
 // ---------------------------------------------------------------
 // Rendering
 // ---------------------------------------------------------------
@@ -6102,7 +6537,7 @@ function presentControlStates(root){
       }
       if(btn.hasAttribute('data-sigil-resonate')){
         cost.sigil=sigilResonanceCost();
-        if((state.sigilResonanceUses||0)>=SIGIL_RESONANCE_RUN_LIMIT){kind='unavailable';reason='Run limit reached';}
+        if((state.sigilResonanceUses||0)>=sigilResonanceLimit()){kind='unavailable';reason='Run limit reached';}
         else if((state.spirits[sp.id]||0)<=0 || state.activeParty.indexOf(sp.id)===-1){kind='unavailable';reason='Field this Wisp first';}
         else if((state.heroResource[sp.id]||0)>=100){kind='unavailable';reason='Ability already ready';}
       }
@@ -6113,7 +6548,8 @@ function presentControlStates(root){
       }
       if(btn.hasAttribute('data-research')){var node=RESEARCH.find(function(n){return n.id===btn.getAttribute('data-research');});subject=node.name;var plan=getResearchBuyPlan(node);cost=plan.needed;
         if(plan.maxed){kind='maxed';reason='Maxed';}
-        else if(!plan.unlocked){kind='locked';reason='Reach Rift '+node.unlockDepth;}}
+        else if(!plan.unlocked){kind='locked';reason='Reach Rift '+node.unlockDepth;}
+        else if(plan.reason==='unavailable'){kind='unavailable';reason='Unavailable';}}
       if(btn.hasAttribute('data-node')){
         var node=NODES.find(function(n){return n.id===btn.getAttribute('data-node');});subject=node.name;
         var plan=getNodeBuyPlan(node);
@@ -6586,7 +7022,7 @@ function renderRiftParty(){
     bar.querySelector('span').style.width=charge+'%';
     bar.setAttribute('aria-valuenow',String(Math.round(charge)));
     var abilityStatus=!powered ? 'Unpowered — Empower this Wisp' :
-      (casting ? 'Casting; ' : charge>=100 ? 'Ready; ' : '')+Math.round(charge)+'% charged; '+Math.ceil(seconds)+' seconds to next ability';
+      (casting ? 'Casting; ' : charge>=100 ? 'Ready; ' : '')+Math.round(charge)+'% charged; '+Math.ceil(seconds)+(forgeHasChargeGrants()?' seconds by natural charge; grants can ready it earlier':' seconds to next ability');
     bar.setAttribute('aria-valuetext',abilityStatus);
   });
 }
@@ -6749,7 +7185,7 @@ function renderSpirits(){
       (resonanceOwned ? '<button class="mini-btn sigil-resonance-btn" data-sigil-resonate="'+sp.id+'" aria-describedby="'+resonanceHelpId+'" '+(resonanceDisabled?'disabled':'')+'>Resonate — Fill ability to 100'+
         '<span>'+sigilResonanceCost()+' Sigils</span></button>' : '')+
       '<p class="sigil-resonance-help" id="'+resonanceHelpId+'">Spend '+sigilResonanceCost()+' Sigils to fill this Active Wisp\'s ability resource to 100. This is a refill, not a permanent upgrade. '+
-        'Requires all Wisp Ultimates. '+(SIGIL_RESONANCE_RUN_LIMIT-resonanceUses)+' of '+SIGIL_RESONANCE_RUN_LIMIT+' uses left this run, shared across all Wisps. Resets on Ascend.</p>' : '';
+        'Requires all Wisp Ultimates. '+(sigilResonanceLimit()-resonanceUses)+' of '+sigilResonanceLimit()+' uses left this run, shared across all Wisps. Resets on Ascend.'+forgeResonanceBonusText()+'</p>' : '';
     var ultimateHtml =
       '<div class="ultimate-row">' +
         (ultimateUnlocked(sp.id) ?
@@ -6781,7 +7217,7 @@ function renderSpirits(){
       (upgradesMaxed ?
         '<details class="wisp-progression" data-wisp-progression="'+sp.id+'" '+(openProgression.indexOf(sp.id)!==-1?'open':'')+'><summary data-wisp-details="'+sp.id+'">'+sp.shortName+' · Ability, Rarity, Module &amp; Ultimate</summary>' :
         '<section class="wisp-progression" data-wisp-progression="'+sp.id+'" aria-labelledby="wisp-progression-'+sp.id+'"><h3 class="wisp-progression-title" id="wisp-progression-'+sp.id+'" data-wisp-details="'+sp.id+'" tabindex="-1">'+sp.shortName+' · Ability, Rarity, Module &amp; Ultimate</h3>') +
-      '<div class="hero-ability"><span class="ability-label">Ability</span><strong>'+sp.abilityName+'</strong><span class="ability-desc">'+ABILITY_DESC[sp.abilityType]+'</span></div>' +
+      '<div class="hero-ability"><span class="ability-label">Ability</span><strong>'+sp.abilityName+'</strong><span class="ability-desc">'+forgeAbilityDescription(sp)+'</span></div>' +
       moduleHtml +
       '<div class="hero-actions">' +
         '<button class="mini-btn rarity-btn" data-rarity="'+sp.id+'" '+(canRarity?'':'disabled')+'>'+rarityLabel+'</button>' +
@@ -6849,19 +7285,21 @@ function renderResearch(){
     return '<button class="mult-btn '+(active?'active':'')+'" data-mult="'+m+'">'+label+'</button>';
   }).join('') + '</div>';
 
-  var html = '',legacyHtml='';
+  var html = '',legacyHtml='',group='';
   RESEARCH.forEach(function(node){
     if(node.retiredTo){
       if(researchLevel(node.id)>0) legacyHtml+=legacyUpgradeMarkup(node,'<div class="earned-effect">Level '+researchLevel(node.id)+' · '+researchEffectText(node,researchEffectPreview(node,researchLevel(node.id)))+'</div>');
       return;
     }
+    var nextGroup=node.forgeGroup || 'Core';
+    if(nextGroup!==group){group=nextGroup;html+='<h3 class="section-sub" data-forge-group style="margin:18px 2px 10px;">'+group+'</h3>';}
     var level = state.research[node.id];
     var queueOn = !!state.researchQueue[node.id];
     html += '<div class="card node-card" data-forge-card="'+node.id+'">' +
       '<div class="forge-head"><svg class="upgrade-emblem" viewBox="0 0 32 38" aria-hidden="true" focusable="false"><use href="#upgrade-forge"/></svg>' +
         '<div class="node-info"><div class="name">'+node.name+'</div>' +
           '<div class="lvl">Level '+level+(node.levelCap===undefined?'':' / '+node.levelCap)+'</div></div></div>' +
-      '<div class="desc forge-description">'+node.desc+'</div>' +
+      '<div class="desc forge-description">'+forgeDescription(node)+'</div>' +
       '<div class="desc" data-forge-preview></div>' +
       '<div class="forge-actions"><button class="node-queue-toggle '+(queueOn?'active':'')+'" data-queue="'+node.id+'">Queue '+(queueOn?'ON':'OFF')+'</button>' +
         '<button class="buy-btn" data-research="'+node.id+'"></button></div>' +
@@ -6875,7 +7313,7 @@ function renderResearch(){
   // Build the authoritative previews and control states off-DOM. Restoring
   // focus on empty cards would clamp the scroll area before they reach full size.
   var prepared=document.createElement('div');
-  prepared.innerHTML='<div class="section-sub">Forge: ability charge, ability damage, cast resources and Luminous encounters.</div>'+multHtml + html;
+  prepared.innerHTML='<div class="section-sub">Forge: shape boss fights, tap rhythm, Support casts, resources and Resonate.</div>'+multHtml + html;
   RESEARCH.filter(function(node){return !node.retiredTo;}).forEach(function(node){updateResearchCard(node,prepared.querySelector('[data-forge-card="'+node.id+'"]'));});
   presentControlStates(prepared);
   replaceControlMarkup(root,prepared.innerHTML);
@@ -7379,7 +7817,7 @@ function renderCurrencies(){
   CURRENCIES.forEach(function(c){
     html += '<div class="card currency-card">' +
       '<span class="shape '+c.shape+'" style="width:26px;height:26px;background:'+c.color+';"></span>' +
-      '<div><div class="cname">'+c.name+'</div><div class="cdesc">'+c.desc+'</div></div>' +
+      '<div><div class="cname">'+c.name+'</div><div class="cdesc">'+forgeCurrencyDescription(c)+'</div></div>' +
     '</div>';
   });
   if(els['currency-list']) els['currency-list'].innerHTML = html;
@@ -7427,7 +7865,7 @@ function renderEncyclopedia(){
       wispPortrait(sp) +
       '<div class="ency-main"><div class="ency-name">'+sp.name+'</div><div class="ency-meta">'+sp.heroClass+' · '+sp.role+' · Unlock Rift '+sp.unlockDepth+'</div></div>' +
       '<span class="ency-status '+(recruited?'on':'')+'">'+(recruited?'Recruited':(unlocked?'Available':'Locked'))+'</span>' +
-      '</div><div class="ency-desc"><strong>'+sp.abilityName+':</strong> '+ABILITY_DESC[sp.abilityType]+'</div></div>';
+      '</div><div class="ency-desc"><strong>'+sp.abilityName+':</strong> '+forgeAbilityDescription(sp)+'</div></div>';
   });
   html += '</div>';
 
@@ -7443,13 +7881,13 @@ function renderEncyclopedia(){
   html += '<div class="settings-section-title">Currencies</div><div class="ency-grid">';
   CURRENCIES.forEach(function(c){
     html += '<div class="ency-card"><div class="ency-top"><span class="shape '+c.shape+'" style="width:22px;height:22px;background:'+c.color+';"></span>' +
-      '<div class="ency-main"><div class="ency-name">'+c.name+'</div></div></div><div class="ency-desc">'+c.desc+'</div></div>';
+      '<div class="ency-main"><div class="ency-name">'+c.name+'</div></div></div><div class="ency-desc">'+forgeCurrencyDescription(c)+'</div></div>';
   });
   html += '</div>';
 
   html += '<div class="settings-section-title">Core Mechanics</div><div class="ency-grid">';
   ENCYCLOPEDIA_MECHANICS.forEach(function(m){
-    html += '<div class="ency-card"><div class="ency-name">'+m.name+'</div><div class="ency-meta">'+m.meta+'</div><div class="ency-desc">'+m.desc+'</div></div>';
+    html += '<div class="ency-card"><div class="ency-name">'+m.name+'</div><div class="ency-meta">'+m.meta+'</div><div class="ency-desc">'+forgeMechanicDescription(m)+'</div></div>';
   });
   html += '</div>';
 
@@ -8059,7 +8497,7 @@ function simulationKillsUntilEconomyMutation(rewardScale){
   RESEARCH.forEach(function(node){
     if(!state.researchQueue[node.id]) return;
     var eligibility = researchEligibility(node);
-    if(!eligibility.unlocked || eligibility.maxed) return;
+    if(!eligibility.unlocked || eligibility.maxed || getResearchBuyPlan(node,1).reason==='unavailable') return;
     var cost = researchCostForLevels(node,state.research[node.id],1);
     best = Math.min(best,simulationLabCurrencyKillsNeeded(cost,lumenPerKill,shardPerKill,rewardScale));
   });
@@ -8118,6 +8556,7 @@ function simulationDefeatEnemy(policy,summary){
     summary.sigilsGained += sigilGain;
     summary.bossKills++;
     trackDaily('bossKills');
+    forgeBossVictory();
   }
 
   state.totalKills++;
@@ -8274,69 +8713,66 @@ function simulationApplyPushPassive(elapsedSec,dps,policy,summary){
   }
   if(state.enemyHp<=SIM_EPS) simulationDefeatEnemy(policy,summary);
 }
-function simulationDealDiscreteDamage(amount,policy,summary){
+function simulationDealDiscreteDamage(amount,policy,summary,allowSpill){
   if(amount<=0) return false;
+  var spill=allowSpill===false ? 0 : forgeSpillDamage(amount,state.enemyHp),run=ascendRunToken;
   state.enemyHp -= amount;
   if(state.enemyHp<=SIM_EPS){
     simulationDefeatEnemy(policy,summary);
+    if(spill>0 && ascendRunToken===run && !isBoss(state.depth)) simulationDealDiscreteDamage(spill,policy,summary,false);
     return true;
   }
   return false;
 }
 function simulationTriggerAbility(sp,level,nowMs,policy,summary,clock){
-  var burst = abilityRawBurst(sp,level);
-  var rewards = abilityRewardPerCast(sp,level);
-  var rewardScale = simulationRewardScale(policy);
-
+  var depth=state.depth,run=ascendRunToken;
+  var hit=abilityRawBurst(sp,level)*formationContextDamageMult(depth)*bossAbilityDamageMult(depth);
+  var rewards=forgeAbilityRewards(sp,level,hit,state.enemyHp);
+  var rewardScale=simulationRewardScale(policy);
   if(rewards.shards>0){
-    var shardGain = rewards.shards*rewardScale;
-    state.shards += shardGain;
-    summary.shardGained += shardGain;
+    var shardGain=rewards.shards*rewardScale;
+    state.shards+=shardGain;
+    summary.shardGained+=shardGain;
   }
   if(rewards.lumen>0){
-    var lumenGain = rewards.lumen*rewardScale;
+    var lumenGain=rewards.lumen*rewardScale;
     gainLumen(lumenGain);
-    summary.lumenGained += lumenGain;
+    summary.lumenGained+=lumenGain;
   }
-  if(sp.abilityType==='support'){
-    applySupportCast(sp,nowMs,clock);
-  }
-
+  if(sp.abilityType==='support') applySupportCast(sp,nowMs,clock);
   if(policy.visual){
     emitCombatVfx(sp.abilityType==='support' ? 'support' : 'ability',sp.color,sp.id);
     flashBattleStage(sp.abilityType==='support' ? 'support' : 'ability');
   }
-  if(burst>0){
-    simulationDealDiscreteDamage(
-      burst*formationContextDamageMult(state.depth)*bossAbilityDamageMult(state.depth),
-      policy,
-      summary
-    );
-  }
+  var killed=hit>0 && simulationDealDiscreteDamage(hit,policy,summary);
+  if(!killed && hit>0 && isBoss(depth) && state.depth===depth && ascendRunToken===run && sp.abilityType!=='support') forgeGiveCharge(sp.id,2*forgeLevel('sustainedchannel'));
 }
 function simulationProcessAbilities(nowMs,policy,summary,clock){
-  var fired = 0;
-  var ids = state.activeParty.slice();
+  var fired=0,ids=state.activeParty.slice(),pendingRelay=[];
   for(var i=0;i<ids.length;i++){
-    var id = ids[i];
+    var id=ids[i];
     if((state.spirits[id]||0)<=0 || (state.heroResource[id]||0)<100-1e-7) continue;
-    var sp = SPIRITS.find(function(s){ return s.id===id; });
+    var sp=SPIRITS.find(function(s){return s.id===id;});
     if(!sp) continue;
-    state.heroResource[id] = 0;
+    var run=ascendRunToken,relay=sp.abilityType==='support' ? 2*forgeLevel('relay') : 0;
+    state.heroResource[id]=0;
     simulationTriggerAbility(sp,state.spirits[id],nowMs,policy,summary,clock);
+    if(relay) pendingRelay.push({run:run,amount:relay});
     fired++;
   }
+  pendingRelay.forEach(function(grant){if(grant.run===ascendRunToken) forgeRelayCharge(grant.amount);});
   return fired;
 }
 function simulationProcessAutoTap(nowMs,policy,summary,clock){
-  var processed = 0;
+  var processed=0;
   while(state.achieved.autotap && (state._autoTapAccum||0)>=1000-1e-7){
-    var tapResidual = (state._autoTapAccum||0)-1000;
-    state._autoTapAccum = Math.abs(tapResidual)<1e-7 ? 0 : Math.max(0,tapResidual);
+    var tapResidual=(state._autoTapAccum||0)-1000;
+    state._autoTapAccum=Math.abs(tapResidual)<1e-7 ? 0 : Math.max(0,tapResidual);
     state.totalTaps++;
     summary.autoTaps++;
     trackDaily('taps');
-    var damage = guardianTapDamageAt(state.depth,simulationBuffMult(nowMs,clock));
+    var damage=guardianTapDamageAt(state.depth,simulationBuffMult(nowMs,clock),state.totalTaps);
+    forgeTapCharge();
     if(policy.visual) spawnFloatNum('+'+formatNum(damage),els['enemy-stage']);
     simulationDealDiscreteDamage(damage,policy,summary);
     processed++;
@@ -8357,7 +8793,8 @@ function simulationProcessAutoEmpower(summary){
 }
 function simulationNextBossRetreatSeconds(nowMs,policy){
   if(!policy.allowBossRetreat || state.riftMode==='farm' || !isBoss(state.depth)) return Infinity;
-  if(isFinite(estimatedBossKillSeconds(state.depth))) return Infinity;
+  if(forgeBossPolicyActive()){if(forgeBossAssessment(state.depth).verdict!=='wall') return Infinity;}
+  else if(isFinite(estimatedBossKillSeconds(state.depth))) return Infinity;
   return Math.max(0,(policy.bossRetreatNotBeforeMs-nowMs)/1000);
 }
 function simulationMaybeRetreatFromBoss(policy,summary,nowMs){
@@ -8366,7 +8803,8 @@ function simulationMaybeRetreatFromBoss(policy,summary,nowMs){
   // Boss. Only an impossible sustained-DPS wall that survives a full 5-minute
   // uninterrupted offline grace period may switch to Farm.
   if(nowMs+SIM_EPS*1000 < policy.bossRetreatNotBeforeMs) return false;
-  if(isFinite(estimatedBossKillSeconds(state.depth))) return false;
+  if(forgeBossPolicyActive()){if(forgeBossAssessment(state.depth).verdict!=='wall') return false;}
+  else if(isFinite(estimatedBossKillSeconds(state.depth))) return false;
   if(state.depth<=1) return false;
   state.farmReturnDepth = state.depth;
   state.farmDepth = highestFarmableDepth(state.farmReturnDepth);
@@ -8380,7 +8818,8 @@ function simulationMaybeRetreatFromBoss(policy,summary,nowMs){
 function simulationMaybeRetryBoss(policy,summary){
   if(!policy.allowBossRetreat || state.riftMode!=='farm' || !state.farmReturnDepth || !isBoss(state.farmReturnDepth)) return false;
   var retryDepth = state.farmReturnDepth;
-  if(!isFinite(estimatedBossKillSeconds(retryDepth))) return false;
+  if(forgeBossPolicyActive()){if(forgeBossAssessment(retryDepth).verdict!=='sustained') return false;}
+  else if(!isFinite(estimatedBossKillSeconds(retryDepth))) return false;
   state.depth = retryDepth;
   state.riftMode = 'push';
   state.farmDepth = 0;
@@ -8737,12 +9176,12 @@ function advanceAuthoritativeTime(elapsedSec,options){
     // event fires.
     if(next>0){
       if(policy.visual && policy.kind==='live' && dps>0)presentPassiveWispAttack();
-      var ascendsBeforePassive = state.ascendCount;
+      var runBeforePassive = ascendRunToken;
       if(state.riftMode==='farm') simulationApplyFarmPassive(next,dps,policy,summary);
       else simulationApplyPushPassive(next,dps,policy,summary);
       // A kill can Ascend at this endpoint. The preceding interval belongs to
       // the old run; do not credit its time to reset resources/purchase timers.
-      if(state.ascendCount===ascendsBeforePassive){
+      if(ascendRunToken===runBeforePassive){
         simulationAdvanceAbilityResources(next);
         simulationAdvanceAutomationTimers(next);
       }

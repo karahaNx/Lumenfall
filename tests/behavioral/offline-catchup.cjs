@@ -68,6 +68,11 @@ function baselineState(actual,expected,seed,label){
  // Additive Lab fields are independently required to be zero/OFF on this old save.
  // Remove only those verified defaults before the unchanged full historical oracle.
  actual=copy(actual);
+ const newForgeIds=['cauterize','fracturekey','guardianseal','spillway','sustainedchannel','tapconduit','guardiancadence','relay','resonantedge','victorycharge','amplifiertrim','dualchannel','overflowconduit','resonancecells','resonancecascade','resonancereclaim'];
+ for(const [field,value] of [['research',0],['researchQueue',false]])for(const id of newForgeIds){
+  assert.equal(actual[field][id],value,label+' exact unpurchased Forge default '+field+'.'+id);
+  delete actual[field][id];
+ }
  const newIds=['labcapacity','procurement','catalysis','focusprotocol','fieldnotes','curriculum','bossledger','luminousdistill','sigilcartography','rarityappraisal','modulefabrication','ultimateanalysis','resonantefficiency','adaptivegrowth'];
  for(const [field,value] of [['longStudyLevels',0],['studyQueue',false],['studyUseMotes',false],['studySpeedTargets',1.5]])for(const id of newIds){
   assert.equal(actual[field][id],value,label+' exact unpurchased Lab default '+field+'.'+id);

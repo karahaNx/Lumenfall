@@ -549,7 +549,8 @@
         finish('pass',window.runInquiryQa(bridge,ctx,assert,assertProtectedParity,assertSummaryParity));return;
       }
       if(ctx.scenario.startsWith('forge-')){
-        bridge.freeze();
+        // Keep the production save boundary live while stopping ambient ticks.
+        bridge.uiMeasurementPause(true);
         if(['forge-save-reload','forge-backup-restore','forge-recovery'].includes(ctx.scenario)){
           window.runForgePersistence(bridge,ctx,assert,phase,nextPhase,backupCode,finish);return;
         }
@@ -621,10 +622,10 @@
           bridge.freeze();finish('pass',window.runNavWorkshopQa(bridge,ctx,assert));return;
         case 'r3-destinations':
         case 'self-test-r3-shortcut':
-          bridge.freeze();
+          bridge.uiMeasurementPause(true);
           finish('pass',window.runR3DestinationsQa(bridge,ctx,assert));return;
         case 'r3-save-reload':
-          bridge.freeze();bridge.resetFeedback();
+          bridge.uiMeasurementPause(true);bridge.resetFeedback();
           if(phase()===0){
             window.prepareR3Reload(bridge,ctx,assert);
             bridge.feedbackSave();
@@ -696,6 +697,7 @@
           assert(s.activeStudies.length===1 && s.activeStudies[0].id==='wispascend','legacy activeStudy must migrate into activeStudies');
           assert(['focus','sense','formation','resolve','charge'].every(function(id){return s.researchQueue[id]===true;}),'legacy global queue preserves five original ON choices');
           assert(['arcanecal','conduction','luminoustracking'].every(function(id){return s.researchQueue[id]===false;}),'legacy global queue does not activate new IDs');
+          assert(['cauterize','fracturekey','guardianseal','spillway','sustainedchannel','tapconduit','guardiancadence','relay','resonantedge','victorycharge','amplifiertrim','dualchannel','overflowconduit','resonancecells','resonancecascade','resonancereclaim'].every(function(id){return s.research[id]===0&&s.researchQueue[id]===false;}),'legacy save keeps all sixteen Forge expansion levels zero and queues OFF');
           assert(['wispascend','guardmastery','riftattune','shardstudy','lumenstudy','formationstudy','motestudy','prismstudy'].every(function(id){ return s.studyQueue[id]===true; }),'legacy autostudy preserves eight original ON choices');
           assert(s.studyQueue.measuredinquiry===false,'legacy autostudy must not activate Measured Inquiry');
           assert(s.autoAscendEnabled===true && s.autoAscendTargetDepth>=22,'legacy auto-ascend ownership must migrate to enabled target');

@@ -16,6 +16,8 @@ window.runUpgradeIdentityQa=async function(b,ctx,assert,parity,summaryParity){
   function install(s){b.setState(s);b.renderLayout();return b.getState();}
   b.resetFeedback();
   var closedForge=['focus','sense','formation','resolve'],closedLab=['riftattune','formationstudy','prismstudy'],closedTree=['starlight','steady','momentum'];
+  var originalForge=['focus','sense','formation','resolve','charge','arcanecal','conduction','luminoustracking'];
+  var addedForge=['cauterize','fracturekey','guardianseal','spillway','sustainedchannel','tapconduit','guardiancadence','relay','resonantedge','victorycharge','amplifiertrim','dualchannel','overflowconduit','resonancecells','resonancecascade','resonancereclaim'];
   if(ctx.scenario==='upgrade-identity-contracts'){
     var s=seed();s.activeStudies=[];install(s);
     closedForge.forEach(function(id){
@@ -31,7 +33,7 @@ window.runUpgradeIdentityQa=async function(b,ctx,assert,parity,summaryParity){
     before=b.getState();ok(!t.autoFill()&&t.queued().studiesStarted===0,'both closed Study queue entrypoints inert');same(b.getState(),before,'closed queued Studies spend nothing');
     closedTree.forEach(function(id){var before=b.getState();u.buyNode(id);same(b.getState(),before,'closed Tree cannot spend '+id);ok(!document.querySelector('[data-node="'+id+'"]'),'closed Tree has no purchase '+id);});
     [0,1,6,20,31].forEach(function(k){
-      var s=seed();Object.keys(s.research).forEach(function(id){s.research[id]=k;});Object.keys(s.longStudyLevels).forEach(function(id){s.longStudyLevels[id]=k;});Object.keys(s.nodes).forEach(function(id){s.nodes[id]=k;});
+      var s=seed();originalForge.forEach(function(id){s.research[id]=k;});addedForge.forEach(function(id){ok(s.research[id]===0&&s.researchQueue[id]===false,'new Forge defaults do not contaminate historical factor oracle '+id);});Object.keys(s.longStudyLevels).forEach(function(id){s.longStudyLevels[id]=k;});Object.keys(s.nodes).forEach(function(id){s.nodes[id]=k;});
       install(s);var m=u.metrics();
       near(m.lumen,(1+k*.1)*(1+k*.08)*(1+k*.08),'exact old Lumen stacking '+k);
       near(m.shards,(1+k*.08)*(1+k*.08),'exact old Shard stacking '+k);
@@ -44,7 +46,7 @@ window.runUpgradeIdentityQa=async function(b,ctx,assert,parity,summaryParity){
       ['research','longStudyLevels','nodes'].forEach(function(key){same(canonical[key],b.getState()[key],'no clamping/conversion '+key+' '+k);});
     });
     install(seed());
-    same(f.nodes().filter(function(n){return !n.retiredTo;}).map(function(n){return [n.id,n.lumenBase,n.shardBase,n.lumenGrowth,n.shardGrowth];}),
+    same(f.nodes().filter(function(n){return ['charge','arcanecal','conduction','luminoustracking'].indexOf(n.id)!==-1;}).map(function(n){return [n.id,n.lumenBase,n.shardBase,n.lumenGrowth,n.shardGrowth];}),
       [['charge',0,30,1,1.55],['arcanecal',15000,120,1.6,1.6],['conduction',90000,280,1.6,1.6],['luminoustracking',2500000,1500,1.6,1.6]],'retained Forge recipes/prices');
     same(t.nodes().filter(function(n){return !n.retiredTo&&!n.labGroup;}).map(function(n){return [n.id,n.lumenBase,n.shardBase,n.baseDurationSec];}),
       [['wispascend',800,80,180],['guardmastery',600,40,150],['shardstudy',400,150,200],['lumenstudy',1400,120,260],['motestudy',3200,320,380],['measuredinquiry',30000,1200,600]],'retained Lab prices/work');
@@ -59,7 +61,8 @@ window.runUpgradeIdentityQa=async function(b,ctx,assert,parity,summaryParity){
     fresh=b.freshStateSnapshot();fresh.research.charge=60;install(fresh);['labmaster','labqueue'].forEach(function(id){ok(f.deeds().items.find(function(d){return d.id===id;}).eligible,'fresh original Forge threshold reachable '+id);});
     ok(f.deeds().total===683,'one-time Comet reward pool unchanged');
     ok(t.nodes().filter(function(n){return !n.retiredTo;}).length===20,'twenty independently purchasable Lab tracks');
-    return {checks:checks,closedTracks:10,activeTracks:27,exactOldFactors:true,currenciesUnchanged:true,idempotent:true,freshDeeds:true};
+    ok(f.nodes().filter(function(n){return !n.retiredTo;}).length===20,'twenty independently purchasable Forge tracks');
+    return {checks:checks,closedTracks:10,activeTracks:43,exactOldFactors:true,currenciesUnchanged:true,idempotent:true,freshDeeds:true};
   }
   if(ctx.scenario==='upgrade-identity-farm-clock'){
     var s=JSON.parse(JSON.stringify(ctx.fixtures['parity-medium-farm'].save)),clocks=[2000000000000,2000000000371];

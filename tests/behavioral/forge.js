@@ -1,4 +1,7 @@
 /* Rift Forge v1: real production entry points, controlled state/time; never shipped. */
+// Independent approved additions; historical v1 matrices below retain their
+// original three IDs, caps, prices and effect expectations.
+window.forgeExpansionIds=['cauterize','fracturekey','guardianseal','spillway','sustainedchannel','tapconduit','guardiancadence','relay','resonantedge','victorycharge','amplifiertrim','dualchannel','overflowconduit','resonancecells','resonancecascade','resonancereclaim'];
 window.forgeSeed = function(b,ctx){
   var s=b.freshStateSnapshot();s.maxDepthEver=101;s.questDay=ctx.currentDay();s.loginStreak=1;
   s.depth=101;s.enemyDepth=101;s.enemyMaxHp=b.enemyHpFor(101);s.enemyHp=s.enemyMaxHp;
@@ -10,15 +13,18 @@ window.runForgeQa = function(b,ctx,assert,parity,summaryParity,near){
   function same(a,c,m){ok(JSON.stringify(a)===JSON.stringify(c),m);}
   function seed(){return window.forgeSeed(b,ctx);}
   function saved(raw){var s=Object.assign(seed(),raw);if(raw.schemaVersion===undefined)delete s.schemaVersion;if(raw.researchQueue===undefined)delete s.researchQueue;return s;}
-  var ids=['arcanecal','conduction','luminoustracking'],legacy=['focus','sense','formation','resolve','charge'];
+  var ids=['arcanecal','conduction','luminoustracking'],legacy=['focus','sense','formation','resolve','charge'],expansion=window.forgeExpansionIds;
   var nodes=f.nodes(),clock=2000000000000;
   function node(id){return nodes.find(function(n){return n.id===id;});}
   function ledger(id,k,n){var r=node(id),l=0,h=0;for(var i=k;i<k+n;i++){l+=r.lumenBase*Math.pow(r.lumenGrowth,i);h+=r.shardBase*Math.pow(r.shardGrowth,i);}return {lumen:Math.ceil(l),shard:Math.ceil(h)};}
   function noEnemyChange(a,c,label){['enemyDepth','enemyHp','enemyMaxHp','enemyIsLuminous','luminousAccum'].forEach(function(k){same(a[k],c[k],label+' '+k);});}
   if(ctx.scenario==='forge-contracts'){
-    same(nodes.map(function(n){return n.id;}),legacy.concat(ids),'exact approved catalogue');
+    ok(!b.getFlags().reloadInProgress,'timer-only test pause leaves production persistence enabled');
+    same(nodes.map(function(n){return n.id;}),legacy.concat(ids,expansion),'eight retained IDs followed by sixteen approved Forge additions');
+    ok(new Set(nodes.map(function(n){return n.id;})).size===24,'twenty-four unique retained catalogue IDs');
+    ok(nodes.filter(function(n){return !n.retiredTo;}).length===20,'twenty active Forge tracks');
     [b.freshStateSnapshot(),{schemaVersion:1,research:{focus:123},researchQueue:{focus:true,charge:false}},{labQueueOn:true,research:{sense:42}}].forEach(function(raw,i){
-      var s=f.canonical(saved(raw));ids.forEach(function(id){ok(s.research[id]===0 && s.researchQueue[id]===false,'missing IDs 0/OFF '+i+' '+id);});
+      var s=f.canonical(saved(raw));ids.concat(expansion).forEach(function(id){ok(s.research[id]===0 && s.researchQueue[id]===false,'missing IDs 0/OFF '+i+' '+id);});
       if(i===1)ok(s.research.focus===123 && s.researchQueue.focus && !s.researchQueue.charge,'v1 legacy values retained');
       if(i===2)legacy.forEach(function(id){ok(s.researchQueue[id]===true,'legacy global ON original '+id);});
     });
@@ -41,8 +47,9 @@ window.runForgeQa = function(b,ctx,assert,parity,summaryParity,near){
       var distinguishes=false;for(var k=0;k<9;k++){var two=f.cost(id,k,2),a=f.cost(id,k,1),c=f.cost(id,k+1,1);if(two.shard!==a.shard+c.shard || two.lumen!==a.lumen+c.lumen) distinguishes=true;}ok(distinguishes,'rounding fixtures distinguish per-level sum '+id);
     });
     legacy.forEach(function(id){var s=seed();var one=f.cost(id,0,1);s.lumen=one.lumen;s.shards=one.shard;b.setState(s);var before=b.getState();f.buy(id,5);same(b.getState(),before,'legacy fixed bulk all-or-nothing '+id);
-      s.lumen=1e30;s.shards=1e30;s.research[id]=11;b.setState(s);ok(!f.plan(id,1).maxed,'old uncapped');f.buy(id,1);ok(b.getState().research[id]===(id==='charge'?12:11),'uncapped charge still grows; closed raw ownership stays11');if(id!=='charge')ok(f.plan(id,1).reason==='retired','closed purchase is distinct from an effect cap');});
-    [19,20,59,60].forEach(function(n){var s=seed();s.research.focus=n;ids.forEach(function(id){s.research[id]=100;});b.setState(s);b.upgradeClarity.render();var d=f.deeds();ok(d.total===683,'one-time Comet pool');['labmaster','labqueue'].forEach(function(id){var item=d.items.find(function(a){return a.id===id;}),target=id==='labmaster'?20:60;ok(item.eligible===(n>=target) && item.progress.current===n,'legacy-only threshold '+n+' '+id);var progress=document.querySelector('[data-deed-progress="'+id+'"]'),scope=progress.closest('.ach-card').querySelector('.deed-scope');ok(scope.textContent==='Counts Battle Focus, Shard Sense, Formation Training, Guardian’s Resolve and Swift Recovery only. Other Forge upgrades do not count.','Deed explains all five legacy upgrades separately');ok(item.text.endsWith('original Forge levels')&&!item.text.includes('Swift Recovery'),'Deed progress stays short with explicit legacy unit');});});
+      s.research[id]=11;var funded=f.cost(id,11,1);s.lumen=funded.lumen;s.shards=funded.shard;b.setState(s);ok(!f.plan(id,1).maxed,'old uncapped');f.buy(id,1);ok(b.getState().research[id]===(id==='charge'?12:11),'uncapped charge still grows; closed raw ownership stays11');if(id!=='charge')ok(f.plan(id,1).reason==='retired','closed purchase is distinct from an effect cap');});
+    nodes.filter(function(n){return !n.retiredTo;}).forEach(function(n){var s=seed();s.lumen=1e30;s.shards=1e30;b.setState(s);var before=b.getState();ok(!f.plan(n.id,1).affordable,'huge wallet cannot represent an exact debit '+n.id);f.buy(n.id,1);same(b.getState(),before,'unrepresentable purchase preserves every field '+n.id);});
+    [19,20,59,60].forEach(function(n){var s=seed();s.research.focus=n;ids.concat(expansion).forEach(function(id){s.research[id]=100;});b.setState(s);b.upgradeClarity.render();var d=f.deeds();ok(d.total===683,'one-time Comet pool');['labmaster','labqueue'].forEach(function(id){var item=d.items.find(function(a){return a.id===id;}),target=id==='labmaster'?20:60;ok(item.eligible===(n>=target) && item.progress.current===n,'legacy-only threshold '+n+' '+id);var progress=document.querySelector('[data-deed-progress="'+id+'"]'),scope=progress.closest('.ach-card').querySelector('.deed-scope');ok(scope.textContent==='Counts Battle Focus, Shard Sense, Formation Training, Guardian’s Resolve and Swift Recovery only. Other Forge upgrades do not count.','Deed explains all five legacy upgrades separately');ok(item.text.endsWith('original Forge levels')&&!item.text.includes('Swift Recovery'),'Deed progress stays short with explicit legacy unit');});});
     var s=seed();s.achieved.labmaster=true;s.achieved.labqueue=true;s.research.focus=0;b.setState(s);var before=b.getState();f.achievements();var once=b.getState();f.achievements();ok(b.getState().comets===once.comets,'no double rewards');ok(once.achieved.labmaster && once.achieved.labqueue,'earned Deeds not revoked');
     // Pure previews and real UI purchase: displayed plan equals the actual debit.
     ids.concat(['charge']).forEach(function(id){var s=seed();s.lumen=1e10;s.shards=1e10;s.research[id]=ids.includes(id)?9:4;b.setState(s);b.renderLayout();b.resetFeedback();document.querySelector('[data-tab="forge"]').click();document.querySelector('[data-mult="5"]').click();
@@ -83,6 +90,7 @@ window.runForgePersistence = function(b,ctx,assert,phase,nextPhase,backupCode,fi
   if(phase()===0){
     var s=window.forgeSeed(b,ctx);s.research.arcanecal=13;s.research.conduction=4;s.research.luminoustracking=2;
     s.research.focus=31;s.researchQueue.arcanecal=true;s.researchQueue.conduction=false;s.researchQueue.luminoustracking=true;
+    window.forgeExpansionIds.forEach(function(id,i){var cap=b.forge.nodes().find(function(n){return n.id===id;}).levelCap;s.research[id]=i===0?cap+3:Math.min(cap,i%3+1);s.researchQueue[id]=i%2===0;});
     s.formationRebuild={members:['tide','stone'],preset:''};s.activeStudies=[{id:'guardmastery',remainingSec:123,totalDurationSec:150,speedMult:2}];
     s.studyQueue.guardmastery=true;s.longStudyLevels.guardmastery=2;s.lumen=37;s.shards=42;
     s.enemyIsLuminous=true;s.enemyHp=s.enemyMaxHp/2;
@@ -94,8 +102,9 @@ window.runForgePersistence = function(b,ctx,assert,phase,nextPhase,backupCode,fi
   var expected=JSON.parse(localStorage.getItem('forge-expected')),s=b.getState();
   ['schemaVersion','research','researchQueue','studyQueue','activeStudies','longStudyLevels','formationRebuild','activeParty','spirits','lumen','shards','enemyIsLuminous','luminousAccum'].forEach(function(k){assert(JSON.stringify(s[k])===JSON.stringify(expected[k]),'Forge persistence exact '+k);});
   assert(s.research.arcanecal===13,'over-cap save level retained');
+  assert(s.research.cauterize===b.forge.nodes().find(function(n){return n.id==='cauterize';}).levelCap+3,'new over-cap raw ownership survives every persistence route');
   assert(s.enemyHp===expected.enemyHp,'load does not reroll existing enemy');
-  finish('pass',{storedOverCap:13,explicitQueues:s.researchQueue,activeStudy:s.activeStudies[0],formation:s.formationRebuild,enemyRetained:true});
+  finish('pass',{storedOverCap:13,newStoredOverCap:s.research.cauterize,expansionTracks:16,explicitQueues:s.researchQueue,activeStudy:s.activeStudies[0],formation:s.formationRebuild,enemyRetained:true});
 };
 window.runForgeExtended = function(b,ctx,assert,parity,summaryParity,near){
   var f=b.forge,copy=function(x){return JSON.parse(JSON.stringify(x));},ids=['arcanecal','conduction','luminoustracking'],clock=2000000000000,checks=0;
@@ -167,7 +176,7 @@ window.runForgeExtended = function(b,ctx,assert,parity,summaryParity,near){
     var records=[];
     ['parity-early-simple','mid-game','mature-high-power'].forEach(function(name){['live','offline'].forEach(function(kind){
       b.setState(copy(ctx.fixtures[name].save));var start=b.getState();var run=b.simulate(60,kind,1,clock);
-      ids.forEach(function(id){delete run.state.research[id];delete run.state.researchQueue[id];});
+      ids.concat(window.forgeExpansionIds).forEach(function(id){ok(run.state.research[id]===0&&run.state.researchQueue[id]===false,'historical fixture keeps unpurchased Forge default '+name+' '+kind+' '+id);delete run.state.research[id];delete run.state.researchQueue[id];});
       records.push({fixture:name,kind:kind,seconds:60,state:run.state,summary:run.summary});
     });});
     return {records:records};

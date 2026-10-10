@@ -1,0 +1,125 @@
+{
+  "ok": true,
+  "scope": "full",
+  "sourceSha256": "05742431ab6bffefce09d0bebefa754190ed836cc51f4aeeb81e8a9d769419ac",
+  "assertions": 9291,
+  "sections": {
+    "catalogue": 7759,
+    "effects": 124,
+    "manual": 389,
+    "queue": 56,
+    "resonance": 21,
+    "saves": 138,
+    "ascend": 331,
+    "combined": 32,
+    "unsafeCounters": 197,
+    "unsafeRuns": 187,
+    "controller": 52,
+    "controls": 5
+  },
+  "priceCases": 598,
+  "purchases": 448,
+  "negativeControls": 25,
+  "negative": [
+    {
+      "name": "disabled-effect-cauterize",
+      "assertion": "Cauterize multiplies current boss regeneration: 0.009 vs 0.0072"
+    },
+    {
+      "name": "disabled-effect-fracturekey",
+      "assertion": "fracturekey actual contextual hit 20: 8.75 vs 10"
+    },
+    {
+      "name": "disabled-effect-guardianseal",
+      "assertion": "guardianseal actual contextual hit 30: 15.06000000005588 vs 17.570000000065193"
+    },
+    {
+      "name": "disabled-effect-spillway",
+      "assertion": "Spillway real next nonboss damage tap: 9957714 vs 9957713.196"
+    },
+    {
+      "name": "disabled-effect-sustainedchannel",
+      "assertion": "Sustained Channel actual eligible refund ember/20/false"
+    },
+    {
+      "name": "disabled-effect-tapconduit",
+      "assertion": "Tap Conduit first powered Active manual"
+    },
+    {
+      "name": "disabled-effect-guardiancadence",
+      "assertion": "actual shared cadence ordinal 5/manual: 5.0200000000186265 vs 7.529999999999999"
+    },
+    {
+      "name": "disabled-effect-relay",
+      "assertion": "post-pass two-Support relay to Ember"
+    },
+    {
+      "name": "disabled-effect-resonantedge",
+      "assertion": "Support now delivers a real pulse"
+    },
+    {
+      "name": "disabled-effect-victorycharge",
+      "assertion": "boss victory grants caster charge"
+    },
+    {
+      "name": "disabled-effect-amplifiertrim",
+      "assertion": "actual stronger Support snapshot"
+    },
+    {
+      "name": "disabled-effect-dualchannel",
+      "assertion": "Dual Channel real Lumen cast gale/live: 0 vs 71"
+    },
+    {
+      "name": "disabled-effect-overflowconduit",
+      "assertion": "Overflow Conduit actual source overkill gale/true: 6098 vs 6105"
+    },
+    {
+      "name": "disabled-effect-resonancecells",
+      "assertion": "purchased extra actual Resonate use"
+    },
+    {
+      "name": "disabled-effect-resonancecascade",
+      "assertion": "manual Resonate cascades only to powered Active, bounded100"
+    },
+    {
+      "name": "disabled-effect-resonancereclaim",
+      "assertion": "actual boss restores bounded spent uses"
+    },
+    {
+      "name": "one-unit-price-drift",
+      "assertion": "exact approved price must buy the real Relay level"
+    },
+    {
+      "name": "inexact-wallet-free-purchase",
+      "assertion": "huge wallet refuses actual free Forge purchase"
+    },
+    {
+      "name": "primary-mutation-leak-forge",
+      "assertion": "primary failure prevents leaked Forge mutation"
+    },
+    {
+      "name": "primary-mutation-leak-resonate",
+      "assertion": "primary failure prevents leaked Resonate mutation"
+    },
+    {
+      "name": "paid-relay-lost-on-real-ascend",
+      "assertion": "manual retains research"
+    },
+    {
+      "name": "finite-burst-false-wall",
+      "assertion": "finite remaining burst prevents automatic wall retreat"
+    },
+    {
+      "name": "unsafe-counter-normal-cadence-average",
+      "assertion": "HUD recognizes stagnant cadence ordinal: 5.522 vs 5.02"
+    },
+    {
+      "name": "unsafe-count-as-forge-run-identity",
+      "assertion": "unsafe run blocks old Spillway damage support-live"
+    },
+    {
+      "name": "unsafe-count-as-passive-run-identity",
+      "assertion": "unsafe run blocks old charge/time credit passive-live/ember"
+    }
+  ]
+}

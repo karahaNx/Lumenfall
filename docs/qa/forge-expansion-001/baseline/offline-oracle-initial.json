@@ -1,0 +1,142 @@
+{
+  "status": "pass",
+  "sourceSha256": "dfd3dbc41e1c298ec2f02f9bb4a2133683c397e92cacd2f664f8cb30d04bee1a",
+  "testSha256": "012ab16388abfe92578ce64cfbcc968a2ca7307be915753ce6bea99b5810ffc5",
+  "scenario": "offline-catchup-core",
+  "wallMs": 255461.632915,
+  "cases": 17,
+  "assertionPolicy": "Frozen original product blob and complete old state/summary oracles unchanged; all sixteen new Forge IDs asserted0/OFF before projection.",
+  "log": "/workspace/scratch/0848c4e4f365/test-environment/forge-offline-oracle-first.log",
+  "records": [
+    {
+      "case": "ON Clear21",
+      "seconds": 28800,
+      "batch": 256,
+      "batches": 1181,
+      "kills": 302400,
+      "ascends": 14400,
+      "iterations": 302401,
+      "earned": 1290055679.9983335
+    },
+    {
+      "case": "Prism policy isolation",
+      "perAscend": 23,
+      "newPrisms": 334010,
+      "legacyPrisms": 89210
+    },
+    {
+      "case": "ON Clear21",
+      "seconds": 28800,
+      "batch": 31,
+      "batches": 9754,
+      "kills": 302400,
+      "ascends": 14400,
+      "iterations": 302401,
+      "earned": 1290055679.9983335
+    },
+    {
+      "case": "ON Clear20",
+      "seconds": 28800,
+      "batch": 256,
+      "batches": 1140,
+      "kills": 291959,
+      "ascends": 14597,
+      "iterations": 291961,
+      "earned": 1232991914.398166
+    },
+    {
+      "case": "OFF",
+      "seconds": 28800,
+      "batch": 256,
+      "batches": 414,
+      "kills": 773,
+      "ascends": 0,
+      "iterations": 106128,
+      "earned": 351609164909646.25
+    },
+    {
+      "case": "ON Clear21",
+      "seconds": 259200,
+      "batch": 256,
+      "batches": 1771,
+      "kills": 453600,
+      "ascends": 21600,
+      "iterations": 453601,
+      "earned": 1935083519.9986768
+    },
+    {
+      "case": "ON Clear21",
+      "seconds": 345600,
+      "batch": 256,
+      "batches": 1771,
+      "kills": 453600,
+      "ascends": 21600,
+      "iterations": 453600,
+      "earned": 1935083519.9986768
+    },
+    {
+      "case": "boundaries live",
+      "kills": 56047,
+      "motes": 22789,
+      "empowers": 2669,
+      "research": 47,
+      "studies": [
+        "Guardian's Mastery"
+      ]
+    },
+    {
+      "case": "boundaries offline",
+      "kills": 56047,
+      "motes": 22789,
+      "empowers": 2669,
+      "research": 47,
+      "studies": [
+        "Guardian's Mastery"
+      ]
+    },
+    {
+      "case": "cancel",
+      "callbacks": 1,
+      "error": "Offline catch-up cancelled",
+      "pending": true
+    },
+    {
+      "case": "simulation",
+      "callbacks": 1,
+      "error": "injected simulation failure",
+      "pending": true
+    },
+    {
+      "case": "primary",
+      "callbacks": 1,
+      "error": "Offline progress could not be saved",
+      "pending": true
+    },
+    {
+      "case": "recovery",
+      "callbacks": 1,
+      "error": null,
+      "pending": false
+    },
+    {
+      "case": "processing time 28800",
+      "kills": 303030,
+      "lastSeen": 1791390424477
+    },
+    {
+      "case": "processing time 259200",
+      "kills": 454230,
+      "lastSeen": 1791620824477
+    },
+    {
+      "case": "wall-clock jump -604800000",
+      "kills": 303030,
+      "lastSeen": 1790785624477
+    },
+    {
+      "case": "wall-clock jump 604800000",
+      "kills": 303030,
+      "lastSeen": 1791995224477
+    }
+  ]
+}
